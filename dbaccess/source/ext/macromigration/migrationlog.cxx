@@ -46,8 +46,8 @@ namespace dbmm
     struct LibraryEntry
     {
         ScriptType      eType;
-        ::rtl::OUString sOldName;
-        ::rtl::OUString sNewName;
+        OUString sOldName;
+        OUString sNewName;
 
         LibraryEntry()
             :eType( eBasic )
@@ -56,7 +56,7 @@ namespace dbmm
         {
         }
 
-        LibraryEntry( const ScriptType& _eType, const ::rtl::OUString& _rOldName, const ::rtl::OUString& _rNewName )
+        LibraryEntry( const ScriptType& _eType, const OUString& _rOldName, const OUString& _rNewName )
             :eType( _eType )
             ,sOldName( _rOldName )
             ,sNewName( _rNewName )
@@ -70,7 +70,7 @@ namespace dbmm
     struct DocumentEntry
     {
         SubDocumentType                 eType;
-        ::rtl::OUString                 sName;
+        OUString                 sName;
         ::std::vector< LibraryEntry >   aMovedLibraries;
 
         DocumentEntry()
@@ -80,7 +80,7 @@ namespace dbmm
         {
         }
 
-        DocumentEntry( const SubDocumentType _eType, const ::rtl::OUString& _rName )
+        DocumentEntry( const SubDocumentType _eType, const OUString& _rName )
             :eType( _eType )
             ,sName( _rName )
         {
@@ -102,7 +102,7 @@ namespace dbmm
     //====================================================================
     struct MigrationLog_Data
     {
-        ::rtl::OUString sBackupLocation;
+        OUString sBackupLocation;
         DocumentLogs    aDocumentLogs;
         ErrorLog        aFailures;
         ErrorLog        aWarnings;
@@ -141,13 +141,13 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    void MigrationLog::backedUpDocument( const ::rtl::OUString& _rNewDocumentLocation )
+    void MigrationLog::backedUpDocument( const OUString& _rNewDocumentLocation )
     {
         m_pData->sBackupLocation = _rNewDocumentLocation;
     }
 
     //--------------------------------------------------------------------
-    DocumentID MigrationLog::startedDocument( const SubDocumentType _eType, const ::rtl::OUString& _rName )
+    DocumentID MigrationLog::startedDocument( const SubDocumentType _eType, const OUString& _rName )
     {
 #if OSL_DEBUG_LEVEL > 0
         bool bAlreadyKnown = false;
@@ -172,7 +172,7 @@ namespace dbmm
 
     //--------------------------------------------------------------------
     void MigrationLog::movedLibrary( const DocumentID _nDocID, const ScriptType _eScriptType,
-            const ::rtl::OUString& _rOriginalLibName, const ::rtl::OUString& _rNewLibName )
+            const OUString& _rOriginalLibName, const OUString& _rNewLibName )
     {
         OSL_ENSURE( m_pData->aDocumentLogs.find( _nDocID ) != m_pData->aDocumentLogs.end(),
             "MigrationLog::movedLibrary: document is not known!" );
@@ -193,10 +193,10 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    const ::rtl::OUString& MigrationLog::getNewLibraryName( DocumentID _nDocID, ScriptType _eScriptType,
-        const ::rtl::OUString& _rOriginalLibName ) const
+    const OUString& MigrationLog::getNewLibraryName( DocumentID _nDocID, ScriptType _eScriptType,
+        const OUString& _rOriginalLibName ) const
     {
-        static ::rtl::OUString s_sEmptyString;
+        static OUString s_sEmptyString;
 
         DocumentLogs::const_iterator docPos = m_pData->aDocumentLogs.find( _nDocID );
         if ( docPos == m_pData->aDocumentLogs.end() )
@@ -225,28 +225,25 @@ namespace dbmm
     namespace
     {
         //----------------------------------------------------------------
-        static void lcl_appendErrorDescription( ::rtl::OUStringBuffer& _inout_rBuffer, const MigrationError& _rError )
+        static void lcl_appendErrorDescription( OUStringBuffer& _inout_rBuffer, const MigrationError& _rError )
         {
             const sal_Char* pAsciiErrorDescription( NULL );
-            ::std::vector< rtl::OUString > aParameterNames;
+            ::std::vector< OUString > aParameterNames;
             switch ( _rError.eType )
             {
             case ERR_OPENING_SUB_DOCUMENT_FAILED:
                 pAsciiErrorDescription = "opening '#doc#' failed";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_CLOSING_SUB_DOCUMENT_FAILED:
                 pAsciiErrorDescription = "closing '#doc#' failed";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_STORAGE_COMMIT_FAILED:
                 pAsciiErrorDescription = "committing the changes for document '#doc#' failed";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_STORING_DATABASEDOC_FAILED:
@@ -259,66 +256,52 @@ namespace dbmm
 
             case ERR_UNEXPECTED_LIBSTORAGE_ELEMENT:
                 pAsciiErrorDescription = "unexpected #lib# storage element in document '#doc#', named '#element#'";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#libstore#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#element#")));
+                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.push_back(OUString("#libstore#"));
+                aParameterNames.push_back(OUString("#element#"));
                 break;
 
             case ERR_CREATING_DBDOC_SCRIPT_STORAGE_FAILED:
                 pAsciiErrorDescription = "creating the database document's storage for #scripttype# scripts failed";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#scripttype#")));
+                aParameterNames.push_back(OUString("#scripttype#"));
                 break;
 
             case ERR_COMMITTING_SCRIPT_STORAGES_FAILED:
                 pAsciiErrorDescription = "saving the #scripttype# scripts for document '#doc#' failed";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#scripttype#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#scripttype#"));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_GENERAL_SCRIPT_MIGRATION_FAILURE:
                 pAsciiErrorDescription = "general error while migrating #scripttype# scripts of document '#doc#'";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#scripttype#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#scripttype#"));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_GENERAL_MACRO_MIGRATION_FAILURE:
                 pAsciiErrorDescription = "general error during macro migration of document '#doc#'";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_UNKNOWN_SCRIPT_TYPE:
                 pAsciiErrorDescription = "unknown script type: #type#";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#type#")));
+                aParameterNames.push_back(OUString("#type#"));
                 break;
 
             case ERR_UNKNOWN_SCRIPT_LANGUAGE:
                 pAsciiErrorDescription = "unknown script language: #lang#";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#lang#")));
+                aParameterNames.push_back(OUString("#lang#"));
                 break;
 
             case ERR_UNKNOWN_SCRIPT_NAME_FORMAT:
                 pAsciiErrorDescription = "unknown script name format: #script#";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#script#")));
+                aParameterNames.push_back(OUString("#script#"));
                 break;
 
             case ERR_SCRIPT_TRANSLATION_FAILURE:
                 pAsciiErrorDescription = "analyzing/translating the script URL failed; script type: #type#; script: #code#";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#type#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#code#")));
+                aParameterNames.push_back(OUString("#type#"));
+                aParameterNames.push_back(OUString("#code#"));
                 break;
 
             case ERR_INVALID_SCRIPT_DESCRIPTOR_FORMAT:
@@ -327,72 +310,57 @@ namespace dbmm
 
             case ERR_ADJUSTING_DOCUMENT_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting events for document '#doc#' failed";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_ADJUSTING_DIALOG_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting events for dialog #lib#.#dlg# in document '#doc#' failed";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#lib#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#dlg#")));
+                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.push_back(OUString("#lib#"));
+                aParameterNames.push_back(OUString("#dlg#"));
                 break;
 
             case ERR_ADJUSTING_FORMCOMP_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting form component events for '#doc#' failed";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_BIND_SCRIPT_STORAGE_FAILED:
                 pAsciiErrorDescription = "binding to the script storage failed for document '#doc#'";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_REMOVE_SCRIPTS_STORAGE_FAILED:
                 pAsciiErrorDescription = "removing a scripts storage failed for document '#doc#'";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_DOCUMENT_BACKUP_FAILED:
                 pAsciiErrorDescription = "backing up the document to #location# failed";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#location#")));
+                aParameterNames.push_back(OUString("#location#"));
                 break;
 
             case ERR_UNKNOWN_SCRIPT_FOLDER:
                 pAsciiErrorDescription = "unknown script folder '#name#' in document '#doc#'";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#name#")));
+                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.push_back(OUString("#name#"));
                 break;
 
             case ERR_EXAMINING_SCRIPTS_FOLDER_FAILED:
                 pAsciiErrorDescription = "examining the 'Scripts' folder failed for document '#doc#'";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
             case ERR_PASSWORD_VERIFICATION_FAILED:
                 pAsciiErrorDescription = "password verification failed for document '#doc#', #libtype# library '#name#'";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#libtype#")));
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#name#")));
+                aParameterNames.push_back(OUString("#doc#"));
+                aParameterNames.push_back(OUString("#libtype#"));
+                aParameterNames.push_back(OUString("#name#"));
                 break;
 
             case ERR_NEW_STYLE_REPORT:
                 pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Oracle Report Builder (TM) extension installed.";
-                aParameterNames.push_back(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#doc#")));
+                aParameterNames.push_back(OUString("#doc#"));
                 break;
 
                 // do *not* add a default case here: Without a default, some compilers will warn you when
@@ -401,7 +369,7 @@ namespace dbmm
             OSL_ENSURE( pAsciiErrorDescription, "lcl_appendErrorDescription: no error message!" );
             if ( pAsciiErrorDescription )
             {
-                ::rtl::OUString sSubstituted( ::rtl::OUString::createFromAscii( pAsciiErrorDescription ) );
+                OUString sSubstituted( OUString::createFromAscii( pAsciiErrorDescription ) );
                 OSL_ENSURE( aParameterNames.size() == _rError.aErrorDetails.size(),
                     "lcl_appendErrorDescription: unexpected number of error message parameters!" );
 
@@ -416,7 +384,7 @@ namespace dbmm
         }
 
         //----------------------------------------------------------------
-        void lcl_describeErrors( ::rtl::OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const sal_uInt16 _nHeadingResId )
+        void lcl_describeErrors( OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const sal_uInt16 _nHeadingResId )
         {
             _rBuffer.appendAscii( "=== " );
             _rBuffer.append     ( String( MacroMigrationResId( _nHeadingResId ) ) );
@@ -458,9 +426,9 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString MigrationLog::getCompleteLog() const
+    OUString MigrationLog::getCompleteLog() const
     {
-        ::rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
 
         if ( !m_pData->sBackupLocation.isEmpty() )
         {

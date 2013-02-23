@@ -130,7 +130,7 @@ void SvxNoSpaceEdit::Modify()
 
     if ( bOnlyNumeric )
     {
-        rtl::OUString aValue = GetText();
+        OUString aValue = GetText();
 
         if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
             // the maximum value of a port number is USHRT_MAX
@@ -170,14 +170,14 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aNoProxyForED     (this, CUI_RES( ED_NOPROXYFOR     )),
     aNoProxyDescFT    (this, CUI_RES( ED_NOPROXYDESC    )),
     sFromBrowser        (       CUI_RES( ST_PROXY_FROM_BROWSER ) ),
-    aProxyModePN(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType")),
-    aHttpProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName")),
-    aHttpPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort")),
-    aHttpsProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyName")),
-    aHttpsPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyPort")),
-    aFtpProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName")),
-    aFtpPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort")),
-    aNoProxyDescPN(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"))
+    aProxyModePN("ooInetProxyType"),
+    aHttpProxyPN("ooInetHTTPProxyName"),
+    aHttpPortPN("ooInetHTTPProxyPort"),
+    aHttpsProxyPN("ooInetHTTPSProxyName"),
+    aHttpsPortPN("ooInetHTTPSProxyPort"),
+    aFtpProxyPN("ooInetFTPProxyName"),
+    aFtpPortPN("ooInetFTPProxyPort"),
+    aNoProxyDescPN("ooInetNoProxy")
 {
     FreeResource();
 
@@ -196,18 +196,18 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
             configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext() ) );
 
-    OUString aConfigRoot(RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings" ) );
+    OUString aConfigRoot( "org.openoffice.Inet/Settings" );
 
     beans::NamedValue aProperty;
-    aProperty.Name  = OUString(RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+    aProperty.Name  = OUString( "nodepath" );
     aProperty.Value = makeAny( aConfigRoot );
 
     Sequence< Any > aArgumentList( 1 );
     aArgumentList[0] = makeAny( aProperty );
 
-    m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments( rtl::OUString(
-                                                                                            RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
-                                                                                        aArgumentList );
+    m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
+        OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+        aArgumentList );
 
     ArrangeControls_Impl();
 }
@@ -575,10 +575,10 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
 
 IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 {
-    rtl::OUString aValue = pEdit->GetText();
+    OUString aValue = pEdit->GetText();
 
     if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
-        pEdit->SetText( rtl::OUString('0') );
+        pEdit->SetText( OUString('0') );
     return 0;
 }
 
@@ -811,7 +811,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl)
     if (!mpCertPathDlg)
         mpCertPathDlg = new CertPathDialog(this);
 
-    rtl::OUString sOrig = mpCertPathDlg->getDirectory();
+    OUString sOrig = mpCertPathDlg->getDirectory();
     short nRet = mpCertPathDlg->Execute();
 
     if (nRet == RET_OK && sOrig != mpCertPathDlg->getDirectory())
@@ -833,7 +833,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
     }
     catch (const Exception& e)
     {
-        OSL_FAIL(rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+        OSL_FAIL(OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
         (void)e;
     }
     return 0;
@@ -1002,15 +1002,15 @@ extern "C" {
 #endif
 
 #define NPP_PATH_MAX 2048
-inline bool getDllURL(rtl::OString * path)
+inline bool getDllURL(OString * path)
 {
     OSL_ASSERT(path != NULL);
-    ::rtl::OUString dirPath/*dllPath, */;
+    OUString dirPath/*dllPath, */;
     if (osl_getExecutableFile(&dirPath.pData) != osl_Process_E_None) {
         return false;
     }
     dirPath = dirPath.copy(0, dirPath.lastIndexOf('/'));
-    ::rtl::OUString sysDirPath;
+    OUString sysDirPath;
     osl::FileBase::getSystemPathFromFileURL(dirPath, sysDirPath);
     *path = OUStringToOString(sysDirPath, RTL_TEXTENCODING_ASCII_US);
     return true;
@@ -1039,7 +1039,7 @@ sal_Bool MozPluginTabPage::isInstalled()
 
     // get the real file path
     char realFilePath[NPP_PATH_MAX] = {0};
-    ::rtl::OString tempString;
+    OString tempString;
     if (!getDllURL(&tempString)) {
         return false;
     }
@@ -1053,7 +1053,7 @@ sal_Bool MozPluginTabPage::isInstalled()
 #ifdef WNT
     // get the value from registry
         sal_Bool ret = true;
-    ::rtl::OString tempString;
+    OString tempString;
     char realFilePath[NPP_PATH_MAX] = {0};
     if (!getDllURL(&tempString)){
         return false;
@@ -1090,7 +1090,7 @@ sal_Bool MozPluginTabPage::installPlugin()
 
     // get the real file path
     char realFilePath[NPP_PATH_MAX] = {0};
-    ::rtl::OString tempString;
+    OString tempString;
     if (!getDllURL(&tempString)) {
         return false;
     }
@@ -1103,7 +1103,7 @@ sal_Bool MozPluginTabPage::installPlugin()
     return true;
 #endif
 #ifdef WNT
-    ::rtl::OString tempString;
+    OString tempString;
     char realFilePath[NPP_PATH_MAX] = {0};
     if (!getDllURL(&tempString)) {
         return false;
@@ -1130,7 +1130,7 @@ sal_Bool MozPluginTabPage::uninstallPlugin()
     return true;
 #endif
 #ifdef WNT
-    ::rtl::OString tempString;
+    OString tempString;
     char realFilePath[NPP_PATH_MAX] = {0};
     if (!getDllURL(&tempString)) {
         return false;
@@ -1159,7 +1159,7 @@ public:
     virtual ~MailerProgramCfg_Impl();
 
     virtual void    Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
 };
 
 /* -------------------------------------------------------------------------*/
@@ -1239,7 +1239,7 @@ void MailerProgramCfg_Impl::Commit()
     PutProperties(aNames, aValues);
 }
 
-void MailerProgramCfg_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+void MailerProgramCfg_Impl::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
 }
 
@@ -1343,14 +1343,14 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
         FileDialogHelper aHelper(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
-        rtl::OUString sPath = aMailerURLED.GetText();
+        OUString sPath = aMailerURLED.GetText();
         if ( sPath.isEmpty() )
-            sPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/usr/bin"));
+            sPath = OUString("/usr/bin");
 
-        rtl::OUString sUrl;
+        OUString sUrl;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL(sPath, sUrl);
         aHelper.SetDisplayDirectory(sUrl);
-        aHelper.AddFilter( m_sDefaultFilterName, rtl::OUString("*"));
+        aHelper.AddFilter( m_sDefaultFilterName, OUString("*"));
 
         if ( ERRCODE_NONE == aHelper.Execute() )
         {

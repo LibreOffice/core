@@ -34,7 +34,7 @@ namespace dbaxml
 DBG_NAME(OXMLConnectionResource)
 
 OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName,
+                sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const Reference< XAttributeList > & _xAttrList) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
@@ -51,12 +51,12 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
     const sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        const OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        const OUString sValue = _xAttrList->getValueByIndex( i );
 
-        aProperty.Name = ::rtl::OUString();
+        aProperty.Name = OUString();
         aProperty.Value = Any();
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
@@ -75,10 +75,10 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
                 aProperty.Name = PROPERTY_TYPE;
                 break;
             case XML_TOK_SHOW:
-                aProperty.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Show"));
+                aProperty.Name = OUString("Show");
                 break;
             case XML_TOK_ACTUATE:
-                aProperty.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Actuate"));
+                aProperty.Name = OUString("Actuate");
                 break;
         }
         if ( !aProperty.Name.isEmpty() )

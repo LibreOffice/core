@@ -37,7 +37,7 @@ DBG_NAME(OXMLDataSourceInfo)
 
 OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const sal_uInt16 _nToken) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
@@ -55,12 +55,12 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
     ::std::vector< sal_uInt16 > aTokens;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
-        aProperty.Name = ::rtl::OUString();
+        aProperty.Name = OUString();
 
         sal_uInt16 nToken = rTokenMap.Get( nPrefix, sLocalName );
         aTokens.push_back(nToken);
@@ -112,20 +112,20 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
             if ( !bFoundField )
             {
                 aProperty.Name = INFO_FIELDDELIMITER;
-                aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+                aProperty.Value <<= OUString(";");
                 rImport.addInfo(aProperty);
             }
             if ( !bFoundThousand )
             {
                 aProperty.Name = INFO_THOUSANDSDELIMITER;
-                aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                aProperty.Value <<= OUString(",");
                 rImport.addInfo(aProperty);
             }
         }
         if ( XML_TOK_FONT_CHARSET == _nToken && !bFoundCharset )
         {
             aProperty.Name = INFO_CHARSET;
-            aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("utf8"));
+            aProperty.Value <<= OUString("utf8");
             rImport.addInfo(aProperty);
         }
     }

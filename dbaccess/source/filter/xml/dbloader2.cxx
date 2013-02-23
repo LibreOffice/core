@@ -102,20 +102,20 @@ public:
     DBTypeDetection(const Reference< XMultiServiceFactory >&);
 
     // XServiceInfo
-    ::rtl::OUString                 SAL_CALL getImplementationName() throw(  );
-    sal_Bool                        SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    Sequence< ::rtl::OUString >     SAL_CALL getSupportedServiceNames(void) throw(  );
+    OUString                        SAL_CALL getImplementationName() throw(  );
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(  );
 
     // static methods
-    static ::rtl::OUString          getImplementationName_Static() throw(  )
+    static OUString                 getImplementationName_Static() throw(  )
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbflt.DBTypeDetection"));
+        return OUString("org.openoffice.comp.dbflt.DBTypeDetection");
     }
-    static Sequence< ::rtl::OUString> getSupportedServiceNames_Static(void) throw(  );
+    static Sequence< OUString> getSupportedServiceNames_Static(void) throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-    virtual ::rtl::OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
 };
 // -------------------------------------------------------------------------
 DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFactory)
@@ -123,13 +123,13 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
 {
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException)
 {
     try
     {
         ::comphelper::NamedValueCollection aMedia( Descriptor );
         sal_Bool bStreamFromDescr = sal_False;
-        ::rtl::OUString sURL = aMedia.getOrDefault( "URL", ::rtl::OUString() );
+        OUString sURL = aMedia.getOrDefault( "URL", OUString() );
 
         Reference< XInputStream > xInStream( aMedia.getOrDefault( "InputStream",  Reference< XInputStream >() ) );
         Reference< XPropertySet > xStorageProperties;
@@ -141,9 +141,9 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
         }
         else
         {
-            ::rtl::OUString sSalvagedURL( aMedia.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
+            OUString sSalvagedURL( aMedia.getOrDefault( "SalvagedFile", OUString() ) );
 
-            ::rtl::OUString sFileLocation( sSalvagedURL.isEmpty() ? sURL : sSalvagedURL );
+            OUString sFileLocation( sSalvagedURL.isEmpty() ? sURL : sSalvagedURL );
             if ( !sFileLocation.isEmpty() )
             {
                 xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromURL(
@@ -153,16 +153,16 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
 
         if ( xStorageProperties.is() )
         {
-            ::rtl::OUString sMediaType;
+            OUString sMediaType;
             xStorageProperties->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
             if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII || sMediaType == MIMETYPE_VND_SUN_XML_BASE_ASCII )
             {
-                if ( bStreamFromDescr && sURL.compareTo( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ), 14 ) != COMPARE_EQUAL )
+                if ( bStreamFromDescr && sURL.compareTo( OUString( "private:stream" ), 14 ) != COMPARE_EQUAL )
                 {
                     // After fixing of the i88522 issue ( use the new file locking for database files ) the stream from the type detection can be used further
                     // for now the file should be reopened to have read/write access
-                    aMedia.remove( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) ) );
-                    aMedia.remove( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Stream" ) ) );
+                    aMedia.remove( OUString(  "InputStream" ) );
+                    aMedia.remove( OUString(  "Stream" ) );
                     aMedia >>= Descriptor;
                     try
                     {
@@ -176,12 +176,12 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
                     }
                 }
 
-                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
+                return OUString("StarBase");
             }
             ::comphelper::disposeComponent(xStorageProperties);
         }
     } catch(Exception&){}
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL DBTypeDetection::Create( const Reference< XMultiServiceFactory >  & rSMgr )
@@ -190,18 +190,18 @@ Reference< XInterface > SAL_CALL DBTypeDetection::Create( const Reference< XMult
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
-::rtl::OUString SAL_CALL DBTypeDetection::getImplementationName() throw(  )
+OUString SAL_CALL DBTypeDetection::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
 // -------------------------------------------------------------------------
 
 // XServiceInfo
-sal_Bool SAL_CALL DBTypeDetection::supportsService(const ::rtl::OUString& ServiceName) throw(  )
+sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pBegin  = aSNL.getConstArray();
-    const ::rtl::OUString * pEnd    = pBegin + aSNL.getLength();
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pBegin  = aSNL.getConstArray();
+    const OUString * pEnd    = pBegin + aSNL.getLength();
     for( ; pBegin != pEnd; ++pBegin)
         if( *pBegin == ServiceName )
             return sal_True;
@@ -209,16 +209,16 @@ sal_Bool SAL_CALL DBTypeDetection::supportsService(const ::rtl::OUString& Servic
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
-Sequence< ::rtl::OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 // -------------------------------------------------------------------------
 // ORegistryServiceManager_Static
-Sequence< ::rtl::OUString > DBTypeDetection::getSupportedServiceNames_Static(void) throw(  )
+Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static(void) throw(  )
 {
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExtendedTypeDetection"));
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString("com.sun.star.document.ExtendedTypeDetection");
     return aSNS;
 }
 // -------------------------------------------------------------------------
@@ -233,7 +233,7 @@ class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceIn
 private:
     ::comphelper::ComponentContext      m_aContext;
     Reference< XFrameLoader >           m_xMySelf;
-    ::rtl::OUString                     m_sCurrentURL;
+    OUString                            m_sCurrentURL;
     sal_uLong                               m_nStartWizard;
 
     DECL_LINK( OnStartTableWizard, void* );
@@ -242,21 +242,21 @@ public:
     ~DBContentLoader();
 
     // XServiceInfo
-    ::rtl::OUString                 SAL_CALL getImplementationName() throw(  );
-    sal_Bool                        SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    Sequence< ::rtl::OUString >     SAL_CALL getSupportedServiceNames(void) throw(  );
+    OUString                        SAL_CALL getImplementationName() throw(  );
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(  );
 
     // static methods
-    static ::rtl::OUString          getImplementationName_Static() throw(  )
+    static OUString                 getImplementationName_Static() throw(  )
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbflt.DBContentLoader2"));
+        return OUString("org.openoffice.comp.dbflt.DBContentLoader2");
     }
-    static Sequence< ::rtl::OUString> getSupportedServiceNames_Static(void) throw(  );
+    static Sequence< OUString > getSupportedServiceNames_Static(void) throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
     // XLoader
-    virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const ::rtl::OUString& _rURL,
+    virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL cancel(void) throw();
@@ -289,18 +289,18 @@ Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMult
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
-::rtl::OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
+OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
 // -------------------------------------------------------------------------
 
 // XServiceInfo
-sal_Bool SAL_CALL DBContentLoader::supportsService(const ::rtl::OUString& ServiceName) throw(  )
+sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pBegin  = aSNL.getConstArray();
-    const ::rtl::OUString * pEnd    = pBegin + aSNL.getLength();
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pBegin   = aSNL.getConstArray();
+    const OUString * pEnd     = pBegin + aSNL.getLength();
     for( ; pBegin != pEnd; ++pBegin)
         if( *pBegin == ServiceName )
             return sal_True;
@@ -308,16 +308,16 @@ sal_Bool SAL_CALL DBContentLoader::supportsService(const ::rtl::OUString& Servic
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
-Sequence< ::rtl::OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 // -------------------------------------------------------------------------
 // ORegistryServiceManager_Static
-Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
+Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.FrameLoader"));
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString("com.sun.star.frame.FrameLoader");
     return aSNS;
 }
 
@@ -325,7 +325,7 @@ Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(voi
 namespace
 {
     // ...................................................................
-    sal_Bool lcl_urlAllowsInteraction( const ::comphelper::ComponentContext& _rContext, const ::rtl::OUString& _rURL )
+    sal_Bool lcl_urlAllowsInteraction( const ::comphelper::ComponentContext& _rContext, const OUString& _rURL )
     {
         bool bDoesAllow = sal_False;
         try
@@ -369,13 +369,13 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
 {
     Sequence< Any > aWizardArgs(2);
     aWizardArgs[0] <<= PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
+                    OUString("ParentWindow"),
                     0,
                     makeAny( lcl_getTopMostWindow( m_aContext.getUNOContext() ) ),
                     PropertyState_DIRECT_VALUE);
 
     aWizardArgs[1] <<= PropertyValue(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection")),
+                    OUString("InitialSelection"),
                     0,
                     makeAny( _rxModel ),
                     PropertyState_DIRECT_VALUE);
@@ -390,13 +390,13 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
 
     Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
     sal_Bool bSuccess = sal_False;
-    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenDatabase"))) >>= bSuccess;
-    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartTableWizard"))) >>= _bShouldStartTableWizard;
+    xProp->getPropertyValue(OUString("OpenDatabase")) >>= bSuccess;
+    xProp->getPropertyValue(OUString("StartTableWizard")) >>= _bShouldStartTableWizard;
     return bSuccess;
 }
 
 // -----------------------------------------------------------------------
-void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::rtl::OUString& _rURL,
+void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& _rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -411,7 +411,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     }
 
     Reference< XModel > xModel       = aMediaDesc.getOrDefault( "Model", Reference< XModel >() );
-    ::rtl::OUString     sSalvagedURL = aMediaDesc.getOrDefault( "SalvagedFile", _rURL );
+    OUString            sSalvagedURL = aMediaDesc.getOrDefault( "SalvagedFile", _rURL );
 
     sal_Bool bCreateNew = sal_False;        // does the URL denote the private:factory URL?
     sal_Bool bStartTableWizard = sal_False; // start the table wizard after everything was loaded successfully?
@@ -436,7 +436,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     aMediaDesc.remove( "Model" );
 
     // also, it's allowed to specify the type of view which should be created
-    ::rtl::OUString sViewName = aMediaDesc.getOrDefault( "ViewName", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) ) );
+    OUString sViewName = aMediaDesc.getOrDefault( "ViewName", OUString( "Default" ) );
     aMediaDesc.remove( "ViewName" );
 
     sal_Int32 nInitialSelection = -1;
@@ -444,7 +444,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     {
         Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(m_aContext.getUNOContext()) );
 
-        ::rtl::OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE);
+        OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE);
         bCreateNew = sFactoryName.match(_rURL);
 
         Reference< XDocumentDataSource > xDocumentDataSource;
@@ -457,7 +457,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         else
         {
             ::comphelper::NamedValueCollection aCreationArgs;
-            aCreationArgs.put( (::rtl::OUString)INFO_POOLURL, sSalvagedURL );
+            aCreationArgs.put( (OUString)INFO_POOLURL, sSalvagedURL );
             xDocumentDataSource.set( xDatabaseContext->createInstanceWithArguments( aCreationArgs.getWrappedNamedValues() ), UNO_QUERY_THROW );
         }
 
@@ -593,14 +593,14 @@ IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, /*NOTINTERESTEDIN*/ )
     {
         Sequence< Any > aWizArgs(1);
         PropertyValue aValue;
-        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseLocation"));
+        aValue.Name = OUString("DatabaseLocation");
         aValue.Value <<= m_sCurrentURL;
         aWizArgs[0] <<= aValue;
 
         SolarMutexGuard aGuard;
         Reference< XJobExecutor > xTableWizard;
         if ( m_aContext.createComponentWithArguments( "com.sun.star.wizards.table.CallTableWizard", aWizArgs, xTableWizard ) )
-            xTableWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
+            xTableWizard->trigger(OUString("start"));
     }
     catch(const Exception&)
     {
@@ -621,17 +621,17 @@ extern "C" void SAL_CALL writeDBLoaderInfo2(void* pRegistryKey)
     Reference< XRegistryKey> xKey(reinterpret_cast< XRegistryKey*>(pRegistryKey));
 
     // register content loader for dispatch
-    ::rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM("/"));
+    OUString aImpl("/");
     aImpl += ::dbaxml::DBContentLoader::getImplementationName_Static();
 
-    ::rtl::OUString aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/Loader"));
+    OUString aImpltwo = aImpl;
+    aImpltwo += OUString("/UNO/Loader");
     Reference< XRegistryKey> xNewKey = xKey->createKey( aImpltwo );
     aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Loader"));
+    aImpltwo += OUString("/Loader");
     Reference< XRegistryKey >  xLoaderKey = xKey->createKey( aImpltwo );
-    xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
-    xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdatabase")) );
+    xNewKey = xLoaderKey->createKey( OUString("Pattern") );
+    xNewKey->setAsciiValue( OUString("private:factory/sdatabase") );
 }
 // -----------------------------------------------------------------------------
 

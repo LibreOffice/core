@@ -116,7 +116,7 @@ namespace dbmm
         MigrationLog                            aLogger;
         Reference< XOfficeDatabaseDocument >    xDocument;
         Reference< XModel2 >                    xDocumentModel;
-        ::rtl::OUString                         sSuccessfulBackupLocation;
+        OUString                         sSuccessfulBackupLocation;
         bool                                    bMigrationIsRunning;
         bool                                    bMigrationFailure;
         bool                                    bMigrationSuccess;
@@ -398,7 +398,7 @@ namespace dbmm
     {
         bool    lcl_equalURLs_nothrow(
             const Reference< XComponentContext >& context,
-            const ::rtl::OUString& _lhs, const ::rtl::OUString _rhs )
+            const OUString& _lhs, const OUString _rhs )
         {
             // the cheap situation: the URLs are equal
             if ( _lhs == _rhs )
@@ -432,7 +432,7 @@ namespace dbmm
             return false;
 
         SaveDBDocPage& rBackupPage = dynamic_cast< SaveDBDocPage& >( *GetPage( STATE_BACKUP_DBDOC ) );
-        ::rtl::OUString sBackupLocation( rBackupPage.getBackupLocation() );
+        OUString sBackupLocation( rBackupPage.getBackupLocation() );
 
         Any aError;
         try
@@ -478,13 +478,13 @@ namespace dbmm
     //--------------------------------------------------------------------
     void MacroMigrationDialog::impl_reloadDocument_nothrow( bool _bMigrationSuccess )
     {
-        typedef ::std::pair< Reference< XFrame >, ::rtl::OUString > ViewDescriptor;
+        typedef ::std::pair< Reference< XFrame >, OUString > ViewDescriptor;
         ::std::list< ViewDescriptor > aViews;
 
         try
         {
             // the information which is necessary to reload the document
-            ::rtl::OUString                     sDocumentURL ( m_pData->xDocumentModel->getURL()  );
+            OUString                            sDocumentURL ( m_pData->xDocumentModel->getURL()  );
             ::comphelper::NamedValueCollection  aDocumentArgs( m_pData->xDocumentModel->getArgs() );
             if ( !_bMigrationSuccess )
             {
@@ -515,7 +515,7 @@ namespace dbmm
                 aControllers.pop_front();
 
                 Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
-                ::rtl::OUString sViewName( xController->getViewControllerName() );
+                OUString sViewName( xController->getViewControllerName() );
 
                 if ( !xController->suspend( sal_True ) )
                 {   // ouch. There shouldn't be any modal dialogs and such, so there
@@ -547,7 +547,7 @@ namespace dbmm
                 aDocumentArgs.put( "ViewName", aView.second );
                 Reference< XInterface > xReloaded( xLoader->loadComponentFromURL(
                     sDocumentURL,
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
+                    OUString( "_self" ),
                     0,
                     aDocumentArgs.getPropertyValues()
                 ) );

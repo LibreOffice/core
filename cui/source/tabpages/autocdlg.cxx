@@ -726,7 +726,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
             *pUserData->pFont = aFont;
             sal_UCS4 aChar = pMapDlg->GetChar();
             // using the UCS4 constructor
-            rtl::OUString aOUStr( &aChar, 1 );
+            OUString aOUStr( &aChar, 1 );
             *pUserData->pString = aOUStr;
         }
         delete pMapDlg;
@@ -1323,7 +1323,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
                                 aReplaceTLB.GetEntryText( pFirstSel, 1 ) );
     if( bEnableNew )
     {
-        for(std::set<rtl::OUString>::iterator i = aFormatText.begin(); i != aFormatText.end(); ++i)
+        for(std::set<OUString>::iterator i = aFormatText.begin(); i != aFormatText.end(); ++i)
         {
             if((*i).equals(rShortTxt))
             {
@@ -1337,9 +1337,9 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-static sal_Bool lcl_FindInArray(std::vector<rtl::OUString>& rStrings, const String& rString)
+static sal_Bool lcl_FindInArray(std::vector<OUString>& rStrings, const String& rString)
 {
-    for(std::vector<rtl::OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
+    for(std::vector<OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
     {
         if((*i).equals(rString))
         {
@@ -1446,7 +1446,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                     }
                 }
 
-                for(std::vector<rtl::OUString>::iterator it = rArrays.aDoubleCapsStrings.begin(); it != rArrays.aDoubleCapsStrings.end(); ++i)
+                for(std::vector<OUString>::iterator it = rArrays.aDoubleCapsStrings.begin(); it != rArrays.aDoubleCapsStrings.end(); ++i)
                 {
                     String* s = new String(*it);
                     if(!pWrdList->insert(s).second)
@@ -1471,7 +1471,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                     }
                 }
 
-                for(std::vector<rtl::OUString>::iterator it = rArrays.aAbbrevStrings.begin(); it != rArrays.aAbbrevStrings.end(); ++it)
+                for(std::vector<OUString>::iterator it = rArrays.aAbbrevStrings.begin(); it != rArrays.aAbbrevStrings.end(); ++it)
                 {
                     String* s = new String(*it);
                     if(!pCplList->insert(s).second)
@@ -1580,10 +1580,10 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
 
         sal_uInt16 i;
         for(i = 0; i < aAbbrevLB.GetEntryCount(); i++)
-            pArrays->aAbbrevStrings.push_back(rtl::OUString(aAbbrevLB.GetEntry(i)));
+            pArrays->aAbbrevStrings.push_back(OUString(aAbbrevLB.GetEntry(i)));
 
         for(i = 0; i < aDoubleCapsLB.GetEntryCount(); i++)
-            pArrays->aDoubleCapsStrings.push_back(rtl::OUString(aDoubleCapsLB.GetEntry(i)));
+            pArrays->aDoubleCapsStrings.push_back(OUString(aDoubleCapsLB.GetEntry(i)));
     }
     aDoubleCapsLB.Clear();
     aAbbrevLB.Clear();
@@ -1594,10 +1594,10 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
     if(aStringsTable.find(eLang) != aStringsTable.end())
     {
         StringsArrays& rArrays = aStringsTable[eLang];
-        for(std::vector<rtl::OUString>::iterator i = rArrays.aAbbrevStrings.begin(); i != rArrays.aAbbrevStrings.end(); ++i)
+        for(std::vector<OUString>::iterator i = rArrays.aAbbrevStrings.begin(); i != rArrays.aAbbrevStrings.end(); ++i)
             aAbbrevLB.InsertEntry(*i);
 
-        for(std::vector<rtl::OUString>::iterator i = rArrays.aDoubleCapsStrings.begin(); i != rArrays.aDoubleCapsStrings.end(); ++i)
+        for(std::vector<OUString>::iterator i = rArrays.aDoubleCapsStrings.begin(); i != rArrays.aDoubleCapsStrings.end(); ++i)
             aDoubleCapsLB.InsertEntry(*i);
     }
     else
@@ -2105,7 +2105,7 @@ String OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
     }
     aStrCodes[ nFullLen++ ] = ')';
     // using the new UCS4 constructor
-    rtl::OUString aOUStr( aStrCodes, nFullLen );
+    OUString aOUStr( aStrCodes, nFullLen );
     return aOUStr;
 }
 
@@ -2311,7 +2311,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
         ::com::sun::star::uno::Reference<
             ::com::sun::star::datatransfer::XTransferable > xRef( pCntnr );
 
-        rtl::OStringBuffer sData;
+        OStringBuffer sData;
         const sal_Char aLineEnd[] =
 #if defined(WNT)
                 "\015\012";
@@ -2323,7 +2323,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
         for( sal_uInt16 n = 0; n < nSelCnt; ++n )
         {
-            sData.append(rtl::OUStringToOString(aLBEntries.GetSelectEntry(n),
+            sData.append(OUStringToOString(aLBEntries.GetSelectEntry(n),
                 nEncode));
             sData.append(RTL_CONSTASCII_STRINGPARAM(aLineEnd));
         }
@@ -2395,11 +2395,11 @@ SfxTabPage* OfaSmartTagOptionsTabPage::Create( Window* pParent, const SfxItemSet
 */
 struct ImplSmartTagLBUserData
 {
-    rtl::OUString maSmartTagType;
+    OUString maSmartTagType;
     uno::Reference< smarttags::XSmartTagRecognizer > mxRec;
     sal_Int32 mnSmartTagIdx;
 
-    ImplSmartTagLBUserData( const rtl::OUString& rSmartTagType,
+    ImplSmartTagLBUserData( const OUString& rSmartTagType,
                             uno::Reference< smarttags::XSmartTagRecognizer > xRec,
                             sal_Int32 nSmartTagIdx ) :
         maSmartTagType( rSmartTagType ),
@@ -2437,21 +2437,21 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
     {
         uno::Reference< smarttags::XSmartTagRecognizer > xRec = rSmartTagMgr.GetRecognizer(i);
 
-        const rtl::OUString aName = xRec->getName( aLocale );
+        const OUString aName = xRec->getName( aLocale );
         const sal_Int32 nNumberOfSupportedSmartTags = xRec->getSmartTagCount();
 
         for ( sal_Int32 j = 0; j < nNumberOfSupportedSmartTags; ++j )
         {
-            const rtl::OUString aSmartTagType = xRec->getSmartTagName(j);
-            rtl::OUString aSmartTagCaption = rSmartTagMgr.GetSmartTagCaption( aSmartTagType, aLocale );
+            const OUString aSmartTagType = xRec->getSmartTagName(j);
+            OUString aSmartTagCaption = rSmartTagMgr.GetSmartTagCaption( aSmartTagType, aLocale );
 
             if ( aSmartTagCaption.isEmpty() )
                 aSmartTagCaption = aSmartTagType;
 
-            const rtl::OUString aLBEntry = aSmartTagCaption +
-                                           OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) +
+            const OUString aLBEntry = aSmartTagCaption +
+                                           OUString(" (") +
                                            aName +
-                                           OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                                           OUString(")");
 
             SvTreeListEntry* pEntry = m_aSmartTagTypesLB.SvTreeListBox::InsertEntry( aLBEntry );
             if ( pEntry )
@@ -2535,7 +2535,7 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
         return sal_False;
 
     sal_Bool bModifiedSmartTagTypes = sal_False;
-    std::vector< rtl::OUString > aDisabledSmartTagTypes;
+    std::vector< OUString > aDisabledSmartTagTypes;
 
     const sal_uLong nCount = m_aSmartTagTypesLB.GetEntryCount();
 

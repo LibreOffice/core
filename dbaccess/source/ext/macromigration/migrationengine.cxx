@@ -151,11 +151,11 @@ namespace dbmm
     {
         Reference< XCommandProcessor >  xCommandProcessor;
         Reference< XModel >             xDocument;          // valid only temporarily
-        ::rtl::OUString                 sHierarchicalName;
+        OUString                        sHierarchicalName;
         SubDocumentType                 eType;
         size_t                          nNumber;
 
-        SubDocument( const Reference< XCommandProcessor >& _rxCommandProcessor, const ::rtl::OUString& _rName,
+        SubDocument( const Reference< XCommandProcessor >& _rxCommandProcessor, const OUString& _rName,
                 const SubDocumentType _eType, const size_t _nNumber )
             :xCommandProcessor( _rxCommandProcessor )
             ,xDocument()
@@ -177,19 +177,19 @@ namespace dbmm
     namespace
     {
         //----------------------------------------------------------------
-        static const ::rtl::OUString& lcl_getScriptsStorageName()
+        static const OUString& lcl_getScriptsStorageName()
         {
-            static const ::rtl::OUString s_sScriptsStorageName( RTL_CONSTASCII_USTRINGPARAM( "Scripts" ) );
+            static const OUString s_sScriptsStorageName( "Scripts" );
             return s_sScriptsStorageName;
         }
 
         //----------------------------------------------------------------
-        static const ::rtl::OUString& lcl_getScriptsSubStorageName( const ScriptType _eType )
+        static const OUString& lcl_getScriptsSubStorageName( const ScriptType _eType )
         {
-            static const ::rtl::OUString s_sBeanShell ( RTL_CONSTASCII_USTRINGPARAM( "beanshell" ) );
-            static const ::rtl::OUString s_sJavaScript( RTL_CONSTASCII_USTRINGPARAM( "javascript" ) );
-            static const ::rtl::OUString s_sPython    ( RTL_CONSTASCII_USTRINGPARAM( "python" ) );      // TODO: is this correct?
-            static const ::rtl::OUString s_sJava      ( RTL_CONSTASCII_USTRINGPARAM( "java" ) );
+            static const OUString s_sBeanShell ( "beanshell" );
+            static const OUString s_sJavaScript( "javascript" );
+            static const OUString s_sPython    ( "python" );      // TODO: is this correct?
+            static const OUString s_sJava      ( "java" );
 
             switch ( _eType )
             {
@@ -202,12 +202,12 @@ namespace dbmm
             }
 
             OSL_FAIL( "lcl_getScriptsSubStorageName: illegal type!" );
-            static ::rtl::OUString s_sEmpty;
+            static OUString s_sEmpty;
             return s_sEmpty;
         }
 
         //----------------------------------------------------------------
-        static bool lcl_getScriptTypeFromLanguage( const ::rtl::OUString& _rLanguage, ScriptType& _out_rScriptType )
+        static bool lcl_getScriptTypeFromLanguage( const OUString& _rLanguage, ScriptType& _out_rScriptType )
         {
             struct LanguageMapping
             {
@@ -241,9 +241,9 @@ namespace dbmm
         }
 
         //----------------------------------------------------------------
-        ::rtl::OUString lcl_getSubDocumentDescription( const SubDocument& _rDocument )
+        OUString lcl_getSubDocumentDescription( const SubDocument& _rDocument )
         {
-            ::rtl::OUString sObjectName(
+            OUString sObjectName(
                     MacroMigrationResId(
                         _rDocument.eType == eForm ? STR_FORM : STR_REPORT).toString().
                 replaceFirst("$name$", _rDocument.sHierarchicalName));
@@ -259,15 +259,15 @@ namespace dbmm
                 return Any();
 
             Command aCommand;
-            aCommand.Name = ::rtl::OUString::createFromAscii( _pAsciiCommand );
+            aCommand.Name = OUString::createFromAscii( _pAsciiCommand );
             return _rxCommandProc->execute(
                 aCommand, _rxCommandProc->createCommandIdentifier(), NULL );
         }
 
         //----------------------------------------------------------------
-        ::rtl::OUString lcl_getMimeType_nothrow( const Reference< XCommandProcessor >& _rxContent )
+        OUString lcl_getMimeType_nothrow( const Reference< XCommandProcessor >& _rxContent )
         {
-            ::rtl::OUString sMimeType;
+            OUString sMimeType;
             try
             {
                 Reference< XContent > xContent( _rxContent, UNO_QUERY_THROW );
@@ -302,7 +302,7 @@ namespace dbmm
 
                 Reference< XCommandProcessor > xCommandProcessor( _rDocument.xCommandProcessor, UNO_SET_THROW );
                 Command aCommand;
-                aCommand.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "openDesign" ) );
+                aCommand.Name = OUString( "openDesign" );
                 aCommand.Argument <<= aLoadArgs.getPropertyValues();
                 Reference< XComponent > xDocComponent(
                     xCommandProcessor->execute(
@@ -619,7 +619,7 @@ namespace dbmm
 
         /** returns the names of the elements in the "Scripts" storage
         */
-        ::std::set< ::rtl::OUString >
+        ::std::set< OUString >
                 getElementNames() const;
 
         /** removes the sub storage for a given script type
@@ -717,7 +717,7 @@ namespace dbmm
         if ( !isValid() )
             return false;
 
-        const ::rtl::OUString& rSubStorageName( lcl_getScriptsSubStorageName( _eType ) );
+        const OUString& rSubStorageName( lcl_getScriptsSubStorageName( _eType ) );
         return  m_xScriptsStorage->hasByName( rSubStorageName )
             &&  m_xScriptsStorage->isStorageElement( rSubStorageName );
     }
@@ -736,17 +736,17 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    ::std::set< ::rtl::OUString > ScriptsStorage::getElementNames() const
+    ::std::set< OUString > ScriptsStorage::getElementNames() const
     {
-        Sequence< ::rtl::OUString > aElementNames;
+        Sequence< OUString > aElementNames;
         if ( isValid() )
             aElementNames = m_xScriptsStorage->getElementNames();
 
-        ::std::set< ::rtl::OUString > aNames;
+        ::std::set< OUString > aNames;
         ::std::copy(
             aElementNames.getConstArray(),
             aElementNames.getConstArray() + aElementNames.getLength(),
-            ::std::insert_iterator< ::std::set< ::rtl::OUString > >( aNames, aNames.end() )
+            ::std::insert_iterator< ::std::set< OUString > >( aNames, aNames.end() )
         );
         return aNames;
     }
@@ -754,7 +754,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     void ScriptsStorage::removeScriptTypeStorage( const ScriptType _eType ) const
     {
-        ::rtl::OUString sSubStorageName( lcl_getScriptsSubStorageName( _eType ) );
+        OUString sSubStorageName( lcl_getScriptsSubStorageName( _eType ) );
         if ( m_xScriptsStorage->hasByName( sSubStorageName ) )
             m_xScriptsStorage->removeElement( sSubStorageName );
     }
@@ -787,8 +787,8 @@ namespace dbmm
     {
     public:
         ProgressDelegator(  IMigrationProgress& _rDelegator,
-                            const ::rtl::OUString& _rObjectName,
-                            const ::rtl::OUString& _rAction
+                            const OUString& _rObjectName,
+                            const OUString& _rAction
                           )
             :m_rDelegator( _rDelegator )
             ,m_sObjectName( _rObjectName )
@@ -815,8 +815,8 @@ namespace dbmm
 
     private:
         IMigrationProgress& m_rDelegator;
-        ::rtl::OUString     m_sObjectName;
-        ::rtl::OUString     m_sAction;
+        OUString     m_sObjectName;
+        OUString     m_sAction;
     };
 
     //====================================================================
@@ -929,9 +929,9 @@ namespace dbmm
         */
         bool    impl_adjustDialogEvents_nothrow(
                     Any& _inout_rDialogLibraryElement,
-                    const ::rtl::OUString& _rDocName,
-                    const ::rtl::OUString& _rDialogLibName,
-                    const ::rtl::OUString& _rDialogName
+                    const OUString& _rDocName,
+                    const OUString& _rDialogLibName,
+                    const OUString& _rDialogName
                 ) const;
 
         /** adjust the document-events which refer to macros/scripts in the document, taking into
@@ -960,8 +960,8 @@ namespace dbmm
                 if and only if adjustments to the script code have been made
         */
         bool    impl_adjustScriptLibrary_nothrow(
-                    const ::rtl::OUString& _rScriptType,
-                    ::rtl::OUString& _inout_rScriptCode
+                    const OUString& _rScriptType,
+                    OUString& _inout_rScriptCode
                 ) const;
 
         bool    impl_adjustScriptLibrary_nothrow( Any& _inout_rScriptDescriptor ) const;
@@ -975,7 +975,7 @@ namespace dbmm
         bool    impl_unprotectPasswordLibrary_throw(
                     const Reference< XLibraryContainerPassword >& _rxPasswordManager,
                     const ScriptType _eScriptType,
-                    const ::rtl::OUString& _rLibraryName
+                    const OUString& _rLibraryName
                 ) const;
     };
 
@@ -1016,9 +1016,9 @@ namespace dbmm
 
         // initialize global progress
         sal_Int32 nOverallRange( m_aSubDocs.size() );
-        rtl::OUString sProgressSkeleton(
+        OUString sProgressSkeleton(
             MacroMigrationResId( STR_OVERALL_PROGRESS).toString().
-            replaceFirst("$overall$", rtl::OUString::valueOf(nOverallRange)));
+            replaceFirst("$overall$", OUString::valueOf(nOverallRange)));
 
         m_rProgress.start( nOverallRange );
 
@@ -1029,9 +1029,9 @@ namespace dbmm
         {
             sal_Int32 nOverallProgressValue( doc - m_aSubDocs.begin() + 1 );
             // update overall progress text
-            ::rtl::OUString sOverallProgress(
+            OUString sOverallProgress(
                 sProgressSkeleton.replaceFirst("$current$",
-                    ::rtl::OUString::valueOf(nOverallProgressValue)));
+                    OUString::valueOf(nOverallProgressValue)));
             m_rProgress.setOverallProgressText( sOverallProgress );
 
             // migrate document
@@ -1057,21 +1057,21 @@ namespace dbmm
     namespace
     {
         void lcl_collectHierarchicalElementNames_throw(
-            const Reference< XNameAccess >& _rxContainer, const ::rtl::OUString& _rContainerLoc,
+            const Reference< XNameAccess >& _rxContainer, const OUString& _rContainerLoc,
             SubDocuments& _out_rDocs, const SubDocumentType _eType, size_t& _io_counter )
         {
-            const ::rtl::OUString sHierarhicalBase(
-                _rContainerLoc.isEmpty() ? ::rtl::OUString() :
-                                           ::rtl::OUStringBuffer( _rContainerLoc ).appendAscii( "/" ).makeStringAndClear());
+            const OUString sHierarhicalBase(
+                _rContainerLoc.isEmpty() ? OUString() :
+                                           OUStringBuffer( _rContainerLoc ).appendAscii( "/" ).makeStringAndClear());
 
-            Sequence< ::rtl::OUString > aElementNames( _rxContainer->getElementNames() );
-            for (   const ::rtl::OUString* elementName = aElementNames.getConstArray();
+            Sequence< OUString > aElementNames( _rxContainer->getElementNames() );
+            for (   const OUString* elementName = aElementNames.getConstArray();
                     elementName != aElementNames.getConstArray() + aElementNames.getLength();
                     ++elementName
                 )
             {
                 Any aElement( _rxContainer->getByName( *elementName ) );
-                ::rtl::OUString sElementName( sHierarhicalBase + *elementName );
+                OUString sElementName( sHierarhicalBase + *elementName );
 
                 Reference< XNameAccess > xSubContainer( aElement, UNO_QUERY );
                 if ( xSubContainer.is() )
@@ -1102,11 +1102,11 @@ namespace dbmm
         {
             Reference< XNameAccess > xDocContainer( m_xDocument->getFormDocuments(), UNO_SET_THROW );
             m_nFormCount = 0;
-            lcl_collectHierarchicalElementNames_throw( xDocContainer, ::rtl::OUString(), m_aSubDocs, eForm, m_nFormCount );
+            lcl_collectHierarchicalElementNames_throw( xDocContainer, OUString(), m_aSubDocs, eForm, m_nFormCount );
 
             xDocContainer.set( m_xDocument->getReportDocuments(), UNO_SET_THROW );
             m_nReportCount = 0;
-            lcl_collectHierarchicalElementNames_throw( xDocContainer, ::rtl::OUString(), m_aSubDocs, eReport, m_nReportCount );
+            lcl_collectHierarchicalElementNames_throw( xDocContainer, OUString(), m_aSubDocs, eReport, m_nReportCount );
         }
         catch( const Exception& )
         {
@@ -1127,12 +1127,12 @@ namespace dbmm
         m_nCurrentDocumentID = m_rLogger.startedDocument( _rDocument.eType, _rDocument.sHierarchicalName );
 
         // start the progress
-        ::rtl::OUString sObjectName( lcl_getSubDocumentDescription( _rDocument ) );
-        m_rProgress.startObject( sObjectName, ::rtl::OUString(), DEFAULT_DOC_PROGRESS_RANGE );
+        OUString sObjectName( lcl_getSubDocumentDescription( _rDocument ) );
+        m_rProgress.startObject( sObjectName, OUString(), DEFAULT_DOC_PROGRESS_RANGE );
 
         // -----------------
         // load the document
-        ::rtl::Reference< ProgressCapture > pStatusIndicator( new ProgressCapture( sObjectName, m_rProgress ) );
+        Reference< ProgressCapture > pStatusIndicator( new ProgressCapture( sObjectName, m_rProgress ) );
         SubDocument aSubDocument( _rDocument );
         OpenDocResult eResult = lcl_loadSubDocument_nothrow( aSubDocument, pStatusIndicator.get(), m_rLogger );
         if ( eResult != eOpenedDoc )
@@ -1209,13 +1209,13 @@ namespace dbmm
     //--------------------------------------------------------------------
     namespace
     {
-        static ::rtl::OUString lcl_createTargetLibName( const SubDocument& _rDocument,
-            const ::rtl::OUString& _rSourceLibName, const Reference< XNameAccess >& _rxTargetContainer )
+        static OUString lcl_createTargetLibName( const SubDocument& _rDocument,
+            const OUString& _rSourceLibName, const Reference< XNameAccess >& _rxTargetContainer )
         {
             // The new library name is composed from the prefix, the base name, and the old library name.
-            const ::rtl::OUString sPrefix = (_rDocument.eType == eForm)?rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Form_")): rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Report_"));
+            const OUString sPrefix = (_rDocument.eType == eForm)?OUString("Form_"): OUString("Report_");
 
-            ::rtl::OUString sBaseName( _rDocument.sHierarchicalName.copy(
+            OUString sBaseName( _rDocument.sHierarchicalName.copy(
                 _rDocument.sHierarchicalName.lastIndexOf( '/' ) + 1 ) );
             // Normalize this name. In our current storage implementation (and script containers in a document
             // are finally mapped to sub storages of the document storage), not all characters are allowed.
@@ -1242,7 +1242,7 @@ namespace dbmm
             }
             if ( ( nInvalid <= 3 ) && ( nInvalid * 2 <= nValid ) )
             {   // not "too many" invalid => replace them
-                ::rtl::OUStringBuffer aReplacement;
+                OUStringBuffer aReplacement;
                 aReplacement.ensureCapacity( nBaseNameLen );
                 aReplacement.append( sBaseName );
                 const sal_Unicode* pReplacement = aReplacement.getStr();
@@ -1253,12 +1253,12 @@ namespace dbmm
                 }
                 sBaseName = aReplacement.makeStringAndClear();
 
-                ::rtl::OUStringBuffer aNewLibNameAttempt;
+                OUStringBuffer aNewLibNameAttempt;
                 aNewLibNameAttempt.append( sPrefix );
                 aNewLibNameAttempt.append( sBaseName );
                 aNewLibNameAttempt.appendAscii( "_" );
                 aNewLibNameAttempt.append( _rSourceLibName );
-                ::rtl::OUString sTargetName( aNewLibNameAttempt.makeStringAndClear() );
+                OUString sTargetName( aNewLibNameAttempt.makeStringAndClear() );
                 if ( !_rxTargetContainer->hasByName( sTargetName ) )
                     return sTargetName;
             }
@@ -1267,9 +1267,9 @@ namespace dbmm
             // (The latter is valid, since there can be multiple sub documents with the same base name,
             // in different levels in the hierarchy.)
             // In this case, just use the umambiguous sub document number.
-            ::rtl::OUStringBuffer aNewLibName;
+            OUStringBuffer aNewLibName;
             aNewLibName.append( sPrefix );
-            aNewLibName.append( ::rtl::OUString::valueOf( sal_Int64( _rDocument.nNumber ) ) );
+            aNewLibName.append( OUString::valueOf( sal_Int64( _rDocument.nNumber ) ) );
             aNewLibName.appendAscii( "_" );
             aNewLibName.append( _rSourceLibName );
             return aNewLibName.makeStringAndClear();
@@ -1291,7 +1291,7 @@ namespace dbmm
             {   // no scripts at all, or no scripts of the given type
                 return !m_rLogger.hadFailure();
             }
-            ::std::set< ::rtl::OUString > aElementNames( aDocStorage.getElementNames() );
+            ::std::set< OUString > aElementNames( aDocStorage.getElementNames() );
 
             ScriptType aKnownStorageBasedTypes[] = {
                 eBeanShell, eJavaScript, ePython, eJava
@@ -1353,13 +1353,13 @@ namespace dbmm
 
             SharedStorage xScriptsRoot( aDocStorage.getScriptsRoot( _eScriptType ) );
             if ( !xScriptsRoot.is() )
-                throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "internal error" ) ), NULL );
+                throw RuntimeException( OUString( "internal error" ), NULL );
 
             // loop through the script libraries
-            Sequence< ::rtl::OUString > aStorageElements( xScriptsRoot->getElementNames() );
+            Sequence< OUString > aStorageElements( xScriptsRoot->getElementNames() );
             aPhase.start( _nPhaseID, aStorageElements.getLength() );
 
-            for (   const ::rtl::OUString* element = aStorageElements.getConstArray();
+            for (   const OUString* element = aStorageElements.getConstArray();
                     element != aStorageElements.getConstArray() + aStorageElements.getLength();
                     ++element
                 )
@@ -1399,7 +1399,7 @@ namespace dbmm
                 }
 
                 // move the library to the DBDoc's scripts library, under the new name
-                ::rtl::OUString sNewLibName( lcl_createTargetLibName( _rDocument, *element, xTargetStorage.getTyped().get() ) );
+                OUString sNewLibName( lcl_createTargetLibName( _rDocument, *element, xTargetStorage.getTyped().get() ) );
                 xScriptsRoot->moveElementTo( *element, xTargetStorage, sNewLibName );
 
                 // log the fact that we moved the library
@@ -1482,7 +1482,7 @@ namespace dbmm
             OSL_ENSURE( xSourcePasswords.is(),
                 "MigrationEngine_Impl::impl_migrateContainerLibraries_nothrow: suspicious: no password management for the source libraries!" );
 
-            Sequence< ::rtl::OUString > aSourceLibNames( xSourceLibraries->getElementNames() );
+            Sequence< OUString > aSourceLibNames( xSourceLibraries->getElementNames() );
             aPhase.start( _nPhaseID, aSourceLibNames.getLength() );
 
             if ( !xSourceLibraries->hasElements() )
@@ -1506,9 +1506,9 @@ namespace dbmm
             }
 
             // copy all libs to the target, with potentially renaming them
-            const ::rtl::OUString* pSourceLibBegin = aSourceLibNames.getConstArray();
-            const ::rtl::OUString* pSourceLibEnd = pSourceLibBegin + aSourceLibNames.getLength();
-            for (   const ::rtl::OUString* pSourceLibName = pSourceLibBegin;
+            const OUString* pSourceLibBegin = aSourceLibNames.getConstArray();
+            const OUString* pSourceLibEnd = pSourceLibBegin + aSourceLibNames.getLength();
+            for (   const OUString* pSourceLibName = pSourceLibBegin;
                     pSourceLibName != pSourceLibEnd;
                     ++pSourceLibName
                 )
@@ -1531,7 +1531,7 @@ namespace dbmm
                     }
                 }
 
-                ::rtl::OUString sNewLibName( lcl_createTargetLibName( _rDocument, *pSourceLibName, xTargetLibraries.get() ) );
+                OUString sNewLibName( lcl_createTargetLibName( _rDocument, *pSourceLibName, xTargetLibraries.get() ) );
 
                 if ( xSourceLibraries->isLibraryLink( *pSourceLibName ) )
                 {
@@ -1551,8 +1551,8 @@ namespace dbmm
                     Reference< XNameAccess > xSourceLib( xSourceLibraries->getByName( *pSourceLibName ), UNO_QUERY_THROW );
                     Reference< XNameContainer > xTargetLib( xTargetLibraries->createLibrary( sNewLibName ), UNO_QUERY_THROW );
 
-                    Sequence< ::rtl::OUString > aLibElementNames( xSourceLib->getElementNames() );
-                    for (   const ::rtl::OUString* pSourceElementName = aLibElementNames.getConstArray();
+                    Sequence< OUString > aLibElementNames( xSourceLib->getElementNames() );
+                    for (   const OUString* pSourceElementName = aLibElementNames.getConstArray();
                             pSourceElementName != aLibElementNames.getConstArray() + aLibElementNames.getLength();
                             ++pSourceElementName
                         )
@@ -1614,8 +1614,8 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    bool MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow( const ::rtl::OUString& _rScriptType,
-            ::rtl::OUString& _inout_rScriptCode ) const
+    bool MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow( const OUString& _rScriptType,
+            OUString& _inout_rScriptCode ) const
     {
         OSL_PRECOND( !_inout_rScriptCode.isEmpty(), "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: invalid script!" );
         if ( _inout_rScriptCode.isEmpty() )
@@ -1640,8 +1640,7 @@ namespace dbmm
             Reference< XUriReferenceFactory > xUriRefFac = UriReferenceFactory::create( m_aContext.getUNOContext() );
             Reference< XVndSunStarScriptUrlReference > xUri( xUriRefFac->parse( _inout_rScriptCode ), UNO_QUERY_THROW );
 
-            ::rtl::OUString sScriptLanguage = xUri->getParameter(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "language" ) ) );
+            OUString sScriptLanguage = xUri->getParameter( OUString( "language" ) );
             ScriptType eScriptType = eBasic;
             if ( !lcl_getScriptTypeFromLanguage( sScriptLanguage, eScriptType ) )
             {
@@ -1654,15 +1653,14 @@ namespace dbmm
                 return false;
             }
 
-            ::rtl::OUString sLocation = xUri->getParameter(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "location" ) ) );
+            OUString sLocation = xUri->getParameter( OUString( "location" ) );
             if ( sLocation != "document" )
             {
                 // only document libraries must be migrated, of course
                 return false;
             }
 
-            ::rtl::OUString sScriptName = xUri->getName();
+            OUString sScriptName = xUri->getName();
             sal_Int32 nLibModuleSeparator = sScriptName.indexOf( '.' );
             if ( nLibModuleSeparator < 0 )
             {
@@ -1676,13 +1674,13 @@ namespace dbmm
             }
 
             // replace the library name
-            ::rtl::OUString sLibrary = sScriptName.copy( 0, nLibModuleSeparator );
-            ::rtl::OUString sNewLibName = m_rLogger.getNewLibraryName(
+            OUString sLibrary = sScriptName.copy( 0, nLibModuleSeparator );
+            OUString sNewLibName = m_rLogger.getNewLibraryName(
                 m_nCurrentDocumentID, eScriptType, sLibrary );
             OSL_ENSURE( sLibrary != sNewLibName,
                 "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: a library which has not been migrated?" );
 
-            ::rtl::OUStringBuffer aNewLocation;
+            OUStringBuffer aNewLocation;
             aNewLocation.append( sNewLibName );
             aNewLocation.append( sScriptName.copy( nLibModuleSeparator ) );
             xUri->setName( aNewLocation.makeStringAndClear() );
@@ -1724,8 +1722,8 @@ namespace dbmm
     {
         ::comphelper::NamedValueCollection aScriptDesc( _inout_rScriptDescriptor );
 
-        ::rtl::OUString sScriptType;
-        ::rtl::OUString sScript;
+        OUString sScriptType;
+        OUString sScript;
         try
         {
             OSL_VERIFY( aScriptDesc.get_ensureType( "EventType", sScriptType ) );
@@ -1759,10 +1757,10 @@ namespace dbmm
                 return true;
 
             Reference< XNameReplace > xEvents( xSuppEvents->getEvents(), UNO_SET_THROW );
-            Sequence< ::rtl::OUString > aEventNames = xEvents->getElementNames();
+            Sequence< OUString > aEventNames = xEvents->getElementNames();
 
             Any aEvent;
-            for (   const ::rtl::OUString* eventName = aEventNames.getConstArray();
+            for (   const OUString* eventName = aEventNames.getConstArray();
                     eventName != aEventNames.getConstArray() + aEventNames.getLength();
                     ++eventName
                 )
@@ -1796,10 +1794,10 @@ namespace dbmm
     {
         Reference< XScriptEventsSupplier > xEventsSupplier( _rxElement, UNO_QUERY_THROW );
         Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
-        Sequence< ::rtl::OUString > aEventNames( xEvents->getElementNames() );
+        Sequence< OUString > aEventNames( xEvents->getElementNames() );
 
-        const ::rtl::OUString* eventName = aEventNames.getArray();
-        const ::rtl::OUString* eventNamesEnd = eventName + aEventNames.getLength();
+        const OUString* eventName = aEventNames.getArray();
+        const OUString* eventNamesEnd = eventName + aEventNames.getLength();
 
         ScriptEventDescriptor aScriptEvent;
         for ( ; eventName != eventNamesEnd; ++eventName )
@@ -1815,7 +1813,7 @@ namespace dbmm
 
     //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_adjustDialogEvents_nothrow( Any& _inout_rDialogLibraryElement,
-        const ::rtl::OUString& _rDocName, const ::rtl::OUString& _rDialogLibName, const ::rtl::OUString& _rDialogName ) const
+        const OUString& _rDocName, const OUString& _rDialogLibName, const OUString& _rDialogName ) const
     {
         try
         {
@@ -1830,9 +1828,9 @@ namespace dbmm
             impl_adjustDialogElementEvents_throw( xDialogModel );
 
             // adjust the events of the controls
-            Sequence< ::rtl::OUString > aControlNames( xDialogModel->getElementNames() );
-            const ::rtl::OUString* controlName = aControlNames.getConstArray();
-            const ::rtl::OUString* controlNamesEnd = controlName + aControlNames.getLength();
+            Sequence< OUString > aControlNames( xDialogModel->getElementNames() );
+            const OUString* controlName = aControlNames.getConstArray();
+            const OUString* controlNamesEnd = controlName + aControlNames.getLength();
             for ( ; controlName != controlNamesEnd; ++controlName )
             {
                 impl_adjustDialogElementEvents_throw( Reference< XInterface >( xDialogModel->getByName( *controlName ), UNO_QUERY ) );
@@ -1915,10 +1913,10 @@ namespace dbmm
 
     //--------------------------------------------------------------------
     bool MigrationEngine_Impl::impl_unprotectPasswordLibrary_throw( const Reference< XLibraryContainerPassword >& _rxPasswordManager,
-            const ScriptType _eScriptType, const ::rtl::OUString& _rLibraryName ) const
+            const ScriptType _eScriptType, const OUString& _rLibraryName ) const
     {
         // a human-readable description of the affected library
-        ::rtl::OUString sLibraryDescription(
+        OUString sLibraryDescription(
             MacroMigrationResId(STR_LIBRARY_TYPE_AND_NAME).toString().
             replaceFirst("$type$",
                 getScriptTypeDisplayName(_eScriptType)).
@@ -1928,7 +1926,7 @@ namespace dbmm
             // replaceFirst
 
         InteractionHandler aHandler( m_aContext, m_xDocumentModel );
-        ::rtl::OUString sPassword;
+        OUString sPassword;
         while ( true )
         {
             if ( !aHandler.requestDocumentPassword( sLibraryDescription, sPassword ) )

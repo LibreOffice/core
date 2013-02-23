@@ -40,7 +40,7 @@ namespace dbaxml
 DBG_NAME(OXMLDataSource)
 
 OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName,
+                sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const Reference< XAttributeList > & _xAttrList, const UsedFor _eUsedFor ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
@@ -59,15 +59,15 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
     bool bFoundSuppressVersionColumns = false;
 
     const sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
-        aProperty.Name = ::rtl::OUString();
+        aProperty.Name = OUString();
         aProperty.Value = Any();
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
@@ -156,7 +156,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 aProperty.Value <<= sValue.toInt32();
                 break;
             case XML_TOK_JAVA_CLASSPATH:
-                aProperty.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath"));
+                aProperty.Name = OUString("JavaDriverClassPath");
                 break;
         }
         if ( !aProperty.Name.isEmpty() )
@@ -210,7 +210,7 @@ OXMLDataSource::~OXMLDataSource()
 
 SvXMLImportContext* OXMLDataSource::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

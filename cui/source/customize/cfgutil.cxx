@@ -67,7 +67,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 namespace css = ::com::sun::star;
 
-static ::rtl::OUString SERVICE_UICATEGORYDESCRIPTION (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UICategoryDescription") );
+static OUString SERVICE_UICATEGORYDESCRIPTION ("com.sun.star.ui.UICategoryDescription");
 
 SfxStylesInfo_Impl::SfxStylesInfo_Impl()
 {}
@@ -77,18 +77,18 @@ void SfxStylesInfo_Impl::setModel(const ::com::sun::star::uno::Reference< ::com:
     m_xDoc = xModel;
 }
 
-static ::rtl::OUString CMDURL_SPART  (RTL_CONSTASCII_USTRINGPARAM(".uno:StyleApply?Style:string=") );
-static ::rtl::OUString CMDURL_FPART2 (RTL_CONSTASCII_USTRINGPARAM("&FamilyName:string=") );
+static OUString CMDURL_SPART  (".uno:StyleApply?Style:string=");
+static OUString CMDURL_FPART2 ("&FamilyName:string=");
 
-static ::rtl::OUString CMDURL_STYLEPROT_ONLY (RTL_CONSTASCII_USTRINGPARAM(".uno:StyleApply?") );
-static ::rtl::OUString CMDURL_SPART_ONLY     (RTL_CONSTASCII_USTRINGPARAM("Style:string=") );
-static ::rtl::OUString CMDURL_FPART_ONLY     (RTL_CONSTASCII_USTRINGPARAM("FamilyName:string=") );
+static OUString CMDURL_STYLEPROT_ONLY (".uno:StyleApply?");
+static OUString CMDURL_SPART_ONLY     ("Style:string=");
+static OUString CMDURL_FPART_ONLY     ("FamilyName:string=");
 
-static ::rtl::OUString STYLEPROP_UINAME (RTL_CONSTASCII_USTRINGPARAM("DisplayName") );
+static OUString STYLEPROP_UINAME ("DisplayName");
 
-::rtl::OUString SfxStylesInfo_Impl::generateCommand(const ::rtl::OUString& sFamily, const ::rtl::OUString& sStyle)
+OUString SfxStylesInfo_Impl::generateCommand(const OUString& sFamily, const OUString& sStyle)
 {
-    ::rtl::OUStringBuffer sCommand(1024);
+    OUStringBuffer sCommand(1024);
     sCommand.append(CMDURL_SPART );
     sCommand.append(sStyle       );
     sCommand.append(CMDURL_FPART2);
@@ -105,16 +105,16 @@ sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
     if (aStyle.sCommand.indexOf(CMDURL_STYLEPROT_ONLY, 0) != 0)
         return sal_False;
 
-    aStyle.sFamily = ::rtl::OUString();
-    aStyle.sStyle  = ::rtl::OUString();
+    aStyle.sFamily = OUString();
+    aStyle.sStyle  = OUString();
 
     sal_Int32       nCmdLen  = aStyle.sCommand.getLength();
-    ::rtl::OUString sCmdArgs = aStyle.sCommand.copy(LEN_STYLEPROT, nCmdLen-LEN_STYLEPROT);
+    OUString sCmdArgs = aStyle.sCommand.copy(LEN_STYLEPROT, nCmdLen-LEN_STYLEPROT);
     sal_Int32       i        = sCmdArgs.indexOf('&');
     if (i<0)
         return sal_False;
 
-    ::rtl::OUString sArg = sCmdArgs.copy(0, i);
+    OUString sArg = sCmdArgs.copy(0, i);
     if (sArg.indexOf(CMDURL_SPART_ONLY) == 0)
         aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
     else if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
@@ -150,14 +150,14 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
         if (xStyleSet.is())
             xStyleSet->getByName(aStyle.sStyle) >>= xStyle;
 
-        aStyle.sLabel = ::rtl::OUString();
+        aStyle.sLabel = OUString();
         if (xStyle.is())
             xStyle->getPropertyValue(STYLEPROP_UINAME) >>= aStyle.sLabel;
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { aStyle.sLabel = ::rtl::OUString(); }
+        { aStyle.sLabel = OUString(); }
 
     if (aStyle.sLabel.isEmpty())
     {
@@ -173,7 +173,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
         return ::std::vector< SfxStyleInfo_Impl >();
 
     css::uno::Reference< css::container::XNameAccess > xCont = xModel->getStyleFamilies();
-    css::uno::Sequence< ::rtl::OUString > lFamilyNames = xCont->getElementNames();
+    css::uno::Sequence< OUString > lFamilyNames = xCont->getElementNames();
     ::std::vector< SfxStyleInfo_Impl > lFamilies;
     sal_Int32 c = lFamilyNames.getLength();
     sal_Int32 i = 0;
@@ -205,11 +205,11 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     return lFamilies;
 }
 
-::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const ::rtl::OUString& sFamily)
+::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& sFamily)
 {
-    static ::rtl::OUString PROP_UINAME (RTL_CONSTASCII_USTRINGPARAM("DisplayName") );
+    static OUString PROP_UINAME ("DisplayName");
 
-    css::uno::Sequence< ::rtl::OUString > lStyleNames;
+    css::uno::Sequence< OUString > lStyleNames;
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameAccess > xFamilies = xModel->getStyleFamilies();
     css::uno::Reference< css::container::XNameAccess > xStyleSet;
@@ -371,8 +371,8 @@ struct SvxConfigGroupBoxResource_Impl : public Resource
     Image m_libImage;
     Image m_macImage;
     Image m_docImage;
-    ::rtl::OUString m_sMyMacros;
-    ::rtl::OUString m_sProdMacros;
+    OUString m_sMyMacros;
+    OUString m_sProdMacros;
     String m_sMacros;
     String m_sDlgMacros;
     String m_aHumanAppName;
@@ -454,8 +454,8 @@ void SfxConfigGroupListBox_Impl::InitModule()
         for (i1=0; i1<c1; ++i1)
         {
             sal_Int16&      rGroupID   = lGroups[i1];
-            ::rtl::OUString sGroupID   = ::rtl::OUString::valueOf((sal_Int32)rGroupID);
-            ::rtl::OUString sGroupName ;
+            OUString sGroupID   = OUString::valueOf((sal_Int32)rGroupID);
+            OUString sGroupName ;
 
             try
             {
@@ -543,7 +543,7 @@ namespace
 //-----------------------------------------------
 void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR          ,
                                       const css::uno::Reference< css::frame::XFrame >&              xFrame         ,
-                                      const ::rtl::OUString&                                        sModuleLongName)
+                                      const OUString&                                        sModuleLongName)
 {
     SetUpdateMode(sal_False);
     ClearAll(); // Remove all old entries from treelist box
@@ -572,13 +572,13 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
     try
     {
         Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ) ), UNO_QUERY_THROW );
+           OUString( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
         rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
     }
     catch( Exception& e )
     {
         OSL_TRACE(" Caught some exception whilst retrieving browse nodes from factory... Exception: %s",
-            ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         // TODO exception handling
     }
 
@@ -612,8 +612,8 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                         rootNode->getChildNodes();
                     sal_Bool bIsRootNode = sal_False;
 
-                    ::rtl::OUString user( RTL_CONSTASCII_USTRINGPARAM("user") );
-                    ::rtl::OUString share( RTL_CONSTASCII_USTRINGPARAM("share") );
+                    OUString user("user");
+                    OUString share("share");
                     if ( rootNode->getName() == "Root" )
                     {
                         bIsRootNode = sal_True;
@@ -625,7 +625,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                     //set the bDisplay flag to FALSE if the current
                     //node is a first level child of the Root and is NOT
                     //either the current document, user or share
-                    ::rtl::OUString currentDocTitle;
+                    OUString currentDocTitle;
                     Reference< XModel > xDocument( lcl_getScriptableDocument_nothrow( m_xFrame ) );
                     if ( xDocument.is() )
                     {
@@ -636,7 +636,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                     {
                         Reference< browse::XBrowseNode >& theChild = children[n];
                         sal_Bool bDisplay = sal_True;
-                        ::rtl::OUString uiName = theChild->getName();
+                        OUString uiName = theChild->getName();
                         if ( bIsRootNode )
                         {
                             if (  ! ((theChild->getName().equals( user )  || theChild->getName().equals( share ) ||
@@ -722,28 +722,28 @@ Image SfxConfigGroupListBox_Impl::GetImage(
     Image aImage;
     if ( bIsRootNode )
     {
-        ::rtl::OUString user( RTL_CONSTASCII_USTRINGPARAM("user") );
-        ::rtl::OUString share( RTL_CONSTASCII_USTRINGPARAM("share") );
+        OUString user("user");
+        OUString share("share");
         if (node->getName().equals( user ) || node->getName().equals(share ) )
         {
             aImage = pImp->m_hdImage;
         }
         else
         {
-            ::rtl::OUString factoryURL;
-            ::rtl::OUString nodeName = node->getName();
+            OUString factoryURL;
+            OUString nodeName = node->getName();
             Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, nodeName );
             if ( xDocumentModel.is() )
             {
                 Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
                 // get the long name of the document:
-                ::rtl::OUString appModule( xModuleManager->identify(
+                OUString appModule( xModuleManager->identify(
                                     xDocumentModel ) );
                 Sequence<beans::PropertyValue> moduleDescr;
                 Any aAny = xModuleManager->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SFTreeListBox::Init: failed to get PropertyValue") ), Reference< XInterface >());
+                    throw RuntimeException(OUString("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
                 }
                 beans::PropertyValue const * pmoduleDescr =
                     moduleDescr.getConstArray();
@@ -753,7 +753,7 @@ Image SfxConfigGroupListBox_Impl::GetImage(
                     {
                         pmoduleDescr[ pos ].Value >>= factoryURL;
                         OSL_TRACE("factory url for doc images is %s",
-                        ::rtl::OUStringToOString( factoryURL , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                        OUStringToOString( factoryURL , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                         break;
                     }
                 }
@@ -779,7 +779,7 @@ Image SfxConfigGroupListBox_Impl::GetImage(
 }
 
 Reference< XInterface  >
-SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
+SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xCtx, OUString& docName )
 {
     Reference< XInterface > xModel;
     Reference< frame::XDesktop2 > desktop = frame::Desktop::create( xCtx );
@@ -794,7 +794,7 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
             components->nextElement(), UNO_QUERY );
         if ( model.is() )
         {
-            ::rtl::OUString sTdocUrl =
+            OUString sTdocUrl =
                 ::comphelper::DocumentInfo::getDocumentTitle( model );
             if( sTdocUrl.equals( docName ) )
             {
@@ -807,9 +807,9 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
 }
 
 //-----------------------------------------------
-::rtl::OUString SfxConfigGroupListBox_Impl::MapCommand2UIName(const ::rtl::OUString& sCommand)
+OUString SfxConfigGroupListBox_Impl::MapCommand2UIName(const OUString& sCommand)
 {
-    ::rtl::OUString sUIName;
+    OUString sUIName;
     try
     {
         css::uno::Reference< css::container::XNameAccess > xModuleConf;
@@ -817,13 +817,13 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            sUIName = lProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ), ::rtl::OUString());
+            sUIName = lProps.getUnpackedValueOrDefault(OUString("Name"), OUString());
         }
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(css::uno::Exception&)
-        { sUIName = ::rtl::OUString(); }
+        { sUIName = OUString(); }
 
     // fallback for missing UINames !?
     if (sUIName.isEmpty())
@@ -866,7 +866,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
             for (i=0; i<c; ++i)
             {
                 const css::frame::DispatchInformation& rInfo      = lCommands[i];
-                ::rtl::OUString                        sUIName    = MapCommand2UIName(rInfo.Command);
+                OUString                        sUIName    = MapCommand2UIName(rInfo.Command);
                 SvTreeListEntry*                           pFuncEntry = pFunctionListBox->InsertEntry(sUIName, NULL);
                 SfxGroupInfo_Impl*                     pGrpInfo   = new SfxGroupInfo_Impl(SFX_CFGFUNCTION_SLOT, 0);
                 pGrpInfo->sCommand = rInfo.Command;
@@ -894,7 +894,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                         {
                             if (children[n]->getType() == browse::BrowseNodeTypes::SCRIPT)
                             {
-                                ::rtl::OUString uri;
+                                OUString uri;
 
                                 Reference < beans::XPropertySet >xPropSet( children[n], UNO_QUERY );
                                 if (!xPropSet.is())
@@ -1019,8 +1019,8 @@ void SfxConfigGroupListBox_Impl::RequestingChildren( SvTreeListEntry *pEntry )
                             rootNode->getChildNodes();
                         sal_Bool bIsRootNode = sal_False;
 
-                        ::rtl::OUString user( RTL_CONSTASCII_USTRINGPARAM("user") );
-                        ::rtl::OUString share( RTL_CONSTASCII_USTRINGPARAM("share" ));
+                        OUString user("user");
+                        OUString share("share" );
                         if ( rootNode->getName() == "Root" )
                         {
                             bIsRootNode = sal_True;
@@ -1032,7 +1032,7 @@ void SfxConfigGroupListBox_Impl::RequestingChildren( SvTreeListEntry *pEntry )
                         set the bDisplay flag to sal_False if the current
                         node is a first level child of the Root and is NOT
                         either the current document, user or share */
-                        ::rtl::OUString currentDocTitle;
+                        OUString currentDocTitle;
                         Reference< XModel > xDocument( lcl_getScriptableDocument_nothrow( m_xFrame ) );
                         if ( xDocument.is() )
                         {
@@ -1043,7 +1043,7 @@ void SfxConfigGroupListBox_Impl::RequestingChildren( SvTreeListEntry *pEntry )
                         for ( sal_Int32 n = 0; n < nLen; ++n )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
-                            ::rtl::OUString aName( theChild->getName() );
+                            OUString aName( theChild->getName() );
                             sal_Bool bDisplay = sal_True;
                             if ( bIsRootNode )
                             {

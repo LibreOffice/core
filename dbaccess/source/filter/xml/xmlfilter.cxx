@@ -126,7 +126,7 @@ namespace dbaxml
                     try
                     {
                         uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create( m_xContext );
-                        const ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+                        const OUString sTarget("_blank");
                         sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
                         uno::Reference< frame::XFrame> xFrame = xDesktop->findFrame(sTarget,nFrameSearchFlag);
                         uno::Reference<frame::XComponentLoader> xFrameLoad(xFrame,uno::UNO_QUERY);
@@ -135,20 +135,20 @@ namespace dbaxml
                         {
                             uno::Sequence < beans::PropertyValue > aArgs( 3);
                             sal_Int32 nLen = 0;
-                            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+                            aArgs[nLen].Name = OUString("AsTemplate");
                             aArgs[nLen++].Value <<= sal_False;
 
-                            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+                            aArgs[nLen].Name = OUString("ReadOnly");
                             aArgs[nLen++].Value <<= sal_True;
 
-                            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+                            aArgs[nLen].Name = OUString("Hidden");
                             aArgs[nLen++].Value <<= sal_True;
 
                             ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
                             SvtModuleOptions aModuleOptions;
                             uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
                                 aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),
-                                ::rtl::OUString(), // empty frame name
+                                OUString(), // empty frame name
                                 0,
                                 aArgs
                                 ),uno::UNO_QUERY);
@@ -180,7 +180,7 @@ namespace dbaxml
             // XPropertyChangeListener
             virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException)
             {
-                ::rtl::OUString sURL;
+                OUString sURL;
                 _rEvent.NewValue >>= sURL;
                 FastLoader* pCreatorThread = NULL;
 
@@ -252,9 +252,9 @@ sal_Int32 ReadThroughComponent(
     catch (const SAXParseException& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        ::rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "SAX parse exception catched while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        OStringBuffer aError(
+            "SAX parse exception catched while importing:\n");
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         aError.append(r.LineNumber);
         aError.append(',');
@@ -302,7 +302,7 @@ sal_Int32 ReadThroughComponent(
         try
         {
             // open stream (and set parser input)
-        ::rtl::OUString sStreamName = ::rtl::OUString::createFromAscii(pStreamName);
+        OUString sStreamName = OUString::createFromAscii(pStreamName);
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
             {
                 // stream name not found! Then try the compatibility name.
@@ -313,7 +313,7 @@ sal_Int32 ReadThroughComponent(
                     return 0;
 
                 // if so, does the stream exist?
-                sStreamName = ::rtl::OUString::createFromAscii(pCompatibilityStreamName);
+                sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
                 if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
                     return 0;
             }
@@ -322,7 +322,7 @@ sal_Int32 ReadThroughComponent(
             xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
 
             uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
-            uno::Any aAny = xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
+            uno::Any aAny = xProps->getPropertyValue( OUString("Encrypted" ) );
             aAny >>= bEncrypted;
         }
         catch (const packages::WrongPasswordException&)
@@ -365,11 +365,11 @@ ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
 
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_10TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
-    GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__db) ),
+    GetNamespaceMap().Add( OUString ( sXML_np__db ),
                         GetXMLToken(XML_N_DB),
                         XML_NAMESPACE_DB );
 
-    GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np___db) ),
+    GetNamespaceMap().Add( OUString ( sXML_np___db ),
                         GetXMLToken(XML_N_DB_OASIS),
                         XML_NAMESPACE_DB );
 }
@@ -424,10 +424,10 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    ::rtl::OUString sFileName;
+    OUString sFileName;
     ::comphelper::NamedValueCollection aMediaDescriptor( rDescriptor );
     if ( aMediaDescriptor.has( "URL" ) )
-        sFileName = aMediaDescriptor.getOrDefault( "URL", ::rtl::OUString() );
+        sFileName = aMediaDescriptor.getOrDefault( "URL", OUString() );
     if ( sFileName.isEmpty() && aMediaDescriptor.has( "FileName" ) )
         sFileName = aMediaDescriptor.getOrDefault( "FileName", sFileName );
 
@@ -450,7 +450,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             Any aError = ::cppu::getCaughtException();
             if  ( aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() ) )
                 throw;
-            throw lang::WrappedTargetRuntimeException( ::rtl::OUString(), *this, aError );
+            throw lang::WrappedTargetRuntimeException( OUString(), *this, aError );
         }
 
         uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
@@ -508,7 +508,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
-                                      const ::rtl::OUString& rLocalName,
+                                      const OUString& rLocalName,
                                       const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = 0;
@@ -827,7 +827,7 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
     return *m_pColumnElemTokenMap;
 }
 // -----------------------------------------------------------------------------
-SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const ::rtl::OUString& rLocalName,
+SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const OUString& rLocalName,
                                      const uno::Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
 {
     SvXMLImportContext *pContext = NULL;
@@ -842,7 +842,7 @@ SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const ::r
     return pContext;
 }
 // -----------------------------------------------------------------------------
-SvXMLImportContext* ODBFilter::CreateScriptContext( const ::rtl::OUString& _rLocalName )
+SvXMLImportContext* ODBFilter::CreateScriptContext( const OUString& _rLocalName )
 {
     return new XMLScriptContext( *this, XML_NAMESPACE_OFFICE, _rLocalName, GetModel() );
 }
@@ -881,7 +881,7 @@ void ODBFilter::setPropertyInfo()
         return;
 
     ::connectivity::DriversConfig aDriverConfig(GetComponentContext());
-    const ::rtl::OUString sURL = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_URL));
+    const OUString sURL = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_URL));
     ::comphelper::NamedValueCollection aDataSourceSettings = aDriverConfig.getProperties( sURL );
 
     Sequence<PropertyValue> aInfo;

@@ -77,16 +77,16 @@ using namespace com::sun::star;
 
 
 //-----------------------------------------------
-static ::rtl::OUString SERVICE_UICONFIGMGR              (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"              ));
+static OUString SERVICE_UICONFIGMGR              ("com.sun.star.ui.UIConfigurationManager"  );
 
-static ::rtl::OUString MODULEPROP_SHORTNAME             (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"                                  ));
-static ::rtl::OUString MODULEPROP_UINAME                (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryUIName"                                     ));
-static ::rtl::OUString CMDPROP_UINAME                   (RTL_CONSTASCII_USTRINGPARAM("Name"                                                     ));
+static OUString MODULEPROP_SHORTNAME             ("ooSetupFactoryShortName"                 );
+static OUString MODULEPROP_UINAME                ("ooSetupFactoryUIName"                    );
+static OUString CMDPROP_UINAME                   ("Name"                                    );
 
-static ::rtl::OUString FOLDERNAME_UICONFIG              (RTL_CONSTASCII_USTRINGPARAM("Configurations2"                                          ));
+static OUString FOLDERNAME_UICONFIG              ("Configurations2"                         );
 
-static ::rtl::OUString MEDIATYPE_PROPNAME               (RTL_CONSTASCII_USTRINGPARAM("MediaType"                                                ));
-static ::rtl::OUString MEDIATYPE_UICONFIG               (RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.ui.configuration"                 ));
+static OUString MEDIATYPE_PROPNAME               ("MediaType"                               );
+static OUString MEDIATYPE_UICONFIG               ("application/vnd.sun.xml.ui.configuration");
 
 //-----------------------------------------------
 static sal_uInt16 KEYCODE_ARRAY[] =
@@ -848,8 +848,8 @@ void SfxAcceleratorConfigPage::InitAccCfg()
                  css::frame::ModuleManager::create(comphelper::getComponentContext(m_xSMGR)));
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
         ::comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
-        m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_SHORTNAME, ::rtl::OUString());
-        m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_UINAME   , ::rtl::OUString());
+        m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_SHORTNAME, OUString());
+        m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_UINAME   , OUString());
 
         // get global accelerator configuration
         m_xGlobal = css::ui::GlobalAcceleratorConfiguration::create(comphelper::getComponentContext(m_xSMGR));
@@ -929,7 +929,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     for (i2=0; i2<c2; ++i2)
     {
         const css::awt::KeyEvent& aAWTKey  = lKeys[i2];
-              ::rtl::OUString     sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
+              OUString     sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
               String              sLabel   = GetLabel4Command(sCommand);
               KeyCode             aKeyCode = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
               sal_uInt16              nPos     = MapKeyCodeToPos(aKeyCode);
@@ -980,7 +980,7 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
     while (pEntry)
     {
         TAccInfo*          pUserData = (TAccInfo*)pEntry->GetUserData();
-        ::rtl::OUString    sCommand  ;
+        OUString    sCommand  ;
         css::awt::KeyEvent aAWTKey   ;
 
         if (pUserData)
@@ -1071,7 +1071,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
     // remove function name from selected entry
     sal_uInt16 nCol = aEntriesBox.TabCount() - 1;
     aEntriesBox.SetEntryText( String(), nPos, nCol );
-    pEntry->m_sCommand = ::rtl::OUString();
+    pEntry->m_sCommand = OUString();
 
     ((Link &) pFunctionBox->GetSelectHdl()).Call( pFunctionBox );
     return 0;
@@ -1086,7 +1086,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     {
         sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
         TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-        ::rtl::OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
+        OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
 
         aRemoveButton.Enable( sal_False );
         aChangeButton.Enable( sal_False );
@@ -1115,7 +1115,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         {
             sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( pLBEntry );
             TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
-            ::rtl::OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
+            OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
 
             if (pEntry->m_bIsConfigurable)
             {
@@ -1205,7 +1205,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
 {
     DBG_ASSERT( m_pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
 
-    ::rtl::OUString sCfgName;
+    OUString sCfgName;
     if ( ERRCODE_NONE == m_pFileDlg->GetError() )
         sCfgName = m_pFileDlg->GetPath();
 
@@ -1289,7 +1289,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 {
     DBG_ASSERT( m_pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
 
-    ::rtl::OUString sCfgName;
+    OUString sCfgName;
     if ( ERRCODE_NONE == m_pFileDlg->GetError() )
         sCfgName = m_pFileDlg->GetPath();
 
@@ -1332,7 +1332,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
                                 css::uno::UNO_QUERY_THROW);
 
             // set the correct media type if the storage was new created
-            ::rtl::OUString sMediaType;
+            OUString sMediaType;
             xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
             if (sMediaType.isEmpty())
                 xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, css::uno::makeAny(MEDIATYPE_UICONFIG));
@@ -1497,7 +1497,7 @@ String SfxAcceleratorConfigPage::GetLabel4Command(const String& sCommand)
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            String sLabel = String(lProps.getUnpackedValueOrDefault(CMDPROP_UINAME, ::rtl::OUString()));
+            String sLabel = String(lProps.getUnpackedValueOrDefault(CMDPROP_UINAME, OUString()));
             if (sLabel.Len())
                 return sLabel;
         }
