@@ -78,7 +78,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     }
     FreeLibrary(hinstDll);    
 
-    // Retreive startup info
+    // Retrieve startup info
 
     STARTUPINFO aStartupInfo;
 

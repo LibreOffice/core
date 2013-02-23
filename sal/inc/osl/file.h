@@ -361,7 +361,7 @@ typedef enum {
 #define osl_File_Attribute_OthRead              0x00001000
 #define osl_File_Attribute_OthExe               0x00002000
 
-/* Flags specifying which fields to retreive by osl_getFileStatus */
+/* Flags specifying which fields to retrieve by osl_getFileStatus */
 
 #define osl_FileStatus_Mask_Type                0x00000001
 #define osl_FileStatus_Mask_Attributes          0x00000002
@@ -545,7 +545,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
 #define osl_Volume_Attribute_Case_Is_Preserved     0x00000040L
 #define osl_Volume_Attribute_Case_Sensitive        0x00000080L
 
-/* Flags specifying which fields to retreive by osl_getVolumeInfo */
+/* Flags specifying which fields to retrieve by osl_getVolumeInfo */
 
 #define osl_VolumeInfo_Mask_Attributes             0x00000001L
 #define osl_VolumeInfo_Mask_TotalSpace             0x00000002L

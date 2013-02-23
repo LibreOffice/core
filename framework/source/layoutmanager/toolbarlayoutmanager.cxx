@@ -1242,7 +1242,7 @@ void ToolbarLayoutManager::implts_reparentToolbars()
                 uno::Reference< awt::XWindow > xWindow;
                 try
                 {
-                    // We have to retreive the window reference with try/catch as it is
+                    // We have to retrieve the window reference with try/catch as it is
                     // possible that all elements have been disposed!
                     xWindow = uno::Reference< awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
                 }

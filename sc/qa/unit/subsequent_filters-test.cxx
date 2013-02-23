@@ -1329,10 +1329,10 @@ void ScFiltersTest::testChartImportODS()
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve the drawing layer object.", pDrawLayer);
     const SdrPage* pPage = pDrawLayer->GetPage(1); // for the 2nd sheet.
-    CPPUNIT_ASSERT_MESSAGE("Failed to retreive the page object.", pPage);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve the page object.", pPage);
     CPPUNIT_ASSERT_MESSAGE("This page should contain one drawing object.", pPage->GetObjCount() == 1);
     const SdrObject* pObj = pPage->GetObj(0);
-    CPPUNIT_ASSERT_MESSAGE("Failed to retreive the drawing object.", pObj);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve the drawing object.", pObj);
     CPPUNIT_ASSERT_MESSAGE("This is not an OLE2 object.", pObj->GetObjIdentifier() == OBJ_OLE2);
     const SdrOle2Obj& rOleObj = static_cast<const SdrOle2Obj&>(*pObj);
     CPPUNIT_ASSERT_MESSAGE("This should be a chart object.", rOleObj.IsChart());
