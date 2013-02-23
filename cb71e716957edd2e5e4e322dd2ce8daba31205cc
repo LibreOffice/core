@@ -16,6 +16,24 @@
       "revId": "cb71e716957edd2e5e4e322dd2ce8daba31205cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///3w\u003d",
+        "filename": "instsetoo_native/CustomTarget_install.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000172
+      },
+      "writtenOn": "2013-02-23T23:14:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///6c\u003d",
+      "revId": "cb71e716957edd2e5e4e322dd2ce8daba31205cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
