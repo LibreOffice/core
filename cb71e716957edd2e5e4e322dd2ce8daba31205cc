@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///6c\u003d",
+        "filename": "instsetoo_native/CustomTarget_install.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-02-23T19:56:10Z",
+      "side": 1,
+      "message": "We need to localize these files with ulfex binary, see e.g. setup_native\\CustomTarget_mac.mk",
+      "revId": "cb71e716957edd2e5e4e322dd2ce8daba31205cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
