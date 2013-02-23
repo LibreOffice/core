@@ -193,8 +193,6 @@ namespace drawinglayer
                     if(fReducedVisualisationFactor != 1.0)
                     {
                         fReduceFactor *= fReducedVisualisationFactor;
-                        fViewSizeX *= fReducedVisualisationFactor;
-                        fViewSizeY *= fReducedVisualisationFactor;
                     }
                 }
 
