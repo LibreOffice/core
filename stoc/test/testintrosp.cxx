@@ -65,14 +65,14 @@ typedef WeakImplHelper1< XPropertySetInfo > ImplPropertySetInfoHelper;
 #define DEFAULT_INDEX_ACCESS_COUNT  10
 #define DEFAULT_NAME_ACCESS_COUNT   5
 
-//**************************************************************
-//*** Hilfs-Funktion, um vom Type eine XIdlClass zu bekommen ***
-//**************************************************************
+//*******************************************************************
+//*** Auxiliary function, in order to get from one type XIdlClass ***
+//*******************************************************************
 Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiServiceFactory > & xMgr )
 {
     static Reference< XIdlReflection > xRefl;
 
-    // void als Default-Klasse eintragen
+    // register void as default class
     Reference<XIdlClass> xRetClass;
     typelib_TypeDescription * pTD = 0;
     rType.getDescription( &pTD );
@@ -342,7 +342,7 @@ public:
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
             {}
 
-    // XIntroTest-Methoden
+    // XIntroTest methods
     // Attributes
     virtual OUString SAL_CALL getObjectName() throw(RuntimeException)
         { return m_ObjectName; }
@@ -415,7 +415,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  )
         throw(RuntimeException);
 
-    // XNameAccess-Methoden
+    // XNameAccess methods
     // Methods
     virtual Any SAL_CALL getByName( const OUString& aName )
         throw(NoSuchElementException, WrappedTargetException, RuntimeException);
@@ -424,7 +424,7 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(RuntimeException);
 
-    // XIndexAccess-Methoden
+    // XIndexAccess methods
     // Methods
     virtual sal_Int32 SAL_CALL getCount(  )
         throw(RuntimeException);
@@ -440,7 +440,7 @@ void ImplIntroTest::Init( void )
     aName += OUString::valueOf( nObjCount );
     setObjectName( aName );
 
-    // Properties initialisieren
+    // Properties initialization
     aAnyArray[0] <<= 3.14;
     aAnyArray[1] <<= (sal_Int32)42;
     aAnyArray[2] <<= OUString( OUString("Hallo") );
@@ -459,14 +459,14 @@ void ImplIntroTest::Init( void )
     m_nLaber = 1;
     eTypeClass = TypeClass_INTERFACE;
 
-    // String-Sequence intitialisieren
+    // String-Sequence initialization
     aStringSeq.realloc( 3 );
     OUString* pStr = aStringSeq.getArray();
     pStr[ 0 ] = OUString( OUString("String 0") );
     pStr[ 1 ] = OUString( OUString("String 1") );
     pStr[ 2 ] = OUString( OUString("String 2") );
 
-    // structs initialisieren
+    // structs initialization
     m_aFirstStruct.Name = OUString("FirstStruct-Name");
     m_aFirstStruct.Handle = 77777;
     //XIdlClassRef Type;
@@ -489,8 +489,8 @@ Reference< XPropertySetInfo > ImplIntroTest::getPropertySetInfo()
     throw(RuntimeException)
 {
     static ImplPropertySetInfo aInfo( mxMgr );
-    // Alle Objekt haben die gleichen Properties, deshalb kann
-    // die Info für alle gleich sein
+    // All objects have the same Properties, so
+    // the Info is the same for all
     return &aInfo;
 }
 
@@ -560,15 +560,13 @@ Reference< XIntroTest > ImplIntroTest::getIntroTest()
     return m_xIntroTest;
 }
 
-// Methoden von XElementAccess
+// Methods of XElementAccess
 Type ImplIntroTest::getElementType(  )
     throw(RuntimeException)
 {
     // TODO
     Type aRetType;
     return aRetType;
-    //return Reference< XIdlClass >();
-    //return Void_getReflection()->getIdlClass();
 }
 
 sal_Bool ImplIntroTest::hasElements(  )
@@ -577,7 +575,7 @@ sal_Bool ImplIntroTest::hasElements(  )
     return sal_True;
 }
 
-// XNameAccess-Methoden
+// XNameAccess methods
 sal_Int32 getIndexForName( const OUString& ItemName )
 {
     OUString aLeftStr = ItemName.copy( 0, 4 );
@@ -585,9 +583,6 @@ sal_Int32 getIndexForName( const OUString& ItemName )
     {
         // TODO
         OUString aNumStr = ItemName.copy( 4 );
-        //sal_Int32 iIndex = (INT32)UStringToString( aNumStr, CHARSET_SYSTEM );
-        //if( iIndex < DEFAULT_NAME_ACCESS_COUNT )
-            //return iIndex;
     }
     return -1;
 }
@@ -639,7 +634,7 @@ sal_Bool ImplIntroTest::hasByName( const OUString& aName )
     return ( getIndexForName( aName ) != -1 );
 }
 
-// XIndexAccess-Methoden
+// XIndexAccess methods
 sal_Int32 ImplIntroTest::getCount(  )
     throw(RuntimeException)
 {
@@ -864,7 +859,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
     //******************************************************
 
-    // Test-Objekt anlegen
+    // create Test object
     Any aObjAny = getIntrospectionTestObject( xMgr );
 
     // Introspection-Service unspecten

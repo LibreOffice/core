@@ -110,7 +110,7 @@ Test_Manager_Impl::~Test_Manager_Impl()
 }
 
 
-// alt, wird von der neuen Mimic nicht mehr gebraucht
+// old, is no longer needed by the new Mimic
 Reference< XInterface > SAL_CALL Test_Manager_Impl_CreateInstance_Impl()
 {
     return (OWeakObject *)new Test_Manager_Impl();

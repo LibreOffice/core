@@ -899,7 +899,6 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
             catch (const IllegalArgumentException &aExc)
             {
                 OSL_ENSURE( aExc.ArgumentPosition == 5 &&
-//                               aExc.Context == xLBT &&
                              aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                              "### unexpected exception content!" );
 
@@ -915,7 +914,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
         }
         catch (const RuntimeException & rExc)
         {
-            OSL_ENSURE(//rExc.Context == xLBT &&
+            OSL_ENSURE(
                         rExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                         "### unexpected exception content!" );
 
@@ -931,10 +930,10 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
     }
     catch (const Exception & aExc)
     {
-        OSL_ENSURE( //aExc.Context == xLBT &&
+        OSL_ENSURE(
                      aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")),
                      "### unexpected exception content!" );
-        return (//aExc.Context == xLBT &&
+        return (
                 aExc.Message.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dum dum dum ich tanz im kreis herum...")));
     }
     return sal_False;

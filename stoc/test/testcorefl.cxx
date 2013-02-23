@@ -100,8 +100,6 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     OSL_ENSURE(xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstUShort")) == aConstUShort, "test_RegCoreReflection(): error 4i");
     OSL_ENSURE(xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstLong")) == aConstLong, "test_RegCoreReflection(): error 4k");
     OSL_ENSURE(xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstULong")) == aConstULong, "test_RegCoreReflection(): error 4m");
-//      OSL_ENSURE(xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstFloat")) == aConstFloat, "test_RegCoreReflection(): error 4o");
-//      OSL_ENSURE(xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstDouble")) == aConstDouble, "test_RegCoreReflection(): error 4q");
 
     // Enums
 
@@ -229,15 +227,6 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     OSL_ENSURE( aAny.getValueTypeName() == "[][]ModuleA.StructA", "test_RegCoreReflection(): error 56" );
 
-//      xClass = xRefl->forName(OUString( "com.sun.star.beans.XIntroTest" ));
-
-//      OSL_ENSURE(xClass.is(), "test_RegCoreReflection(): error 58");
-//      OSL_ENSURE(xClass->getMethod(OUString("getStrings"))->getReturnType()->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 59");
-//      OSL_ENSURE(xClass->getMethod(OUString("getStrings"))->getReturnType()->getComponentType()->getName() == OUString("string"), "test_RegCoreReflection(): error 60");
-
-//      xClass->getMethod(OUString("getStrings"))->getReturnType()->createObject(aAny);
-//      OSL_ENSURE( aAny.getValueTypeName() == "[]string",  "test_RegCoreReflection(): error 61" );
-
     OSL_ENSURE(xRefl->forName(OUString("[][][]unsigned long"))->getComponentType()->getComponentType()->getComponentType()->getTypeClass() == TypeClass_UNSIGNED_LONG, "test_RegCoreReflection(): error 62");
 
     try
@@ -259,7 +248,6 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any gulp;
         rField = Reference< XIdlField2 > ( xRefl->forName(OUString("ModuleA.StructC"))->getField(OUString("aString")) , UNO_QUERY);
         rField->set( blup, gulp);
-//          xRefl->forName(OUString("ModuleA.StructC"))->getField(OUString("aString"))->set(blup, gulp);
         OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 64");
         return sal_False;
     }

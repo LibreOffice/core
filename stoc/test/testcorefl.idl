@@ -71,8 +71,6 @@ module ModuleC
     const unsigned short    aConstUShort    = 1;
     const long              aConstLong      = -2;
     const unsigned long     aConstULong     = 2;
-//      const hyper             aConstHyper     = -3;
-//      const unsigned hyper    aConstUHyper    = 3;
     const float             aConstFloat     = 3.14;
     const double            aConstDouble    = 3.14e-10;
 
