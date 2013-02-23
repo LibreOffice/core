@@ -351,7 +351,7 @@ public class LinguisticExamples
         public void processLinguServiceEvent( LinguServiceEvent aServiceEvent )
         {
             //! do here whatever you think needs to be done depending
-            //! on the event recieved (e.g. trigger background spellchecking
+            //! on the event received (e.g. trigger background spellchecking
             //! or hyphenation again.)
 
             System.out.println("Listener called");

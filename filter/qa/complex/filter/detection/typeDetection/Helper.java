@@ -134,13 +134,13 @@ public class Helper  {
 
              // example: data = "firstData;secondData;;forthData"
              // => three tokens => missing one data because the imagine
-             // "thirdData" was not recieved by data.nextToken()
+             // "thirdData" was not received by data.nextToken()
              // Therefore here comes a special handling for empty datas
              boolean nextIsData = false;
              int dataCount = 0;
              while (data.hasMoreTokens()) {
                  String myToken = data.nextToken();
-                 // if the "thirdData" will be recieved, myToken=";" but
+                 // if the "thirdData" will be received, myToken=";" but
                  // vData must add an empty String
                  if (myToken.equals(";")){
                      if (nextIsData ) {

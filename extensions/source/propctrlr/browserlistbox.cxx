@@ -162,7 +162,7 @@ namespace pcr
         */
         void SAL_CALL dispose();
 
-        /** sets the notification mode, so that notifications recieved from the controls are
+        /** sets the notification mode, so that notifications received from the controls are
             forwarded to our IControlContext either synchronously or asynchronously
             @param  _eMode
                 the new notification mode

@@ -114,7 +114,7 @@ namespace dbaui
         sal_uInt16              m_nFormActionNestingLevel;      // see enter-/leaveFormAction
 
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
-        bool                    m_bCannotSelectUnfiltered : 1;  // recieved an DATA_CANNOT_SELECT_UNFILTERED error
+        bool                    m_bCannotSelectUnfiltered : 1;  // received an DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
         class FormErrorHelper

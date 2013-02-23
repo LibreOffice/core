@@ -53,7 +53,7 @@ class ChildrenManagerImpl;
     forwarder in the shape tree info.</p>
 
     <p>A children manager registers itself at the broadcaster passed to its
-    constructor and transforms/forwards the recieved events to the listeners
+    constructor and transforms/forwards the received events to the listeners
     of the also given context base.  The transformation process includes
     interpreting a <type>document::XEventListener</type>, the change from
     XShape references to the associated XAccessible reference, and the

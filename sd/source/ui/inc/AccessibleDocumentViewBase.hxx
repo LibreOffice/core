@@ -122,7 +122,7 @@ public:
     //=====  IAccessibleViewForwarderListener  ================================
 
     /** A view forwarder change is signalled for instance when any of the
-        window events is recieved.  Thus, instead of overloading the four
+        window events is received.  Thus, instead of overloading the four
         windowResized... methods it will be sufficient in most cases just to
         overload this method.
      */

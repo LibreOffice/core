@@ -780,7 +780,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     pCode = rCell.pCode->Clone();
 
     //  set back any errors and recompile
-    //  not in the Clipboard - it must keep the recieved error flag
+    //  not in the Clipboard - it must keep the received error flag
     //  Special Length=0: as bad cells are generated, then they are also retained
     if ( pCode->GetCodeError() && !pDocument->IsClipboard() && pCode->GetLen() )
     {

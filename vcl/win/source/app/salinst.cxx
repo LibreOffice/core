@@ -726,7 +726,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         // If we get this message, because another GetMessage() call
-        // has recieved this message, we must post this message to
+        // has received this message, we must post this message to
         // us again, because in the other case we wait forever.
         case SAL_MSG_RELEASEWAITYIELD:
             {
