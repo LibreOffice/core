@@ -133,12 +133,14 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(call gb_Helper_optional,MDDS,mdds) \
 	Mesa \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
+	$(call gb_Helper_optional,MOZ,moz) \
 	$(call gb_Helper_optional,MYSQLC,mysqlc) \
 	$(call gb_Helper_optional,MYSQLCPPCONN,mysqlcppconn) \
 	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	np_sdk \
+	$(call gb_Helper_optional,NSS,nss) \
 	o3tl \
 	$(call gb_Helper_optional,ODK,odk) \
 	offapi \

@@ -133,7 +133,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,LIBXSLT,$(LIBXSLT_TARBALL)) \
 		$(call fetch_Optional,LPSOLVE,$(LPSOLVE_TARBALL)) \
 		$(call fetch_Optional,MDDS,$(MDDS_TARBALL)) \
-		$(call fetch_Optional,MOZ,$(MOZ_TARBALL)) \
 		$(call fetch_Optional,MYSQLCPPCONN,$(MYSQLCPPCONN_TARBALL)) \
 		$(call fetch_Optional,MYTHES,$(MYTHES_TARBALL)) \
 		$(call fetch_Optional,NEON,$(NEON_TARBALL)) \
