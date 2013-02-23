@@ -24,6 +24,7 @@
 #ifndef DISABLE_DBCONNECTIVITY
 #include "svx/dbcharsethelper.hxx"
 #endif
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
@@ -39,6 +40,20 @@ SvxTextEncodingBox::SvxTextEncodingBox( Window* pParent, const ResId& rResId )
     ListBox( pParent, rResId )
 {
     m_pEncTable = new SvxTextEncodingTable;
+}
+
+SvxTextEncodingBox::SvxTextEncodingBox( Window* pParent, WinBits nBits )
+    : ListBox( pParent, nBits )
+{
+    m_pEncTable = new SvxTextEncodingTable;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxTextEncodingBox(Window *pParent, VclBuilder::stringmap &)
+{
+    WinBits nWinBits = WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
+    SvxTextEncodingBox *pListBox = new SvxTextEncodingBox(pParent, nWinBits);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
 }
 
 //------------------------------------------------------------------------

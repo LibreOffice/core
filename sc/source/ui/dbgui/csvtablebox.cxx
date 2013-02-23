@@ -25,8 +25,8 @@
 
 // ============================================================================
 
-ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
-    ScCsvControl( pParent, maData, rResId ),
+ScCsvTableBox::ScCsvTableBox( Window* pParent, WinBits nBits ) :
+    ScCsvControl( pParent, maData, nBits ),
     maRuler( *this ),
     maGrid( *this ),
     maHScroll( this, WB_HORZ | WB_DRAG ),
@@ -56,6 +56,10 @@ ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
     InitControls();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeScCsvTableBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ScCsvTableBox(pParent, WB_BORDER);
+}
 
 Size ScCsvTableBox::GetOptimalSize() const
 {

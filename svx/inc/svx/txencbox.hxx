@@ -34,6 +34,7 @@ private:
 
 public:
                         SvxTextEncodingBox( Window* pParent, const ResId& rResId );
+                        SvxTextEncodingBox( Window* pParent, WinBits nBits );
                         ~SvxTextEncodingBox();
 
     /** Fill with all known encodings but exclude those matching one or more

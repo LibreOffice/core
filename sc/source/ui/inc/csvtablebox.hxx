@@ -66,7 +66,7 @@ private:
 
     // ------------------------------------------------------------------------
 public:
-    explicit                    ScCsvTableBox( Window* pParent, const ResId& rResId );
+    explicit                    ScCsvTableBox( Window* pParent, WinBits nBits );
 
     /** Finishes initialization. Must be called after constructing a new object. */
     void Init();
