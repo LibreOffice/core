@@ -183,7 +183,7 @@
         LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )
 
         Show some exception info by using current set output mode by define LOGTYPE!
-        We use a seperated scope {} do protect us against multiple variable definitions.
+        We use a separated scope {} do protect us against multiple variable definitions.
     _____________________________________________________________________________________________________________*/
 
     #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )                                            \

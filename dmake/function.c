@@ -78,7 +78,7 @@ char *buf;
       }
    }
 
-   /* ??? Some function macros expect comma seperated parameters, but
+   /* ??? Some function macros expect comma separated parameters, but
     * no decent parser is included. The desirable solution would be
     * to parse fname for the correct number of parameters in fname
     * when a function is recognized. We only count the parameters
@@ -113,7 +113,7 @@ char *buf;
         if( mod_count == 2 )
           res = _exec_iseq(mod1,mod2,args,TRUE);
         else
-          Fatal( "Two comma-seperated arguments expected in [%s].\n", buf );
+          Fatal( "Two comma-separated arguments expected in [%s].\n", buf );
      else if (strncmp(fname,"echo",4) == 0)
         res = _exec_echo(args);
          else
@@ -125,7 +125,7 @@ char *buf;
         if( mod_count == 2 )
           res = _exec_foreach(mod1,mod2,args);
         else
-          Fatal( "Two comma-seperated arguments expected in [%s].\n", buf );
+          Fatal( "Two comma-separated arguments expected in [%s].\n", buf );
      else
         res = _exec_call(fname,args);
      break;
@@ -135,7 +135,7 @@ char *buf;
         if( mod_count < 3 )
           res = _exec_mktmp(mod1,mod2,args);
         else
-          Fatal( "Maximal two comma-seperated arguments expected in [%s].\n", buf );
+          Fatal( "Maximal two comma-separated arguments expected in [%s].\n", buf );
      else
         res = _exec_call(fname,args);
      break;
@@ -169,7 +169,7 @@ char *buf;
            FREE(para);
         }
         else
-           Fatal( "One or no comma-seperated arguments expected in [%s].\n", buf );
+           Fatal( "One or no comma-separated arguments expected in [%s].\n", buf );
 
         FREE(eargs);
      }
@@ -184,7 +184,7 @@ char *buf;
         if( mod_count == 2 )
           res = _exec_iseq(mod1,mod2,args,FALSE);
         else
-          Fatal( "Two comma-seperated arguments expected in [%s].\n", buf );
+          Fatal( "Two comma-separated arguments expected in [%s].\n", buf );
      else
         res = _exec_call(fname,args);
      break;
@@ -212,14 +212,14 @@ char *buf;
            FREE(emod);
         }
         else
-           Fatal( "One or no comma-seperated arguments expected in [%s].\n", buf );
+           Fatal( "One or no comma-separated arguments expected in [%s].\n", buf );
      else if(strncmp(fname,"strip",5)==0)
         res = Tokenize(Expand(args)," ",'t',TRUE);
      else if(strncmp(fname,"subst",5)==0) {
         if( mod_count == 2 )
           res = _exec_subst(mod1,mod2,args);
         else
-          Fatal( "Two comma-seperated arguments expected in [%s].\n", buf );
+          Fatal( "Two comma-separated arguments expected in [%s].\n", buf );
      }
          else
             res = _exec_call(fname,args);

@@ -33,8 +33,8 @@ struct AutoTextGroup
     sal_uInt16      nCount;
     String      sName;
     String      sTitle;
-    String      sLongNames;   // by 0x0A seperated long names
-    String      sShortNames;  // by 0x0A seperated short names
+    String      sLongNames;   // by 0x0A separated long names
+    String      sShortNames;  // by 0x0A separated short names
     DateTime    aDateModified;
 
     AutoTextGroup() : aDateModified( DateTime::EMPTY ) {}

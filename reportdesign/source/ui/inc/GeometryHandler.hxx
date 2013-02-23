@@ -145,13 +145,13 @@ namespace rptui
         */
         bool impl_isDataField(const ::rtl::OUString& _sName) const;
 
-        /**return all formula in a semicolon seperated list
+        /**return all formula in a semicolon separated list
         *
         * \param _rList the localized function names
         */
         void impl_fillFormulaList_nothrow(::std::vector< ::rtl::OUString >& _out_rList) const;
 
-        /** return all group names in a semicolon seperated list starting with the group where this control is contained in.
+        /** return all group names in a semicolon separated list starting with the group where this control is contained in.
         *
         * \param _rList fills the list with all scope names.
         */

@@ -1170,7 +1170,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
     uno::Reference< beans::XPropertySet > xProps( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
     // Strangly enough you can have Range( "namedRange1, namedRange2, etc," )
-    // loop around each ',' seperated name
+    // loop around each ',' separated name
     std::vector< rtl::OUString > vNames;
     sal_Int32 nIndex = 0;
     do

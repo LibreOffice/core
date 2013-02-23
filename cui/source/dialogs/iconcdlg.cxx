@@ -685,7 +685,7 @@ IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
 
     if ( pData->bOnDemand )
     {
-        // CSet on AIS has problems here, therefore seperated
+        // CSet on AIS has problems here, therefore separated
         const SfxItemSet* _pSet = &( pData->pPage->GetItemSet() );
         pData->pPage->Reset( *(SfxItemSet*)_pSet );
     }
@@ -845,7 +845,7 @@ void IconChoiceDialog::ResetPageImpl ()
 
     if ( pData->bOnDemand )
     {
-        // CSet on AIS has problems here, therefore seperated
+        // CSet on AIS has problems here, therefore separated
         const SfxItemSet* _pSet = &pData->pPage->GetItemSet();
         pData->pPage->Reset( *(SfxItemSet*)_pSet );
     }

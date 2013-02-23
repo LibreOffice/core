@@ -42,7 +42,7 @@ published interface XConnector: com::sun::star::uno::XInterface
 
         @param sConnectionDescription
                 contains the kind of the connection plus a
-                comma seperated list of attributes,
+                comma separated list of attributes,
                e.g., <em>socket,host=locahost,port=2345</em> for a tcpip connection.
 
         @throws ConnectionSetupException

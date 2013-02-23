@@ -563,7 +563,7 @@ void OStatement_Base::GetAssignValues()
 
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
-        // List of Column-Names, that exist in the column_commalist (seperated by ;):
+        // List of Column-Names, that exist in the column_commalist (separated by ;):
         ::std::vector<String> aColumnNameList;
 
         OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");

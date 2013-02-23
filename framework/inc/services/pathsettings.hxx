@@ -214,7 +214,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
                         sal_Bool                bReSubst);
 
 
-        /** converts our new string list schema to the old ";" seperated schema ... */
+        /** converts our new string list schema to the old ";" separated schema ... */
         ::rtl::OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath        ) const;
         OUStringList    impl_convertOldStyle2Path(const ::rtl::OUString&        sOldStylePath) const;
 

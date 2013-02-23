@@ -891,7 +891,7 @@ enum ScChangeTrackMergeState
 };
 
 // Internally generated actions start at this value (nearly all bits set)
-// and are decremented, to keep values in a table seperated from "normal" actions.
+// and are decremented, to keep values in a table separated from "normal" actions.
 #define SC_CHGTRACK_GENERATED_START ((sal_uInt32) 0xfffffff0)
 
 class ScChangeTrack : public utl::ConfigurationListener

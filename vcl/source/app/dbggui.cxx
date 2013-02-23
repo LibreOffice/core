@@ -197,25 +197,25 @@ static const sal_Char* pDbgHelpText[] =
 "\n",
 "Include ObjectTest filters\n",
 "Only classes which contain one of the indicated filters are evaluated with "
-"the object test. Filters are seperated by ';' and are case sensitive. "
+"the object test. Filters are separated by ';' and are case sensitive. "
 "Wildcards are not supported. If no text is indicated the filters are not "
 "active.\n",
 "\n",
 "Exclude ObjectTest filters\n",
 "Only classes which do not contain one of the indicated filters are evaluated "
-"with the object test. Filters are seperated by ';' and are case sensitive. "
+"with the object test. Filters are separated by ';' and are case sensitive. "
 "Wildcards are not supported. If no text is indicated the filters are not "
 "active.\n",
 "\n",
 "Include filters\n",
 "Only those texts which include the indicated filters are output. "
-"Filters are seperated by ';' and are case sensitive. "
+"Filters are separated by ';' and are case sensitive. "
 "Wildcards are not supported. The filter is used for all output (except for "
 "errors). If no text is indicated the filters are not active.\n",
 "\n",
 "Exclude filters\n",
 "Only those texts which do not include the indicated filters are output. "
-"Filters are seperated by ';' and are case sensitive. "
+"Filters are separated by ';' and are case sensitive. "
 "Wildcards are not supported. The filter is used for all output (except for "
 "errors). If no text is indicated the filters are not active.\n",
 "\n",

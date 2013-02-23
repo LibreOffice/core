@@ -366,7 +366,7 @@ throw(  SAXException, RuntimeException )
 
                             case TB_ATTRIBUTE_STYLE:
                             {
-                                // read space seperated item style list
+                                // read space separated item style list
                                 ::rtl::OUString aTemp = xAttribs->getValueByIndex( n );
                                 sal_Int32 nIndex = 0;
 

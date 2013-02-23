@@ -100,7 +100,7 @@ class FmSearchDialog : public ModalDialog
 
     ::svxform::FmSearchConfigItem*      m_pConfig;
 public:
-    /** This can search in different sets of fields. There is a number of contexts; their names are in strContexts (seperated
+    /** This can search in different sets of fields. There is a number of contexts; their names are in strContexts (separated
         by ';'), the user can choose one of them.
         When the user chooses a context, lnkContextSupplier is called, it gets a pointer on an FmSearchContext-structure,
         that has to be filled.

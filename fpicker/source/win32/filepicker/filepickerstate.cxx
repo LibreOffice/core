@@ -655,7 +655,7 @@ inline sal_Bool SAL_CALL CExecuteFilePickerState::IsListboxControl( HWND hwndCon
 
 //---------------------------------------------
 // because listboxes (comboboxes) and their labels
-// are seperated we have to translate the listbox
+// are separated we have to translate the listbox
 // id to their corresponding label id
 // the convention is that the label id of a listbox
 // is the id of the listbox + 100

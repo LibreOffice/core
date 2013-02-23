@@ -251,7 +251,7 @@ sal_Bool JobURL::implst_split( /*IN*/  const ::rtl::OUString& sPart           ,
     // Otherwhise we do nothing and return sal_False.
     if (bPartFound)
     {
-        // But may the part has optional arguments - seperated by a "?".
+        // But may the part has optional arguments - separated by a "?".
         // Do so - we set the return value with the whole part string.
         // Arguments will be set to an empty string as default.
         // If we detect the right sign - we split the arguments and overwrite the default.

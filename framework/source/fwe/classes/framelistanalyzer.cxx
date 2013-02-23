@@ -179,7 +179,7 @@ void FrameListAnalyzer::impl_analyze()
 
             // -------------------------------------------------
             // a) Is it the special help task?
-            //    Return it seperated from any return list.
+            //    Return it separated from any return list.
             if (
                 ((m_eDetectMode & E_HELP) == E_HELP      ) &&
                 (xFrame->getName()==SPECIALTARGET_HELPTASK)
@@ -191,7 +191,7 @@ void FrameListAnalyzer::impl_analyze()
 
             // -------------------------------------------------
             // b) Or is includes this task the special backing component?
-            //    Return it seperated from any return list.
+            //    Return it separated from any return list.
             //    But check if the reference task itself is the backing frame.
             //    Our user mst know it to decide right.
             if ((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT)

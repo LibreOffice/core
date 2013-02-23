@@ -177,7 +177,7 @@ public class FCFGSplit
      *  Its meaned relative to m_sOutDir. */
     private static java.lang.String m_sSubDirContentHandlers;
 
-    /** enable/disable generating of filter groups - seperated by
+    /** enable/disable generating of filter groups - separated by
      *  application modules. */
     private static boolean m_bSeperateFiltersByModule;
 

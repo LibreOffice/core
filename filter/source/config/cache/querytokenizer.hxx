@@ -72,7 +72,7 @@ class QueryTokenizer : public ::boost::unordered_map< ::rtl::OUString           
                     a new query.
 
             @descr  The given query is immidiatly analyzed
-                    and seperated into its token, which can
+                    and separated into its token, which can
                     be access by some specialized method later.
 
             @param  sQuery

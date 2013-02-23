@@ -473,7 +473,7 @@
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
 				<info>
-					<desc>Semicolon seperated list of file types this filter will show</desc>
+					<desc>Semicolon separated list of file types this filter will show</desc>
 				</info>
 			</prop>
 		</group>

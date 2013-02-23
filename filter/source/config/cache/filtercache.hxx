@@ -771,7 +771,7 @@ class FilterCache : public BaseLock
         /** @short      register the specified item for the given type.
 
             @descr      Because detect services, frame loader or content handler
-                        are not listed inside the xml configuration as seperated
+                        are not listed inside the xml configuration as separated
                         items (they are properties of any type entry!), this method update
                         the internal lists of such items. Thats neccessary to have
                         it accessible for our container interfaces of detect, frame loader

@@ -3083,7 +3083,7 @@ void Frame::impl_checkMenuCloser()
     // If there exist ate least one other frame - there are two frames currently open.
     // But we can enable this closer only, if one of these two tasks includes the help module.
     // The "other frame" couldn't be the help. Because then it wouldn't be part of this "other list".
-    // In such case it will be seperated to the reference aAnalyzer.m_xHelp!
+    // In such case it will be separated to the reference aAnalyzer.m_xHelp!
     // But we must check, if weself includes the help ...
     // Check aAnalyzer.m_bReferenceIsHelp!
     if (

@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 // cache structure.
 struct WordBreakCache {
     sal_Int32 length;       // contents length saved here.
-    sal_Unicode *contents;      // seperated segment contents.
+    sal_Unicode *contents;      // separated segment contents.
     sal_Int32* wordboundary;        // word boundaries in segments.
     sal_Int32 size;         // size of wordboundary
 

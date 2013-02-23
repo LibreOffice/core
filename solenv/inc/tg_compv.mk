@@ -58,7 +58,7 @@ CFLAGSNUMVERSION_CMD= -V  $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin/get
 CCVER:=$(shell @-$(CXX) $(CFLAGSVERSION_CMD))
 
 # and a computed integer for comparing
-# each point seperated token blown up to 4 digits
+# each point separated token blown up to 4 digits
 CCNUMVER:=$(shell @-$(CXX) $(CFLAGSNUMVERSION_CMD))
 
 .IF "$(COM)"=="MSC"

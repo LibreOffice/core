@@ -81,7 +81,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS ObjectIdentifier
     //syntax of a CID:  CID:/classification/ObjectID
 
     //where classification: nothing or "MultiClick" or "DragMethod=DragMethodServiceName" and "DragParameter=DragParameterString"
-    //                      or a combination of these seperated with a colon
+    //                      or a combination of these separated with a colon
     //where DragMethodServiceName can be a selfdefined servicename for special actions //todo define standard service for this purpose
     //where DragParameterString is any string you like to transport information to your special drag service
     //                            only semicolon, colon, equal sign and slash are not allowed characters

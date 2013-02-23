@@ -3417,7 +3417,7 @@ RTLFUNC(Shell)
         }
         sal_Int32 nLen = aCmdLine.getLength();
 
-        // #55735 if there are parameters, they have to be seperated
+        // #55735 if there are parameters, they have to be separated
         // #72471 also seperate the single parameters
         std::list<String> aTokenList;
         OUString aToken;

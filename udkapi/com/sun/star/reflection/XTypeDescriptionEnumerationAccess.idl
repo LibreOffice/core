@@ -47,7 +47,7 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
         for the search within the underlying type description tree.
 
         @param moduleName
-            contains the name of an UNOIDL module. Modules are seperated by a
+            contains the name of an UNOIDL module. Modules are separated by a
             single '.' (i.e., "com.sun.star.reflection"). The root of the module
             hierarchy is specified with an empty string. Module names are always
             absolute, never relative.

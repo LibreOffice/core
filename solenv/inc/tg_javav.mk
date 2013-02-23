@@ -33,7 +33,7 @@ JFLAGSNUMVERSION_CMD=-version $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin
 JAVAVER:=$(shell @-$(JAVA_HOME)/bin/java $(JFLAGSVERSION_CMD))
 
 # and a computed integer for comparing
-# each point seperated token blown up to 4 digits
+# each point separated token blown up to 4 digits
 JAVANUMVER:=$(shell @-$(JAVA_HOME)/bin/java $(JFLAGSNUMVERSION_CMD))
 
 .ELSE          # "$(SOLAR_JAVA)"!=""
