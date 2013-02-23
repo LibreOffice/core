@@ -105,7 +105,7 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DVCLPLUG_GEN_IMPLEMENTATION \
 ))
 
-## handle RandR 
+## handle RandR
 ifneq ($(ENABLE_RANDR),)
 $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	Xrandr \
@@ -128,7 +128,7 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
 ))
 else
 $(eval $(call gb_Library_add_libs,vclplug_gen,\
-    -Wl,-Bstatic -lXinerama -Wl,-Bdynamic \
+    -Wl$(COMMA)-Bstatic -lXinerama -Wl$(COMMA)-Bdynamic \
 ))
 endif
 else # Solaris/Xsun

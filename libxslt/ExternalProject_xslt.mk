@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 			$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),LIBS="$(MINGW_SHARED_LIBSTDCPP)") \
-			LDFLAGS="-Wl,--no-undefined -Wl,--enable-runtime-pseudo-reloc-v2" \
+			LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2" \
 			OBJDUMP=objdump \
 		&& chmod 777 xslt-config \
 		&& $(MAKE) \

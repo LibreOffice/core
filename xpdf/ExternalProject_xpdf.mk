@@ -21,7 +21,7 @@ $(call gb_ExternalProject_get_state_target,xpdf,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --without-x --enable-multithreaded --enable-exceptions \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2" \
+			LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2" \
 			LIBS="-lgdi32" \
 		&& $(MAKE) \
 	)
