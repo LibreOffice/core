@@ -946,7 +946,7 @@ void Outliner::PaintBullet( sal_uInt16 nPara, const Point& rStartPos,
                     if ( !bRightToLeftPara )
                         aTextPos.X() = rStartPos.X() + aBulletArea.Left();
                     else
-                        aTextPos.X() = rStartPos.X() + GetPaperSize().Width() - aBulletArea.Left();
+                        aTextPos.X() = rStartPos.X() + GetPaperSize().Width() - aBulletArea.Right();
                 }
                 else
                 {
@@ -980,7 +980,7 @@ void Outliner::PaintBullet( sal_uInt16 nPara, const Point& rStartPos,
                 sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
                 nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG);
                 if ( bRightToLeftPara )
-                    nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
+                    nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
                 pOutDev->SetLayoutMode( nLayoutMode );
 
                 if(bStrippingPortions)
@@ -997,7 +997,7 @@ void Outliner::PaintBullet( sal_uInt16 nPara, const Point& rStartPos,
                     }
 
                     DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), pBuf,
-                        aSvxFont, nPara, 0xFFFF, 0xFF, 0, 0, false, false, true, 0, Color(), Color());
+                        aSvxFont, nPara, 0xFFFF, bRightToLeftPara, 0, 0, false, false, true, 0, Color(), Color());
 
                     delete[] pBuf;
                 }
@@ -2093,38 +2093,6 @@ void Outliner::SetParaFlag( Paragraph* pPara,  sal_uInt16 nFlag )
 bool Outliner::HasParaFlag( const Paragraph* pPara, sal_uInt16 nFlag ) const
 {
     return pPara && pPara->HasFlag( nFlag );
-}
-
-
-sal_Bool DrawPortionInfo::IsRTL() const
-{
-    if(0xFF == mnBiDiLevel)
-    {
-        // Use Bidi functions from icu 2.0 to calculate if this portion
-        // is RTL or not.
-        UErrorCode nError(U_ZERO_ERROR);
-        UBiDi* pBidi = ubidi_openSized(mrText.Len(), 0, &nError);
-        nError = U_ZERO_ERROR;
-
-        // I do not have this info here. Is it necessary? I'll have to ask MT.
-        const sal_uInt8 nDefaultDir = UBIDI_LTR; //IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR;
-
-        ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(mrText.GetBuffer()), mrText.Len(), nDefaultDir, NULL, &nError);    // UChar != sal_Unicode in MinGW
-        nError = U_ZERO_ERROR;
-
-        int32_t nStart(0);
-        int32_t nEnd;
-        UBiDiLevel nCurrDir;
-
-        ubidi_getLogicalRun(pBidi, nStart, &nEnd, &nCurrDir);
-
-        ubidi_close(pBidi);
-
-        // remember on-demand calculated state
-        ((DrawPortionInfo*)this)->mnBiDiLevel = nCurrDir;
-    }
-
-    return (1 == (mnBiDiLevel % 2));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
