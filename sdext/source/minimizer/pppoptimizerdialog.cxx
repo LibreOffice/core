@@ -147,8 +147,8 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
                     sBuf.append( rtl::OUString("KB to ") );
                     sBuf.append( rtl::OUString::valueOf( nFileSizeDest >> 10 ) );
                     sBuf.append( rtl::OUString("KB.") );
-                    sBuf.makeStringAndClear();
-//                  mpOptimizerDialog->showMessageBox( sResult, sResult, sal_False );
+                    OUString sResult( sBuf.makeStringAndClear() );
+                    SAL_INFO("sdext.minimizer", sResult );
                 }
                 delete mpOptimizerDialog, mpOptimizerDialog = NULL;
             }

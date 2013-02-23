@@ -139,6 +139,7 @@ certain functionality.
 
 @section sdext
 
+@li @c sdext.minimizer
 @li @c sdext.pdfimport
 @li @c sdext.presenter
 
