@@ -720,7 +720,7 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
     }
     else // from network, on windows, fname is c:\abc123
     {
-        strncpy(localPathNew, fname, sizeof(localPathNew));
+        strncpy(localPathNew, fname, NPP_PATH_MAX - 1);
         char* pRandomFilename = NULL;
 
 #ifdef UNIX
