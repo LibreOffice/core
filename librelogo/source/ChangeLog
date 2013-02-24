@@ -1,3 +1,26 @@
+2012-02-24 László Németh:
+    * fix Asian and CTL language support. Language recognition depends from the
+      UI language of LibreOffice and the language(s) of the document.
+    * fix turtle shape, the problem with the old arrow-like turtle shape
+      reported by teachers and other users of turtle graphics
+    * better consistency with the UI based position and rotation settings of the
+      turtle: now Drawing Object toolbar supports also the pen color, fill
+      color and transparency, also line width settings of the turtle.
+    * real dotted line works with rectangles, also with rounded corners
+    * restore original cursor position and selection at the end of the running
+      (problem reported by Viktória Lakó)
+    * fix 'sleep' (resulted by the new default non-integer division of Python 3,
+      reported by Prof. Gilvan Vilarim)
+    * fix 1-character length variable name/casing problem (reported by
+      Prof. Gilvan Vilarim)
+    * fix false leading and ending function name recognition
+    * support 'translation' of the selected text
+    * fix bad line width settings after command 'home'
+    * fix dot shape of dotted lines (remove its 0 width 'tail') by minimal dot
+      size of dotted lines: 1pt, and shorter 'tail' size
+    * fix size of the rounded corners of the rectangle shape
+    * rotation doesn't modify the size of the selection frame of the turtle
+
 2012-12-26 László Németh:
     * fix turtle position and rotation at repeated hideturtle/showturtle
     * add new languages, fix Czech and Brazilian Portuguese for

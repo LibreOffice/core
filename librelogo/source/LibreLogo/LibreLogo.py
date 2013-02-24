@@ -24,7 +24,6 @@ if "vnd.sun.star.pathname" in urebootstrap:
 else:
     __lngpath__ = unohelper.fileUrlToSystemPath(re.sub("program/(fundamental.ini|fundamentalrc)$", "", urebootstrap))
 __lngpath__ = __lngpath__ + "share/Scripts/python/LibreLogo/".replace("/", os.sep)
-
 __translang__ = "am|ca|cs|de|dk|el|en|eo|es|et|fr|hu|it|ja|nl|no|pl|pt|ru|se|sl" # FIXME supported languages for language guessing, expand this list, according to the localizations
 __lng__ = {}
 __docs__ = {}
@@ -122,6 +121,7 @@ from com.sun.star.awt import Size as __Size__
 from com.sun.star.awt import WindowDescriptor as __WinDesc__
 from com.sun.star.awt.WindowClass import MODALTOP as __MODALTOP__
 from com.sun.star.awt.VclWindowPeerAttribute import OK as __OK__ 
+from com.sun.star.awt.VclWindowPeerAttribute import OK_CANCEL as __OK_CANCEL__ 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO_CANCEL as __YES_NO_CANCEL__ # OK_CANCEL, YES_NO, RETRY_CANCEL, DEF_OK, DEF_CANCEL, DEF_RETRY, DEF_YES, DEF_NO
 from com.sun.star.awt.PushButtonType import OK as __Button_OK__
 from com.sun.star.awt.PushButtonType import CANCEL as __Button_CANCEL__
@@ -132,6 +132,10 @@ from com.sun.star.lang import Locale
 def __getprop__(name, value):
     p, p.Name, p.Value = __property__(), name, value
     return p
+
+__uilocale__ = uno.getComponentContext().ServiceManager.createInstance("com.sun.star.configuration.ConfigurationProvider").\
+    createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess",\
+    (__getprop__("nodepath", "/org.openoffice.Setup/L10N"),)).getByName("ooLocale") + '-' # handle missing Country of locale 'eo'
 
 def __l12n__(lng):
     try:
@@ -145,17 +149,16 @@ def __l12n__(lng):
             return None
 
 # dot for dotted line (implemented as an array of dot-headed arrows, because PostScript dot isn't supported by Writer)
+def __gendots__(n):
+    return [__Point__(round(sin(360.0/n * i * pi/180.0) * 600), round(cos(360.0/n * i * pi/180) * 600)) for i in range(n)]
 __bezierdot__ = __Bezier__()
-__dots__ = []
-for i in range(32):
-    __dots__ += [__Point__(round(sin(360.0/32 * i * pi/180.0) * 1000), round(cos(360.0/32 * i * pi/180) * 1000))]
-__bezierdot__.Coordinates = (tuple(__dots__),)
+__bezierdot__.Coordinates = (tuple(__gendots__(32)),)
 __bezierdot__.Flags = ((0,) * 32,)
 
 # turtle shape
-__TURTLESHAPE__ = [((__Point__(-60, 0), __Point__(0, -100), __Point__(60, 0)), (__Point__(0, 0), __Point__(0, 100)), \
-            (__Point__(-250, 0),), (__Point__(0, 250),), (__Point__(250, 0),), (__Point__(0, -250),), # single points for wider selection
-            (__Point__(0, 0),)), # last point for position handling
+__TURTLESHAPE__ = [tuple([(__Point__(-120, 130), __Point__(-245, 347), __Point__(-291, 176), ), (__Point__(0, -500), __Point__(126, -375), __Point__(0, -250), __Point__(-124, -375), ), (__Point__(295, 170), __Point__(124, 124), __Point__(250, 340), ), (__Point__(466, -204), __Point__(224, -269), __Point__(71, -180), __Point__(313, -116), ), (__Point__(-75, -175), __Point__(-292, -300), __Point__(-417, -83), ), (__Point__(250, 0), __Point__(0, -250), __Point__(-250, 0), __Point__(0, 250), )] + 
+            [(i,) for i in __gendots__(32)] + # single points for wider selection
+            [(__Point__(0, 0),)]), # last point for position handling
             ((__Point__(0, 0),),)] # hidden turtle (single point to draw at the left border of the page area)
 
 def __getdocument__():
@@ -170,6 +173,7 @@ def __getdocument__():
 
 # input function, result: input string or 0
 def Input(s):
+    global __halt__
     try:
         ctx = uno.getComponentContext()
         smgr = ctx.ServiceManager
@@ -218,6 +222,8 @@ def Input(s):
         inputtext = controlContainer.execute()
         if inputtext:
             inputtext = e.Text
+        else:
+            __halt__ = True
 
         # dispose the dialog
         controlContainer.dispose()
@@ -244,8 +250,10 @@ def __string__(s, decimal = None): # convert decimal sign, localized BOOL and SE
     return str(s)
 
 def Print(s):
+    global __halt__
     s = __string__(s, _.decimal)
-    z = MessageBox(_.doc.CurrentController.Frame.ContainerWindow, s[:500] + s[500:5000].replace('\n', ' '), "", "messbox")
+    if not MessageBox(_.doc.CurrentController.Frame.ContainerWindow, s[:500] + s[500:5000].replace('\n', ' '), "", "messbox", __OK_CANCEL__):
+        __halt__ = True
 
 def MessageBox(parent, message, title, msgtype = "messbox", buttons = __OK__):
     msgtypes = ("messbox", "infobox", "errorbox", "warningbox", "querybox")
@@ -288,12 +296,25 @@ def __locname__(name, l = -1):
             return __l12n__(l)[i].split("|")[0] # return with the first localized name
     return to_unicode(name)
 
+def __getcursor__(fulltext):
+    try:
+        text = _.doc.getCurrentController().getViewCursor().getText().createTextCursor() # copy selection (also in frames)
+        text.gotoRange(_.doc.getCurrentController().getViewCursor(), False)
+        if fulltext:
+            1/len(text.getString()) # exception, if zero length
+    except:
+        text = _.doc.getText().createTextCursorByRange(_.doc.getText().getStart())
+        text.gotoEnd(True)
+    return text
+
 def __translate__(arg = None):
     global _
+    __getdocument__()
+    selection = __getcursor__(True)
     __initialize__()
     __setlang__()
     # detect language
-    text = _.doc.getText().getString()
+    text = selection.getString()
     # remove comments and strings
     text = re.sub(r"[ ]*;[^\n]*", "", re.sub(r"['„“‘«»「][^\n'”“‘’«»」]*['”“‘’«»」]", "", re.sub(r"^[ \t]*[;#][^\n]*", "", text)))
     text = " ".join(set(re.findall("(?u)\w+", text)) - set(re.findall("(?u)\w*\d+\w*", text))).lower()  # only words
@@ -317,7 +338,7 @@ def __translate__(arg = None):
     rq = '\'' + lang['RIGHTSTRING'].replace("|", "")
     __strings__ = []
 
-    text = re.sub("(?u)([%s])([^\n%s]*)(?<!\\\\)[%s]" % (lq, rq, rq), __encodestring__, _.doc.getText().getString())
+    text = re.sub("(?u)([%s])([^\n%s]*)(?<!\\\\)[%s]" % (lq, rq, rq), __encodestring__, selection.getString())
     text = re.sub('(?u)(?<![0-9])(")(~?\w*)', __encodestring__, text)
 
     # translate the program to the language of the document FIXME space/tab
@@ -341,7 +362,7 @@ def __translate__(arg = None):
     text = re.sub(__DECODE_STRING_REGEX__, __decodestring2__, text)
     for i in __STRCONST__:
         text = re.sub(quoted % lang[i], __l12n__(_.lng)[i].split("|")[0].upper(), text)
-    _.doc.getText().setString(text)
+    selection.setString(text)
     # convert to paragraphs
     __dispatcher__(".uno:ExecuteSearch", (__getprop__("SearchItem.SearchString", r"\n"), __getprop__("SearchItem.ReplaceString", r"\n"), \
         __getprop__("Quiet", True), __getprop__("SearchItem.Command", 3), __getprop__("SearchItem.StyleFamily", 2), \
@@ -356,6 +377,12 @@ class LogoProgram(threading.Thread):
         global __thread__
         try:
             exec(self.code)
+            if _.origcursor:
+                __dispatcher__(".uno:Escape")
+                try:
+                    _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor, False)
+                except:
+                    _.doc.CurrentController.getViewCursor().gotoRange(_.origcursor.getStart(), False)
         except Exception as e:
             try:
               TRACEPATTERN = '"<string>", line '
@@ -427,14 +454,19 @@ def __initialize__():
         _.initialize()
         turtlehome()
         _.doc.CurrentController.select(shape)
+        shape.FillColor, transparence = __splitcolor__(_.areacolor)
+        shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
+    else:
+        _.areacolor = shape.FillColor + (int(255.0 * shape.FillTransparence/100) << 24)
+        _.pencolor = shape.LineColor + (int(255.0 * shape.LineTransparence/100) << 24)
+        if shape.LineWidth != round((1 + _.pen * 2) * __PT_TO_TWIP__ / __MM10_TO_TWIP__) and shape.LineWidth != round(__LINEWIDTH__ / __MM10_TO_TWIP__):
+            _.pensize = shape.LineWidth * __MM10_TO_TWIP__
     shape.LineJoint = __MITER__
     shape.Shadow = True
     shape.FillColor, transparence = __splitcolor__(_.areacolor)
     shape.FillTransparence = min(95, transparence)
     shape.ShadowColor, shape.ShadowTransparence, shape.ShadowXDistance, shape.ShadowYDistance = (0, 20, 0, 0)
-#    shape.ShadowColor, shape.ShadowTransparence, shape.ShadowXDistance, shape.ShadowYDistance = (0, max(20, 100 - transparence), 0, 0)
-    shape.LineColor, shape.LineTransparence = __splitcolor__(_.pencolor)
-    shape.LineWidth = min(_.pensize, (1 + _.pen * 2) * __PT_TO_TWIP__)
+    shape.LineWidth = min(_.pensize, (1 + _.pen * 2) * __PT_TO_TWIP__) / __MM10_TO_TWIP__
     shape.SizeProtect = True
 
 def pagesize(n = -1):
@@ -452,7 +484,7 @@ def turtlehome():
         turtle.setPosition(__Point__((page.Width - turtle.BoundRect.Width)/2, (page.Height - turtle.BoundRect.Height)/2))
         turtle.LineStyle = __LineStyle_SOLID__
         turtle.LineJoint = __MITER__
-        turtle.LineWidth = min(_.pensize, (1 + _.pen * 2) * __PT_TO_TWIP__)
+        turtle.LineWidth = min(_.pensize, (1 + _.pen * 2) * __PT_TO_TWIP__) / __MM10_TO_TWIP__
         turtle.LineColor, none = __splitcolor__(_.pencolor)
         turtle.LineTransparence = 25
         turtle.RotateAngle = 0
@@ -464,11 +496,11 @@ def __pen__(n):
     if turtle:
         if n:
             turtle.LineStyle = __LineStyle_SOLID__
-            turtle.LineWidth = min(_.pensize, 3 * __PT_TO_TWIP__)
+            turtle.LineWidth = min(_.pensize, 3 * __PT_TO_TWIP__) / __MM10_TO_TWIP__
         else:
             turtle.LineStyle = __LineStyle_DASHED__
             turtle.LineDash = __LineDash__(__DashStyle_RECT__, 0, 0, 1, __PT_TO_TWIP__, __PT_TO_TWIP__)
-            turtle.LineWidth = min(_.pensize, __PT_TO_TWIP__)
+            turtle.LineWidth = min(_.pensize, __PT_TO_TWIP__) / __MM10_TO_TWIP__
 
 
 def __visible__(shape, visible = -1): # for OOo 3.2 compatibility
@@ -515,7 +547,6 @@ def left(arg=None):
     turtle = uno.getComponentContext().ServiceManager.createInstance('com.sun.star.drawing.ShapeCollection')
     turtle.add(__getshape__(__TURTLE__))
     _.doc.CurrentController.select(turtle)
-#    _.doc.CurrentController.select(__getshape__(__TURTLE__)) # it works from LibreOffice 3.5
     rotate(__TURTLE__, 1500)
     return None
 
@@ -554,7 +585,11 @@ def commandline(arg=None, arg2=None):
 
 def __setlang__():
         global _
-        loc = _.doc.CurrentController.getViewCursor().CharLocale
+        c = _.doc.CurrentController.getViewCursor()
+        locs = [i for i in [c.CharLocale, c.CharLocaleAsian, c.CharLocaleComplex] if i.Language != 'zxx'] # not None language
+        loc = Locale(__uilocale__.split('-')[0], __uilocale__.split('-')[1], '')
+        if locs and loc not in locs:
+            loc = locs[0]
         _.lng = loc.Language + '_' + loc.Country
         if not __l12n__(_.lng):
             _.lng = loc.Language
@@ -569,14 +604,10 @@ def run(arg=None, arg2 = -1):
         __thread__ = 1
     try:
         __getdocument__()
+        _.origcursor = None
         if arg2 == -1:
-            try:
-                _.cursor = _.doc.getCurrentController().getViewCursor().getText().createTextCursor() # copy selection
-                _.cursor.gotoRange(_.doc.getCurrentController().getViewCursor(), False)
-                1/len(_.cursor.getString()) # exception, if zero length
-            except:
-                _.cursor = _.doc.getText().createTextCursorByRange(_.doc.getText().getStart())
-                _.cursor.gotoEnd(True)
+            _.origcursor, _.cursor = __getcursor__(False), __getcursor__(True)
+            __dispatcher__(".uno:Escape")
             c = _.doc.Text.createTextCursor() # go to the first page
             c.gotoStart(False)
             _.doc.CurrentController.getViewCursor().gotoRange(c, False)
@@ -729,17 +760,18 @@ def backward(n):
     else:
         __go__(__TURTLE__, n * __PT_TO_TWIP__)
 
-def __dots__(n, pos, dx, dy, r = 0): # dots for dotted polyline or circle
-    k = abs(int(1.0 * n / max(10, _.pensize) / 2.0))
+def __dots__(n, pos, dx, dy, r = -1, q = 0): # dots for dotted polyline or circle
+    f = [1, 4, 4, 4, 4][q]
+    k = abs(int(1.0 * n / max(20, _.pensize) / 2.0 / f))
     dots = []
     px, py = pos.X, pos.Y
     for i in range(k + 1):
         if k > 0:
-            if r:
-                px, py = pos.X + sin(360.0/k * i * pi/180.0) * r, pos.Y + cos(360.0/k * i * pi/180) * r
+            if r != -1:
+                px, py = pos.X + sin(((f-1)*(q-1)*30 + 360.0/f/k * i) * pi/180.0) * r[0], pos.Y + cos(((f-1)*(q-1)*30 + 360.0/f/k * i) * pi/180) * r[1]
             else:
                 px, py = pos.X + round(i * dx/k), pos.Y + round(i * dy/k)
-        dots += [(__Point__(px, py),__Point__(px + 10, py + 10))]
+        dots += [(__Point__(px, py), __Point__(px + 7, py + 7))]
     return dots
 
 def __draw__(d):
@@ -827,7 +859,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
         shape.PolyPolygon = tuple( list(shape.PolyPolygon) + __dots__(n, last, c2.X, c2.Y))
         shape.LineStart = __bezierdot__
         shape.LineStartCenter = True
-        shape.LineStartWidth = _.pensize / __MM10_TO_TWIP__
+        shape.LineStartWidth = max(20, _.pensize) / __MM10_TO_TWIP__
         shape.LineWidth = 0
     else:
         shape.PolyPolygon = tuple([tuple( list(shape.PolyPolygon[-1]) + [last2])])
@@ -845,7 +877,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
 
 def __fillit__(filled = True):
     oldshape = __getshape__(__ACTUAL__)
-    if oldshape.LineStartCenter:
+    if oldshape and oldshape.LineStartCenter:
         __removeshape__(__ACTUAL__)  # FIXME close dotted polyline
         return
     if oldshape and "LineShape" in oldshape.ShapeType:
@@ -891,8 +923,6 @@ def point():
     _.pen, _.linestyle = oldpen, oldstyle
 
 def __boxshape__(shapetype, l):
-    if type(l) != type([]): # default for circle and square
-        l = [l, l]
     turtle = __getshape__(__TURTLE__)
     shape = __draw__(shapetype + "Shape")
     if _.hatch:
@@ -913,7 +943,7 @@ def __boxshape__(shapetype, l):
     shape.FillColor, shape.FillTransparence = __splitcolor__(_.areacolor)
     shape.RotateAngle = turtle.RotateAngle
     if shapetype == "Rectangle" and len(l) > 2:
-        shape.CornerRadius = l[2] * __PT_TO_TWIP__
+        shape.CornerRadius = (l[2] * __PT_TO_TWIP__) / __MM10_TO_TWIP__
     elif shapetype == "Ellipse" and len(l) > 2:
         try:
             shape.CircleKind = __SECTION__
@@ -928,20 +958,54 @@ def __boxshape__(shapetype, l):
     __lefthang__(shape)
 
 def ellipse(l):
+    if type(l) != type([]): # default for circle and square
+        l = [l, l]
     if _.linestyle == __LineStyle_DOTTED__:
-        __removeshape__(__ACTUAL__)
+        __groupstart__()
+        _.linestyle = __LineStyle_SOLID__
+        pc, _.pencolor = _.pencolor, 0xff000000
+        ellipse(l)
+        _.pencolor, _.linestyle = pc, __LineStyle_DOTTED__
         point()
         shape = __getshape__(__ACTUAL__)
-        shape.PolyPolygon = tuple(__dots__(l * pi * __PT_TO_TWIP__, shape.PolyPolygon[0][0], 0, 0, l/2 * __PT_TO_TWIP__))
+        shape.PolyPolygon = tuple(__dots__(max(l[0], l[1]) * pi * __PT_TO_TWIP__, shape.PolyPolygon[0][0], 0, 0, [i/2.0 * __PT_TO_TWIP__ for i in l]))
+        turtle = __getshape__(__TURTLE__)
+        shape.RotateAngle = turtle.RotateAngle
+        __groupend__()
     else:
         __boxshape__("Ellipse", l)
 
 def rectangle(l):
+    if type(l) != type([]): # default for circle and square
+        l = [l, l]
     if _.linestyle == __LineStyle_DOTTED__:
-        __removeshape__(__ACTUAL__)
+        __groupstart__()
+        _.linestyle = __LineStyle_SOLID__
+        pc, _.pencolor = _.pencolor, 0xff000000
+        rectangle(l)
+        _.pencolor, _.linestyle = pc, __LineStyle_DOTTED__
         point()
         shape = __getshape__(__ACTUAL__)
-        shape.PolyPolygon = tuple(__dots__(l * pi * __PT_TO_TWIP__, shape.PolyPolygon[0][0], 0, 0, l/2 * __PT_TO_TWIP__))
+        if type(l) != type([]):
+            l = [l, l]
+        if len(l) == 2:
+            l = l + [0]
+        l = [i * __PT_TO_TWIP__ for i in l]
+        c = shape.PolyPolygon[0][0]
+        k = [min(l[0] / 2.0, l[2]), min(l[1] / 2.0, l[2])]
+        p = __dots__(l[0] - 2 * k[0], __Point__(c.X - l[0]/2 + k[0], c.Y - l[1]/2), l[0] - 2 * k[0], 0)
+        p = p[:-1] + __dots__(l[1] - 2 * k[1], __Point__(c.X + l[0]/2, c.Y - l[1]/2 + k[1]), 0, l[1] - 2 * k[1]) 
+        p = p[:-1] + __dots__(l[0] - 2 * k[0], __Point__(c.X + l[0]/2 - k[0], c.Y + l[1]/2), -l[0] + 2 * k[0], 0) 
+        p = p[:-1] + __dots__(l[1] - 2 * k[1], __Point__(c.X - l[0]/2, c.Y + l[1]/2 - k[1]), 0, -l[1] + 2 * k[1]) 
+        if l[2] > 0:
+               p = p + __dots__(max(k) * 2 * pi, __Point__(c.X - l[0]/2 + k[0], c.Y - l[1]/2 + k[1]), 0, 0, k, 3)[1:]
+               p = p + __dots__(max(k) * 2 * pi, __Point__(c.X + l[0]/2 - k[0], c.Y - l[1]/2 + k[1]), 0, 0, k, 2)[1:]
+               p = p + __dots__(max(k) * 2 * pi, __Point__(c.X + l[0]/2 - k[0], c.Y + l[1]/2 - k[1]), 0, 0, k, 1)[1:]
+               p = p + __dots__(max(k) * 2 * pi, __Point__(c.X - l[0]/2 + k[0], c.Y + l[1]/2 - k[1]), 0, 0, k, 4)[1:]
+        shape.PolyPolygon = tuple(p)
+        turtle = __getshape__(__TURTLE__)
+        shape.RotateAngle = turtle.RotateAngle
+        __groupend__()
     else:
         __boxshape__("Rectangle", l)
 
@@ -972,7 +1036,7 @@ def text(shape, st):
         c.CharFontName = _.fontfamily
 
 def sleep(t):
-    for i in range(t/__SLEEP_SLICE_IN_MILLISECONDS__):
+    for i in range(int(t/__SLEEP_SLICE_IN_MILLISECONDS__)):
         __checkhalt__()
         __time__.sleep(0.5)
     __checkhalt__()
@@ -1068,7 +1132,7 @@ def pensize(n = -1):
             _.pensize = n * __PT_TO_TWIP__
         turtle = __getshape__(__TURTLE__)
         if turtle and __visible__(turtle):
-            turtle.LineWidth = min(_.pensize, (1 + _.pen * 2) * __PT_TO_TWIP__)
+            turtle.LineWidth = min(_.pensize, (1 + _.pen * 2) * __PT_TO_TWIP__) / __MM10_TO_TWIP__
     return _.pensize / __PT_TO_TWIP__
 
 def penstyle(n = -1):
@@ -1187,7 +1251,7 @@ def __loadlang__(lang, a):
     loop = lambda r: "%(i)s = 1\n%(orig)s%(j)s = %(i)s\n%(i)s += 1\n" % \
         { "i": repcount + str(next(loopi)), "j": repcount, "orig": re.sub( r"(?ui)(?<!:)\b%s\b" % repcount, repcount + str(next(loopi)-1), r.group(0)) }
     __comp__[lang] = [
-    [r"(?i)(?<!:)(\b|(?=[-:]))(?:%s)\b" % "|".join([a[i].lower() for i in a if i[0:3] != "ERR"]), lambda s: s.group().upper()], # uppercase all native commands in the source code
+    [r"(?i)(?<!:)(\b|(?=[-:]))(?:%s)\b" % "|".join([a[i].lower() for i in a if not "_" in i and i != "DECIMAL"]), lambda s: s.group().upper()], # uppercase all native commands in the source code
     [r"(?<!:)\b(?:%s) [[]" % a['GROUP'], "\n__groupstart__()\nfor __groupindex__ in range(2):\n[\nif __groupindex__ == 1:\n[\n__groupend__()\nbreak\n]\n"],
     [r"(?<!:)\b(?:%s)\b" % a['GROUP'], "\n__removeshape__(__ACTUAL__)\n"],
     [r"(\n| )][ \n]*\[(\n| )", "\n]\nelse:\n[\n"], # if/else block
@@ -1299,7 +1363,11 @@ def __concatenation__(r): # keep line positions with extra line breaks
 def __compil__(s):
     global _, comp, __strings__, __compiled__
     try:
-        loc = _.doc.CurrentController.getViewCursor().CharLocale
+        c = _.doc.CurrentController.getViewCursor()
+        locs = [i for i in [c.CharLocale, c.CharLocaleAsian, c.CharLocaleComplex] if i.Language != 'zxx'] # not None language
+        loc = Locale(__uilocale__.split('-')[0], __uilocale__.split('-')[1], '')
+        if locs and loc not in locs:
+            loc = locs[0]
         try:
             _.lng = loc.Language + '_' + loc.Country
             __loadlang__(_.lng, __l12n__(_.lng))
