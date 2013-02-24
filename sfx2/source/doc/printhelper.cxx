@@ -60,6 +60,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/event.hxx>
 
+#define SFX_PRINTABLESTATE_CANCELJOB    -2
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -143,7 +145,7 @@ void SAL_CALL SfxPrintJob_Impl::cancelJob() throw (RuntimeException)
 {
     // FIXME: how to cancel PrintJob via API?!
     if( m_pData->m_pObjectShell.Is() )
-        m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( -2 ) );
+        m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( SFX_PRINTABLESTATE_CANCELJOB ) );
 }
 
 SfxPrintHelper::SfxPrintHelper()
@@ -788,7 +790,7 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
     SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
     if ( &rBC != m_pObjectShell
         || !pPrintHint
-        || pPrintHint->GetWhich() == -2 ) // -2 : CancelPrintJob
+        || pPrintHint->GetWhich() == SFX_PRINTABLESTATE_CANCELJOB )
         return;
 
     if ( pPrintHint->GetWhich() == com::sun::star::view::PrintableState_JOB_STARTED )
