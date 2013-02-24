@@ -761,7 +761,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         {
             // If we have a PoolNumRule, create it if needed
             const SwNumRuleItem* pRule;
-            sal_uInt16 nPoolId;
+            sal_uInt16 nPoolId=0;
             if( SFX_ITEM_SET == pOtherSet->GetItemState( RES_PARATR_NUMRULE,
                                 sal_False, (const SfxPoolItem**)&pRule ) &&
                 !pDoc->FindNumRulePtr( pRule->GetValue() ) &&
