@@ -1347,46 +1347,6 @@ AC_ARG_WITH(system-expat,
         [Use expat already on system.]),,
     [with_system_expat="$with_system_libs"])
 
-AC_ARG_WITH(system-libcmis,
-    AS_HELP_STRING([--with-system-libcmis],
-        [Use libcmis already on system.]),,
-    [with_system_libcmis="$with_system_libs"])
-
-AC_ARG_WITH(system-lcms2,
-    AS_HELP_STRING([--with-system-lcms2],
-        [Use littlecms v2 already on system.]),,
-    [with_system_lcms2="$with_system_libs"])
-
-AC_ARG_WITH(system-libcdr,
-    AS_HELP_STRING([--with-system-libcdr],
-        [Use libcdr already on system.]),,
-    [with_system_libcdr="$with_system_libs"])
-
-AC_ARG_WITH(system-libmspub,
-    AS_HELP_STRING([--with-system-libmspub],
-        [Use libmspub already on system.]),,
-    [with_system_libmspub="$with_system_libs"])
-
-AC_ARG_WITH(system-libvisio,
-    AS_HELP_STRING([--with-system-libvisio],
-        [Use libvisio already on system.]),,
-    [with_system_libvisio="$with_system_libs"])
-
-AC_ARG_WITH(system-libwpd,
-    AS_HELP_STRING([--with-system-libwpd],
-        [Use libwpd already on system.]),,
-    [with_system_libwpd="$with_system_libs"])
-
-AC_ARG_WITH(system-libwps,
-    AS_HELP_STRING([--with-system-libwps],
-        [Use libwps already on system.]),,
-    [with_system_libwps="$with_system_libs"])
-
-AC_ARG_WITH(system-libwpg,
-    AS_HELP_STRING([--with-system-libwpg],
-        [Use libwpg already on system.]),,
-    [with_system_libwpg="$with_system_libs"])
-
 AC_ARG_WITH(system-libxml,
     AS_HELP_STRING([--with-system-libxml],
         [Use libxml/libxslt already on system.]),,
@@ -1665,16 +1625,6 @@ AC_ARG_WITH(system-lpsolve,
     AS_HELP_STRING([--with-system-lpsolve],
         [Use lpsolve already on system.]),,
     [with_system_lpsolve="$with_system_libs"])
-
-AC_ARG_WITH(system-libexttextcat,
-    AS_HELP_STRING([--with-system-libexttextcat],
-        [Use libexttextcat already on system.]),,
-    [with_system_libexttextcat="$with_system_libs"])
-
-AC_ARG_WITH(system-cppunit,
-    AS_HELP_STRING([--with-system-cppunit],
-        [Use cppunit already on system.]),,
-    [with_system_cppunit="$with_system_libs"])
 
 AC_ARG_WITH(system-redland,
     AS_HELP_STRING([--with-system-redland],
@@ -7243,30 +7193,24 @@ AC_SUBST([MINGW_EXPAT_DLL])
 dnl ===================================================================
 dnl Check for system libcdr
 dnl ===================================================================
-if test $_os = iOS; then
-    # libcdr depends on libwpd and libwpg and those are LGPL, publishing empty flags
-    libo_PUBLISH_MODULE([CDR])
-else
+# libcdr depends on libwpd and libwpg and those are LGPL, publishing empty flags
+if test $_os != iOS; then
     libo_CHECK_SYSTEM_MODULE([libcdr],[CDR],[libcdr-0.0 >= 0.0.5])
 fi
 
 dnl ===================================================================
 dnl Check for system libmspub
 dnl ===================================================================
-if test $_os = iOS; then
-    # libmspub depends on libwpd and libwpg and those are LGPL, publishing empty flags
-    libo_PUBLISH_MODULE([MSPUB])
-else
+# libmspub depends on libwpd and libwpg and those are LGPL, publishing empty flags
+if test $_os != iOS; then
     libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.0])
 fi
 
 dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
-if test $_os = iOS; then
-    # libvisio depends on libwpd and libwpg and those are LGPL, publishing empty flags
-    libo_PUBLISH_MODULE([VISIO])
-else
+# libvisio depends on libwpd and libwpg and those are LGPL, publishing empty flags
+if test $_os != iOS; then
     libo_CHECK_SYSTEM_MODULE([libvisio],[VISIO],[libvisio-0.0])
 fi
 
@@ -7278,9 +7222,7 @@ libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.3 >= 0.3.0])
 dnl ===================================================================
 dnl Check for system libwpd
 dnl ===================================================================
-if test $_os = iOS; then
-    libo_PUBLISH_MODULE([WPD])
-else
+if test $_os != iOS; then
     libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.9 libwpd-stream-0.9],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpdlib"])
 fi
 
@@ -7322,18 +7264,14 @@ AC_SUBST(FREETYPE_LIBS)
 dnl ===================================================================
 dnl Check for system libwps
 dnl ===================================================================
-if test $_os = iOS; then
-    libo_PUBLISH_MODULE([WPS])
-else
+if test $_os != iOS; then
     libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpslib"])
 fi
 
 dnl ===================================================================
 dnl Check for system libwpg
 dnl ===================================================================
-if test $_os = iOS; then
-    libo_PUBLISH_MODULE([WPG])
-else
+if test $_os != iOS; then
     libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpglib"])
 fi
 
