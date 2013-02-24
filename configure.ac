@@ -1286,16 +1286,6 @@ AC_ARG_WITH(system-cairo,
         [Use Cairo libraries already on system.]),,
     [with_system_cairo="$with_system_libs"])
 
-AC_ARG_WITH(system-graphite,
-    AS_HELP_STRING([--with-system-graphite],
-        [Use graphite library already installed on system.]),,
-    [with_system_graphite="$with_system_libs"])
-
-AC_ARG_WITH(system-nss,
-    AS_HELP_STRING([--with-system-nss],
-        [Use NSS/nspr libraries already on system.]),,
-    [with_system_nss="$with_system_libs"])
-
 AC_ARG_WITH(myspell-dicts,
     AS_HELP_STRING([--with-myspell-dicts],
         [Adds myspell dictionaries to the LibreOffice installation set]),
@@ -1594,11 +1584,6 @@ AC_ARG_WITH(system-vigra,
     AS_HELP_STRING([--with-system-vigra],
         [Use vigra already on system.]),,
     [with_system_vigra="$with_system_headers"])
-
-AC_ARG_WITH(system-neon,
-    AS_HELP_STRING([--with-system-neon],
-        [Use neon already on system.]),,
-    [with_system_neon="$with_system_libs"])
 
 AC_ARG_WITH(system-hunspell,
     AS_HELP_STRING([--with-system-hunspell],
@@ -8245,11 +8230,8 @@ AC_SUBST(EXTMSV80)
 dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
-AC_MSG_CHECKING([which NSS to use])
+libo_CHECK_SYSTEM_MODULE([nss/nspr],[NSS],[nss >= 3.9.3 nspr >= 4.8])
 if test "$with_system_nss" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_NSS="YES"
-    PKG_CHECK_MODULES(NSS, nss >= 3.9.3 nspr >= 4.8)
     libo_MINGW_CHECK_DLL([NSPR4], [libnspr4])
     libo_MINGW_CHECK_DLL([PLC4], [libplc4])
     libo_MINGW_CHECK_DLL([PLDS4], [libplds4])
@@ -8258,19 +8240,13 @@ if test "$with_system_nss" = "yes"; then
     libo_MINGW_CHECK_DLL([SMIME3], [smime3])
     libo_MINGW_CHECK_DLL([SSL3], [ssl3])
 else
-    SYSTEM_NSS="NO"
     NSS_MAJOR="3"
     NSS_MINOR="13"
     NSS_PATCH="5"
-    BUILD_TYPE="$BUILD_TYPE NSS"
-    AC_MSG_RESULT([internal])
-fi # system nss
-AC_SUBST(SYSTEM_NSS)
+fi
 AC_SUBST(NSS_MAJOR)
 AC_SUBST(NSS_MINOR)
 AC_SUBST(NSS_PATCH)
-AC_SUBST(NSS_CFLAGS)
-AC_SUBST(NSS_LIBS)
 AC_SUBST(MINGW_SMIME3_DLL)
 
 dnl ===================================================================
@@ -8464,24 +8440,14 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "$enable_graphite" = "" -o 
     AC_MSG_RESULT([yes])
     ENABLE_GRAPHITE="TRUE"
     AC_DEFINE(ENABLE_GRAPHITE)
-    AC_MSG_CHECKING([which graphite to use])
+    libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
     if test "$with_system_graphite" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_GRAPHITE=YES
-        PKG_CHECK_MODULES( GRAPHITE, graphite2 >= 0.9.3 )
         libo_MINGW_CHECK_DLL([GRAPHITE2], [libgraphite2])
-    else
-        AC_MSG_RESULT([internal])
-        SYSTEM_GRAPHITE=NO
-        BUILD_TYPE="$BUILD_TYPE GRAPHITE"
     fi
 else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_GRAPHITE)
-AC_SUBST(SYSTEM_GRAPHITE)
-AC_SUBST(GRAPHITE_CFLAGS)
-AC_SUBST(GRAPHITE_LIBS)
 AC_SUBST([MINGW_GRAPHITE2_DLL])
 
 dnl ===================================================================
@@ -8667,24 +8633,15 @@ else
 dnl ===================================================================
 dnl Check for system neon
 dnl ===================================================================
-AC_MSG_CHECKING([which neon to use])
+libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.26.0])
 if test "$with_system_neon" = "yes"; then
-    AC_MSG_RESULT([external])
-    PKG_CHECK_MODULES(NEON, neon >= 0.26.0, , AC_MSG_ERROR([you need neon >= 0.26.x for system-neon]))
     NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
-    SYSTEM_NEON=YES
     libo_MINGW_CHECK_DLL([NEON], [libneon])
     libo_MINGW_TRY_DLL([TASN1], [libtasn1])
     libo_MINGW_TRY_DLL([GNUTLS], [libgnutls])
 else
-    AC_MSG_RESULT([internal])
-    SYSTEM_NEON=NO
-    BUILD_TYPE="$BUILD_TYPE NEON"
     NEON_VERSION=0295
 fi
-AC_SUBST(SYSTEM_NEON)
-AC_SUBST(NEON_LIBS)
-AC_SUBST(NEON_CFLAGS)
 AC_SUBST(NEON_VERSION)
 AC_SUBST([MINGW_GNUTLS_DLL])
 AC_SUBST([MINGW_NEON_DLL])
