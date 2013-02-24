@@ -656,12 +656,9 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_STATUS_DOCPOS:
                 {
-                    String  aStr( ScGlobal::GetRscString( STR_TABLE ) );
-
-                    aStr += ' ';
-                    aStr += OUString::number( nTab + 1 );
-                    aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
-                    aStr += OUString::number( nTabCount );
+                    OUString aStr = ScGlobal::GetRscString( STR_TABLE ) +
+                                    " "   + OUString::number( nTab + 1 ) +
+                                    " / " + OUString::number( nTabCount );
                     rSet.Put( SfxStringItem( nWhich, aStr ) );
                 }
                 break;

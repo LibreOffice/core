@@ -126,22 +126,22 @@ static short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16*
     return 0;
 }
 
-static String lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
+static OUString lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
 {
     if ( nMinDigits <= 1 )
         return OUString::number( nValue );           // simple case...
     else
     {
-        String aStr = OUString::number( Abs( nValue ) );
-        if ( aStr.Len() < nMinDigits )
+        OUString aStr = OUString::number( Abs( nValue ) );
+        if ( aStr.getLength() < nMinDigits )
         {
             OUStringBuffer aZero;
-            comphelper::string::padToLength(aZero, nMinDigits - aStr.Len(), '0');
-            aStr.Insert(aZero.makeStringAndClear(), 0);
+            comphelper::string::padToLength(aZero, nMinDigits - aStr.getLength(), '0');
+            aStr = aZero.makeStringAndClear() + aStr;
         }
         //  nMinDigits doesn't include the '-' sign -> add after inserting zeros
         if ( nValue < 0 )
-            aStr.Insert( '-', 0 );
+            aStr = "-" + aStr;
         return aStr;
     }
 }
@@ -824,7 +824,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 // so nNextValue is now calculated ahead.
                                 sal_Int32 nNextValue = nStringValue+(sal_Int32)nDelta;
 
-                                String aStr;
+                                OUString aStr;
                                 if ( nHeadNoneTail < 0 )
                                 {
                                     aCol[nCol].Insert( static_cast<SCROW>(nRow),
@@ -834,8 +834,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 }
                                 else
                                 {
-                                    aStr = aValue;
-                                    aStr += lcl_ValueString( nNextValue, nCellDigits );
+                                    aStr = aValue + lcl_ValueString( nNextValue, nCellDigits );
                                     aCol[nCol].Insert( static_cast<SCROW>(nRow),
                                             new ScStringCell( aStr));
                                 }

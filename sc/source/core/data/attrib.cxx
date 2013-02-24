@@ -471,7 +471,7 @@ SfxItemPresentation ScRangeItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_COMPLETE:
-        rText = OUString(ScGlobal::GetRscString(STR_AREA)) + ": ";
+        rText = ScGlobal::GetRscString(STR_AREA) + ": ";
         /* !!! fall-through !!! */
 
         case SFX_ITEM_PRESENTATION_NAMELESS:

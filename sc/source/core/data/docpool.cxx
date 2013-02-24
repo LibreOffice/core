@@ -916,8 +916,8 @@ SfxItemPresentation ScDocumentPool::GetPresentation(
 //                  break; // DURCHFALLEN!!!
                     case SFX_ITEM_PRESENTATION_NAMELESS:
                     {
-                        String aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
-                        aPages.SearchAndReplaceAscii( "%1", OUString::number( nPagNo ) );
+                        OUString aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
+                        aPages = aPages.replaceFirst( "%1", OUString::number( nPagNo ) );
                         rText += aPages;
                     }
                     break;

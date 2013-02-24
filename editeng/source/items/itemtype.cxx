@@ -137,7 +137,7 @@ XubString GetSvxString( sal_uInt16 nId )
 
 XubString GetColorString( const Color& rCol )
 {
-    XubString sStr;
+    OUString sStr;
 
     ColorData nColData =
         RGB_COLORDATA( rCol.GetRed(), rCol.GetGreen(), rCol.GetBlue() );
@@ -158,16 +158,12 @@ XubString GetColorString( const Color& rCol )
     if ( nColor < sizeof(aColAry)/sizeof(ColorData) )
         sStr = EE_RESSTR( RID_SVXITEMS_COLOR_BEGIN + nColor + 1 );
 
-    if ( !sStr.Len() )
+    if ( sStr.isEmpty() )
     {
-        sStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "RGB" ));
-        sStr += sal_Unicode('(');
-        sStr += OUString::number( rCol.GetRed() );
-        sStr += cpDelim;
-        sStr += OUString::number( rCol.GetGreen() );
-        sStr += cpDelim;
-        sStr += OUString::number( rCol.GetBlue() );
-        sStr += sal_Unicode(')');
+        sStr += "RGB(" +
+                OUString::number( rCol.GetRed() )   + OUString(cpDelim) +
+                OUString::number( rCol.GetGreen() ) + OUString(cpDelim) +
+                OUString::number( rCol.GetBlue() )  + ")";
     }
     return sStr;
 }

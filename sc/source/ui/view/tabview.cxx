@@ -1102,9 +1102,8 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
             sal_uInt16 nAlign;
             if (bHoriz)
             {
-                aHelpStr = ScGlobal::GetRscString(STR_COLUMN);
-                aHelpStr += ' ';
-                aHelpStr += ScColToAlpha((SCCOL) nScrollPos);
+                aHelpStr = ScGlobal::GetRscString(STR_COLUMN) +
+                           " " + ScColToAlpha((SCCOL) nScrollPos);
 
                 aRect.Left() = aMousePos.X();
                 aRect.Top()  = aPos.Y() - 4;
@@ -1112,9 +1111,8 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
             }
             else
             {
-                aHelpStr = ScGlobal::GetRscString(STR_ROW);
-                aHelpStr += ' ';
-                aHelpStr += OUString::number(nScrollPos + 1);
+                aHelpStr = ScGlobal::GetRscString(STR_ROW) +
+                           " " + OUString::number(nScrollPos + 1);
 
                 // show quicktext always inside sheet area
                 aRect.Left() = bLayoutRTL ? (aPos.X() + aSize.Width() + 8) : (aPos.X() - 8);

@@ -286,16 +286,12 @@ DBG_NAME(DirectSQLDialog)
     //--------------------------------------------------------------------
     void DirectSQLDialog::addStatusText(const String& _rMessage)
     {
-        String sAppendMessage = OUString::number(m_nStatusCount++);
-        sAppendMessage += rtl::OUString(": ");
-        sAppendMessage += _rMessage;
-        sAppendMessage += rtl::OUString("\n\n");
+        OUString sAppendMessage = OUString::number(m_nStatusCount++) + ": " + _rMessage + "\n\n";
 
-        String sCompleteMessage = m_aStatus.GetText();
-        sCompleteMessage += sAppendMessage;
+        OUString sCompleteMessage = m_aStatus.GetText() + sAppendMessage;
         m_aStatus.SetText(sCompleteMessage);
 
-        m_aStatus.SetSelection(Selection(sCompleteMessage.Len(), sCompleteMessage.Len()));
+        m_aStatus.SetSelection(Selection(sCompleteMessage.getLength(), sCompleteMessage.getLength()));
     }
 
     //--------------------------------------------------------------------

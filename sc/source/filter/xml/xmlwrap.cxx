@@ -213,9 +213,9 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             OSL_FAIL(aError.getStr());
 #endif
 
-            String sErr( OUString::number( r.LineNumber ));
-            sErr += ',';
-            sErr += OUString::number( r.ColumnNumber );
+            String sErr = OUString::number( r.LineNumber ) +
+                          "," +
+                          OUString::number( r.ColumnNumber );
 
             if( !sDocName.isEmpty() )
             {

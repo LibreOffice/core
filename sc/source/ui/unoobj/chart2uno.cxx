@@ -3189,9 +3189,8 @@ public:
             {
                 if (meOrigin != chart2::data::LabelOrigin_LONG_SIDE)
                 {
-                    String aString = ScGlobal::GetRscString(STR_ROW);
-                    aString += ' ';
-                    aString += OUString::number( nRow+1 );
+                    OUString aString = ScGlobal::GetRscString(STR_ROW) +
+                                       " " + OUString::number( nRow+1 );
                     pArr[mnCount] = aString;
                 }
                 else //only indices for categories

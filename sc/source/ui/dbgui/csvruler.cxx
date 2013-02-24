@@ -70,16 +70,16 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
 }
 static void save_FixedWidthList(ScCsvSplits aSplits)
 {
-    String sSplits;
+    OUStringBuffer sSplits;
     // Create a semi-colon separated string to save the splits
     sal_uInt32 n = aSplits.Count();
     for (sal_uInt32 i = 0; i < n; ++i)
     {
-        sSplits.Append( OUString::number( aSplits[i] ) );
-        sSplits.Append((char)';');
+        sSplits.append( OUString::number( aSplits[i] ) );
+        sSplits.append(";");
     }
 
-    OUString sFixedWidthLists = OUString( sSplits );
+    OUString sFixedWidthLists = sSplits.makeStringAndClear();
     Sequence<Any> aValues;
     Any *pProperties;
     Sequence<OUString> aNames(1);

@@ -2183,21 +2183,16 @@ void ScViewData::WriteUserData(String& rData)
     //  wenn Zeilen groesser 8192, "+" statt "/"
 
     sal_uInt16 nZoom = (sal_uInt16)((pThisTab->aZoomY.GetNumerator() * 100) / pThisTab->aZoomY.GetDenominator());
-    rData = OUString::number( nZoom );
-    rData += '/';
+    rData = OUString::number( nZoom ) + "/";
     nZoom = (sal_uInt16)((pThisTab->aPageZoomY.GetNumerator() * 100) / pThisTab->aPageZoomY.GetDenominator());
-    rData += OUString::number( nZoom );
-    rData += '/';
+    rData += OUString::number( nZoom ) + "/";
     if (bPagebreak)
         rData += '1';
     else
         rData += '0';
 
-    rData += ';';
-    rData += OUString::number( nTabNo );
-    rData += ';';
-    rData.AppendAscii(RTL_CONSTASCII_STRINGPARAM( TAG_TABBARWIDTH ));
-    rData += OUString::number( pView->GetTabBarWidth() );
+    rData += ";" + OUString::number( nTabNo ) + ";" + TAG_TABBARWIDTH +
+             OUString::number( pView->GetTabBarWidth() );
 
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)
@@ -2205,24 +2200,20 @@ void ScViewData::WriteUserData(String& rData)
         rData += ';';                   // Numerierung darf auf keinen Fall durcheinanderkommen
         if (i < static_cast<SCTAB>(maTabData.size()) && maTabData[i])
         {
-            sal_Unicode cTabSep = SC_OLD_TABSEP;                // wie 3.1
+            OUString cTabSep = OUString(SC_OLD_TABSEP);                // wie 3.1
             if ( maTabData[i]->nCurY > MAXROW_30 ||
                  maTabData[i]->nPosY[0] > MAXROW_30 || maTabData[i]->nPosY[1] > MAXROW_30 ||
                  ( maTabData[i]->eVSplitMode == SC_SPLIT_FIX &&
                     maTabData[i]->nFixPosY > MAXROW_30 ) )
             {
-                cTabSep = SC_NEW_TABSEP;        // um eine 3.1-Version nicht umzubringen
+                cTabSep = OUString(SC_NEW_TABSEP);        // um eine 3.1-Version nicht umzubringen
             }
 
 
-            rData += OUString::number( maTabData[i]->nCurX );
-            rData += cTabSep;
-            rData += OUString::number( maTabData[i]->nCurY );
-            rData += cTabSep;
-            rData += OUString::number( maTabData[i]->eHSplitMode );
-            rData += cTabSep;
-            rData += OUString::number( maTabData[i]->eVSplitMode );
-            rData += cTabSep;
+            rData += OUString::number( maTabData[i]->nCurX ) + cTabSep +
+                     OUString::number( maTabData[i]->nCurY ) + cTabSep +
+                     OUString::number( maTabData[i]->eHSplitMode ) + cTabSep +
+                     OUString::number( maTabData[i]->eVSplitMode ) + cTabSep;
             if ( maTabData[i]->eHSplitMode == SC_SPLIT_FIX )
                 rData += OUString::number( maTabData[i]->nFixPosX );
             else
@@ -2232,16 +2223,12 @@ void ScViewData::WriteUserData(String& rData)
                 rData += OUString::number( maTabData[i]->nFixPosY );
             else
                 rData += OUString::number( maTabData[i]->nVSplitPos );
-            rData += cTabSep;
-            rData += OUString::number( maTabData[i]->eWhichActive );
-            rData += cTabSep;
-            rData += OUString::number( maTabData[i]->nPosX[0] );
-            rData += cTabSep;
-            rData += OUString::number( maTabData[i]->nPosX[1] );
-            rData += cTabSep;
-            rData += OUString::number( maTabData[i]->nPosY[0] );
-            rData += cTabSep;
-            rData += OUString::number( maTabData[i]->nPosY[1] );
+            rData += cTabSep +
+                     OUString::number( maTabData[i]->eWhichActive ) + cTabSep +
+                     OUString::number( maTabData[i]->nPosX[0] ) + cTabSep +
+                     OUString::number( maTabData[i]->nPosX[1] ) + cTabSep +
+                     OUString::number( maTabData[i]->nPosY[0] ) + cTabSep +
+                     OUString::number( maTabData[i]->nPosY[1] );
         }
     }
 }

@@ -636,9 +636,9 @@ void ScHTMLExport::WriteBody()
 void ScHTMLExport::WriteTables()
 {
     const SCTAB nTabCount = pDoc->GetTableCount();
-    const String    aStrTable( ScResId( SCSTR_TABLE ) );
+    const OUString  aStrTable( ScResId( SCSTR_TABLE ) );
     rtl::OUString   aStr;
-    String          aStrOut;
+    OUString        aStrOut;
     SCCOL           nStartCol;
     SCROW           nStartRow;
     SCTAB           nStartTab;
@@ -677,10 +677,7 @@ void ScHTMLExport::WriteTables()
 
             if ( nUsedTables > 1 )
             {
-                aStrOut  = aStrTable;
-                aStrOut.AppendAscii( " " );
-                aStrOut += OUString::number( nTableStrNum++ );
-                aStrOut.AppendAscii( ": " );
+                aStrOut = aStrTable + " "  + OUString::number( nTableStrNum++ ) + ": ";
 
                 OUT_HR();
 

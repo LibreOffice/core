@@ -1051,8 +1051,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 else
                                     nPageNo += ((long)nRowPos)*nColBreaks+nColPos;
 
-                                String aThisPageStr = aPageStr; // Don't modify the original string.
-                                aThisPageStr.SearchAndReplaceAscii("%1", OUString::number(nPageNo));
+                                OUString aThisPageStr = OUString(aPageStr).replaceFirst("%1", OUString::number(nPageNo));
 
                                 if ( pEditEng )
                                 {

@@ -112,14 +112,13 @@ static void getNewSpreadsheetName (rtl::OUString &aNewName, rtl::OUString aOldNa
 {
     if (!xSpreadDoc.is())
         throw lang::IllegalArgumentException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getNewSpreadsheetName() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
-    static rtl::OUString aUnderScre( RTL_CONSTASCII_USTRINGPARAM( "_" ) );
+    static OUString aUnderScore( "_" );
     int currentNum =2;
-    aNewName = aOldName + aUnderScre+ OUString::number(currentNum) ;
+    aNewName = aOldName + aUnderScore + OUString::number(currentNum) ;
     SCTAB nTab = 0;
     while ( ScVbaWorksheets::nameExists(xSpreadDoc,aNewName, nTab ) )
     {
-        aNewName = aOldName + aUnderScre +
-        OUString::number(++currentNum) ;
+        aNewName = aOldName + aUnderScore + OUString::number(++currentNum);
     }
 }
 

@@ -660,15 +660,11 @@ String ScPreview::GetPosString()
         UpdateDrawView();       // The table eventually changes
     }
 
-    String aString( ScGlobal::GetRscString( STR_PAGE ) );
-    aString += ' ';
-    aString += OUString::number(nPageNo+1);
+    OUString aString = ScGlobal::GetRscString( STR_PAGE ) +
+                       " " + OUString::number(nPageNo+1);
 
     if (nTabsTested >= nTabCount)
-    {
-        aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
-        aString += OUString::number(nTotalPages);
-    }
+        aString += " / " + OUString::number(nTotalPages);
 
     return aString;
 }

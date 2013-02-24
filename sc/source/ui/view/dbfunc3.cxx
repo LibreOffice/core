@@ -557,10 +557,9 @@ void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord )
 //          Pivot
 //
 
-static String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
+static OUString lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
 {
-    String aName = rPrefix;
-    aName += OUString::number( nNumber );
+    OUString aName = rPrefix + OUString::number( nNumber );
     return aName;
 }
 

@@ -309,40 +309,35 @@ void ScAsciiOptions::ReadFromString( const String& rString )
 
 String ScAsciiOptions::WriteToString() const
 {
-    String aOutStr;
+    OUString aOutStr;
 
         //
         //  Feld-Trenner
         //
 
     if ( bFixedLen )
-        aOutStr.AppendAscii(pStrFix);
+        aOutStr += pStrFix;
     else if ( !aFieldSeps.Len() )
-        aOutStr += '0';
+        aOutStr += "0";
     else
     {
         xub_StrLen nLen = aFieldSeps.Len();
         for (xub_StrLen i=0; i<nLen; i++)
         {
             if (i)
-                aOutStr += '/';
+                aOutStr += "/";
             aOutStr += OUString::number(aFieldSeps.GetChar(i));
         }
         if ( bMergeFieldSeps )
         {
-            aOutStr += '/';
-            aOutStr.AppendAscii(pStrMrg);
+            aOutStr += "/";
+            aOutStr += pStrMrg;
         }
     }
 
-    aOutStr += ',';                 // Token-Ende
-
-        //
-        //  Text-Trenner
-        //
-
-    aOutStr += OUString::number(cTextSep);
-    aOutStr += ',';                 // Token-Ende
+    aOutStr += "," +
+               // Text-Trenner
+               OUString::number(cTextSep) + ",";
 
         //
         //  Zeichensatz
@@ -352,14 +347,9 @@ String ScAsciiOptions::WriteToString() const
         aOutStr += ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW );
     else
         aOutStr += ScGlobal::GetCharsetString( eCharSet );
-    aOutStr += ',';                 // Token-Ende
-
-        //
-        //  Startzeile
-        //
-
-    aOutStr += OUString::number(nStartRow);
-    aOutStr += ',';                 // Token-Ende
+    aOutStr += "," +
+               // Startzeile
+               OUString::number(nStartRow) + ",";
 
         //
         //  Spalten-Infos
@@ -369,27 +359,22 @@ String ScAsciiOptions::WriteToString() const
     for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
     {
         if (nInfo)
-            aOutStr += '/';
-        aOutStr += OUString::number(pColStart[nInfo]);
-        aOutStr += '/';
-        aOutStr += OUString::number(pColFormat[nInfo]);
+            aOutStr += "/";
+        aOutStr += OUString::number(pColStart[nInfo]) +
+                   "/" +
+                   OUString::number(pColFormat[nInfo]);
     }
 
     // #i112025# the options string is used in macros and linked sheets,
     // so new options must be added at the end, to remain compatible
 
-    aOutStr += ',';
-
-    // Language
-    aOutStr += OUString::number(eLang);
-    aOutStr += ',';
-
-    // Import quoted field as text.
-    aOutStr += bQuotedFieldAsText ? rtl::OUString("true") : rtl::OUString("false");
-    aOutStr += ',';
-
-    // Detect special nubmers.
-    aOutStr += bDetectSpecialNumber ? rtl::OUString("true") : rtl::OUString("false");
+    aOutStr += "," +
+               // Language
+               OUString::number(eLang) + "," +
+               // Import quoted field as text.
+               OUString::boolean( bQuotedFieldAsText ) + ",";
+               // Detect special numbers.
+               OUString::boolean( bDetectSpecialNumber );
 
     // 9th token is used for "Save as shown" in export options
     // 10th token is used for "Save cell formulas" in export options
