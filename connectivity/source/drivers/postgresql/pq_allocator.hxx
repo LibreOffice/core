@@ -206,15 +206,4 @@ inline bool operator!= (const Allocator<T>&, const Allocator<U>&) SAL_THROW(())
 
 } /* namespace sal */
 
-//######################################################
-/* REQUIRED BY STLPort (see stlport '_alloc.h'):
-   Hack for compilers that do not support member
-   template classes (e.g. MSVC 6) */
-    template<class T, class U>
-    inline pq_sdbc_driver::Allocator<U> & __stl_alloc_rebind (
-        pq_sdbc_driver::Allocator<T> & a, U const *)
-    {
-        return (pq_sdbc_driver::Allocator<U>&)(a);
-    }
-
 #endif /* _PQ_ALLOCATOR_ */
