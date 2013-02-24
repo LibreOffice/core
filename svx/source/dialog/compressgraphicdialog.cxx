@@ -43,7 +43,21 @@ CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, SdrGrafObj* pGr
     m_pGraphicObj     ( pGraphicObj ),
     m_aGraphic        ( pGraphicObj->GetGraphicObject().GetGraphic() ),
     m_aViewSize100mm  ( pGraphicObj->GetLogicRect().GetSize() ),
-    m_aCropRectangle  ( Rectangle() ),
+    m_rBindings       ( rBindings ),
+    m_dResolution     ( 96.0 )
+{
+    const SdrGrafCropItem& rCrop = (const SdrGrafCropItem&) m_pGraphicObj->GetMergedItem(SDRATTR_GRAFCROP);
+    m_aCropRectangle = Rectangle(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
+
+    Initialize();
+}
+
+CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings ) :
+    ModalDialog       ( pParent, "CompressGraphicDialog", "svx/ui/compressgraphicdialog.ui" ),
+    m_pGraphicObj     ( NULL ),
+    m_aGraphic        ( rGraphic ),
+    m_aViewSize100mm  ( rViewSize100mm ),
+    m_aCropRectangle  ( rCropRectangle ),
     m_rBindings       ( rBindings ),
     m_dResolution     ( 96.0 )
 {
@@ -184,15 +198,15 @@ sal_uLong CompressGraphicsDialog::GetSelectedInterpolationType()
 
 void CompressGraphicsDialog::Compress(SvStream& aStream)
 {
-    BitmapEx bitmap = m_aGraphic.GetBitmapEx();
+    BitmapEx aBitmap = m_aGraphic.GetBitmapEx();
     if ( m_pReduceResolutionCB->IsChecked() )
     {
         long nPixelX = (long)( GetViewWidthInch() * m_dResolution );
         long nPixelY = (long)( GetViewHeightInch() * m_dResolution );
 
-        bitmap.Scale( Size( nPixelX, nPixelY ), GetSelectedInterpolationType() );
+        aBitmap.Scale( Size( nPixelX, nPixelY ), GetSelectedInterpolationType() );
     }
-    Graphic aScaledGraphic = Graphic( bitmap );
+    Graphic aScaledGraphic( aBitmap );
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
     Sequence< PropertyValue > aFilterData( 3 );
@@ -206,7 +220,7 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     String aGraphicFormatName = m_pLosslessRB->IsChecked() ? String( "png" ) : String( "jpg" );
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aGraphicFormatName );
-    rFilter.ExportGraphic( aScaledGraphic, String( "test" ), aStream, nFilterFormat, &aFilterData );
+    rFilter.ExportGraphic( aScaledGraphic, OUString( "none" ), aStream, nFilterFormat, &aFilterData );
 }
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl )
@@ -266,7 +280,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl )
 {
     sal_Int32 aSize = 0;
 
-    if ( m_dResolution > 0  )
+    if ( m_dResolution > 0.0  )
     {
         SvMemoryStream aMemStream;
         aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
@@ -286,38 +300,63 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl )
     return 0L;
 }
 
-SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
+Rectangle CompressGraphicsDialog::GetScaledCropRectangle()
 {
-    if ( m_dResolution > 0  )
+    if ( m_pReduceResolutionCB->IsChecked() )
     {
-        SdrGrafObj* pNewObject = (SdrGrafObj*) m_pGraphicObj->Clone();
+        long nPixelX = (long)( GetViewWidthInch()  * m_dResolution );
+        long nPixelY = (long)( GetViewHeightInch() * m_dResolution );
+        Size aSize = m_aGraphic.GetBitmapEx().GetSizePixel();
+        double aScaleX = nPixelX / (double) aSize.Width();
+        double aScaleY = nPixelY / (double) aSize.Height();
 
-        if ( m_pReduceResolutionCB->IsChecked() )
-        {
-            const SdrGrafCropItem& rCrop = (const SdrGrafCropItem&) m_pGraphicObj->GetMergedItem(SDRATTR_GRAFCROP);
-            long nPixelX = (long)( GetViewWidthInch()  * m_dResolution );
-            long nPixelY = (long)( GetViewHeightInch() * m_dResolution );
-            Size size = m_aGraphic.GetBitmapEx().GetSizePixel();
-            double aScaleX = nPixelX / (double) size.Width();
-            double aScaleY = nPixelY / (double) size.Height();
+        return Rectangle(
+            m_aCropRectangle.Left()  * aScaleX,
+            m_aCropRectangle.Top()   * aScaleY,
+            m_aCropRectangle.Right() * aScaleX,
+            m_aCropRectangle.Bottom()* aScaleY);
+    }
+    else
+    {
+        return m_aCropRectangle;
+    }
+}
 
-            SdrGrafCropItem aNewCrop(
-                rCrop.GetLeft()  * aScaleX,
-                rCrop.GetTop()   * aScaleY,
-                rCrop.GetRight() * aScaleX,
-                rCrop.GetBottom()* aScaleY);
-            pNewObject->SetMergedItem(aNewCrop);
-        }
-
+Graphic CompressGraphicsDialog::GetCompressedGraphic()
+{
+    if ( m_dResolution > 0.0  )
+    {
         SvMemoryStream aMemStream;
         aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
         Compress( aMemStream );
         aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
         Graphic aResultGraphic;
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.ImportGraphic( aResultGraphic, String("import"), aMemStream );
+        rFilter.ImportGraphic( aResultGraphic, OUString("import"), aMemStream );
 
-        pNewObject->SetGraphic( aResultGraphic );
+        return aResultGraphic;
+    }
+    return Graphic();
+}
+
+SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
+{
+    if ( m_dResolution > 0.0  )
+    {
+        SdrGrafObj* pNewObject = (SdrGrafObj*) m_pGraphicObj->Clone();
+
+        if ( m_pReduceResolutionCB->IsChecked() )
+        {
+            Rectangle aScaledCropedRectangle = GetScaledCropRectangle();
+            SdrGrafCropItem aNewCrop(
+                aScaledCropedRectangle.Left(),
+                aScaledCropedRectangle.Top(),
+                aScaledCropedRectangle.Right(),
+                aScaledCropedRectangle.Bottom());
+
+            pNewObject->SetMergedItem(aNewCrop);
+        }
+        pNewObject->SetGraphic( GetCompressedGraphic() );
 
         return pNewObject;
     }

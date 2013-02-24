@@ -1286,6 +1286,7 @@ Menu MN_GRF_POPUPMENU
         MN_FRM_CAPTION_ITEM
         SEPARATOR;
         MenuItem { ITEM_SAVE_GRAPHIC };
+        MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_EXTERNAL_EDIT };
         SEPARATOR;
         MenuItem

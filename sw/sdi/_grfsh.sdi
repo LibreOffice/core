@@ -42,8 +42,13 @@ interface BaseTextGraphic
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-
     SID_SAVE_GRAPHIC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+
+    SID_COMPRESS_GRAPHIC
     [
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;

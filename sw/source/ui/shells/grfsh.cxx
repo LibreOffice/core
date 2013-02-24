@@ -41,6 +41,7 @@
 #include <svx/sdgmoitm.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/grfflt.hxx>
+#include <svx/compressgraphicdialog.hxx>
 #include <svx/tbxcolor.hxx>
 #include <fmturl.hxx>
 #include <view.hxx>
@@ -112,6 +113,50 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 String sGrfNm, sFilterNm;
                 rSh.GetGrfNms( &sGrfNm, &sFilterNm );
                 GraphicHelper::ExportGraphic( *pGraphic, sGrfNm );
+            }
+        }
+        break;
+        case SID_COMPRESS_GRAPHIC:
+        {
+            const Graphic* pGraphic = rSh.GetGraphic();
+            if( pGraphic )
+            {
+                Size aSize (
+                    TWIP_TO_MM100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width()),
+                    TWIP_TO_MM100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height()));
+
+                SfxItemSet aSet( rSh.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
+                rSh.GetCurAttr( aSet );
+                SwCropGrf aCrop( (const SwCropGrf&) aSet.Get(RES_GRFATR_CROPGRF) );
+
+                Rectangle aCropRectangle(
+                    TWIP_TO_MM100(aCrop.GetLeft()),
+                    TWIP_TO_MM100(aCrop.GetTop()),
+                    TWIP_TO_MM100(aCrop.GetRight()),
+                    TWIP_TO_MM100(aCrop.GetBottom()) );
+
+                Graphic aGraphic = Graphic( *pGraphic );
+
+                CompressGraphicsDialog aDialog( GetView().GetWindow(), aGraphic, aSize, aCropRectangle, GetView().GetViewFrame()->GetBindings() );
+                if( aDialog.Execute() == RET_OK )
+                {
+                    rSh.StartAllAction();
+                    rSh.StartUndo(UNDO_START);
+                    Rectangle aScaledCropedRectangle = aDialog.GetScaledCropRectangle();
+
+                    aCrop.SetLeft(   MM100_TO_TWIP( aScaledCropedRectangle.Left() ));
+                    aCrop.SetTop(    MM100_TO_TWIP( aScaledCropedRectangle.Top() ));
+                    aCrop.SetRight(  MM100_TO_TWIP( aScaledCropedRectangle.Right() ));
+                    aCrop.SetBottom( MM100_TO_TWIP( aScaledCropedRectangle.Bottom() ));
+
+                    Graphic aCompressedGraphic( aDialog.GetCompressedGraphic() );
+                    rSh.ReRead(aEmptyStr, aEmptyStr, (const Graphic*) &aCompressedGraphic);
+
+                    rSh.SetAttr(aCrop);
+
+                    rSh.EndUndo(UNDO_END);
+                    rSh.EndAllAction();
+                }
             }
         }
         break;
