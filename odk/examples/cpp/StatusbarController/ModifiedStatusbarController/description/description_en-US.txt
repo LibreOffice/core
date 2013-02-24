@@ -1,1 +1,0 @@
-This extension enhances Apache OpenOffice status bar by replacing the Modified status bar item in Apache OpenOffice Writer's status bar.
