@@ -71,7 +71,7 @@ extern "C" {
    NAMING CONVENTIONS <p>
 
    Naming conventions for names of bootstrap values :
-   Names may only include characters, that are allowed charcters for
+   Names may only include characters, that are allowed characters for
    environment variables. This excludes '.', ' ', ';', ':' and any non-ascii
    character. Names are case insensitive.<p>
 

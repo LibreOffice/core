@@ -60,7 +60,7 @@ class QualifiedName
                             bool                i_bAbsolute )
                                                 { Empty(); bIsAbsolute = i_bAbsolute; }
     /** Reads a qualified name from a string.
-        If the last two charcters are "()", the inquiry IsFunction() will return
+        If the last two characters are "()", the inquiry IsFunction() will return
         true.
     */
     void                AssignText(

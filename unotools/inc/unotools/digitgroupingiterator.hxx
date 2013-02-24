@@ -40,7 +40,7 @@ namespace utl {
     count single characters but hunks of groups instead using the get() method,
     this is just for illustrating usage. Anyway, for double values it is highly
     more efficient to use ::rtl::math::doubleToString() and pass the grouping
-    sequence, instead of using this iterator and inserting charcters into
+    sequence, instead of using this iterator and inserting characters into
     strings.
 
     DigitGroupingIterator aGrouping(...)

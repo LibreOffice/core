@@ -1435,7 +1435,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newConcat(
     the length of str, inclusive.
 
     @param count
-    the number of charcters to remove.  Must not be negative, and the sum of
+    the number of characters to remove.  Must not be negative, and the sum of
     index and count must not exceed the length of str.
 
     @param subStr
