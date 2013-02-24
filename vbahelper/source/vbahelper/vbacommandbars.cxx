@@ -111,13 +111,13 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
         // some built-in command bars
         if( m_pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
         {
-            if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Worksheet Menu Bar") ) )
+            if( sBarName.equalsIgnoreAsciiCase( "Worksheet Menu Bar" ) )
             {
                 // spreadsheet menu bar
                 sResourceUrl = ITEM_MENUBAR_URL;
                 bMenu = sal_True;
             }
-            else if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Cell") ) )
+            else if( sBarName.equalsIgnoreAsciiCase( "Cell" ) )
             {
                 // EVIL HACK (tm): spreadsheet cell context menu as dummy object without functionality
                 aRet <<= uno::Reference< XCommandBar >( new VbaDummyCommandBar( this, mxContext, sBarName, office::MsoBarType::msoBarTypePopup ) );
@@ -125,7 +125,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
         }
         else if( m_pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )
         {
-            if( sBarName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("Menu Bar") ) )
+            if( sBarName.equalsIgnoreAsciiCase( "Menu Bar" ) )
             {
                 // text processor menu bar
                 sResourceUrl = ITEM_MENUBAR_URL;
