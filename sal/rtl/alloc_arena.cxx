@@ -165,7 +165,7 @@ rtl_arena_segment_populate (
  *  @precond  arena->m_lock acquired.
  *  @precond  (*ppSegment == 0)
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_segment_get (
     rtl_arena_type *          arena,
     rtl_arena_segment_type ** ppSegment
@@ -183,17 +183,12 @@ rtl_arena_segment_get (
     }
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_arena_segment_get)
-#endif
-
-
 /** rtl_arena_segment_put()
  *
  *  @precond  arena->m_lock acquired.
  *  @postcond (*ppSegment == 0)
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_segment_put (
     rtl_arena_type *          arena,
     rtl_arena_segment_type ** ppSegment
@@ -218,17 +213,12 @@ rtl_arena_segment_put (
     (*ppSegment) = 0;
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_arena_segment_put)
-#endif
-
-/* ================================================================= */
 
 /** rtl_arena_freelist_insert()
  *
  *  @precond arena->m_lock acquired.
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_freelist_insert (
     rtl_arena_type *         arena,
     rtl_arena_segment_type * segment
@@ -242,16 +232,11 @@ rtl_arena_freelist_insert (
     arena->m_freelist_bitmap |= head->m_size;
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_arena_freelist_insert)
-#endif /* __SUNPRO_C */
-
-
 /** rtl_arena_freelist_remove()
  *
  *  @precond arena->m_lock acquired.
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_freelist_remove (
     rtl_arena_type *         arena,
     rtl_arena_segment_type * segment
@@ -356,7 +341,7 @@ rtl_arena_hash_rescale (
 /** rtl_arena_hash_insert()
  *  ...and update stats.
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_hash_insert (
     rtl_arena_type *         arena,
     rtl_arena_segment_type * segment
