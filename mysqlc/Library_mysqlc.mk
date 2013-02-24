@@ -33,8 +33,7 @@ $(eval $(call gb_Library_use_libraries,mysqlc,\
 	cppuhelper \
 ))
 
-MYSQL_LIBFILE :=$(if $(filter WNT,$(OS)),libmysql.dll,\
-	$(if $(filter MACOSX,$(OS)),libmysql.16.dylib,libmysql.so.16))
+MYSQL_LIBFILE :=$(if $(filter WNT,$(OS)),libmysql.dll,$(if $(filter MACOSX,$(OS)),libmysql.16.dylib,libmysql.so.16))
 
 $(eval $(call gb_Library_add_defs,mysqlc,\
 	-DCPPDBC_EXPORTS \
