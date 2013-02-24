@@ -45,6 +45,9 @@
     <glade-widget-class title="Font ListBox" name="svtlo-FontStyleBox"
                         generic-name="FontStyleBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Text Encoding ListBox" name="svxlo-SvxTextEncodingBox"
+                        generic-name="TextEncodingBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Font Preview" name="svxlo-SvxFontPrevWindow"
                         generic-name="Font Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -53,6 +56,9 @@
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="ValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="CsvTableBox" name="sclo-ScCsvTableBox"
+                        generic-name="CSV Table Box" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Table Container" name="svxcorelo-SvxSimpleTableContainer"
                         generic-name="Simple Table Container" parent="GtkTreeView"
