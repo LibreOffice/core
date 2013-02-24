@@ -49,6 +49,38 @@ AVAILABLE TARGETS
        <target>         build gbuild target (such as Library_vbaswobj or
                         CppunitTest_sw_macros_test)
        <target>.clean   clean gbuild target
+       <class>_<target> for all targets and for the following classes:
+       o AllLangResTarget
+       o AllLangZip
+       o CliLibrary
+       o CliNativeLibrary
+       o CliUnoApi
+       o Configuration
+       o CppunitTest
+       o CustomTarget
+       o Dictionary
+       o Executable
+       o Extension
+       o ExternalPackage
+       o ExternalProject
+       o Helper
+       o InstallModule
+       o InstallScript
+       o InternalUnoApi
+       o Jar
+       o JunitTest
+       o Library
+       o Package
+       o Pagein
+       o Pyuno
+       o Rdb
+       o StaticLibrary
+       o UI
+       o UnoApi
+       o UnoApiMerge
+       o UnpackedTarball
+       o WinResTarget
+       o Zip
 
 INTERACTIVE VARIABLES:
        DEBUG / debug   If not empty, build as with --enable-debug.
