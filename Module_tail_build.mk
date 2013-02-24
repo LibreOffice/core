@@ -175,6 +175,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	shell \
 	slideshow \
 	smoketest \
+	solenv \
 	soltools \
 	sot \
 	starmath \

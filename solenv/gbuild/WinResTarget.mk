@@ -33,7 +33,7 @@ $(call gb_WinResTarget_get_dep_target,%) :
 endif
 
 
-$(call gb_WinResTarget_get_target,%) :
+$(call gb_WinResTarget_get_target,%) : $(call gb_Package_get_target,solenv_inc)
 	$(call gb_WinResTarget__command,$@,$*,$<)
 
 $(call gb_WinResTarget_get_clean_target,%) :
