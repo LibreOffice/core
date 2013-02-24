@@ -42,13 +42,13 @@
 #endif
 
 #include <tdeversion.h>
-#include <kdiroperator.h>
-#include <kfiledialog.h>
-#include <kfilefiltercombo.h>
-#include <kio/netaccess.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <ktempfile.h>
+#include <tdediroperator.h>
+#include <tdefiledialog.h>
+#include <tdefilefiltercombo.h>
+#include <tdeio/netaccess.h>
+#include <tdelocale.h>
+#include <tdemessagebox.h>
+#include <tdetempfile.h>
 
 #else // ENABLE_TDE
 

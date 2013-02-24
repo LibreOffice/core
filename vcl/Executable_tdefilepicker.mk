@@ -46,7 +46,7 @@ $(eval $(call gb_Executable_use_libraries,tdefilepicker,\
 
 $(eval $(call gb_Executable_add_libs,tdefilepicker,\
 	$(TDE_LIBS) \
-	-lkio -lX11 \
+	-ltdeio -lX11 \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,tdefilepicker,\

@@ -20,6 +20,7 @@
 #include "KDEInit.h"
 #include <osl/diagnose.h>
 #include <osl/process.h>
+
 #include <shell/kde_headers.h>
 
 namespace connectivity

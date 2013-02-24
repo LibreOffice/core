@@ -68,27 +68,27 @@
 
 
 /* ********* TDE base headers */
-#include <kaboutdata.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <kconfig.h>
+#include <tdeaboutdata.h>
+#include <tdeapplication.h>
+#include <tdecmdlineargs.h>
+#include <tdeconfig.h>
 #include <tdeversion.h>
-#include <kemailsettings.h>
-#include <kglobal.h>
-#include <kglobalsettings.h>
-#include <klocale.h>
-#include <kmainwindow.h>
-#include <kmenubar.h>
-#include <kprotocolmanager.h>
-#include <kstartupinfo.h>
-#include <kstyle.h>
+#include <tdeemailsettings.h>
+#include <tdeglobal.h>
+#include <tdeglobalsettings.h>
+#include <tdelocale.h>
+#include <tdemainwindow.h>
+#include <tdemenubar.h>
+#include <tdeprotocolmanager.h>
+#include <tdestartupinfo.h>
+#include <tdestyle.h>
 
 
 /* ********* TDE address book connectivity headers */
-#include <kabc/addressbook.h>
-#include <kabc/addressee.h>
-#include <kabc/field.h>
-#include <kabc/stdaddressbook.h>
+#include <tdeabc/addressbook.h>
+#include <tdeabc/addressee.h>
+#include <tdeabc/field.h>
+#include <tdeabc/stdaddressbook.h>
 
 #include "tde_defines.h"
 

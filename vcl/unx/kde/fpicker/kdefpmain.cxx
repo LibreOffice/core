@@ -23,9 +23,16 @@
 #include <kdefilepicker.hxx>
 #include <kdecommandthread.hxx>
 
+#ifdef ENABLE_TDE
+#include <tqeventloop.h>
+#include <tdeaboutdata.h>
+#include <tdeapplication.h>
+#include <tdecmdlineargs.h>
+#else // ENABLE_TDE
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
+#endif // ENABLE_TDE
 
 #include <iostream>
 #include <stdlib.h>
@@ -38,6 +45,15 @@
 #else // ENABLE_TDE
 #define THIS_DESKENV_NAME_CAP "KDE"
 #define THIS_DESKENV_NAME_LOW "kde"
+#endif // ENABLE_TDE
+
+#ifdef ENABLE_TDE
+#define KAboutData TDEAboutData
+#define KCmdLineArgs TDECmdLineArgs
+#define KCmdLineOptions TDECmdLineOptions
+#define KCmdLineLastOption TDECmdLineLastOption
+#define KApplication TDEApplication
+#define KLocale TDELocale
 #endif // ENABLE_TDE
 
 //////////////////////////////////////////////////////////////////////////

@@ -21,8 +21,13 @@
 
 #include <kdemodalityfilter.hxx>
 
+#ifdef ENABLE_TDE
+#include <tdeapplication.h>
+#include <kdialogbase.h>
+#else // ENABLE_TDE
 #include <kapplication.h>
 #include <kdialogbase.h>
+#endif // ENABLE_TDE
 
 #include <netwm.h>
 #include <X11/Xlib.h>

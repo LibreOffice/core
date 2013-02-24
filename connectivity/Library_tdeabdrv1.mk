@@ -39,7 +39,7 @@ $(eval $(call gb_Library_use_externals,tdeabdrv1,\
 ))
 
 $(eval $(call gb_Library_add_libs,tdeabdrv1,\
-	-lkabc \
+	-ltdeabc \
 ))
 
 $(eval $(call gb_Library_use_libraries,tdeabdrv1,\
