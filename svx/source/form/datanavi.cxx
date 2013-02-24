@@ -2054,7 +2054,6 @@ namespace svxform
         {
             try
             {
-                ::rtl::OUString sURL = m_xFrameModel->getURL();
                 Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY );
                 if ( xFormsSupp.is() )
                 {

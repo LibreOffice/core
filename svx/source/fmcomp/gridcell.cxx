@@ -3032,7 +3032,6 @@ void DbFilterField::SetText(const OUString& rText)
         }   break;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
         {
-            OUString aText;
             Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, m_aText, sal_True);
             if (aPosSeq.getLength())
                 static_cast<ListBox*>(m_pWindow)->SelectEntryPos(aPosSeq.getConstArray()[0], sal_True);

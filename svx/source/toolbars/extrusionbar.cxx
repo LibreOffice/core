@@ -852,7 +852,6 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
     static const rtl::OUString  sSpecularity( RTL_CONSTASCII_USTRINGPARAM ( "Specularity" ) );
-    static const rtl::OUString  sDiffusion( RTL_CONSTASCII_USTRINGPARAM ( "Diffusion" ) );
     static const rtl::OUString  sMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
 
     com::sun::star::uno::Any* pAny;

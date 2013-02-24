@@ -77,7 +77,6 @@ void TestCharacterClassification::testTitleCase()
         //tricky one
         const sal_Unicode LATINSMALLLETTERDZ[] = { 0x01F3 };
         ::rtl::OUString aTest(LATINSMALLLETTERDZ, SAL_N_ELEMENTS(LATINSMALLLETTERDZ));
-        ::rtl::OUString sTest(aTest);
         ::rtl::OUString sTitleCase = m_xCC->toTitle(aTest, 0, aTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be title", sTitleCase.getLength() == 1 && sTitleCase[0] == 0x01F2);
         ::rtl::OUString sUpperCase = m_xCC->toUpper(aTest, 0, aTest.getLength(), aLocale);

@@ -1517,7 +1517,6 @@ void SvtFileDialog::OpenMultiSelection_Impl()
 */
 
 {
-    String aPath;
     sal_uLong nCount = _pFileView->GetSelectionCount();
     SvTreeListEntry* pEntry = nCount ? _pFileView->FirstSelected() : NULL;
 

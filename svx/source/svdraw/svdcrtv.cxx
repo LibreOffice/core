@@ -575,7 +575,6 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
         bool bMerk(aDragStat.IsMinMoved());
         if (aDragStat.CheckMinMoved(aPnt))
         {
-            Rectangle aBound;
             if (!bMerk) aDragStat.NextPoint();
             aDragStat.NextMove(aPnt);
             pAktCreate->MovCreate(aDragStat);

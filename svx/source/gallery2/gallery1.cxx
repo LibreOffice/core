@@ -80,7 +80,6 @@ GalleryThemeEntry::GalleryThemeEntry( const INetURLObject& rBaseURL, const Strin
 INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL ) const
 {
     INetURLObject   aURL( rURL );
-    String          aFileName;
 
     // check original file name
     if( !FileExists( aURL ) )

@@ -365,7 +365,6 @@ void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs
     if (parseDateTime(aString, aDateTime))
     {
         Date aReferenceDate(1, 1, 1970);
-        Time aReferenceTime(0, 0, 0);
         sal_Int32 nDays = aDateTime - aReferenceDate;
         sal_Int32 nSeconds = nDays * 24 * 60 * 60;
         nSeconds += aDateTime.GetHour() * 60 * 60;

@@ -366,7 +366,6 @@ namespace frm
             else
             {
                 OSL_VERIFY( _rValue >>= nColor );
-                Color aColor( nColor );
                 pNavBar->SetTextLineColor( nColor );
             }
         }

@@ -548,7 +548,6 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
                 if (y1<rRect.Top()   -nY1Pix) y1=rRect.Top()   -nY1Pix;
                 if (y2>rRect.Bottom()+nY1Pix) y2=rRect.Bottom()+nY1Pix;
             }
-            Point aPnt;
 
             long xBigOrg=aOrg.X()+nWrX;
             while (xBigOrg>=x1) xBigOrg-=nx1;

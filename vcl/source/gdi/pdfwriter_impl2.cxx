@@ -508,7 +508,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 if( ! i_rContext.m_bTransparenciesWereRemoved )
                 {
                     const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
-                    String                      aSkipComment;
 
                     if( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN"))
                     {

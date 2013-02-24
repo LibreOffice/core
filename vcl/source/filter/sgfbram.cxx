@@ -404,7 +404,6 @@ sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile&
     sal_Bool      bPDwn=sal_False;
     Point     aP0(0,0);
     Point     aP1(0,0);
-    String    Msg;
     sal_uInt16    RecNr=0;
 
     rMtf.Record(&aOutDev);

@@ -682,8 +682,6 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<String*>& rLi
     sal_uInt32          nNFEntry;
     String          aStrComment;
     String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
 
     short           nMyCat      = SELPOS_NONE;
 
@@ -727,8 +725,6 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<String*>& rL
     sal_uInt32          nNFEntry;
     String          aStrComment;
     String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
 
     short           nMyCat      = SELPOS_NONE;
 
@@ -811,8 +807,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
     sal_uInt32          nNFEntry;
     String          aStrComment;
     String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
 
     nCurCurrencyEntryPos=0;
 
@@ -904,8 +898,6 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
 
     String          aStrComment;
     String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
     short           nMyCat = SELPOS_NONE;
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
@@ -1099,8 +1091,6 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
 
     String          aStrComment;
     String          aNewFormNInfo;
-    String          aPrevString;
-    String          a2PrevString;
 
     short           nMyCat      = SELPOS_NONE;
     bool            bAdditional = (nPrivCat != CAT_USERDEFINED &&

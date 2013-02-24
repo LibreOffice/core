@@ -353,7 +353,6 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
                 if( aMask.IsEmpty() )
                 {
-                    const Point aEmpty;
                     const Rectangle aRect(aEmptyPoint,
                                           aVDevMask.GetOutputSizePixel());
                     const Wallpaper aWallpaper(COL_BLACK);

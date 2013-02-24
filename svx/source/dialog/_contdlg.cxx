@@ -110,7 +110,6 @@ PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
         {
             VirtualDevice       aVDev;
             MapMode             aTransMap;
-            PolyPolygon         aAnimPolyPoly;
             const Animation     aAnim( rGraphic.GetAnimation() );
             const Size&         rSizePix = aAnim.GetDisplaySizePixel();
             const sal_uInt16        nCount = aAnim.Count();

@@ -391,7 +391,6 @@ bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
 
     if (bRad)
     {
-        Rectangle aBoundRect0;
         Point aPt(rDrag.GetNow());
 
         if(aGeo.nDrehWink)

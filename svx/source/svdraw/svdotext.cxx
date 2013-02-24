@@ -214,7 +214,6 @@ void SdrTextObj::FitFrameToTextSize()
         rOutliner.SetPaperSize(Size(aRect.Right()-aRect.Left(),aRect.Bottom()-aRect.Top()));
         rOutliner.SetUpdateMode(sal_True);
         rOutliner.SetText(*pText->GetOutlinerParaObject());
-        Rectangle aTextRect;
         Size aNewSize(rOutliner.CalcTextSize());
         rOutliner.Clear();
         aNewSize.Width()++; // because of possible rounding errors

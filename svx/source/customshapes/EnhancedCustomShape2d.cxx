@@ -2153,7 +2153,6 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     if ( !vObjectList.empty() )
     {
         const SfxItemSet& rCustomShapeSet = pCustomShapeObj->GetMergedItemSet();
-        Color           aFillColor;
         sal_uInt32      nColorCount = nColorData >> 28;
         sal_uInt32      nColorIndex = 0;
 

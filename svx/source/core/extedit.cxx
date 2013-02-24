@@ -72,7 +72,6 @@ IMPL_LINK (ExternalToolEdit, StartListeningEvent, void*, pEvent)
 {
     //Start an event listener implemented via VCL timeout
     ExternalToolEdit* pData = ( ExternalToolEdit* )pEvent;
-    String aURL( pData->m_aFileName );
 
     new FileChangedChecker(
         pData->m_aFileName,

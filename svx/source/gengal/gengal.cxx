@@ -144,7 +144,6 @@ static void createTheme( rtl::OUString aThemeName,
 //  Requires a load more components ...
 
         Graphic aGraphic;
-        String aFormat;
 
         if ( ! pGalTheme->InsertURL( *aIter ) )
             fprintf( stderr, "Failed to import '%s'\n",

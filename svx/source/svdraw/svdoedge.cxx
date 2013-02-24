@@ -2087,7 +2087,6 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
     sal_uInt16 nMarkHdSiz=rPV.GetView().GetMarkHdlSizePixel();
     Size aHalfConSiz(nMarkHdSiz,nMarkHdSiz);
     aHalfConSiz=pOut->PixelToLogic(aHalfConSiz);
-    Size aHalfCenterSiz(2*aHalfConSiz.Width(),2*aHalfConSiz.Height());
     Rectangle aMouseRect(rPt,rPt);
     aMouseRect.Left()  -=aHalfConSiz.Width();
     aMouseRect.Top()   -=aHalfConSiz.Height();

@@ -156,7 +156,6 @@ void ElementDescriptor::readPageModel( StyleBag * all_styles )
 
     // collect elements
     readDefaults();
-    OUString aTitle;
     readStringAttr( "Title", XMLNS_DIALOGS_PREFIX ":title" );
     uno::Reference< container::XNameContainer > xControlContainer( _xProps, uno::UNO_QUERY );
     if ( xControlContainer.is() && xControlContainer->getElementNames().getLength() )

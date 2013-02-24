@@ -557,7 +557,6 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
 
 
     // Aggregate Liste to ::rtl::OUString
-    ::rtl::OUString aResult;
     for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
             pSuccObj < aSuccObjList.end();
             ++pSuccObj

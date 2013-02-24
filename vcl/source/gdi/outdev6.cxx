@@ -206,7 +206,6 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     }
 
     // fallback to old polygon drawing if needed
-    const PolyPolygon aToolsPolyPolygon( rB2DPolyPoly );
     DrawTransparent(PolyPolygon(rB2DPolyPoly), static_cast< sal_uInt16 >(fTransparency * 100.0));
 }
 

@@ -167,8 +167,6 @@ ScaFuncDataList::~ScaFuncDataList()
 
 const ScaFuncData* ScaFuncDataList::Get( const OUString& rProgrammaticName ) const
 {
-    OUString aTestName;
-
     if( aLastName == rProgrammaticName ){
         return Get( nLast );
     }

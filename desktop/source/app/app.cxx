@@ -2224,7 +2224,6 @@ void Desktop::OpenClients()
     bool bRecovery = false;
 
     const CommandLineArgs& rArgs = GetCommandLineArgs();
-    SvtInternalOptions  aInternalOptions;
 
     if (!rArgs.IsQuickstart())
     {

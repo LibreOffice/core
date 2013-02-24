@@ -1390,7 +1390,6 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             aElement >>= xField;
             Reference< XPropertySetInfo >  xInfo = xField.is() ? xField->getPropertySetInfo() : Reference< XPropertySetInfo > ();
 
-            ::rtl::OUString sCurrentModelType;
             const ::rtl::OUString sType("Type");
             sal_Int32 nFormatKey = 0;
             xField->getPropertyValue(sType) >>= nFormatKey;

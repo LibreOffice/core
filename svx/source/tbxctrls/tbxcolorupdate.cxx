@@ -106,7 +106,6 @@ namespace svx
             {
                 Bitmap              aMsk;
                 BitmapWriteAccess*  pMskAcc;
-                const Point         aNullPnt;
 
                 if( aBmpEx.IsAlpha() )
                     pMskAcc = ( aMsk = aBmpEx.GetAlpha().GetBitmap() ).AcquireWriteAccess();

@@ -512,8 +512,6 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
         {
             // Translation
             // Determine the motion vector
-            basegfx::B3DPoint aGlobalMoveHead((double)(rPnt.X() - maLastPos.X()), (double)(rPnt.Y() - maLastPos.Y()), 32768.0);
-            basegfx::B3DPoint aGlobalMoveTail(0.0, 0.0, 32768.0);
             const sal_uInt32 nCnt(maGrp.size());
 
             // Get modifier

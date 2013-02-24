@@ -1061,7 +1061,6 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
             else if(nPntAnz > 1)
             {
                 sal_uInt16 nPntMax(nPntAnz - 1);
-                Point aPt1,aPt2;
                 sal_Bool bIsClosed(IsClosed(meObjectKind));
                 sal_Bool bPt1(nPntNum > 0);
                 sal_Bool bPt2(nPntNum < nPntMax);
@@ -1874,8 +1873,6 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
             const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(0L));
             const basegfx::B2DPoint aB2DPoint0(aPoly.getB2DPoint(0L));
             const basegfx::B2DPoint aB2DPoint1(aPoly.getB2DPoint(1L));
-            const Point aPoint0(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
-            const Point aPoint1(FRound(aB2DPoint0.getX()), FRound(aB2DPoint0.getY()));
 
             if(aB2DPoint0 != aB2DPoint1)
             {

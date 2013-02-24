@@ -874,7 +874,6 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
 {
     sal_uInt16 nStyle = 0;
     Bitmap* pBitmap = &maBitmap;
-    Color aCol;
 
     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
     {
@@ -1095,7 +1094,6 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     }
 
     Image *pImage = &maImage;
-    Color aCol;
 
     // Haben wir ueberhaupt ein Image
     if ( !(!(*pImage)) )

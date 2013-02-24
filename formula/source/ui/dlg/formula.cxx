@@ -820,7 +820,6 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
     if (!pData )
         return;
 
-    String aNewTitle;
     //  2. Page or Edit: show selected function
 
     xub_StrLen nFStart     = pData->GetFStart();

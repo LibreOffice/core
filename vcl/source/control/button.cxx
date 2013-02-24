@@ -942,7 +942,6 @@ void PushButton::ImplDrawPushButton( bool bLayout )
     Size                    aOutSz( GetOutputSizePixel() );
     Rectangle               aRect( aPoint, aOutSz );
     Rectangle               aInRect = aRect;
-    Rectangle               aTextRect;
     sal_Bool                    bNativeOK = sal_False;
 
     // adjust style if button should be rendered 'pressed'
@@ -2137,7 +2136,6 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 {
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
-    Rectangle               aRect( rPos, rSize );
     MetricVector*           pVector = bLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : NULL;
     OUString*               pDisplayText = bLayout ? &mpControlData->mpLayoutData->m_aDisplayText : NULL;
 
@@ -2611,7 +2609,6 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
         Font        aFont = GetDrawPixelFont( pDev );
         Rectangle   aStateRect;
         Rectangle   aMouseRect;
-        Rectangle   aFocusRect;
 
         aImageSize.Width()  = CalcZoom( aImageSize.Width() );
         aImageSize.Height() = CalcZoom( aImageSize.Height() );

@@ -2805,7 +2805,6 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
 {
     if( p )
     {
-        Color aColor;
         sal_Bool bUpdatePreview = sal_False;
 
         // Material

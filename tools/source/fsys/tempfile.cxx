@@ -65,8 +65,6 @@ String ConstructTempDir_Impl( const String* pParent )
     String aName;
     if ( pParent && pParent->Len() )
     {
-        // if parent given try to use it
-        rtl::OUString aTmp( *pParent );
         rtl::OUString aRet;
 
         // test for valid filename

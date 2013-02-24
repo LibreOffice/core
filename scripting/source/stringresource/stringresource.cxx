@@ -1118,9 +1118,6 @@ void StringResourcePersistenceImpl::implStoreAtStorage
         Reference< io::XStream > xElementStream =
                 Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
 
-        ::rtl::OUString aPropName("MediaType");
-        ::rtl::OUString aMime("text/plain");
-
         // Only create stream without content
         Reference< io::XOutputStream > xOutputStream = xElementStream->getOutputStream();
         xOutputStream->closeOutput();

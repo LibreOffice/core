@@ -92,7 +92,6 @@ int cdecl main ( int argc, char ** argv)
     String aTmpSfxItemFile;
     String aTmpDataBaseFile;
     String aTmpCallingFile;
-    String aTmpSrcFile;
     String aTmpCxxFile;
     String aTmpHxxFile;
     String aTmpHelpIdFile;

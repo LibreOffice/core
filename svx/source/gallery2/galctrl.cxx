@@ -379,7 +379,6 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
             {
                 if( ( aSize.Width() > rRect.GetWidth() ) || ( aSize.Height() > rRect.GetHeight() ) )
                 {
-                    Point           aNewPos;
                     const double    fBmpWH  = (double) aSize.Width() / aSize.Height();
                     const double    fThmpWH = (double) rRect.GetWidth() / rRect.GetHeight();
 
@@ -609,7 +608,6 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
                 {
                     if( ( aSize.Width() > aOutputRect.GetWidth() ) || ( aSize.Height() > aOutputRect.GetHeight() ) )
                     {
-                        Point           aNewPos;
                         const double    fBmpWH  = (double) aSize.Width() / aSize.Height();
                         const double    fThmpWH = (double) aOutputRect.GetWidth() / aOutputRect.GetHeight();
 
