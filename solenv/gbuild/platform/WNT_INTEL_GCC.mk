@@ -85,8 +85,7 @@ gb_CFLAGS += --sysroot=$(SYSBASE)
 endif
 
 ifeq ($(HAVE_CXX0X),TRUE)
-# We can turn on additional useful checks with c++0x
-# FIXME still does not compile fully gb_CXXFLAGS += -std=gnu++0x
+gb_CXXFLAGS += -std=gnu++0x
 endif
 
 # At least sal defines its own __main, which would cause DLLs linking against
