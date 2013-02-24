@@ -2977,7 +2977,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 
         const long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
         const long nOffsetY = aPartArea.Height() + nGapH;
-        const long nStartX = bRTL ? nOffsetX*(1 - nColCnt) - nX : nX;
+        const long nStartX = bRTL ? nOffsetX*(1 - nColCnt) + nX : nX;
 
         for(sal_uInt16 nRow = 0; nRow < nRowCnt; nRow++)
         {
