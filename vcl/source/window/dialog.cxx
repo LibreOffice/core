@@ -633,25 +633,24 @@ long Dialog::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
+//What we really want here is something that gives the available width and
+//height of a users screen, taking away the space taken up the OS
+//taskbar, menus, etc.
 Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
 {
     long w = rScreenSize.Width();
+    if (w <= 800)
+        w -= 15;
+    else if (w <= 1024)
+        w -= 65;
+    else
+        w -= 115;
+
     long h = rScreenSize.Height();
-
-    // fill in holy default values brought to us by product management
-    if (rScreenSize.Width() >= 800)
-        w = 785;
-    if (rScreenSize.Width() >= 1024)
-        w = 920;
-    if (rScreenSize.Width() >= 1280)
-        w = 1050;
-
-    if (rScreenSize.Height() >= 600)
-        h = 550;
-    if (rScreenSize.Height() >= 768)
-        h = 630;
-    if (rScreenSize.Height() >= 1024)
-        h = 875;
+    if (h <= 768)
+        h -= 50;
+    else
+        h -= 100;
 
     return Size(w, h);
 }
