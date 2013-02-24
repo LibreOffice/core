@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///zY\u003d",
+        "filename": "sw/source/filter/writer/wrt_fn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-24T14:11:49Z",
+      "side": 1,
+      "message": "Proposal: \"what kind of node is it now?\"",
+      "revId": "1cc793195f2b4fdc9a728e042c253ad5165858fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///zw\u003d",
+        "filename": "sw/source/filter/writer/wrtswtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-24T14:11:49Z",
+      "side": 1,
+      "message": "hight -\u003e height",
+      "revId": "1cc793195f2b4fdc9a728e042c253ad5165858fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///zs\u003d",
+        "filename": "sw/source/filter/writer/wrtswtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-24T14:11:49Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1cc793195f2b4fdc9a728e042c253ad5165858fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///zo\u003d",
+        "filename": "sw/source/filter/writer/wrtswtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-24T14:11:49Z",
+      "side": 1,
+      "message": "coloumn -\u003e column",
+      "revId": "1cc793195f2b4fdc9a728e042c253ad5165858fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///zk\u003d",
+        "filename": "sw/source/filter/writer/wrtswtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-24T14:11:49Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1cc793195f2b4fdc9a728e042c253ad5165858fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///zg\u003d",
+        "filename": "sw/source/filter/writer/wrtswtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-24T14:11:49Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1cc793195f2b4fdc9a728e042c253ad5165858fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///zc\u003d",
+        "filename": "sw/source/filter/writer/wrtswtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-24T14:11:49Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1cc793195f2b4fdc9a728e042c253ad5165858fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
