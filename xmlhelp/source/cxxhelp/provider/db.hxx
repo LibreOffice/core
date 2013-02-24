@@ -110,7 +110,7 @@ namespace helpdatafileproxy {
                 , m_nItRead( -1 )
                 , m_iItPos( -1 )
         {
-            OSL_ASSERT(!rFileURL.compareTo(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:")), 5));
+            OSL_ASSERT(!rFileURL.compareTo("file:", 5));
         }
         ~Hdf()
             { releaseHashMap(); }

@@ -162,8 +162,8 @@ namespace DOM
         // no MutexGuard needed: m_pElement is const
         Reference< XAttr > const xAttr(m_pElement->getAttributeNode(name));
         if (!xAttr.is()) {
-            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "CAttributesMap::removeNamedItem: no such attribute")),
+            throw DOMException(OUString(
+                    "CAttributesMap::removeNamedItem: no such attribute"),
                 static_cast<OWeakObject*>(this),
                 DOMExceptionType_NOT_FOUND_ERR);
         }
@@ -184,8 +184,8 @@ namespace DOM
         Reference< XAttr > const xAttr(
             m_pElement->getAttributeNodeNS(namespaceURI, localName));
         if (!xAttr.is()) {
-            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "CAttributesMap::removeNamedItemNS: no such attribute")),
+            throw DOMException(OUString(
+                    "CAttributesMap::removeNamedItemNS: no such attribute"),
                 static_cast<OWeakObject*>(this),
                 DOMExceptionType_NOT_FOUND_ERR);
         }
@@ -203,8 +203,8 @@ namespace DOM
     {
         Reference< XAttr > const xAttr(xNode, UNO_QUERY);
         if (!xNode.is()) {
-            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "CAttributesMap::setNamedItem: XAttr argument expected")),
+            throw DOMException(OUString(
+                    "CAttributesMap::setNamedItem: XAttr argument expected"),
                 static_cast<OWeakObject*>(this),
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }
@@ -223,8 +223,8 @@ namespace DOM
     {
         Reference< XAttr > const xAttr(xNode, UNO_QUERY);
         if (!xNode.is()) {
-            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "CAttributesMap::setNamedItemNS: XAttr argument expected")),
+            throw DOMException(OUString(
+                    "CAttributesMap::setNamedItemNS: XAttr argument expected"),
                 static_cast<OWeakObject*>(this),
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }

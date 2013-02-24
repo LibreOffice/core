@@ -197,7 +197,7 @@ namespace DOM
 
         // dispatch DOM events to signal change in attribute value
         // dispatch DomAttrModified + DOMSubtreeModified
-        OUString sEventName( RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified") );
+        OUString sEventName( "DOMAttrModified" );
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(sEventName),UNO_QUERY);
         event->initMutationEvent(

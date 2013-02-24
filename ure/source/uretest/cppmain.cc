@@ -137,8 +137,7 @@ private:
             throw;
         } catch (::css::uno::Exception &) {
             throw ::css::uno::RuntimeException(
-                ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("error creating instance")),
+                ::rtl::OUString("error creating instance"),
                 static_cast< ::cppu::OWeakObject * >(this));
         }
         if (!instance.is()) {
@@ -152,18 +151,18 @@ private:
     for (::std::size_t i = 0; i < SAL_N_ELEMENTS(singletons); ++i)
     {
         ::rtl::OUStringBuffer b;
-        b.appendAscii(RTL_CONSTASCII_STRINGPARAM("/singletons/"));
-        b.appendAscii(singletons[i]);
+        b.append("/singletons/");
+        b.append(singletons[i]);
         ::css::uno::Reference< ::css::uno::XInterface > instance(
             context_->getValueByName(b.makeStringAndClear()),
             ::css::uno::UNO_QUERY_THROW);
     }
     test(
         ::test::types::CppTest::create(context_),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test.types.CppTest")));
+        ::rtl::OUString("test.types.CppTest"));
     test(
         ::test::types::JavaTest::create(context_),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test.types.JavaTest")));
+        ::rtl::OUString("test.types.JavaTest"));
     return 0;
 }
 
@@ -180,8 +179,7 @@ void Service::test(
     if (!ok) {
         throw ::css::uno::RuntimeException(
             (name
-             + ::rtl::OUString(
-                 RTL_CONSTASCII_USTRINGPARAM(".throwException failed"))),
+             + ::rtl::OUString(".throwException failed")),
             static_cast< ::cppu::OWeakObject * >(this));
     }
 }
@@ -196,14 +194,13 @@ namespace CppMain {
         return static_cast< ::cppu::OWeakObject * >(new Service(context));
     } catch (::std::bad_alloc &) {
         throw ::css::uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")),
+            ::rtl::OUString("std::bad_alloc"),
             ::css::uno::Reference< ::css::uno::XInterface >());
     }
 }
 
-::rtl::OUString getImplementationName() {
-    return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("test.cpp.cppmain.Component"));
+OUString getImplementationName() {
+    return OUString("test.cpp.cppmain.Component");
 }
 
 ::css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() {

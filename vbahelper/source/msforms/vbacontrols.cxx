@@ -300,48 +300,48 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             uno::Reference< awt::XControlModel > xNewModel;
             bool bFontSupport = false;
             bool bNativeAX = false;
-            if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.CommandButton.1" ) ) )
+            if( aComServiceName.equalsIgnoreAsciiCase( "Forms.CommandButton.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlButtonModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 24.0;
                 bFontSupport = true;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.Label.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.Label.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlFixedTextModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.Image.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.Image.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlImageControlModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 72.0;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.CheckBox.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.CheckBox.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlCheckBoxModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 108.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.OptionButton.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.OptionButton.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlRadioButtonModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 108.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.TextBox.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.TextBox.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlEditModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ListBox.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.ListBox.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlListBoxModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ComboBox.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.ComboBox.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlComboBoxModel" ), uno::UNO_QUERY_THROW );
                 uno::Reference< beans::XPropertySet > xProps( xNewModel, uno::UNO_QUERY_THROW );
@@ -349,7 +349,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ToggleButton.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.ToggleButton.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlButtonModel" ), uno::UNO_QUERY_THROW );
                 uno::Reference< beans::XPropertySet > xProps( xNewModel, uno::UNO_QUERY_THROW );
@@ -357,18 +357,18 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
                 fDefWidth = 72.0; fDefHeight = 18.0;
                 bFontSupport = true;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.Frame.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.Frame.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlGroupBoxModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 216.0; fDefHeight = 144.0;
                 bFontSupport = true;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.SpinButton.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.SpinButton.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlSpinButtonModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 12.75; fDefHeight = 25.5;
             }
-            else if( aComServiceName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Forms.ScrollBar.1" ) ) )
+            else if( aComServiceName.equalsIgnoreAsciiCase( "Forms.ScrollBar.1" ) )
             {
                 xNewModel.set( xModelFactory->createInstance( "com.sun.star.awt.UnoControlScrollBarModel" ), uno::UNO_QUERY_THROW );
                 fDefWidth = 12.75; fDefHeight = 63.8;
@@ -488,7 +488,7 @@ void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
     }
     catch (const uno::Exception&)
     {
-        // throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not create AXControl!" ) ),
+        // throw lang::WrappedTargetException( ::rtl::OUString( "Can not create AXControl!" ),
         //         uno::Reference< uno::XInterface >(),
         //         uno::makeAny( e ) );
     }
