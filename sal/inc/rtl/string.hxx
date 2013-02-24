@@ -1134,7 +1134,7 @@ public:
       @param  index   the replacing index in str.
                       The index must be greater or equal as 0 and
                       less or equal as the length of the string.
-      @param  count   the count of charcters that will replaced
+      @param  count   the count of characters that will replaced
                       The count must be greater or equal as 0 and
                       less or equal as the length of the string minus index.
       @param  newStr  the new substring.

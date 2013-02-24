@@ -421,7 +421,7 @@ public:
 
     static long         GetDefaultFlags();
 
-// returns sal_True for charcters where the function
+// returns sal_True for characters where the function
 // 'SvxAutoCorrect::AutoCorrect' should be called.
 // (used to avoid occasional 'collisions' with (Thai) input-sequence-checking)
     static sal_Bool     IsAutoCorrectChar( sal_Unicode cChar );

@@ -602,7 +602,7 @@ void SwHHCWrapper::Convert()
             // of them are words on their own!) using the word boundary here does
             // not work. Thus since chinese conversion is not interactive we start
             // at the begin of the paragraph to solve the problem, i.e. have the
-            // TextConversion service get those charcters together in the same call.
+            // TextConversion service get those characters together in the same call.
             xub_StrLen nStartIdx = STRING_MAXLEN;
             if (editeng::HangulHanjaConversion::IsChinese( GetSourceLanguage() ) )
                 nStartIdx = 0;
