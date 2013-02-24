@@ -43,10 +43,10 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
                         const SfxItemSet& rSet, sal_Bool bDeep,
                         sal_Bool bTstForDefault )
 {
-    // erst die eigenen Attribute ausgeben
+    // at first give the own attributes out
     const SfxItemPool& rPool = *rSet.GetPool();
     const SfxItemSet* pSet = &rSet;
-    if( !pSet->Count() )        // Optimierung - leere Sets
+    if( !pSet->Count() )        // Optimizing - empty Sets
     {
         if( !bDeep )
             return rWrt;
@@ -59,7 +59,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
     FnAttrOut pOut;
     if( !bDeep || !pSet->GetParent() )
     {
-        OSL_ENSURE( rSet.Count(), "Wurde doch schon behandelt oder?" );
+        OSL_ENSURE( rSet.Count(), "It has been handled already, right?" );
         SfxItemIter aIter( *pSet );
         pItem = aIter.GetCurItem();
         do {
@@ -90,7 +90,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
 
 Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
 {
-    // es muss ein CntntNode sein !!
+    // It must be a CntntNode !!
     SwCntntNode * pCNd = rNode.GetCntntNode();
     if( !pCNd )
         return rWrt;
@@ -108,7 +108,7 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
             nId = RES_OLENODE;
             break;
         default:
-            OSL_FAIL("was fuer ein Node ist es denn nun?");
+            OSL_FAIL("What kind of node is it now?");
             break;
     }
     FnNodeOut pOut;
