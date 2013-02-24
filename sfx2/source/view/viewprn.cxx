@@ -19,7 +19,6 @@
 
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/view/PrintableState.hpp>
 #include "com/sun/star/view/XRenderable.hpp"
 
 #include <svl/itempool.hxx>
@@ -55,7 +54,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-TYPEINIT1(SfxPrintingHint, SfxHint);
+TYPEINIT1(SfxPrintingHint, SfxViewEventHint);
 
 // -----------------------------------------------------------------------
 class SfxPrinterController : public vcl::PrinterController, public SfxListener
@@ -321,9 +320,15 @@ void SfxPrinterController::jobStarted()
             now.GetDay(), now.GetMonth(), now.GetYear() ) );
 
         SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PRINTDOC, GlobalEventConfig::GetEventName( STR_EVENT_PRINTDOC ), mpObjectShell ) );
-        // FIXME: how to get all print options incl. AdditionalOptions easily?
         uno::Sequence < beans::PropertyValue > aOpts;
-        mpObjectShell->Broadcast( SfxPrintingHint( view::PrintableState_JOB_STARTED, aOpts ) );
+        aOpts = getJobProperties( aOpts );
+
+        uno::Reference< frame::XController2 > xController;
+        if ( mpViewShell )
+            xController.set( mpViewShell->GetController(), uno::UNO_QUERY );
+
+        mpObjectShell->Broadcast( SfxPrintingHint(
+            view::PrintableState_JOB_STARTED, aOpts, mpObjectShell, xController ) );
     }
 }
 

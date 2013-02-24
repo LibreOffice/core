@@ -21,6 +21,7 @@
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
+#include "sfx2/sfx.hrc"
 #include <tools/string.hxx>
 #include <svl/hint.hxx>
 #include <unotools/eventcfg.hxx>
@@ -29,6 +30,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XController2.hpp>
+#include <com/sun/star/view/PrintableState.hpp>
+
+namespace css = ::com::sun::star;
 
 class SfxObjectShell;
 
@@ -62,22 +66,22 @@ public:
 
 class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > xViewController;
+    ::com::sun::star::uno::Reference< css::frame::XController2 > xViewController;
 
 public:
     TYPEINFO();
 
-    SfxViewEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
+    SfxViewEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj, const css::uno::Reference< css::frame::XController >& xController )
                         : SfxEventHint( nId, aName, pObj )
-                        , xViewController( xController, ::com::sun::star::uno::UNO_QUERY )
+                        , xViewController( xController, css::uno::UNO_QUERY )
                         {}
 
-    SfxViewEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController )
+    SfxViewEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj, const css::uno::Reference< css::frame::XController2 >& xController )
                         : SfxEventHint( nId, aName, pObj )
                         , xViewController( xController )
                         {}
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > GetController() const
+    css::uno::Reference< css::frame::XController2 > GetController() const
                         { return xViewController; }
 };
 
@@ -112,23 +116,35 @@ public:
 };
 
 class Printer;
-class SfxPrintingHint : public SfxHint
+
+class SfxPrintingHint : public SfxViewEventHint
 {
-    sal_Int32           nWhich;
+    sal_Int32 mnPrintableState;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOpts;
 public:
-                        TYPEINFO();
-                        SfxPrintingHint( sal_Int32 nEvent, const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
-                            : nWhich( nEvent )
-                            , aOpts( rOpts )
-                        {}
+        TYPEINFO();
 
-                        SfxPrintingHint( sal_Int32 nEvent )
-                            : nWhich( nEvent )
-                        {}
+        SfxPrintingHint(
+                sal_Int32 nEvent,
+                const css::uno::Sequence < css::beans::PropertyValue >& rOpts,
+                SfxObjectShell *pObj,
+                const css::uno::Reference< css::frame::XController2 >& xController )
+        : SfxViewEventHint(
+            SFX_EVENT_PRINTDOC,
+            GlobalEventConfig::GetEventName( STR_EVENT_PRINTDOC ),
+            pObj,
+            xController )
+        , mnPrintableState( nEvent )
+        , aOpts( rOpts )
+        {}
 
-    sal_Int32           GetWhich() const { return nWhich; }
-    const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& GetOptions() { return aOpts; }
+        SfxPrintingHint( sal_Int32 nEvent )
+        : SfxViewEventHint( SFX_EVENT_PRINTDOC, rtl::OUString(), 0, css::uno::Reference< css::frame::XController >() )
+        , mnPrintableState( nEvent )
+        {}
+
+    sal_Int32 GetWhich() const { return mnPrintableState; }
+    const css::uno::Sequence < css::beans::PropertyValue >& GetOptions() { return aOpts; }
 };
 
 #endif
