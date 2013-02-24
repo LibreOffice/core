@@ -1043,7 +1043,7 @@ sal_Bool MozPluginTabPage::isInstalled()
     if (!getDllURL(&tempString)) {
         return false;
     }
-    strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
+    strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX - 1);
     strcat(realFilePath, "/libnpsoplugin" SAL_DLLEXTENSION);
 
     if (0 != strcmp(lnkReferFilePath, realFilePath))
@@ -1094,7 +1094,7 @@ sal_Bool MozPluginTabPage::installPlugin()
     if (!getDllURL(&tempString)) {
         return false;
     }
-    strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
+    strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX - 1);
     strcat(realFilePath, "/libnpsoplugin" SAL_DLLEXTENSION);
 
     // create the link
