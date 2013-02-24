@@ -2238,8 +2238,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
 
         // Create sorted array of pointers to the id strings
         const ::rtl::OUString** pIdPtrs = new const ::rtl::OUString*[nTabSize];
-        sal_Int32 i;
-        for( i = 0 ; i < nTabSize ; i++ )
+        for(sal_Int32 i = 0 ; i < nTabSize ; i++ )
             pIdPtrs[i] = NULL;
         for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
         {
@@ -2248,7 +2247,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
         }
 
         // Write lines in correct order
-        for( i = 0 ; i < nTabSize ; i++ )
+        for(sal_Int32 i = 0 ; i < nTabSize ; i++ )
         {
             const ::rtl::OUString* pStr = pIdPtrs[i];
             if( pStr != NULL )
