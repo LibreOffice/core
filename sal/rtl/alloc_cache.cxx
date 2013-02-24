@@ -93,10 +93,10 @@ static rtl_cache_type * gp_cache_bufctl_cache = 0;
 #define RTL_CACHE_HASH_INDEX(cache, addr) \
     RTL_CACHE_HASH_INDEX_IMPL((addr), (cache)->m_hash_shift, (cache)->m_type_shift, ((cache)->m_hash_size - 1))
 
+namespace
+{
 
-/** rtl_cache_hash_rescale()
- */
-static void
+void
 rtl_cache_hash_rescale (
     rtl_cache_type * cache,
     sal_Size         new_size
@@ -161,9 +161,7 @@ rtl_cache_hash_rescale (
     }
 }
 
-/** rtl_cache_hash_insert()
- */
-static RTL_MEMORY_INLINE sal_uIntPtr
+inline sal_uIntPtr
 rtl_cache_hash_insert (
     rtl_cache_type *        cache,
     rtl_cache_bufctl_type * bufctl
@@ -179,14 +177,9 @@ rtl_cache_hash_insert (
     return (bufctl->m_addr);
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_cache_hash_insert)
-#endif /* __SUNPRO_C */
-
-
 /** rtl_cache_hash_remove()
  */
-static rtl_cache_bufctl_type *
+rtl_cache_bufctl_type *
 rtl_cache_hash_remove (
     rtl_cache_type * cache,
     sal_uIntPtr      addr
@@ -243,7 +236,7 @@ rtl_cache_hash_remove (
 
 /** rtl_cache_slab_constructor()
  */
-static int
+int
 rtl_cache_slab_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_slab_type * slab = (rtl_cache_slab_type*)(obj);
@@ -257,7 +250,7 @@ rtl_cache_slab_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
 
 /** rtl_cache_slab_destructor()
  */
-static void
+void
 rtl_cache_slab_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_slab_type * slab = static_cast< rtl_cache_slab_type * >(obj);
@@ -271,7 +264,7 @@ rtl_cache_slab_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
  *
  *  @precond cache->m_slab_lock released.
  */
-static rtl_cache_slab_type *
+rtl_cache_slab_type *
 rtl_cache_slab_create (
     rtl_cache_type * cache
 )
@@ -319,7 +312,7 @@ rtl_cache_slab_create (
  *
  *  @precond cache->m_slab_lock released.
  */
-static void
+void
 rtl_cache_slab_destroy (
     rtl_cache_type *      cache,
     rtl_cache_slab_type * slab
@@ -365,7 +358,7 @@ rtl_cache_slab_destroy (
  *
  *  @precond cache->m_slab_lock acquired.
  */
-static int
+int
 rtl_cache_slab_populate (
     rtl_cache_type * cache
 )
@@ -400,7 +393,7 @@ rtl_cache_slab_populate (
  *
  *  Allocate a buffer from slab layer; used by magazine layer.
  */
-static void *
+void *
 rtl_cache_slab_alloc (
     rtl_cache_type * cache
 )
@@ -485,7 +478,7 @@ rtl_cache_slab_alloc (
  *
  *  Return a buffer to slab layer; used by magazine layer.
  */
-static void
+void
 rtl_cache_slab_free (
     rtl_cache_type * cache,
     void *           addr
@@ -552,7 +545,7 @@ rtl_cache_slab_free (
 
 /** rtl_cache_magazine_constructor()
  */
-static int
+int
 rtl_cache_magazine_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_magazine_type * mag = (rtl_cache_magazine_type*)(obj);
@@ -568,7 +561,7 @@ rtl_cache_magazine_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
 
 /** rtl_cache_magazine_destructor()
  */
-static void
+void
 rtl_cache_magazine_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_magazine_type * mag = static_cast< rtl_cache_magazine_type * >(
@@ -581,7 +574,7 @@ rtl_cache_magazine_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
 
 /** rtl_cache_magazine_clear()
  */
-static void
+void
 rtl_cache_magazine_clear (
     rtl_cache_type *          cache,
     rtl_cache_magazine_type * mag
@@ -609,7 +602,7 @@ rtl_cache_magazine_clear (
  *
  *  @precond cache->m_depot_lock acquired.
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_cache_depot_enqueue (
     rtl_cache_depot_type *    depot,
     rtl_cache_magazine_type * mag
@@ -632,7 +625,7 @@ rtl_cache_depot_enqueue (
  *
  *  @precond cache->m_depot_lock acquired.
  */
-static RTL_MEMORY_INLINE rtl_cache_magazine_type *
+inline rtl_cache_magazine_type *
 rtl_cache_depot_dequeue (
     rtl_cache_depot_type * depot
 )
@@ -666,7 +659,7 @@ rtl_cache_depot_dequeue (
  *
  *  @precond cache->m_depot_lock acquired.
  */
-static RTL_MEMORY_INLINE rtl_cache_magazine_type *
+inline rtl_cache_magazine_type *
 rtl_cache_depot_exchange_alloc (
     rtl_cache_type *          cache,
     rtl_cache_magazine_type * empty
@@ -689,16 +682,11 @@ rtl_cache_depot_exchange_alloc (
     return (full);
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_cache_depot_exchange_alloc)
-#endif /* __SUNPRO_C */
-
-
 /** rtl_cache_depot_exchange_free()
  *
  *  @precond cache->m_depot_lock acquired.
  */
-static RTL_MEMORY_INLINE rtl_cache_magazine_type *
+inline rtl_cache_magazine_type *
 rtl_cache_depot_exchange_free (
     rtl_cache_type *          cache,
     rtl_cache_magazine_type * full
@@ -730,7 +718,7 @@ rtl_cache_depot_exchange_free (
  *
  *  @precond cache->m_depot_lock acquired.
  */
-static int
+int
 rtl_cache_depot_populate (
     rtl_cache_type * cache
 )
@@ -756,7 +744,7 @@ rtl_cache_depot_populate (
 
 /** rtl_cache_constructor()
  */
-static int
+int
 rtl_cache_constructor (void * obj)
 {
     rtl_cache_type * cache = (rtl_cache_type*)(obj);
@@ -784,7 +772,7 @@ rtl_cache_constructor (void * obj)
 
 /** rtl_cache_destructor()
  */
-static void
+void
 rtl_cache_destructor (void * obj)
 {
     rtl_cache_type * cache = (rtl_cache_type*)(obj);
@@ -810,7 +798,7 @@ rtl_cache_destructor (void * obj)
 
 /** rtl_cache_activate()
  */
-static rtl_cache_type *
+rtl_cache_type *
 rtl_cache_activate (
     rtl_cache_type * cache,
     const char *     name,
@@ -932,7 +920,7 @@ rtl_cache_activate (
 
 /** rtl_cache_deactivate()
  */
-static void
+void
 rtl_cache_deactivate (
     rtl_cache_type * cache
 )
@@ -1066,6 +1054,8 @@ rtl_cache_deactivate (
         cache->m_hash_shift = highbit(cache->m_hash_size) - 1;
     }
 }
+
+} //namespace
 
 /* ================================================================= *
  *

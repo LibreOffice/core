@@ -66,34 +66,35 @@ static rtl_arena_type * gp_arena_arena = 0;
  */
 static rtl_arena_type * gp_machdep_arena = 0;
 
+/** gp_default_arena
+ */
+rtl_arena_type * gp_default_arena = 0;
 
-static void *
+namespace
+{
+
+void *
 SAL_CALL rtl_machdep_alloc (
     rtl_arena_type * pArena,
     sal_Size *       pSize
 );
 
-static void
+void
 SAL_CALL rtl_machdep_free (
     rtl_arena_type * pArena,
     void *           pAddr,
     sal_Size         nSize
 );
 
-static sal_Size
+sal_Size
 rtl_machdep_pagesize();
-
-
-/** gp_default_arena
- */
-rtl_arena_type * gp_default_arena = 0;
 
 
 /* ================================================================= */
 
 /** rtl_arena_segment_constructor()
  */
-static int
+int
 rtl_arena_segment_constructor (void * obj)
 {
     rtl_arena_segment_type * segment = (rtl_arena_segment_type*)(obj);
@@ -107,7 +108,7 @@ rtl_arena_segment_constructor (void * obj)
 
 /** rtl_arena_segment_destructor()
  */
-static void
+void
 rtl_arena_segment_destructor (void * obj)
 {
     rtl_arena_segment_type * segment = static_cast< rtl_arena_segment_type * >(
@@ -123,7 +124,7 @@ rtl_arena_segment_destructor (void * obj)
  *
  *  @precond  arena->m_lock acquired.
  */
-static int
+int
 rtl_arena_segment_populate (
     rtl_arena_type * arena
 )
@@ -165,7 +166,7 @@ rtl_arena_segment_populate (
  *  @precond  arena->m_lock acquired.
  *  @precond  (*ppSegment == 0)
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_segment_get (
     rtl_arena_type *          arena,
     rtl_arena_segment_type ** ppSegment
@@ -183,17 +184,12 @@ rtl_arena_segment_get (
     }
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_arena_segment_get)
-#endif
-
-
 /** rtl_arena_segment_put()
  *
  *  @precond  arena->m_lock acquired.
  *  @postcond (*ppSegment == 0)
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_segment_put (
     rtl_arena_type *          arena,
     rtl_arena_segment_type ** ppSegment
@@ -218,17 +214,12 @@ rtl_arena_segment_put (
     (*ppSegment) = 0;
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_arena_segment_put)
-#endif
-
-/* ================================================================= */
 
 /** rtl_arena_freelist_insert()
  *
  *  @precond arena->m_lock acquired.
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_freelist_insert (
     rtl_arena_type *         arena,
     rtl_arena_segment_type * segment
@@ -242,16 +233,11 @@ rtl_arena_freelist_insert (
     arena->m_freelist_bitmap |= head->m_size;
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_arena_freelist_insert)
-#endif /* __SUNPRO_C */
-
-
 /** rtl_arena_freelist_remove()
  *
  *  @precond arena->m_lock acquired.
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_freelist_remove (
     rtl_arena_type *         arena,
     rtl_arena_segment_type * segment
@@ -269,11 +255,6 @@ rtl_arena_freelist_remove (
     QUEUE_REMOVE_NAMED(segment, f);
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_arena_freelist_remove)
-#endif /* __SUNPRO_C */
-
-
 /* ================================================================= */
 
 /** RTL_ARENA_HASH_INDEX()
@@ -288,7 +269,7 @@ rtl_arena_freelist_remove (
  *
  * @precond arena->m_lock released.
  */
-static void
+void
 rtl_arena_hash_rescale (
     rtl_arena_type * arena,
     sal_Size         new_size
@@ -356,7 +337,7 @@ rtl_arena_hash_rescale (
 /** rtl_arena_hash_insert()
  *  ...and update stats.
  */
-static RTL_MEMORY_INLINE void
+inline void
 rtl_arena_hash_insert (
     rtl_arena_type *         arena,
     rtl_arena_segment_type * segment
@@ -373,15 +354,10 @@ rtl_arena_hash_insert (
     arena->m_stats.m_mem_alloc += segment->m_size;
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(rtl_arena_hash_insert)
-#endif /* __SUNPRO_C */
-
-
 /** rtl_arena_hash_remove()
  *  ...and update stats.
  */
-static rtl_arena_segment_type *
+rtl_arena_segment_type *
 rtl_arena_hash_remove (
     rtl_arena_type * arena,
     sal_uIntPtr      addr,
@@ -445,7 +421,7 @@ rtl_arena_hash_remove (
  *  @precond arena->m_lock acquired
  *  @precond (*ppSegment == 0)
  */
-static int
+int
 rtl_arena_segment_alloc (
     rtl_arena_type *          arena,
     sal_Size                  size,
@@ -507,7 +483,7 @@ dequeue_and_leave:
  *  @precond arena->m_lock acquired
  *  @precond (*ppSegment == 0)
  */
-static int
+int
 rtl_arena_segment_create (
     rtl_arena_type *          arena,
     sal_Size                  size,
@@ -562,7 +538,7 @@ rtl_arena_segment_create (
  *  @precond arena->m_lock acquired
  *  @precond segment marked 'used'
  */
-static void
+void
 rtl_arena_segment_coalesce (
     rtl_arena_type *         arena,
     rtl_arena_segment_type * segment
@@ -614,7 +590,7 @@ rtl_arena_segment_coalesce (
 
 /** rtl_arena_constructor()
  */
-static void
+void
 rtl_arena_constructor (void * obj)
 {
     rtl_arena_type * arena = (rtl_arena_type*)(obj);
@@ -656,7 +632,7 @@ rtl_arena_constructor (void * obj)
 
 /** rtl_arena_destructor()
  */
-static void
+void
 rtl_arena_destructor (void * obj)
 {
     rtl_arena_type * arena = (rtl_arena_type*)(obj);
@@ -700,7 +676,7 @@ rtl_arena_destructor (void * obj)
 
 /** rtl_arena_activate()
  */
-static rtl_arena_type *
+rtl_arena_type *
 rtl_arena_activate (
     rtl_arena_type *   arena,
     const char *       name,
@@ -761,7 +737,7 @@ rtl_arena_activate (
 
 /** rtl_arena_deactivate()
  */
-static void
+void
 rtl_arena_deactivate (
     rtl_arena_type * arena
 )
@@ -886,6 +862,7 @@ rtl_arena_deactivate (
     }
 }
 
+} //namespace
 /* ================================================================= *
  *
  * arena implementation.
@@ -1140,9 +1117,12 @@ SAL_CALL rtl_arena_free (
 #define MAP_FAILED 0
 #endif /* SAL_UNX || SAL_W32 */
 
+namespace
+{
+
 /** rtl_machdep_alloc()
  */
-static void *
+void *
 SAL_CALL rtl_machdep_alloc (
     rtl_arena_type * pArena,
     sal_Size *       pSize
@@ -1195,7 +1175,7 @@ SAL_CALL rtl_machdep_alloc (
 
 /** rtl_machdep_free()
  */
-static void
+void
 SAL_CALL rtl_machdep_free (
     rtl_arena_type * pArena,
     void *           pAddr,
@@ -1215,9 +1195,8 @@ SAL_CALL rtl_machdep_free (
 #endif /* (SAL_UNX || SAL_W32) */
 }
 
-/** rtl_machdep_pagesize()
- */
-static sal_Size
+
+sal_Size
 rtl_machdep_pagesize()
 {
 #if defined(SAL_UNX)
@@ -1232,6 +1211,8 @@ rtl_machdep_pagesize()
     return ((sal_Size)(info.dwPageSize));
 #endif /* (SAL_UNX || SAL_W32) */
 }
+
+} //namespace
 
 /* ================================================================= *
  *

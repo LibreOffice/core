@@ -51,21 +51,6 @@
 #define RTL_MEMORY_P2END(value, align) \
     (-(~(sal_IntPtr)(value) & -(sal_IntPtr)(align)))
 
-
-/** Function inlining macros
- *  (compiler dependent)
- */
-#ifndef RTL_MEMORY_INLINE
-#if defined(__GNUC__)
-#define RTL_MEMORY_INLINE __inline__
-#elif defined(_MSC_VER)
-#define RTL_MEMORY_INLINE __inline
-#else
-#define RTL_MEMORY_INLINE
-#endif /* __GNUC__ || _MSC_VER */
-#endif /* RTL_MEMORY_INLINE */
-
-
 /** printf() format specifier(s)
  *  (from C90 <sys/int_fmtio.h>)
  */
@@ -77,11 +62,10 @@
 #endif /* !_MSC_VER */
 #endif /* PRIu64 */
 
-
 /** highbit(): log2() + 1
  *  (complexity O(1))
  */
-static RTL_MEMORY_INLINE int
+static inline int
 highbit(sal_Size n)
 {
   int k = 1;
@@ -106,15 +90,10 @@ highbit(sal_Size n)
   return (k);
 }
 
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(highbit)
-#endif /* __SUNPRO_C */
-
-
 /** lowbit(): find first bit set
  *  (complexity O(1))
  */
-static RTL_MEMORY_INLINE int
+static inline int
 lowbit(sal_Size n)
 {
   int k = 1;
@@ -137,11 +116,6 @@ lowbit(sal_Size n)
     k++;
   return (k);
 }
-
-#if defined(__SUNPRO_C) || defined(__SUNPRO_CC)
-#pragma inline(lowbit)
-#endif /* __SUNPRO_C */
-
 
 /** Queue manipulation macros
  *  (doubly linked circular list)
