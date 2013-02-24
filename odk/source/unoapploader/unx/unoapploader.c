@@ -88,7 +88,7 @@ int main( int argc, char *argv[] )
         int size;
 
         size_t pathlen = strlen(path);
-        struct stat stat;
+        struct stat stats;
         int ret;
 
         static char const unoinfoSuffix[] = "/unoinfo";
@@ -103,7 +103,7 @@ int main( int argc, char *argv[] )
         strcpy(
             unoinfo + pathlen,
             unoinfoSuffix + (pathlen == 0 || path[pathlen - 1] != '/' ? 0 : 1));
-        ret = lstat(unoinfo, &stat);
+        ret = lstat(unoinfo, &stats);
         free(unoinfo);
 
         if (ret == 0) {
