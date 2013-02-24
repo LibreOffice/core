@@ -2718,8 +2718,6 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
 
 void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>& rSettings)
 {
-    Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    //! evaluate (all sheets?)
-
     std::vector<bool> aHasZoomVect( GetDocument()->GetTableCount(), false );
 
     sal_Int32 nCount(rSettings.getLength());

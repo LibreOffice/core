@@ -249,8 +249,6 @@ void ScConsolidateDlg::FillAreaLists()
 
     if ( pRangeUtil && pAreaData && (nAreaDataCount > 0) )
     {
-        String aString;
-
         for ( size_t i=0;
               (i<nAreaDataCount) && (pAreaData[i].aStrName.Len()>0);
               i++ )

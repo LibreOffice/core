@@ -659,8 +659,6 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 {
     SfxStyleSheetBase* pSheet = NULL;
 
-    String aOutlineTag(SdResId(STR_LAYOUT_OUTLINE));
-
     std::vector<String> aNameList;
     CreateLayoutSheetNames(rLayoutName,aNameList);
 

@@ -980,7 +980,6 @@ uno::Sequence<rtl::OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         sal_uInt16 nCount = aIter.Count();
 
-        String aName;
         uno::Sequence<rtl::OUString> aSeq(nCount);
         rtl::OUString* pAry = aSeq.getArray();
         SfxStyleSheetBase* pStyle = aIter.First();

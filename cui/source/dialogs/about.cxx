@@ -203,10 +203,6 @@ static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth )
     osl_getProcessLocale (&pLoc);
     LanguageTag aLanguageTag( *pLoc);
 
-    rtl::OUString aName = aBaseName + aSvg;
-    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString("-") +
-                                  aLanguageTag.getBcp47() +
-                                  aSvg );
     rtl::OUString uri = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ) + aBaseName+aSvg;
     rtl::Bootstrap::expandMacros( uri );
     INetURLObject aObj( uri );

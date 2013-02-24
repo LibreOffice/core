@@ -2642,7 +2642,6 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
     {
         EffectSequence::iterator aInsertIter( find( pEffect ) );
 
-        const OUString strNumberingLevel( "NumberingLevel" );
         Reference< XEnumerationAccess > xText( xTarget, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xText->createEnumeration(), UNO_QUERY_THROW );
 

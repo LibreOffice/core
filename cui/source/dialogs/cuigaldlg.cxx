@@ -163,7 +163,6 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                     if( bDocument )
                     {
                         GraphicDescriptor   aDesc( aFoundURL );
-                        String              aFileName;
 
                         if( ( aDesc.Detect() &&
                               ::std::find( rFormats.begin(),
@@ -292,7 +291,6 @@ TakeThread::~TakeThread()
 
 void TakeThread::execute()
 {
-    String              aName;
     INetURLObject       aURL;
     sal_uInt16          nEntries;
     GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;

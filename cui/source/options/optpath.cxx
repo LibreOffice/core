@@ -268,7 +268,6 @@ SfxTabPage* SvxPathTabPage::Create( Window* pParent,
 
 sal_Bool SvxPathTabPage::FillItemSet( SfxItemSet& )
 {
-    SvtPathOptions aPathOpt;
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(i)->GetUserData();
@@ -284,7 +283,6 @@ sal_Bool SvxPathTabPage::FillItemSet( SfxItemSet& )
 void SvxPathTabPage::Reset( const SfxItemSet& )
 {
     pPathBox->Clear();
-    SvtPathOptions aPathOpt; //! deprecated
 
     HeaderBar &rBar = pPathBox->GetTheHeaderBar();
     long nWidth1 = rBar.GetTextWidth(rBar.GetItemText(1));

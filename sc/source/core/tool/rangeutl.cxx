@@ -930,7 +930,6 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
 
             ScAddress::ExternalInfo aExtInfo1, aExtInfo2;
             ScAddress aCell1, aCell2;
-            rtl::OUString aBuf;
             sal_uInt16 nRet = aCell1.Parse(aBeginCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
             if ((nRet & SCA_VALID) != SCA_VALID)
             {

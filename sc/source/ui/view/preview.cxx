@@ -1265,7 +1265,6 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     long    nRightMargin = 0;
     long    nTopMargin = 0;
     long    nBottomMargin = 0;
-    Size    PageSize;
 
     long    nWidth = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Width();
     long    nHeight = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Height();

@@ -1153,7 +1153,6 @@ getCellRangesForAddress( sal_uInt16& rResFlags, const rtl::OUString& sAddress, S
     if ( pDocSh )
     {
         pDoc = pDocSh->GetDocument();
-        String aString(sAddress);
         sal_uInt16 nMask = SCA_VALID;
         rResFlags = rCellRanges.Parse( sAddress, pDoc, nMask, eConv, cDelimiter );
         if ( rResFlags & SCA_VALID )

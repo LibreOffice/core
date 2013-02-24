@@ -410,7 +410,7 @@ ScCondFormatEntry* ScXMLMapContext::CreateConditionEntry()
     }
 
     ScConditionMode eMode = ScConditionEntry::GetModeFromApi(aParseResult.meOperator);
-    rtl::OUString aExpr1, aExpr2, aNmsp1, aNmsp2;
+    rtl::OUString aNmsp1, aNmsp2;
     ScDocument* pDoc = GetScImport().GetDocument();
 
     ScCondFormatEntry* pEntry =  new ScCondFormatEntry(eMode, aParseResult.maOperand1, aParseResult.maOperand2, pDoc, ScAddress(), msApplyStyle,

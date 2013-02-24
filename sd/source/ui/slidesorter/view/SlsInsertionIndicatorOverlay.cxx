@@ -68,7 +68,6 @@ namespace sd { namespace slidesorter { namespace view {
 //=====  InsertionIndicatorOverlay  ===========================================
 
 const static sal_Int32 gnShadowBorder = 3;
-const static sal_Int32 gnSuperScaleFactor = 1;
 
 InsertionIndicatorOverlay::InsertionIndicatorOverlay (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
@@ -208,9 +207,6 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
 
         // Paint the preview.
         Bitmap aPreview (rRepresentatives[nIndex].maBitmap);
-        const Size aSuperSampleSize(
-            aPreviewSize.Width()*gnSuperScaleFactor,
-            aPreviewSize.Height()*gnSuperScaleFactor);
         aPreview.Scale(aPreviewSize, BMP_SCALE_BEST);
         rContent.DrawBitmapEx(aPageOffset, aPreview);
 

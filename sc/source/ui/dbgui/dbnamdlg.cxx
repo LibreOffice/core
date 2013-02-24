@@ -278,7 +278,6 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
     aFTSource.SetText(aBuf.makeStringAndClear());
 
     aBuf.append(aStrOperations);
-    String aOper = aStrOperations;
     if (pDBData)
     {
         aBuf.append(sal_Unicode(' '));

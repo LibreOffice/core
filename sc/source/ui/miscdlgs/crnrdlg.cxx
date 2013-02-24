@@ -399,7 +399,6 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pD
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pEdActive );
 
-        String aRefStr;
         if ( pEdActive == &aEdAssign )
             SetColRowData( rRef, sal_True );
         else

@@ -224,7 +224,6 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
     // Inserted update to force repaint
     Update();
 
-    String aFile;
     sal_Bool   bCancel = sal_False;
 
     switch (nResult)

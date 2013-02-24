@@ -859,7 +859,6 @@ namespace {
                     sal_Int32(aPrintSize.Width() / nPageWidth)));
             const sal_Int32 nRowCount (::std::max(sal_Int32(2),
                     sal_Int32(aPrintSize.Height() / nPageHeight)));
-            Point aPrintOrigin;
             for (sal_Int32 nRow=0; nRow<nRowCount; ++nRow)
                 for (sal_Int32 nColumn=0; nColumn<nColumnCount; ++nColumn)
                 {
@@ -1968,7 +1967,6 @@ private:
     {
         ::boost::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
         pViewShell->WriteFrameViewData();
-        Point aPtZero;
 
         sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
         StringRangeEnumerator aRangeEnum(

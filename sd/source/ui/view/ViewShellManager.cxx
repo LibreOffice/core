@@ -1065,7 +1065,6 @@ void ViewShellManager::Implementation::CreateShells (void)
     ::osl::MutexGuard aGuard (maMutex);
 
     // Iterate over all view shells.
-    ShellStack aShellStack;
     ActiveShellList::reverse_iterator iShell;
     for (iShell=maActiveViewShells.rbegin(); iShell!=maActiveViewShells.rend(); ++iShell)
     {

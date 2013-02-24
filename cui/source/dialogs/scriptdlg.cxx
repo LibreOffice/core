@@ -988,8 +988,6 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         String aChildName = aChildNode->getName();
         SvTreeListEntry* pNewEntry = NULL;
 
-
-        OUString name( aChildName );
         Reference<XModel> xDocumentModel = getModel( pEntry );
 
         // ISSUE do we need to remove all entries for parent

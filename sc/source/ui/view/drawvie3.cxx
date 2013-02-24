@@ -112,7 +112,6 @@ ScAnchorType ScDrawView::GetAnchorType() const
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
         sal_uLong nCount = pMark->GetMarkCount();
-        Point p0;
         const SdrObject* pObj = NULL;
         for( sal_uLong i=0; i<nCount; i++ )
         {

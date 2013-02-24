@@ -617,8 +617,6 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                 rEntry.eOp = SC_EQUAL;
         }
 
-        rtl::OUString aStr;
-
         switch( nType )
         {
             case EXC_AFTYPE_RK:

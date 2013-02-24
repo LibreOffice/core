@@ -218,7 +218,6 @@ public:
 
     String      GetScriptURL() const;
     String      GetSelectedDisplayName();
-    String      GetSelectedHelpText();
     void        SetRunLabel();
     void        SetDialogDescription(const String& rDescription);
 };

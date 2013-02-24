@@ -1812,7 +1812,6 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     ::sd::ClientView* pView = new ::sd::ClientView( mpDocShell, pOut, NULL );
                     Rectangle               aVisArea = Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
                     Region                  aRegion( aVisArea );
-                    Point                   aOrigin;
 
                     ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();
                     ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : NULL;

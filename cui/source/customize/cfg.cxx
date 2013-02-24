@@ -590,9 +590,6 @@ ConvertSvxConfigEntry(
     static const OUString aDescriptorLabel(
             ITEM_DESCRIPTOR_LABEL  );
 
-    static const OUString aDescriptorContainer(
-            ITEM_DESCRIPTOR_CONTAINER  );
-
     uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
     aPropSeq[0].Name = aDescriptorCommandURL;
@@ -667,9 +664,6 @@ ConvertToolbarEntry(
 
     static const OUString aDescriptorLabel(
             ITEM_DESCRIPTOR_LABEL  );
-
-    static const OUString aDescriptorContainer(
-            ITEM_DESCRIPTOR_CONTAINER  );
 
     static const OUString aIsVisible(
             ITEM_DESCRIPTOR_ISVISIBLE  );
@@ -1933,8 +1927,8 @@ void SvxConfigPage::PositionContentsListBox()
         return;
     }
 
-    Point p, newp;
-    Size s, news;
+    Point p;
+    Size s;
     long x, y, width, height;
 
     // x and width is same as aTopLevelListBox
@@ -2060,7 +2054,6 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
     SvTreeListEntry* pTarget, bool bFront, bool bAllowDuplicates )
 {
     String aDisplayName = pSelectorDlg->GetSelectedDisplayName();
-    String aHelpText = pSelectorDlg->GetSelectedHelpText();
     String aURL = pSelectorDlg->GetScriptURL();
 
     if ( !aURL.Len() )

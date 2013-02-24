@@ -194,7 +194,6 @@ void VisibleAreaManager::MakeVisible (void)
     const sal_Int32 nVisibleHeight (aVisibleArea.GetHeight());
 
     // Find the longest run of boxes whose union fits into the visible area.
-    Rectangle aBoundingBox;
     for (::std::vector<Rectangle>::const_iterator
              iBox(maVisibleRequests.begin()),
              iEnd(maVisibleRequests.end());

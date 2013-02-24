@@ -1184,7 +1184,6 @@ sal_Bool FuText::DeleteDefaultText()
 
     if ( mxTextObj.is() && mxTextObj->IsEmptyPresObj() )
     {
-        String aString;
         SdPage* pPage = (SdPage*) mxTextObj->GetPage();
 
         if (pPage)

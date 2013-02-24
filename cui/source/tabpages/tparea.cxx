@@ -155,7 +155,6 @@ IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrHdl_Impl, void *, pControl)
                 (sal_uInt16)aMtrTrgrBorder.GetValue(),
                 100, 100);
 
-    String aString;
     XFillFloatTransparenceItem aItem( rXFSet.GetPool()/*aString*/, aTmpGradient);
     rXFSet.Put ( aItem );
 
@@ -380,7 +379,6 @@ sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
                         (sal_uInt16)aMtrTrgrBorder.GetValue(),
                         100, 100);
 
-            String aString;
             XFillFloatTransparenceItem aItem( rXFSet.GetPool()/*aString*/, aTmpGradient);
             const SfxPoolItem* pOld = GetOldItem(rAttrs, XATTR_FILLFLOATTRANSPARENCE);
 
@@ -406,7 +404,6 @@ sal_Bool SvxTransparenceTabPage::FillItemSet(SfxItemSet& rAttrs)
         XGradient aGrad(aColor, Color(COL_WHITE));
         aGrad.SetStartIntens(100);
         aGrad.SetEndIntens(100);
-        String aString;
         XFillFloatTransparenceItem aItem( rXFSet.GetPool()/*aString*/, aGrad);
         aItem.SetEnabled(sal_False);
         rAttrs.Put(aItem);

@@ -110,7 +110,6 @@ String SdLayer::convertToInternalName( const OUString& rName )
 
 OUString SdLayer::convertToExternalName( const String& rName )
 {
-    const String aCompare( rName );
     if( rName == String( SdResId( STR_LAYER_BCKGRND ) ) )
     {
         return OUString( sUNO_LayerName_background );

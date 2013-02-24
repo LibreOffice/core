@@ -1426,7 +1426,6 @@ void AssistentDlgImpl::UpdateUserData()
             pPage->SetAutoLayout(AUTOLAYOUT_TITLE, sal_True);
 
         SdrTextObj* pObj;
-        String aEmptyString;
 
         if( aTopic.Len() )
         {

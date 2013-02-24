@@ -1027,10 +1027,4 @@ SvxScriptSelectorDialog::GetSelectedDisplayName()
     return m_pCommands->GetEntryText( m_pCommands->GetLastSelectedEntry() );
 }
 
-String
-SvxScriptSelectorDialog::GetSelectedHelpText()
-{
-    return m_pCommands->GetHelpText( m_pCommands->GetLastSelectedEntry() );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

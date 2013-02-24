@@ -182,7 +182,6 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( String& aStrURL, String& aStrNa
 String SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 {
     String aStrURL = maCbbTarget.GetText();
-    String aScheme = GetSchemeFromURL(aStrURL);
 
     INetURLObject aURL(aStrURL);
 

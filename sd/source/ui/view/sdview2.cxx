@@ -116,7 +116,6 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     // to fix fdo#45260
     const Rectangle                 aMarkRect( GetAllMarkedRect() );
     TransferableObjectDescriptor    aObjDesc;
-    String                          aDisplayName;
     SdrOle2Obj*                     pSdrOleObj = NULL;
     SdrPageView*                    pPgView = GetSdrPageView();
     SdPage*                         pOldPage = pPgView ? ( (SdPage*) pPgView->GetPage() ) : NULL;

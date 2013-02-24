@@ -297,7 +297,6 @@ void SAL_CALL ScAutoFormatsObj::removeByName( const rtl::OUString& aName )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameStr(aName);
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
     ScAutoFormat::iterator it = pFormats->find(aName);
@@ -372,7 +371,6 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
-    String aName;
     uno::Sequence<rtl::OUString> aSeq(pFormats->size());
     rtl::OUString* pAry = aSeq.getArray();
     ScAutoFormat::const_iterator it = pFormats->begin(), itEnd = pFormats->end();

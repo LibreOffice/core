@@ -208,7 +208,6 @@ sal_Bool SvxHlinkDlgMarkWnd::ConnectToDialog( sal_Bool bDoit )
 
 void SvxHlinkDlgMarkWnd::RefreshTree ( String aStrURL )
 {
-    String aEmptyStr;
     OUString aUStrURL;
 
     EnterWait();

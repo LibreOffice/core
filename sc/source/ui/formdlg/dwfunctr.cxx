@@ -831,7 +831,6 @@ void ScFunctionDockWin::UpdateFunctionList()
 void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
 {
     String aFirstArgStr;
-    String aParaStr;
     String aArgStr;
     String aString=pAllFuncList->GetSelectEntry();
     SfxViewShell* pCurSh = SfxViewShell::Current();

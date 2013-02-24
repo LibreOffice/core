@@ -962,7 +962,6 @@ void ScXMLExport::CloseHeaderColumn()
 void ScXMLExport::ExportColumns(const sal_Int32 nTable, const table::CellRangeAddress& aColumnHeaderRange, const bool bHasColumnHeader)
 {
     sal_Int32 nColsRepeated (1);
-    rtl::OUString sParent;
     sal_Int32 nIndex;
     sal_Int32 nPrevColumn(0);
     bool bPrevIsVisible (true);

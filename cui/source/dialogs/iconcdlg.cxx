@@ -989,7 +989,6 @@ sal_Bool IconChoiceDialog::QueryClose()
 
 void IconChoiceDialog::Start_Impl()
 {
-    Point aPos;
     sal_uInt16 nActPage;
 
     if ( mnCurrentPageId == 0 || mnCurrentPageId == USHRT_MAX )

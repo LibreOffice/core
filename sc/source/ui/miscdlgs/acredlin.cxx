@@ -211,7 +211,6 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
 
 void ScAcceptChgDlg::Init()
 {
-    String  aAreaStr;
     ScRange aRange;
 
     OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );
@@ -316,7 +315,6 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
     ScChangeActionType eType=pScChangeAction->GetType();
-    String aString;
     rtl::OUString aDesc;
 
     String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');

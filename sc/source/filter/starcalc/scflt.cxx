@@ -1424,8 +1424,6 @@ void Sc10Import::LoadTables()
         sal_uInt16           DataValue;
         sal_uInt16           Count;
         sal_uInt16           i;
-        String           aStr;  // Universal-Konvertierungs-String
-
 
         lcl_ReadPageFormat(rStream, PageFormat);
 

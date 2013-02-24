@@ -1132,7 +1132,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     ScDocument* pDoc = pDocShell->GetDocument();
 
     FmFormView* pDrawView = NULL;
-    Rectangle aFull( 0, 0, LONG_MAX, LONG_MAX );
 
     // #114135#
     ScDrawLayer* pModel = pDoc->GetDrawLayer();

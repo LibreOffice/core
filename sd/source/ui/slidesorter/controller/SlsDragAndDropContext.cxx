@@ -45,8 +45,6 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     : mpTargetSlideSorter(&rSlideSorter),
       mnInsertionIndex(-1)
 {
-    ::std::vector<const SdPage*> aPages;
-
     // No Drag-and-Drop for master pages.
     if (rSlideSorter.GetModel().GetEditMode() != EM_PAGE)
         return;

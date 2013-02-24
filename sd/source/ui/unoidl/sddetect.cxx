@@ -169,7 +169,6 @@ SdFilterDetect::~SdFilterDetect()
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aFilterName;
     String aPrefix = rtl::OUString("private:factory/");
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {

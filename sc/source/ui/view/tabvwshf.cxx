@@ -117,7 +117,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if ( nVis<=nTabSelCount || !pDoc->IsDocEditable() )
                     break;
 
-                rtl::OUString aName;
                 SCTAB nHideTab;
                 ScMarkData::MarkedTabsType::const_iterator it;
 
@@ -721,7 +720,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     sal_uInt16      nRet    = RET_OK; /// temp
                     sal_Bool        bDone   = false; /// temp
                     Color       aTabBgColor;
-                    Color       aNewTabBgColor;
 
                     aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();

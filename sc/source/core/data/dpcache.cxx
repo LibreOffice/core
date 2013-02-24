@@ -395,8 +395,6 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
         maLabelNames.clear();
         maLabelNames.reserve(mnColumnCount+1);
 
-        std::vector<sal_Int32> aColTypes(mnColumnCount);
-
         for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
         {
             rtl::OUString aColTitle = rDB.getColumnLabel(nCol);

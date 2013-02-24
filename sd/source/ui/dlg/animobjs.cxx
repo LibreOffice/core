@@ -545,8 +545,6 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 
 void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 {
-    String aString;
-
     if (!m_FrameList.empty())
     {
         BitmapEx aBmp(*m_FrameList[m_nCurrentFrame].first);

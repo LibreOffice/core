@@ -73,7 +73,6 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
     Color       aOldLine   = pOut->GetLineColor();
     sal_Bool        bOldEnable = pOut->IsMapModeEnabled();
 
-    Size        aLogPix( 1, 1 );
     Rectangle   aBtnRect( rAt, rSize );
     Rectangle   aInnerRect = aBtnRect;
 

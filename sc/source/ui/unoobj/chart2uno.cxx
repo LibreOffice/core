@@ -1042,7 +1042,6 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     rtl::OUString aRangeRepresentation;
     for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
     {
-        rtl::OUString sName(aArguments[i].Name);
         if ( aArguments[i].Name == "CellRangeRepresentation" )
         {
             aArguments[i].Value >>= aRangeRepresentation;
@@ -1449,7 +1448,6 @@ ScChart2DataProvider::createDataSource(
     uno::Sequence< sal_Int32 > aSequenceMapping;
     for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
     {
-        rtl::OUString sName(aArguments[i].Name);
         if ( aArguments[i].Name == "DataRowSource" )
         {
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;

@@ -93,7 +93,6 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
             const Graphic* pGraphic = aOle2Object->GetGraphic();
             if( pGraphic != NULL )
             {
-                String sGrfNm, sFilterNm;
                 GraphicHelper::ExportGraphic( *pGraphic,  String("") );
             }
         }

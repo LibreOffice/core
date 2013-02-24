@@ -266,7 +266,6 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, co
     long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
     long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
-    String aDocStr;
     sal_Bool bHasErrors = false;
 
     uno::Sequence< uno::Sequence<uno::Any> > aRowSeq( nRowCount );

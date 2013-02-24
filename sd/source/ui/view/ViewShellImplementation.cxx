@@ -104,7 +104,6 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     sal_Bool bHandoutMode = sal_False;
     SdPage* pHandoutMPage = NULL;
     String aNewName;
-    String aOldName;
 
     AutoLayout aNewAutoLayout;
 

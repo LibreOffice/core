@@ -71,7 +71,6 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     std::vector<String> aPageNameList(mpDoc->GetSdPageCount( PK_STANDARD ));
     const String&   rPresPage = rPresentationSettings.maPresPage;
     String          aFirstPage;
-    String          aStandardName( SdResId( STR_PAGE ) );
     SdPage*         pPage = NULL;
     long            nPage;
 

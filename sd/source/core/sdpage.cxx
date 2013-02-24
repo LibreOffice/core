@@ -452,7 +452,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
             pOutliner->SetStyleSheet( 0, NULL );
             pOutliner->SetVertical( bVertical );
 
-            String aEmptyStr;
             SetObjText( (SdrTextObj*) pSdrObj, (SdrOutliner*)pOutliner, eObjKind, aString );
 
             pOutliner->Init( nOutlMode );
@@ -864,7 +863,6 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
             const long nLftBorder = GetLftBorder();
             const long nUppBorder = GetUppBorder();
 
-            Point aTitlePos ( nLftBorder, nUppBorder );
             Size aPageSize ( GetSize() );
             aPageSize.Width()  -= nLftBorder + GetRgtBorder();
             aPageSize.Height() -= nUppBorder + GetLwrBorder();
@@ -904,7 +902,6 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
         else
         {
             // create header&footer objects for handout and notes master
-            Point aTitlePos ( GetLftBorder(), GetUppBorder() );
             Size aPageSize ( GetSize() );
             aPageSize.Width()  -= GetLftBorder() + GetRgtBorder();
             aPageSize.Height() -= GetUppBorder() + GetLwrBorder();

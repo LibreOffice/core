@@ -374,7 +374,6 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
         SdrObject* pPlaceholder = mxPlaceholderObj.get();
         SmartTagReference xThis( this );
         const Rectangle& rSnapRect = pPlaceholder->GetSnapRect();
-        const Point aPoint;
 
         OutputDevice* pDev = mrView.GetFirstOutputDevice();
         if( pDev == 0 )

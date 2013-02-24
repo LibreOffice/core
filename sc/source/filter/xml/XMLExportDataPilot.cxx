@@ -583,7 +583,6 @@ void ScXMLExportDataPilot::WriteNumGroupInfo(const ScDPNumGroupInfo& rGroupInfo)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_END, XML_AUTO);
         else
         {
-            rtl::OUStringBuffer sDate;
             rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfEnd,
                         rtl_math_StringFormat_Automatic,
                         rtl_math_DecimalPlaces_Max, '.', true));

@@ -100,7 +100,6 @@ ScHighlightChgDlg::~ScHighlightChgDlg()
 
 void ScHighlightChgDlg::Init()
 {
-    String  aAreaStr;
     ScRange aRange;
 
     OSL_ENSURE( pViewData && pDoc, "ViewData oder Document nicht gefunden!" );

@@ -354,7 +354,6 @@ namespace svx
         long nItemWidth = 2*GetTextWidth( aOneCharacter );
         m_aValueSet.SetItemWidth( nItemWidth );
 
-        Point aPos(0,0);
         Size aSize(GetSizePixel());
         m_aValueSet.SetSizePixel(aSize);
         m_aListBox.SetSizePixel(aSize);
