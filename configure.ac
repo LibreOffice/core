@@ -574,11 +574,6 @@ AC_ARG_ENABLE(extension-integration,
          product. Use this switch to disable the integration.])
 )
 
-AC_ARG_ENABLE(ext-barcode,
-    AS_HELP_STRING([--enable-ext-barcode],
-        [Enable the Barcode extension.])
-)
-
 AC_ARG_ENABLE(export,
     AS_HELP_STRING([--disable-export],
         [Disable (some) code for document export. Useful when building viewer-only apps that lack
@@ -613,44 +608,9 @@ AC_ARG_ENABLE(dynamic-loading,
         [Disable any use of dynamic loading of code. Work in progress, use only if you are hacking on it.])
 )
 
-AC_ARG_ENABLE(ext-diagram,
-    AS_HELP_STRING([--enable-ext-diagram],
-        [Enable the SmART Gallery (Diagram) extension.])
-)
-
-AC_ARG_ENABLE(ext-google-docs,
-    AS_HELP_STRING([--enable-ext-google-docs],
-        [Enable the Google Documents extension.])
-)
-
-AC_ARG_ENABLE(ext-hunart,
-    AS_HELP_STRING([--enable-ext-hunart],
-        [Enable the Hungarian Cross-reference Toolbar extension.])
-)
-
-AC_ARG_ENABLE(ext-languagetool,
-    AS_HELP_STRING([--enable-ext-languagetool],
-        [Enable the LanguageTool extension.])
-)
-
 AC_ARG_ENABLE(ext-mysql-connector,
     AS_HELP_STRING([--enable-ext-mysql-connector],
         [Enable the build of the MySQL Connector extension.])
-)
-
-AC_ARG_ENABLE(ext-nlpsolver,
-    AS_HELP_STRING([--enable-ext-nlpsolver],
-        [Enable the NLPSolver extension.])
-)
-
-AC_ARG_ENABLE(ext-ct2n,
-    AS_HELP_STRING([--enable-ext-ct2n],
-        [Enable the ConvertTextToNumber extension.])
-)
-
-AC_ARG_ENABLE(ext-numbertext,
-    AS_HELP_STRING([--enable-ext-numbertext],
-        [Enable the Numbertext extension.])
 )
 
 AC_ARG_ENABLE(ext-presenter-minimizer,
@@ -661,21 +621,6 @@ AC_ARG_ENABLE(ext-presenter-minimizer,
 AC_ARG_ENABLE(ext-report-builder,
     AS_HELP_STRING([--disable-ext-report-builder],
         [Disable the Report Builder extension.])
-)
-
-AC_ARG_ENABLE(ext-typo,
-    AS_HELP_STRING([--enable-ext-typo],
-        [Enable the Typography Toolbar extension.])
-)
-
-AC_ARG_ENABLE(ext-validator,
-    AS_HELP_STRING([--enable-ext-validator],
-        [Enable the Validator extension.])
-)
-
-AC_ARG_ENABLE(ext-watch-window,
-    AS_HELP_STRING([--enable-ext-watch-window],
-        [Enable the Watch Window extension to Calc.])
 )
 
 AC_ARG_ENABLE(ext-wiki-publisher,
@@ -10653,18 +10598,18 @@ dnl There are standalone tests for each of these below.
 WITH_EXTRA_EXTENSIONS=
 AC_SUBST([WITH_EXTRA_EXTENSIONS])
 
-libo_CHECK_EXTENSION([Watch Window],[WATCH_WINDOW],[watch_window],[23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt])
-libo_CHECK_EXTENSION([SmART Gallery (Diagram)],[DIAGRAM],[diagram],[8d74685d41f8bffe8c3e71fe8deac09d-SmART_0.9.5.oxt])
-libo_CHECK_EXTENSION([Validator],[VALIDATOR],[validator],[bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt])
-libo_CHECK_EXTENSION([Barcode],[BARCODE],[barcode],[3ed18025a766f1e955707b969c8113a5-Barcode_1.3.5.0.oxt])
-libo_CHECK_EXTENSION([ConvertTextToNumber],[CT2N],[ct2n],[])
-libo_CHECK_EXTENSION([Numbertext],[NUMBERTEXT],[numbertext],[b7cae45ad2c23551fd6ccb8ae2c1f59e-numbertext_0.9.5.oxt])
-libo_CHECK_EXTENSION([Hungarian Cross-reference Toolbar],[HUNART],[hunart],[b632bdd25649cc4067bcb410bae23d2b-hunart_0.3.oxt])
-libo_CHECK_EXTENSION([Typography Toolbar],[TYPO],[typo],[9d60b6cfa3ef1926848710bbcd11115b-typo_0.4.2.oxt])
-libo_CHECK_EXTENSION([Google Docs],[GOOGLE_DOCS],[google_docs],[27211596cf0ad97cab7321239406fde0-gdocs_3.0.1_modified.oxt])
+libo_CHECK_EXTENSION([Watch Window],[WATCH_WINDOW],[watch_window],[watch-window],[23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt])
+libo_CHECK_EXTENSION([SmART Gallery (Diagram)],[DIAGRAM],[diagram],[diagram],[8d74685d41f8bffe8c3e71fe8deac09d-SmART_0.9.5.oxt])
+libo_CHECK_EXTENSION([Validator],[VALIDATOR],[validator],[validator],[bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt])
+libo_CHECK_EXTENSION([Barcode],[BARCODE],[barcode],[barcode],[3ed18025a766f1e955707b969c8113a5-Barcode_1.3.5.0.oxt])
+libo_CHECK_EXTENSION([ConvertTextToNumber],[CT2N],[ct2n],[ct2n],[])
+libo_CHECK_EXTENSION([Numbertext],[NUMBERTEXT],[numbertext],[numbertext],[b7cae45ad2c23551fd6ccb8ae2c1f59e-numbertext_0.9.5.oxt])
+libo_CHECK_EXTENSION([Hungarian Cross-reference Toolbar],[HUNART],[hunart],[hunart],[b632bdd25649cc4067bcb410bae23d2b-hunart_0.3.oxt])
+libo_CHECK_EXTENSION([Typography Toolbar],[TYPO],[typo],[typo],[9d60b6cfa3ef1926848710bbcd11115b-typo_0.4.2.oxt])
+libo_CHECK_EXTENSION([Google Docs],[GOOGLE_DOCS],[google_docs],[google-docs],[27211596cf0ad97cab7321239406fde0-gdocs_3.0.1_modified.oxt])
 if test "x$with_java" != "xno"; then
-    libo_CHECK_EXTENSION([NLPSolver],[NLPSOLVER],[nlpsolver],[])
-    libo_CHECK_EXTENSION([LanguageTool],[LANGUAGETOOL],[languagetool],[])
+    libo_CHECK_EXTENSION([NLPSolver],[NLPSOLVER],[nlpsolver],[nlpsolver],[])
+    libo_CHECK_EXTENSION([LanguageTool],[LANGUAGETOOL],[languagetool],[languagetool],[])
 fi
 
 dnl ===================================================================
