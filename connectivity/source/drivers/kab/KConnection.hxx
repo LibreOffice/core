@@ -30,6 +30,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/compbase3.hxx>
+#include <shell/kde_headers.h>
 
 namespace KABC
 {

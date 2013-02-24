@@ -10258,7 +10258,7 @@ your TDE installation by exporting TDEDIR before running "configure".])
 
     dnl Set the variables
     TDE_CFLAGS="-I$tqt_incdir -I$tde_incdir -I/usr/include/tqt -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
-    TDE_LIBS="-L$tde_libdir -L$tqt_libdir -lkio -ltdeui -ltdecore -ltqt -ltqt-mt"
+    TDE_LIBS="-L$tde_libdir -L$tqt_libdir -ltdeio -ltdeui -ltdecore -ltqt -ltqt-mt"
 fi
 AC_SUBST(TDE_CFLAGS)
 AC_SUBST(TDE_LIBS)

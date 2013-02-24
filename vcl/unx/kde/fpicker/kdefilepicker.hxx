@@ -28,8 +28,13 @@
 
 #include <cstddef>
 
+#ifdef ENABLE_TDE
+#include <tdefiledialog.h>
+#include <tdefilefiltercombo.h>
+#else // ENABLE_TDE
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
+#endif // ENABLE_TDE
 
 class QGrid;
 class QHBox;

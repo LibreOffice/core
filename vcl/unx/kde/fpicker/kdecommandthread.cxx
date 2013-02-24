@@ -25,11 +25,11 @@
 
 #ifdef ENABLE_TDE
 #include <tqstringlist.h>
+#include <tdeapplication.h>
 #else // ENABLE_TDE
 #include <qstringlist.h>
-#endif // ENABLE_TDE
-
 #include <kapplication.h>
+#endif // ENABLE_TDE
 
 #if OSL_DEBUG_LEVEL > 1
 #include <iostream>
@@ -121,12 +121,18 @@ void KDECommandThread::handleCommand( const QString &rString, bool &bQuit )
 
     QString qCommand = pTokens->front();
     pTokens->pop_front();
+#if OSL_DEBUG_LEVEL > 1
+    ::std::cerr << "kdefilepicker first command: " << qCommand.latin1() << ::std::endl;
+#endif
 
     if ( qCommand == "exit" )
     {
         bQuit = true;
         kapp->exit();
         kapp->wakeUpGuiThread();
+#if OSL_DEBUG_LEVEL > 1
+        ::std::cerr << "kdefilepicker: exiting" << ::std::endl;
+#endif
     }
     else
         kapp->postEvent( m_pObject, new KDECommandEvent( qCommand, pTokens ) );
