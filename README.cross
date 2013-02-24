@@ -138,7 +138,6 @@ CXX_FOR_BUILD=ccache g++
 --host=i686-w64-mingw32
 --with-distro=LibreOfficeWin32
 --disable-activex
---disable-build-mozilla
 --disable-directx
 --disable-ext-nlpsolver
 --disable-ext-presenter-minimizer
@@ -147,8 +146,6 @@ CXX_FOR_BUILD=ccache g++
 --disable-ext-scripting-javascript
 --disable-ext-wiki-publisher
 --disable-ext-wiki-publisher
---disable-mozilla
---disable-nss-module
 --disable-pdfimport
 --enable-python=system
 --with-system-altlinuxhyph
@@ -238,7 +235,6 @@ TODO:
     - --without-myspell-dicts
     - --disable-directx
     - --disable-activex
-    - --disable-mozilla
   - much of the stuff currently relies on --with-system-*, and
     consequently on the mingw32-* openSUSE packages; might be good to be
     able to build with as few dependencies as possible - but that is low
@@ -410,5 +406,3 @@ CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
 --build=i386-apple-darwin10.7.0
 --host=powerpc-apple-darwin10
---disable-mozilla
---disable-build-mozilla
