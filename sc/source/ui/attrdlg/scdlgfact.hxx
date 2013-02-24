@@ -391,7 +391,7 @@ public:
     virtual ~ScAbstractDialogFactory_Impl() {}
 
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
-                                                                    SvStream* pInStream, int nId,
+                                                                    SvStream* pInStream,
                                                                     ScImportAsciiCall eCall);
 
     virtual AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg(Window* pParent);

@@ -647,21 +647,10 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 
 
 AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( Window* pParent, String aDatName,
-                                                    SvStream* pInStream, int nId, ScImportAsciiCall eCall )
+                                                    SvStream* pInStream, ScImportAsciiCall eCall )
 {
-    ScImportAsciiDlg* pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_ASCII :
-            pDlg = new ScImportAsciiDlg( pParent, aDatName,pInStream, eCall );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScImportAsciiDlg_Impl( pDlg );
-    return 0;
+    ScImportAsciiDlg* pDlg = new ScImportAsciiDlg( pParent, aDatName,pInStream, eCall );
+    return new AbstractScImportAsciiDlg_Impl( pDlg );
 }
 // ScImportAsciiDlg end
 

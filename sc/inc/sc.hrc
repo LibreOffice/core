@@ -1010,9 +1010,6 @@
 #define RID_SCDLG_CHARTCOLROW           (SC_DIALOGS_START + 80)
 #define RID_SCDLG_AREAS                 (SC_DIALOGS_START + 81)
 
-// popup for statusbar controller
-#define RID_SCDLG_ASCII                 (SC_DIALOGS_START + 91)
-
 // popup for drop-mode in navigator
 #define RID_POPUP_DROPMODE              (SC_DIALOGS_START + 92)
 #define RID_DROPMODE_URL                (SC_DIALOGS_START + 93)

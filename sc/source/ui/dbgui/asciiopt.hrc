@@ -20,33 +20,3 @@
 #define BTN_OK                      1
 #define BTN_CANCEL                  2
 #define BTN_HELP                    3
-
-#define FL_FIELDOPT                 4
-#define FT_CHARSET                  5
-#define LB_CHARSET                  6
-#define FT_CUSTOMLANG               7
-#define LB_CUSTOMLANG               8
-#define FT_AT_ROW                   9
-#define NF_AT_ROW                   10
-
-#define FL_SEPOPT                   11
-#define RB_FIXED                    12
-#define RB_SEPARATED                13
-#define CKB_TAB                     14
-#define CKB_COMMA                   15
-#define CKB_OTHER                   16
-#define ED_OTHER                    17
-#define CKB_SEMICOLON               18
-#define CKB_SPACE                   19
-#define CB_ASONCE                   20
-#define CB_TEXTSEP                  21
-#define FT_TEXTSEP                  22
-
-#define FL_OTHER_OPTIONS            23
-#define CB_QUOTED_AS_TEXT           24
-#define CB_DETECT_SPECIAL_NUMBER    25
-
-#define FL_WIDTH                    26
-#define FT_TYPE                     27
-#define LB_TYPE1                    28
-#define CTR_TABLEBOX                29

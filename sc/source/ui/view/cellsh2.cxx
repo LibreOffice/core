@@ -930,7 +930,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
                     AbstractScImportAsciiDlg *pDlg = pFact->CreateScImportAsciiDlg(
-                        NULL, String(), &aStream, RID_SCDLG_ASCII,SC_TEXTTOCOLUMNS);
+                        NULL, String(), &aStream, SC_TEXTTOCOLUMNS);
                     OSL_ENSURE( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
 
                     if ( pDlg->Execute() == RET_OK )

@@ -325,7 +325,7 @@ public:
     SC_DLLPUBLIC static ScAbstractDialogFactory*    Create();
 
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
-                                                                    SvStream* pInStream, int nId,
+                                                                    SvStream* pInStream,
                                                                     ScImportAsciiCall eCall) = 0;
 
     virtual     AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg(Window* pParent) = 0;
