@@ -895,8 +895,7 @@ String OTableEditorCtrl::GenerateName( const String& rName )
     sal_Int32 i=1;
     while( HasFieldName(aFieldName) )
     {
-        aFieldName = aBaseName;
-        aFieldName += OUString::number(i);
+        aFieldName = aBaseName + OUString::number(i);
         i++;
     }
 

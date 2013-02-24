@@ -255,11 +255,7 @@ sal_Int32 OQueryTableView::CountTableAlias(const String& rName, sal_Int32& rMax)
     OTableWindowMapIterator aIter = GetTabWinMap()->find(rName);
     while(aIter != GetTabWinMap()->end())
     {
-        String aNewName;
-        aNewName = rName;
-        aNewName += '_';
-        aNewName += OUString::number(++nRet);
-
+        OUString aNewName = OUString(rName) + "_" + OUString::number(++nRet);
         aIter = GetTabWinMap()->find(aNewName);
     }
 

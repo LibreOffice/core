@@ -79,23 +79,20 @@ ScImportOptions::ScImportOptions( const String& rStr )
 
 String ScImportOptions::BuildString() const
 {
-    String  aResult;
+    OUString aResult;
 
     if( bFixedWidth )
-        aResult.AppendAscii( pStrFix );
+        aResult += pStrFix;
     else
         aResult += OUString::number(nFieldSepCode);
-    aResult += ',';
-    aResult += OUString::number(nTextSepCode);
-    aResult += ',';
-    aResult += aStrFont;
-                                                            // use the same string format as ScAsciiOptions:
-    aResult.AppendAscii( ",1,,0," );                        // first row, no column info, default language
-    aResult.AppendAscii(bQuoteAllText ? "true" : "false");  // same as "quoted field as text" in ScAsciiOptions
-    aResult.AppendAscii( ",true," );                        // "detect special numbers"
-    aResult.AppendAscii(bSaveAsShown ? "true" : "false");   // "save as shown": not in ScAsciiOptions
-    aResult.AppendAscii( "," );
-    aResult.AppendAscii(bSaveFormulas ? "true" : "false");  // "save formulas": not in ScAsciiOptions
+    aResult += "," + OUString::number(nTextSepCode) + "," + aStrFont +
+                                                 // use the same string format as ScAsciiOptions:
+            ",1,,0," +                           // first row, no column info, default language
+            OUString::boolean( bQuoteAllText ) + // same as "quoted field as text" in ScAsciiOptions
+            ",true," +                           // "detect special numbers"
+            OUString::boolean( bSaveAsShown ) +  // "save as shown": not in ScAsciiOptions
+            "," +
+            OUString::boolean( bSaveFormulas );  // "save formulas": not in ScAsciiOptions
 
     return aResult;
 }

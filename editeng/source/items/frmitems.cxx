@@ -97,7 +97,7 @@ inline void SetValueProp( XubString& rStr, const sal_uInt16 nValue,
     if( 100 == nProp )
         rStr += OUString::number( nValue );
     else
-        ( rStr += OUString::number( nProp )) += sal_Unicode('%');
+        rStr += OUString::number(nProp) + "%";
 }
 
 inline void SetValueProp( XubString& rStr, const short nValue,
@@ -106,7 +106,7 @@ inline void SetValueProp( XubString& rStr, const short nValue,
     if( 100 == nProp )
         rStr += OUString::number( nValue );
     else
-        ( rStr += OUString::number( nProp )) += sal_Unicode('%');
+        rStr += OUString::number(nProp) + "%";
 }
 
 // -----------------------------------------------------------------------

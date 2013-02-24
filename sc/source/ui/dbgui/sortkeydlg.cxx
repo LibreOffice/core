@@ -90,8 +90,8 @@ void ScSortKeyWindow::AddSortKey( sal_uInt16 nItemNumber )
     ScSortKeyItem* pSortKeyItem = new ScSortKeyItem(m_pBox);
 
     // Set Sort key number
-    String aLine = pSortKeyItem->m_pFlSort->GetText();
-    aLine += OUString::number( nItemNumber );
+    OUString aLine = pSortKeyItem->m_pFlSort->GetText() +
+                     OUString::number( nItemNumber );
     pSortKeyItem->m_pFlSort->SetText( aLine );
 
     mrSortKeyItems.push_back(pSortKeyItem);

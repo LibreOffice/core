@@ -1454,11 +1454,7 @@ r1c1_add_col( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
     if( rRef.IsColRel() )
     {
         if (rRef.nRelCol != 0)
-        {
-            rBuf.append( sal_Unicode( '[' ) );
-            rBuf.append( OUString::number( rRef.nRelCol ) );
-            rBuf.append( sal_Unicode( ']' ) );
-        }
+            rBuf.append("[").append( OUString::number( rRef.nRelCol ) ).append("]");
     }
     else
         rBuf.append( OUString::number( rRef.nCol + 1 ) );
@@ -1471,9 +1467,7 @@ r1c1_add_row( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
     {
         if (rRef.nRelRow != 0)
         {
-            rBuf.append( sal_Unicode( '[' ) );
-            rBuf.append( OUString::number( rRef.nRelRow ) );
-            rBuf.append( sal_Unicode( ']' ) );
+            rBuf.append("[").append( OUString::number( rRef.nRelRow ) ).append("]");
         }
     }
     else

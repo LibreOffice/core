@@ -715,7 +715,7 @@ void Outliner::ImplSetLevelDependendStyleSheet( sal_uInt16 nPara, SfxStyleSheet*
         DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
         if ( pNewStyle && ( pNewStyle != GetStyleSheet( nPara ) ) )
         {
-             SfxItemSet aOldAttrs( GetParaAttribs( nPara ) );
+            SfxItemSet aOldAttrs( GetParaAttribs( nPara ) );
             SetStyleSheet( nPara, pNewStyle );
             if ( aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
             {

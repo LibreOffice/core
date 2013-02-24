@@ -683,9 +683,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.SetUserData(  REPLACE_BULLETS, pUserData );
 
     nPercent = pOpt->nRightMargin;
-    sMargin = ' ';
-    sMargin += OUString::number( nPercent );
-    sMargin += '%';
+    sMargin = " " + OUString::number( nPercent ) + "%";
     pUserData = new ImpUserData(&sMargin, 0);
     aCheckLB.SetUserData( MERGE_SINGLE_LINE_PARA, pUserData );
 
@@ -739,9 +737,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
         if(RET_OK == aDlg.Execute())
         {
             nPercent = (sal_uInt16)aDlg.GetPrcntFld().GetValue();
-            sMargin = ' ';
-            sMargin += OUString::number( nPercent );
-            sMargin += '%';
+            sMargin = " " + OUString::number( nPercent ) + "%";
         }
     }
     aCheckLB.Invalidate();

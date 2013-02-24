@@ -447,8 +447,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         SCTAB nDummy;
                         do
                         {
-                            aName = aBaseName;
-                            aName += OUString::number( i );
+                            aName = aBaseName + OUString::number( i );
                             if (bPrefix)
                                 bValid = pDoc->ValidNewTabName( aName );
                             else

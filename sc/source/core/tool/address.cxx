@@ -1626,9 +1626,7 @@ lcl_r1c1_append_c ( String &r, int nCol, bool bIsAbs,
     {
         nCol -= rDetails.nCol;
         if (nCol != 0) {
-            r += '[';
-            r += OUString::number( nCol );
-            r += ']';
+            r += "[" + OUString::number( nCol ) + "]";
         }
     }
 }
@@ -1645,9 +1643,7 @@ lcl_r1c1_append_r ( String &r, int nRow, bool bIsAbs,
     {
         nRow -= rDetails.nRow;
         if (nRow != 0) {
-            r += '[';
-            r += OUString::number( nRow );
-            r += ']';
+            r += "[" + OUString::number( nRow ) + "]";
         }
     }
 }

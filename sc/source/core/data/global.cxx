@@ -398,8 +398,7 @@ String ScGlobal::GetErrorString(sal_uInt16 nErrNumber)
         case errDivisionByZero     : nErrNumber = STR_DIV_ZERO; break;
         case errIllegalFPOperation : nErrNumber = STR_NUM_ERROR; break;
 
-        default          : sResStr = GetRscString(STR_ERROR_STR);
-                           sResStr += OUString::number( nErrNumber );
+        default          : sResStr = GetRscString(STR_ERROR_STR) + OUString::number( nErrNumber );
                            nErrNumber = 0;
                            break;
     }

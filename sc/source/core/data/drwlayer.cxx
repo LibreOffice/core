@@ -1728,7 +1728,7 @@ String ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
     String aBase = ScGlobal::GetRscString(STR_GRAPHICNAME);
     aBase += ' ';
 
-    sal_Bool bThere = sal_True;
+    bool bThere = true;
     String aGraphicName;
     SCTAB nDummy;
     long nId = pnCounter ? *pnCounter : 0;

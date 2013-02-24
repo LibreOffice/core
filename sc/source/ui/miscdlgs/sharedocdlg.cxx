@@ -124,7 +124,7 @@ void ScShareDocumentDlg::UpdateView()
                 {
                     if ( pUsersData[i].getLength() > SHARED_EDITTIME_ID )
                     {
-                        String aUser;
+                        OUString aUser;
                         if ( !pUsersData[i][SHARED_OOOUSERNAME_ID].isEmpty() )
                         {
                             aUser = pUsersData[i][SHARED_OOOUSERNAME_ID];
@@ -135,9 +135,7 @@ void ScShareDocumentDlg::UpdateView()
                         }
                         else
                         {
-                            aUser = maStrUnkownUser;
-                            aUser += ' ';
-                            aUser += OUString::number( nUnknownUser++ );
+                            aUser = OUString(maStrUnkownUser) + " " + OUString::number( nUnknownUser++ );
                         }
 
                         // parse the edit time string of the format "DD.MM.YYYY hh:mm"

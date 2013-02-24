@@ -445,7 +445,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
         {
             Point  aMousePos = pScroll->OutputToNormalizedScreenPixel( pScroll->GetPointerPosPixel() );
             Point  aPos      = pScroll->GetParent()->OutputToNormalizedScreenPixel( pScroll->GetPosPixel() );
-            String aHelpStr;
+            OUString aHelpStr;
             Rectangle aRect;
             sal_uInt16   nAlign;
 
@@ -456,12 +456,9 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
                 if( bIsDivide )
                     pPreview->SetPageNo( nPageNo );
 
-                aHelpStr = ScGlobal::GetRscString( STR_PAGE );
-                aHelpStr += ' ';
-                aHelpStr += OUString::number( nPageNo );
-
-                aHelpStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
-                aHelpStr += OUString::number( nTotalPages );
+                aHelpStr = ScGlobal::GetRscString( STR_PAGE ) +
+                           " " + OUString::number( nPageNo ) +
+                           " / "  + OUString::number( nTotalPages );
             }
             else if( nDelta > 0 )
             {
@@ -469,12 +466,9 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
                 if ( nTotalPages && ( nPageNo < nTotalPages || !bAllTested ) )
                     pPreview->SetPageNo( nPageNo );
 
-                aHelpStr = ScGlobal::GetRscString( STR_PAGE );
-                aHelpStr += ' ';
-                aHelpStr += OUString::number( nPageNo+1 );
-
-                aHelpStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " / " ));
-                aHelpStr += OUString::number( nTotalPages );
+                aHelpStr = ScGlobal::GetRscString( STR_PAGE ) +
+                           " " + OUString::number( nPageNo+1 ) +
+                           " / "  + OUString::number( nTotalPages );
             }
 
             aRect.Left()    = aPos.X() - 8;

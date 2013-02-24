@@ -135,8 +135,7 @@ namespace
 
         if ( _pPortNumber )
         {
-            sNewUrl += OUString::createFromAscii(":");
-            sNewUrl += OUString::number(_pPortNumber->GetValue());
+            sNewUrl = sNewUrl + ":" + OUString::number(_pPortNumber->GetValue());
         }
 
         return sNewUrl;
@@ -472,7 +471,7 @@ sal_Bool ODbDataSourceAdministrationHelper::hasAuthentication(const SfxItemSet& 
 // -----------------------------------------------------------------------------
 String ODbDataSourceAdministrationHelper::getConnectionURL() const
 {
-    String sNewUrl;
+    OUString sNewUrl;
 
     OUString eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
 
@@ -497,7 +496,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 OUString sNewFileName;
                 if ( ::osl::FileBase::getSystemPathFromFileURL( sFileName, sNewFileName ) == ::osl::FileBase::E_None )
                 {
-                    sNewUrl += String(sNewFileName);
+                    sNewUrl += sNewFileName;
                 }
             }
             break;
@@ -528,7 +527,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
                 if ( pHostName && pHostName->GetValue().getLength() )
                 {
-                    sNewUrl = OUString("@") + lcl_createHostWithPort(pHostName,pPortNumber);
+                    sNewUrl = "@" + lcl_createHostWithPort(pHostName,pPortNumber);
                     OUString sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : OUString();
                     if ( !sDatabaseName.getLength() && pUrlItem )
                         sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
@@ -546,8 +545,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
         case  ::dbaccess::DST_LDAP:
             {
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
-                sNewUrl = pCollection->cutPrefix(pUrlItem->GetValue());
-                sNewUrl += lcl_createHostWithPort(NULL,pPortNumber);
+                sNewUrl = pCollection->cutPrefix(pUrlItem->GetValue()) + lcl_createHostWithPort(NULL,pPortNumber);
             }
             break;
         case  ::dbaccess::DST_JDBC:
@@ -555,12 +553,8 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
         default:
             break;
     }
-    if ( sNewUrl.Len() )
-    {
-        String sUrl = pCollection->getPrefix(eType);
-        sUrl += sNewUrl;
-        sNewUrl = sUrl;
-    }
+    if ( !sNewUrl.isEmpty() )
+        sNewUrl = pCollection->getPrefix(eType) + sNewUrl;
     else
         sNewUrl = pUrlItem->GetValue();
 

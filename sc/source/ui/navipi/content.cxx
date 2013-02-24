@@ -504,27 +504,26 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
 
 void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
 {
-    sal_Bool bDone = false;
+    bool bDone = false;
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvTreeListEntry* pEntry = GetEntry( aPos );
         if ( pEntry )
         {
-            sal_Bool bRet = false;
-            String aHelpText;
+            bool bRet = false;
+            OUString aHelpText;
             SvTreeListEntry* pParent = GetParent(pEntry);
             if ( !pParent )                                 // Top-Level ?
             {
-                aHelpText = OUString::number( GetChildCount(pEntry) );
-                aHelpText += ' ';
-                aHelpText += GetEntryText(pEntry);
-                bRet = sal_True;
+                aHelpText = OUString::number( GetChildCount(pEntry) ) +
+                            " " + GetEntryText(pEntry);
+                bRet = true;
             }
             else if ( pParent == pRootNodes[SC_CONTENT_NOTE] )
             {
                 aHelpText = GetEntryText(pEntry);           // Notizen als Help-Text
-                bRet = sal_True;
+                bRet = true;
             }
             else if ( pParent == pRootNodes[SC_CONTENT_AREALINK] )
             {
@@ -535,7 +534,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
                     if (pLink)
                     {
                         aHelpText = pLink->GetFile();           // Source-Datei als Help-Text
-                        bRet = sal_True;
+                        bRet = true;
                     }
                 }
             }
@@ -553,7 +552,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
 
                     Rectangle aItemRect( aPos, aSize );
                     Help::ShowQuickHelp( this, aItemRect, aHelpText );
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
         }

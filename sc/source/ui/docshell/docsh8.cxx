@@ -383,33 +383,32 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         vector<long> aScales(nColCount, -1);
         for (i=0; i<nColCount; i++)
         {
-            String aHeader = xMeta->getColumnLabel( i+1 );
+            OUString aHeader = xMeta->getColumnLabel( i+1 );
 
             switch ( pTypeArr[i] )
             {
                 case sdbc::DataType::BIT:
-                    aHeader.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",L" ));
+                    aHeader += ",L";
                     break;
                 case sdbc::DataType::DATE:
-                    aHeader.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",D" ));
+                    aHeader += ",D";
                     break;
                 case sdbc::DataType::LONGVARCHAR:
-                    aHeader.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",M" ));
+                    aHeader += ",M";
                     break;
                 case sdbc::DataType::VARCHAR:
-                    aHeader.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",C," ));
-                    aHeader += OUString::number( xMeta->getColumnDisplaySize( i+1 ) );
+                    aHeader += ",C," + OUString::number( xMeta->getColumnDisplaySize( i+1 ) );
                     break;
                 case sdbc::DataType::DECIMAL:
                     {
                         long nPrec = xMeta->getPrecision( i+1 );
                         long nScale = xMeta->getScale( i+1 );
-                        aHeader.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",N," ));
-                        aHeader += OUString::number(
-                                    SvDbaseConverter::ConvertPrecisionToDbase(
-                                        nPrec, nScale ) );
-                        aHeader += ',';
-                        aHeader += OUString::number( nScale );
+                        aHeader += ",N," +
+                                    OUString::number(
+                                        SvDbaseConverter::ConvertPrecisionToDbase(
+                                            nPrec, nScale ) ) +
+                                    "," +
+                                    OUString::number( nScale );
                         aScales[i] = nScale;
                     }
                     break;
@@ -732,30 +731,27 @@ void lcl_GetColumnTypes(
         }
         if ( bUpdateTitles )
         {   // Angabe anpassen und ausgeben
-            String aOutString = aFieldName;
+            OUString aOutString = aFieldName;
             switch ( nDbType )
             {
                 case sdbc::DataType::BIT :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",L" ));
+                    aOutString += ",L";
                     break;
                 case sdbc::DataType::DATE :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",D" ));
+                    aOutString += ",D";
                     break;
                 case sdbc::DataType::LONGVARCHAR :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",M" ));
+                    aOutString += ",M";
                     break;
                 case sdbc::DataType::VARCHAR :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",C," ));
-                    aOutString += OUString::number( nFieldLen );
+                    aOutString += ",C," + OUString::number( nFieldLen );
                     break;
                 case sdbc::DataType::DECIMAL :
-                    aOutString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ",N," ));
-                    aOutString += OUString::number( nFieldLen );
-                    aOutString += ',';
-                    aOutString += OUString::number( nPrecision );
+                    aOutString += ",N,"  + OUString::number( nFieldLen ) +
+                                  "," + OUString::number( nPrecision );
                     break;
             }
-            if ( !aOutString.EqualsIgnoreCaseAscii( aString ) )
+            if ( !aOutString.equalsIgnoreAsciiCase( aString ) )
             {
                 pDoc->SetString( nCol, nFirstRow, nTab, aOutString );
                 rDocShell.PostPaint( nCol, nFirstRow, nTab, nCol, nFirstRow, nTab, PAINT_GRID );

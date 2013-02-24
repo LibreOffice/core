@@ -379,10 +379,7 @@ static void lcl_ChangeColor( sal_uInt16 nIndex, Color& rColor )
 
 static String lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
 {
-    String  aName = ScGlobal::GetRscString( STR_PAGESTYLE );
-    aName.AppendAscii( " " );
-    aName += OUString::number( i + 1 );
-
+    OUString  aName = ScGlobal::GetRscString( STR_PAGESTYLE ) + " " + OUString::number( i + 1 );
     return aName;
 }
 

@@ -273,13 +273,11 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
     uno::Any result;
     for (SCTAB i=0; i < nNewSheets; i++, nSheetName++)
     {
-        String aStringName = aStringBase;
-        aStringName += OUString::number(nSheetName);
+        OUString aStringName = aStringBase + OUString::number(nSheetName);
         while (m_xNameAccess->hasByName(aStringName))
         {
             nSheetName++;
-            aStringName = aStringBase;
-            aStringName += OUString::number(nSheetName);
+            aStringName = aStringBase + OUString::number(nSheetName);
         }
         m_xSheets->insertNewByName(aStringName, nSheetIndex + i);
         result = getItemByStringIndex( aStringName );

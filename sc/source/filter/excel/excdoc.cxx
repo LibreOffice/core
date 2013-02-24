@@ -81,8 +81,7 @@ using namespace oox;
 
 static String lcl_GetVbaTabName( SCTAB n )
 {
-    String  aRet( RTL_CONSTASCII_USTRINGPARAM( "__VBA__" ) );
-    aRet += OUString::number( static_cast<sal_uInt16>(n) );
+    OUString aRet = "__VBA__"  + OUString::number( static_cast<sal_uInt16>(n) );
     return aRet;
 }
 

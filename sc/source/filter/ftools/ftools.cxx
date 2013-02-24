@@ -304,8 +304,8 @@ const String& ScfTools::GetHTMLNamePrefix()
 
 String ScfTools::GetNameFromHTMLIndex( sal_uInt32 nIndex )
 {
-    String aName( GetHTMLIndexPrefix() );
-    aName += OUString::number( static_cast< sal_Int32 >( nIndex ) );
+    OUString aName = GetHTMLIndexPrefix() +
+                     OUString::number( static_cast< sal_Int32 >( nIndex ) );
     return aName;
 }
 
