@@ -789,32 +789,31 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
 void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( &rBC == m_pObjectShell )
+    SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
+    if ( &rBC != m_pObjectShell
+        || !pPrintHint
+        || pPrintHint->GetWhich() == -2 ) // -2 : CancelPrintJob
+        return;
+
+    if ( pPrintHint->GetWhich() == com::sun::star::view::PrintableState_JOB_STARTED )
     {
-        SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
-        if ( pPrintHint )
-        {
-            if ( pPrintHint->GetWhich() == com::sun::star::view::PrintableState_JOB_STARTED )
-            {
-                if ( !m_xPrintJob.is() )
-                    m_xPrintJob = new SfxPrintJob_Impl( this );
-                m_aPrintOptions = pPrintHint->GetOptions();
-            }
-            else if ( pPrintHint->GetWhich() != -2 )    // -2 : CancelPrintJob
-            {
-                view::PrintJobEvent aEvent;
-                aEvent.Source = m_xPrintJob;
-                aEvent.State = (com::sun::star::view::PrintableState) pPrintHint->GetWhich();
-                ::cppu::OInterfaceContainerHelper* pContainer = m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< view::XPrintJobListener >*) NULL ) );
-                if ( pContainer!=NULL )
-                {
-                    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-                    while (pIterator.hasMoreElements())
-                        ((view::XPrintJobListener*)pIterator.next())->printJobEvent( aEvent );
-                }
-            }
-        }
+        if ( !m_xPrintJob.is() )
+            m_xPrintJob = new SfxPrintJob_Impl( this );
+        m_aPrintOptions = pPrintHint->GetOptions();
     }
+
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aInterfaceContainer.getContainer(
+        ::getCppuType( ( const uno::Reference< view::XPrintJobListener >*) NULL ) );
+    if ( !pContainer )
+        return;
+
+    view::PrintJobEvent aEvent;
+    aEvent.Source = m_xPrintJob;
+    aEvent.State = (com::sun::star::view::PrintableState) pPrintHint->GetWhich();
+
+    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    while (pIterator.hasMoreElements())
+        ((view::XPrintJobListener*)pIterator.next())->printJobEvent( aEvent );
 }
 
 void SAL_CALL SfxPrintHelper::addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
