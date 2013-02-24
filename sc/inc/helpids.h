@@ -134,7 +134,6 @@
 #define HID_SC_DROPMODE_COPY                                    "SC_HID_SC_DROPMODE_COPY"
 
 #define HID_SC_FAP_STRUCT                                       "SC_HID_SC_FAP_STRUCT"
-#define HID_SC_ASCII_TABCTR                                     "SC_HID_SC_ASCII_TABCTR"
 
 #define HID_SC_SCENARIO_DELETE                                  "SC_HID_SC_SCENARIO_DELETE"
 #define HID_SC_SCENARIO_EDIT                                    "SC_HID_SC_SCENARIO_EDIT"

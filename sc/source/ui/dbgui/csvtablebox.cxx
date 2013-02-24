@@ -18,6 +18,7 @@
  */
 
 #include "csvtablebox.hxx"
+#include <vcl/builder.hxx>
 #include <vcl/lstbox.hxx>
 
 // ause

@@ -75,7 +75,6 @@ class ScImportAsciiDlg : public ModalDialog
     String                      aTextSepList;
     String                      maFieldSeparators;  // selected field separators
     sal_Unicode                 mcTextSep;
-    String                      maStrTextToColumns;
 
     CharSet                     meCharSet;          /// Selected char set.
     bool                        mbCharSetSystem;    /// Is System char set selected?

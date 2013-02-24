@@ -50,4 +50,3 @@
 #define FT_TYPE                     27
 #define LB_TYPE1                    28
 #define CTR_TABLEBOX                29
-#define STR_TEXTTOCOLUMNS           30

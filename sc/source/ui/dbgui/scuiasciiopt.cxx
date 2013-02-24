@@ -249,7 +249,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
         aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
         mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
-        maStrTextToColumns( ScResId( STR_TEXTTOCOLUMNS ) ),
         meCall(eCall)
 {
     get(pFtCharSet, "textcharset");
@@ -279,7 +278,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     switch (meCall)
     {
         case SC_TEXTTOCOLUMNS:
-            SetText( maStrTextToColumns );
+            SetText( get<FixedText>("textalttitle")->GetText() );
             break;
         case SC_IMPORTFILE:
             aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
