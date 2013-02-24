@@ -2265,7 +2265,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
             }
         }
 
-        delete pIdPtrs;
+        delete[] pIdPtrs;
     }
 
     bSuccess = true;
