@@ -126,6 +126,7 @@ public:
 protected:
     virtual void                Resize();
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+    virtual Size                GetOptimalSize() const;
 
 private:
     SC_DLLPRIVATE              DECL_LINK( CsvCmdHdl, ScCsvControl* );

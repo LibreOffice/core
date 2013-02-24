@@ -57,6 +57,12 @@ ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
 }
 
 
+Size ScCsvTableBox::GetOptimalSize() const
+{
+    Size aDefault(LogicToPixel(Size(243, 82), MapMode(MAP_APPFONT)));
+    return aDefault;
+}
+
 // common table box handling --------------------------------------------------
 
 void ScCsvTableBox::SetSeparatorsMode()
