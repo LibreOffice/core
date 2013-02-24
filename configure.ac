@@ -1265,8 +1265,7 @@ AC_ARG_WITH(package-format,
 
 AC_ARG_WITH(system-libs,
     AS_HELP_STRING([--with-system-libs],
-        [Use libraries already on system -- enables all --with-system-* flags except
-         mozilla.]),
+        [Use libraries already on system -- enables all --with-system-* flags.]),
 ,)
 
 AC_ARG_WITH(system-headers,
