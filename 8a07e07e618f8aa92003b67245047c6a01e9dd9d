@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///2A\u003d",
+        "filename": "sd/source/core/stlsheet.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-24T02:38:54Z",
+      "side": 1,
+      "message": "whitespaces",
+      "revId": "8a07e07e618f8aa92003b67245047c6a01e9dd9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
