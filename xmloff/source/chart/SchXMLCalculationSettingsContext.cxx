@@ -72,7 +72,7 @@ void SchXMLCalculationSettingsContext::EndElement()
     if ( m_aNullDate.hasValue() )
     {
         Reference < XPropertySet > xPropSet ( GetImport().GetModel(), UNO_QUERY );
-        ::rtl::OUString sNullDate( RTL_CONSTASCII_USTRINGPARAM ( "NullDate" ) );
+        OUString sNullDate( "NullDate" );
         xPropSet->setPropertyValue ( sNullDate, m_aNullDate );
     }
 }

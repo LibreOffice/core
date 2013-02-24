@@ -320,10 +320,8 @@ public:
 
         @returns the actual prefix that the namespace is associated with
       */
-    ::rtl::OUString
-    EnsureNamespace(::rtl::OUString const & i_rNamespace,
-        ::rtl::OUString const & i_rPreferredPrefix
-        = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gen")) );
+    OUString EnsureNamespace(OUString const & i_rNamespace,
+                             OUString const & i_rPreferredPrefix = OUString("gen") );
 
     // Check if common attribute list is empty.
 #ifndef DBG_UTIL

@@ -181,7 +181,7 @@ sal_Bool XMLTextAnimationStepPropertyHdl::importXML(
     sal_Bool bRet = sal_False;
     sal_Int32 nValue = 0;
 
-    const OUString aPX( RTL_CONSTASCII_USTRINGPARAM( "px" ) );
+    const OUString aPX( "px" );
     sal_Int32 nPos = rStrImpValue.indexOf( aPX );
     if( nPos != -1 )
     {
@@ -217,7 +217,7 @@ sal_Bool XMLTextAnimationStepPropertyHdl::exportXML(
 
         if( nVal < 0 )
         {
-            const OUString aPX( RTL_CONSTASCII_USTRINGPARAM( "px" ) );
+            const OUString aPX( "px" );
             ::sax::Converter::convertNumber( aOut, (sal_Int32)-nVal );
             aOut.append( aPX );
         }

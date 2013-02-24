@@ -243,18 +243,18 @@ public:
     OUString msAnimPath;
 
     AnimExpImpl()
-    :   msDimColor( RTL_CONSTASCII_USTRINGPARAM( "DimColor" ) ),
-        msDimHide( RTL_CONSTASCII_USTRINGPARAM( "DimHide" ) ),
-        msDimPrev( RTL_CONSTASCII_USTRINGPARAM( "DimPrevious" ) ),
-        msEffect( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ),
-        msPlayFull( RTL_CONSTASCII_USTRINGPARAM( "PlayFull" ) ),
-        msPresOrder( RTL_CONSTASCII_USTRINGPARAM( "PresentationOrder" ) ),
-        msSound( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ),
-        msSoundOn( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ),
-        msSpeed( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ),
-        msTextEffect( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" ) ),
-        msIsAnimation( RTL_CONSTASCII_USTRINGPARAM( "IsAnimation" ) ),
-        msAnimPath( RTL_CONSTASCII_USTRINGPARAM( "AnimationPath" ) )
+    :   msDimColor( "DimColor" ),
+        msDimHide( "DimHide" ),
+        msDimPrev( "DimPrevious" ),
+        msEffect( "Effect" ),
+        msPlayFull( "PlayFull" ),
+        msPresOrder( "PresentationOrder" ),
+        msSound( "Sound" ),
+        msSoundOn( "SoundOn" ),
+        msSpeed( "Speed" ),
+        msTextEffect( "TextEffect" ),
+        msIsAnimation( "IsAnimation" ),
+        msAnimPath( "AnimationPath" )
     {}
 };
 
@@ -277,7 +277,7 @@ void XMLAnimationsExporter::prepare( Reference< XShape > xShape, SvXMLExport& )
         // check for presentation shape service
         {
             Reference< XServiceInfo > xServiceInfo( xShape, UNO_QUERY );
-            if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.Shape" ) ) ) )
+            if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( "com.sun.star.presentation.Shape" ) ) )
                 return;
         }
 
@@ -306,7 +306,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
         // check for presentation shape service
         {
             Reference< XServiceInfo > xServiceInfo( xShape, UNO_QUERY );
-            if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.Shape" ) ) ) )
+            if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( "com.sun.star.presentation.Shape" ) ) )
                 return;
         }
 

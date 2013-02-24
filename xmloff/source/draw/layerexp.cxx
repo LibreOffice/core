@@ -55,9 +55,9 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
     if( nCount == 0 )
         return;
 
-    const OUString strName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
-    const OUString strTitle( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
-    const OUString strDescription( RTL_CONSTASCII_USTRINGPARAM( "Description" ) );
+    const OUString strName( "Name" );
+    const OUString strTitle( "Title" );
+    const OUString strDescription( "Description" );
 
     OUString sTmp;
 

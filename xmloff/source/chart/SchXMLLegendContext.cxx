@@ -102,7 +102,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     {
         try
         {
-            xDocProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasLegend" )), uno::makeAny( sal_True ) );
+            xDocProp->setPropertyValue( OUString( "HasLegend" ), uno::makeAny( sal_True ) );
         }
         catch(const beans::UnknownPropertyException&)
         {
@@ -148,7 +148,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
                     try
                     {
                         if( SchXMLEnumConverter::getLegendPositionConverter().importXML( aValue, aAny, GetImport().GetMM100UnitConverter() ) )
-                            xLegendProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Alignment" )), aAny );
+                            xLegendProps->setPropertyValue( OUString( "Alignment" ), aAny );
                     }
                     catch(const beans::UnknownPropertyException&)
                     {
@@ -197,12 +197,12 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         xLegendShape->setPosition( aLegendPos );
 
     if( bHasExpansion && nLegendExpansion!= chart::ChartLegendExpansion_CUSTOM )
-        xLegendProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Expansion" )), uno::makeAny(nLegendExpansion) );
+        xLegendProps->setPropertyValue( OUString( "Expansion" ), uno::makeAny(nLegendExpansion) );
     else if( bHasHeight && bHasWidth )
         xLegendShape->setSize( aLegendSize );
 
     // the fill style has the default "none" in XML, but "solid" in the model.
-    xLegendProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" )), uno::makeAny( drawing::FillStyle_NONE ));
+    xLegendProps->setPropertyValue( OUString( "FillStyle" ), uno::makeAny( drawing::FillStyle_NONE ));
 
     // set auto-styles for Legend
     const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();

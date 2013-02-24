@@ -809,7 +809,7 @@ sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rV
     if( bValue )
     {
         if( !rStrExpValue.isEmpty() )
-            rStrExpValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+            rStrExpValue += " ";
 
         rStrExpValue += GetXMLToken( mnType == XML_SD_TYPE_MOVE_PROTECT ? XML_POSITION : XML_SIZE );
     }
@@ -1013,7 +1013,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 uno::Reference<ucb::XAnyCompareFactory> xCompareFac( mxModel, uno::UNO_QUERY );
                 uno::Reference<ucb::XAnyCompare> xCompare;
                 if( xCompareFac.is() )
-                    xCompare = xCompareFac->createAnyCompareByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ) );
+                    xCompare = xCompareFac->createAnyCompareByName( OUString( "NumberingRules" ) );
 
                 pHdl = new XMLNumRulePropHdl( xCompare );
                 break;
@@ -1405,7 +1405,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
         {
             try
             {
-                const OUString sVisibleArea( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") );
+                const OUString sVisibleArea( "VisibleArea" );
                 awt::Rectangle aRect;
                 if( rPropSet->getPropertyValue( sVisibleArea ) >>= aRect )
                 {

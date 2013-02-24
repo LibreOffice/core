@@ -140,33 +140,33 @@ ImpXMLEXPPageMasterInfo::ImpXMLEXPPageMasterInfo(
         Any aAny;
 
         Reference< beans::XPropertySetInfo > xPropsInfo( xPropSet->getPropertySetInfo() );
-        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderBottom") )))
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString("BorderBottom" )))
         {
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderBottom")));
+            aAny = xPropSet->getPropertyValue(OUString("BorderBottom"));
             aAny >>= mnBorderBottom;
 
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderLeft")));
+            aAny = xPropSet->getPropertyValue(OUString("BorderLeft"));
             aAny >>= mnBorderLeft;
 
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderRight")));
+            aAny = xPropSet->getPropertyValue(OUString("BorderRight"));
             aAny >>= mnBorderRight;
 
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BorderTop")));
+            aAny = xPropSet->getPropertyValue(OUString("BorderTop"));
             aAny >>= mnBorderTop;
         }
 
-        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("Width") )))
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString("Width")))
         {
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Width")));
+            aAny = xPropSet->getPropertyValue(OUString("Width"));
             aAny >>= mnWidth;
 
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Height")));
+            aAny = xPropSet->getPropertyValue(OUString("Height"));
             aAny >>= mnHeight;
         }
 
-        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation") )))
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString("Orientation")))
         {
-            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")));
+            aAny = xPropSet->getPropertyValue(OUString("Orientation"));
             aAny >>= meOrientation;
         }
     }
@@ -417,11 +417,11 @@ SdXMLExport::SdXMLExport(
     mbFamilyGraphicUsed(sal_False),
     mbFamilyPresentationUsed(sal_False),
     msZIndex( GetXMLToken(XML_ZINDEX) ),
-    msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
-    msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
-    msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
-    msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") ),
-    msPageLayoutNames( RTL_CONSTASCII_USTRINGPARAM("PageLayoutNames") )
+    msEmptyPres( "IsEmptyPresentationObject" ),
+    msModel( "Model" ),
+    msStartShape( "StartShape" ),
+    msEndShape( "EndShape" ),
+    msPageLayoutNames( "PageLayoutNames" )
 {
 
 
@@ -469,19 +469,19 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     // add family name
       GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)),
+        OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME),
           GetPropertySetMapper(),
-          OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX)));
+          OUString(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX));
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_PRESENTATION_ID,
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)),
+        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
           GetPropertySetMapper(),
-          OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX)));
+          OUString(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX));
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID,
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME)),
+        OUString(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME),
           GetPresPagePropsMapper(),
-          OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX)));
+          OUString(XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX));
     // prepare access to styles
     Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), UNO_QUERY );
     if(xFamSup.is())
@@ -776,7 +776,7 @@ sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, O
         sal_uInt16 nType = sal_uInt16();
         Any aAny;
 
-        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Layout")));
+        aAny = xPropSet->getPropertyValue(OUString("Layout"));
         if(aAny >>= nType)
         {
             if(ImpXMLAutoLayoutInfo::IsCreateNecessary(nType))
@@ -816,9 +816,9 @@ sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, O
                 if(!bDidExist)
                 {
                     mpAutoLayoutInfoList->push_back( pNew );
-                    OUString sNewName = OUString(RTL_CONSTASCII_USTRINGPARAM("AL"));
+                    OUString sNewName = "AL";
                     sNewName += OUString::valueOf(sal_Int32( mpAutoLayoutInfoList->size() - 1 ));
-                    sNewName += OUString(RTL_CONSTASCII_USTRINGPARAM("T"));
+                    sNewName += "T";
                     sNewName += OUString::valueOf(sal_Int32(nType));
                     pNew->SetLayoutName(sNewName);
                 }
@@ -1230,20 +1230,20 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectan
     // prepare presentation-placeholder attributes, presentation:object
     switch(ePl)
     {
-        case XmlPlaceholderTitle: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("title")); break;
-        case XmlPlaceholderOutline: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("outline")); break;
-        case XmlPlaceholderSubtitle: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("subtitle")); break;
-        case XmlPlaceholderText: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("text")); break;
-        case XmlPlaceholderGraphic: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("graphic")); break;
-        case XmlPlaceholderObject: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("object")); break;
-        case XmlPlaceholderChart: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("chart")); break;
-        case XmlPlaceholderOrgchart: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("orgchart")); break;
-        case XmlPlaceholderTable: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("table")); break;
-        case XmlPlaceholderPage: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("page")); break;
-        case XmlPlaceholderNotes: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("notes")); break;
-        case XmlPlaceholderHandout: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("handout")); break;
-        case XmlPlaceholderVerticalTitle: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_title")); break;
-        case XmlPlaceholderVerticalOutline: aStr = OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_outline")); break;
+        case XmlPlaceholderTitle: aStr = "title"; break;
+        case XmlPlaceholderOutline: aStr = "outline"; break;
+        case XmlPlaceholderSubtitle: aStr = "subtitle"; break;
+        case XmlPlaceholderText: aStr = "text"; break;
+        case XmlPlaceholderGraphic: aStr = "graphic"; break;
+        case XmlPlaceholderObject: aStr = "object"; break;
+        case XmlPlaceholderChart: aStr = "chart"; break;
+        case XmlPlaceholderOrgchart: aStr = "orgchart"; break;
+        case XmlPlaceholderTable: aStr = "table"; break;
+        case XmlPlaceholderPage: aStr = "page"; break;
+        case XmlPlaceholderNotes: aStr = "notes"; break;
+        case XmlPlaceholderHandout: aStr = "handout"; break;
+        case XmlPlaceholderVerticalTitle: aStr = "vertical_title"; break;
+        case XmlPlaceholderVerticalOutline: aStr = "vertical_outline"; break;
     }
 
     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_OBJECT, aStr);
@@ -1357,7 +1357,7 @@ void SdXMLExport::ImpWritePageMasterInfos()
         if(pInfo)
         {
             // create name
-            OUString sNewName = OUString(RTL_CONSTASCII_USTRINGPARAM("PM"));
+            OUString sNewName("PM");
 
             sNewName += OUString::valueOf((sal_Int32)nCnt);
             pInfo->SetName(sNewName);
@@ -1532,7 +1532,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
 
         OUString aStrText;
 
-        const OUString aStrHeaderTextProp( RTL_CONSTASCII_USTRINGPARAM( "HeaderText" ) );
+        const OUString aStrHeaderTextProp( "HeaderText" );
         if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
         {
             xSet->getPropertyValue( aStrHeaderTextProp  ) >>= aStrText;
@@ -1540,7 +1540,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
                 aSettings.maStrHeaderDeclName = findOrAppendImpl( maHeaderDeclsVector, aStrText, gpStrHeaderTextPrefix );
         }
 
-        const OUString aStrFooterTextProp( RTL_CONSTASCII_USTRINGPARAM( "FooterText" ) );
+        const OUString aStrFooterTextProp( "FooterText" );
         if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
         {
             xSet->getPropertyValue( aStrFooterTextProp ) >>= aStrText;
@@ -1548,14 +1548,14 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
                 aSettings.maStrFooterDeclName = findOrAppendImpl( maFooterDeclsVector, aStrText, gpStrFooterTextPrefix );
         }
 
-        const OUString aStrDateTimeTextProp( RTL_CONSTASCII_USTRINGPARAM( "DateTimeText" ) );
+        const OUString aStrDateTimeTextProp( "DateTimeText" );
         if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
         {
             sal_Bool bFixed = false;
             sal_Int32 nFormat = 0;
             xSet->getPropertyValue( aStrDateTimeTextProp ) >>= aStrText;
-            xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDateTimeFixed" ) ) ) >>= bFixed;
-            xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DateTimeFormat" ) ) ) >>= nFormat;
+            xSet->getPropertyValue( OUString( "IsDateTimeFixed" ) ) >>= bFixed;
+            xSet->getPropertyValue( OUString( "DateTimeFormat" ) ) >>= nFormat;
 
             if( !bFixed || !aStrText.isEmpty() )
             {
@@ -1671,7 +1671,7 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( Reference<XDrawPage> xDrawPage
             // which itself is a property of the pages property set
             // we now merge these two propertysets if possible to simulate
             // a single propertyset with all draw page properties
-            const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
+            const OUString aBackground("Background");
             Reference< beans::XPropertySet > xPropSet2;
             Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
             if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
@@ -1762,9 +1762,9 @@ void SdXMLExport::ImpWritePresentationStyles()
 
                     OUString aPrefix( xNamed->getName() );
 
-                    aPrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+                    aPrefix += "-";
                     aStEx.exportStyleFamily(xNamed->getName(),
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)),
+                        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
                         aMapperRef, sal_False,
                         XML_STYLE_FAMILY_SD_PRESENTATION_ID, &aPrefix);
                 }
@@ -1788,7 +1788,7 @@ void SdXMLExport::SetProgress(sal_Int32 nProg)
 void SdXMLExport::_ExportMeta()
 {
     uno::Sequence<beans::NamedValue> stats(1);
-    stats[0] = beans::NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ObjectCount" )),
+    stats[0] = beans::NamedValue(OUString( "ObjectCount" ),
                 uno::makeAny(mnObjectCount));
 
     // update document statistics at the model
@@ -1858,7 +1858,7 @@ void SdXMLExport::_ExportContent()
                 try
                 {
                     OUString aBookmarkURL;
-                    xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "BookmarkURL" ) ) ) >>= aBookmarkURL;
+                    xProps->getPropertyValue( OUString( "BookmarkURL" ) ) >>= aBookmarkURL;
 
                     if( !aBookmarkURL.isEmpty() )
                     {
@@ -2010,11 +2010,11 @@ void SdXMLExport::exportPresentationSettings()
         sal_Bool bTemp = false;
 
         // export range
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowAll" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "IsShowAll" ) ) >>= bTemp;
         if( !bTemp )
         {
             OUString aFirstPage;
-            xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) ) >>= aFirstPage;
+            xPresProps->getPropertyValue( OUString( "FirstPage" ) ) >>= aFirstPage;
             if( !aFirstPage.isEmpty() )
             {
                 AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_PAGE, aFirstPage );
@@ -2023,7 +2023,7 @@ void SdXMLExport::exportPresentationSettings()
             else
             {
                 OUString aCustomShow;
-                xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShow" ) ) ) >>= aCustomShow;
+                xPresProps->getPropertyValue( OUString( "CustomShow" ) ) >>= aCustomShow;
                 if( !aCustomShow.isEmpty() )
                 {
                     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW, aCustomShow );
@@ -2032,14 +2032,14 @@ void SdXMLExport::exportPresentationSettings()
             }
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "IsEndless" ) ) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ENDLESS, XML_TRUE );
             bHasAttr = sal_True;
 
             sal_Int32 nPause = 0;
-            xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Pause" ) ) ) >>= nPause;
+            xPresProps->getPropertyValue( OUString( "Pause" ) ) >>= nPause;
 
             util::Duration aDuration;
             aDuration.Seconds = static_cast<sal_uInt16>(nPause);
@@ -2049,63 +2049,63 @@ void SdXMLExport::exportPresentationSettings()
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PAUSE, aOut.makeStringAndClear() );
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowAnimations" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "AllowAnimations" ) ) >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, XML_DISABLED );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAlwaysOnTop" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "IsAlwaysOnTop" ) ) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STAY_ON_TOP, XML_TRUE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "IsAutomatic" ) ) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FORCE_MANUAL, XML_TRUE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "IsFullScreen" ) ) >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FULL_SCREEN, XML_FALSE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsMouseVisible" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "IsMouseVisible" ) ) >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_VISIBLE, XML_FALSE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "StartWithNavigator" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "StartWithNavigator" ) ) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_WITH_NAVIGATOR, XML_TRUE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePen" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "UsePen" ) ) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_AS_PEN, XML_TRUE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTransitionOnClick" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "IsTransitionOnClick" ) ) >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_TRANSITION_ON_CLICK, XML_DISABLED );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowLogo" ) ) ) >>= bTemp;
+        xPresProps->getPropertyValue( OUString( "IsShowLogo" ) ) >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW_LOGO, XML_TRUE );
@@ -2298,7 +2298,7 @@ void SdXMLExport::_ExportAutoStyles()
                 }
                 if(!aMasterPageNamePrefix.isEmpty())
                 {
-                    aMasterPageNamePrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+                    aMasterPageNamePrefix += "-";
                 }
                 GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
 
@@ -2363,7 +2363,7 @@ void SdXMLExport::_ExportAutoStyles()
                 }
                 if(!aMasterPageNamePrefix.isEmpty())
                 {
-                    aMasterPageNamePrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+                    aMasterPageNamePrefix += "-";
                 }
 
                 GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
@@ -2570,16 +2570,16 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
             return;
 
         awt::Rectangle aVisArea;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ) ) >>= aVisArea;
+        xPropSet->getPropertyValue( OUString( "VisibleArea" ) ) >>= aVisArea;
 
         sal_uInt16 i = 0;
-        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaTop"));
+        pProps[i].Name = OUString("VisibleAreaTop");
         pProps[i++].Value <<= aVisArea.Y;
-        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaLeft"));
+        pProps[i].Name = OUString("VisibleAreaLeft");
         pProps[i++].Value <<= aVisArea.X;
-        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaWidth"));
+        pProps[i].Name = OUString("VisibleAreaWidth");
         pProps[i++].Value <<= aVisArea.Width;
-        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaHeight"));
+        pProps[i].Name = OUString("VisibleAreaHeight");
         pProps[i++].Value <<= aVisArea.Height;
     }
 }
@@ -2589,7 +2589,7 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
     if( xFac.is() )
     {
-        Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
+        Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), UNO_QUERY );
         if( xProps.is() )
             SvXMLUnitConverter::convertPropertySet( rProps, xProps );
         DocumentSettingsSerializer *pFilter;
@@ -2665,7 +2665,7 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
     try
     {
         Reference< XPropertySet > xSet( xDrawPage, UNO_QUERY_THROW );
-        Reference< XIndexAccess > xNavOrder( xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "NavigationOrder" ) ) ), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xNavOrder( xSet->getPropertyValue( OUString( "NavigationOrder" ) ), UNO_QUERY_THROW );
 
         Reference< XIndexAccess > xZOrderAccess( xDrawPage, UNO_QUERY );
 
@@ -2793,13 +2793,13 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 #define SERVICE( classname, servicename, implementationname, draw, flags )\
 uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw()\
 {\
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( servicename ) );\
+    const OUString aServiceName( servicename );\
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );\
     return aSeq;\
 }\
 OUString SAL_CALL classname##_getImplementationName() throw()\
 {\
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( implementationname ) );\
+    return OUString( implementationname );\
 }\
 uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
 {\
@@ -2907,7 +2907,7 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
     Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
     if( xFac.is() )
     {
-        Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
+        Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), UNO_QUERY );
         if( xProps.is() )
             xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
     }

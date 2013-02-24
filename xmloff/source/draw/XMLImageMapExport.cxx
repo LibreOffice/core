@@ -62,17 +62,17 @@ const sal_Char sAPI_ImageMapCircleObject[] = "com.sun.star.image.ImageMapCircleO
 const sal_Char sAPI_ImageMapPolygonObject[] = "com.sun.star.image.ImageMapPolygonObject";
 
 XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
-    msBoundary(RTL_CONSTASCII_USTRINGPARAM("Boundary")),
-    msCenter(RTL_CONSTASCII_USTRINGPARAM("Center")),
-    msDescription(RTL_CONSTASCII_USTRINGPARAM("Description")),
-    msImageMap(RTL_CONSTASCII_USTRINGPARAM("ImageMap")),
-    msIsActive(RTL_CONSTASCII_USTRINGPARAM("IsActive")),
-    msName(RTL_CONSTASCII_USTRINGPARAM("Name")),
-    msPolygon(RTL_CONSTASCII_USTRINGPARAM("Polygon")),
-    msRadius(RTL_CONSTASCII_USTRINGPARAM("Radius")),
-    msTarget(RTL_CONSTASCII_USTRINGPARAM("Target")),
-    msURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
-    msTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
+    msBoundary("Boundary"),
+    msCenter("Center"),
+    msDescription("Description"),
+    msImageMap("ImageMap"),
+    msIsActive("IsActive"),
+    msName("Name"),
+    msPolygon("Polygon"),
+    msRadius("Radius"),
+    msTarget("Target"),
+    msURL("URL"),
+    msTitle("Title"),
     mrExport(rExp),
     mbWhiteSpace(sal_True)
 {

@@ -170,17 +170,17 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
     Reference<XIndexContainer> xMap,
     const sal_Char* pServiceName) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
-        sBoundary(RTL_CONSTASCII_USTRINGPARAM("Boundary")),
-        sCenter(RTL_CONSTASCII_USTRINGPARAM("Center")),
-        sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
-        sDescription(RTL_CONSTASCII_USTRINGPARAM("Description")),
-        sImageMap(RTL_CONSTASCII_USTRINGPARAM("ImageMap")),
-        sIsActive(RTL_CONSTASCII_USTRINGPARAM("IsActive")),
-        sName(RTL_CONSTASCII_USTRINGPARAM("Name")),
-        sPolygon(RTL_CONSTASCII_USTRINGPARAM("Polygon")),
-        sRadius(RTL_CONSTASCII_USTRINGPARAM("Radius")),
-        sTarget(RTL_CONSTASCII_USTRINGPARAM("Target")),
-        sURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
+        sBoundary("Boundary"),
+        sCenter("Center"),
+        sTitle("Title"),
+        sDescription("Description"),
+        sImageMap("ImageMap"),
+        sIsActive("IsActive"),
+        sName("Name"),
+        sPolygon("Polygon"),
+        sRadius("Radius"),
+        sTarget("Target"),
+        sURL("URL"),
         xImageMap(xMap),
         bIsActive(sal_True),
         bValid(sal_False)
@@ -643,7 +643,7 @@ XMLImageMapContext::XMLImageMapContext(
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropertySet) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
-        sImageMap(RTL_CONSTASCII_USTRINGPARAM("ImageMap")),
+        sImageMap("ImageMap"),
         xPropertySet(rPropertySet)
 
 {

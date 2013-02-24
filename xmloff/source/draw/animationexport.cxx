@@ -573,9 +573,9 @@ void AnimationsExporterImpl::exportTransitionNode()
     if( mbHasTransition && mxPageProps.is() )
     {
         sal_Int16 nTransition = 0;
-        mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) ) >>= nTransition;
+        mxPageProps->getPropertyValue( OUString( "TransitionType" ) ) >>= nTransition;
 
-        Any aSound( mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) ) );
+        Any aSound( mxPageProps->getPropertyValue( OUString( "Sound" ) ) );
         OUString sSoundURL;
         aSound >>= sSoundURL;
         sal_Bool bStopSound = sal_False;
@@ -603,10 +603,10 @@ void AnimationsExporterImpl::exportTransitionNode()
                 sal_Bool bDirection = sal_False;
                 sal_Int32 nFadeColor = 0;
                 double fDuration = 0.0;
-                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionSubtype" ) ) ) >>= nSubtype;
-                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionDirection" ) ) ) >>= bDirection;
-                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionFadeColor" ) ) ) >>= nFadeColor;
-                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionDuration" ) ) ) >>= fDuration;
+                mxPageProps->getPropertyValue( OUString( "TransitionSubtype" ) ) >>= nSubtype;
+                mxPageProps->getPropertyValue( OUString( "TransitionDirection" ) ) >>= bDirection;
+                mxPageProps->getPropertyValue( OUString( "TransitionFadeColor" ) ) >>= nFadeColor;
+                mxPageProps->getPropertyValue( OUString( "TransitionDuration" ) ) >>= fDuration;
 
                 ::sax::Converter::convertDouble( sTmp, fDuration );
                 sTmp.append( sal_Unicode('s'));
@@ -642,7 +642,7 @@ void AnimationsExporterImpl::exportTransitionNode()
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, mrExport.GetRelativeReference( sSoundURL ) );
 
                 sal_Bool bLoopSound = sal_False;
-                mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LoopSound" ) ) ) >>= bLoopSound;
+                mxPageProps->getPropertyValue( OUString( "LoopSound" ) ) >>= bLoopSound;
 
                 if( bLoopSound )
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_REPEATCOUNT, XML_INDEFINITE );
@@ -657,14 +657,14 @@ void AnimationsExporterImpl::prepareTransitionNode()
     if( mxPageProps.is() ) try
     {
         sal_Int16 nTransition = 0;
-        mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) ) >>= nTransition;
+        mxPageProps->getPropertyValue( OUString( "TransitionType" ) ) >>= nTransition;
 
         sal_Bool bStopSound = sal_False;
         OUString sSoundURL;
 
         if( nTransition == 0 )
         {
-            Any aSound( mxPageProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) ) );
+            Any aSound( mxPageProps->getPropertyValue( OUString( "Sound" ) ) );
             aSound >>= sSoundURL;
 
             if( !(aSound >>= bStopSound) )
@@ -1156,7 +1156,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             }
             else
             {
-                OUString aStr( RTL_CONSTASCII_USTRINGPARAM( "invalid" ) );
+                OUString aStr( "invalid" );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME, aStr );
             }
         }

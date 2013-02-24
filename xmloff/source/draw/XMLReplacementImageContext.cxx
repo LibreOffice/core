@@ -41,7 +41,7 @@ XMLReplacementImageContext::XMLReplacementImageContext(
         const Reference< XPropertySet > & rPropSet ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     m_xPropSet( rPropSet ),
-    m_sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))
+    m_sGraphicURL("GraphicURL")
 {
     UniReference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();

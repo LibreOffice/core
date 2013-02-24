@@ -61,11 +61,11 @@ void SdXMLDescriptionContext::EndElement()
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY_THROW);
         if(IsXMLToken(GetLocalName(),XML_TITLE))
         {
-            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), Any(msText));
+            xPropSet->setPropertyValue(OUString("Title"), Any(msText));
         }
         else
         {
-            xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), Any(msText));
+            xPropSet->setPropertyValue(OUString("Description"), Any(msText));
         }
     }
     catch( uno::Exception& )

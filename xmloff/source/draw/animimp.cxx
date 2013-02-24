@@ -342,19 +342,19 @@ public:
     OUString msIsAnimation;
 
     AnimImpImpl()
-    :   msDimColor( RTL_CONSTASCII_USTRINGPARAM( "DimColor" ) ),
-        msDimHide( RTL_CONSTASCII_USTRINGPARAM( "DimHide" ) ),
-        msDimPrev( RTL_CONSTASCII_USTRINGPARAM( "DimPrevious" ) ),
-        msEffect( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ),
-        msPlayFull( RTL_CONSTASCII_USTRINGPARAM( "PlayFull" ) ),
-        msPresOrder( RTL_CONSTASCII_USTRINGPARAM( "PresentationOrder" ) ),
-        msSound( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ),
-        msSoundOn( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ),
-        msSpeed( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ),
-        msTextEffect( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" ) ),
-        msPresShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.Shape" ) ),
-        msAnimPath( RTL_CONSTASCII_USTRINGPARAM( "AnimationPath" ) ),
-        msIsAnimation( RTL_CONSTASCII_USTRINGPARAM( "IsAnimation" ) )
+    :   msDimColor( "DimColor" ),
+        msDimHide( "DimHide" ),
+        msDimPrev( "DimPrevious" ),
+        msEffect( "Effect" ),
+        msPlayFull( "PlayFull" ),
+        msPresOrder( "PresentationOrder" ),
+        msSound( "Sound" ),
+        msSoundOn( "SoundOn" ),
+        msSpeed( "Speed" ),
+        msTextEffect( "TextEffect" ),
+        msPresShapeService( "com.sun.star.presentation.Shape" ),
+        msAnimPath( "AnimationPath" ),
+        msIsAnimation( "IsAnimation" )
     {}
 };
 

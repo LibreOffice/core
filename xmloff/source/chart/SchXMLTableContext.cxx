@@ -860,8 +860,8 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
         try
         {
             Reference< beans::XPropertySet > xProps( xChartDoc, uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ), uno::makeAny( sal_True ) );
-            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ), uno::makeAny( sal_True ) );
+            xProps->setPropertyValue( OUString( "DisableDataTableDialog" ), uno::makeAny( sal_True ) );
+            xProps->setPropertyValue( OUString( "DisableComplexChartTypes" ), uno::makeAny( sal_True ) );
         }
         catch ( uno::Exception& )
         {
@@ -934,7 +934,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                             Reference< beans::XPropertySet > xOldSequenceProp( aLSeqIt->second->getValues(), uno::UNO_QUERY );
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM("categories"))));
+                                    OUString("categories")));
                             SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
                             aLSeqIt->second->setValues( xNewSequence );
@@ -974,7 +974,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                 }
                 else if( ! lcl_tableOfRangeMatches( aRange, rTable.aTableNameOfFile ))
                 {
-                    OUString aRep( RTL_CONSTASCII_USTRINGPARAM("label "));
+                    OUString aRep("label ");
                     aRep += OUString::valueOf( aLSeqIt->first.first );
 
                     Reference< chart2::data::XDataSequence > xNewSeq(
@@ -993,7 +993,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     if( ! bCategoriesApplied )
     {
         SchXMLTools::CreateCategories(
-            xDataProv, xChartDoc, OUString(RTL_CONSTASCII_USTRINGPARAM("categories")),
+            xDataProv, xChartDoc, OUString("categories"),
             0 /* nCooSysIndex */, 0 /* nDimension */ );
     }
 

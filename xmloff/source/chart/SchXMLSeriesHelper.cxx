@@ -26,8 +26,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-// header for define RTL_CONSTASCII_USTRINGPARAM
-#include <rtl/ustring.h>
 // header for define DBG_ERROR1
 #include <tools/debug.hxx>
 

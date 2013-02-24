@@ -133,7 +133,7 @@ AnimationsImportHelperImpl::AnimationsImportHelperImpl( SvXMLImport& rImport )
 :   mrImport( rImport ),
     mpAnimationNodeTokenMap( NULL ),
     mpAnimationNodeAttributeTokenMap( NULL ),
-    mastrHSL( RTL_CONSTASCII_USTRINGPARAM( "hsl" ) )
+    mastrHSL( "hsl" )
 {
 }
 
@@ -1379,14 +1379,14 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                             Reference< XTransitionFilter > xTransFilter( xChildNode, UNO_QUERY_THROW );
 
 
-                            xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ), Any( xTransFilter->getTransition() ) );
-                            xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionSubtype" ) ), Any( xTransFilter->getSubtype() ) );
-                            xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionDirection" ) ), Any( xTransFilter->getDirection() ) );
-                            xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionFadeColor" ) ), Any( xTransFilter->getFadeColor() ) );
+                            xPageProps->setPropertyValue( OUString( "TransitionType" ), Any( xTransFilter->getTransition() ) );
+                            xPageProps->setPropertyValue( OUString( "TransitionSubtype" ), Any( xTransFilter->getSubtype() ) );
+                            xPageProps->setPropertyValue( OUString( "TransitionDirection" ), Any( xTransFilter->getDirection() ) );
+                            xPageProps->setPropertyValue( OUString( "TransitionFadeColor" ), Any( xTransFilter->getFadeColor() ) );
 
                             double fDuration;
                             if( xTransFilter->getDuration() >>= fDuration )
-                                xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionDuration" ) ), Any( fDuration ) );
+                                xPageProps->setPropertyValue( OUString( "TransitionDuration" ), Any( fDuration ) );
 
                         }
                         break;
@@ -1396,7 +1396,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                             Reference< XCommand > xCommand( xChildNode, UNO_QUERY_THROW );
                             if( xCommand->getCommand() == EffectCommands::STOPAUDIO )
                             {
-                                xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ), Any(sal_True) );
+                                xPageProps->setPropertyValue( OUString( "Sound" ), Any(sal_True) );
                             }
                         }
                         break;
@@ -1407,11 +1407,11 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                             OUString sSoundURL;
                             if( (xAudio->getSource() >>= sSoundURL) && !sSoundURL.isEmpty() )
                             {
-                                xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ), Any(sSoundURL) );
+                                xPageProps->setPropertyValue( OUString( "Sound" ), Any(sSoundURL) );
 
                                 Timing eTiming;
                                 if( (xAudio->getRepeatCount() >>= eTiming) && (eTiming == Timing_INDEFINITE) )
-                                    xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LoopSound" ) ), Any( sal_True ) );
+                                    xPageProps->setPropertyValue( OUString( "LoopSound" ), Any( sal_True ) );
                             }
                         }
                         break;
@@ -1435,14 +1435,14 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
 
 Sequence< OUString > SAL_CALL AnimationsImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Xmloff.AnimationsImport" ) );
+    const OUString aServiceName( "com.sun.star.comp.Xmloff.AnimationsImport" );
     const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
 OUString SAL_CALL AnimationsImport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "xmloff::AnimationsImport" ) );
+    return OUString( "xmloff::AnimationsImport" );
 }
 
 Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
