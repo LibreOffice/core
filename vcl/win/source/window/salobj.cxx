@@ -41,7 +41,7 @@ static sal_Bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
     HWND hTempWnd = ::GetParent( hWndChild );
     while ( hTempWnd )
     {
-        // Ab nicht Child-Fenstern hoeren wir auf zu suchen
+        // stop searching if not a child window
         if ( !(GetWindowStyle( hTempWnd ) & WS_CHILD) )
             return FALSE;
         if ( hTempWnd == hWndParent )
@@ -129,8 +129,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
             pObject = ImplFindSalObject( pData->hwnd );
             if ( pObject && !ImplFindSalObject( (HWND)pData->wParam ) )
             {
-                // LoseFocus nur rufen, wenn wirklich kein ChildFenster
-                // den Focus bekommt
+                // only call LoseFocus, if truly no child window gets the focus
                 if ( !pData->wParam || !ImplFindSalObject( (HWND)pData->wParam ) )
                 {
                     if ( ImplSalYieldMutexTryToAcquire() )
@@ -172,11 +171,9 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
     if ( (pMsg->message == WM_KEYDOWN) ||
          (pMsg->message == WM_KEYUP) )
     {
-        // KeyEvents wollen wir nach Moeglichkeit auch abarbeiten,
-        // wenn das Control diese nicht selber auswertet
-        // SysKeys werden als WM_SYSCOMMAND verarbeitet
-        // Char-Events verarbeiten wir nicht, da wir nur
-        // Accelerator relevante Keys verarbeiten wollen
+        // process KeyEvents even if the control does not process them itself
+        // SysKeys are processed as WM_SYSCOMMAND
+        // Char-Events are not processed, as they are not accelerator-relevant
         sal_Bool bWantedKeyCode = FALSE;
         // A-Z, 0-9 nur in Verbindung mit Control-Taste
         if ( ((pMsg->wParam >= 65) && (pMsg->wParam <= 90)) ||
@@ -200,7 +197,7 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
             ImplSalYieldMutexRelease();
         }
     }
-    // Hier WM_SYSCHAR abfangen, um mit Alt+Taste evtl. Menu zu aktivieren
+    // check WM_SYSCHAR, to activate menu with Alt key
     else if ( pMsg->message == WM_SYSCHAR )
     {
         pSalData->mnSalObjWantKeyEvt = 0;
@@ -362,9 +359,8 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             CREATESTRUCTA* pStruct = (CREATESTRUCTA*)lParam;
             pSysObj = (WinSalObject*)pStruct->lpCreateParams;
             SetSalObjWindowPtr( hWnd, pSysObj );
-            // HWND schon hier setzen, da schon auf den Instanzdaten
-            // gearbeitet werden kann, wenn Messages waehrend
-            // CreateWindow() gesendet werden
+            // set HWND already here,
+            // as instance data might be used during CreateWindow() events
             pSysObj->mhWnd = hWnd;
             rDef = FALSE;
             }
@@ -400,7 +396,7 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
 
     switch( nMsg )
     {
-        // Wegen PlugIn's loeschen wir erstmal den Hintergrund
+        // clear background for plugins
         case WM_ERASEBKGND:
             {
                 WinSalObject* pSysObj = GetSalObjWindowPtr( ::GetParent( hWnd ) );
@@ -480,7 +476,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 {
     SalData* pSalData = GetSalData();
 
-    // Hook installieren, wenn es das erste SalObject ist
+    // install hook, if it is the first SalObject
     if ( !pSalData->mpFirstObject )
     {
         pSalData->mhSalObjMsgHook = SetWindowsHookExW( WH_CALLWNDPROC,
@@ -599,7 +595,7 @@ WinSalObject::~WinSalObject()
     {
         pSalData->mpFirstObject = mpNextObject;
 
-        // Wenn letztes SalObject, dann Hook wieder entfernen
+        // remove hook, if it is the last SalObject
         if ( !pSalData->mpFirstObject )
             UnhookWindowsHookEx( pSalData->mhSalObjMsgHook );
     }
@@ -622,9 +618,8 @@ WinSalObject::~WinSalObject()
     if ( mhWnd )
         DestroyWindow( mhWnd );
 
-    // Palette wieder zuruecksetzen, wenn kein externes Child-Fenster
-    // mehr vorhanden ist, da diese unsere Palette ueberschrieben haben
-    // koennen
+    // reset palette, if no external child window is left,
+    // as they might have overwritten our palette
     if ( hWndParent &&
          ::GetActiveWindow() == hWndParent &&
          !GetWindow( hWndParent, GW_CHILD ) )
@@ -712,7 +707,7 @@ void WinSalObject::EndSetClipRegion()
 {
     HRGN hRegion;
 
-    // Aus den Region-Daten muessen wir jetzt eine ClipRegion erzeugen
+    // create a ClipRegion from the Region data
     if ( mpClipRgnData->rdh.nCount == 1 )
     {
         RECT* pRect = &(mpClipRgnData->rdh.rcBound);
