@@ -1909,9 +1909,6 @@ sal_Bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 
 sal_Bool WatchTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
-    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
-    String aVName( pItem->maName );
-
     String aResult = comphelper::string::strip(rNewText, ' ');
 
     sal_uInt16 nResultLen = aResult.Len();

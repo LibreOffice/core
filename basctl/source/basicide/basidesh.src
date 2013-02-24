@@ -117,10 +117,6 @@ String RID_STR_CANNOTRUNMACRO
 {
     Text [ en-US ] = "For security reasons, you cannot run this macro.\n\nFor more information, check the security settings." ;
 };
-String RID_STR_COMPILEERROR
-{
-    Text [ en-US ] = "Compile Error: " ;
-};
 String RID_STR_RUNTIMEERROR
 {
     Text [ en-US ] = "Runtime Error: #" ;

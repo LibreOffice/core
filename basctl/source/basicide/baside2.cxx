@@ -654,7 +654,6 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     // ReturnWert: BOOL
     //  FALSE:  cancel
     //  TRUE:   go on....
-    OUString aErrorText( pBasic->GetErrorText() );
     sal_uInt16 nErrorLine = pBasic->GetLine() - 1;
     sal_uInt16 nErrCol1 = pBasic->GetCol1();
     sal_uInt16 nErrCol2 = pBasic->GetCol2();
@@ -664,17 +663,6 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     AssertValidEditEngine();
     GetEditView()->SetSelection( TextSelection( TextPaM( nErrorLine, nErrCol1 ), TextPaM( nErrorLine, nErrCol2 ) ) );
 
-    OUStringBuffer aErrorTextPrefixBuf;
-    if( pBasic->IsCompilerError() )
-        aErrorTextPrefixBuf.append(IDE_RESSTR(RID_STR_COMPILEERROR));
-    else
-    {
-        aErrorTextPrefixBuf.append(IDE_RESSTR(RID_STR_RUNTIMEERROR));
-        aErrorTextPrefixBuf.append(StarBASIC::GetVBErrorCode(pBasic->GetErrorCode()));
-        aErrorTextPrefixBuf.append(' ');
-        rLayout.UpdateDebug(false);
-    }
-    OUString aErrorTextPrefix(aErrorTextPrefixBuf.makeStringAndClear());
     // if other basic, the IDE should try to display the correct module
     bool const bMarkError = pBasic == GetBasic();
     if ( bMarkError )

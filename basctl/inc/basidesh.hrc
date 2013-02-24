@@ -67,7 +67,6 @@
 #define RID_STR_OPEN                    ( RID_BASICIDE_START + 20 )
 #define RID_STR_SAVE                    ( RID_BASICIDE_START + 21 )
 #define RID_STR_RUNTIMEERROR            ( RID_BASICIDE_START + 22 )
-#define RID_STR_COMPILEERROR            ( RID_BASICIDE_START + 23 )
 #define RID_STR_STDDIALOGNAME           ( RID_BASICIDE_START + 24 )
 
 #define RID_STR_STDMODULENAME           ( RID_BASICIDE_START + 27 )
