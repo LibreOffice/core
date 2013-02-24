@@ -209,8 +209,6 @@ public:
     virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
     virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum);
 
-    virtual void SetLinkData(const String& rLinkName, const String& rLinkData);
-
     void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, const String& rStr );
 
     void        SetPageKind(PageKind ePgType)        { mePageKind = ePgType; }

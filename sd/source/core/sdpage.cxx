@@ -2473,16 +2473,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 
 /*************************************************************************
 |*
-|* Link & Daten von einem VControl empfangen
-|*
-\************************************************************************/
-
-void SdPage::SetLinkData(const String&, const String& )
-{
-}
-
-/*************************************************************************
-|*
 |* Layoutname setzen
 |*
 \************************************************************************/
