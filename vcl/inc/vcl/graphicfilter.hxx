@@ -87,10 +87,7 @@ struct ConvertData;
 #define EMF_SHORTNAME           "EMF"
 #define SVG_SHORTNAME           "SVG"
 
-// ------------------------------------
-// - Info-Klasse fuer alle von uns
-//  unterstuetzten Grafik-Fileformate
-// ------------------------------------
+//  Info class for all supported file formats
 
 #define GFF_NOT ( (sal_uInt16)0x0000 )
 #define GFF_BMP ( (sal_uInt16)0x0001 )
@@ -169,50 +166,48 @@ class VCL_DLLPUBLIC GraphicDescriptor
 
 public:
 
-    // Ctor, um einen Filenamen zu setzen. Es muss ::Detect() gerufen werden,
-    // um das File zu identifizieren;
-    // wenn das File keinen eindeutigen Header besitzt ( Mtf's ) wird das
-    // Format anhand der Extension bestimmt
+    /** Ctor to set a filename
+
+        ::Detect() must be called to identify the file
+        If the file has no unique header (Mtf's), the format
+        is determined from the extension */
     GraphicDescriptor( const INetURLObject& rPath );
 
-    // Ctor, um einen Stream zu setzen. Es muss ::Detect() gerufen werden,
-    // um das File zu identifizieren;
-    // da einige Formate ( Mtf's ) keinen eindeutigen Header besitzen,
-    // ist es sinnvoll den Filenamen (inkl. Ext. ) mitanzugeben,
-    // da so das Format ueber die Extension ermittelt werden kann
+    /** Ctor using a stream
+
+        ::Detect() must be called to identify the file
+        As some formats (Mtf's) do not have a unique header, it makes sense
+        to supply the file name (incl. ext.), so that the format can be
+        derived from the extension */
     GraphicDescriptor( SvStream& rInStream, const String* pPath = NULL );
 
-    // Dtor
     virtual ~GraphicDescriptor();
 
-    // Startet die Detektion;
-    // bei bExtendedInfo == sal_True werden soweit wie moeglich
-    // Daten aus dem jeweiligen FileHeader ermittelt
-    // ( Groesse, Farbtiefe usw. )
+    /** starts the detection
+
+        if bExtendedInfo == sal_True the file header is used to derive
+        as many properties as possible (size, color, etc.) */
     virtual sal_Bool    Detect( sal_Bool bExtendedInfo = sal_False );
 
-    // liefert das Fileformat nach erfolgreicher  Detektion zurueck;
-    // wenn kein Format erkannt wurde, ist das Formart GFF_NOT
+    /** @return the file format, GFF_NOT if no format was recognized */
     sal_uInt16          GetFileFormat() const { return nFormat; }
 
-    // liefert die Pixel-Bildgroesse oder 0-Size zurueck
+    /** @return graphic size in pixels or 0 size */
     const Size&     GetSizePixel() const { return (Size&) aPixSize; }
 
-    // liefert die logische Bildgroesse in 1/100mm oder 0-Size zurueck
+    /** @return the logical graphic size in 1/100mm or 0 size */
     const Size&     GetSize_100TH_MM() const { return (Size&) aLogSize; }
 
-    // liefert die Bits/Pixel oder 0 zurueck
+    /** @return bits/pixel or 0 **/
     sal_uInt16          GetBitsPerPixel() const { return nBitsPerPixel; }
 
-    // liefert die Anzahl der Planes oder 0 zurueck
+    /** return number of planes or 0 */
     sal_uInt16          GetPlanes() const { return nPlanes; }
 
-    // zeigt an, ob das Bild evtl. komprimiert (wie auch immer) ist
+    /** @return true if the graphic is compressed */
     sal_Bool            IsCompressed() const { return bCompressed; }
 
-    // gibt die Filternummer des Filters zurueck,
-    // der im GraphicFilter zum Lesen dieses Formats
-    // benoetigt wird
+    /** @return filter number that is needed by the GraphFilter to read this format */
     static String GetImportFormatShortName( sal_uInt16 nFormat );
 };
 

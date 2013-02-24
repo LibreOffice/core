@@ -24,29 +24,26 @@
 #include <vcl/window.hxx>
 
 /*************************************************************************
-
-Beschreibung
-============
-
-class ProgressBar
-
-Diese Klasse dient zur Anzeige einer Progress-Anzeige.
-
---------------------------------------------------------------------------
-
-WinBits
-
-WB_BORDER           Border um das Fenster
-WB_3DLOOK           3D-Darstellung
-
---------------------------------------------------------------------------
-
-Methoden
-
-Mit SetValue() setzt man einen Prozent-Wert zwischen 0 und 100. Wenn Werte
-groesser 100 gesetzt werden, faengt das letzte Rechteck an zu blinken.
-
-*************************************************************************/
+ *
+ * class ProgressBar
+ *
+ * this class is used to display the ProgressBar
+ *
+ * -----------------------------------------------------------------------
+ *
+ * WinBits
+ *
+ * WB_BORDER           border around the window
+ * WB_3DLOOK           3D representation
+ *
+ * -----------------------------------------------------------------------
+ *
+ * Methodes
+ *
+ * Use SetValue() to set a percentage between 0 and 100. A value larger
+ * than 100 will cause the last rectangle to start flashing
+ *
+ ************************************************************************/
 
 // -----------
 // - WinBits -
