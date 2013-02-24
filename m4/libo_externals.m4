@@ -6,15 +6,11 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-AC_DEFUN([libo_PUBLISH_MODULE],
-[
-    true
-    AC_SUBST([SYSTEM_$1])
-    AC_SUBST([$1_CFLAGS])
-    AC_SUBST([$1_LIBS])
-])
-
 AC_DEFUN([libo_CHECK_SYSTEM_MODULE], [
+AC_ARG_WITH(system-$1,
+    AS_HELP_STRING([--with-system-$1],
+        [Use $1 already on system.]),,
+    [with_system_$1="$with_system_libs"])
 AC_MSG_CHECKING([which $1 to use])
 if test "$with_system_$1" = "yes"; then
     AC_MSG_RESULT([external])
@@ -27,7 +23,9 @@ else
     $2_LIBS=$5
     BUILD_TYPE="$BUILD_TYPE $2"
 fi
-    libo_PUBLISH_MODULE([$2])
+AC_SUBST([SYSTEM_$2])
+AC_SUBST([$2_CFLAGS])
+AC_SUBST([$2_LIBS])
 ])
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
