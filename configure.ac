@@ -1326,11 +1326,6 @@ AC_ARG_WITH(system-zlib,
         [Use zlib already on system.]),,
     [with_system_zlib=auto])
 
-AC_ARG_WITH(system-openssl,
-    AS_HELP_STRING([--with-system-openssl],
-        [Use OpenSSL already on system.]),,
-    [with_system_openssl="$with_system_libs"])
-
 AC_ARG_WITH(system-jpeg,
     AS_HELP_STRING([--with-system-jpeg],
         [Use jpeg already on system.]),,
@@ -1624,16 +1619,6 @@ AC_ARG_WITH(system-lpsolve,
     AS_HELP_STRING([--with-system-lpsolve],
         [Use lpsolve already on system.]),,
     [with_system_lpsolve="$with_system_libs"])
-
-AC_ARG_WITH(system-redland,
-    AS_HELP_STRING([--with-system-redland],
-        [Use redland library already on system.]),,
-    [with_system_redland="$with_system_libs"])
-
-AC_ARG_WITH(system-orcus,
-    AS_HELP_STRING([--with-system-orcus],
-        [Use orcus library already on system.]),,
-    [with_system_orcus="$with_system_libs"])
 
 AC_ARG_WITH(system-liblangtag,
     AS_HELP_STRING([--with-system-liblangtag],
@@ -8720,58 +8705,37 @@ dnl Check for system openssl
 dnl ===================================================================
 if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
         "$_os" = "DragonFly" && test "$with_system_openssl" != "no"; then
-    with_system_openssl=yes
-fi
-AC_MSG_CHECKING([which libssl to use])
-if test "$with_system_openssl" = "yes"; then
-    AC_MSG_RESULT([external])
     # Mac OS builds should get out without extra stuff is the Mac porters'
     # wish. And pkg-config is although Xcode ships a .pc for openssl
-    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
-            "$_os" = "DragonFly"; then
-        OPENSSL_CFLAGS=
-        OPENSSL_LIBS="-lssl -lcrypto"
-    else
-        PKG_CHECK_MODULES( OPENSSL, openssl )
-    fi
+    with_system_openssl=yes
     SYSTEM_OPENSSL=YES
+    OPENSSL_CFLAGS=
+    OPENSSL_LIBS="-lssl -lcrypto"
+else
+    libo_CHECK_SYSTEM_MODULE([libssl],[OPENSSL],[openssl])
+fi
+if test "$with_system_openssl" = "yes"; then
     libo_MINGW_CHECK_DLL([SSL], [libssl])
     libo_MINGW_CHECK_DLL([CRYPTO], [libcrypto])
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_OPENSSL=NO
-    BUILD_TYPE="$BUILD_TYPE OPENSSL"
 fi
-AC_SUBST(SYSTEM_OPENSSL)
-AC_SUBST(OPENSSL_CFLAGS)
-AC_SUBST(OPENSSL_LIBS)
 AC_SUBST([MINGW_SSL_DLL])
 AC_SUBST([MINGW_CRYPTO_DLL])
 
 dnl ===================================================================
 dnl Check for system redland
 dnl ===================================================================
-AC_MSG_CHECKING([which redland library to use])
+dnl versions before 1.0.8 write RDF/XML that is useless for ODF (@xml:base)
+libo_CHECK_SYSTEM_MODULE([redland],[REDLAND],[redland >= 1.0.8])
 if test "$with_system_redland" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_REDLAND=YES
-    dnl versions before 1.0.8 write RDF/XML that is useless for ODF (@xml:base)
-    PKG_CHECK_MODULES(REDLAND, redland >= 1.0.8)
     libo_MINGW_CHECK_DLL([REDLAND], [librdf])
     libo_MINGW_TRY_DLL([RAPTOR], [libraptor])
     libo_MINGW_TRY_DLL([RASQAL], [librasqal])
     libo_MINGW_TRY_DLL([SQLITE3], [libsqlite3])
 else
-    AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE REDLAND"
     RAPTOR_MAJOR="1"
     RASQAL_MAJOR="1"
     REDLAND_MAJOR="0"
-    SYSTEM_REDLAND=NO
 fi
-AC_SUBST(SYSTEM_REDLAND)
-AC_SUBST(REDLAND_CFLAGS)
-AC_SUBST(REDLAND_LIBS)
 AC_SUBST(RAPTOR_MAJOR)
 AC_SUBST(RASQAL_MAJOR)
 AC_SUBST(REDLAND_MAJOR)
@@ -8783,16 +8747,8 @@ AC_SUBST([MINGW_SQLITE3_DLL])
 dnl ===================================================================
 dnl Check for system orcus
 dnl ===================================================================
-AC_MSG_CHECKING([which orcus library to use])
-if test "$with_system_orcus" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_LIBORCUS=YES
-    PKG_CHECK_MODULES(ORCUS, liborcus-0.4 >= 0.3.0)
-else
-    AC_MSG_RESULT([internal])
-    BUILD_TYPE="$BUILD_TYPE ORCUS"
-    SYSTEM_LIBORCUS=NO
-
+libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.4 >= 0.3.0])
+if test "$with_system_orcus" != "yes"; then
     if test "$SYSTEM_BOOST" = "YES"; then
         # ===========================================================
         # Determine if we are going to need to link with Boost.System
@@ -8817,10 +8773,10 @@ else
         AC_LANG_POP([C++])
     fi
 fi
+dnl FIXME by renaming SYSTEM_LIBORCUS to SYSTEM_ORCUS in the build system world
+SYSTEM_LIBORCUS=$SYSTEM_ORCUS
 AC_SUBST([BOOST_SYSTEM_LIB])
 AC_SUBST(SYSTEM_LIBORCUS)
-AC_SUBST(ORCUS_CFLAGS)
-AC_SUBST(ORCUS_LIBS)
 
 dnl ===================================================================
 dnl Check for system hunspell
