@@ -1241,13 +1241,6 @@ AC_ARG_WITH(afms,
          are known to be available.]),
 ,)
 
-AC_ARG_WITH(agfa-monotype-fonts,
-     AS_HELP_STRING([--with-agfa-monotype-fonts],
-          [This switch should only be enabled for those who have the right
-           to use or distribute the proprietary Agfa Monotype
-           fonts.]),
-,)
-
 AC_ARG_WITH(epm,
     AS_HELP_STRING([--with-epm],
         [Decides which epm to use. Default is to use the one from the system if
@@ -6722,14 +6715,6 @@ AC_SUBST(x_JAVALIB)
 AC_SUBST(x_JDKLIB)
 
 dnl ===================================================================
-dnl Checks for specific files.
-dnl ===================================================================
-
-dnl ===================================================================
-dnl Checks for programs.
-dnl ===================================================================
-
-dnl ===================================================================
 dnl Check whether we already have dmake
 dnl ===================================================================
 AC_PATH_PROG(DMAKE, dmake, no)
@@ -10779,25 +10764,6 @@ else
     SCPDEFS="$SCPDEFS -DWITHOUT_FONTS"
 fi
 AC_SUBST(WITH_FONTS)
-
-
-# The agfa monotype fonts options seems broken
-# there is no assocaited entry in Makefile.fetch
-# so we do not fetch the dependencies
-# there is no tie-up with MORE_FONTS, but in dmake mode
-# without more_fonts that option is meaningless
-# so I suspect it is not really used anymore, commenting out for now
-#AC_MSG_CHECKING([whether to include Agfa Monotype fonts])
-#if test "$with_agfa_monotype_fonts" = "yes"; then
-#    AC_MSG_RESULT([yes])
-#    WITH_AGFA_MONOTYPE_FONTS=YES
-#    SCPDEFS="$SCPDEFS -DWITH_AGFA_MONOTYPE_FONTS"
-#    BUILD_TYPE="$BUILD_TYPE AGFA_MONOTYPE_FONTS"
-#else
-#    AC_MSG_RESULT([no])
-#    WITH_AGFA_MONOTYPE_FONTS=NO
-#fi
-#AC_SUBST(WITH_AGFA_MONOTYPE_FONTS)
 
 dnl ===================================================================
 dnl Test whether to include ppds
