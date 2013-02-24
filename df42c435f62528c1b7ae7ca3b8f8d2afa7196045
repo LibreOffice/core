@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///yQ\u003d",
+        "filename": "sw/source/filter/ww8/ww8par3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1963,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-02-24T17:53:19Z",
+      "side": 0,
+      "message": "Its a good idea in general to keep these bug references, as they are public:\n\nhttps://issues.apache.org/ooo/show_bug.cgi?id\u003d24553\n\nIts also a good idea to test the available test document from such bugs, if available.",
+      "revId": "df42c435f62528c1b7ae7ca3b8f8d2afa7196045",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
