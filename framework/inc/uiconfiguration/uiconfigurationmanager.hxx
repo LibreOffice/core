@@ -71,7 +71,7 @@ namespace framework
             FWK_DECLARE_XTYPEPROVIDER
             DECLARE_XSERVICEINFO
 
-            UIConfigurationManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager );
+            UIConfigurationManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxContext );
             virtual ~UIConfigurationManager();
 
             // XComponent
@@ -180,7 +180,7 @@ namespace framework
             rtl::OUString                                                                   m_aPropUIName;
             rtl::OUString                                                                   m_aPropResourceURL;
             rtl::OUString                                                                   m_aModuleIdentifier;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        m_xContext;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
             com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xImageManager;
             com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               m_xAccConfig;

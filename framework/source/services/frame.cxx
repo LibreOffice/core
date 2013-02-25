@@ -40,6 +40,7 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/task/StatusIndicatorFactory.hpp>
 #include <com/sun/star/task/JobExecutor.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -564,17 +565,8 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     // create progress helper
     css::uno::Reference< css::frame::XFrame >                 xThis            (static_cast< css::frame::XFrame* >(this)                        , css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory(xSMGR->createInstance(IMPLEMENTATIONNAME_STATUSINDICATORFACTORY), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::lang::XInitialization >         xIndicatorInit   (xIndicatorFactory                                               , css::uno::UNO_QUERY_THROW);
-    css::uno::Sequence< css::uno::Any > lArgs(2);
-    css::beans::NamedValue aArg;
-    aArg.Name    = STATUSINDICATORFACTORY_PROPNAME_FRAME;
-    aArg.Value <<= xThis;
-    lArgs[0]   <<= aArg;
-    aArg.Name    = STATUSINDICATORFACTORY_PROPNAME_ALLOWPARENTSHOW;
-    aArg.Value <<= sal_True;
-    lArgs[1]   <<= aArg;
-    xIndicatorInit->initialize(lArgs);
+    css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory =
+        css::task::StatusIndicatorFactory::createWithFrame(comphelper::getComponentContext(xSMGR), xThis, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/ );
 
     // SAFE -> ----------------------------------
     aWriteLock.lock();

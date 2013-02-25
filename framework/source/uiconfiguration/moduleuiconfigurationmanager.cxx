@@ -305,7 +305,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
                     {
                         try
                         {
-                            MenuConfiguration aMenuCfg( m_xServiceManager );
+                            MenuConfiguration aMenuCfg( comphelper::getComponentContext(m_xServiceManager) );
                             Reference< XIndexAccess > xContainer( aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream ));
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xContainer );
                             if ( pRootItemContainer )
@@ -446,7 +446,7 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
                         {
                             try
                             {
-                                MenuConfiguration aMenuCfg( m_xServiceManager );
+                                MenuConfiguration aMenuCfg( comphelper::getComponentContext(m_xServiceManager) );
                                 aMenuCfg.StoreMenuBarConfigurationToXML( rElement.xSettings, xOutputStream );
                             }
                             catch ( const ::com::sun::star::lang::WrappedTargetException& )

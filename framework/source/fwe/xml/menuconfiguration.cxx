@@ -44,8 +44,8 @@ namespace framework
 {
 
 MenuConfiguration::MenuConfiguration(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager )
-:   m_rxServiceManager( rServiceManager )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+:   m_xContext( rxContext )
 {
 }
 
@@ -59,7 +59,7 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     Reference< XInputStream >& rInputStream )
 throw ( WrappedTargetException )
 {
-    Reference< XParser > xParser = Parser::create( comphelper::getComponentContext(m_rxServiceManager) );
+    Reference< XParser > xParser = Parser::create( m_xContext );
 
     // connect stream to input stream to the parser
     InputSource aInputSource;
@@ -121,7 +121,7 @@ void MenuConfiguration::StoreMenuBarConfigurationToXML(
     Reference< XOutputStream >& rOutputStream )
 throw ( WrappedTargetException )
 {
-    Reference< XWriter > xWriter = Writer::create(comphelper::getComponentContext(m_rxServiceManager));
+    Reference< XWriter > xWriter = Writer::create(m_xContext);
     xWriter->setOutputStream( rOutputStream );
 
     try

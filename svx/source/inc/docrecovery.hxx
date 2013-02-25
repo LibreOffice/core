@@ -32,7 +32,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/task/StatusIndicatorFactory.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -50,14 +50,10 @@
 #define RECOVERY_CMD_DO_ENTRY_BACKUP                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryBackup"         ))
 #define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryCleanUp"        ))
 
-#define SERVICENAME_PROGRESSFACTORY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.StatusIndicatorFactory"))
-
-#define PROP_PARENTWINDOW                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window"           ))
 #define PROP_STATUSINDICATOR                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator"  ))
 #define PROP_DISPATCHASYNCHRON                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DispatchAsynchron"))
 #define PROP_SAVEPATH                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SavePath"         ))
 #define PROP_ENTRYID                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "EntryID"          ))
-#define PROP_ALLOWPARENTSHOW                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AllowParentShow"  ))
 
 #define STATEPROP_ID                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ID"           ))
 #define STATEPROP_STATE                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DocumentState"))
@@ -337,8 +333,8 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
 
         //---------------------------------------
         /** @short  TODO */
-        PluginProgress(      Window*                                                 pParent,
-                       const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  );
+        PluginProgress(      Window*                                             pParent,
+                       const css::uno::Reference< css::uno::XComponentContext >& xContext  );
 
         //---------------------------------------
         /** @short  TODO */

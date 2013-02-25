@@ -326,7 +326,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
 
     if ( pVCLPopupMenu )
     {
-        MenuConfiguration aMenuCfg( m_xServiceManager );
+        MenuConfiguration aMenuCfg( comphelper::getComponentContext(m_xServiceManager) );
         BmkMenu* pSubMenu( 0 );
 
         if ( m_bNewMenu )

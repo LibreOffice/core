@@ -598,25 +598,12 @@ PluginProgressWindow::~PluginProgressWindow()
 }
 
 //===============================================
-PluginProgress::PluginProgress(      Window*                                                 pParent,
-                               const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  )
+PluginProgress::PluginProgress(      Window*                                             pParent,
+                               const css::uno::Reference< css::uno::XComponentContext >& xContext  )
 {
     m_pPlugProgressWindow = new PluginProgressWindow(pParent, static_cast< css::lang::XComponent* >(this));
     css::uno::Reference< css::awt::XWindow > xProgressWindow = VCLUnoHelper::GetInterface(m_pPlugProgressWindow);
-    m_xProgressFactory = css::uno::Reference< css::task::XStatusIndicatorFactory >(xSMGR->createInstance(SERVICENAME_PROGRESSFACTORY), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::lang::XInitialization > xInit(m_xProgressFactory, css::uno::UNO_QUERY_THROW);
-
-    css::uno::Sequence< css::uno::Any > lArgs(2);
-    css::beans::NamedValue aProp;
-    aProp.Name    = PROP_PARENTWINDOW;
-    aProp.Value <<= xProgressWindow;
-    lArgs[0]    <<= aProp;
-    aProp.Name    = PROP_ALLOWPARENTSHOW;
-    aProp.Value <<= sal_True;
-    lArgs[1]    <<= aProp;
-
-    xInit->initialize(lArgs);
-
+    m_xProgressFactory = css::task::StatusIndicatorFactory::createWithWindow(xContext, xProgressWindow, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/);
     m_xProgress = m_xProgressFactory->createStatusIndicator();
 }
 
@@ -789,7 +776,7 @@ SaveProgressDialog::SaveProgressDialog(Window*       pParent,
     , m_pCore       ( pCore                                                      )
 {
     FreeResource();
-    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, css::uno::Reference<css::lang::XMultiServiceFactory>(pCore->getComponentContext()->getServiceManager(), css::uno::UNO_QUERY_THROW) );
+    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getComponentContext() );
     m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 }
 
@@ -998,7 +985,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     aVal >>= bCrashRepEnabled;
     m_bRecoveryOnly = !bCrashRepEnabled;
 
-    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, css::uno::Reference<css::lang::XMultiServiceFactory>(pCore->getComponentContext()->getServiceManager(), css::uno::UNO_QUERY_THROW) );
+    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getComponentContext() );
     m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();

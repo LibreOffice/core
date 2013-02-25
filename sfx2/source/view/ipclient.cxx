@@ -33,7 +33,7 @@
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/task/StatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -231,7 +231,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
     uno::Reference< frame::XFrame >              xFrame;
     uno::Reference< task::XStatusIndicator >     xStatusIndicator;
     uno::Reference< frame::XModel >              xModel( m_xObject->getComponent(), uno::UNO_QUERY );
-    uno::Reference< lang::XMultiServiceFactory > xSrvMgr( ::comphelper::getProcessServiceFactory() );
+    uno::Reference< uno::XComponentContext >     xContext( ::comphelper::getProcessComponentContext() );
 
     if ( xModel.is() )
     {
@@ -240,29 +240,18 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
             xFrame = xController->getFrame();
     }
 
-    if ( xSrvMgr.is() && xFrame.is() )
+    if ( xFrame.is() )
     {
         // set non-reschedule progress to prevent problems when asynchronous calls are made
         // during storing of the embedded object
-        uno::Reference< lang::XInitialization > xInit(
-            xSrvMgr->createInstance( "com.sun.star.comp.framework.StatusIndicatorFactory" ), uno::UNO_QUERY_THROW );
-        beans::PropertyValue aProperty;
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aProperty.Name  = "DisableReschedule";
-        aProperty.Value = uno::makeAny( sal_True );
-        aArgs[0] = uno::makeAny( aProperty );
-        aProperty.Name  = "Frame";
-        aProperty.Value = uno::makeAny( xFrame );
-        aArgs[1] = uno::makeAny( aProperty );
-
-        xInit->initialize( aArgs );
+        uno::Reference< task::XStatusIndicatorFactory > xStatusIndicatorFactory =
+               task::StatusIndicatorFactory::createWithFrame( xContext, xFrame, sal_True/*DisableReschedule*/, sal_False/*AllowParentShow*/ );
 
         uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
             try
             {
-                uno::Reference< task::XStatusIndicatorFactory > xStatusIndicatorFactory( xInit, uno::UNO_QUERY_THROW );
                 xStatusIndicator = xStatusIndicatorFactory->createStatusIndicator();
                 xPropSet->setPropertyValue( "IndicatorInterception" , uno::makeAny( xStatusIndicator ));
             }

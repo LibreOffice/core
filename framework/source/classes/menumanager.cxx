@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -110,11 +109,11 @@ namespace framework
 const char UNO_COMMAND[] = ".uno:";
 
 MenuManager::MenuManager(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
     REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    mxServiceFactory(xServiceFactory)
+    m_xContext(rxContext)
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -193,7 +192,7 @@ MenuManager::MenuManager(
         {
             if ( nItemId == SID_NEWDOCDIRECT || aItemCommand == aSlotNewDocDirect )
             {
-                MenuConfiguration aMenuCfg( getServiceFactory() );
+                MenuConfiguration aMenuCfg( m_xContext );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
@@ -207,7 +206,7 @@ MenuManager::MenuManager(
             }
             else if ( nItemId == SID_AUTOPILOTMENU || aItemCommand == aSlotAutoPilot )
             {
-                MenuConfiguration aMenuCfg( getServiceFactory() );
+                MenuConfiguration aMenuCfg( m_xContext );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
@@ -278,8 +277,8 @@ void MenuManager::SetHdl()
     m_pVCLMenu->SetDeactivateHdl( LINK( this, MenuManager, Deactivate ));
     m_pVCLMenu->SetSelectHdl( LINK( this, MenuManager, Select ));
 
-    if ( mxServiceFactory.is() )
-        m_xURLTransformer.set( URLTransformer::create(::comphelper::getComponentContext(mxServiceFactory)) );
+    if ( m_xContext.is() )
+        m_xURLTransformer.set( URLTransformer::create( m_xContext ) );
 }
 
 MenuManager::~MenuManager()
@@ -763,7 +762,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         if ( m_aMenuItemCommand == aSpecialFileMenu || m_aMenuItemCommand == aSlotSpecialFileMenu || aCommand == aSpecialFileCommand )
             UpdateSpecialFileMenu( pMenu );
         else if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aCommand == aSpecialWindowCommand )
-            UpdateSpecialWindowMenu( pMenu, comphelper::getComponentContext(getServiceFactory()), m_aLock );
+            UpdateSpecialWindowMenu( pMenu, m_xContext, m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
         if ( bShowMenuImages != m_bShowMenuImages )
@@ -862,7 +861,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
             {
                 // window list menu item selected
 
-                Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(getServiceFactory()) );
+                Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
 
                 sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
                 Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
@@ -923,14 +922,14 @@ IMPL_LINK_NOARG(MenuManager, Highlight)
     return 0;
 }
 
-const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& MenuManager::getServiceFactory()
+const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& MenuManager::getContext()
 {
-    return mxServiceFactory;
+    return m_xContext;
 }
 
 void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren)
 {
-    MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), m_xFrame, _pPopupMenu, _bDelete, _bDeleteChildren );
+    MenuManager* pSubMenuManager = new MenuManager( m_xContext, m_xFrame, _pPopupMenu, _bDelete, _bDeleteChildren );
 
     // store menu item command as we later have to know which menu is active (see Activate handler)
     pSubMenuManager->m_aMenuItemCommand = _sItemCommand;

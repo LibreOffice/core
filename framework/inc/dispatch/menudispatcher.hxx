@@ -99,14 +99,14 @@ class MenuDispatcher   :   // interfaces
 
             @seealso    using at owner
 
-            @param      "xFactory"  , css::uno::Reference to servicemanager for creation of new services
+            @param      "rxContext"  , css::uno::Reference to servicemanager for creation of new services
             @param      "xOwner"    , css::uno::Reference to our owner, the Desktop!!!
             @return     -
 
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        MenuDispatcher(    const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory    ,
+        MenuDispatcher(    const   css::uno::Reference< css::uno::XComponentContext >& rxContext    ,
                             const   css::uno::Reference< css::frame::XFrame >&              xOwner      );
 
         //---------------------------------------------------------------------------------------------------------
@@ -252,37 +252,6 @@ class MenuDispatcher   :   // interfaces
         void impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel );
 
     //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      css::uno::References to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-
-        static sal_Bool impldbg_checkParameter_MenuDispatcher      (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
-                                                                        const   css::uno::Reference< css::frame::XFrame >&              xOwner          );
-        static sal_Bool impldbg_checkParameter_addStatusListener    (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
-                                                                        const   css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
-                                                                        const   css::util::URL&                                         aURL            );
-    #endif  // #ifdef ENABLE_ASSERTIONS
-
-    //-------------------------------------------------------------------------------------------------------------
     //  variables
     //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
@@ -290,7 +259,7 @@ class MenuDispatcher   :   // interfaces
     private:
 
         css::uno::WeakReference< css::frame::XFrame >           m_xOwnerWeak        ;   /// css::uno::WeakReference to owner (Don't use a hard css::uno::Reference. Owner can't delete us then!)
-        css::uno::Reference< css::lang::XMultiServiceFactory >  m_xFactory          ;   /// factory shared with our owner to create new services!
+        css::uno::Reference< css::uno::XComponentContext >      m_xContext          ;   /// factory shared with our owner to create new services!
         IMPL_ListenerHashContainer                              m_aListenerContainer;   /// hash table for listener at specified URLs
         sal_Bool                                                m_bAlreadyDisposed  ;   /// Protection against multiple disposing calls.
         sal_Bool                                                m_bActivateListener ;   /// dispatcher is listener for frame activation

@@ -325,6 +325,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
 	OfficeRestartManager \
 	PasswordContainer \
 	PasswordContainerInteractionHandler \
+	StatusIndicatorFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/text,\
 	DefaultNumberingProvider \

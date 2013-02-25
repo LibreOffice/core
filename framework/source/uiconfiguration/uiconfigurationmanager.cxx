@@ -81,7 +81,7 @@ DEFINE_XTYPEPROVIDER_7                  (   UIConfigurationManager              
                                             ::com::sun::star::ui::XUIConfigurationStorage
                                         )
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   UIConfigurationManager                      ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2        (   UIConfigurationManager                      ,
                                             ::cppu::OWeakObject                         ,
                                             SERVICENAME_UICONFIGURATIONMANAGER          ,
                                             IMPLEMENTATIONNAME_UICONFIGURATIONMANAGER
@@ -243,7 +243,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                     {
                         try
                         {
-                            MenuConfiguration aMenuCfg( m_xServiceManager );
+                            MenuConfiguration aMenuCfg( m_xContext );
                             Reference< XIndexAccess > xContainer( aMenuCfg.CreateMenuBarConfigurationFromXML( xInputStream ));
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xContainer );
                             if ( pRootItemContainer )
@@ -268,7 +268,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         try
                         {
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
-                            ToolBoxConfiguration::LoadToolBox( comphelper::getComponentContext(m_xServiceManager), xInputStream, xIndexContainer );
+                            ToolBoxConfiguration::LoadToolBox( m_xContext, xInputStream, xIndexContainer );
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
                             aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
                             return;
@@ -285,7 +285,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         try
                         {
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
-                            StatusBarConfiguration::LoadStatusBar( comphelper::getComponentContext(m_xServiceManager), xInputStream, xIndexContainer );
+                            StatusBarConfiguration::LoadStatusBar( m_xContext, xInputStream, xIndexContainer );
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
                             aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
                             return;
@@ -375,7 +375,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                         {
                             try
                             {
-                                MenuConfiguration aMenuCfg( m_xServiceManager );
+                                MenuConfiguration aMenuCfg( m_xContext );
                                 aMenuCfg.StoreMenuBarConfigurationToXML( rElement.xSettings, xOutputStream );
                             }
                             catch ( const ::com::sun::star::lang::WrappedTargetException& )
@@ -388,7 +388,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                         {
                             try
                             {
-                                ToolBoxConfiguration::StoreToolBox( comphelper::getComponentContext(m_xServiceManager), xOutputStream, rElement.xSettings );
+                                ToolBoxConfiguration::StoreToolBox( m_xContext, xOutputStream, rElement.xSettings );
                             }
                             catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {
@@ -400,7 +400,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                         {
                             try
                             {
-                                StatusBarConfiguration::StoreStatusBar( comphelper::getComponentContext(m_xServiceManager), xOutputStream, rElement.xSettings );
+                                StatusBarConfiguration::StoreStatusBar( m_xContext, xOutputStream, rElement.xSettings );
                             }
                             catch ( const ::com::sun::star::lang::WrappedTargetException& )
                             {
@@ -578,7 +578,7 @@ void UIConfigurationManager::impl_Initialize()
     }
 }
 
-UIConfigurationManager::UIConfigurationManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager ) :
+UIConfigurationManager::UIConfigurationManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xDocConfigStorage( 0 )
     , m_bReadOnly( true )
@@ -588,7 +588,7 @@ UIConfigurationManager::UIConfigurationManager( com::sun::star::uno::Reference< 
     , m_aXMLPostfix( ".xml" )
     , m_aPropUIName( "UIName" )
     , m_aPropResourceURL( "ResourceURL" )
-    , m_xServiceManager( xServiceManager )
+    , m_xContext( rxContext )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
@@ -1050,7 +1050,9 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw
 
     if ( !m_xImageManager.is() )
     {
-        m_xImageManager = Reference< XComponent >( static_cast< cppu::OWeakObject *>( new ImageManager( m_xServiceManager )),
+        Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
+
+        m_xImageManager = Reference< XComponent >( static_cast< cppu::OWeakObject *>( new ImageManager( xMSF )),
                                                          UNO_QUERY );
         Reference< XInitialization > xInit( m_xImageManager, UNO_QUERY );
 
@@ -1077,7 +1079,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() th
     if (m_xAccConfig.is())
         return m_xAccConfig;
 
-    Reference< XMultiServiceFactory > xSMGR         = m_xServiceManager;
+    Reference<XMultiServiceFactory>   xSMGR(m_xContext->getServiceManager(), UNO_QUERY_THROW);
     Reference< XStorage >             xDocumentRoot = m_xDocConfigStorage;
 
     aGuard.unlock();

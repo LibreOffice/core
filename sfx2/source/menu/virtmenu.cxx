@@ -766,8 +766,7 @@ void SfxVirtualMenu::UnbindControllers()
 void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
 {
     // Create special popup menu that is filled with the 3rd party components popup menu items
-    Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
-    ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
+    ::framework::MenuConfiguration aConf( ::comphelper::getProcessComponentContext() );
     Reference<com::sun::star::frame::XFrame> xFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
 
     PopupMenu* pAddonMenu = NULL;

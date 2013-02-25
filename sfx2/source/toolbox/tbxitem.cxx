@@ -1485,7 +1485,7 @@ SfxPopupWindow* SfxAppToolBoxControl_Impl::CreatePopupWindow()
 
     if ( !pMenu )
     {
-        ::framework::MenuConfiguration aConf( m_xServiceManager );
+        ::framework::MenuConfiguration aConf( comphelper::getComponentContext(m_xServiceManager) );
         if ( m_aCommandURL == ".uno:AddDirect" )
             pMenu = aConf.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU );
         else
@@ -1552,7 +1552,7 @@ void SfxAppToolBoxControl_Impl::StateChanged
         // to check for supported URLs ...
         if ( !pMenu )
         {
-            ::framework::MenuConfiguration aConf( m_xServiceManager );
+            ::framework::MenuConfiguration aConf( comphelper::getComponentContext(m_xServiceManager) );
             // This toolbox controller is used for two popup menus (new documents and wizards!). Create the correct
             // popup menu according to the slot ID our controller has been initialized with.
             if ( nSlotId == SID_NEWDOCDIRECT )

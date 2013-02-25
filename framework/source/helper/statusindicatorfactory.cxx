@@ -71,8 +71,8 @@ DEFINE_XTYPEPROVIDER_5(StatusIndicatorFactory            ,
 
 DEFINE_XSERVICEINFO_MULTISERVICE(StatusIndicatorFactory                   ,
                                  ::cppu::OWeakObject                      ,
-                                 SERVICENAME_STATUSINDICATORFACTORY       ,
-                                 IMPLEMENTATIONNAME_STATUSINDICATORFACTORY)
+                                 OUString("com.sun.star.task.StatusIndicatorFactory"),
+                                 OUString("com.sun.star.comp.framework.StatusIndicatorFactory"))
 
 DEFINE_INIT_SERVICE(StatusIndicatorFactory,
                     {
@@ -107,18 +107,37 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
-    ::comphelper::SequenceAsHashMap lArgs(lArguments);
+    if (lArguments.getLength() > 0) {
+        // SAFE -> ----------------------------------
+        WriteGuard aWriteLock(m_aLock);
 
-    // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+        css::uno::Reference< css::frame::XFrame > xTmpFrame;
+        css::uno::Reference< css::awt::XWindow > xTmpWindow;
+        bool b1 = lArguments[0] >>= xTmpFrame;
+        bool b2 = lArguments[0] >>= xTmpWindow;
+        if (lArguments.getLength() == 3 && b1) {
+           // it's the first service constructor "createWithFrame"
+            m_xFrame = xTmpFrame;
+            lArguments[1] >>= m_bDisableReschedule;
+            lArguments[2] >>= m_bAllowParentShow;
+        } else if (lArguments.getLength() == 3 && b2) {
+           // it's the second service constructor "createWithWindow"
+            m_xPluggWindow = xTmpWindow;
+            lArguments[1] >>= m_bDisableReschedule;
+            lArguments[2] >>= m_bAllowParentShow;
+        } else {
+           // it's an old-style initialisation using properties
+            ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
-    m_xFrame             = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_FRAME            , css::uno::Reference< css::frame::XFrame >());
-    m_xPluggWindow       = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_WINDOW           , css::uno::Reference< css::awt::XWindow >() );
-    m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_ALLOWPARENTSHOW  , (sal_Bool)sal_False                        );
-    m_bDisableReschedule = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_DISABLERESCHEDULE, (sal_Bool)sal_False                        );
+            m_xFrame             = lArgs.getUnpackedValueOrDefault("Frame"            , css::uno::Reference< css::frame::XFrame >());
+            m_xPluggWindow       = lArgs.getUnpackedValueOrDefault("Window"           , css::uno::Reference< css::awt::XWindow >() );
+            m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault("AllowParentShow"  , (sal_Bool)sal_False                        );
+            m_bDisableReschedule = lArgs.getUnpackedValueOrDefault("DisableReschedule", (sal_Bool)sal_False                        );
 
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+            aWriteLock.unlock();
+           // <- SAFE ----------------------------------
+       }
+    }
 
     impl_createProgress();
 }

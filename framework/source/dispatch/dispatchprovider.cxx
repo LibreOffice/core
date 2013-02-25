@@ -597,7 +597,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     WriteGuard aWriteLock( m_aLock );
                     if ( ! m_xMenuDispatcher.is() )
                     {
-                        MenuDispatcher* pDispatcher = new MenuDispatcher( xFactory, xOwner );
+                        MenuDispatcher* pDispatcher = new MenuDispatcher( comphelper::getComponentContext(xFactory), xOwner );
                         m_xMenuDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                     xDispatchHelper = m_xMenuDispatcher;

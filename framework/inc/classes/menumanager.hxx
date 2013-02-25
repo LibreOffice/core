@@ -38,8 +38,6 @@
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/debug.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #define REFERENCE                                       ::com::sun::star::uno::Reference
 #define XFRAME                                          ::com::sun::star::frame::XFrame
 #define XDISPATCH                                       ::com::sun::star::frame::XDispatch
@@ -61,7 +59,7 @@ class MenuManager : public ThreadHelpBase           ,
 {
     public:
         MenuManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             REFERENCE< XFRAME >& rFrame,
             Menu* pMenu,
             sal_Bool bDelete,
@@ -81,7 +79,7 @@ class MenuManager : public ThreadHelpBase           ,
 
         void    RemoveListener();
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getContext();
 
         static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,IMutex& _rMutex);
         static void FillMenuImages(
@@ -136,8 +134,8 @@ class MenuManager : public ThreadHelpBase           ,
         REFERENCE< XFRAME >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >             m_xURLTransformer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >       m_xURLTransformer;
 };
 
 } // namespace
