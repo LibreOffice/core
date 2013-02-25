@@ -366,7 +366,6 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
 
     // SfxContentHelper::MakeFolder
     INetURLObject aURL( NewFolderURL, INET_PROT_FILE );
-    String aNewFolderURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
     String aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     if ( aTitle.Len() )
     {

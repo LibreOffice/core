@@ -262,7 +262,6 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
         else if ( aDescriptor[i].Name == "URL" )
         {
                     OUString        sURL;
-            OUString        sFileName;
 
                 aDescriptor[i].Value >>= sURL;
             /*

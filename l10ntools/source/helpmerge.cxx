@@ -234,7 +234,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
     PFormEntrys   *pEntrys    = NULL;
 
     rtl::OString sLId;
-    rtl::OString sGId;
 
     pEntrys = NULL;
 

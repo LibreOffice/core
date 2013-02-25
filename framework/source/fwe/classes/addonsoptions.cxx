@@ -887,7 +887,6 @@ sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionCont
 
     // Init the property value sequence
     Sequence< ::rtl::OUString > aNodePropNames( 5 );
-    ::rtl::OUString                aURL;
 
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
@@ -974,7 +973,6 @@ sal_Bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruc
 
     // Init the property value sequence
     Sequence< ::rtl::OUString > aNodePropNames( 6 );
-    ::rtl::OUString                aURL;
 
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {

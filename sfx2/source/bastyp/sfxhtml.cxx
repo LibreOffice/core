@@ -236,8 +236,6 @@ void SfxHTMLParser::StartFileDownload(const OUString& rURL)
 
 sal_Bool SfxHTMLParser::FinishFileDownload( String& rStr )
 {
-    String aStr;
-
     sal_Bool bOK = pDLMedium && pDLMedium->GetErrorCode()==0;
     if( bOK )
     {

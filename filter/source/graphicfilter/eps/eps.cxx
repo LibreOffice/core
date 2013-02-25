@@ -2046,7 +2046,6 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const sal_
         sal_Int16 nRotation = maFont.GetOrientation();
         Polygon aPolyDummy( 1 );
 
-        PolyPolygon aPolyPoly;
         Point aPos( rPos );
         if ( nRotation )
         {

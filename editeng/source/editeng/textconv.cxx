@@ -358,7 +358,6 @@ void TextConvWrapper::ReplaceUnit(
 
     OUString aOrigTxt( pEditView->GetSelected() );
     OUString aNewTxt( rReplaceWith );
-    String  aNewOrigText;
     switch (eAction)
     {
         case eExchange :

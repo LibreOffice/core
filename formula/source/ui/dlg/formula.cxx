@@ -1313,7 +1313,6 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaCursorHdl)
 
     bEditFlag=sal_True;
 
-    String      aInputFormula=m_pHelper->getCurrentFormula();
     String      aString=pMEdit->GetText();
 
     Selection   aSel =pMEdit->GetSelection();

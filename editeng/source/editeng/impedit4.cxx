@@ -123,7 +123,7 @@ EditPaM ImpEditEngine::ReadText( SvStream& rInput, EditSelection aSel )
         aSel = ImpDeleteSelection( aSel );
     EditPaM aPaM = aSel.Max();
 
-    XubString aTmpStr, aStr;
+    XubString aTmpStr;
     sal_Bool bDone = rInput.ReadByteStringLine( aTmpStr, rInput.GetStreamCharSet() );
     while ( bDone )
     {

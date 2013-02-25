@@ -316,7 +316,7 @@ void SVGAttributeWriter::SetFontAttr( const Font& rFont )
 {
     if( rFont != maCurFont )
     {
-        ::rtl::OUString  aFontStyle, aFontWeight, aTextDecoration;
+        ::rtl::OUString  aFontStyle, aTextDecoration;
         sal_Int32        nFontWeight;
 
         maCurFont = rFont;
@@ -3222,7 +3222,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             case( META_COMMENT_ACTION ):
             {
                 const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
-                String                      aSkipComment;
 
                 if( ( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XGRAD_SEQ_BEGIN")) ) &&
                     ( nWriteFlags & SVGWRITER_WRITE_FILL ) )

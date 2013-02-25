@@ -1326,7 +1326,6 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
                     break;
 
                 sToken[k] = sKey.getToken(0, '_', nIndex);
-                ::rtl::OUString sTest = sToken[k];
                 if (sToken[k].isEmpty())
                 {
                     bValid = sal_False;

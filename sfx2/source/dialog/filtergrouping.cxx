@@ -764,7 +764,6 @@ namespace sfx2
     //--------------------------------------------------------------------
     sal_Bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, String& /* [out] */ _rAllFilterName )
     {
-        ::rtl::OUString sUIName;
         sal_Bool        bHasAll = sal_False;
         _rAllFilterName = SfxResId( STR_SFX_FILTERNAME_ALL ).toString();
 
@@ -1001,7 +1000,6 @@ namespace sfx2
             sUIName     = pFilter->GetUIName();
             sExtensions = pFilter->GetWildcard().getGlob();
             ExportFilter aExportFilter( sUIName, sExtensions );
-            String aExt = sExtensions;
 
             if ( nHTMLIndex == -1 &&
                 ( sTypeName.equals( sWriterHTMLType ) || sTypeName.equals( sGraphicHTMLType ) ) )

@@ -1773,7 +1773,6 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         lang::Locale aLocale = GetLocale( EditPaM( pNode, nMaxBreakPos ) );
 
         Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
-        OUString aText = pNode->GetString();
         Reference< XHyphenator > xHyph;
         if ( bCanHyphenate )
             xHyph = GetHyphenator();

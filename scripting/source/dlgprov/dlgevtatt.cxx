@@ -554,7 +554,6 @@ namespace dlgprov
     {
         static ::rtl::OUString sUnoURLScheme("vnd.sun.star.UNO:");
 
-        ::rtl::OUString sScriptCode( aScriptEvent.ScriptCode );
         ::rtl::OUString aMethodName = aScriptEvent.ScriptCode.copy( sUnoURLScheme.getLength() );
 
         const Any* pArguments = aScriptEvent.Arguments.getConstArray();

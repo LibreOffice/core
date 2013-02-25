@@ -1505,8 +1505,6 @@ void ToolBarManager::RequestImages()
     pIter = m_aCommandMap.begin();
     while ( pIter != pEnd )
     {
-        rtl::OUString aCommandURL = aCmdURLSeq[i];
-
         Image aImage;
         if ( aDocGraphicSeq.getLength() > 0 )
             aImage = Image( aDocGraphicSeq[i] );

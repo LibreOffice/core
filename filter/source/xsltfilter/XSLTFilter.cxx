@@ -282,7 +282,6 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         if (msUserData.getLength() < 5)
             return sal_False;
 
-        OUString udImport = msUserData[2];
         OUString udStyleSheet = rel2abs(msUserData[4]);
 
         // get information from media descriptor
@@ -425,7 +424,6 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
             return sal_False;
 
         // get interesting values from user data
-        OUString udImport = msUserData[2];
         OUString udStyleSheet = rel2abs(msUserData[5]);
 
         // read source data

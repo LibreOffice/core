@@ -77,8 +77,6 @@ static const int C_FULL_STOP        = 0x01;
 static const int C_EXCLAMATION_MARK = 0x02;
 static const int C_QUESTION_MARK    = 0x04;
 
-static const sal_Char pImplWrdStt_ExcptLstStr[]    = "WordExceptList";
-static const sal_Char pImplCplStt_ExcptLstStr[]    = "SentenceExceptList";
 static const sal_Char pImplAutocorr_ListStr[]      = "DocumentList";
 static const sal_Char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
 static const sal_Char pXMLImplCplStt_ExcptLstStr[] = "SentenceExceptList.xml";
@@ -2333,8 +2331,6 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
 
         if( xSrcStg.Is() && xDstStg.Is() )
         {
-            String sWord        ( RTL_CONSTASCII_USTRINGPARAM ( pImplWrdStt_ExcptLstStr ) );
-            String sSentence    ( RTL_CONSTASCII_USTRINGPARAM ( pImplCplStt_ExcptLstStr ) );
             String sXMLWord     ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplWrdStt_ExcptLstStr ) );
             String sXMLSentence ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplCplStt_ExcptLstStr ) );
             SvStringsISortDtor  *pTmpWordList = NULL;

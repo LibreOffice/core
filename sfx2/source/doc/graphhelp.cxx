@@ -292,7 +292,6 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
     const Point     aBRPix( aVDev.LogicToPixel( Point( rMtf.GetPrefSize().Width() - 1, rMtf.GetPrefSize().Height() - 1 ), rMtf.GetPrefMapMode() ) );
     Size            aDrawSize( aVDev.LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
     Size            aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
-    Point           aPosPix;
 
     if ( !rBmpEx.IsEmpty() )
         rBmpEx.SetEmpty();

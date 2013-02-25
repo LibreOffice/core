@@ -199,7 +199,6 @@ static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTi
 
 static ::rtl::OUString _getCurrentDateString()
 {
-    ::rtl::OUString aString;
     return _makeDateTimeString(DateTime( DateTime::SYSTEM));
 }
 

@@ -1638,7 +1638,6 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
                 const sal_uInt8*                pData = pA->GetData();
-                String                      aSkipComment;
 
                 if( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN") )
                 {

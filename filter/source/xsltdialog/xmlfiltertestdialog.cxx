@@ -267,7 +267,6 @@ void XMLFilterTestDialog::initDialog()
     aTitle.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("%s") ), m_pFilterInfo->maFilterName );
     SetText( aTitle );
 
-    String aEmpty;
     bool bImport = (m_pFilterInfo->maFlags & 1) == 1;
     bool bExport = (m_pFilterInfo->maFlags & 2) == 2;
 

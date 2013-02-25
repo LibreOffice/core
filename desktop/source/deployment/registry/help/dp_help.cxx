@@ -393,7 +393,6 @@ void BackendImpl::implProcessHelp(
                 Reference< ucb::XSimpleFileAccess3 > xSFA = getFileAccess();
                 rtl::OUString aHelpURL = xPackage->getURL();
                 rtl::OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl( aHelpURL );
-                rtl::OUString aName = xPackage->getName();
                 if( !xSFA->isFolder( aExpandedHelpURL ) )
                 {
                     rtl::OUString aErrStr = getResourceString( RID_STR_HELPPROCESSING_GENERAL_ERROR );

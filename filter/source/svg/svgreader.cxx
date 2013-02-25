@@ -178,7 +178,6 @@ struct AnnotatingVisitor
             case XML_LINEARGRADIENT:
             {
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
                 maGradientVector.push_back(Gradient(Gradient::LINEAR));
 
                 // do we have a reference to a parent gradient? parse
@@ -216,7 +215,6 @@ struct AnnotatingVisitor
             case XML_RADIALGRADIENT:
             {
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
                 maGradientVector.push_back(Gradient(Gradient::RADIAL));
 
                 // do we have a reference to a parent gradient? parse
@@ -254,7 +252,6 @@ struct AnnotatingVisitor
             case XML_STOP:
             {
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
                 maGradientStopVector.push_back(GradientStop());
                 maGradientVector.back().maStops.push_back(maGradientStopVector.size()-1);
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
@@ -1627,7 +1624,6 @@ struct ShapeWritingVisitor
                          const basegfx::B2DEllipse&                      rEllipse)
     {
         State aState = maCurrState;
-        rtl::OUString aStyleId(rStyleId);
 
         xAttrs->Clear();
 

@@ -300,7 +300,6 @@ ContentListBox_Impl::~ContentListBox_Impl()
     SvTreeListEntry* pEntry = GetEntry( nPos++ );
     while ( pEntry )
     {
-        ::rtl::OUString aTemp( GetEntryText( pEntry ) );
         ClearChildren( pEntry );
         delete (ContentEntry_Impl*)pEntry->GetUserData();
         pEntry = GetEntry( nPos++ );
@@ -339,7 +338,6 @@ void ContentListBox_Impl::ClearChildren( SvTreeListEntry* pParent )
     SvTreeListEntry* pEntry = FirstChild( pParent );
     while ( pEntry )
     {
-        ::rtl::OUString aTemp( GetEntryText( pEntry ) );
         ClearChildren( pEntry );
         delete (ContentEntry_Impl*)pEntry->GetUserData();
         pEntry = NextSibling( pEntry );

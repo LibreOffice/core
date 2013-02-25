@@ -512,7 +512,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     SvtSaveOptions aSaveOptions;
     SvtHelpOptions aHelpOptions;
     SvtSecurityOptions aSecurityOptions;
-    SvtPathOptions aPathOptions;
     SvtMiscOptions aMiscOptions;
     boost::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());

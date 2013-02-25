@@ -3505,7 +3505,6 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
             {
                 // Office-Bookmark
                 String aURL( ((const SvxURLField*)pFld)->GetURL() );
-                String aTxt( ((const SvxURLField*)pFld)->GetRepresentation() );
                 pDataObj->GetURL() = aURL;
             }
         }

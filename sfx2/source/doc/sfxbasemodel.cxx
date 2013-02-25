@@ -3443,7 +3443,6 @@ sal_Bool SfxBaseModel::hasValidSignatures() const
 
 static void GetCommandFromSequence( rtl::OUString& rCommand, sal_Int32& nIndex, const uno::Sequence< beans::PropertyValue >& rSeqPropValue )
 {
-    rtl::OUString aCommand;
     nIndex = -1;
 
     for ( sal_Int32 i = 0; i < rSeqPropValue.getLength(); i++ )

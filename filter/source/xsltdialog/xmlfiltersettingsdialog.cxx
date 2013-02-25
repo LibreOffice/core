@@ -726,7 +726,6 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                                 sal_Int32 nStr;
                                 for( nStr = 0; nStr < nStrCount; nStr++ )
                                 {
-                                    OUString aType( aTypes[nStr] );
                                     if( aTypes[nStr] == pFilterEntry->maType )
                                         break;
                                 }

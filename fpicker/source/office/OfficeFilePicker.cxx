@@ -165,7 +165,6 @@ void SvtFilePicker::prepareExecute()
                 aPath.insertName( m_aDefaultName );
                 getDialog()->SetHasFilename( true );
             }
-            String sPath = aPath.GetMainURL( INetURLObject::NO_DECODE );
             getDialog()->SetPath( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
         }
         else if ( !m_aDefaultName.isEmpty() )

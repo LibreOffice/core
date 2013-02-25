@@ -199,7 +199,6 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const String& rName 
 
     // For the following code we need some additional informations.
     String sServiceName   = aOpt.GetFactoryName(eFactory);
-    String sShortName     = aOpt.GetFactoryShortName(eFactory);
     String sDefaultFilter = aOpt.GetFactoryDefaultFilter(eFactory);
 
     // Try to get the default filter. Dont fiorget to verify it.

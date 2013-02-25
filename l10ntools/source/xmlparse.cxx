@@ -349,7 +349,7 @@ void XMLFile::Extract( XMLFile *pCur )
 /*****************************************************************************/
 void XMLFile::InsertL10NElement( XMLElement* pElement ){
 /*****************************************************************************/
-    rtl::OString tmpStr,id,oldref,language("");
+    rtl::OString tmpStr,id,language("");
     LangHashMap* elem;
 
     if( pElement->GetAttributeList() != NULL ){
@@ -509,7 +509,6 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
 /*****************************************************************************/
 {
     static bool bStatusExport = true;
-    const rtl::OString LOCALIZE("localize");
     const rtl::OString STATUS(RTL_CONSTASCII_STRINGPARAM("status"));
     const rtl::OString PUBLISH(RTL_CONSTASCII_STRINGPARAM("PUBLISH"));
     const rtl::OString DEPRECATED(RTL_CONSTASCII_STRINGPARAM("DEPRECATED"));

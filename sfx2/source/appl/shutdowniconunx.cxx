@@ -275,7 +275,6 @@ static void populate_menu( GtkWidget *pMenu )
     add_item (pMenuShell, "dummy", &aULabel,
               SV_ICON_ID_TEMPLATE, G_CALLBACK( open_template_cb ));
 
-    OString aLabel;
     GtkWidget *pMenuItem;
 
     pMenuItem = gtk_separator_menu_item_new();

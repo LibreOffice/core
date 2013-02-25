@@ -414,7 +414,6 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     // Mark FileOpen parameter
     SfxItemSet* pItemSet = pMed->GetItemSet();
-    String aMedName( pMed->GetName() );
 
     const SfxFilter* pFilter = pMed->GetOrigFilter();
     String aFilter;
