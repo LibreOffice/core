@@ -30,10 +30,15 @@ $(eval $(call gb_Library_Library,mozabdrv))
 $(eval $(call gb_Library_set_include,mozabdrv,\
 	-I$(SRCDIR)/connectivity/source/drivers/mozab \
 	-I$(SRCDIR)/connectivity/source/inc \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc) \
 	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,mozabdrv))
+
+$(eval $(call gb_Library_use_package,mozabdrv,moz_lib))
+
+$(eval $(call gb_Library_use_unpacked,mozabdrv,moz_inc))
 
 $(eval $(call gb_Library_use_libraries,mozabdrv,\
 	comphelper \
@@ -43,11 +48,6 @@ $(eval $(call gb_Library_use_libraries,mozabdrv,\
 	sal \
 	salhelper \
 	$(gb_UWINAPI) \
-))
-
-$(eval $(call gb_Library_use_package,mozabdrv,\
-	moz_inc \
-	moz_lib \
 ))
 
 $(eval $(call gb_Library_use_externals,mozabdrv,\
