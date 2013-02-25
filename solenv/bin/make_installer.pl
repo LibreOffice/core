@@ -339,7 +339,7 @@ if ( $installer::globals::iswindowsbuild ) { installer::control::read_encodingli
 ####################################################################
 # MacOS dmg build requires special DS_Store file to arrange icons
 ####################################################################
-if (($installer::globals::ismacdmgbuild) && ($installer::globals::product eq "OpenOffice_Dev")) { $installer::globals::devsnapshotbuild = 1; }
+if (($installer::globals::ismacdmgbuild) && ($installer::globals::product =~ /OpenOffice_Dev/)) { $installer::globals::devsnapshotbuild = 1; }
 
 #####################################################################
 # Including additional inc files for variable settings, if defined
