@@ -1196,6 +1196,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
     _GetCharRect( pOrig, nFindOfst, pCMS );
 
+    // This actually would have to be "-1 LogicToPixel", but that seems too
+    // expensive, so it's a value (-12), that should hopefully be OK.
     const SwTwips nTmpRight = Right() - 12;
 
     pOrig->Pos().X() += aCharPos.X();
