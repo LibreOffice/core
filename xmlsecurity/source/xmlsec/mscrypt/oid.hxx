@@ -58,7 +58,6 @@ OIDItem OIDs[] = {
     {"1.2.840.113549.1.7.3",    "PKCS #7 Enveloped Data"},
     {"1.2.840.113549.1.7.4",    "PKCS #7 Signed and Enveloped Data"},
     {"1.2.840.113549.1.7.5",    "PKCS #7 Digested Data"},
-    {"1.2.840.113549.1.7.5",    "PKCS #7 Digested Data"},
     {"1.2.840.113549.1.7.6",    "PKCS #7 Encrypted Data"},
     {"1.2.840.113549.1.9.1",    "PKCS #9 Email Address"},
     {"1.2.840.113549.1.9.2",    "PKCS #9 Unstructured Name"},
