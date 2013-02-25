@@ -2643,7 +2643,13 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         // ugly on the screen!
         OutputDevice* pDev = pOut ? pOut : GetRefDevice();
         rFont.SetPhysFont( pDev );
-        Size aRealSz( rFont.GetSize().Width(), rFont.GetSize().Height() );
+        FontMetric aMetric( pDev->GetFontMetric() );
+
+        // Set the font as we want it to look like & reset the Propr attribute
+        // so that it is not counted twice.
+        Size aRealSz( aMetric.GetSize() );
+        rFont.SetPropr( 100 );
+
         if ( aStatus.DoStretch() )
         {
             if ( nStretchY != 100 )
