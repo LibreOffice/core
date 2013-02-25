@@ -248,9 +248,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dbaxml \
     drawinglayer \
 	file \
+    frm \
     sdbt \
     odbcbase \
 ))
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     abp \
     acc \
@@ -299,7 +301,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	flash \
 	flat \
     for \
-    frm \
     fwe \
     fwi \
     fwk \

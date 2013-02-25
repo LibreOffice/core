@@ -560,8 +560,6 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Frm , frm)
-
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fsstorage, fsstorage.uno )
 
 #ifdef WNT
