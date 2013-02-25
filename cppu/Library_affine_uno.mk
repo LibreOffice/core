@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,affine_uno))
 
-$(eval $(call gb_Library_use_sdk_api,affine_uno))
+$(eval $(call gb_Library_use_udk_api,affine_uno))
 
 $(eval $(call gb_Library_use_libraries,affine_uno,\
 	purpenvhelper \

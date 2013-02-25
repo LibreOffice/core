@@ -31,7 +31,7 @@ $(eval $(call gb_Library_set_soversion_script,cppu,3,$(SRCDIR)/cppu/util/cppu.ma
 
 $(eval $(call gb_Library_use_package,cppu,cppu_inc))
 
-$(eval $(call gb_Library_use_sdk_api,cppu))
+$(eval $(call gb_Library_use_udk_api,cppu))
 
 $(eval $(call gb_Library_add_defs,cppu,\
 	-DCPPU_DLLIMPLEMENTATION \

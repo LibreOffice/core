@@ -33,7 +33,7 @@ $(eval $(call gb_Library_add_defs,purpenvhelper,\
 	-DPURPENV_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_sdk_api,purpenvhelper))
+$(eval $(call gb_Library_use_udk_api,purpenvhelper))
 
 $(eval $(call gb_Library_use_libraries,purpenvhelper,\
 	cppu \
