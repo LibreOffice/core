@@ -37,6 +37,10 @@
 #include <rtl/strbuf.hxx>
 #include <basebmp/scanlineformats.hxx>
 
+#define LOGTAG "LibreOffice/androidinst"
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, LOGTAG, __VA_ARGS__))
+
 static bool bHitIdle = false;
 
 class AndroidSalData : public SalGenericData
@@ -185,13 +189,13 @@ static sal_uInt16 KeyToCode(AInputEvent *event)
     case AKEYCODE_BUTTON_START:
     case AKEYCODE_BUTTON_SELECT:
     case AKEYCODE_BUTTON_MODE:
-        fprintf (stderr, "un-mapped keycode %d\n", nCode);
+        LOGI("un-mapped keycode %d\n", nCode);
         nCode = 0;
         break;
 #undef MAP_SAME
 #undef MAP
     }
-    fprintf (stderr, "mapped %d -> %d\n", AKeyEvent_getKeyCode(event), nCode);
+    LOGI("mapped %d -> %d\n", AKeyEvent_getKeyCode(event), nCode);
     return nCode;
 }
 
@@ -202,7 +206,7 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                     const ARect &rSrcRect,
                                     int nDestX, int nDestY)
 {
-    fprintf (stderr, "Blit frame src %d,%d->%d,%d to position %d, %d\n",
+    LOGI("Blit frame src %d,%d->%d,%d to position %d, %d\n",
              rSrcRect.left, rSrcRect.top, rSrcRect.right, rSrcRect.bottom,
              nDestX, nDestY);
 
@@ -252,7 +256,7 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
             break;
         }
         default:
-            fprintf (stderr, "unknown pixel format %d !\n", pOutBuffer->format);
+            LOGI("unknown pixel format %d !\n", pOutBuffer->format);
             break;
         }
     }
@@ -271,7 +275,7 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
     ANativeWindow_Buffer aOutBuffer;
     memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
 
-    fprintf (stderr, "RedrawWindows\n");
+    LOGI("RedrawWindows\n");
 
     int32_t nRet = 0;
     if (pBuffer != NULL)
@@ -282,10 +286,10 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
             return;
 
         //    ARect aRect;
-        fprintf (stderr, "pre lock #3\n");
+        LOGI("pre lock #3\n");
         nRet = ANativeWindow_lock(pWindow, &aOutBuffer, NULL);
     }
-    fprintf (stderr, "Frame count: %d locked window %d returned " // rect:  %d,%d->%d,%d "
+    LOGI("Frame count: %d locked window %d returned " // rect:  %d,%d->%d,%d "
              "buffer: %dx%d stride %d, format %d, bits %p\n",
              (int)getFrames().size(),
              nRet, // aRect.left, aRect.top, aRect.right, aRect.bottom,
@@ -311,7 +315,7 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
 
             if (pFrame->IsVisible())
             {
-                fprintf( stderr, "render visible frame %d\n", i );
+                LOGI("render visible frame %d\n", i );
 #ifndef REGION_RE_RENDER
                 BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
 #else
@@ -341,12 +345,12 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
         }
     }
     else
-        fprintf (stderr, "no buffer for locked window\n");
+        LOGI("no buffer for locked window\n");
 
     if (pBuffer && pWindow)
         ANativeWindow_unlockAndPost(pWindow);
 
-    fprintf (stderr, "done render!\n");
+    LOGI("done render!\n");
     maRedrawRegion.SetEmpty();
     mbQueueReDraw = false;
 }
@@ -404,7 +408,7 @@ void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
 
 void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
 {
-        fprintf (stderr, "app cmd for app %p: %s\n", app, app_cmd_name(cmd));
+        LOGI("app cmd for app %p: %s\n", app, app_cmd_name(cmd));
         ANativeWindow *pWindow = mpApp->window;
         switch (cmd) {
         case APP_CMD_INIT_WINDOW:
@@ -416,7 +420,7 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
                                 pWindow, ANativeWindow_getWidth(pWindow),
                                 ANativeWindow_getHeight(pWindow),
                                 WINDOW_FORMAT_RGBA_8888);
-            fprintf (stderr, "we have an app window ! %p %dx%x (%d) set %d\n",
+            LOGI("we have an app window ! %p %dx%x (%d) set %d\n",
                      pWindow, aRect.right, aRect.bottom,
                      ANativeWindow_getFormat(pWindow), nRet);
             maRedrawRegion = Region( Rectangle( 0, 0, ANativeWindow_getWidth(pWindow),
@@ -429,15 +433,15 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
             ARect aRect = { 0, 0, 0, 0 };
             aRect.right = ANativeWindow_getWidth(pWindow);
             aRect.bottom = ANativeWindow_getHeight(pWindow);
-            fprintf (stderr, "app window resized to ! %p %dx%x (%d)\n",
-                     pWindow, aRect.right, aRect.bottom,
-                     ANativeWindow_getFormat(pWindow));
+            LOGI("app window resized to ! %p %dx%x (%d)\n",
+                 pWindow, aRect.right, aRect.bottom,
+                 ANativeWindow_getFormat(pWindow));
             break;
         }
 
         case APP_CMD_WINDOW_REDRAW_NEEDED:
         {
-            fprintf (stderr, "redraw needed\n");
+            LOGI("redraw needed\n");
             maRedrawRegion = Region( Rectangle( 0, 0, ANativeWindow_getWidth(pWindow),
                                                 ANativeWindow_getHeight(pWindow) ) );
             mbQueueReDraw = true;
@@ -447,12 +451,12 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
         case APP_CMD_CONTENT_RECT_CHANGED:
         {
             ARect aRect = mpApp->contentRect;
-            fprintf (stderr, "content rect changed [ k/b popped up etc. ] %d,%d->%d,%d\n",
-                     aRect.left, aRect.top, aRect.right, aRect.bottom);
+            LOGI("content rect changed [ k/b popped up etc. ] %d,%d->%d,%d\n",
+                 aRect.left, aRect.top, aRect.right, aRect.bottom);
             break;
         }
         default:
-            fprintf (stderr, "unhandled app cmd %d\n", cmd);
+            LOGI("unhandled app cmd %d\n", cmd);
             break;
         }
 }
@@ -464,7 +468,7 @@ SalFrame *AndroidSalInstance::getFocusFrame() const
 {
     SalFrame *pFocus = SvpSalFrame::GetFocusFrame();
     if (!pFocus) {
-        fprintf (stderr, "no focus frame, re-focusing first visible frame\n");
+        LOGI("no focus frame, re-focusing first visible frame\n");
         const std::list< SalFrame* >& rFrames( getFrames() );
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
@@ -483,24 +487,24 @@ SalFrame *AndroidSalInstance::getFocusFrame() const
 int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* event)
 {
     bool bHandled = false;
-    fprintf (stderr, "input event for app %p, event %p type %d source %d device id %d\n",
-             app, event,
-             AInputEvent_getType(event),
-             AInputEvent_getSource(event),
-             AInputEvent_getDeviceId(event));
+    LOGI("input event for app %p, event %p type %d source %d device id %d\n",
+         app, event,
+         AInputEvent_getType(event),
+         AInputEvent_getSource(event),
+         AInputEvent_getDeviceId(event));
 
     switch (AInputEvent_getType(event))
     {
     case AINPUT_EVENT_TYPE_KEY:
     {
         int32_t nAction = AKeyEvent_getAction(event);
-        fprintf (stderr, "key event keycode %d '%s' %s flags (0x%x) 0x%x\n",
-                 AKeyEvent_getKeyCode(event),
-                 nAction == AKEY_EVENT_ACTION_DOWN ? "down" :
-                 nAction == AKEY_EVENT_ACTION_UP ? "up" : "multiple",
-                 KeyMetaStateToString(AKeyEvent_getMetaState(event)).getStr(),
-                 AKeyEvent_getMetaState (event),
-                 AKeyEvent_getFlags (event));
+        LOGI("key event keycode %d '%s' %s flags (0x%x) 0x%x\n",
+             AKeyEvent_getKeyCode(event),
+             nAction == AKEY_EVENT_ACTION_DOWN ? "down" :
+             nAction == AKEY_EVENT_ACTION_UP ? "up" : "multiple",
+             KeyMetaStateToString(AKeyEvent_getMetaState(event)).getStr(),
+             AKeyEvent_getMetaState (event),
+             AKeyEvent_getFlags (event));
 
         // FIXME: the whole SALEVENT_KEYMODCHANGE stuff is going to be interesting
         // can we really emit that ? no input method madness required though.
@@ -534,26 +538,26 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
         if (pFocus)
             bHandled = pFocus->CallCallback( nEvent, &aEvent );
         else
-            fprintf (stderr, "no focused frame to emit event on\n");
+            LOGI("no focused frame to emit event on\n");
 
-        fprintf( stderr, "bHandled == %s\n", bHandled? "true": "false" );
+        LOGI("bHandled == %s\n", bHandled? "true": "false" );
         break;
     }
     case AINPUT_EVENT_TYPE_MOTION:
     {
         size_t nPoints = AMotionEvent_getPointerCount(event);
-        fprintf (stderr, "motion event %d %g,%g %d points: %s\n",
-                 AMotionEvent_getAction(event),
-                 AMotionEvent_getXOffset(event),
-                 AMotionEvent_getYOffset(event),
-                 (int)nPoints,
-                 MotionEdgeFlagsToString(AMotionEvent_getEdgeFlags(event)).getStr());
+        LOGI("motion event %d %g,%g %d points: %s\n",
+             AMotionEvent_getAction(event),
+             AMotionEvent_getXOffset(event),
+             AMotionEvent_getYOffset(event),
+             (int)nPoints,
+             MotionEdgeFlagsToString(AMotionEvent_getEdgeFlags(event)).getStr());
         for (size_t i = 0; i < nPoints; i++)
-            fprintf(stderr, "\t%d: %g,%g - pressure %g\n",
-                    (int)i,
-                    AMotionEvent_getX(event, i),
-                    AMotionEvent_getY(event, i),
-                    AMotionEvent_getPressure(event, i));
+            LOGI("\t%d: %g,%g - pressure %g\n",
+                 (int)i,
+                 AMotionEvent_getX(event, i),
+                 AMotionEvent_getY(event, i),
+                 AMotionEvent_getPressure(event, i));
 
         SalMouseEvent aMouseEvent;
         sal_uInt16 nEvent = 0;
@@ -579,15 +583,15 @@ int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* 
         if (pFocus)
             bHandled = pFocus->CallCallback( nEvent, &aMouseEvent );
         else
-            fprintf (stderr, "no focused frame to emit event on\n");
+            LOGI("no focused frame to emit event on\n");
 
-        fprintf( stderr, "bHandled == %s\n", bHandled? "true": "false" );
+        LOGI("bHandled == %s\n", bHandled? "true": "false" );
 
         break;
     }
     default:
-        fprintf (stderr, "unknown input event type %p %d\n",
-                 event, AInputEvent_getType(event));
+        LOGI("unknown input event type %p %d\n",
+             event, AInputEvent_getType(event));
         break;
     }
     return bHandled ? 1 : 0;
@@ -625,25 +629,25 @@ AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
     , mbQueueReDraw( false )
 {
-    fprintf (stderr, "created Android Sal Instance thread: %d\n",
-             (int)pthread_self());
+    LOGI("created Android Sal Instance thread: %d\n",
+         (int)pthread_self());
 }
 
 AndroidSalInstance::~AndroidSalInstance()
 {
-    fprintf (stderr, "destroyed Android Sal Instance\n");
+    LOGI("destroyed Android Sal Instance\n");
 }
 
 void AndroidSalInstance::Wakeup()
 {
-    fprintf (stderr, "Wakeup alooper\n");
-    fprintf (stderr, "busted - no global looper\n");
+    LOGI("Wakeup alooper\n");
+    LOGI("busted - no global looper\n");
 }
 
 void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 {
     if (!bHitIdle)
-        fprintf( stderr, "hit idle !\n" );
+        LOGI("hit idle !\n" );
     bHitIdle = true;
 
 #if 1
@@ -658,7 +662,7 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
         static bool beenhere = false;
         if (!beenhere)
         {
-            fprintf (stderr, "**** Huh, %s called in non-NativeActivity app\n", __FUNCTION__);
+            LOGI("**** Huh, %s called in non-NativeActivity app\n", __FUNCTION__);
             beenhere = true;
         }
         return;
@@ -667,8 +671,8 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
     // release yield mutex
     sal_uLong nAcquireCount = ReleaseYieldMutex();
 
-    fprintf (stderr, "DoReleaseYield #3 %d thread: %d ms\n",
-             nTimeoutMS, (int)pthread_self());
+    LOGI("DoReleaseYield #3 %d thread: %d ms\n",
+         nTimeoutMS, (int)pthread_self());
 
     struct android_poll_source *pSource = NULL;
     int outFd = 0, outEvents = 0;
@@ -678,7 +682,7 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 
     int nRet;
     nRet = ALooper_pollAll (nTimeoutMS, &outFd, &outEvents, (void**)&pSource);
-    fprintf (stderr, "ret #6 %d %d %d %p\n", nRet, outFd, outEvents, pSource);
+    LOGI("ret #6 %d %d %d %p\n", nRet, outFd, outEvents, pSource);
 
     // acquire yield mutex again
     AcquireYieldMutex(nAcquireCount);
@@ -700,7 +704,7 @@ bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
     if( (nType & VCL_INPUT_TIMER) != 0 )
         return CheckTimeout( false );
     // FIXME: ideally we should check our input queue here ...
-    fprintf (stderr, "FIXME: AnyInput returns false\n");
+    LOGI("FIXME: AnyInput returns false\n");
     return false;
 }
 
@@ -742,16 +746,16 @@ public:
     {
         long long area = rDamageRect.getWidth() * rDamageRect.getHeight();
 //        if( area > 32 * 1024 )
-        fprintf( stderr, "bitmap damaged  %d %d (%dx%d) area %lld\n",
-                 (int) rDamageRect.getMinX(),
-                 (int) rDamageRect.getMinY(),
-                 (int) rDamageRect.getWidth(),
-                 (int) rDamageRect.getHeight(),
-                 area );
+        LOGI("bitmap damaged  %d %d (%dx%d) area %lld\n",
+             (int) rDamageRect.getMinX(),
+             (int) rDamageRect.getMinY(),
+             (int) rDamageRect.getWidth(),
+             (int) rDamageRect.getHeight(),
+             area );
         if (rDamageRect.getWidth() <= 0 ||
             rDamageRect.getHeight() <= 0)
         {
-            fprintf (stderr, "ERROR: damage region has tiny / negative size\n");
+            LOGE("Damage region has tiny / negative size\n");
             return;
         }
         Rectangle aRect( std::max((long) 0, (long) rDamageRect.getMinX() ),
@@ -817,10 +821,10 @@ void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
     rtl::OUString aError( rErrorText );
     if( aError.isEmpty() )
         aError = rtl::OUString::createFromAscii("Unknown application error");
-    ::fprintf( stderr, "%s\n", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
+    LOGI("%s\n", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 
-    __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "SalAbort: '%s'",
-                        rtl::OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
+    LOGI("SalAbort: '%s'",
+         rtl::OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
     if( bDumpCore )
         abort();
     else
@@ -847,7 +851,7 @@ SalData::~SalData()
 // This is our main entry point:
 SalInstance *CreateSalInstance()
 {
-    fprintf (stderr, "Android: CreateSalInstance!\n");
+    LOGI("Android: CreateSalInstance!\n");
     AndroidSalInstance* pInstance = new AndroidSalInstance( new SalYieldMutex() );
     new AndroidSalData( pInstance );
 // FIXME: we init VCL in a different thread from where we run the mainloop [!] ...
@@ -869,12 +873,12 @@ int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
                                         int nDefButton )
 {
     (void)rButtons; (void)nDefButton;
-    fprintf (stderr, "LibreOffice native dialog '%s': '%s'\n",
-             rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
-             rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
-    __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "Dialog '%s': '%s'",
-                        rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
-                        rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+    LOGI("LibreOffice native dialog '%s': '%s'\n",
+         rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
+         rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+    LOGI("Dialog '%s': '%s'",
+         rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
+         rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
 
     if (AndroidSalInstance::getInstance() != NULL)
     {
@@ -891,7 +895,7 @@ int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
         aVclErrBox.Execute();
     }
     else
-        fprintf (stderr, "VCL not initialized\n");
+        LOGI("VCL not initialized\n");
     return 0;
 }
 
@@ -909,19 +913,19 @@ Java_org_libreoffice_experimental_desktop_Desktop_renderVCL(JNIEnv *env,
     int                ret;
 
     if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
-        fprintf(stderr, "AndroidBitmap_getInfo() failed ! error=%d", ret);
+        LOGI("AndroidBitmap_getInfo() failed ! error=%d", ret);
         return;
     }
 
 #if 0
     if (info.format != ANDROID_BITMAP_FORMAT_RGB_565) {
-        fprintf(stderr, "Bitmap format is not RGB_565 !");
+        LOGI("Bitmap format is not RGB_565 !");
         return;
     }
 #endif
 
     if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
-        fprintf(stderr, "AndroidBitmap_lockPixels() failed ! error=%d", ret);
+        LOGI("AndroidBitmap_lockPixels() failed ! error=%d", ret);
     }
 
 /*
