@@ -8215,7 +8215,7 @@ AC_SUBST(EXTMSV80)
 dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([nss/nspr],[NSS],[nss >= 3.9.3 nspr >= 4.8])
+libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
 if test "$with_system_nss" = "yes"; then
     libo_MINGW_CHECK_DLL([NSPR4], [libnspr4])
     libo_MINGW_CHECK_DLL([PLC4], [libplc4])
