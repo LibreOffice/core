@@ -1,8 +1,0 @@
-Obsolete dmake build tool.
-
-The dmake build tool was for years the backbone of building the
-codebase. Herein lies the bones of that effort - a patched, and fixed
-up version of dmake that mostly works even on Windows.
-
-It is now being incrementally written-out in favour of the faster
-gnumake approach.
