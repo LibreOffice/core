@@ -6,15 +6,6 @@ critical for building LibreOffice:
 bin/
 	contains lots of tools used during the build:
 
-	build.pl
-		the top-level wrapper perl-script, from the dmake
-		days - we're incrementally removing this in favour
-		of gnumake
-
-	deliver.pl
-		copies files from old-style dmake packages into the
-		top-level 'solver' directory
-
 	concat-deps*
 		these aggregate, and remove duplicates from module
 		dependencies, to accelerate build times.
