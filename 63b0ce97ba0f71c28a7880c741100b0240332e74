@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///n0\u003d",
+        "filename": "sc/source/ui/dbgui/sortkeydlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 0,
+      "message": "I think this is more readable",
+      "revId": "63b0ce97ba0f71c28a7880c741100b0240332e74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

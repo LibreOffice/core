@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///oI\u003d",
+        "filename": "sc/source/filter/ftools/ftools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "should be OUString, too?!",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///oE\u003d",
+        "filename": "sc/source/filter/starcalc/scflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "dito",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///oA\u003d",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "dito",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///n8\u003d",
+        "filename": "sc/source/ui/dbgui/asciiopt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "as you other changes this could be one line",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///n4\u003d",
+        "filename": "sc/source/ui/dbgui/imoptdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "OUString?!",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///no\u003d",
+        "filename": "sc/source/ui/docshell/docsh8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "expects String",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///nk\u003d",
+        "filename": "sc/source/ui/docshell/docsh8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "expects String",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///ng\u003d",
+        "filename": "sc/source/ui/miscdlgs/optsolver.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "String?",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///nc\u003d",
+        "filename": "sc/source/ui/view/dbfunc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "used by ScUndoInsertTab which expects String",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///nY\u003d",
+        "filename": "sc/source/ui/view/preview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "OUString?!",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///nU\u003d",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2174,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T13:53:11Z",
+      "side": 1,
+      "message": "rData comes in as String",
+      "revId": "69a556f35efb4100470cd82e251d7f435e338760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
