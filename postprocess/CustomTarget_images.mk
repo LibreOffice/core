@@ -39,7 +39,7 @@ $(call gb_CustomTarget_get_target,postprocess/images) : \
 	$(if $(filter default,$(WITH_THEMES)),$(packimages_DIR)/images.zip) \
 	$(foreach theme,$(filter-out default,$(WITH_THEMES)),$(packimages_DIR)/images_$(theme).zip)
 
-$(packimages_DIR)/images.zip : $(call gb_Postprocess_get_target,AllResources) \
+$(packimages_DIR)/images.zip : $(WORKDIR)/AllResources \
 		$(packimages_DIR)/sorted.lst $(packimages_DIR)/commandimagelist.ilst
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
