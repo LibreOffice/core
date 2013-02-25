@@ -571,7 +571,6 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
     }
 
     ChangeEditMode (meEditMode, ! IsLayerModeActive());
-    ChangeEditMode (meEditMode, ! IsLayerModeActive());
     ResetActualLayer();
 }
 
