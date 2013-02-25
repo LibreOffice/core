@@ -253,6 +253,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 	fwi \
     fwl \
 	fwm \
+    lng \
     sdbt \
     odbcbase \
 ))
@@ -325,7 +326,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	jdbc \
 	kab1 \
 	kabdrv1 \
-    lng \
     lnth \
     log \
     lwpft \
