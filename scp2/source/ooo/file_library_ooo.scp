@@ -165,8 +165,6 @@ File gid_File_Lib_Comphelper2
     Styles = (PACKED);
 End
 
-STD_LIB_FILE( gid_File_Lib_Ctl , ctl)
-
 STD_LIB_FILE( gid_File_Lib_Cui, cui)
 
 #ifndef SYSTEM_CURL
