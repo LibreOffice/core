@@ -2737,7 +2737,6 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
         }
 
         rDoc.RemoveMasterPage( nPage );
-        rDoc.RemoveMasterPage( nPage );
 
         if( bUndo )
         {
