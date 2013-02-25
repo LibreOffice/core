@@ -58,7 +58,6 @@ OIDItem OIDs[] = {
     {"1.2.840.113549.1.7.3",    "PKCS #7 Enveloped Data"},
     {"1.2.840.113549.1.7.4",    "PKCS #7 Signed and Enveloped Data"},
     {"1.2.840.113549.1.7.5",    "PKCS #7 Digested Data"},
-    {"1.2.840.113549.1.7.5",    "PKCS #7 Digested Data"},
     {"1.2.840.113549.1.7.6",    "PKCS #7 Encrypted Data"},
     {"1.2.840.113549.1.9.1",    "PKCS #9 Email Address"},
     {"1.2.840.113549.1.9.2",    "PKCS #9 Unstructured Name"},
@@ -150,7 +149,7 @@ OIDItem OIDs[] = {
     {"1.2.643.2.2.36.0", "GOST_R_34.10-2001_Sign_DH_PRO"}
 };
 
-int nOID = 120;
+int nOID = 119;
 
 #endif
 
