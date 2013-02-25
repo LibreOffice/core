@@ -2011,7 +2011,10 @@ AC_ARG_WITH(macosx-version-max-allowed,
 
 dnl ===================================================================
 dnl options for stuff used during cross-compilation build
-dnl These are superseded by --with-build-platform-configure-options
+dnl These are superseded by --with-build-platform-configure-options.
+dnl Or are they? Look for the complicated tests for "$cross_compiling" = "yes" -a \(
+dnl "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" \)
+dnl far below. Could whoever understands MinGW cross-compilation clean up this please.
 dnl ===================================================================
 
 AC_ARG_WITH(system-boost-for-build,
