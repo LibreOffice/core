@@ -1763,7 +1763,16 @@ namespace cppcanvas
 
                 rMF.Seek (next);
 
-                length -= size;
+                if (size <= length)
+                {
+                    length -= size;
+                }
+                else
+                {
+                    SAL_WARN("cppcanvas", "ImplRenderer::processEMFPlus: "
+                            "size " << size << " > length " << length);
+                    length = 0;
+                }
             }
         }
     }
