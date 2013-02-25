@@ -456,6 +456,7 @@ $(call gb_AllLangResTarget_get_target,%) :
 		mkdir -p $(dir $@) && touch $@)
 
 define gb_AllLangResTarget_AllLangResTarget
+$(call gb_Postprocess_get_target,AllResources) : $(call gb_AllLangResTarget_get_target,$(1))
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 	$(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
 $$(eval $$(call gb_Module_register_target,$(call gb_AllLangResTarget_get_target,$(1)),$(call gb_AllLangResTarget_get_clean_target,$(1))))
@@ -480,5 +481,9 @@ $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 	$(call gb_ResTarget_set_reslocation,$(1)$(lang),$(2)))
 
 endef
+
+$(call gb_Postprocess_get_target,AllResources) :
+	$(call gb_Output_announce,All resources: $^,$(true),ALL)
+	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && touch $@)
 
 # vim: set noet sw=4: 

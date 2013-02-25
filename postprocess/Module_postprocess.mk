@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Module_Module,postprocess))
 
-# Do not add to tail_build!
-# At least CustomTarget_config and CustomTarget_signing would miss dependencies.
-
 # UGLY: postprocess_XCDS variable from CustomTarget_registry
 # is reused in Package_registry!
 
