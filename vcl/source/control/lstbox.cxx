@@ -1348,9 +1348,7 @@ Size ListBox::CalcSubEditSize() const
 
         if (m_nMaxWidthChars != -1)
         {
-            //MAP_APPFONT == 1/8th avg char
-            long nMaxWidth = LogicToPixel(Size(m_nMaxWidthChars * 8, 0),
-                MapMode(MAP_APPFONT)).Width();
+            long nMaxWidth = m_nMaxWidthChars * approximate_char_width();
             aSz.Width() = std::min(aSz.Width(), nMaxWidth);
         }
 
