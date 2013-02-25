@@ -514,9 +514,11 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     {
         throw; // runtime errors are fatal
     }
-    catch (const uno::Exception&)
+    catch (const uno::Exception& e)
     {
         // ignore errors, no way of reporting them here
+        SAL_WARN("vcl",
+            "GDIMetaFile::ImplPlayWithRenderer: exception: " << e.Message);
     }
 
     return false;
@@ -586,9 +588,11 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
             // runtime errors are fatal
             throw;
         }
-        catch (const uno::Exception&)
+        catch (const uno::Exception& e)
         {
             // ignore errors, no way of reporting them here
+            SAL_WARN("vcl", "GDIMetaFile::ImplDelegate2PluggableRenderer:"
+                    " exception: " << e.Message);
         }
     }
 }
