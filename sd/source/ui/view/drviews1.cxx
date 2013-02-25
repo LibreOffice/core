@@ -444,15 +444,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             if (meEditMode == EM_PAGE)
                 maTabControl.SetCurPageId (nActualPageNum + 1);
         }
-        /*AF: The LayerDialogChildWindow is not used anymore (I hope).
-        if (GetViewFrame()->KnowsChildWindow(
-            LayerDialogChildWindow::GetChildWindowId()))
-        {
-            GetViewFrame()->SetChildWindow(
-                LayerDialogChildWindow::GetChildWindowId(),
-                IsLayerModeActive());
-        }
-        */
+
         ResetActualLayer();
 
         Invalidate( SID_PAGEMODE );

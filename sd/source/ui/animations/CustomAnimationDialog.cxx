@@ -1855,7 +1855,6 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
     FreeResource();
 
     mpRBClickSequence->SetClickHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
-    mpRBClickSequence->SetClickHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
     mpLBTrigger->SetSelectHdl( LINK( this, CustomAnimationDurationTabPage, implControlHdl ) );
 
     if( pSet->getPropertyState( nHandleStart ) != STLPropertyState_AMBIGUOUS )

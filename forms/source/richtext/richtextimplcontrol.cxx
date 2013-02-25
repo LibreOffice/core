@@ -625,7 +625,7 @@ namespace frm
             // don't draw the text over the border
             lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
 
-        // leave a space of one pixel between the "surroundings" of the control
+        // leave a space of two pixels between the "surroundings" of the control
         // and the content
         lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
         lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
