@@ -1061,6 +1061,9 @@ void FormulaCompiler::Factor()
                     // Don't use SetRecalcModeOnLoad() which would override
                     // ModeAlways.
                 case ocConvert :
+                case ocDde:
+                case ocMacro:
+                case ocExternal:
                     pArr->AddRecalcMode( RECALCMODE_ONLOAD );
                 break;
                     // If the referred cell is moved the value changes.
@@ -1079,9 +1082,6 @@ void FormulaCompiler::Factor()
                     // get its matrix result generated.
                     pArr->AddRecalcMode( RECALCMODE_ONLOAD );
                     pArr->SetHyperLink(true);
-                break;
-                case ocDde:
-                    pArr->AddRecalcMode( RECALCMODE_ONLOAD );
                 break;
                 default:
                     ;   // nothing
