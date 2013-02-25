@@ -499,6 +499,7 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/$(1).xcd : \
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/$(1).list : \
 	$(foreach file,$(postprocess_FILES_$(1)),$(OUTDIR)/xml/$(file)) \
 	$(SRCDIR)/postprocess/CustomTarget_registry.mk \
+	$(call gb_Postprocess_get_target,AllPackages) \
 	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
 
 endef

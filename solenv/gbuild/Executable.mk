@@ -48,6 +48,7 @@ $(call gb_Executable_get_clean_target,%) :
 			$(AUXTARGETS))
 
 define gb_Executable_Executable
+$(call gb_Postprocess_get_target,AllExecutables) : $(call gb_Executable_get_target,$(1))
 ifeq (,$$(findstring $(1),$$(gb_Executable_KNOWN)))
 $$(eval $$(call gb_Output_info,Currently known executables: $(sort $(gb_Executable_KNOWN)),ALL))
 $$(eval $$(call gb_Output_error,Executable $(1) must be registered in Repository.mk))
@@ -167,5 +168,9 @@ define gb_Executable_add_runtime_dependencies
 $(call gb_Executable_get_runtime_target,$(1)) : $(2)
 
 endef
+
+$(call gb_Postprocess_get_target,AllExecutables) :
+	$(call gb_Output_announce,All executables: $^,$(true),ALL)
+	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && touch $@)
 
 # vim: set noet sw=4:

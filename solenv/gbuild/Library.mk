@@ -49,6 +49,7 @@ $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) :
 			$(AUXTARGETS))
 
 define gb_Library_Library
+$(call gb_Postprocess_get_target,AllLibraries) : $(call gb_Library_get_target,$(1))
 ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
 $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk))
@@ -233,5 +234,9 @@ $(eval $(foreach method,\
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))
+
+$(call gb_Postprocess_get_target,AllLibraries) :
+	$(call gb_Output_announce,All libraries: $^,$(true),ALL)
+	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && touch $@)
 
 # vim: set noet sw=4:
