@@ -692,10 +692,12 @@ void ClassFile::addMethod(
     appendSignatureAttribute(m_methods, signature);
 }
 
+#define CLASSFILE_FMT 49.0 // a classfile format understood by JDK 5/6/7
+
 void ClassFile::write(FileStream & file) const {
     writeU4(file, 0xCAFEBABE);
-    writeU2(file, 0);
-    writeU2(file, 46);
+    writeU2(file, static_cast<sal_uInt16>((CLASSFILE_FMT-(int)CLASSFILE_FMT)*100000));
+    writeU2(file, static_cast<sal_uInt16>((int)CLASSFILE_FMT));
     writeU2(file, m_constantPoolCount);
     writeStream(file, m_constantPool);
     writeU2(file, static_cast< sal_uInt16 >(m_accessFlags));
