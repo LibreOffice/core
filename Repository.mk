@@ -250,6 +250,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 	file \
     frm \
     fwe \
+	fwi \
     sdbt \
     odbcbase \
 ))
@@ -302,7 +303,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	flash \
 	flat \
     for \
-    fwi \
     fwk \
     fwl \
     fwm \

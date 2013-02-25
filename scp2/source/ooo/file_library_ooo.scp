@@ -573,8 +573,6 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
-
 File gid_File_Lib_Fwk
     Name = LIBNAME(fwk);
     LIB_FILE_BODY;
