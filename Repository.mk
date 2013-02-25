@@ -234,6 +234,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     ctl \
     cui \
     dba \
+    sdbt \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     abp \
@@ -348,7 +349,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     scn \
     scui \
     sd \
-    sdbt \
     sdd \
     sdfilt \
     sdui \
