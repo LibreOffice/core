@@ -236,6 +236,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dba \
     dbase \
     dbmm \
+    dbtools \
 	file \
     sdbt \
     odbcbase \
@@ -269,7 +270,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     cppcanvas \
     dbaxml \
     dbp \
-    dbtools \
     dbu \
     deploymentmisc \
     desktop_detector \

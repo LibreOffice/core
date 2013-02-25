@@ -212,8 +212,6 @@ File gid_File_Lib_Dbpool
   #endif
 End
 
-STD_LIB_FILE( gid_File_Lib_Dbt, dbtools )
-
 STD_LIB_FILE( gid_File_Lib_Dbaxml, dbaxml )
 
 File gid_File_Lib_Dict_Ja
