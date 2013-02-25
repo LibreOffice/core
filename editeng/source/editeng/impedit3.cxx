@@ -2976,13 +2976,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                             aTextLineColor);
                     }
 
-                    for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
+                    for ( sal_uInt16 nPortion = pLine->GetStartPortion(); nPortion <= pLine->GetEndPortion(); nPortion++ )
                     {
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Line without Textportion in Paint!" );
-                        const TextPortion* pTextPortion = pPortion->GetTextPortions()[y];
+                        const TextPortion* pTextPortion = pPortion->GetTextPortions()[nPortion];
                         DBG_ASSERT( pTextPortion, "NULL-Pointer in Portion iterator in UpdateViews" );
 
-                        long nPortionXOffset = GetPortionXOffset( pPortion, pLine, y );
+                        long nPortionXOffset = GetPortionXOffset( pPortion, pLine, nPortion );
                         if ( !IsVertical() )
                         {
                             aTmpPos.X() = aStartPos.X() + nPortionXOffset;
@@ -3306,7 +3306,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     const lang::Locale aLocale(GetLocale(EditPaM(pPortion->GetNode(), nIndex + 1)));
 
                                     // create EOL and EOP bools
-                                    const bool bEndOfLine(y == pLine->GetEndPortion());
+                                    const bool bEndOfLine(nPortion == pLine->GetEndPortion());
                                     const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
                                     // get Overline color (from ((const SvxOverlineItem*)GetItem())->GetColor() in
@@ -3537,7 +3537,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     if ( bStripOnly )
                                     {
                                         // create EOL and EOP bools
-                                        const bool bEndOfLine(y == pLine->GetEndPortion());
+                                        const bool bEndOfLine(nPortion == pLine->GetEndPortion());
                                         const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
                                         const Color aOverlineColor(pOutDev->GetOverlineColor());
@@ -3557,7 +3557,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     // #i108052# When stripping, a callback for _empty_ paragraphs is also needed.
                                     // This was optimized away (by not rendering the space-only tab portion), so do
                                     // it manually here.
-                                    const bool bEndOfLine(y == pLine->GetEndPortion());
+                                    const bool bEndOfLine(nPortion == pLine->GetEndPortion());
                                     const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
                                     const Color aOverlineColor(pOutDev->GetOverlineColor());
@@ -3577,7 +3577,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                             break;
                         }
                         if( bParsingFields )
-                            y--;
+                            nPortion--;
                         else
                             nIndex = nIndex + pTextPortion->GetLen();
 
