@@ -201,7 +201,6 @@ End
 #endif
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Dbfile , file)
 STD_LIB_FILE( gid_File_Lib_Odbcbase,odbcbase)
 
 

@@ -237,6 +237,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dbmm \
     sdbt \
     dbase \
+	file \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     abp \
@@ -286,7 +287,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     eti \
     evoab \
     exp \
-	file \
 	filterconfig \
 	filtertracer \
 	flash \
