@@ -50,7 +50,7 @@ namespace dbaui
         {
             m_bCheck = _bCheck;
         }
-        sal_Bool checkString(const ::rtl::OUString& _sOldValue,const ::rtl::OUString& _sToCheck,::rtl::OUString& _rsCorrected);
+        sal_Bool checkString(const ::rtl::OUString& _sToCheck,::rtl::OUString& _rsCorrected);
     };
     //==================================================================
     class OSQLNameEdit : public Edit

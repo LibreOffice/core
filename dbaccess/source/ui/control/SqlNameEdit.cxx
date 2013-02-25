@@ -32,14 +32,12 @@ namespace dbaui
                 );
     }
     //------------------------------------------------------------------
-    sal_Bool OSQLNameChecker::checkString(  const ::rtl::OUString& _sOldValue,
-                                        const ::rtl::OUString& _sToCheck,
+    sal_Bool OSQLNameChecker::checkString(const ::rtl::OUString& _sToCheck,
                                         ::rtl::OUString& _rsCorrected)
     {
         sal_Bool bCorrected = sal_False;
         if ( m_bCheck )
         {
-            XubString sSavedValue   = _sOldValue;
             XubString sText         = _sToCheck;
             xub_StrLen nMatch       = 0;
             for ( xub_StrLen i=nMatch;i < sText.Len(); ++i )
@@ -59,7 +57,7 @@ namespace dbaui
     void OSQLNameEdit::Modify()
     {
         ::rtl::OUString sCorrected;
-        if ( checkString( GetSavedValue(),GetText(),sCorrected ) )
+        if ( checkString( GetText(),sCorrected ) )
         {
             Selection aSel = GetSelection();
             aSel.setMax( aSel.getMin() );
@@ -73,7 +71,7 @@ namespace dbaui
     void OSQLNameComboBox::Modify()
     {
         ::rtl::OUString sCorrected;
-        if ( checkString( GetSavedValue(),GetText(),sCorrected ) )
+        if ( checkString( GetText(),sCorrected ) )
         {
             Selection aSel = GetSelection();
             aSel.setMax( aSel.getMin() );
