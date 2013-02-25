@@ -87,11 +87,11 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #define KIND_COUNT          (14)
 #define INDEX_COUNT         (6)
-#define INDIVIDUAL_COUNT    (4)
+#define INDIVIDUAL_COUNT    (5)
 
 SdrHdlBitmapSet::SdrHdlBitmapSet(sal_uInt16 nResId)
     :   maMarkersBitmap(ResId(nResId, *ImpGetResMgr())),
-    // 14 kinds (BitmapMarkerKind) use index [0..5], 4 extra
+        // 15 kinds (BitmapMarkerKind) use index [0..5] + 5 extra
         maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
 {
 }
@@ -237,20 +237,20 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
 
         case Glue_Deselected:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 1, Rectangle(Point(15, 67), Size(9, 9)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(15, 67), Size(9, 9)));
         }
 
         case Anchor: // AnchorTR for SW
         case AnchorTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 2, Rectangle(Point(24, 67), Size(24, 24)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(24, 67), Size(24, 24)));
         }
 
         // add AnchorPressed to be able to animate anchor control
         case AnchorPressed:
         case AnchorPressedTR:
         {
-            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 3, Rectangle(Point(48, 67), Size(24, 24)));
+            return impGetOrCreateTargetBitmap((KIND_COUNT * INDEX_COUNT) + 4, Rectangle(Point(48, 67), Size(24, 24)));
         }
     }
 }
