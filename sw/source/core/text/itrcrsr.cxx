@@ -1211,7 +1211,9 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         pCMS->p2Lines->aPortion.Pos().Y() += aCharPos.Y();
     }
 
-    if( pOrig->Left() > nTmpRight )
+    const bool bTabOverMargin = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVER_MARGIN);
+    // Make sure the cursor respects the right margin, unless in compat mode, where the tab size has priority over the margin size.
+    if( pOrig->Left() > nTmpRight && !bTabOverMargin)
         pOrig->Pos().X() = nTmpRight;
 
     if( nMax )
