@@ -194,7 +194,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
             aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
             aFilter,
             aTitle,
-            SfxStringEncode( aURL.GetPass() ) );
+            OUString() );
 
     if ( aURL.GetProtocol() == INET_PROT_FILE )
         Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : ::rtl::OUString() );
@@ -237,7 +237,6 @@ void SfxPickList::CreatePickListEntries()
         ::rtl::OUString sURL;
         ::rtl::OUString sFilter;
         ::rtl::OUString sTitle;
-        ::rtl::OUString sPassword;
 
         sal_uInt32 nPropertyCount = seqPropertySet.getLength();
         for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
@@ -254,14 +253,10 @@ void SfxPickList::CreatePickListEntries()
             {
                 seqPropertySet[nProperty].Value >>= sTitle;
             }
-            else if( seqPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_PASSWORD )
-            {
-                seqPropertySet[nProperty].Value >>= sPassword;
-            }
         }
 
         aURL.SetSmartURL( sURL );
-        aURL.SetPass( SfxStringDecode( sPassword ) );
+        aURL.SetPass( OUString() );
 
         PickListEntry *pPick = new PickListEntry( aURL.GetMainURL( INetURLObject::NO_DECODE ), sFilter, sTitle );
         m_aPicklistVector.push_back( pPick );
@@ -407,7 +402,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
                         aFilter,
                         aTitle,
-                        SfxStringEncode( aURL.GetPass() ) );
+                        OUString() );
             }
             break;
 

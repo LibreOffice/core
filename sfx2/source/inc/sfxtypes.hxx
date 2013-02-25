@@ -111,17 +111,6 @@ public:
 
 //------------------------------------------------------------------------
 
-String SearchAndReplace( const String &rSource,
-                         const String &rToReplace,
-                         const String &rReplacement );
-
-#define SFX_PASSWORD_CODE "_:;*\x9A?()/&[&"
-String SfxStringEncode( const String &rSource,
-                        const char *pKey = SFX_PASSWORD_CODE );
-String SfxStringDecode( const String &rSource,
-                        const char *pKey = SFX_PASSWORD_CODE );
-
-
 struct StringList_Impl : private Resource
 {
 
