@@ -1188,7 +1188,7 @@ void WMFReader::ReadWMF()
                   || pWMF->IsEof()
                   )
                 {
-                    if( pWMF->IsEof() )
+                    if( pWMF->IsEof() && nPos != nEndPos)
                         pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
 
                     break;
