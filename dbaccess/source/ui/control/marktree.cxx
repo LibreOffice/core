@@ -106,9 +106,6 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
     if (!GetModel()->HasChildren(_pEntry))
         // nothing to do in this bottom-up routine if there are no children ...
         return eState;
-#ifdef DBG_UTIL
-    String sEntryText  =GetEntryText(_pEntry);
-#endif
 
     // loop through the children and check their states
     sal_uInt16 nCheckedChildren = 0;
@@ -117,9 +114,6 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvTreeListEntry* _pEntry)
     SvTreeListEntry* pChildLoop = GetModel()->FirstChild(_pEntry);
     while (pChildLoop)
     {
-#ifdef DBG_UTIL
-        String sChildText  =GetEntryText(pChildLoop);
-#endif
         SvButtonState eChildState = implDetermineState(pChildLoop);
         if (SV_BUTTON_TRISTATE == eChildState)
             break;

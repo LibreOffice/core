@@ -871,7 +871,6 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
         {
             ::rtl::OUString aColumnName;
             ::rtl::OUString aTypeName;
-            ::rtl::OUString aTableRange;
             sal_Int32 nType = DataType::VARCHAR;
             aColumnName = pColumnRef->getChild(0)->getTokenValue();
 
@@ -985,7 +984,6 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 {
                     // Function call present
                     pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_True );
-                    ::rtl::OUString sTableRange;
                     // check if the column is also a parameter
                     traverseORCriteria(pColumnRef); // num_value_exp
 
@@ -1074,7 +1072,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
     OSL_ENSURE(!_bOrder || SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OSQLParseTreeIterator:ordering_spec_commalist error in parse tree!");
     OSL_ENSURE(pOrderingSpecCommalist->count() > 0,"OSQLParseTreeIterator: error in parse tree!");
 
-    ::rtl::OUString sColumnName,aColumnAlias;
+    ::rtl::OUString sColumnName;
     ::rtl::OUString aTableRange;
     sal_uInt32 nCount = pOrderingSpecCommalist->count();
     for (sal_uInt32 i = 0; i < nCount; ++i)

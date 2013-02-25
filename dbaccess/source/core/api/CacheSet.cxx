@@ -335,10 +335,6 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
 
     OUStringBuffer aSql("DELETE FROM " + m_aComposedTableName + " WHERE ");
 
-    // list all cloumns that should be set
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd(" AND ");
-
     // use keys and indexes for exact positioning
     // first the keys
     const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);

@@ -823,7 +823,6 @@ void OTableController::loadData()
         OSL_ENSURE(xColSup.is(),"No XColumnsSupplier!");
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         OFieldDescription* pActFieldDescr = NULL;
-        String aType;
         //////////////////////////////////////////////////////////////////////
         // ReadOnly-Flag
         // Bei Drop darf keine Zeile editierbar sein.

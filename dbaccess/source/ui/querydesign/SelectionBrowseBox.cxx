@@ -2258,7 +2258,6 @@ sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId,Strin
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     sal_Bool bErg=sal_True;
-    String aText;
     switch(_nFunctionTokenId)
     {
         case SQL_TOKEN_COUNT:
@@ -2386,7 +2385,6 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
             break;
         case BROW_FUNCTION_ROW:
         {
-            String sOldFunctionName   = pEntry->GetFunction();
             String sGroupFunctionName = m_aFunctionStrings.GetToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1);
             pEntry->SetFunction(strNewText);
             // first reset this two member
@@ -2512,7 +2510,6 @@ sal_Bool OSelectionBrowseBox::isCutAllowed()
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::cut()
 {
-    String sOldValue = GetCellContents(GetRealRow(GetCurRow()),GetCurColumnId());
     long nRow = GetRealRow(GetCurRow());
     switch (nRow)
     {

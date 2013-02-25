@@ -620,8 +620,6 @@ namespace basegfx
                                 nY += nLastY;
                             }
 
-                            const B2DPoint aPrevPoint(aCurrPoly.getB2DPoint(aCurrPoly.count() - 1));
-
                             if( nX == nLastX && nY == nLastY )
                                 continue; // start==end -> skip according to SVG spec
 

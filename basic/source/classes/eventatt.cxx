@@ -215,7 +215,6 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                 aLibName = aFullLibName.copy( nIndex + 1 );
             }
 
-            OUString aModul = aMacro.getToken( (sal_Int32)0, (sal_Unicode)'.', nLast );
             aMacro = aMacro.copy( nLast );
         }
 

@@ -293,8 +293,6 @@ namespace basic
         {
             aPathCFG.SetBasicPath(OUString("$(prog)"));
         }
-        // soffice.new search only in user dir => first dir
-        OUString aAppFirstBasicDir = aAppBasicDir.getToken(1, ';');
 
         // Create basic and load it
         // AppBasicDir is now a PATH

@@ -172,7 +172,6 @@ DBG_NAME(OTableSubscriptionPage)
         CheckAll(sal_False);
 
         // check the ones which are in the list
-        String aListBoxTable;
         ::rtl::OUString sCatalog, sSchema, sName;
 
         SvTreeListEntry* pRootEntry = m_aTablesList.getAllObjectsEntry();

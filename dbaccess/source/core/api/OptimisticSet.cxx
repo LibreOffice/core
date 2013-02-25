@@ -182,8 +182,6 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     static ::rtl::OUString s_sPara(" = ?");
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
 
-    ::rtl::OUString aColumnName;
-    ::rtl::OUStringBuffer sKeyCondition;
     ::std::map< ::rtl::OUString,bool > aResultSetChanged;
     TSQLStatements aKeyConditions;
     TSQLStatements aIndexConditions;
@@ -351,9 +349,6 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
 void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& /*_xTable*/   ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    ::rtl::OUString aColumnName;
-    ::rtl::OUStringBuffer sKeyCondition,sIndexCondition;
-    ::std::vector<sal_Int32> aIndexColumnPositions;
     TSQLStatements aKeyConditions;
     TSQLStatements aIndexConditions;
     TSQLStatements aSql;

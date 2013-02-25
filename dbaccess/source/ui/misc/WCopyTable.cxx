@@ -924,7 +924,6 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
 
-                            String sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
                             String sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
                             SQLContext aError;
                             aError.Message = sMsg;
@@ -1114,7 +1113,6 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     _rColumns.clear();
 
     OFieldDescription* pActFieldDescr = NULL;
-    String aType;
     ::rtl::OUString sCreateParam(RTL_CONSTASCII_USTRINGPARAM("x"));
     //////////////////////////////////////////////////////////////////////
     // ReadOnly-Flag
@@ -1350,8 +1348,6 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
             const ::rtl::OUString* pIter = aSeq.getConstArray();
             const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
-
-            ::std::vector<int> aAlreadyFound(m_vColumnPos.size(),0);
 
             for(sal_Int32 nNewPos=1;pIter != pEnd;++pIter,++nNewPos)
             {

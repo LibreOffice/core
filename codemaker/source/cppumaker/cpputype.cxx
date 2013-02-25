@@ -629,7 +629,6 @@ void CppuType::dumpNormalGetCppuType(FileStream& o)
         sal_uInt16      fieldCount = m_reader.getFieldCount();
         RTFieldAccess   access = RT_ACCESS_INVALID;
         OString         fieldType, fieldName;
-        OString         scope = m_typeName.replace('/', '.');
         OString         modFieldType;
         StringSet       generatedTypeSet;
         StringSet::iterator findIter;
@@ -745,7 +744,6 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
         sal_uInt16      fieldCount = m_reader.getFieldCount();
         RTFieldAccess   access = RT_ACCESS_INVALID;
         OString         fieldType, fieldName;
-        OString         scope = m_typeName.replace('/', '.');
         for (sal_uInt16 i=0; i < fieldCount; i++)
         {
             access = m_reader.getFieldFlags(i);

@@ -851,7 +851,6 @@ drawing::PolyPolygonBezierCoords getCircularArcBezierCoords(
 
     //!! applying matrix to vector does ignore translation, so it is important to use a B2DPoint here instead of B2DVector
     ::basegfx::B2DPoint P0,P1,P2,P3;
-    ::basegfx::B2DPoint POrigin = rTransformationFromUnitCircle * ::basegfx::B2DPoint(0.0, 0.0);
 
     sal_Int32 nPoint=0;
     double fCurrentRotateAngle = fStartAngleRadian;

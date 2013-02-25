@@ -422,7 +422,6 @@ long OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             {
                 case SID_TABLEDESIGN_TABED_PRIMARYKEY:
                 {
-                    String sColumnName;
                     sal_uInt16 nCount = GetEntryCount();
                     for(sal_uInt16 j = 0 ; j < nCount ; ++j)
                     {

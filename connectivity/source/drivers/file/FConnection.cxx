@@ -130,7 +130,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     {
         sal_Int32 nLen = url.indexOf(':');
         nLen = url.indexOf(':',nLen+1);
-        ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
+        ::rtl::OUString aDSN(url.copy(nLen+1));
 
         String aFileName = aDSN;
         INetURLObject aURL;

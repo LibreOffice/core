@@ -186,7 +186,6 @@ ORowSetValue OOp_Quarter::operate(const ORowSetValue& lhs) const
 
     sal_Int32 nRet = 1;
     ::com::sun::star::util::Date aD = lhs;
-    Date aDate(aD.Day,aD.Month,aD.Year);
     if ( aD.Month >= 4 && aD.Month < 7 )
         nRet = 2;
     else if ( aD.Month >= 7 && aD.Month < 10 )

@@ -1926,7 +1926,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         if(bFilter)
         {
             DlgFilterCrit aDlg( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() );
-            String aFilter;
             if ( !aDlg.Execute() )
                 return; // if so we don't need to update the grid
             aDlg.BuildWherePart();
@@ -1934,7 +1933,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         else
         {
             DlgOrderCrit aDlg( getBrowserView(),xCon,xParser,xSup->getColumns() );
-            String aOrder;
             if(!aDlg.Execute())
             {
                 return; // if so we don't need to actualize the grid

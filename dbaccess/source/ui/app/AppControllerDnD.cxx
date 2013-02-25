@@ -262,9 +262,6 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                           aObsolete != aUpperChildrenBound;
                         )
                     {
-#if OSL_DEBUG_LEVEL > 0
-                        ::rtl::OUString sObsoleteName = *aObsolete;
-#endif
                         ::std::set< ::rtl::OUString >::iterator aNextObsolete = aObsolete; ++aNextObsolete;
                         aDeleteNames.erase( aObsolete );
                         --nObjectsLeft;

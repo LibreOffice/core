@@ -4162,7 +4162,6 @@ RTLFUNC(StrConv)
     }
     else if ( (nConversion & 0x80) == 128 ) // vbFromUnicode
     {
-        OUString aOUStr(aNewStr);
         // there is no concept about default codepage in unix. so it is incorrectly in unix
         OString aOStr = OUStringToOString(aNewStr,osl_getThreadTextEncoding());
         const sal_Char* pChar = aOStr.getStr();

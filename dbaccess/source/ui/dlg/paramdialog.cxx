@@ -181,8 +181,6 @@ DBG_NAME(OParameterDialog)
                 return 0L;
         }
 
-        // transform the current string according to the param field type
-        OUString sTransformedText(m_aParam.GetText());
         Reference< XPropertySet >  xParamAsSet;
         m_xParams->getByIndex(m_nCurrentlySelected) >>= xParamAsSet;
         if (xParamAsSet.is())

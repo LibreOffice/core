@@ -706,8 +706,6 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
     mpImpl->maContainerInfo = rInfo;
 
     uno::Reference< script::XLibraryContainer > xScriptCont( mpImpl->maContainerInfo.mxScriptCont.get() );
-    StarBASIC* pStdLib = GetStdLib();
-    OUString aLibName = pStdLib->GetName();
     if( xScriptCont.is() )
     {
         // Register listener for lib container
@@ -1367,7 +1365,7 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
                     xStorage->FillInfoList( &aInfoList );
                     if ( aInfoList.empty() )
                     {
-                        OUString aName_( xStorage->GetName() );
+                        //OUString aName_( xStorage->GetName() );
                         xStorage.Clear();
                         //*** TODO: Replace if still necessary
                         //SfxContentHelper::Kill( aName );

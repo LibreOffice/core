@@ -616,7 +616,6 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
 
-        String aColumnName;
         OSQLParseNode * pRow_Value_Const;
         xub_StrLen nIndex=0;
         for (sal_uInt32 i = 0; i < pInsertAtomCommalist->count(); i++)

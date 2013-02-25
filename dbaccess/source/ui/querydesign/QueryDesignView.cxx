@@ -678,7 +678,6 @@ namespace
                     if  ( !pEntryField->isOtherFunction() )
                     {
                         // we have to look if we have alias.* here but before we have to check if the column doesn't already exist
-                        String sTemp = rFieldName;
                         OTableFieldDescRef  aInfo = new OTableFieldDesc();
                         OJoinTableView::OTableWindowMap::iterator tableIter = pTabList->begin();
                         OJoinTableView::OTableWindowMap::iterator tableEnd = pTabList->end();

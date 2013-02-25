@@ -50,9 +50,6 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                      _pCon,
                                                    ::std::vector< ::rtl::OUString >& _rStrings)
 {
-    ::rtl::OUString                             sAbURI;
-    ::rtl::OString                              sAbURIString;
-
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTableStrings()");
 
     /* add default table */
@@ -89,7 +86,6 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     aRows.clear();
 
     ::std::vector< ::rtl::OUString > tables;
-    OUString matchAny = "%";
 
     if ( !getTableStrings( _pCon, tables ) )
         return sal_False;

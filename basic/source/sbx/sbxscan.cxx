@@ -410,8 +410,6 @@ bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
         case SbxDOUBLE:
         case SbxCURRENCY:
         {
-            OString aBStr( OUStringToOString( rSrc, RTL_TEXTENCODING_ASCII_US ) );
-
             sal_Unicode cDecimalSep, cThousandSep;
             ImpGetIntntlSep( cDecimalSep, cThousandSep );
             aNewString = rSrc;

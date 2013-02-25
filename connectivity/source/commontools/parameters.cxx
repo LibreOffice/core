@@ -422,7 +422,6 @@ namespace dbtools
         sal_Int32 nSmallestIndexLinkedByColumnName = -1;
         sal_Int32 nLargestIndexNotLinkedByColumnName = -1;
 #endif
-        ::rtl::OUString sName;
         for ( ParameterInformation::iterator aParam = m_aParameterInformation.begin();
               aParam != m_aParameterInformation.end();
               ++aParam

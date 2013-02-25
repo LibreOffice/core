@@ -370,9 +370,6 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
-#ifdef DBG_UTIL
-                ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
-#endif
                 sal_Int32 nPrec = aIter->second->nPrecision;
                 sal_Int32 nScale = aIter->second->nMaximumScale;
                 if  (   (nPrec  >= _nPrecision)
@@ -389,9 +386,6 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                 for(aIter = aPair.first; aIter != aPair.second; ++aIter)
                 {
                     // search the best matching type (now comparing the local names)
-#ifdef DBG_UTIL
-                    ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
-#endif
                     sal_Int32 nScale = aIter->second->nMaximumScale;
                     if  (   (nScale >= _nScale)
                         &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)

@@ -998,7 +998,6 @@ void OAppDetailPageHelper::Resize()
 
         m_aFL.SetPosSizePixel( Point(nHalfOutputWidth , 0 ), Size(aFLSize.Width(), nOutputHeight ) );
 
-        String sText = m_aTBPreview.GetItemText(SID_DB_APP_DISABLE_PREVIEW);
         Size aTBSize = m_aTBPreview.CalcWindowSizePixel();
         m_aTBPreview.SetPosSizePixel(Point(nOutputWidth - aTBSize.getWidth(), 0 ),
                                      aTBSize );

@@ -809,9 +809,6 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         {
             if (aIndirectProps.end() != aIndirectProps.find(aPreserved->second))
             {
-#if OSL_DEBUG_LEVEL > 0
-                const OUString sName = aPreserved->second;
-#endif
                 aRemoveIndexes.push_back(aPreserved->first - nPositionCorrector);
                 ++nPositionCorrector;
             }
@@ -823,14 +820,6 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
                 ++aRemoveIndex
             )
             ::comphelper::removeElementAt(_rInfo, *aRemoveIndex);
-#if OSL_DEBUG_LEVEL > 0
-        const PropertyValue* pWhatsLeft = _rInfo.getConstArray();
-        const PropertyValue* pWhatsLeftEnd = pWhatsLeft + _rInfo.getLength();
-        for (; pWhatsLeft != pWhatsLeftEnd; ++pWhatsLeft)
-        {
-            OUString sLookAtIt = pWhatsLeft->Name;
-        }
-#endif
     }
 
     ::connectivity::DriversConfig aDriverConfig(getORB());

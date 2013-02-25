@@ -306,9 +306,6 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
             ++aSearch
         )
     {
-#ifdef DBG_UTIL
-        ::rtl::OUString sName = (*aSearch)->first;
-#endif
         if ((*aSearch)->first == _rName)
         {
             aMapPos = *aSearch;

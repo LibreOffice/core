@@ -399,7 +399,6 @@ void Connection::setCatalog( const ::rtl::OUString& )
 
 ::rtl::OUString Connection::getCatalog() throw (SQLException, RuntimeException)
 {
-    OUString ret;
     MutexGuard guard( m_refMutex->mutex );
     if( m_settings.pConnection == 0 )
     {

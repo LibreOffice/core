@@ -927,9 +927,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
         Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
-        :: rtl::OUString sFilename = _rURL.getName();
         ::rtl::OUString BaseName = _rURL.getBase();
-        ::rtl::OUString sExtension = _rURL.getExtension();
 
         sal_Bool bElementExists = sal_True;
 

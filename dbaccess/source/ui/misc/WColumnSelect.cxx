@@ -207,7 +207,6 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
     ::std::vector< ::rtl::OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
-    String aColumnName;
     if(!bAll)
     {
         for(sal_uInt16 i=0; i < pLeft->GetSelectEntryCount(); ++i)
@@ -257,7 +256,6 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
     ::std::vector< ::rtl::OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
-    String aColumnName;
     for(sal_uInt16 i=0; i < pLeft->GetSelectEntryCount(); ++i)
         moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectEntry(i),sExtraChars,nMaxNameLen,aCase);
     for(sal_uInt16 j=pLeft->GetSelectEntryCount(); j ; --j)
