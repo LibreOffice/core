@@ -9,6 +9,7 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,postprocess/signing))
 
+
 $(eval $(call gb_CustomTarget_register_targets,postprocess/signing,\
 	signing.done \
 ))
@@ -20,7 +21,8 @@ $(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done: \
 	$(SRCDIR)/postprocess/signing/signing.pl \
 	$(SRCDIR)/postprocess/signing/no_signing.txt \
 
-$(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done:
+$(call gb_CustomTarget_get_workdir,postprocess/signing)/signing.done : \
+		$(call gb_Postprocess_get_target,AllLibraries) $(call gb_Postprocess_get_target,AllExecutables)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 ifeq ($(COM),MSC)
 ifneq ($(ENABLE_DBGUTIL),TRUE)

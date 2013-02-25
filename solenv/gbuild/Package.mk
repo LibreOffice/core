@@ -76,6 +76,7 @@ $(call gb_Package_get_target,$(1)) : $(call gb_Package_get_preparation_target,$(
 endef
 
 define gb_Package_Package
+$(if $(filter postprocess_config,$(1)),,$(call gb_Postprocess_get_target,AllPackages) : $(call gb_Package_get_target,$(1)))
 $(call gb_Package_Package_internal,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_Package_get_target,$(1)),$(call gb_Package_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Package)
@@ -132,5 +133,9 @@ define gb_Package_use_external_project
 $(call gb_Package_get_preparation_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
 
 endef
+
+$(call gb_Postprocess_get_target,AllPackages) :
+	$(call gb_Output_announce,All packages: $^,$(true),ALL)
+	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && touch $@)
 
 # vim: set noet sw=4:
