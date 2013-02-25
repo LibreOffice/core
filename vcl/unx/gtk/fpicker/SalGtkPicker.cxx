@@ -217,6 +217,9 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirec
     OSL_ASSERT( m_pDialog != NULL );
 
     OString aTxt = unicodetouri(aDirectory);
+    if( aTxt.isEmpty() ){
+      aTxt = unicodetouri(OUString("file:///."));
+    }
 
     if( aTxt.lastIndexOf('/') == aTxt.getLength() - 1 )
         aTxt = aTxt.copy( 0, aTxt.getLength() - 1 );
