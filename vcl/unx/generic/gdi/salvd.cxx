@@ -104,11 +104,9 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
         if( bDeleteColormap )
             m_pDeleteColormap = pColormap;
     }
-    else
-    if( nDeviceDepth == nVisualDepth )
+    else if( nDeviceDepth == nVisualDepth )
         m_pColormap = &pDisplay->GetColormap( m_nXScreen );
-    else
-    if( nDeviceDepth == 1 )
+    else if( nDeviceDepth == 1 )
         m_pColormap = m_pDeleteColormap = new SalColormap();
 
     if (m_pDeleteColormap != pOrigDeleteColormap)

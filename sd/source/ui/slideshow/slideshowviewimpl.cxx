@@ -479,7 +479,7 @@ awt::Rectangle SAL_CALL SlideShowView::getCanvasArea(  ) throw (RuntimeException
     awt::Rectangle aRectangle;
 
     if( mxWindow.is() )
-    return mxWindow->getPosSize();
+        return mxWindow->getPosSize();
 
     aRectangle.X = aRectangle.Y = aRectangle.Width = aRectangle.Height = 0;
 

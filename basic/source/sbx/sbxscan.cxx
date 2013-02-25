@@ -435,8 +435,7 @@ bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
                 aNewString = OUString::valueOf( (sal_Int32)SbxTRUE );
                 bChanged = true;
             }
-            else
-            if( rSrc.equalsIgnoreAsciiCase("false") )
+            else if( rSrc.equalsIgnoreAsciiCase("false") )
             {
                 aNewString = OUString::valueOf( (sal_Int32)SbxFALSE );
                 bChanged = true;

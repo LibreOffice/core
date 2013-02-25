@@ -142,8 +142,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         xNotifyDispatch->dispatchWithNotification(aURL, aArguments, xListener);
         aResult = m_aResult;
     }
-    else
-    if (xDispatch.is())
+    else if (xDispatch.is())
     {
         // dispatch it without any chance to get a result
         xDispatch->dispatch( aURL, aArguments );

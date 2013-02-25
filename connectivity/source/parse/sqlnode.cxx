@@ -814,7 +814,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
                 case DataType::TIME:
                 case DataType::TIMESTAMP:
                     if (m_xFormatter.is())
-                    pReturn = buildDate( nType, pReturn);
+                        pReturn = buildDate( nType, pReturn);
                     break;
                 default:
                     m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);

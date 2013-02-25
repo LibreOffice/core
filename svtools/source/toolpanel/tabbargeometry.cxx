@@ -141,8 +141,7 @@ namespace svt
                 lcl_mirrorHorizontally( aReference, aResult );
             }
         }
-        else
-        if  ( i_eTargetAlignment == TABS_BOTTOM )
+        else if  ( i_eTargetAlignment == TABS_BOTTOM )
         {
             lcl_mirrorVertically( m_aReference, aResult );
         }
@@ -169,8 +168,7 @@ namespace svt
 
             lcl_rotate( aReference, aResult, false );
         }
-        else
-        if  ( i_eTargetAlignment == TABS_BOTTOM )
+        else if  ( i_eTargetAlignment == TABS_BOTTOM )
         {
             lcl_mirrorVertically( m_aReference, aResult );
         }

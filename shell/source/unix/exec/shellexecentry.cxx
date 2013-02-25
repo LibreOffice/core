@@ -70,7 +70,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL syssh_component_getFactory(
     }
 
     if (xFactory.is())
-    xFactory->acquire();
+        xFactory->acquire();
 
     return xFactory.get();
 }

@@ -688,10 +688,8 @@ short SfxInsertFloatingFrameDialog::Execute()
                 else
                     xSet->setPropertyValue( "FrameIsScrollingMode", makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
-                    xSet->setPropertyValue( "FrameIsBorder", makeAny( bHasBorder ) );
-
+                xSet->setPropertyValue( "FrameIsBorder", makeAny( bHasBorder ) );
                 xSet->setPropertyValue( "FrameMarginWidth", makeAny( sal_Int32( lMarginWidth ) ) );
-
                 xSet->setPropertyValue( "FrameMarginHeight", makeAny( sal_Int32( lMarginHeight ) ) );
 
                 if ( bIPActive )

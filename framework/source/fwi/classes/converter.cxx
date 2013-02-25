@@ -70,11 +70,9 @@ OUStringList Converter::convert_seqOUString2OUStringList( const css::uno::Sequen
     // write year formated as "YYYY"
     if (nYear<10)
         sBuffer.appendAscii("000");
-    else
-    if (nYear<100)
+    else if (nYear<100)
         sBuffer.appendAscii("00");
-    else
-    if (nYear<1000)
+    else if (nYear<1000)
         sBuffer.appendAscii("0");
     sBuffer.append( (sal_Int32)nYear );
 

@@ -259,8 +259,7 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
         {
             bUsable = sal_False;
         }
-        else
-        if( pVInfos[i].c_class == TrueColor )
+        else if( pVInfos[i].c_class == TrueColor )
         {
             nTrueColor = 2048;
             if( pVInfos[i].depth == 24 )
@@ -2320,7 +2319,7 @@ extern "C"
             i_pEvent->xproperty.window == pSalDisplay->GetDrawable( pSalDisplay->GetDefaultXScreen() ) &&
             i_pEvent->xproperty.atom == pSalDisplay->getWMAdaptor()->getAtom( WMAdaptor::SAL_GETTIMEEVENT )
             )
-        return True;
+            return True;
 
         return False;
     }

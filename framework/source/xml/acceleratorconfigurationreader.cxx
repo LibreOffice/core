@@ -258,8 +258,7 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
 
     if (sElement.equals(NS_ELEMENT_ACCELERATORLIST))
         eElement = E_ELEMENT_ACCELERATORLIST;
-    else
-    if (sElement.equals(NS_ELEMENT_ITEM))
+    else if (sElement.equals(NS_ELEMENT_ITEM))
         eElement = E_ELEMENT_ITEM;
     else
         throw css::uno::RuntimeException(
@@ -276,20 +275,15 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
 
     if (sAttribute.equals(NS_ATTRIBUTE_KEYCODE))
         eAttribute = E_ATTRIBUTE_KEYCODE;
-    else
-    if (sAttribute.equals(NS_ATTRIBUTE_MOD_SHIFT))
+    else if (sAttribute.equals(NS_ATTRIBUTE_MOD_SHIFT))
         eAttribute = E_ATTRIBUTE_MOD_SHIFT;
-    else
-    if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD1))
+    else if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD1))
         eAttribute = E_ATTRIBUTE_MOD_MOD1;
-    else
-    if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD2))
+    else if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD2))
         eAttribute = E_ATTRIBUTE_MOD_MOD2;
-    else
-    if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD3))
+    else if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD3))
         eAttribute = E_ATTRIBUTE_MOD_MOD3;
-    else
-    if (sAttribute.equals(NS_ATTRIBUTE_URL))
+    else if (sAttribute.equals(NS_ATTRIBUTE_URL))
         eAttribute = E_ATTRIBUTE_URL;
     else
         throw css::uno::RuntimeException(

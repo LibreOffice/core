@@ -1048,7 +1048,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                 if(!(rValue >>= nMode))
                     throw IllegalArgumentException();
 
-                    eMode = (BitmapMode)nMode;
+                eMode = (BitmapMode)nMode;
             }
 
             mpProperties->SetObjectItem( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );

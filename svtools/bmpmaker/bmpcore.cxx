@@ -102,13 +102,13 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
         else
             aPrefix = String( aName, 0, 2 );
 
-            String aNumStr(rtl::OUString::createFromAscii(rLang.maLangDir));
+        String aNumStr(rtl::OUString::createFromAscii(rLang.maLangDir));
 
-            if( aNumStr.Len() == 1 )
-                aNumStr.Insert( '0', 0 );
+        if( aNumStr.Len() == 1 )
+            aNumStr.Insert( '0', 0 );
 
-            aName = DirEntry( aName ).GetBase();
-            aName += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
+        aName = DirEntry( aName ).GetBase();
+        aName += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
 
         // create output file name
         aOutFile += DirEntry( aName );

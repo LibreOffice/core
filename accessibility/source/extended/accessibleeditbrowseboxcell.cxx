@@ -217,8 +217,8 @@ namespace accessibility
             Reference< XAccessibleContext > xMyContext( m_aContext );
             if ( !xMyContext.is() )
             {
-            Reference< XAccessibleContext > xInnerContext = m_xControlAccessible->getAccessibleContext();
-            Reference< XAccessible > xMe( this );
+                Reference< XAccessibleContext > xInnerContext = m_xControlAccessible->getAccessibleContext();
+                Reference< XAccessible > xMe( this );
 
                 xMyContext = new EditBrowseBoxTableCell( m_xParent, xMe, xInnerContext, *m_pBrowseBox, m_xFocusWindow, m_nRowPos, m_nColPos );
                 m_aContext = xMyContext;

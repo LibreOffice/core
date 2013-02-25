@@ -379,8 +379,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     sal_Bool bSuccess = sal_False;
     if (bCloseFrame)
         bSuccess = implts_closeFrame();
-    else
-    if (bEstablishBackingMode)
+    else if (bEstablishBackingMode)
     #if defined MACOSX
     {
         // on mac close down, quickstarter keeps the process alive
@@ -408,8 +407,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     #else
         bSuccess = implts_establishBackingMode();
     #endif
-    else
-    if (bTerminateApp)
+    else if (bTerminateApp)
         bSuccess = implts_terminateApplication();
 
     if (

@@ -1839,7 +1839,7 @@ namespace cppcanvas
                             }
                             EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer, size: %u\n", (unsigned int)pAct->GetDataSize ()));
                             if (count < limit)
-                            processEMFPlus( pAct, rFactoryParms, rStates.getState(), rCanvas );
+                                processEMFPlus( pAct, rFactoryParms, rStates.getState(), rCanvas );
                             count ++;
                         } else if( pAct->GetComment().equalsL(RTL_CONSTASCII_STRINGPARAM("EMF_PLUS_HEADER_INFO")) ) {
                             EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer - header info, size: %u\n", (unsigned int)pAct->GetDataSize ()));

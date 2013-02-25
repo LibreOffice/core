@@ -1016,7 +1016,7 @@ bool lcl_isFormatObjectCommand( const OString& aCommand )
         || aCommand == "FormatMajorGrid"
         || aCommand == "FormatMinorGrid"
         )
-    return true;
+        return true;
 
     // else
     return false;

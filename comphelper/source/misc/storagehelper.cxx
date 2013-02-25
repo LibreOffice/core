@@ -249,8 +249,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     {
         nResult = SOFFICE_FILEFORMAT_60;
     }
-    else
-    if (
+    else if (
         aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII        ) ||
         aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII    ) ||
         aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII ) ||

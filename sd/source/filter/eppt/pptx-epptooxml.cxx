@@ -492,7 +492,7 @@ const char* PowerPointExport::Get8Direction( sal_uInt8 nDirection )
     const char* pDirection = GetSideDirection( nDirection );
 
     if( !pDirection )
-    pDirection = GetCornerDirection( nDirection );
+        pDirection = GetCornerDirection( nDirection );
 
     return pDirection;
 }
@@ -509,11 +509,11 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
     sal_uInt8 nDirection = 0;
 
     if( GETA( TransitionType ) && ( mAny >>= nTransitionType ) &&
-    GETA( TransitionSubtype ) && ( mAny >>= nTransitionSubtype ) )
-    nPPTTransitionType = GetTransition( nTransitionType, nTransitionSubtype, eFadeEffect, nDirection );
+            GETA( TransitionSubtype ) && ( mAny >>= nTransitionSubtype ) )
+        nPPTTransitionType = GetTransition( nTransitionType, nTransitionSubtype, eFadeEffect, nDirection );
 
     if( !nPPTTransitionType && eFadeEffect != FadeEffect_NONE )
-    nPPTTransitionType = GetTransition( eFadeEffect, nDirection );
+        nPPTTransitionType = GetTransition( eFadeEffect, nDirection );
 
     if( nPPTTransitionType ) {
     AnimationSpeed animationSpeed = AnimationSpeed_MEDIUM;
@@ -657,7 +657,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
 void PowerPointExport::WriteAnimationProperty( FSHelperPtr pFS, const Any& rAny )
 {
     if( !rAny.hasValue() )
-    return;
+        return;
 
     switch( rAny.getValueType().getTypeClass() ) {
     case TypeClass_STRING:
@@ -674,7 +674,7 @@ void PowerPointExport::WriteAnimateValues( FSHelperPtr pFS, const Reference< XAn
 {
     const Sequence< double > aKeyTimes = rXAnimate->getKeyTimes();
     if( aKeyTimes.getLength() <= 0 )
-    return;
+        return;
     const Sequence< Any > aValues = rXAnimate->getValues();
     const OUString& sFormula = rXAnimate->getFormula();
     const OUString& rAttributeName = rXAnimate->getAttributeName();
@@ -693,10 +693,10 @@ void PowerPointExport::WriteAnimateValues( FSHelperPtr pFS, const Reference< XAn
         pFS->startElementNS( XML_p, XML_val, FSEND );
         ValuePair aPair;
         if( aValues[ i ] >>= aPair ) {
-        WriteAnimationProperty( pFS, AnimationExporter::convertAnimateValue( aPair.First, rAttributeName ) );
-        WriteAnimationProperty( pFS, AnimationExporter::convertAnimateValue( aPair.Second, rAttributeName ) );
+            WriteAnimationProperty( pFS, AnimationExporter::convertAnimateValue( aPair.First, rAttributeName ) );
+            WriteAnimationProperty( pFS, AnimationExporter::convertAnimateValue( aPair.Second, rAttributeName ) );
         } else
-        WriteAnimationProperty( pFS, AnimationExporter::convertAnimateValue( aValues[ i ], rAttributeName ) );
+            WriteAnimationProperty( pFS, AnimationExporter::convertAnimateValue( aValues[ i ], rAttributeName ) );
 
         pFS->endElementNS( XML_p, XML_val );
         pFS->endElementNS( XML_p, XML_tav );
@@ -709,7 +709,7 @@ void PowerPointExport::WriteAnimateValues( FSHelperPtr pFS, const Reference< XAn
 void PowerPointExport::WriteAnimateTo( FSHelperPtr pFS, Any aValue, const OUString& rAttributeName )
 {
     if( !aValue.hasValue() )
-    return;
+        return;
 
     DBG(printf("to attribute name: %s\n", USS( rAttributeName )));
 
@@ -723,7 +723,7 @@ void PowerPointExport::WriteAnimateTo( FSHelperPtr pFS, Any aValue, const OUStri
 void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUString& rAttributeName )
 {
     if( rAttributeName.isEmpty() )
-    return;
+        return;
 
     pFS->startElementNS( XML_p, XML_attrNameLst, FSEND );
 
@@ -731,11 +731,11 @@ void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUStr
 
     const char* sAttributeName = NULL;
     if ( rAttributeName == "Visibility" ) {
-    sAttributeName = "style.visibility";
+        sAttributeName = "style.visibility";
     } else if ( rAttributeName == "X" ) {
-    sAttributeName = "ppt_x";
+        sAttributeName = "ppt_x";
     } else if ( rAttributeName == "Y" ) {
-    sAttributeName = "ppt_y";
+        sAttributeName = "ppt_y";
     }
 
     pFS->startElementNS( XML_p, XML_attrName, FSEND );
@@ -773,7 +773,7 @@ void PowerPointExport::WriteAnimationNodeAnimate( FSHelperPtr pFS, const Referen
 {
     Reference< XAnimate > rXAnimate( rXNode, UNO_QUERY );
     if( !rXAnimate.is() )
-    return;
+        return;
 
     const char* pCalcMode = NULL;
     const char* pValueType = NULL;
@@ -814,7 +814,7 @@ void PowerPointExport::WriteAnimationNodeAnimateInside( FSHelperPtr pFS, const R
 {
     Reference< XAnimate > rXAnimate( rXNode, UNO_QUERY );
     if( !rXAnimate.is() )
-    return;
+        return;
 
     const char* pAdditive = NULL;
 
@@ -935,7 +935,7 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, sal_
         DBG(printf ("event offset: %f\n", fDelay));
     } else if( aEvent.Offset >>= eTiming ) {
         if( eTiming == Timing_INDEFINITE )
-        pDelay = "indefinite";
+            pDelay = "indefinite";
         DBG(printf ("event offset timing: %d\n", eTiming));
     }
     }
@@ -1200,12 +1200,12 @@ void PowerPointExport::WriteAnimationNode( FSHelperPtr pFS, const Reference< XAn
     }
 
     if( pMethod ) {
-    (this->*(pMethod))( pFS, rXNode, xmlNodeType, bMainSeqChild );
-    return;
+        (this->*(pMethod))( pFS, rXNode, xmlNodeType, bMainSeqChild );
+        return;
     }
 
     if( xmlNodeType == -1 )
-    return;
+        return;
 
     pFS->startElementNS( XML_p, xmlNodeType, FSEND );
 
@@ -1451,7 +1451,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
 void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 {
     if( !mbCreateNotes || !ContainsOtherShapeThanPlaceholders( sal_True ) )
-    return;
+        return;
 
     DBG(printf("write Notes %" SAL_PRIuUINT32 "\n----------------\n", nPageNum));
 
@@ -1658,11 +1658,11 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
     mXShapes = Reference< XShapes >( xSlide, UNO_QUERY );
 
     if( mLayoutInfo[ nOffset ].mnFileIdArray.size() < mnMasterPages ) {
-    mLayoutInfo[ nOffset ].mnFileIdArray.resize( mnMasterPages );
+        mLayoutInfo[ nOffset ].mnFileIdArray.resize( mnMasterPages );
     }
 
     if( mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ] != 0 )
-    return;
+        return;
 
     FSHelperPtr pFS
         = openFragmentStreamWithSerializer( OUStringBuffer()
@@ -1738,7 +1738,7 @@ void PowerPointExport::WriteShapeTree( FSHelperPtr pFS, PageType ePageType, sal_
 ShapeExport& PowerPointShapeExport::WritePageShape( Reference< XShape > xShape, PageType ePageType, sal_Bool bPresObj )
 {
     if( ( ePageType == NOTICE && bPresObj ) || ePageType == LAYOUT )
-    return WritePlaceholderShape( xShape, SlideImage );
+        return WritePlaceholderShape( xShape, SlideImage );
 
     return WriteTextShape( xShape );
 }
@@ -1810,7 +1810,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > x
     WritePresetShape( "rect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() )
-    WriteBlipFill( xProps, "GraphicURL" );
+        WriteBlipFill( xProps, "GraphicURL" );
     mpFS->endElementNS( XML_p, XML_spPr );
 
     WriteTextBox( xShape, XML_p );
@@ -2112,8 +2112,8 @@ sal_Bool PowerPointExport::WriteNotesMaster()
 
     Reference< XPropertySet > aXBackgroundPropSet;
     if( ImplGetPropertyValue( mXPagePropSet, rtl::OUString( "Background" ) ) &&
-    ( mAny >>= aXBackgroundPropSet ) )
-    ImplWriteBackground( pFS, aXBackgroundPropSet );
+            ( mAny >>= aXBackgroundPropSet ) )
+        ImplWriteBackground( pFS, aXBackgroundPropSet );
 
     WriteShapeTree( pFS, NOTICE, sal_True );
 
@@ -2145,7 +2145,7 @@ sal_Bool PowerPointExport::WriteNotesMaster()
 sal_Bool PowerPointExport::ImplCreateMainNotes()
 {
     if( mbCreateNotes )
-    return WriteNotesMaster();
+        return WriteNotesMaster();
 
     return sal_True;
 }

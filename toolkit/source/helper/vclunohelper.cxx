@@ -666,7 +666,7 @@ awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, 
     if ( _rVclEvent.IsShift() )
         aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
     if ( _rVclEvent.IsMod1() )
-    aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+        aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
     if ( _rVclEvent.IsMod2() )
         aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
 

@@ -1063,18 +1063,14 @@ Binding::Any_t Binding::getValue( const Type_t& rType )
         throw IncompatibleTypesException( EXCEPT( "type unsupported" ) );
 
     // return string value (if present; else return empty Any)
-        Binding::Any_t result = Any();
-        if(maBindingExpression.hasValue()) {
-            rtl::OUString pathExpr(maBindingExpression.getString());
-            Convert &rConvert = Convert::get();
-            result = rConvert.toAny(pathExpr,rType);
-        }
+    Binding::Any_t result = Any();
+    if(maBindingExpression.hasValue()) {
+        rtl::OUString pathExpr(maBindingExpression.getString());
+        Convert &rConvert = Convert::get();
+        result = rConvert.toAny(pathExpr,rType);
+    }
 
-//      return maBindingExpression.hasValue()
-  //      ? Convert::get().toAny( maBindingExpression.getString(), rType )
-    //    : Any();
-
-        return result;
+    return result;
 }
 
 void Binding::setValue( const Any_t& aValue )

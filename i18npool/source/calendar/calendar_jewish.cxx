@@ -269,7 +269,7 @@ void Calendar_jewish::mapToGregorian() throw(RuntimeException)
     if (fieldSet & FIELDS) {
         sal_Int16 y = fieldSetValue[CalendarFieldIndex::YEAR];
         if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
-        y = 1 - y;
+            y = 1 - y;
         HebrewDate Temp(fieldSetValue[CalendarFieldIndex::MONTH] + 1, fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH], y);
         GregorianDate gd(Temp);
 

@@ -191,8 +191,7 @@ void FilterConfigCache::ImplInit()
                 continue;
             if (lFlags[0].equalsIgnoreAsciiCase("import"))
                 aEntry.nFlags = 1;
-            else
-            if (lFlags[0].equalsIgnoreAsciiCase("export"))
+            else if (lFlags[0].equalsIgnoreAsciiCase("export"))
                 aEntry.nFlags = 2;
 
             ::rtl::OUString sFormatName;

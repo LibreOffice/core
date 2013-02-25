@@ -73,7 +73,7 @@ void Calendar_hijri::mapToGregorian() throw(RuntimeException)
         sal_Int32 month = (sal_Int32)fieldSetValue[CalendarFieldIndex::MONTH] + 1;
         sal_Int32 year = (sal_Int32)fieldSetValue[CalendarFieldIndex::YEAR];
         if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
-        year *= -1;
+            year *= -1;
 
         ToGregorian(&day, &month, &year);
 
@@ -282,16 +282,16 @@ Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int3
     /* ...and the month, adjusting it if necessary */
     *pnMonth = lFactorE - 1;
     if (*pnMonth > 12)
-    (*pnMonth) -= 12;
+        (*pnMonth) -= 12;
 
     /* ...and similarly for the year */
     *pnYear = lFactorC - 4715;
     if (*pnMonth > 2)
-    (*pnYear)--;
+        (*pnYear)--;
 
-// Negative year adjustments
+    // Negative year adjustments
     if (*pnYear <= 0)
-    (*pnYear)--;
+        (*pnYear)--;
 }
 
 double

@@ -2828,7 +2828,7 @@ ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, cons
 {
     if ( m_Areas->getCount() > 1 )
         throw uno::RuntimeException( rtl::OUString( "That command cannot be used on multiple selections"  ), uno::Reference< uno::XInterface >() );
-        ScDocShell* pShell = getScDocShell();
+    ScDocShell* pShell = getScDocShell();
 
         uno::Reference< frame::XModel > xModel( ( pShell ? pShell->GetModel() : NULL ), uno::UNO_QUERY_THROW );
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
@@ -4061,7 +4061,7 @@ ScVbaRange::getLeft() throw (uno::RuntimeException)
     // helperapi returns the first ranges left ( and top below )
     if ( m_Areas->getCount() > 1 )
         return getArea( 0 )->getLeft();
-        awt::Point aPoint = getPosition();
+    awt::Point aPoint = getPosition();
     return uno::makeAny( lcl_hmmToPoints( aPoint.X ) );
 }
 
@@ -4072,7 +4072,7 @@ ScVbaRange::getTop() throw (uno::RuntimeException)
     // helperapi returns the first ranges top
     if ( m_Areas->getCount() > 1 )
         return getArea( 0 )->getTop();
-        awt::Point aPoint= getPosition();
+    awt::Point aPoint= getPosition();
     return uno::makeAny( lcl_hmmToPoints( aPoint.Y ) );
 }
 

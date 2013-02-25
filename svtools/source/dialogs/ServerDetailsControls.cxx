@@ -126,7 +126,7 @@ INetURLObject HostDetailsContainer::getUrl( )
         if ( !sPath.isEmpty( ) )
             if ( sPath.indexOf( '/' ) != 0 )
                 sUrl += "/";
-            sUrl += sPath;
+        sUrl += sPath;
     }
 
     return INetURLObject( sUrl );
@@ -235,7 +235,7 @@ INetURLObject SmbDetailsContainer::getUrl( )
         if ( !sPath.isEmpty( ) )
             if ( sPath.indexOf( '/' ) != 0 )
                 sUrl += "/";
-            sUrl += sPath;
+        sUrl += sPath;
     }
 
     return INetURLObject( sUrl );

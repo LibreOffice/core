@@ -1699,18 +1699,20 @@ void SfxStoringHelper::SetDocInfoState(
         {
             uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
             if ( pProps[i].Attributes & ::com::sun::star::beans::PropertyAttribute::REMOVABLE )
-            try
             {
-                // QUESTION: DefaultValue?!
-                xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
+                try
+                {
+                    // QUESTION: DefaultValue?!
+                    xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
+                }
+                catch (beans::PropertyExistException const&) {}
+                try
+                {
+                    // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
+                    xSet->setPropertyValue( pProps[i].Name, aValue );
+                }
+                catch ( const uno::Exception& ) {}
             }
-            catch (beans::PropertyExistException const&) {}
-            try
-            {
-                // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
-                xSet->setPropertyValue( pProps[i].Name, aValue );
-            }
-            catch ( const uno::Exception& ) {}
         }
 
         // sigh... have to set these manually i'm afraid... wonder why

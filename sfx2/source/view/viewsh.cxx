@@ -555,18 +555,15 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                 if ( nId == SID_MAIL_SENDDOC )
                     eResult = aModel.SaveAndSend( xFrame, rtl::OUString() );
-                else
-                if ( nId == SID_MAIL_SENDDOCASPDF )
+                else if ( nId == SID_MAIL_SENDDOCASPDF )
                     eResult = aModel.SaveAndSend( xFrame, rtl::OUString( "pdf_Portable_Document_Format" ));
-                else
-                if ( nId == SID_MAIL_SENDDOCASMS )
+                else if ( nId == SID_MAIL_SENDDOCASMS )
                 {
                     aDocType = impl_searchFormatTypeForApp(xFrame, E_MS_DOC);
                     if (!aDocType.isEmpty())
                         eResult = aModel.SaveAndSend( xFrame, aDocType );
                 }
-                else
-                if ( nId == SID_MAIL_SENDDOCASOOO )
+                else if ( nId == SID_MAIL_SENDDOCASOOO )
                 {
                     aDocType = impl_searchFormatTypeForApp(xFrame, E_OOO_DOC);
                     if (!aDocType.isEmpty())

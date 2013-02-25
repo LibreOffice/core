@@ -455,7 +455,7 @@ static void suppress_decorations(struct splash* splash)
         XChangeProperty( splash->display, splash->win, atom_type, XA_ATOM, 32,
                          PropModeReplace, (unsigned char*)&atom_splash, 1 );
     //else
-        suppress_decorations_motif(splash); // FIXME: Unconditional until Metacity/compiz's SPLASH handling is fixed
+    suppress_decorations_motif(splash); // FIXME: Unconditional until Metacity/compiz's SPLASH handling is fixed
 }
 
 // Create the window

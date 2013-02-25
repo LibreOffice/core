@@ -491,7 +491,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         {
             const SfxPoolItem* pItem;
             if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
-            aRangeString = ::rtl::OUString( ((const SfxStringItem*)pItem)->GetValue());
+                aRangeString = ::rtl::OUString( ((const SfxStringItem*)pItem)->GetValue());
 
             aPositionRange = pViewSh->GetViewData()->GetCurPos();
         }

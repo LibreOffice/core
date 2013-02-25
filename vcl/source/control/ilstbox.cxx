@@ -2794,9 +2794,9 @@ void ImplWin::ImplDraw( bool bLayout )
 
             ImplControlValue aControlValue;
             if ( !pWin->IsEnabled() )
-            nState &= ~CTRL_STATE_ENABLED;
+                nState &= ~CTRL_STATE_ENABLED;
             if ( pWin->HasFocus() )
-            nState |= CTRL_STATE_FOCUSED;
+                nState |= CTRL_STATE_FOCUSED;
 
             // The listbox is painted over the entire control including the
             // border, but ImplWin does not contain the border => correction

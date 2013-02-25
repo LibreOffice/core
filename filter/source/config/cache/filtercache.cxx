@@ -1324,14 +1324,11 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
     // !? ... such situation can occur, if an item was added and(!) removed before it was flushed :-)
     if (!bExistsInConfigLayer && !bExistsInMemory)
         eState = E_ITEM_UNCHANGED;
-    else
-    if (!bExistsInConfigLayer && bExistsInMemory)
+    else if (!bExistsInConfigLayer && bExistsInMemory)
         eState = E_ITEM_ADDED;
-    else
-    if (bExistsInConfigLayer && bExistsInMemory)
+    else if (bExistsInConfigLayer && bExistsInMemory)
         eState = E_ITEM_CHANGED;
-    else
-    if (bExistsInConfigLayer && !bExistsInMemory)
+    else if (bExistsInConfigLayer && !bExistsInMemory)
         eState = E_ITEM_REMOVED;
 
     return eState;

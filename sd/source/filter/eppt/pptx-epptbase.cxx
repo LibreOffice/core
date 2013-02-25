@@ -994,17 +994,20 @@ sal_Bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( sal_Bool bForOOMLX )
     sal_Bool bOtherThanPlaceHolders = sal_False;
 
     if ( nShapes )
-    for ( sal_uInt32 nIndex = 0; ( nIndex < nShapes ) && ( bOtherThanPlaceHolders == sal_False ); nIndex++ ) {
-        if ( GetShapeByIndex( nIndex ) && mType != "drawing.Page" ) {
-        if( bForOOMLX &&
-            ( mType == "presentation.Page" ||
-              mType == "presentation.Notes" ) ) {
-            Reference< XSimpleText > rXText( mXShape, UNO_QUERY );
+        for ( sal_uInt32 nIndex = 0; ( nIndex < nShapes ) && ( bOtherThanPlaceHolders == sal_False ); nIndex++ )
+        {
+            if ( GetShapeByIndex( nIndex ) && mType != "drawing.Page" )
+            {
+                if( bForOOMLX &&
+                        ( mType == "presentation.Page" ||
+                        mType == "presentation.Notes" ) ) {
+                    Reference< XSimpleText > rXText( mXShape, UNO_QUERY );
 
-            if( rXText.is() && !rXText->getString().isEmpty() )
-            bOtherThanPlaceHolders = sal_True;
-        } else
-            bOtherThanPlaceHolders = sal_True;
+                if( rXText.is() && !rXText->getString().isEmpty() )
+                    bOtherThanPlaceHolders = sal_True;
+            }
+            else
+                bOtherThanPlaceHolders = sal_True;
         }
         DBG(printf("mType == %s\n", mType.getStr()));
     }

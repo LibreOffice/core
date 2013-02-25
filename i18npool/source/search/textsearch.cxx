@@ -124,14 +124,12 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     sSrchStr = aSrchPara.searchString;
 
     // use transliteration here
-    if ( xTranslit.is() &&
-     aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
+    if ( xTranslit.is() && aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
         sSrchStr = xTranslit->transliterateString2String(
-                aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
+            aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
-    if ( xTranslit2.is() &&
-     aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
-    sSrchStr2 = xTranslit2->transliterateString2String(
+    if ( xTranslit2.is() && aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
+        sSrchStr2 = xTranslit2->transliterateString2String(
             aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
     // When start or end of search string is a complex script type, we need to
@@ -213,13 +211,13 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         for ( int k = 0; k < sres.startOffset.getLength(); k++ )
         {
             if (sres.startOffset[k])
-          sres.startOffset[k] = offset[sres.startOffset[k]];
+                sres.startOffset[k] = offset[sres.startOffset[k]];
             // JP 20.6.2001: end is ever exclusive and then don't return
             //               the position of the next character - return the
             //               next position behind the last found character!
             //               "a b c" find "b" must return 2,3 and not 2,4!!!
             if (sres.endOffset[k])
-          sres.endOffset[k] = offset[sres.endOffset[k]-1] + 1;
+                sres.endOffset[k] = offset[sres.endOffset[k]-1] + 1;
         }
     }
     else
@@ -295,20 +293,20 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         newStartPos = in_str.getLength();
 
         if( endPos )
-        newEndPos = FindPosInSeq_Impl( offset, endPos );
+            newEndPos = FindPosInSeq_Impl( offset, endPos );
 
         sres = (this->*fnBackward)( in_str, newStartPos, newEndPos );
 
         for ( int k = 0; k < sres.startOffset.getLength(); k++ )
         {
             if (sres.startOffset[k])
-          sres.startOffset[k] = offset[sres.startOffset[k] - 1] + 1;
+                sres.startOffset[k] = offset[sres.startOffset[k] - 1] + 1;
             // JP 20.6.2001: end is ever exclusive and then don't return
             //               the position of the next character - return the
             //               next position behind the last found character!
             //               "a b c" find "b" must return 2,3 and not 2,4!!!
             if (sres.endOffset[k])
-          sres.endOffset[k] = offset[sres.endOffset[k]];
+                sres.endOffset[k] = offset[sres.endOffset[k]];
         }
     }
     else

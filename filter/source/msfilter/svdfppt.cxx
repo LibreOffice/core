@@ -1072,29 +1072,30 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 pTObj->SetMergedItem( SdrTextAutoGrowHeightItem( bFitShapeToText ) );
             }
 
-                pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
-                pTObj->SetMergedItem( SdrTextHorzAdjustItem( eTHA ) );
+            pTObj->SetMergedItem( SdrTextVertAdjustItem( eTVA ) );
+            pTObj->SetMergedItem( SdrTextHorzAdjustItem( eTHA ) );
 
-                if ( nMinFrameHeight < 0 )
-                    nMinFrameHeight = 0;
+            if ( nMinFrameHeight < 0 )
+                nMinFrameHeight = 0;
             if ( !pTObj->ISA( SdrObjCustomShape ) )
                 pTObj->SetMergedItem( SdrTextMinFrameHeightItem( nMinFrameHeight ) );
 
-                if ( nMinFrameWidth < 0 )
-                    nMinFrameWidth = 0;
+            if ( nMinFrameWidth < 0 )
+                nMinFrameWidth = 0;
             if ( !pTObj->ISA( SdrObjCustomShape ) )
                 pTObj->SetMergedItem( SdrTextMinFrameWidthItem( nMinFrameWidth ) );
 
-                // set margins at the borders of the textbox
-                pTObj->SetMergedItem( SdrTextLeftDistItem( nTextLeft ) );
-                pTObj->SetMergedItem( SdrTextRightDistItem( nTextRight ) );
-                pTObj->SetMergedItem( SdrTextUpperDistItem( nTextTop ) );
-                pTObj->SetMergedItem( SdrTextLowerDistItem( nTextBottom ) );
-                pTObj->SetMergedItem( SdrTextFixedCellHeightItem( sal_True ) );
+            // set margins at the borders of the textbox
+            pTObj->SetMergedItem( SdrTextLeftDistItem( nTextLeft ) );
+            pTObj->SetMergedItem( SdrTextRightDistItem( nTextRight ) );
+            pTObj->SetMergedItem( SdrTextUpperDistItem( nTextTop ) );
+            pTObj->SetMergedItem( SdrTextLowerDistItem( nTextBottom ) );
+            pTObj->SetMergedItem( SdrTextFixedCellHeightItem( sal_True ) );
 
-                if ( !pTObj->ISA( SdrObjCustomShape ) )
-                    pTObj->SetSnapRect( rTextRect );
-                pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
+            if ( !pTObj->ISA( SdrObjCustomShape ) )
+                pTObj->SetSnapRect( rTextRect );
+            pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
+
                 if ( pTObj )
                 {
                     /* check if our new snaprect makes trouble,

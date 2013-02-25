@@ -73,8 +73,7 @@ void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 
     if( eType == GRAPHIC_BITMAP )
         nType = 1;
-    else
-    if( eType != GRAPHIC_NONE )
+    else if( eType != GRAPHIC_NONE )
         nType = 2;
 
     pVar->PutInteger( nType );

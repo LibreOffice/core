@@ -117,15 +117,13 @@ sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
     ::rtl::OUString sArg = sCmdArgs.copy(0, i);
     if (sArg.indexOf(CMDURL_SPART_ONLY) == 0)
         aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
-    else
-    if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
+    else if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
         aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
 
     sArg = sCmdArgs.copy(i+1, sCmdArgs.getLength()-i-1);
     if (sArg.indexOf(CMDURL_SPART_ONLY) == 0)
         aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
-    else
-    if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
+    else if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
         aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
 
     if (!(aStyle.sFamily.isEmpty() || aStyle.sStyle.isEmpty()))

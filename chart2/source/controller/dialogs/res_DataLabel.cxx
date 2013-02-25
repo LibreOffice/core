@@ -400,7 +400,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
         m_aDC_Dial.SetRotation( nDegrees );
     }
     else
-    m_aDC_Dial.SetRotation( 0 );
+        m_aDC_Dial.SetRotation( 0 );
 
     EnableControls();
 }

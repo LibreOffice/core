@@ -5485,8 +5485,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
                 nChain = pObj->nTxBxComp;
                 bSetReplaceFALSE = !pObj->bReplaceByFly;
             }
-            else
-            if( !pObj->bReplaceByFly )
+            else if( !pObj->bReplaceByFly )
             {
                 // object that must NOT be replaced by frame?
                 bSetReplaceFALSE = sal_True;

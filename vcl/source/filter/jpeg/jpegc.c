@@ -188,7 +188,7 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
             }
             /* PENDING ??? */
             if ( cinfo.err->msg_code == 113 )
-            break;
+                break;
 
             pTmp += nAlignedWidth;
         }

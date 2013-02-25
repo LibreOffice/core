@@ -4190,7 +4190,7 @@ uno::Reference<accessibility::XAccessibleEditableText>
         uno::Reference< accessibility::XAccessible > xChild = xContext->getAccessibleChild(i);
         if (!xChild.is())
             continue;
-            uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
+        uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
         if (!xChildContext.is())
             continue;
         uno::Reference< accessibility::XAccessibleEditableText > xText = FindFocus(xChildContext);

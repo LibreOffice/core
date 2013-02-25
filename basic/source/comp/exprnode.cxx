@@ -313,11 +313,9 @@ void SbiExprNode::FoldConstants()
                     // Integer operations
                     sal_Bool err = sal_False;
                     if( nl > SbxMAXLNG ) err = sal_True, nl = SbxMAXLNG;
-                    else
-                    if( nl < SbxMINLNG ) err = sal_True, nl = SbxMINLNG;
+                    else if( nl < SbxMINLNG ) err = sal_True, nl = SbxMINLNG;
                     if( nr > SbxMAXLNG ) err = sal_True, nr = SbxMAXLNG;
-                    else
-                    if( nr < SbxMINLNG ) err = sal_True, nr = SbxMINLNG;
+                    else if( nr < SbxMINLNG ) err = sal_True, nr = SbxMINLNG;
                     ll = (long) nl; lr = (long) nr;
                     llMod = (long) (nl < 0 ? nl - 0.5 : nl + 0.5);
                     lrMod = (long) (nr < 0 ? nr - 0.5 : nr + 0.5);
@@ -431,8 +429,7 @@ void SbiExprNode::FoldConstants()
                 // Integer operation!
                 sal_Bool err = sal_False;
                 if( nVal > SbxMAXLNG ) err = sal_True, nVal = SbxMAXLNG;
-                else
-                if( nVal < SbxMINLNG ) err = sal_True, nVal = SbxMINLNG;
+                else if( nVal < SbxMINLNG ) err = sal_True, nVal = SbxMINLNG;
                 if( err )
                 {
                     pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );

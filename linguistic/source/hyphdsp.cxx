@@ -607,8 +607,7 @@ Reference< XPossibleHyphens > SAL_CALL
                         rMgr.AddLngSvcEvtBroadcaster( xBroadcaster );
 
                     if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
-                    xRes = xHyph->createPossibleHyphens( aChkWord, rLocale,
-                                rProperties );
+                        xRes = xHyph->createPossibleHyphens( aChkWord, rLocale, rProperties );
 
                     pEntry->nLastTriedSvcIndex = (sal_Int16) i;
                     ++i;

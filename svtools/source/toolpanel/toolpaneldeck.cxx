@@ -252,15 +252,13 @@ namespace svt
         case ACTION_ACTIVATE_PREV:
             if ( !aCurrentPanel && ( nPanelCount > 0 ) )
                 aActivatePanel = nPanelCount - 1;
-            else
-            if ( !!aCurrentPanel && ( *aCurrentPanel > 0 ) )
+            else if ( !!aCurrentPanel && ( *aCurrentPanel > 0 ) )
                 aActivatePanel = *aCurrentPanel - 1;
             break;
         case ACTION_ACTIVATE_NEXT:
             if ( !aCurrentPanel && ( nPanelCount > 0 ) )
                 aActivatePanel = 0;
-            else
-            if ( !!aCurrentPanel && ( *aCurrentPanel < nPanelCount - 1 ) )
+            else if ( !!aCurrentPanel && ( *aCurrentPanel < nPanelCount - 1 ) )
                 aActivatePanel = *aCurrentPanel + 1;
             break;
         case ACTION_ACTIVATE_LAST:

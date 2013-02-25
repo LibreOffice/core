@@ -787,7 +787,7 @@ namespace cppcanvas
                     sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
 
                     for( sal_uInt32 i = 0; i < length; i++ )
-                    s >> chars[ i ];
+                        s >> chars[ i ];
 
                     family = ::rtl::OUString( chars, length );
                     EMFP_DEBUG (printf ("EMF+\tfamily: %s\n", rtl::OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()));

@@ -436,8 +436,8 @@ static sal_uInt16 sal_GetCode( int state )
         nCode |= KEY_MOD1;
     if( state & Mod1Mask )
         nCode |= KEY_MOD2;
-        if( state & Mod3Mask )
-                nCode |= KEY_MOD3;
+    if( state & Mod3Mask )
+        nCode |= KEY_MOD3;
 
     return nCode;
 }

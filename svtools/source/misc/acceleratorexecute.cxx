@@ -224,7 +224,7 @@ css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
         aAWTKey.Modifiers |= css::awt::KeyModifier::MOD1;
     if (aVCLKey.IsMod2())
         aAWTKey.Modifiers |= css::awt::KeyModifier::MOD2;
-        if (aVCLKey.IsMod3())
+    if (aVCLKey.IsMod3())
         aAWTKey.Modifiers |= css::awt::KeyModifier::MOD3;
     return aAWTKey;
 }

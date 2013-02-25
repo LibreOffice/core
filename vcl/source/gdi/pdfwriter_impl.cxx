@@ -3487,7 +3487,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                         nLength2 = nEndBinaryIndex - nBeginBinaryIndex + 1; // include the last byte
                         for( it = aSections.begin(); it != aSections.end(); ++it )
                             if( *it > nBeginBinaryIndex && *it < nEndBinaryIndex )
-                            nLength2 -= 6;
+                                nLength2 -= 6;
                     }
                     else
                     {

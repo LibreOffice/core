@@ -1367,26 +1367,19 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
     ::rtl::OUString aModule;
     if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWRITER))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITER);
-    else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SCALC))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SCALC))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_CALC);
-    else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_IMPRESS);
-    else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_DATABASE);
-    else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDRAW))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDRAW))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_DRAW);
-    else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWEB))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWEB))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITERWEB);
-    else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SGLOBAL))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SGLOBAL))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITERGLOBAL);
-    else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SMATH))
+    else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SMATH))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_MATH);
     return aModule;
 }

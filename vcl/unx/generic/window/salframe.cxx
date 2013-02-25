@@ -2596,10 +2596,10 @@ static sal_uInt16 sal_GetCode( int state )
     if( state & Mod1Mask )
         nCode |= KEY_MOD2;
 
-        // Map Meta/Super modifier to MOD3 on all Unix systems
-        // except Mac OS X
-        if( (state & Mod3Mask) )
-            nCode |= KEY_MOD3;
+    // Map Meta/Super modifier to MOD3 on all Unix systems
+    // except Mac OS X
+    if( (state & Mod3Mask) )
+        nCode |= KEY_MOD3;
 
     return nCode;
 }
@@ -3217,8 +3217,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         pString = &nKeyString;
         nSize = 1;
     }
-    else
-    if (nLen > 0 && nEncoding != RTL_TEXTENCODING_UNICODE)
+    else if (nLen > 0 && nEncoding != RTL_TEXTENCODING_UNICODE)
     {
         // create text converter
         rtl_TextToUnicodeConverter aConverter =
@@ -3244,8 +3243,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
         pString = pBuffer;
     }
-    else
-    if (nLen > 0 /* nEncoding == RTL_TEXTENCODING_UNICODE */)
+    else if (nLen > 0 /* nEncoding == RTL_TEXTENCODING_UNICODE */)
     {
         pString = (sal_Unicode*)pPrintable;
           nSize = nLen;

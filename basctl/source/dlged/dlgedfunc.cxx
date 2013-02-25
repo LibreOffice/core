@@ -61,14 +61,12 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     {
         if( rPos.X() < aOutRect.Left() )
             nDeltaX = -nDeltaX;
-        else
-        if( rPos.X() <= aOutRect.Right() )
+        else if( rPos.X() <= aOutRect.Right() )
             nDeltaX = 0;
 
         if( rPos.Y() < aOutRect.Top() )
             nDeltaY = -nDeltaY;
-        else
-        if( rPos.Y() <= aOutRect.Bottom() )
+        else if( rPos.Y() <= aOutRect.Bottom() )
             nDeltaY = 0;
 
         if( nDeltaX )

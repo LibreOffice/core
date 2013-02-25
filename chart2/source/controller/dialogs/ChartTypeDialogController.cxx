@@ -1183,13 +1183,15 @@ void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypePar
     sal_Int32 nNumLines = 0;
 
     if(xTemplateProps.is())
-    try
     {
-        xTemplateProps->getPropertyValue( "NumberOfLines" ) >>= nNumLines;
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
+        try
+        {
+            xTemplateProps->getPropertyValue( "NumberOfLines" ) >>= nNumLines;
+        }
+        catch( const uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
     }
     if( nNumLines < 0 )
         nNumLines = 0;

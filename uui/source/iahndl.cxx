@@ -963,9 +963,9 @@ UUIInteractionHelper::getInteractionHandlerList(
                                 xHierNameAccess( xInterface, uno::UNO_QUERY );
 
             if ( !xHierNameAccess.is() )
-            throw uno::RuntimeException(OUString(
-                        "config access does not implement XHierarchicalNameAccess"),
-                uno::Reference< uno::XInterface >());
+                throw uno::RuntimeException(OUString(
+                    "config access does not implement XHierarchicalNameAccess"),
+                    uno::Reference< uno::XInterface >());
 
             // Iterate over children.
             for ( sal_Int32 n = 0; n < nCount; ++n )

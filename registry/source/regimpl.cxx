@@ -1716,8 +1716,7 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
 
     if (_err == store_E_NotExists)
         return REG_KEY_NOT_EXISTS;
-    else
-    if (_err == store_E_WrongFormat)
+    else if (_err == store_E_WrongFormat)
         return REG_INVALID_KEY;
 
     fprintf(stdout, "%s/ %s\n", sIndent.getStr(), OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());

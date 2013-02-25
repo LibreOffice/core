@@ -3872,9 +3872,9 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, sal_uInt16 nFlags )
         ResMgr* pResMgr = ImplGetResMgr();
         pSVData->maCtrlData.mpCheckImgList = new ImageList();
         if( pResMgr )
-        LoadThemedImageList( rStyleSettings,
-                 pSVData->maCtrlData.mpCheckImgList,
-                 ResId( SV_RESID_BITMAP_CHECK+nStyle, *pResMgr ), 9 );
+            LoadThemedImageList( rStyleSettings,
+                pSVData->maCtrlData.mpCheckImgList,
+                ResId( SV_RESID_BITMAP_CHECK+nStyle, *pResMgr ), 9 );
         pSVData->maCtrlData.mnCheckStyle = nStyle;
     }
 

@@ -298,8 +298,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             String sFamily = ((const SfxStringItem*)pFamItem)->GetValue();
             if (sFamily.CompareToAscii("CellStyles") == COMPARE_EQUAL)
                 eFamily = SFX_STYLE_FAMILY_PARA;
-            else
-            if (sFamily.CompareToAscii("PageStyles") == COMPARE_EQUAL)
+            else if (sFamily.CompareToAscii("PageStyles") == COMPARE_EQUAL)
                 eFamily = SFX_STYLE_FAMILY_PAGE;
         }
 

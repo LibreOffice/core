@@ -2134,7 +2134,7 @@ void EscherPropertyContainer::LookForPolarHandles( const MSO_SPT eShapeType, sal
 sal_Bool EscherPropertyContainer::GetAdjustmentValue( const com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue & rkProp, sal_Int32 nIndex, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, sal_Int32& nValue )
 {
     if ( rkProp.State != beans::PropertyState_DIRECT_VALUE )
-    return sal_False;
+        return sal_False;
 
     sal_Bool bUseFixedFloat = ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << nIndex ) ) != 0;
     if ( rkProp.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )

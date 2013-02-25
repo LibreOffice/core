@@ -67,7 +67,7 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
     ::osl::MutexGuard aGuard( getOslMutex() );
 
     if (nChildIndex<0 || nChildIndex>=getAccessibleChildCount())
-    throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
     ensureIsAlive();
     Reference< XAccessible > xChild;
     if(m_eObjType == svt::table::TCTYPE_COLUMNHEADERBAR)

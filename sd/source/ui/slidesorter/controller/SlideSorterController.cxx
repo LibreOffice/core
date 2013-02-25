@@ -981,9 +981,9 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rs
 
     // Get a pointer to the corresponding accessible object and notify
     // that of the name change.
-        SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-        if ( ! pWindow)
-            return;
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    if ( ! pWindow)
+        return;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         xAccessible (pWindow->GetAccessible(sal_False));

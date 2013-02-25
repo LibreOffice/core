@@ -61,8 +61,8 @@ public:
 
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
     {
-    if ( Index < 0 || Index >= getCount() )
-        throw lang::IndexOutOfBoundsException();
+        if ( Index < 0 || Index >= getCount() )
+            throw lang::IndexOutOfBoundsException();
         return uno::makeAny( sal_Int32( spnDefColorTable8[ Index ] ) );
     }
 

@@ -464,8 +464,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
             XFreePixmap (GetXDisplay(), hBrush_);
         hBrush_ = limitXCreatePixmap( GetXDisplay(), GetDrawable(), 8, 8, 8 );
     }
-    else
-    if( !hBrush_ )
+    else if( !hBrush_ )
         hBrush_ = limitXCreatePixmap( GetXDisplay(), GetDrawable(), 8, 8, 8 );
 
     // put the ximage to the pixmap

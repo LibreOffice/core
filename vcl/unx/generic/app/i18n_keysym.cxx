@@ -343,8 +343,7 @@ KeysymToUnicode (KeySym nKeySym)
         keymap_t const* p_map = NULL;
         if (n_byte3 < INITIAL_KEYMAPS)
             p_map = p_keymap[n_byte3];
-        else
-        if (n_byte3 == 255)
+        else if (n_byte3 == 255)
             p_map = &keymap255;
 
         if ((p_map != NULL) && (n_byte4 >= p_map->first) && (n_byte4 <= p_map->last) )

@@ -608,7 +608,7 @@ void PrinterInfoManager::initialize()
 
         if( m_aPrinters.find( aPrinterName ) != m_aPrinters.end() )
             // probably user made this one permanent in padmin
-        continue;
+            continue;
 
         String aCmd( m_aSystemPrintCommand );
         aCmd.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(PRINTER)" ) ), it->m_aQueue );
@@ -710,7 +710,7 @@ bool PrinterInfoManager::writePrinterConfig()
     {
         if( ! it->second.m_bModified )
             // printer was not changed, do nothing
-        continue;
+            continue;
 
         // don't save autoqueue printers
         sal_Int32 nIndex = 0;
@@ -973,7 +973,7 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
 
     if( ! rInfo.m_bPerformFontSubstitution ||
         ! rInfo.m_aFontSubstitutes.size() )
-    return;
+        return;
 
     ::std::list< FastPrintFontInfo > aFonts;
     ::boost::unordered_map< OUString, ::std::list< FastPrintFontInfo >, OUStringHash > aPrinterFonts;

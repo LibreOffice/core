@@ -163,9 +163,8 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     // a)
     if (sCurrentHelpURL.isEmpty())
         bShowIt = sal_True;
-    else
     // b)
-    if (bCurrentHelpURLIsAnyDefaultURL)
+    else if (bCurrentHelpURLIsAnyDefaultURL)
         bShowIt = sal_True;
 
     if (bShowIt)
@@ -194,11 +193,9 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 
     if (aEvent.Source == m_xModuleManager)
         m_xModuleManager.clear();
-    else
-    if (aEvent.Source == m_xDesktop)
+    else if (aEvent.Source == m_xDesktop)
         m_xDesktop.clear();
-    else
-    if (aEvent.Source == m_xConfig)
+    else if (aEvent.Source == m_xConfig)
         m_xConfig.clear();
 
     aLock.unlock();

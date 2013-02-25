@@ -409,8 +409,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aSortParam.bHasHeader = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_CASESENS, sal_True, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bCaseSens = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-                    if ( pArgs->GetItemState( SID_SORT_NATURALSORT, true, &pItem ) == SFX_ITEM_SET )
-                        aSortParam.bNaturalSort = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                        if ( pArgs->GetItemState( SID_SORT_NATURALSORT, true, &pItem ) == SFX_ITEM_SET )
+                            aSortParam.bNaturalSort = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_ATTRIBS, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bIncludePattern = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_USERDEF, sal_True, &pItem ) == SFX_ITEM_SET )

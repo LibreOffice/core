@@ -2143,10 +2143,10 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
         MayCallback();
 
         if (pPict->GetError())
-        bStatus=sal_False;
+            bStatus=sal_False;
 
         if (bStatus==sal_False)
-        break;
+            break;
     }
 }
 

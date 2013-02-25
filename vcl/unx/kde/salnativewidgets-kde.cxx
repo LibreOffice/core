@@ -1100,7 +1100,7 @@ QToolBar *WidgetPainter::toolBar( const Rectangle& rControlRegion, sal_Bool bHor
 QToolButton *WidgetPainter::toolButton( const Rectangle& rControlRegion)
 {
     if ( !m_pToolButton )
-    m_pToolButton = new QToolButton( NULL, "tool_button" );
+        m_pToolButton = new QToolButton( NULL, "tool_button" );
 
     QRect qRect = region2QRect( rControlRegion );
 
@@ -1155,7 +1155,7 @@ QPopupMenu *WidgetPainter::popupMenu( const Rectangle& rControlRegion)
 QProgressBar *WidgetPainter::progressBar( const Rectangle& rControlRegion )
 {
     if ( !m_pProgressBar )
-    m_pProgressBar = new QProgressBar( NULL, "progress_bar" );
+        m_pProgressBar = new QProgressBar( NULL, "progress_bar" );
 
     QRect qRect = region2QRect( rControlRegion );
 
@@ -1299,9 +1299,9 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
             QStyle::CC_ScrollBar, pScrollBar,
             QStyle::SC_ScrollBarAddPage ).right() + 1 );
         if ( qRectAddLine.width() > qRectSubLine.width() )
-        bTwoSubButtons = sal_True;
+            bTwoSubButtons = sal_True;
         if ( qRectSubLine.left() > kapp->style().querySubControlMetrics( QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarSubPage ).left() )
-        bPlatinumStyle = sal_True;
+            bPlatinumStyle = sal_True;
     }
     else
     {
@@ -1309,9 +1309,9 @@ sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nP
             QStyle::CC_ScrollBar, pScrollBar,
             QStyle::SC_ScrollBarAddPage ).bottom() + 1 );
         if ( qRectAddLine.height() > qRectSubLine.height() )
-        bTwoSubButtons = sal_True;
+            bTwoSubButtons = sal_True;
         if ( qRectSubLine.top() > kapp->style().querySubControlMetrics( QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarSubPage ).top() )
-        bPlatinumStyle = sal_True;
+            bPlatinumStyle = sal_True;
     }
 
     switch ( nPart )
@@ -1678,11 +1678,11 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
             // Workaround for Platinum and 3 button style scroll bars.
             // It makes the right/down button bigger.
             if ( nPart == PART_BUTTON_RIGHT )
-            qRect.setLeft( kapp->style().querySubControlMetrics(
+                qRect.setLeft( kapp->style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
                     QStyle::SC_ScrollBarAddPage ).right() + 1 );
             else
-            qRect.setTop( kapp->style().querySubControlMetrics(
+                qRect.setTop( kapp->style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
                     QStyle::SC_ScrollBarAddPage ).bottom() + 1 );
 

@@ -82,8 +82,8 @@ namespace sfx2
                 _rEvent.Modifiers |= KeyModifier::MOD1;
             if ( _rVclEvent.IsMod2() )
                 _rEvent.Modifiers |= KeyModifier::MOD2;
-                if ( _rVclEvent.IsMod3() )
-                        _rEvent.Modifiers |= KeyModifier::MOD3;
+            if ( _rVclEvent.IsMod3() )
+                _rEvent.Modifiers |= KeyModifier::MOD3;
         }
 
         void lcl_initKeyEvent( KeyEvent& rEvent, const ::KeyEvent& rEvt )

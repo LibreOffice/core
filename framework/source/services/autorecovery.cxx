@@ -1334,11 +1334,9 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
 
             if (! impl_enoughDiscSpace(nMinSpaceConfigSave))
                 AutoRecovery::impl_showFullDiscError();
-            else
-            if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
+            else if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
                 nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
-            else
-            if (nRetry <= GIVE_UP_RETRY)
+            else if (nRetry <= GIVE_UP_RETRY)
                 throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
 
             --nRetry;
@@ -1479,8 +1477,7 @@ void AutoRecovery::implts_updateTimer()
             nMilliSeconds = m_nAutoSaveTimeIntervall;  // [ms]
         #endif
     }
-    else
-    if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
+    else if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
     {
         nMilliSeconds = MIN_TIME_FOR_USER_IDLE;
         #if OSL_DEBUG_LEVEL > 1
@@ -1488,8 +1485,7 @@ void AutoRecovery::implts_updateTimer()
             nMilliSeconds = 300; // let us some time, to finish this method .-)
         #endif
     }
-    else
-    if (m_eTimerType == AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED)
+    else if (m_eTimerType == AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED)
         nMilliSeconds = 300; // there is a minimum time frame, where the user can loose some key input data!
 
     m_aTimer.SetTimeout(nMilliSeconds);
@@ -2370,11 +2366,9 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
 
             if (! impl_enoughDiscSpace(nMinSpaceDocSave))
                 AutoRecovery::impl_showFullDiscError();
-            else
-            if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
+            else if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
                 nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
-            else
-            if (nRetry <= GIVE_UP_RETRY)
+            else if (nRetry <= GIVE_UP_RETRY)
                 throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
 
             --nRetry;
@@ -2500,15 +2494,13 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         {
             sLoadOriginalURL = rInfo.OrgURL;
         }
-        else
-        if (!rInfo.TemplateURL.isEmpty())
+        else if (!rInfo.TemplateURL.isEmpty())
         {
             sLoadOriginalURL = rInfo.TemplateURL;
             lDescriptor[::comphelper::MediaDescriptor::PROP_ASTEMPLATE()]   <<= sal_True;
             lDescriptor[::comphelper::MediaDescriptor::PROP_TEMPLATENAME()] <<= rInfo.TemplateURL;
         }
-        else
-        if (!rInfo.FactoryURL.isEmpty())
+        else if (!rInfo.FactoryURL.isEmpty())
         {
             sLoadOriginalURL = rInfo.FactoryURL;
             lDescriptor[::comphelper::MediaDescriptor::PROP_ASTEMPLATE()] <<= sal_True;

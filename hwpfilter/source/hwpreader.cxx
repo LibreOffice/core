@@ -1479,8 +1479,8 @@ void HwpReader::makePStyle(ParaShape * pshape)
         {
             if( i > 0 && pshape->tabs[i].position == 0. )
                 break;
-                if( pshape->tabs[i].position <= tab_margin )
-                    continue;
+            if( pshape->tabs[i].position <= tab_margin )
+                continue;
             padd(ascii("style:position"), sXML_CDATA,
                 Double2Str(WTMM(pshape->tabs[i].position - tab_margin )) + ascii("mm"));
             if( pshape->tabs[i].type )
@@ -2750,11 +2750,11 @@ void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
                 firstspace = 0;
             else
                 firstspace = 1;
-                res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
-                for( int j = 0 ; j < res; j++ )
-                {
-                    str.push_back(dest[j]);
-                }
+            res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
+            for( int j = 0 ; j < res; j++ )
+            {
+                str.push_back(dest[j]);
+            }
         }
     }
 }
@@ -2833,11 +2833,11 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
                 firstspace = 0;
             else
                 firstspace = 1;
-                res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
-                for( int j = 0 ; j < res; j++ )
-                {
-                    str.push_back(dest[j]);
-                }
+            res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
+            for( int j = 0 ; j < res; j++ )
+            {
+                str.push_back(dest[j]);
+            }
         }
     }
 }
@@ -2914,11 +2914,11 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                 firstspace = 0;
             else
                 firstspace = 1;
-                res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
-                for( int j = 0 ; j < res; j++ )
-                {
-                    str.push_back(dest[j]);
-                }
+            res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
+            for( int j = 0 ; j < res; j++ )
+            {
+                str.push_back(dest[j]);
+            }
         }
         else if (para->hhstr[n]->hh == CH_FIELD)
         {
@@ -3672,19 +3672,19 @@ void HwpReader::makeFormula(TxtBox * hbox)
                 cshape = pPar->GetCharShape(n);
             if (l >= sizeof(mybuf)-7)
                 break;
-                res = hcharconv(pPar->hhstr[n]->hh, dest, UNICODE);
-                for( int j = 0 ; j < res; j++ ){
-                    c = dest[j];
-                    if( c < 32 )
-                         c = ' ';
-                    if( c < 256 )
-                         mybuf[l++] = sal::static_int_cast<char>(c);
-                    else
-                    {
-                         mybuf[l++] = sal::static_int_cast<char>((c >> 8) & 0xff);
-                         mybuf[l++] = sal::static_int_cast<char>(c & 0xff);
-                    }
+            res = hcharconv(pPar->hhstr[n]->hh, dest, UNICODE);
+            for( int j = 0 ; j < res; j++ ){
+                c = dest[j];
+                if( c < 32 )
+                    c = ' ';
+                if( c < 256 )
+                    mybuf[l++] = sal::static_int_cast<char>(c);
+                else
+                {
+                    mybuf[l++] = sal::static_int_cast<char>((c >> 8) & 0xff);
+                    mybuf[l++] = sal::static_int_cast<char>(c & 0xff);
                 }
+            }
         }
         if (l >= sizeof(mybuf)-7)
             break;

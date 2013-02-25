@@ -451,16 +451,13 @@ ERecoveryState RecoveryCore::mapDocState2RecoverState(sal_Int32 eDocState)
        )
         eRecState = E_RECOVERY_IS_IN_PROGRESS;
     // red
-    else
-    if ((eDocState & E_DAMAGED) == E_DAMAGED)
+    else if ((eDocState & E_DAMAGED) == E_DAMAGED)
         eRecState = E_RECOVERY_FAILED;
     // yellow
-    else
-    if ((eDocState & E_INCOMPLETE) == E_INCOMPLETE)
+    else if ((eDocState & E_INCOMPLETE) == E_INCOMPLETE)
         eRecState = E_ORIGINAL_DOCUMENT_RECOVERED;
     // green
-    else
-    if ((eDocState & E_SUCCEDED) == E_SUCCEDED)
+    else if ((eDocState & E_SUCCEDED) == E_SUCCEDED)
         eRecState = E_SUCCESSFULLY_RECOVERED;
 
     return eRecState;

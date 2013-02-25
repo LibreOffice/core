@@ -218,8 +218,7 @@ void SfxStringListItem::SetString( const XubString& rStr )
 
     if ( pImp && (pImp->nRefCount == 1) )
         delete pImp;
-    else
-    if( pImp )
+    else if( pImp )
         pImp->nRefCount--;
     pImp = new SfxImpStringList;
 
@@ -278,8 +277,7 @@ void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< rtl:
 
     if ( pImp && (pImp->nRefCount == 1) )
         delete pImp;
-    else
-    if( pImp )
+    else if( pImp )
         pImp->nRefCount--;
     pImp = new SfxImpStringList;
 

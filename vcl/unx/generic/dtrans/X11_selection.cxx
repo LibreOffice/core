@@ -956,22 +956,21 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
                     && aEvent.xproperty.atom == selection )
                     bAdjustTime = true;
             }
-            else
-            if( XCheckTypedEvent( m_pDisplay,
+            else if( XCheckTypedEvent( m_pDisplay,
                                   SelectionClear,
                                   &aEvent
                                   ) )
             {
                 bHandle = true;
             }
-            else
-            if( XCheckTypedEvent( m_pDisplay,
+            else if( XCheckTypedEvent( m_pDisplay,
                                   SelectionRequest,
                                   &aEvent
                                   ) )
+            {
                 bHandle = true;
-            else
-            if( XCheckTypedEvent( m_pDisplay,
+            }
+            else if( XCheckTypedEvent( m_pDisplay,
                                   SelectionNotify,
                                   &aEvent
                                   ) )
