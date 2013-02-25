@@ -16,7 +16,8 @@ ifeq ($(COM),MSC)
 $(call gb_CustomTarget_get_workdir,odk/unowinreg)/unowinreg.dll: $(call gb_Library_get_target,unowinreg)
 	cp $< $@
 else # COM=GCC
-$(call gb_CustomTarget_get_workdir,odk/unowinreg)/unowinreg.dll: $(SRCDIR)/odk/sourcd/unowinreg/win/unowinreg.cxx
+$(call gb_CustomTarget_get_workdir,odk/unowinreg)/unowinreg.dll : \
+		$(SRCDIR)/odk/source/unowinreg/win/unowinreg.cxx
 	$(MINGWCXX) -Wall -D_JNI_IMPLEMENTATION_ \
 		-I$(JAVA_HOME)/include \
 		$(if $(filter LINUX,$(OS)),-I$(JAVA_HOME)/include/linux,\
