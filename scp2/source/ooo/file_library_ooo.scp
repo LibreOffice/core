@@ -201,8 +201,6 @@ End
 #endif
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Dbmm, dbmm)
-
 STD_LIB_FILE( gid_File_Lib_Dbase2, dbase )
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)

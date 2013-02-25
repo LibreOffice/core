@@ -234,6 +234,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     ctl \
     cui \
     dba \
+    dbmm \
     sdbt \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
@@ -266,7 +267,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     cppcanvas \
     dbase \
     dbaxml \
-    dbmm \
     dbp \
     dbtools \
     dbu \
