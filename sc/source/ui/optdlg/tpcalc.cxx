@@ -112,6 +112,17 @@ __EXPORT ScTpCalcOptions::~ScTpCalcOptions()
 
 void ScTpCalcOptions::Init()
 {
+    const Size a6Size = aFtPrec.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+    const Size aMin = aFtPrec.CalcMinimumSize();
+    const Point aPos = aFtPrec.GetPosPixel();
+    const long nNewX = aPos.X() + aFtPrec.GetSizePixel().Width() - aMin.Width();
+
+    aFtPrec.SetPosPixel( Point( nNewX, aPos.Y() ) );
+    aFtPrec.SetSizePixel( aMin );
+    aBtnGeneralPrec.SetSizePixel( Size(
+        nNewX - a6Size.Width() - aBtnGeneralPrec.GetPosPixel().X(),
+        aBtnGeneralPrec.GetSizePixel().Height() ) );
+
     aBtnIterate .SetClickHdl( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
     aBtnGeneralPrec.SetClickHdl( LINK(this, ScTpCalcOptions, CheckClickHdl) );
     aBtnDateStd .SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );

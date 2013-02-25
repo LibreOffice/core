@@ -160,8 +160,9 @@ TabPage RID_SCPAGE_CALC
     {
         HelpID = "sc:CheckBox:RID_SCPAGE_CALC:BTN_GENERAL_PREC";
         Pos = MAP_APPFONT ( 12 , 147 ) ;
-        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Size = MAP_APPFONT ( 148 , 26 ) ;
         Text [ en-US ] = "Limit decimals for general number format" ;
+        WordBreak = TRUE ;
     };
     FixedText FT_PREC
     {
