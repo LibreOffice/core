@@ -60,17 +60,46 @@ using namespace ::cppu                          ;
 
 const sal_uInt16 SLOTID_MDIWINDOWLIST = 5610;
 
+//-------------------------------------------------------------------------------------------------------------
+//  debug methods
+//  (should be private everyway!)
+//-------------------------------------------------------------------------------------------------------------
+
+/*-****************************************************************************************************//**
+    @short      debug-method to check incoming parameter of some other mehods of this class
+    @descr      The following methods are used to check parameters for other methods
+                of this class. The return value is used directly for an ASSERT(...).
+
+    @seealso    ASSERTs in implementation!
+
+    @param      css::uno::References to checking variables
+    @return     sal_False on invalid parameter<BR>
+                sal_True  otherway
+
+    @onerror    -
+*//*-*****************************************************************************************************/
+
+#ifdef ENABLE_ASSERTIONS
+
+static sal_Bool impldbg_checkParameter_MenuDispatcher      (   const   css::uno::Reference< css::uno::XComponentContext >& xContext        ,
+                                                               const   css::uno::Reference< css::frame::XFrame >&              xOwner          );
+static sal_Bool impldbg_checkParameter_addStatusListener    (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
+                                                                const   css::util::URL&                                         aURL            );
+static sal_Bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
+                                                                const   css::util::URL&                                         aURL            );
+#endif  // #ifdef ENABLE_ASSERTIONS
+
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-MenuDispatcher::MenuDispatcher(   const   uno::Reference< XMultiServiceFactory >&  xFactory    ,
-                                    const   uno::Reference< XFrame >&               xOwner      )
+MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
+                                  const   uno::Reference< XFrame >&             xOwner      )
         //  Init baseclasses first
         :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
         ,   OWeakObject             (                                )
         // Init member
         ,   m_xOwnerWeak            ( xOwner                         )
-        ,   m_xFactory              ( xFactory                       )
+        ,   m_xContext              ( xContext                       )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex() )
         ,   m_bAlreadyDisposed      ( sal_False                      )
         ,   m_bActivateListener     ( sal_False                      )
@@ -78,7 +107,7 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XMultiServiceFactory >
 {
     // Safe impossible cases
     // We need valid information about our owner for work.
-    LOG_ASSERT( impldbg_checkParameter_MenuDispatcher( xFactory, xOwner ), "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!\n" )
+    LOG_ASSERT( impldbg_checkParameter_MenuDispatcher( xContext, xOwner ), "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!\n" )
 
     m_bActivateListener = sal_True;
     xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
@@ -221,7 +250,7 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
         }
 
         // Forget our factory.
-        m_xFactory = uno::Reference< XMultiServiceFactory >();
+        m_xContext = uno::Reference< XComponentContext >();
 
         // Remove our menu from system window if it is still there!
         if ( m_pMenuManager )
@@ -310,11 +339,11 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                 // set new menu on our system window and create new menu manager
                 if ( bMenuFromResource )
                 {
-                    m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_False );
+                    m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, sal_True, sal_False );
                 }
                 else
                 {
-                    m_pMenuManager = new MenuManager( m_xFactory, xFrame, pMenuBar, sal_True, sal_True );
+                    m_pMenuManager = new MenuManager( m_xContext, xFrame, pMenuBar, sal_True, sal_True );
                 }
 
                 pSysWindow->SetMenuBar( pMenuBar );
@@ -344,16 +373,16 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
 #ifdef ENABLE_ASSERTIONS
 
 //*****************************************************************************************************************
-sal_Bool MenuDispatcher::impldbg_checkParameter_MenuDispatcher(   const   uno::Reference< XMultiServiceFactory >&  xFactory    ,
-                                                                        const   uno::Reference< XFrame >&               xOwner      )
+static sal_Bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
+                                                                  const   uno::Reference< XFrame >&             xOwner      )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
     if  (
-            ( &xFactory     ==  NULL        )   ||
+            ( &xContext     ==  NULL        )   ||
             ( &xOwner       ==  NULL        )   ||
-            ( xFactory.is() ==  sal_False   )   ||
+            ( xContext.is() ==  sal_False   )   ||
             ( xOwner.is()   ==  sal_False   )
         )
     {
@@ -366,8 +395,8 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_MenuDispatcher(   const   uno::R
 //*****************************************************************************************************************
 // We need a valid URL. What is meaning with "register for nothing"?!
 // xControl must correct to - nobody can advised otherwise!
-sal_Bool MenuDispatcher::impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,
-                                                                        const   URL&                            aURL    )
+static sal_Bool impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,
+                                                          const   URL&                                 aURL    )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
@@ -387,8 +416,8 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_addStatusListener( const   uno::
 //*****************************************************************************************************************
 // The same goes for these case! We have added valid listener for correct URL only.
 // We can't remove invalid listener for nothing!
-sal_Bool MenuDispatcher::impldbg_checkParameter_removeStatusListener(  const   uno::Reference< XStatusListener >&   xControl,
-                                                                            const   URL&                            aURL    )
+static sal_Bool impldbg_checkParameter_removeStatusListener(  const   uno::Reference< XStatusListener >&   xControl,
+                                                              const   URL&                                 aURL    )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
