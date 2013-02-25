@@ -46,7 +46,6 @@ using ::comphelper::ImplementationReference;
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star;
 
 namespace sd
 {

@@ -529,7 +529,6 @@ PrinterGfx::LicenseWarning(const Point& rPoint, const sal_Unicode* pStr,
     // printer. This is not so unlikely as it may seem; no print embedding
     // licensed fonts are often used (or so they say) in companies:
     // they are installed on displays and printers, but get not embedded in
-    // they are installed on displays and printers, but get not embedded in
     // print files or documents because they are not licensed for use outside
     // the company.
     rtl::OString aMessage( "The font " );

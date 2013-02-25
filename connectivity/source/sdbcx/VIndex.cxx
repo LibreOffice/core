@@ -26,7 +26,6 @@
 #include "TConnection.hxx"
 // -------------------------------------------------------------------------
 using namespace ::connectivity;
-using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::connectivity::sdbcx;
 using namespace ::cppu;

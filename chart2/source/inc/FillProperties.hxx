@@ -37,7 +37,6 @@ public:
     enum
     {
         // com.sun.star.drawing.FillProperties
-        // com.sun.star.drawing.FillProperties
         PROP_FILL_STYLE = FAST_PROPERTY_ID_START_FILL_PROP
         , PROP_FILL_COLOR
         , PROP_FILL_TRANSPARENCE

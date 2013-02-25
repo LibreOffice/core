@@ -238,7 +238,6 @@ public:
                             bool& bHorizontal ) const;
 
     /** Converts the vertical alignment to UNO properties. */
-    /** Converts the vertical alignment to UNO properties. */
     void                convertVerticalAlign(
                             PropertyMap& rPropMap,
                             sal_Int32 nVerticalAlign ) const;

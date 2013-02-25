@@ -39,7 +39,6 @@ using namespace ::com::sun::star::security;
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star;
 
 
 // HACK!!! copied from xmlsecurity/source/dialog/resourcemanager.cxx

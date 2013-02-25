@@ -41,7 +41,6 @@
 #include <canvas/canvastools.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
-#include <cppcanvas/basegfxfactory.hxx>
 #include <avmedia/mediawindow.hxx>
 
 #include <com/sun/star/media/XManager.hpp>

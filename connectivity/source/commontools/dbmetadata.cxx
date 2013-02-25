@@ -52,7 +52,6 @@ namespace dbtools
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdbc::XDatabaseMetaData;
     using ::com::sun::star::sdbc::XDatabaseMetaData2;
     using ::com::sun::star::lang::IllegalArgumentException;

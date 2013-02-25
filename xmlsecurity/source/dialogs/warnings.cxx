@@ -38,7 +38,6 @@ using namespace ::com::sun::star::security;
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star;
 
 
 MacroWarning::MacroWarning( Window* _pParent, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, cssu::Reference< dcss::security::XCertificate >& _rxCert )

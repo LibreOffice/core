@@ -48,7 +48,6 @@
 
 using namespace dbaccess;
 using namespace connectivity;
-using namespace connectivity;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;

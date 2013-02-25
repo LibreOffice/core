@@ -118,7 +118,6 @@ void Camera3D::SetBankAngle(double fAngle)
 
     // Calculate from aDiff to uppwards pointing View-Up-Vector
     aPrj = aPrj.getPerpendicular(aDiff);
-    aPrj = aPrj.getPerpendicular(aDiff);
     aDiff.normalize();
 
     // Rotate on Z axis, to rotate the BankAngle and back

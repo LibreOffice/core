@@ -53,7 +53,6 @@ using namespace std;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
 using namespace com::sun::star::task;

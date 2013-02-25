@@ -51,7 +51,6 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star;
 
 void Main();
 

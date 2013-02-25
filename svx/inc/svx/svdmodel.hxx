@@ -377,7 +377,6 @@ public:
     //   MAP_100TH_MM, Fraction(1,10)    : 1 log Einh = 1/1000mm
     //   MAP_MM,       Fraction(1000,1)  : 1 log Einh = 1000mm     = 1m
     //   MAP_CM,       Fraction(100,1)   : 1 log Einh = 100cm      = 1m
-    //   MAP_CM,       Fraction(100,1)   : 1 log Einh = 100cm      = 1m
     //   MAP_CM,       Fraction(100000,1): 1 log Einh = 100000cm   = 1km
     // (PS: Lichtjahre sind somit also nicht darstellbar).
     // Die Skalierungseinheit wird benoetigt, damit die Engine das Clipboard
