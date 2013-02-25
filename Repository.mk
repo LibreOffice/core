@@ -226,6 +226,14 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     basctl \
 ))
 endif
+ifeq ($(OS),WNT)
+ifeq ($(DISABLE_ATL),)
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
+    emser \
+))
+endif
+endif
+
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     bib \
@@ -277,7 +285,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     editeng \
     egi \
     eme \
-    emser \
     epb \
     epg \
     epp \

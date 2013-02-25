@@ -372,8 +372,6 @@ SPECIAL_LIB_FILE(gid_File_Lib_Emboleobj,emboleobj)
 
 #if defined(WNT) && !defined(DISABLE_ATL)
 
-STD_LIB_FILE( gid_File_Lib_Emser, emser )
-
 File gid_File_Lib_Inprocserv
     LIB_FILE_BODY;
     Styles = (PACKED);
