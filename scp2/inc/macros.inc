@@ -43,14 +43,12 @@
 
 #ifdef UNX
     #define LIBNAME(name)                     STRING(CONCAT4(lib,name,DLLPOSTFIX,UNXSUFFIX))
-    #define FILTER_LIBNAME(name)              LIBNAME(name)
     #define EXENAME(name)                     STRING(name)
     #define PROFILENAME(name)                 STRING(CONCAT2(name,rc))
     #define SPECIAL_NAME(name)                STRING(CONCAT3(lib,name,UNXSUFFIX))
     #define SPECIAL_COMPONENT_LIB_NAME(name)  STRING(CONCAT2(name,UNXSUFFIX))
 #else
     #define LIBNAME(name)                     STRING(CONCAT3(name,DLLPOSTFIX,.dll))
-    #define FILTER_LIBNAME(name)              LIBNAME(name)
     #define EXENAME(name)                     STRING(CONCAT2(name,.exe))
     #define PROFILENAME(name)                 STRING(CONCAT2(name,.ini))
     #define SPECIAL_NAME(name)                STRING(CONCAT2(name,.dll))
@@ -118,12 +116,6 @@
         RESFILE_ALL_LANG(name); \
         Dir     = gid_Dir_Resource; \
         Styles  = (PACKED); \
-    End
-
-#define STD_FILTER_FILE(id,name) \
-    File id \
-        PACKED_LIB_FILE_BODY; \
-        Name = FILTER_LIBNAME(name); \
     End
 
 #define STD_FONTWIN_FILE(id,name,fontname) \

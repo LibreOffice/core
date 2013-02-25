@@ -55,7 +55,7 @@ STD_LIB_FILE( gid_File_Lib_Sc, sc)
 
 STD_LIB_FILE( gid_File_Lib_Scui, scui)
 
-STD_FILTER_FILE( gid_File_Lib_Scfilt, scfilt)
+STD_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
 
 STD_LIB_FILE( gid_File_Lib_Scd, scd)
 

@@ -334,53 +334,53 @@ File gid_File_Dtd_Toolbar
     Name = "toolbar.dtd";
 End
 
-STD_FILTER_FILE( gid_File_Filter_Sdfilt, sdfilt)
+STD_LIB_FILE( gid_File_Filter_Sdfilt, sdfilt)
 
-STD_FILTER_FILE( git_File_Filter_Svgio, svgio)
+STD_LIB_FILE( git_File_Filter_Svgio, svgio)
 
-STD_FILTER_FILE( gid_File_Filter_Eme, eme)
+STD_LIB_FILE( gid_File_Filter_Eme, eme)
 
-STD_FILTER_FILE( gid_File_Filter_Icg, icg)
+STD_LIB_FILE( gid_File_Filter_Icg, icg)
 
-STD_FILTER_FILE( gid_File_Filter_Egi, egi)
+STD_LIB_FILE( gid_File_Filter_Egi, egi)
 
-STD_FILTER_FILE( gid_File_Filter_Epb, epb)
+STD_LIB_FILE( gid_File_Filter_Epb, epb)
 
-STD_FILTER_FILE( gid_File_Filter_Epg, epg)
+STD_LIB_FILE( gid_File_Filter_Epg, epg)
 
-STD_FILTER_FILE( gid_File_Filter_Epp, epp)
+STD_LIB_FILE( gid_File_Filter_Epp, epp)
 
-STD_FILTER_FILE( gid_File_Filter_Eps, eps)
+STD_LIB_FILE( gid_File_Filter_Eps, eps)
 
-STD_FILTER_FILE( gid_File_Filter_Ept, ept)
+STD_LIB_FILE( gid_File_Filter_Ept, ept)
 
-STD_FILTER_FILE( gid_File_Filter_Era, era)
+STD_LIB_FILE( gid_File_Filter_Era, era)
 
-STD_FILTER_FILE( gid_File_Filter_Eti, eti)
+STD_LIB_FILE( gid_File_Filter_Eti, eti)
 
-STD_FILTER_FILE( gid_File_Filter_Exp, exp)
+STD_LIB_FILE( gid_File_Filter_Exp, exp)
 
-STD_FILTER_FILE( gid_File_Filter_Icd, icd)
+STD_LIB_FILE( gid_File_Filter_Icd, icd)
 
-STD_FILTER_FILE( gid_File_Filter_Idx, idx)
+STD_LIB_FILE( gid_File_Filter_Idx, idx)
 
-STD_FILTER_FILE( gid_File_Filter_Ime, ime)
+STD_LIB_FILE( gid_File_Filter_Ime, ime)
 
-STD_FILTER_FILE( gid_File_Filter_Ipb, ipb)
+STD_LIB_FILE( gid_File_Filter_Ipb, ipb)
 
-STD_FILTER_FILE( gid_File_Filter_Ipd, ipd)
+STD_LIB_FILE( gid_File_Filter_Ipd, ipd)
 
-STD_FILTER_FILE( gid_File_Filter_Ips, ips)
+STD_LIB_FILE( gid_File_Filter_Ips, ips)
 
-STD_FILTER_FILE( gid_File_Filter_Ipt, ipt)
+STD_LIB_FILE( gid_File_Filter_Ipt, ipt)
 
-STD_FILTER_FILE( gid_File_Filter_Ipx, ipx)
+STD_LIB_FILE( gid_File_Filter_Ipx, ipx)
 
-STD_FILTER_FILE( gid_File_Filter_Ira, ira)
+STD_LIB_FILE( gid_File_Filter_Ira, ira)
 
-STD_FILTER_FILE( gid_File_Filter_Itg, itg)
+STD_LIB_FILE( gid_File_Filter_Itg, itg)
 
-STD_FILTER_FILE( gid_File_Filter_Iti, iti)
+STD_LIB_FILE( gid_File_Filter_Iti, iti)
 
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
