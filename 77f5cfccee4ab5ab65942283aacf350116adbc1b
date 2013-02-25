@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///mw\u003d",
+        "filename": "dbaccess/source/core/resource/core_resource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T14:28:22Z",
+      "side": 1,
+      "message": "replaceFirst",
+      "revId": "77f5cfccee4ab5ab65942283aacf350116adbc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///m4\u003d",
+        "filename": "dbaccess/source/core/resource/core_resource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T14:28:22Z",
+      "side": 1,
+      "message": "SearchAndReplaceAscii equals replaceFirst as OUString",
+      "revId": "77f5cfccee4ab5ab65942283aacf350116adbc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///m0\u003d",
+        "filename": "dbaccess/source/core/resource/core_resource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T14:28:22Z",
+      "side": 1,
+      "message": "please use replaceFirst",
+      "revId": "77f5cfccee4ab5ab65942283aacf350116adbc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///ms\u003d",
+        "filename": "dbaccess/source/ui/app/AppControllerDnD.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T14:28:22Z",
+      "side": 1,
+      "message": "replaceFirst",
+      "revId": "77f5cfccee4ab5ab65942283aacf350116adbc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///mo\u003d",
+        "filename": "dbaccess/source/ui/app/AppControllerGen.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T14:28:22Z",
+      "side": 1,
+      "message": "replaceFirst",
+      "revId": "77f5cfccee4ab5ab65942283aacf350116adbc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///mk\u003d",
+        "filename": "dbaccess/source/ui/app/AppIconControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T14:28:22Z",
+      "side": 1,
+      "message": "I\u0027m not sure about this one",
+      "revId": "77f5cfccee4ab5ab65942283aacf350116adbc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///mY\u003d",
+        "filename": "dbaccess/source/ui/browser/unodatbr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3751,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T14:28:22Z",
+      "side": 1,
+      "message": "you could simplify this to:\n\nsTitle \u003d sName + \" - \" + sTitle;",
+      "revId": "77f5cfccee4ab5ab65942283aacf350116adbc1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
