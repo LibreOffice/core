@@ -1026,7 +1026,7 @@ void TableLayouter::UpdateBorderLayout()
         for( aPos.mnCol = 0; aPos.mnCol < nColCount; aPos.mnCol++ )
         {
             CellRef xCell( getCell( aPos ) );
-            if( !xCell.is() || xCell->isMerged() )
+            if( !xCell.is() )
                 continue;
 
             const SvxBoxItem* pThisAttr = (const SvxBoxItem*)xCell->GetItemSet().GetItem( SDRATTR_TABLE_BORDER );
