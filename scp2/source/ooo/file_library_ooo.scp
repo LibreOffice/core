@@ -103,7 +103,6 @@ File gid_File_Lib_Ldapbe2
   #endif
 End
 
-STD_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
 STD_LIB_FILE(gid_File_Lib_Chartcore, chartcore)
 
 
