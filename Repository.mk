@@ -232,6 +232,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     chartcore \
     chartcontroller \
     ctl \
+    cui \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     abp \
@@ -261,7 +262,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basegfx \
     calc \
     cppcanvas \
-    cui \
     dba \
     dbase \
     dbaxml \
