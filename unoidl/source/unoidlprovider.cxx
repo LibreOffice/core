@@ -14,13 +14,6 @@
 #include <cstring>
 #include <vector>
 
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/registry/InvalidRegistryException.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/DeploymentException.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "cppuhelper/unoidl.hxx"
 #include "osl/endian.h"
 #include "osl/file.h"
 #include "rtl/ref.hxx"
@@ -28,8 +21,8 @@
 #include "sal/log.hxx"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
-
-#include "unoidlprovider.hxx"
+#include "unoidl/unoidl.hxx"
+#include "unoidl/unoidlprovider.hxx"
 
 // New binary format:
 //
@@ -292,11 +285,13 @@ struct Memory64 {
 
 }
 
-namespace cppu {
+namespace unoidl {
+
+namespace detail {
 
 class MappedFile: public salhelper::SimpleReferenceObject {
 public:
-    explicit MappedFile(rtl::OUString const & fileUrl);
+    explicit MappedFile(OUString const & fileUrl);
 
     sal_uInt8 read8(sal_uInt32 offset) const;
 
@@ -310,11 +305,11 @@ public:
 
     double readIso60599Binary64(sal_uInt32 offset) const;
 
-    rtl::OUString readNameNul(sal_uInt32 offset) const;
+    OUString readNameNul(sal_uInt32 offset) const;
 
-    rtl::OUString readNameLen(sal_uInt32 offset, sal_uInt32 * newOffset = 0)
-        const;
+    OUString readNameLen(sal_uInt32 offset, sal_uInt32 * newOffset = 0) const;
 
+    OUString uri;
     oslFileHandle handle;
     sal_uInt64 size;
     void * address;
@@ -335,19 +330,15 @@ private:
     double getIso60599Binary64(sal_uInt32 offset) const;
 };
 
-MappedFile::MappedFile(rtl::OUString const & fileUrl) {
-    oslFileError e = osl_openFile(
-        fileUrl.pData, &handle, osl_File_OpenFlag_Read);
+MappedFile::MappedFile(OUString const & fileUrl): uri(fileUrl) {
+    oslFileError e = osl_openFile(uri.pData, &handle, osl_File_OpenFlag_Read);
     switch (e) {
     case osl_File_E_None:
         break;
     case osl_File_E_NOENT:
-        throw css::container::NoSuchElementException(
-            fileUrl, css::uno::Reference< css::uno::XInterface >());
+        throw NoSuchFileException(uri);
     default:
-        throw css::uno::RuntimeException(
-            "cannot open " + fileUrl + ": " + rtl::OUString::number(e),
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(uri, "cannot open: " + OUString::number(e));
     }
     e = osl_getFileSize(handle, &size);
     if (e == osl_File_E_None) {
@@ -357,20 +348,17 @@ MappedFile::MappedFile(rtl::OUString const & fileUrl) {
     if (e != osl_File_E_None) {
         oslFileError e2 = osl_closeFile(handle);
         SAL_WARN_IF(
-            e2 != osl_File_E_None, "cppuhelper",
-            "cannot close " << fileUrl << ": " << +e2);
-        throw css::uno::RuntimeException(
-            "cannot mmap " + fileUrl + ": " + rtl::OUString::number(e),
-            css::uno::Reference< css::uno::XInterface >());
+            e2 != osl_File_E_None, "unoidl",
+            "cannot close " << uri << ": " << +e2);
+        throw FileFormatException(uri, "cannot mmap: " + OUString::number(e));
     }
 }
 
 sal_uInt8 MappedFile::read8(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 1) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: offset for 8-bit value too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            uri, "UNOIDL format: offset for 8-bit value too large");
     }
     return get8(offset);
 }
@@ -378,9 +366,8 @@ sal_uInt8 MappedFile::read8(sal_uInt32 offset) const {
 sal_uInt16 MappedFile::read16(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 2) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: offset for 16-bit value too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            uri, "UNOIDL format: offset for 16-bit value too large");
     }
     return get16(offset);
 }
@@ -388,9 +375,8 @@ sal_uInt16 MappedFile::read16(sal_uInt32 offset) const {
 sal_uInt32 MappedFile::read32(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 4) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: offset for 32-bit value too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            uri, "UNOIDL format: offset for 32-bit value too large");
     }
     return get32(offset);
 }
@@ -398,9 +384,8 @@ sal_uInt32 MappedFile::read32(sal_uInt32 offset) const {
 sal_uInt64 MappedFile::read64(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 8) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: offset for 64-bit value too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            uri, "UNOIDL format: offset for 64-bit value too large");
     }
     return get64(offset);
 }
@@ -408,9 +393,8 @@ sal_uInt64 MappedFile::read64(sal_uInt32 offset) const {
 float MappedFile::readIso60599Binary32(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 4) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: offset for 32-bit value too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            uri, "UNOIDL format: offset for 32-bit value too large");
     }
     return getIso60599Binary32(offset);
 }
@@ -418,36 +402,31 @@ float MappedFile::readIso60599Binary32(sal_uInt32 offset) const {
 double MappedFile::readIso60599Binary64(sal_uInt32 offset) const {
     assert(size >= 8);
     if (offset > size - 8) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: offset for 64-bit value too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            uri, "UNOIDL format: offset for 64-bit value too large");
     }
     return getIso60599Binary64(offset);
 }
 
-rtl::OUString MappedFile::readNameNul(sal_uInt32 offset) const {
+OUString MappedFile::readNameNul(sal_uInt32 offset) const {
     if (offset > size) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: offset for string too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            uri, "UNOIDL format: offset for string too large");
     }
     sal_uInt64 end = offset;
     for (;; ++end) {
         if (end == size) {
-            throw css::uno::DeploymentException(
-                "broken UNOIDL file: string misses trailing NUL",
-                css::uno::Reference< css::uno::XInterface >());
+            throw FileFormatException(
+                uri, "UNOIDL format: string misses trailing NUL");
         }
         if (static_cast< char const * >(address)[end] == 0) {
             break;
         }
     }
     if (end - offset > SAL_MAX_INT32) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: string too long",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(uri, "UNOIDL format: string too long");
     }
-    rtl::OUString name;
+    OUString name;
     if (!rtl_convertStringToUString(
             &name.pData, static_cast< char const * >(address) + offset,
             end - offset, RTL_TEXTENCODING_ASCII_US,
@@ -455,14 +434,12 @@ rtl::OUString MappedFile::readNameNul(sal_uInt32 offset) const {
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: name is not ASCII",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(uri, "UNOIDL format: name is not ASCII");
     }
     return name;
 }
 
-rtl::OUString MappedFile::readNameLen(sal_uInt32 offset, sal_uInt32 * newOffset)
+OUString MappedFile::readNameLen(sal_uInt32 offset, sal_uInt32 * newOffset)
     const
 {
     sal_uInt32 len = read32(offset);
@@ -473,9 +450,8 @@ rtl::OUString MappedFile::readNameLen(sal_uInt32 offset, sal_uInt32 * newOffset)
         offset = len;
         len = read32(offset);
         if ((len & 0x80000000) == 0) {
-            throw css::uno::DeploymentException(
-                "broken UNOIDL file: name length high bit unset",
-                css::uno::Reference< css::uno::XInterface >());
+            throw FileFormatException(
+                uri, "UNOIDL format: name length high bit unset");
         }
         len &= ~0x80000000;
     } else {
@@ -485,11 +461,10 @@ rtl::OUString MappedFile::readNameLen(sal_uInt32 offset, sal_uInt32 * newOffset)
         }
     }
     if (len > SAL_MAX_INT32 || len > size - offset - 4) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: size of name is too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            uri, "UNOIDL format: size of name is too large");
     }
-    rtl::OUString name;
+    OUString name;
     if (!rtl_convertStringToUString(
             &name.pData, static_cast< char const * >(address) + offset + 4, len,
             RTL_TEXTENCODING_ASCII_US,
@@ -497,18 +472,16 @@ rtl::OUString MappedFile::readNameLen(sal_uInt32 offset, sal_uInt32 * newOffset)
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: name is not ASCII",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(uri, "UNOIDL format: name is not ASCII");
     }
     return name;
 }
 
 MappedFile::~MappedFile() {
     oslFileError e = osl_unmapMappedFile(handle, address, size);
-    SAL_WARN_IF(e != osl_File_E_None, "cppuhelper", "cannot unmap: " << +e);
+    SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot unmap: " << +e);
     e = osl_closeFile(handle);
-    SAL_WARN_IF(e != osl_File_E_None, "cppuhelper", "cannot close: " << +e);
+    SAL_WARN_IF(e != osl_File_E_None, "unoidl", "cannot close: " << +e);
 }
 
 sal_uInt8 MappedFile::get8(sal_uInt32 offset) const {
@@ -558,21 +531,22 @@ struct MapEntry {
     Memory32 data;
 };
 
+}
+
 namespace {
 
 enum Compare { COMPARE_LESS, COMPARE_GREATER, COMPARE_EQUAL };
 
 Compare compare(
-    rtl::Reference< MappedFile > const & file, rtl::OUString const & name,
-    sal_Int32 nameOffset, sal_Int32 nameLength, MapEntry const * entry)
+    rtl::Reference< detail::MappedFile > const & file, OUString const & name,
+    sal_Int32 nameOffset, sal_Int32 nameLength, detail::MapEntry const * entry)
 {
     assert(file.is());
     assert(entry != 0);
     sal_uInt32 off = entry->name.getUnsigned32();
     if (off > file->size - 1) { // at least a trailing NUL
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: string offset too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            file->uri, "UNOIDL format: string offset too large");
     }
     assert(nameLength >= 0);
     sal_uInt64 min = std::min(
@@ -591,9 +565,8 @@ Compare compare(
     }
     if (static_cast< sal_uInt64 >(nameLength) == min) {
         if (file->size - off == min) {
-            throw css::uno::DeploymentException(
-                "broken UNOIDL file: string misses trailing NUL",
-                css::uno::Reference< css::uno::XInterface >());
+            throw FileFormatException(
+                file->uri, "UNOIDL format: string misses trailing NUL");
         }
         return
             static_cast< unsigned char const * >(file->address)[off + min] == 0
@@ -604,15 +577,15 @@ Compare compare(
 }
 
 sal_uInt32 findInMap(
-    rtl::Reference< MappedFile > const & file, MapEntry const * mapBegin,
-    sal_uInt32 mapSize, rtl::OUString const & name, sal_Int32 nameOffset,
-    sal_Int32 nameLength)
+    rtl::Reference< detail::MappedFile > const & file,
+    detail::MapEntry const * mapBegin, sal_uInt32 mapSize,
+    OUString const & name, sal_Int32 nameOffset, sal_Int32 nameLength)
 {
     if (mapSize == 0) {
         return 0;
     }
     sal_uInt32 n = mapSize / 2;
-    MapEntry const * p = mapBegin + n;
+    detail::MapEntry const * p = mapBegin + n;
     switch (compare(file, name, nameOffset, nameLength, p)) {
     case COMPARE_LESS:
         return findInMap(file, mapBegin, n, name, nameOffset, nameLength);
@@ -624,15 +597,14 @@ sal_uInt32 findInMap(
     }
     sal_uInt32 off = mapBegin[n].data.getUnsigned32();
     if (off == 0) {
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: map entry data offset is null",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            file->uri, "UNOIDL format: map entry data offset is null");
     }
     return off;
 }
 
-css::uno::Any readConstant(
-    rtl::Reference< MappedFile > const & file, sal_uInt32 offset)
+ConstantValue readConstant(
+    rtl::Reference< detail::MappedFile > const & file, sal_uInt32 offset)
 {
     assert(file.is());
     int v = file->read8(offset);
@@ -643,74 +615,75 @@ css::uno::Any readConstant(
         v = file->read8(offset + 1);
         switch (v) {
         case 0:
-            return css::uno::makeAny(false);
+            return ConstantValue(false);
         case 1:
-            return css::uno::makeAny(true);
+            return ConstantValue(true);
         default:
-            throw css::uno::DeploymentException(
-                ("broken UNOIDL file: bad boolean constant value "
-                 + rtl::OUString::number(v)),
-                css::uno::Reference< css::uno::XInterface >());
+            throw FileFormatException(
+                file->uri,
+                ("UNOIDL format: bad boolean constant value "
+                 + OUString::number(v)));
         }
-        break;
     case 1: // BYTE
-        return css::uno::makeAny< sal_Int8 >(file->read8(offset + 1));
+        return ConstantValue(static_cast< sal_Int8 >(file->read8(offset + 1)));
             //TODO: implementation-defined behavior of conversion from sal_uInt8
             // to sal_Int8 relies on two's complement representation
     case 2: // SHORT
-        return css::uno::makeAny< sal_Int16 >(file->read16(offset + 1));
+        return ConstantValue(
+            static_cast< sal_Int16 >(file->read16(offset + 1)));
             //TODO: implementation-defined behavior of conversion from
             // sal_uInt16 to sal_Int16 relies on two's complement representation
     case 3: // UNSIGNED SHORT
-        return css::uno::makeAny(file->read16(offset + 1));
+        return ConstantValue(file->read16(offset + 1));
     case 4: // LONG
-        return css::uno::makeAny< sal_Int32 >(file->read32(offset + 1));
+        return ConstantValue(
+            static_cast< sal_Int32 >(file->read32(offset + 1)));
             //TODO: implementation-defined behavior of conversion from
             // sal_uInt32 to sal_Int32 relies on two's complement representation
     case 5: // UNSIGNED LONG
-        return css::uno::makeAny(file->read32(offset + 1));
+        return ConstantValue(file->read32(offset + 1));
     case 6: // HYPER
-        return css::uno::makeAny< sal_Int64 >(file->read64(offset + 1));
+        return ConstantValue(
+            static_cast< sal_Int64 >(file->read64(offset + 1)));
             //TODO: implementation-defined behavior of conversion from
             // sal_uInt64 to sal_Int64 relies on two's complement representation
     case 7: // UNSIGNED HYPER
-        return css::uno::makeAny(file->read64(offset + 1));
+        return ConstantValue(file->read64(offset + 1));
     case 8: // FLOAT
-        return css::uno::makeAny(file->readIso60599Binary32(offset + 1));
+        return ConstantValue(file->readIso60599Binary32(offset + 1));
     case 9: // DOUBLE
-        return css::uno::makeAny(file->readIso60599Binary64(offset + 1));
+        return ConstantValue(file->readIso60599Binary64(offset + 1));
     default:
-        throw css::uno::DeploymentException(
-            ("broken UNOIDL file: bad constant type byte "
-             + rtl::OUString::number(v)),
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            file->uri,
+            "UNOIDL format: bad constant type byte " + OUString::number(v));
     }
 }
 
-rtl::Reference< unoidl::Entity > readEntity(
-    rtl::Reference< MappedFile > const & file, sal_uInt32 offset);
+rtl::Reference< Entity > readEntity(
+    rtl::Reference< detail::MappedFile > const & file, sal_uInt32 offset);
 
-class UnoidlCursor: public unoidl::MapCursor {
+class UnoidlCursor: public MapCursor {
 public:
     UnoidlCursor(
-        rtl::Reference< MappedFile > file, MapEntry const * mapBegin,
-        sal_uInt32 mapSize):
+        rtl::Reference< detail::MappedFile > file,
+        detail::MapEntry const * mapBegin, sal_uInt32 mapSize):
         file_(file), mapIndex_(mapBegin), mapEnd_(mapBegin + mapSize)
     {}
 
 private:
     virtual ~UnoidlCursor() throw () {}
 
-    virtual rtl::Reference< unoidl::Entity > getNext(rtl::OUString * name);
+    virtual rtl::Reference< Entity > getNext(OUString * name);
 
-    rtl::Reference< MappedFile > file_;
-    MapEntry const * mapIndex_;
-    MapEntry const * mapEnd_;
+    rtl::Reference< detail::MappedFile > file_;
+    detail::MapEntry const * mapIndex_;
+    detail::MapEntry const * mapEnd_;
 };
 
-rtl::Reference< unoidl::Entity > UnoidlCursor::getNext(rtl::OUString * name) {
+rtl::Reference< Entity > UnoidlCursor::getNext(OUString * name) {
     assert(name != 0);
-    rtl::Reference< unoidl::Entity > ent;
+    rtl::Reference< Entity > ent;
     if (mapIndex_ != mapEnd_) {
         *name = file_->readNameNul(mapIndex_->name.getUnsigned32());
         ent = readEntity(file_, mapIndex_->data.getUnsigned32());
@@ -719,14 +692,14 @@ rtl::Reference< unoidl::Entity > UnoidlCursor::getNext(rtl::OUString * name) {
     return ent;
 }
 
-class UnoidlModuleEntity: public unoidl::ModuleEntity {
+class UnoidlModuleEntity: public ModuleEntity {
 public:
     UnoidlModuleEntity(
-        rtl::Reference< MappedFile > const & file, sal_uInt32 mapOffset,
+        rtl::Reference< detail::MappedFile > const & file, sal_uInt32 mapOffset,
         sal_uInt32 mapSize):
         file_(file),
         mapBegin_(
-            reinterpret_cast< MapEntry const * >(
+            reinterpret_cast< detail::MapEntry const * >(
                 static_cast< char const * >(file_->address) + mapOffset)),
         mapSize_(mapSize)
     { assert(file.is()); }
@@ -734,26 +707,26 @@ public:
 private:
     virtual ~UnoidlModuleEntity() throw () {}
 
-    virtual std::vector< rtl::OUString > getMemberNames() const;
+    virtual std::vector< OUString > getMemberNames() const;
 
-    virtual rtl::Reference< unoidl::MapCursor > createCursor() const
+    virtual rtl::Reference< MapCursor > createCursor() const
     { return new UnoidlCursor(file_, mapBegin_, mapSize_); }
 
-    rtl::Reference< MappedFile > file_;
-    MapEntry const * mapBegin_;
+    rtl::Reference< detail::MappedFile > file_;
+    detail::MapEntry const * mapBegin_;
     sal_uInt32 mapSize_;
 };
 
-std::vector< rtl::OUString > UnoidlModuleEntity::getMemberNames() const {
-    std::vector< rtl::OUString > names;
+std::vector< OUString > UnoidlModuleEntity::getMemberNames() const {
+    std::vector< OUString > names;
     for (sal_uInt32 i = 0; i != mapSize_; ++i) {
         names.push_back(file_->readNameNul(mapBegin_[i].name.getUnsigned32()));
     }
     return names;
 }
 
-rtl::Reference< unoidl::Entity > readEntity(
-    rtl::Reference< MappedFile > const & file, sal_uInt32 offset)
+rtl::Reference< Entity > readEntity(
+    rtl::Reference< detail::MappedFile > const & file, sal_uInt32 offset)
 {
     assert(file.is());
     int v = file->read8(offset);
@@ -765,21 +738,20 @@ rtl::Reference< unoidl::Entity > readEntity(
     case 0: // module
         {
             if (v != 0) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: bad module type byte "
-                     + rtl::OUString::number(v)),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: bad module type byte "
+                     + OUString::number(v)));
             }
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    "broken UNOIDL file: too many items in module",
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri, "UNOIDL format: too many items in module");
             }
             if (offset + 5 + 8 * n > file->size) { //TODO: overflow
-                throw css::uno::DeploymentException(
-                    "broken UNOIDL file: module map offset + size too large",
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    "UNOIDL format: module map offset + size too large");
             }
             return new UnoidlModuleEntity(file, offset + 5, n);
         }
@@ -787,198 +759,191 @@ rtl::Reference< unoidl::Entity > readEntity(
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    "broken UNOIDL file: too many members of enum type",
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri, "UNOIDL format: too many members of enum type");
             }
             offset += 5;
-            std::vector< unoidl::EnumTypeEntity::Member > mems;
+            std::vector< EnumTypeEntity::Member > mems;
             for (sal_uInt32 i = 0; i != n; ++i) {
-                rtl::OUString memName(file->readNameLen(offset, &offset));
+                OUString memName(file->readNameLen(offset, &offset));
                 sal_Int32 memValue = static_cast< sal_Int32 >(
                     file->read32(offset));
                     //TODO: implementation-defined behavior of conversion from
                     // sal_uInt32 to sal_Int32 relies on two's complement
                     // representation
                 offset += 4;
-                mems.push_back(
-                    unoidl::EnumTypeEntity::Member(memName, memValue));
+                mems.push_back(EnumTypeEntity::Member(memName, memValue));
             }
-            return new unoidl::EnumTypeEntity(published, mems);
+            return new EnumTypeEntity(published, mems);
         }
     case 2: // plain struct type without base
     case 2 | 0x20: // plain struct type with base
         {
             ++offset;
-            rtl::OUString base;
+            OUString base;
             if (flag) {
                 base = file->readNameLen(offset, &offset);
                 if (base.isEmpty()) {
-                    throw css::uno::DeploymentException(
-                        ("broken UNOIDL file: empty base type name of plain"
-                         " struct type"),
-                        css::uno::Reference< css::uno::XInterface >());
+                    throw FileFormatException(
+                        file->uri,
+                        ("UNOIDL format: empty base type name of plain struct"
+                         " type"));
                 }
             }
             sal_uInt32 n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct members of plain"
-                     " struct type"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct members of plain struct"
+                     " type"));
             }
             offset += 4;
-            std::vector< unoidl::PlainStructTypeEntity::Member > mems;
+            std::vector< PlainStructTypeEntity::Member > mems;
             for (sal_uInt32 i = 0; i != n; ++i) {
-                rtl::OUString memName(file->readNameLen(offset, &offset));
-                rtl::OUString memType(file->readNameLen(offset, &offset));
-                mems.push_back(
-                    unoidl::PlainStructTypeEntity::Member(memName, memType));
+                OUString memName(file->readNameLen(offset, &offset));
+                OUString memType(file->readNameLen(offset, &offset));
+                mems.push_back(PlainStructTypeEntity::Member(memName, memType));
             }
-            return new unoidl::PlainStructTypeEntity(published, base, mems);
+            return new PlainStructTypeEntity(published, base, mems);
         }
     case 3: // polymorphic struct type template
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many type parameters of"
-                     " polymorphic struct type template"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many type parameters of polymorphic"
+                     " struct type template"));
             }
             offset += 5;
-            std::vector< rtl::OUString > params;
+            std::vector< OUString > params;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 params.push_back(file->readNameLen(offset, &offset));
             }
             n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many members of polymorphic"
-                     " struct type template"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many members of polymorphic struct"
+                     " type template"));
             }
             offset += 4;
-            std::vector< unoidl::PolymorphicStructTypeTemplateEntity::Member >
-                mems;
+            std::vector< PolymorphicStructTypeTemplateEntity::Member > mems;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 v = file->read8(offset);
                 ++offset;
-                rtl::OUString memName(file->readNameLen(offset, &offset));
-                rtl::OUString memType(file->readNameLen(offset, &offset));
+                OUString memName(file->readNameLen(offset, &offset));
+                OUString memType(file->readNameLen(offset, &offset));
                 if (v > 1) {
-                    throw css::uno::DeploymentException(
-                        ("broken UNOIDL file: bad flags "
-                         + rtl::OUString::number(v) + " for member " + memName
-                         + " of polymorphic struct type template"),
-                        css::uno::Reference< css::uno::XInterface >());
+                    throw FileFormatException(
+                        file->uri,
+                        ("UNOIDL format: bad flags " + OUString::number(v)
+                         + " for member " + memName
+                         + " of polymorphic struct type template"));
                 }
                 mems.push_back(
-                    unoidl::PolymorphicStructTypeTemplateEntity::Member(
+                    PolymorphicStructTypeTemplateEntity::Member(
                         memName, memType, v == 1));
             }
-            return new unoidl::PolymorphicStructTypeTemplateEntity(
+            return new PolymorphicStructTypeTemplateEntity(
                 published, params, mems);
         }
     case 4: // exception type without base
     case 4 | 0x20: // exception type with base
         {
             ++offset;
-            rtl::OUString base;
+            OUString base;
             if (flag) {
                 base = file->readNameLen(offset, &offset);
                 if (base.isEmpty()) {
-                    throw css::uno::DeploymentException(
-                        ("broken UNOIDL file: empty base type name of"
-                         " exception type"),
-                        css::uno::Reference< css::uno::XInterface >());
+                    throw FileFormatException(
+                        file->uri,
+                        ("UNOIDL format: empty base type name of exception"
+                         " type"));
                 }
             }
             sal_uInt32 n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct members of"
-                     " exception type"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    "UNOIDL format: too many direct members of exception type");
             }
             offset += 4;
-            std::vector< unoidl::ExceptionTypeEntity::Member > mems;
+            std::vector< ExceptionTypeEntity::Member > mems;
             for (sal_uInt32 i = 0; i != n; ++i) {
-                rtl::OUString memName(file->readNameLen(offset, &offset));
-                rtl::OUString memType(file->readNameLen(offset, &offset));
-                mems.push_back(
-                    unoidl::ExceptionTypeEntity::Member(memName, memType));
+                OUString memName(file->readNameLen(offset, &offset));
+                OUString memType(file->readNameLen(offset, &offset));
+                mems.push_back(ExceptionTypeEntity::Member(memName, memType));
             }
-            return new unoidl::ExceptionTypeEntity(published, base, mems);
+            return new ExceptionTypeEntity(published, base, mems);
         }
     case 5: // interface type
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct mandatory bases of"
-                     " interface type"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct mandatory bases of"
+                     " interface type"));
             }
             offset += 5;
-            std::vector< rtl::OUString > mandBases;
+            std::vector< OUString > mandBases;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 mandBases.push_back(file->readNameLen(offset, &offset));
             }
             n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct optional bases of"
-                     " interface type"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct optional bases of"
+                     " interface type"));
             }
             offset += 4;
-            std::vector< rtl::OUString > optBases;
+            std::vector< OUString > optBases;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 optBases.push_back(file->readNameLen(offset, &offset));
             }
             sal_uInt32 nAttrs = file->read32(offset);
             if (nAttrs > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct attributes of"
-                     " interface type"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct attributes of interface"
+                     " type"));
             }
             offset += 4;
-            std::vector< unoidl::InterfaceTypeEntity::Attribute > attrs;
+            std::vector< InterfaceTypeEntity::Attribute > attrs;
             for (sal_uInt32 i = 0; i != nAttrs; ++i) {
                 v = file->read8(offset);
                 ++offset;
-                rtl::OUString attrName(file->readNameLen(offset, &offset));
-                rtl::OUString attrType(file->readNameLen(offset, &offset));
+                OUString attrName(file->readNameLen(offset, &offset));
+                OUString attrType(file->readNameLen(offset, &offset));
                 if (v > 0x03) {
-                    throw css::uno::DeploymentException(
-                        ("broken UNOIDL file: bad flags for direct attribute "
-                         + attrName + " of interface type"),
-                        css::uno::Reference< css::uno::XInterface >());
+                    throw FileFormatException(
+                        file->uri,
+                        ("UNOIDL format: bad flags for direct attribute "
+                         + attrName + " of interface type"));
                 }
-                std::vector< rtl::OUString > getExcs;
+                std::vector< OUString > getExcs;
                 sal_uInt32 m = file->read32(offset);
                 if (m > SAL_MAX_INT32) {
-                    throw css::uno::DeploymentException(
-                        ("broken UNOIDL file: too many getter exceptions for"
-                         " direct attribute " + attrName
-                         + " of interface type"),
-                        css::uno::Reference< css::uno::XInterface >());
+                    throw FileFormatException(
+                        file->uri,
+                        ("UNOIDL format: too many getter exceptions for direct"
+                         " attribute " + attrName + " of interface type"));
                 }
                 offset += 4;
                 for (sal_uInt32 j = 0; j != m; ++j) {
                     getExcs.push_back(file->readNameLen(offset, &offset));
                 }
-                std::vector< rtl::OUString > setExcs;
+                std::vector< OUString > setExcs;
                 if ((v & 0x02) == 0) {
                     m = file->read32(offset);
                     if (m > SAL_MAX_INT32) {
-                        throw css::uno::DeploymentException(
-                            ("broken UNOIDL file: too many setter exceptions"
-                             " for direct attribute " + attrName
-                             + " of interface type"),
-                            css::uno::Reference< css::uno::XInterface >());
+                        throw FileFormatException(
+                            file->uri,
+                            ("UNOIDL format: too many setter exceptions for"
+                             " direct attribute " + attrName
+                             + " of interface type"));
                     }
                     offset += 4;
                     for (sal_uInt32 j = 0; j != m; ++j) {
@@ -986,153 +951,145 @@ rtl::Reference< unoidl::Entity > readEntity(
                     }
                 }
                 attrs.push_back(
-                    unoidl::InterfaceTypeEntity::Attribute(
+                    InterfaceTypeEntity::Attribute(
                         attrName, attrType, (v & 0x01) != 0, (v & 0x02) != 0,
                         getExcs, setExcs));
             }
             sal_uInt32 nMeths = file->read32(offset);
             if (nMeths > SAL_MAX_INT32 - nAttrs) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct attributes and"
-                     " methods of interface type"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct attributes and methods of"
+                     " interface type"));
             }
             offset += 4;
-            std::vector< unoidl::InterfaceTypeEntity::Method > meths;
+            std::vector< InterfaceTypeEntity::Method > meths;
             for (sal_uInt32 i = 0; i != nMeths; ++i) {
-                rtl::OUString methName(file->readNameLen(offset, &offset));
-                rtl::OUString methType(file->readNameLen(offset, &offset));
+                OUString methName(file->readNameLen(offset, &offset));
+                OUString methType(file->readNameLen(offset, &offset));
                 sal_uInt32 m = file->read32(offset);
                 if (m > SAL_MAX_INT32) {
-                    throw css::uno::DeploymentException(
-                        ("broken UNOIDL file: too many parameters for method "
-                         + methName + " of interface type"),
-                        css::uno::Reference< css::uno::XInterface >());
+                    throw FileFormatException(
+                        file->uri,
+                        ("UNOIDL format: too many parameters for method "
+                         + methName + " of interface type"));
                 }
                 offset += 4;
-                std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >
-                    params;
+                std::vector< InterfaceTypeEntity::Method::Parameter > params;
                 for (sal_uInt32 j = 0; j != m; ++j) {
                     v = file->read8(offset);
                     ++offset;
-                    rtl::OUString paramName(
-                        file->readNameLen(offset, &offset));
-                    rtl::OUString paramType(
-                        file->readNameLen(offset, &offset));
-                    unoidl::InterfaceTypeEntity::Method::Parameter::Direction
-                        dir;
+                    OUString paramName(file->readNameLen(offset, &offset));
+                    OUString paramType(file->readNameLen(offset, &offset));
+                    InterfaceTypeEntity::Method::Parameter::Direction dir;
                     switch (v) {
                     case 0:
-                        dir = unoidl::InterfaceTypeEntity::Method::Parameter::
+                        dir = InterfaceTypeEntity::Method::Parameter::
                             DIRECTION_IN;
                         break;
                     case 1:
-                        dir = unoidl::InterfaceTypeEntity::Method::Parameter::
+                        dir = InterfaceTypeEntity::Method::Parameter::
                             DIRECTION_OUT;
                         break;
                     case 2:
-                        dir = unoidl::InterfaceTypeEntity::Method::Parameter::
+                        dir = InterfaceTypeEntity::Method::Parameter::
                             DIRECTION_IN_OUT;
                         break;
                     default:
-                        throw css::uno::DeploymentException(
-                            ("broken UNOIDL file: bad direction "
-                             + rtl::OUString::number(v) + " of parameter "
+                        throw FileFormatException(
+                            file->uri,
+                            ("UNOIDL format: bad direction "
+                             + OUString::number(v) + " of parameter "
                              + paramName + " for method " + methName
-                             + " of interface type"),
-                            css::uno::Reference< css::uno::XInterface >());
+                             + " of interface type"));
                     }
                     params.push_back(
-                        unoidl::InterfaceTypeEntity::Method::Parameter(
+                        InterfaceTypeEntity::Method::Parameter(
                             paramName, paramType, dir));
                 }
-                std::vector< rtl::OUString > excs;
+                std::vector< OUString > excs;
                 m = file->read32(offset);
                 if (m > SAL_MAX_INT32) {
-                    throw css::uno::DeploymentException(
-                        ("broken UNOIDL file: too many exceptions for method "
-                         + methName + " of interface type"),
-                        css::uno::Reference< css::uno::XInterface >());
+                    throw FileFormatException(
+                        file->uri,
+                        ("UNOIDL format: too many exceptions for method "
+                         + methName + " of interface type"));
                 }
                 offset += 4;
                 for (sal_uInt32 j = 0; j != m; ++j) {
                     excs.push_back(file->readNameLen(offset, &offset));
                 }
                 meths.push_back(
-                    unoidl::InterfaceTypeEntity::Method(
+                    InterfaceTypeEntity::Method(
                         methName, methType, params, excs));
             }
-            return new unoidl::InterfaceTypeEntity(
+            return new InterfaceTypeEntity(
                 published, mandBases, optBases, attrs, meths);
         }
     case 6: // typedef
-        return new unoidl::TypedefEntity(
-            published, file->readNameLen(offset + 1));
+        return new TypedefEntity(published, file->readNameLen(offset + 1));
     case 7: // constant group
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    "broken UNOIDL file: too many constants in constant group",
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    "UNOIDL format: too many constants in constant group");
             }
             if (offset + 5 + 8 * n > file->size) { //TODO: overflow
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: constant group map offset + size too"
-                     " large"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: constant group map offset + size too"
+                     " large"));
             }
-            MapEntry const * p = reinterpret_cast< MapEntry const * >(
-                static_cast< char const * >(file->address) + offset + 5);
-            std::vector< unoidl::ConstantGroupEntity::Member > mems;
+            detail::MapEntry const * p
+                = reinterpret_cast< detail::MapEntry const * >(
+                    static_cast< char const * >(file->address) + offset + 5);
+            std::vector< ConstantGroupEntity::Member > mems;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 mems.push_back(
-                    unoidl::ConstantGroupEntity::Member(
+                    ConstantGroupEntity::Member(
                         file->readNameNul(p[i].name.getUnsigned32()),
                         readConstant(file, p[i].data.getUnsigned32())));
             }
-            return new unoidl::ConstantGroupEntity(published, mems);
+            return new ConstantGroupEntity(published, mems);
         }
     case 8: // single-interface--based service without default constructor
     case 8 | 0x20: // single-interface--based service with default constructor
         {
-            rtl::OUString base(file->readNameLen(offset + 1, &offset));
-            std::vector<
-                unoidl::SingleInterfaceBasedServiceEntity::Constructor >
-                ctors;
+            OUString base(file->readNameLen(offset + 1, &offset));
+            std::vector< SingleInterfaceBasedServiceEntity::Constructor > ctors;
             if (flag) {
                 ctors.push_back(
-                    unoidl::SingleInterfaceBasedServiceEntity::Constructor());
+                    SingleInterfaceBasedServiceEntity::Constructor());
             } else {
                 sal_uInt32 n = file->read32(offset);
                 if (n > SAL_MAX_INT32) {
-                    throw css::uno::DeploymentException(
-                        ("broken UNOIDL file: too many constructors of"
-                         " single-interface--based service"),
-                        css::uno::Reference< css::uno::XInterface >());
+                    throw FileFormatException(
+                        file->uri,
+                        ("UNOIDL format: too many constructors of"
+                         " single-interface--based service"));
                 }
                 offset += 4;
                 for (sal_uInt32 i = 0; i != n; ++i) {
-                    rtl::OUString ctorName(file->readNameLen(offset, &offset));
+                    OUString ctorName(file->readNameLen(offset, &offset));
                     sal_uInt32 m = file->read32(offset);
                     if (m > SAL_MAX_INT32) {
-                        throw css::uno::DeploymentException(
-                            ("broken UNOIDL file: too many parameters for"
+                        throw FileFormatException(
+                            file->uri,
+                            ("UNOIDL format: too many parameters for"
                              " constructor " + ctorName
-                             + " of single-interface--based service"),
-                            css::uno::Reference< css::uno::XInterface >());
+                             + " of single-interface--based service"));
                     }
                     offset += 4;
                     std::vector<
-                        unoidl::SingleInterfaceBasedServiceEntity::Constructor::
+                        SingleInterfaceBasedServiceEntity::Constructor::
                         Parameter > params;
                     for (sal_uInt32 j = 0; j != m; ++j) {
                         v = file->read8(offset);
                         ++offset;
-                        rtl::OUString paramName(
-                            file->readNameLen(offset, &offset));
-                        rtl::OUString paramType(
-                            file->readNameLen(offset, &offset));
+                        OUString paramName(file->readNameLen(offset, &offset));
+                        OUString paramType(file->readNameLen(offset, &offset));
                         bool rest;
                         switch (v) {
                         case 0:
@@ -1142,164 +1099,160 @@ rtl::Reference< unoidl::Entity > readEntity(
                             rest = true;
                             break;
                         default:
-                            throw css::uno::DeploymentException(
-                                ("broken UNOIDL file: bad mode "
-                                 + rtl::OUString::number(v) + " of parameter "
+                            throw FileFormatException(
+                                file->uri,
+                                ("UNOIDL format: bad mode "
+                                 + OUString::number(v) + " of parameter "
                                  + paramName + " for constructor " + ctorName
-                                 + " of single-interface--based service"),
-                                css::uno::Reference< css::uno::XInterface >());
+                                 + " of single-interface--based service"));
                         }
                         params.push_back(
-                            unoidl::SingleInterfaceBasedServiceEntity::
-                            Constructor::Parameter(
+                            SingleInterfaceBasedServiceEntity::Constructor::
+                            Parameter(
                                 paramName, paramType, rest));
                     }
-                    std::vector< rtl::OUString > excs;
+                    std::vector< OUString > excs;
                     m = file->read32(offset);
                     if (m > SAL_MAX_INT32) {
-                        throw css::uno::DeploymentException(
-                            ("broken UNOIDL file: too many exceptions for"
+                        throw FileFormatException(
+                            file->uri,
+                            ("UNOIDL format: too many exceptions for"
                              " constructor " + ctorName
-                             + " of single-interface--based service"),
-                            css::uno::Reference< css::uno::XInterface >());
+                             + " of single-interface--based service"));
                     }
                     offset += 4;
                     for (sal_uInt32 j = 0; j != m; ++j) {
                         excs.push_back(file->readNameLen(offset, &offset));
                     }
                     ctors.push_back(
-                        unoidl::SingleInterfaceBasedServiceEntity::Constructor(
+                        SingleInterfaceBasedServiceEntity::Constructor(
                             ctorName, params, excs));
                 }
             }
-            return new unoidl::SingleInterfaceBasedServiceEntity(
+            return new SingleInterfaceBasedServiceEntity(
                 published, base, ctors);
         }
     case 9: // accumulation-based service
         {
             sal_uInt32 n = file->read32(offset + 1);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct mandatory service"
-                     " bases of accumulation-based service"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct mandatory service bases of"
+                     " accumulation-based service"));
             }
             offset += 5;
-            std::vector< rtl::OUString > mandServs;
+            std::vector< OUString > mandServs;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 mandServs.push_back(file->readNameLen(offset, &offset));
             }
             n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct optional service"
-                     " bases of accumulation-based servcie"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct optional service bases of"
+                     " accumulation-based service"));
             }
             offset += 4;
-            std::vector< rtl::OUString > optServs;
+            std::vector< OUString > optServs;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 optServs.push_back(file->readNameLen(offset, &offset));
             }
             n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct mandatory interface"
-                     " bases of accumulation-based servcie"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct mandatory interface bases"
+                     " of accumulation-based service"));
             }
             offset += 4;
-            std::vector< rtl::OUString > mandIfcs;
+            std::vector< OUString > mandIfcs;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 mandIfcs.push_back(file->readNameLen(offset, &offset));
             }
             n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct optional interface"
-                     " bases of accumulation-based servcie"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct optional interface bases"
+                     " of accumulation-based service"));
             }
             offset += 4;
-            std::vector< rtl::OUString > optIfcs;
+            std::vector< OUString > optIfcs;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 optIfcs.push_back(file->readNameLen(offset, &offset));
             }
             n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
-                throw css::uno::DeploymentException(
-                    ("broken UNOIDL file: too many direct properties of"
-                     " accumulation-based servcie"),
-                    css::uno::Reference< css::uno::XInterface >());
+                throw FileFormatException(
+                    file->uri,
+                    ("UNOIDL format: too many direct properties of"
+                     " accumulation-based service"));
             }
             offset += 4;
-            std::vector< unoidl::AccumulationBasedServiceEntity::Property >
-                props;
+            std::vector< AccumulationBasedServiceEntity::Property > props;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 sal_uInt16 attrs = file->read16(offset);
                 offset += 2;
-                rtl::OUString propName(file->readNameLen(offset, &offset));
-                rtl::OUString propType(file->readNameLen(offset, &offset));
+                OUString propName(file->readNameLen(offset, &offset));
+                OUString propType(file->readNameLen(offset, &offset));
                 if (attrs > 0x01FF) { // see css.beans.PropertyAttribute
-                    throw css::uno::DeploymentException(
-                        ("broken UNOIDL file: bad mode "
-                         + rtl::OUString::number(v) + " of property " + propName
-                         + " for accumulation-based servcie"),
-                        css::uno::Reference< css::uno::XInterface >());
+                    throw FileFormatException(
+                        file->uri,
+                        ("UNOIDL format: bad mode " + OUString::number(v)
+                         + " of property " + propName
+                         + " for accumulation-based servcie"));
                 }
                 props.push_back(
-                    unoidl::AccumulationBasedServiceEntity::Property(
+                    AccumulationBasedServiceEntity::Property(
                         propName, propType,
                         static_cast<
-                            unoidl::AccumulationBasedServiceEntity::Property::
+                            AccumulationBasedServiceEntity::Property::
                             Attributes >(
                                 attrs)));
             }
-            return new unoidl::AccumulationBasedServiceEntity(
+            return new AccumulationBasedServiceEntity(
                 published, mandServs, optServs, mandIfcs, optIfcs, props);
         }
     case 10: // interface-based singleton
-        return new unoidl::InterfaceBasedSingletonEntity(
+        return new InterfaceBasedSingletonEntity(
             published, file->readNameLen(offset + 1));
     case 11: // service-based singleton
-        return new unoidl::ServiceBasedSingletonEntity(
+        return new ServiceBasedSingletonEntity(
             published, file->readNameLen(offset + 1));
     default:
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: bad type byte " + rtl::OUString::number(v),
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            file->uri, "UNOIDL format: bad type byte " + OUString::number(v));
     }
 }
 
 }
 
-UnoidlProvider::UnoidlProvider(rtl::OUString const & uri):
-    file_(new MappedFile(uri))
+UnoidlProvider::UnoidlProvider(OUString const & uri):
+    file_(new detail::MappedFile(uri))
 {
     if (file_->size < 8 || std::memcmp(file_->address, "UNOIDL\0\xFF", 8) != 0)
     {
-        throw css::registry::InvalidRegistryException(
-            uri, css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            file_->uri,
+            "UNOIDL format: does not begin with magic UNOIDL\\0\\xFF");
     }
     sal_uInt32 off = file_->read32(8);
     mapSize_ = file_->read32(12);
     if (off + 8 * mapSize_ > file_->size) { //TODO: overflow
-        throw css::uno::DeploymentException(
-            "broken UNOIDL file: root map offset + size too large",
-            css::uno::Reference< css::uno::XInterface >());
+        throw FileFormatException(
+            file_->uri, "UNOIDL format: root map offset + size too large");
     }
-    mapBegin_ = reinterpret_cast< MapEntry const * >(
+    mapBegin_ = reinterpret_cast< detail::MapEntry const * >(
         static_cast< char const * >(file_->address) + off);
 }
 
-rtl::Reference< unoidl::MapCursor > UnoidlProvider::createRootCursor() const {
+rtl::Reference< MapCursor > UnoidlProvider::createRootCursor() const {
     return new UnoidlCursor(file_, mapBegin_, mapSize_);
 }
 
-sal_uInt32 UnoidlProvider::find(rtl::OUString const & name, bool * constant)
-    const
-{
-    MapEntry const * mapBegin = mapBegin_;
+sal_uInt32 UnoidlProvider::find(OUString const & name, bool * constant) const {
+    detail::MapEntry const * mapBegin = mapBegin_;
     sal_uInt32 mapSize = mapSize_;
     bool cgroup = false;
     for (sal_Int32 i = 0;;) {
@@ -1336,23 +1289,20 @@ sal_uInt32 UnoidlProvider::find(rtl::OUString const & name, bool * constant)
         }
         mapSize = file_->read32(off + 1);
         if (8 * mapSize > file_->size - off - 5) { //TODO: overflow
-            throw css::uno::DeploymentException(
-                "broken UNOIDL file: map offset + size too large",
-                css::uno::Reference< css::uno::XInterface >());
+            throw FileFormatException(
+                file_->uri, "UNOIDL format: map offset + size too large");
         }
-        mapBegin = reinterpret_cast< MapEntry const * >(
+        mapBegin = reinterpret_cast< detail::MapEntry const * >(
             static_cast< char const * >(file_->address) + off + 5);
         i = j + 1;
     }
 }
 
-rtl::Reference< unoidl::Entity > UnoidlProvider::getEntity(sal_uInt32 offset)
-    const
-{
+rtl::Reference< Entity > UnoidlProvider::getEntity(sal_uInt32 offset) const {
     return readEntity(file_, offset);
 }
 
-css::uno::Any UnoidlProvider::getConstant(sal_uInt32 offset) const {
+ConstantValue UnoidlProvider::getConstant(sal_uInt32 offset) const {
     return readConstant(file_, offset);
 }
 

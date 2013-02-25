@@ -290,6 +290,7 @@ certain functionality.
 @li @c svg
 @li @c svx
 @li @c ucbhelper
+@li @c unoidl
 @li @c xmlhelp
 @li @c xmloff
 @li @c xmlreader

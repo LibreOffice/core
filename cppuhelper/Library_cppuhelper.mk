@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_libraries,cppuhelper,\
 	reg \
 	sal \
 	salhelper \
+	unoidl \
 	xmlreader \
 	$(gb_UWINAPI) \
 ))
@@ -76,8 +77,6 @@ $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/tdmgr \
 	cppuhelper/source/typedescriptionprovider \
 	cppuhelper/source/typeprovider \
-	cppuhelper/source/unoidl \
-	cppuhelper/source/unoidlprovider \
 	cppuhelper/source/unourl \
 	cppuhelper/source/weak \
 ))

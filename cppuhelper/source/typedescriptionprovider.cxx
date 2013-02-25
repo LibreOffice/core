@@ -49,16 +49,16 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/compbase2.hxx"
 #include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/unoidl.hxx"
 #include "osl/file.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "unoidl/unoidl.hxx"
+#include "unoidl/unoidlprovider.hxx"
 
 #include "paths.hxx"
 #include "typedescriptionprovider.hxx"
-#include "unoidlprovider.hxx"
 
 namespace {
 
@@ -108,7 +108,7 @@ public:
     ModuleDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::ModuleEntity > const & entity):
+        rtl::Reference< unoidl::ModuleEntity > const & entity):
         context_(context), name_(name), entity_(entity)
     { assert(entity.is()); }
 
@@ -129,20 +129,26 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::ModuleEntity > entity_;
+    rtl::Reference< unoidl::ModuleEntity > entity_;
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 ModuleDescription::getMembers() throw (css::uno::RuntimeException) {
-    std::vector< rtl::OUString > names(entity_->getMemberNames());
-    assert(names.size() <= SAL_MAX_INT32);
-    sal_Int32 n = static_cast< sal_Int32 >(names.size());
-    css::uno::Sequence<
-        css::uno::Reference< css::reflection::XTypeDescription > > s(n);
-    for (sal_Int32 i = 0; i != n; ++i) {
-        s[i] = resolve(context_, name_ + "." + names[i]);
+    try {
+        std::vector< rtl::OUString > names(entity_->getMemberNames());
+        assert(names.size() <= SAL_MAX_INT32);
+        sal_Int32 n = static_cast< sal_Int32 >(names.size());
+        css::uno::Sequence<
+            css::uno::Reference< css::reflection::XTypeDescription > > s(n);
+        for (sal_Int32 i = 0; i != n; ++i) {
+            s[i] = resolve(context_, name_ + "." + names[i]);
+        }
+        return s;
+    } catch (unoidl::FileFormatException & e) {
+        throw css::uno::DeploymentException(
+            e.getUri() + ": " + e.getDetail(),
+            static_cast< cppu::OWeakObject * >(this));
     }
-    return s;
 }
 
 typedef cppu::ImplInheritanceHelper1<
@@ -153,7 +159,7 @@ class EnumTypeDescription: public EnumTypeDescription_Base {
 public:
     EnumTypeDescription(
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::EnumTypeEntity > const & entity):
+        rtl::Reference< unoidl::EnumTypeEntity > const & entity):
         EnumTypeDescription_Base(entity->isPublished()), name_(name),
         entity_(entity)
     { assert(entity.is()); }
@@ -179,7 +185,7 @@ private:
         throw (css::uno::RuntimeException);
 
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::EnumTypeEntity > entity_;
+    rtl::Reference< unoidl::EnumTypeEntity > entity_;
 };
 
 css::uno::Sequence< rtl::OUString > EnumTypeDescription::getEnumNames()
@@ -215,7 +221,7 @@ public:
     PlainStructTypeDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::PlainStructTypeEntity > const & entity):
+        rtl::Reference< unoidl::PlainStructTypeEntity > const & entity):
         PlainStructTypeDescription_Base(entity->isPublished()),
         context_(context), name_(name), entity_(entity)
     { assert(entity.is()); }
@@ -259,7 +265,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::PlainStructTypeEntity > entity_;
+    rtl::Reference< unoidl::PlainStructTypeEntity > entity_;
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
@@ -321,8 +327,8 @@ public:
     PolymorphicStructTypeTemplateDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::PolymorphicStructTypeTemplateEntity >
-            const & entity):
+        rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > const &
+            entity):
         PolymorphicStructTypeTemplateDescription_Base(entity->isPublished()),
         context_(context), name_(name), entity_(entity)
     { assert(entity.is()); }
@@ -362,7 +368,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::PolymorphicStructTypeTemplateEntity > entity_;
+    rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > entity_;
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
@@ -417,7 +423,7 @@ public:
     ExceptionTypeDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::ExceptionTypeEntity > const & entity):
+        rtl::Reference< unoidl::ExceptionTypeEntity > const & entity):
         ExceptionTypeDescription_Base(entity->isPublished()), context_(context),
         name_(name), entity_(entity)
     { assert(entity.is()); }
@@ -449,7 +455,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::ExceptionTypeEntity > entity_;
+    rtl::Reference< unoidl::ExceptionTypeEntity > entity_;
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
@@ -551,7 +557,7 @@ public:
     AttributeDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        cppu::unoidl::InterfaceTypeEntity::Attribute const & attribute,
+        unoidl::InterfaceTypeEntity::Attribute const & attribute,
         sal_Int32 position):
         context_(context), name_(name), attribute_(attribute),
         position_(position)
@@ -596,7 +602,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    cppu::unoidl::InterfaceTypeEntity::Attribute attribute_;
+    unoidl::InterfaceTypeEntity::Attribute attribute_;
     sal_Int32 position_;
 };
 
@@ -637,7 +643,7 @@ class MethodParameter:
 public:
     MethodParameter(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        cppu::unoidl::InterfaceTypeEntity::Method::Parameter const & parameter,
+        unoidl::InterfaceTypeEntity::Method::Parameter const & parameter,
         sal_Int32 position):
         context_(context), parameter_(parameter), position_(position)
     {}
@@ -655,20 +661,18 @@ private:
     virtual sal_Bool SAL_CALL isIn() throw (css::uno::RuntimeException) {
         return
             (parameter_.direction
-             == cppu::unoidl::InterfaceTypeEntity::Method::Parameter::
-                 DIRECTION_IN)
+             == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
             || (parameter_.direction
-                == cppu::unoidl::InterfaceTypeEntity::Method::Parameter::
+                == unoidl::InterfaceTypeEntity::Method::Parameter::
                     DIRECTION_IN_OUT);
     }
 
     virtual sal_Bool SAL_CALL isOut() throw (css::uno::RuntimeException) {
         return
             (parameter_.direction
-             == cppu::unoidl::InterfaceTypeEntity::Method::Parameter::
-                 DIRECTION_OUT)
+             == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT)
             || (parameter_.direction
-                == cppu::unoidl::InterfaceTypeEntity::Method::Parameter::
+                == unoidl::InterfaceTypeEntity::Method::Parameter::
                     DIRECTION_IN_OUT);
     }
 
@@ -676,7 +680,7 @@ private:
     { return position_; }
 
     css::uno::Reference< css::uno::XComponentContext > context_;
-    cppu::unoidl::InterfaceTypeEntity::Method::Parameter parameter_;
+    unoidl::InterfaceTypeEntity::Method::Parameter parameter_;
     sal_Int32 position_;
 };
 
@@ -689,8 +693,7 @@ public:
     MethodDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        cppu::unoidl::InterfaceTypeEntity::Method const & method,
-        sal_Int32 position):
+        unoidl::InterfaceTypeEntity::Method const & method, sal_Int32 position):
         context_(context), name_(name), method_(method), position_(position)
     {}
 
@@ -730,7 +733,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    cppu::unoidl::InterfaceTypeEntity::Method method_;
+    unoidl::InterfaceTypeEntity::Method method_;
     sal_Int32 position_;
 };
 
@@ -767,7 +770,7 @@ public:
     InterfaceTypeDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::InterfaceTypeEntity > const & entity):
+        rtl::Reference< unoidl::InterfaceTypeEntity > const & entity):
         InterfaceTypeDescription_Base(entity->isPublished()), context_(context),
         name_(name), entity_(entity)
     { assert(entity.is()); }
@@ -810,7 +813,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::InterfaceTypeEntity > entity_;
+    rtl::Reference< unoidl::InterfaceTypeEntity > entity_;
 };
 
 css::uno::Sequence<
@@ -905,7 +908,7 @@ public:
     ConstantGroupDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::ConstantGroupEntity > const & entity):
+        rtl::Reference< unoidl::ConstantGroupEntity > const & entity):
         ConstantGroupDescription_Base(entity->isPublished()), context_(context),
         name_(name), entity_(entity)
     { assert(entity.is()); }
@@ -927,7 +930,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::ConstantGroupEntity > entity_;
+    rtl::Reference< unoidl::ConstantGroupEntity > entity_;
 };
 
 css::uno::Sequence<
@@ -955,7 +958,7 @@ public:
     TypedefDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::TypedefEntity > const & entity):
+        rtl::Reference< unoidl::TypedefEntity > const & entity):
         TypedefDescription_Base(entity->isPublished()), context_(context),
         name_(name), entity_(entity)
     { assert(entity.is()); }
@@ -976,7 +979,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::TypedefEntity > entity_;
+    rtl::Reference< unoidl::TypedefEntity > entity_;
 };
 
 class ConstructorParameter:
@@ -986,7 +989,7 @@ class ConstructorParameter:
 public:
     ConstructorParameter(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        cppu::unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter
+        unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter
             const & parameter,
         sal_Int32 position):
         context_(context), parameter_(parameter), position_(position)
@@ -1016,7 +1019,7 @@ private:
     { return parameter_.rest; }
 
     css::uno::Reference< css::uno::XComponentContext > context_;
-    cppu::unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter
+    unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter
         parameter_;
     sal_Int32 position_;
 };
@@ -1029,7 +1032,7 @@ class ConstructorDescription:
 public:
     ConstructorDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        cppu::unoidl::SingleInterfaceBasedServiceEntity::Constructor const &
+        unoidl::SingleInterfaceBasedServiceEntity::Constructor const &
             constructor):
         context_(context), constructor_(constructor)
     {}
@@ -1055,7 +1058,7 @@ private:
     SAL_CALL getExceptions() throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::uno::XComponentContext > context_;
-    cppu::unoidl::SingleInterfaceBasedServiceEntity::Constructor constructor_;
+    unoidl::SingleInterfaceBasedServiceEntity::Constructor constructor_;
 };
 
 css::uno::Sequence< css::uno::Reference< css::reflection::XParameter > >
@@ -1097,8 +1100,8 @@ public:
     SingleInterfaceBasedServiceDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::SingleInterfaceBasedServiceEntity >
-            const & entity):
+        rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > const &
+            entity):
         SingleInterfaceBasedServiceDescription_Base(entity->isPublished()),
         context_(context), name_(name), entity_(entity)
     { assert(entity.is()); }
@@ -1176,7 +1179,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::SingleInterfaceBasedServiceEntity > entity_;
+    rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > entity_;
 };
 
 css::uno::Sequence<
@@ -1203,8 +1206,7 @@ class PropertyDescription:
 public:
     PropertyDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        cppu::unoidl::AccumulationBasedServiceEntity::Property const &
-            property):
+        unoidl::AccumulationBasedServiceEntity::Property const & property):
         context_(context), property_(property)
     {}
 
@@ -1227,7 +1229,7 @@ private:
     { return resolve(context_, property_.type); }
 
     css::uno::Reference< css::uno::XComponentContext > context_;
-    cppu::unoidl::AccumulationBasedServiceEntity::Property property_;
+    unoidl::AccumulationBasedServiceEntity::Property property_;
 };
 
 typedef cppu::ImplInheritanceHelper1<
@@ -1241,7 +1243,7 @@ public:
     AccumulationBasedServiceDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::AccumulationBasedServiceEntity > const &
+        rtl::Reference< unoidl::AccumulationBasedServiceEntity > const &
             entity):
         AccumulationBasedServiceDescription_Base(entity->isPublished()),
         context_(context), name_(name), entity_(entity)
@@ -1302,7 +1304,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::AccumulationBasedServiceEntity > entity_;
+    rtl::Reference< unoidl::AccumulationBasedServiceEntity > entity_;
 };
 
 css::uno::Sequence<
@@ -1411,8 +1413,7 @@ public:
     InterfaceBasedSingletonDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::InterfaceBasedSingletonEntity > const &
-            entity):
+        rtl::Reference< unoidl::InterfaceBasedSingletonEntity > const & entity):
         InterfaceBasedSingletonDescription_Base(entity->isPublished()),
         context_(context), name_(name), entity_(entity)
     { assert(entity.is()); }
@@ -1444,7 +1445,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::InterfaceBasedSingletonEntity > entity_;
+    rtl::Reference< unoidl::InterfaceBasedSingletonEntity > entity_;
 };
 
 typedef cppu::ImplInheritanceHelper1<
@@ -1458,8 +1459,7 @@ public:
     ServiceBasedSingletonDescription(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & name,
-        rtl::Reference< cppu::unoidl::ServiceBasedSingletonEntity > const &
-            entity):
+        rtl::Reference< unoidl::ServiceBasedSingletonEntity > const & entity):
         ServiceBasedSingletonDescription_Base(entity_->isPublished()),
         context_(context), name_(name), entity_(entity)
     { assert(entity.is()); }
@@ -1491,7 +1491,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString name_;
-    rtl::Reference< cppu::unoidl::ServiceBasedSingletonEntity > entity_;
+    rtl::Reference< unoidl::ServiceBasedSingletonEntity > entity_;
 };
 
 class Enumeration:
@@ -1503,7 +1503,7 @@ public:
     Enumeration(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & prefix,
-        rtl::Reference< cppu::unoidl::MapCursor > const & cursor,
+        rtl::Reference< unoidl::MapCursor > const & cursor,
         css::uno::Sequence< css::uno::TypeClass > const & types, bool deep):
         context_(context), types_(types), deep_(deep)
     {
@@ -1536,22 +1536,22 @@ private:
     struct Position {
         Position(
             rtl::OUString const & thePrefix,
-            rtl::Reference< cppu::unoidl::MapCursor > const & theCursor):
+            rtl::Reference< unoidl::MapCursor > const & theCursor):
             prefix(thePrefix), cursor(theCursor)
         { assert(theCursor.is()); }
 
         Position(
             rtl::OUString const & thePrefix,
-            rtl::Reference< cppu::unoidl::ConstantGroupEntity > const &
+            rtl::Reference< unoidl::ConstantGroupEntity > const &
                 theConstantGroup):
             prefix(thePrefix), constantGroup(theConstantGroup),
             constantGroupIndex(constantGroup->getMembers().begin())
         { assert(theConstantGroup.is()); }
 
         rtl::OUString prefix;
-        rtl::Reference< cppu::unoidl::MapCursor > cursor;
-        rtl::Reference< cppu::unoidl::ConstantGroupEntity > constantGroup;
-        std::vector< cppu::unoidl::ConstantGroupEntity::Member >::const_iterator
+        rtl::Reference< unoidl::MapCursor > cursor;
+        rtl::Reference< unoidl::ConstantGroupEntity > constantGroup;
+        std::vector< unoidl::ConstantGroupEntity::Member >::const_iterator
             constantGroupIndex;
     };
 
@@ -1595,87 +1595,93 @@ bool Enumeration::matches(css::uno::TypeClass tc) const {
 }
 
 void Enumeration::findNextMatch() {
-    for (;;) {
-        assert(!positions_.empty());
-        rtl::OUString name;
-        if (positions_.top().cursor.is()) { // root or module
-            rtl::Reference< cppu::unoidl::Entity > ent(
-                positions_.top().cursor->getNext(&name));
-            if (!ent.is()) {
-                positions_.pop();
-                if (positions_.empty()) {
+    try {
+        for (;;) {
+            assert(!positions_.empty());
+            rtl::OUString name;
+            if (positions_.top().cursor.is()) { // root or module
+                rtl::Reference< unoidl::Entity > ent(
+                    positions_.top().cursor->getNext(&name));
+                if (!ent.is()) {
+                    positions_.pop();
+                    if (positions_.empty()) {
+                        break;
+                    }
+                    continue;
+                }
+                name = positions_.top().prefix + name;
+                css::uno::TypeClass tc;
+                switch (ent->getSort()) {
+                case unoidl::Entity::SORT_MODULE:
+                    tc = css::uno::TypeClass_MODULE;
+                    if (deep_) {
+                        positions_.push(
+                            Position(
+                                name + ".",
+                                static_cast< unoidl::ModuleEntity * >(
+                                    ent.get())->createCursor()));
+                    }
+                    break;
+                case unoidl::Entity::SORT_ENUM_TYPE:
+                    tc = css::uno::TypeClass_ENUM;
+                    break;
+                case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
+                case unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+                    tc = css::uno::TypeClass_STRUCT;
+                    break;
+                case unoidl::Entity::SORT_EXCEPTION_TYPE:
+                    tc = css::uno::TypeClass_EXCEPTION;
+                    break;
+                case unoidl::Entity::SORT_INTERFACE_TYPE:
+                    tc = css::uno::TypeClass_INTERFACE;
+                    break;
+                case unoidl::Entity::SORT_TYPEDEF:
+                    tc = css::uno::TypeClass_TYPEDEF;
+                    break;
+                case unoidl::Entity::SORT_CONSTANT_GROUP:
+                    tc = css::uno::TypeClass_CONSTANTS;
+                    if (deep_ && matches(css::uno::TypeClass_CONSTANT)) {
+                        positions_.push(
+                            Position(
+                                name + ".",
+                                static_cast< unoidl::ConstantGroupEntity * >(
+                                    ent.get())));
+                    }
+                    break;
+                case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+                case unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
+                    tc = css::uno::TypeClass_SERVICE;
+                    break;
+                case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
+                case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
+                    tc = css::uno::TypeClass_SINGLETON;
+                    break;
+                default:
+                    for (;;) { std::abort(); } // this cannot happen
+                }
+                if (matches(tc)) {
+                    current_ = name;
                     break;
                 }
-                continue;
-            }
-            name = positions_.top().prefix + name;
-            css::uno::TypeClass tc;
-            switch (ent->getSort()) {
-            case cppu::unoidl::Entity::SORT_MODULE:
-                tc = css::uno::TypeClass_MODULE;
-                if (deep_) {
-                    positions_.push(
-                        Position(
-                            name + ".",
-                            static_cast< cppu::unoidl::ModuleEntity * >(
-                                ent.get())->createCursor()));
+            } else { // constant group
+                if (positions_.top().constantGroupIndex
+                    == positions_.top().constantGroup->getMembers().end())
+                {
+                    positions_.pop();
+                    if (positions_.empty()) {
+                        break;
+                    }
+                    continue;
                 }
-                break;
-            case cppu::unoidl::Entity::SORT_ENUM_TYPE:
-                tc = css::uno::TypeClass_ENUM;
-                break;
-            case cppu::unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
-            case cppu::unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-                tc = css::uno::TypeClass_STRUCT;
-                break;
-            case cppu::unoidl::Entity::SORT_EXCEPTION_TYPE:
-                tc = css::uno::TypeClass_EXCEPTION;
-                break;
-            case cppu::unoidl::Entity::SORT_INTERFACE_TYPE:
-                tc = css::uno::TypeClass_INTERFACE;
-                break;
-            case cppu::unoidl::Entity::SORT_TYPEDEF:
-                tc = css::uno::TypeClass_TYPEDEF;
-                break;
-            case cppu::unoidl::Entity::SORT_CONSTANT_GROUP:
-                tc = css::uno::TypeClass_CONSTANTS;
-                if (deep_ && matches(css::uno::TypeClass_CONSTANT)) {
-                    positions_.push(
-                        Position(
-                            name + ".",
-                            static_cast< cppu::unoidl::ConstantGroupEntity * >(
-                                ent.get())));
-                }
-                break;
-            case cppu::unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
-            case cppu::unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
-                tc = css::uno::TypeClass_SERVICE;
-                break;
-            case cppu::unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
-            case cppu::unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
-                tc = css::uno::TypeClass_SINGLETON;
-                break;
-            default:
-                for (;;) { std::abort(); } // this cannot happen
-            }
-            if (matches(tc)) {
-                current_ = name;
+                current_ = positions_.top().prefix
+                    + positions_.top().constantGroupIndex++->name;
                 break;
             }
-        } else { // constant group
-            if (positions_.top().constantGroupIndex
-                == positions_.top().constantGroup->getMembers().end())
-            {
-                positions_.pop();
-                if (positions_.empty()) {
-                    break;
-                }
-                continue;
-            }
-            current_ = positions_.top().prefix
-                + positions_.top().constantGroupIndex++->name;
-            break;
         }
+    } catch (unoidl::FileFormatException & e) {
+        throw css::uno::DeploymentException(
+            e.getUri() + ": " + e.getDetail(),
+            static_cast< cppu::OWeakObject * >(this));
     }
 }
 
@@ -1688,11 +1694,12 @@ class Provider:
     private osl::Mutex, public Provider_Base, private boost::noncopyable
 {
 public:
+    // throws unoidl::FileFormatException, unoidl::NoSuchFileException:
     Provider(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & uri):
         Provider_Base(*static_cast< osl::Mutex * >(this)), context_(context),
-        provider_(new cppu::UnoidlProvider(uri))
+        provider_(new unoidl::UnoidlProvider(uri))
     {}
 
     using Provider_Base::acquire;
@@ -1709,8 +1716,7 @@ private:
             css::container::NoSuchElementException, css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL hasByHierarchicalName(
-        rtl::OUString const & aName) throw (css::uno::RuntimeException)
-    { return provider_->find(aName) != 0; }
+        rtl::OUString const & aName) throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
     SAL_CALL createTypeDescriptionEnumeration(
@@ -1723,117 +1729,169 @@ private:
             css::uno::RuntimeException);
 
     css::uno::Reference< css::uno::XComponentContext > context_;
-    rtl::Reference< cppu::UnoidlProvider > provider_;
+    rtl::Reference< unoidl::UnoidlProvider > provider_;
 };
 
 css::uno::Any Provider::getByHierarchicalName(rtl::OUString const & aName)
     throw (css::container::NoSuchElementException, css::uno::RuntimeException)
 {
-    bool cnst;
-    sal_uInt32 off = provider_->find(aName, &cnst);
-    if (off == 0) {
-        throw css::container::NoSuchElementException(
-            aName, static_cast< cppu::OWeakObject * >(this));
-    }
-    if (cnst) {
-        return css::uno::makeAny<
-            css::uno::Reference< css::reflection::XTypeDescription > >(
-                new ConstantDescription(aName, provider_->getConstant(off)));
-    } else {
-        rtl::Reference< cppu::unoidl::Entity > ent(provider_->getEntity(off));
-        switch (ent->getSort()) {
-        case cppu::unoidl::Entity::SORT_MODULE:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new ModuleDescription(
-                        context_, aName,
-                        static_cast< cppu::unoidl::ModuleEntity * >(
-                            ent.get())));
-        case cppu::unoidl::Entity::SORT_ENUM_TYPE:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new EnumTypeDescription(
-                        aName,
-                        static_cast< cppu::unoidl::EnumTypeEntity * >(
-                            ent.get())));
-        case cppu::unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new PlainStructTypeDescription(
-                        context_, aName,
-                        static_cast< cppu::unoidl::PlainStructTypeEntity * >(
-                            ent.get())));
-        case cppu::unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new PolymorphicStructTypeTemplateDescription(
-                        context_, aName,
-                        static_cast<
-                            cppu::unoidl::PolymorphicStructTypeTemplateEntity *
-                                >(ent.get())));
-        case cppu::unoidl::Entity::SORT_EXCEPTION_TYPE:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new ExceptionTypeDescription(
-                        context_, aName,
-                        static_cast< cppu::unoidl::ExceptionTypeEntity * >(
-                            ent.get())));
-        case cppu::unoidl::Entity::SORT_INTERFACE_TYPE:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new InterfaceTypeDescription(
-                        context_, aName,
-                        static_cast< cppu::unoidl::InterfaceTypeEntity * >(
-                            ent.get())));
-        case cppu::unoidl::Entity::SORT_TYPEDEF:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new TypedefDescription(
-                        context_, aName,
-                        static_cast< cppu::unoidl::TypedefEntity * >(
-                            ent.get())));
-        case cppu::unoidl::Entity::SORT_CONSTANT_GROUP:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new ConstantGroupDescription(
-                        context_, aName,
-                        static_cast< cppu::unoidl::ConstantGroupEntity * >(
-                            ent.get())));
-        case cppu::unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new SingleInterfaceBasedServiceDescription(
-                        context_, aName,
-                        static_cast<
-                            cppu::unoidl::SingleInterfaceBasedServiceEntity * >(
-                                ent.get())));
-        case cppu::unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new AccumulationBasedServiceDescription(
-                        context_, aName,
-                        static_cast<
-                            cppu::unoidl::AccumulationBasedServiceEntity * >(
-                                ent.get())));
-        case cppu::unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new InterfaceBasedSingletonDescription(
-                        context_, aName,
-                        static_cast<
-                            cppu::unoidl::InterfaceBasedSingletonEntity * >(
-                                ent.get())));
-        case cppu::unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
-            return css::uno::makeAny<
-                css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new ServiceBasedSingletonDescription(
-                        context_, aName,
-                        static_cast<
-                            cppu::unoidl::ServiceBasedSingletonEntity * >(
-                                ent.get())));
-        default:
-            for (;;) { std::abort(); } // this cannot happen
+    try {
+        bool cnst;
+        sal_uInt32 off = provider_->find(aName, &cnst);
+        if (off == 0) {
+            throw css::container::NoSuchElementException(
+                aName, static_cast< cppu::OWeakObject * >(this));
         }
+        if (cnst) {
+            unoidl::ConstantValue val1(provider_->getConstant(off));
+            css::uno::Any val2;
+            switch (val1.type) {
+            case unoidl::ConstantValue::TYPE_BOOLEAN:
+                val2 <<= val1.booleanValue;
+                break;
+            case unoidl::ConstantValue::TYPE_BYTE:
+                val2 <<= val1.byteValue;
+                break;
+            case unoidl::ConstantValue::TYPE_SHORT:
+                val2 <<= val1.shortValue;
+                break;
+            case unoidl::ConstantValue::TYPE_UNSIGNED_SHORT:
+                val2 <<= val1.unsignedShortValue;
+                break;
+            case unoidl::ConstantValue::TYPE_LONG:
+                val2 <<= val1.longValue;
+                break;
+            case unoidl::ConstantValue::TYPE_UNSIGNED_LONG:
+                val2 <<= val1.unsignedLongValue;
+                break;
+            case unoidl::ConstantValue::TYPE_HYPER:
+                val2 <<= val1.hyperValue;
+                break;
+            case unoidl::ConstantValue::TYPE_UNSIGNED_HYPER:
+                val2 <<= val1.unsignedHyperValue;
+                break;
+            case unoidl::ConstantValue::TYPE_FLOAT:
+                val2 <<= val1.floatValue;
+                break;
+            case unoidl::ConstantValue::TYPE_DOUBLE:
+                val2 <<= val1.doubleValue;
+                break;
+            default:
+                for (;;) { std::abort(); } // this cannot happen
+            }
+            return css::uno::makeAny<
+                css::uno::Reference< css::reflection::XTypeDescription > >(
+                    new ConstantDescription(aName, val2));
+        } else {
+            rtl::Reference< unoidl::Entity > ent(provider_->getEntity(off));
+            switch (ent->getSort()) {
+            case unoidl::Entity::SORT_MODULE:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new ModuleDescription(
+                            context_, aName,
+                            static_cast< unoidl::ModuleEntity * >(ent.get())));
+            case unoidl::Entity::SORT_ENUM_TYPE:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new EnumTypeDescription(
+                            aName,
+                            static_cast< unoidl::EnumTypeEntity * >(
+                                ent.get())));
+            case unoidl::Entity::SORT_PLAIN_STRUCT_TYPE:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new PlainStructTypeDescription(
+                            context_, aName,
+                            static_cast< unoidl::PlainStructTypeEntity * >(
+                                ent.get())));
+            case unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new PolymorphicStructTypeTemplateDescription(
+                            context_, aName,
+                            static_cast<
+                                unoidl::PolymorphicStructTypeTemplateEntity * >(
+                                    ent.get())));
+            case unoidl::Entity::SORT_EXCEPTION_TYPE:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new ExceptionTypeDescription(
+                            context_, aName,
+                            static_cast< unoidl::ExceptionTypeEntity * >(
+                                ent.get())));
+            case unoidl::Entity::SORT_INTERFACE_TYPE:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new InterfaceTypeDescription(
+                            context_, aName,
+                            static_cast< unoidl::InterfaceTypeEntity * >(
+                                ent.get())));
+            case unoidl::Entity::SORT_TYPEDEF:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new TypedefDescription(
+                            context_, aName,
+                            static_cast< unoidl::TypedefEntity * >(ent.get())));
+            case unoidl::Entity::SORT_CONSTANT_GROUP:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new ConstantGroupDescription(
+                            context_, aName,
+                            static_cast< unoidl::ConstantGroupEntity * >(
+                                ent.get())));
+            case unoidl::Entity::SORT_SINGLE_INTERFACE_BASED_SERVICE:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new SingleInterfaceBasedServiceDescription(
+                            context_, aName,
+                            static_cast<
+                                unoidl::SingleInterfaceBasedServiceEntity * >(
+                                    ent.get())));
+            case unoidl::Entity::SORT_ACCUMULATION_BASED_SERVICE:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new AccumulationBasedServiceDescription(
+                            context_, aName,
+                            static_cast<
+                                unoidl::AccumulationBasedServiceEntity * >(
+                                    ent.get())));
+            case unoidl::Entity::SORT_INTERFACE_BASED_SINGLETON:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new InterfaceBasedSingletonDescription(
+                            context_, aName,
+                            static_cast<
+                                unoidl::InterfaceBasedSingletonEntity * >(
+                                    ent.get())));
+            case unoidl::Entity::SORT_SERVICE_BASED_SINGLETON:
+                return css::uno::makeAny<
+                    css::uno::Reference< css::reflection::XTypeDescription > >(
+                        new ServiceBasedSingletonDescription(
+                            context_, aName,
+                            static_cast<
+                                unoidl::ServiceBasedSingletonEntity * >(
+                                    ent.get())));
+            default:
+                for (;;) { std::abort(); } // this cannot happen
+            }
+        }
+    } catch (unoidl::FileFormatException & e) {
+        throw css::uno::DeploymentException(
+            e.getUri() + ": " + e.getDetail(),
+            static_cast< cppu::OWeakObject * >(this));
+    }
+}
+
+sal_Bool Provider::hasByHierarchicalName(
+    rtl::OUString const & aName) throw (css::uno::RuntimeException)
+{
+    try {
+        return provider_->find(aName) != 0;
+    } catch (unoidl::FileFormatException & e) {
+        throw css::uno::DeploymentException(
+            e.getUri() + ": " + e.getDetail(),
+            static_cast< cppu::OWeakObject * >(this));
     }
 }
 
@@ -1846,33 +1904,39 @@ Provider::createTypeDescriptionEnumeration(
         css::reflection::NoSuchTypeNameException,
         css::reflection::InvalidTypeNameException, css::uno::RuntimeException)
 {
-    rtl::OUString prefix;
-    rtl::Reference< cppu::unoidl::MapCursor > cursor;
-    if (moduleName.isEmpty()) {
-        cursor = provider_->createRootCursor();
-    } else {
-        prefix = moduleName + ".";
-        bool cnst;
-        sal_uInt32 off = provider_->find(moduleName, &cnst);
-        if (off == 0) {
-            throw css::reflection::NoSuchTypeNameException(
-                moduleName, static_cast< cppu::OWeakObject * >(this));
+    try {
+        rtl::OUString prefix;
+        rtl::Reference< unoidl::MapCursor > cursor;
+        if (moduleName.isEmpty()) {
+            cursor = provider_->createRootCursor();
+        } else {
+            prefix = moduleName + ".";
+            bool cnst;
+            sal_uInt32 off = provider_->find(moduleName, &cnst);
+            if (off == 0) {
+                throw css::reflection::NoSuchTypeNameException(
+                    moduleName, static_cast< cppu::OWeakObject * >(this));
+            }
+            if (cnst) {
+                throw css::reflection::InvalidTypeNameException(
+                    moduleName, static_cast< cppu::OWeakObject * >(this));
+            }
+            rtl::Reference< unoidl::Entity > ent(provider_->getEntity(off));
+            if (ent->getSort() != unoidl::Entity::SORT_MODULE) {
+                throw css::reflection::InvalidTypeNameException(
+                    moduleName, static_cast< cppu::OWeakObject * >(this));
+            }
+            cursor = static_cast< unoidl::ModuleEntity * >(ent.get())->
+                createCursor();
         }
-        if (cnst) {
-            throw css::reflection::InvalidTypeNameException(
-                moduleName, static_cast< cppu::OWeakObject * >(this));
-        }
-        rtl::Reference< cppu::unoidl::Entity > ent(provider_->getEntity(off));
-        if (ent->getSort() != cppu::unoidl::Entity::SORT_MODULE) {
-            throw css::reflection::InvalidTypeNameException(
-                moduleName, static_cast< cppu::OWeakObject * >(this));
-        }
-        cursor = static_cast< cppu::unoidl::ModuleEntity * >(ent.get())->
-            createCursor();
+        return new Enumeration(
+            context_, prefix, cursor, types,
+            depth == css::reflection::TypeDescriptionSearchDepth_INFINITE);
+    } catch (unoidl::FileFormatException & e) {
+        throw css::uno::DeploymentException(
+            e.getUri() + ": " + e.getDetail(),
+            static_cast< cppu::OWeakObject * >(this));
     }
-    return new Enumeration(
-        context_, prefix, cursor, types,
-        depth == css::reflection::TypeDescriptionSearchDepth_INFINITE);
 }
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
@@ -1916,7 +1980,7 @@ void readRdbFile(
     css::uno::Reference< css::container::XHierarchicalNameAccess > prov;
     try {
         prov = new Provider(context, uri);
-    } catch (css::container::NoSuchElementException &) {
+    } catch (unoidl::NoSuchFileException &) {
         if (optional) {
             SAL_INFO("cppuhelper", "Ignored optional " << uri);
             return;
@@ -1924,7 +1988,7 @@ void readRdbFile(
         throw css::uno::DeploymentException(
             uri + ": no such file",
             css::uno::Reference< css::uno::XInterface >());
-    } catch (css::registry::InvalidRegistryException &) {
+    } catch (unoidl::FileFormatException &) {
         prov = readLegacyRdbFile(uri, serviceManager, context);
     }
     assert(prov.is());

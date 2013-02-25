@@ -7,38 +7,71 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CPPUHELPER_UNOIDL_HXX
-#define INCLUDED_CPPUHELPER_UNOIDL_HXX
+#ifndef INCLUDED_UNOIDL_UNOIDL_HXX
+#define INCLUDED_UNOIDL_UNOIDL_HXX
 
 #include "sal/config.h"
 
 #include <cassert>
 #include <vector>
 
-#include "com/sun/star/uno/Any.hxx"
-#include "cppuhelper/cppuhelperdllapi.h"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "salhelper/simplereferenceobject.hxx"
+#include "unoidl/detail/dllapi.hxx"
 
-namespace cppu { namespace unoidl {
+namespace unoidl {
 
-class CPPUHELPER_DLLPUBLIC Entity: public salhelper::SimpleReferenceObject {
+class LO_DLLPUBLIC_UNOIDL NoSuchFileException {
+public:
+    SAL_DLLPRIVATE NoSuchFileException(rtl::OUString const & uri): uri_(uri) {}
+
+    SAL_DLLPRIVATE NoSuchFileException(NoSuchFileException const & other):
+        uri_(other.uri_) {}
+
+    virtual SAL_DLLPRIVATE ~NoSuchFileException() throw ();
+
+    rtl::OUString getUri() const { return uri_; }
+
+private:
+    void operator =(NoSuchFileException) SAL_DELETED_FUNCTION;
+
+    rtl::OUString uri_;
+};
+
+class LO_DLLPUBLIC_UNOIDL FileFormatException {
+public:
+    SAL_DLLPRIVATE FileFormatException(
+        rtl::OUString const & uri, rtl::OUString const & detail):
+        uri_(uri), detail_(detail)
+    {}
+
+    SAL_DLLPRIVATE FileFormatException(FileFormatException const & other):
+        uri_(other.uri_), detail_(other.detail_)
+    {}
+
+    virtual SAL_DLLPRIVATE ~FileFormatException() throw ();
+
+    rtl::OUString getUri() const { return uri_; }
+
+    rtl::OUString getDetail() const { return detail_; }
+
+private:
+    void operator =(FileFormatException) SAL_DELETED_FUNCTION;
+
+    rtl::OUString uri_;
+    rtl::OUString detail_;
+};
+
+class LO_DLLPUBLIC_UNOIDL Entity: public salhelper::SimpleReferenceObject {
 public:
     enum Sort {
-        SORT_MODULE,
-        SORT_ENUM_TYPE,
-        SORT_PLAIN_STRUCT_TYPE,
-        SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE,
-        SORT_EXCEPTION_TYPE,
-        SORT_INTERFACE_TYPE,
-        SORT_TYPEDEF,
-        SORT_CONSTANT_GROUP,
-        SORT_SINGLE_INTERFACE_BASED_SERVICE,
-        SORT_ACCUMULATION_BASED_SERVICE,
-        SORT_INTERFACE_BASED_SINGLETON,
-        SORT_SERVICE_BASED_SINGLETON
+        SORT_MODULE, SORT_ENUM_TYPE, SORT_PLAIN_STRUCT_TYPE,
+        SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE, SORT_EXCEPTION_TYPE,
+        SORT_INTERFACE_TYPE, SORT_TYPEDEF, SORT_CONSTANT_GROUP,
+        SORT_SINGLE_INTERFACE_BASED_SERVICE, SORT_ACCUMULATION_BASED_SERVICE,
+        SORT_INTERFACE_BASED_SINGLETON, SORT_SERVICE_BASED_SINGLETON
     };
 
     Sort getSort() const { return sort_; }
@@ -52,8 +85,9 @@ private:
     Sort sort_;
 };
 
-class CPPUHELPER_DLLPUBLIC MapCursor: public salhelper::SimpleReferenceObject {
+class LO_DLLPUBLIC_UNOIDL MapCursor: public salhelper::SimpleReferenceObject {
 public:
+    // throws FileFormatException:
     virtual rtl::Reference< Entity > getNext(rtl::OUString * name) = 0;
 
 protected:
@@ -62,10 +96,12 @@ protected:
     virtual SAL_DLLPRIVATE ~MapCursor() throw();
 };
 
-class CPPUHELPER_DLLPUBLIC ModuleEntity: public Entity {
+class LO_DLLPUBLIC_UNOIDL ModuleEntity: public Entity {
 public:
+    // throws FileFormatException:
     virtual std::vector< rtl::OUString > getMemberNames() const = 0;
 
+    // throws FileFormatException:
     virtual rtl::Reference< MapCursor > createCursor() const = 0;
 
 protected:
@@ -74,7 +110,7 @@ protected:
     virtual SAL_DLLPRIVATE ~ModuleEntity() throw ();
 };
 
-class CPPUHELPER_DLLPUBLIC PublishableEntity: public Entity {
+class LO_DLLPUBLIC_UNOIDL PublishableEntity: public Entity {
 public:
     bool isPublished() const { return published_; }
 
@@ -89,7 +125,7 @@ private:
     bool published_;
 };
 
-class CPPUHELPER_DLLPUBLIC EnumTypeEntity: public PublishableEntity {
+class LO_DLLPUBLIC_UNOIDL EnumTypeEntity: public PublishableEntity {
 public:
     struct Member {
         Member(rtl::OUString const & theName, sal_Int32 theValue):
@@ -114,7 +150,7 @@ private:
     std::vector< Member > members_;
 };
 
-class CPPUHELPER_DLLPUBLIC PlainStructTypeEntity: public PublishableEntity {
+class LO_DLLPUBLIC_UNOIDL PlainStructTypeEntity: public PublishableEntity {
 public:
     struct Member {
         Member(rtl::OUString const & theName, rtl::OUString const & theType):
@@ -145,7 +181,7 @@ private:
     std::vector< Member > directMembers_;
 };
 
-class CPPUHELPER_DLLPUBLIC PolymorphicStructTypeTemplateEntity:
+class LO_DLLPUBLIC_UNOIDL PolymorphicStructTypeTemplateEntity:
     public PublishableEntity
 {
 public:
@@ -182,7 +218,7 @@ private:
     std::vector< Member > members_;
 };
 
-class CPPUHELPER_DLLPUBLIC ExceptionTypeEntity: public PublishableEntity {
+class LO_DLLPUBLIC_UNOIDL ExceptionTypeEntity: public PublishableEntity {
 public:
     struct Member {
         Member(rtl::OUString const & theName, rtl::OUString const & theType):
@@ -213,7 +249,7 @@ private:
     std::vector< Member > directMembers_;
 };
 
-class CPPUHELPER_DLLPUBLIC InterfaceTypeEntity: public PublishableEntity {
+class LO_DLLPUBLIC_UNOIDL InterfaceTypeEntity: public PublishableEntity {
 public:
     struct Attribute {
         Attribute(
@@ -306,7 +342,7 @@ private:
     std::vector< Method > directMethods_;
 };
 
-class CPPUHELPER_DLLPUBLIC TypedefEntity: public PublishableEntity {
+class LO_DLLPUBLIC_UNOIDL TypedefEntity: public PublishableEntity {
 public:
     SAL_DLLPRIVATE TypedefEntity(bool published, rtl::OUString const & type):
         PublishableEntity(SORT_TYPEDEF, published), type_(type)
@@ -320,16 +356,69 @@ private:
     rtl::OUString type_;
 };
 
-class CPPUHELPER_DLLPUBLIC ConstantGroupEntity: public PublishableEntity {
+struct LO_DLLPUBLIC_UNOIDL ConstantValue {
+    enum Type {
+        TYPE_BOOLEAN, TYPE_BYTE, TYPE_SHORT, TYPE_UNSIGNED_SHORT, TYPE_LONG,
+        TYPE_UNSIGNED_LONG, TYPE_HYPER, TYPE_UNSIGNED_HYPER, TYPE_FLOAT,
+        TYPE_DOUBLE };
+
+    explicit ConstantValue(bool value): type(TYPE_BOOLEAN), booleanValue(value)
+    {}
+
+    explicit ConstantValue(sal_Int8 value): type(TYPE_BYTE), byteValue(value) {}
+
+    explicit ConstantValue(sal_Int16 value): type(TYPE_SHORT), shortValue(value)
+    {}
+
+    explicit ConstantValue(sal_uInt16 value):
+        type(TYPE_UNSIGNED_SHORT), unsignedShortValue(value)
+    {}
+
+    explicit ConstantValue(sal_Int32 value): type(TYPE_LONG), longValue(value)
+    {}
+
+    explicit ConstantValue(sal_uInt32 value):
+        type(TYPE_UNSIGNED_LONG), unsignedLongValue(value)
+    {}
+
+    explicit ConstantValue(sal_Int64 value): type(TYPE_HYPER), hyperValue(value)
+    {}
+
+    explicit ConstantValue(sal_uInt64 value):
+        type(TYPE_UNSIGNED_HYPER), unsignedHyperValue(value)
+    {}
+
+    explicit ConstantValue(float value): type(TYPE_FLOAT), floatValue(value) {}
+
+    explicit ConstantValue(double value): type(TYPE_DOUBLE), doubleValue(value)
+    {}
+
+    Type type;
+
+    union {
+        bool booleanValue;
+        sal_Int8 byteValue;
+        sal_Int16 shortValue;
+        sal_uInt16 unsignedShortValue;
+        sal_Int32 longValue;
+        sal_uInt32 unsignedLongValue;
+        sal_Int64 hyperValue;
+        sal_uInt64 unsignedHyperValue;
+        float floatValue;
+        double doubleValue;
+    };
+};
+
+class LO_DLLPUBLIC_UNOIDL ConstantGroupEntity: public PublishableEntity {
 public:
     struct Member {
-        Member(rtl::OUString const & theName, css::uno::Any const & theValue):
+        Member(rtl::OUString const & theName, ConstantValue const & theValue):
             name(theName), value(theValue)
         {}
 
         rtl::OUString name;
 
-        css::uno::Any value;
+        ConstantValue value;
     };
 
     SAL_DLLPRIVATE ConstantGroupEntity(
@@ -345,7 +434,7 @@ private:
     std::vector< Member > members_;
 };
 
-class CPPUHELPER_DLLPUBLIC SingleInterfaceBasedServiceEntity:
+class LO_DLLPUBLIC_UNOIDL SingleInterfaceBasedServiceEntity:
     public PublishableEntity
 {
 public:
@@ -402,7 +491,7 @@ private:
     std::vector< Constructor > constructors_;
 };
 
-class CPPUHELPER_DLLPUBLIC AccumulationBasedServiceEntity:
+class LO_DLLPUBLIC_UNOIDL AccumulationBasedServiceEntity:
     public PublishableEntity
 {
 public:
@@ -473,7 +562,7 @@ private:
     std::vector< Property > directProperties_;
 };
 
-class CPPUHELPER_DLLPUBLIC InterfaceBasedSingletonEntity:
+class LO_DLLPUBLIC_UNOIDL InterfaceBasedSingletonEntity:
     public PublishableEntity
 {
 public:
@@ -491,7 +580,7 @@ private:
     rtl::OUString base_;
 };
 
-class CPPUHELPER_DLLPUBLIC ServiceBasedSingletonEntity: public PublishableEntity
+class LO_DLLPUBLIC_UNOIDL ServiceBasedSingletonEntity: public PublishableEntity
 {
 public:
     SAL_DLLPRIVATE ServiceBasedSingletonEntity(
@@ -507,8 +596,9 @@ private:
     rtl::OUString base_;
 };
 
-class CPPUHELPER_DLLPUBLIC Provider: public salhelper::SimpleReferenceObject {
+class LO_DLLPUBLIC_UNOIDL Provider: public salhelper::SimpleReferenceObject {
 public:
+    // throws FileFormatException:
     virtual rtl::Reference< MapCursor > createRootCursor() const = 0;
 
 protected:
@@ -517,10 +607,11 @@ protected:
     virtual SAL_DLLPRIVATE ~Provider() throw ();
 };
 
-CPPUHELPER_DLLPUBLIC rtl::Reference< Provider > loadProvider(
+// throws FileFormatException, NoSuchFileException:
+LO_DLLPUBLIC_UNOIDL rtl::Reference< Provider > loadProvider(
     rtl::OUString const & uri);
 
-} }
+}
 
 #endif
 

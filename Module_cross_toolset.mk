@@ -69,6 +69,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	ucbhelper \
 	udkapi \
 	udm \
+	unoidl \
 	unoil \
 	unotest \
 	unotools \

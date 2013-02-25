@@ -443,6 +443,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     sal_textenc \
     sunjavaplugin \
 	sunpro5_uno \
+    unoidl \
     unsafe_uno \
     xmlreader \
 ))

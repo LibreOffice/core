@@ -212,6 +212,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	UnoControls \
 	unodevtools \
 	unoil \
+	unoidl \
 	unotest \
 	unotools \
 	unoxml \

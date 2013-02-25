@@ -277,6 +277,13 @@ File gid_File_Dl_Store
 End
 
 
+File gid_File_Dl_Unoidl
+    LIB_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = SCP2_URE_DL_NORMAL("unoidl");
+    Styles = (PACKED);
+End
+
 File gid_File_Dl_Xmlreader
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -998,6 +1005,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_Unixlink_File_Dl_Rmcxt,
             gid_File_Dl_Store,
             gid_Unixlink_File_Dl_Store,
+            gid_File_Dl_Unoidl,
             gid_File_Dl_Xmlreader,
             gid_File_Dl_Jvmaccess,
             gid_Unixlink_File_Dl_Jvmaccess,

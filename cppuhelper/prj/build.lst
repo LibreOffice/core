@@ -1,2 +1,2 @@
-ch	cppuhelper	:	BOOST:boost LIBXSLT:libxslt DESKTOP:codemaker cppu offapi registry salhelper xmlreader NULL
+ch	cppuhelper	:	BOOST:boost LIBXSLT:libxslt DESKTOP:codemaker cppu offapi registry salhelper unoidl xmlreader NULL
 ch	cppuhelper\prj							nmake	-	all	ch_prj NULL

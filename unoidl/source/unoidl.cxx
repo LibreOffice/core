@@ -11,13 +11,16 @@
 
 #include <vector>
 
-#include "cppuhelper/unoidl.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
+#include "unoidl/unoidl.hxx"
+#include "unoidl/unoidlprovider.hxx"
 
-#include "unoidlprovider.hxx"
+namespace unoidl {
 
-namespace cppu { namespace unoidl {
+NoSuchFileException::~NoSuchFileException() throw () {}
+
+FileFormatException::~FileFormatException() throw () {}
 
 Entity::~Entity() throw () {}
 
@@ -54,10 +57,10 @@ ServiceBasedSingletonEntity::~ServiceBasedSingletonEntity() throw () {}
 
 Provider::~Provider() throw () {}
 
-rtl::Reference< Provider > loadProvider(rtl::OUString const & uri) {
+rtl::Reference< Provider > loadProvider(OUString const & uri) {
     return new UnoidlProvider(uri);
 }
 
-} }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
