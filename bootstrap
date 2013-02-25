@@ -29,48 +29,7 @@ else
 fi
 export EXEEXT
 
-# ------------------------------------------------------------------------------
-# Build dmake
-
-if test "$BUILD_DMAKE" != "NO"; then
-    if test ! -x "$SRC_ROOT/dmake/dmake$EXEEXT"; then
-        cd "$SRC_ROOT/dmake" || exit
-
-        # If cross-compiling then don't use the cross compilers to build dmake.
-        if test "$OS_FOR_BUILD" = "WNT"; then
-            # Let the Cygwin gcc be found
-            unset CC CXX AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
-        elif test "$CROSS_COMPILING" = "YES"; then
-            export CC="$CC_FOR_BUILD"
-            export CXX="$CXX_FOR_BUILD"
-            unset AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
-        fi
-
-        # For normal unixy systems
-        if test -f "Makefile" ; then
-            $GNUMAKE distclean || exit
-        fi
-
-        ./configure $DMAKE_CONF || exit
-
-        ## invoke the gnu make command set by configure.
-        $GNUMAKE || exit
-
-        echo ""
-        echo "dmake has been successfully built"
-
-        cd ..
-    else
-        echo "dmake/dmake already built"
-    fi
-fi
-
 mkdir -p "$SOLARENV/$OUTPATH_FOR_BUILD/bin"
-if test "$BUILD_DMAKE" != "NO"; then
-    cp -f "$SRC_ROOT/dmake/dmake$EXEEXT" "$SOLARENV/$OUTPATH_FOR_BUILD/bin" || exit
-    echo ""
-    echo "dmake copied to $SOLARENV/$OUTPATH_FOR_BUILD/bin/dmake$EXEEXT"
-fi
 
 #make sure build.pl is executable
 
