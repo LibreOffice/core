@@ -424,7 +424,6 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     //did not use cached formula results.
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
-    rtl::OUString sGenerator = xDocProps->getGenerator();
 
     Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
     ScRecalcOptions nRecalcMode =

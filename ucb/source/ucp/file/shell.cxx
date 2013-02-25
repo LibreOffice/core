@@ -1272,10 +1272,7 @@ shell::move( sal_Int32 CommandId,
     copyPersistentSet( srcUnqPath,dstUnqPath,!isDocument );
 
     rtl::OUString aDstParent = getParentName( dstUnqPath );
-    rtl::OUString aDstTitle  = getTitle( dstUnqPath );
-
     rtl::OUString aSrcParent = getParentName( srcUnqPath );
-    rtl::OUString aSrcTitle  = getTitle( srcUnqPath );
 
     notifyInsert( getContentEventListeners( aDstParent ),dstUnqPath );
     if(  aDstParent != aSrcParent )

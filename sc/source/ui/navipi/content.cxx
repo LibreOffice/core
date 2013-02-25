@@ -370,7 +370,6 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
 
                     if( (nType != SC_CONTENT_ROOT) && (nChild == SC_CONTENT_NOCHILD) )
                     {
-                        String aText( GetEntryText( pEntry ) );
                         if ( IsExpanded( pEntry ) )
                             Collapse( pEntry );
                         else

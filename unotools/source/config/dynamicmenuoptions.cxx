@@ -390,13 +390,6 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
 
     sal_uInt32  nItem     = 0 ;
     sal_uInt32  nPosition = 0 ;
-    OUString    sName         ;
-
-    // We must use these one instance object(!) to get information about installed modules.
-    // These information are used to filter menu entries wich need not installed modules ...
-    // Such entries shouldnt be available then!
-    // see impl_IsEntrySupported() too
-    SvtModuleOptions aModuleOptions;
 
     // Get names/values for new menu.
     // 4 subkeys for every item!

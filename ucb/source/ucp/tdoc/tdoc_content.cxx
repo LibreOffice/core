@@ -1442,8 +1442,6 @@ uno::Any Content::open(
 
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
-
         uno::Reference< io::XActiveDataStreamer > xDataStreamer(
                                         rArg.Sink, uno::UNO_QUERY );
         if ( xDataStreamer.is() )

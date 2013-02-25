@@ -1398,8 +1398,6 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                 // add, if it is a UTF-8 byte buffer
                 if( xMimeType->hasParameter( aCharsetStr ) )
                 {
-                    const ::rtl::OUString aCharset( xMimeType->getParameterValue( aCharsetStr ) );
-
                     if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unicode" )) ) ||
                         xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "utf-16" )) ) )
                     {

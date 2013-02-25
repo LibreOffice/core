@@ -445,7 +445,6 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
 {
     xmlreader::Span name;
     int nsId;
-    OString sType;
 
     OString sID, sProperty;
 
@@ -1606,7 +1605,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
             if (name.equals("col"))
             {
                 bool bTranslated = false;
-                OString sProperty, sValue;
+                OString sValue;
                 sal_uInt32 nId = 0;
 
                 while (reader.nextAttribute(&nsId, &name))
@@ -1835,7 +1834,6 @@ void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reade
 {
     xmlreader::Span name;
     int nsId;
-    OString sType;
 
     int nLevel = 1;
     while(1)

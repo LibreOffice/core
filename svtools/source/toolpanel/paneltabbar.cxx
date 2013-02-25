@@ -554,8 +554,6 @@ namespace svt
             ItemDescriptor aItem;
             aItem.pPanel = pPanel;
 
-            Rectangle aContentArea;
-
             const Size aCompleteSize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_AND_TEXT ) );
             const Size aIconOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_ONLY ) );
             const Size aTextOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_TEXT_ONLY ) );

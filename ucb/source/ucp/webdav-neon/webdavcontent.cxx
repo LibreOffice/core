@@ -1896,7 +1896,6 @@ uno::Any Content::open(
             // Unreachable
         }
 
-        rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
         uno::Reference< io::XOutputStream > xOut
             = uno::Reference< io::XOutputStream >( rArg.Sink, uno::UNO_QUERY );
         if ( xOut.is() )
@@ -2639,8 +2638,6 @@ void Content::destroy( sal_Bool bDeletePhysical )
     throw( uno::Exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
-    rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
-
     uno::Reference< ucb::XContent > xThis = this;
 
     deleted();

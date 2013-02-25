@@ -294,8 +294,6 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 
             Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 
-            Rectangle       aBoundingBoxOnScreen( mpRepr->OutputToScreenPixel( aFocusRect.TopLeft() ), aFocusRect.GetSize() );
-
             SvxRectCtlChildAccessibleContext*   pChild = new SvxRectCtlChildAccessibleContext(
                                                     this, *mpRepr, aName, aDescr, aFocusRect, nIndex );
             xChild = mpChildren[ nIndex ] = pChild;

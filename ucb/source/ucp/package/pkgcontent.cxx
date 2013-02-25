@@ -1484,7 +1484,6 @@ uno::Any Content::open(
             // Unreachable
         }
 
-        rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
         uno::Reference< io::XOutputStream > xOut( rArg.Sink, uno::UNO_QUERY );
         if ( xOut.is() )
         {

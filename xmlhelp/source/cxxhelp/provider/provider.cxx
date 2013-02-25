@@ -196,11 +196,6 @@ ContentProvider::queryContent(
     if( !m_pDatabases )
         throw uno::RuntimeException();
 
-    rtl::OUString aOUString( m_pDatabases->getInstallPathAsURL() );
-    rtl::OString aOString( aOUString.getStr(),
-                           aOUString.getLength(),
-                           RTL_TEXTENCODING_UTF8 );
-
     // Check, if a content with given id already exists...
     uno::Reference< ucb::XContent > xContent
         = queryExistingContent( xCanonicId ).get();

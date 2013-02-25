@@ -290,7 +290,6 @@ static ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScD
 {
     ScRange aReturn;
     rUnoPoint = xShape->getPosition();
-    rtl::OUString sType(xShape->getShapeType());
     sal_Bool bCaptionShape(lcl_GetCaptionPoint(xShape, rCaptionPoint));
     if (pDoc->IsNegativePage(nTab))
     {

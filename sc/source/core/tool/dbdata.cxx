@@ -784,7 +784,6 @@ ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
 
 void ScDBCollection::AnonDBs::insert(ScDBData* p)
 {
-    rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDBData> pNew(p);
         SAL_WNODEPRECATED_DECLARATIONS_POP

@@ -1630,12 +1630,10 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
         else
         {
             // aMacro has the following syntax:
-            // "Macroname.Modulname.Libname.Dokumentname" or
-            // "Macroname.Modulname.Libname.Applikationsname"
+            // "Macroname.Modulname.Libname.Documentname" or
+            // "Macroname.Modulname.Libname.Applicationname"
             String aMacroName = aMacro.GetToken(0, sal_Unicode('.'));
             String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
-            String aLibName   = aMacro.GetToken(2, sal_Unicode('.'));
-            String aDocName   = aMacro.GetToken(3, sal_Unicode('.'));
 
             // todo: is the limitation still given that only
             // Modulname+Macroname can be used here?

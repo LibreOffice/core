@@ -418,7 +418,6 @@ void ExtendedColorConfig_Impl::Commit()
         return;
     const ::rtl::OUString sColorEntries(RTL_CONSTASCII_USTRINGPARAM("Entries"));
     const ::rtl::OUString sColor(RTL_CONSTASCII_USTRINGPARAM("/Color"));
-    const ::rtl::OUString sDefaultColor(RTL_CONSTASCII_USTRINGPARAM("/DefaultColor"));
     ::rtl::OUString sBase(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/ColorSchemes/"));
     const ::rtl::OUString s_sSep(RTL_CONSTASCII_USTRINGPARAM("/"));
     sBase += m_sLoadedScheme;

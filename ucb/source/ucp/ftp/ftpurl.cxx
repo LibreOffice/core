@@ -441,7 +441,6 @@ std::vector<FTPDirentry> FTPURL::list(
 
     sal_uInt32 len = data.m_nWritePos;
     char* fwd = (char*) data.m_pBuffer;
-    rtl::OString str(fwd,len);
     char *p1, *p2;
     p1 = p2 = fwd;
 

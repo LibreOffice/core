@@ -1385,7 +1385,6 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
     Rectangle   aRect( aPos, aSize );
-    Rectangle   aTextRect;
     Font        aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();

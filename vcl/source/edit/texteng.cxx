@@ -2559,7 +2559,7 @@ sal_Bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
 
     rtl::OString aLine;
     sal_Bool bDone = rInput.ReadLine( aLine );
-    rtl::OUString aTmpStr(rtl::OStringToOUString(aLine, rInput.GetStreamCharSet())), aStr;
+    rtl::OUString aTmpStr(rtl::OStringToOUString(aLine, rInput.GetStreamCharSet()));
     while ( bDone )
     {
         aSel = ImpInsertText( aSel, aTmpStr );

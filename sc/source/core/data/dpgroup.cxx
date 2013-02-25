@@ -845,8 +845,6 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 sal_Int32 nPartValue = ScDPUtil::getDatePartValue(
                     pData->GetValue(), *pNumInfo, nDatePart, pFormatter);
-                rtl::OUString aName = ScDPUtil::getDateGroupName(
-                    nDatePart, nPartValue, pFormatter, pNumInfo->mfStart, pNumInfo->mfEnd);
 
                 ScDPItemData aItem(nDatePart, nPartValue);
                 rItems[i] = pCache->GetIdByItemData(nColumn, aItem);

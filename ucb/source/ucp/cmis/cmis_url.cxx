@@ -41,9 +41,6 @@ namespace cmis
 {
     URL::URL( rtl::OUString const & urlStr )
     {
-        rtl::OUString sBindingUrl;
-        rtl::OUString sRepositoryId;
-
         INetURLObject aUrl( urlStr );
 
         // Decode the authority to get the binding URL and repository id

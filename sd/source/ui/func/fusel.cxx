@@ -1404,15 +1404,11 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     {
                         // aMacro has got following format:
                         // "Macroname.Modulname.Libname.Documentname" or
-                        // "Macroname.Modulname.Libname.Applicationsname"
+                        // "Macroname.Modulname.Libname.Applicationname"
                         String aMacroName =
                             aMacro.GetToken(0, sal_Unicode('.'));
                         String aModulName =
                              aMacro.GetToken(1, sal_Unicode('.'));
-                        String aLibName   =
-                             aMacro.GetToken(2, sal_Unicode('.'));
-                        String aDocName   =
-                             aMacro.GetToken(3, sal_Unicode('.'));
 
                         // In this moment the Call-method only
                         // resolves modulename+macroname

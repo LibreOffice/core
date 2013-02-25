@@ -951,7 +951,6 @@ void SvImpLBox::Paint( const Rectangle& rRect )
 
     nFlags &= (~F_DESEL_ALL);
     pView->SetClipRegion();
-    Rectangle aRect;
     if( !(nFlags & F_PAINTED) )
     {
         nFlags |= F_PAINTED;

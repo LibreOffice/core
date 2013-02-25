@@ -726,7 +726,7 @@ void CondFormatRule::finalizeImport()
 
     if( !aReplaceFormula.isEmpty() )
     {
-        OUString aAddress, aRanges, aText, aComp;
+        OUString aAddress;
         sal_Int32 nStrPos = aReplaceFormula.getLength();
         while( (nStrPos = aReplaceFormula.lastIndexOf( '#', nStrPos )) >= 0 )
         {

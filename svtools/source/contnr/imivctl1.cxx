@@ -2654,7 +2654,6 @@ void SvxIconChoiceCtrl_Impl::SetDefaultTextSize()
     if( nDX <= 0 )
         nDX = 2;
 
-    String aStrDummy( RTL_CONSTASCII_USTRINGPARAM( "X" ) );
     long nHeight = pView->GetTextHeight();
     if( nDY < nHeight )
         nDY = nHeight;

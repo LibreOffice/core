@@ -958,7 +958,6 @@ void ImageControlElement::endElement()
 
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
     ctx.importBooleanProperty( "ScaleImage", "scale-image", _xAttributes );
-    OUString sURL = _xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID,  "src" );
     Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
 
     ctx.importImageURLProperty( "ImageURL" , "src" , _xAttributes );

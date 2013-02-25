@@ -347,7 +347,6 @@ ImageList::ImageList( const ResId& rResId ) :
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
         sal_uLong                               nObjMask = pResMgr->ReadLong();
-        const String                        aPrefix( pResMgr->ReadString() );
         ::boost::scoped_ptr< Color >        spMaskColor;
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )

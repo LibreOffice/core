@@ -711,8 +711,6 @@ void Ruler::ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom
 void Ruler::ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    Point   aPos1;
-    Point   aPos2;
 
     if ( nStyle & RULER_STYLE_INVISIBLE )
         return;

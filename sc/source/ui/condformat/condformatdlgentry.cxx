@@ -449,7 +449,6 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
             pDisp->Lock(sal_True);
 
         // Find the new style and add it into the style list boxes
-        rtl::OUString aNewStyle;
         SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
         bool bFound = false;
         for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle && !bFound; pStyle = aStyleIter.Next() )

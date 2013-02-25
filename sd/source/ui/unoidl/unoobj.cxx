@@ -1546,11 +1546,10 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
             // aMacro has got following format:
             // "Macroname.Modulname.Libname.Documentname" or
-            // "Macroname.Modulname.Libname.Applicationsname"
+            // "Macroname.Modulname.Libname.Applicationname"
             String aMacroName = aMacro.GetToken(0, sal_Unicode('.'));
             String aModulName = aMacro.GetToken(1, sal_Unicode('.'));
             String aLibName   = aMacro.GetToken(2, sal_Unicode('.'));
-            String aDocName   = aMacro.GetToken(3, sal_Unicode('.'));
 
             OUStringBuffer sBuffer;
             sBuffer.append( aLibName );

@@ -326,12 +326,6 @@ uno::Any SAL_CALL Content::execute(
         aRet <<= getCommandInfo( xEnv, sal_False );
 
     } else if ( COMMAND_IS( aCommand, "open" ) ) {
-        rtl::OUString str = m_xIdentifier->getContentIdentifier();
-        rtl::OString stra(
-            str.getStr(),
-            str.getLength(),
-            RTL_TEXTENCODING_UTF8);
-
         ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
