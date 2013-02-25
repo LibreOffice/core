@@ -885,10 +885,19 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // POS_CHANGED event.
                 // Therefor, the event's type has to be adapted and the event
                 // has to be put at the end.
+                //
+                // fdo#56031 An INVALID_CONTENT event overwrites a INVALID_ATTR
+                // event and overwrites its flags
                 OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 if( aEvent.GetType() == SwAccessibleEvent_Impl::CARET_OR_STATES )
                     aEvent.SetType( SwAccessibleEvent_Impl::INVALID_CONTENT );
+                else if ( aEvent.GetType() == SwAccessibleEvent_Impl::INVALID_ATTR )
+                {
+                    aEvent.SetType( SwAccessibleEvent_Impl::INVALID_CONTENT );
+                    aEvent.SetStates( rEvent.GetAllStates() );
+                }
+
                 break;
             case SwAccessibleEvent_Impl::POS_CHANGED:
                 // A pos changed event overwrites CARET_STATES (keeping its

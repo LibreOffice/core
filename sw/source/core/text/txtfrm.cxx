@@ -912,6 +912,13 @@ static void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
     }
 }
 
+//Related: fdo#56031 filter out attribute changes that don't matter for
+//humans/a11y to stop flooding the destination mortal with useless noise
+static bool isA11yRelevantAttribute(MSHORT nWhich)
+{
+    return nWhich != RES_CHRATR_RSID;
+}
+
 /*************************************************************************
  *                      SwTxtFrm::Modify()
  *************************************************************************/
@@ -1294,11 +1301,14 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     SwCntntFrm::Modify( pOld, pNew );
             }
 
-            // #i88069#
-            ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
-            if ( pViewSh  )
+            if (isA11yRelevantAttribute(nWhich))
             {
-                pViewSh->InvalidateAccessibleParaAttrs( *this );
+                // #i88069#
+                ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+                if ( pViewSh  )
+                {
+                    pViewSh->InvalidateAccessibleParaAttrs( *this );
+                }
             }
         }
         break;
