@@ -256,6 +256,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     lng \
     sdbt \
     odbcbase \
+    t602filter \
     wpftwriter \
 ))
 
@@ -380,7 +381,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sw \
     swd \
     swui \
-    t602filter \
 	tdeab1 \
 	tdeabdrv1 \
     textconversiondlgs \
