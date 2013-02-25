@@ -104,7 +104,7 @@ public:
     void testFdo49659();
     void testFdo46966();
     void testFdo52066();
-    void testFdo48033();
+    void testFdo48033_53594();
     void testFdo36089();
     void testFdo49892();
     void testFdo48446();
@@ -218,7 +218,8 @@ void Test::run()
         {"fdo49659.rtf", &Test::testFdo49659},
         {"fdo46966.rtf", &Test::testFdo46966},
         {"fdo52066.rtf", &Test::testFdo52066},
-        {"fdo48033.rtf", &Test::testFdo48033},
+        {"fdo48033.rtf", &Test::testFdo48033_53594},
+        {"fdo53594.rtf", &Test::testFdo48033_53594},
         {"fdo36089.rtf", &Test::testFdo36089},
         {"fdo49892.rtf", &Test::testFdo49892},
         {"fdo48446.rtf", &Test::testFdo48446},
@@ -741,10 +742,11 @@ void Test::testFdo52066()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(19)), xShape->getSize().Height);
 }
 
-void Test::testFdo48033()
+void Test::testFdo48033_53594()
 {
     /*
-     * The problem was that the picture was in the first cell, instead of the second one.
+     * The problem was that the picture (48033) or OLE object (53594) was in the first cell,
+     * instead of the second one.
      *
      * oTable = ThisComponent.TextTables(0)
      * oParas = oTable.getCellByName("B1").Text.createEnumeration
