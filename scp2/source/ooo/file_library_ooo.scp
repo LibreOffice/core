@@ -201,9 +201,6 @@ End
 #endif
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Odbcbase,odbcbase)
-
-
 File gid_File_Lib_Dbpool
     LIB_FILE_BODY;
     Styles = (PACKED);

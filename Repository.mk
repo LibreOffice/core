@@ -234,10 +234,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     ctl \
     cui \
     dba \
-    dbmm \
-    sdbt \
     dbase \
+    dbmm \
 	file \
+    sdbt \
+    odbcbase \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     abp \
@@ -257,7 +258,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     evtatt \
     forui \
     odbc \
-    odbcbase \
     oox \
 	ooxml \
     sdbc \
