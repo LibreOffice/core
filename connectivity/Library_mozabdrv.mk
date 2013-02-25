@@ -45,6 +45,11 @@ $(eval $(call gb_Library_use_libraries,mozabdrv,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_Library_use_package,mozabdrv,\
+	moz_inc \
+	moz_lib \
+))
+
 $(eval $(call gb_Library_use_externals,mozabdrv,\
 	boost_headers \
 	mozilla \

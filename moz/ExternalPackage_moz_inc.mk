@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,moz_inc,moz_inc))
 
-MOZ_INC = $(subst $(call gb_UnpackedTarball_get_dir,moz_inc),,$(shell find $(call gb_UnpackedTarball_get_dir,moz_inc) -type f 2>/dev/null))
+MOZ_INC = $(subst $(call gb_UnpackedTarball_get_dir,moz_inc),,$(shell find $(call gb_UnpackedTarball_get_dir,moz_inc) -type f))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,moz_inc,inc/mozilla,\
 	$(MOZ_INC) \
