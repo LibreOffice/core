@@ -740,8 +740,7 @@ AC_ARG_ENABLE(dbgutil,
 AC_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug],
         [Include debugging information, disable compiler optimization and inlining plus
-         extra debugging code like assertions. Extra large build! (enables -g compiler flag
-         and dmake debug=true).]))
+         extra debugging code like assertions. Extra large build! (enables -g compiler flag).]))
 
 AC_ARG_ENABLE(selective-debuginfo,
     AS_HELP_STRING([--enable-selective-debuginfo],
@@ -1818,10 +1817,10 @@ AC_ARG_WITH(sun-templates,
 
 AC_ARG_WITH(parallelism,
     AS_HELP_STRING([--with-parallelism],
-        [Number of jobs to run simultaneously during build. Parallel builds can save a lot
-         of time on multi-cpu machines. The real number of jobs can get up to parallelism*parallelism
-         for a while in the first build phase. That will not happen when dmake is removed.
-         Defaults to the number of CPUs on the machine, unless you configure --enable-icecream - then to 10.]),
+        [Number of jobs to run simultaneously during build. Parallel builds can
+        save a lot of time on multi-cpu machines. Defaults to the number of
+        CPUs on the machine, unless you configure --enable-icecream - then to
+        10.]),
 ,)
 
 AC_ARG_WITH(check-jobs,
@@ -2160,7 +2159,7 @@ else
 fi
 
 dnl ===================================================================
-dnl Extra check for Windows. Cygwin builds need gcc to build dmake
+dnl Extra check for Windows. Cygwin builds need gcc to build concat-deps
 dnl although MSVC is used to build other build-time tools and
 dnl LibreOffice itself.
 dnl ===================================================================
@@ -6672,43 +6671,6 @@ AC_SUBST(JDKLIB)
 AC_SUBST(x_JAVALIB)
 AC_SUBST(x_JDKLIB)
 
-dnl ===================================================================
-dnl Check whether we already have dmake
-dnl ===================================================================
-AC_PATH_PROG(DMAKE, dmake, no)
-if test "$DMAKE" = "no"; then
-    BUILD_DMAKE=YES
-    echo "dmake will be built on ./bootstrap"
-else
-    AC_MSG_CHECKING([whether the found dmake is the right dmake])
-    # we need to find out whether that dmake we found is "our" dmake
-    # or the dmake from Sun's SunStudio Compiler which is something
-    # different
-    # This test _should_ work because the one accepts -V (ours) and one
-    # (the other) not...
-    $DMAKE -V 2>/dev/null | grep 'dmake .* Version .*' >/dev/null
-    if test $? -eq 0; then
-        BUILD_DMAKE=NO
-        AC_MSG_RESULT([yes])
-        AC_MSG_CHECKING([the dmake version])
-        DMAKE_VERSION=`$DMAKE -V | $AWK '$3 == "Version" {print $4}'`
-        if test "`echo $DMAKE_VERSION | cut -d'.' -f1`" -gt "4"; then
-            AC_MSG_RESULT([OK, >= 4.11])
-        elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" = "4" && \
-            test "`echo $DMAKE_VERSION | cut -d'.' -f2`" -ge "11"; then
-            AC_MSG_RESULT([OK, >= 4.11])
-        else
-            AC_MSG_RESULT([too old. >= 4.11 is needed])
-            echo "A newer dmake will be built on ./bootstrap"
-            BUILD_DMAKE=YES
-        fi
-    else
-        AC_MSG_RESULT([no])
-        echo "dmake will be built on ./bootstrap"
-        BUILD_DMAKE=YES
-    fi
-fi
-AC_SUBST(BUILD_DMAKE)
 
 AC_MSG_CHECKING([which C preprocessor to use in idlc])
 if test -n "$with_idlc_cpp"; then

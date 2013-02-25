@@ -62,17 +62,14 @@ endif
 
 # This list tells which modules are gbuild ones. It does *not* tell which modules to build. That is directed
 # by the module being mentioned in postprocess/prj/build.lst, etc, recursively.
-$(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake) $(BUILDDIR)/config_host.mk
+$(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(BUILDDIR)/config_host.mk
 	mkdir -p $(dir $@)
 	echo "gbuild_modules:= tail_build \\" > $@
 	for m in `cd $(SRCDIR) && ls */Module_*.mk`; do echo $$m | sed -e 's/\/.*$$/ \\/'; done >> $@
 	echo >> $@
-	echo -n "dmake_modules:=" >> $@
-	echo >> $@
 
 -include $(WORKDIR)/modules.mk
 include $(SRCDIR)/solenv/gbuild/Output.mk
-$(if $(filter $(gbuild_modules),$(dmake_modules)),$(eval $(call gb_Output_warn,The following modules claim to be both dmake and gbuild: $(filter $(gbuild_modules),$(dmake_modules)))))
 
 export gb_TAILBUILDTARGET=all slowcheck
 
@@ -89,7 +86,7 @@ $(1).all: bootstrap fetch
 	, \
 		cd $(SRC_ROOT)/$(1) && unset MAKEFLAGS && \
 	) \
-	$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 
 $(1).build $(1).check $(1).clean $(1).showdeliverables:
 	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
@@ -103,36 +100,11 @@ define gbuild_modules_rules
 $(foreach m,$(1),$(call gbuild_module_rules,$(m)))
 endef
 
-define dmake_module_rules
-.PHONY: $(1) $(1).all $(1).deliver $(1).clean
-
-$(1): bootstrap fetch
-	cd $(SRC_ROOT)/$(1) && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) -- -P$(PARALLELISM)
-
-$(1).all: bootstrap fetch
-	cd $(SRC_ROOT)/$(1) && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
-
-$(1).deliver: $(1)
-	cd $(SRC_ROOT)/$(1) && $(SOLARENV)/bin/deliver.pl
-
-$(1).clean:
-	cd $(SRC_ROOT)/$(1) && $(SOLARENV)/bin/deliver.pl -delete
-	rm -fr $(1)/$(INPATH)
-
-endef
-
-define dmake_modules_rules
-$(foreach m,$(1),$(call dmake_module_rules,$(m)))
-endef
 
 #
 # Partial Build
 #
 $(eval $(call gbuild_modules_rules,$(gbuild_modules)))
-
-$(eval $(call dmake_modules_rules,$(dmake_modules)))
 
 # run a JunitTest - relies on naming convention (module prefix)
 $(WORKDIR)/JunitTest/%/done :
@@ -154,9 +126,6 @@ help:
 clean: clean-host clean-build
 
 clean-host:
-ifeq ($(BUILD_DMAKE),YES)
-	if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(PARALLELISM) -C dmake clean; fi
-endif
 	rm -fr $(DEVINSTALLDIR)
 	rm -fr $(OUTDIR)
 	rm -fr $(WORKDIR)
@@ -176,10 +145,6 @@ include $(SRCDIR)/compilerplugins/Makefile.mk
 # Distclean
 #
 distclean : clean compilerplugins-clean
-ifeq ($(BUILD_DMAKE),YES)
-	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(PARALLELISM) -C dmake distclean; fi) && \
-	rm -f solenv/*/bin/dmake*
-endif
 	rm -fr \
         $(BUILDDIR)/Makefile \
         $(BUILDDIR)/aclocal.m4 \
@@ -245,11 +210,7 @@ endif
 #
 # Bootstap
 #
-bootstrap: $(WORKDIR)/bootstrap compilerplugins
-
-$(WORKDIR)/bootstrap:
-	@cd $(SRCDIR) && ./bootstrap
-	@mkdir -p $(dir $@) && touch $@
+bootstrap: compilerplugins
 
 #
 # Build
@@ -267,9 +228,7 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 # Ditto for dbconnectivity in the --disable-database-connectivity case
 	$(GNUMAKE) connectivity
 endif
-	cd $(SRCDIR)/postprocess && unset MAKEFLAGS && \
-		$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
-	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/tail_build && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 ifeq ($(OS),ANDROID)
 	cd android && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 endif
@@ -428,8 +387,6 @@ findunusedcode:
 	@echo unexport CFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
 	@echo unexport CXXFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
 	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
-	    ln -sf $(SRCDIR)/solenv/$(INPATH)/bin/dmake \
-		$(SRCDIR)/solenv/callcatcher/bin/dmake
 	@$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile findunusedcode
 	@grep ::.*\( unusedcode.all \
               | grep -v ^Atom \
