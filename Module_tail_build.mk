@@ -146,6 +146,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	package \
 	padmin \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
+	postprocess \
 	psprint_config \
 	$(call gb_Helper_optional,PYTHON,python3) \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
