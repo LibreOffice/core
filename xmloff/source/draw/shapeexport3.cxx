@@ -106,7 +106,7 @@ void XMLShapeExport::ImpExport3DShape(
         OUStringBuffer sStringBuffer;
 
         // transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
-        uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
+        uno::Any aAny = xPropSet->getPropertyValue(OUString("D3DTransformMatrix"));
         drawing::HomogenMatrix xHomMat;
         aAny >>= xHomMat;
         SdXMLImExTransform3D aTransform;
@@ -122,13 +122,13 @@ void XMLShapeExport::ImpExport3DShape(
                 SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_CUBE, sal_True, sal_True);
 
                 // minEdge
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
+                aAny = xPropSet->getPropertyValue(OUString("D3DPosition"));
                 drawing::Position3D aPosition3D;
                 aAny >>= aPosition3D;
                 ::basegfx::B3DVector aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
 
                 // maxEdge
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")));
+                aAny = xPropSet->getPropertyValue(OUString("D3DSize"));
                 drawing::Direction3D aDirection3D;
                 aAny >>= aDirection3D;
                 ::basegfx::B3DVector aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
@@ -160,13 +160,13 @@ void XMLShapeExport::ImpExport3DShape(
                 SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_SPHERE, sal_True, sal_True);
 
                 // Center
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPosition")));
+                aAny = xPropSet->getPropertyValue(OUString("D3DPosition"));
                 drawing::Position3D aPosition3D;
                 aAny >>= aPosition3D;
                 ::basegfx::B3DVector aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
 
                 // Size
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSize")));
+                aAny = xPropSet->getPropertyValue(OUString("D3DSize"));
                 drawing::Direction3D aDirection3D;
                 aAny >>= aDirection3D;
                 ::basegfx::B3DVector aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
@@ -193,7 +193,7 @@ void XMLShapeExport::ImpExport3DShape(
             case XmlShapeTypeDraw3DExtrudeObject:
             {
                 // write special 3DLathe/3DExtrude attributes
-                aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DPolyPolygon3D")));
+                aAny = xPropSet->getPropertyValue(OUString("D3DPolyPolygon3D"));
                 drawing::PolyPolygonShape3D xPolyPolygon3D;
                 aAny >>= xPolyPolygon3D;
 
@@ -318,7 +318,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     OUStringBuffer sStringBuffer;
 
     // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
-    uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")));
+    uno::Any aAny = xPropSet->getPropertyValue(OUString("D3DTransformMatrix"));
     drawing::HomogenMatrix xHomMat;
     aAny >>= xHomMat;
     SdXMLImExTransform3D aTransform;
@@ -327,7 +327,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_TRANSFORM, aTransform.GetExportString(mrExport.GetMM100UnitConverter()));
 
     // VRP, VPN, VUP
-    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
+    aAny = xPropSet->getPropertyValue(OUString("D3DCameraGeometry"));
     drawing::CameraGeometry aCamGeo;
     aAny >>= aCamGeo;
 
@@ -356,7 +356,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     }
 
     // projection "D3DScenePerspective" drawing::ProjectionMode
-    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")));
+    aAny = xPropSet->getPropertyValue(OUString("D3DScenePerspective"));
     drawing::ProjectionMode xPrjMode;
     aAny >>= xPrjMode;
     if(xPrjMode == drawing::ProjectionMode_PARALLEL)
@@ -366,7 +366,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_PROJECTION, aStr);
 
     // distance
-    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")));
+    aAny = xPropSet->getPropertyValue(OUString("D3DSceneDistance"));
     sal_Int32 nDistance = 0;
     aAny >>= nDistance;
     mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
@@ -375,7 +375,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DISTANCE, aStr);
 
     // focalLength
-    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")));
+    aAny = xPropSet->getPropertyValue(OUString("D3DSceneFocalLength"));
     sal_Int32 nFocalLength = 0;
     aAny >>= nFocalLength;
     mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
@@ -384,7 +384,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_FOCAL_LENGTH, aStr);
 
     // shadowSlant
-    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")));
+    aAny = xPropSet->getPropertyValue(OUString("D3DSceneShadowSlant"));
     sal_Int16 nShadowSlant = 0;
     aAny >>= nShadowSlant;
     ::sax::Converter::convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
@@ -392,7 +392,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADOW_SLANT, aStr);
 
     // shadeMode
-    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")));
+    aAny = xPropSet->getPropertyValue(OUString("D3DSceneShadeMode"));
     drawing::ShadeMode xShadeMode;
     if(aAny >>= xShadeMode)
     {
@@ -413,7 +413,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADE_MODE, aStr);
 
     // ambientColor
-    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")));
+    aAny = xPropSet->getPropertyValue(OUString("D3DSceneAmbientColor"));
     sal_Int32 nAmbientColor = 0;
     aAny >>= nAmbientColor;
     ::sax::Converter::convertColor(sStringBuffer, nAmbientColor);
@@ -421,7 +421,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_AMBIENT_COLOR, aStr);
 
     // lightingMode
-    aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")));
+    aAny = xPropSet->getPropertyValue(OUString("D3DSceneTwoSidedLighting"));
     sal_Bool bTwoSidedLighting = false;
     aAny >>= bTwoSidedLighting;
     ::sax::Converter::convertBool(sStringBuffer, bTwoSidedLighting);
@@ -436,9 +436,9 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
     OUString aStr;
     OUStringBuffer sStringBuffer;
 
-    const OUString aColorPropName(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor") );
-    const OUString aDirectionPropName(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection") );
-    const OUString aLightOnPropName(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn") );
+    const OUString aColorPropName("D3DSceneLightColor");
+    const OUString aDirectionPropName("D3DSceneLightDirection");
+    const OUString aLightOnPropName("D3DSceneLightOn");
 
     OUString aPropName;
     OUString aIndexStr;

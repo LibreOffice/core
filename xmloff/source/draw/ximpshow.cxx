@@ -113,7 +113,7 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
                 if( IsXMLToken( aLocalName, XML_START_PAGE ) )
                 {
                     aAny <<= sValue;
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "FirstPage" ), aAny );
                     bAll = sal_False;
                 }
                 else if( IsXMLToken( aLocalName, XML_SHOW ) )
@@ -130,62 +130,62 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
                     const sal_Int32 nMS = (aDuration.Hours * 60 +
                             aDuration.Minutes) * 60 + aDuration.Seconds;
                     aAny <<= nMS;
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Pause" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "Pause" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_ANIMATIONS ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_ENABLED ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowAnimations" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "AllowAnimations" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_STAY_ON_TOP ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAlwaysOnTop" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "IsAlwaysOnTop" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_FORCE_MANUAL ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "IsAutomatic" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_ENDLESS ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "IsEndless" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_FULL_SCREEN ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFullScreen" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "IsFullScreen" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_MOUSE_VISIBLE ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsMouseVisible" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "IsMouseVisible" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_START_WITH_NAVIGATOR ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "StartWithNavigator" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "StartWithNavigator" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_MOUSE_AS_PEN ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePen" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "UsePen" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_TRANSITION_ON_CLICK ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_ENABLED ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTransitionOnClick" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "IsTransitionOnClick" ), aAny );
                 }
                 else if( IsXMLToken( aLocalName, XML_SHOW_LOGO ) )
                 {
                     aAny = bool2any( IsXMLToken( sValue, XML_TRUE ) );
-                    mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowLogo" ) ), aAny );
+                    mpImpl->mxPresProps->setPropertyValue( OUString( "IsShowLogo" ), aAny );
                 }
             }
         }
         aAny = bool2any( bAll );
-        mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsShowAll" ) ), aAny );
+        mpImpl->mxPresProps->setPropertyValue( OUString( "IsShowAll" ), aAny );
     }
 }
 
@@ -195,7 +195,7 @@ SdXMLShowsContext::~SdXMLShowsContext()
     {
         uno::Any aAny;
         aAny <<= mpImpl->maCustomShowName;
-        mpImpl->mxPresProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomShow" ) ), aAny );
+        mpImpl->mxPresProps->setPropertyValue( OUString( "CustomShow" ), aAny );
     }
 
     delete mpImpl;

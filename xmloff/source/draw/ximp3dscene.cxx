@@ -364,32 +364,32 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
     if(mbSetTransform)
     {
         aAny <<= mxHomMat;
-        xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")), aAny);
+        xPropSet->setPropertyValue(OUString("D3DTransformMatrix"), aAny);
     }
 
     // distance
     aAny <<= mnDistance;
-    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneDistance")), aAny);
+    xPropSet->setPropertyValue(OUString("D3DSceneDistance"), aAny);
 
     // focalLength
     aAny <<= mnFocalLength;
-    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneFocalLength")), aAny);
+    xPropSet->setPropertyValue(OUString("D3DSceneFocalLength"), aAny);
 
     // shadowSlant
     aAny <<= (sal_Int16)mnShadowSlant;
-    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadowSlant")), aAny);
+    xPropSet->setPropertyValue(OUString("D3DSceneShadowSlant"), aAny);
 
     // shadeMode
     aAny <<= mxShadeMode;
-    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneShadeMode")), aAny);
+    xPropSet->setPropertyValue(OUString("D3DSceneShadeMode"), aAny);
 
     // ambientColor
     aAny <<= maAmbientColor;
-    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneAmbientColor")), aAny);
+    xPropSet->setPropertyValue(OUString("D3DSceneAmbientColor"), aAny);
 
     // lightingMode
     aAny <<= mbLightingMode;
-    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")), aAny);
+    xPropSet->setPropertyValue(OUString("D3DSceneTwoSidedLighting"), aAny);
 
     if( !maList.empty() )
     {
@@ -414,58 +414,58 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
             {
                 case 0:
                 {
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor1")), aAny);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection1")), aAny2);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn1")), aAny3);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightColor1"), aAny);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightDirection1"), aAny2);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightOn1"), aAny3);
                     break;
                 }
                 case 1:
                 {
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor2")), aAny);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection2")), aAny2);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn2")), aAny3);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightColor2"), aAny);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightDirection2"), aAny2);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightOn2"), aAny3);
                     break;
                 }
                 case 2:
                 {
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor3")), aAny);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection3")), aAny2);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn3")), aAny3);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightColor3"), aAny);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightDirection3"), aAny2);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightOn3"), aAny3);
                     break;
                 }
                 case 3:
                 {
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor4")), aAny);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection4")), aAny2);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn4")), aAny3);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightColor4"), aAny);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightDirection4"), aAny2);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightOn4"), aAny3);
                     break;
                 }
                 case 4:
                 {
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor5")), aAny);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection5")), aAny2);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn5")), aAny3);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightColor5"), aAny);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightDirection5"), aAny2);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightOn5"), aAny3);
                     break;
                 }
                 case 5:
                 {
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor6")), aAny);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection6")), aAny2);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn6")), aAny3);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightColor6"), aAny);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightDirection6"), aAny2);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightOn6"), aAny3);
                     break;
                 }
                 case 6:
                 {
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor7")), aAny);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection7")), aAny2);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn7")), aAny3);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightColor7"), aAny);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightDirection7"), aAny2);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightOn7"), aAny3);
                     break;
                 }
                 case 7:
                 {
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightColor8")), aAny);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightDirection8")), aAny2);
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneLightOn8")), aAny3);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightColor8"), aAny);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightDirection8"), aAny2);
+                    xPropSet->setPropertyValue(OUString("D3DSceneLightOn8"), aAny3);
                     break;
                 }
             }
@@ -484,12 +484,12 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
     aCamGeo.vup.DirectionY = maVUP.getY();
     aCamGeo.vup.DirectionZ = maVUP.getZ();
     aAny <<= aCamGeo;
-    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")), aAny);
+    xPropSet->setPropertyValue(OUString("D3DCameraGeometry"), aAny);
 
     // #91047# set drawing::ProjectionMode AFTER camera geometry is set
     // projection "D3DScenePerspective" drawing::ProjectionMode
     aAny <<= mxPrjMode;
-    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")), aAny);
+    xPropSet->setPropertyValue(OUString("D3DScenePerspective"), aAny);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

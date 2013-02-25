@@ -137,10 +137,10 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mp3DLightAttrTokenMap(0L),
     mpPathShapeAttrTokenMap(0L),
     mpPolygonShapeAttrTokenMap(0L),
-    msStartShape(RTL_CONSTASCII_USTRINGPARAM("StartShape")),
-    msEndShape(RTL_CONSTASCII_USTRINGPARAM("EndShape")),
-    msStartGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")),
-    msEndGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex")),
+    msStartShape("StartShape"),
+    msEndShape("EndShape"),
+    msStartGluePointIndex("StartGluePointIndex"),
+    msEndGluePointIndex("EndGluePointIndex"),
 
     mrImporter( rImporter )
 {
@@ -181,7 +181,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     }
 
     uno::Reference< lang::XServiceInfo > xInfo( rImporter.GetModel(), uno::UNO_QUERY );
-    const OUString aSName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument") );
+    const OUString aSName( "com.sun.star.presentation.PresentationDocument" );
     mpImpl->mbIsPresentationShapesSupported = xInfo.is() && xInfo->supportsService( aSName );
 }
 
@@ -793,12 +793,12 @@ void XMLShapeImportHelper::finishShape(
     {
         if ( mrImporter.IsShapePositionInHoriL2R() &&
              xPropSet->getPropertySetInfo()->hasPropertyByName(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("PositionLayoutDir"))) )
+                OUString("PositionLayoutDir")) )
         {
             uno::Any aPosLayoutDir;
             aPosLayoutDir <<= text::PositionLayoutDir::PositionInHoriL2R;
             xPropSet->setPropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("PositionLayoutDir")),
+                OUString("PositionLayoutDir"),
                 aPosLayoutDir );
         }
     }
@@ -831,7 +831,7 @@ public:
 
 ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext )
 :   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ),
-    msZOrder(RTL_CONSTASCII_USTRINGPARAM("ZOrder"))
+    msZOrder("ZOrder")
 {
 }
 
@@ -1022,9 +1022,9 @@ void XMLShapeImportHelper::restoreConnections()
                 uno::Any aLine1Delta;
                 uno::Any aLine2Delta;
                 uno::Any aLine3Delta;
-                OUString aStr1(RTL_CONSTASCII_USTRINGPARAM("EdgeLine1Delta"));
-                OUString aStr2(RTL_CONSTASCII_USTRINGPARAM("EdgeLine2Delta"));
-                OUString aStr3(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta"));
+                OUString aStr1("EdgeLine1Delta");
+                OUString aStr2("EdgeLine2Delta");
+                OUString aStr3("EdgeLine3Delta");
                 aLine1Delta = xConnector->getPropertyValue(aStr1);
                 aLine2Delta = xConnector->getPropertyValue(aStr2);
                 aLine3Delta = xConnector->getPropertyValue(aStr3);

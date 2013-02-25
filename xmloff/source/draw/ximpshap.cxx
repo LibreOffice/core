@@ -2709,8 +2709,8 @@ void SdXMLObjectShapeContext::EndElement()
 
         if( xProps.is() )
         {
-            xProps->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")), uno::makeAny(drawing::FillStyle_NONE));
-            xProps->setPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineStyle")), uno::makeAny(drawing::LineStyle_NONE));
+            xProps->setPropertyValue(OUString("FillStyle"), uno::makeAny(drawing::FillStyle_NONE));
+            xProps->setPropertyValue(OUString("LineStyle"), uno::makeAny(drawing::LineStyle_NONE));
         }
     }
 
@@ -3413,12 +3413,12 @@ rtl::OUString SdXMLFrameShapeContext::getGraphicURLFromImportContext(const SvXML
 
             if(xPropSet.is())
             {
-                xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL"))) >>= aRetval;
+                xPropSet->getPropertyValue(OUString("GraphicStreamURL")) >>= aRetval;
 
                 if(!aRetval.getLength())
                 {
                     // it maybe a link, try GraphicURL
-                    xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= aRetval;
+                    xPropSet->getPropertyValue(OUString("GraphicURL")) >>= aRetval;
                 }
             }
         }

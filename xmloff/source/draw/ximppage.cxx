@@ -300,7 +300,7 @@ void SdXMLGenericPageContext::EndElement()
 
             if( !maUseHeaderDeclName.isEmpty() )
             {
-                const OUString aStrHeaderTextProp( RTL_CONSTASCII_USTRINGPARAM( "HeaderText" ) );
+                const OUString aStrHeaderTextProp( "HeaderText" );
                 if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
                     xSet->setPropertyValue( aStrHeaderTextProp,
                                             makeAny( GetSdImport().GetHeaderDecl( maUseHeaderDeclName ) ) );
@@ -308,7 +308,7 @@ void SdXMLGenericPageContext::EndElement()
 
             if( !maUseFooterDeclName.isEmpty() )
             {
-                const OUString aStrFooterTextProp( RTL_CONSTASCII_USTRINGPARAM( "FooterText" ) );
+                const OUString aStrFooterTextProp( "FooterText" );
                 if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
                     xSet->setPropertyValue( aStrFooterTextProp,
                                         makeAny( GetSdImport().GetFooterDecl( maUseFooterDeclName ) ) );
@@ -316,14 +316,14 @@ void SdXMLGenericPageContext::EndElement()
 
             if( !maUseDateTimeDeclName.isEmpty() )
             {
-                const OUString aStrDateTimeTextProp( RTL_CONSTASCII_USTRINGPARAM( "DateTimeText" ) );
+                const OUString aStrDateTimeTextProp( "DateTimeText" );
                 if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
                 {
                     sal_Bool bFixed;
                     OUString aDateTimeFormat;
                     const OUString aText( GetSdImport().GetDateTimeDecl( maUseDateTimeDeclName, bFixed, aDateTimeFormat ) );
 
-                    xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("IsDateTimeFixed") ),
+                    xSet->setPropertyValue( OUString( "IsDateTimeFixed" ),
                                         makeAny( bFixed ) );
 
                     if( bFixed )
@@ -343,7 +343,7 @@ void SdXMLGenericPageContext::EndElement()
 
                             if( pSdNumStyle )
                             {
-                                xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("DateTimeFormat") ),
+                                xSet->setPropertyValue( OUString( "DateTimeFormat" ),
                                                                     makeAny( pSdNumStyle->GetDrawKey() ) );
                             }
                         }
@@ -387,7 +387,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
                             Reference< beans::XPropertySet > xPropSet( xPropSet1 );
                             Reference< beans::XPropertySet > xBackgroundSet;
 
-                            const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
+                            const OUString aBackground("Background");
                             if( xPropSet1->getPropertySetInfo()->hasPropertyByName( aBackground ) )
                             {
                                 Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
@@ -398,7 +398,7 @@ void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
                                     {
                                         xBackgroundSet = Reference< beans::XPropertySet >::query(
                                             xServiceFact->createInstance(
-                                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))));
+                                            OUString("com.sun.star.drawing.Background")));
                                     }
                                 }
 
@@ -465,7 +465,7 @@ void SdXMLGenericPageContext::SetLayout()
             Reference <beans::XPropertySet> xPropSet(mxShapes, uno::UNO_QUERY);
             if(xPropSet.is())
             {
-                OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("Layout"));
+                OUString aPropName("Layout");
                 Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
                 if( xInfo.is() && xInfo->hasPropertyByName( aPropName ) )
                     xPropSet->setPropertyValue(aPropName, uno::makeAny( (sal_Int16)nType ) );
@@ -520,32 +520,25 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
                         uno::Any aAny;
 
                         aAny <<= pPageMasterContext->GetBorderBottom();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderBottom")), aAny);
+                        xPropSet->setPropertyValue(OUString("BorderBottom"), aAny);
 
                         aAny <<= pPageMasterContext->GetBorderLeft();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderLeft")), aAny);
+                        xPropSet->setPropertyValue(OUString("BorderLeft"), aAny);
 
                         aAny <<= pPageMasterContext->GetBorderRight();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderRight")), aAny);
+                        xPropSet->setPropertyValue(OUString("BorderRight"), aAny);
 
                         aAny <<= pPageMasterContext->GetBorderTop();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("BorderTop")), aAny);
+                        xPropSet->setPropertyValue(OUString("BorderTop"), aAny);
 
                         aAny <<= pPageMasterContext->GetWidth();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), aAny);
+                        xPropSet->setPropertyValue(OUString("Width"), aAny);
 
                         aAny <<= pPageMasterContext->GetHeight();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), aAny);
+                        xPropSet->setPropertyValue(OUString("Height"), aAny);
 
                         aAny <<= pPageMasterContext->GetOrientation();
-                        xPropSet->setPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), aAny);
+                        xPropSet->setPropertyValue(OUString("Orientation"), aAny);
                     }
                 }
             }
@@ -631,7 +624,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         }
 
         Reference< XPropertySet > xSet( mxShapes, UNO_QUERY_THROW );
-        xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "NavigationOrder" ) ), Any( Reference< XIndexAccess >( new XoNavigationOrderAccess( aShapes ) ) ) );
+        xSet->setPropertyValue( OUString( "NavigationOrder" ), Any( Reference< XIndexAccess >( new XoNavigationOrderAccess( aShapes ) ) ) );
     }
     catch(const uno::Exception&)
     {

@@ -1073,7 +1073,7 @@ void SdXMLImport::NotifyEmbeddedFontRead()
     uno::Reference< lang::XMultiServiceFactory > xFac( GetModel(), uno::UNO_QUERY );
     if( xFac.is() )
     {
-        uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), uno::UNO_QUERY );
         if( xProps.is() )
             xProps->setPropertyValue("EmbedFonts", uno::makeAny( true ) );
     }

@@ -1114,10 +1114,10 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
             if( !bIsEmptyPresObj )
             {
                 OUString aReplacementUrl;
-                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ReplacementGraphicURL"))) >>= aReplacementUrl;
+                xPropSet->getPropertyValue( OUString("ReplacementGraphicURL")) >>= aReplacementUrl;
 
                 // If there is no url, then then graphic is empty
-                if(aReplacementUrl.getLength())
+                if(!aReplacementUrl.isEmpty())
                 {
                     const OUString aStr = mrExport.AddEmbeddedGraphicObject(aReplacementUrl);
 
