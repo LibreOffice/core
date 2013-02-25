@@ -580,8 +580,6 @@ File gid_File_Lib_Fwk
     Dir = SCP2_OOO_BIN_DIR;
 End
 
-STD_LIB_FILE( gid_File_Lib_Fwm , fwm)
-
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
 
 STD_LIB_FILE( gid_File_Lib_Helplinker, helplinker)

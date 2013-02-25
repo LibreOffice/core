@@ -252,6 +252,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     fwe \
 	fwi \
     fwl \
+	fwm \
     sdbt \
     odbcbase \
 ))
@@ -305,7 +306,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	flat \
     for \
     fwk \
-    fwm \
     guesslang \
     helplinker \
     hwp \
