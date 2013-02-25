@@ -258,9 +258,6 @@ sal_Bool InitVCL()
     }
     InitSalMain();
 
-    /*AllSettings aAS;
-    Application::SetSettings( aAS );// ???
-    */
     ImplSVData* pSVData = ImplGetSVData();
 
     // SV bei den Tools anmelden
