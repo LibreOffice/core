@@ -363,8 +363,6 @@ End
 
 #endif
 
-STD_LIB_FILE(gid_File_Lib_Drawinglayer,drawinglayer)
-
 SPECIAL_LIB_FILE(gid_File_Lib_Embobj,embobj)
 
 /* fdo#60491 always need emboleobj library on non-WNT platforms */

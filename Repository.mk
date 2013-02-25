@@ -238,6 +238,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dbmm \
     dbtools \
     dbaxml \
+    drawinglayer \
 	file \
     sdbt \
     odbcbase \
@@ -273,7 +274,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbu \
     deploymentmisc \
     desktop_detector \
-    drawinglayer \
     editeng \
     egi \
     eme \
