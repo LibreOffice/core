@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///nE\u003d",
+        "filename": "dbaccess/source/sdbtools/connection/objectnames.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T14:07:42Z",
+      "side": 1,
+      "message": "isEmpty is preferred",
+      "revId": "95f0b4169bad34f055c1c0a11cf746286f92d840",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
