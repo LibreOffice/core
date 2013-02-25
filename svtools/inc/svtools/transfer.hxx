@@ -37,6 +37,7 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
 // ------------------------
@@ -81,6 +82,12 @@ struct TransferableObjectDescriptor
     String              maTypeName;
     String              maDisplayName;
     sal_Bool            mbCanLink;
+
+    TransferableObjectDescriptor()
+        : mnViewAspect(::com::sun::star::embed::Aspects::MSOLE_CONTENT)
+        , mnOle2Misc(0)
+        , mbCanLink(false)
+    {}
 
     SVT_DLLPUBLIC friend SvStream&  operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc );
     SVT_DLLPUBLIC friend SvStream&  operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );
