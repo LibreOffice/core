@@ -103,9 +103,6 @@ File gid_File_Lib_Ldapbe2
   #endif
 End
 
-STD_LIB_FILE(gid_File_Lib_Chartcore, chartcore)
-
-
 #if defined _MSC_VER
 
 File gid_File_Lib_Cli_Oootypes_Assembly

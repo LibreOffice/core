@@ -229,6 +229,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     bib \
+    chartcore \
     chartcontroller \
 ))
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
@@ -258,7 +259,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmediaQuickTime \
     basegfx \
     calc \
-    chartcore \
     cppcanvas \
     ctl \
     cui \
