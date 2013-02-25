@@ -153,7 +153,6 @@ public class Desktop
     class MyXController
         implements XController
     {
-
         XFrame frame;
         XModel model;
 
@@ -297,12 +296,16 @@ public class Desktop
         public BitmapView()
         {
             super(Desktop.this);
-            mBitmap = Bitmap.createBitmap(1000, 600, Bitmap.Config.ARGB_8888);
         }
 
-        @Override protected void onDraw(Canvas canvas) {
+        @Override protected void onDraw(Canvas canvas)
+        {
 //            canvas.drawColor(0xFF1ABCDD);
 
+            if (mBitmap == null) {
+                Log.i(TAG, "calling Bitmap.createBitmap(" + getWidth() + ", " + getHeight() + ", Bitmap.Config.ARGB_8888)");
+                mBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+            }
             renderVCL(mBitmap);
             canvas.drawBitmap(mBitmap, 0, 0, null);
 
@@ -311,4 +314,5 @@ public class Desktop
         }
     }
 }
+
 // vim:set shiftwidth=4 softtabstop=4 expandtab:
