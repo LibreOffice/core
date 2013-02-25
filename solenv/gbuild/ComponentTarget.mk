@@ -51,8 +51,12 @@ $(call gb_ComponentTarget_get_clean_target,%) :
 		$(call gb_ComponentTarget_get_target,$*) \
 
 
+# when a library is renamed, the component file needs to be rebuilt to match.
+# hence simply depend on Repository{,Fixes}.mk since the command runs quickly.
 $(call gb_ComponentTarget_get_target,%) : \
 		$(call gb_ComponentTarget_get_source,%) \
+		$(SRCDIR)/Repository.mk \
+		$(SRCDIR)/RepositoryFixes.mk \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_ComponentTarget__command,$@,$<,$*)
 
