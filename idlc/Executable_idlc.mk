@@ -40,6 +40,8 @@ $(eval $(call gb_Executable_use_libraries,idlc,\
     salhelper \
 ))
 
+$(eval $(call gb_Executable_use_package,idlc,soltools_inc))
+
 $(eval $(call gb_Executable_add_grammars,idlc,\
     idlc/source/parser \
 ))
