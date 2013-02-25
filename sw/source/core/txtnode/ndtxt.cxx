@@ -3350,9 +3350,9 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
             "SwTxtNode::ReplaceText: node text with insertion > TXTNODE_MAX.");
     OUString const sInserted(
             (nOverflow > 0) ? rStr.Copy(0, rStr.Len() - nOverflow) : rStr);
-    if (sInserted.isEmpty())
+    if (sInserted.isEmpty() && 0 == nDelLen)
     {
-        return;
+        return; // nothing to do
     }
 
     const xub_StrLen nStartPos = rStart.GetIndex();
