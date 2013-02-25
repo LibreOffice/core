@@ -209,6 +209,8 @@ static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow );
 static Rectangle NWGetButtonArea( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                                 const ImplControlValue& aValue, const OUString& rCaption );
 
+static Rectangle NWGetTabItemRect( SalX11Screen nScreen, Rectangle aAreaRect );
+
 //---
 static Rectangle NWGetEditBoxPixmapRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, const OUString& rCaption );
@@ -993,6 +995,12 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 
         returnVal = sal_True;
     }
+    if (nType == CTRL_TAB_ITEM && nPart == PART_ENTIRE_CONTROL)
+    {
+        rNativeBoundingRegion = NWGetTabItemRect(m_nXScreen, rControlRegion);
+        rNativeContentRegion = rNativeBoundingRegion;
+        returnVal = sal_True;
+    }
     if ( (nType==CTRL_COMBOBOX) && ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
         rNativeBoundingRegion = NWGetComboBoxButtonRect( m_nXScreen, nType, nPart, rControlRegion, nState,
@@ -1592,6 +1600,28 @@ static Rectangle NWGetButtonArea( SalX11Screen nScreen,
     aRect = Rectangle( Point( x, y ), Size( w, h ) );
 
     return( aRect );
+}
+
+static Rectangle NWGetTabItemRect( SalX11Screen nScreen, Rectangle aAreaRect )
+{
+    NWEnsureGTKNotebook( nScreen );
+
+    gint            x, y, w, h;
+
+    x = aAreaRect.Left();
+    y = aAreaRect.Top();
+    w = aAreaRect.GetWidth();
+    h = aAreaRect.GetHeight();
+
+    gint xthickness = gWidgetData[0].gNotebookWidget->style->xthickness;
+    gint ythickness = gWidgetData[0].gNotebookWidget->style->ythickness;
+
+    x -= xthickness;
+    y -= ythickness;
+    w += xthickness*2;
+    h += ythickness*2;
+
+    return Rectangle( Point( x, y ), Size( w, h ) );
 }
 
 //-------------------------------------
