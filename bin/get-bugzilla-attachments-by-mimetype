@@ -280,6 +280,7 @@ mimetypes = {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.template': 'dotx',
     'application/vnd.visio': 'vsd',
+    'application/vnd.visio.xml': 'vdx',
 # W3C
     'application/xhtml+xml': 'xhtml',
     'application/mathml+xml': 'mml',
