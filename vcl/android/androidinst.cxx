@@ -221,11 +221,10 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
     // FIXME: do some cropping goodness on aSrcRect to ensure no overflows etc.
     ARect aSrcRect = rSrcRect;
 
-    // FIXME: by default we have WINDOW_FORMAT_RGB_565 = 4 ...
     for (unsigned int y = 0; y < (unsigned int)(aSrcRect.bottom - aSrcRect.top); y++)
     {
         unsigned char *sp = ( pSrc + nStride * (aSrcRect.top + y) +
-                              aSrcRect.left * 3 /* src pixel size */ );
+                              aSrcRect.left * 4 /* src pixel size */ );
 
         switch (pOutBuffer->format) {
         case WINDOW_FORMAT_RGBA_8888:
@@ -236,9 +235,9 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                   nDestX * 4 /* dest pixel size */ );
             for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
             {
-                dp[x*4 + 0] = sp[x*3 + 2]; // R
-                dp[x*4 + 1] = sp[x*3 + 1]; // G
-                dp[x*4 + 2] = sp[x*3 + 0]; // B
+                dp[x*4 + 0] = sp[x*4 + 2]; // R
+                dp[x*4 + 1] = sp[x*4 + 1]; // G
+                dp[x*4 + 2] = sp[x*4 + 0]; // B
                 dp[x*4 + 3] = 255; // A
             }
             break;
