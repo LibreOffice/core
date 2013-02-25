@@ -11,9 +11,12 @@
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <vcl/fontmanager.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+
+#if defined(UNX)
+#include <vcl/fontmanager.hxx>
+#endif
 
 using namespace std;
 
@@ -60,6 +63,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     FontWeight weight, FontPitch pitch, rtl_TextEncoding )
 {
     OUString url;
+#if defined(UNX)
     psp::PrintFontManager& mgr = psp::PrintFontManager::get();
     list< psp::fontID > fontIds;
     mgr.getFontList( fontIds );
@@ -98,6 +102,13 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
             }
         }
     }
+#else
+    (void) familyName;
+    (void) family;
+    (void) italic;
+    (void) weight;
+    (void) pitch;
+#endif
     return url;
 }
 
