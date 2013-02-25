@@ -237,6 +237,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     dbase \
     dbmm \
     dbtools \
+    dbaxml \
 	file \
     sdbt \
     odbcbase \
@@ -268,7 +269,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basegfx \
     calc \
     cppcanvas \
-    dbaxml \
     dbp \
     dbu \
     deploymentmisc \
