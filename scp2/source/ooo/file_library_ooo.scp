@@ -786,8 +786,6 @@ SPECIAL_LIB_FILE(gid_File_Lib_Mozbootstrap,mozbootstrap)
 
 #endif
 
-STD_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
-
 STD_LIB_FILE(gid_File_Lib_Mysql,mysql)
 STD_LIB_FILE(gid_File_Lib_Odbc,odbc)
 

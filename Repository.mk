@@ -259,6 +259,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     odbcbase \
     t602filter \
     wpftwriter \
+    writerfilter \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
@@ -403,7 +404,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vclplug_kde4 \
     vclplug_svp \
     wpftdraw \
-    writerfilter \
     xmlscript \
     xmlfa \
     xmlfd \
