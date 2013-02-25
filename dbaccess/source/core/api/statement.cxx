@@ -369,7 +369,6 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, Runtime
     Reference<XDatabaseMetaData> xMeta = Reference< XConnection > (m_xParent, UNO_QUERY)->getMetaData();
     if (!xMeta.is() && !xMeta->supportsMultipleResultSets())
         throwFunctionSequenceException(*this);
-        throwFunctionSequenceException(*this);
 
     // free the previous results
     disposeResultSet();
