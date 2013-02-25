@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///qE\u003d",
+        "filename": "sd/source/core/stlsheet.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-02-25T12:28:43Z",
+      "side": 1,
+      "message": "The result of copy() actually needs to be assigned, so this should be\n\n  aStyleName \u003d aStyleName.copy(...);",
+      "revId": "d48766695e05ca8d567507eda7efaabffcf69a88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
