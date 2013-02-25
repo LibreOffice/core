@@ -127,7 +127,6 @@ $(eval $(foreach method,\
 	use_system_darwin_frameworks \
 	use_system_win32_libs \
 	set_library_path_flags \
-	add_api \
 	use_api \
 	use_sdk_api \
 	use_udk_api \

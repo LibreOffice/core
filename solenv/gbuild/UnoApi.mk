@@ -138,10 +138,6 @@ $(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarge
 
 endef
 
-define gb_UnoApi_add_api
-$$(call gb_Output_error,gb_UnoApi_add_api: use gb_UnoApi_use_api instead.)
-endef
-
 define gb_UnoApi_use_api
 $(foreach rdb,$(2),$(call gb_UnoApi__use_api,$(1),$(rdb)))
 

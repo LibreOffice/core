@@ -81,17 +81,9 @@ $(call gb_UnoApiTarget_get_external_headers_target,$(1)_out) : $(call gb_UnoApiT
 
 endef
 
-define gb_InternalUnoApi_add_api
-$$(call gb_Output_error,gb_InternalUnoApi_add_api: use gb_InternalUnoApi_use_api instead.)
-endef
-
 define gb_InternalUnoApi_use_api
 $(foreach rdb,$(2),$(call gb_InternalUnoApi__use_api,$(1),$(rdb)))
 
-endef
-
-define gb_InternalUnoApi_add_api_dependency
-$$(call gb_Output_error,gb_InternalUnoApi_add_api_dependency: use gb_InternalUnoApi_define_api_dependency instead.)
 endef
 
 # Express that the rdb $(2) depends on rdb $(3).
@@ -107,10 +99,6 @@ endef
 define gb_InternalUnoApi_define_api_dependency
 $(call gb_UnoApiHeadersTarget_use_api,$(2),$(3))
 
-endef
-
-define gb_InternalUnoApi_add_api_dependencies
-$$(call gb_Output_error,gb_InternalUnoApi_add_api_dependencies: use gb_InternalUnoApi_define_api_dependencies instead.)
 endef
 
 define gb_InternalUnoApi_define_api_dependencies

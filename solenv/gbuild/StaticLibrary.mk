@@ -101,7 +101,6 @@ $(eval $(foreach method,\
 	set_x64 \
 	add_libs \
 	set_library_path_flags \
-	add_api \
 	use_api \
 	use_sdk_api \
 	use_udk_api \

@@ -134,7 +134,7 @@ help :
 	@cat $(SRCDIR)/solenv/gbuild/gbuild.help.txt
 
 showmodules :
-	$(info $(strip $(gb_Module_ALLMODULES)))
+	$(warning $(strip $(gb_Module_ALLMODULES)))
 	@true 
 
 translations : $(WORKDIR)/pot.done

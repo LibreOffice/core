@@ -747,11 +747,6 @@ $(call gb_LinkTarget_get_target,$(1)) : LIBS := $$(filter-out $$(gb_STDLIBS),$$(
 
 endef
 
-define gb_LinkTarget_add_api
-$$(call gb_Output_error,\
- gb_LinkTarget_add_api: use gb_LinkTarget_use_api instead.)
-endef
-
 define gb_LinkTarget__use_api
 $(call gb_LinkTarget_get_target,$(1)) :| $(call gb_UnoApi_get_target,$(2))
 $(call gb_LinkTarget_use_package,$(1),$(2)_inc)
