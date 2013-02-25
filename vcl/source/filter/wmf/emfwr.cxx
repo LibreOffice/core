@@ -1601,12 +1601,25 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 break;
             }
 
+            case( META_COMMENT_ACTION ):
+            {
+                MetaCommentAction const*const pCommentAction(
+                        static_cast<MetaCommentAction const*>(pAction));
+                if (pCommentAction->GetComment() == "EMF_PLUS")
+                {
+                    ImplBeginCommentRecord(WIN_EMR_COMMENT_EMFPLUS);
+                    m_rStm.Write(pCommentAction->GetData(),
+                                 pCommentAction->GetDataSize());
+                    ImplEndCommentRecord();
+                }
+            }
+            break;
+
             case( META_MASK_ACTION ):
             case( META_MASKSCALE_ACTION ):
             case( META_MASKSCALEPART_ACTION ):
             case( META_WALLPAPER_ACTION ):
             case( META_TEXTLINE_ACTION ):
-            case( META_COMMENT_ACTION ):
             case( META_GRADIENTEX_ACTION ):
             {
                 // !!! >>> we don't want to support these actions
