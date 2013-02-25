@@ -484,9 +484,10 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString aModulePath( makeComponentPath( sLibName, rPath ) );
     if (! checkAccessPath( &aModulePath ))
     {
-        throw loader::CannotActivateFactoryException(
-            "permission denied to load component library: " +
-            aModulePath,
+        OUString const msg(
+                "permission denied to load component library: " + aModulePath);
+        SAL_WARN("cppuhelper", msg);
+        throw loader::CannotActivateFactoryException(msg,
             Reference< XInterface >() );
     }
 
@@ -494,8 +495,9 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
     {
-        throw loader::CannotActivateFactoryException(
-            "loading component library failed: " + aModulePath,
+        OUString const msg("loading component library failed: " + aModulePath);
+        SAL_WARN("cppuhelper", msg);
+        throw loader::CannotActivateFactoryException(msg,
             Reference< XInterface >() );
     }
 #else
@@ -607,11 +609,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 #ifndef DISABLE_DYNLOADING
         osl_unloadModule( lib );
 #endif
-#if OSL_DEBUG_LEVEL > 1
-        out( "### cannot activate factory: " );
-        out( aExcMsg );
-        out( "\n" );
-#endif
+        SAL_WARN("cppuhelper", "### cannot activate factory: " << aExcMsg);
         throw loader::CannotActivateFactoryException(
             aExcMsg,
             Reference< XInterface >() );
@@ -639,11 +637,7 @@ Reference< XInterface > SAL_CALL invokeStaticComponentFactory(
 
     if (! xRet.is())
     {
-#if OSL_DEBUG_LEVEL > 1
-        out( "### cannot activate factory: " );
-        out( aExcMsg );
-        out( "\n" );
-#endif
+        SAL_WARN("cppuhelper", "### cannot activate factory: " << aExcMsg);
         throw loader::CannotActivateFactoryException(
             aExcMsg,
             Reference< XInterface >() );
@@ -676,9 +670,10 @@ void SAL_CALL writeSharedLibComponentInfo(
 
     if (! checkAccessPath( &aModulePath ))
     {
-        throw registry::CannotRegisterImplementationException(
-            "permission denied to load component library: " +
-            aModulePath,
+        OUString const msg(
+                "permission denied to load component library: " + aModulePath);
+        SAL_WARN("cppuhelper", msg);
+        throw registry::CannotRegisterImplementationException(msg,
             Reference< XInterface >() );
     }
 
@@ -686,8 +681,9 @@ void SAL_CALL writeSharedLibComponentInfo(
         aModulePath.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (! lib)
     {
-        throw registry::CannotRegisterImplementationException(
-            "loading component library failed: " + aModulePath,
+        OUString const msg("loading component library failed: " + aModulePath);
+        SAL_WARN("cppuhelper", msg);
+        throw registry::CannotRegisterImplementationException(msg,
             Reference< XInterface >() );
     }
 
@@ -768,11 +764,7 @@ void SAL_CALL writeSharedLibComponentInfo(
 //! ::osl_unloadModule( lib);
     if (! bRet)
     {
-#if OSL_DEBUG_LEVEL > 1
-        out( "### cannot write component info: " );
-        out( aExcMsg );
-        out( "\n" );
-#endif
+        SAL_WARN("cppuhelper", "### cannot write component info: " << aExcMsg);
         throw registry::CannotRegisterImplementationException(
             aExcMsg, Reference< XInterface >() );
     }
