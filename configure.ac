@@ -8657,7 +8657,7 @@ if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o \
     OPENSSL_CFLAGS=
     OPENSSL_LIBS="-lssl -lcrypto"
 else
-    libo_CHECK_SYSTEM_MODULE([libssl],[OPENSSL],[openssl])
+    libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
 fi
 if test "$with_system_openssl" = "yes"; then
     libo_MINGW_CHECK_DLL([SSL], [libssl])
