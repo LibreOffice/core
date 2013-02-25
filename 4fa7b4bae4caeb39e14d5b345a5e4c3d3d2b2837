@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///lM\u003d",
+        "filename": "dbaccess/source/ext/macromigration/migrationlog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T15:29:19Z",
+      "side": 1,
+      "message": "replaceFirst",
+      "revId": "4fa7b4bae4caeb39e14d5b345a5e4c3d3d2b2837",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///lI\u003d",
+        "filename": "dbaccess/source/ext/macromigration/migrationlog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T15:29:19Z",
+      "side": 1,
+      "message": "replaceFirst",
+      "revId": "4fa7b4bae4caeb39e14d5b345a5e4c3d3d2b2837",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///lE\u003d",
+        "filename": "dbaccess/source/ext/macromigration/migrationlog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-25T15:29:19Z",
+      "side": 1,
+      "message": "replaceFirst",
+      "revId": "4fa7b4bae4caeb39e14d5b345a5e4c3d3d2b2837",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
