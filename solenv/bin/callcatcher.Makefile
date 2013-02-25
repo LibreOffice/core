@@ -30,7 +30,7 @@ export dbglevel:=2
 include $(SOLARENV)/gbuild/gbuild.mk
 
 findunusedcode:
-	cd instsetoo_native && unset MAKEFLAGS && \
+	cd $(SRCDIR)/postprocess && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 	ooinstall -l $(DEVINSTALLDIR)/opt
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post subsequentcheck
