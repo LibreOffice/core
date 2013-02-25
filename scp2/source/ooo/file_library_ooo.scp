@@ -786,8 +786,6 @@ SPECIAL_LIB_FILE(gid_File_Lib_Mozbootstrap,mozbootstrap)
 
 #endif
 
-STD_LIB_FILE(gid_File_Lib_WpftWriter,wpftwriter)
-
 STD_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
 
 STD_LIB_FILE(gid_File_Lib_Wlwp,lwpft)
