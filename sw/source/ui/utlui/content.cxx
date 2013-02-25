@@ -39,7 +39,6 @@
 #include <IMark.hxx>
 #include <section.hxx>
 #include <tox.hxx>
-#define NAVIPI_CXX
 #include <navipi.hxx>
 #include <navicont.hxx>
 #include <navicfg.hxx>

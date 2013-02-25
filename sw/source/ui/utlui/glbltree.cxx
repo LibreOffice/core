@@ -43,7 +43,6 @@
 #include <section.hxx>
 #include <tox.hxx>
 #include <cnttab.hxx>
-#define NAVIPI_CXX
 #include <navipi.hxx>
 #include <navicont.hxx>
 #include <edtwin.hxx>

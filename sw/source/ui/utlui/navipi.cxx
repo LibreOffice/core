@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#define NAVIPI_CXX
-
 #include <string>
 #include <comphelper/string.hxx>
 #include <svl/urlbmk.hxx>
