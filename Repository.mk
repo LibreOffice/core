@@ -254,6 +254,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     fwl \
 	fwm \
     lng \
+    lwpft \
     sdbt \
     odbcbase \
     t602filter \
@@ -330,7 +331,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	kabdrv1 \
     lnth \
     log \
-    lwpft \
 	MacOSXSpell \
     merged \
     mork \
