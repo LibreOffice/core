@@ -43,6 +43,9 @@
 
 static bool bHitIdle = false;
 
+// Horrible hack
+static int viewWidth = 1, viewHeight = 1;
+
 class AndroidSalData : public SalGenericData
 {
 public:
@@ -735,6 +738,8 @@ public:
                        pSysParent )
     {
         enableDamageTracker();
+        if (pParent == NULL && viewWidth > 1 && viewHeight > 1)
+            SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
 
     virtual void GetWorkArea( Rectangle& rRect )
@@ -960,6 +965,17 @@ typedef struct ANativeWindow_Buffer {
     AndroidSalInstance::getInstance()->RedrawWindows (NULL, &dummyOut);
 
     AndroidBitmap_unlockPixels(env, bitmap);
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL
+Java_org_libreoffice_experimental_desktop_Desktop_setViewSize(JNIEnv * /* env */,
+                                                              jobject /* object */,
+                                                              jint width,
+                                                              jint height)
+{
+    // Horrible
+    viewWidth = width;
+    viewHeight = height;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

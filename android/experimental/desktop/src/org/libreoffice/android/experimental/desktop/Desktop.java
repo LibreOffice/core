@@ -132,6 +132,7 @@ public class Desktop
 
     /* implementend by vcl */
     public static native void renderVCL(Bitmap bitmap);
+    public static native void setViewSize(int width, int height);
 
     /**
      * This class contains the state that is initialized once and never changes
@@ -278,15 +279,15 @@ public class Desktop
             if (bootstrapContext == null)
                 initBootstrapContext();
 
+            Log.i(TAG, "onCreate - set content view\n");
+            setContentView(new BitmapView());
+
             spawnMain();
         }
         catch (Exception e) {
             e.printStackTrace(System.err);
             finish();
         }
-
-        Log.i(TAG, "onCreate - set content view\n");
-        setContentView(new BitmapView());
     }
 
     class BitmapView extends android.view.View
@@ -305,6 +306,7 @@ public class Desktop
             if (mBitmap == null) {
                 Log.i(TAG, "calling Bitmap.createBitmap(" + getWidth() + ", " + getHeight() + ", Bitmap.Config.ARGB_8888)");
                 mBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+                setViewSize(getWidth(), getHeight());
             }
             renderVCL(mBitmap);
             canvas.drawBitmap(mBitmap, 0, 0, null);
