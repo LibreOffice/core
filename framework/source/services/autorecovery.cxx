@@ -2523,7 +2523,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         else
             continue; // TODO ERROR!
 
-        LoadEnv::initializeUIDefaults( m_xSMGR, lDescriptor, true, NULL );
+        LoadEnv::initializeUIDefaults( comphelper::getComponentContext(m_xSMGR), lDescriptor, true, NULL );
 
         // <- SAFE ------------------------------
         aWriteLock.unlock();

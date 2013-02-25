@@ -37,6 +37,7 @@
 #include "officecfg/Office/Common.hxx"
 
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -293,7 +294,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
         ( m_lMediaDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_PREVIEW(), sal_False ) == sal_False      );
 
     initializeUIDefaults(
-        m_xSMGR,
+        comphelper::getComponentContext(m_xSMGR),
         m_lMediaDescriptor,
         bUIMode,
         &m_pQuietInteraction
@@ -304,7 +305,7 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
 }
 
 
-void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::lang::XMultiServiceFactory >& i_rSMGR,
+void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
                                     ::comphelper::MediaDescriptor& io_lMediaDescriptor, const bool i_bUIMode,
                                     QuietInteraction** o_ppQuietInteraction )
 {
@@ -318,7 +319,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::lang::XMulti
         nUpdateMode = css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
         try
         {
-            xInteractionHandler = css::uno::Reference< css::task::XInteractionHandler >(i_rSMGR->createInstance(IMPLEMENTATIONNAME_UIINTERACTIONHANDLER), css::uno::UNO_QUERY);
+            xInteractionHandler.set( css::task::InteractionHandler::createWithParent( i_rxContext, 0 ), css::uno::UNO_QUERY_THROW );
         }
         catch(const css::uno::RuntimeException&) {throw;}
         catch(const css::uno::Exception&       ) {      }

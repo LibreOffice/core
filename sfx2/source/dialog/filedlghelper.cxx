@@ -40,6 +40,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
@@ -2689,69 +2690,65 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
 
 ErrCode RequestPassword(const SfxFilter* pCurrentFilter, rtl::OUString& aURL, SfxItemSet* pSet)
 {
-    uno::Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
-    if( xInteractionHandler.is() )
+    uno::Reference < task::XInteractionHandler2 > xInteractionHandler = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
+    // TODO: need a save way to distinguish MS filters from other filters
+    // for now MS-filters are the only alien filters that support encryption
+    sal_Bool bMSType = !pCurrentFilter->IsOwnFormat();
+    ::comphelper::DocPasswordRequestType eType = bMSType ?
+        ::comphelper::DocPasswordRequestType_MS :
+        ::comphelper::DocPasswordRequestType_STANDARD;
+
+    ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, aURL, ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_PASSWORDTOMODIFY ) != 0 ) );
+
+    uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
+    xInteractionHandler->handle( rRequest );
+    if ( pPasswordRequest->isPassword() )
     {
-        // TODO: need a save way to distinguish MS filters from other filters
-        // for now MS-filters are the only alien filters that support encryption
-        sal_Bool bMSType = !pCurrentFilter->IsOwnFormat();
-        ::comphelper::DocPasswordRequestType eType = bMSType ?
-            ::comphelper::DocPasswordRequestType_MS :
-            ::comphelper::DocPasswordRequestType_STANDARD;
-
-        ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, aURL, ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_PASSWORDTOMODIFY ) != 0 ) );
-
-        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
-        xInteractionHandler->handle( rRequest );
-        if ( pPasswordRequest->isPassword() )
+        if ( pPasswordRequest->getPassword().getLength() )
         {
-            if ( pPasswordRequest->getPassword().getLength() )
-            {
-                // TODO/LATER: The filters should show the password dialog themself in future
-                if ( bMSType )
-                {
-                    // all the current MS-filters use MSCodec_Std97 implementation
-                    uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
-                    uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPasswordRequest->getPassword(), aUniqueID );
-
-                    if ( aEncryptionKey.getLength() )
-                    {
-                        ::comphelper::SequenceAsHashMap aHashData;
-                        aHashData[ ::rtl::OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
-                        aHashData[ ::rtl::OUString( "STD97UniqueID"  ) ] <<= aUniqueID;
-
-                        pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
-                    }
-                    else
-                        return ERRCODE_IO_NOTSUPPORTED;
-                }
-                else
-                {
-                    pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreatePackageEncryptionData( pPasswordRequest->getPassword() ) ) ) );
-                }
-            }
-
-            if ( pPasswordRequest->getRecommendReadOnly() )
-                pSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
-
+            // TODO/LATER: The filters should show the password dialog themself in future
             if ( bMSType )
             {
-                // the empty password has 0 as Hash
-                sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( "com.sun.star.text.TextDocument"  ).equals( pCurrentFilter->GetServiceName() ) );
-                if ( nHash )
-                    pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( nHash ) ) );
+                // all the current MS-filters use MSCodec_Std97 implementation
+                uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
+                uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPasswordRequest->getPassword(), aUniqueID );
+
+                if ( aEncryptionKey.getLength() )
+                {
+                    ::comphelper::SequenceAsHashMap aHashData;
+                    aHashData[ ::rtl::OUString( "STD97EncryptionKey"  ) ] <<= aEncryptionKey;
+                    aHashData[ ::rtl::OUString( "STD97UniqueID"  ) ] <<= aUniqueID;
+
+                    pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
+                }
+                else
+                    return ERRCODE_IO_NOTSUPPORTED;
             }
             else
             {
-                uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( pPasswordRequest->getPasswordToModify() );
-                if ( aModifyPasswordInfo.getLength() )
-                    pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( aModifyPasswordInfo ) ) );
+                pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreatePackageEncryptionData( pPasswordRequest->getPassword() ) ) ) );
             }
         }
+
+        if ( pPasswordRequest->getRecommendReadOnly() )
+            pSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
+
+        if ( bMSType )
+        {
+            // the empty password has 0 as Hash
+            sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( "com.sun.star.text.TextDocument"  ).equals( pCurrentFilter->GetServiceName() ) );
+            if ( nHash )
+                pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( nHash ) ) );
+        }
         else
-            return ERRCODE_ABORT;
+        {
+            uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( pPasswordRequest->getPasswordToModify() );
+            if ( aModifyPasswordInfo.getLength() )
+                pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( aModifyPasswordInfo ) ) );
+        }
     }
-    return ERRCODE_NONE;
+    else
+        return ERRCODE_ABORT;
 }
 
 // ------------------------------------------------------------------------

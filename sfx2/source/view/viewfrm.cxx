@@ -65,6 +65,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <rtl/ustrbuf.hxx>
 
 #include <unotools/localfilehelper.hxx>
@@ -694,7 +695,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 if (!pInteractionItem)
                 {
-                    Reference < ::com::sun::star::task::XInteractionHandler > xHdl( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
+                    Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 );
                     if (xHdl.is())
                         pNewSet->Put( SfxUnoAnyItem(SID_INTERACTIONHANDLER,::com::sun::star::uno::makeAny(xHdl)) );
                 }

@@ -19,16 +19,15 @@
 
 #include "framework/preventduplicateinteraction.hxx"
 
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
 namespace framework{
 
-#define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))
-
-PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : ThreadHelpBase2()
-    , m_xSMGR(xSMGR)
+    , m_xContext(rxContext)
 {
 }
 
@@ -55,13 +54,10 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aLock.clear();
     // <- SAFE
 
-    css::uno::Reference< css::task::XInteractionHandler > xHandler(
-                            xSMGR->createInstance(IMPLEMENTATIONNAME_UIINTERACTIONHANDLER),
-                            css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::task::XInteractionHandler > xHandler( css::task::InteractionHandler::createWithParent( m_xContext, 0 ), css::uno::UNO_QUERY_THROW );
 
     // SAFE ->
     aLock.reset();

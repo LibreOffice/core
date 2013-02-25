@@ -24,17 +24,16 @@
 #include <loadenv/actionlockguard.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/util/URL.hpp>
-
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/URL.hpp>
 
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -370,7 +369,7 @@ public:
 
     /** TODO document me ... */
     static  void initializeUIDefaults(
-                const css::uno::Reference< css::lang::XMultiServiceFactory >& i_rSMGR,
+                const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
                 ::comphelper::MediaDescriptor& io_lMediaDescriptor,
                 const bool _bUIMode,
                 QuietInteraction** o_ppQuiteInteraction

@@ -26,7 +26,6 @@
 
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -92,7 +91,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
     private:
 
         /// Used to create needed uno services at runtime.
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** The outside interaction handler, which is used to handle every incoming interaction,
             if it's not blocked. */
@@ -160,7 +159,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
 
             @threadsafe not neccessary
         */
-        PreventDuplicateInteraction(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        PreventDuplicateInteraction(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
         //_________________________________
         /**
