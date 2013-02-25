@@ -323,9 +323,9 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     sal_uLong nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
     sal_uLong nSysShortDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eCurLanguage);
     sal_uLong nSysLongDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eCurLanguage);
-    sal_Bool bSysLang = sal_False;
+    bool bSysLang = false;
     if( eCurLanguage == GetAppLanguage() )
-        bSysLang = sal_True;
+        bSysLang = true;
     sal_uLong nNumFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysNumFmt, LANGUAGE_SYSTEM );
     sal_uLong nShortDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysShortDateFmt, LANGUAGE_SYSTEM );
     sal_uLong nLongDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysLongDateFmt, LANGUAGE_SYSTEM );

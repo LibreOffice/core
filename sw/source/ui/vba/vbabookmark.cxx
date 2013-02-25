@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 SwVbaBookmark::SwVbaBookmark( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
     const css::uno::Reference< frame::XModel >& rModel, const rtl::OUString& rName ) throw ( css::uno::RuntimeException ) :
-    SwVbaBookmark_BASE( rParent, rContext ), mxModel( rModel ), maName( rName ), mbValid( sal_True )
+    SwVbaBookmark_BASE( rParent, rContext ), mxModel( rModel ), maName( rName ), mbValid( true )
 {
     uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( mxModel, uno::UNO_QUERY_THROW );
     mxBookmark.set( xBookmarksSupplier->getBookmarks()->getByName( maName ), uno::UNO_QUERY_THROW );
@@ -54,7 +54,7 @@ void SAL_CALL SwVbaBookmark::Delete() throw ( uno::RuntimeException )
     checkVality();
     uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
     xTextDocument->getText()->removeTextContent( mxBookmark );
-    mbValid = sal_False;
+    mbValid = false;
 }
 
 void SAL_CALL SwVbaBookmark::Select() throw ( uno::RuntimeException )

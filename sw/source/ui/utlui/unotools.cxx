@@ -59,7 +59,7 @@ using ::rtl::OUString;
 const sal_Char cFrameControl[] = "com.sun.star.frame.FrameControl";
 const sal_Char cFactory[] = "private:factory/swriter";
 
-sal_Bool SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_True;
+bool SwOneExampleFrame::bShowServiceNotAvailableMessage = true;
 
 SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
                                         sal_uInt32 nFlags,
@@ -96,7 +96,7 @@ void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
         String sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
         sInfo += rtl::OUString(cFrameControl);
         InfoBox(pParent, sInfo).Execute();
-        SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_False;
+        SwOneExampleFrame::bShowServiceNotAvailableMessage = false;
     }
 }
 

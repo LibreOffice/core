@@ -622,7 +622,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
         aDistanceField.SetValue(0);
     }
 
-    ::FillCharStyleListBox(aTemplateBox, rSh.GetView().GetDocShell(), sal_True);
+    ::FillCharStyleListBox(aTemplateBox, rSh.GetView().GetDocShell(), true);
 
     aTemplateBox.InsertEntry(SW_RESSTR(SW_STR_NONE), 0);
 

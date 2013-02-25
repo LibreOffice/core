@@ -450,7 +450,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
         throw uno::RuntimeException();
     }
 
-    sal_Bool bCustom = sal_True;
+    bool bCustom = true;
     rtl::OUString sFieldService;
     // find the build in document properties
     for( const DocPropertyTable* pTable = aDocPropertyTables; pTable->sDocPropertyName != NULL; pTable++ )
@@ -459,7 +459,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
         {
             if( pTable->sFieldService != NULL )
                 sFieldService = rtl::OUString::createFromAscii(pTable->sFieldService);
-            bCustom = sal_False;
+            bCustom = false;
             break;
         }
     }

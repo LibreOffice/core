@@ -462,7 +462,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
             }
         }
 
-        ::FillCharStyleListBox( aCharStyleLB, pSh->GetView().GetDocShell(), sal_True, sal_True );
+        ::FillCharStyleListBox( aCharStyleLB, pSh->GetView().GetDocShell(), true, true );
     }
 
 

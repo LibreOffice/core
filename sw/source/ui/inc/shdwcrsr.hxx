@@ -34,7 +34,7 @@ class SwShadowCursor
     long nOldHeight;
     sal_uInt16 nOldMode;
 
-    void DrawTri( const Point& rPt, long nHeight, sal_Bool bLeft );
+    void DrawTri( const Point& rPt, long nHeight, bool bLeft );
     void DrawCrsr( const Point& rPt, long nHeight, sal_uInt16 nMode );
 
 public:

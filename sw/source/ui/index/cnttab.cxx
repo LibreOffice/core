@@ -2764,7 +2764,7 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
 void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     SwDocShell* pDocSh = rSh.GetView().GetDocShell();
-    ::FillCharStyleListBox(aCharStyleLB, pDocSh, sal_True, sal_True);
+    ::FillCharStyleListBox(aCharStyleLB, pDocSh, true, true);
     const String sDefault(SW_RES(STR_POOLCOLL_STANDARD));
     for(sal_uInt16 i = 0; i < aCharStyleLB.GetEntryCount(); i++)
     {

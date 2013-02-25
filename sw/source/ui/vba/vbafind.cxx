@@ -29,7 +29,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ) throw ( uno::RuntimeException ) :
-    SwVbaFind_BASE( rParent, rContext ), mxModel( xModel ), mxTextRange( xTextRange ), mbReplace( sal_False ), mnReplaceType( word::WdReplace::wdReplaceOne ), mnWrap( word::WdFindWrap::wdFindStop )
+    SwVbaFind_BASE( rParent, rContext ), mxModel( xModel ), mxTextRange( xTextRange ), mbReplace( false ), mnReplaceType( word::WdReplace::wdReplaceOne ), mnWrap( word::WdFindWrap::wdFindStop )
 {
     mxReplaceable.set( mxModel, uno::UNO_QUERY_THROW );
     mxPropertyReplace.set( mxReplaceable->createReplaceDescriptor(), uno::UNO_QUERY_THROW );
@@ -41,26 +41,26 @@ SwVbaFind::~SwVbaFind()
 {
 }
 
-sal_Bool SwVbaFind::InRange( const uno::Reference< text::XTextRange >& xCurrentRange ) throw ( uno::RuntimeException )
+bool SwVbaFind::InRange( const uno::Reference< text::XTextRange >& xCurrentRange ) throw ( uno::RuntimeException )
 {
     uno::Reference< text::XTextRangeCompare > xTRC( mxTextRange->getText(), uno::UNO_QUERY_THROW );
     if( xTRC->compareRegionStarts( mxTextRange, xCurrentRange ) >= 0 && xTRC->compareRegionEnds( mxTextRange, xCurrentRange ) <= 0 )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
-sal_Bool SwVbaFind::InEqualRange( const uno::Reference< text::XTextRange >& xCurrentRange ) throw ( uno::RuntimeException )
+bool SwVbaFind::InEqualRange( const uno::Reference< text::XTextRange >& xCurrentRange ) throw ( uno::RuntimeException )
 {
     uno::Reference< text::XTextRangeCompare > xTRC( mxTextRange->getText(), uno::UNO_QUERY_THROW );
     if( xTRC->compareRegionStarts( mxTextRange, xCurrentRange ) == 0 && xTRC->compareRegionEnds( mxTextRange, xCurrentRange ) == 0 )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 void SwVbaFind::SetReplaceWith( const rtl::OUString& rText ) throw (uno::RuntimeException)
 {
     mxPropertyReplace->setReplaceString( rText );
-    mbReplace = sal_True;
+    mbReplace = true;
 }
 
 rtl::OUString SwVbaFind::GetReplaceWith() throw (uno::RuntimeException)
@@ -70,7 +70,7 @@ rtl::OUString SwVbaFind::GetReplaceWith() throw (uno::RuntimeException)
 void SwVbaFind::SetReplace( sal_Int32 type )
 {
     mnReplaceType = type;
-    mbReplace = sal_True;
+    mbReplace = true;
 }
 uno::Reference< text::XTextRange > SwVbaFind::FindOneElement() throw ( uno::RuntimeException )
 {

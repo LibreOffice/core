@@ -33,7 +33,7 @@ private:
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::text::XTextContent > mxBookmark;
     rtl::OUString maName;
-    sal_Bool mbValid;
+    bool mbValid;
 
 private:
     void checkVality() throw ( css::uno::RuntimeException );

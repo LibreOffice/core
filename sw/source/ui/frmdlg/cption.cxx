@@ -448,7 +448,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
     m_pEdDelim->SetText(sDelim);
 
     m_pLbCharStyle->InsertEntry(sNone);
-    ::FillCharStyleListBox( *m_pLbCharStyle, rView.GetDocShell(), sal_True, sal_True );
+    ::FillCharStyleListBox( *m_pLbCharStyle, rView.GetDocShell(), true, true );
     m_pLbCharStyle->SelectEntryPos( 0 );
 }
 

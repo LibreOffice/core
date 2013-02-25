@@ -40,13 +40,13 @@ private:
     css::uno::Reference< css::util::XPropertyReplace> mxPropertyReplace;
     css::uno::Reference< css::text::XTextViewCursor> mxTVC;
     css::uno::Reference< css::view::XSelectionSupplier> mxSelSupp;
-    sal_Bool mbReplace;
+    bool mbReplace;
     sal_Int32 mnReplaceType;
     sal_Int32 mnWrap;
 
 private:
-    sal_Bool InRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange ) throw ( css::uno::RuntimeException );
-    sal_Bool InEqualRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange ) throw ( css::uno::RuntimeException );
+    bool InRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange ) throw ( css::uno::RuntimeException );
+    bool InEqualRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange ) throw ( css::uno::RuntimeException );
     void SetReplace( sal_Int32 type );
     void SetReplaceWith( const rtl::OUString& rText ) throw ( css::uno::RuntimeException );
     rtl::OUString GetReplaceWith() throw ( css::uno::RuntimeException );

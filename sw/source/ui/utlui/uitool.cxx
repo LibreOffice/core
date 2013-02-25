@@ -542,12 +542,12 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     const SfxPoolItem* pItem;
     SwFmtPageDesc aPgDesc;
 
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
     // Seitennummer
     if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_PARA_PAGENUM, sal_False, &pItem))
     {
         aPgDesc.SetNumOffset(((SfxUInt16Item*)pItem)->GetValue());
-        bChanged = sal_True;
+        bChanged = true;
     }
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PARA_MODEL, sal_False, &pItem ))
     {
@@ -562,7 +562,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
                 aPgDesc.RegisterToPageDesc( *pDesc );
         }
         rSet.ClearItem( SID_ATTR_PARA_MODEL );
-        bChanged = sal_True;
+        bChanged = true;
     }
     else
     {
@@ -589,7 +589,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
     const SfxPoolItem* pItem = 0;
     String aName;
     sal_uInt16 nPageNum = 0;
-    sal_Bool bPut = sal_True;
+    bool bPut = true;
     switch( rCoreSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
     {
     case SFX_ITEM_SET:
@@ -608,7 +608,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
         break;
 
     default:
-        bPut = sal_False;
+        bPut = false;
     }
     SfxUInt16Item aPageNum( SID_ATTR_PARA_PAGENUM, nPageNum );
     rCoreSet.Put( aPageNum );
@@ -649,7 +649,7 @@ sal_uInt16 InsertStringSorted(const String& rEntry, ListBox& rToFill, sal_uInt16
     }
     return rToFill.InsertEntry(rEntry, i);
 }
-void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, sal_Bool bSorted, sal_Bool bWithDefault)
+void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
 {
     sal_Bool bHasOffset = rToFill.GetEntryCount() > 0;
     SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();

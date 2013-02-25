@@ -68,7 +68,7 @@ SW_DLLPUBLIC sal_Bool HasCharUnit( sal_Bool bWeb );
 void SetApplyCharUnit(sal_Bool bApplyChar, sal_Bool bWeb);
 
 // ListBox mit allen Zeichenvorlagen fuellen - ausser Standard!
-SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, sal_Bool bSorted = sal_False, sal_Bool bWithDefault = sal_False);
+SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
 
 //inserts a string sorted into a ListBox,
 SW_DLLPUBLIC sal_uInt16 InsertStringSorted(const String& rEntry, ListBox& rToFill, sal_uInt16 nOffset);
