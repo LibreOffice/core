@@ -18,18 +18,6 @@
  -->
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="WikiExtension" oor:package="org.openoffice.Office.Custom">
     <node oor:name="SpecialData">
-        <node oor:name="so-wiki.germany.sun.com" oor:op="fuse">
-            <prop oor:name="AllowUnknownCertificate">
-                <value>true</value>
-            </prop>
-            <node oor:name="AdditionalLoginArguments">
-                <node oor:name="wpDomain" oor:op="fuse">
-                    <prop oor:name="Value">
-                        <value>sun</value>
-                    </prop>
-                </node>
-            </node>
-        </node>
     </node>
 
     <node oor:name="ConnectionList">
