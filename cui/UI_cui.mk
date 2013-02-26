@@ -15,6 +15,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/borderpage \
 	cui/uiconfig/ui/charnamepage \
 	cui/uiconfig/ui/colorpage \
+	cui/uiconfig/ui/comment \
 	cui/uiconfig/ui/gradientpage \
 	cui/uiconfig/ui/colorconfigwin \
 	cui/uiconfig/ui/effectspage \

@@ -19,9 +19,10 @@
 #ifndef _SVX_POSTDLG_HXX
 #define _SVX_POSTDLG_HXX
 
-#include <vcl/group.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/group.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svtools/svmedit.hxx>
@@ -44,8 +45,8 @@
 class SvxPostItDialog : public SfxModalDialog
 {
 public:
-    SvxPostItDialog( Window* pParent, const SfxItemSet& rCoreSet,
-                     sal_Bool bPrevNext = sal_False, sal_Bool bRedline = sal_False );
+    SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
+                     bool bPrevNext = false, bool bRedline = false);
     ~SvxPostItDialog();
 
     static sal_uInt16*      GetRanges();
@@ -58,38 +59,47 @@ public:
     void                SetNextHdl( const Link& rLink )
                             { aNextHdlLink = rLink; }
 
-    void                EnableTravel(sal_Bool bNext, sal_Bool bPrev);
-    inline String       GetNote() { return aEditED.GetText(); }
-    inline void         SetNote(const String& rTxt) { aEditED.SetText(rTxt); }
-
-    void                ShowLastAuthor(const String& rAuthor, const String& rDate);
-    inline void         DontChangeAuthor()  { aAuthorBtn.Enable(sal_False); }
-    inline void         HideAuthor()        { aAuthorFT.Hide(); aAuthorBtn.Hide(); }
-    inline void         SetReadonlyPostIt(sal_Bool bDisable)
-                            {
-                                aOKBtn.Enable( !bDisable );
-                                aEditED.SetReadOnly( bDisable );
-                                aAuthorBtn.Enable( !bDisable );
-                            }
-    inline sal_Bool         IsOkEnabled() const { return aOKBtn.IsEnabled(); }
+    void EnableTravel(sal_Bool bNext, sal_Bool bPrev);
+    String GetNote()
+    {
+        return m_pEditED->GetText();
+    }
+    void SetNote(const OUString& rTxt)
+    {
+        m_pEditED->SetText(rTxt);
+    }
+    void ShowLastAuthor(const String& rAuthor, const String& rDate);
+    void DontChangeAuthor()
+    {
+        m_pAuthorBtn->Enable(false);
+    }
+    void HideAuthor()
+    {
+        m_pInsertAuthor->Hide();
+    }
+    void SetReadonlyPostIt(bool bDisable)
+    {
+        m_pOKBtn->Enable( !bDisable );
+        m_pEditED->SetReadOnly( bDisable );
+        m_pAuthorBtn->Enable( !bDisable );
+    }
+    bool IsOkEnabled() const
+    {
+        return m_pOKBtn->IsEnabled();
+    }
 
 private:
-    FixedLine           aPostItFL;
-    FixedText           aLastEditLabelFT;
-    FixedInfo           aLastEditFT;
+    FixedText*          m_pLastEditFT;
 
-    FixedText           aEditFT;
-    MultiLineEdit       aEditED;
+    MultiLineEdit*      m_pEditED;
 
-    FixedText           aAuthorFT;
-    PushButton          aAuthorBtn;
+    VclContainer*       m_pInsertAuthor;
+    PushButton*         m_pAuthorBtn;
 
-    OKButton            aOKBtn;
-    CancelButton        aCancelBtn;
-    HelpButton          aHelpBtn;
+    OKButton*           m_pOKBtn;
 
-    ImageButton         aPrevBtn;
-    ImageButton         aNextBtn;
+    PushButton*         m_pPrevBtn;
+    PushButton*         m_pNextBtn;
 
     const SfxItemSet&   rSet;
     SfxItemSet*         pOutSet;

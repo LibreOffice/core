@@ -67,7 +67,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/iconcdlg.src \
     cui/source/dialogs/multipat.src \
     cui/source/dialogs/passwdomdlg.src \
-    cui/source/dialogs/postdlg.src \
     cui/source/dialogs/scriptdlg.src \
     cui/source/dialogs/sdrcelldlg.src \
     cui/source/dialogs/showcols.src \

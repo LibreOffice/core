@@ -465,7 +465,7 @@ public:
     virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const String& rLanguage ) = 0;
 
     virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc() = 0; //  add for SvxDistributePage
-    virtual DialogGetRanges         GetDialogGetRangesFunc( sal_uInt16 nId ) = 0; //add for SvxPostItDialog
+    virtual DialogGetRanges             GetDialogGetRangesFunc() = 0; //add for SvxPostItDialog
 
     virtual AbstractScriptSelectorDialog*
         CreateScriptSelectorDialog(

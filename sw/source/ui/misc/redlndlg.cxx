@@ -1061,7 +1061,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                         rtl::OUString sComment = convertLineEnd(rRedline.GetComment(), GetSystemLineEnd());
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialogdiet fail!");
-                        ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
+                        ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();
                         OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
                         SfxItemSet aSet( pSh->GetAttrPool(), fnGetRange() );
 

@@ -1793,18 +1793,11 @@ CreateSvxDistributePage AbstractDialogFactory_Impl::GetSvxDistributePageCreatorF
     return SvxDistributePage::Create;
 }
 
-DialogGetRanges AbstractDialogFactory_Impl::GetDialogGetRangesFunc( sal_uInt16 nId )
+DialogGetRanges AbstractDialogFactory_Impl::GetDialogGetRangesFunc()
 {
-        switch ( nId )
-    {
-        case RID_SVXDLG_POSTIT:
-            return SvxPostItDialog::GetRanges;  //add for SvxPostItDialog
-        default:
-            break;
-    }
-
-    return 0;
+    return SvxPostItDialog::GetRanges;  //add for SvxPostItDialog
 }
+
 GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nId )
 {
     switch ( nId )

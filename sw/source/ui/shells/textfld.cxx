@@ -408,7 +408,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "Dialogdiet fail!");
-                    ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
+                    ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();
                     OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
                     SfxItemSet aSet(GetPool(), fnGetRange());
                     aSet.Put(SvxPostItTextItem(sComment, SID_ATTR_POSTIT_TEXT));

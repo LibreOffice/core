@@ -749,7 +749,7 @@ public:
     virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc();
 
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId );
-    virtual DialogGetRanges         GetDialogGetRangesFunc( sal_uInt16 nId ); //add for SvxPostItDialog
+    virtual DialogGetRanges             GetDialogGetRangesFunc(); //add for SvxPostItDialog
     virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const String& rLanguage );
 
     virtual AbstractScriptSelectorDialog*

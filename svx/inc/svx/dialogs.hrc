@@ -111,7 +111,6 @@
 #define RID_SVX_GRFFILTER_DLG_SMOOTH        (RID_SVX_START + 337)
 #define RID_SVXDLG_SEARCHFORMAT             (RID_SVX_START +  21)
 #define RID_SVXDLG_CHARMAP                  ( RID_SVX_START +  10 )
-#define RID_SVXDLG_POSTIT                   ( RID_SVX_START +   8 )
 
 // IDs of options pages of applications
 #define RID_SW_TP_MAILCONFIG            (RID_OFA_START + 102)
