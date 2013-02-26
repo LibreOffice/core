@@ -89,8 +89,10 @@ $(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1)) \
 
 endef
 
+# depend on makefile to enforce a rebuild if files are removed from the zip
 define gb_Zip_Zip
 $(call gb_Zip_Zip_internal,$(1),$(2))
+$(call gb_Zip_get_target,$(1)) : $(lastword $(MAKEFILE_LIST))
 
 $(eval $(call gb_Module_register_target,$(call gb_Zip_get_final_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Zip)
