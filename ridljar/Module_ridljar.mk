@@ -32,8 +32,6 @@ $(eval $(call gb_Module_add_targets,ridljar,\
     CustomTarget_javamaker \
     Jar_ridl \
     Jar_unoloader \
-    Zip_ridl \
-    Zip_unoloader \
 ))
 
 # unfortunately, these tests depend on qadevOOo, which depends on

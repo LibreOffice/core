@@ -32,7 +32,6 @@ ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,javaunohelper,\
     Library_juh \
     Jar_juh \
-    Zip_juh \
 ))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)

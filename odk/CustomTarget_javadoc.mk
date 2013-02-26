@@ -17,7 +17,7 @@ odk_JAVAPACKAGES := com.sun.star.comp.helper \
 	com.sun.star.lib.uno.helper \
 	com.sun.star.lib.unoloader \
 	com.sun.star.uno \
-	$(odk_WORKDIR)/java_src/com/sun/star/lib/util/UrlToFileMapper.java
+	$(SRCDIR)/jurt/com/sun/star/lib/util/UrlToFileMapper.java
 
 $(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/java/ref,index.html))
 
@@ -26,27 +26,12 @@ $(odk_WORKDIR)/docs/java/ref/index.html: $(call gb_Jar_get_target,ridl)
 	$(JAVADOC) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
 		-header $(JAVADOCREFNAME) -d $(dir $@) \
-		-sourcepath $(odk_WORKDIR)/java_src \
+		-sourcepath $(SRCDIR)/ridljar/source/unoloader:$(SRCDIR)/ridljar:$(SRCDIR)/jurt:$(SRCDIR)/javaunohelper \
 		-classpath $(OUTDIR)/bin/ridl.jar \
 		-linkoffline ../../common/reg ./uno \
 		-linkoffline http://java.sun.com/j2se/1.5/docs/api ./java \
 		$(odk_JAVAPACKAGES) \
 		$(if $(JAVADOCISGJDOC),,-notimestamp) \
 		> $(odk_WORKDIR)/javadoc_log.txt
-
-odk_JAVASRCLIST := juh_src \
-	jurt_src \
-	ridl_src \
-	unoloader_src
-
-define odk_jsrc
-$(odk_WORKDIR)/docs/java/ref/index.html: $(odk_WORKDIR)/java_src/$(1).done
-$(odk_WORKDIR)/java_src/$(1).done: $(call gb_Zip_get_target,$(1))
-	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),build,UNZ,1)
-	unzip -quo $$< -d $$(dir $$@)
-	touch $$@
-endef
-
-$(foreach src,$(odk_JAVASRCLIST),$(eval $(call odk_jsrc,$(src))))
 
 # vim: set noet sw=4 ts=4:

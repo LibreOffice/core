@@ -32,7 +32,6 @@ ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,jurt,\
     Jar_jurt \
     Library_jpipe \
-    Zip_jurt \
 ))
 
 ifeq ($(OS),MACOSX)
