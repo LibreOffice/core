@@ -70,6 +70,57 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///TQ\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-26T23:12:54Z",
+      "side": 1,
+      "message": "White space",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///TM\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-26T23:12:54Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///TI\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-26T23:12:54Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAVn///YQ\u003d",
         "filename": "oox/inc/oox/ppt/slidepersist.hxx",
         "patchSetId": 1
@@ -115,6 +166,40 @@
       "writtenOn": "2013-02-21T12:23:42Z",
       "side": 1,
       "message": "All of this can probably move down to be local to PresentationFragmentHandler::finalizeImport() ?",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///TE\u003d",
+        "filename": "oox/source/ppt/presentationfragmenthandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-26T23:12:54Z",
+      "side": 1,
+      "message": "trailing white space",
+      "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///TA\u003d",
+        "filename": "oox/source/ppt/presentationfragmenthandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-02-26T23:12:54Z",
+      "side": 1,
+      "message": "trailing white space",
       "revId": "5d8768807ec63d466075fc5fd145b920944d10f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
