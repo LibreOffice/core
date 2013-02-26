@@ -448,6 +448,7 @@ static ScSingleRefData lcl_ScToken_InitSingleRef()
 {
     ScSingleRefData aRef;
     aRef.InitAddress( ScAddress() );
+    aRef.nRelCol = aRef.nRelRow = aRef.nRelTab = 0;
     return aRef;
 }
 
