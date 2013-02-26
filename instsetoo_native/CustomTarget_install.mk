@@ -35,15 +35,15 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/bin/find-requires-%
 	chmod a+x $@
 
 ifneq ($(WITH_LANG),)
-$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.mlf: \
+$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf: \
 		$(SRCDIR)/instsetoo_native/inc_openoffice/windows/msi_languages/%.ulf | \
 		$(call gb_Executable_get_runtime_dependencies,ulfex)
 	$(call gb_Output_announce,$@,$(true),SUM,1)
-        MERGEINPUT=`$(gb_MKTEMP)` && \
-        echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $@)).po) > $${MERGEINPUT} && \
-        $(call gb_Helper_abbreviate_dirs,\
-        $(call gb_Executable_get_command,ulfex) -p instsetoo_native -i $< -o $@ -m $${MERGEINPUT} -l all ) && \
-        rm -rf $${MERGEINPUT}
+	MERGEINPUT=`$(gb_MKTEMP)` && \
+	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/instsetoo_native/inc_openoffice/windows/msi_languages.po) > $${MERGEINPUT} && \
+	$(call gb_Helper_abbreviate_dirs,\
+	$(call gb_Executable_get_command,ulfex) -p instsetoo_native -i $< -o $@ -m $${MERGEINPUT} -l all ) && \
+	rm -rf $${MERGEINPUT}
 else
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf: \
 	$(SRCDIR)/instsetoo_native/inc_openoffice/windows/msi_languages/%.ulf
