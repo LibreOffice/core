@@ -4100,7 +4100,7 @@ if test "$cross_compiling" = "yes"; then
     echo
     rm -rf CONF-FOR-BUILD config_build.mk
     mkdir CONF-FOR-BUILD
-    tar cf - \
+    (cd $SRC_ROOT && tar cf - \
         config.guess \
         config_host.mk.in \
         configure \
@@ -4112,7 +4112,7 @@ if test "$cross_compiling" = "yes"; then
         solenv/inc/langlist.mk \
         solenv/inc/postset.mk \
         solenv/inc/minor.mk.in \
-        instsetoo_native/util/openoffice.lst.in \
+        instsetoo_native/util/openoffice.lst.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
