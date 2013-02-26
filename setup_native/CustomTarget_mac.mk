@@ -16,7 +16,7 @@ ifneq ($(WITH_LANG),)
 $(call gb_CustomTarget_get_workdir,setup_native/mac)/macinstall.ulf: $(SRCDIR)/setup_native/source/mac/macinstall.ulf | $(call gb_Executable_get_runtime_dependencies,ulfex)
 	$(call gb_Output_announce,$@,$(true),SUM,1)
 	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $@)).po) > $${MERGEINPUT} && \
+	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/setup_native/source/mac.po) > $${MERGEINPUT} && \
 	$(call gb_Helper_abbreviate_dirs,\
 	$(call gb_Executable_get_command,ulfex) -p setup_native -i $< -o $@ -m $${MERGEINPUT} -l all ) && \
 	rm -rf $${MERGEINPUT}
