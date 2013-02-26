@@ -50,7 +50,6 @@ DBG_NAMEEX( OutputDevice )
 
 void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags )
 {
-    OSL_TRACE( "OutputDevice::DrawGrid()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
@@ -149,7 +148,6 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
 
 void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency)
 {
-    OSL_TRACE( "OutputDevice::DrawTransparent(B2D&,transparency)" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // AW: Do NOT paint empty PolyPolygons
@@ -214,7 +212,6 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                                     sal_uInt16 nTransparencePercent )
 {
-    OSL_TRACE( "OutputDevice::DrawTransparent()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // short circuit for drawing an opaque polygon
@@ -605,7 +602,6 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                                     const Size& rSize, const Gradient& rTransparenceGradient )
 {
-    OSL_TRACE( "OutputDevice::DrawTransparent()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     const Color aBlack( COL_BLACK );
@@ -1150,8 +1146,6 @@ void OutputDevice::Erase()
 bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
 {
-    OSL_TRACE( "OutputDevice::DrawEPS()" );
-
     bool bDrawn(true);
 
     if ( mpMetaFile )

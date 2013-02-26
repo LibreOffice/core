@@ -1055,7 +1055,6 @@ void OutputDevice::ImplSetClipRegion( const Region* pRegion )
 
 void OutputDevice::SetClipRegion()
 {
-    OSL_TRACE( "OutputDevice::SetClipRegion()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1071,7 +1070,6 @@ void OutputDevice::SetClipRegion()
 
 void OutputDevice::SetClipRegion( const Region& rRegion )
 {
-    OSL_TRACE( "OutputDevice::SetClipRegion( rRegion )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rRegion, Region, ImplDbgTestRegion );
 
@@ -1126,7 +1124,6 @@ Region OutputDevice::GetActiveClipRegion() const
 
 void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
 {
-    OSL_TRACE( "OutputDevice::MoveClipRegion()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mbClipRegion )
@@ -1147,7 +1144,6 @@ void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
 
 void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
 {
-    OSL_TRACE( "OutputDevice::IntersectClipRegion( rRect )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1166,7 +1162,6 @@ void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
 
 void OutputDevice::IntersectClipRegion( const Region& rRegion )
 {
-    OSL_TRACE( "OutputDevice::IntersectClipRegion( rRegion )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rRegion, Region, ImplDbgTestRegion );
 
@@ -1191,7 +1186,6 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
 
 void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
 {
-    OSL_TRACE( "OutputDevice::SetDrawMode( %lx )", nDrawMode );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     mnDrawMode = nDrawMode;
@@ -1204,7 +1198,6 @@ void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
 
 void OutputDevice::SetRasterOp( RasterOp eRasterOp )
 {
-    OSL_TRACE( "OutputDevice::SetRasterOp( %d )", (int)eRasterOp );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1227,7 +1220,6 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
 
 void OutputDevice::SetLineColor()
 {
-    OSL_TRACE( "OutputDevice::SetLineColor()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1289,7 +1281,6 @@ Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
 
 void OutputDevice::SetLineColor( const Color& rColor )
 {
-    OSL_TRACE( "OutputDevice::SetLineColor( %lx )", rColor.GetColor() );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor = ImplDrawModeToColor( rColor );
@@ -1324,7 +1315,6 @@ void OutputDevice::SetLineColor( const Color& rColor )
 
 void OutputDevice::SetFillColor()
 {
-    OSL_TRACE( "OutputDevice::SetFillColor()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1345,7 +1335,6 @@ void OutputDevice::SetFillColor()
 
 void OutputDevice::SetFillColor( const Color& rColor )
 {
-    OSL_TRACE( "OutputDevice::SetFillColor( %lx )", rColor.GetColor() );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor( rColor );
@@ -1417,7 +1406,6 @@ void OutputDevice::SetFillColor( const Color& rColor )
 
 void OutputDevice::SetBackground()
 {
-    OSL_TRACE( "OutputDevice::SetBackground()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     maBackground = Wallpaper();
@@ -1431,7 +1419,6 @@ void OutputDevice::SetBackground()
 
 void OutputDevice::SetBackground( const Wallpaper& rBackground )
 {
-    OSL_TRACE( "OutputDevice::SetBackground( rBackground )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     maBackground = rBackground;
@@ -1449,7 +1436,6 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
 
 void OutputDevice::SetRefPoint()
 {
-    OSL_TRACE( "OutputDevice::SetRefPoint()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1466,7 +1452,6 @@ void OutputDevice::SetRefPoint()
 
 void OutputDevice::SetRefPoint( const Point& rRefPoint )
 {
-    OSL_TRACE( "OutputDevice::SetRefPoint( rRefPoint )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1483,7 +1468,6 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
 
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 {
-    OSL_TRACE( "OutputDevice::DrawLine()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1685,7 +1669,6 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                              const LineInfo& rLineInfo )
 {
-    OSL_TRACE( "OutputDevice::DrawLine()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( rLineInfo.IsDefault() )
@@ -1739,7 +1722,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
 
 void OutputDevice::DrawRect( const Rectangle& rRect )
 {
-    OSL_TRACE( "OutputDevice::DrawRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1780,7 +1762,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 {
-    OSL_TRACE( "OutputDevice::DrawPolyLine()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
 
@@ -1858,7 +1839,6 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo )
 {
-    OSL_TRACE( "OutputDevice::DrawPolyLine()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
 
@@ -1950,7 +1930,6 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
 
 void OutputDevice::DrawPolygon( const Polygon& rPoly )
 {
-    OSL_TRACE( "OutputDevice::DrawPolygon()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
 
@@ -2046,7 +2025,6 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
 
 void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    OSL_TRACE( "OutputDevice::DrawPolyPolygon()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
 
@@ -2163,9 +2141,7 @@ void OutputDevice::DrawPolygon( const ::basegfx::B2DPolygon& rB2DPolygon)
 
 void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-    OSL_TRACE( "OutputDevice::DrawPolyPolygon(B2D&)" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( PolyPolygon( rB2DPolyPoly ) ) );
@@ -2293,7 +2269,6 @@ void OutputDevice::DrawPolyLine(
     basegfx::B2DLineJoin eLineJoin,
     com::sun::star::drawing::LineCap eLineCap)
 {
-    OSL_TRACE( "OutputDevice::DrawPolyLine(B2D&)" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     (void)eLineJoin; // ATM used in UNX, but not in WNT, access it for warning-free
     (void)eLineCap;
@@ -2410,7 +2385,6 @@ sal_uInt32 OutputDevice::GetGCStackDepth() const
 
 void OutputDevice::Push( sal_uInt16 nFlags )
 {
-    OSL_TRACE( "OutputDevice::Push()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -2499,7 +2473,6 @@ void OutputDevice::Push( sal_uInt16 nFlags )
 
 void OutputDevice::Pop()
 {
-    OSL_TRACE( "OutputDevice::Pop()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if( mpMetaFile )
