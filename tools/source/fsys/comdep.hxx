@@ -19,7 +19,7 @@
 #ifndef _COMDEP_HXX
 #define _COMDEP_HXX
 
-#include <tools/fsys.hxx>
+#include "tools-internal.hxx"
 
 #define ACCESSDELIM(e)  ( ( e == FSYS_STYLE_NTFS ) ? "\\" : "/" )
 #define ACCESSDELIM_C(e)(char)\

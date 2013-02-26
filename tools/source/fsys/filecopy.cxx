@@ -33,7 +33,6 @@
 
 #include <stdio.h>
 #include "comdep.hxx"
-#include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <osl/file.hxx>
 

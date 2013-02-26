@@ -35,20 +35,11 @@
 // FSys-Types
 class DirEntry;
 class FileStat;
-struct FileCopier_Impl;
 class SvFileStream;
 class BigInt;
 
 typedef ::std::vector< DirEntry* > DirEntryList;
 typedef ::std::vector< FileStat* > FileStatList;
-
-#define FSYS_SHORTNAME_DELIMITER    '@'
-
-// FSysAccess
-typedef int FSysAccess;
-#define FSYS_ACCESS_FORCED          1
-#define FSYS_ACCESS_FLOPPY          FSYS_ACCESS_FORCED
-#define FSYS_ACCESS_CACHED          2
 
 // DirEntryKind
 typedef int DirEntryKind;
@@ -107,6 +98,12 @@ enum FSysPathStyle
     FSYS_STYLE_DETECT,
 };
 
+// FSysAccess
+typedef int FSysAccess;
+#define FSYS_ACCESS_CACHED          2
+#define FSYS_ACCESS_FORCED          1
+#define FSYS_ACCESS_FLOPPY          FSYS_ACCESS_FORCED
+
 // FSysAction
 typedef int FSysAction;
 #define FSYS_ACTION_COPYFILE        0x01    // not only create hardlink
@@ -123,13 +120,6 @@ typedef int FSysAction;
 #define RFS_IDENTIFIER  "-rfs-"
 
 typedef sal_uIntPtr FSysError;
-
-// FSysExact
-enum FSysExact
-{
-    FSYS_NOTEXACT,
-    FSYS_EXACT
-};
 
 // FileStat
 struct dirent;
@@ -249,10 +239,6 @@ public:
     void                SetExtension( const String& rExt, char cSep = '.' );
     String              GetExtension( char cSep = '.' ) const;
     void                SetName( const String& rName, FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    const String        GetNameDirect() const
-    {
-        return rtl::OStringToOUString(aName, osl_getThreadTextEncoding());
-    }
     String              GetName( FSysPathStyle eFormatter = FSYS_STYLE_HOST ) const;
     String              CutName( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     String              GetBase(char cSep = '.' ) const;
@@ -307,54 +293,6 @@ public:
 
     static String       GetAccessDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-};
-
-// FileCopier (a private impl. detail of tools/)
-
-class FileCopier
-{
-    DirEntry            aSource;
-    DirEntry            aTarget;
-    sal_uIntPtr         nBytesTotal;
-    sal_uIntPtr         nBytesCopied;
-    Link                aProgressLink;
-    sal_uInt16          nBlockSize;
-    FileCopier_Impl*    pImp;
-
-private:
-    TOOLS_DLLPRIVATE FSysError DoCopy_Impl(
-        const DirEntry &rSource, const DirEntry &rTarget );
-
-protected:
-    virtual sal_Bool    Progress();
-    virtual ErrCode     Error( ErrCode eErr,
-                               const DirEntry *pSource, const DirEntry *pTarget );
-
-public:
-                        FileCopier( const DirEntry &rSource,
-                                    const DirEntry &rTarget );
-                        FileCopier( const FileCopier &rCopier );
-                        virtual ~FileCopier();
-
-    FileCopier&         operator =( const FileCopier &rCopier );
-
-    void                SetBlockSize( sal_uInt16 nBytes ) { nBlockSize = nBytes; }
-    sal_uInt16          GetBlockSize() const { return nBlockSize; }
-
-    sal_uIntPtr         GetBytesTotal() const { return nBytesTotal; }
-    sal_uIntPtr         GetBytesCopied() const { return nBytesCopied; }
-
-    void                SetSource( const DirEntry &rSource ) { aSource = rSource; }
-    void                SetTarget( const DirEntry &rTarget ) { aTarget = rTarget; }
-    const DirEntry&     GetSource() const { return aSource; }
-    const DirEntry&     GetTarget() const { return aTarget; }
-
-    FSysError           Execute( FSysAction nActions = FSYS_ACTION_STANDARD );
-    FSysError           ExecuteExact( FSysAction nActions = FSYS_ACTION_STANDARD,
-                                      FSysExact  eExact = FSYS_NOTEXACT);
-
-    void                SetProgressHdl( const Link& rLink ) { aProgressLink = rLink; }
-    const Link&         GetProgressHdl() const { return aProgressLink; }
 };
 
 // Dir
