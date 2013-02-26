@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///eU\u003d",
+        "filename": "vcl/source/filter/wmf/emfwr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-02-26T10:22:29Z",
+      "side": 1,
+      "message": "I assume that this is re-writing the WIN_EMR_GDICOMMENT from above - the thing that is not clear to me is how mnRecordPos is managed - I\u0027d expect to have a member offset specific to this comment record - surely ?",
+      "revId": "2a053615b52654d99b5f4450feb2ec625e1ea742",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
