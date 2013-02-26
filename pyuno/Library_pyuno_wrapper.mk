@@ -28,7 +28,7 @@ $(eval $(call gb_Library_Library,pyuno_wrapper))
 
 $(eval $(call gb_Library_use_packages,pyuno_wrapper,\
     sal_generated \
-    sal_inc \
+    sal_odk_headers \
 ))
 
 $(eval $(call gb_Library_set_include,pyuno_wrapper,\

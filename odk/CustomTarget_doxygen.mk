@@ -20,7 +20,7 @@ DOXY_WORKDIR := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(odk_WORKDIR)/docs/
 DOXY_STRIP_PATH := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(OUTDIR)/inc),$(OUTDIR)/inc)
 DOXY_DEPS := $(SRCDIR)/odk/pack/gendocu/Doxyfile \
 	$(SRCDIR)/odk/pack/gendocu/main.dox \
-	$(call gb_Package_get_target,sal_inc) \
+	$(call gb_Package_get_target,sal_odk_headers) \
 	$(call gb_Package_get_target,salhelper_inc) \
 	$(call gb_Package_get_target,cppu_inc) \
 	$(call gb_Package_get_target,cppuhelper_inc) \

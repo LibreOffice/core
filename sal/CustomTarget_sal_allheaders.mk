@@ -34,7 +34,9 @@ $(call gb_CustomTarget_get_target,sal/allheaders) : \
 
 # dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
 $(sal_allheaders_DIR)/sal_allheaders.hxx : $(SRCDIR)/sal/CustomTarget_sal_allheaders.mk \
-            | $(sal_allheaders_DIR)/.dir $(SRCDIR)/sal/Package_inc.mk
+			  $(SRCDIR)/sal/ZipPackage_sal_odk_headers.mk \
+              $(SRCDIR)/sal/Package_inc.mk \
+            | $(sal_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	printf '// Generated list of all sal/ includes\n' >  $@
 	printf '#ifdef WNT\n' >>  $@

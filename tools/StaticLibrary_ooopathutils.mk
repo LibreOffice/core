@@ -20,7 +20,7 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,ooopathutils))
 
 $(eval $(call gb_StaticLibrary_use_packages,ooopathutils,\
-	sal_inc \
+	sal_odk_headers \
 	tools_inc \
 ))
 

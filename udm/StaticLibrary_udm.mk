@@ -12,7 +12,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,udm))
 $(eval $(call gb_StaticLibrary_use_packages,udm,\
 	cosv_inc \
 	sal_generated \
-	sal_inc \
+	sal_odk_headers \
 	udm_inc \
 ))
 

@@ -11,7 +11,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,findsofficepath))
 
 $(eval $(call gb_StaticLibrary_use_packages,findsofficepath,\
     cppuhelper_inc \
-    sal_inc \
+    sal_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_add_cobjects,findsofficepath,\

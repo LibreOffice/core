@@ -33,6 +33,7 @@ $(eval $(call gb_Library_set_precompiled_header,sal,$(SRCDIR)/sal/inc/pch/precom
 
 $(eval $(call gb_Library_use_packages,sal,\
 	sal_generated \
+	sal_odk_headers \
 	sal_inc \
 ))
 

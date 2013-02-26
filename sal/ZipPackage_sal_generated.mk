@@ -25,12 +25,12 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,sal_generated,$(call gb_CustomTarget_get_workdir,sal/generated)))
+$(eval $(call gb_ZipPackage_ZipPackage,sal_generated,$(call gb_CustomTarget_get_workdir,sal/generated)))
 
-$(eval $(call gb_Package_add_file,sal_generated,inc/sal/udkversion.h,sal/udkversion.h))
+$(eval $(call gb_ZipPackage_add_files,sal_generated,inc/sal,include/sal,sal/udkversion.h))
 
 ifneq ($(COM),MSC)
-$(eval $(call gb_Package_add_file,sal_generated,inc/sal/typesizes.h,sal/typesizes.h))
+$(eval $(call gb_ZipPackage_add_files,sal_generated,inc/sal,include/sal,sal/typesizes.h))
 endif
 
 # vim: set noet sw=4 ts=4:

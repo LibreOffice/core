@@ -29,7 +29,7 @@ $(eval $(call gb_Executable_Executable,xpdfimport))
 
 $(eval $(call gb_Executable_use_packages,xpdfimport,\
     sal_generated \
-    sal_inc \
+    sal_odk_headers \
 ))
 
 $(eval $(call gb_Executable_use_externals,xpdfimport,\

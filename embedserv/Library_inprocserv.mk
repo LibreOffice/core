@@ -43,7 +43,7 @@ $(eval $(call gb_Library_use_libraries,inprocserv,\
 ))
 
 $(eval $(call gb_Library_use_packages,inprocserv,\
-	sal_inc \
+	sal_odk_headers \
 ))
 
 ifeq ($(COM),MSC)

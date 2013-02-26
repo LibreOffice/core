@@ -33,7 +33,7 @@ $(eval $(call gb_StaticLibrary_use_packages,codemaker,\
 	codemaker_inc \
 	registry_inc \
 	sal_generated \
-	sal_inc \
+	sal_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,codemaker,\

@@ -29,7 +29,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,nputils))
 
 $(eval $(call gb_StaticLibrary_use_packages,nputils,\
 	sal_generated \
-	sal_inc \
+	sal_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,nputils,\
