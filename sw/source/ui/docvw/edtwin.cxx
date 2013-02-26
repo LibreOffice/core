@@ -2731,7 +2731,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
-    if ( lcl_CheckHeaderFooterClick( rSh, aDocPos, rMEvt.GetClicks() ) )
+    sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
+    if ( (bIsDocReadOnly || !rSh.GetCurFld()) && lcl_CheckHeaderFooterClick( rSh, aDocPos, rMEvt.GetClicks() ) )
         return;
 
 
@@ -2750,7 +2751,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     // work but in practice ...
     lcl_SelectShellForDrop( rView );
 
-    sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
     sal_Bool bCallBase = sal_True;
 
     if( pQuickHlpData->bClear )
