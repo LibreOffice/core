@@ -79,7 +79,7 @@ void XMLCalculationSettingsContext::EndElement()
         if (xTextDoc.is())
         {
             Reference < XPropertySet > xPropSet ( xTextDoc, UNO_QUERY );
-            OUString sTwoDigitYear ( RTL_CONSTASCII_USTRINGPARAM ( "TwoDigitYear" ) );
+            OUString sTwoDigitYear ( "TwoDigitYear" );
             Any aAny;
             aAny <<= nYear;
             xPropSet->setPropertyValue ( sTwoDigitYear, aAny );

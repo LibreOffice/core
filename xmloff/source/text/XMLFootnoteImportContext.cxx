@@ -72,7 +72,7 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sPropertyReferenceId(RTL_CONSTASCII_USTRINGPARAM("ReferenceId"))
+,   sPropertyReferenceId("ReferenceId")
 ,   mbListContextPushed(false)
 ,   rHelper(rHlp)
 {
@@ -107,8 +107,8 @@ void XMLFootnoteImportContext::StartElement(
 
         Reference<XInterface> xIfc = xFactory->createInstance(
             bIsEndnote ?
-            OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_service_endnote)) :
-            OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_service_footnote)) );
+            OUString(sAPI_service_endnote) :
+            OUString(sAPI_service_footnote) );
 
         // attach footnote to document
         Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);

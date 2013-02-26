@@ -252,8 +252,8 @@ void XMLTableImport::finishStyles()
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrImport.GetModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM("table" ) );
-        const OUString sCellFamilyName( RTL_CONSTASCII_USTRINGPARAM("cell") );
+        const OUString sFamilyName( "table" );
+        const OUString sCellFamilyName( "cell" );
 
         Reference< XNameContainer > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
         Reference< XNameAccess > xCellFamily( xFamilies->getByName( sCellFamilyName ), UNO_QUERY_THROW );

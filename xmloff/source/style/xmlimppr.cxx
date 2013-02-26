@@ -717,16 +717,16 @@ sal_Bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
                 switch (aResults[i].Result)
                 {
                 case TolerantPropertySetResultType::UNKNOWN_PROPERTY :
-                    sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNKNOWN_PROPERTY"));
+                    sMessage = "UNKNOWN_PROPERTY";
                     break;
                 case TolerantPropertySetResultType::ILLEGAL_ARGUMENT :
-                    sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ILLEGAL_ARGUMENT"));
+                    sMessage = "ILLEGAL_ARGUMENT";
                     break;
                 case TolerantPropertySetResultType::PROPERTY_VETO :
-                    sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PROPERTY_VETO"));
+                    sMessage = "PROPERTY_VETO";
                     break;
                 case TolerantPropertySetResultType::WRAPPED_TARGET :
-                    sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WRAPPED_TARGET"));
+                    sMessage = "WRAPPED_TARGET";
                     break;
                 };
                 rImport.SetError(

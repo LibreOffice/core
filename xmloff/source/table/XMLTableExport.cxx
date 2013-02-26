@@ -167,17 +167,17 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get() ) );
 
     mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN,
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME)),
+        OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME),
         mxColumnExportPropertySetMapper.get(),
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX)));
+        OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
     mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW,
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
+        OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME),
         mxRowExportPropertySetMapper.get(),
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
+        OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
     mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL,
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
+        OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME),
         mxCellExportPropertySetMapper.get(),
-        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
+        OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
 }
 
 // --------------------------------------------------------------------
@@ -263,9 +263,9 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                 // get style
                 OUString sParentStyleName;
                 Reference< XPropertySetInfo > xPropertySetInfo( xCellSet->getPropertySetInfo() );
-                if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName( OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))) )
+                if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName( OUString("Style")) )
                 {
-                    Reference< XStyle > xStyle( xCellSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style"))), UNO_QUERY );
+                    Reference< XStyle > xStyle( xCellSet->getPropertyValue(OUString("Style")), UNO_QUERY );
                     if( xStyle.is() )
                         sParentStyleName = xStyle->getName();
                 }
@@ -480,7 +480,7 @@ void XMLTableExport::exportTableStyles()
     XMLStyleExport aStEx(mrExport, OUString(), mrExport.GetAutoStylePool().get());
 
     // write graphic family styles
-    aStEx.exportStyleFamily("cell", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), mxCellExportPropertySetMapper.get(), sal_True, XML_STYLE_FAMILY_TABLE_CELL);
+    aStEx.exportStyleFamily("cell", OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), sal_True, XML_STYLE_FAMILY_TABLE_CELL);
 
     exportTableTemplates();
 }
@@ -505,15 +505,15 @@ const TableStyleElement* getTableStyleMap()
 {
     static struct TableStyleElement gTableStyleElements[] =
     {
-        { XML_FIRST_ROW, OUString( RTL_CONSTASCII_USTRINGPARAM( "first-row" ) ) },
-        { XML_LAST_ROW, OUString( RTL_CONSTASCII_USTRINGPARAM( "last-row" ) ) },
-        { XML_FIRST_COLUMN, OUString( RTL_CONSTASCII_USTRINGPARAM( "first-column" ) ) },
-        { XML_LAST_COLUMN, OUString( RTL_CONSTASCII_USTRINGPARAM( "last-column" ) ) },
-        { XML_EVEN_ROWS, OUString( RTL_CONSTASCII_USTRINGPARAM( "even-rows" ) ) },
-        { XML_ODD_ROWS, OUString( RTL_CONSTASCII_USTRINGPARAM( "odd-rows" ) ) },
-        { XML_EVEN_COLUMNS, OUString( RTL_CONSTASCII_USTRINGPARAM( "even-columns" ) ) },
-        { XML_ODD_COLUMNS, OUString( RTL_CONSTASCII_USTRINGPARAM( "odd-columns" ) ) },
-        { XML_BODY, OUString( RTL_CONSTASCII_USTRINGPARAM( "body" ) ) },
+        { XML_FIRST_ROW, OUString("first-row") },
+        { XML_LAST_ROW, OUString("last-row") },
+        { XML_FIRST_COLUMN, OUString("first-column") },
+        { XML_LAST_COLUMN, OUString("last-column") },
+        { XML_EVEN_ROWS, OUString("even-rows") },
+        { XML_ODD_ROWS, OUString("odd-rows") },
+        { XML_EVEN_COLUMNS, OUString("even-columns") },
+        { XML_ODD_COLUMNS, OUString("odd-columns") },
+        { XML_BODY, OUString("body") },
         { XML_TOKEN_END, OUString() }
     };
 
@@ -531,7 +531,7 @@ void XMLTableExport::exportTableTemplates()
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrExport.GetModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        const OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM("table" ) );
+        const OUString sFamilyName( "table" );
         Reference< XIndexAccess > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
 
         for( sal_Int32 nIndex = 0; nIndex < xTableFamily->getCount(); nIndex++ ) try

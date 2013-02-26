@@ -656,9 +656,9 @@ void SvxXMLNumRuleExport::AddListStyleAttributes()
 
 SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     rExport( rExp ),
-    sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ),
-    sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
-    sIsContinuousNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsContinuousNumbering" ) ),
+    sNumberingRules( "NumberingRules" ),
+    sIsPhysical( "IsPhysical" ),
+    sIsContinuousNumbering( "IsContinuousNumbering" ),
     // Let list style creation depend on Load/Save option "ODF format version" (#i89178#)
     mbExportPositionAndSpaceModeLabelAlignment( true )
 {
@@ -785,7 +785,7 @@ void SvxXMLNumRuleExport::exportOutline()
                     xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
                 if (xNumRulePropSet.is())
                 {
-                    const OUString sName( RTL_CONSTASCII_USTRINGPARAM("Name") );
+                    const OUString sName( "Name" );
                     xNumRulePropSet->getPropertyValue( sName ) >>= sOutlineStyleName;
                 }
             }
@@ -840,7 +840,7 @@ void SvxXMLNumRuleExport::exportStyles( sal_Bool bUsed,
 
         if( xFamilies.is() )
         {
-            const OUString aNumberStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyles" ));
+            const OUString aNumberStyleName( "NumberingStyles" );
 
             Reference< XIndexAccess > xStyles;
             if( xFamilies->hasByName( aNumberStyleName ) )
