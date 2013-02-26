@@ -20,6 +20,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_autodoc \
 	CustomTarget_idl \
 	Executable_unoapploader \
+	Zip_odkcommon \
 	Zip_odkexamples \
 ))
 
@@ -32,10 +33,5 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Zip_uno_loader_classes \
 ))
 endif
-
-$(eval $(call gb_Module_add_targets,odk,\
-	Zip_odkcommon \
-))
-
 
 # vim: set noet sw=4 ts=4:
