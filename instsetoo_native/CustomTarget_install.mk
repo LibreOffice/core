@@ -62,6 +62,7 @@ instsetoo_native_WITH_LANG := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
 ifeq (WNT,$(OS))
 define instsetoo_native_msitemplates
+
 TEMPLATE_DIR=$(dir $@)msi_templates \
 && rm -rf $${TEMPLATE_DIR} \
 && mkdir -p $${TEMPLATE_DIR}/Binary \
