@@ -48,7 +48,7 @@ public:
 
 //-------------------------------------------------------------------------
 
-class ScDrawObjData : public SdrObjUserData
+class SC_DLLPUBLIC ScDrawObjData : public SdrObjUserData
 {
 public:
     enum Type { CellNote, ValidationCircle, DetectiveArrow, DrawingObject };

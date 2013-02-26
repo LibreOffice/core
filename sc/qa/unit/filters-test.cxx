@@ -51,6 +51,9 @@
 #include "scitems.hxx"
 #include "document.hxx"
 #include "cellform.hxx"
+#include "drwlayer.hxx"
+#include "userdat.hxx"
+#include <svx/svdpage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -81,7 +84,6 @@ public:
     void testContentXLS();
     void testContentXLSX();
     void testContentLotus123();
-
 #if TEST_BUG_FILES
     //goes recursively through all files in this dir and tries to open them
     void testDir(osl::Directory& rDir, sal_Int32 nType);
@@ -90,6 +92,7 @@ public:
     void testBugFilesXLS();
     void testBugFilesXLSX();
 #endif
+    void testLegacyCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -98,6 +101,7 @@ public:
     CPPUNIT_TEST(testContentXLS);
     CPPUNIT_TEST(testContentXLSX);
     CPPUNIT_TEST(testContentLotus123);
+    CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
 
 #if TEST_BUG_FILES
     CPPUNIT_TEST(testBugFiles);
@@ -330,6 +334,114 @@ void ScFiltersTest::testContentLotus123()
     CPPUNIT_ASSERT(pDoc);
     testContentImpl(pDoc, LOTUS123);
     xDocSh->DoClose();
+}
+void impl_testLegacyCellAnchoredRotatedShape( ScDocument* pDoc, Rectangle& aRect, ScDrawObjData& aAnchor )
+{
+    const long TOLERANCE = 30; //30 hmm
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("No page instance for the 1st sheet.", pPage);
+    CPPUNIT_ASSERT_EQUAL( sal_uIntPtr(1), pPage->GetObjCount() );
+
+    SdrObject* pObj = pPage->GetObj(0);
+    const Rectangle& aSnap = pObj->GetSnapRect();
+    printf("expected height %ld actual %ld\n", aRect.GetHeight(), aSnap.GetHeight() );
+    CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
+    printf("expected width %ld actual %ld\n", aRect.GetWidth(), aSnap.GetWidth() );
+    CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
+    printf("expected left %ld actual %ld\n", aRect.Left(), aSnap.Left() );
+    CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.Left(), aSnap.Left(), TOLERANCE ) );
+    printf("expected right %ld actual %ld\n", aRect.Top(), aSnap.Top() );
+    CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.Top(), aSnap.Top(), TOLERANCE ) );
+
+
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+    printf("expected startrow %d actual %d\n", aAnchor.maStart.Row(), pData->maStart.Row()  );
+    CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Row(), pData->maStart.Row() );
+    printf("expected startcol %d actual %d\n", aAnchor.maStart.Col(), pData->maStart.Col()  );
+    CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Col(), pData->maStart.Col() );
+    printf("expected endrow %d actual %d\n", aAnchor.maEnd.Row(), pData->maEnd.Row()  );
+    CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Row(), pData->maEnd.Row() );
+    printf("expected endcol %d actual %d\n", aAnchor.maEnd.Col(), pData->maEnd.Col()  );
+    CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Col(), pData->maEnd.Col() );
+}
+
+void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
+{
+    {
+        // This example doc contains cell anchored shape that is rotated, the
+        // rotated shape is in fact cliped by the sheet boundries ( and thus
+        // is a good edge case test to see if we import it still correctly )
+        ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedclippedshape.", ODS);
+
+        ScDocument* pDoc = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(pDoc);
+        // ensure the imported legacy rotated shape is in the expected position
+        Rectangle aRect( 6000, -2000, 8000, 4000 );
+        // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
+        // terms of the rotated shape ) is more or less contains the correct info
+        ScDrawObjData aAnchor;
+        aAnchor.maStart.SetRow( 0 );
+        aAnchor.maStart.SetCol( 5 );
+        aAnchor.maEnd.SetRow( 3 );
+        aAnchor.maEnd.SetCol( 7 );
+        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+        // test save and reload
+        // for some reason having this test in subsequent_export-test.cxx causes
+        // a core dump in editeng ( so moved to here )
+        xDocSh = saveAndReload( &(*xDocSh), ODS);
+        pDoc = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(pDoc);
+        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+    }
+#if 0 // #FIXME, this is failing and is a regression
+    {
+        // This example doc contains cell anchored shape that is rotated, the
+        // rotated shape is in fact clipped by the sheet boundries, additionally
+        // the shape is completely hidden because the rows the shape occupies
+        // are hidden
+        ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedhiddenshape.", ODS);
+        ScDocument* pDoc = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(pDoc);
+        // ensure the imported legacy rotated shape is in the expected position
+        Rectangle aRect( 6000, -2000, 8000, 4000 );
+        // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
+        // terms of the rotated shape ) is more or less contains the correct info
+        ScDrawObjData aAnchor;
+        aAnchor.maStart.SetRow( 0 );
+        aAnchor.maStart.SetCol( 5 );
+        aAnchor.maEnd.SetRow( 3 );
+        aAnchor.maEnd.SetCol( 7 );
+        pDoc->ShowRows(0, 9, 0, true); // show relavent rows
+        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+        xDocSh->DoClose();
+    }
+#endif
+    {
+        // This example doc contains cell anchored shape that is rotated
+        ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedshape.", ODS);
+
+        ScDocument* pDoc = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(pDoc);
+        // ensure the imported legacy rotated shape is in the expected position
+        Rectangle aRect( 6000, 3000, 8000, 9000 );
+        // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
+        // terms of the rotated shape ) is more or less contains the correct info
+
+        ScDrawObjData aAnchor;
+        aAnchor.maStart.SetRow( 3 );
+        aAnchor.maStart.SetCol( 6 );
+        aAnchor.maEnd.SetRow( 9 );
+        aAnchor.maEnd.SetCol( 7 );
+        // test import
+        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+        // test save and reload
+        xDocSh = saveAndReload( &(*xDocSh), ODS);
+        pDoc = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(pDoc);
+        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+    }
 }
 
 ScFiltersTest::ScFiltersTest()

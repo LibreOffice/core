@@ -261,6 +261,7 @@ public:
     void testShiftCells();
     void testDeleteRow();
     void testDeleteCol();
+    void testAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -321,6 +322,7 @@ public:
     CPPUNIT_TEST(testShiftCells);
     CPPUNIT_TEST(testDeleteRow);
     CPPUNIT_TEST(testDeleteCol);
+    CPPUNIT_TEST(testAnchoredRotatedShape);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5940,6 +5942,87 @@ void Test::testDeleteCol()
 
     CPPUNIT_ASSERT(m_pDoc->GetNotes(0)->empty());
     pDoc->DeleteTab(0);
+}
+
+void Test::testAnchoredRotatedShape()
+{
+    OUString aTabName("TestTab");
+    m_pDoc->InsertTab(0, aTabName);
+    SCROW nRow1, nRow2;
+    bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
+
+    m_pDoc->InitDrawLayer();
+    ScDrawLayer *pDrawLayer = m_pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE("must have a draw layer", pDrawLayer != NULL);
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("must have a draw page", pPage != NULL);
+    m_pDoc->SetRowHeightRange( 0, MAXROW, 0, sc::HMMToTwips( 1000 ) );
+    const long TOLERANCE = 30; //30 hmm
+    for ( SCCOL nCol = 0; nCol < MAXCOL; ++nCol )
+        m_pDoc->SetColWidth( nCol, 0, sc::HMMToTwips( 1000 ) );
+    {
+        //Add a rect
+        Rectangle aRect( 4000, 5000, 10000, 7000 );
+
+        Rectangle aRotRect( 6000, 3000, 8000, 9000 );
+        SdrRectObj *pObj = new SdrRectObj(aRect);
+        pPage->InsertObject(pObj);
+        Point aRef1(pObj->GetSnapRect().Center());
+        int nAngle = 9000; //90 deg.
+        double nSin=sin(nAngle*nPi180);
+        double nCos=cos(nAngle*nPi180);
+        pObj->Rotate(aRef1,nAngle,nSin,nCos);
+
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+
+        Rectangle aSnap = pObj->GetSnapRect();
+        printf("expected height %ld actual %ld\n", aRotRect.GetHeight(), aSnap.GetHeight() );
+        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
+        printf("expected width %ld actual %ld\n", aRotRect.GetWidth(), aSnap.GetWidth() );
+        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
+        printf("expected left %ld actual %ld\n", aRotRect.Left(), aSnap.Left() );
+        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.Left(), aSnap.Left(), TOLERANCE ) );
+        printf("expected right %ld actual %ld\n", aRotRect.Top(), aSnap.Top() );
+        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.Top(), aSnap.Top(), TOLERANCE ) );
+
+        ScDrawObjData aAnchor;
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
+
+        aAnchor.maStart = pData->maStart;
+        aAnchor.maEnd = pData->maEnd;
+
+        m_pDoc->SetDrawPageSize(0);
+
+        // increase row 5 by 2000 hmm
+        m_pDoc->SetRowHeight( 5, 0, sc::HMMToTwips( 3000 ) );
+        // increase col 6 by 1000 hmm
+        m_pDoc->SetColWidth( 6, 0, sc::HMMToTwips( 2000 ) );
+
+        aRotRect.setWidth( aRotRect.GetWidth() + 1000 );
+        aRotRect.setHeight( aRotRect.GetHeight() + 2000 );
+
+        m_pDoc->SetDrawPageSize(0);
+
+        aSnap = pObj->GetSnapRect();
+
+        printf("expected new height %ld actual %ld\n", aRotRect.GetHeight(), aSnap.GetHeight() );
+        // ensure that width and height have been adjusted accordingly
+        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
+        printf("expected new width %ld %ld\n", aRotRect.GetWidth(), aSnap.GetWidth() );
+        CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
+
+        // ensure that anchor start and end addresses haven't changed
+        printf("expected startrow %d actual %d\n", aAnchor.maStart.Row(), pData->maStart.Row()  );
+        CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Row(), pData->maStart.Row() ); // start row 0
+        printf("expected startcol %d actual %d\n", aAnchor.maStart.Col(), pData->maStart.Col()  );
+        CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Col(), pData->maStart.Col() ); // start column 5
+        printf("expected endrow %d actual %d\n", aAnchor.maEnd.Row(), pData->maEnd.Row()  );
+        CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Row(), pData->maEnd.Row() ); // end row 3
+        printf("expected endcol %d actual %d\n", aAnchor.maEnd.Col(), pData->maEnd.Col()  );
+        CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Col(), pData->maEnd.Col() ); // end col 7
+    }
+    m_pDoc->DeleteTab(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

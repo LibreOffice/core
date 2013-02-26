@@ -58,6 +58,11 @@
 #define HTML     4
 #define LOTUS123 5
 
+bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol )
+{
+    return ( labs( nVal1 - nVal2 ) <= nTol );
+}
+
 struct FileFormat {
     const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
 };
