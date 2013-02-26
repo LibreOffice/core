@@ -433,7 +433,7 @@ namespace dbmm
         if ( !m_pData->sBackupLocation.isEmpty() )
         {
             OUString sBackedUp( MacroMigrationResId( STR_SAVED_COPY_TO ) );
-            sBackedUp = sBackedUp.replaceFirst( "$location$", m_pData->sBackupLocation );
+            sBackedUp = sBackedUp.replaceAll( "$location$", m_pData->sBackupLocation );
 
             aBuffer.appendAscii( "=== " );
             aBuffer.append     ( OUString( MacroMigrationResId( STR_DATABASE_DOCUMENT ) ) );
@@ -462,7 +462,7 @@ namespace dbmm
                     continue;
 
                 OUString sDocTitle( MacroMigrationResId( rDoc.eType == eForm ? STR_FORM : STR_REPORT ) );
-                sDocTitle = sDocTitle.replaceFirst( "$name$", rDoc.sName );
+                sDocTitle = sDocTitle.replaceAll( "$name$", rDoc.sName );
 
                 aBuffer.appendAscii( "=== " );
                 aBuffer.append     ( sDocTitle );
@@ -474,9 +474,9 @@ namespace dbmm
                     )
                 {
                     OUString sMovedLib( sMovedLibTemplate );
-                    sMovedLib = sMovedLib.replaceFirst( "$type$", getScriptTypeDisplayName( lib->eType ) );
-                    sMovedLib = sMovedLib.replaceFirst( "$old$", lib->sOldName );
-                    sMovedLib = sMovedLib.replaceFirst( "$new$", lib->sNewName );
+                    sMovedLib = sMovedLib.replaceAll( "$type$", getScriptTypeDisplayName( lib->eType ) );
+                    sMovedLib = sMovedLib.replaceAll( "$old$", lib->sOldName );
+                    sMovedLib = sMovedLib.replaceAll( "$new$", lib->sNewName );
 
                     aBuffer.append( sMovedLib );
                     aBuffer.append( sal_Unicode( '\n' ) );
