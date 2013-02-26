@@ -80,9 +80,6 @@ public class Desktop
             // Avoid all the old style OSL_TRACE calls especially in vcl
             Bootstrap.putenv("SAL_LOG=+WARN+INFO");
 
-            // Log.i(TAG, "Sleeping NOW");
-            // Thread.sleep(20000);
-
             bootstrapContext.componentContext = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
 
             Log.i(TAG, "context is" + (bootstrapContext.componentContext!=null ? " not" : "") + " null");
@@ -119,6 +116,21 @@ public class Desktop
             String[] argv = { "lo-document-loader", input };
 
             Bootstrap.setCommandArgs(argv);
+
+            // To enable the sleep below, do: "adb shell setprop
+            // log.tag.LODesktopSleepOnCreate VERBOSE". Yeah, has
+            // nothing to do with logging as such.
+
+            // This should be after at least one call to something in
+            // the Bootstrap class as it is the static initialiser
+            // that loads the lo-native-code library, and presumably
+            // in ndk-gdb you want to set a breapoint in some native
+            // code...
+
+            if (Log.isLoggable("LODesktopSleepOnCreate", Log.VERBOSE)) {
+                Log.i(TAG, "Sleeping, start ndk-gdb NOW if you intend to debug");
+                Thread.sleep(20000);
+            }
 
             if (bootstrapContext == null)
                 initBootstrapContext();
