@@ -186,7 +186,7 @@ static const sal_Char* parseStateToMessage(ParseState state)
     case PS_InterfaceDeclSeen:
         return "Malformed interface declaration";
     case PS_ServiceDeclSeen:
-        return "Malformed servicve declaration";
+        return "Malformed service declaration";
     case PS_ModuleDeclSeen:
         return "Malformed module declaration";
     case PS_AttributeDeclSeen:
