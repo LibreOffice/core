@@ -213,7 +213,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_SESSION_RESTORE           = 128,
             E_DISABLE_AUTORECOVERY      = 256,
             E_SET_AUTOSAVE_STATE        = 512,
-            E_SESSION_QUIET_QUIT        = 1024
+            E_SESSION_QUIET_QUIT        = 1024,
+            E_USER_AUTO_SAVE            = 2048
         };
 
         //---------------------------------------

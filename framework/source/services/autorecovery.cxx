@@ -124,6 +124,8 @@ static const char CFG_ENTRY_SESSIONDATA[] = "SessionData";
 static const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
 static const char CFG_ENTRY_AUTOSAVE_TIMEINTERVALL[] = "AutoSave/TimeIntervall"; //sic!
 
+static const char CFG_ENTRY_USERAUTOSAVE_ENABLED[] = "UserAutoSave/Enabled";
+
 static const char CFG_PATH_AUTOSAVE[] = "AutoSave";
 static const char CFG_ENTRY_MINSPACE_DOCSAVE[] = "MinSpaceDocSave";
 static const char CFG_ENTRY_MINSPACE_CONFIGSAVE[] = "MinSpaceConfigSave";
@@ -977,12 +979,25 @@ void AutoRecovery::implts_readAutoSaveConfig()
     sal_Bool bEnabled = sal_False;
     xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_AUTOSAVE_ENABLED)) >>= bEnabled;
 
+    // UserAutoSave [bool]
+    sal_Bool bUserEnabled = sal_False;
+    xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_USERAUTOSAVE_ENABLED)) >>= bUserEnabled;
+
     // SAFE -> ------------------------------
     WriteGuard aWriteLock(m_aLock);
     if (bEnabled)
     {
         m_eJob       |= AutoRecovery::E_AUTO_SAVE;
         m_eTimerType  = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
+
+        if (bUserEnabled)
+        {
+            m_eJob       |= AutoRecovery::E_USER_AUTO_SAVE;
+        }
+        else
+        {
+            m_eJob       &= ~AutoRecovery::E_USER_AUTO_SAVE;
+        }
     }
     else
     {
@@ -2341,6 +2356,12 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
         try
         {
             xDocRecover->storeToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
+
+            //if userautosave is enabled, also save to the original file
+            if((m_eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
+            {
+                //dispatchURL( rtl::OUString( ".uno:Save" ), rtl::OUString(), xFrame, aArgs );
+            }
 
 #ifdef TRIGGER_FULL_DISC_CHECK
             throw css::uno::Exception();

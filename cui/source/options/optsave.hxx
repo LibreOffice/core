@@ -54,6 +54,7 @@ private:
     CheckBox                aAutoSaveCB;
     NumericField            aAutoSaveEdit;
     FixedText               aMinuteFT;
+    CheckBox                aUserAutoSaveCB;
     CheckBox                aRelativeFsysCB;
     CheckBox                aRelativeInetCB;
 

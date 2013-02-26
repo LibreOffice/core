@@ -29,6 +29,7 @@
 #define BTN_AUTOSAVE            16
 #define ED_AUTOSAVE             17
 #define FT_MINUTE               18
+#define BTN_USERAUTOSAVE        19
 #define BTN_NOPRETTYPRINTING    20
 #define FI_BACKUP               21
 #define BTN_WARNALIENFORMAT     22
