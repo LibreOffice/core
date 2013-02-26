@@ -20,6 +20,7 @@
 
 #include "aqua/salinst.h"
 #include "quartz/utils.h"
+#include "aqua/salgdi.h"
 
 #include "aqua11ytextattributeswrapper.h"
 
@@ -28,8 +29,8 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 
+namespace css_awt = ::com::sun::star::awt;
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -41,8 +42,8 @@ using namespace ::rtl;
     int underlineStyle = NSNoUnderlineStyle;
     sal_Int16 value = 0;
     property.Value >>= value;
-    if ( value != FontUnderline::NONE 
-      && value != FontUnderline::DONTKNOW) {
+    if ( value != ::css_awt::FontUnderline::NONE
+      && value != ::css_awt::FontUnderline::DONTKNOW) {
         underlineStyle = NSSingleUnderlineStyle;
     }
     return underlineStyle;
@@ -52,10 +53,10 @@ using namespace ::rtl;
     int boldStyle = 0;
     float value = 0;
     property.Value >>= value;
-    if ( value == FontWeight::SEMIBOLD
-      || value == FontWeight::BOLD
-      || value == FontWeight::ULTRABOLD
-      || value == FontWeight::BLACK ) {
+    if ( value == ::css_awt::FontWeight::SEMIBOLD
+      || value == ::css_awt::FontWeight::BOLD
+      || value == ::css_awt::FontWeight::ULTRABOLD
+      || value == ::css_awt::FontWeight::BLACK ) {
         boldStyle = NSBoldFontMask;
     }
     return boldStyle;
@@ -63,8 +64,8 @@ using namespace ::rtl;
 
 +(int)convertItalicStyle:(PropertyValue)property {
     int italicStyle = 0;
-    sal_Int16 value = property.Value.get<FontSlant>();
-    if ( value == FontSlant_ITALIC ) {
+    sal_Int16 value = property.Value.get<::css_awt::FontSlant>();
+    if ( value == ::css_awt::FontSlant_ITALIC ) {
         italicStyle = NSItalicFontMask;
     }
     return italicStyle;
@@ -74,8 +75,8 @@ using namespace ::rtl;
     BOOL strikethrough = NO;
     sal_Int16 value = 0;
     property.Value >>= value;
-    if ( value != FontStrikeout::NONE
-      && value != FontStrikeout::DONTKNOW ) {
+    if ( value != ::css_awt::FontStrikeout::NONE
+      && value != ::css_awt::FontStrikeout::DONTKNOW ) {
         strikethrough = YES;
     }
     return strikethrough;
@@ -97,13 +98,13 @@ using namespace ::rtl;
     return [ NSNumber numberWithShort: value ];
 }
 
-+(void)addColor:(sal_Int32)salColor forAttribute:(NSString *)attribute andRange:(NSRange)range toString:(NSMutableAttributedString *)string {
-    if ( salColor != -1 ) {
-        CGFloat elements[] = { static_cast<CGFloat>(salColor & 0x00ff0000), static_cast<CGFloat>(salColor & 0x0000ff00), static_cast<CGFloat>(salColor & 0x000000ff) };
-        CGColorRef color = CGColorCreate ( CGColorSpaceCreateWithName ( kCGColorSpaceGenericRGB ), elements );
-        [ string addAttribute: attribute value: (id) color range: range ];
-        CGColorRelease ( color );
-    }
++(void)addColor:(SalColor)nSalColor forAttribute:(NSString *)attribute andRange:(NSRange)range toString:(NSMutableAttributedString *)string {
+    if( nSalColor == COL_TRANSPARENT )
+        return;
+    const RGBAColor aRGBAColor( nSalColor);
+    CGColorRef aColorRef = CGColorCreate ( CGColorSpaceCreateWithName ( kCGColorSpaceGenericRGB ), aRGBAColor.AsArray() );
+    [ string addAttribute: attribute value: (id) aColorRef range: range ];
+    CGColorRelease( aColorRef );
 }
 
 +(void)addFont:(NSFont *)font toString:(NSMutableAttributedString *)string forRange:(NSRange)range {
@@ -112,11 +113,11 @@ using namespace ::rtl;
             [ font fontName ], NSAccessibilityFontNameKey,
             [ font familyName ], NSAccessibilityFontFamilyKey,
             [ font displayName ], NSAccessibilityVisibleNameKey,
-            [ NSNumber numberWithFloat: [ font pointSize ] ], NSAccessibilityFontSizeKey, 
+            [ NSNumber numberWithFloat: [ font pointSize ] ], NSAccessibilityFontSizeKey,
             nil
         ];
-        [ string addAttribute: NSAccessibilityFontTextAttribute 
-                value: fontDictionary 
+        [ string addAttribute: NSAccessibilityFontTextAttribute
+                value: fontDictionary
                 range: range
         ];
     }
