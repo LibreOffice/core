@@ -36,6 +36,7 @@ gb_Dictionary_get_target = $(OUTDIR)/pck/$(1).oxt
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_Extension_get_target = $(OUTDIR)/bin/$(1).oxt
+gb_HelpTarget_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
 	$(OUTDIR)/bin \
@@ -85,6 +86,7 @@ endef
 # workdir target patterns
 
 gb_AutoInstallLibs_get_target = $(WORKDIR)/AutoInstallLibs/$(1)
+gb_AllLangHelp_get_target = $(WORKDIR)/AllLangHelp/$(1)
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
 gb_AllLangZip_get_target = $(WORKDIR)/AllLangZip/$(1)
 gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
@@ -119,6 +121,22 @@ gb_ExternalProject_get_statedir = $(WORKDIR)/ExternalProject/$(1)
 gb_ExternalProject_get_preparation_target = $(WORKDIR)/ExternalProject/$(1).prepare
 gb_ExternalProject_get_state_target = $(WORKDIR)/ExternalProject/$(1)/$(2)
 gb_ExternalProject_get_target = $(WORKDIR)/ExternalProject/$(1).done
+gb_HelpIndexTarget_get_target = $(WORKDIR)/HelpIndexTarget/$(1).done
+gb_HelpJarTarget_get_target = $(WORKDIR)/HelpJarTarget/$(1).done
+gb_HelpLinkTarget_get_preparation_target = $(WORKDIR)/HelpLinkTarget/$(1).prepare
+gb_HelpLinkTarget_get_target = $(WORKDIR)/HelpLinkTarget/$(1).done
+gb_HelpTarget_get_filelist = $(WORKDIR)/HelpTarget/$(1).filelist
+gb_HelpTarget_get_packing_target = $(WORKDIR)/HelpTarget/$(1).packing
+gb_HelpTarget_get_target = $(WORKDIR)/HelpTarget/$(1).done
+gb_HelpTarget_get_zipfile = $(call gb_Zip_get_target,$(call gb_HelpTarget_get_zipname,$(1)))
+gb_HelpTarget_get_zipname = HelpTarget/$(1)
+gb_HelpTarget_get_translation_target = $(call gb_HelpTarget_get_filelist,$(1))
+gb_HelpTarget_get_workdir = $(WORKDIR)/HelpTarget/$(1)
+gb_HelpTranslatePartTarget_get_target = $(WORKDIR)/HelpTranslatePartTarget/$(1)/done
+gb_HelpTranslatePartTarget_get_translated_target = $(WORKDIR)/HelpTranslatePartTarget/$(1)/$(2).xhp
+gb_HelpTranslatePartTarget_get_workdir = $(WORKDIR)/HelpTranslatePartTarget/$(1)
+gb_HelpTranslateTarget_get_target = $(WORKDIR)/HelpTranslateTarget/$(1).done
+gb_HelpTreeTarget_get_target = $(WORKDIR)/HelpTreeTarget/$(1).tree
 gb_InstallModule_get_filelist = $(call gb_InstallModuleTarget_get_filelist,$(1))
 gb_InstallModule_get_target = $(WORKDIR)/InstallModule/$(1).done
 gb_InstallModuleTarget_get_external_target = $(WORKDIR)/InstallModuleTarget/$(1).external
@@ -240,6 +258,7 @@ endef
 
 $(eval $(call gb_Helper_make_clean_targets,\
 	AutoInstallLibs \
+	AllLangHelp \
 	AllLangResTarget \
 	AllLangZip \
 	CliAssembly \
@@ -251,6 +270,13 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ComponentTarget \
 	ExternalPackage \
 	ExtensionTarget \
+	HelpTarget \
+	HelpIndexTarget \
+	HelpJarTarget \
+	HelpLinkTarget \
+	HelpTranslatePartTarget \
+	HelpTranslateTarget \
+	HelpTreeTarget \
 	InstallModule \
 	InstallModuleTarget \
 	InstallScriptTarget \

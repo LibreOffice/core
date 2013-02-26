@@ -336,6 +336,8 @@ include $(foreach class, \
 	Zip \
 	AllLangZip \
 	Configuration \
+	HelpTarget \
+	AllLangHelp \
 	ExtensionTarget \
 	Dictionary \
 	Extension \
