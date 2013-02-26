@@ -776,15 +776,4 @@ sal_Bool IsRedirectable_Impl( const rtl::OString& rPath )
     return sal_False;
 }
 
-/// get name of the directory for temporary files
-const char* TempDirImpl( char *pBuf )
-{
-    if ( !GetTempPath( MAX_PATH, pBuf ) &&
-        !GetWindowsDirectory( pBuf, MAX_PATH ) &&
-        !GetEnvironmentVariable( "HOMEPATH", pBuf, MAX_PATH ) )
-        return 0;
-
-    return pBuf;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

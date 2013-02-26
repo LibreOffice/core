@@ -363,26 +363,4 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, SAL_UNUSED_PARAMETER sal_B
     return sal_True;
 }
 
-const char *TempDirImpl( char *pBuf )
-{
-#ifdef MACOSX
-    // P_tmpdir is /var/tmp on Mac OS X, and it is not cleaned up on system
-    // startup
-    strcpy( pBuf, "/tmp" );
-#else
-    const char *pValue = getenv( "TEMP" );
-    if ( !pValue )
-        pValue = getenv( "TMP" );
-    if ( pValue )
-        strcpy( pBuf, pValue );
-    else
-        // P_tempdir exists in Solaris and Linux
-        strcpy( pBuf, P_tmpdir );
-        // don't use "/tmp" as hard coded directory
-        //strcpy( pBuf, "/tmp" );
-#endif /* MACOSX */
-
-    return pBuf;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

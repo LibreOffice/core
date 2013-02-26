@@ -43,26 +43,21 @@ struct TempFile_Impl
     sal_Bool    bIsDirectory;
 };
 
-String GetSystemTempDir_Impl()
-{
-    char sBuf[_MAX_PATH];
-    const char *pDir = TempDirImpl(sBuf);
+extern rtl::OUString GetSystemTempDirPath_Impl();
 
-    ::rtl::OString aTmpA( pDir );
-    ::rtl::OUString aTmp = ::rtl::OStringToOUString( aTmpA, osl_getThreadTextEncoding() );
-    rtl::OUString aRet;
-    FileBase::getFileURLFromSystemPath( aTmp, aRet );
-    String aName = aRet;
-    if( aName.GetChar(aName.Len()-1) != '/' )
-        aName += '/';
-    return aName;
+rtl::OUString GetSystemTempDirPath_Impl()
+{
+    rtl::OUString aTmpURL, aPath;
+    osl::FileBase::getTempDirURL( aTmpURL );
+    osl::FileBase::getSystemPathFromFileURL( aTmpURL, aPath );
+    return aPath;
 }
 
 #define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
 
-String ConstructTempDir_Impl( const String* pParent )
+OUString ConstructTempDir_Impl( const String* pParent )
 {
-    String aName;
+    OUString aName;
     if ( pParent && pParent->Len() )
     {
         rtl::OUString aRet;
@@ -79,19 +74,18 @@ String ConstructTempDir_Impl( const String* pParent )
         }
     }
 
-    if ( !aName.Len() )
+    if ( aName.isEmpty() )
     {
         // if no parent or invalid parent : use system directory
-    ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
+        ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
         if ( rTempNameBase_Impl.isEmpty() )
-            rTempNameBase_Impl = GetSystemTempDir_Impl();
+            rTempNameBase_Impl = GetSystemTempDirPath_Impl();
         aName = rTempNameBase_Impl;
     }
 
     // Make sure that directory ends with a separator
-    xub_StrLen i = aName.Len();
-    if( i>0 && aName.GetChar(i-1) != '/' )
-        aName += '/';
+    if( !aName.endsWith( "/" ) )
+        aName += "/";
 
     return aName;
 }

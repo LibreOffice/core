@@ -57,7 +57,7 @@
 using namespace osl;
 using ::rtl::OUString;
 
-int ApiRet2ToSolarError_Impl( int nApiRet );
+extern rtl::OUString GetSystemTempDirPath_Impl();
 
 int Sys2SolarError_Impl( int nSysErr )
 {
@@ -1304,9 +1304,13 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
         }
         dir = aDirName.getStr();
 
-        char sBuf[_MAX_PATH];
+        OString sTempRoot;
         if ( eFlag == FSYS_FLAG_CURRENT || ( !pParent && pWild ) )
-            dir = TempDirImpl(sBuf);
+        {
+            rtl::OUString aPath = GetSystemTempDirPath_Impl();
+            sTempRoot = OUStringToOString( aPath, osl_getThreadTextEncoding() );
+            dir = sTempRoot.getStr();
+        }
 
         DirEntry aRet(FSYS_FLAG_INVALID);
         i = strlen(dir);

@@ -63,8 +63,6 @@ inline sal_Bool DRIVE_EXISTS(char c)
     return GetDriveType( aDriveRoot.getStr() ) > 1;
 }
 
-const char* TempDirImpl( char *pBuf );
-
 #define FSysFailOnErrorImpl()
 
 #endif
