@@ -547,7 +547,8 @@ $(foreach lang,$(gb_Configuration_LANGS),$(eval $(call postprocess_lang_deps,$(l
 # Rules
 #
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.xcd :
+$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.xcd : \
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(call gb_XcuModuleTarget_get_outdir_target) -o $@ \
@@ -558,7 +559,8 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
 	echo '<list><dependency file="main"/><filename>Langpack-$*.xcu</filename></list>' > $@
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.xcd :
+$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.xcd : \
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(call gb_CustomTarget_get_workdir,postprocess/registry)/ \
@@ -580,7 +582,8 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 	&& echo '</list>' >> $@ \
 	)
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.xcd :
+$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.xcd : \
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(call gb_CustomTarget_get_workdir,postprocess/registry)/ \
@@ -623,7 +626,8 @@ ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
 endif
 	echo '</list>' >> $@
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/%.xcd :
+$(call gb_CustomTarget_get_workdir,postprocess/registry)/%.xcd : \
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --stringparam prefix $(OUTDIR)/xml/ \
