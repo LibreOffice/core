@@ -21,6 +21,7 @@ $(call gb_CustomTarget_get_target,odk/odkcommon): \
 	$(call gb_CustomTarget_get_target,odk/odkcommon/bin) \
 	$(call gb_CustomTarget_get_target,odk/odkcommon/lib) \
 	$(call gb_CustomTarget_get_target,odk/odkcommon/idl) \
+	$(call gb_CustomTarget_get_target,odk/odkcommon/include) \
 	$(if $(filter MSC,$(COM)),$(call gb_CustomTarget_get_target,odk/odkcommon/cli))
 
 ifeq ($(OS),WNT)

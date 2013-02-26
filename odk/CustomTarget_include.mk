@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+$(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/include))
+
 include $(SRCDIR)/solenv/inc/udkversion.mk
 
 odk_INCDIRLIST := sal salhelper rtl osl store typelib uno cppu cppuhelper \
@@ -27,7 +29,7 @@ odk_INCLIST := $(subst $(OUTDIR)/inc/,,$(shell find \
 
 define odk_inc
 odkcommon_ZIPLIST += include/$(1)
-$(call gb_CustomTarget_get_target,odk/odkcommon): $(odk_WORKDIR)/include/$(1)
+$(call gb_CustomTarget_get_target,odk/odkcommon/include): $(odk_WORKDIR)/include/$(1)
 $(odk_WORKDIR)/include/$(1): $(foreach dir,$(odk_INCDIRLIST),$(call gb_Package_get_target,$(dir)_inc))
 	mkdir -p $$(dir $$@)
 	$$(call gb_Output_announce,$$(subst $$(WORKDIR)/,,$$@),build,CPY,1)
@@ -37,7 +39,7 @@ endef
 $(foreach inc,$(odk_INCLIST),$(eval $(call odk_inc,$(inc))))
 
 odkcommon_ZIPLIST += include/udkversion.mk
-$(eval $(call gb_CustomTarget_register_target,odk/odkcommon,include/udkversion.mk))
+$(eval $(call gb_CustomTarget_register_target,odk/odkcommon/include,include/udkversion.mk))
 $(odk_WORKDIR)/include/udkversion.mk:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	echo "#UDK version number" > $@

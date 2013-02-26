@@ -19,6 +19,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_settings \
 	CustomTarget_autodoc \
 	CustomTarget_idl \
+	CustomTarget_include \
 	Executable_unoapploader \
 	Zip_odkexamples \
 ))
