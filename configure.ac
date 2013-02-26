@@ -8173,44 +8173,12 @@ if test "$_os" = "WINNT"; then
         WITH_MOZAB4WIN=YES
         AC_MSG_RESULT([yes, internal (old windows mozab driver)])
         BUILD_TYPE="$BUILD_TYPE MOZ"
-        EXTMSV80=`cygpath  -u "$SRC_ROOT/external/msvcp80"`
-        AC_MSG_CHECKING([for MSVC 2005 runtime needed for prebuilt Mozilla])
-        if test -e "$EXTMSV80/Microsoft.VC80.CRT.manifest" -a \
-                -e "$EXTMSV80/msvcp80.dll" -a \
-                -e "$EXTMSV80/msvcr80.dll"; then
-            AC_MSG_RESULT([Found])
-            EXTMSV80=
-        else
-            #uwin-prefixed paths are with no quotes to allow for mask, and uwin to not have spaces, btw
-            uwin=`cygpath -d "$WINDIR"`
-            uwin=`cygpath -u "$uwin"`
-            #if we have one we have all
-            if test -e $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053* ; then
-                MSVC80_DLL_DIR=`ls -d $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053*`
-                MSVC80_MNFST=`ls $uwin/winsxs/Manifests/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053_*.manifest`
-                AC_MSG_RESULT([Found])
-            else
-                EXTMSV80=
-                AC_MSG_RESULT([Not Found])
-                AC_MSG_ERROR([For the pre-built Mozilla libraries, you need MSVC 2005 runtime files
-    Microsoft.VC80.CRT.manifest, msvcp80.dll, and msvcr80.dll
-    in external/msvcp80.
-
-    You can get them by installing:
-    <http://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE>
-    and relaunch ./autogen.sh])
-            fi
-        fi
     else
         AC_MSG_RESULT([no])
         WITH_MOZAB4WIN=NO
     fi
 fi
 AC_SUBST(WITH_MOZAB4WIN)
-AC_SUBST(MSVC80_DLL_DIR)
-AC_SUBST(MSVC80_MNFST)
-AC_SUBST(EXTMSV80)
-AC_SUBST(EXTMSV80)
 
 dnl ===================================================================
 dnl Check for system NSS
