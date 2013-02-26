@@ -11,8 +11,6 @@ $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/java/ref))
 
 odkcommon_ZIPLIST += docs/java/ref
 
-JAVADOCREFNAME := "UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) Java API Reference"
-
 odk_JAVAPACKAGES := com.sun.star.comp.helper \
 	com.sun.star.lib.uno.helper \
 	com.sun.star.lib.unoloader \
@@ -25,7 +23,8 @@ $(odk_WORKDIR)/docs/java/ref/index.html: $(call gb_Jar_get_target,ridl)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
 	$(JAVADOC) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
-		-header $(JAVADOCREFNAME) -d $(dir $@) \
+		-header "UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) Java API Reference"\
+		-d $(dir $@) \
 		-sourcepath $(SRCDIR)/ridljar/source/unoloader:$(SRCDIR)/ridljar:$(SRCDIR)/jurt:$(SRCDIR)/javaunohelper \
 		-classpath $(OUTDIR)/bin/ridl.jar \
 		-linkoffline ../../common/reg ./uno \
