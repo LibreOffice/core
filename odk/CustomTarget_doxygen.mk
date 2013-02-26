@@ -21,7 +21,7 @@ DOXY_STRIP_PATH := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(OUTDIR)/inc),$(
 DOXY_DEPS := $(SRCDIR)/odk/pack/gendocu/Doxyfile \
 	$(SRCDIR)/odk/pack/gendocu/main.dox \
 	$(call gb_Package_get_target,sal_odk_headers) \
-	$(call gb_Package_get_target,salhelper_inc) \
+	$(call gb_Package_get_target,salhelper_odk_headers) \
 	$(call gb_Package_get_target,cppu_inc) \
 	$(call gb_Package_get_target,cppuhelper_inc) \
 	$(call gb_Package_get_target,store_inc) \

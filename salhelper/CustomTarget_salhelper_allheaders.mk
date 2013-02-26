@@ -32,10 +32,12 @@ salhelper_allheaders_DIR := $(call gb_CustomTarget_get_workdir,salhelper/allhead
 $(call gb_CustomTarget_get_target,salhelper/allheaders) : \
 	$(salhelper_allheaders_DIR)/salhelper_allheaders.hxx
 
-# dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
+# dependency on Package_salhelper_odk_headers.mk should ensure this is
+# updated whenever a new public header is added
 $(salhelper_allheaders_DIR)/salhelper_allheaders.hxx : \
             $(SRCDIR)/salhelper/CustomTarget_salhelper_allheaders.mk \
-            | $(salhelper_allheaders_DIR)/.dir $(SRCDIR)/salhelper/Package_inc.mk
+		    $(SRCDIR)/salhelper/ZipPackage_salhelper_odk_headers.mk \
+            | $(salhelper_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	printf '// Generated list of all salhelper/ includes\n' >  $@
 	$(foreach file, $(wildcard $(SRCDIR)/salhelper/inc/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*.hxx) \

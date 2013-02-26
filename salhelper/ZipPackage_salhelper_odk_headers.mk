@@ -25,16 +25,18 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,salhelper_inc,$(SRCDIR)/salhelper/inc/salhelper))
+$(eval $(call gb_ZipPackage_ZipPackage,salhelper_odk_headers,$(SRCDIR)/salhelper/inc/salhelper))
 
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/salhelperdllapi.h,salhelperdllapi.h))
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/condition.hxx,condition.hxx))
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/dynload.hxx,dynload.hxx))
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/linkhelper.hxx,linkhelper.hxx))
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/refobj.hxx,refobj.hxx))
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/simplereferenceobject.hxx,simplereferenceobject.hxx))
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/singletonref.hxx,singletonref.hxx))
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/thread.hxx,thread.hxx))
-$(eval $(call gb_Package_add_file,salhelper_inc,inc/salhelper/timer.hxx,timer.hxx))
+$(eval $(call gb_ZipPackage_add_files,salhelper_odk_headers,inc/salhelper,include/salhelper,\
+	salhelperdllapi.h \
+	condition.hxx \
+	dynload.hxx \
+	linkhelper.hxx \
+	refobj.hxx \
+	simplereferenceobject.hxx \
+	singletonref.hxx \
+	thread.hxx \
+	timer.hxx \
+))
 
 # vim: set noet sw=4 ts=4:
