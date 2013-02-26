@@ -65,7 +65,7 @@ endif
 $(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(wildcard */prj/dmake) $(BUILDDIR)/config_host.mk
 	mkdir -p $(dir $@)
 	echo "gbuild_modules:= tail_build \\" > $@
-	for m in */Module_*.mk; do echo $$m | sed -e 's/\/.*$$/ \\/'; done >> $@
+	for m in `cd $(SRCDIR) && */Module_*.mk`; do echo $$m | sed -e 's/\/.*$$/ \\/'; done >> $@
 	echo >> $@
 	echo -n "dmake_modules:=" >> $@
 	echo >> $@
