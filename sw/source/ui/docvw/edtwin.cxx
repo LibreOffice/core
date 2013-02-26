@@ -2774,6 +2774,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     bool bOverFly = false;
     bool bPageAnchored = false;
     bool bOverHeaderFooterFly = IsOverHeaderFooterFly( aDocPos, eControl, bOverFly, bPageAnchored );
+
+    sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
+    if (bOverHeaderFooterFly && (!bIsDocReadOnly && rSh.GetCurFld()))
+        // We have a field here, that should have priority over header/footer fly.
+        bOverHeaderFooterFly = false;
+
     int nNbFlyClicks = 1;
     // !bOverHeaderFooterFly doesn't mean we have a frame to select
     if ( !bPageAnchored && ( ( rSh.IsHeaderFooterEdit( ) && !bOverHeaderFooterFly && bOverFly ) ||
@@ -2870,7 +2876,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     // work but in practice ...
     rView.SelectShellForDrop();
 
-    sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
     sal_Bool bCallBase = sal_True;
 
     if( pQuickHlpData->m_bIsDisplayed )
