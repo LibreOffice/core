@@ -22,17 +22,14 @@
 #include "ModelImpl.hxx"
 #include "documenteventnotifier.hxx"
 
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -49,6 +46,10 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 #ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17
@@ -171,7 +172,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     };
 
     DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >,TNumberedController);
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>            m_xUIConfigurationManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2>           m_xUIConfigurationManager;
 
     ::cppu::OInterfaceContainerHelper                                                           m_aModifyListeners;
     ::cppu::OInterfaceContainerHelper                                                           m_aCloseListener;
@@ -480,6 +481,8 @@ public:
     }
 
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2 > getUIConfigurationManager2() throw (::com::sun::star::uno::RuntimeException);
+
     /** returns whether the model is currently being initialized
     */
     bool    impl_isInitializing() const { return m_eInitState == Initializing; }

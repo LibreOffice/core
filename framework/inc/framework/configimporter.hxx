@@ -22,7 +22,7 @@
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
@@ -34,7 +34,7 @@ namespace framework
     {
         public:
             static sal_Bool ImportCustomToolbars(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >& rContainerFactory,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2 >& rContainerFactory,
                         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > >& rSeqContainer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rToolbarStorage );

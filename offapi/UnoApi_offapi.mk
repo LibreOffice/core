@@ -348,6 +348,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
     AddressBookSourceDialog \
 	GlobalAcceleratorConfiguration \
     ModuleUIConfigurationManagerSupplier \
+	UIConfigurationManager \
     UIElementFactoryManager \
 	WindowContentFactory \
     WindowContentFactoryManager \
@@ -1484,7 +1485,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 	ModuleUIConfigurationManager \
 	ModuleWindowStateConfiguration \
 	UICategoryDescription \
-	UIConfigurationManager \
 	UIElement \
 	UIElementFactory \
 	UIElementSettings \
@@ -3905,6 +3905,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui,\
 	XUIConfiguration \
 	XUIConfigurationListener \
 	XUIConfigurationManager \
+	XUIConfigurationManager2 \
 	XUIConfigurationManagerSupplier \
 	XUIConfigurationPersistence \
 	XUIConfigurationStorage \

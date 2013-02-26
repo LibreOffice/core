@@ -36,6 +36,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/uno3.hxx>
@@ -395,6 +396,8 @@ namespace reportdesign
         virtual bool isEnableSetModified() const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext() const;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager2 > getUIConfigurationManager2(  ) throw (::com::sun::star::uno::RuntimeException);
       };
 // =============================================================================
 } // namespace reportdesign

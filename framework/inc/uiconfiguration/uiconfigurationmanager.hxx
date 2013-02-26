@@ -39,11 +39,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/ui/XUIConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -57,11 +53,7 @@ namespace framework
 {
     class UIConfigurationManager :   public com::sun::star::lang::XTypeProvider ,
                                      public com::sun::star::lang::XServiceInfo  ,
-                                     public com::sun::star::lang::XComponent    ,
-                                     public ::com::sun::star::ui::XUIConfiguration             ,
-                                     public ::com::sun::star::ui::XUIConfigurationManager      ,
-                                     public ::com::sun::star::ui::XUIConfigurationPersistence  ,
-                                     public ::com::sun::star::ui::XUIConfigurationStorage      ,
+                                     public com::sun::star::ui::XUIConfigurationManager2      ,
                                      private ThreadHelpBase                     ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                      public ::cppu::OWeakObject
     {

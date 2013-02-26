@@ -68,6 +68,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -1503,6 +1504,7 @@ private:
         @onerror    -
     */
 
+    css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2() throw ( RUNTIMEEXCEPTION );
     bool impl_getPrintHelper();
     SAL_DLLPRIVATE void ListenForStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     SAL_DLLPRIVATE ::rtl::OUString GetMediumFilterName_Impl();

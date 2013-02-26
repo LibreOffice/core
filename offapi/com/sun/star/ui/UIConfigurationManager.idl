@@ -19,11 +19,7 @@
 #ifndef __com_sun_star_ui_UIConfigurationManager_idl__
 #define __com_sun_star_ui_UIConfigurationManager_idl__
 
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/ui/XUIConfiguration.idl>
-#include <com/sun/star/ui/XUIConfigurationManager.idl>
-#include <com/sun/star/ui/XUIConfigurationPersistence.idl>
-#include <com/sun/star/ui/XUIConfigurationStorage.idl>
+#include <com/sun/star/ui/XUIConfigurationManager2.idl>
 
 module com { module sun { module star { module ui {
 
@@ -33,37 +29,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-service UIConfigurationManager
-{
-    /** provides access to set a storage and to check if a storage has been
-        associated to the user interface configuration manager.
-    */
-    interface com::sun::star::ui::XUIConfigurationStorage;
-
-    /** provides access to persistence functions to load/store user interface configuration
-        data from a storage.
-    */
-    interface com::sun::star::ui::XUIConfigurationPersistence;
-
-    /** provides functions to change, insert and remove user interface elements
-        from a user interface configuration manager.
-    */
-    interface com::sun::star::ui::XUIConfigurationManager;
-
-    /** provides functions to add and remove listeners for changes within a user
-        interface configuration manager.
-    */
-    interface com::sun::star::ui::XUIConfiguration;
-
-    /** allows controlling or observing the lifetime of a user interface configuration manager
-        instance.
-
-    <p>The owner of the object may dispose of this object using
-    <member scope="com::sun::star::lang">XComponent::dispose()</member>.
-    </p>
-    */
-    interface ::com::sun::star::lang::XComponent;
-};
+service UIConfigurationManager : XUIConfigurationManager2;
 
 
 }; }; }; };

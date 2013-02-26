@@ -46,17 +46,18 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
+#include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/sdb/DatabaseContext.hpp>
-#include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/awt/XControl.hpp>
@@ -1689,37 +1690,39 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
 
 Reference< XUIConfigurationManager > SAL_CALL ODatabaseDocument::getUIConfigurationManager(  ) throw (RuntimeException)
 {
+    return Reference< XUIConfigurationManager >( getUIConfigurationManager2(), UNO_QUERY_THROW );
+}
+
+Reference< XUIConfigurationManager2 > ODatabaseDocument::getUIConfigurationManager2(  ) throw (RuntimeException)
+{
     DocumentGuard aGuard( *this );
 
     if ( !m_xUIConfigurationManager.is() )
     {
-        m_pImpl->m_aContext.createComponent( "com.sun.star.ui.UIConfigurationManager", m_xUIConfigurationManager );
-        Reference< XUIConfigurationStorage > xUIConfigStorage( m_xUIConfigurationManager, UNO_QUERY );
-        if ( xUIConfigStorage.is() )
+        m_xUIConfigurationManager = UIConfigurationManager::create( m_pImpl->m_aContext.getUNOContext() );
+
+        OUString aUIConfigFolderName( "Configurations2" );
+        Reference< XStorage > xConfigStorage;
+
+        // First try to open with READWRITE and then READ
+        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
+        if ( xConfigStorage.is() )
         {
-            OUString aUIConfigFolderName( "Configurations2" );
-            Reference< XStorage > xConfigStorage;
-
-            // First try to open with READWRITE and then READ
-            xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
-            if ( xConfigStorage.is() )
+            OUString aUIConfigMediaType( "application/vnd.sun.xml.ui.configuration" );
+            OUString aMediaType;
+            Reference< XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
+            Any a = xPropSet->getPropertyValue( INFO_MEDIATYPE );
+            if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty() )
             {
-                OUString aUIConfigMediaType( "application/vnd.sun.xml.ui.configuration" );
-                OUString aMediaType;
-                Reference< XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
-                Any a = xPropSet->getPropertyValue( INFO_MEDIATYPE );
-                if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty() )
-                {
-                    a <<= aUIConfigMediaType;
-                    xPropSet->setPropertyValue( INFO_MEDIATYPE, a );
-                }
+                a <<= aUIConfigMediaType;
+                xPropSet->setPropertyValue( INFO_MEDIATYPE, a );
             }
-            else
-                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READ );
-
-            // initialize ui configuration manager with document substorage
-            xUIConfigStorage->setStorage( xConfigStorage );
         }
+        else
+            xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READ );
+
+        // initialize ui configuration manager with document substorage
+        m_xUIConfigurationManager->setStorage( xConfigStorage );
     }
 
     return m_xUIConfigurationManager;

@@ -30,7 +30,7 @@ namespace framework
 {
 
 sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
-    const uno::Reference< ui::XUIConfigurationManager >& rContainerFactory,
+    const uno::Reference< ui::XUIConfigurationManager2 >& rContainerFactory,
     uno::Sequence< uno::Reference< container::XIndexContainer > >& rSeqContainer,
     const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Reference< embed::XStorage >& rToolbarStorage )

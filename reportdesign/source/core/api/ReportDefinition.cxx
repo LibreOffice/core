@@ -74,6 +74,7 @@
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
@@ -573,7 +574,7 @@ struct OReportDefinitionImpl
     uno::Reference< container::XNameAccess>                 m_xDashTable;
     uno::Reference< container::XNameAccess>                 m_xMarkerTable;
     uno::Reference< report::XFunctions >                    m_xFunctions;
-    uno::Reference< ui::XUIConfigurationManager>            m_xUIConfigurationManager;
+    uno::Reference< ui::XUIConfigurationManager2>           m_xUIConfigurationManager;
     uno::Reference< util::XNumberFormatsSupplier>           m_xNumberFormatsSupplier;
     uno::Reference< sdbc::XConnection>                      m_xActiveConnection;
     uno::Reference< frame::XTitle >                         m_xTitleHelper;
@@ -2071,21 +2072,21 @@ uno::Reference< report::XFunctions > SAL_CALL OReportDefinition::getFunctions() 
 // -----------------------------------------------------------------------------
 uno::Reference< ui::XUIConfigurationManager > SAL_CALL OReportDefinition::getUIConfigurationManager(  ) throw (uno::RuntimeException)
 {
+    return uno::Reference< ui::XUIConfigurationManager >( getUIConfigurationManager2(), uno::UNO_QUERY_THROW );
+}
+// -----------------------------------------------------------------------------
+uno::Reference< ui::XUIConfigurationManager2 > OReportDefinition::getUIConfigurationManager2(  ) throw (uno::RuntimeException)
+{
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
     if ( !m_pImpl->m_xUIConfigurationManager.is() )
     {
-        m_pImpl->m_xUIConfigurationManager.set(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager")),m_aProps->m_xContext),
-            uno::UNO_QUERY);
+        m_pImpl->m_xUIConfigurationManager = ui::UIConfigurationManager::create(m_aProps->m_xContext);
 
-        uno::Reference< ui::XUIConfigurationStorage > xUIConfigStorage( m_pImpl->m_xUIConfigurationManager, uno::UNO_QUERY );
-        if ( xUIConfigStorage.is() )
-        {
-            uno::Reference< embed::XStorage > xConfigStorage;
-            // initialize ui configuration manager with document substorage
-            xUIConfigStorage->setStorage( xConfigStorage );
-        }
+        uno::Reference< embed::XStorage > xConfigStorage;
+        // initialize ui configuration manager with document substorage
+        m_pImpl->m_xUIConfigurationManager->setStorage( xConfigStorage );
     }
 
     return m_pImpl->m_xUIConfigurationManager;

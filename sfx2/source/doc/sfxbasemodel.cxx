@@ -41,8 +41,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
@@ -204,7 +203,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     sal_Bool                                                m_bModifiedSinceLastSave;
     uno::Reference< com::sun::star::view::XPrintable>       m_xPrintable            ;
     uno::Reference< script::provider::XScriptProvider >     m_xScriptProvider;
-    uno::Reference< ui::XUIConfigurationManager >           m_xUIConfigurationManager;
+    uno::Reference< ui::XUIConfigurationManager2 >          m_xUIConfigurationManager;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >   m_pStorageModifyListen;
     ::rtl::OUString                                         m_sModuleIdentifier;
     css::uno::Reference< css::frame::XTitle >               m_xTitleHelper;
@@ -2767,8 +2766,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     if ( xConfigStorage.is() || !m_pData->m_pObjectShell->GetStorage()->hasByName( aUIConfigFolderName ) )
                     {
                         // the storage is different, since otherwise it could not be opened, so it must be exchanged
-                        Reference< ui::XUIConfigurationStorage > xUIConfigStorage( m_pData->m_xUIConfigurationManager, uno::UNO_QUERY );
-                        xUIConfigStorage->setStorage( xConfigStorage );
+                        m_pData->m_xUIConfigurationManager->setStorage( xConfigStorage );
                     }
                     else
                     {
@@ -3498,95 +3496,94 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, uno::Reference< contai
 uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfigurationManager()
         throw ( uno::RuntimeException )
 {
+    return uno::Reference< ui::XUIConfigurationManager >( getUIConfigurationManager2(), UNO_QUERY_THROW );
+}
+
+uno::Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManager2()
+        throw ( uno::RuntimeException )
+{
     SfxModelGuard aGuard( *this );
 
     if ( !m_pData->m_xUIConfigurationManager.is() )
     {
-        uno::Reference< ui::XUIConfigurationManager > xNewUIConfMan(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString("com.sun.star.ui.UIConfigurationManager")),
-                uno::UNO_QUERY );
+        uno::Reference< ui::XUIConfigurationManager2 > xNewUIConfMan =
+            ui::UIConfigurationManager::create( comphelper::getProcessComponentContext() );
 
-        Reference< ui::XUIConfigurationStorage > xUIConfigStorage( xNewUIConfMan, uno::UNO_QUERY );
-        if ( xUIConfigStorage.is() )
+        uno::Reference< XSTORAGE > xConfigStorage;
+
+        rtl::OUString aUIConfigFolderName( "Configurations2" );
+        // First try to open with READWRITE and then READ
+        xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
+        if ( xConfigStorage.is() )
         {
-            uno::Reference< XSTORAGE > xConfigStorage;
-
-            rtl::OUString aUIConfigFolderName( "Configurations2" );
-            // First try to open with READWRITE and then READ
-            xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
-            if ( xConfigStorage.is() )
+            rtl::OUString aMediaTypeProp( "MediaType" );
+            rtl::OUString aUIConfigMediaType(
+                    "application/vnd.sun.xml.ui.configuration"  );
+            rtl::OUString aMediaType;
+            uno::Reference< beans::XPropertySet > xPropSet( xConfigStorage, uno::UNO_QUERY );
+            Any a = xPropSet->getPropertyValue( aMediaTypeProp );
+            if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty())
             {
-                rtl::OUString aMediaTypeProp( "MediaType" );
-                rtl::OUString aUIConfigMediaType(
-                        "application/vnd.sun.xml.ui.configuration"  );
-                rtl::OUString aMediaType;
-                uno::Reference< beans::XPropertySet > xPropSet( xConfigStorage, uno::UNO_QUERY );
-                Any a = xPropSet->getPropertyValue( aMediaTypeProp );
-                if ( !( a >>= aMediaType ) ||  aMediaType.isEmpty())
-                {
-                    a <<= aUIConfigMediaType;
-                    xPropSet->setPropertyValue( aMediaTypeProp, a );
-                }
+                a <<= aUIConfigMediaType;
+                xPropSet->setPropertyValue( aMediaTypeProp, a );
             }
-            else
-                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READ );
+        }
+        else
+            xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READ );
 
-            // initialize ui configuration manager with document substorage
-            xUIConfigStorage->setStorage( xConfigStorage );
+        // initialize ui configuration manager with document substorage
+        xNewUIConfMan->setStorage( xConfigStorage );
 
-            // embedded objects did not support local configuration data until OOo 3.0, so there's nothing to
-            // migrate
-            if ( m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+        // embedded objects did not support local configuration data until OOo 3.0, so there's nothing to
+        // migrate
+        if ( m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+        {
+            // Import old UI configuration from OOo 1.x
+            uno::Reference< XSTORAGE > xOOo1ConfigStorage;
+            rtl::OUString         aOOo1UIConfigFolderName( "Configurations" );
+
+            // Try to open with READ
+            xOOo1ConfigStorage = getDocumentSubStorage( aOOo1UIConfigFolderName, embed::ElementModes::READ );
+            if ( xOOo1ConfigStorage.is() )
             {
-                // Import old UI configuration from OOo 1.x
-                uno::Reference< XSTORAGE > xOOo1ConfigStorage;
-                rtl::OUString         aOOo1UIConfigFolderName( "Configurations" );
+                uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                uno::Sequence< uno::Reference< container::XIndexContainer > > rToolbars;
 
-                // Try to open with READ
-                xOOo1ConfigStorage = getDocumentSubStorage( aOOo1UIConfigFolderName, embed::ElementModes::READ );
-                if ( xOOo1ConfigStorage.is() )
+                sal_Bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
+                                        xNewUIConfMan, rToolbars, xContext, xOOo1ConfigStorage );
+                if ( bImported )
                 {
-                    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                    uno::Sequence< uno::Reference< container::XIndexContainer > > rToolbars;
+                    SfxObjectShell* pObjShell = SfxBaseModel::GetObjectShell();
 
-                    sal_Bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
-                                            xNewUIConfMan, rToolbars, xContext, xOOo1ConfigStorage );
-                    if ( bImported )
+                    rtl::OUString aNum( "private:resource/toolbar/custom_OOo1x_" );
+                    rtl::OUString aTitle( "Toolbar " );
+                    for ( sal_Int32 i = 0; i < rToolbars.getLength(); i++ )
                     {
-                        SfxObjectShell* pObjShell = SfxBaseModel::GetObjectShell();
+                        rtl::OUString aCustomTbxName = aNum + rtl::OUString::valueOf( i + 1 );
+                        rtl::OUString aCustomTbxTitle = aTitle + rtl::OUString::valueOf( i + 1 );
 
-                        rtl::OUString aNum( "private:resource/toolbar/custom_OOo1x_" );
-                        rtl::OUString aTitle( "Toolbar " );
-                        for ( sal_Int32 i = 0; i < rToolbars.getLength(); i++ )
+                        uno::Reference< container::XIndexContainer > xToolbar = rToolbars[i];
+                        ConvertSlotsToCommands( pObjShell, xToolbar );
+                        if ( !xNewUIConfMan->hasSettings( aCustomTbxName ))
                         {
-                            rtl::OUString aCustomTbxName = aNum + rtl::OUString::valueOf( i + 1 );
-                            rtl::OUString aCustomTbxTitle = aTitle + rtl::OUString::valueOf( i + 1 );
-
-                            uno::Reference< container::XIndexContainer > xToolbar = rToolbars[i];
-                            ConvertSlotsToCommands( pObjShell, xToolbar );
-                            if ( !xNewUIConfMan->hasSettings( aCustomTbxName ))
+                            // Set UIName for the toolbar with container property
+                            uno::Reference< beans::XPropertySet > xPropSet( xToolbar, UNO_QUERY );
+                            if ( xPropSet.is() )
                             {
-                                // Set UIName for the toolbar with container property
-                                uno::Reference< beans::XPropertySet > xPropSet( xToolbar, UNO_QUERY );
-                                if ( xPropSet.is() )
+                                try
                                 {
-                                    try
-                                    {
-                                        rtl::OUString aPropName( "UIName" );
-                                        Any           aAny( aCustomTbxTitle );
-                                        xPropSet->setPropertyValue( aPropName, aAny );
-                                    }
-                                    catch ( beans::UnknownPropertyException& )
-                                    {
-                                    }
+                                    rtl::OUString aPropName( "UIName" );
+                                    Any           aAny( aCustomTbxTitle );
+                                    xPropSet->setPropertyValue( aPropName, aAny );
                                 }
-
-                                uno::Reference< container::XIndexAccess > xToolbarData( xToolbar, uno::UNO_QUERY );
-                                xNewUIConfMan->insertSettings( aCustomTbxName, xToolbarData );
-                                uno::Reference< ui::XUIConfigurationPersistence > xPersist( xNewUIConfMan, uno::UNO_QUERY );
-                                xPersist->store();
+                                catch ( beans::UnknownPropertyException& )
+                                {
+                                }
                             }
+
+                            uno::Reference< container::XIndexAccess > xToolbarData( xToolbar, uno::UNO_QUERY );
+                            xNewUIConfMan->insertSettings( aCustomTbxName, xToolbarData );
+                            xNewUIConfMan->store();
                         }
                     }
                 }
@@ -3814,9 +3811,7 @@ void SAL_CALL SfxBaseModel::switchToStorage( const uno::Reference< XSTORAGE >& x
         else
         {
             // UICfgMgr has a reference to the old storage, update it
-            uno::Reference< ui::XUIConfigurationStorage > xUICfgMgrStorage( getUIConfigurationManager(), uno::UNO_QUERY );
-            if ( xUICfgMgrStorage.is() )
-                xUICfgMgrStorage->setStorage( xStorage );
+            getUIConfigurationManager2()->setStorage( xStorage );
         }
     }
     m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
@@ -3900,7 +3895,6 @@ css::uno::Reference< css::frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
 
     if ( ! m_pData->m_xTitleHelper.is ())
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR    = ::comphelper::getProcessServiceFactory();
         css::uno::Reference< css::uno::XComponentContext >     xContext = ::comphelper::getProcessComponentContext();
         css::uno::Reference< css::frame::XUntitledNumbers >    xDesktop( css::frame::Desktop::create(xContext), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::frame::XModel >              xThis   (static_cast< css::frame::XModel* >(this), css::uno::UNO_QUERY_THROW);

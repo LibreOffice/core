@@ -31,9 +31,6 @@
 #include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
 #include "svtools/treelistentry.hxx"
-#include <com/sun/star/embed/StorageFactory.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 
 #include <sal/macros.h>
 
@@ -44,20 +41,23 @@
 
 //-----------------------------------------------
 // include interface declarations
+#include <com/sun/star/awt/KeyModifier.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/form/XReset.hpp>
-#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 //-----------------------------------------------
@@ -77,7 +77,6 @@ using namespace com::sun::star;
 
 
 //-----------------------------------------------
-static OUString SERVICE_UICONFIGMGR              ("com.sun.star.ui.UIConfigurationManager"  );
 
 static OUString MODULEPROP_SHORTNAME             ("ooSetupFactoryShortName"                 );
 static OUString MODULEPROP_UINAME                ("ooSetupFactoryUIName"                    );
@@ -1215,7 +1214,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
     GetTabDialog()->EnterWait();
 
     css::uno::Reference< css::frame::XModel >                xDoc        ;
-    css::uno::Reference< css::ui::XUIConfigurationManager > xCfgMgr     ;
+    css::uno::Reference< css::ui::XUIConfigurationManager >  xCfgMgr     ;
     css::uno::Reference< css::embed::XStorage >              xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
 
     try
@@ -1241,9 +1240,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
             css::uno::Reference< css::embed::XStorage > xUIConfig = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, css::embed::ElementModes::READ);
             if (xUIConfig.is())
             {
-                xCfgMgr = css::uno::Reference< css::ui::XUIConfigurationManager >(m_xSMGR->createInstance(SERVICE_UICONFIGMGR), css::uno::UNO_QUERY_THROW);
-                css::uno::Reference< css::ui::XUIConfigurationStorage > xCfgMgrStore(xCfgMgr, css::uno::UNO_QUERY_THROW);
-                xCfgMgrStore->setStorage(xUIConfig);
+                css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( comphelper::getComponentContext(m_xSMGR) );
+                xCfgMgr2->setStorage(xUIConfig);
+                xCfgMgr.set( xCfgMgr2, css::uno::UNO_QUERY_THROW );
             }
         }
 
@@ -1299,7 +1298,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
     GetTabDialog()->EnterWait();
 
     css::uno::Reference< css::frame::XModel >                xDoc        ;
-    css::uno::Reference< css::ui::XUIConfigurationManager > xCfgMgr     ;
+    css::uno::Reference< css::ui::XUIConfigurationManager >  xCfgMgr     ;
     css::uno::Reference< css::embed::XStorage >              xRootStorage;
 
     try
@@ -1337,9 +1336,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
             if (sMediaType.isEmpty())
                 xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, css::uno::makeAny(MEDIATYPE_UICONFIG));
 
-            xCfgMgr = css::uno::Reference< css::ui::XUIConfigurationManager >(m_xSMGR->createInstance(SERVICE_UICONFIGMGR), css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< css::ui::XUIConfigurationStorage > xUICfgStore(xCfgMgr, css::uno::UNO_QUERY_THROW);
-            xUICfgStore->setStorage(xUIConfig);
+            css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( comphelper::getComponentContext(m_xSMGR) );
+            xCfgMgr2->setStorage(xUIConfig);
+            xCfgMgr.set( xCfgMgr2, css::uno::UNO_QUERY_THROW );
         }
 
         if (xCfgMgr.is())
@@ -1367,11 +1366,10 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
 
         if (xRootStorage.is())
         {
-            css::uno::Reference< css::lang::XComponent > xComponent;
-            xComponent = css::uno::Reference< css::lang::XComponent >(xCfgMgr, css::uno::UNO_QUERY);
+            css::uno::Reference< css::lang::XComponent > xComponent(xCfgMgr, css::uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
-            xComponent = css::uno::Reference< css::lang::XComponent >(xRootStorage, css::uno::UNO_QUERY);
+            xComponent.set(xRootStorage, css::uno::UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
         }

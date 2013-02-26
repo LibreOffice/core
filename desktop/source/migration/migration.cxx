@@ -55,6 +55,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
@@ -267,14 +268,12 @@ sal_Bool MigrationImpl::doMigration()
             uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
             uno::Reference< lang::XSingleServiceFactory > xStorageFactory(embed::FileSystemStorageFactory::create(xContext));
             uno::Reference< embed::XStorage >             xModules(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
-            uno::Reference< ui::XUIConfigurationManager > xOldCfgManager(xContext->getServiceManager()->createInstanceWithContext("com.sun.star.ui.UIConfigurationManager", xContext), uno::UNO_QUERY );
-            uno::Reference< ui::XUIConfigurationStorage > xOldCfgStorage( xOldCfgManager, uno::UNO_QUERY );
-            uno::Reference< ui::XUIConfigurationPersistence > xOldCfgPersistence( xOldCfgManager, uno::UNO_QUERY );
+            uno::Reference< ui::XUIConfigurationManager2 > xOldCfgManager = ui::UIConfigurationManager::create(xContext);
 
-            if ( xOldCfgStorage.is() && xOldCfgPersistence.is() && xModules.is() )
+            if ( xModules.is() )
             {
-                    xOldCfgStorage->setStorage( xModules );
-                    xOldCfgPersistence->reload();
+                    xOldCfgManager->setStorage( xModules );
+                    xOldCfgManager->reload();
             }
 
             uno::Reference< ui::XUIConfigurationManager > xCfgManager = aNewVersionUIInfo.getConfigManager(vModulesInfo[i].sModuleShortName);

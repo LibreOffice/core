@@ -28,15 +28,16 @@
 
 #include <framework/statusbarconfiguration.hxx>
 
-#include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/ConfigurationEvent.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/ui/UIElementType.hpp>
+#include <com/sun/star/ui/ConfigurationEvent.hpp>
+#include <com/sun/star/ui/ConfigurationEvent.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <vcl/svapp.hxx>
@@ -60,31 +61,33 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_7                    (    UIConfigurationManager                                                          ,
+DEFINE_XINTERFACE_8                    (    UIConfigurationManager                                                          ,
                                             OWeakObject                                                                     ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
                                             DIRECT_INTERFACE( css::lang::XComponent                                         ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfiguration                  ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationManager           ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationPersistence       ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationStorage           )
+                                            DIRECT_INTERFACE( css::ui::XUIConfiguration                  ),
+                                            DIRECT_INTERFACE( css::ui::XUIConfigurationManager           ),
+                                            DIRECT_INTERFACE( css::ui::XUIConfigurationManager2           ),
+                                            DIRECT_INTERFACE( css::ui::XUIConfigurationPersistence       ),
+                                            DIRECT_INTERFACE( css::ui::XUIConfigurationStorage           )
                                         )
 
-DEFINE_XTYPEPROVIDER_7                  (   UIConfigurationManager                                  ,
+DEFINE_XTYPEPROVIDER_8                  (   UIConfigurationManager                                  ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::lang::XComponent                                   ,
-                                            ::com::sun::star::ui::XUIConfiguration            ,
-                                            ::com::sun::star::ui::XUIConfigurationManager     ,
-                                            ::com::sun::star::ui::XUIConfigurationPersistence ,
-                                            ::com::sun::star::ui::XUIConfigurationStorage
+                                            css::ui::XUIConfiguration            ,
+                                            css::ui::XUIConfigurationManager     ,
+                                            css::ui::XUIConfigurationManager2     ,
+                                            css::ui::XUIConfigurationPersistence ,
+                                            css::ui::XUIConfigurationStorage
                                         )
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2        (   UIConfigurationManager                      ,
                                             ::cppu::OWeakObject                         ,
-                                            SERVICENAME_UICONFIGURATIONMANAGER          ,
-                                            IMPLEMENTATIONNAME_UICONFIGURATIONMANAGER
+                                            OUString("com.sun.star.ui.UIConfigurationManager"),
+                                            OUString("com.sun.star.comp.framework.UIConfigurationManager")
                                         )
 
 DEFINE_INIT_SERVICE                     (   UIConfigurationManager, {} )
