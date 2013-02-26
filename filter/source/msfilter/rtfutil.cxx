@@ -53,8 +53,10 @@ OString OutHex(sal_uLong nHex, sal_uInt8 nLen)
     return OString(pStr);
 }
 
-OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc)
+OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc, bool* pSuccess, bool bUnicode)
 {
+    if (pSuccess)
+        *pSuccess = true;
     OStringBuffer aBuf;
     const sal_Char* pStr = 0;
     // 0x0b instead of \n, etc because of the replacements in SwWW8AttrIter::GetSnippet()
@@ -91,10 +93,13 @@ OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc)
             else {
                 OUString sBuf(&c, 1);
                 OString sConverted;
-                sBuf.convertToString(&sConverted, eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
+                if (pSuccess)
+                    *pSuccess &= sBuf.convertToString(&sConverted, eDestEnc, RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
+                else
+                    sBuf.convertToString(&sConverted, eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
                 const sal_Int32 nLen = sConverted.getLength();
 
-                if (pUCMode)
+                if (pUCMode && bUnicode)
                 {
                     if (*pUCMode != nLen)
                     {
@@ -130,19 +135,51 @@ OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc)
     return aBuf.makeStringAndClear();
 }
 
-OString OutString(const String &rStr, rtl_TextEncoding eDestEnc)
+OString OutString(const String &rStr, rtl_TextEncoding eDestEnc, bool bUnicode)
 {
     SAL_INFO("filter.ms", OSL_THIS_FUNC << ", rStr = '" << OUString(rStr) << "'");
     OStringBuffer aBuf;
     int nUCMode = 1;
     for (xub_StrLen n = 0; n < rStr.Len(); ++n)
-        aBuf.append(OutChar(rStr.GetChar(n), &nUCMode, eDestEnc));
+        aBuf.append(OutChar(rStr.GetChar(n), &nUCMode, eDestEnc, 0, bUnicode));
     if (nUCMode != 1) {
         aBuf.append(OOO_STRING_SVTOOLS_RTF_UC);
         aBuf.append((sal_Int32)1);
         aBuf.append(" "); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     }
     return aBuf.makeStringAndClear();
+}
+
+/// Checks if lossless conversion of the string to eDestEnc is possible or not.
+static bool TryOutString(const String &rStr, rtl_TextEncoding eDestEnc)
+{
+    int nUCMode = 1;
+    for (xub_StrLen n = 0; n < rStr.Len(); ++n)
+    {
+        bool bRet;
+        OutChar(rStr.GetChar(n), &nUCMode, eDestEnc, &bRet);
+        if (!bRet)
+            return false;
+    }
+    return true;
+}
+
+OString OutStringUpr(const sal_Char *pToken, const String &rStr, rtl_TextEncoding eDestEnc)
+{
+    if (TryOutString(rStr, eDestEnc))
+        return OString("{") + pToken + " " + OutString(rStr, eDestEnc) + "}";
+
+    OStringBuffer aRet;
+    aRet.append("{" OOO_STRING_SVTOOLS_RTF_UPR "{");
+    aRet.append(pToken);
+    aRet.append(" ");
+    aRet.append(OutString(rStr, eDestEnc, /*bUnicode =*/ false));
+    aRet.append("}{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_UD "{");
+    aRet.append(pToken);
+    aRet.append(" ");
+    aRet.append(OutString(rStr, eDestEnc));
+    aRet.append("}}}");
+    return aRet.makeStringAndClear();
 }
 
 }
