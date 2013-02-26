@@ -34,13 +34,18 @@ packimages_DIR := $(call gb_CustomTarget_get_workdir,postprocess/images)
 packimages_CUSTOM_FALLBACK_1 := -c $(SRCDIR)/icon-themes/tango
 packimages_CUSTOM_FALLBACK_2 := -c $(SRCDIR)/icon-themes/industrial
 
-$(call gb_CustomTarget_get_target,postprocess/images) : \
-	$(packimages_DIR)/images_brand.zip \
-	$(if $(filter default,$(WITH_THEMES)),$(packimages_DIR)/images.zip) \
-	$(foreach theme,$(filter-out default,$(WITH_THEMES)),$(packimages_DIR)/images_$(theme).zip)
+$(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
+	images_brand.zip \
+	$(if $(filter default,$(WITH_THEMES)),images.zip) \
+	$(foreach theme,$(filter-out default,$(WITH_THEMES)),images_$(theme).zip) \
+	commandimagelist.ilst \
+	sorted.lst \
+))
 
-$(packimages_DIR)/images.zip : $(call gb_Postprocess_get_target,AllResources) \
-		$(packimages_DIR)/sorted.lst $(packimages_DIR)/commandimagelist.ilst
+$(packimages_DIR)/images.zip : \
+		$(packimages_DIR)/sorted.lst \
+		$(packimages_DIR)/commandimagelist.ilst \
+		$(call gb_Postprocess_get_target,AllResources)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
@@ -48,8 +53,10 @@ $(packimages_DIR)/images.zip : $(call gb_Postprocess_get_target,AllResources) \
 			-l $(packimages_DIR) -l $(dir $(call gb_ResTarget_get_imagelist_target)) -s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
-$(packimages_DIR)/images_%.zip : $(call gb_Postprocess_get_target,AllResources) \
-		$(packimages_DIR)/sorted.lst $(packimages_DIR)/commandimagelist.ilst
+$(packimages_DIR)/images_%.zip : \
+		$(packimages_DIR)/sorted.lst \
+		$(packimages_DIR)/commandimagelist.ilst \
+		$(call gb_Postprocess_get_target,AllResources)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
@@ -59,14 +66,14 @@ $(packimages_DIR)/images_%.zip : $(call gb_Postprocess_get_target,AllResources) 
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # make sure to have one to keep packing happy
-$(packimages_DIR)/images_brand.zip :| $(packimages_DIR)/.dir
+$(packimages_DIR)/images_brand.zip :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),TCH,2)
 	touch $@
 
 # commandimagelist.ilst and sorted.lst are phony to rebuild everything each time
 .PHONY : $(packimages_DIR)/commandimagelist.ilst $(packimages_DIR)/sorted.lst
 
-$(packimages_DIR)/commandimagelist.ilst :| $(packimages_DIR)/.dir
+$(packimages_DIR)/commandimagelist.ilst :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		find $(SRCDIR)/icon-themes/galaxy/cmd -name "*.png" -o -name "*.svg" | \
@@ -76,7 +83,8 @@ $(packimages_DIR)/commandimagelist.ilst :| $(packimages_DIR)/.dir
 			$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
 
 $(packimages_DIR)/sorted.lst : \
-		$(SRCDIR)/postprocess/packimages/image-sort.lst | $(packimages_DIR)/.dir
+		$(SRCDIR)/postprocess/packimages/image-sort.lst \
+		$(call gb_Postprocess_get_target,AllPackages)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/image-sort.pl $< $(OUTDIR)/xml $@)
