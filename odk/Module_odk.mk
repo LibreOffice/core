@@ -33,6 +33,8 @@ $(eval $(call gb_Module_add_targets,odk,\
 ))
 endif
 
+# This apparently needs to come last, as the various CustomTarget_* add to
+# odkcommon_ZIPLIST that is used here:
 $(eval $(call gb_Module_add_targets,odk,\
 	Zip_odkcommon \
 ))
