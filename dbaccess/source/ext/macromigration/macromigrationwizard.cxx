@@ -196,7 +196,7 @@ namespace dbmm
 
         if ( _rArguments.getLength() != 1 )
             throw IllegalArgumentException(
-                String(MacroMigrationResId(STR_INVALID_NUMBER_ARGS)),
+                OUString(MacroMigrationResId(STR_INVALID_NUMBER_ARGS)),
                 *this,
                 1
             );
@@ -204,7 +204,7 @@ namespace dbmm
         m_xDocument.set( _rArguments[0], UNO_QUERY );
         if ( !m_xDocument.is() )
             throw IllegalArgumentException(
-                String(MacroMigrationResId(STR_NO_DATABASE)),
+                OUString(MacroMigrationResId(STR_NO_DATABASE)),
                 *this,
                 1
             );
@@ -212,7 +212,7 @@ namespace dbmm
         Reference< XStorable > xDocStor( m_xDocument, UNO_QUERY_THROW );
         if ( xDocStor->isReadonly() )
             throw IllegalArgumentException(
-                String(MacroMigrationResId(STR_NOT_READONLY)),
+                OUString(MacroMigrationResId(STR_NOT_READONLY)),
                 *this,
                 1
             );
