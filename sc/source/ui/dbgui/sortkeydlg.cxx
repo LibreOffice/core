@@ -29,6 +29,7 @@
 #include "sortkeydlg.hxx"
 #include "sortdlg.hxx"
 #include "sortdlg.hrc"
+#include <vcl/layout.hxx>
 
 // =======================================================================
 
@@ -45,7 +46,7 @@ ScSortKeyItem::ScSortKeyItem(Window* pParent)
 
 long ScSortKeyItem::getItemHeight() const
 {
-    return m_pFrame->get_preferred_size().Height();
+    return VclContainer::getLayoutRequisition(*m_pFrame).Height();
 }
 
 void ScSortKeyItem::DisableField()
