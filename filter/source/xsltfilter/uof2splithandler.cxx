@@ -48,8 +48,8 @@ using namespace ::rtl;
 UOF2SplitHandler::UOF2SplitHandler(
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rMultiFactory,
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rStream )
-: m_rMultiFactory( rMultiFactory )
-, m_rStream( rStream )
+: m_rStream( rStream )
+, m_rMultiFactory( rMultiFactory )
 , m_bIsStart( sal_False )
 {
     _Init();
