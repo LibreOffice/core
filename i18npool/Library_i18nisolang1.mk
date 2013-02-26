@@ -29,7 +29,7 @@
 $(eval $(call gb_Library_Library,i18nisolang1))
 
 $(eval $(call gb_Library_use_packages,i18nisolang1,\
-	cppu_inc \
+	cppu_odk_headers \
 	i18npool_inc \
 ))
 

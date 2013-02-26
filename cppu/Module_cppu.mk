@@ -35,7 +35,7 @@ $(eval $(call gb_Module_add_targets,cppu,\
 	Library_log_uno \
 	Library_purpenvhelper \
 	Library_unsafe_uno \
-	Package_inc \
+	ZipPackage_cppu_odk_headers \
 ))
 
 $(eval $(call gb_Module_add_check_targets,cppu,\

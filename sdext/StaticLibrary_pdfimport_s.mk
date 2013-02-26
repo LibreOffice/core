@@ -30,7 +30,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,pdfimport_s))
 $(eval $(call gb_StaticLibrary_use_packages,pdfimport_s,\
     basegfx_inc \
     comphelper_inc \
-    cppu_inc \
+    cppu_odk_headers \
     cppuhelper_inc \
     o3tl_inc \
     tools_inc \

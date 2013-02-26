@@ -32,9 +32,12 @@ cppu_allheaders_DIR := $(call gb_CustomTarget_get_workdir,cppu/allheaders)
 $(call gb_CustomTarget_get_target,cppu/allheaders) : \
 	$(cppu_allheaders_DIR)/cppu_allheaders.hxx
 
-# dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
-$(cppu_allheaders_DIR)/cppu_allheaders.hxx : $(SRCDIR)/cppu/CustomTarget_cppu_allheaders.mk \
-            | $(cppu_allheaders_DIR)/.dir $(SRCDIR)/cppu/Package_inc.mk
+# dependency on Package_cppu_odk_headers.mk should ensure this is
+# updated whenever a new public header is added
+$(cppu_allheaders_DIR)/cppu_allheaders.hxx : \
+			$(SRCDIR)/cppu/CustomTarget_cppu_allheaders.mk \
+			$(SRCDIR)/cppu/ZipPackage_cppu_odk_headers.mk \
+            | $(cppu_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	printf '// Generated list of all cppu/ includes\n' >  $@
 	$(foreach file, $(wildcard $(SRCDIR)/cppu/inc/*.h) $(wildcard $(SRCDIR)/cppu/inc/*.hxx) \

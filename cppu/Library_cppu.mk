@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,cppu))
 
 $(eval $(call gb_Library_set_soversion_script,cppu,3,$(SRCDIR)/cppu/util/cppu.map))
 
-$(eval $(call gb_Library_use_package,cppu,cppu_inc))
+$(eval $(call gb_Library_use_package,cppu,cppu_odk_headers))
 
 $(eval $(call gb_Library_use_udk_api,cppu))
 

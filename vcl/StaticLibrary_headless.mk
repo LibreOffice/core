@@ -32,7 +32,7 @@ $(eval $(call gb_StaticLibrary_use_packages,headless,\
 	basebmp_inc \
 	basegfx_inc \
 	comphelper_inc \
-	cppu_inc \
+	cppu_odk_headers \
 	cppuhelper_inc \
 	i18npool_inc \
 	i18nutil_inc \

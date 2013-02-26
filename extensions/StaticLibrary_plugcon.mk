@@ -34,7 +34,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,plugcon))
 $(eval $(call gb_StaticLibrary_use_packages,plugcon,\
     basegfx_inc \
     comphelper_inc \
-    cppu_inc \
+    cppu_odk_headers \
     i18npool_inc \
     np_sdk_inc \
     tools_inc \

@@ -21,7 +21,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,writerperfect))
 
 $(eval $(call gb_StaticLibrary_use_packages,writerperfect,\
 	comphelper_inc \
-	cppu_inc \
+	cppu_odk_headers \
 	cppuhelper_inc \
 	sot_inc \
 	tools_inc \

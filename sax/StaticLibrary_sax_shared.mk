@@ -10,7 +10,7 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,sax_shared))
 
 $(eval $(call gb_StaticLibrary_use_packages,sax_shared,\
-	cppu_inc \
+	cppu_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,sax_shared,\
