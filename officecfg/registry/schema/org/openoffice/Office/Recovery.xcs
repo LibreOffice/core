@@ -131,6 +131,12 @@
                 </info>
                 <value>true</value>
             </prop>
+            <prop oor:name="UserAutoSaveEnabled" oor:type="xs:boolean" oor:nillable="false">
+                <info>
+                    <desc> </desc>
+                </info>
+                <value>true</value>
+            </prop>
             <prop oor:name="TimeIntervall" oor:type="xs:int" oor:nillable="false">
                 <info>
                     <desc> </desc>
