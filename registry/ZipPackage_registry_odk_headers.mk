@@ -1,5 +1,4 @@
-# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
-#
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -25,19 +24,22 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,codemaker_java))
+$(eval $(call gb_ZipPackage_ZipPackage,registry_odk_headers,$(SRCDIR)/registry/inc/registry))
 
-$(eval $(call gb_StaticLibrary_use_external,codemaker_java,boost_headers))
-
-$(eval $(call gb_StaticLibrary_use_packages,codemaker_java,\
-	codemaker_inc \
-	registry_odk_headers \
-	sal_generated \
-	sal_odk_headers \
-))
-
-$(eval $(call gb_StaticLibrary_add_exception_objects,codemaker_java,\
-	codemaker/source/commonjava/commonjava \
+$(eval $(call gb_ZipPackage_add_files,registry_odk_headers,inc/registry,include/registry,\
+	reader.h \
+	reader.hxx \
+	reflread.hxx \
+	refltype.hxx \
+	reflwrit.hxx \
+	regdllapi.h \
+	registry.h \
+	registry.hxx \
+	regtype.h \
+	types.h \
+	version.h \
+	writer.h \
+	writer.hxx \
 ))
 
 # vim: set noet sw=4 ts=4:

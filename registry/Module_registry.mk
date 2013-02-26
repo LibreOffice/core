@@ -28,7 +28,7 @@ $(eval $(call gb_Module_Module,registry))
 
 $(eval $(call gb_Module_add_targets,registry,\
     Library_reg \
-    Package_inc \
+    ZipPackage_registry_odk_headers \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

@@ -31,7 +31,7 @@ $(eval $(call gb_StaticLibrary_use_external,codemaker_cpp,boost_headers))
 
 $(eval $(call gb_StaticLibrary_use_packages,codemaker_cpp,\
 	codemaker_inc \
-	registry_inc \
+	registry_odk_headers \
 	sal_generated \
 	sal_odk_headers \
 ))
