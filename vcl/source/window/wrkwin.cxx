@@ -98,16 +98,6 @@ WorkWindow::WorkWindow( WindowType nType ) :
     ImplInitWorkWindowData();
 }
 
-#ifdef ANDROID
-
-extern "C" void *
-createWindowFoo(void)
-{
-    return (void*) new WorkWindow((Window *)NULL);
-}
-
-#endif
-
 // -----------------------------------------------------------------------
 
 WorkWindow::WorkWindow( Window* pParent, WinBits nStyle ) :

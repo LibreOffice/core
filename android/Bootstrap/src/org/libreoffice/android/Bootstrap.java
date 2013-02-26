@@ -77,9 +77,6 @@ public final class Bootstrap
     // where the lo-bootstrap library is.
     public static native void setCommandArgs(String[] argv);
 
-    // A wrapper for createWindowFoo() in the vcl library
-    public static native int createWindowFoo();
-
     // A method that starts a thread to redirect stdout and stderr writes to
     // the Android logging mechanism, or stops the redirection.
     public static native boolean redirect_stdio(boolean state);

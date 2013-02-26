@@ -927,20 +927,6 @@ Java_org_libreoffice_android_Bootstrap_setCommandArgs(JNIEnv* env,
     osl_setCommandArgs(c_argc, c_argv);
 }
 
-extern int createWindowFoo(void);
-
-__attribute__ ((visibility("default")))
-jint
-Java_org_libreoffice_android_Bootstrap_createWindowFoo(JNIEnv* env,
-                                                       jobject clazz)
-{
-    (void) env;
-    (void) clazz;
-
-    return createWindowFoo();
-}
-
-
 /* Code for reading lines from the pipe based on the (Apache-licensed) Android
  * logwrapper.c
  */
