@@ -153,7 +153,7 @@ namespace dbmm
             INetURLObject aURLParser( xDocument->getURL() );
             OSL_ENSURE( aURLParser.GetProtocol() != INET_PROT_NOT_VALID, "SaveDBDocPage::initializePage: illegal document URL!" );
 
-            ::rtl::OUStringBuffer aBaseName( aURLParser.getBase() );
+            OUStringBuffer aBaseName( aURLParser.getBase() );
             aBaseName.appendAscii( ".backup" );
             aURLParser.setBase( aBaseName.makeStringAndClear() );
 
@@ -225,9 +225,9 @@ namespace dbmm
     //--------------------------------------------------------------------
     void ProgressPage::setDocumentCounts( const sal_Int32 _nForms, const sal_Int32 _nReports )
     {
-        String sText( m_aObjectCount.GetText() );
-        sText.SearchAndReplaceAscii( "$forms$", OUString::number( _nForms ) );
-        sText.SearchAndReplaceAscii( "$reports$", OUString::number( _nReports ) );
+        OUString sText( m_aObjectCount.GetText() );
+        sText = sText.replaceFirst( "$forms$", OUString::number( _nForms ) );
+        sText = sText.replaceFirst( "$reports$", OUString::number( _nReports ) );
         m_aObjectCount.SetText( sText );
     }
 
@@ -238,7 +238,7 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    void ProgressPage::startObject( const ::rtl::OUString& _rObjectName, const ::rtl::OUString& _rCurrentAction, const sal_uInt32 _nRange )
+    void ProgressPage::startObject( const OUString& _rObjectName, const OUString& _rCurrentAction, const sal_uInt32 _nRange )
     {
         m_aCurrentObject.SetText( _rObjectName );
         m_aCurrentAction.SetText( _rCurrentAction );
@@ -253,7 +253,7 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    void ProgressPage::setObjectProgressText( const ::rtl::OUString& _rText )
+    void ProgressPage::setObjectProgressText( const OUString& _rText )
     {
         m_aCurrentAction.SetText( _rText );
         m_aCurrentAction.Update();
@@ -270,7 +270,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     void ProgressPage::endObject()
     {
-        m_aCurrentAction.SetText( String() );
+        m_aCurrentAction.SetText( OUString() );
         m_aCurrentProgress.SetValue( m_aCurrentProgress.GetRange() );
         m_aCurrentAction.Update();
         Update();
@@ -284,7 +284,7 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    void ProgressPage::setOverallProgressText( const ::rtl::OUString& _rText )
+    void ProgressPage::setOverallProgressText( const OUString& _rText )
     {
         m_aAllProgressText.SetText( _rText );
         Update();
@@ -318,7 +318,7 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    void ResultPage::displayMigrationLog( const bool _bSuccessful, const String& _rSummary )
+    void ResultPage::displayMigrationLog( const bool _bSuccessful, const OUString& _rSummary )
     {
         m_aChangesLabel.SetText( _bSuccessful ? m_aSuccessful : m_aUnsuccessful );
         m_aChanges.SetText( _rSummary );

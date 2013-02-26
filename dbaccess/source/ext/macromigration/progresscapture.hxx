@@ -44,14 +44,14 @@ namespace dbmm
     class ProgressCapture : public ProgressCapture_Base
     {
     public:
-        ProgressCapture( const ::rtl::OUString& _rObjectName, IMigrationProgress& _rMasterProgress );
+        ProgressCapture( const OUString& _rObjectName, IMigrationProgress& _rMasterProgress );
 
         void    dispose();
 
         // XStatusIndicator
-        virtual void SAL_CALL start( const ::rtl::OUString& Text, ::sal_Int32 Range ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL start( const OUString& Text, ::sal_Int32 Range ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL end(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setText( const ::rtl::OUString& Text ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setText( const OUString& Text ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setValue( ::sal_Int32 Value ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL reset(  ) throw (::com::sun::star::uno::RuntimeException);
 

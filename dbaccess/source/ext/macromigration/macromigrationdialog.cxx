@@ -144,10 +144,10 @@ namespace dbmm
         :MacroMigrationDialog_Base( _pParent, MacroMigrationResId( DLG_MACRO_MIGRATION ) )
         ,m_pData( new MacroMigrationDialog_Data( _rContext, _rxDocument ) )
     {
-        String sTitlePrepare( MacroMigrationResId( STR_STATE_CLOSE_SUB_DOCS ) );
-        String sTitleStoreAs( MacroMigrationResId( STR_STATE_BACKUP_DBDOC ) );
-        String sTitleMigrate( MacroMigrationResId( STR_STATE_MIGRATE ) );
-        String sTitleSummary( MacroMigrationResId( STR_STATE_SUMMARY ) );
+        OUString sTitlePrepare( MacroMigrationResId( STR_STATE_CLOSE_SUB_DOCS ) );
+        OUString sTitleStoreAs( MacroMigrationResId( STR_STATE_BACKUP_DBDOC ) );
+        OUString sTitleMigrate( MacroMigrationResId( STR_STATE_MIGRATE ) );
+        OUString sTitleSummary( MacroMigrationResId( STR_STATE_SUMMARY ) );
         FreeResource();
 
         describeState( STATE_CLOSE_SUB_DOCS,    sTitlePrepare, &PreparationPage::Create   );

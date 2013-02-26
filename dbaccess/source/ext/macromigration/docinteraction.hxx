@@ -63,8 +63,8 @@ namespace dbmm
                 if the user aborted the request.
         */
         bool    requestDocumentPassword(
-                    const ::rtl::OUString& _rDocumentName,
-                          ::rtl::OUString& _io_rPassword
+                    const OUString& _rDocumentName,
+                          OUString& _io_rPassword
                 );
 
         /** reports the given error (usually an exception caught on the caller's side)

@@ -89,11 +89,11 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    bool InteractionHandler::requestDocumentPassword( const ::rtl::OUString& _rDocumentName, ::rtl::OUString& _io_rPassword )
+    bool InteractionHandler::requestDocumentPassword( const OUString& _rDocumentName, OUString& _io_rPassword )
     {
         // create request
         DocumentPasswordRequest aRequest(
-            ::rtl::OUString(), NULL,
+            OUString(), NULL,
             InteractionClassification_QUERY,
             _io_rPassword.isEmpty() ? PasswordRequestMode_PASSWORD_ENTER : PasswordRequestMode_PASSWORD_REENTER,
             _rDocumentName
