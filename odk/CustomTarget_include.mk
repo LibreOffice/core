@@ -30,7 +30,7 @@ odk_INCLIST := $(subst $(OUTDIR)/inc/,,$(shell find \
 define odk_inc
 odkcommon_ZIPLIST += include/$(1)
 $(call gb_CustomTarget_get_target,odk/odkcommon/include): $(odk_WORKDIR)/include/$(1)
-$(odk_WORKDIR)/include/$(1): $(foreach dir,$(odk_INCDIRLIST),$(call gb_Package_get_target,$(dir)_inc))
+$(odk_WORKDIR)/include/$(1): $(OUTDIR)/inc/$(1)
 	mkdir -p $$(dir $$@)
 	$$(call gb_Output_announce,$$(subst $$(WORKDIR)/,,$$@),build,CPY,1)
 	cp $$< $$@
