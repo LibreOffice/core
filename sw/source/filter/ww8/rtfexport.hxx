@@ -156,7 +156,7 @@ public:
     SvStream& Strm();
     SvStream& OutULong( sal_uLong nVal );
     SvStream& OutLong( long nVal );
-    void OutUnicode(const sal_Char *pToken, const String &rContent);
+    void OutUnicode(const sal_Char *pToken, const String &rContent, bool bUpr = false);
     void OutDateTime(const sal_Char* pStr, const util::DateTime& rDT );
     void OutPageDescription( const SwPageDesc& rPgDsc, sal_Bool bWriteReset, sal_Bool bCheckForFirstPage );
 
