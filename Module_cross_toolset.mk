@@ -62,6 +62,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	sax \
 	setup_native \
 	shell \
+	solenv \
 	soltools \
 	stoc \
 	store \

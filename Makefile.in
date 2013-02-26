@@ -280,10 +280,7 @@ endif
 build-nocheck : export SKIP_TESTS := YES
 build-nocheck : build
 
-# Ideally solenv would be also in Module_cross_toolset.mk
-# but one would need to chase and add missing dependencies.
 cross-toolset: bootstrap fetch
-	$(GNUMAKE) gb_Side=build solenv
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.cross
 
 #
