@@ -4103,7 +4103,6 @@ if test "$cross_compiling" = "yes"; then
     (cd $SRC_ROOT && tar cf - \
         config.guess \
         config_host.mk.in \
-        configure \
         Makefile.in \
         lo.xcent.in \
         config_host/config_*.h.in \
@@ -4114,6 +4113,7 @@ if test "$cross_compiling" = "yes"; then
         solenv/inc/minor.mk.in \
         instsetoo_native/util/openoffice.lst.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
+    cp configure CONF-FOR-BUILD
     (
     unset COM GUI GUIBASE OS CPU CPUNAME
     unset CC CXX SYSBASE CFLAGS
