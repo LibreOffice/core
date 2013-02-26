@@ -24,11 +24,13 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,store_inc,$(SRCDIR)/store))
+$(eval $(call gb_ZipPackage_ZipPackage,store_odk_headers,$(SRCDIR)/store/inc/store))
 
-$(eval $(call gb_Package_add_file,store_inc,inc/store/store.h,inc/store/store.h))
-$(eval $(call gb_Package_add_file,store_inc,inc/store/store.hxx,inc/store/store.hxx))
-$(eval $(call gb_Package_add_file,store_inc,inc/store/storedllapi.h,inc/store/storedllapi.h))
-$(eval $(call gb_Package_add_file,store_inc,inc/store/types.h,inc/store/types.h))
+$(eval $(call gb_ZipPackage_add_files,store_odk_headers,inc/store,include/store,\
+	store.h \
+	store.hxx \
+	storedllapi.h \
+	types.h \
+))
 
 # vim: set noet sw=4 ts=4:
