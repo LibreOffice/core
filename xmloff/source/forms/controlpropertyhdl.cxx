@@ -296,7 +296,7 @@ namespace xmloff
             return sal_False;
 
         if ( !_rStrExpValue.isEmpty() )
-            _rStrExpValue += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+            _rStrExpValue += " ";
         _rStrExpValue += aOut.makeStringAndClear();
 
         return sal_True;

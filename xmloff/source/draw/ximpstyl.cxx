@@ -1245,8 +1245,8 @@ void SdXMLStylesContext::EndElement()
         {
             uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
-            if( xInfoSetInfo->hasPropertyByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) ) ) )
-                xInfoSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) ), uno::makeAny( getPageLayouts() ) );
+            if( xInfoSetInfo->hasPropertyByName( OUString( "PageLayouts" ) ) )
+                xInfoSet->setPropertyValue( OUString( "PageLayouts" ), uno::makeAny( getPageLayouts() ) );
         }
 
     }
@@ -1288,7 +1288,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is()) try
     {
-        const OUString sGraphicStyleName(OUString(RTL_CONSTASCII_USTRINGPARAM("graphics")));
+        const OUString sGraphicStyleName(OUString("graphics"));
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sGraphicStyleName), uno::UNO_QUERY_THROW );
 
         ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, rtl::OUString());
@@ -1303,7 +1303,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 {
     if(GetSdImport().GetLocalDocStyleFamilies().is()) try
     {
-        const OUString sCellStyleName(OUString(RTL_CONSTASCII_USTRINGPARAM("cell")));
+        const OUString sCellStyleName(OUString("cell"));
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sCellStyleName), uno::UNO_QUERY_THROW );
 
         ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, rtl::OUString());

@@ -53,9 +53,9 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
          IsXMLToken(rLocalName, XML_DOCUMENT_META) )
     {
         if (!mxDocProps.is()) {
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            throw uno::RuntimeException(OUString(
                 "XMLMetaImportComponent::CreateContext: setTargetDocument "
-                "has not been called")), *this);
+                "has not been called"), *this);
         }
         return new SvXMLMetaDocumentContext(
                         *this, nPrefix, rLocalName, mxDocProps);
@@ -72,24 +72,23 @@ void SAL_CALL XMLMetaImportComponent::setTargetDocument(
 {
     mxDocProps = uno::Reference< document::XDocumentProperties >::query( xDoc );
     if( !mxDocProps.is() )
-        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw lang::IllegalArgumentException(OUString(
             "XMLMetaImportComponent::setTargetDocument: argument is no "
-            "XDocumentProperties")), uno::Reference<uno::XInterface>(*this), 0);
+            "XDocumentProperties"), uno::Reference<uno::XInterface>(*this), 0);
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL
     XMLMetaImportComponent_getSupportedServiceNames()
         throw()
 {
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.document.XMLOasisMetaImporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    const OUString aServiceName( "com.sun.star.document.XMLOasisMetaImporter" );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-rtl::OUString SAL_CALL XMLMetaImportComponent_getImplementationName() throw()
+OUString SAL_CALL XMLMetaImportComponent_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLMetaImportComponent" ) );
+    return OUString( "XMLMetaImportComponent" );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance(

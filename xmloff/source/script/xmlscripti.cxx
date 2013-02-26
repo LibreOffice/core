@@ -90,8 +90,8 @@ SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
 
     if ( m_xDocumentScripts.is() )
     {   // document supports embedding scripts/macros
-        ::rtl::OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
-        aBasic += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":Basic" ) );
+        OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
+        aBasic += OUString( ":Basic" );
 
         if ( m_aLanguage == aBasic && nPrefix == XML_NAMESPACE_OOO && IsXMLToken( rLocalName, XML_LIBRARIES ) )
             pContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );
@@ -144,7 +144,7 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
         else if ( IsXMLToken( rLName, XML_SCRIPT ) )
         {
             ::rtl::OUString aAttrName( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_SCRIPT ) );
-            aAttrName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":language" ) );
+            aAttrName += ":language";
             if ( xAttrList.is() )
             {
                 ::rtl::OUString aLanguage = xAttrList->getValueByName( aAttrName );
@@ -154,7 +154,7 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
                     uno::Sequence< beans::PropertyValue > aMedDescr = m_xModel->getArgs();
                     sal_Int32 nNewLen = aMedDescr.getLength() + 1;
                     aMedDescr.realloc( nNewLen );
-                    aMedDescr[nNewLen-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BreakMacroSignature" ) );
+                    aMedDescr[nNewLen-1].Name = "BreakMacroSignature";
                     aMedDescr[nNewLen-1].Value <<= (sal_Bool)sal_True;
                     m_xModel->attachResource( m_xModel->getURL(), aMedDescr );
 

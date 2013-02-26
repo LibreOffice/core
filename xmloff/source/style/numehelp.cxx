@@ -45,10 +45,10 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier)
     : xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
     pExport(NULL),
-    sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)),
-    sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)),
-    msCurrencySymbol(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)),
-    msCurrencyAbbreviation(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION)),
+    sStandardFormat(XML_STANDARDFORMAT),
+    sType(XML_TYPE),
+    msCurrencySymbol(XML_CURRENCYSYMBOL),
+    msCurrencyAbbreviation(XML_CURRENCYABBREVIATION),
     aNumberFormats()
 {
 }
@@ -58,8 +58,8 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
             SvXMLExport& rTempExport )
 :   xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > ()),
     pExport(&rTempExport),
-    sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT)),
-    sType(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE)),
+    sStandardFormat(XML_STANDARDFORMAT),
+    sType(XML_TYPE),
     sAttrValueType(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_VALUE_TYPE))),
     sAttrValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_VALUE))),
     sAttrDateValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_DATE_VALUE))),
@@ -67,8 +67,8 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
     sAttrBooleanValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_BOOLEAN_VALUE))),
     sAttrStringValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_STRING_VALUE))),
     sAttrCurrency(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_CURRENCY))),
-    msCurrencySymbol(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL)),
-    msCurrencyAbbreviation(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION)),
+    msCurrencySymbol(XML_CURRENCYSYMBOL),
+    msCurrencyAbbreviation(XML_CURRENCYABBREVIATION),
     aNumberFormats()
 {
 }
@@ -244,17 +244,17 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
             try
             {
                 uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
-                if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYSYMBOL))) >>= sCurrencySymbol)
+                if ( xNumberPropertySet->getPropertyValue(OUString(XML_CURRENCYSYMBOL)) >>= sCurrencySymbol)
                 {
-                    rtl::OUString sCurrencyAbbreviation;
-                    if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_CURRENCYABBREVIATION))) >>= sCurrencyAbbreviation)
+                    OUString sCurrencyAbbreviation;
+                    if ( xNumberPropertySet->getPropertyValue(OUString(XML_CURRENCYABBREVIATION)) >>= sCurrencyAbbreviation)
                     {
                         if ( !sCurrencyAbbreviation.isEmpty())
                             sCurrencySymbol = sCurrencyAbbreviation;
                         else
                         {
                             if ( sCurrencySymbol.getLength() == 1 && sCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
-                                sCurrencySymbol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUR"));
+                                sCurrencySymbol = "EUR";
                         }
                     }
                     return sal_True;
@@ -281,9 +281,9 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
             try
             {
                 uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
-                xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STANDARDFORMAT))) >>= bIsStandard;
+                xNumberPropertySet->getPropertyValue(OUString(XML_STANDARDFORMAT)) >>= bIsStandard;
                 sal_Int16 nNumberType = sal_Int16();
-                if ( xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_TYPE))) >>= nNumberType )
+                if ( xNumberPropertySet->getPropertyValue(OUString(XML_TYPE)) >>= nNumberType )
                 {
                     return nNumberType;
                 }
@@ -330,7 +330,7 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
             uno::Reference <beans::XPropertySet> xNumberPropertySet(xNumberFormats->getByKey(nNumberFormat));
             if ( xNumberPropertySet->getPropertyValue(msCurrencySymbol) >>= rCurrencySymbol)
             {
-                rtl::OUString sCurrencyAbbreviation;
+                OUString sCurrencyAbbreviation;
                 if ( xNumberPropertySet->getPropertyValue(msCurrencyAbbreviation) >>= sCurrencyAbbreviation)
                 {
                     if ( !sCurrencyAbbreviation.isEmpty())
@@ -338,7 +338,7 @@ sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int3
                     else
                     {
                         if ( rCurrencySymbol.getLength() == 1 && rCurrencySymbol.toChar() == NfCurrencyEntry::GetEuroSymbol() )
-                            rCurrencySymbol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUR"));
+                            rCurrencySymbol = OUString("EUR");
                     }
                 }
                 return sal_True;

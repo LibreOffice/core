@@ -42,15 +42,15 @@ namespace xmloff
     namespace
     {
         //----------------------------------------------------------------
-        ::rtl::OUString getParaAlignProperty()
+        OUString getParaAlignProperty()
         {
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) );
+            return OUString( "ParaAdjust" );
         }
 
         //----------------------------------------------------------------
-        ::rtl::OUString getAlignProperty()
+        OUString getAlignProperty()
         {
-            return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Align" ) );
+            return OUString( "Align" );
         }
 
         //----------------------------------------------------------------

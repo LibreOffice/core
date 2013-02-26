@@ -272,36 +272,28 @@ void SvXMLMetaExport::_MExport()
             if ( aDocStatistic[nInd].Value >>= nValue )
             {
                 ::rtl::OUString aValue = rtl::OUString::valueOf( nValue );
-                if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "TableCount" ) ) ) )
+                if ( aDocStatistic[nInd].Name == "TableCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_TABLE_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "ObjectCount" ) ) ) )
+                else if ( aDocStatistic[nInd].Name == "ObjectCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_OBJECT_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "ImageCount" ) ) ) )
+                else if ( aDocStatistic[nInd].Name == "ImageCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_IMAGE_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "PageCount" ) ) ) )
+                else if ( aDocStatistic[nInd].Name == "PageCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_PAGE_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "ParagraphCount" ) ) ) )
+                else if ( aDocStatistic[nInd].Name == "ParagraphCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_PARAGRAPH_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "WordCount" ) ) ) )
+                else if ( aDocStatistic[nInd].Name == "WordCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_WORD_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "CharacterCount" ) ) ) )
+                else if ( aDocStatistic[nInd].Name == "CharacterCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_CHARACTER_COUNT, aValue );
-                else if ( aDocStatistic[nInd].Name.equals( ::rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "CellCount" ) ) ) )
+                else if ( aDocStatistic[nInd].Name == "CellCount" )
                     mrExport.AddAttribute(
                         XML_NAMESPACE_META, XML_CELL_COUNT, aValue );
                 else

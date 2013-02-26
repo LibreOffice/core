@@ -35,11 +35,11 @@ using ::com::sun::star::beans::PropertyValue;
 
 
 XMLStarBasicExportHandler::XMLStarBasicExportHandler() :
-    sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic")),
-    sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
-    sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
-    sStarOffice(RTL_CONSTASCII_USTRINGPARAM("StarOffice")),
-    sApplication(RTL_CONSTASCII_USTRINGPARAM("application"))
+    sStarBasic("StarBasic"),
+    sLibrary("Library"),
+    sMacroName("MacroName"),
+    sStarOffice("StarOffice"),
+    sApplication("application")
 {
 }
 

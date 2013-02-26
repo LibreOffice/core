@@ -325,7 +325,7 @@ sal_Bool XMLPMPropHdl_Print::exportXML(
     if( getBOOL( rValue ) )
     {
         if( !rStrExpValue.isEmpty() )
-            rStrExpValue += OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+            rStrExpValue += " ";
         rStrExpValue += sAttrValue;
     }
 

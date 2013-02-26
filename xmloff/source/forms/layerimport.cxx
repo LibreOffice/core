@@ -542,7 +542,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
         &&  FormCellBindingHelper::isCellBindingAllowed( rImport.GetModel() )
         )
     {
-        static ::rtl::OUString s_sIndex( RTL_CONSTASCII_USTRINGPARAM( ":index" ) );
+        static OUString s_sIndex( ":index" );
         ::std::vector< ModelStringPair >::const_iterator aEnd = m_aCellValueBindings.end();
         for (   ::std::vector< ModelStringPair >::const_iterator aCellBindings = m_aCellValueBindings.begin();
                 aCellBindings != aEnd;

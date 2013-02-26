@@ -45,7 +45,7 @@ using ::xmloff::token::XML_EVENT_LISTENERS;
 
 XMLEventExport::XMLEventExport(SvXMLExport& rExp,
                          const XMLEventNameTranslation* pTranslationTable) :
-    sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
+    sEventType("EventType"),
     rExport(rExp),
     bExtNamespace(false)
 {

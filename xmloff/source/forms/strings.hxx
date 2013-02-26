@@ -31,7 +31,7 @@ namespace xmloff
 #ifndef XMLFORM_IMPLEMENT_STRINGS
     #define XMLFORM_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident
 #else
-    #define XMLFORM_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident = {RTL_CONSTASCII_STRINGPARAM(string)}
+    #define XMLFORM_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident = {string}
 #endif
 
     //============================================================

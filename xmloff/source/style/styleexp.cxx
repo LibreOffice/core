@@ -56,11 +56,11 @@ XMLStyleExport::XMLStyleExport(
         const OUString& rPoolStyleName,
         SvXMLAutoStylePoolP *pAutoStyleP ) :
     rExport( rExp ),
-    sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
-    sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
-    sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
-    sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) ),
-    sOutlineLevel( RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) ),
+    sIsPhysical( "IsPhysical" ),
+    sIsAutoUpdate( "IsAutoUpdate" ),
+    sFollowStyle( "FollowStyle" ),
+    sNumberingStyleName( "NumberingStyleName" ),
+    sOutlineLevel( "OutlineLevel" ),
     sPoolStyleName( rPoolStyleName ),
     pAutoStylePool( pAutoStyleP  )
 {
@@ -195,7 +195,7 @@ sal_Bool XMLStyleExport::exportStyle(
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                               XML_DEFAULT_OUTLINE_LEVEL,
-                                              OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
+                                              OUString( "" ));
                 }
             }
         }
@@ -246,7 +246,7 @@ sal_Bool XMLStyleExport::exportStyle(
                                     Reference< XPropertySet > xNumRulePropSet
                                         (xNumRule, UNO_QUERY);
                                     xNumRulePropSet->getPropertyValue(
-                                        OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) )
+                                        OUString("Name") )
                                         >>= sOutlineName;
                                     bSuppressListStyle = ( sListName == sOutlineName );
                                 }
@@ -299,7 +299,7 @@ sal_Bool XMLStyleExport::exportStyle(
             if ( bNoInheritedListStyle )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_LIST_STYLE_NAME,
-                                          OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
+                                          OUString( "" ));
         }
     }
 

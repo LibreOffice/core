@@ -157,8 +157,8 @@ sal_Bool XMLPageExport::exportStyle(
 
 XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
     rExport( rExp ),
-    sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
-    sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+    sIsPhysical( "IsPhysical" ),
+    sFollowStyle( "FollowStyle" )
 {
     xPageMasterPropHdlFactory = new XMLPageMasterPropHdlFactory;
     xPageMasterPropSetMapper = new XMLPageMasterPropSetMapper(
@@ -167,8 +167,8 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
     xPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(
                                     xPageMasterPropSetMapper, rExp);
 
-    rExport.GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_PAGE_MASTER, OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_PAGE_MASTER_NAME ) ),
-        xPageMasterExportPropMapper, OUString( RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_PAGE_MASTER_PREFIX ) ), sal_False );
+    rExport.GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_PAGE_MASTER, OUString( XML_STYLE_FAMILY_PAGE_MASTER_NAME ),
+        xPageMasterExportPropMapper, OUString( XML_STYLE_FAMILY_PAGE_MASTER_PREFIX ), sal_False );
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(),
                                                        UNO_QUERY );
@@ -181,8 +181,7 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
                     "getStyleFamilies() from XModel failed for export!" );
         if( xFamilies.is() )
         {
-            const OUString aPageStyleName(
-                        RTL_CONSTASCII_USTRINGPARAM( "PageStyles" ));
+            const OUString aPageStyleName("PageStyles");
 
             if( xFamilies->hasByName( aPageStyleName ) )
             {
@@ -228,7 +227,7 @@ void XMLPageExport::exportDefaultStyle()
     Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);
     if (xFactory.is())
     {
-        OUString sTextDefaults ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.Defaults" ) );
+        OUString sTextDefaults ( "com.sun.star.text.Defaults" );
         Reference < XPropertySet > xPropSet (xFactory->createInstance ( sTextDefaults ), UNO_QUERY);
         if (xPropSet.is())
         {

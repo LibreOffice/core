@@ -162,7 +162,7 @@ void PageStyleContext::FillPropertySet(
         uno::Any aPageUsage;
         XMLPMPropHdl_PageStyleLayout aPageUsageHdl;
         if (aPageUsageHdl.importXML(sPageUsage, aPageUsage, GetImport().GetMM100UnitConverter()))
-            rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyleLayout")), aPageUsage);
+            rPropSet->setPropertyValue(OUString("PageStyleLayout"), aPageUsage);
     }
 }
 
@@ -174,7 +174,7 @@ void PageStyleContext::SetDefaults( )
     if (xFactory.is())
     {
         Reference < XInterface > xInt = xFactory->createInstance (
-        rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.Defaults" ) ) );
+        OUString ( "com.sun.star.text.Defaults" ) );
         Reference < beans::XPropertySet > xProperties ( xInt, UNO_QUERY );
         if ( xProperties.is() )
             FillPropertySet ( xProperties );

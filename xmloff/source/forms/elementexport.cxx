@@ -379,7 +379,7 @@ namespace xmloff
             // later on imported, it overwrites anything which has previously been imported for
             // CharStrikeout.
             // #i27729#
-            exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharCrossedOut" ) ) );
+            exportedProperty( OUString( "CharCrossedOut" ) );
         }
 
         if ( m_eType == LISTBOX )
@@ -1960,7 +1960,7 @@ namespace xmloff
         try
         {
             // currently exchanging the data with a database column?
-            ::rtl::OUString sBoundFieldPropertyName( RTL_CONSTASCII_USTRINGPARAM( "BoundField" ) );
+            ::rtl::OUString sBoundFieldPropertyName( "BoundField" );
             if ( m_xPropertyInfo.is() && m_xPropertyInfo->hasPropertyByName( sBoundFieldPropertyName ) )
             {
                 Reference< XPropertySet > xBoundField;
