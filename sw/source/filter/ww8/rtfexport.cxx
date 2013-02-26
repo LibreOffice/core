@@ -395,7 +395,7 @@ void RtfExport::WriteInfo()
     }
 
     if (xDocProps.is()) {
-        OutUnicode(OOO_STRING_SVTOOLS_RTF_TITLE, xDocProps->getTitle());
+        OutUnicode(OOO_STRING_SVTOOLS_RTF_TITLE, xDocProps->getTitle(), true);
         OutUnicode(OOO_STRING_SVTOOLS_RTF_SUBJECT, xDocProps->getSubject());
 
         OutUnicode(OOO_STRING_SVTOOLS_RTF_KEYWORDS,
@@ -801,13 +801,18 @@ SvStream& RtfExport::OutLong( long nVal )
     return m_pWriter->OutLong( Strm(), nVal );
 }
 
-void RtfExport::OutUnicode(const sal_Char *pToken, const String &rContent)
+void RtfExport::OutUnicode(const sal_Char *pToken, const String &rContent, bool bUpr)
 {
     if (rContent.Len())
     {
-        Strm() << '{' << pToken << ' ';
-        Strm() << msfilter::rtfutil::OutString( rContent, eCurrentEncoding ).getStr();
-        Strm() << '}';
+        if (!bUpr)
+        {
+            Strm() << '{' << pToken << ' ';
+            Strm() << msfilter::rtfutil::OutString( rContent, eCurrentEncoding ).getStr();
+            Strm() << '}';
+        }
+        else
+            Strm() << msfilter::rtfutil::OutStringUpr(pToken, rContent, eCurrentEncoding).getStr();
     }
 }
 

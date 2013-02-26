@@ -69,6 +69,7 @@ public:
     void testTextFrames();
     void testFdo53604();
     void testFdo52286();
+    void testFdo61507();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -113,6 +114,7 @@ void Test::run()
         {"textframes.odt", &Test::testTextFrames},
         {"fdo53604.odt", &Test::testFdo53604},
         {"fdo52286.odt", &Test::testFdo52286},
+        {"fdo61507.rtf", &Test::testFdo61507},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -461,6 +463,23 @@ void Test::testFdo52286()
     // The problem was that font size wasn't reduced in sub/super script.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharEscapementHeight"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58), getProperty<sal_Int32>(getRun(getParagraph(2), 2), "CharEscapementHeight"));
+}
+
+void Test::testFdo61507()
+{
+    /*
+     * Unicode-only characters in \title confused Wordpad. Once the exporter
+     * was fixed to guard the problematic characters with \upr and \ud, the
+     * importer didn't cope with these new keywords.
+     */
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
+    OUString aExpected = OUString("ÉÁŐŰ∭", 11, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xDocumentProperties->getTitle());
+
+    // Only "Hello.", no additional characters.
+    CPPUNIT_ASSERT_EQUAL(6, getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
