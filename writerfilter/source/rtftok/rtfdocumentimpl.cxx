@@ -1517,7 +1517,11 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE;
             break;
         case RTF_TITLE:
-            m_aStates.top().nDestinationState = DESTINATION_TITLE;
+            // \title inside \upr but outside \ud should be ignored.
+            if (m_aStates.top().nDestinationState != DESTINATION_UPR)
+                m_aStates.top().nDestinationState = DESTINATION_TITLE;
+            else
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         case RTF_SUBJECT:
             m_aStates.top().nDestinationState = DESTINATION_SUBJECT;
@@ -1615,6 +1619,13 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         OPEN_M_TOKEN(SPREPR, sPrePr);
         OPEN_M_TOKEN(BOX, box);
         OPEN_M_TOKEN(EQARR, eqArr);
+        case RTF_UPR:
+            m_aStates.top().nDestinationState = DESTINATION_UPR;
+            break;
+        case RTF_UD:
+            // Anything inside \ud is just normal Unicode content.
+            m_aStates.top().nDestinationState = DESTINATION_NORMAL;
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -3808,10 +3819,6 @@ int RTFDocumentImpl::popState()
     if (m_xDocumentProperties.is())
         m_xDocumentProperties->setGenerator(m_aStates.top().aDestinationText.makeStringAndClear());
     break;
-    case DESTINATION_TITLE:
-    if (m_xDocumentProperties.is())
-        m_xDocumentProperties->setTitle(m_aStates.top().aDestinationText.makeStringAndClear());
-    break;
     case DESTINATION_SUBJECT:
     if (m_xDocumentProperties.is())
         m_xDocumentProperties->setSubject(m_aStates.top().aDestinationText.makeStringAndClear());
@@ -4234,6 +4241,14 @@ int RTFDocumentImpl::popState()
             aState.nDestinationState == DESTINATION_SHPPICT ||
             aState.nDestinationState == DESTINATION_SHAPE)
         m_aStates.top().aFrame = aState.aFrame;
+    else if (aState.nDestinationState == DESTINATION_TITLE)
+    {
+        if (m_aStates.top().nDestinationState == DESTINATION_TITLE)
+            // The parent is a title as well, just append what we have so far.
+            m_aStates.top().aDestinationText.append(aState.aDestinationText.makeStringAndClear());
+        else if (m_xDocumentProperties.is())
+            m_xDocumentProperties->setTitle(aState.aDestinationText.makeStringAndClear());
+    }
     if (m_pCurrentBuffer == &m_aSuperBuffer)
     {
         if (!m_bHasFootnote)
