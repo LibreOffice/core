@@ -30,7 +30,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,ulingu))
 $(eval $(call gb_StaticLibrary_use_packages,ulingu,\
 	comphelper_inc \
 	cppu_odk_headers \
-	cppuhelper_inc \
+	cppuhelper_odk_headers \
 	i18npool_inc \
 	linguistic_inc \
 	tools_inc \

@@ -31,9 +31,9 @@ $(eval $(call gb_Module_add_targets,cppuhelper,\
 	CustomTarget_cppuhelper_allheaders \
 	InternalUnoApi_cppuhelper \
 	Library_cppuhelper \
-	Package_inc \
 	Package_unorc \
 	StaticLibrary_findsofficepath \
+	ZipPackage_cppuhelper_odk_headers \
 ))
 
 $(eval $(call gb_Module_add_check_targets,cppuhelper,\

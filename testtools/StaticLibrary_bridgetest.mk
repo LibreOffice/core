@@ -31,7 +31,7 @@ $(eval $(call gb_StaticLibrary_use_external,testtools_bridgetest_s,boost_headers
 
 $(eval $(call gb_StaticLibrary_use_packages,testtools_bridgetest_s,\
 	cppu_odk_headers \
-	cppuhelper_inc \
+	cppuhelper_odk_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_use_internal_api,testtools_bridgetest_s,\

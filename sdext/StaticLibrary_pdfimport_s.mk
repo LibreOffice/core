@@ -31,7 +31,7 @@ $(eval $(call gb_StaticLibrary_use_packages,pdfimport_s,\
     basegfx_inc \
     comphelper_inc \
     cppu_odk_headers \
-    cppuhelper_inc \
+    cppuhelper_odk_headers \
     o3tl_inc \
     tools_inc \
 ))

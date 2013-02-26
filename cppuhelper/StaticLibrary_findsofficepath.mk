@@ -10,7 +10,7 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,findsofficepath))
 
 $(eval $(call gb_StaticLibrary_use_packages,findsofficepath,\
-    cppuhelper_inc \
+    cppuhelper_odk_headers \
     sal_odk_headers \
 ))
 

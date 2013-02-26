@@ -33,7 +33,7 @@ $(eval $(call gb_StaticLibrary_use_packages,headless,\
 	basegfx_inc \
 	comphelper_inc \
 	cppu_odk_headers \
-	cppuhelper_inc \
+	cppuhelper_odk_headers \
 	i18npool_inc \
 	i18nutil_inc \
 	o3tl_inc \

@@ -23,7 +23,7 @@ DOXY_DEPS := $(SRCDIR)/odk/pack/gendocu/Doxyfile \
 	$(call gb_Package_get_target,sal_odk_headers) \
 	$(call gb_Package_get_target,salhelper_odk_headers) \
 	$(call gb_Package_get_target,cppu_odk_headers) \
-	$(call gb_Package_get_target,cppuhelper_inc) \
+	$(call gb_Package_get_target,cppuhelper_odk_headers) \
 	$(call gb_Package_get_target,store_inc) \
 	$(call gb_Package_get_target,registry_inc)
 
