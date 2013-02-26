@@ -373,7 +373,9 @@ void HelpLinker::link() throw( HelpProcessingException )
         }
         else
         {
-            langsourceRoot.append('/' + lang + '/');
+            langsourceRoot.append( "/" );
+            if ( m_bUseLangRoot )
+                langsourceRoot.append( lang + '/' );
             xhpFile = fs::path(xhpFileName, fs::native);
         }
 
@@ -732,6 +734,8 @@ void HelpLinker::main( std::vector<std::string> &args,
             if (!addFileUnderPath.empty() && !addFile.empty())
                 additionalFiles[addFileUnderPath] = addFile;
         }
+        else if (args[i].compare("-nolangroot") == 0)
+            m_bUseLangRoot = false;
         else
             helpFiles.push_back(args[i]);
         ++i;
