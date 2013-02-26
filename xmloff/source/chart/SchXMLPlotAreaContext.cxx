@@ -1037,6 +1037,90 @@ SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
 {
 }
 
+namespace {
+
+void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Reference< beans::XPropertySet> xBarProp,
+                                            SchXMLImportHelper& rImportHelper)
+{
+    const SvXMLStylesContext* pStylesCtxt = rImportHelper.GetAutoStylesContext();
+    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(rImportHelper.GetChartFamilyID(),
+            aStyleName);
+
+    XMLPropStyleContext * pSeriesStyleContext =
+        const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
+
+    uno::Any aAny = SchXMLTools::getPropertyFromContext("ErrorBarStyle",
+            pSeriesStyleContext,pStylesCtxt);
+
+    if ( aAny.hasValue() )
+    {
+        sal_Int32 aBarStyle = com::sun::star::chart::ErrorBarStyle::NONE;
+        aAny >>= aBarStyle;
+
+        aAny = SchXMLTools::getPropertyFromContext("ShowPositiveError",
+                pSeriesStyleContext,pStylesCtxt);
+
+        if(aAny.hasValue())
+            xBarProp->setPropertyValue("ShowPositiveError",aAny);
+
+        aAny = SchXMLTools::getPropertyFromContext("ShowNegativeError",
+                pSeriesStyleContext,pStylesCtxt);
+
+        if(aAny.hasValue())
+            xBarProp->setPropertyValue("ShowNegativeError",aAny);
+
+        aAny = SchXMLTools::getPropertyFromContext("PositiveError",
+                pSeriesStyleContext, pStylesCtxt);
+
+        if(aAny.hasValue())
+            xBarProp->setPropertyValue("PositiveError", aAny);
+        else
+        {
+            aAny = SchXMLTools::getPropertyFromContext("ConstantErrorHigh",
+                    pSeriesStyleContext, pStylesCtxt);
+
+            if(aAny.hasValue())
+                xBarProp->setPropertyValue("PositiveError", aAny);
+        }
+
+        aAny = SchXMLTools::getPropertyFromContext("NegativeError",
+                pSeriesStyleContext, pStylesCtxt);
+
+        if(aAny.hasValue())
+            xBarProp->setPropertyValue("NegativeError", aAny);
+        else
+        {
+            aAny = SchXMLTools::getPropertyFromContext("ConstantErrorLow",
+                    pSeriesStyleContext, pStylesCtxt);
+
+            if(aAny.hasValue())
+                xBarProp->setPropertyValue("NegativeError", aAny);
+        }
+
+        switch(aBarStyle)
+        {
+            case com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
+                {
+                    aAny = SchXMLTools::getPropertyFromContext("NegativeError",
+                            pSeriesStyleContext,pStylesCtxt);
+
+                    xBarProp->setPropertyValue("NegativeError",aAny);
+
+                    aAny = SchXMLTools::getPropertyFromContext("PositiveError",
+                            pSeriesStyleContext,pStylesCtxt);
+
+                    xBarProp->setPropertyValue("PositiveError",aAny);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+}
+
+
 void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
@@ -1096,15 +1180,10 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                     xBarProp->setPropertyValue("ShowPositiveError",uno::makeAny(sal_True));
                     xBarProp->setPropertyValue("ShowNegativeError",uno::makeAny(sal_True));
 
-                    const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
 
-                    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                        mrImportHelper.GetChartFamilyID(), sAutoStyleName );
-                    // note: SvXMLStyleContext::FillPropertySet is not const
-                    XMLPropStyleContext * pErrorStyleContext =
-                        const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
-
-                    pErrorStyleContext->FillPropertySet( xBarProp );
+                    // first import defaults from parent style
+                    SetErrorBarPropertiesFromStyleName( maSeriesStyleName, xBarProp, mrImportHelper );
+                    SetErrorBarPropertiesFromStyleName( sAutoStyleName, xBarProp, mrImportHelper );
 
                     uno::Reference< chart2::XChartDocument > xDoc(GetImport().GetModel(),uno::UNO_QUERY);
 
@@ -1120,51 +1199,6 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                     }
                     else
                     {
-                        /// Keep 0DF12 and below support
-                        pStyle = pStylesCtxt->FindStyleChildContext(mrImportHelper.GetChartFamilyID(),
-                                                                    maSeriesStyleName);
-
-                        XMLPropStyleContext * pSeriesStyleContext =
-                            const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
-
-                        uno::Any aAny = SchXMLTools::getPropertyFromContext("ErrorBarStyle",
-                                                                            pSeriesStyleContext,pStylesCtxt);
-
-                        if ( aAny.hasValue() )
-                        {
-                            sal_Int32 aBarStyle = com::sun::star::chart::ErrorBarStyle::NONE;
-                            aAny >>= aBarStyle;
-
-                            aAny = SchXMLTools::getPropertyFromContext("ShowPositiveError",
-                                                                       pSeriesStyleContext,pStylesCtxt);
-
-                            xBarProp->setPropertyValue("ShowPositiveError",aAny);
-
-                            aAny = SchXMLTools::getPropertyFromContext("ShowNegativeError",
-                                                                       pSeriesStyleContext,pStylesCtxt);
-
-                            xBarProp->setPropertyValue("ShowNegativeError",aAny);
-
-                            switch(aBarStyle)
-                            {
-                            case com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
-                                {
-                                    aAny = SchXMLTools::getPropertyFromContext("NegativeError",
-                                                                               pSeriesStyleContext,pStylesCtxt);
-
-                                    xBarProp->setPropertyValue("NegativeError",aAny);
-
-                                    aAny = SchXMLTools::getPropertyFromContext("PositiveError",
-                                                                               pSeriesStyleContext,pStylesCtxt);
-
-                                    xBarProp->setPropertyValue("PositiveError",aAny);
-                                }
-                                break;
-                            default:
-                                break;
-                            }
-                        }
-
                         aStyle.m_xErrorYProperties.set( xBarProp );
                     }
                 }
