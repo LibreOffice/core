@@ -6013,13 +6013,13 @@ void Test::testAnchoredRotatedShape()
         CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
 
         // ensure that anchor start and end addresses haven't changed
-        printf("expected startrow %d actual %d\n", aAnchor.maStart.Row(), pData->maStart.Row()  );
+        printf("expected startrow %ld actual %ld\n", (long)aAnchor.maStart.Row(), (long)pData->maStart.Row()  );
         CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Row(), pData->maStart.Row() ); // start row 0
-        printf("expected startcol %d actual %d\n", aAnchor.maStart.Col(), pData->maStart.Col()  );
+        printf("expected startcol %ld actual %ld\n", (long)aAnchor.maStart.Col(), (long)pData->maStart.Col()  );
         CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Col(), pData->maStart.Col() ); // start column 5
-        printf("expected endrow %d actual %d\n", aAnchor.maEnd.Row(), pData->maEnd.Row()  );
+        printf("expected endrow %ld actual %ld\n", (long)aAnchor.maEnd.Row(), (long)pData->maEnd.Row()  );
         CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Row(), pData->maEnd.Row() ); // end row 3
-        printf("expected endcol %d actual %d\n", aAnchor.maEnd.Col(), pData->maEnd.Col()  );
+        printf("expected endcol %ld actual %ld\n", (long)aAnchor.maEnd.Col(), (long)pData->maEnd.Col()  );
         CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Col(), pData->maEnd.Col() ); // end col 7
     }
     m_pDoc->DeleteTab(0);
