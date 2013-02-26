@@ -2736,6 +2736,7 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
             rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
         }
 
+        // remove both pages
         rDoc.RemoveMasterPage( nPage );
         rDoc.RemoveMasterPage( nPage );
 
