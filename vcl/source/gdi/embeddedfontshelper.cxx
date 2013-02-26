@@ -14,7 +14,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-#if defined(UNX)
+#if defined(UNX) && !defined(MACOSX)
 #include <vcl/fontmanager.hxx>
 #endif
 
@@ -63,7 +63,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     FontWeight weight, FontPitch pitch, rtl_TextEncoding )
 {
     OUString url;
-#if defined(UNX)
+#if defined(UNX) && !defined(MACOSX)
     psp::PrintFontManager& mgr = psp::PrintFontManager::get();
     list< psp::fontID > fontIds;
     mgr.getFontList( fontIds );
