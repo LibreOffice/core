@@ -94,6 +94,8 @@ private:
 
     DECL_LINK(ScrollHdl, ScrollBar*);
 
+    void checkAutoVScroll();
+
 public:
     ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& mrSortKeyItems);
     void setScrollRange();

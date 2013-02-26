@@ -111,13 +111,26 @@ ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
     , m_rVertScroll(m_rScrolledWindow.getVertScrollBar())
 {
     m_rVertScroll.EnableDrag();
-    m_rVertScroll.Show();
+    m_rVertScroll.Show(m_rScrolledWindow.GetStyle() & WB_VSCROLL);
 
     m_rVertScroll.SetRangeMin( 0 );
     m_rVertScroll.SetVisibleSize( 0xFFFF );
 
     Link aScrollLink = LINK( this, ScSortKeyCtrl, ScrollHdl );
     m_rVertScroll.SetScrollHdl( aScrollLink );
+}
+
+void ScSortKeyCtrl::checkAutoVScroll()
+{
+    WinBits nBits = m_rScrolledWindow.GetStyle();
+    if (nBits & WB_VSCROLL)
+        return;
+    if (nBits & WB_AUTOVSCROLL)
+    {
+        bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
+        if (bShow != m_rVertScroll.IsVisible())
+            m_rVertScroll.Show(bShow);
+    }
 }
 
 void ScSortKeyCtrl::setScrollRange()
@@ -127,6 +140,7 @@ void ScSortKeyCtrl::setScrollRange()
     m_rVertScroll.SetPageSize( nVisibleItems - 1 );
     m_rVertScroll.SetVisibleSize( nVisibleItems );
     m_rVertScroll.Scroll();
+    checkAutoVScroll();
 }
 
 // -----------------------------------------------------------------------
@@ -146,6 +160,7 @@ void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItem )
     m_rVertScroll.SetRangeMax( nItem );
     m_rVertScroll.DoScroll( nItem );
     m_aSortWin.AddSortKey( nItem );
+    checkAutoVScroll();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
