@@ -742,7 +742,7 @@ public:
                                                                 sal_Bool bHasObj = sal_True );
     virtual AbstractSvxPostItDialog*        CreateSvxPostItDialog( Window* pParent, //add for SvxPostItDialog
                                                                         const SfxItemSet& rCoreSet,
-                                                                        sal_Bool bPrevNext = sal_False, sal_Bool bRedline = sal_False );
+                                                                        sal_Bool bPrevNext = sal_False );
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId );

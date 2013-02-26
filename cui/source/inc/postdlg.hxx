@@ -29,8 +29,6 @@
 
 // class SvxPostItDialog -------------------------------------------------
 /*
-    {k:\svx\prototyp\dialog\memo.bmp}
-
     [Description]
     In this dialog a note can be created or edited. If the
     application holds a list of notes, it can be iterated
@@ -46,7 +44,7 @@ class SvxPostItDialog : public SfxModalDialog
 {
 public:
     SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
-                     bool bPrevNext = false, bool bRedline = false);
+                     bool bPrevNext = false);
     ~SvxPostItDialog();
 
     static sal_uInt16*      GetRanges();

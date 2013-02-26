@@ -33,7 +33,7 @@ ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, true );
+        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext );
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         pDocShell=pShell;
         pDlg->DontChangeAuthor();

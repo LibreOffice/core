@@ -1665,9 +1665,9 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
 
 AbstractSvxPostItDialog* AbstractDialogFactory_Impl::CreateSvxPostItDialog( Window* pParent,
                                                                         const SfxItemSet& rCoreSet,
-                                                                        sal_Bool bPrevNext, sal_Bool bRedline )
+                                                                        sal_Bool bPrevNext )
 {
-    SvxPostItDialog* pDlg = new SvxPostItDialog( pParent, rCoreSet, bPrevNext, bRedline );
+    SvxPostItDialog* pDlg = new SvxPostItDialog( pParent, rCoreSet, bPrevNext );
     return new AbstractSvxPostItDialog_Impl( pDlg );
 }
 

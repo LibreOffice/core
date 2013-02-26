@@ -453,7 +453,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact2, "Dialogdiet fail!");
-                    AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel, sal_True );
+                    AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel );
                     OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     pDlg->HideAuthor();
 

@@ -41,7 +41,7 @@
 // class SvxPostItDialog -------------------------------------------------
 
 SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
-    bool bPrevNext, bool bRedline)
+    bool bPrevNext)
     : SfxModalDialog(pParent, "CommentDialog", "cui/ui/comment.ui")
     , rSet(rCoreSet)
     , pOutSet(0)
@@ -53,14 +53,6 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
     get(m_pPrevBtn, "previous");
     get(m_pNextBtn, "next");
     get(m_pEditED, "edit");
-
-    if (bRedline)   // HelpIDs for redlining
-    {
-        SetHelpId(HID_REDLINING_DLG);
-        m_pEditED->SetHelpId(HID_REDLINING_EDIT);
-        m_pPrevBtn->SetHelpId(HID_REDLINING_PREV);
-        m_pNextBtn->SetHelpId(HID_REDLINING_NEXT);
-    }
 
     m_pPrevBtn->SetClickHdl( LINK( this, SvxPostItDialog, PrevHdl ) );
     m_pNextBtn->SetClickHdl( LINK( this, SvxPostItDialog, NextHdl ) );
