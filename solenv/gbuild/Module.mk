@@ -154,6 +154,7 @@ gb_Module__debug_enabled = \
        $(filter all $(1)/,$(ENABLE_DEBUGINFO_FOR)))
 
 define gb_Module_Module
+$(if $(filter-out tail_build instsetoo_native,$(1)),$(call gb_Postprocess_get_target,AllModulesButInstsetNative) : $(call gb_Module_get_target,$(1)))
 gb_Module_ALLMODULES += $(1)
 gb_Module_MODULELOCATIONS += $(1):$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 gb_Module_TARGETSTACK := $(call gb_Module_get_target,$(1)) $(gb_Module_TARGETSTACK)
@@ -289,5 +290,9 @@ endif
 
 $$(eval $$(gb_Extensions_final_hook))
 endef
+
+$(call gb_Postprocess_get_target,AllModulesButInstsetNative) :
+	$(call gb_Output_announce,All modules but instset: $^,$(true),ALL)
+	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && touch $@)
 
 # vim: set noet sw=4:

@@ -28,7 +28,8 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/install,\
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: \
 	$(SOLARENV)/bin/make_installer.pl \
-	$(foreach ulf,$(instsetoo_ULFLIST),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/$(ulf).ulf)
+	$(foreach ulf,$(instsetoo_ULFLIST),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/$(ulf).ulf) \
+	$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/bin/find-requires-%.sh: $(SRCDIR)/instsetoo_native/inc_openoffice/unix/find-requires-%.sh
 	cat $< | tr -d "\015" > $@
@@ -37,7 +38,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/bin/find-requires-%
 ifneq ($(WITH_LANG),)
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf: \
 		$(SRCDIR)/instsetoo_native/inc_openoffice/windows/msi_languages/%.ulf | \
-		$(call gb_Executable_get_runtime_dependencies,ulfex)
+		$(call gb_Executable_get_runtime_dependencies,ulfex) \
+		$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 	$(call gb_Output_announce,$@,$(true),SUM,1)
 	MERGEINPUT=`$(gb_MKTEMP)` && \
 	echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/instsetoo_native/inc_openoffice/windows/msi_languages.po) > $${MERGEINPUT} && \
@@ -46,7 +48,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf:
 	rm -rf $${MERGEINPUT}
 else
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/%.ulf: \
-	$(SRCDIR)/instsetoo_native/inc_openoffice/windows/msi_languages/%.ulf
+		$(SRCDIR)/instsetoo_native/inc_openoffice/windows/msi_languages/%.ulf \
+		$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 	cp $< $@
 endif
 
