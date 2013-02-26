@@ -95,7 +95,9 @@ void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
 #endif
     const std::string& sourceXhpPath = filePath.native_file_string();
     std::string zipdirPath = zipdir.native_file_string();
-    std::string jarXhpPath = sourceXhpPath.substr( sourceXhpPath.rfind( lang + pathSep + "text" + pathSep ) ).substr( lang.length() );
+    const std::string srcdirPath( src.native_file_string() );
+    // srcdirPath contains trailing /, but we want the file path with / at the beginning
+    std::string jarXhpPath = sourceXhpPath.substr( srcdirPath.length() - 1 );
     std::string xhpFileName = jarXhpPath.substr( jarXhpPath.rfind( pathSep ) + 1 );
     jarXhpPath = jarXhpPath.substr( 0, jarXhpPath.rfind( pathSep ) );
     if ( !jarXhpPath.compare( 1, 11, "text" + pathSep + "sbasic" ) )
@@ -104,8 +106,9 @@ void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
     }
     if ( !jarXhpPath.compare( 1, 11, "text" + pathSep + "shared" ) )
     {
-        size_t pos = zipdirPath.find( "ziptmp" ) + 6;
-        zipdirPath.replace( pos, module.length(), "shared" );
+        const size_t pos = zipdirPath.find( "ziptmp" );
+        if ( pos != std::string::npos )
+            zipdirPath.replace( pos + 6, module.length(), "shared" );
     }
     xmlDocPtr compacted = compactXhpForJar( doc );
     fs::create_directory( fs::path( zipdirPath + jarXhpPath, fs::native ) );
