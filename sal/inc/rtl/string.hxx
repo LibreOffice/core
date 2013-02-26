@@ -1079,7 +1079,7 @@ public:
       @param     beginIndex   the beginning index, inclusive.
       @return    the specified substring.
     */
-    OString copy( sal_Int32 beginIndex ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString copy( sal_Int32 beginIndex ) const SAL_THROW(())
     {
         rtl_String *pNew = 0;
         rtl_string_newFromSubString( &pNew, pData, beginIndex, getLength() - beginIndex );
@@ -1098,7 +1098,7 @@ public:
       @param     count        the number of characters.
       @return    the specified substring.
     */
-    OString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
         rtl_String *pNew = 0;
         rtl_string_newFromSubString( &pNew, pData, beginIndex, count );
