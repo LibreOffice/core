@@ -177,9 +177,6 @@
 #define HID_VALUESET_EXTRUSION_DIRECTION                      "SVX_HID_VALUESET_EXTRUSION_DIRECTION"
 #define HID_VALUESET_EXTRUSION_LIGHTING                       "SVX_HID_VALUESET_EXTRUSION_LIGHTING"
 #define HID_XMLSEC_CALL                                       "SVX_HID_XMLSEC_CALL"
-#define HID_OFA_HYPERLINK_NAME                                "SVX_HID_OFA_HYPERLINK_NAME"
-#define HID_OFA_HYPERLINK_TARGET                              "SVX_HID_OFA_HYPERLINK_TARGET"
-#define HID_OFA_HYPERLINK_URL                                 "SVX_HID_OFA_HYPERLINK_URL"
 #define HID_CT_THES_ALTERNATIVES                              "SVX_HID_CT_THES_ALTERNATIVES"
 
 #endif
