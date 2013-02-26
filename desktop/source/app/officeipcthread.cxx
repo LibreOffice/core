@@ -442,6 +442,7 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
 
 OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
+#if !defined(ANDROID) && !defined(IOS)
     ::osl::MutexGuard   aGuard( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
@@ -595,12 +596,15 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
         return IPC_STATUS_2ND_OFFICE;
     }
-
+#else
+    pGlobalOfficeIPCThread = rtl::Reference< OfficeIPCThread >(new OfficeIPCThread);
+#endif
     return IPC_STATUS_OK;
 }
 
 void OfficeIPCThread::DisableOfficeIPCThread(bool join)
 {
+#if !defined(ANDROID) && !defined(IOS)
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
@@ -623,6 +627,9 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
             pOfficeIPCThread->join();
         }
     }
+#else
+    (void) join;
+#endif
 }
 
 OfficeIPCThread::OfficeIPCThread() :
@@ -657,6 +664,7 @@ void OfficeIPCThread::SetReady(
 
 void OfficeIPCThread::execute()
 {
+#if !defined(ANDROID) && !defined(IOS)
     do
     {
         osl::StreamPipe aStreamPipe;
@@ -934,6 +942,7 @@ void OfficeIPCThread::execute()
             salhelper::Thread::wait( tval );
         }
     } while( schedule() );
+#endif
 }
 
 static void AddToDispatchList(
