@@ -21,6 +21,8 @@
 #include "services/autorecovery.hxx"
 #include <loadenv/loadenv.hxx>
 
+#include <sfx2/sfxbasemodel.hxx> //?
+
 #include <loadenv/targethelper.hxx>
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
@@ -123,6 +125,8 @@ static const char CFG_ENTRY_SESSIONDATA[] = "SessionData";
 
 static const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
 static const char CFG_ENTRY_AUTOSAVE_TIMEINTERVALL[] = "AutoSave/TimeIntervall"; //sic!
+
+static const char CFG_ENTRY_USERAUTOSAVE_ENABLED[] = "AutoSave/UserAutoSaveEnabled";
 
 static const char CFG_PATH_AUTOSAVE[] = "AutoSave";
 static const char CFG_ENTRY_MINSPACE_DOCSAVE[] = "MinSpaceDocSave";
@@ -977,12 +981,21 @@ void AutoRecovery::implts_readAutoSaveConfig()
     sal_Bool bEnabled = sal_False;
     xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_AUTOSAVE_ENABLED)) >>= bEnabled;
 
+    // UserAutoSave [bool]
+    sal_Bool bUserEnabled = sal_False;
+    xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_USERAUTOSAVE_ENABLED)) >>= bUserEnabled;
+
     // SAFE -> ------------------------------
     WriteGuard aWriteLock(m_aLock);
     if (bEnabled)
     {
         m_eJob       |= AutoRecovery::E_AUTO_SAVE;
         m_eTimerType  = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
+
+        if (bUserEnabled)
+            m_eJob |= AutoRecovery::E_USER_AUTO_SAVE;
+        else
+            m_eJob &= ~AutoRecovery::E_USER_AUTO_SAVE;
     }
     else
     {
@@ -2328,6 +2341,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     // Mark AutoSave state as "INCOMPLETE" if it failed.
     // Because the last temp file is to old and does not include all changes.
     Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY_THROW);
+    Reference< XStorable > xDocSave(rInfo.Document, css::uno::UNO_QUERY_THROW);
 
     // safe the state about "trying to save"
     // ... we need it for recovery if e.g. a crash occures inside next line!
@@ -2341,6 +2355,12 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
         try
         {
             xDocRecover->storeToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
+
+            // if userautosave is enabled, also save to the original file
+            if((m_eJob & AutoRecovery::E_USER_AUTO_SAVE) == AutoRecovery::E_USER_AUTO_SAVE)
+            {
+                xDocSave->store();
+            }
 
 #ifdef TRIGGER_FULL_DISC_CHECK
             throw css::uno::Exception();

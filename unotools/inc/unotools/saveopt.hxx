@@ -47,7 +47,8 @@ public:
         E_LOADDOCPRINTER,
         E_ODFDEFAULTVERSION,
         E_USESHA1INODF12,
-        E_USEBLOWFISHINODF12
+        E_USEBLOWFISHINODF12,
+        E_USERAUTOSAVE,
     };
 
     // keep enum values sorted that a less or greater compare maps to older and newer versions!
@@ -80,6 +81,9 @@ public:
 
     void                    SetAutoSavePrompt( sal_Bool b );
     sal_Bool                IsAutoSavePrompt() const;
+
+    void                    SetUserAutoSave( sal_Bool b );
+    sal_Bool                IsUserAutoSave() const;
 
     void                    SetDocInfoSave(sal_Bool b);
     sal_Bool                IsDocInfoSave() const;

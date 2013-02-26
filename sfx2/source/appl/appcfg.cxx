@@ -226,6 +226,14 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                                 bRet = sal_False;
                     }
                     break;
+                case SID_ATTR_USERAUTOSAVE :
+                    {
+                        bRet = sal_True;
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_USERAUTOSAVE))
+                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_USERAUTOSAVE ), aSaveOptions.IsUserAutoSave())))
+                                bRet = sal_False;
+                    }
+                    break;
                 case SID_ATTR_DOCINFO :
                     {
                         bRet = sal_True;
@@ -580,6 +588,13 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
         aSaveOptions.SetAutoSaveTime(((const SfxUInt16Item *)pItem)->GetValue());
+    }
+
+    // UserAutoSave
+    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_USERAUTOSAVE), sal_True, &pItem))
+    {
+        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
+        aSaveOptions.SetUserAutoSave( ( (const SfxBoolItem*)pItem )->GetValue() );
     }
 
     // DocInfo

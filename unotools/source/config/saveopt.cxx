@@ -57,6 +57,7 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bBackup,
                                         bAutoSave,
                                         bAutoSavePrompt,
+                                        bUserAutoSave,
                                         bDocInfSave,
                                         bSaveWorkingSet,
                                         bSaveDocView,
@@ -76,6 +77,7 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROBackup,
                                         bROAutoSave,
                                         bROAutoSavePrompt,
+                                        bROUserAutoSave,
                                         bRODocInfSave,
                                         bROSaveWorkingSet,
                                         bROSaveDocView,
@@ -101,6 +103,7 @@ public:
     sal_Bool                    IsBackup() const                    { return bBackup; }
     sal_Bool                    IsAutoSave() const                  { return bAutoSave; }
     sal_Bool                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
+    sal_Bool                    IsUserAutoSave() const              { return bUserAutoSave; }
     sal_Bool                    IsDocInfoSave() const               { return bDocInfSave; }
     sal_Bool                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
     sal_Bool                    IsSaveDocView() const               { return bSaveDocView; }
@@ -121,6 +124,7 @@ public:
     void                    SetBackup( sal_Bool b );
     void                    SetAutoSave( sal_Bool b );
     void                    SetAutoSavePrompt( sal_Bool b );
+    void                    SetUserAutoSave( sal_Bool b );
     void                    SetDocInfoSave( sal_Bool b );
     void                    SetSaveWorkingSet( sal_Bool b );
     void                    SetSaveDocView( sal_Bool b );
@@ -178,6 +182,16 @@ void SvtSaveOptions_Impl::SetAutoSavePrompt( sal_Bool b )
     {
         bAutoSavePrompt = b;
         SetModified();
+    }
+}
+
+void SvtSaveOptions_Impl::SetUserAutoSave( sal_Bool b )
+{
+    if (!bROUserAutoSave && bUserAutoSave!=b)
+    {
+        bUserAutoSave = b;
+        SetModified();
+        Commit();
     }
 }
 
@@ -282,6 +296,9 @@ sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) cons
         case SvtSaveOptions::E_AUTOSAVEPROMPT :
             bReadOnly = bROAutoSavePrompt;
             break;
+        case SvtSaveOptions::E_USERAUTOSAVE :
+            bReadOnly = bROUserAutoSave;
+            break;
         case SvtSaveOptions::E_DOCINFSAVE :
             bReadOnly = bRODocInfSave;
             break;
@@ -340,6 +357,7 @@ sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) cons
 #define ODFDEFAULTVERSION   15
 #define USESHA1INODF12      16
 #define USEBLOWFISHINODF12  17
+#define USERAUTOSAVE        18
 
 Sequence< OUString > GetPropertyNames()
 {
@@ -362,7 +380,8 @@ Sequence< OUString > GetPropertyNames()
         "WorkingSet",
         "ODF/DefaultVersion",
         "ODF/UseSHA1InODF12",
-        "ODF/UseBlowfishInODF12"
+        "ODF/UseBlowfishInODF12",
+        "Document/UserAutoSave"
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -383,6 +402,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bBackup( sal_False )
     , bAutoSave( sal_False )
     , bAutoSavePrompt( sal_False )
+    , bUserAutoSave( sal_False )
     , bDocInfSave( sal_False )
     , bSaveWorkingSet( sal_False )
     , bSaveDocView( sal_False )
@@ -400,6 +420,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROBackup( CFG_READONLY_DEFAULT )
     , bROAutoSave( CFG_READONLY_DEFAULT )
     , bROAutoSavePrompt( CFG_READONLY_DEFAULT )
+    , bROUserAutoSave( CFG_READONLY_DEFAULT )
     , bRODocInfSave( CFG_READONLY_DEFAULT )
     , bROSaveWorkingSet( CFG_READONLY_DEFAULT )
     , bROSaveDocView( CFG_READONLY_DEFAULT )
@@ -478,6 +499,10 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case AUTOSAVE :
                                     bAutoSave = bTemp;
                                     bROAutoSave = pROStates[nProp];
+                                    break;
+                                case USERAUTOSAVE :
+                                    bUserAutoSave = bTemp;
+                                    bROUserAutoSave = pROStates[nProp];
                                     break;
                                 case PROMPT :
                                     bAutoSavePrompt = bTemp;
@@ -563,6 +588,11 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
         xCFG,
         ::rtl::OUString("AutoSave"),
         ::rtl::OUString("TimeIntervall")) >>= nAutoSaveTime;
+
+    ::comphelper::ConfigurationHelper::readRelativeKey(
+        xCFG,
+        ::rtl::OUString("AutoSave"),
+        ::rtl::OUString("UserAutoSaveEnabled")) >>= bUserAutoSave;
     }
     catch(const css::uno::Exception&)
         { OSL_FAIL("Could not find needed information for AutoSave feature."); }
@@ -626,6 +656,14 @@ void SvtSaveOptions_Impl::Commit()
                 if (!bROAutoSavePrompt)
                 {
                     pValues[nRealCount] <<= bAutoSavePrompt;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
+                break;
+            case USERAUTOSAVE :
+                if (!bROUserAutoSave)
+                {
+                    pValues[nRealCount] <<= bUserAutoSave;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -752,6 +790,12 @@ void SvtSaveOptions_Impl::Commit()
         ::rtl::OUString("AutoSave"),
         ::rtl::OUString("Enabled"),
         css::uno::makeAny(bAutoSave));
+
+    ::comphelper::ConfigurationHelper::writeRelativeKey(
+        xCFG,
+        ::rtl::OUString("AutoSave"),
+        ::rtl::OUString("UserAutoSaveEnabled"),
+        css::uno::makeAny(bUserAutoSave));
 
     ::comphelper::ConfigurationHelper::flush(xCFG);
 }
@@ -906,6 +950,16 @@ void SvtSaveOptions::SetAutoSavePrompt( sal_Bool b )
 sal_Bool SvtSaveOptions::IsAutoSavePrompt() const
 {
     return pImp->pSaveOpt->IsAutoSavePrompt();
+}
+
+void SvtSaveOptions::SetUserAutoSave( sal_Bool b )
+{
+    pImp->pSaveOpt->SetUserAutoSave( b );
+}
+
+sal_Bool SvtSaveOptions::IsUserAutoSave() const
+{
+    return pImp->pSaveOpt->IsUserAutoSave();
 }
 
 void SvtSaveOptions::SetDocInfoSave(sal_Bool b)

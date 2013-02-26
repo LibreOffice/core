@@ -110,36 +110,43 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Text [ en-US ] = "Minutes" ;
     };
+    CheckBox BTN_USERAUTOSAVE
+    {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_USERAUTOSAVE"; //? FIX ME
+        Pos = MAP_APPFONT ( 21 , 74 ) ;
+        Size = MAP_APPFONT ( 163 , 10 ) ;
+        Text [ en-US ] = "Automatically save the document too" ;
+    };
     CheckBox BTN_RELATIVE_FSYS
     {
         HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_RELATIVE_FSYS";
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Save URLs relative to file system" ;
     };
     CheckBox BTN_RELATIVE_INET
     {
         HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_RELATIVE_INET";
-        Pos = MAP_APPFONT ( 12 , 85 ) ;
+        Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ en-US ] = "Save URLs relative to internet" ;
     };
     FixedLine FL_FILTER
     {
-        Pos = MAP_APPFONT ( 6 , 97 ) ;
+        Pos = MAP_APPFONT ( 6 , 108 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Default file format and ODF settings" ;
     };
     FixedText FT_ODF_VERSION
     {
-        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
         Text [ en-US ] = "ODF format version" ;
     };
     ListBox LB_ODF_VERSION
     {
         HelpID = "cui:ListBox:RID_SFXPAGE_SAVE:LB_ODF_VERSION";
-        Pos = MAP_APPFONT ( 136 , 105 ) ;
+        Pos = MAP_APPFONT ( 136 , 116 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         DropDown = TRUE;
@@ -154,33 +161,33 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_NOPRETTYPRINTING
     {
         HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_NOPRETTYPRINTING";
-        Pos = MAP_APPFONT ( 12 , 120 ) ;
+        Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ en-US ] = "Size optimization for ODF format" ;
     };
     CheckBox BTN_WARNALIENFORMAT
     {
         HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_WARNALIENFORMAT";
-        Pos = MAP_APPFONT ( 12 , 131 ) ;
+        Pos = MAP_APPFONT ( 12 , 142 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ en-US ] = "Warn when not saving in ODF or default format" ;
     };
     FixedText FT_APP
     {
-        Pos = MAP_APPFONT ( 12 , 142 ) ;
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ en-US ] = "D~ocument type";
     };
     FixedText FT_FILTER
     {
-        Pos = MAP_APPFONT ( 136 , 142 ) ;
+        Pos = MAP_APPFONT ( 136 , 153 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ en-US ] = "Always sa~ve as";
     };
     ListBox LB_APP
     {
         HelpID = "cui:ListBox:RID_SFXPAGE_SAVE:LB_APP";
-        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Pos = MAP_APPFONT ( 12 , 164 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         DropDown = TRUE;
@@ -197,14 +204,14 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedImage FI_FILTER
     {
-        Pos = MAP_APPFONT ( 129, 154 ) ;
+        Pos = MAP_APPFONT ( 129, 165 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     ListBox LB_FILTER
     {
         HelpID = "cui:ListBox:RID_SFXPAGE_SAVE:LB_FILTER";
-        Pos = MAP_APPFONT ( 136 , 153 ) ;
+        Pos = MAP_APPFONT ( 136 , 164 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         Sort = TRUE;
@@ -212,13 +219,13 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedImage FI_ODF_WARNING
     {
-        Pos = MAP_APPFONT ( 12, 169 ) ;
+        Pos = MAP_APPFONT ( 12, 170 ) ;
         Size = MAP_APPFONT ( 8 , 8 ) ;
         Hide = TRUE;
     };
     FixedText FT_WARN
     {
-        Pos = MAP_APPFONT ( 23 , 169 ) ;
+        Pos = MAP_APPFONT ( 23 , 170 ) ;
         Size = MAP_APPFONT ( 239 , 8 ) ;
         Hide = TRUE;
         Text [ en-US ] = "Not using ODF 1.2 Extended may cause information to be lost.";

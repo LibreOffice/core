@@ -55,8 +55,9 @@ using namespace comphelper;
 
 #define CFG_PAGE_AND_GROUP          OUString("General"), OUString("LoadSave")
 // !! you have to update these index, if you changed the list of the child windows !!
-#define WININDEX_AUTOSAVE           ((sal_uInt16)6)
-#define WININDEX_SAVEURL_RELFSYS    ((sal_uInt16)9)
+#define WININDEX_AUTOSAVE           ((sal_uInt16) 6)
+#define WININDEX_USERAUTOSAVE       ((sal_uInt16) 9)
+#define WININDEX_SAVEURL_RELFSYS    ((sal_uInt16)10)
 
 // ----------------------------------------------------------------------
 
@@ -100,6 +101,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     aAutoSaveCB         ( this, CUI_RES( BTN_AUTOSAVE ) ),
     aAutoSaveEdit       ( this, CUI_RES( ED_AUTOSAVE ) ),
     aMinuteFT           ( this, CUI_RES( FT_MINUTE ) ),
+    aUserAutoSaveCB     ( this, CUI_RES( BTN_USERAUTOSAVE ) ),
     aRelativeFsysCB     ( this, CUI_RES( BTN_RELATIVE_FSYS ) ),
     aRelativeInetCB     ( this, CUI_RES( BTN_RELATIVE_INET ) ),
 
@@ -239,11 +241,22 @@ void SfxSaveTabPage::DetectHiddenControls()
         aAutoSaveEdit.Hide();
         aMinuteFT.Hide();
         // the other controls have to move upwards the height of checkbox + space
-        nDelta += aRelativeFsysCB.GetPosPixel().Y() - aAutoSaveCB.GetPosPixel().Y();
+        nDelta += aUserAutoSaveCB.GetPosPixel().Y() - aAutoSaveCB.GetPosPixel().Y();
     }
     else if ( nDelta > 0 )
         // the "AutoSave" controls have to move upwards too
         nWinIndex = WININDEX_AUTOSAVE;
+
+    if ( aOptionsDlgOpt.IsOptionHidden( "UserAutoSave", CFG_PAGE_AND_GROUP ) )
+    {
+        // hide controls of "UserAutoSave"
+        aUserAutoSaveCB.Hide();
+        // the other controls have to move upwards the height of checkbox + space
+        nDelta += aRelativeFsysCB.GetPosPixel().Y() - aUserAutoSaveCB.GetPosPixel().Y();
+    }
+    else if ( nDelta > 0 )
+        // the "UserAutoSave" controls have to move upwards too
+        nWinIndex = WININDEX_USERAUTOSAVE;
 
     if ( nDelta > 0 )
     {
@@ -313,6 +326,13 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     {
         rSet.Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
                                  (sal_uInt16)aAutoSaveEdit.GetValue() ) );
+        bModified |= sal_True;
+    }
+
+    if ( aUserAutoSaveCB.IsChecked() != aUserAutoSaveCB.GetSavedValue() )
+    {
+        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_USERAUTOSAVE ),
+                               aUserAutoSaveCB.IsChecked() ) );
         bModified |= sal_True;
     }
     // save relatively
@@ -489,6 +509,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aBackupFI.Show(bBackupRO);
 
     aAutoSaveCB.Check(aSaveOpt.IsAutoSave());
+    aUserAutoSaveCB.Check(aSaveOpt.IsUserAutoSave());
     aWarnAlienFormatCB.Check(aSaveOpt.IsWarnAlienFormat());
     aWarnAlienFormatCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT));
 
@@ -515,6 +536,8 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aAutoSaveCB.SaveValue();
     aAutoSaveEdit.SaveValue();
 
+    aUserAutoSaveCB.SaveValue();
+
     aRelativeFsysCB.SaveValue();
     aRelativeInetCB.SaveValue();
     aODFVersionLB.SaveValue();
@@ -530,11 +553,13 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
         {
             aAutoSaveEdit.Enable();
             aMinuteFT.Enable();
+            aUserAutoSaveCB.Enable();
         }
         else
         {
             aAutoSaveEdit.Disable();
             aMinuteFT.Disable();
+            aUserAutoSaveCB.Disable();
         }
     }
     return 0;

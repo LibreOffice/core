@@ -25,6 +25,10 @@
       <value oor:external=
           "com.sun.star.configuration.backend.GconfBackend AutoSaveEnabled"/>
     </prop>
+    <prop oor:name="UserAutoSaveEnabled">
+      <value oor:external=
+          "com.sun.star.configuration.backend.GconfBackend UserAutoSaveEnabled"/>
+    </prop>
     <prop oor:name="TimeIntervall">
       <value oor:external=
        "com.sun.star.configuration.backend.GconfBackend AutoSaveTimeIntervall"/>
