@@ -32,7 +32,6 @@ $(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/file.h,osl/detail/file.
 $(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/android-bootstrap.h,osl/detail/android-bootstrap.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/ios-bootstrap.h,osl/detail/ios-bootstrap.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/component-mapping.h,osl/detail/component-mapping.h))
-$(eval $(call gb_Package_add_file,sal_inc,inc/sal/log-areas.dox,sal/log-areas.dox))
 $(eval $(call gb_Package_add_file,sal_inc,inc/systools/win32/comptr.hxx,systools/win32/comptr.hxx))
 $(eval $(call gb_Package_add_file,sal_inc,inc/systools/win32/comtools.hxx,systools/win32/comtools.hxx))
 $(eval $(call gb_Package_add_file,sal_inc,inc/systools/win32/qswin32.h,systools/win32/qswin32.h))
