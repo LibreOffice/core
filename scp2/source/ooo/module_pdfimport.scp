@@ -26,6 +26,7 @@
 #include "macros.inc"
 
 Module gid_Module_Pdfimport
+    MOD_NAME_DESC(MODULE_PRG_PDFIMPORT);
     ParentID = gid_Module_Root_Brand;
     Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Share_Xpdfimport);
