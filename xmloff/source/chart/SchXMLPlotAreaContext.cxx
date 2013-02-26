@@ -980,8 +980,6 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
         else
             aRoleBuffer.append( sal_Unicode( 'x' ));
 
-        rtl::OUString aPlainRole = aRoleBuffer.makeStringAndClear();
-        aRoleBuffer.append( aPlainRole );
         aRoleBuffer.append( sal_Unicode( '-' ));
 
         if( bPositiveValue )
@@ -1040,7 +1038,7 @@ SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
 namespace {
 
 void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Reference< beans::XPropertySet> xBarProp,
-                                            SchXMLImportHelper& rImportHelper)
+                                            SchXMLImportHelper& rImportHelper, OUString& aPosRange, OUString& aNegRange)
 {
     const SvXMLStylesContext* pStylesCtxt = rImportHelper.GetAutoStylesContext();
     const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(rImportHelper.GetChartFamilyID(),
@@ -1096,6 +1094,20 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
 
             if(aAny.hasValue())
                 xBarProp->setPropertyValue("NegativeError", aAny);
+        }
+
+        aAny = SchXMLTools::getPropertyFromContext("ErrorBarRangePositive",
+                pSeriesStyleContext, pStylesCtxt);
+        if( aAny.hasValue() )
+        {
+            aAny >>= aPosRange;
+        }
+
+        aAny = SchXMLTools::getPropertyFromContext("ErrorBarRangeNegative",
+                pSeriesStyleContext, pStylesCtxt);
+        if( aAny.hasValue() )
+        {
+            aAny >>= aNegRange;
         }
 
         switch(aBarStyle)
@@ -1183,8 +1195,8 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
 
 
                     // first import defaults from parent style
-                    SetErrorBarPropertiesFromStyleName( maSeriesStyleName, xBarProp, mrImportHelper );
-                    SetErrorBarPropertiesFromStyleName( sAutoStyleName, xBarProp, mrImportHelper );
+                    SetErrorBarPropertiesFromStyleName( maSeriesStyleName, xBarProp, mrImportHelper, aPosRange, aNegRange );
+                    SetErrorBarPropertiesFromStyleName( sAutoStyleName, xBarProp, mrImportHelper, aPosRange, aNegRange );
 
                     uno::Reference< chart2::XChartDocument > xDoc(GetImport().GetModel(),uno::UNO_QUERY);
 
