@@ -154,6 +154,7 @@ gb_Module__debug_enabled = \
        $(filter all $(1)/,$(ENABLE_DEBUGINFO_FOR)))
 
 define gb_Module_Module
+$(if $(filter-out instsetoo_native,$(1)),$(call gb_Postprocess_get_target,AllModulesButInstsetNative) : $(call gb_Module_get_target,$(1)))
 gb_Module_ALLMODULES += $(1)
 gb_Module_MODULELOCATIONS += $(1):$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 gb_Module_TARGETSTACK := $(call gb_Module_get_target,$(1)) $(gb_Module_TARGETSTACK)
