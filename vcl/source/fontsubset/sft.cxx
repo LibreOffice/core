@@ -752,7 +752,8 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
     pa = (ControlPoint*)calloc(np, sizeof(ControlPoint));
     assert(pa != 0);
 
-    memcpy( pa, &myPoints[0], np*sizeof(ControlPoint) );
+    if (np > 0)
+        memcpy( pa, &myPoints[0], np*sizeof(ControlPoint) );
 
     *pointArray = pa;
     return np;
