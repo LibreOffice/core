@@ -1078,7 +1078,7 @@ void OJoinTableView::ClearAll()
 sal_Bool OJoinTableView::ScrollWhileDragging()
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
-    OSL_ENSURE(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging darf nur waehrend Dragging eines Fensters aufgerufen werden !");
+    OSL_ENSURE(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging must not be called when a window is being dragged !");
 
     // kill the timer
     if (m_aDragScrollTimer.IsActive())
