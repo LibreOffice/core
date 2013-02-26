@@ -1056,6 +1056,7 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
     {
         sal_Int32 aBarStyle = com::sun::star::chart::ErrorBarStyle::NONE;
         aAny >>= aBarStyle;
+        xBarProp->setPropertyValue("ErrorBarStyle", aAny);
 
         aAny = SchXMLTools::getPropertyFromContext("ShowPositiveError",
                 pSeriesStyleContext,pStylesCtxt);
