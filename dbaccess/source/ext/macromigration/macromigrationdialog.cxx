@@ -116,7 +116,7 @@ namespace dbmm
         MigrationLog                            aLogger;
         Reference< XOfficeDatabaseDocument >    xDocument;
         Reference< XModel2 >                    xDocumentModel;
-        OUString                         sSuccessfulBackupLocation;
+        ::rtl::OUString                         sSuccessfulBackupLocation;
         bool                                    bMigrationIsRunning;
         bool                                    bMigrationFailure;
         bool                                    bMigrationSuccess;
@@ -144,10 +144,10 @@ namespace dbmm
         :MacroMigrationDialog_Base( _pParent, MacroMigrationResId( DLG_MACRO_MIGRATION ) )
         ,m_pData( new MacroMigrationDialog_Data( _rContext, _rxDocument ) )
     {
-        String sTitlePrepare( MacroMigrationResId( STR_STATE_CLOSE_SUB_DOCS ) );
-        String sTitleStoreAs( MacroMigrationResId( STR_STATE_BACKUP_DBDOC ) );
-        String sTitleMigrate( MacroMigrationResId( STR_STATE_MIGRATE ) );
-        String sTitleSummary( MacroMigrationResId( STR_STATE_SUMMARY ) );
+        OUString sTitlePrepare( MacroMigrationResId( STR_STATE_CLOSE_SUB_DOCS ) );
+        OUString sTitleStoreAs( MacroMigrationResId( STR_STATE_BACKUP_DBDOC ) );
+        OUString sTitleMigrate( MacroMigrationResId( STR_STATE_MIGRATE ) );
+        OUString sTitleSummary( MacroMigrationResId( STR_STATE_SUMMARY ) );
         FreeResource();
 
         describeState( STATE_CLOSE_SUB_DOCS,    sTitlePrepare, &PreparationPage::Create   );
@@ -398,7 +398,7 @@ namespace dbmm
     {
         bool    lcl_equalURLs_nothrow(
             const Reference< XComponentContext >& context,
-            const OUString& _lhs, const OUString _rhs )
+            const ::rtl::OUString& _lhs, const ::rtl::OUString _rhs )
         {
             // the cheap situation: the URLs are equal
             if ( _lhs == _rhs )
@@ -432,7 +432,7 @@ namespace dbmm
             return false;
 
         SaveDBDocPage& rBackupPage = dynamic_cast< SaveDBDocPage& >( *GetPage( STATE_BACKUP_DBDOC ) );
-        OUString sBackupLocation( rBackupPage.getBackupLocation() );
+        ::rtl::OUString sBackupLocation( rBackupPage.getBackupLocation() );
 
         Any aError;
         try
@@ -515,7 +515,7 @@ namespace dbmm
                 aControllers.pop_front();
 
                 Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
-                OUString sViewName( xController->getViewControllerName() );
+                ::rtl::OUString sViewName( xController->getViewControllerName() );
 
                 if ( !xController->suspend( sal_True ) )
                 {   // ouch. There shouldn't be any modal dialogs and such, so there
@@ -547,7 +547,7 @@ namespace dbmm
                 aDocumentArgs.put( "ViewName", aView.second );
                 Reference< XInterface > xReloaded( xLoader->loadComponentFromURL(
                     sDocumentURL,
-                    OUString( "_self" ),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
                     0,
                     aDocumentArgs.getPropertyValues()
                 ) );

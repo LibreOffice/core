@@ -52,7 +52,7 @@ namespace dbmm
     //====================================================================
     //= helper
     //====================================================================
-    String getScriptTypeDisplayName( const ScriptType _eType );
+    OUString getScriptTypeDisplayName( const ScriptType _eType );
 
 //........................................................................
 } // namespace dbmm

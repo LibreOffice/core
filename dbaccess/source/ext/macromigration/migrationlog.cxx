@@ -46,8 +46,8 @@ namespace dbmm
     struct LibraryEntry
     {
         ScriptType      eType;
-        OUString sOldName;
-        OUString sNewName;
+        ::rtl::OUString sOldName;
+        ::rtl::OUString sNewName;
 
         LibraryEntry()
             :eType( eBasic )
@@ -56,7 +56,7 @@ namespace dbmm
         {
         }
 
-        LibraryEntry( const ScriptType& _eType, const OUString& _rOldName, const OUString& _rNewName )
+        LibraryEntry( const ScriptType& _eType, const ::rtl::OUString& _rOldName, const ::rtl::OUString& _rNewName )
             :eType( _eType )
             ,sOldName( _rOldName )
             ,sNewName( _rNewName )
@@ -70,7 +70,7 @@ namespace dbmm
     struct DocumentEntry
     {
         SubDocumentType                 eType;
-        OUString                 sName;
+        ::rtl::OUString                 sName;
         ::std::vector< LibraryEntry >   aMovedLibraries;
 
         DocumentEntry()
@@ -80,7 +80,7 @@ namespace dbmm
         {
         }
 
-        DocumentEntry( const SubDocumentType _eType, const OUString& _rName )
+        DocumentEntry( const SubDocumentType _eType, const ::rtl::OUString& _rName )
             :eType( _eType )
             ,sName( _rName )
         {
@@ -102,7 +102,7 @@ namespace dbmm
     //====================================================================
     struct MigrationLog_Data
     {
-        OUString sBackupLocation;
+        ::rtl::OUString sBackupLocation;
         DocumentLogs    aDocumentLogs;
         ErrorLog        aFailures;
         ErrorLog        aWarnings;
@@ -141,13 +141,13 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    void MigrationLog::backedUpDocument( const OUString& _rNewDocumentLocation )
+    void MigrationLog::backedUpDocument( const ::rtl::OUString& _rNewDocumentLocation )
     {
         m_pData->sBackupLocation = _rNewDocumentLocation;
     }
 
     //--------------------------------------------------------------------
-    DocumentID MigrationLog::startedDocument( const SubDocumentType _eType, const OUString& _rName )
+    DocumentID MigrationLog::startedDocument( const SubDocumentType _eType, const ::rtl::OUString& _rName )
     {
 #if OSL_DEBUG_LEVEL > 0
         bool bAlreadyKnown = false;
@@ -172,7 +172,7 @@ namespace dbmm
 
     //--------------------------------------------------------------------
     void MigrationLog::movedLibrary( const DocumentID _nDocID, const ScriptType _eScriptType,
-            const OUString& _rOriginalLibName, const OUString& _rNewLibName )
+            const ::rtl::OUString& _rOriginalLibName, const ::rtl::OUString& _rNewLibName )
     {
         OSL_ENSURE( m_pData->aDocumentLogs.find( _nDocID ) != m_pData->aDocumentLogs.end(),
             "MigrationLog::movedLibrary: document is not known!" );
@@ -193,10 +193,10 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    const OUString& MigrationLog::getNewLibraryName( DocumentID _nDocID, ScriptType _eScriptType,
-        const OUString& _rOriginalLibName ) const
+    const ::rtl::OUString& MigrationLog::getNewLibraryName( DocumentID _nDocID, ScriptType _eScriptType,
+        const ::rtl::OUString& _rOriginalLibName ) const
     {
-        static OUString s_sEmptyString;
+        static ::rtl::OUString s_sEmptyString;
 
         DocumentLogs::const_iterator docPos = m_pData->aDocumentLogs.find( _nDocID );
         if ( docPos == m_pData->aDocumentLogs.end() )
@@ -369,7 +369,7 @@ namespace dbmm
             OSL_ENSURE( pAsciiErrorDescription, "lcl_appendErrorDescription: no error message!" );
             if ( pAsciiErrorDescription )
             {
-                OUString sSubstituted( OUString::createFromAscii( pAsciiErrorDescription ) );
+                ::rtl::OUString sSubstituted( ::rtl::OUString::createFromAscii( pAsciiErrorDescription ) );
                 OSL_ENSURE( aParameterNames.size() == _rError.aErrorDetails.size(),
                     "lcl_appendErrorDescription: unexpected number of error message parameters!" );
 
@@ -387,10 +387,10 @@ namespace dbmm
         void lcl_describeErrors( OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const sal_uInt16 _nHeadingResId )
         {
             _rBuffer.appendAscii( "=== " );
-            _rBuffer.append     ( String( MacroMigrationResId( _nHeadingResId ) ) );
+            _rBuffer.append     ( OUString( MacroMigrationResId( _nHeadingResId ) ) );
             _rBuffer.appendAscii( " ===\n" );
 
-            String sException( MacroMigrationResId( STR_EXCEPTION ) );
+            OUString sException( MacroMigrationResId( STR_EXCEPTION ) );
 
             for (   ErrorLog::const_iterator error = _rErrors.begin();
                     error != _rErrors.end();
@@ -432,11 +432,11 @@ namespace dbmm
 
         if ( !m_pData->sBackupLocation.isEmpty() )
         {
-            String sBackedUp( MacroMigrationResId( STR_SAVED_COPY_TO ) );
-            sBackedUp.SearchAndReplaceAllAscii( "$location$", m_pData->sBackupLocation );
+            OUString sBackedUp( MacroMigrationResId( STR_SAVED_COPY_TO ) );
+            sBackedUp.replaceFirst( "$location$", m_pData->sBackupLocation );
 
             aBuffer.appendAscii( "=== " );
-            aBuffer.append     ( String( MacroMigrationResId( STR_DATABASE_DOCUMENT ) ) );
+            aBuffer.append     ( OUString( MacroMigrationResId( STR_DATABASE_DOCUMENT ) ) );
             aBuffer.appendAscii( " ===\n" );
             aBuffer.append     ( sBackedUp );
             aBuffer.appendAscii( "\n\n" );
@@ -449,7 +449,7 @@ namespace dbmm
         }
         else
         {
-            String sMovedLibTemplate( MacroMigrationResId( STR_MOVED_LIBRARY ) );
+            OUString sMovedLibTemplate( MacroMigrationResId( STR_MOVED_LIBRARY ) );
 
             for (   DocumentLogs::const_iterator doc = m_pData->aDocumentLogs.begin();
                     doc != m_pData->aDocumentLogs.end();
@@ -461,8 +461,8 @@ namespace dbmm
                 if ( rDoc.aMovedLibraries.empty() )
                     continue;
 
-                String sDocTitle( MacroMigrationResId( rDoc.eType == eForm ? STR_FORM : STR_REPORT ) );
-                sDocTitle.SearchAndReplaceAllAscii( "$name$", rDoc.sName );
+                OUString sDocTitle( MacroMigrationResId( rDoc.eType == eForm ? STR_FORM : STR_REPORT ) );
+                sDocTitle.replaceFirst( "$name$", rDoc.sName );
 
                 aBuffer.appendAscii( "=== " );
                 aBuffer.append     ( sDocTitle );
@@ -473,10 +473,10 @@ namespace dbmm
                         ++lib
                     )
                 {
-                    String sMovedLib( sMovedLibTemplate );
-                    sMovedLib.SearchAndReplaceAllAscii( "$type$", getScriptTypeDisplayName( lib->eType ) );
-                    sMovedLib.SearchAndReplaceAllAscii( "$old$", lib->sOldName );
-                    sMovedLib.SearchAndReplaceAllAscii( "$new$", lib->sNewName );
+                    OUString sMovedLib( sMovedLibTemplate );
+                    sMovedLib.replaceFirst( "$type$", getScriptTypeDisplayName( lib->eType ) );
+                    sMovedLib.replaceFirst( "$old$", lib->sOldName );
+                    sMovedLib.replaceFirst( "$new$", lib->sNewName );
 
                     aBuffer.append( sMovedLib );
                     aBuffer.append( sal_Unicode( '\n' ) );

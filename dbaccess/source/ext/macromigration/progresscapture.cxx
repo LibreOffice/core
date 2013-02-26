@@ -45,14 +45,14 @@ namespace dbmm
     //====================================================================
     struct ProgressCapture_Data
     {
-        ProgressCapture_Data( const ::rtl::OUString& _rObjectName, IMigrationProgress& _rMasterProgress )
+        ProgressCapture_Data( const OUString& _rObjectName, IMigrationProgress& _rMasterProgress )
             :sObjectName( _rObjectName )
             ,rMasterProgress( _rMasterProgress )
             ,bDisposed( false )
         {
         }
 
-        ::rtl::OUString     sObjectName;
+        OUString     sObjectName;
         IMigrationProgress& rMasterProgress;
         bool                bDisposed;
     };
@@ -61,7 +61,7 @@ namespace dbmm
     //= ProgressCapture
     //====================================================================
     //--------------------------------------------------------------------
-    ProgressCapture::ProgressCapture( const ::rtl::OUString& _rObjectName, IMigrationProgress& _rMasterProgress )
+    ProgressCapture::ProgressCapture( const OUString& _rObjectName, IMigrationProgress& _rMasterProgress )
         :m_pData( new ProgressCapture_Data( _rObjectName, _rMasterProgress ) )
     {
     }
@@ -79,7 +79,7 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ProgressCapture::start( const ::rtl::OUString& _rText, ::sal_Int32 _nRange ) throw (RuntimeException)
+    void SAL_CALL ProgressCapture::start( const OUString& _rText, ::sal_Int32 _nRange ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
@@ -95,7 +95,7 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ProgressCapture::setText( const ::rtl::OUString& _rText ) throw (RuntimeException)
+    void SAL_CALL ProgressCapture::setText( const OUString& _rText ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
