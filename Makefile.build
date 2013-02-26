@@ -7,13 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq ($(strip $(SOLARENV)),)
-ifeq ($(gb_Side),)
-gb_Side:=host
-endif
-include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../config_$(gb_Side).mk
-endif
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))config_host.mk
 
+gb_Side := host
 include $(SOLARENV)/gbuild/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(SRCDIR)/Module_tail_build.mk))

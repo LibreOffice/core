@@ -1,2 +1,0 @@
-tb      tail_build : NULL
-tb tail_build\prj nmake - all tb_prj   NULL

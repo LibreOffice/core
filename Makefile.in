@@ -71,28 +71,20 @@ $(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(BUILDDIR)/config_host.mk
 -include $(WORKDIR)/modules.mk
 include $(SRCDIR)/solenv/gbuild/Output.mk
 
-export gb_TAILBUILDTARGET=all slowcheck
-
 define gbuild_module_rules
 .PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck
 
 $(1): bootstrap fetch
 	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 
-$(1).all: bootstrap fetch
-	$$(if $$(filter $(1),$$(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)), \
-		cd $(SRC_ROOT)/tail_build && unset MAKEFLAGS && \
-		export gb_TAILBUILDTARGET="$(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)" && \
-	, \
-		cd $(SRC_ROOT)/$(1) && unset MAKEFLAGS && \
-	) \
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
-
 $(1).build $(1).check $(1).clean $(1).showdeliverables:
 	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).subsequentcheck:
 	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck
+
+$(1).all: bootstrap fetch
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.build $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)
 
 endef
 
@@ -228,7 +220,7 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 # Ditto for dbconnectivity in the --disable-database-connectivity case
 	$(GNUMAKE) connectivity
 endif
-	cd $(SRCDIR)/tail_build && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.build all slowcheck
 ifeq ($(OS),ANDROID)
 	cd android && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 endif
@@ -422,11 +414,11 @@ findunusedcode:
 check: dev-install subsequentcheck
 
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
-	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f $(SRC_ROOT)/Makefile.post $@
+	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.build $@
 
 .PHONY : unitcheck slowcheck debugrun translations
 unitcheck slowcheck debugrun translations:
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRC_ROOT)/Makefile.post $@
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.build $@
 
 endif # not clean or distclean
 

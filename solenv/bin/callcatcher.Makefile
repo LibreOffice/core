@@ -30,10 +30,9 @@ export dbglevel:=2
 include $(SOLARENV)/gbuild/gbuild.mk
 
 findunusedcode:
-	cd $(SRCDIR)/postprocess && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.build
 	ooinstall -l $(DEVINSTALLDIR)/opt
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post subsequentcheck
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.build subsequentcheck
 	callanalyse \
         $(WORKDIR)/LinkTarget/*/* \
 	    */$(OUTPATH)/bin/* \
