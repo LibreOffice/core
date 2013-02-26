@@ -79,6 +79,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -86,10 +87,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.BaseInputConnection;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -253,12 +259,11 @@ public class Desktop
         }
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
+    @Override public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        Log.i(TAG, "onCreate - added here\n");
+        Log.i(TAG, "onCreate");
 
         try {
             String input;
@@ -279,7 +284,7 @@ public class Desktop
             if (bootstrapContext == null)
                 initBootstrapContext();
 
-            Log.i(TAG, "onCreate - set content view\n");
+            Log.i(TAG, "onCreate - set content view");
             setContentView(new BitmapView());
 
             spawnMain();
@@ -290,13 +295,16 @@ public class Desktop
         }
     }
 
-    class BitmapView extends android.view.View
+    class BitmapView
+        extends View
     {
         Bitmap mBitmap;
+        boolean renderedOnce;
 
         public BitmapView()
         {
             super(Desktop.this);
+            setFocusableInTouchMode(true);
         }
 
         @Override protected void onDraw(Canvas canvas)
@@ -310,9 +318,55 @@ public class Desktop
             }
             renderVCL(mBitmap);
             canvas.drawBitmap(mBitmap, 0, 0, null);
+            renderedOnce = true;
 
             // re-call ourselves a bit later ...
             invalidate();
+        }
+
+        @Override public boolean onTouchEvent(MotionEvent event)
+        {
+            if (!renderedOnce)
+                return super.onTouchEvent(event);
+
+            super.onTouchEvent(event);
+            Log.d(TAG, "onTOUCH");
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                // show the keyboard so we can enter text
+                InputMethodManager imm = (InputMethodManager) getContext()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(this, InputMethodManager.SHOW_FORCED);
+            }
+            return true;
+        }
+
+        @Override public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+            Log.d(TAG, "onCreateInputConnection");
+
+            BaseInputConnection fic = new LOInputConnection(this, true);
+            outAttrs.actionLabel = null;
+            outAttrs.inputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+            outAttrs.imeOptions = EditorInfo.IME_ACTION_NONE;
+
+            return fic;
+        }
+
+        @Override public boolean onCheckIsTextEditor() {
+            Log.d(TAG, "onCheckIsTextEditor");
+            return renderedOnce;
+        }
+    }
+
+    class LOInputConnection
+        extends BaseInputConnection
+    {
+        public LOInputConnection(View targetView, boolean fullEditor) {
+            super(targetView, fullEditor);
+        }
+
+        @Override public boolean commitText(CharSequence text, int newCursorPosition) {
+            Log.i(TAG, "commitText(" + text + ", " + newCursorPosition + ")");
+            return true;
         }
     }
 }
