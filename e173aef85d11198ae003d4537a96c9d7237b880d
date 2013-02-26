@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///ZQ\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-26T12:32:14Z",
+      "side": 1,
+      "message": "typo: i -\u003e I",
+      "revId": "e173aef85d11198ae003d4537a96c9d7237b880d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///ZU\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-26T12:32:14Z",
+      "side": 1,
+      "message": "typo: TPut -\u003e Put",
+      "revId": "e173aef85d11198ae003d4537a96c9d7237b880d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///ZM\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2181,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-26T12:32:14Z",
+      "side": 1,
+      "message": "typo: initializing",
+      "revId": "e173aef85d11198ae003d4537a96c9d7237b880d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///ZI\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-26T12:32:14Z",
+      "side": 1,
+      "message": "the means -\u003e this means\ntypo: beacsue -\u003e because",
+      "revId": "e173aef85d11198ae003d4537a96c9d7237b880d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///ZE\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-02-26T12:32:14Z",
+      "side": 1,
+      "message": "nitpick: only one whitespace before but ;)",
+      "revId": "e173aef85d11198ae003d4537a96c9d7237b880d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
