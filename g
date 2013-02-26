@@ -254,11 +254,13 @@ local configured
 	    git submodule init $module || return $?
 	fi
     done
-    if [ -n "$REFERENCED_GIT" ] ; then
-        for module in $SUBMODULES_CONFIGURED ; do
+    for module in $SUBMODULES_CONFIGURED ; do
+        if [ -n "$REFERENCED_GIT" ] ; then
             git submodule update --reference $REFERENCED_GIT/.git/modules/$module $module || return $?
-        done
-    fi
+        else
+            git submodule update $module || return $?
+        fi
+    done
     return 0
 }
 
