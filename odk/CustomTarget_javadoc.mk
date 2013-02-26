@@ -25,7 +25,7 @@ $(odk_WORKDIR)/docs/java/ref/index.html: $(call gb_Jar_get_target,ridl)
 		-windowtitle "Java UNO Runtime Reference" \
 		-header "UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) Java API Reference"\
 		-d $(dir $@) \
-		-sourcepath $(SRCDIR)/ridljar/source/unoloader$(gb_CLASSPATHSEP)$(SRCDIR)/ridljar$(gb_CLASSPATHSEP)$(SRCDIR)/jurt$(gb_CLASSPATHSEP)$(SRCDIR)/javaunohelper \
+		-sourcepath "$(SRCDIR)/ridljar/source/unoloader$(gb_CLASSPATHSEP)$(SRCDIR)/ridljar$(gb_CLASSPATHSEP)$(SRCDIR)/jurt$(gb_CLASSPATHSEP)$(SRCDIR)/javaunohelper" \
 		-classpath $(OUTDIR)/bin/ridl.jar \
 		-linkoffline ../../common/reg ./uno \
 		-linkoffline http://java.sun.com/j2se/1.5/docs/api ./java \
