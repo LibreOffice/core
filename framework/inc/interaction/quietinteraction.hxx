@@ -117,7 +117,7 @@ class QuietInteraction : public  css::lang::XTypeProvider
         //_________________________________
         /**
             @short      returns information if interaction was used
-            @descr      It can be usefully to know the reason for a failed operation.
+            @descr      It can be useful to know the reason for a failed operation.
 
             @return     [boolean]
                             <TRUE/> for used interaction

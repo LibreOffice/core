@@ -107,7 +107,7 @@ public class AsciiReplaceFilter
        /**
         * special debug helper to get an idea how expensive
         * the implemented filter operations are realy.
-        * May be usefully for own purposes.
+        * May be useful for own purposes.
         *
         * To see the output inside an office environment
         * use "soffice ...params... >output.txt"

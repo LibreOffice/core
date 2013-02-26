@@ -109,8 +109,8 @@ class LoadEnvException
         css::uno::Any m_exOriginal;
 
         /** TODO
-             Experimental use! May it can be usefully to know, if an exception was already
-             catched and handled by an interaction and was might be rethrowed! */
+             Experimental use! Maybe it can be useful to know if an exception was already
+             catched and handled by an interaction and might be rethrown! */
         sal_Bool m_bHandled;
 
     //___________________________________________

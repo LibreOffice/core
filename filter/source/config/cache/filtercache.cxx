@@ -2232,7 +2232,7 @@ void FilterCache::impl_interpretDataVal4Filter(const ::rtl::OUString& sValue,
 
 /*-----------------------------------------------
     TODO work on a cache copy first, which can be flushed afterwards
-         That would be usefully to gurantee a consistent cache.
+         That would be useful to guarantee a consistent cache.
 -----------------------------------------------*/
 void FilterCache::impl_readOldFormat()
     throw(css::uno::Exception)
