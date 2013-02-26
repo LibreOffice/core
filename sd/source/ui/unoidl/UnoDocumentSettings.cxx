@@ -905,7 +905,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
             case HANDLE_EMBED_FONTS:
             {
-                sal_Bool bNewValue = sal_False;
+                bool bNewValue = false;
                 if ( *pValues >>= bNewValue )
                 {
                     bChanged = ( pDoc->IsUsingEmbededFonts() != bNewValue );
