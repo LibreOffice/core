@@ -117,6 +117,7 @@ public:
     void testGroupshapeLine();
     void testN779642();
     void testTbLrHeight();
+    void testFdo53985();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -185,6 +186,7 @@ void Test::run()
         {"groupshape-line.docx", &Test::testGroupshapeLine},
         {"n779642.docx", &Test::testN779642},
         {"tblr-height.docx", &Test::testTbLrHeight},
+        {"fdo53985.docx", &Test::testFdo53985},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1194,6 +1196,15 @@ void Test::testTbLrHeight()
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
     // btLr text direction was imported as MIN, it should be FIX to avoid incorrectly large height in case of too much content.
     CPPUNIT_ASSERT_EQUAL(text::SizeType::FIX, getProperty<sal_Int16>(xTableRows->getByIndex(0), "SizeType"));
+}
+
+void Test::testFdo53985()
+{
+    // Unhandled excetion prevented import of the rest of the document.
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTables->getCount()); // Only 4 tables were imported.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
