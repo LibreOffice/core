@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
@@ -46,6 +47,7 @@ public class Desktop
     public static native void renderVCL(Bitmap bitmap);
     public static native void setViewSize(int width, int height);
     public static native void key(char c, short timestamp);
+    public static native void touch(int action, int x, int y, short timestamp);
 
     /**
      * This class contains the state that is initialized once and never changes
@@ -152,11 +154,21 @@ public class Desktop
     {
         Bitmap mBitmap;
         boolean renderedOnce;
+        ScaleGestureDetector gestureDetector;
 
         public BitmapView()
         {
             super(Desktop.this);
             setFocusableInTouchMode(true);
+            gestureDetector =
+                new ScaleGestureDetector(Desktop.this,
+                                         new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                                             @Override public boolean onScale(ScaleGestureDetector detector)
+                                             {
+                                                 Log.i(TAG, "onScale: " + detector.getScaleFactor());
+                                                 return true;
+                                             }
+                                         });
         }
 
         @Override protected void onDraw(Canvas canvas)
@@ -182,13 +194,32 @@ public class Desktop
                 return super.onTouchEvent(event);
 
             super.onTouchEvent(event);
-            Log.d(TAG, "onTOUCH");
-            if (event.getAction() == MotionEvent.ACTION_UP) {
+            Log.d(TAG, "onTouch (" + event.getX() + "," + event.getY() + ")");
+
+            // Just temporary hack. We should not show the keyboard
+            // unconditionally on a ACTION_UP event here. The LO level
+            // should callback to us requesting showing the keyboard
+            // if the user taps in a text area. Also, if the device
+            // has a hardware keyboard, we probably should not show
+            // the soft one unconditionally? But what if the user
+            // wants to input in another script than what the hardware
+            // keyboard covers?
+            if (event.getActionMasked() == MotionEvent.ACTION_UP) {
                 // show the keyboard so we can enter text
                 InputMethodManager imm = (InputMethodManager) getContext()
                     .getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(this, InputMethodManager.SHOW_FORCED);
             }
+
+            switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_MOVE:
+                short timestamp = (short) (System.currentTimeMillis() % Short.MAX_VALUE);
+                Desktop.touch(event.getActionMasked(), (int) event.getX(), (int) event.getY(), timestamp);
+                break;
+            }
+
             return true;
         }
 

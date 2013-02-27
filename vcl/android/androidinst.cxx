@@ -900,10 +900,10 @@ int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
     return 0;
 }
 
-// Render everything
+// public static native void renderVCL(Bitmap bitmap);
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_experimental_desktop_Desktop_renderVCL(JNIEnv *env,
-                                                            jobject /* dummy */,
+                                                            jobject /* clazz */,
                                                             jobject bitmap)
 {
     if (!bHitIdle)
@@ -963,6 +963,7 @@ typedef struct ANativeWindow_Buffer {
     AndroidBitmap_unlockPixels(env, bitmap);
 }
 
+// public static native void setViewSize(int width, int height);
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_experimental_desktop_Desktop_setViewSize(JNIEnv * /* env */,
                                                               jobject /* clazz */,
@@ -974,6 +975,7 @@ Java_org_libreoffice_experimental_desktop_Desktop_setViewSize(JNIEnv * /* env */
     viewHeight = height;
 }
 
+// public static native void key(char c, short timestamp);
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_experimental_desktop_Desktop_key(JNIEnv * /* env */,
                                                       jobject /* clazz */,
@@ -992,6 +994,43 @@ Java_org_libreoffice_experimental_desktop_Desktop_key(JNIEnv * /* env */,
         pFocus->CallCallback( SALEVENT_KEYINPUT, &aEvent );
         pFocus->CallCallback( SALEVENT_KEYUP, &aEvent );
     }
+    else
+        LOGW("No focused frame to emit event on");
+}
+
+// public static native void touch(int action, int x, int y, short timestamp);
+extern "C" SAL_JNI_EXPORT void JNICALL
+Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
+                                                        jobject /* clazz */,
+                                                        jint action,
+                                                        jint x,
+                                                        jint y,
+                                                        jshort timestamp)
+{
+    SalMouseEvent aEvent;
+
+    aEvent.mnTime = timestamp;
+    aEvent.mnX = x;
+    aEvent.mnY = y;
+    aEvent.mnButton = MOUSE_LEFT;
+    aEvent.mnCode = 0;
+
+    sal_uInt16 eventKind;
+    switch (action) {
+    case AMOTION_EVENT_ACTION_DOWN:
+        eventKind = SALEVENT_MOUSEBUTTONDOWN;
+        break;
+    case AMOTION_EVENT_ACTION_UP:
+        eventKind = SALEVENT_MOUSEBUTTONUP;
+        break;
+    case AMOTION_EVENT_ACTION_MOVE:
+        eventKind = SALEVENT_MOUSEMOVE;
+        break;
+    }
+
+    SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
+    if (pFocus)
+        pFocus->CallCallback( eventKind, &aEvent );
     else
         LOGW("No focused frame to emit event on");
 }
