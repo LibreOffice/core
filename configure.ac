@@ -4181,6 +4181,9 @@ UDK_MAJOR=3
 UDK_MINOR=2
 UDK_MICRO=7
 
+AC_SUBST(UDK_MAJOR)
+AC_SUBST(UDK_MINOR)
+AC_SUBST(UDK_MICRO)
 AC_DEFINE_UNQUOTED(SAL_UDK_MAJOR,"$UDK_MAJOR")
 AC_DEFINE_UNQUOTED(SAL_UDK_MINOR,"$UDK_MINOR")
 AC_DEFINE_UNQUOTED(SAL_UDK_MICRO,"$UDK_MICRO")
@@ -11873,7 +11876,7 @@ if test -f config_host.mk; then
     config_md5=`$MD5SUM config_host.mk | sed "s/ .*//"`
 fi
 
-AC_CONFIG_FILES([config_host.mk Makefile lo.xcent solenv/inc/minor.mk instsetoo_native/util/openoffice.lst])
+AC_CONFIG_FILES([config_host.mk Makefile lo.xcent solenv/inc/minor.mk config_host/udkversion.mk instsetoo_native/util/openoffice.lst])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])

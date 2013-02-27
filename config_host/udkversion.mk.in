@@ -1,0 +1,6 @@
+# UDK version number
+
+UDK_MAJOR=@UDK_MAJOR@
+UDK_MINOR=@UDK_MINOR@
+UDK_MICRO=@UDK_MICRO@
+

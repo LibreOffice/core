@@ -15,12 +15,6 @@ odkcommon_ZIPLIST += include/udkversion.mk
 $(eval $(call gb_CustomTarget_register_target,odk/odkcommon/include,include/udkversion.mk))
 $(odk_WORKDIR)/include/udkversion.mk:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	echo "#UDK version number" > $@
-	echo "#major" >>$@
-	echo "UDK_MAJOR=$(UDK_MAJOR)" >> $@
-	echo "#minor" >>$@
-	echo "UDK_MINOR=$(UDK_MINOR)" >> $@
-	echo "#micro" >>$@
-	echo "UDK_MICRO=$(UDK_MICRO)" >> $@
+	cp $(BUILDDIR)/config_host/udkversion.mk $@
 
 # vim: set noet sw=4 ts=4:
