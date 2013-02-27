@@ -300,7 +300,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const OUString
         static OUString aAnd(" AND ");
         const OUString aQuote    = getIdentifierQuoteString();
         const OUString* pIter = aSeq.getConstArray();
-        const OUString* pEnd   = pIter + aSeq.getLength();
+        const OUString* const pEnd  = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
         {
             if ( *pIter != m_sUpdateTableName )
@@ -443,12 +443,12 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     OUStringBuffer aCondition("( ");
 
     SelectColumnsMetaData::const_iterator aIter = (*m_pKeyColumnNames).begin();
-    SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
+    const SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
     for(;aIter != aPosEnd;++aIter)
     {
         aCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aEqual + aAnd);
     }
-    aCondition.setLength(aCondition.getLength()-5);
+    aCondition.setLength(aCondition.getLength() - aAnd.getLength());
     const OUString sCon( aCondition.makeStringAndClear() );
 
     const Any* pBegin   = rows.getConstArray();
@@ -911,7 +911,7 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
 
     // update the key values
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
-    SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
+    const SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
     for(;aPosIter != aPosEnd;++aPosIter,++aIter)
     {
         impl_convertValue_throw(_rInsertRow,aPosIter->second);
@@ -1325,12 +1325,12 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
 
     // now set the primary key column values
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
-    SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
-    SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
+    SelectColumnsMetaData::const_iterator aPosIter = m_pKeyColumnNames->begin();
+    SelectColumnsMetaData::const_iterator aPosEnd = m_pKeyColumnNames->end();
     for(;aPosIter != aPosEnd;++aPosIter,++aIter)
         setOneKeyColumnParameter(nPos,xParameter,*aIter,aPosIter->second.nType,aPosIter->second.nScale);
-    aPosIter = (*m_pForeignColumnNames).begin();
-    aPosEnd = (*m_pForeignColumnNames).end();
+    aPosIter = m_pForeignColumnNames->begin();
+    aPosEnd = m_pForeignColumnNames->end();
     for(;aPosIter != aPosEnd;++aPosIter,++aIter)
         setOneKeyColumnParameter(nPos,xParameter,*aIter,aPosIter->second.nType,aPosIter->second.nScale);
 
@@ -1643,7 +1643,7 @@ void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
 
 
         ::comphelper::UStringMixLess aTmp(o_rColumnNames.key_comp());
-        ::comphelper::UStringMixEqual bCase(static_cast< ::comphelper::UStringMixLess*>(&aTmp)->isCaseSensitive());
+        ::comphelper::UStringMixEqual bCase(aTmp.isCaseSensitive());
 
         for(sal_Int32 nPos = 1;pSelIter != pSelEnd;++pSelIter,++nPos)
         {
