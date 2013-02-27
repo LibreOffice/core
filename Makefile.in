@@ -77,7 +77,7 @@ $(if $(filter $(gbuild_modules),$(dmake_modules)),$(eval $(call gb_Output_warn,T
 export gb_TAILBUILDTARGET=all slowcheck
 
 define gbuild_module_rules
-.PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).subsequentcheck $(1).deliver
+.PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck
 
 $(1): bootstrap fetch
 	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
@@ -91,14 +91,11 @@ $(1).all: bootstrap fetch
 	) \
 	$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 
-$(1).build $(1).check $(1).clean:
+$(1).build $(1).check $(1).clean $(1).showdeliverables:
 	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).subsequentcheck:
 	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck
-
-$(1).deliver:
-	@true
 
 endef
 
