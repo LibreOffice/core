@@ -54,7 +54,7 @@ WRONG_SOURCEVERSION
 # $(UPD)minor.mk could be empty as it's contents were already included from minor.mk
 .INCLUDE : $(SOLARVERSION)/$(INPATH)/inc/$(UPD)minor.mk
 
-.INCLUDE : udkversion.mk
+.INCLUDE : $(BUILDDIR)/config_host/udkversion.mk
 
 # --- reset defined Environments --------------------
 ASM=
