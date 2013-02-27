@@ -22,6 +22,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
+import com.sun.star.awt.Key;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.XComponentContext;
 
@@ -149,6 +151,11 @@ public class Desktop
         }
     }
 
+    static short getTimestamp()
+    {
+        return (short) (System.currentTimeMillis() % Short.MAX_VALUE);
+    }
+
     class BitmapView
         extends View
     {
@@ -188,6 +195,35 @@ public class Desktop
             invalidate();
         }
 
+        @Override public boolean onKeyDown(int keyCode, KeyEvent event)
+        {
+            switch (keyCode) {
+            case KeyEvent.KEYCODE_0:
+            case KeyEvent.KEYCODE_1:
+            case KeyEvent.KEYCODE_2:
+            case KeyEvent.KEYCODE_3:
+            case KeyEvent.KEYCODE_4:
+            case KeyEvent.KEYCODE_5:
+            case KeyEvent.KEYCODE_6:
+            case KeyEvent.KEYCODE_7:
+            case KeyEvent.KEYCODE_8:
+            case KeyEvent.KEYCODE_9:
+                Desktop.key((char) ('0' + keyCode - KeyEvent.KEYCODE_0), Desktop.getTimestamp());
+                return true;
+            case KeyEvent.KEYCODE_DEL:
+                Desktop.key((char) Key.BACKSPACE, Desktop.getTimestamp());
+                return true;
+            case KeyEvent.KEYCODE_ENTER:
+                Desktop.key((char) Key.RETURN, Desktop.getTimestamp());
+                return true;
+            case KeyEvent.KEYCODE_TAB:
+                Desktop.key((char) Key.TAB, Desktop.getTimestamp());
+                return true;
+            default:
+                return false;
+            }
+        }
+
         @Override public boolean onTouchEvent(MotionEvent event)
         {
             if (!renderedOnce)
@@ -215,8 +251,7 @@ public class Desktop
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_MOVE:
-                short timestamp = (short) (System.currentTimeMillis() % Short.MAX_VALUE);
-                Desktop.touch(event.getActionMasked(), (int) event.getX(), (int) event.getY(), timestamp);
+                Desktop.touch(event.getActionMasked(), (int) event.getX(), (int) event.getY(), Desktop.getTimestamp());
                 break;
             }
 
@@ -249,9 +284,8 @@ public class Desktop
 
         @Override public boolean commitText(CharSequence text, int newCursorPosition) {
             Log.i(TAG, "commitText(" + text + ", " + newCursorPosition + ")");
-            short timestamp = (short) (System.currentTimeMillis() % Short.MAX_VALUE);
             for (int i = 0; i < text.length(); i++) {
-                Desktop.key(text.charAt(i), timestamp);
+                Desktop.key(text.charAt(i), Desktop.getTimestamp());
             }
             return true;
         }
