@@ -44,6 +44,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/optsecuritypage \
 	cui/uiconfig/ui/optuserpage \
 	cui/uiconfig/ui/optviewpage \
+	cui/uiconfig/ui/pageformatpage \
 	cui/uiconfig/ui/personalization_tab \
 	cui/uiconfig/ui/pickbulletpage \
 	cui/uiconfig/ui/pickgraphicpage \

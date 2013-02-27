@@ -146,6 +146,12 @@ SvxPageWindow::~SvxPageWindow()
     delete pFtBorder;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPageWindow(Window *pParent)
+{
+    return new SvxPageWindow(pParent);
+}
+
+
 // -----------------------------------------------------------------------
 
 void SvxPageWindow::Paint( const Rectangle& )
