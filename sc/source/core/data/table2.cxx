@@ -740,12 +740,15 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
 
 
-        // make sure that there are no old references to the cond formats
-        sal_uInt16 nWhichArray[2];
-        nWhichArray[0] = ATTR_CONDITIONAL;
-        nWhichArray[1] = 0;
-        for ( SCCOL i = nCol1; i <= nCol2; ++i)
-            aCol[i].ClearItems(nRow1, nRow2, nWhichArray);
+        if(nInsFlag != IDF_OBJECTS)
+        {
+            // make sure that there are no old references to the cond formats
+            sal_uInt16 nWhichArray[2];
+            nWhichArray[0] = ATTR_CONDITIONAL;
+            nWhichArray[1] = 0;
+            for ( SCCOL i = nCol1; i <= nCol2; ++i)
+                aCol[i].ClearItems(nRow1, nRow2, nWhichArray);
+        }
 
         //remove old notes
         if (nInsFlag & (IDF_NOTE|IDF_ADDNOTES))
