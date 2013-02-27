@@ -5097,12 +5097,11 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     AC_CHECK_SIZEOF(double)
     AC_CHECK_SIZEOF(void*)
 
-    SIZEOF_SHORT=$ac_cv_sizeof_short
-    SIZEOF_INT=$ac_cv_sizeof_int
-    SIZEOF_LONG=$ac_cv_sizeof_long
-    SIZEOF_LONGLONG=$ac_cv_sizeof_long_long
-    SIZEOF_DOUBLE=$ac_cv_sizeof_double
-    SIZEOF_POINTER=$ac_cv_sizeof_voidp
+    SAL_TYPES_SIZEOFSHORT=$ac_cv_sizeof_short
+    SAL_TYPES_SIZEOFINT=$ac_cv_sizeof_int
+    SAL_TYPES_SIZEOFLONG=$ac_cv_sizeof_long
+    SAL_TYPES_SIZEOFLONGLONG=$ac_cv_sizeof_long_long
+    SAL_TYPES_SIZEOFPOINTER=$ac_cv_sizeof_voidp
 
     dnl Allow build without AC_CHECK_ALIGNOF, grrr
     m4_pattern_allow([AC_CHECK_ALIGNOF])
@@ -5144,10 +5143,15 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
             esac
         ])
 
-    ALIGNOF_SHORT=$ac_cv_alignof_short
-    ALIGNOF_INT=$ac_cv_alignof_int
-    ALIGNOF_LONG=$ac_cv_alignof_long
-    ALIGNOF_DOUBLE=$ac_cv_alignof_double
+    SAL_TYPES_ALIGNMENT2=$ac_cv_alignof_short
+    SAL_TYPES_ALIGNMENT4=$ac_cv_alignof_int
+    if test $ac_cv_alignof_long -eq 8; then
+        SAL_TYPES_ALIGNMENT8=$ac_cv_alignof_long
+    elif test $ac_cv_alignof_double -eq 8; then
+        SAL_TYPES_ALIGNMENT8=$ac_cv_alignof_double
+    else
+        AC_MSG_ERROR([Cannot find alignment of 8 byte types.])
+    fi
 
     AC_C_BIGENDIAN
     WORDS_BIGENDIAN=$ac_cv_c_bigendian
@@ -5162,35 +5166,32 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     fi
 else
     # Hardcode for MSVC
-    SIZEOF_SHORT=2
-    SIZEOF_INT=4
-    SIZEOF_LONG=4
-    SIZEOF_LONGLONG=8
+    SAL_TYPES_SIZEOFSHORT=2
+    SAL_TYPES_SIZEOFINT=4
+    SAL_TYPES_SIZEOFLONG=4
+    SAL_TYPES_SIZEOFLONGLONG=8
     if test "$BITNESS_OVERRIDE" = ""; then
-        SIZEOF_POINTER=4
+        SAL_TYPES_SIZEOFPOINTER=4
     else
-        SIZEOF_POINTER=8
+        SAL_TYPES_SIZEOFPOINTER=8
     fi
-    ALIGNOF_SHORT=2
-    ALIGNOF_INT=4
-    ALIGNOF_LONG=4
-    ALIGNOF_DOUBLE=8
+    SAL_TYPES_ALIGNMENT2=2
+    SAL_TYPES_ALIGNMENT4=4
+    SAL_TYPES_ALIGNMENT8=8
     WORDS_BIGENDIAN=no
     LFS_CFLAGS=''
 fi
 AC_SUBST(WORDS_BIGENDIAN)
 AC_SUBST(LFS_CFLAGS)
 
-AC_SUBST(SIZEOF_SHORT)
-AC_SUBST(SIZEOF_INT)
-AC_SUBST(SIZEOF_LONG)
-AC_SUBST(SIZEOF_LONGLONG)
-AC_SUBST(SIZEOF_DOUBLE)
-AC_SUBST(SIZEOF_POINTER)
-AC_SUBST(ALIGNOF_SHORT)
-AC_SUBST(ALIGNOF_INT)
-AC_SUBST(ALIGNOF_LONG)
-AC_SUBST(ALIGNOF_DOUBLE)
+AC_DEFINE_UNQUOTED(SAL_TYPES_SIZEOFSHORT,$SAL_TYPES_SIZEOFSHORT)
+AC_DEFINE_UNQUOTED(SAL_TYPES_SIZEOFINT,$SAL_TYPES_SIZEOFINT)
+AC_DEFINE_UNQUOTED(SAL_TYPES_SIZEOFLONG,$SAL_TYPES_SIZEOFLONG)
+AC_DEFINE_UNQUOTED(SAL_TYPES_SIZEOFLONGLONG,$SAL_TYPES_SIZEOFLONGLONG)
+AC_DEFINE_UNQUOTED(SAL_TYPES_SIZEOFPOINTER,$SAL_TYPES_SIZEOFPOINTER)
+AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT2,$SAL_TYPES_ALIGNMENT2)
+AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT4,$SAL_TYPES_ALIGNMENT4)
+AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT8,$SAL_TYPES_ALIGNMENT8)
 
 dnl ===================================================================
 dnl Check if valgrind headers are available
@@ -9985,7 +9986,7 @@ AC_SUBST(RHINO_JAR)
 supports_multilib=
 case "$host_cpu" in
 x86_64 | powerpc64 | s390x)
-    if test "$SIZEOF_LONG" = "8"; then
+    if test "$SAL_TYPES_SIZEOFLONG" = "8"; then
         supports_multilib="yes"
     fi
     ;;
@@ -11869,6 +11870,7 @@ AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])
+AC_CONFIG_HEADERS([config_host/config_typesizes.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_OUTPUT
