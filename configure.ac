@@ -4108,6 +4108,7 @@ if test "$cross_compiling" = "yes"; then
     cp config.log ../config.Build.log
     mkdir -p ../config_build
     cp config_host/*.h ../config_build
+    cp config_host/udkversion.mk ../config_build
     . ./bin/get_config_variables COM GUI OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR SOLARINC SOLARLIB WORKDIR
 
     for V in COM GUI OS CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
