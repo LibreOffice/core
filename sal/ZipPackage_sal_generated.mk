@@ -27,6 +27,8 @@
 
 $(eval $(call gb_ZipPackage_ZipPackage,sal_generated,$(BUILDDIR)/config_host))
 
+$(eval $(call gb_ZipPackage_add_file,sal_generated,inc/udkversion.mk,include/udkversion.mk,udkversion.mk))
+
 $(eval $(call gb_ZipPackage_add_file,sal_generated,inc/sal/udkversion.h,include/sal/udkversion.h,config_udkversion.h))
 
 $(eval $(call gb_ZipPackage_add_file,sal_generated,inc/sal/typesizes.h,include/sal/typesizes.h,config_typesizes.h))

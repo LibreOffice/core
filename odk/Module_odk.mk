@@ -9,6 +9,9 @@
 
 $(eval $(call gb_Module_Module,odk))
 
+# needed in several makefiles here
+include $(BUILDDIR)/config_host/udkversion.mk
+
 $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_odkcommon \
 	$(if $(filter WNT,$(OS)),CustomTarget_cli) \
@@ -19,7 +22,6 @@ $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_settings \
 	CustomTarget_autodoc \
 	CustomTarget_idl \
-	CustomTarget_include \
 	Executable_unoapploader \
 	Zip_odkexamples \
 ))
