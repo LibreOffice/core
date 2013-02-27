@@ -254,6 +254,8 @@ public:
 class Lanczos3Kernel : public Kernel
 {
 public:
+    Lanczos3Kernel( void) {}
+
     virtual double GetWidth() const
     {
         return 3.0;
@@ -278,6 +280,9 @@ public:
 
 class BicubicKernel : public Kernel
 {
+public:
+    BicubicKernel( void) {}
+
     virtual double GetWidth() const
     {
         return 2.0;
@@ -305,6 +310,9 @@ class BicubicKernel : public Kernel
 
 class BilinearKernel : public Kernel
 {
+public:
+    BilinearKernel( void) {}
+
     virtual double GetWidth() const
     {
         return 1.0;
@@ -328,6 +336,9 @@ class BilinearKernel : public Kernel
 
 class BoxKernel : public Kernel
 {
+public:
+    BoxKernel( void) {}
+
     virtual double GetWidth() const
     {
         return 0.5;
