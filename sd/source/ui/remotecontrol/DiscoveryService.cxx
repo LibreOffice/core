@@ -76,6 +76,7 @@ DiscoveryService::DiscoveryService() :
 
 DiscoveryService::~DiscoveryService()
 {
+    close( mSocket );
 }
 
 void SAL_CALL DiscoveryService::run()
