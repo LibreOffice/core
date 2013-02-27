@@ -13,6 +13,19 @@ odkcommon_ZIPLIST += docs/cpp/ref
 
 CPPDOCREFNAME := "UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) C/C++ API Reference"
 
+odk_INCDIRLIST := sal salhelper rtl osl store typelib uno cppu cppuhelper \
+	registry $(if $(filter WNT,$(OS)),systools)
+odk_INCFILELIST := com/sun/star/uno/Any.h \
+	com/sun/star/uno/Any.hxx \
+	com/sun/star/uno/genfunc.h \
+	com/sun/star/uno/genfunc.hxx \
+	com/sun/star/uno/Reference.h \
+	com/sun/star/uno/Reference.hxx \
+	com/sun/star/uno/Sequence.h \
+	com/sun/star/uno/Sequence.hxx \
+	com/sun/star/uno/Type.h \
+	com/sun/star/uno/Type.hxx
+
 # Cygwin Doxygen needs unix paths
 DOXY_INPUT := $(docu_SRCDIR)/main.dox $(addprefix $(OUTDIR)/inc/,$(odk_INCDIRLIST) $(odk_INCFILELIST))
 DOXY_INPUT := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(DOXY_INPUT)),$(DOXY_INPUT))
