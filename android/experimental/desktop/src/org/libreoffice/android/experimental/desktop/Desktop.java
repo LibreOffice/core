@@ -45,6 +45,7 @@ public class Desktop
     /* implementend by vcl */
     public static native void renderVCL(Bitmap bitmap);
     public static native void setViewSize(int width, int height);
+    public static native void key(char c, short timestamp);
 
     /**
      * This class contains the state that is initialized once and never changes
@@ -217,6 +218,10 @@ public class Desktop
 
         @Override public boolean commitText(CharSequence text, int newCursorPosition) {
             Log.i(TAG, "commitText(" + text + ", " + newCursorPosition + ")");
+            short timestamp = (short) (System.currentTimeMillis() % Short.MAX_VALUE);
+            for (int i = 0; i < text.length(); i++) {
+                Desktop.key(text.charAt(i), timestamp);
+            }
             return true;
         }
     }

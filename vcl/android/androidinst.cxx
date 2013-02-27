@@ -39,6 +39,7 @@
 
 #define LOGTAG "LibreOffice/androidinst"
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
+#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, LOGTAG, __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, LOGTAG, __VA_ARGS__))
 
 static bool bHitIdle = false;
@@ -463,6 +464,8 @@ void AndroidSalInstance::onAppCmd (struct android_app* app, int32_t cmd)
         }
 }
 
+#endif
+
 /*
  * Try too hard to get a frame, in the absence of anything better to do
  */
@@ -485,6 +488,8 @@ SalFrame *AndroidSalInstance::getFocusFrame() const
     }
     return pFocus;
 }
+
+#if 0
 
 int32_t AndroidSalInstance::onInputEvent (struct android_app* app, AInputEvent* event)
 {
@@ -960,13 +965,35 @@ typedef struct ANativeWindow_Buffer {
 
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_experimental_desktop_Desktop_setViewSize(JNIEnv * /* env */,
-                                                              jobject /* object */,
+                                                              jobject /* clazz */,
                                                               jint width,
                                                               jint height)
 {
     // Horrible
     viewWidth = width;
     viewHeight = height;
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL
+Java_org_libreoffice_experimental_desktop_Desktop_key(JNIEnv * /* env */,
+                                                      jobject /* clazz */,
+                                                      jchar c,
+                                                      jshort timestamp)
+{
+    SalKeyEvent aEvent;
+
+    aEvent.mnCharCode = c;
+    aEvent.mnTime = timestamp;
+    aEvent.mnCode = c;
+    aEvent.mnRepeat = 0;
+
+    SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
+    if (pFocus) {
+        pFocus->CallCallback( SALEVENT_KEYINPUT, &aEvent );
+        pFocus->CallCallback( SALEVENT_KEYUP, &aEvent );
+    }
+    else
+        LOGW("No focused frame to emit event on");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
