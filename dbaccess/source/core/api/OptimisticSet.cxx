@@ -157,7 +157,7 @@ void OptimisticSet::makeNewStatement( )
     fillJoinedColumns_throw(m_aSqlIterator.getJoinConditions());
 
     const ::rtl::OUString sComposerFilter = m_xComposer->getFilter();
-    if ( !m_sRowSetFilter.isEmpty() || (!sComposerFilter.isEmpty() && sComposerFilter != m_sRowSetFilter) )
+    if ( !m_sRowSetFilter.isEmpty() || !sComposerFilter.isEmpty() )
     {
         FilterCreator aFilterCreator;
         if ( !sComposerFilter.isEmpty() && sComposerFilter != m_sRowSetFilter )
