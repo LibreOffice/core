@@ -182,7 +182,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
         // For instance, imagine a "SELECT alias.col FROM table AS alias". Now i_aTable would be the table named
         // "table", so our sUpdateTableName would be "table" as well - not the information about the "alias" is
         // already lost here.
-        // now getColumnPositions would travers the columns, and check which of them belong to the table denoted
+        // now getColumnPositions would traverse the columns, and check which of them belong to the table denoted
         // by sUpdateTableName. Since the latter is "table", but the columns only know that they belong to a table
         // named "alias", there will be no matching - so getColumnPositions wouldn't find anything.
 
@@ -518,7 +518,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     OUString sIsNull(" IS NULL");
     OUString sParam(" = ?");
 
-    // use keys and indexes for excat postioning
+    // use keys and indexes for exact postioning
     // first the keys
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
 
@@ -1042,7 +1042,7 @@ void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 Reference<XNameAccess> OKeySet::getKeyColumns() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::getKeyColumns" );
-    // use keys and indexes for excat postioning
+    // use keys and indexes for exact postioning
     // first the keys
 
     Reference<XIndexAccess> xKeys = m_xTableKeys;
