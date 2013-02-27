@@ -1,0 +1,480 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///KA\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "Better: \"fdo#39468: Translate German comments in sd/source/core/\" so that it can be automatically matched with the bug tracker entry. Plus, the commit does not only contain drawdoc1 and drawdoc4 but also some other files... I would not list the file names here as they can be easily seen in the commit information.",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///MQ\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "I would write \"so _that_ text objects\"",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///MM\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "I would move the \"do\"  between \"templates\" and \"exist\" or remove it completely",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///MI\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///ME\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "I suggest using /** ... */ here for the multi-line comment so that oxygen can parse it.",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///MA\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "In my eyes, mentioning the method name does not provide additional benefit here and below... or does it? How do you see this?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///L8\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "I would add a \"that\" before \"it\". Plus change \"load\" into \"be loaded\".",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///L0\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "I would remove the initials \"(PB)\" here...",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Lw\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "Maybe better: \"First search in all pages\"?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Ls\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "PowerPoint is written with a capital P in the middle :-) (see http://office.microsoft.com/powerpoint/)",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Lo\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "I would replace \"said\" by \"given\"",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Lg\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "sounds strange to me, maybe better: \"no Autolayout yet -\u003e initialize\"? (also for the two identical comments below)",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Lc\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "Better: \"Timer did not yet expire\"",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///LY\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "missing space between \"execute\" and \"HitTest\"?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///LQ\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "\"Wink\" for \"Winkel\" \u003d angle? Oh, I see refactoring potential ;-)",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///LM\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "better: \"Creates a DocShell, ...\"",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///LI\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "Why did you add a fullstop (\".\") in this line and the comments below? No big deal, but inconsistent :-)",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///K8\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "here, you missed one comment",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///K4\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "here, you missed translating a comment",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///K0\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "please \"anymore\" instead of \"any more\"",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Kk\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "Why a fullstop here at the end of the line?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Kg\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Kc\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///KY\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///KU\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///KQ\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///KM\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///KI\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:17:08Z",
+      "side": 1,
+      "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
