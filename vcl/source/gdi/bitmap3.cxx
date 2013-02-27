@@ -1559,7 +1559,6 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     else
                                         nWeightY = nMax;
 
-                                    nWeightY = nWeightY ;
                                     nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
                                     nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
                                     nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
@@ -1704,7 +1703,6 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     else
                                         nWeightY = nMax;
 
-                                    nWeightY = nWeightY ;
                                     nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
                                     nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
                                     nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
@@ -1851,7 +1849,6 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     else
                                         nWeightY = nMax;
 
-                                    nWeightY = nWeightY ;
                                     nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
                                     nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
                                     nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
@@ -1996,7 +1993,6 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     else
                                         nWeightY = nMax;
 
-                                    nWeightY = nWeightY ;
                                     nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
                                     nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
                                     nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
@@ -2139,7 +2135,6 @@ sal_Bool Bitmap::ImplScaleSuper(
                                     else
                                         nWeightY = nMax;
 
-                                    nWeightY = nWeightY ;
                                     nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
                                     nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
                                     nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
