@@ -11,7 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/cpp/ref))
 
 odkcommon_ZIPLIST += docs/cpp/ref
 
-CPPDOCREFNAME := "UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) C/C++ API Reference"
+CPPDOCREFNAME := "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"
 
 odk_INCDIRLIST := sal salhelper rtl osl store typelib uno cppu cppuhelper \
 	registry $(if $(filter WNT,$(OS)),systools)

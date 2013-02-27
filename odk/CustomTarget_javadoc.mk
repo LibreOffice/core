@@ -23,7 +23,7 @@ $(odk_WORKDIR)/docs/java/ref/index.html: $(call gb_Jar_get_target,ridl)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
 	$(JAVADOC) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
-		-header "UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) Java API Reference"\
+		-header "$(PRODUCTNAME) $(PRODUCTVERSION) SDK Java API Reference"\
 		-d $(dir $@) \
 		-sourcepath "$(SRCDIR)/ridljar/source/unoloader$(gb_CLASSPATHSEP)$(SRCDIR)/ridljar$(gb_CLASSPATHSEP)$(SRCDIR)/jurt$(gb_CLASSPATHSEP)$(SRCDIR)/javaunohelper" \
 		-classpath $(OUTDIR)/bin/ridl.jar \
