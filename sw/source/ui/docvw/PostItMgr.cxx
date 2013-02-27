@@ -968,7 +968,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
                 SwSidebarWin_iterator aNextPostIt = i;
                 ++aNextPostIt;
 
-                if (aNextPostIt !=aVisiblePostItList.end())
+                if (aNextPostIt != aVisiblePostItList.end())
                 {
                     lTranslatePos = ( (*i)->VirtualPos().Y() + (*i)->VirtualSize().Height()) - (*aNextPostIt)->VirtualPos().Y();
                     if (lTranslatePos > 0) // note windows overlaps the next one
@@ -1020,7 +1020,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
                             }
                         }
                     }
-                    if (aNextPostIt !=aVisiblePostItList.end() && (*aNextPostIt)->IsFollow())
+                    if ( (*aNextPostIt)->IsFollow() )
                         lSpaceUsed += (*i)->VirtualSize().Height() + ANCHORLINE_WIDTH;
                     else
                         lSpaceUsed += (*i)->VirtualSize().Height() + GetSpaceBetween();
