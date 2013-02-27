@@ -336,7 +336,7 @@ void ScFiltersTest::testContentLotus123()
     testContentImpl(pDoc, LOTUS123);
     xDocSh->DoClose();
 }
-void impl_testLegacyCellAnchoredRotatedShape( ScDocument* pDoc, Rectangle& aRect, ScDrawObjData& aAnchor, long TOLERENCE = 30 /* 30 hmm */ )
+void impl_testLegacyCellAnchoredRotatedShape( ScDocument* pDoc, Rectangle& aRect, ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
 {
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
