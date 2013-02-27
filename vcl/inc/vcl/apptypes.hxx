@@ -37,8 +37,6 @@
 #define EXC_MAJORTYPE               ((sal_uInt16)0xFF00)
 #define EXC_MINORTYPE               ((sal_uInt16)0x00FF)
 
-#define UNIQUEID_SV_BEGIN           64000
-
 class VCL_DLLPUBLIC ApplicationProperty
 {
 public:
