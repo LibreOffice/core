@@ -164,6 +164,9 @@ public:
     void                        RemoveDdeTopic( SfxObjectShell* );
 
     // "static" methods
+    /**
+    * @param pArgs Takes ownership
+    */
     sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const String& rFileName, sal_Bool bCopy=sal_True, SfxItemSet* pArgs = 0 );
     SfxTemplateDialog*          GetTemplateDialog();
     Window*                     GetTopWindow() const;

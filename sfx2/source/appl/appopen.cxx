@@ -375,6 +375,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String
             xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName() );
 
         SfxMedium *pMedium = new SfxMedium( rFileName, STREAM_STD_READ, pFilter, pSet );
+        delete pSet;
         if(!xDoc->DoLoad(pMedium))
         {
             ErrCode nErrCode = xDoc->GetErrorCode();

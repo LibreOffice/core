@@ -96,9 +96,15 @@ public:
                         SfxMedium(String const &, StreamMode, void *)
                             SAL_DELETED_FUNCTION;
 
+                        /**
+                         * @param pSet does NOT take ownership
+                         */
                         SfxMedium( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     const String& rBaseURL,
                                     const SfxItemSet* pSet=0 );
+                        /**
+                         * @param pSet does NOT take ownership
+                         */
                         SfxMedium( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     const String& rBaseURL,
                                     const String& rTypeName,
