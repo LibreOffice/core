@@ -27,23 +27,7 @@
 #include <config_global.h>
 #endif
 
-#if defined UNX
-  #include <sal/typesizes.h>
-#elif defined(WNT)
-  /* FIXME: autogeneration of type sizes on Win32/Win64? */
-  #define SAL_TYPES_ALIGNMENT2      1
-  #define SAL_TYPES_ALIGNMENT4      1
-  #define SAL_TYPES_ALIGNMENT8      1
-  #define SAL_TYPES_SIZEOFSHORT     2
-  #define SAL_TYPES_SIZEOFINT       4
-  #define SAL_TYPES_SIZEOFLONG      4
-  #define SAL_TYPES_SIZEOFLONGLONG  8
-  #ifdef _WIN64
-    #define SAL_TYPES_SIZEOFPOINTER 8
-  #else
-    #define SAL_TYPES_SIZEOFPOINTER 4
-  #endif
-#endif
+#include <sal/typesizes.h>
 
 #ifdef __cplusplus
 extern "C" {

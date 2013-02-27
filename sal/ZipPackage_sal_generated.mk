@@ -29,8 +29,6 @@ $(eval $(call gb_ZipPackage_ZipPackage,sal_generated,$(call gb_CustomTarget_get_
 
 $(eval $(call gb_ZipPackage_add_files,sal_generated,inc/sal,include/sal,sal/udkversion.h))
 
-ifneq ($(COM),MSC)
 $(eval $(call gb_ZipPackage_add_files,sal_generated,inc/sal,include/sal,sal/typesizes.h))
-endif
 
 # vim: set noet sw=4 ts=4:
