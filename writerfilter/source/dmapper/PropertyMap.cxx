@@ -840,7 +840,20 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             ApplyColumnProperties( xSection );
         uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
         if (xRangeProperties.is())
-            xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName));
+        {
+            OUString aName = m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName;
+            if (!aName.isEmpty())
+            {
+                try
+                {
+                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(aName));
+                }
+                catch( const uno::Exception& )
+                {
+                    SAL_WARN("writerfilter", "failed to set PageDescName!");
+                }
+            }
+        }
     }
     // If the section is of type "New column" (0x01), then simply insert a column break.
     // But only if there actually are columns on the page, otherwise a column break

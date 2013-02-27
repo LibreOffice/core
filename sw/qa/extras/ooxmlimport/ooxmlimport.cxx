@@ -111,6 +111,7 @@ public:
     void testN780645();
     void testFineTableDash();
     void testN779642();
+    void testFdo53985();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -174,6 +175,7 @@ void Test::run()
         {"n780645.docx", &Test::testN780645},
         {"tableborder-finedash.docx", &Test::testFineTableDash},
         {"n779642.docx", &Test::testN779642},
+        {"fdo53985.docx", &Test::testFdo53985},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1083,6 +1085,15 @@ void Test::testN779642()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation", nValue, text::VertOrientation::BOTTOM);
     xFrame->getPropertyValue("VertOrientRelation") >>= nValue;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong vertical orientation relation", nValue, text::RelOrientation::PAGE_PRINT_AREA);
+}
+
+void Test::testFdo53985()
+{
+    // Unhandled excetion prevented import of the rest of the document.
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTables->getCount()); // Only 4 tables were imported.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
