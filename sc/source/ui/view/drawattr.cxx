@@ -22,14 +22,14 @@
 
 //------------------------------------------------------------------------
 
-String SvxDrawToolItem::GetValueText() const
+OUString SvxDrawToolItem::GetValueText() const
 {
     return GetValueText(GetValue());
 }
 
 //------------------------------------------------------------------------
 
-String SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
+OUString SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
 {
     const sal_Char* p;
 
@@ -47,7 +47,7 @@ String SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
         case 8  : p = "SVX_SNAP_DRAW_TEXT"      ; break;
         default : return EMPTY_STRING;
     }
-    return String::CreateFromAscii( p );
+    return OUString::createFromAscii( p );
 }
 
 //------------------------------------------------------------------------
