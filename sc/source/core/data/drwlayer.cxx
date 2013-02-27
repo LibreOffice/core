@@ -1844,7 +1844,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
 void ScDrawLayer::GetCellAnchorFromPosition( SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect, bool bHiddenAsZero )
 {
     Rectangle aObjRect( bUseLogicRect ? rObj.GetLogicRect() : rObj.GetSnapRect() );
-    ScRange aRange = rDoc.GetRange( nTab, aObjRect );
+    ScRange aRange = rDoc.GetRange( nTab, aObjRect, bHiddenAsZero );
 
     Rectangle aCellRect;
 

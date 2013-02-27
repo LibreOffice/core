@@ -805,7 +805,7 @@ public:
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void            InitializeNoteCaptions( SCTAB nTab, bool bForced = false );
 
-    void            SetDrawPageSize(SCTAB nTab);
+    SC_DLLPUBLIC void            SetDrawPageSize(SCTAB nTab);
 
     bool            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
@@ -1461,7 +1461,7 @@ public:
 
     SC_DLLPUBLIC Rectangle      GetMMRect( SCCOL nStartCol, SCROW nStartRow,
                                            SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC ScRange            GetRange( SCTAB nTab, const Rectangle& rMMRect ) const;
+    SC_DLLPUBLIC ScRange            GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHiddenAsZero = true ) const;
 
     void            UpdStlShtPtrsFrmNms();
     void            StylesToNames();

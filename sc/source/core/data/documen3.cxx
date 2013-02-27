@@ -1655,7 +1655,7 @@ void ScDocument::ResetEmbedded()
     while result is less than nStopTwips.
     @return true if advanced at least one row.
  */
-static bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEndRow, const ScTable * pTable )
+static bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEndRow, const ScTable * pTable, bool bHiddenAsZero = true )
 {
     SCROW nRow = rPosY;
     bool bAdded = false;
@@ -1663,7 +1663,7 @@ static bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SC
     while (rTwips < nStopTwips && nRow <= nEndRow && !bStop)
     {
         SCROW nHeightEndRow;
-        sal_uInt16 nHeight = pTable->GetRowHeight( nRow, NULL, &nHeightEndRow);
+        sal_uInt16 nHeight = pTable->GetRowHeight( nRow, NULL, &nHeightEndRow, bHiddenAsZero );
         if (nHeightEndRow > nEndRow)
             nHeightEndRow = nEndRow;
         if (!nHeight)
@@ -1698,7 +1698,7 @@ static bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SC
     return bAdded;
 }
 
-ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect ) const
+ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHiddenAsZero ) const
 {
     ScTable* pTable = NULL;
     if (nTab < static_cast<SCTAB>(maTabs.size()))
@@ -1727,7 +1727,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect ) const
     bEnd = false;
     while (!bEnd)
     {
-        nAdd = (long) pTable->GetColWidth(nX1);
+        nAdd = (long) pTable->GetColWidth(nX1, bHiddenAsZero);
         if (nSize+nAdd <= nTwips+1 && nX1<MAXCOL)
         {
             nSize += nAdd;
@@ -1743,7 +1743,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect ) const
     bEnd = false;
     while (!bEnd)
     {
-        nAdd = (long) pTable->GetColWidth(nX2);
+        nAdd = (long) pTable->GetColWidth(nX2, bHiddenAsZero);
         if (nSize+nAdd < nTwips && nX2<MAXCOL)
         {
             nSize += nAdd;
@@ -1759,14 +1759,14 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect ) const
 
     SCROW nY1 = 0;
     // Was if(nSize+nAdd<=nTwips+1) inside loop => if(nSize+nAdd<nTwips+2)
-    if (lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MAXROW, pTable) && nY1 < MAXROW)
+    if (lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MAXROW, pTable, bHiddenAsZero) && nY1 < MAXROW)
         ++nY1;  // original loop ended on last matched +1 unless that was MAXROW
 
     nTwips = (long) (aPosRect.Bottom() / HMM_PER_TWIPS);
 
     SCROW nY2 = nY1;
     // Was if(nSize+nAdd<nTwips) inside loop => if(nSize+nAdd<nTwips)
-    if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MAXROW, pTable) && nY2 < MAXROW)
+    if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MAXROW, pTable, bHiddenAsZero) && nY2 < MAXROW)
         ++nY2;  // original loop ended on last matched +1 unless that was MAXROW
 
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );
