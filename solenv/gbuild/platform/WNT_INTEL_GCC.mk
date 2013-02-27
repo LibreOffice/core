@@ -358,6 +358,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 ))
 
 ifeq ($(gb_FULLDEPS),$(true))
+gb_WinResTarget__command_target = $(OUTDIR_FOR_BUILD)/bin/makedepend
 define gb_WinResTarget__command_dep
 $(call gb_Output_announce,RC:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
@@ -375,6 +376,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	> $(1))
 endef
 else
+gb_WinResTarget__command_target =
 gb_WinResTarget__command_dep =
 endif
 

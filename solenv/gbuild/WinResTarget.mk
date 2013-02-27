@@ -28,7 +28,7 @@ endif
 endef
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_WinResTarget_get_dep_target,%) :
+$(call gb_WinResTarget_get_dep_target,%) : $(gb_WinResTarget__command_target)
 	$(call gb_WinResTarget__command_dep,$@,$*,$<)
 endif
 

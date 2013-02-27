@@ -105,7 +105,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) \
-		$(gb_ResTarget_RSCDEPS)
+		$(gb_ResTarget_RSCDEPS) $(gb_SrsPartTarget__command_target)
 	$(call gb_SrsPartTarget__command_dep,$*,$<)
 	$(call gb_SrsPartTarget__command,$@,$*,$<)
 
