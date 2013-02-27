@@ -1447,10 +1447,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
             Point aPt3(*pPt2);
             aXP1.Insert(2,aPt3,XPOLY_CONTROL);
             nPntAnz=aXP1.GetPointCount();
-            pPt1=&aXP1[0];
             pPt2=&aXP1[1];
             pPt3=&aXP1[nPntAnz-2];
-            pPt4=&aXP1[nPntAnz-1];
             pPt2->X()-=dx1/3;
             pPt2->Y()-=dy1/3;
             pPt3->X()-=dx2/3;
