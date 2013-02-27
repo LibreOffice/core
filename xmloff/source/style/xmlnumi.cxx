@@ -440,7 +440,7 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
 Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         const SvI18NMap *pI18NMap )
 {
-    sal_Int16 eType = NUMBER_NONE;
+    sal_Int16 eType = NumberingType::NUMBER_NONE;
 
     sal_Int32 nCount = 0;
     if( bBullet )
