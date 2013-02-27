@@ -535,6 +535,11 @@ throw (lang::IllegalArgumentException)
                 sal_Int16 nLevel = 0;
                 if (rValue >>= nLevel)
                 {
+                    if (nLevel < 0 || MAXLEVEL <= nLevel)
+                    {
+                        throw lang::IllegalArgumentException(
+                            "invalid NumberingLevel", 0, 0);
+                    }
                     pTxtNd->SetAttrListLevel(nLevel);
                 }
             }

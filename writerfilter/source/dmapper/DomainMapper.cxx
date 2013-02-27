@@ -1540,7 +1540,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PBrcp:
         break;  // sprmPBrcp
     case NS_sprm::LN_PIlvl: // sprmPIlvl
-        //todo: Numbering level will be implemented in the near future (OOo 3.0?)
+            if (nIntValue < 0 || 10 <= nIntValue) // Writer can't do everything
+            {
+                SAL_INFO("writerfilter",
+                        "unsupported numbering level " << nIntValue);
+                break;
+            }
             if( m_pImpl->IsStyleSheetImport() )
             {
                 //style sheets cannot have a numbering rule attached
