@@ -50,6 +50,7 @@ namespace dbaccess
         void fillJoinedColumns_throw(const ::std::vector< ::connectivity::TNodePair>& i_aJoinColumns);
         void fillJoinedColumns_throw(const ::rtl::OUString& i_sLeftColumn,const ::rtl::OUString& i_sRightColumn);
     protected:
+        virtual void makeNewStatement( );
         virtual ~OptimisticSet();
     public:
         OptimisticSet(const ::comphelper::ComponentContext& _rContext,

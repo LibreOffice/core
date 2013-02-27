@@ -1,4 +1,3 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -108,8 +107,11 @@ OptimisticSet::~OptimisticSet()
 void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::construct" );
+
     OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
+
     initColumns();
+    m_sRowSetFilter = i_sRowSetFilter;
 
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     bool bCase = (xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers()) ? true : false;
@@ -134,7 +136,10 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
     m_aKeyMap.insert(OKeySetMatrix::value_type(0,keySetValue));
     m_aKeyIter = m_aKeyMap.begin();
+}
 
+void OptimisticSet::makeNewStatement( )
+{
     ::rtl::OUStringBuffer aFilter = createKeyFilter();
 
     Reference< XSingleSelectQueryComposer> xSourceComposer(m_xComposer,UNO_QUERY);
@@ -152,12 +157,12 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     fillJoinedColumns_throw(m_aSqlIterator.getJoinConditions());
 
     const ::rtl::OUString sComposerFilter = m_xComposer->getFilter();
-    if ( !i_sRowSetFilter.isEmpty() || (!sComposerFilter.isEmpty() && sComposerFilter != i_sRowSetFilter) )
+    if ( !m_sRowSetFilter.isEmpty() || (!sComposerFilter.isEmpty() && sComposerFilter != m_sRowSetFilter) )
     {
         FilterCreator aFilterCreator;
-        if ( !sComposerFilter.isEmpty() && sComposerFilter != i_sRowSetFilter )
+        if ( !sComposerFilter.isEmpty() && sComposerFilter != m_sRowSetFilter )
             aFilterCreator.append( sComposerFilter );
-        aFilterCreator.append( i_sRowSetFilter );
+        aFilterCreator.append( m_sRowSetFilter );
         aFilterCreator.append( aFilter.makeStringAndClear() );
         aFilter = aFilterCreator.getComposedAndClear();
     }

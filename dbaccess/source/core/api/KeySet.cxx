@@ -64,6 +64,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star;
 using namespace ::cppu;
 using namespace ::osl;
+using std::vector;
 
 namespace
 {
@@ -130,8 +131,15 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
 
 OKeySet::~OKeySet()
 {
-    tryDispose(m_xStatement);
     tryDispose(m_xSet);
+    // m_xStatement is necessarily one of those
+    const vStatements_t::const_iterator end(m_vStatements.end());
+    for(vStatements_t::iterator i(m_vStatements.begin());
+        i != end;
+        ++i)
+    {
+        tryDispose(i->second);
+    }
 
     m_xComposer = NULL;
 
@@ -221,13 +229,22 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 namespace
 {
-    void appendOneKeyColumnClause( const OUString &tblName, const OUString &colName, OUStringBuffer &o_buf )
+    void appendOneKeyColumnClause( const OUString &tblName, const OUString &colName, const connectivity::ORowSetValue &_rValue, OUStringBuffer &o_buf )
     {
-        static OUString s_sDot(".");
-        static OUString s_sParam0(" ( 1 = ? AND ");
-        static OUString s_sParam1(" = ? OR 1 = ? AND ");
-        static OUString s_sParam2(" IS NULL ) ");
-        o_buf.append(s_sParam0 + tblName + s_sDot + colName + s_sParam1 + tblName + s_sDot + colName + s_sParam2);
+        static const OUString s_sDot(".");
+        OUString fullName;
+        if (tblName.isEmpty())
+            fullName = colName;
+        else
+            fullName = tblName + s_sDot + colName;
+        if ( _rValue.isNull() )
+        {
+            o_buf.append(fullName + " IS NULL ");
+        }
+        else
+        {
+            o_buf.append(fullName + " = ? ");
+        }
     }
 }
 
@@ -235,58 +252,60 @@ void OKeySet::setOneKeyColumnParameter( sal_Int32 &nPos, const Reference< XParam
 {
     if ( _rValue.isNull() )
     {
-        _xParameter->setByte( nPos++, 0 );
-        // We do the full call so that the right sqlType is passed to setNull
-        setParameter( nPos++, _xParameter, _rValue, _nType, _nScale );
-        _xParameter->setByte( nPos++, 1 );
+        // Nothing to do, appendOneKeyColumnClause took care of it,
+        // the "IS NULL" is hardcoded in the query
     }
     else
     {
-        _xParameter->setByte( nPos++, 1 );
         setParameter( nPos++, _xParameter, _rValue, _nType, _nScale );
-        _xParameter->setByte( nPos++, 0 );
     }
 }
 
 OUStringBuffer OKeySet::createKeyFilter()
 {
-    static OUString aAnd(" AND ");
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
+
+    static const OUString aAnd(" AND ");
     const OUString aQuote    = getIdentifierQuoteString();
     OUStringBuffer aFilter;
     // create the where clause
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-    SelectColumnsMetaData::iterator aPosEnd = m_pKeyColumnNames->end();
-    for(SelectColumnsMetaData::iterator aPosIter = m_pKeyColumnNames->begin();aPosIter != aPosEnd;)
+    SelectColumnsMetaData::const_iterator aPosEnd = m_pKeyColumnNames->end();
+    for(SelectColumnsMetaData::const_iterator aPosIter = m_pKeyColumnNames->begin();aPosIter != aPosEnd; ++aPosIter)
     {
-        appendOneKeyColumnClause(::dbtools::quoteTableName( xMeta,aPosIter->second.sTableName,::dbtools::eInDataManipulation),
-                                 ::dbtools::quoteName( aQuote,aPosIter->second.sRealName),
-                                 aFilter);
-        ++aPosIter;
-        if(aPosIter != aPosEnd)
+        if ( ! aFilter.isEmpty() )
             aFilter.append(aAnd);
+        appendOneKeyColumnClause(::dbtools::quoteTableName(xMeta, aPosIter->second.sTableName, ::dbtools::eInDataManipulation),
+                                 ::dbtools::quoteName(aQuote, aPosIter->second.sRealName),
+                                 *aIter++,
+                                 aFilter);
+    }
+    aPosEnd = m_pForeignColumnNames->end();
+    for(SelectColumnsMetaData::const_iterator aPosIter = m_pForeignColumnNames->begin(); aPosIter != aPosEnd; ++aPosIter)
+    {
+        if ( ! aFilter.isEmpty() )
+            aFilter.append(aAnd);
+        appendOneKeyColumnClause(::dbtools::quoteTableName(xMeta, aPosIter->second.sTableName, ::dbtools::eInDataManipulation),
+                                 ::dbtools::quoteName(aQuote, aPosIter->second.sRealName),
+                                 *aIter++,
+                                 aFilter);
     }
     return aFilter;
 }
 
-void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter)
+void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUString& i_sRowSetFilter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::construct" );
+
     OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
+
     initColumns();
+    m_sRowSetFilter = i_sRowSetFilter;
 
-    Reference<XNameAccess> xKeyColumns  = getKeyColumns();
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-    Reference<XColumnsSupplier> xQueryColSup(m_xComposer,UNO_QUERY);
+    Reference<XColumnsSupplier> xQueryColSup(m_xComposer, UNO_QUERY);
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
-    findTableColumnsMatching_throw(makeAny(m_xTable),m_sUpdateTableName,xMeta,xQueryColumns,m_pKeyColumnNames);
-
-    // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
-    // without extra variable to be set
-    OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
-    m_aKeyMap.insert(OKeySetMatrix::value_type(0, keySetValue));
-    m_aKeyIter = m_aKeyMap.begin();
-
-    OUStringBuffer aFilter = createKeyFilter();
+    findTableColumnsMatching_throw( makeAny(m_xTable), m_sUpdateTableName, xMeta, xQueryColumns, m_pKeyColumnNames );
 
     Reference< XSingleSelectQueryComposer> xSourceComposer(m_xComposer,UNO_QUERY);
     Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
@@ -297,8 +316,6 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const OUString
     const Sequence< OUString> aSeq = xSelectTables->getElementNames();
     if ( aSeq.getLength() > 1 ) // special handling for join
     {
-        static OUString aAnd(" AND ");
-        const OUString aQuote    = getIdentifierQuoteString();
         const OUString* pIter = aSeq.getConstArray();
         const OUString* const pEnd  = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
@@ -309,31 +326,63 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const OUString
                 Reference<XPropertySet> xProp(xSelColSup,uno::UNO_QUERY);
                 OUString sSelectTableName = ::dbtools::composeTableName( xMeta, xProp, ::dbtools::eInDataManipulation, false, false, false );
 
-                ::dbaccess::getColumnPositions(xQueryColumns,xSelColSup->getColumns()->getElementNames(),sSelectTableName,(*m_pForeignColumnNames));
+                ::dbaccess::getColumnPositions(xQueryColumns, xSelColSup->getColumns()->getElementNames(), sSelectTableName, (*m_pForeignColumnNames), true);
 
-                const SelectColumnsMetaData::iterator aPosEnd = (*m_pForeignColumnNames).end();
-                for(SelectColumnsMetaData::iterator aPosIter = (*m_pForeignColumnNames).begin();aPosIter != aPosEnd;++aPosIter)
-                {
-                    // look for columns not in the source columns to use them as filter as well
-                    if ( aFilter.getLength() )
-                        aFilter.append(aAnd);
-                    appendOneKeyColumnClause(::dbtools::quoteName( aQuote,sSelectTableName),
-                                             ::dbtools::quoteName( aQuote,aPosIter->second.sRealName),
-                                             aFilter);
-                }
-                break;
+                // LEM: there used to be a break here; however, I see no reason to stop
+                //      at first non-updateTable, so I removed it. (think of multiple joins...)
             }
         }
     }
-    executeStatement(aFilter,i_sRowSetFilter,xAnalyzer);
+
+    // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
+    // without extra variable to be set
+    OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
+    m_aKeyMap.insert(OKeySetMatrix::value_type(0, keySetValue));
+    m_aKeyIter = m_aKeyMap.begin();
 }
-void OKeySet::executeStatement(OUStringBuffer& io_aFilter,const OUString& i_sRowSetFilter,Reference<XSingleSelectQueryComposer>& io_xAnalyzer)
+
+void OKeySet::ensureStatement( )
 {
-    bool bFilterSet = !i_sRowSetFilter.isEmpty();
+    // do we already have a statement for the current combination of NULLness
+    // of key & foreign columns?
+    FilterColumnsNULL_t FilterColumnsNULL;
+    FilterColumnsNULL.reserve(m_aKeyIter->second.first->get().size());
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
+    const connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aEnd  = m_aKeyIter->second.first->get().end();
+    for( ; aIter != aEnd; ++aIter )
+        FilterColumnsNULL.push_back(aIter->isNull());
+    vStatements_t::iterator pNewStatement(m_vStatements.find(FilterColumnsNULL));
+    if(pNewStatement == m_vStatements.end())
+    {
+        // no: make a new one
+        makeNewStatement();
+        std::pair< vStatements_t::iterator, bool > insert_result
+            (m_vStatements.insert(vStatements_t::value_type(FilterColumnsNULL, m_xStatement)));
+        assert(insert_result.second);
+    }
+    else
+        // yes: use it
+        m_xStatement = pNewStatement->second;
+}
+
+void OKeySet::makeNewStatement()
+{
+    Reference< XSingleSelectQueryComposer> xSourceComposer(m_xComposer,UNO_QUERY);
+    Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
+    Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
+    xAnalyzer->setElementaryQuery(xSourceComposer->getElementaryQuery());
+
+    OUStringBuffer aFilter(createKeyFilter());
+    executeStatement(aFilter, xAnalyzer);
+}
+
+void OKeySet::executeStatement(OUStringBuffer& io_aFilter, Reference<XSingleSelectQueryComposer>& io_xAnalyzer)
+{
+    bool bFilterSet = !m_sRowSetFilter.isEmpty();
     if ( bFilterSet )
     {
         FilterCreator aFilterCreator;
-        aFilterCreator.append( i_sRowSetFilter );
+        aFilterCreator.append( m_sRowSetFilter );
         aFilterCreator.append( io_aFilter.makeStringAndClear() );
         io_aFilter = aFilterCreator.getComposedAndClear();
     }
@@ -1298,6 +1347,7 @@ sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
 
 bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
 {
+    ensureStatement( );
     // we just reassign the base members
     Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
     OSL_ENSURE(xParameter.is(),"No Parameter interface!");
@@ -1346,7 +1396,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 
     invalidateRow();
 
-    if(isBeforeFirst() || isAfterLast() || !m_xStatement.is())
+    if(isBeforeFirst() || isAfterLast())
         return;
 
     if ( m_aKeyIter->second.second.second.is() )
@@ -1667,16 +1717,19 @@ void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
                     sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
                     OSL_VERIFY( xQueryColumnProp->getPropertyValue( PROPERTY_ISNULLABLE ) >>= nNullable );
 
+                    SelectColumnDescription aColDesc( nPos, nType, nScale, nNullable != sdbc::ColumnValue::NO_NULLS, sColumnDefault );
+                    OUString sName;
                     if ( i_bAppendTableName )
                     {
-                        OUString sName = sTableName + "." + sRealName;
-                        SelectColumnDescription aColDesc( nPos, nType,nScale,nNullable != sdbc::ColumnValue::NO_NULLS, sColumnDefault );
+                        sName = sTableName + "." + sRealName;
                         aColDesc.sRealName = sRealName;
                         aColDesc.sTableName = sTableName;
-                        o_rColumnNames[sName] = aColDesc;
                     }
                     else
-                        o_rColumnNames[sRealName] = SelectColumnDescription( nPos, nType,nScale,nNullable != sdbc::ColumnValue::NO_NULLS, sColumnDefault );
+                    {
+                        sName = sRealName;
+                    }
+                    o_rColumnNames[sName] = aColDesc;
 
                     break;
                 }

@@ -25,6 +25,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <memory>
 #include <map>
+#include <vector>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
@@ -91,11 +92,21 @@ namespace dbaccess
         SAL_WNODEPRECATED_DECLARATIONS_POP
         connectivity::OSQLTable                                 m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xTableKeys;
+        // we need a different SQL (statement) for each different combination
+        // of NULLness of key & foreign columns;
+        // each subclause is either "colName = ?" or "colName IS NULL"
+        // (we avoid the standard "colName IS NOT DISTINCT FROM ?" because it is not widely supported)
+        typedef ::std::vector< bool > FilterColumnsNULL_t;
+        typedef ::std::map< FilterColumnsNULL_t,
+                            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > >
+                vStatements_t;
+        vStatements_t                                           m_vStatements;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
-        ::rtl::OUString                                                                 m_sUpdateTableName;
+        const ::rtl::OUString                                   m_sUpdateTableName;
+        ::rtl::OUString                                         m_sRowSetFilter;
         ::std::vector< ::rtl::OUString >                        m_aFilterColumns;
         sal_Int32&                                              m_rRowCount;
 
@@ -124,17 +135,19 @@ namespace dbaccess
                                              const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns,
                                              ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
         SAL_WNODEPRECATED_DECLARATIONS_POP
+        void ensureStatement( );
+        virtual void makeNewStatement( );
         void setOneKeyColumnParameter( sal_Int32 &nPos,
                                        const ::com::sun::star::uno::Reference<  ::com::sun::star::sdbc::XParameters > &_xParameter,
                                        const connectivity::ORowSetValue &_rValue,
                                        sal_Int32 _nType,
                                        sal_Int32 _nScale ) const;
-        ::rtl::OUStringBuffer createKeyFilter();
+        ::rtl::OUStringBuffer createKeyFilter( );
         bool doTryRefetch_throw() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);;
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
         void executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions = ::std::vector<sal_Int32>());
         void executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName = ::rtl::OUString(),bool bRefetch = false);
-        void executeStatement(::rtl::OUStringBuffer& io_aFilter,const ::rtl::OUString& i_sRowSetFilter,::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
+        void executeStatement(::rtl::OUStringBuffer& io_aFilter, ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
 
         virtual ~OKeySet();
     public:
