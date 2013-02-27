@@ -109,7 +109,6 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
             uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
             uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
 
-            util::DateTime aDT;
             std::vector<TemplateItemProperties> aItems;
 
             sal_uInt16 nIdx = 0;
@@ -120,15 +119,6 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
                 // don't show hidden files or anything besides documents
                 if ( !bIsHidden || xRow->wasNull() )
                 {
-                    aDT = xRow->getTimestamp( ROW_DATE_MOD );
-                    bool bContainsDate = !xRow->wasNull();
-
-                    if ( !bContainsDate )
-                    {
-                        aDT = xRow->getTimestamp( ROW_DATE_CREATE );
-                        bContainsDate = !xRow->wasNull();
-                    }
-
                     OUString aContentURL = xContentAccess->queryContentIdentifierString();
                     OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
                     bool bHasTargetURL = !xRow->wasNull() && !aTargetURL.isEmpty();
@@ -143,19 +133,6 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
                                                                                     TEMPLATE_THUMBNAIL_MAX_WIDTH,
                                                                                     TEMPLATE_THUMBNAIL_MAX_HEIGHT);
                     aTemplateItem.aName = xRow->getString( ROW_TITLE );
-
-                    if ( bHasTargetURL &&
-                        INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
-                    {
-                        ucbhelper::Content aCnt( aTargetURL, m_xCmdEnv, comphelper::getProcessComponentContext() );
-
-                        try
-                        {
-                            aCnt.getPropertyValue("DateModified") >>= aDT;
-                        }
-                        catch (...)
-                        {}
-                    }
 
                     pItem->insertTemplate(aTemplateItem);
                     aItems.push_back(aTemplateItem);
