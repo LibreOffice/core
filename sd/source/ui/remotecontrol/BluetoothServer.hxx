@@ -12,6 +12,8 @@
 #include <osl/thread.hxx>
 #include <vector>
 
+#include <boost/scoped_ptr.hpp>
+
 namespace sd
 {
     class Communicator;
@@ -40,7 +42,7 @@ namespace sd
         enum { UNKNOWN, DISCOVERABLE, NOT_DISCOVERABLE } meWasDiscoverable;
         static BluetoothServer *spServer;
 
-        BluetoothServerImpl *mpImpl;
+        boost::scoped_ptr<BluetoothServerImpl> mpImpl;
         virtual void SAL_CALL run();
 
         void cleanupCommunicators();
