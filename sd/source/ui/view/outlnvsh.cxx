@@ -1916,6 +1916,8 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
                 pTO->ActionChanged();
             }
         }
+        else
+            delete pOPO;
     }
     else if( pTO )
     {
