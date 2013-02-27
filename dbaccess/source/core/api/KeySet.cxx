@@ -1641,9 +1641,7 @@ void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
         const OUString* pTblColumnIter   = _aColumnNames.getConstArray();
         const OUString* pTblColumnEnd    = pTblColumnIter + _aColumnNames.getLength();
 
-
-        ::comphelper::UStringMixLess aTmp(o_rColumnNames.key_comp());
-        ::comphelper::UStringMixEqual bCase(aTmp.isCaseSensitive());
+        ::comphelper::UStringMixEqual bCase(o_rColumnNames.key_comp().isCaseSensitive());
 
         for(sal_Int32 nPos = 1;pSelIter != pSelEnd;++pSelIter,++nPos)
         {
