@@ -9,6 +9,6 @@
 
 $(eval $(call gb_Package_Package,setup_native/ulf,$(SRCDIR)/setup_native/source))
 
-$(eval $(call gb_Package_add_file,setup_native/misc,bin/macinstall.ulf,mac/macinstall.ulf))
+$(eval $(call gb_Package_add_file,setup_native/ulf,bin/macinstall.ulf,mac/macinstall.ulf))
 
 # vim: set noet sw=4 ts=4:

@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Library_Library,sellangmsi))
 
+$(eval $(call gb_Library_use_packages,sellangmsi,\
+	setup_native_spell \
+))
+
 $(eval $(call gb_Library_add_defs,sellangmsi,\
 	-U_DLL \
 ))

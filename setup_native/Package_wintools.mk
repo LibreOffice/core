@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,wintools,$(call gb_CustomTarget_get_workdir,setup_native/wintools)))
+$(eval $(call gb_Package_Package,setup_native_wintools,$(call gb_CustomTarget_get_workdir,setup_native/wintools)))
 
-$(eval $(call gb_Package_add_files,scripts,bin,\
+$(eval $(call gb_Package_add_files,setup_native_wintools,bin,\
 	mackcab.exe \
 	msidb.exe \
 	msiinfo.exe \
