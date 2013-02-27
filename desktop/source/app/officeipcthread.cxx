@@ -57,8 +57,11 @@ const int OfficeIPCThread::sc_nShSeqLength = 5;
 
 namespace {
 
-static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
 static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments";
+
+#if !defined(ANDROID) && !defined(IOS)
+
+static char const SEND_ARGUMENTS[] = "InternalIPC::SendArguments";
 static char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
 
 // Receives packets from the pipe until a packet ends in a NUL character (that
@@ -85,6 +88,8 @@ OString readStringFromPipe(osl::StreamPipe & pipe) {
     }
 }
 
+#endif
+
 }
 
 // Type of pipe we use
@@ -99,6 +104,8 @@ namespace desktop
 {
 
 namespace {
+
+#if !defined(ANDROID) && !defined(IOS)
 
 class Parser: public CommandLineArgs::Supplier {
 public:
@@ -234,6 +241,8 @@ bool addArgument(rtl::OStringBuffer &rArguments, char prefix,
     }
     return true;
 }
+
+#endif
 
 }
 
