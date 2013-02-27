@@ -49,7 +49,6 @@ public:
                 KeyCode( KeyFuncType eFunction );
 
     sal_uInt16      GetFullCode() const { return nCode; }
-    sal_uInt16      GetFullKeyCode() const { return (nCode) ; }
     KeyFuncType GetFullFunction() const { return eFunc; }
     sal_Bool        IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const;
 
@@ -116,7 +115,7 @@ inline sal_Bool KeyCode::operator !=( const KeyCode& rKeyCode ) const
 inline sal_Bool KeyCode::IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
-        return (GetFullKeyCode() == rKeyCode.GetFullKeyCode());
+        return (GetFullCode() == rKeyCode.GetFullCode());
     return (GetFunction() == rKeyCode.GetFunction());
 }
 

@@ -170,7 +170,7 @@ void Accelerator::ImplInit()
 
 ImplAccelEntry* Accelerator::ImplGetAccelData( const KeyCode& rKeyCode ) const
 {
-    ImplAccelMap::iterator it = mpData->maKeyMap.find( rKeyCode.GetFullKeyCode() );
+    ImplAccelMap::iterator it = mpData->maKeyMap.find( rKeyCode.GetFullCode() );
     if( it != mpData->maKeyMap.end() )
         return it->second;
     else
@@ -195,7 +195,7 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
         else
             pEntry->mpAutoAccel = NULL;
 
-        mpData->maKeyMap.insert( std::make_pair( pEntry->maKeyCode.GetFullKeyCode(), pEntry ) );
+        mpData->maKeyMap.insert( std::make_pair( pEntry->maKeyCode.GetFullCode(), pEntry ) );
         mpData->maIdList.push_back( pEntry );
     }
 }
@@ -256,7 +256,7 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
     pEntry->mbEnabled       = bEnable;
 
     // now into the tables
-    sal_uLong nCode = rKeyCode.GetFullKeyCode();
+    sal_uLong nCode = rKeyCode.GetFullCode();
     if ( !nCode )
     {
         OSL_FAIL( "Accelerator::InsertItem(): KeyCode with KeyCode 0 not allowed" );
