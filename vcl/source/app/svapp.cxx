@@ -1807,16 +1807,8 @@ bool InitAccessBridge( bool bShowCancel, bool &rCancelled )
     return bRet;
 }
 
-// MT: AppProperty, AppEvent was in oldsv.cxx, but is still needed...
+// MT: AppEvent was in oldsv.cxx, but is still needed...
 // ------------------------------------------------------------------------
-
-TYPEINIT0(ApplicationProperty)
-
-// ------------------------------------------------------------------------
-
-void Application::Property( ApplicationProperty& /*rProp*/ )
-{
-}
 
 void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {

@@ -126,15 +126,6 @@ private:
     rtl::OUString aData;
 };
 
-class VCL_DLLPUBLIC PropertyHandler
-{
-public:
-    virtual void                Property( ApplicationProperty& ) = 0;
-
-protected:
-    ~PropertyHandler() {}
-};
-
 // ---------------
 // - Application -
 // ---------------
@@ -248,8 +239,6 @@ public:
     static void                 RemoveIdleHdl( const Link& rLink );
 
     virtual void                AppEvent( const ApplicationEvent& rAppEvent );
-
-    virtual void                Property( ApplicationProperty& );
 
 #ifndef NO_GETAPPWINDOW
     static WorkWindow*          GetAppWindow();

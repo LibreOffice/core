@@ -37,13 +37,6 @@
 #define EXC_MAJORTYPE               ((sal_uInt16)0xFF00)
 #define EXC_MINORTYPE               ((sal_uInt16)0x00FF)
 
-class VCL_DLLPUBLIC ApplicationProperty
-{
-public:
-    virtual ~ApplicationProperty() {}
-    TYPEINFO();
-};
-
 #define VCL_INPUT_MOUSE                 0x0001
 #define VCL_INPUT_KEYBOARD              0x0002
 #define VCL_INPUT_PAINT                 0x0004
