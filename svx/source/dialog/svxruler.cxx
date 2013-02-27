@@ -166,7 +166,7 @@ void     RulerDebugWindow::AddDebugText(const sal_Char* pDescription, const Stri
             pParent = pParent->GetParent();
         pDebugWindow = new RulerDebugWindow(pParent);
     }
-    OUString sContent( OUString::createFromAscii(pDescription) );
+    OUString sContent(pDescription);
     sContent += rText;
     sal_uInt16 nPos = pDebugWindow->GetLBox().InsertEntry(sContent);
     pDebugWindow->GetLBox().SelectEntryPos(nPos);
