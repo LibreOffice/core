@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///JU\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:34:37Z",
+      "side": 1,
+      "message": "Please reference to the bug tracker id in your commit message. Better: \"fdo#39468: Translate German comments\"",
+      "revId": "3cc195440bedc1ba9d0c7411060aee539fb4cd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///J4\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:34:37Z",
+      "side": 1,
+      "message": "please remove lines that you translated",
+      "revId": "3cc195440bedc1ba9d0c7411060aee539fb4cd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Jw\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:34:37Z",
+      "side": 1,
+      "message": "duplication - please remove",
+      "revId": "3cc195440bedc1ba9d0c7411060aee539fb4cd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Js\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:34:37Z",
+      "side": 1,
+      "message": "This comment is only partially translated. My suggestion: \"I need a collection of all window names that cannot be created so that I do not initialize connections for them.\"",
+      "revId": "3cc195440bedc1ba9d0c7411060aee539fb4cd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Jo\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:34:37Z",
+      "side": 1,
+      "message": "double spacing between \"the\" and \"base class\"",
+      "revId": "3cc195440bedc1ba9d0c7411060aee539fb4cd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Jk\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:34:37Z",
+      "side": 1,
+      "message": "instead of \"info,ed\" please write \"informed\" and please add a \"t\" in \"abou_t_\"",
+      "revId": "3cc195440bedc1ba9d0c7411060aee539fb4cd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Jg\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:34:37Z",
+      "side": 1,
+      "message": "please add an \"e\" in \"sel_e_ction\"",
+      "revId": "3cc195440bedc1ba9d0c7411060aee539fb4cd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Jc\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:34:37Z",
+      "side": 1,
+      "message": "please add a space between \"the\" and \"window\"",
+      "revId": "3cc195440bedc1ba9d0c7411060aee539fb4cd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///JY\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2013-02-27T22:34:37Z",
+      "side": 1,
+      "message": "please remove the german part from this line",
+      "revId": "3cc195440bedc1ba9d0c7411060aee539fb4cd2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
