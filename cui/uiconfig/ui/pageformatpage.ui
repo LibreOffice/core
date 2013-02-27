@@ -13,7 +13,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
@@ -235,7 +234,6 @@
                       <object class="GtkGrid" id="grid4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
@@ -258,6 +256,7 @@
                           <object class="GtkLabel" id="labelPaperTray">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Paper _tray:</property>
                             <property name="use_underline">True</property>
@@ -274,7 +273,6 @@
                           <object class="GtkComboBox" id="comboPaperTray">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="hexpand">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -503,13 +501,13 @@
                   <object class="GtkGrid" id="grid7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="labelPageLayout">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Page layout:</property>
                         <property name="use_underline">True</property>
@@ -526,6 +524,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Format:</property>
                         <property name="use_underline">True</property>
@@ -585,6 +584,7 @@
                       <object class="GtkLabel" id="labelTblAlign">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
+                        <property name="hexpand">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Table alignment:</property>
                         <property name="use_underline">True</property>
@@ -637,6 +637,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
+                        <property name="hexpand">True</property>
                         <property name="relief">none</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -911,12 +912,14 @@ Do you still want to apply these settings?</property>
     </data>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="ignore_hidden">True</property>
     <widgets>
       <widget name="grid3"/>
       <widget name="grid6"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
+    <property name="ignore_hidden">True</property>
     <widgets>
       <widget name="grid4"/>
       <widget name="grid7"/>
@@ -928,6 +931,8 @@ Do you still want to apply these settings?</property>
       <widget name="comboPaperTray"/>
       <widget name="comboPageLayout"/>
       <widget name="comboLayoutFormat"/>
+      <widget name="checkbuttonHorz"/>
+      <widget name="checkbuttonVert"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup5">
