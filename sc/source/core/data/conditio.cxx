@@ -1107,6 +1107,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
                 rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
                 bValid = aStr2.indexOf(aStrVal1) == 0;
             }
+            break;
         case SC_COND_ENDS_WITH:
             if(aStrVal1.isEmpty())
             {
@@ -1119,6 +1120,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
                 rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
                 bValid = aStr2.endsWith(aStrVal1) == 0;
             }
+            break;
         case SC_COND_CONTAINS_TEXT:
         case SC_COND_NOT_CONTAINS_TEXT:
             if(aStrVal1.isEmpty())
