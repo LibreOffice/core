@@ -776,6 +776,13 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     aLbColor.SetAccessibleRelationMemberOf( &aFlProp );
     aMtrFldOffset.SetAccessibleRelationLabeledBy(&aFlOffset);
     aMtrFldOffset.SetAccessibleName(aFlOffset.GetText());
+
+    //fdo#61241 lock down size of this tab page until it's
+    //converted to .ui (remember to use some sizegroups
+    //that take into account hidden frames)
+    Size aSize(GetSizePixel());
+    set_width_request(aSize.Width());
+    set_height_request(aSize.Height());
 }
 
 // -----------------------------------------------------------------------
