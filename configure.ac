@@ -4177,6 +4177,14 @@ dnl ===================================================================
 dnl Our version is defined by the AC_INIT() at the top of this script.
 dnl ===================================================================
 
+UDK_MAJOR=3
+UDK_MINOR=2
+UDK_MICRO=7
+
+AC_DEFINE_UNQUOTED(SAL_UDK_MAJOR,"$UDK_MAJOR")
+AC_DEFINE_UNQUOTED(SAL_UDK_MINOR,"$UDK_MINOR")
+AC_DEFINE_UNQUOTED(SAL_UDK_MICRO,"$UDK_MICRO")
+
 set `echo AC_PACKAGE_VERSION | sed "s/\./ /g"`
 
 LIBO_VERSION_MAJOR=$1
@@ -11871,6 +11879,7 @@ AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
+AC_CONFIG_HEADERS([config_host/config_udkversion.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_OUTPUT

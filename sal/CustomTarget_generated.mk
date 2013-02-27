@@ -37,17 +37,8 @@ $(sal_DIR)/sal/typesizes.h :| $(sal_DIR)/sal/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	cp $(SRCDIR)/config_host/config_typesizes.h $@
 
-include $(SRCDIR)/solenv/inc/udkversion.mk
-
 $(sal_DIR)/sal/udkversion.h :| $(sal_DIR)/sal/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	echo '#ifndef _SAL_UDKVERSION_H_'           >  $@
-	echo '#define _SAL_UDKVERSION_H_'           >> $@
-	echo ''                                     >> $@
-	echo '#define SAL_UDK_MAJOR "$(UDK_MAJOR)"' >> $@
-	echo '#define SAL_UDK_MINOR "$(UDK_MINOR)"' >> $@
-	echo '#define SAL_UDK_MICRO "$(UDK_MICRO)"' >> $@
-	echo ''                                     >> $@
-	echo '#endif'                               >> $@
+	cp $(SRCDIR)/config_host/config_udkversion.h $@
 
 # vim: set noet sw=4 ts=4:
