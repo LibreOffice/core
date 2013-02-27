@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_ZipPackage_ZipPackage,sal_generated,$(BUILDDIR)/config_host))
+$(eval $(call gb_ZipPackage_ZipPackage,sal_generated,$(BUILDDIR)/config_$(gb_Side)))
 
 $(eval $(call gb_ZipPackage_add_file,sal_generated,inc/udkversion.mk,include/udkversion.mk,udkversion.mk))
 
