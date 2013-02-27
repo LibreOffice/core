@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs download fetch findunusedcode get-submodules help id install install-strip install-tb subsequentcheck tags
+.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip install-tb subsequentcheck tags
 
 ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
@@ -46,11 +46,10 @@ else # MAKE_RESTARTS
 all: build
 
 ifeq ($(gb_Side),)
-export gb_Side:=host
+gb_Side := host
 endif
 
 include $(BUILDDIR)/config_$(gb_Side).mk
-SRCDIR:=$(SRC_ROOT)
 
 ifeq ($(GMAKE_OPTIONS),)
 ifeq ($(verbose)$(VERBOSE),)
@@ -60,17 +59,9 @@ export GMAKE_OPTIONS:=-r
 endif
 endif
 
-# This list tells which modules are gbuild ones. It does *not* tell which modules to build. That is directed
-# by the module being mentioned in postprocess/prj/build.lst, etc, recursively.
-$(WORKDIR)/modules.mk: $(wildcard */Module_*.mk) $(BUILDDIR)/config_host.mk
-	mkdir -p $(dir $@)
-	echo "gbuild_modules:= tail_build \\" > $@
-	for m in `cd $(SRCDIR) && ls */Module_*.mk`; do echo $$m | sed -e 's/\/.*$$/ \\/'; done >> $@
-	echo >> $@
-
--include $(WORKDIR)/modules.mk
-include $(SRCDIR)/solenv/gbuild/Output.mk
-
+#
+# Partial Build
+#
 define gbuild_module_rules
 .PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck
 
@@ -92,11 +83,7 @@ define gbuild_modules_rules
 $(foreach m,$(1),$(call gbuild_module_rules,$(m)))
 endef
 
-
-#
-# Partial Build
-#
-$(eval $(call gbuild_modules_rules,$(gbuild_modules)))
+$(eval $(call gbuild_modules_rules,$(filter-out Module%,$(subst /, ,$(subst $(SRCDIR)/,,$(wildcard $(SRCDIR)/*/Module_*.mk))))))
 
 # run a JunitTest - relies on naming convention (module prefix)
 $(WORKDIR)/JunitTest/%/done :
@@ -107,12 +94,6 @@ $(WORKDIR)/CppunitTest/%.test :
 	cd $(firstword $(subst _, ,$*)) && $(GNUMAKE) $(GMAKE_OPTIONS) $@
 
 #
-# Help
-#
-help:
-	@cat $(SRCDIR)/solenv/gbuild/gbuild.help.txt
-
-#
 # Clean
 #
 clean: clean-host clean-build
@@ -121,14 +102,12 @@ clean-host:
 	rm -fr $(DEVINSTALLDIR)
 	rm -fr $(OUTDIR)
 	rm -fr $(WORKDIR)
-	rm -fr $(SRCDIR)/*/$(INPATH)
-	rm -fr $(SRCDIR)/solenv/$(OUTPATH)
 	rm -fr install
 
 clean-build:
 ifeq ($(CROSS_COMPILING),YES)
-	rm -rf $(SOLARVER)/$(INPATH_FOR_BUILD) # not necessarily below SRCDIR
-	rm -rf $(SRCDIR)/*/$(INPATH_FOR_BUILD)
+	rm -fr $(OUTDIR_FOR_BUILD)
+	rm -fr $(WORKDIR_FOR_BUILD)
 endif
 
 include $(SRCDIR)/compilerplugins/Makefile.mk
@@ -157,13 +136,9 @@ distclean : clean compilerplugins-clean
 #
 # custom command
 #
-ifneq ( $(MAKECMDGOALS),cmd)
 cmd:
 	echo "custom cmd" && ( $(cmd) )
 
-endif
-
-ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 #
 # Fetch
 #
@@ -416,11 +391,9 @@ check: dev-install subsequentcheck
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
 	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.build $@
 
-.PHONY : unitcheck slowcheck debugrun translations
-unitcheck slowcheck debugrun translations:
+.PHONY : debugrun help slowcheck translations unitcheck
+debugrun help slowcheck translations unitcheck :
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.build $@
-
-endif # not clean or distclean
 
 endif # MAKE_RESTARTS
 
