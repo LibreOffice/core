@@ -35,7 +35,6 @@ $(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/component-mapping.h,osl
 $(eval $(call gb_Package_add_file,sal_inc,inc/systools/win32/comptr.hxx,systools/win32/comptr.hxx))
 $(eval $(call gb_Package_add_file,sal_inc,inc/systools/win32/comtools.hxx,systools/win32/comtools.hxx))
 $(eval $(call gb_Package_add_file,sal_inc,inc/systools/win32/qswin32.h,systools/win32/qswin32.h))
-$(eval $(call gb_Package_add_file,sal_inc,inc/systools/win32/snprintf.h,systools/win32/snprintf.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/systools/win32/uwinapi.h,systools/win32/uwinapi.h))
 
 # vim: set noet sw=4 ts=4:

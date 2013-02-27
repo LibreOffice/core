@@ -99,4 +99,8 @@ $(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/osl,include/osl,\
 	osl/util.h \
 ))
 
+$(eval $(call gb_ZipPackage_add_files,sal_odk_headers,inc/systools/win32,include/systools/win32,\
+	systools/win32/snprintf.h \
+))
+
 # vim: set noet sw=4 ts=4:
