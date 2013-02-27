@@ -7119,7 +7119,7 @@ fi
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.3 >= 0.3.0])
+libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.3 >= 0.3.1])
 
 dnl ===================================================================
 dnl Check for system libwpd
