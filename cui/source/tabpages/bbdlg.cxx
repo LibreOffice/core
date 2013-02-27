@@ -20,7 +20,6 @@
 #include <tools/shl.hxx>
 #include <svx/dialogs.hrc>
 #include <cuires.hrc>
-#include "page.hrc"
 
 #include "bbdlg.hxx"
 #include "border.hxx"
