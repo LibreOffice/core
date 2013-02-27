@@ -497,6 +497,7 @@ void createKnotVector(const lcl_tSizeType n, const sal_uInt32 p, double* t, doub
             {
                 fSum += t[i];
             }
+            assert(p != 0);
             u[j+p] = fSum / p ;
         }
         for (lcl_tSizeType j = n+1; j <= n+1+p; ++j)
