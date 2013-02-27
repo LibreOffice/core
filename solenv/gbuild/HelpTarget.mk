@@ -630,7 +630,7 @@ endef
 
 # gb_HelpTarget__add_jar target
 define gb_HelpTarget__add_jar
-$(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(2)).jar)
+$(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).jar)
 $(call gb_HelpJarTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 $(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpJarTarget_get_target,$(1))
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpJarTarget_get_clean_target,$(1))
