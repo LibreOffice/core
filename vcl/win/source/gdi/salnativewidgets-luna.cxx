@@ -106,7 +106,7 @@ VisualStylesAPI::VisualStylesAPI()
       lpfnGetThemePartSize( NULL ),
       lpfnIsThemeActive( NULL )
 {
-    OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "uxtheme.dll" ) );
+    OUString aLibraryName( "uxtheme.dll" );
     mhModule = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
 
     if ( mhModule )

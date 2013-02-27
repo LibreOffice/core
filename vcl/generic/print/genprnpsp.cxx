@@ -103,12 +103,11 @@ static void getPaLib()
 #if defined( UNX ) && !( defined( MACOSX ) || defined( IOS )  || defined( ANDROID ) )
     if( ! driverLib )
     {
-        OUString aLibName( _XSALSET_LIBNAME );
-        driverLib   = osl_loadModuleRelative( (oslGenericFunction)getPaLib, aLibName.pData, SAL_LOADMODULE_DEFAULT );
+        driverLib = osl_loadModuleRelativeAscii( (oslGenericFunction)getPaLib,
+                                                 _XSALSET_LIBNAME,
+                                                 SAL_LOADMODULE_DEFAULT );
         if ( !driverLib )
-        {
             return;
-        }
 
         pSetupFunction  = (setupFunction)osl_getAsciiFunctionSymbol( driverLib, "Sal_SetupPrinterDriver" );
         if ( !pSetupFunction )

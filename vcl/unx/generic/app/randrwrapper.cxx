@@ -148,14 +148,13 @@ RandRWrapper::RandRWrapper( Display* pDisplay ) :
     initFromModule();
     if( ! m_bValid )
     {
-        rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libXrandr.so.2" ) );
         // load and resolve dependencies immediately
         // rationale: there are older distributions where libXrandr.so.2 is not linked
         // with libXext.so, resulting in a missing symbol and terminating the office
         // obviously they expected libXext to be linked in global symbolspace (that is
         // linked by the application), which is not the case with us (because we want
         // to be able to run in headless mode even without an installed X11 library)
-        m_pRandRLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT | SAL_LOADMODULE_NOW );
+        m_pRandRLib = osl_loadModule( "libXrandr.so.2", SAL_LOADMODULE_DEFAULT | SAL_LOADMODULE_NOW );
         initFromModule();
     }
     if( m_bValid )

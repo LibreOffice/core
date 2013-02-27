@@ -870,9 +870,7 @@ bool CUPSManager::addOrRemovePossible() const
 const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
 {
     const char* pRet = NULL;
-
-    OUString aLib(_XSALSET_LIBNAME );
-    oslModule pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
+    oslModule pLib = osl_loadModuleAscii( _XSALSET_LIBNAME, SAL_LOADMODULE_LAZY );
     if( pLib )
     {
         OUString aSym( "Sal_authenticateQuery"  );

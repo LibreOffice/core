@@ -21,8 +21,6 @@
 #include <stdio.h>
 
 #include <rtl/ustring.hxx>
-#include <osl/module.h>
-
 #include <unx/salunx.h>
 #include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
