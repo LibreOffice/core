@@ -251,10 +251,10 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
         {
             Reference< XAnimationNode > xParent;
 
-            const Atom* pAtom = Atom::import( rProgTagContentHd, mrStCtrl );
+            boost::scoped_ptr<Atom> pAtom(Atom::import( rProgTagContentHd, mrStCtrl ));
             if( pAtom )
             {
-                nNodes = importAnimationContainer( pAtom, xParent );
+                nNodes = importAnimationContainer( pAtom.get(), xParent );
             }
 
             processAfterEffectNodes();
