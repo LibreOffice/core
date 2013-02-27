@@ -5156,9 +5156,9 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
 
     SAL_TYPES_ALIGNMENT2=$ac_cv_alignof_short
     SAL_TYPES_ALIGNMENT4=$ac_cv_alignof_int
-    if test $ac_cv_alignof_long -eq 8; then
+    if test $ac_cv_sizeof_long -eq 8; then
         SAL_TYPES_ALIGNMENT8=$ac_cv_alignof_long
-    elif test $ac_cv_alignof_double -eq 8; then
+    elif test $ac_cv_sizeof_double -eq 8; then
         SAL_TYPES_ALIGNMENT8=$ac_cv_alignof_double
     else
         AC_MSG_ERROR([Cannot find alignment of 8 byte types.])
