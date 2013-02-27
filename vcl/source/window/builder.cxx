@@ -1093,6 +1093,12 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pWindow = pListBox;
         }
     }
+    else if (name == "VclComboBoxNumeric")
+    {
+        NumericBox* pComboBox = new NumericBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+        pComboBox->EnableAutoSize(true);
+        pWindow = pComboBox;
+    }
     else if (name == "GtkTreeView")
     {
         //To-Do
