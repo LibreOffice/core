@@ -1242,27 +1242,30 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-enum SymbolType { SYMBOL_SQUARE=0
-                 , SYMBOL_DIAMOND
-                 , SYMBOL_ARROW_DOWN
-                 , SYMBOL_ARROW_UP
-                 , SYMBOL_ARROW_RIGHT
-                 , SYMBOL_ARROW_LEFT
-                 , SYMBOL_BOWTIE
-                 , SYMBOL_SANDGLASS
-                 , SYMBOL_CIRCLE
-                 , SYMBOL_STAR
-                 , SYMBOL_X
-                 , SYMBOL_PLUS
-                 , SYMBOL_ASTERISK
-                 , SYMBOL_HORIZONTAL_BAR
-                 , SYMBOL_VERTICAL_BAR
-                 , SYMBOL_COUNT
+// Be careful here not to clash with the SYMBOL_FOO #defines in
+// <rsc/rsc-vcl-shared-types.hxx>
+
+enum SymbolEnum { Symbol_Square=0
+                 , Symbol_Diamond
+                 , Symbol_DownArrow
+                 , Symbol_UpArrow
+                 , Symbol_RightArrow
+                 , Symbol_LeftArrow
+                 , Symbol_Bowtie
+                 , Symbol_Sandglass
+                 , Symbol_Circle
+                 , Symbol_Star
+                 , Symbol_X
+                 , Symbol_Plus
+                 , Symbol_Asterisk
+                 , Symbol_HorizontalBar
+                 , Symbol_VerticalBar
+                 , Symbol_COUNT
                   };
 
 sal_Int32 ShapeFactory::getSymbolCount()
 {
-    return SYMBOL_COUNT;
+    return Symbol_COUNT;
 }
 
 drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D& rPos
@@ -1272,7 +1275,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
     if(nStandardSymbol<0)
         nStandardSymbol*=-1;
     nStandardSymbol = nStandardSymbol%ShapeFactory::getSymbolCount();
-    SymbolType eSymbolType=static_cast<SymbolType>(nStandardSymbol);
+    SymbolEnum eSymbolType=static_cast<SymbolEnum>(nStandardSymbol);
 
     const double& fX = rPos.PositionX;
     const double& fY = rPos.PositionY;
@@ -1285,27 +1288,27 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
     sal_Int32 nPointCount = 4; //all arrow symbols only need 4 points
     switch( eSymbolType )
     {
-        case SYMBOL_SQUARE:
-        case SYMBOL_DIAMOND:
-        case SYMBOL_BOWTIE:
-        case SYMBOL_SANDGLASS:
-        case SYMBOL_HORIZONTAL_BAR:
-        case SYMBOL_VERTICAL_BAR:
+        case Symbol_Square:
+        case Symbol_Diamond:
+        case Symbol_Bowtie:
+        case Symbol_Sandglass:
+        case Symbol_HorizontalBar:
+        case Symbol_VerticalBar:
             nPointCount = 5;
             break;
-        case SYMBOL_X:
+        case Symbol_X:
             nPointCount = 13;
             break;
-        case SYMBOL_PLUS:
+        case Symbol_Plus:
             nPointCount = 13;
             break;
-        case SYMBOL_STAR:
+        case Symbol_Star:
             nPointCount = 9;
             break;
-        case SYMBOL_ASTERISK:
+        case Symbol_Asterisk:
             nPointCount = 19;
             break;
-        case SYMBOL_CIRCLE:
+        case Symbol_Circle:
             nPointCount = 5 + 4 * nQuarterCount;
             break;
         default:
@@ -1336,7 +1339,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
 
     switch(eSymbolType)
     {
-        case SYMBOL_SQUARE:
+        case Symbol_Square:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;
@@ -1354,7 +1357,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY-fHeightH;
             break;
         }
-        case SYMBOL_ARROW_UP:
+        case Symbol_UpArrow:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY+fHeightH;
@@ -1369,7 +1372,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY+fHeightH;
             break;
         }
-        case SYMBOL_ARROW_DOWN:
+        case Symbol_DownArrow:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;
@@ -1384,7 +1387,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY-fHeightH;
             break;
         }
-        case SYMBOL_ARROW_RIGHT:
+        case Symbol_RightArrow:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;
@@ -1399,7 +1402,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY-fHeightH;
             break;
         }
-        case SYMBOL_ARROW_LEFT:
+        case Symbol_LeftArrow:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY;
@@ -1414,7 +1417,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY;
             break;
         }
-        case SYMBOL_BOWTIE:
+        case Symbol_Bowtie:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;
@@ -1432,7 +1435,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY-fHeightH;
             break;
         }
-        case SYMBOL_SANDGLASS:
+        case Symbol_Sandglass:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY+fHeightH;
@@ -1451,7 +1454,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY+fHeightH;
             break;
         }
-        case SYMBOL_DIAMOND:
+        case Symbol_Diamond:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY;
@@ -1469,7 +1472,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY;
             break;
         }
-        case SYMBOL_HORIZONTAL_BAR:
+        case Symbol_HorizontalBar:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY-0.2*fHeightH;
@@ -1488,7 +1491,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY-0.2*fHeightH;
             break;
         }
-        case SYMBOL_VERTICAL_BAR:
+        case Symbol_VerticalBar:
         {
             *pInnerSequenceX++ = fX-0.2*fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;
@@ -1508,7 +1511,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
 
             break;
         }
-        case SYMBOL_CIRCLE:
+        case Symbol_Circle:
         {
             double fOmega = 1.5707963267948966192 / (nQuarterCount + 1.0);
             // one point in the middle of each edge to get full size bounding rectangle
@@ -1549,7 +1552,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY;
             break;
         }
-        case SYMBOL_STAR:
+        case Symbol_Star:
         {
             *pInnerSequenceX++ = fX;
             *pInnerSequenceY++ = fY-fHeightH;
@@ -1579,7 +1582,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY-fHeightH;
             break;
         }
-        case SYMBOL_X:
+        case Symbol_X:
         {
             const double fScaleX = fWidthH / 128.0;
             const double fScaleY = fHeightH / 128.0;
@@ -1627,7 +1630,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             break;
 
         }
-        case SYMBOL_PLUS:
+        case Symbol_Plus:
         {
             const double fScaleX = fWidthH / 128.0;
             const double fScaleY = fHeightH / 128.0;
@@ -1676,7 +1679,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             break;
 
         }
-        case SYMBOL_ASTERISK:
+        case Symbol_Asterisk:
         {
             const double fHalf = 10.0; // half line width on 256 size square
             const double fTwoY = fHalf * sqrt(3.0);
@@ -1747,7 +1750,7 @@ drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D&
             *pInnerSequenceY++ = fY-fHeightH;
             break;
         }
-        default: //case SYMBOL_SQUARE:
+        default: //case Symbol_Square:
         {
             *pInnerSequenceX++ = fX-fWidthH;
             *pInnerSequenceY++ = fY-fHeightH;

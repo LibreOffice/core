@@ -29,5 +29,6 @@
 $(eval $(call gb_Package_Package,rsc_inc,$(SRCDIR)/rsc/inc))
 
 $(eval $(call gb_Package_add_file,rsc_inc,inc/rsc/rscsfx.hxx,rsc/rscsfx.hxx))
+$(eval $(call gb_Package_add_file,rsc_inc,inc/rsc/rsc-vcl-shared-types.hxx,rsc/rsc-vcl-shared-types.hxx))
 
 # vim: set noet sw=4 ts=4:

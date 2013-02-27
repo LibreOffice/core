@@ -21,15 +21,10 @@
 #define _SV_KEYCODES_HXX
 
 #include <tools/solar.h>
+#include <rsc/rsc-vcl-shared-types.hxx>
 #undef DELETE
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-
-// -----------------
-// - KeyCode-Types -
-// -----------------
-
-// By changes you must also change: rsc/vclrsc.hxx
 
 // Key-Gruppen
 #define KEYGROUP_NUM    ((sal_uInt16)::com::sun::star::awt::KeyGroup::NUM)
@@ -155,16 +150,6 @@
 #define KEY_CAPSLOCK    ((sal_uInt16)::com::sun::star::awt::Key::CAPSLOCK)
 #define KEY_NUMLOCK     ((sal_uInt16)::com::sun::star::awt::Key::NUMLOCK)
 #define KEY_SCROLLLOCK  ((sal_uInt16)::com::sun::star::awt::Key::SCROLLLOCK)
-
-#define KEY_CODE        ((sal_uInt16)0x0FFF)
-
-// Modifier-Tasten
-#define KEY_SHIFT       ((sal_uInt16)0x1000)
-#define KEY_MOD1        ((sal_uInt16)0x2000)
-#define KEY_MOD2        ((sal_uInt16)0x4000)
-#define KEY_MOD3    ((sal_uInt16)0x8000)
-#define KEY_MODTYPE ((sal_uInt16)0xF000)
-#define KEY_ALLMODTYPE  ((sal_uInt16)0xF000)
 
 // extended Modifier-Keys (only used for modkey events)
 #define MODKEY_LSHIFT    0x0001

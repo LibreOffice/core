@@ -26,6 +26,7 @@
 #include <tools/resid.hxx>
 #include <vcl/pointr.hxx>
 #include <tools/wintypes.hxx>
+#include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/apptypes.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/vclevent.hxx>
@@ -276,14 +277,6 @@ typedef sal_uInt16 StateChangedType;
 #define WINDOW_DRAW_NOFOCUS             ((sal_uLong)0x00000040)
 #define WINDOW_DRAW_NOBACKGROUND        ((sal_uLong)0x00000080)
 #define WINDOW_DRAW_ROLLOVER            ((sal_uLong)0x00000100)
-
-// Border-Styles fuer SetBorder()
-#define WINDOW_BORDER_NORMAL            ((sal_uInt16)0x0001)
-#define WINDOW_BORDER_MONO              ((sal_uInt16)0x0002)
-#define WINDOW_BORDER_MENU              ((sal_uInt16)0x0010)
-#define WINDOW_BORDER_NWF               ((sal_uInt16)0x0020)
-#define WINDOW_BORDER_NOBORDER          ((sal_uInt16)0x1000)
-#define WINDOW_BORDER_REMOVEBORDER      ((sal_uInt16)0x2000)
 
 // DialogControl-Flags
 #define WINDOW_DLGCTRL_RETURN           ((sal_uInt16)0x0001)

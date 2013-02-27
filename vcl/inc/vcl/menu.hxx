@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <tools/rc.hxx>
 #include <tools/resid.hxx>
+#include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/bitmapex.hxx>
 #include <tools/color.hxx>
 #include <vcl/vclevent.hxx>
@@ -67,23 +68,6 @@ namespace vcl { struct MenuLayoutData; }
 #define POPUPMENU_EXECUTE_RIGHT ((sal_uInt16)0x0008)
 
 #define POPUPMENU_NOMOUSEUPCLOSE ((sal_uInt16)0x0010)
-
-// By changes you must also change: rsc/vclrsc.hxx
-enum MenuItemType { MENUITEM_DONTKNOW, MENUITEM_STRING, MENUITEM_IMAGE,
-                    MENUITEM_STRINGIMAGE, MENUITEM_SEPARATOR };
-
-// By changes you must also change: rsc/vclrsc.hxx
-typedef sal_uInt16 MenuItemBits;
-#define MIB_CHECKABLE           ((MenuItemBits)0x0001)
-#define MIB_RADIOCHECK          ((MenuItemBits)0x0002)
-#define MIB_AUTOCHECK           ((MenuItemBits)0x0004)
-#define MIB_ABOUT               ((MenuItemBits)0x0008)
-#define MIB_HELP                ((MenuItemBits)0x0010)
-#define MIB_POPUPSELECT         ((MenuItemBits)0x0020)
-// not in rsc/vclsrc.hxx because only a prelimitary solution
-#define MIB_NOSELECT            ((MenuItemBits)0x0040)
-#define MIB_ICON            ((MenuItemBits)0x0080)
-#define MIB_TEXT            ((MenuItemBits)0x0100)
 
 #define MENU_FLAG_NOAUTOMNEMONICS       0x0001
 #define MENU_FLAG_HIDEDISABLEDENTRIES   0x0002

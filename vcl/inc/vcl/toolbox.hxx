@@ -21,6 +21,7 @@
 #define _SV_TOOLBOX_HXX
 
 #include <tools/solar.h>
+#include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
@@ -93,29 +94,6 @@ inline sal_Bool ToolBoxCustomizeEvent::IsResized() const
         return sal_False;
 }
 
-// -------------------
-// - ToolBoxItemBits -
-// -------------------
-
-typedef sal_uInt16 ToolBoxItemBits;
-
-// --------------------------
-// - Bits fuer ToolBoxItems -
-// --------------------------
-
-// By changes you must also change: rsc/vclrsc.hxx
-#define TIB_CHECKABLE           ((ToolBoxItemBits)0x0001)
-#define TIB_RADIOCHECK          ((ToolBoxItemBits)0x0002)
-#define TIB_AUTOCHECK           ((ToolBoxItemBits)0x0004)
-#define TIB_LEFT                ((ToolBoxItemBits)0x0008)
-#define TIB_AUTOSIZE            ((ToolBoxItemBits)0x0010)
-#define TIB_DROPDOWN            ((ToolBoxItemBits)0x0020)
-#define TIB_REPEAT              ((ToolBoxItemBits)0x0040)
-#define TIB_DROPDOWNONLY        ((ToolBoxItemBits)0x0080 | TIB_DROPDOWN)    // this button has only drop down functionality
-#define TIB_TEXT_ONLY           ((ToolBoxItemBits)0x0100)
-#define TIB_ICON_ONLY           ((ToolBoxItemBits)0x0200)
-#define TIB_TEXTICON            ((ToolBoxItemBits) TIB_TEXT_ONLY | TIB_ICON_ONLY )
-
 // -----------------
 // - ToolBox-Types -
 // -----------------
@@ -132,14 +110,6 @@ typedef sal_uInt16 ToolBoxItemBits;
 #define TOOLBOX_MENUTYPE_NONE           ((sal_uInt16)0x0000)    // no menu at all, scrolling by spin buttons
 #define TOOLBOX_MENUTYPE_CLIPPEDITEMS   ((sal_uInt16)0x0001)    // menu will contain "more" indicator
 #define TOOLBOX_MENUTYPE_CUSTOMIZE      ((sal_uInt16)0x0002)    // menu will contain "customization" and "more" indicator
-
-// By changes you must also change: rsc/vclrsc.hxx
-enum ButtonType { BUTTON_SYMBOL, BUTTON_TEXT, BUTTON_SYMBOLTEXT };
-
-// By changes you must also change: rsc/vclrsc.hxx
-enum ToolBoxItemType { TOOLBOXITEM_DONTKNOW, TOOLBOXITEM_BUTTON,
-                       TOOLBOXITEM_SPACE, TOOLBOXITEM_SEPARATOR,
-                       TOOLBOXITEM_BREAK };
 
 // small or large force an exact toolbox size for proper alignemnt
 // dontcare will let the toolbox decide about its size
