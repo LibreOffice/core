@@ -22,6 +22,7 @@
 #include <vcl/wrkwin.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
