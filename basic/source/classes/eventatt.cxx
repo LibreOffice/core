@@ -22,30 +22,29 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
+#include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XDialogProvider.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/resource/XStringResourceSupplier.hpp>
+#include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/script/XEventAttacher.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/XScriptEventsAttacher.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/resource/XStringResourceSupplier.hpp>
-#include <com/sun/star/resource/XStringResourceManager.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
-
+#include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
-#include <com/sun/star/awt/XDialogProvider.hpp>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
 //==================================================================================================
@@ -93,16 +92,12 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
             {
                 Reference< XComponentContext > xContext(
                     comphelper::getProcessComponentContext() );
-                Reference< provider::XScriptProviderFactory > xFactory(
-                    xContext->getValueByName(
-                        OUString("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory")), UNO_QUERY );
-                OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
-                if ( xFactory.is() )
-                {
-                    Any aCtx;
-                    aCtx <<= OUString("user");
-                    xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
-                }
+                Reference< provider::XScriptProviderFactory > xFactory =
+                    provider::theMasterScriptProviderFactory::get( xContext );
+
+                Any aCtx;
+                aCtx <<= OUString("user");
+                xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
             }
 
             if ( !xScriptProvider.is() )

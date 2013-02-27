@@ -27,7 +27,7 @@
 #include "comphelper/servicedecl.hxx"
 #include "svl/inettype.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <memory>
 
@@ -304,17 +304,13 @@ void BackendImpl::PackageImpl:: initPackageHandler()
         // NOT supported at the momemtn // TODO
     }
 
-    Reference< provider::XScriptProviderFactory > xFac(
-        that->getComponentContext()->getValueByName(
-            "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory"), UNO_QUERY );
+    Reference< provider::XScriptProviderFactory > xFac =
+        provider::theMasterScriptProviderFactory::get( that->getComponentContext() );
 
-    if ( xFac.is() )
+    Reference< container::XNameContainer > xName( xFac->createScriptProvider( aContext ), UNO_QUERY );
+    if ( xName.is() )
     {
-        Reference< container::XNameContainer > xName( xFac->createScriptProvider( aContext ), UNO_QUERY );
-        if ( xName.is() )
-        {
-            m_xNameCntrPkgHandler.set( xName );
-        }
+        m_xNameCntrPkgHandler.set( xName );
     }
     // TODO what happens if above fails??
 }

@@ -36,7 +36,7 @@
 
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 
 #include <util/scriptingconstants.hxx>
@@ -224,9 +224,8 @@ void MasterScriptProvider::createPkgProvider()
         ::rtl::OUString sPkgCtx =  m_sCtxString.concat( ":uno_packages" );
         location <<= sPkgCtx;
 
-        Reference< provider::XScriptProviderFactory > xFac(
-            m_xContext->getValueByName(
-                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory" ), UNO_QUERY_THROW );
+        Reference< provider::XScriptProviderFactory > xFac =
+            provider::theMasterScriptProviderFactory::get( m_xContext );
 
         m_xMSPPkg.set(
             xFac->createScriptProvider( location ), UNO_QUERY_THROW );
@@ -362,9 +361,8 @@ throw ( provider::ScriptFrameworkErrorException,
     }
     else
     {
-        Reference< provider::XScriptProviderFactory > xFac_(
-            m_xContext->getValueByName(
-                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory" ), UNO_QUERY_THROW );
+        Reference< provider::XScriptProviderFactory > xFac_ =
+            provider::theMasterScriptProviderFactory::get( m_xContext );
 
         Reference< provider::XScriptProvider > xSP(
             xFac_->createScriptProvider( makeAny( location ) ), UNO_QUERY_THROW );

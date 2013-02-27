@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_provider_MasterScriptProviderFactory_idl__
-#define __com_sun_star_script_provider_MasterScriptProviderFactory_idl__
+#ifndef __com_sun_star_script_provider_theMasterScriptProviderFactory_idl__
+#define __com_sun_star_script_provider_theMasterScriptProviderFactory_idl__
 
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.idl>
@@ -26,13 +26,15 @@
 module com { module sun { module star { module script { module provider {
 
 /**
-    This service is used to create MasterScriptProviders.
-    Note: You shouldn't ever instantiate the MasterScriptProvider
-    service directly, you should always use this service.
+    The one and only MasterScriptProviderFactory
 
-    @deprecated rather use the singleton service theMasterScriptProviderFactory
+    To get the singleton call getValueByName on the component context
+    <pre>
+    /singletons/com.sun.star.script.provider.theMasterScriptProviderFactory
+    </pre>
+
 */
-service MasterScriptProviderFactory : XScriptProviderFactory;
+singleton theMasterScriptProviderFactory : XScriptProviderFactory;
 
 }; }; }; }; };
 

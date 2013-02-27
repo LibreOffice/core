@@ -45,7 +45,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
@@ -1968,8 +1968,8 @@ Reference< provider::XScriptProvider > SAL_CALL ODatabaseDocument::getScriptProv
     Reference< XScriptProvider > xScriptProvider( m_xScriptProvider );
     if ( !xScriptProvider.is() )
     {
-        Reference < XScriptProviderFactory > xFactory(
-            m_pImpl->m_aContext.getSingleton( "com.sun.star.script.provider.theMasterScriptProviderFactory" ), UNO_QUERY_THROW );
+        Reference < XScriptProviderFactory > xFactory =
+            theMasterScriptProviderFactory::get( m_pImpl->m_aContext.getUNOContext() );
 
         Any aScriptProviderContext;
         if ( m_bAllowDocumentScripting )

@@ -27,12 +27,16 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/logging/DocumentIOLogRing.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/script/FinishEngineEvent.hpp>
 #include <com/sun/star/script/InterruptReason.hpp>
 #include <com/sun/star/script/XEngineListener.hpp>
@@ -43,16 +47,12 @@
 #include <com/sun/star/script/XEngine.hpp>
 #include <com/sun/star/script/InterruptEngineEvent.hpp>
 #include <com/sun/star/script/XLibraryAccess.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 #include <toolkit/unohlp.hxx>
 
@@ -1541,9 +1541,8 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
 
         if ( !xScriptProvider.is() )
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            Reference< provider::XScriptProviderFactory > xScriptProviderFactory(
-                aContext.getSingleton( "com.sun.star.script.provider.theMasterScriptProviderFactory" ), UNO_QUERY_THROW );
+            Reference< provider::XScriptProviderFactory > xScriptProviderFactory =
+                provider::theMasterScriptProviderFactory::get( ::comphelper::getProcessComponentContext() );
             xScriptProvider.set( xScriptProviderFactory->createScriptProvider( makeAny( _rxScriptContext ) ), UNO_SET_THROW );
         }
 

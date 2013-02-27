@@ -268,6 +268,8 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script,\
 	DocumentScriptLibraryContainer \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script/provider,\
+	theMasterScriptProviderFactory \
+	MasterScriptProviderFactory \
 	ScriptURIHelper \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script/vba,\
@@ -989,7 +991,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/script/provider,\
 	LanguageScriptProvider \
 	MasterScriptProvider \
-	MasterScriptProviderFactory \
 	ScriptProvider \
 	ScriptProviderForBasic \
 	ScriptProviderForBeanShell \

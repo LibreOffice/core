@@ -40,6 +40,7 @@ namespace com { namespace sun { namespace star {
     }
     namespace uno {
         class Any;
+        class XComponentContext;
     }
     namespace lang {
         class XMultiServiceFactory;
@@ -69,7 +70,7 @@ public ::cppu::WeakImplHelper4< css::frame::XDispatchProvider,
 {
 private:
     bool m_bInitialised;
-    css::uno::Reference < css::lang::XMultiServiceFactory >         m_xFactory;
+    css::uno::Reference < css::uno::XComponentContext >             m_xContext;
     css::uno::Reference < css::frame::XFrame >                      m_xFrame;
     css::uno::Reference < css::script::provider::XScriptProvider >  m_xScriptProvider;
     css::uno::Reference< css::document::XScriptInvocationContext >  m_xScriptInvocation;
@@ -78,8 +79,7 @@ private:
     bool getScriptInvocation();
 
 public:
-    ScriptProtocolHandler( const css::uno::Reference <
-        css::lang::XMultiServiceFactory >& xFactory );
+    ScriptProtocolHandler( const css::uno::Reference < css::uno::XComponentContext >& xContext );
     virtual ~ScriptProtocolHandler();
 
     /* XServiceInfo */

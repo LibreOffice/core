@@ -39,7 +39,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -3403,9 +3403,8 @@ uno::Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getSc
 
     uno::Reference< script::provider::XScriptProvider > xScriptProvider;
 
-    ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-    Reference< script::provider::XScriptProviderFactory > xScriptProviderFactory(
-        aContext.getSingleton( "com.sun.star.script.provider.theMasterScriptProviderFactory" ), uno::UNO_QUERY_THROW );
+    Reference< script::provider::XScriptProviderFactory > xScriptProviderFactory =
+        script::provider::theMasterScriptProviderFactory::get( ::comphelper::getProcessComponentContext() );
 
     try
     {

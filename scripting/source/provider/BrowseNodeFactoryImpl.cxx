@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
@@ -297,9 +297,6 @@ namespace
 
 Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference< XComponentContext >& xCtx )
 {
-    Reference< lang::XMultiComponentFactory > mcf =
-        xCtx->getServiceManager();
-
     Sequence< ::rtl::OUString > openDocs =
         MiscUtils::allOpenTDocUrls( xCtx );
 
@@ -310,9 +307,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
     Sequence < Reference < browse::XBrowseNode > > locnBNs( initialSize );
     try
     {
-        xFac.set(
-            xCtx->getValueByName(
-                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory" ), UNO_QUERY_THROW );
+        xFac = provider::theMasterScriptProviderFactory::get( xCtx );
 
         locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString("user") ) ), UNO_QUERY_THROW );
         locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString("share") ) ), UNO_QUERY_THROW );

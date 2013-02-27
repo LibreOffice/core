@@ -34,7 +34,7 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/lang/NoSuchMethodException.hpp>
@@ -485,17 +485,12 @@ namespace dlgprov
                 OSL_ASSERT( m_xContext.is() );
                 if ( m_xContext.is() )
                 {
-                    Reference< provider::XScriptProviderFactory > xFactory(
-                        m_xContext->getValueByName(
-                        ::rtl::OUString("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ),
-                        UNO_QUERY );
-                    OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
-                    if ( xFactory.is() )
-                    {
-                        Any aCtx;
-                        aCtx <<= ::rtl::OUString("user");
-                        xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
-                    }
+                    Reference< provider::XScriptProviderFactory > xFactory =
+                        provider::theMasterScriptProviderFactory::get( m_xContext );
+
+                    Any aCtx;
+                    aCtx <<= ::rtl::OUString("user");
+                    xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
                 }
             }
 

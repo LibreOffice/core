@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 
 #include <sfx2/objsh.hxx>
@@ -88,7 +88,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
         throw RuntimeException( temp, Reference< XInterface >() );
     }
 
-    ENSURE_OR_THROW( m_xFactory.is(), "ScriptProtocolHandler::initialize: No Service Manager available" );
+    ENSURE_OR_THROW( m_xContext.is(), "ScriptProtocolHandler::initialize: No Service Manager available" );
     m_bInitialised = true;
 }
 
@@ -102,7 +102,7 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     Reference< XDispatch > xDispatcher;
     // get scheme of url
 
-    Reference< uri::XUriReferenceFactory > xFac = uri::UriReferenceFactory::create( comphelper::getComponentContext(m_xFactory) );
+    Reference< uri::XUriReferenceFactory > xFac = uri::UriReferenceFactory::create( m_xContext );
     Reference<  uri::XUriReference > uriRef(
         xFac->parse( aURL.Complete ), UNO_QUERY );
     if ( uriRef.is() )
@@ -378,14 +378,8 @@ void ScriptProtocolHandler::createScriptProvider()
         // if nothing of this is successful, use the master script provider
         if ( !m_xScriptProvider.is() )
         {
-            Reference< XComponentContext > xCtx(
-                comphelper::getComponentContext( m_xFactory ) );
-
-            ::rtl::OUString tmspf(
-                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory");
-
-            Reference< provider::XScriptProviderFactory > xFac(
-                xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );
+            Reference< provider::XScriptProviderFactory > xFac =
+                provider::theMasterScriptProviderFactory::get( m_xContext );
 
             Any aContext;
             if ( getScriptInvocation() )
@@ -406,9 +400,8 @@ void ScriptProtocolHandler::createScriptProvider()
     }
 }
 
-ScriptProtocolHandler::ScriptProtocolHandler(
-Reference< css::lang::XMultiServiceFactory > const& rFact ) :
-m_bInitialised( false ), m_xFactory( rFact )
+ScriptProtocolHandler::ScriptProtocolHandler( const Reference< css::uno::XComponentContext > & xContext )
+  : m_bInitialised( false ), m_xContext( xContext )
 {
 }
 
@@ -469,7 +462,7 @@ Reference< XInterface > SAL_CALL ScriptProtocolHandler::impl_createInstance(
 const Reference< css::lang::XMultiServiceFactory >& xServiceManager )
 throw( RuntimeException )
 {
-    return Reference< XInterface > ( *new ScriptProtocolHandler( xServiceManager ) );
+    return Reference< XInterface > ( *new ScriptProtocolHandler( comphelper::getComponentContext(xServiceManager) ) );
 }
 
 /* Factory for registration */
