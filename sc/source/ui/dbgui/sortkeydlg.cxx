@@ -128,7 +128,7 @@ void ScSortKeyCtrl::checkAutoVScroll()
         return;
     if (nBits & WB_AUTOVSCROLL)
     {
-        bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
+        sal_Bool bShow = m_rVertScroll.GetRangeMax() > m_rVertScroll.GetVisibleSize();
         if (bShow != m_rVertScroll.IsVisible())
             m_rVertScroll.Show(bShow);
     }
