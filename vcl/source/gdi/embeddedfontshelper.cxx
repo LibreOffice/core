@@ -11,20 +11,17 @@
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
-#if defined(UNX) && !defined(MACOSX)
-#include <vcl/fontmanager.hxx>
-#endif
+#include <boost/scoped_ptr.hpp>
+#include <fontsubset.hxx>
+#include <outdev.h>
+#include <outfont.hxx>
+#include <salgdi.hxx>
 
-using namespace std;
-
-void EmbeddedFontsHelper::clearTemporaryFontFiles()
-{
-    OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
-    rtl::Bootstrap::expandMacros( path );
-    path += "/user/temp/embeddedfonts/";
+static void clearDir( const OUString& path )
+    {
     osl::Directory dir( path );
     if( dir.reset() == osl::Directory::E_None )
     {
@@ -40,11 +37,20 @@ void EmbeddedFontsHelper::clearTemporaryFontFiles()
     }
 }
 
-OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, const char* fontStyle )
+void EmbeddedFontsHelper::clearTemporaryFontFiles()
 {
     OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/embeddedfonts/";
+    clearDir( path + "fromdocs/" );
+    clearDir( path + "fromsystem/" );
+}
+
+OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, const char* fontStyle )
+{
+    OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    rtl::Bootstrap::expandMacros( path );
+    path += "/user/temp/embeddedfonts/fromdocs/";
     osl::Directory::createPath( path );
     OUString filename = fontName;
     filename += OStringToOUString( fontStyle, RTL_TEXTENCODING_ASCII_US );
@@ -62,54 +68,98 @@ void EmbeddedFontsHelper::activateFont( const OUString& fontName, const OUString
 OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
     FontWeight weight, FontPitch pitch, rtl_TextEncoding )
 {
-    OUString url;
-#if defined(UNX) && !defined(MACOSX)
-    psp::PrintFontManager& mgr = psp::PrintFontManager::get();
-    list< psp::fontID > fontIds;
-    mgr.getFontList( fontIds );
-    for( list< psp::fontID >::const_iterator it = fontIds.begin();
-         it != fontIds.end();
-         ++it )
+    OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    rtl::Bootstrap::expandMacros( path );
+    path += "/user/temp/embeddedfonts/fromsystem/";
+    osl::Directory::createPath( path );
+    OUString filename = familyName + "_" + OUString::number( family ) + "_" + OUString::number( italic )
+        + "_" + OUString::number( weight ) + "_" + OUString::number( pitch );
+    filename += ".ttf"; // TODO is it always ttf?
+    OUString url = path + filename;
+    if( osl::File( url ).open( osl_File_OpenFlag_Read ) == osl::File::E_None ) // = exists()
     {
-        psp::fontID id = *it;
-        psp::FastPrintFontInfo info;
-        if( !mgr.getFontFastInfo( id, info ))
-            continue;
-        if( info.m_aFamilyName == familyName )
+        // File with contents of the font file already exists, assume it's been created by a previous call.
+        return url;
+    }
+    bool ok = false;
+    SalGraphics* graphics = Application::GetDefaultDevice()->ImplGetGraphics();
+    ImplDevFontList fonts;
+    graphics->GetDevFontList( &fonts );
+    boost::scoped_ptr< ImplGetDevFontList > fontInfo( fonts.GetDevFontList());
+    PhysicalFontFace* selected = NULL;
+    for( int i = 0;
+         i < fontInfo->Count();
+         ++i )
+     {
+        PhysicalFontFace* f = fontInfo->Get( i );
+        if( f->GetFamilyName() == familyName )
         {
             // Ignore comparing text encodings, at least for now. They cannot be trivially compared
             // (e.g. UCS2 and UTF8 are technically the same characters, just have different encoding,
             // and just having a unicode font doesn't say what glyphs it actually contains).
             // It is possible that it still may be needed to do at least some checks here
             // for some encodings (can one font have more font files for more encodings?).
-            if(( family == FAMILY_DONTKNOW || info.m_eFamilyStyle == family )
-                && ( italic == ITALIC_DONTKNOW || info.m_eItalic == italic )
-                && ( weight == WEIGHT_DONTKNOW || info.m_eWeight == weight )
-                && ( pitch == PITCH_DONTKNOW || info.m_ePitch == pitch ))
+            if(( family == FAMILY_DONTKNOW || f->GetFamilyType() == family )
+                && ( italic == ITALIC_DONTKNOW || f->GetSlant() == italic )
+                && ( weight == WEIGHT_DONTKNOW || f->GetWeight() == weight )
+                && ( pitch == PITCH_DONTKNOW || f->GetPitch() == pitch ))
             { // Exact match, return it immediately.
-                OUString ret;
-                osl::File::getFileURLFromSystemPath(
-                    OStringToOUString( mgr.getFontFileSysPath( id ), RTL_TEXTENCODING_UTF8 ), ret );
-                return ret;
+                selected = f;
+                break;
             }
-            if(( info.m_eFamilyStyle == FAMILY_DONTKNOW || family == FAMILY_DONTKNOW || info.m_eFamilyStyle == family )
-                && ( info.m_eItalic == ITALIC_DONTKNOW || italic == ITALIC_DONTKNOW || info.m_eItalic == italic )
-                && ( info.m_eWeight == WEIGHT_DONTKNOW || weight == WEIGHT_DONTKNOW || info.m_eWeight == weight )
-                && ( info.m_ePitch == PITCH_DONTKNOW || pitch == PITCH_DONTKNOW || info.m_ePitch == pitch ))
+            if(( f->GetFamilyType() == FAMILY_DONTKNOW || family == FAMILY_DONTKNOW || f->GetFamilyType() == family )
+                && ( f->GetSlant() == ITALIC_DONTKNOW || italic == ITALIC_DONTKNOW || f->GetSlant() == italic )
+                && ( f->GetWeight() == WEIGHT_DONTKNOW || weight == WEIGHT_DONTKNOW || f->GetWeight() == weight )
+                && ( f->GetPitch() == PITCH_DONTKNOW || pitch == PITCH_DONTKNOW || f->GetPitch() == pitch ))
             { // Some fonts specify 'DONTKNOW' for some things, still a good match, if we don't find a better one.
-                osl::File::getFileURLFromSystemPath(
-                    OStringToOUString( mgr.getFontFileSysPath( id ), RTL_TEXTENCODING_UTF8 ), url );
+                selected = f;
             }
         }
     }
-#else
-    (void) familyName;
-    (void) family;
-    (void) italic;
-    (void) weight;
-    (void) pitch;
-#endif
-    return url;
+    if( selected != NULL )
+    {
+        sal_Ucs unicodes[ 256 ];
+        for( int i = 0;
+             i < 256;
+             ++i )
+            unicodes[ i ] = 'A'; // Just something, not needed, but GetEmbedFontData() needs it.
+        sal_Int32 widths[ 256 ];
+        FontSubsetInfo info;
+        long size;
+        if( const void* data = graphics->GetEmbedFontData( selected, unicodes, widths, info, &size ))
+        {
+            osl::File file( url );
+            if( file.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) == osl::File::E_None )
+            {
+                sal_uInt64 written = 0;
+                sal_uInt64 totalSize = size;
+                bool error = false;
+                while( written < totalSize && !error)
+                {
+                    sal_uInt64 nowWritten;
+                    switch( file.write( static_cast< const char* >( data ) + written, size - written, nowWritten ))
+                    {
+                        case osl::File::E_None:
+                            written += nowWritten;
+                            break;
+                        case osl::File::E_AGAIN:
+                        case osl::File::E_INTR:
+                            break;
+                        default:
+                            error = true;
+                            break;
+                    }
+                }
+                file.close();
+                if( error )
+                    osl::File::remove( url );
+                else
+                    ok = true;
+            }
+            graphics->FreeEmbedFontData( data, size );
+        }
+    }
+    return ok ? url : "";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
