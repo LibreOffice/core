@@ -32,7 +32,6 @@
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/cmdevt.h>
 #include <sot/storage.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/securityoptions.hxx>
@@ -5051,95 +5050,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if( pShadCrsr )
                 delete pShadCrsr, pShadCrsr = 0;
             bCallBase = !rView.HandleWheelCommands( rCEvt );
-            break;
-
-        case COMMAND_VOICE:
-            {
-                // forward to Outliner if applicable
-                if ( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
-                {
-                    bCallBase = false;
-                    rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
-                    break;
-                }
-
-                const CommandVoiceData *pCData = rCEvt.GetVoiceData();
-                if ( VOICECOMMANDTYPE_CONTROL == pCData->GetType() )
-                    break;
-
-                sal_uInt16 nSlotId = 0;
-                SfxPoolItem *pItem = 0;
-
-                switch ( pCData->GetCommand() )
-                {
-                    case DICTATIONCOMMAND_NEWPARAGRAPH: nSlotId = FN_INSERT_BREAK; break;
-                    case DICTATIONCOMMAND_NEWLINE:      nSlotId = FN_INSERT_LINEBREAK; break;
-                    case DICTATIONCOMMAND_LEFT:         nSlotId = FN_PREV_WORD; break;
-                    case DICTATIONCOMMAND_RIGHT:        nSlotId = FN_NEXT_WORD; break;
-                    case DICTATIONCOMMAND_UP:           nSlotId = FN_LINE_UP; break;
-                    case DICTATIONCOMMAND_DOWN:         nSlotId = FN_LINE_DOWN; break;
-                    case DICTATIONCOMMAND_UNDO:         nSlotId = SID_UNDO; break;
-                    case DICTATIONCOMMAND_REPEAT:       nSlotId = SID_REPEAT; break;
-                    case DICTATIONCOMMAND_DEL:          nSlotId = FN_DELETE_BACK_WORD; break;
-
-                    case DICTATIONCOMMAND_BOLD_ON:      nSlotId = SID_ATTR_CHAR_WEIGHT;
-                                                        pItem = new SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT );
-                                                        break;
-                    case DICTATIONCOMMAND_BOLD_OFF:     nSlotId = SID_ATTR_CHAR_WEIGHT;
-                                                        pItem = new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
-                                                        break;
-                    case DICTATIONCOMMAND_UNDERLINE_ON: nSlotId = SID_ATTR_CHAR_UNDERLINE;
-                                                        pItem = new SvxUnderlineItem( UNDERLINE_SINGLE, RES_CHRATR_WEIGHT );
-                                                        break;
-                    case DICTATIONCOMMAND_UNDERLINE_OFF:nSlotId = SID_ATTR_CHAR_UNDERLINE;
-                                                        pItem = new SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE );
-                                                        break;
-                    case DICTATIONCOMMAND_ITALIC_ON:    nSlotId = SID_ATTR_CHAR_POSTURE;
-                                                        pItem = new SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE );
-                                                        break;
-                    case DICTATIONCOMMAND_ITALIC_OFF:   nSlotId = SID_ATTR_CHAR_POSTURE;
-                                                        pItem = new SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE );
-                                                        break;
-                    case DICTATIONCOMMAND_NUMBERING_ON:
-                                    if ( !rSh.GetCurNumRule() )
-                                        nSlotId = FN_NUM_NUMBERING_ON;
-                                    break;
-                    case DICTATIONCOMMAND_NUMBERING_OFF:
-                                    if ( rSh.GetCurNumRule() )
-                                       nSlotId = FN_NUM_NUMBERING_ON;
-                                    break;
-                    case DICTATIONCOMMAND_TAB:
-                                    {
-                                       rSh.Insert( '\t' );
-                                    }
-                                    break;
-                    case DICTATIONCOMMAND_UNKNOWN:
-                                    {
-                                        rView.GetWrtShell().Insert( pCData->GetText() );
-                                    }
-                                    break;
-
-#if OSL_DEBUG_LEVEL > 0
-                    default:
-                        OSL_ENSURE( !this, "unknown speech command." );
-#endif
-                }
-                if ( nSlotId )
-                {
-                    bCallBase = false;
-                    if ( pItem )
-                    {
-                        const SfxPoolItem* aArgs[2];
-                        aArgs[0] = pItem;
-                        aArgs[1] = 0;
-                        GetView().GetViewFrame()->GetBindings().Execute(
-                                    nSlotId, aArgs, 0, SFX_CALLMODE_STANDARD );
-                        delete pItem;
-                    }
-                    else
-                        GetView().GetViewFrame()->GetBindings().Execute( nSlotId );
-                }
-            }
             break;
 
     case COMMAND_STARTEXTTEXTINPUT:

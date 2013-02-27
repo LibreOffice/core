@@ -24,7 +24,6 @@
 #include <vcl/cursor.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/cmdevt.h>
 #include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -2234,42 +2233,6 @@ void Edit::Command( const CommandEvent& rCEvt )
                 break;
         }
         mbActivePopup = sal_False;
-    }
-    else if ( rCEvt.GetCommand() == COMMAND_VOICE )
-    {
-        const CommandVoiceData* pData = rCEvt.GetVoiceData();
-        if ( pData->GetType() == VOICECOMMANDTYPE_DICTATION )
-        {
-            switch ( pData->GetCommand() )
-            {
-                case DICTATIONCOMMAND_UNKNOWN:
-                {
-                    ReplaceSelected( pData->GetText() );
-                }
-                break;
-                case DICTATIONCOMMAND_LEFT:
-                {
-                    ImplHandleKeyEvent( KeyEvent( 0, KeyCode( KEY_LEFT, KEY_MOD1  ) ) );
-                }
-                break;
-                case DICTATIONCOMMAND_RIGHT:
-                {
-                    ImplHandleKeyEvent( KeyEvent( 0, KeyCode( KEY_RIGHT, KEY_MOD1  ) ) );
-                }
-                break;
-                case DICTATIONCOMMAND_UNDO:
-                {
-                    Undo();
-                }
-                break;
-                case DICTATIONCOMMAND_DEL:
-                {
-                    ImplHandleKeyEvent( KeyEvent( 0, KeyCode( KEY_LEFT, KEY_MOD1|KEY_SHIFT  ) ) );
-                    DeleteSelected();
-                }
-                break;
-            }
-        }
     }
     else if ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT )
     {

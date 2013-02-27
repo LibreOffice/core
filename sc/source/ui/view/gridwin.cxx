@@ -2840,34 +2840,6 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
 
-    if ( nCmd == COMMAND_VOICE )
-    {
-        //  Der Handler wird nur gerufen, wenn ein Text-Cursor aktiv ist,
-        //  also muss es eine EditView oder ein editiertes Zeichenobjekt geben
-
-        ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
-        if ( pHdl && pViewData->HasEditView( eWhich ) )
-        {
-            EditView* pEditView = pViewData->GetEditView( eWhich ); // ist dann nicht 0
-            pHdl->DataChanging();
-            pEditView->Command( rCEvt );
-            pHdl->DataChanged();
-            return;                                     // erledigt
-        }
-        SdrView* pSdrView = pViewData->GetView()->GetSdrView();
-        if ( pSdrView )
-        {
-            OutlinerView* pOlView = pSdrView->GetTextEditOutlinerView();
-            if ( pOlView && pOlView->GetWindow() == this )
-            {
-                pOlView->Command( rCEvt );
-                return;                                 // erledigt
-            }
-        }
-        Window::Command(rCEvt);     //  sonst soll sich die Basisklasse drum kuemmern...
-        return;
-    }
-
     if ( nCmd == COMMAND_PASTESELECTION )
     {
         if ( bEEMouse )

@@ -49,7 +49,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <vcl/cmdevt.h>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -348,110 +347,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 {
     GetSelEngine().SetCurView( pView );
     SetActiveView( pView );
-    if ( rCEvt.GetCommand() == COMMAND_VOICE )
-    {
-        const CommandVoiceData* pData = rCEvt.GetVoiceData();
-        if ( pData->GetType() == VOICECOMMANDTYPE_DICTATION )
-        {
-            // Turn functions into KeyEvent if no corresponding method to
-            // EditView/EditEngine so that Undo remains consistent.
-            SfxPoolItem* pNewAttr = NULL;
-
-            switch ( pData->GetCommand() )
-            {
-                case DICTATIONCOMMAND_UNKNOWN:
-                {
-                    pView->InsertText( pData->GetText() );
-                }
-                break;
-                case DICTATIONCOMMAND_NEWPARAGRAPH:
-                {
-                    pView->PostKeyEvent( KeyEvent( 0, KeyCode( KEY_RETURN, 0 ) ) );
-                }
-                break;
-                case DICTATIONCOMMAND_NEWLINE:
-                {
-                    pView->PostKeyEvent( KeyEvent( 0, KeyCode( KEY_RETURN, KEY_SHIFT ) ) );
-                }
-                break;
-                case DICTATIONCOMMAND_TAB:
-                {
-                    pView->PostKeyEvent( KeyEvent( 0, KeyCode( KEY_TAB, 0 ) ) );
-                }
-                break;
-                case DICTATIONCOMMAND_LEFT:
-                {
-                    pView->PostKeyEvent( KeyEvent( 0, KeyCode( KEY_LEFT, KEY_MOD1  ) ) );
-                }
-                break;
-                case DICTATIONCOMMAND_RIGHT:
-                {
-                    pView->PostKeyEvent( KeyEvent( 0, KeyCode( KEY_RIGHT, KEY_MOD1  ) ) );
-                }
-                break;
-                case DICTATIONCOMMAND_UP:
-                {
-                    pView->PostKeyEvent( KeyEvent( 0, KeyCode( KEY_UP, 0 ) ) );
-                }
-                break;
-                case DICTATIONCOMMAND_DOWN:
-                {
-                    pView->PostKeyEvent( KeyEvent( 0, KeyCode( KEY_UP, 0 ) ) );
-                }
-                break;
-                case DICTATIONCOMMAND_UNDO:
-                {
-                    pView->Undo();
-                }
-                break;
-                case DICTATIONCOMMAND_DEL:
-                {
-                    pView->PostKeyEvent( KeyEvent( 0, KeyCode( KEY_LEFT, KEY_MOD1|KEY_SHIFT  ) ) );
-                    pView->DeleteSelected();
-                }
-                break;
-                case DICTATIONCOMMAND_BOLD_ON:
-                {
-                    pNewAttr = new SvxWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT );
-                }
-                break;
-                case DICTATIONCOMMAND_BOLD_OFF:
-                {
-                    pNewAttr = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT );
-                }
-                break;
-                case DICTATIONCOMMAND_ITALIC_ON:
-                {
-                    pNewAttr = new SvxPostureItem( ITALIC_NORMAL, EE_CHAR_ITALIC );
-                }
-                break;
-                case DICTATIONCOMMAND_ITALIC_OFF:
-                {
-                    pNewAttr = new SvxPostureItem( ITALIC_NORMAL, EE_CHAR_ITALIC );
-                }
-                break;
-                case DICTATIONCOMMAND_UNDERLINE_ON:
-                {
-                    pNewAttr = new SvxUnderlineItem( UNDERLINE_SINGLE, EE_CHAR_UNDERLINE );
-                }
-                break;
-                case DICTATIONCOMMAND_UNDERLINE_OFF:
-                {
-                    pNewAttr = new SvxUnderlineItem( UNDERLINE_NONE, EE_CHAR_UNDERLINE );
-                }
-                break;
-            }
-
-            if ( pNewAttr )
-            {
-                SfxItemSet aSet( GetEmptyItemSet() );
-                aSet.Put( *pNewAttr );
-                pView->SetAttribs( aSet );
-                delete pNewAttr;
-            }
-        }
-    }
-    else if ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT )
+    if ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT )
     {
         pView->DeleteSelected();
         delete mpIMEInfos;

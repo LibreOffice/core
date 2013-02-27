@@ -1004,7 +1004,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
-#include <vcl/cmdevt.h>
 #include <vcl/cmdevt.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/dialog.hxx>
