@@ -54,8 +54,15 @@
 #
 gb_Configuration__get_source = $(SRCDIR)/$(2)
 
-# The main LibreOffice registry
+# The main LibreOffice registry (cf. officecfg/Configuration_officecfg.mk):
 gb_Configuration_PRIMARY_REGISTRY_NAME := registry
+gb_Configuration_PRIMARY_REGISTRY_SCHEMA_ROOT = \
+    $(SRCDIR)/officecfg/registry/schema
+
+gb_Configuration__stringparam_schemaRoot = --stringparam schemaRoot \
+    $(if $(PRIMARY_REGISTRY), \
+        $(gb_Configuration_PRIMARY_REGISTRY_SCHEMA_ROOT), \
+        $(call gb_XcsTarget_get_outdir_target,))
 
 gb_Configuration_XSLTCOMMAND = $(call gb_ExternalExecutable_get_command,xsltproc)
 gb_Configuration_XSLTCOMMAND_DEPS = $(call gb_ExternalExecutable_get_dependencies,xsltproc)
@@ -82,7 +89,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		--noout \
 		--stringparam componentName $(subst /,.,$(basename $(XCSFILE))) \
 		--stringparam root $(subst $(XCSFILE),,$(3)) \
-		$(if $(PRIMARY_REGISTRY),,--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,)) \
+		$(gb_Configuration__stringparam_schemaRoot) \
 		$(gb_XcsTarget_XSLT_SchemaVal) \
 		$(3) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
@@ -131,14 +138,14 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		--noout \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
-		--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,) \
+		$(gb_Configuration__stringparam_schemaRoot) \
 		--path $(gb_Configuration_registry) \
 		$(gb_XcuDataTarget_XSLT_DataVal) \
 		$(3) && \
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
-		--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,) \
+		$(gb_Configuration__stringparam_schemaRoot) \
 		--path $(gb_Configuration_registry) \
 		$(gb_XcuTarget_XSLT_AllLang) \
 		$(3))
@@ -183,7 +190,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
 		--stringparam xcs $(4) \
-		--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,) \
+		$(gb_Configuration__stringparam_schemaRoot) \
 		--stringparam module $(notdir $(subst -,/,$(basename $(notdir $(2))))) \
 		$(gb_XcuTarget_XSLT_AllLang) \
 		$(3))
@@ -302,7 +309,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_Configuration_XSLTCOMMAND) --nonet \
 		-o $(1) \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
-		--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,) \
+		$(gb_Configuration__stringparam_schemaRoot) \
 		--stringparam locale $(word 2,$(subst /, ,$(2))) \
 		--path $(gb_Configuration_registry) \
 		$(gb_XcuTarget_XSLT_AllLang) \
@@ -330,6 +337,7 @@ $(call gb_XcuResTarget_get_target,$(1)) : \
 endif
 $(call gb_XcuResTarget_get_target,$(1)) : \
 	$(call gb_XcsTarget_for_XcuTarget,$(4))
+$(call gb_XcuResTarget_get_target,$(1)) : PRIMARY_REGISTRY := $(filter $(2),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
 $(call gb_XcuResTarget_get_target,$(1)) : XCUFILE := $(4)
 endef
 
@@ -411,6 +419,7 @@ $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : \
 	$(call gb_Configuration__get_source,$(1),$(2)/$(3)) \
 	$(call gb_Configuration_get_preparation_target,$(1)) \
 	$(call gb_XcsTarget_for_XcuTarget,$(3))
+$(call gb_XcuDataTarget_get_target,$(2)/$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : XCUFILE := $(3)
 $(call gb_XcuDataTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
 ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
@@ -444,6 +453,7 @@ $(call gb_XcuModuleTarget_get_target,$(2)/$(3)) : \
 	$(call gb_XcuDataSource_for_XcuModuleTarget,$(1),$(2)/$(3)) \
 	$(call gb_Configuration_get_preparation_target,$(1)) \
 	$(call gb_XcsTarget_for_XcuModuleTarget,$(3))
+$(call gb_XcuModuleTarget_get_target,$(2)/$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
 $(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
 ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
 $(call gb_Configuration_get_target,$(1)) : \

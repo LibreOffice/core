@@ -16,6 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+# The name "registry" needs to match gb_Configuration_PRIMARY_REGISTRY_NAME in
+# solenv/gbuild/Configuration.mk:
 $(eval $(call gb_Configuration_Configuration,registry))
 
 $(eval $(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
