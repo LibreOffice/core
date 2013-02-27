@@ -135,7 +135,13 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
             m_nXChFollow = nValue;
         break;
         case NS_ooxml::LN_CT_TabStop_pos:
-            m_nTabstop = nValue;
+            if (nValue < 0)
+            {
+                SAL_INFO("writerfilter",
+                        "unsupported list tab stop position " << nValue);
+            }
+            else
+                m_nTabstop = nValue;
         break;
         default:
             OSL_FAIL( "this line should never be reached");
