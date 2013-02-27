@@ -420,7 +420,7 @@ sub create_package
         }
 	else
 	{
-	    if (defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}))
+	    if (defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
 	    {
 		# Just sign the .app as a whole, which means signing
 		# the CFBundleExecutable from Info.plist,
