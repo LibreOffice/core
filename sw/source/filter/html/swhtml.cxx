@@ -113,10 +113,6 @@
 #define HTML_SPTYPE_HORI 2
 #define HTML_SPTYPE_VERT 3
 
-#ifndef TOOLS_CONSTASCII_STRINGPARAM
-#define TOOLS_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, sizeof( constAsciiStr )-1
-#endif
-
 using editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
@@ -148,17 +144,17 @@ HTMLReader::HTMLReader()
 
 String HTMLReader::GetTemplateName() const
 {
-    String sTemplate(rtl::OUString("html"));
-    String sTemplateWithoutExt( sTemplate );
+    OUString sTemplate("html");
+    OUString sTemplateWithoutExt( sTemplate );
     // first search for OpenDocument Writer/Web template
-    sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".oth") );
+    sTemplate += ".oth";
 
     //Added path for the common HTML template
     SvtPathOptions aPathOpt;
     const String sCommonTemplatePath("share/template/common/internal");
     aPathOpt.SetTemplatePath(sCommonTemplatePath);
     // OpenDocument Writer/Web template (extension .oth)
-    sal_Bool bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+    sal_Bool bSet = aPathOpt.SearchFile( String().Assign(sTemplate), SvtPathOptions::PATH_TEMPLATE );
 
     if( !bSet )
     {
@@ -166,13 +162,13 @@ String HTMLReader::GetTemplateName() const
         sTemplate = sTemplateWithoutExt;
         // no OpenDocument Writer/Web template found.
         // search for OpenOffice.org Writer/Web template
-        sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".stw") );
-        bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+        sTemplate += ".stw";
+        bSet = aPathOpt.SearchFile( String().Assign(sTemplate), SvtPathOptions::PATH_TEMPLATE );
     }
 
     if( !bSet )
     {
-        sTemplate.Erase();
+        sTemplate = "";
         OSL_ENSURE( !this,
             "Die html.vor befindet sich nicht mehr im definierten Directory!");
     }
