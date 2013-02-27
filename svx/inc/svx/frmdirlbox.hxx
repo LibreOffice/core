@@ -40,6 +40,7 @@ class SVX_DLLPUBLIC FrameDirectionListBox : public ListBox
 {
 public:
     explicit            FrameDirectionListBox( Window* pParent, const ResId& rResId );
+    explicit            FrameDirectionListBox( Window* pParent, WinBits nBits );
     virtual             ~FrameDirectionListBox();
 
     /** Inserts a string with corresponding direction enum into the listbox. */

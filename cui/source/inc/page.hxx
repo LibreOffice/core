@@ -76,67 +76,53 @@ class SvxPageDescPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
     // paper format
-    FixedLine           aPaperSizeFl;
-    FixedText           aPaperFormatText;
-    ListBox             aPaperSizeBox;
+    ListBox*             m_pPaperSizeBox;
 
-    FixedText           aPaperWidthText;
-    MetricField         aPaperWidthEdit;
-    FixedText           aPaperHeightText;
-    MetricField         aPaperHeightEdit;
+    MetricField*         m_pPaperWidthEdit;
+    MetricField*         m_pPaperHeightEdit;
 
-    FixedText           aOrientationFT;
-    RadioButton         aPortraitBtn;
-    RadioButton         aLandscapeBtn;
+    FixedText*           m_pOrientationFT;
+    RadioButton*         m_pPortraitBtn;
+    RadioButton*         m_pLandscapeBtn;
 
-    SvxPageWindow       aBspWin;
+    SvxPageWindow*       m_pBspWin;
 
-    FixedText                   aTextFlowLbl;
-    svx::FrameDirectionListBox  aTextFlowBox;
+    FixedText*           m_pTextFlowLbl;
+    svx::FrameDirectionListBox*  m_pTextFlowBox;
 
-    FixedText           aPaperTrayLbl;
-    ListBox             aPaperTrayBox;
+    ListBox*             m_pPaperTrayBox;
 
     // Margins
-    FixedLine           aMarginFl;
-    FixedText           aLeftMarginLbl;
-    MetricField         aLeftMarginEdit;
-    FixedText           aRightMarginLbl;
-    MetricField         aRightMarginEdit;
-    FixedText           aTopMarginLbl;
-    MetricField         aTopMarginEdit;
-    FixedText           aBottomMarginLbl;
-    MetricField         aBottomMarginEdit;
+    FixedText*           m_pLeftMarginLbl;
+    MetricField*         m_pLeftMarginEdit;
+    FixedText*           m_pRightMarginLbl;
+    MetricField*         m_pRightMarginEdit;
+    MetricField*         m_pTopMarginEdit;
+    MetricField*         m_pBottomMarginEdit;
 
-    FixedLine           aBottomSeparatorFl;
     // layout settings
-    FixedLine           aLayoutFL;
-    FixedText           aPageText;
-    ListBox             aLayoutBox;
-    FixedText           aNumberFormatText;
-    ListBox             aNumberFormatBox;
-
+    FixedText*           m_pPageText;
+    ListBox*             m_pLayoutBox;
+    ListBox*             m_pNumberFormatBox;
 
     //Extras Calc
-    FixedText           aTblAlignFT;
-    CheckBox            aHorzBox;
-    CheckBox            aVertBox;
+    FixedText*           m_pTblAlignFT;
+    CheckBox*            m_pHorzBox;
+    CheckBox*            m_pVertBox;
 
     // Impress and Draw
-    CheckBox            aAdaptBox;
+    CheckBox*            m_pAdaptBox;
 
     //Register Writer
-    CheckBox            aRegisterCB;
-    FixedText           aRegisterFT;
-    ListBox             aRegisterLB;
+    CheckBox*            m_pRegisterCB;
+    FixedText*           m_pRegisterFT;
+    ListBox*             m_pRegisterLB;
 
     String              sStandardRegister;
 
-    String              aInsideText;
-    String              aOutsideText;
-    String              aLeftText;
-    String              aRightText;
-    String              aPrintRangeQueryText;
+    FixedText*           m_pInsideText;
+    FixedText*           m_pOutsideText;
+    FixedText*           m_pPrintRangeQueryText;
 
     long                nFirstLeftMargin;
     long                nFirstRightMargin;

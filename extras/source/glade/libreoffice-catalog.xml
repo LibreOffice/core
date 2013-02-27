@@ -63,6 +63,12 @@
     <glade-widget-class title="Table Container" name="svxcorelo-SvxSimpleTableContainer"
                         generic-name="Simple Table Container" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Page Preview" name="svxlo-SvxPageWindow"
+                        generic-name="Page Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Text Direction ListBox" name="svxlo-FrameDirectionListBox"
+                        generic-name="FrameDirectionListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
 
     <glade-widget-class title="VclComboBoxText" name="VclComboBoxText"
                         generic-name="ComboBoxText" parent="GtkComboBoxText"

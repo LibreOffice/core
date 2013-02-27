@@ -18,6 +18,7 @@
  */
 
 #include <svx/frmdirlbox.hxx>
+#include <vcl/builder.hxx>
 
 namespace svx {
 
@@ -44,9 +45,20 @@ FrameDirectionListBox::FrameDirectionListBox( Window* pParent, const ResId& rRes
 {
 }
 
+FrameDirectionListBox::FrameDirectionListBox( Window* pParent, WinBits nBits ) :
+    ListBox( pParent, nBits )
+{
+}
+
 FrameDirectionListBox::~FrameDirectionListBox()
 {
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFrameDirectionListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new FrameDirectionListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
+}
+
 
 void FrameDirectionListBox::InsertEntryValue( const String& rString, SvxFrameDirection eDirection, sal_uInt16 nPos )
 {
