@@ -312,7 +312,16 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             if( pFontList )
             {
                 FuText::ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pOLV, pFontList, mpView );
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+
+                SfxItemSet aSet( pOLV->GetEditView().GetAttribs() );
+                SfxItemSet aNewAttrs (pOLV->GetEditView().GetEmptyItemSet() );
+
+                aNewAttrs.Put( aSet.Get( EE_CHAR_FONTHEIGHT ), EE_CHAR_FONTHEIGHT );
+                aNewAttrs.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CJK ), EE_CHAR_FONTHEIGHT_CJK );
+                aNewAttrs.Put( aSet.Get( EE_CHAR_FONTHEIGHT_CTL ), EE_CHAR_FONTHEIGHT_CTL );
+
+                mpView->SetAttributes( aNewAttrs );
+                Invalidate();
             }
             rReq.Done();
         }
