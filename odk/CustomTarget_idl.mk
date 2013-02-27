@@ -9,18 +9,17 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/idl))
 
-# FIXME: should be pulled in from offapi/udkapi
-odk_IDLLIST := $(subst $(OUTDIR)/idl/,,$(shell find $(OUTDIR)/idl/com -type f))
-
 define odk_idl
-odkcommon_ZIPLIST += idl/$(1)
-$(call gb_CustomTarget_get_target,odk/odkcommon/idl): $(odk_WORKDIR)/idl/$(1)
-$(odk_WORKDIR)/idl/$(1): $(OUTDIR)/idl/$(1)
-	mkdir -p $$(dir $$@)
+odkcommon_ZIPLIST += $(subst $(SRCDIR)/$(1)/,idl/,$(shell find $(SRCDIR)/$(1)/com -type f))
+$(call gb_CustomTarget_get_target,odk/odkcommon/idl) : $(odk_WORKDIR)/idl.$(1).done
+$(odk_WORKDIR)/idl.$(1).done :
 	$$(call gb_Output_announce,$$(subst $$(WORKDIR)/,,$$@),build,CPY,1)
-	cp $$< $$@
+	mkdir -p $(odk_WORKDIR)/idl
+	cp -rf $(SRCDIR)/$(1)/com $(odk_WORKDIR)/idl
+	touch $$@
+
 endef
 
-$(foreach idl,$(odk_IDLLIST),$(eval $(call odk_idl,$(idl))))
+$(foreach api,udkapi offapi,$(eval $(call odk_idl,$(api))))
 
 # vim: set noet sw=4 ts=4:
