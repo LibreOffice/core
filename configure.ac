@@ -4050,7 +4050,7 @@ if test "$cross_compiling" = "yes"; then
         config_host.mk.in \
         Makefile.in \
         lo.xcent.in \
-        config_host/config_*.h.in \
+        config_host/*.in \
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
