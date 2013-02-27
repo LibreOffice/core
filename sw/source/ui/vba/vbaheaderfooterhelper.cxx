@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-#define FIRST_PAGE 1;
+#define FIRST_PAGE 1
 
 // Class HeaderFooterHelper
 sal_Bool HeaderFooterHelper::isHeaderFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)

@@ -36,8 +36,6 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-#define FIRST_PAGE 1;
-
 namespace ooo
 {
 namespace vba
