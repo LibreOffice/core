@@ -65,7 +65,6 @@ UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
 
 UndoAnimation::~UndoAnimation()
 {
-    delete mpImpl;
 }
 
 void UndoAnimation::Undo()
@@ -233,7 +232,6 @@ UndoTransition::UndoTransition( SdDrawDocument* _pDoc, SdPage* pThePage )
 
 UndoTransition::~UndoTransition()
 {
-    delete mpImpl;
 }
 
 void UndoTransition::Undo()

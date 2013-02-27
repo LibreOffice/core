@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <svx/svdundo.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #include "sdundo.hxx"
 
@@ -45,7 +46,7 @@ public:
     virtual rtl::OUString GetComment() const;
 
 private:
-    UndoAnimationImpl*  mpImpl;
+    boost::scoped_ptr<UndoAnimationImpl>  mpImpl;
 };
 
 struct UndoAnimationPathImpl;
@@ -61,7 +62,7 @@ public:
     virtual rtl::OUString GetComment() const;
 
 private:
-    UndoAnimationPathImpl* mpImpl;
+    boost::scoped_ptr<UndoAnimationPathImpl> mpImpl;
 };
 
 struct UndoTransitionImpl;
@@ -78,7 +79,7 @@ public:
     virtual rtl::OUString GetComment() const;
 
 private:
-    UndoTransitionImpl* mpImpl;
+    boost::scoped_ptr<UndoTransitionImpl> mpImpl;
 };
 
 }
