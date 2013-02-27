@@ -76,7 +76,11 @@ DiscoveryService::DiscoveryService() :
 
 DiscoveryService::~DiscoveryService()
 {
+#ifdef WNT
+    closesocket( mSocket );
+#else
     close( mSocket );
+#endif
 }
 
 void SAL_CALL DiscoveryService::run()
