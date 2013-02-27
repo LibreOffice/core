@@ -609,6 +609,7 @@ endef
 # gb_HelpTarget_set_configdir target configdir
 define gb_HelpTarget_set_configdir
 $(call gb_HelpLinkTarget_set_configdir,$(1),$(SRCDIR)/$(2))
+$(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).cfg)
 
 endef
 
@@ -625,6 +626,7 @@ $(if $(call gb_HelpTarget__is_default_lang,$(1)),,\
 	$(call gb_HelpTreeTarget_set_helptextdir,$(1),$(call gb_HelpTarget__get_helpdir,$(1),$(3))) \
 )
 $(call gb_HelpLinkTarget_set_treefile,$(1),$(call gb_HelpTarget__get_treefile,$(1),$(2)))
+$(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).tree)
 
 endef
 
