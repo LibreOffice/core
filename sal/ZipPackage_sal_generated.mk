@@ -25,10 +25,10 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_ZipPackage_ZipPackage,sal_generated,$(call gb_CustomTarget_get_workdir,sal/generated)))
+$(eval $(call gb_ZipPackage_ZipPackage,sal_generated,$(BUILDDIR)/config_host))
 
-$(eval $(call gb_ZipPackage_add_files,sal_generated,inc/sal,include/sal,sal/udkversion.h))
+$(eval $(call gb_ZipPackage_add_file,sal_generated,inc/sal/udkversion.h,include/sal/udkversion.h,config_udkversion.h))
 
-$(eval $(call gb_ZipPackage_add_files,sal_generated,inc/sal,include/sal,sal/typesizes.h))
+$(eval $(call gb_ZipPackage_add_file,sal_generated,inc/sal/typesizes.h,include/sal/typesizes.h,config_typesizes.h))
 
 # vim: set noet sw=4 ts=4:

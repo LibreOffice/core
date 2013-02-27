@@ -37,4 +37,14 @@ $(foreach file,$(4),$(call gb_Zip_add_file,$(1),$(3)/$(notdir $(file)),$(gb_Pack
 
 endef
 
+# $(1) package
+# $(2) file in package
+# $(3) file in zip
+# $(4) file source
+define gb_ZipPackage_add_file
+$(call gb_Package_add_file,$(1),$(2),$(4))
+$(call gb_Zip_add_file,$(1),$(3),$(gb_Package_SOURCEDIR_$(1))/$(4))
+
+endef
+
 # vim: set noet sw=4 ts=4:

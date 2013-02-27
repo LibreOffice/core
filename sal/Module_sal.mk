@@ -29,7 +29,6 @@
 $(eval $(call gb_Module_Module,sal))
 
 $(eval $(call gb_Module_add_targets,sal,\
-	CustomTarget_generated \
 	CustomTarget_sal_allheaders \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)), \
 		Executable_cppunittester) \
