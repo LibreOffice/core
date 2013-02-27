@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///SA\u003d",
+        "filename": "cui/source/tabpages/page.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-02-27T07:36:36Z",
+      "side": 0,
+      "message": "this file is still included in:\n\n* http://cgit.freedesktop.org/libreoffice/core/tree/cui/source/tabpages/bbdlg.cxx",
+      "revId": "9c77890a165a1a00441245fd6f8703d8911bc075",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
