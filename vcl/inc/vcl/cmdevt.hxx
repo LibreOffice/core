@@ -213,49 +213,6 @@ inline CommandScrollData::CommandScrollData( long nDeltaX, long nDeltaY )
     mnDeltaY    = nDeltaY;
 }
 
-// --------------------
-// - CommandVoiceData -
-// --------------------
-
-enum DictationCommandType
-{
-    VOICECOMMANDTYPE_DICTATION,
-    VOICECOMMANDTYPE_CONTROL
-};
-
-class VCL_DLLPUBLIC CommandVoiceData
-{
-private:
-    XubString               maText;
-    sal_uInt16                  mnCommand;
-    DictationCommandType    meType;
-
-public:
-                            CommandVoiceData();
-                            CommandVoiceData( const XubString& rStr,
-                                              DictationCommandType eType,
-                                              sal_uInt16 nCommand );
-
-    const XubString&        GetText() const { return maText; }
-    sal_uInt16                  GetCommand() const { return mnCommand; }
-    DictationCommandType    GetType() const { return meType; }
-};
-
-inline CommandVoiceData::CommandVoiceData()
-{
-    meType = VOICECOMMANDTYPE_DICTATION;
-    mnCommand = 0;
-}
-
-inline CommandVoiceData::CommandVoiceData( const XubString& rStr,
-                                           DictationCommandType eType,
-                                           sal_uInt16 nCommand ) :
-    maText( rStr ),
-    mnCommand( nCommand ),
-    meType( eType )
-{
-}
-
 // ---------------------
 // - CommandModKeyData -
 // ---------------------
@@ -380,7 +337,6 @@ inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
 #define COMMAND_WHEEL                   ((sal_uInt16)3)
 #define COMMAND_STARTAUTOSCROLL         ((sal_uInt16)4)
 #define COMMAND_AUTOSCROLL              ((sal_uInt16)5)
-#define COMMAND_VOICE                   ((sal_uInt16)6)
 #define COMMAND_STARTEXTTEXTINPUT       ((sal_uInt16)7)
 #define COMMAND_EXTTEXTINPUT            ((sal_uInt16)8)
 #define COMMAND_ENDEXTTEXTINPUT         ((sal_uInt16)9)
@@ -417,7 +373,6 @@ public:
     const CommandInputContextData*      GetInputContextChangeData() const;
     const CommandWheelData*             GetWheelData() const;
     const CommandScrollData*            GetAutoScrollData() const;
-    const CommandVoiceData*             GetVoiceData() const;
     const CommandModKeyData*            GetModKeyData() const;
     const CommandDialogData*            GetDialogData() const;
     sal_Int16                           GetMediaCommand() const;
@@ -468,14 +423,6 @@ inline const CommandScrollData* CommandEvent::GetAutoScrollData() const
 {
     if ( mnCommand == COMMAND_AUTOSCROLL )
         return (const CommandScrollData*)mpData;
-    else
-        return NULL;
-}
-
-inline const CommandVoiceData* CommandEvent::GetVoiceData() const
-{
-    if ( mnCommand == COMMAND_VOICE )
-        return (const CommandVoiceData*)mpData;
     else
         return NULL;
 }

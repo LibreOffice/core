@@ -1565,7 +1565,7 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
 {
     bInputMode = sal_True;
     sal_uInt16 nCommand = rCEvt.GetCommand();
-    if ( pEditView /* && ( nCommand == COMMAND_STARTDRAG || nCommand == COMMAND_VOICE ) */ )
+    if ( pEditView /* && nCommand == COMMAND_STARTDRAG */ )
     {
         ScModule* pScMod = SC_MOD();
         ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
