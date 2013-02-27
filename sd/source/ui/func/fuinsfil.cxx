@@ -506,6 +506,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             if (pOutlinerView)
             {
                 pOutlinerView->InsertText(*pOPO);
+                delete pOPO;
             }
             else
             {
