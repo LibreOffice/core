@@ -33,10 +33,10 @@ public:
         SvxDrawToolItem(sal_uInt16 nWhichP) : SfxEnumItem(nWhichP){}
 
 
-    virtual String              GetValueText() const;
+    virtual OUString            GetValueText() const;
 
 
-    virtual String              GetValueText(sal_uInt16 nVal) const;
+    virtual OUString            GetValueText(sal_uInt16 nVal) const;
     virtual sal_uInt16              GetValueCount() const
                                     {return((sal_uInt16)SVX_SNAP_DRAW_TEXT);}
 
