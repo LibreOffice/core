@@ -564,12 +564,12 @@ void    OutputDevice::ImplReMirror( Region &rRegion ) const
 
 // -----------------------------------------------------------------------
 
-int OutputDevice::ImplGetGraphics() const
+SalGraphics* OutputDevice::ImplGetGraphics() const
 {
     DBG_TESTSOLARMUTEX();
 
     if ( mpGraphics )
-        return sal_True;
+        return mpGraphics;
 
     mbInitLineColor     = sal_True;
     mbInitFillColor     = sal_True;
@@ -709,10 +709,9 @@ int OutputDevice::ImplGetGraphics() const
     {
         mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
         mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
-        return sal_True;
     }
 
-    return sal_False;
+    return mpGraphics;
 }
 
 // -----------------------------------------------------------------------
