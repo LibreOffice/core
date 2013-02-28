@@ -30,10 +30,13 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+const sal_uInt8 kDisplayEraForcedLongYear = 0x01;
+
 struct Era {
     sal_Int32 year;
     sal_Int32 month;
     sal_Int32 day;
+    sal_uInt8 flags;
 };
 
 const sal_Int16 FIELD_INDEX_COUNT = CalendarFieldIndex::FIELD_COUNT2;
@@ -100,6 +103,8 @@ protected:
     virtual void mapToGregorian() throw(com::sun::star::uno::RuntimeException);
     virtual void mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
     void getValue() throw(com::sun::star::uno::RuntimeException);
+
+    rtl::OUString getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, bool bEraMode ) throw (com::sun::star::uno::RuntimeException);
 
 private:
     Calendar2 aCalendar;

@@ -200,11 +200,11 @@ Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const com::sun::star
 }
 
 static Era gengou_eraArray[] = {
-    {1868,  1,  1},
-    {1912,  7, 30},
-    {1926, 12, 25},
-    {1989,  1,  8},
-    {0, 0,  0}
+    {1868,  1,  1, 0},
+    {1912,  7, 30, 0},
+    {1926, 12, 25, 0},
+    {1989,  1,  8, 0},
+    {0, 0, 0, 0}
 };
 Calendar_gengou::Calendar_gengou() : Calendar_gregorian(gengou_eraArray)
 {
@@ -212,8 +212,8 @@ Calendar_gengou::Calendar_gengou() : Calendar_gregorian(gengou_eraArray)
 }
 
 static Era ROC_eraArray[] = {
-    {1912, 1, 1},
-    {0, 0,  0}
+    {1912, 1, 1, kDisplayEraForcedLongYear},    // #i116701#
+    {0, 0, 0, 0}
 };
 Calendar_ROC::Calendar_ROC() : Calendar_gregorian(ROC_eraArray)
 {
@@ -221,8 +221,8 @@ Calendar_ROC::Calendar_ROC() : Calendar_gregorian(ROC_eraArray)
 }
 
 static Era buddhist_eraArray[] = {
-    {-542, 1, 1},
-    {0, 0,  0}
+    {-542, 1, 1, 0},
+    {0, 0, 0, 0}
 };
 Calendar_buddhist::Calendar_buddhist() : Calendar_gregorian(buddhist_eraArray)
 {
@@ -1002,6 +1002,13 @@ OUString SAL_CALL
 Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
         throw (RuntimeException)
 {
+    return getDisplayStringImpl( nCalendarDisplayCode, nNativeNumberMode, false);
+}
+
+OUString
+Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, bool bEraMode )
+        throw (RuntimeException)
+{
     sal_Int16 value = getValue(sal::static_int_cast<sal_Int16>( DisplayCode2FieldIndex(nCalendarDisplayCode) ));
     OUString aOUStr;
 
@@ -1045,10 +1052,17 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 break;
             case CalendarDisplayCode::SHORT_YEAR:
                 // Take last 2 digits, or only one if value<10, for example,
-                // in case of the Gengou calendar.
-                // #i116701# For values in non-Gregorian era years use all
-                // digits.
-                if (value < 100 || eraArray)
+                // in case of the Gengou calendar. For combined era+year always
+                // the full year is displayed, without leading 0.
+                // Workaround for non-combined calls in certain calendars is
+                // the kDisplayEraForcedLongYear flag, but this also could get
+                // called for YY not only E format codes, no differentiation
+                // possible here; the good news is that usually the Gregorian
+                // calendar is the default and hence YY calls for Gregorian and
+                // E for the other calendar and currently (2013-02-28) ROC is
+                // the only calendar using this.
+                // See i#116701 and fdo#60915
+                if (value < 100 || bEraMode || (eraArray && (eraArray[0].flags & kDisplayEraForcedLongYear)))
                     sprintf(aStr, "%d", value); // #100211# - checked
                 else
                     sprintf(aStr, "%02d", value % 100); // #100211# - checked
@@ -1087,12 +1101,12 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 return getDisplayName(CalendarDisplayIndex::ERA, value, 1);
 
             case CalendarDisplayCode::SHORT_YEAR_AND_ERA:
-                return  getDisplayString( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode ) +
-                    getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode );
+                return  getDisplayStringImpl( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode, true ) +
+                    getDisplayStringImpl( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode, true );
 
             case CalendarDisplayCode::LONG_YEAR_AND_ERA:
-                return  getDisplayString( CalendarDisplayCode::LONG_ERA, nNativeNumberMode ) +
-                    getDisplayString( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode );
+                return  getDisplayStringImpl( CalendarDisplayCode::LONG_ERA, nNativeNumberMode, true ) +
+                    getDisplayStringImpl( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode, true );
 
             default:
                 throw ERROR;
@@ -1126,11 +1140,11 @@ Calendar_buddhist::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 n
                 nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR_AND_ERA) &&
             getValue(CalendarFieldIndex::ERA) == 0) {
         if (nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR_AND_ERA)
-            return  getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode ) +
-                getDisplayString( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode );
+            return  getDisplayStringImpl( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode, true ) +
+                getDisplayStringImpl( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode, true );
         else
-            return  getDisplayString( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode ) +
-                getDisplayString( CalendarDisplayCode::LONG_ERA, nNativeNumberMode );
+            return  getDisplayStringImpl( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode, true ) +
+                getDisplayStringImpl( CalendarDisplayCode::LONG_ERA, nNativeNumberMode, true );
     }
     return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode);
 }
