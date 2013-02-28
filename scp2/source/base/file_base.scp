@@ -31,12 +31,7 @@ File gid_File_Exe_Sbase
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(sbase);
-  #ifdef WNT
-    FileDescription = "%PRODUCTNAME Base";
-    Styles = (PACKED, PATCH_SO_NAME);
-  #else
     Styles = (PACKED);
-  #endif
 End
 
 #if defined WNT

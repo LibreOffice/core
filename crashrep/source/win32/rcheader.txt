@@ -58,13 +58,14 @@ VS_VERSION_INFO versioninfo
 			block "040904E4"
 			{
 				// International StringTable
-				value "CompanyName", 		"The Document Foundation\0"
-				value "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
-				value "FileVersion",		PPS(VER_LEVEL) "\0"
-				value "ProductVersion",		PPS(VER_LEVEL) "\0"
-				value "OriginalFilename",	"SOREPORT.EXE\0"
-				value "InternalName", 		"CrashReport\0"
-				value "LegalCopyright", 	S_CRIGHT " LibreOffice contributors and/or their affiliates. All rights reserved.\0"
+                VALUE "CompanyName",      PPS(RES_APP_VENDOR) "\0"
+                VALUE "FileDescription",  PPS(RES_APP_FILEDESC) "\0"
+                VALUE "FileVersion",      PPS(VER_LEVEL) "\0"
+                VALUE "ProductVersion",   PPS(VER_LEVEL) "\0"
+                VALUE "ProductName",      "LibreOffice\0"
+                VALUE "OriginalFilename", PPS(RES_APP_NAME) ".exe\0"
+                VALUE "InternalName",     PPS(RES_APP_NAME) "\0"
+                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors and/or their affiliates. All rights reserved.\0"
 			}
 		}
 
