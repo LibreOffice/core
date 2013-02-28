@@ -65,7 +65,6 @@ SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
                 delete pList->at( --i );
             }
         }
-        delete pList;
     }
 }
 
