@@ -30,6 +30,7 @@
 #include "macroass.hxx"
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::ucbhelper;
 
@@ -49,11 +50,11 @@ SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
                                         SfxDispatcher* pDispatch )
 :   ComboBox (pParent, rResId)
 {
-    TargetList* pList = new TargetList;
     SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
     SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetTopFrame() : 0;
     if ( pFrame )
     {
+        boost::scoped_ptr<TargetList> pList(new TargetList);
         pFrame->GetTargetList(*pList);
         if( !pList->empty() )
         {
