@@ -83,18 +83,18 @@ OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type&
 {
     DBG_CTOR(OTableWindow,NULL);
 
-    // Position und Groesse bestimmen
+    // Set position and size
     if( GetData()->HasPosition() )
         SetPosPixel( GetData()->GetPosition() );
 
     if( GetData()->HasSize() )
         SetSizePixel( GetData()->GetSize() );
 
-    // Hintergrund setzen
+    // Set background
     const StyleSettings&  aSystemStyle = Application::GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(aSystemStyle.GetFaceColor()));
-    // und Textfarbe (obwohl ich eigentlich keinen Text habe, aber wer weiss, was
-    // abgeleitete Klassen machen)
+    // Set the text colour even though there is no text,
+    // because derived classes might need it
     SetTextColor(aSystemStyle.GetButtonTextColor());
 
     EnableClipSiblings();
@@ -282,17 +282,17 @@ sal_Bool OTableWindow::Init()
     if ( !m_pListBox )
     {
         m_pListBox = CreateListBox();
-        OSL_ENSURE( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !" );
+        OSL_ENSURE( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox returned NULL !" );
         m_pListBox->SetSelectionMode( MULTIPLE_SELECTION );
     }
 
-    // Titel setzen
+    // Set the title
     m_aTitle.SetText( m_pData->GetWinName() );
     m_aTitle.Show();
 
     m_pListBox->Show();
 
-    // die Felder in die ListBox eintragen
+    // add the fields to the ListBox
     clearListBox();
     sal_Bool bSuccess = FillListBox();
     if ( bSuccess )
@@ -307,8 +307,8 @@ void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
 {
     if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
     {
-        // nehmen wir den worst-case an : die Farben haben sich geaendert, also
-        // mich anpassen
+        // In the worst-case the colours have changed so
+        // adapt myself to the new colours
         const StyleSettings&  aSystemStyle = Application::GetSettings().GetStyleSettings();
         SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
         SetTextColor(aSystemStyle.GetButtonTextColor());
@@ -325,21 +325,21 @@ void OTableWindow::Paint( const Rectangle& rRect )
 //------------------------------------------------------------------------------
 void OTableWindow::Draw3DBorder(const Rectangle& rRect)
 {
-    // die Style-Settings des Systems fuer meine Farben
+    // Use the System Style-Settings for my colours
     const StyleSettings& aSystemStyle = Application::GetSettings().GetStyleSettings();
 
-    // Schwarze Linie unten und rechts
+    // Black lines for bottom and right
     SetLineColor(aSystemStyle.GetDarkShadowColor());
     DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
     DrawLine( rRect.BottomRight(), rRect.TopRight() );
 
-    // Dunkelgraue Linie ueber der schwarzen
+    // Dark grey lines over the black lines
     SetLineColor(aSystemStyle.GetShadowColor());
     Point aEHvector(1,1);
     DrawLine( rRect.BottomLeft()+Point(1,-1), rRect.BottomRight() - aEHvector );
     DrawLine( rRect.BottomRight() - aEHvector, rRect.TopRight()+Point(-1,1) );
 
-    // Hellgraue Linie links und oben
+    // Light grey lines for top and left
     SetLineColor(aSystemStyle.GetLightColor());
     DrawLine( rRect.BottomLeft()+Point(1,-2), rRect.TopLeft() + aEHvector );
     DrawLine( rRect.TopLeft() + aEHvector, rRect.TopRight()+Point(-2,1) );
@@ -389,7 +389,7 @@ void OTableWindow::setSizingFlag(const Point& _rPos)
 {
     Size    aOutSize = GetOutputSizePixel();
     //////////////////////////////////////////////////////////////////////
-    // Flags anpassen, wenn Mauszeiger in sizingArea
+    // Set the flags when the mouse cursor is in the sizing area
     m_nSizingFlags = SIZING_NONE;
 
     if( _rPos.X() < TABWIN_SIZING_AREA )
@@ -419,7 +419,7 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
 
 
     //////////////////////////////////////////////////////////////////////
-    // Mauszeiger anpassen, wenn Mauszeiger in sizingArea
+    // Set the mouse cursor when it is in the sizing area
     switch( m_nSizingFlags )
     {
     case SIZING_TOP:
@@ -450,8 +450,8 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
 void OTableWindow::MouseButtonDown( const MouseEvent& rEvt )
 {
     //////////////////////////////////////////////////////////////////////
-    // Wenn sizing, dann bekommt Parent die Nachricht,
-    // dass jetzt die Fenstergroesse seines Childs veraendert wird
+    // When resizing, the parent must be informed that
+    // the window size of its child has changed
     if( m_nSizingFlags )
         getTableView()->BeginChildSizing( this, GetPointer() );
 
@@ -464,14 +464,14 @@ void OTableWindow::MouseButtonDown( const MouseEvent& rEvt )
 void OTableWindow::Resize()
 {
     //////////////////////////////////////////////////////////////////////
-    // Das Fenster darf nicht verschwinden, deshalb min. Groesse setzen
+    // The window must not disappear so we enforce a minimum size
     Size    aOutSize = GetOutputSizePixel();
     aOutSize = Size(CalcZoom(aOutSize.Width()),CalcZoom(aOutSize.Height()));
 
     long nTitleHeight = CalcZoom( GetTextHeight() )+ CalcZoom( 4 );
 
     //////////////////////////////////////////////////////////////////////
-    // Titel und ListBox anpassen
+    // Set the title and ListBox
     long n5Pos = CalcZoom(5);
     long nPositionX = n5Pos;
     long nPositionY = n5Pos;
@@ -527,7 +527,7 @@ void OTableWindow::setActive(sal_Bool _bActive)
 void OTableWindow::Remove()
 {
     //////////////////////////////////////////////////////////////////
-    // Fenster loeschen
+    // Delete the window
     OJoinTableView* pTabWinCont = getTableView();
     pTabWinCont->RemoveTabWin( this );
     pTabWinCont->Invalidate();
@@ -559,7 +559,7 @@ sal_Bool OTableWindow::ExistsAConn() const
 void OTableWindow::EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields)
 {
     arrstrFields.clear();
-    // diese Default-Implementierung zaehlt einfach alles auf, was es in der ListBox gibt ... fuer anderes Verhalten ueberschreiben
+    // This default implementation counts every item in the ListBox ... for any other behaviour it must be over-written
     if ( m_pListBox )
     {
         arrstrFields.reserve(m_pListBox->GetEntryCount());
