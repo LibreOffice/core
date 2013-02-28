@@ -977,19 +977,14 @@ extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_experimental_desktop_Desktop_key(JNIEnv * /* env */,
                                                       jobject /* clazz */,
                                                       jchar c,
-                                                      jshort timestamp)
+                                                      jshort /* timestamp */)
 {
-    SalKeyEvent aEvent;
-
-    aEvent.mnCharCode = c;
-    aEvent.mnTime = timestamp;
-    aEvent.mnCode = c;
-    aEvent.mnRepeat = 0;
+    KeyEvent aEvent(c, c, 0);
 
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
-        pFocus->CallCallback( SALEVENT_KEYINPUT, &aEvent );
-        pFocus->CallCallback( SALEVENT_KEYUP, &aEvent );
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pFocus->GetWindow(), &aEvent);
+        Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pFocus->GetWindow(), &aEvent);
     }
     else
         LOGW("No focused frame to emit event on");
@@ -1002,26 +997,23 @@ Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
                                                         jint action,
                                                         jint x,
                                                         jint y,
-                                                        jshort timestamp)
+                                                        jshort /* timestamp */)
 {
-    SalMouseEvent aEvent;
+    MouseEvent aEvent;
 
-    aEvent.mnTime = timestamp;
-    aEvent.mnX = x;
-    aEvent.mnY = y;
-    aEvent.mnButton = MOUSE_LEFT;
-    aEvent.mnCode = 0;
-
-    sal_uInt16 eventKind;
+    sal_uLong nEvent;
     switch (action) {
     case AMOTION_EVENT_ACTION_DOWN:
-        eventKind = SALEVENT_MOUSEBUTTONDOWN;
+        aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+        nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
         break;
     case AMOTION_EVENT_ACTION_UP:
-        eventKind = SALEVENT_MOUSEBUTTONUP;
+        aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+        nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
         break;
     case AMOTION_EVENT_ACTION_MOVE:
-        eventKind = SALEVENT_MOUSEMOVE;
+        aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT);
+        nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
         break;
     default:
         LOGE("Java_org_libreoffice_experimental_desktop_Desktop_touch: Invalid action %d", action);
@@ -1030,7 +1022,7 @@ Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
 
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus)
-        pFocus->CallCallback( eventKind, &aEvent );
+        Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
     else
         LOGW("No focused frame to emit event on");
 }
