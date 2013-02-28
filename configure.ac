@@ -4101,6 +4101,7 @@ if test "$cross_compiling" = "yes"; then
         --without-doxygen \
         ENABLE_PDFIMPORT=FALSE \
         $sub_conf_opts \
+        --srcdir=$srcdir \
         2>&1 | sed -e 's/^/    /'
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
