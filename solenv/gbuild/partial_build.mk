@@ -1,7 +1,7 @@
-ifeq ($(SOLARENV),)
 ifeq ($(gb_Side),)
 gb_Side:=host
 endif
+ifeq ($(SOLARENV),)
 include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))../../config_$(gb_Side).mk
 endif
 
