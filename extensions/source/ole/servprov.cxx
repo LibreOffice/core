@@ -200,9 +200,10 @@ STDMETHODIMP ProviderOleWrapper_Impl::LockServer(int /*fLock*/)
 OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiServiceFactory>& smgr,
                                                          const Reference<XInterface>& xInst,
                                                          GUID* pGuid )
-    : m_xInst(xInst), m_refCount(0),
-      m_smgr( smgr),
-      m_factoryHandle( 0 ),
+    : m_xInst(xInst)
+    , m_refCount(0)
+    , m_smgr(smgr)
+    , m_factoryHandle(0)
 {
     m_guid = *pGuid;
 
