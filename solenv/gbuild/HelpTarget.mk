@@ -534,17 +534,12 @@ $(call gb_HelpTarget_get_linked_target,%) :
 $(call gb_HelpTarget_get_target,%) :
 	$(call gb_HelpTarget__get_command,$@,$*)
 
-# All processing is done and the results can be packed into a zip.
-$(call gb_HelpTarget_get_packing_target,%) :
-	touch $@
-
 .PHONY : $(call gb_HelpTarget_get_clean_target,%)
 $(call gb_HelpTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),HLP,4)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf \
 			$(call gb_HelpTarget_get_linked_target,$*) \
-			$(call gb_HelpTarget_get_packing_target,$*) \
 			$(call gb_HelpTarget_get_target,$*) \
 			$(call gb_HelpTarget_get_translation_target,$*) \
 			$(call gb_HelpTarget_get_workdir,$*) \
@@ -576,11 +571,9 @@ $(call gb_HelpJarTarget_HelpJarTarget,$(1),$(2),$(4))
 $(call gb_HelpTarget_get_linked_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
 $(call gb_HelpLinkTarget_get_preparation_target,$(1)) : $(call gb_HelpTarget_get_linked_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) :| $(call gb_HelpTarget_get_workdir,$(1))/.dir
-$(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
-$(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpTarget_get_packing_target,$(1))
+$(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 
 $(call gb_HelpTarget_get_linked_target,$(1)) :| $(dir $(call gb_HelpTarget_get_linked_target,$(1))).dir
-$(call gb_HelpTarget_get_packing_target,$(1)) :| $(dir $(call gb_HelpTarget_get_packing_target,$(1))).dir
 $(call gb_HelpTarget_get_target,$(1)) :| $(dir $(call gb_HelpTarget_get_target,$(1))).dir
 $(call gb_HelpTarget_get_translation_target,$(1)) :| $(dir $(call gb_HelpTarget_get_translation_target,$(1))).dir
 
@@ -653,7 +646,7 @@ $(call gb_HelpTarget__add_index_files,$(1),$(call gb_HelpTarget__get_module,$(1)
 $(call gb_HelpTarget_get_target,$(1)) : HELP_INDEXED := $(true)
 
 $(call gb_HelpIndexTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
-$(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpIndexTarget_get_target,$(1))
+$(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpIndexTarget_get_target,$(1))
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpIndexTarget_get_clean_target,$(1))
 
 endef
@@ -662,7 +655,7 @@ endef
 define gb_HelpTarget__add_jar
 $(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).jar)
 $(call gb_HelpJarTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
-$(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpJarTarget_get_target,$(1))
+$(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpJarTarget_get_target,$(1))
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpJarTarget_get_clean_target,$(1))
 
 endef
