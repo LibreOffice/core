@@ -73,7 +73,7 @@ if ($help) {
 
 my $BUILD=undef;
 my $LAST_MINOR=undef;
-open MINORMK, "$ENV{'SOLARENV'}/inc/minor.mk";
+open MINORMK, "$ENV{'BUILDDIR'}/solenv/inc/minor.mk";
 while (<MINORMK>) {
     my $t = "\$" . $_;
     if (/^BUILD/ || /^LAST_MINOR/) {
@@ -117,11 +117,12 @@ if ($destdir && "$ENV{DESTDIR}" ne "/" && -d "$ENV{DESTDIR}") {
 }
 
 print "Running LibreOffice installer\n";
+
 system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
         "perl " .
         (scalar keys(%DB::sub) ? "-d " : "") .
         "-w $ENV{SOLARENV}/bin/make_installer.pl " .
-        "-f openoffice.lst -l $langs -p LibreOffice " .
+        "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l $langs -p LibreOffice " .
         "-u $tmp_dir " .
         "-buildid $BUILD $destdir $strip $msi " .
         "-simple $path") && die "Failed to install: $!";
@@ -130,7 +131,7 @@ if ($ENV{BUILD_TYPE} =~ m/ODK/) {
     print "Running SDK installer\n";
     system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
             "perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
-            "-f openoffice.lst -l en-US -p LibreOffice_SDK " .
+            "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l en-US -p LibreOffice_SDK " .
             "-u $tmp_dir " .
             "-buildid $BUILD $destdir $strip $msi " .
             "-simple $path") && die "Failed to install: $!";
