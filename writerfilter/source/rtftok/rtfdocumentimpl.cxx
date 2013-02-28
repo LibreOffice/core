@@ -1238,6 +1238,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_LIST:
             m_aStates.top().nDestinationState = DESTINATION_LISTENTRY;
             break;
+        case RTF_LFOLEVEL:
+            m_aStates.top().nDestinationState = DESTINATION_LFOLEVEL;
+            m_aStates.top().aTableSprms.clear();
+            break;
         case RTF_LISTOVERRIDETABLE:
             m_aStates.top().nDestinationState = DESTINATION_LISTOVERRIDETABLE;
             break;
@@ -2715,6 +2719,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 m_aFontIndexes.push_back(nParam);
                 m_nCurrentFontIndex = getFontIndex(nParam);
+            }
+            else if (m_aStates.top().nDestinationState == DESTINATION_LISTLEVEL)
+            {
+                RTFSprms aFontSprms;
+                aFontSprms.set(NS_sprm::LN_CRgFtc0, RTFValue::Pointer_t(new RTFValue(getFontIndex(nParam))));
+                RTFSprms aRunPropsSprms;
+                aRunPropsSprms.set(NS_ooxml::LN_EG_RPrBase_rFonts, RTFValue::Pointer_t(new RTFValue(RTFSprms(), aFontSprms)));
+                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_rPr, RTFValue::Pointer_t(new RTFValue(RTFSprms(), aRunPropsSprms)));
             }
             else
             {
@@ -4195,7 +4207,18 @@ int RTFDocumentImpl::popState()
         aState.aTableAttributes.set(NS_ooxml::LN_CT_Lvl_ilvl, pInnerValue);
 
         RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
-        m_aStates.top().aListLevelEntries.set(NS_ooxml::LN_CT_AbstractNum_lvl, pValue, false);
+        if (m_aStates.top().nDestinationState != DESTINATION_LFOLEVEL)
+            m_aStates.top().aListLevelEntries.set(NS_ooxml::LN_CT_AbstractNum_lvl, pValue, false);
+        else
+            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_NumLvl_lvl, pValue);
+    }
+    else if (aState.nDestinationState == DESTINATION_LFOLEVEL)
+    {
+        RTFValue::Pointer_t pInnerValue(new RTFValue(m_aStates.top().nListLevelNum++));
+        aState.aTableAttributes.set(NS_ooxml::LN_CT_NumLvl_ilvl, pInnerValue);
+
+        RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
+        m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Num_lvlOverride, pValue);
     }
     // list override table
     else if (aState.nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
