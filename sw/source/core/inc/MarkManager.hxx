@@ -55,7 +55,8 @@ namespace sw {
             virtual void deleteMarks(const SwNodeIndex& rStt, const SwNodeIndex& rEnd, ::std::vector< ::sw::mark::SaveBookmark>* pSaveBkmk, const SwIndex* pSttIdx, const SwIndex* pEndIdx);
 
             // deleters
-            virtual void deleteMark(const const_iterator_t ppMark);
+            virtual ::boost::shared_ptr<ILazyDeleter>
+                deleteMark(const const_iterator_t ppMark);
             virtual void deleteMark(const ::sw::mark::IMark* const pMark);
             virtual void clearAllMarks();
 
