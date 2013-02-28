@@ -105,7 +105,7 @@ ScTpDefaultsItem::~ScTpDefaultsItem()
 
 String ScTpDefaultsItem::GetValueText() const
 {
-    return rtl::OUString("ScTpDefaultsItem");
+    return OUString("ScTpDefaultsItem");
 }
 
 int ScTpDefaultsItem::operator==( const SfxPoolItem& rItem ) const
@@ -145,7 +145,7 @@ Sequence<OUString> ScDefaultsCfg::GetPropertyNames()
 }
 
 ScDefaultsCfg::ScDefaultsCfg() :
-    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_FORMULA )) )
+    ConfigItem( OUString( CFGPATH_FORMULA ) )
 {
     OUString aPrefix;
 

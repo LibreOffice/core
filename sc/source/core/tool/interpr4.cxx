@@ -294,7 +294,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
         SetError( mnStringNoValueError);
         return fValue;
     }
-    ::rtl::OUString aStr( rStr);
+    OUString aStr( rStr);
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nParseEnd;
     // Decimal and group separator 0 => only integer and possibly exponent,
@@ -744,7 +744,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     }
                     if (bOk)
                     {
-                        rtl::OString aTmp(rtl::OUStringToOString(aStr,
+                        rtl::OString aTmp(OUStringToOString(aStr,
                             osl_getThreadTextEncoding()));
                         // In case the xub_StrLen will be longer than USHORT
                         // one day, and room for pad byte check.
@@ -870,7 +870,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         }
                         else
                         {
-                            rtl::OString aTmp(rtl::OUStringToOString(aStr,
+                            rtl::OString aTmp(OUStringToOString(aStr,
                                 osl_getThreadTextEncoding()));
                             // In case the xub_StrLen will be longer than USHORT
                             // one day, and room for pad byte check.
@@ -1495,7 +1495,7 @@ void ScInterpreter::PopExternalSingleRef(
         return;
 
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
-    const rtl::OUString* pFile = pRefMgr->getExternalFileName(rFileId);
+    const OUString* pFile = pRefMgr->getExternalFileName(rFileId);
     if (!pFile)
     {
         SetError(errNoName);
@@ -1594,7 +1594,7 @@ void ScInterpreter::GetExternalDoubleRef(
     sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rData, ScExternalRefCache::TokenArrayRef& rArray)
 {
     ScExternalRefManager* pRefMgr = pDok->GetExternalRefManager();
-    const rtl::OUString* pFile = pRefMgr->getExternalFileName(nFileId);
+    const OUString* pFile = pRefMgr->getExternalFileName(nFileId);
     if (!pFile)
     {
         SetError(errNoName);
@@ -1939,7 +1939,7 @@ void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushStringBuffer" );
     if ( pString )
-        PushString( rtl::OUString(pString) );
+        PushString( OUString(pString) );
     else
         PushString( EMPTY_STRING );
 }
@@ -2578,7 +2578,7 @@ void ScInterpreter::ScExternal()
                         break;
                     case PTR_STRING :
                         {
-                            rtl::OString aStr(rtl::OUStringToOString(GetString(),
+                            rtl::OString aStr(OUStringToOString(GetString(),
                                 osl_getThreadTextEncoding()));
                             if ( aStr.getLength() >= ADDIN_MAXSTRLEN )
                                 SetError( errStringOverflow );
@@ -2788,7 +2788,7 @@ void ScInterpreter::ScExternal()
                     break;
 
                 case SC_ADDINARG_STRING:
-                    aParam <<= rtl::OUString( GetString() );
+                    aParam <<= OUString( GetString() );
                     break;
 
                 case SC_ADDINARG_INTEGER_ARRAY:
@@ -2868,9 +2868,9 @@ void ScInterpreter::ScExternal()
                         case svString:
                         case svSingleRef:
                             {
-                                rtl::OUString aString = rtl::OUString( GetString() );
-                                uno::Sequence<rtl::OUString> aInner( &aString, 1 );
-                                uno::Sequence< uno::Sequence<rtl::OUString> > aOuter( &aInner, 1 );
+                                OUString aString = OUString( GetString() );
+                                uno::Sequence<OUString> aInner( &aString, 1 );
+                                uno::Sequence< uno::Sequence<OUString> > aOuter( &aInner, 1 );
                                 aParam <<= aOuter;
                             }
                             break;
@@ -2903,7 +2903,7 @@ void ScInterpreter::ScExternal()
                                 if ( nStackType == svDouble )
                                     aElem <<= (double) GetDouble();
                                 else if ( nStackType == svString )
-                                    aElem <<= rtl::OUString( GetString() );
+                                    aElem <<= OUString( GetString() );
                                 else
                                 {
                                     ScAddress aAdr;
@@ -2914,7 +2914,7 @@ void ScInterpreter::ScExternal()
                                         {
                                             String aStr;
                                             GetCellString( aStr, pCell );
-                                            aElem <<= rtl::OUString( aStr );
+                                            aElem <<= OUString( aStr );
                                         }
                                         else
                                             aElem <<= (double) GetCellValue( aAdr, pCell );
@@ -2952,7 +2952,7 @@ void ScInterpreter::ScExternal()
                             aParam <<= (double) GetDouble();
                             break;
                         case svString:
-                            aParam <<= rtl::OUString( GetString() );
+                            aParam <<= OUString( GetString() );
                             break;
                         case svSingleRef:
                             {
@@ -2964,7 +2964,7 @@ void ScInterpreter::ScExternal()
                                     {
                                         String aStr;
                                         GetCellString( aStr, pCell );
-                                        aParam <<= rtl::OUString( aStr );
+                                        aParam <<= OUString( aStr );
                                     }
                                     else
                                         aParam <<= (double) GetCellValue( aAdr, pCell );
@@ -3115,8 +3115,8 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
 {
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
-    rtl::OUString sCodeName;
-    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CodeName") ) ) >>= sCodeName;
+    OUString sCodeName;
+    xProps->getPropertyValue( OUString( "CodeName" ) ) >>= sCodeName;
     // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
     // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
     // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
@@ -3127,7 +3127,7 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     uno::Reference< uno::XInterface > xIf;
     if ( pBasMgr && !pBasMgr->GetName().isEmpty() )
     {
-        String sProj = String( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        String sProj = String( "Standard" );
         if ( !pDok->GetDocumentShell()->GetBasicManager()->GetName().isEmpty() )
         {
             sProj = pDok->GetDocumentShell()->GetBasicManager()->GetName();
@@ -3158,7 +3158,7 @@ static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPa
         xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( pDok->GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
         if ( xVBARange.is() )
         {
-            String sDummy(RTL_CONSTASCII_USTRINGPARAM("A-Range") );
+            String sDummy("A-Range");
             SbxObjectRef aObj = GetSbUnoObject( sDummy, uno::Any( xVBARange ) );
             SetSbUnoObjectDfltPropName( aObj );
             bOk = pPar->PutObject( aObj );
@@ -3473,13 +3473,13 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                 break;
             case CELLTYPE_STRING :
             {
-                rtl::OUString aVal = ((ScStringCell*)pCell)->GetString();
+                OUString aVal = ((ScStringCell*)pCell)->GetString();
                 pVar->PutString( aVal );
                 break;
             }
             case CELLTYPE_EDIT :
             {
-                rtl::OUString aVal = ((ScEditCell*) pCell)->GetString();
+                OUString aVal = ((ScEditCell*) pCell)->GetString();
                 pVar->PutString( aVal );
                 break;
             }
@@ -3494,7 +3494,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                     }
                     else
                     {
-                        rtl::OUString aVal = ((ScFormulaCell*)pCell)->GetString();
+                        OUString aVal = ((ScFormulaCell*)pCell)->GetString();
                         pVar->PutString( aVal );
                     }
                 }

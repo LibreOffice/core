@@ -26,7 +26,7 @@
 //------------------------------------------------------------------
 
 ScNavipiCfg::ScNavipiCfg() :
-//! ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_NAVIPI )) ),
+//! ConfigItem( OUString( CFGPATH_NAVIPI ) ),
     nListMode(0),
     nDragMode(0),
     nRootType(0)

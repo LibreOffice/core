@@ -211,7 +211,7 @@ uno::Reference< chart2::XChartDocument > ScChartHelper::GetChartFromSdrObject( S
 }
 
 void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartDoc,
-            uno::Sequence< rtl::OUString >& rRanges )
+            uno::Sequence< OUString >& rRanges )
 {
     rRanges.realloc(0);
     uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
@@ -238,7 +238,7 @@ void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument
 }
 
 void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartDoc,
-            const uno::Sequence< rtl::OUString >& rRanges )
+            const uno::Sequence< OUString >& rRanges )
 {
     uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
     if( !xDataSource.is() )
@@ -253,7 +253,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
     try
     {
-        rtl::OUString aPropertyNameRole( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Role")) );
+        OUString aPropertyNameRole( OUString("Role") );
 
         uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
         sal_Int32 nRange=0;
@@ -317,13 +317,13 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                 svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
                 uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
                 if ( xProps.is() &&
-                     ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
+                     ( xProps->getPropertyValue( OUString( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog ) &&
                      bDisableDataTableDialog )
                 {
                     ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
                     if (pCollection)
                     {
-                        ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
+                        OUString aChartName = pSdrOle2Obj->GetPersistName();
                         const ScChartListener* pListener = pCollection->findByName(aChartName);
                         if (pListener)
                         {
@@ -358,7 +358,7 @@ void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVe
     }
 }
 
-void ScChartHelper::GetChartNames( ::std::vector< ::rtl::OUString >& rChartNames, SdrPage* pPage )
+void ScChartHelper::GetChartNames( ::std::vector< OUString >& rChartNames, SdrPage* pPage )
 {
     if ( pPage )
     {
@@ -380,7 +380,7 @@ void ScChartHelper::GetChartNames( ::std::vector< ::rtl::OUString >& rChartNames
 }
 
 void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
-    const ScRangeListVector& rRangesVector, const ::std::vector< ::rtl::OUString >& rExcludedChartNames, bool bSameDoc )
+    const ScRangeListVector& rRangesVector, const ::std::vector< OUString >& rExcludedChartNames, bool bSameDoc )
 {
     if ( pDoc && pPage && pModelObj )
     {
@@ -395,9 +395,9 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                 SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
                 if ( pSdrOle2Obj && pSdrOle2Obj->IsChart() )
                 {
-                    ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
-                    ::std::vector< ::rtl::OUString >::const_iterator aEnd = rExcludedChartNames.end();
-                    ::std::vector< ::rtl::OUString >::const_iterator aFound = ::std::find( rExcludedChartNames.begin(), aEnd, aChartName );
+                    OUString aChartName = pSdrOle2Obj->GetPersistName();
+                    ::std::vector< OUString >::const_iterator aEnd = rExcludedChartNames.end();
+                    ::std::vector< OUString >::const_iterator aFound = ::std::find( rExcludedChartNames.begin(), aEnd, aChartName );
                     if ( aFound == aEnd )
                     {
                         uno::Reference< embed::XEmbeddedObject > xEmbeddedObj = pSdrOle2Obj->GetObjRef();
@@ -407,7 +407,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                             svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
                             uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
                             if ( xProps.is() &&
-                                 ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
+                                 ( xProps->getPropertyValue( OUString( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog ) &&
                                  bDisableDataTableDialog )
                             {
                                 if ( bSameDoc )
@@ -424,9 +424,9 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                                 }
                                 else
                                 {
-                                    xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ),
+                                    xProps->setPropertyValue( OUString( "DisableDataTableDialog" ),
                                         uno::makeAny( sal_False ) );
-                                    xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ),
+                                    xProps->setPropertyValue( OUString( "DisableComplexChartTypes" ),
                                         uno::makeAny( sal_False ) );
                                 }
                             }
@@ -440,10 +440,10 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                             aChangeRanges.Append( aRange );
 
                             uno::Sequence< beans::PropertyValue > aProperties( 1 );
-                            aProperties[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
+                            aProperties[ 0 ].Name = OUString( "Name" );
                             aProperties[ 0 ].Value <<= aChartName;
 
-                            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-chart" ) ), aChangeRanges, aProperties );
+                            pModelObj->NotifyChanges( OUString( "insert-chart" ), aChangeRanges, aProperties );
                         }
                     }
                 }

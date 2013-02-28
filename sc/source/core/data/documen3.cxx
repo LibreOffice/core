@@ -116,10 +116,10 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
     rNames.swap(aNames);
 }
 
-void ScDocument::SetAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap)
+void ScDocument::SetAllRangeNames( const boost::ptr_map<OUString, ScRangeName>& rRangeMap)
 {
-    rtl::OUString aGlobalStr(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME));
-    boost::ptr_map<rtl::OUString,ScRangeName>::const_iterator itr = rRangeMap.begin(), itrEnd = rRangeMap.end();
+    OUString aGlobalStr(STR_GLOBAL_RANGE_NAME);
+    boost::ptr_map<OUString,ScRangeName>::const_iterator itr = rRangeMap.begin(), itrEnd = rRangeMap.end();
     for (; itr!=itrEnd; ++itr)
     {
         if (itr->first == aGlobalStr)
@@ -144,7 +144,7 @@ void ScDocument::SetAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeNa
     }
 }
 
-void ScDocument::GetTabRangeNameMap(std::map<rtl::OUString, ScRangeName*>& aRangeNameMap)
+void ScDocument::GetTabRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap)
 {
     for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i)
     {
@@ -156,21 +156,21 @@ void ScDocument::GetTabRangeNameMap(std::map<rtl::OUString, ScRangeName*>& aRang
             p = new ScRangeName();
             SetRangeName(i, p);
         }
-        rtl::OUString aTableName;
+        OUString aTableName;
         maTabs[i]->GetName(aTableName);
-        aRangeNameMap.insert(std::pair<rtl::OUString, ScRangeName*>(aTableName,p));
+        aRangeNameMap.insert(std::pair<OUString, ScRangeName*>(aTableName,p));
     }
 }
 
-void ScDocument::GetRangeNameMap(std::map<rtl::OUString, ScRangeName*>& aRangeNameMap)
+void ScDocument::GetRangeNameMap(std::map<OUString, ScRangeName*>& aRangeNameMap)
 {
     GetTabRangeNameMap(aRangeNameMap);
     if (!pRangeName)
     {
         pRangeName = new ScRangeName();
     }
-    rtl::OUString aGlobal(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME));
-    aRangeNameMap.insert(std::pair<rtl::OUString, ScRangeName*>(aGlobal, pRangeName));
+    OUString aGlobal(STR_GLOBAL_RANGE_NAME);
+    aRangeNameMap.insert(std::pair<OUString, ScRangeName*>(aGlobal, pRangeName));
 }
 
 ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
@@ -203,7 +203,7 @@ void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
 }
 
 
-const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, rtl::OUString* pName ) const
+const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString* pName ) const
 {
     const ScRangeData* pData = NULL;
     if ( pRangeName )
@@ -390,7 +390,7 @@ bool ScDocument::IsScenario( SCTAB nTab ) const
     return ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] &&maTabs[nTab]->IsScenario();
 }
 
-void ScDocument::SetScenarioData( SCTAB nTab, const rtl::OUString& rComment,
+void ScDocument::SetScenarioData( SCTAB nTab, const OUString& rComment,
                                         const Color& rColor, sal_uInt16 nFlags )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
@@ -421,7 +421,7 @@ bool ScDocument::IsDefaultTabBgColor( SCTAB nTab ) const
     return true;
 }
 
-void ScDocument::GetScenarioData( SCTAB nTab, rtl::OUString& rComment,
+void ScDocument::GetScenarioData( SCTAB nTab, OUString& rComment,
                                         Color& rColor, sal_uInt16& rFlags ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario())
@@ -469,32 +469,32 @@ sal_uInt8 ScDocument::GetLinkMode( SCTAB nTab ) const
     return SC_LINK_NONE;
 }
 
-const rtl::OUString ScDocument::GetLinkDoc( SCTAB nTab ) const
+const OUString ScDocument::GetLinkDoc( SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetLinkDoc();
-    return rtl::OUString();
+    return OUString();
 }
 
-const rtl::OUString ScDocument::GetLinkFlt( SCTAB nTab ) const
+const OUString ScDocument::GetLinkFlt( SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetLinkFlt();
-    return rtl::OUString();
+    return OUString();
 }
 
-const rtl::OUString ScDocument::GetLinkOpt( SCTAB nTab ) const
+const OUString ScDocument::GetLinkOpt( SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetLinkOpt();
-    return rtl::OUString();
+    return OUString();
 }
 
-const rtl::OUString ScDocument::GetLinkTab( SCTAB nTab ) const
+const OUString ScDocument::GetLinkTab( SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetLinkTab();
-    return rtl::OUString();
+    return OUString();
 }
 
 sal_uLong ScDocument::GetLinkRefreshDelay( SCTAB nTab ) const
@@ -504,16 +504,16 @@ sal_uLong ScDocument::GetLinkRefreshDelay( SCTAB nTab ) const
     return 0;
 }
 
-void ScDocument::SetLink( SCTAB nTab, sal_uInt8 nMode, const rtl::OUString& rDoc,
-                            const rtl::OUString& rFilter, const rtl::OUString& rOptions,
-                            const rtl::OUString& rTabName, sal_uLong nRefreshDelay )
+void ScDocument::SetLink( SCTAB nTab, sal_uInt8 nMode, const OUString& rDoc,
+                            const OUString& rFilter, const OUString& rOptions,
+                            const OUString& rTabName, sal_uLong nRefreshDelay )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->SetLink( nMode, rDoc, rFilter, rOptions, rTabName, nRefreshDelay );
 }
 
-bool ScDocument::HasLink( const rtl::OUString& rDoc,
-                            const rtl::OUString& rFilter, const rtl::OUString& rOptions ) const
+bool ScDocument::HasLink( const OUString& rDoc,
+                            const OUString& rFilter, const OUString& rOptions ) const
 {
     SCTAB nCount = static_cast<SCTAB>(maTabs.size());
     for (SCTAB i=0; i<nCount; i++)
@@ -526,8 +526,8 @@ bool ScDocument::HasLink( const rtl::OUString& rDoc,
     return false;
 }
 
-bool ScDocument::LinkExternalTab( SCTAB& rTab, const rtl::OUString& aDocTab,
-        const rtl::OUString& aFileName, const rtl::OUString& aTabName )
+bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
+        const OUString& aFileName, const OUString& aTabName )
 {
     if ( IsClipboard() )
     {
@@ -535,8 +535,8 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const rtl::OUString& aDocTab,
         return false;
     }
     rTab = 0;
-    rtl::OUString  aFilterName;        // wird vom Loader gefuellt
-    rtl::OUString  aOptions;       // Filter-Optionen
+    OUString  aFilterName;        // wird vom Loader gefuellt
+    OUString  aOptions;       // Filter-Optionen
     sal_uInt32 nLinkCnt = pExtDocOptions ? pExtDocOptions->GetDocSettings().mnLinkCnt : 0;
     ScDocumentLoader aLoader( aFileName, aFilterName, aOptions, nLinkCnt + 1 );
     if ( aLoader.IsError() )
@@ -568,7 +568,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const rtl::OUString& aDocTab,
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( true );
         String aFilName = aFilterName;
-        GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, String(aFileName),
+        GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, OUString(aFileName),
                                         &aFilName );
         pLink->Update();
         pLink->SetInCreate( false );
@@ -1112,13 +1112,13 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScProg
                             nStepValue, nMaxValue, pProgress);
 }
 
-rtl::OUString ScDocument::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )
+OUString ScDocument::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )
 {
     SCTAB nTab = rSource.aStart.Tab();
     if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetAutoFillPreview( rSource, nEndX, nEndY );
 
-    return rtl::OUString();
+    return OUString();
 }
 
 void ScDocument::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
@@ -1236,7 +1236,7 @@ void ScDocument::GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
 bool ScDocument::SearchAndReplace(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
     const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-    rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
+    OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     //!     getrennte Markierungen pro Tabelle verwalten !!!!!!!!!!!!!
 
@@ -1357,12 +1357,12 @@ SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeep
 }
 
 
-void ScDocument::GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rStr)
+void ScDocument::GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rStr)
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->GetUpperCellString( nCol, nRow, rStr );
     else
-        rStr = rtl::OUString();
+        rStr = OUString();
 }
 
 bool ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab, ScQueryParam& rQueryParam)
@@ -1585,7 +1585,7 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
                 for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
                     if ( pCell->HasStringData() )
                     {
-                        rtl::OUString aStr = pCell->GetStringData();
+                        OUString aStr = pCell->GetStringData();
                         rStrings.insert(ScTypedStrData(aStr, 0.0, ScTypedStrData::Header));
                     }
             }
@@ -1932,9 +1932,9 @@ void ScDocument::SetExtDocOptions( ScExtDocOptions* pNewOptions )
 void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow )
 {
-    rtl::OUString aEmpty;
-    rtl::OUStringBuffer aTotal;
-    rtl::OUString aCellStr;
+    OUString aEmpty;
+    OUStringBuffer aTotal;
+    OUString aCellStr;
     SCCOL nCol;
     SCROW nRow;
     for (nRow=nStartRow; nRow<=nEndRow; nRow++)

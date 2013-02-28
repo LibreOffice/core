@@ -2604,7 +2604,7 @@ void ScInterpreter::ScRoman()
                     sal_Int32 nPad = nDigit % 5;
                     if (nPad)
                     {
-                        rtl::OUStringBuffer aBuf(aRoman);
+                        OUStringBuffer aBuf(aRoman);
                         comphelper::string::padToLength(aBuf, aBuf.getLength() + nPad,
                             pChars[nIndex]);
                         aRoman = aBuf.makeStringAndClear();
@@ -2851,7 +2851,7 @@ void ScInterpreter::ScEuroConvert()
             double fToRate;
             int    nFromDec;
             int    nToDec;
-            String aEur( RTL_CONSTASCII_USTRINGPARAM("EUR"));
+            String aEur( "EUR");
             if ( lclConvertMoney( aFromUnit, fFromRate, nFromDec )
                 && lclConvertMoney( aToUnit, fToRate, nToDec ) )
             {

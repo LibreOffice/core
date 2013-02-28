@@ -117,11 +117,11 @@ void ScFuncDesc::Clear()
     bHasSuppressedArgs = false;
 }
 
-::rtl::OUString ScFuncDesc::GetParamList() const
+OUString ScFuncDesc::GetParamList() const
 {
-    ::rtl::OUString sep(ScCompiler::GetNativeSymbol(ocSep));
+    OUString sep(ScCompiler::GetNativeSymbol(ocSep));
 
-    ::rtl::OUStringBuffer aSig;
+    OUStringBuffer aSig;
 
     if ( nArgCount > 0 )
     {
@@ -208,15 +208,15 @@ void ScFuncDesc::Clear()
     return aSig.makeStringAndClear();
 }
 
-::rtl::OUString ScFuncDesc::getSignature() const
+OUString ScFuncDesc::getSignature() const
 {
-    ::rtl::OUStringBuffer aSig;
+    OUStringBuffer aSig;
 
     if(pFuncName)
     {
         aSig.append(*pFuncName);
 
-        ::rtl::OUString aParamList = GetParamList();
+        OUString aParamList = GetParamList();
         if( !aParamList.isEmpty() )
         {
             aSig.appendAscii( "( " );
@@ -231,19 +231,19 @@ void ScFuncDesc::Clear()
     return aSig.makeStringAndClear();
 }
 
-::rtl::OUString ScFuncDesc::getFormula( const ::std::vector< ::rtl::OUString >& _aArguments ) const
+OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) const
 {
-    ::rtl::OUString sep = ScCompiler::GetNativeSymbol(ocSep);
+    OUString sep = ScCompiler::GetNativeSymbol(ocSep);
 
-    ::rtl::OUStringBuffer aFormula;
+    OUStringBuffer aFormula;
 
     if(pFuncName)
     {
         aFormula.append( *pFuncName );
 
         aFormula.appendAscii( "(" );
-        ::std::vector< ::rtl::OUString >::const_iterator aIter = _aArguments.begin();
-        ::std::vector< ::rtl::OUString >::const_iterator aEnd = _aArguments.end();
+        ::std::vector< OUString >::const_iterator aIter = _aArguments.begin();
+        ::std::vector< OUString >::const_iterator aEnd = _aArguments.end();
 
         if ( nArgCount > 0 && aIter != aEnd )
         {
@@ -291,9 +291,9 @@ sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
     return nCount;
 }
 
-::rtl::OUString ScFuncDesc::getFunctionName() const
+OUString ScFuncDesc::getFunctionName() const
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     if ( pFuncName )
         sRet = *pFuncName;
     return sRet;
@@ -304,9 +304,9 @@ const formula::IFunctionCategory* ScFuncDesc::getCategory() const
     return ScGlobal::GetStarCalcFunctionMgr()->getCategory(nCategory);
 }
 
-::rtl::OUString ScFuncDesc::getDescription() const
+OUString ScFuncDesc::getDescription() const
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     if ( pFuncDesc )
         sRet = *pFuncDesc;
     return sRet;
@@ -349,7 +349,7 @@ void ScFuncDesc::initArgumentInfo()  const
     if ( bIncomplete && pFuncName )
     {
         ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
-        ::rtl::OUString aIntName(rAddIns.FindFunction( *pFuncName, true ));         // pFuncName is upper-case
+        OUString aIntName(rAddIns.FindFunction( *pFuncName, true ));         // pFuncName is upper-case
 
         if ( !aIntName.isEmpty() )
         {
@@ -377,12 +377,12 @@ sal_uInt32 ScFuncDesc::getParameterCount() const
     return nArgCount;
 }
 
-::rtl::OUString ScFuncDesc::getParameterName(sal_uInt32 _nPos) const
+OUString ScFuncDesc::getParameterName(sal_uInt32 _nPos) const
 {
     return *(ppDefArgNames[_nPos]);
 }
 
-::rtl::OUString ScFuncDesc::getParameterDescription(sal_uInt32 _nPos) const
+OUString ScFuncDesc::getParameterDescription(sal_uInt32 _nPos) const
 {
     return *(ppDefArgDescs[_nPos]);
 }
@@ -453,20 +453,20 @@ ScFunctionList::ScFunctionList() :
     sal_uInt16 nNextId = SC_OPCODE_LAST_OPCODE_ID + 1; // FuncID for AddIn functions
 
     // Interpretation of AddIn list
-    ::rtl::OUString aDefArgNameValue   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"));
-    ::rtl::OUString aDefArgNameString  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("string"));
-    ::rtl::OUString aDefArgNameValues  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("values"));
-    ::rtl::OUString aDefArgNameStrings = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("strings"));
-    ::rtl::OUString aDefArgNameCells   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cells"));
-    ::rtl::OUString aDefArgNameNone    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
-    ::rtl::OUString aDefArgDescValue   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a value"));
-    ::rtl::OUString aDefArgDescString  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a string"));
-    ::rtl::OUString aDefArgDescValues  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("array of values"));
-    ::rtl::OUString aDefArgDescStrings = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("array of strings"));
-    ::rtl::OUString aDefArgDescCells   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("range of cells"));
-    ::rtl::OUString aDefArgDescNone    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
+    OUString aDefArgNameValue   = OUString("value");
+    OUString aDefArgNameString  = OUString("string");
+    OUString aDefArgNameValues  = OUString("values");
+    OUString aDefArgNameStrings = OUString("strings");
+    OUString aDefArgNameCells   = OUString("cells");
+    OUString aDefArgNameNone    = OUString("none");
+    OUString aDefArgDescValue   = OUString("a value");
+    OUString aDefArgDescString  = OUString("a string");
+    OUString aDefArgDescValues  = OUString("array of values");
+    OUString aDefArgDescStrings = OUString("array of strings");
+    OUString aDefArgDescCells   = OUString("range of cells");
+    OUString aDefArgDescNone    = OUString("none");
 
-    ::rtl::OUString aArgName, aArgDesc;
+    OUString aArgName, aArgDesc;
     const FuncCollection& rFuncColl = *ScGlobal::GetFuncCollection();
     FuncCollection::const_iterator it = rFuncColl.begin(), itEnd = rFuncColl.end();
     for (; it != itEnd; ++it)
@@ -479,73 +479,73 @@ ScFunctionList::ScFunctionList() :
         pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
         pDesc->pFuncName   = new OUString(pAddInFuncData->GetInternalName().toAsciiUpperCase());
 
-        ::rtl::OUStringBuffer aBuf(aArgDesc);
+        OUStringBuffer aBuf(aArgDesc);
         aBuf.append(sal_Unicode('\n'));
         aBuf.appendAscii("( AddIn: ");
         aBuf.append(pAddInFuncData->GetModuleName());
         aBuf.appendAscii(" )");
-        pDesc->pFuncDesc = new ::rtl::OUString(aBuf.makeStringAndClear());
+        pDesc->pFuncDesc = new OUString(aBuf.makeStringAndClear());
 
         pDesc->nArgCount   = nArgs;
         if (nArgs)
         {
             pDesc->pDefArgFlags  = new ScFuncDesc::ParameterFlags[nArgs];
-            pDesc->ppDefArgNames = new ::rtl::OUString*[nArgs];
-            pDesc->ppDefArgDescs = new ::rtl::OUString*[nArgs];
+            pDesc->ppDefArgNames = new OUString*[nArgs];
+            pDesc->ppDefArgDescs = new OUString*[nArgs];
             for (sal_uInt16 j = 0; j < nArgs; ++j)
             {
                 pDesc->pDefArgFlags[j].bOptional = false;
                 pDesc->pDefArgFlags[j].bSuppress = false;
                 pAddInFuncData->getParamDesc( aArgName, aArgDesc, j+1 );
                 if ( !aArgName.isEmpty() )
-                    pDesc->ppDefArgNames[j] = new ::rtl::OUString( aArgName );
+                    pDesc->ppDefArgNames[j] = new OUString( aArgName );
                 else
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
                         case PTR_DOUBLE:
-                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameValue );
+                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameValue );
                             break;
                         case PTR_STRING:
-                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameString );
+                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameString );
                             break;
                         case PTR_DOUBLE_ARR:
-                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameValues );
+                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameValues );
                             break;
                         case PTR_STRING_ARR:
-                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameStrings );
+                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameStrings );
                             break;
                         case PTR_CELL_ARR:
-                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameCells );
+                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameCells );
                             break;
                         default:
-                            pDesc->ppDefArgNames[j] = new ::rtl::OUString( aDefArgNameNone );
+                            pDesc->ppDefArgNames[j] = new OUString( aDefArgNameNone );
                             break;
                     }
                 }
                 if ( !aArgDesc.isEmpty() )
-                    pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aArgDesc );
+                    pDesc->ppDefArgDescs[j] = new OUString( aArgDesc );
                 else
                 {
                     switch (pAddInFuncData->GetParamType(j+1))
                     {
                         case PTR_DOUBLE:
-                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescValue );
+                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescValue );
                             break;
                         case PTR_STRING:
-                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescString );
+                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescString );
                             break;
                         case PTR_DOUBLE_ARR:
-                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescValues );
+                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescValues );
                             break;
                         case PTR_STRING_ARR:
-                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescStrings );
+                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescStrings );
                             break;
                         case PTR_CELL_ARR:
-                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescCells );
+                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescCells );
                             break;
                         default:
-                            pDesc->ppDefArgDescs[j] = new ::rtl::OUString( aDefArgDescNone );
+                            pDesc->ppDefArgDescs[j] = new OUString( aDefArgDescNone );
                             break;
                     }
                 }
@@ -641,7 +641,7 @@ const formula::IFunctionManager* ScFunctionCategory::getFunctionManager() const
     return m_pMgr;
 }
 
-::rtl::OUString ScFunctionCategory::getName() const
+OUString ScFunctionCategory::getName() const
 {
     if ( m_sName.isEmpty() )
         m_sName = ScFunctionMgr::GetCategoryName(m_nCategory+1);
@@ -712,13 +712,13 @@ ScFunctionMgr::~ScFunctionMgr()
         delete aCatLists[i];
 }
 
-const ScFuncDesc* ScFunctionMgr::Get( const ::rtl::OUString& rFName ) const
+const ScFuncDesc* ScFunctionMgr::Get( const OUString& rFName ) const
 {
     const ScFuncDesc* pDesc = NULL;
     if (rFName.getLength() <= pFuncList->GetMaxFuncNameLen())
     {
         ::boost::scoped_ptr<ScFuncDesc> dummy(new ScFuncDesc);
-        dummy->pFuncName = new ::rtl::OUString(rFName);
+        dummy->pFuncName = new OUString(rFName);
         ::std::vector<const ScFuncDesc*>::iterator lower =
             ::std::lower_bound(aCatLists[0]->begin(), aCatLists[0]->end(),
                         static_cast<const ScFuncDesc*>(dummy.get()), ScFuncDesc::compareByName);
@@ -784,7 +784,7 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
     return pRet;
 }
 
-const formula::IFunctionDescription* ScFunctionMgr::getFunctionByName(const ::rtl::OUString& _sFunctionName) const
+const formula::IFunctionDescription* ScFunctionMgr::getFunctionByName(const OUString& _sFunctionName) const
 {
     return Get(_sFunctionName);
 }
@@ -802,12 +802,12 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
     }
 }
 
-::rtl::OUString ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
+OUString ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
 {
     if ( _nCategoryNumber > SC_FUNCGROUP_COUNT )
     {
         OSL_FAIL("Invalid category number!");
-        return ::rtl::OUString();
+        return OUString();
     }
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -898,17 +898,17 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
         }
     }
 
-    pDesc->pFuncName = new ::rtl::OUString( ScCompiler::GetNativeSymbol( static_cast<OpCode>( aRes.GetId())));
-    pDesc->pFuncDesc = new ::rtl::OUString( SC_RESSTR(1) );
+    pDesc->pFuncName = new OUString( ScCompiler::GetNativeSymbol( static_cast<OpCode>( aRes.GetId())));
+    pDesc->pFuncDesc = new OUString( SC_RESSTR(1) );
 
     if (nArgs)
     {
-        pDesc->ppDefArgNames = new ::rtl::OUString*[nArgs];
-        pDesc->ppDefArgDescs = new ::rtl::OUString*[nArgs];
+        pDesc->ppDefArgNames = new OUString*[nArgs];
+        pDesc->ppDefArgDescs = new OUString*[nArgs];
         for (sal_uInt16 i = 0; i < nArgs; ++i)
         {
-            pDesc->ppDefArgNames[i] = new ::rtl::OUString(SC_RESSTR(2*(i+1)  ));
-            pDesc->ppDefArgDescs[i] = new ::rtl::OUString(SC_RESSTR(2*(i+1)+1));
+            pDesc->ppDefArgNames[i] = new OUString(SC_RESSTR(2*(i+1)  ));
+            pDesc->ppDefArgDescs[i] = new OUString(SC_RESSTR(2*(i+1)+1));
         }
     }
 

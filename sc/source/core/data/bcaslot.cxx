@@ -147,7 +147,7 @@ bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
             OSL_ENSURE( pShell, "Missing DocShell :-/" );
 
             if ( pShell )
-                pShell->SetError( SCWARN_CORE_HARD_RECALC, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                pShell->SetError( SCWARN_CORE_HARD_RECALC, OUString( OSL_LOG_PREFIX ) );
 
             pDoc->SetAutoCalc( false );
             pDoc->SetHardRecalcState( true );

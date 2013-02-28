@@ -141,7 +141,7 @@ ScDPSource::~ScDPSource()
     delete pResData;
 }
 
-const ::rtl::OUString* ScDPSource::GetGrandTotalName() const
+const OUString* ScDPSource::GetGrandTotalName() const
 {
     return mpGrandTotalName.get();
 }
@@ -177,9 +177,9 @@ ScDPDimension* ScDPSource::GetDataDimension(long nIndex)
     return GetDimensionsObject()->getByIndex(nDimIndex);
 }
 
-rtl::OUString ScDPSource::GetDataDimName(long nIndex)
+OUString ScDPSource::GetDataDimName(long nIndex)
 {
-    rtl::OUString aRet;
+    OUString aRet;
     ScDPDimension* pDim = GetDataDimension(nIndex);
     if (pDim)
         aRet = pDim->getName();
@@ -334,7 +334,7 @@ void ScDPSource::SetDupCount( long nNew )
     nDupCount = nNew;
 }
 
-ScDPDimension* ScDPSource::AddDuplicated(long /* nSource */, const rtl::OUString& rNewName)
+ScDPDimension* ScDPSource::AddDuplicated(long /* nSource */, const OUString& rNewName)
 {
     OSL_ENSURE( pDimensions, "AddDuplicated without dimensions?" );
 
@@ -437,7 +437,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     for (sal_Int32 i = 0; i < nFilterCount; ++i)
     {
         const sheet::DataPilotFieldFilter& rFilter = aFilters[i];
-        const rtl::OUString& aFieldName = rFilter.FieldName;
+        const OUString& aFieldName = rFilter.FieldName;
         for (long nCol = 0; nCol < nColumnCount; ++nCol)
         {
             if (aFieldName.equals(pData->getDimensionName(nCol)))
@@ -472,11 +472,11 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     return aTabData;
 }
 
-rtl::OUString ScDPSource::getDataDescription()
+OUString ScDPSource::getDataDescription()
 {
     CreateRes_Impl();       // create pResData
 
-    rtl::OUString aRet;
+    OUString aRet;
     if ( pResData->GetMeasureCount() == 1 )
     {
         bool bTotalResult = false;
@@ -595,10 +595,10 @@ static long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vecto
     return nTotal;
 }
 
-static long lcl_GetIndexFromName( const rtl::OUString rName, const uno::Sequence<rtl::OUString>& rElements )
+static long lcl_GetIndexFromName( const OUString rName, const uno::Sequence<OUString>& rElements )
 {
     long nCount = rElements.getLength();
-    const rtl::OUString* pArray = rElements.getConstArray();
+    const OUString* pArray = rElements.getConstArray();
     for (long nPos=0; nPos<nCount; nPos++)
         if (pArray[nPos] == rName)
             return nPos;
@@ -768,7 +768,7 @@ void ScDPSource::CreateRes_Impl()
     // TODO: Aggreate pDataNames, pDataRefValues, nDataRefOrient, and
     // eDataFunctions into a structure and use vector instead of static
     // or pointer arrays.
-    vector<rtl::OUString> aDataNames;
+    vector<OUString> aDataNames;
     vector<sheet::DataPilotFieldReference> aDataRefValues;
     vector<ScSubTotalFunc> aDataFunctions;
     vector<sal_uInt16> aDataRefOrient;
@@ -1096,7 +1096,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
     static SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_DP_COLGRAND), 0,  &getBooleanCppuType(),              0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_DATADESC), 0,  &getCppuType((rtl::OUString*)0),    beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_DATADESC), 0,  &getCppuType((OUString*)0),    beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_IGNOREEMPTY), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
         {MAP_CHAR_LEN(SC_UNO_DP_REPEATEMPTY), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
         {MAP_CHAR_LEN(SC_UNO_DP_ROWGRAND), 0,  &getBooleanCppuType(),              0, 0 },
@@ -1111,7 +1111,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
     return aRef;
 }
 
-void SAL_CALL ScDPSource::setPropertyValue( const rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -1137,7 +1137,7 @@ void SAL_CALL ScDPSource::setPropertyValue( const rtl::OUString& aPropertyName, 
     }
 }
 
-uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -1234,7 +1234,7 @@ void ScDPDimensions::CountChanged()
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
-uno::Any SAL_CALL ScDPDimensions::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScDPDimensions::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -1252,17 +1252,17 @@ uno::Any SAL_CALL ScDPDimensions::getByName( const rtl::OUString& aName )
 //    return uno::Any();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScDPDimensions::getElementNames() throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames() throw(uno::RuntimeException)
 {
     long nCount = getCount();
-    uno::Sequence<rtl::OUString> aSeq(nCount);
-    rtl::OUString* pArr = aSeq.getArray();
+    uno::Sequence<OUString> aSeq(nCount);
+    OUString* pArr = aSeq.getArray();
     for (long i=0; i<nCount; i++)
         pArr[i] = getByIndex(i)->getName();
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPDimensions::hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName ) throw(uno::RuntimeException)
 {
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
@@ -1350,12 +1350,12 @@ ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
     return pHierarchies;
 }
 
-const rtl::OUString* ScDPDimension::GetLayoutName() const
+const OUString* ScDPDimension::GetLayoutName() const
 {
     return mpLayoutName.get();
 }
 
-const rtl::OUString* ScDPDimension::GetSubtotalName() const
+const OUString* ScDPDimension::GetSubtotalName() const
 {
     return mpSubtotalName.get();
 }
@@ -1366,7 +1366,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
     return GetHierarchiesObject();
 }
 
-::rtl::OUString SAL_CALL ScDPDimension::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDPDimension::getName() throw(uno::RuntimeException)
 {
     if (!aName.isEmpty())
         return aName;
@@ -1374,7 +1374,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
         return pSource->GetData()->getDimensionName( nDim );
 }
 
-void SAL_CALL ScDPDimension::setName( const ::rtl::OUString& rNewName ) throw(uno::RuntimeException)
+void SAL_CALL ScDPDimension::setName( const OUString& rNewName ) throw(uno::RuntimeException)
 {
     //  used after cloning
     aName = rNewName;
@@ -1425,7 +1425,7 @@ ScDPDimension* ScDPDimension::CreateCloneObject()
     OSL_ENSURE( nSourceDim < 0, "recursive duplicate - not implemented" );
 
     //! set new name here, or temporary name ???
-    rtl::OUString aNewName = aName;
+    OUString aNewName = aName;
 
     ScDPDimension* pNew = pSource->AddDuplicated( nDim, aNewName );
 
@@ -1502,8 +1502,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         {MAP_CHAR_LEN(SC_UNO_DP_POSITION), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_REFVALUE), 0,  &getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_USEDHIERARCHY), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_FIELD_SUBTOTALNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_LAYOUTNAME), 0, &getCppuType(static_cast<OUString*>(0)), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_FIELD_SUBTOTALNAME), 0, &getCppuType(static_cast<OUString*>(0)), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_HAS_HIDDEN_MEMBER), 0, &getBooleanCppuType(), 0, 0 },
         {0,0,0,0,0,0}
     };
@@ -1512,7 +1512,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
     return aRef;
 }
 
-void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -1546,7 +1546,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
             sal_Int32 nLength = aSeq.getLength();
             if ( nLength == 0 )
             {
-                aSelectedPage = rtl::OUString();
+                aSelectedPage = OUString();
                 bHasSelectedPage = false;
                 bDone = sal_True;
             }
@@ -1593,7 +1593,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
     }
 }
 
-uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -1667,9 +1667,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
     else if (aPropertyName.equalsAscii(SC_UNO_DP_LAYOUTNAME))
-        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString("");
     else if (aPropertyName.equalsAscii(SC_UNO_DP_FIELD_SUBTOTALNAME))
-        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString("");
     else if (aPropertyName.equalsAscii(SC_UNO_DP_HAS_HIDDEN_MEMBER))
         aRet <<= static_cast<sal_Bool>(mbHasHiddenMember);
     else if (aPropertyName.equalsAscii(SC_UNO_DP_FLAGS))
@@ -1717,7 +1717,7 @@ ScDPHierarchies::~ScDPHierarchies()
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
-uno::Any SAL_CALL ScDPHierarchies::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScDPHierarchies::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -1734,17 +1734,17 @@ uno::Any SAL_CALL ScDPHierarchies::getByName( const rtl::OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScDPHierarchies::getElementNames() throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL ScDPHierarchies::getElementNames() throw(uno::RuntimeException)
 {
     long nCount = getCount();
-    uno::Sequence<rtl::OUString> aSeq(nCount);
-    rtl::OUString* pArr = aSeq.getArray();
+    uno::Sequence<OUString> aSeq(nCount);
+    OUString* pArr = aSeq.getArray();
     for (long i=0; i<nCount; i++)
         pArr[i] = getByIndex(i)->getName();
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPHierarchies::hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName ) throw(uno::RuntimeException)
 {
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
@@ -1830,19 +1830,19 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
     return GetLevelsObject();
 }
 
-::rtl::OUString SAL_CALL ScDPHierarchy::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDPHierarchy::getName() throw(uno::RuntimeException)
 {
-    rtl::OUString aRet;        //! globstr-ID !!!!
+    OUString aRet;        //! globstr-ID !!!!
     switch (nHier)
     {
         case SC_DAPI_HIERARCHY_FLAT:
-            aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flat"));
+            aRet = OUString("flat");
             break;  //! name ???????
         case SC_DAPI_HIERARCHY_QUARTER:
-            aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quarter"));
+            aRet = OUString("Quarter");
             break;  //! name ???????
         case SC_DAPI_HIERARCHY_WEEK:
-            aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Week"));
+            aRet = OUString("Week");
             break;  //! name ???????
         default:
             OSL_FAIL( "ScDPHierarchy::getName: unexpected hierarchy" );
@@ -1851,7 +1851,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
     return aRet;
 }
 
-void SAL_CALL ScDPHierarchy::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
+void SAL_CALL ScDPHierarchy::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
     OSL_FAIL("not implemented");        //! exception?
 }
@@ -1900,7 +1900,7 @@ ScDPLevels::~ScDPLevels()
 
 // very simple XNameAccess implementation using getCount/getByIndex
 
-uno::Any SAL_CALL ScDPLevels::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScDPLevels::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -1917,17 +1917,17 @@ uno::Any SAL_CALL ScDPLevels::getByName( const rtl::OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScDPLevels::getElementNames() throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL ScDPLevels::getElementNames() throw(uno::RuntimeException)
 {
     long nCount = getCount();
-    uno::Sequence<rtl::OUString> aSeq(nCount);
-    rtl::OUString* pArr = aSeq.getArray();
+    uno::Sequence<OUString> aSeq(nCount);
+    OUString* pArr = aSeq.getArray();
     for (long i=0; i<nCount; i++)
         pArr[i] = getByIndex(i)->getName();
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPLevels::hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScDPLevels::hasByName( const OUString& aName ) throw(uno::RuntimeException)
 {
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
@@ -2118,28 +2118,28 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
     return uno::Sequence<sheet::MemberResult>(0);       //! Error?
 }
 
-::rtl::OUString SAL_CALL ScDPLevel::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDPLevel::getName() throw(uno::RuntimeException)
 {
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( pSource->IsDateDimension( nSrcDim ) )
     {
-        rtl::OUString aRet;        //! globstr-ID !!!!
+        OUString aRet;        //! globstr-ID !!!!
 
         if ( nHier == SC_DAPI_HIERARCHY_QUARTER )
         {
             switch ( nLev )
             {
                 case SC_DAPI_LEVEL_YEAR:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Year"));
+                    aRet = OUString("Year");
                     break;
                 case SC_DAPI_LEVEL_QUARTER:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quarter"));
+                    aRet = OUString("Quarter");
                     break;
                 case SC_DAPI_LEVEL_MONTH:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Month"));
+                    aRet = OUString("Month");
                     break;
                 case SC_DAPI_LEVEL_DAY:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Day"));
+                    aRet = OUString("Day");
                     break;
                 default:
                     OSL_FAIL( "ScDPLevel::getName: unexpected level" );
@@ -2151,13 +2151,13 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
             switch ( nLev )
             {
                 case SC_DAPI_LEVEL_YEAR:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Year"));
+                    aRet = OUString("Year");
                     break;
                 case SC_DAPI_LEVEL_WEEK:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Week"));
+                    aRet = OUString("Week");
                     break;
                 case SC_DAPI_LEVEL_WEEKDAY:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Weekday"));
+                    aRet = OUString("Weekday");
                     break;
                 default:
                     OSL_FAIL( "ScDPLevel::getName: unexpected level" );
@@ -2170,12 +2170,12 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
 
     ScDPDimension* pDim = pSource->GetDimensionsObject()->getByIndex(nSrcDim);
     if (!pDim)
-        return rtl::OUString();
+        return OUString();
 
     return pDim->getName();
 }
 
-void SAL_CALL ScDPLevel::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
+void SAL_CALL ScDPLevel::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
     OSL_FAIL("not implemented");        //! exception?
 }
@@ -2218,7 +2218,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
     return aRef;
 }
 
-void SAL_CALL ScDPLevel::setPropertyValue( const rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -2239,7 +2239,7 @@ void SAL_CALL ScDPLevel::setPropertyValue( const rtl::OUString& aPropertyName, c
     }
 }
 
-uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -2362,7 +2362,7 @@ ScDPMembers::~ScDPMembers()
 
 // XNameAccess implementation using getCount/getByIndex
 
-sal_Int32 ScDPMembers::GetIndexFromName( const ::rtl::OUString& rName ) const
+sal_Int32 ScDPMembers::GetIndexFromName( const OUString& rName ) const
 {
     if ( aHashMap.empty() )
     {
@@ -2380,7 +2380,7 @@ sal_Int32 ScDPMembers::GetIndexFromName( const ::rtl::OUString& rName ) const
         return -1;                      // not found
 }
 
-uno::Any SAL_CALL ScDPMembers::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScDPMembers::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -2396,7 +2396,7 @@ uno::Any SAL_CALL ScDPMembers::getByName( const rtl::OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::RuntimeException)
 {
     // Return list of names in sorted order,
     // so it's displayed in that order in the field options dialog.
@@ -2409,14 +2409,14 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::
     bool bSort = !rGlobalOrder.empty();
 
     long nCount = getCount();
-    uno::Sequence<rtl::OUString> aSeq(nCount);
-    rtl::OUString* pArr = aSeq.getArray();
+    uno::Sequence<OUString> aSeq(nCount);
+    OUString* pArr = aSeq.getArray();
     for (long i=0; i<nCount; i++)
         pArr[i] = getByIndex(bSort ? rGlobalOrder[i] : i)->getName();
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPMembers::hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScDPMembers::hasByName( const OUString& aName ) throw(uno::RuntimeException)
 {
     return ( GetIndexFromName( aName ) >= 0 );
 }
@@ -2483,7 +2483,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
             {
                 sal_Int32 nGroupBy = 0;
                 sal_Int32 nVal = 0;
-                rtl::OUString aName;
+                OUString aName;
 
                 if ( nLev == SC_DAPI_LEVEL_YEAR )   // YEAR is in both hierarchies
                 {
@@ -2533,7 +2533,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                         ;
                 }
                 if (aName.isEmpty())
-                    aName = rtl::OUString::valueOf(nVal);
+                    aName = OUString::valueOf(nVal);
 
                 ScDPItemData aData(nGroupBy, nVal);
                 SCROW nId = pSource->GetCache()->GetIdByItemData(nDim, aData);
@@ -2638,20 +2638,20 @@ long ScDPMember::GetDim() const
     return nDim;
 }
 
-rtl::OUString ScDPMember::GetNameStr() const
+OUString ScDPMember::GetNameStr() const
 {
     const ScDPItemData* pData = GetItemData();
     if (pData)
         return pSource->GetData()->GetFormattedString(nDim, *pData);
-    return rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException)
 {
     return GetNameStr();
 }
 
-void SAL_CALL ScDPMember::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
+void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
     OSL_FAIL("not implemented");        //! exception?
 }
@@ -2678,7 +2678,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
         {MAP_CHAR_LEN(SC_UNO_DP_ISVISIBLE), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_SHOWDETAILS), 0,  &getBooleanCppuType(),              0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_LAYOUTNAME), 0, &getCppuType(static_cast<OUString*>(0)), 0, 0 },
         {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -2686,7 +2686,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
     return aRef;
 }
 
-void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -2699,9 +2699,9 @@ void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, 
         aValue >>= nPosition;
     else if (aPropertyName.equalsAscii(SC_UNO_DP_LAYOUTNAME))
     {
-        rtl::OUString aName;
+        OUString aName;
         if (aValue >>= aName)
-            mpLayoutName.reset(new rtl::OUString(aName));
+            mpLayoutName.reset(new OUString(aName));
     }
     else
     {
@@ -2709,7 +2709,7 @@ void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, 
     }
 }
 
-uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScDPMember::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -2721,7 +2721,7 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
     else if ( aPropertyName.equalsAscii( SC_UNO_DP_POSITION ) )
         aRet <<= nPosition;
     else if (aPropertyName.equalsAscii(SC_UNO_DP_LAYOUTNAME))
-        aRet <<= mpLayoutName.get() ? *mpLayoutName : rtl::OUString();
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString();
     else
     {
         OSL_FAIL("unknown property");

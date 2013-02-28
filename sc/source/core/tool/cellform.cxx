@@ -34,7 +34,7 @@ const ScFormulaCell* pLastFormulaTreeTop = 0;
 
 // -----------------------------------------------------------------------
 
-void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
+void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, OUString& rString,
                               Color** ppColor, SvNumberFormatter& rFormatter,
                               sal_Bool bNullVals,
                               sal_Bool bFormula,
@@ -44,7 +44,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
     *ppColor = NULL;
     if (&rFormatter==NULL)
     {
-        rString = rtl::OUString();
+        rString = OUString();
         return;
     }
 
@@ -53,13 +53,13 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
     {
         case CELLTYPE_STRING:
             {
-                rtl::OUString aCellString = ((ScStringCell*)pCell)->GetString();
+                OUString aCellString = ((ScStringCell*)pCell)->GetString();
                 rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor, bUseStarFormat );
             }
             break;
         case CELLTYPE_EDIT:
             {
-                rtl::OUString aCellString = ((ScEditCell*)pCell)->GetString();
+                OUString aCellString = ((ScEditCell*)pCell)->GetString();
                 rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor );
             }
             break;
@@ -67,7 +67,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
             {
                 double nValue = ((ScValueCell*)pCell)->GetValue();
                 if ( !bNullVals && nValue == 0.0 )
-                    rString = rtl::OUString();
+                    rString = OUString();
                 else
                 {
                     if( eForceTextFmt == ftCheck )
@@ -77,7 +77,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                     }
                     if( eForceTextFmt == ftForce )
                     {
-                        rtl::OUString aTemp;
+                        OUString aTemp;
                         rFormatter.GetOutputString( nValue, 0, aTemp, ppColor );
                         rFormatter.GetOutputString( aTemp, nFormat, rString, ppColor );
                     }
@@ -105,7 +105,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                             (!pFCell->GetDocument()->GetMacroInterpretLevel()
                             || pFCell->IsRunning()) )
                     {
-                        rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..."));
+                        rString = OUString("...");
                     }
                     else
                     {
@@ -119,12 +119,12 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                         if (nErrCode != 0)
                             rString = ScGlobal::GetErrorString(nErrCode);
                         else if ( pFCell->IsEmptyDisplayedAsString() )
-                            rString = rtl::OUString();
+                            rString = OUString();
                         else if ( pFCell->IsValue() )
                         {
                             double fValue = pFCell->GetValue();
                             if ( !bNullVals && fValue == 0.0 )
-                                rString = rtl::OUString();
+                                rString = OUString();
                             else if ( pFCell->IsHybridValueCell() )
                                 rString = pFCell->GetString();
                             else
@@ -132,7 +132,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                         }
                         else
                         {
-                            rtl::OUString aCellString = pFCell->GetString();
+                            OUString aCellString = pFCell->GetString();
                             rFormatter.GetOutputString( aCellString, nFormat, rString, ppColor, bUseStarFormat );
                         }
                     }
@@ -140,17 +140,17 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
             }
             break;
         default:
-            rString = rtl::OUString();
+            rString = OUString();
             break;
     }
 }
 
-void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUString& rString,
+void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, OUString& rString,
                                       SvNumberFormatter& rFormatter )
 {
     if (&rFormatter==NULL)
     {
-        rString = rtl::OUString();
+        rString = OUString();
         return;
     }
 

@@ -66,9 +66,9 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
     switch (eHash)
     {
         case PASSHASH_SHA1:
-            return OUString(RTL_CONSTASCII_USTRINGPARAM(URI_SHA1));
+            return OUString(URI_SHA1);
         case PASSHASH_XL:
-            return OUString(RTL_CONSTASCII_USTRINGPARAM(URI_XLS_LEGACY));
+            return OUString(URI_XLS_LEGACY);
         case PASSHASH_UNSPECIFIED:
         default:
             ;
@@ -309,7 +309,7 @@ bool ScTableProtectionImpl::verifyPassword(const String& aPassText) const
 {
 #if DEBUG_TAB_PROTECTION
     fprintf(stdout, "ScTableProtectionImpl::verifyPassword: input = '%s'\n",
-            OUStringToOString(rtl::OUString(aPassText), RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(OUString(aPassText), RTL_TEXTENCODING_UTF8).getStr());
 #endif
 
     if (mbEmptyPass)

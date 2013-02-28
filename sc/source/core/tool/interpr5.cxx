@@ -351,7 +351,7 @@ struct CellBucket
     SCSIZE mnNumValStart;
     SCSIZE mnStrValStart;
     std::vector<double> maNumVals;
-    std::vector<rtl::OUString> maStrVals;
+    std::vector<OUString> maStrVals;
 
     CellBucket() : mnNumValStart(0), mnStrValStart(0) {}
 
@@ -365,7 +365,7 @@ struct CellBucket
         }
         else if (!maStrVals.empty())
         {
-            const rtl::OUString* p = &maStrVals[0];
+            const OUString* p = &maStrVals[0];
             rMat.PutString(p, maStrVals.size(), nCol, mnStrValStart);
             reset();
         }
@@ -3298,7 +3298,7 @@ void ScInterpreter::ScMatRef()
                 PushDouble( pCell->GetValue() );
             else
             {
-                rtl::OUString aVal = pCell->GetString();
+                OUString aVal = pCell->GetString();
                 PushString( aVal );
             }
             pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex, aAdr, pCell );
@@ -3318,11 +3318,11 @@ void ScInterpreter::ScInfo()
         String aStr = GetString();
         ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::GetLocale(), ocInfo);
         if( aStr.EqualsAscii( "SYSTEM" ) )
-            PushString( String( RTL_CONSTASCII_USTRINGPARAM( SC_INFO_OSVERSION ) ) );
+            PushString( String( SC_INFO_OSVERSION ) );
         else if( aStr.EqualsAscii( "OSVERSION" ) )
-            PushString( String( RTL_CONSTASCII_USTRINGPARAM( "Windows (32-bit) NT 5.01" ) ) );
+            PushString( String( "Windows (32-bit) NT 5.01" ) );
         else if( aStr.EqualsAscii( "RELEASE" ) )
-            PushString( ::utl::Bootstrap::getBuildIdData( ::rtl::OUString() ) );
+            PushString( ::utl::Bootstrap::getBuildIdData( OUString() ) );
         else if( aStr.EqualsAscii( "NUMFILE" ) )
             PushDouble( 1 );
         else if( aStr.EqualsAscii( "RECALC" ) )

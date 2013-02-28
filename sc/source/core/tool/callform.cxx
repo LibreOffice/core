@@ -76,10 +76,10 @@ typedef void (CALLTYPE* FARPROC) ( void );
 class ModuleData
 {
 friend class ModuleCollection;
-    rtl::OUString aName;
+    OUString aName;
     osl::Module* pInstance;
 public:
-    ModuleData(const rtl::OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
+    ModuleData(const OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
     ModuleData(const ModuleData& rData) : aName(rData.aName)
     {
 #ifndef DISABLE_DYNLOADING
@@ -90,7 +90,7 @@ public:
     }
     ~ModuleData() { delete pInstance; }
 
-    const rtl::OUString& GetName() const { return aName; }
+    const OUString& GetName() const { return aName; }
     osl::Module*    GetInstance() const { return pInstance; }
     void            FreeInstance() { delete pInstance; pInstance = 0; }
 };
@@ -98,8 +98,8 @@ public:
 //------------------------------------------------------------------------
 
 FuncData::FuncData(const ModuleData*pModule,
-                   const rtl::OUString& rIName,
-                   const rtl::OUString& rFName,
+                   const OUString& rIName,
+                   const OUString& rFName,
                          sal_uInt16 nNo,
                     sal_uInt16  nCount,
                    const ParamType* peType,
@@ -133,18 +133,18 @@ namespace {
 
 class ModuleCollection
 {
-    typedef boost::ptr_map<rtl::OUString, ModuleData> MapType;
+    typedef boost::ptr_map<OUString, ModuleData> MapType;
     MapType maData;
 public:
     ModuleCollection() {}
     ModuleCollection(const ModuleCollection& r) : maData(r.maData) {}
 
-    const ModuleData* findByName(const rtl::OUString& rName) const;
+    const ModuleData* findByName(const OUString& rName) const;
     void insert(ModuleData* pNew);
     void clear();
 };
 
-const ModuleData* ModuleCollection::findByName(const rtl::OUString& rName) const
+const ModuleData* ModuleCollection::findByName(const OUString& rName) const
 {
     MapType::const_iterator it = maData.find(rName);
     return it == maData.end() ? NULL : it->second;
@@ -155,7 +155,7 @@ void ModuleCollection::insert(ModuleData* pNew)
     if (!pNew)
         return;
 
-    rtl::OUString aName = pNew->GetName();
+    OUString aName = pNew->GetName();
     maData.insert(aName, pNew);
 }
 
@@ -170,7 +170,7 @@ ModuleCollection aModuleCollection;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-bool InitExternalFunc(const rtl::OUString& rModuleName)
+bool InitExternalFunc(const OUString& rModuleName)
 {
 #ifdef DISABLE_DYNLOADING
     (void) rModuleName;
@@ -181,7 +181,7 @@ bool InitExternalFunc(const rtl::OUString& rModuleName)
     if (pTemp)
         return false;
 
-    rtl::OUString aNP;
+    OUString aNP;
     aNP = rModuleName;
 
     bool bRet = false;
@@ -386,12 +386,12 @@ bool FuncData::Unadvice( double nHandle )
 
 //------------------------------------------------------------------------
 
-const rtl::OUString& FuncData::GetModuleName() const
+const OUString& FuncData::GetModuleName() const
 {
     return pModuleData->GetName();
 }
 
-bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam ) const
+bool FuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const
 {
     bool bRet = false;
     if ( nParam <= nParamCount )
@@ -405,15 +405,15 @@ bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal
             *pcName = *pcDesc = 0;
             sal_uInt16 nFuncNo = nNumber;   // nicht per Reference versauen lassen..
             ((::GetParamDesc)fProc)( nFuncNo, nParam, pcName, pcDesc );
-            aName = ::rtl::OUString( pcName, 256, osl_getThreadTextEncoding() );
-            aDesc = ::rtl::OUString( pcDesc, 256, osl_getThreadTextEncoding() );
+            aName = OUString( pcName, 256, osl_getThreadTextEncoding() );
+            aDesc = OUString( pcDesc, 256, osl_getThreadTextEncoding() );
             bRet = true;
         }
     }
     if ( !bRet )
     {
-        aName = ::rtl::OUString();
-        aDesc = ::rtl::OUString();
+        aName = OUString();
+        aDesc = OUString();
     }
     return bRet;
 }
@@ -421,13 +421,13 @@ bool FuncData::getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal
 FuncCollection::FuncCollection() {}
 FuncCollection::FuncCollection(const FuncCollection& r) : maData(r.maData) {}
 
-const FuncData* FuncCollection::findByName(const rtl::OUString& rName) const
+const FuncData* FuncCollection::findByName(const OUString& rName) const
 {
     MapType::const_iterator it = maData.find(rName);
     return it == maData.end() ? NULL : it->second;
 }
 
-FuncData* FuncCollection::findByName(const rtl::OUString& rName)
+FuncData* FuncCollection::findByName(const OUString& rName)
 {
     MapType::iterator it = maData.find(rName);
     return it == maData.end() ? NULL : it->second;
@@ -435,7 +435,7 @@ FuncData* FuncCollection::findByName(const rtl::OUString& rName)
 
 void FuncCollection::insert(FuncData* pNew)
 {
-    rtl::OUString aName = pNew->GetInternalName();
+    OUString aName = pNew->GetInternalName();
     maData.insert(aName, pNew);
 }
 

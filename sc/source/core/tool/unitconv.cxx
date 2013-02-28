@@ -37,7 +37,7 @@ const sal_Unicode cDelim = 0x01;        // Delimiter zwischen From und To
 // --- ScUnitConverterData --------------------------------------------
 
 ScUnitConverterData::ScUnitConverterData(
-    const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit, double fValue ) :
+    const OUString& rFromUnit, const OUString& rToUnit, double fValue ) :
     maIndexString(BuildIndexString(rFromUnit, rToUnit)),
     mfValue(fValue) {}
 
@@ -52,15 +52,15 @@ double ScUnitConverterData::GetValue() const
     return mfValue;
 }
 
-const rtl::OUString& ScUnitConverterData::GetIndexString() const
+const OUString& ScUnitConverterData::GetIndexString() const
 {
     return maIndexString;
 }
 
-rtl::OUString ScUnitConverterData::BuildIndexString(
-    const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit )
+OUString ScUnitConverterData::BuildIndexString(
+    const OUString& rFromUnit, const OUString& rToUnit )
 {
-    rtl::OUStringBuffer aBuf(rFromUnit);
+    OUStringBuffer aBuf(rFromUnit);
     aBuf.append(cDelim);
     aBuf.append(rToUnit);
     return aBuf.makeStringAndClear();
@@ -78,7 +78,7 @@ ScUnitConverter::ScUnitConverter()
     //  read from configuration - "convert.ini" is no longer used
     //! config item as member to allow change of values
 
-    ScLinkConfigItem aConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_UNIT )) );
+    ScLinkConfigItem aConfigItem( OUString( CFGPATH_UNIT ) );
 
     // empty node name -> use the config item's path itself
     OUString aEmptyString;
@@ -99,11 +99,11 @@ ScUnitConverter::ScUnitConverter()
             sPrefix += sSlash;
 
             pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_UNIT_FROM ));
+            pValNameArray[nIndex++] += OUString( CFGSTR_UNIT_FROM );
             pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_UNIT_TO ));
+            pValNameArray[nIndex++] += OUString( CFGSTR_UNIT_TO );
             pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_UNIT_FACTOR ));
+            pValNameArray[nIndex++] += OUString( CFGSTR_UNIT_FACTOR );
         }
 
         Sequence<Any> aProperties = aConfigItem.GetProperties(aValNames);
@@ -124,7 +124,7 @@ ScUnitConverter::ScUnitConverter()
                 pProperties[nIndex++] >>= fFactor;
 
                 ScUnitConverterData* pNew = new ScUnitConverterData( sFromUnit, sToUnit, fFactor );
-                rtl::OUString aIndex  = pNew->GetIndexString();
+                OUString aIndex  = pNew->GetIndexString();
                 maData.insert(aIndex, pNew);
             }
         }
@@ -134,9 +134,9 @@ ScUnitConverter::ScUnitConverter()
 ScUnitConverter::~ScUnitConverter() {}
 
 bool ScUnitConverter::GetValue(
-    double& fValue, const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit ) const
+    double& fValue, const OUString& rFromUnit, const OUString& rToUnit ) const
 {
-    rtl::OUString aIndex = ScUnitConverterData::BuildIndexString(rFromUnit, rToUnit);
+    OUString aIndex = ScUnitConverterData::BuildIndexString(rFromUnit, rToUnit);
     MapType::const_iterator it = maData.find(aIndex);
     if (it == maData.end())
     {
