@@ -34,6 +34,7 @@
 
 #define GCONF_PROXY_MODE_KEY "/system/proxy/mode"
 #define GCONF_AUTO_SAVE_KEY  "/apps/openoffice/auto_save"
+#define GCONF_USER_AUTO_SAVE_KEY  "/apps/openoffice/user_auto_save"
 
 namespace gconfaccess {
 
@@ -433,6 +434,18 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             }
         }
             break;
+        case SETTING_USER_AUTO_SAVE:
+        {
+            GConfValue* pGconfValue = gconf_client_get( pClient, GCONF_USER_AUTO_SAVE_KEY, NULL );
+
+            if( ( pGconfValue != NULL ) )
+            {
+                bool bOk = gconf_value_get_bool( pGconfValue );
+                gconf_value_free( pGconfValue );
+                if (bOk) return sal_True;
+            }
+        }
+            break;
 #endif // ENABLE_LOCKDOWN
 
         default:
@@ -594,6 +607,14 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_AUTO_SAVE,
         GCONF_AUTO_SAVE_KEY,
         RTL_CONSTASCII_STRINGPARAM("AutoSaveEnabled"),
+        sal_False,
+        SETTINGS_LAST
+    },
+
+    {
+        SETTING_USER_AUTO_SAVE,
+        GCONF_USER_AUTO_SAVE_KEY,
+        RTL_CONSTASCII_STRINGPARAM("UserAutoSaveEnabled"),
         sal_False,
         SETTINGS_LAST
     },

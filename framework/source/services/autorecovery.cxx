@@ -21,6 +21,8 @@
 #include "services/autorecovery.hxx"
 #include <loadenv/loadenv.hxx>
 
+#include <sfx2/sfxbasemodel.hxx> //?
+
 #include <loadenv/targethelper.hxx>
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
@@ -124,7 +126,7 @@ static const char CFG_ENTRY_SESSIONDATA[] = "SessionData";
 static const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
 static const char CFG_ENTRY_AUTOSAVE_TIMEINTERVALL[] = "AutoSave/TimeIntervall"; //sic!
 
-static const char CFG_ENTRY_USERAUTOSAVE_ENABLED[] = "UserAutoSave/Enabled";
+static const char CFG_ENTRY_USERAUTOSAVE_ENABLED[] = "AutoSave/UserAutoSaveEnabled";
 
 static const char CFG_PATH_AUTOSAVE[] = "AutoSave";
 static const char CFG_ENTRY_MINSPACE_DOCSAVE[] = "MinSpaceDocSave";
@@ -2357,10 +2359,11 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
         {
             xDocRecover->storeToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
 
-            //if userautosave is enabled, also save to the original file
+            // if userautosave is enabled, also save to the original file
             if((m_eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
             {
-                //dispatchURL( rtl::OUString( ".uno:Save" ), rtl::OUString(), xFrame, aArgs );
+                //SfxBaseModel::storeToURL( rInfo.OrgURL, lOldArgs.getAsConstPropertyValueList() );
+                //xDocRecover->storeToRecoveryFile( rInfo.OrgURL, lOldArgs.getAsConstPropertyValueList() );
             }
 
 #ifdef TRIGGER_FULL_DISC_CHECK

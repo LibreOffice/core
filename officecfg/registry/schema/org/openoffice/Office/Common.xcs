@@ -2545,6 +2545,18 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="UserAutoSaveEnabled" oor:type="xs:boolean" oor:nillable="false">
+          <!-- OldPath: General/Save/Documents -->
+          <!-- OldLocation: soffice.cfg -->
+          <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
+          <info>
+            <author>_</author>
+            <desc>Specifies whether to save over the original document when
+            auto saving.</desc>
+            <label>Save file when AutoSaving</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop
             oor:name="CreateBackup" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: General/Save/Documents -->

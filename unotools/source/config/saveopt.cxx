@@ -591,8 +591,8 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString("UserAutoSave"),
-        ::rtl::OUString("Enabled")) >>= bUserAutoSave;
+        ::rtl::OUString("AutoSave"),
+        ::rtl::OUString("UserAutoSaveEnabled")) >>= bUserAutoSave;
     }
     catch(const css::uno::Exception&)
         { OSL_FAIL("Could not find needed informations for AutoSave feature."); }
@@ -793,9 +793,9 @@ void SvtSaveOptions_Impl::Commit()
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString("UserAutoSave"),
-        ::rtl::OUString("Enabled"),
-    css::uno::makeAny(bUserAutoSave));
+        ::rtl::OUString("AutoSave"),
+        ::rtl::OUString("UserAutoSaveEnabled"),
+        css::uno::makeAny(bUserAutoSave));
 
     ::comphelper::ConfigurationHelper::flush(xCFG);
 }
