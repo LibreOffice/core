@@ -110,8 +110,8 @@ public class Desktop
             String input;
 //            input = getIntent().getStringExtra("input");
 //            if (input == null)
-//            input = "/assets/test1.odt";
-            input = "--writer";
+            input = "/assets/test1.odt";
+//          input = "--writer";
 
             // We need to fake up an argv, and the argv[0] even needs to
             // point to some file name that we can pretend is the "program".
