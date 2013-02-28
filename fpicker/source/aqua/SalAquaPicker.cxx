@@ -109,7 +109,7 @@ void SAL_CALL SalAquaPicker::implInitialize()
             [(NSOpenPanel*)m_pDialog setCanChooseFiles:YES];
             break;
 
-        case NAVIGATIONSERVICES_SAVE:
+        case NAVIGATIONSERVICES_SAVE: {
             OSL_TRACE("NAVIGATIONSERVICES_SAVE");
             m_pDialog = [NSSavePanel savePanel];
             [(NSSavePanel*)m_pDialog setCanSelectHiddenExtension:NO]; //changed for issue #102102
@@ -128,7 +128,7 @@ void SAL_CALL SalAquaPicker::implInitialize()
                 OSL_TRACE("Hiding extension");
                 [pDefaults setBool:YES forKey:kSetHideExtensionStateKey];
             }
-            break;
+            } break;
 
         case NAVIGATIONSERVICES_DIRECTORY:
             OSL_TRACE("NAVIGATIONSERVICES_DIRECTORY");

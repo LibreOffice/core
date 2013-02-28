@@ -86,7 +86,7 @@ rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
             sURLString = CFURLGetString(aUrlRef);
             CFRetain(sURLString);
             break;
-        case FILENAME:
+        case FILENAME: {
             OSL_TRACE("Extracting the file name of an item");
             CFStringRef fullString = CFURLGetString(aUrlRef);
             CFURLRef dirRef = CFURLCreateCopyDeletingLastPathComponent(NULL,aUrlRef);
@@ -95,14 +95,14 @@ rtl::OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info)
             CFIndex fullLength = CFStringGetLength(fullString);
             CFRange substringRange = CFRangeMake(dirLength, fullLength - dirLength);
             sURLString = CFStringCreateWithSubstring(NULL, fullString, substringRange);
-            break;
-        case PATHWITHOUTLASTCOMPONENT:
+            } break;
+        case PATHWITHOUTLASTCOMPONENT: {
             OSL_TRACE("Extracting the last but one component of an item's path");
             CFURLRef directoryRef = CFURLCreateCopyDeletingLastPathComponent(NULL,aUrlRef);
             sURLString = CFURLGetString(directoryRef);
             CFRetain(sURLString);
             CFRelease(directoryRef);
-            break;
+            } break;
         default:
             break;
     }
