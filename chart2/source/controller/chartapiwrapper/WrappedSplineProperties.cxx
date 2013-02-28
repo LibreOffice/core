@@ -231,12 +231,29 @@ Any WrappedSplineTypeProperty::convertInnerToOuterValue( const Any& rInnerValue 
     rInnerValue >>= aInnerValue;
 
     sal_Int32 nOuterValue;
-    if( chart2::CurveStyle_CUBIC_SPLINES == aInnerValue )
-        nOuterValue = 1;
-    else if( chart2::CurveStyle_B_SPLINES == aInnerValue )
-        nOuterValue = 2;
-    else
-        nOuterValue = 0;
+    switch (aInnerValue)
+    {
+        case chart2::CurveStyle_CUBIC_SPLINES:
+            nOuterValue = 1;
+            break;
+        case chart2::CurveStyle_B_SPLINES:
+            nOuterValue = 2;
+            break;
+        case chart2::CurveStyle_STEP_START:
+            nOuterValue = 3;
+            break;
+        case chart2::CurveStyle_STEP_END:
+            nOuterValue = 4;
+            break;
+        case chart2::CurveStyle_STEP_CENTER_X:
+            nOuterValue = 5;
+            break;
+        case chart2::CurveStyle_STEP_CENTER_Y:
+            nOuterValue = 6;
+            break;
+        default:
+            nOuterValue = 0;
+    }
 
     return uno::makeAny(nOuterValue);
 }
@@ -247,12 +264,43 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
 
     chart2::CurveStyle aInnerValue;
 
-    if(1==nOuterValue)
-        aInnerValue = chart2::CurveStyle_CUBIC_SPLINES;
-    else if(2==nOuterValue)
-        aInnerValue = chart2::CurveStyle_B_SPLINES;
-    else
-        aInnerValue = chart2::CurveStyle_LINES;
+    switch (nOuterValue)
+    {
+        case 1:
+            aInnerValue = chart2::CurveStyle_CUBIC_SPLINES;
+            break;
+        case 2:
+            aInnerValue = chart2::CurveStyle_B_SPLINES;
+            break;
+        case 3:
+            aInnerValue = chart2::CurveStyle_STEP_START;
+            break;
+        case 4:
+            aInnerValue = chart2::CurveStyle_STEP_END;
+            break;
+        case 5:
+            aInnerValue = chart2::CurveStyle_STEP_CENTER_X;
+            break;
+        case 6:
+            aInnerValue = chart2::CurveStyle_STEP_CENTER_Y;
+            break;
+        // map the pre-ODF1.3 Gnumeric values to ODF1.3
+        case 7:
+            aInnerValue = chart2::CurveStyle_STEP_START;
+            break;
+        case 8:
+            aInnerValue = chart2::CurveStyle_STEP_END;
+            break;
+        case 9:
+            aInnerValue = chart2::CurveStyle_STEP_CENTER_X;
+            break;
+        case 10:
+            aInnerValue = chart2::CurveStyle_STEP_CENTER_Y;
+            break;
+        default:
+            SAL_WARN_IF(chart2::CurveStyle_LINES != 0, "chart2", "Unknown line style");
+            aInnerValue = chart2::CurveStyle_LINES;
+    }
 
     return uno::makeAny(aInnerValue);
 }
