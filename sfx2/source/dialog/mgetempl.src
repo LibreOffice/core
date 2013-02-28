@@ -43,7 +43,7 @@ TabPage TP_MANAGE_STYLES
     MultiLineEdit MLE_NAME
     {
         Pos = MAP_APPFONT ( 70 , 8  ) ;
-        Size = MAP_APPFONT ( 80 , 12 ) ;
+        Size = MAP_APPFONT ( 184 , 12 ) ;
         Border = FALSE;
         ReadOnly = TRUE;
         Hide = TRUE;
