@@ -64,33 +64,6 @@
 
 # things below this point are targeted for elimination
 
-# the build directories: to be removed when dmake is dead and burried
-/*/unxlng??
-/*/unxlng??.pro
-/*/unxlng???
-/*/unxlng???.pro
-/*/wntmsc???
-/*/wntmsc???.pro
-/*/wntgcc?
-/*/wntgcc?.pro
-/*/unxmac??
-/*/unxmac??.pro
-/*/unx?bsd??
-/*/unx?bsd??.pro
-/*/unxdfly??
-/*/unxdfly??.pro
-/*/unxso???
-/*/unxso???.pro
-/*/unxaig??
-/*/unxaig??.pro
-/*/unxios?
-/*/unxios?.pro
-/*/unxand?
-/*/unxand?.pro
-/*/unx*.obsolete
-/*/wnt*.obsolete
-/*/callcatcher
-
 #stuff that we should no generated where they are
 /desktop/scripts/soffice.sh
 /intltool-extract.in
