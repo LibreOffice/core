@@ -316,33 +316,7 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
 
             if (pFrame->IsVisible())
             {
-#ifndef REGION_RE_RENDER // (It isn't defined, don't know where it
-                         // would/could bem so this branch is the one
-                         // that is used)
                 BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
-#else
-                // Sadly it seems that due to double buffering, we don't
-                // get back in our buffer what we had there last time - so we cannot
-                // do incremental rendering. Presumably this will require us to
-                // render to a bitmap, and keep that updated instead in future.
-
-                // Intersect re-rendering region with this frame
-                Region aClipped( maRedrawRegion );
-                basegfx::B2IVector aDevSize = pFrame->getDevice()->getSize();
-                aClipped.Intersect( Rectangle( 0, 0, aDevSize.getX(), aDevSize.getY() ) );
-
-                Rectangle aSubRect;
-                RegionHandle aHdl = aClipped.BeginEnumRects();
-                while( aClipped.GetNextEnumRect( aHdl, aSubRect ) )
-                {
-                    ARect aASubRect = { aSubRect.Left(), aSubRect.Top(),
-                                        aSubRect.Right(), aSubRect.Bottom() };
-                    BlitFrameRegionToWindow(&aOutBuffer, pFrame->getDevice(),
-                                            aASubRect,
-                                            aSubRect.Left(), aSubRect.Top());
-                }
-                aClipped.EndEnumRects( aHdl );
-#endif
             }
         }
     }
@@ -352,14 +326,11 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
     if (pBuffer && pWindow)
         ANativeWindow_unlockAndPost(pWindow);
 
-    maRedrawRegion.SetEmpty();
     mbQueueReDraw = false;
 }
 
-void AndroidSalInstance::damaged(AndroidSalFrame */* frame */, const Rectangle &rRect)
+void AndroidSalInstance::damaged(AndroidSalFrame */* frame */)
 {
-    // FIXME: translate rRect to the frame's offset ...
-    maRedrawRegion.Union( rRect );
     mbQueueReDraw = true;
 }
 
@@ -756,13 +727,7 @@ public:
         {
             return;
         }
-        Rectangle aRect( std::max((long) 0, (long) rDamageRect.getMinX() ),
-                         std::max((long) 0, (long) rDamageRect.getMinY() ),
-                         std::max((long) 0, (long) ( rDamageRect.getMinX() +
-                                                     rDamageRect.getWidth() ) ),
-                         std::max((long) 0, (long) ( rDamageRect.getMinY() +
-                                                     rDamageRect.getHeight() ) ) );
-        AndroidSalInstance::getInstance()->damaged( this, aRect );
+        AndroidSalInstance::getInstance()->damaged( this );
     }
 
     virtual void UpdateSettings( AllSettings &rSettings )

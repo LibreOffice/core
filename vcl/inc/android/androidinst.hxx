@@ -65,10 +65,9 @@ public:
     void RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buffer *pBuffer = NULL);
     SalFrame *getFocusFrame() const;
 
-    void      damaged(AndroidSalFrame *frame, const Rectangle &rRect);
+    void      damaged(AndroidSalFrame *frame);
 protected:
     virtual void DoReleaseYield( int nTimeoutMS );
-    Region maRedrawRegion;
     bool   mbQueueReDraw;
 };
 
