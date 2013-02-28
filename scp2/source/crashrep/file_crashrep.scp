@@ -33,12 +33,7 @@ File gid_Brand_File_Bin_Crashreport
     BIN_FILE_BODY;
     Name = EXENAME(crashrep);
     Dir = gid_Brand_Dir_Program;
-  #ifdef WNT
-    FileDescription = "%PRODUCTNAME Crashreporter";
-    Styles = (PACKED, PATCH_SO_NAME);
-  #else
     Styles = (PACKED);
-  #endif
 End
 
 #ifdef WNT
