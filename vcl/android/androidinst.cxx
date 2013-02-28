@@ -236,9 +236,9 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                   nDestX * 4 /* dest pixel size */ );
             for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
             {
-                dp[x*4 + 0] = sp[x*4 + 2]; // R
+                dp[x*4 + 0] = sp[x*4 + 0]; // R
                 dp[x*4 + 1] = sp[x*4 + 1]; // G
-                dp[x*4 + 2] = sp[x*4 + 0]; // B
+                dp[x*4 + 2] = sp[x*4 + 2]; // B
                 dp[x*4 + 3] = 255; // A
             }
             break;
