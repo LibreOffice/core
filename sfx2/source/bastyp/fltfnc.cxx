@@ -110,6 +110,10 @@ using namespace ::com::sun::star::beans;
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <functional>
 
+#if defined(DBG_UTIL) && defined(WNT)
+unsigned SfxStack::nLevel = 0;
+#endif
+
 namespace
 {
     class theSfxFilterListener : public rtl::Static<SfxFilterListener, theSfxFilterListener> {};
