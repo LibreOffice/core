@@ -9,17 +9,14 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/idl))
 
-define odk_idl
-odkcommon_ZIPLIST += $(subst $(SRCDIR)/$(1)/,idl/,$(shell find $(SRCDIR)/$(1)/com -type f))
-$(call gb_CustomTarget_get_target,odk/odkcommon/idl) : $(odk_WORKDIR)/idl.$(1).done
-$(odk_WORKDIR)/idl.$(1).done :
-	$$(call gb_Output_announce,$$(subst $$(WORKDIR)/,,$$@),build,CPY,1)
+odkcommon_ZIPLIST += $(subst $(SRCDIR)/udkapi/,idl/,$(shell find $(SRCDIR)/udkapi/com -type f))
+odkcommon_ZIPLIST += $(subst $(SRCDIR)/offapi/,idl/,$(shell find $(SRCDIR)/offapi/com -type f))
+
+$(call gb_CustomTarget_get_target,odk/odkcommon/idl) :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CPY,1)
 	mkdir -p $(odk_WORKDIR)/idl
-	cp -rf $(SRCDIR)/$(1)/com $(odk_WORKDIR)/idl
-	touch $$@
-
-endef
-
-$(foreach api,udkapi offapi,$(eval $(call odk_idl,$(api))))
+	cp -rf $(SRCDIR)/udkapi/com $(odk_WORKDIR)/idl
+	cp -rf $(SRCDIR)/offapi/com $(odk_WORKDIR)/idl
+	touch $@
 
 # vim: set noet sw=4 ts=4:
