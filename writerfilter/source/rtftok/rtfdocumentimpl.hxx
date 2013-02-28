@@ -179,6 +179,7 @@ namespace writerfilter {
             DESTINATION_MBOX,
             DESTINATION_MEQARR,
             DESTINATION_UPR,
+            DESTINATION_LFOLEVEL,
         };
 
         enum RTFBorderState
