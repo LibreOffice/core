@@ -37,7 +37,6 @@
 
 #include <boost/scoped_array.hpp>
 
-
 using namespace ::com::sun::star;
 
 namespace vclcanvas
@@ -471,7 +470,7 @@ namespace vclcanvas
         return OUString( IMPLEMENTATION_NAME );
     }
 
-    sal_Bool SAL_CALL TextLayout::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
+    sal_Bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
         return ServiceName == SERVICE_NAME;
     }

@@ -40,7 +40,6 @@
 #include "canvas.hxx"
 #include "windowoutdevholder.hxx"
 
-
 using namespace ::com::sun::star;
 
 namespace vclcanvas
@@ -101,7 +100,7 @@ namespace vclcanvas
         OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
         if( !pOutDev )
             throw lang::NoSupportException(
-                ::rtl::OUString( "Passed OutDev invalid!" ),
+                OUString( "Passed OutDev invalid!" ),
                 NULL);
 
         OutDevProviderSharedPtr pOutdevProvider( new OutDevHolder(*pOutDev) );
@@ -131,9 +130,9 @@ namespace vclcanvas
         CanvasBaseT::disposeThis();
     }
 
-    ::rtl::OUString SAL_CALL Canvas::getServiceName(  ) throw (::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL Canvas::getServiceName(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        return ::rtl::OUString( CANVAS_SERVICE_NAME );
+        return OUString( CANVAS_SERVICE_NAME );
     }
 
     bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,

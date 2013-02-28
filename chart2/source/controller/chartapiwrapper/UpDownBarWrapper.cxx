@@ -174,7 +174,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getProperty
 {
     return *StaticUpDownBarWrapperInfo::get();
 }
-void SAL_CALL UpDownBarWrapper::setPropertyValue( const ::rtl::OUString& rPropertyName, const uno::Any& rValue )
+void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Reference< beans::XPropertySet > xPropSet(0);
@@ -196,7 +196,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValue( const ::rtl::OUString& rProper
     if(xPropSet.is())
         xPropSet->setPropertyValue( rPropertyName, rValue );
 }
-uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const ::rtl::OUString& rPropertyName )
+uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -222,22 +222,22 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const ::rtl::OUString& rPr
     return aRet;
 }
 
-void SAL_CALL UpDownBarWrapper::addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
+void SAL_CALL UpDownBarWrapper::addPropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
+void SAL_CALL UpDownBarWrapper::removePropertyChangeListener( const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::addVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL UpDownBarWrapper::addVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
@@ -245,13 +245,13 @@ void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const ::rtl::OUStr
 
 //XMultiPropertySet
 //getPropertySetInfo() already declared in XPropertySet
-void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
+void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
                     throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
-        ::rtl::OUString aPropertyName( rNameSeq[nN] );
+        OUString aPropertyName( rNameSeq[nN] );
         try
         {
             this->setPropertyValue( aPropertyName, rValueSeq[nN] );
@@ -263,7 +263,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< ::rtl::O
     }
     //todo: store unknown properties elsewhere
 }
-uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq )
+uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const uno::Sequence< OUString >& rNameSeq )
                     throw (uno::RuntimeException)
 {
     Sequence< Any > aRetSeq;
@@ -272,13 +272,13 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const un
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            ::rtl::OUString aPropertyName( rNameSeq[nN] );
+            OUString aPropertyName( rNameSeq[nN] );
             aRetSeq[nN] = this->getPropertyValue( aPropertyName );
         }
     }
     return aRetSeq;
 }
-void SAL_CALL UpDownBarWrapper::addPropertiesChangeListener( const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void SAL_CALL UpDownBarWrapper::addPropertiesChangeListener( const uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
@@ -288,14 +288,14 @@ void SAL_CALL UpDownBarWrapper::removePropertiesChangeListener( const uno::Refer
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
 //XPropertyState
-beans::PropertyState SAL_CALL UpDownBarWrapper::getPropertyState( const ::rtl::OUString& rPropertyName )
+beans::PropertyState SAL_CALL UpDownBarWrapper::getPropertyState( const OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     uno::Any aDefault( this->getPropertyDefault( rPropertyName ) );
@@ -306,7 +306,7 @@ beans::PropertyState SAL_CALL UpDownBarWrapper::getPropertyState( const ::rtl::O
 
     return beans::PropertyState_DIRECT_VALUE;
 }
-uno::Sequence< beans::PropertyState > SAL_CALL UpDownBarWrapper::getPropertyStates( const uno::Sequence< ::rtl::OUString >& rNameSeq )
+uno::Sequence< beans::PropertyState > SAL_CALL UpDownBarWrapper::getPropertyStates( const uno::Sequence< OUString >& rNameSeq )
                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     Sequence< beans::PropertyState > aRetSeq;
@@ -315,19 +315,19 @@ uno::Sequence< beans::PropertyState > SAL_CALL UpDownBarWrapper::getPropertyStat
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            ::rtl::OUString aPropertyName( rNameSeq[nN] );
+            OUString aPropertyName( rNameSeq[nN] );
             aRetSeq[nN] = this->getPropertyState( aPropertyName );
         }
     }
     return aRetSeq;
 }
-void SAL_CALL UpDownBarWrapper::setPropertyToDefault( const ::rtl::OUString& rPropertyName )
+void SAL_CALL UpDownBarWrapper::setPropertyToDefault( const OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     this->setPropertyValue( rPropertyName, this->getPropertyDefault(rPropertyName) );
 }
 
-uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const ::rtl::OUString& rPropertyName )
+uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticUpDownBarWrapperDefaults::get();
@@ -345,20 +345,20 @@ void SAL_CALL UpDownBarWrapper::setAllPropertiesToDefault(  )
     const Sequence< beans::Property >& rPropSeq = *StaticUpDownBarWrapperPropertyArray::get();
     for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
     {
-        ::rtl::OUString aPropertyName( rPropSeq[nN].Name );
+        OUString aPropertyName( rPropSeq[nN].Name );
         this->setPropertyToDefault( aPropertyName );
     }
 }
-void SAL_CALL UpDownBarWrapper::setPropertiesToDefault( const uno::Sequence< ::rtl::OUString >& rNameSeq )
+void SAL_CALL UpDownBarWrapper::setPropertiesToDefault( const uno::Sequence< OUString >& rNameSeq )
                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
     {
-        ::rtl::OUString aPropertyName( rNameSeq[nN] );
+        OUString aPropertyName( rNameSeq[nN] );
         this->setPropertyToDefault( aPropertyName );
     }
 }
-uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const uno::Sequence< ::rtl::OUString >& rNameSeq )
+uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Sequence< Any > aRetSeq;
@@ -367,7 +367,7 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            ::rtl::OUString aPropertyName( rNameSeq[nN] );
+            OUString aPropertyName( rNameSeq[nN] );
             aRetSeq[nN] = this->getPropertyDefault( aPropertyName );
         }
     }
@@ -380,10 +380,10 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
 Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 4 );
-    aServices[ 0 ] = ::rtl::OUString("com.sun.star.chart.ChartArea");
-    aServices[ 1 ] = ::rtl::OUString("com.sun.star.drawing.LineProperties");
-    aServices[ 2 ] = ::rtl::OUString("com.sun.star.drawing.FillProperties");
-    aServices[ 3 ] = ::rtl::OUString("com.sun.star.xml.UserDefinedAttributesSupplier");
+    aServices[ 0 ] = OUString("com.sun.star.chart.ChartArea");
+    aServices[ 1 ] = OUString("com.sun.star.drawing.LineProperties");
+    aServices[ 2 ] = OUString("com.sun.star.drawing.FillProperties");
+    aServices[ 3 ] = OUString("com.sun.star.xml.UserDefinedAttributesSupplier");
 
     return aServices;
 }

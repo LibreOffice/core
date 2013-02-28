@@ -102,8 +102,8 @@ enum eServiceType
     SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER
 };
 
-typedef ::std::map< ::rtl::OUString, enum eServiceType > tServiceNameMap;
-typedef ::comphelper::MakeMap< ::rtl::OUString, enum eServiceType > tMakeServiceNameMap;
+typedef ::std::map< OUString, enum eServiceType > tServiceNameMap;
+typedef ::comphelper::MakeMap< OUString, enum eServiceType > tMakeServiceNameMap;
 
 tServiceNameMap & lcl_getStaticServiceNameMap()
 {
@@ -197,7 +197,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "BaseDiagram",
                   PROP_DOCUMENT_BASEDIAGRAM,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
@@ -312,7 +312,7 @@ void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOu
     m_aOuterValue = rOuterValue;
     bool bNewValue = bLabelsInFirstRow;
 
-    ::rtl::OUString aRangeString;
+    OUString aRangeString;
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
@@ -338,7 +338,7 @@ void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOu
 Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    ::rtl::OUString aRangeString;
+    OUString aRangeString;
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
@@ -413,7 +413,7 @@ void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& 
     m_aOuterValue = rOuterValue;
     bool bNewValue = bLabelsInFirstRow;
 
-    ::rtl::OUString aRangeString;
+    OUString aRangeString;
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
@@ -439,7 +439,7 @@ void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& 
 Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    ::rtl::OUString aRangeString;
+    OUString aRangeString;
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
@@ -858,7 +858,7 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
 
 // ____ XModel ____
 sal_Bool SAL_CALL ChartDocumentWrapper::attachResource(
-    const ::rtl::OUString& URL,
+    const OUString& URL,
     const Sequence< beans::PropertyValue >& Arguments )
     throw (uno::RuntimeException)
 {
@@ -868,13 +868,13 @@ sal_Bool SAL_CALL ChartDocumentWrapper::attachResource(
     return sal_False;
 }
 
-::rtl::OUString SAL_CALL ChartDocumentWrapper::getURL()
+OUString SAL_CALL ChartDocumentWrapper::getURL()
     throw (uno::RuntimeException)
 {
     Reference< frame::XModel > xModel( m_spChart2ModelContact->getChartModel() );
     if( xModel.is() )
         return xModel->getURL();
-    return ::rtl::OUString();
+    return OUString();
 }
 
 Sequence< beans::PropertyValue > SAL_CALL ChartDocumentWrapper::getArgs()
@@ -1039,7 +1039,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
     }
 }
 
-void ChartDocumentWrapper::setBaseDiagram( const rtl::OUString& rBaseDiagram )
+void ChartDocumentWrapper::setBaseDiagram( const OUString& rBaseDiagram )
 {
     ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     m_aBaseDiagram = rBaseDiagram;
@@ -1049,7 +1049,7 @@ void ChartDocumentWrapper::setBaseDiagram( const rtl::OUString& rBaseDiagram )
         this->setDiagram( xDiagram );
 }
 
-rtl::OUString ChartDocumentWrapper::getBaseDiagram() const
+OUString ChartDocumentWrapper::getBaseDiagram() const
 {
     return m_aBaseDiagram;
 }
@@ -1162,7 +1162,7 @@ uno::Reference< drawing::XDrawPage > ChartDocumentWrapper::impl_getDrawPage() co
 
 // ____ XMultiServiceFactory ____
 uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
-    const ::rtl::OUString& aServiceSpecifier )
+    const OUString& aServiceSpecifier )
     throw (uno::Exception,
            uno::RuntimeException)
 {
@@ -1438,7 +1438,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceWithArguments(
-    const ::rtl::OUString& ServiceSpecifier,
+    const OUString& ServiceSpecifier,
     const uno::Sequence< uno::Any >& Arguments )
     throw (uno::Exception,
            uno::RuntimeException)
@@ -1449,11 +1449,11 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceW
     return createInstance( ServiceSpecifier );
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceNames()
+uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceNames()
     throw (uno::RuntimeException)
 {
     tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
-    uno::Sequence< ::rtl::OUString > aResult( rMap.size());
+    uno::Sequence< OUString > aResult( rMap.size());
 
     ::std::transform( rMap.begin(), rMap.end(),
                       aResult.getArray(),
@@ -1556,9 +1556,9 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
 
 // ================================================================================
 
-uno::Sequence< ::rtl::OUString > ChartDocumentWrapper::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ChartDocumentWrapper::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 4 );
+    uno::Sequence< OUString > aServices( 4 );
     aServices[ 0 ] = "com.sun.star.chart.ChartDocument";
     aServices[ 1 ] = CHART_CHARTAPIWRAPPER_SERVICE_NAME;
     aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";

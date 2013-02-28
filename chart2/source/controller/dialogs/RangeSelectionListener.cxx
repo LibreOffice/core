@@ -31,7 +31,7 @@ namespace chart
 
 RangeSelectionListener::RangeSelectionListener(
     RangeSelectionListenerParent & rParent,
-    const ::rtl::OUString & rInitialRange,
+    const OUString & rInitialRange,
     const Reference< frame::XModel >& xModelToLockController ) :
         m_rParent( rParent ),
         m_aRange( rInitialRange ),

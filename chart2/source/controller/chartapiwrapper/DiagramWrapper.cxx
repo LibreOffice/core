@@ -459,7 +459,7 @@ bool lcl_isXYChart( const Reference< chart2::XDiagram > xDiagram )
     Reference< chart2::XChartType > xChartType( ::chart::DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
     if( xChartType.is() )
     {
-        rtl::OUString aChartType( xChartType->getChartType() );
+        OUString aChartType( xChartType->getChartType() );
         if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
             bRet = true;
     }
@@ -497,11 +497,11 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "Area" "StackedArea" "PercentStackedArea" "ThreeDArea"
         // "StackedThreeDArea" "PercentStackedThreeDArea"
         if( aName.indexOf( "Area" ) != -1 )
-            return rtl::OUString("com.sun.star.chart.AreaDiagram");
+            return OUString("com.sun.star.chart.AreaDiagram");
 
         // "Pie" "PieAllExploded" "ThreeDPie" "ThreeDPieAllExploded"
         if( aName.indexOf( "Pie" ) != -1 )
-            return rtl::OUString("com.sun.star.chart.PieDiagram");
+            return OUString("com.sun.star.chart.PieDiagram");
 
         // "Column" "StackedColumn" "PercentStackedColumn" "ThreeDColumnDeep"
         // "ThreeDColumnFlat" "StackedThreeDColumnFlat"
@@ -510,33 +510,33 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "StackedThreeDBarFlat" "PercentStackedThreeDBarFlat" "ColumnWithLine"
         // "StackedColumnWithLine"
         if( aName.indexOf( "Column" ) != -1 || aName.indexOf( "Bar" ) != -1 )
-            return rtl::OUString( "com.sun.star.chart.BarDiagram" );
+            return OUString( "com.sun.star.chart.BarDiagram" );
 
         // "Donut" "DonutAllExploded" "ThreeDDonut" "ThreeDDonutAllExploded"
         if( aName.indexOf( "Donut" ) != -1 )
-            return rtl::OUString( "com.sun.star.chart.DonutDiagram" );
+            return OUString( "com.sun.star.chart.DonutDiagram" );
 
         // "ScatterLineSymbol" "ScatterLine" "ScatterSymbol" "ThreeDScatter"
         if( aName.indexOf( "Scatter" ) != -1 )
-            return rtl::OUString( "com.sun.star.chart.XYDiagram" );
+            return OUString( "com.sun.star.chart.XYDiagram" );
 
         // "FilledNet" "StackedFilledNet" "PercentStackedFilledNet"
         if( aName.indexOf( "FilledNet" ) != -1 )
-            return rtl::OUString( "com.sun.star.chart.FilledNetDiagram" );
+            return OUString( "com.sun.star.chart.FilledNetDiagram" );
 
         // "Net" "NetSymbol" "NetLine" "StackedNet" "StackedNetSymbol"
         // "StackedNetLine" "PercentStackedNet" "PercentStackedNetSymbol"
         // "PercentStackedNetLine"
         if( aName.indexOf( "Net" ) != -1 )
-            return rtl::OUString( "com.sun.star.chart.NetDiagram" );
+            return OUString( "com.sun.star.chart.NetDiagram" );
 
         // "StockLowHighClose" "StockOpenLowHighClose" "StockVolumeLowHighClose"
         // "StockVolumeOpenLowHighClose"
         if( aName.indexOf( "Stock" ) != -1 )
-            return rtl::OUString( "com.sun.star.chart.StockDiagram" );
+            return OUString( "com.sun.star.chart.StockDiagram" );
 
         if( aName.indexOf( "Bubble" ) != -1 )
-            return rtl::OUString( "com.sun.star.chart.BubbleDiagram" );
+            return OUString( "com.sun.star.chart.BubbleDiagram" );
 
         // Note: this must be checked after Bar, Net and Scatter
 
@@ -545,7 +545,7 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "PercentStackedLineSymbol" "ThreeDLine" "StackedThreeDLine"
         // "PercentStackedThreeDLine" "ThreeDLineDeep"
         if( aName.indexOf( "Line" ) != -1 || aName.indexOf( "Symbol" ) != -1 )
-            return rtl::OUString( "com.sun.star.chart.LineDiagram" );
+            return OUString( "com.sun.star.chart.LineDiagram" );
 
         OSL_FAIL( "unknown template" );
     }
@@ -553,7 +553,7 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
     return OUString();
 }
 
-typedef ::comphelper::MakeMap< ::rtl::OUString, ::rtl::OUString > tMakeStringStringMap;
+typedef ::comphelper::MakeMap< OUString, OUString > tMakeStringStringMap;
 
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
@@ -769,7 +769,7 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 OUString SAL_CALL DiagramWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
-    return rtl::OUString( "com.sun.star.chart.Diagram" );
+    return OUString( "com.sun.star.chart.Diagram" );
 }
 
 // ____ XDiagramPositioning ____
@@ -1221,7 +1221,7 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
 
     bool bNewUseColumns = eChartDataRowSource == ::com::sun::star::chart::ChartDataRowSource_COLUMNS;
 
-    ::rtl::OUString aRangeString;
+    OUString aRangeString;
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
@@ -1243,7 +1243,7 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
 Any WrappedDataRowSourceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    ::rtl::OUString aRangeString;
+    OUString aRangeString;
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;

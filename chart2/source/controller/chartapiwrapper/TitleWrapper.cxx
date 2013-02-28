@@ -95,7 +95,7 @@ Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPrope
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
 
-        ::rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
         {
             aBuf.append( aStrings[ i ]->getString());
@@ -107,7 +107,7 @@ Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPrope
 Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    return uno::makeAny( rtl::OUString() );//default title is a empty String
+    return uno::makeAny( OUString() );//default title is a empty String
 }
 
 //-----------------------------------------------------------------------------
@@ -148,7 +148,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "String",
                   PROP_TITLE_STRING,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -261,7 +261,7 @@ void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
 OUString SAL_CALL TitleWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
-    return rtl::OUString( "com.sun.star.chart.ChartTitle" );
+    return OUString( "com.sun.star.chart.ChartTitle" );
 }
 
 // ____ XComponent ____

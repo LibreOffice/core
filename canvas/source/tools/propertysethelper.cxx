@@ -85,7 +85,7 @@ namespace canvas
         initProperties( aMerged );
     }
 
-    bool PropertySetHelper::isPropertyName( const ::rtl::OUString& aPropertyName ) const
+    bool PropertySetHelper::isPropertyName( const OUString& aPropertyName ) const
     {
         if( !mpMap.get() )
             return false;
@@ -101,7 +101,7 @@ namespace canvas
         return uno::Reference< beans::XPropertySetInfo >();
     }
 
-    void PropertySetHelper::setPropertyValue( const ::rtl::OUString& aPropertyName,
+    void PropertySetHelper::setPropertyValue( const OUString& aPropertyName,
                                               const uno::Any&        aValue )
     {
         Callbacks aCallbacks;
@@ -118,7 +118,7 @@ namespace canvas
         aCallbacks.setter(aValue);
     }
 
-    uno::Any PropertySetHelper::getPropertyValue( const ::rtl::OUString& aPropertyName ) const
+    uno::Any PropertySetHelper::getPropertyValue( const OUString& aPropertyName ) const
     {
         Callbacks aCallbacks;
         if( !mpMap.get() ||
@@ -136,7 +136,7 @@ namespace canvas
         return uno::Any();
     }
 
-    void PropertySetHelper::addPropertyChangeListener( const ::rtl::OUString&                                  aPropertyName,
+    void PropertySetHelper::addPropertyChangeListener( const OUString&                                  aPropertyName,
                                                        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     {
         // check validity of property, but otherwise ignore the
@@ -145,13 +145,13 @@ namespace canvas
             throwUnknown( aPropertyName );
     }
 
-    void PropertySetHelper::removePropertyChangeListener( const ::rtl::OUString&                                  /*aPropertyName*/,
+    void PropertySetHelper::removePropertyChangeListener( const OUString&                                  /*aPropertyName*/,
                                                           const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     {
         // ignore request, no listener added in the first place
     }
 
-    void PropertySetHelper::addVetoableChangeListener( const ::rtl::OUString&                                  aPropertyName,
+    void PropertySetHelper::addVetoableChangeListener( const OUString&                                  aPropertyName,
                                                        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     {
         // check validity of property, but otherwise ignore the
@@ -160,7 +160,7 @@ namespace canvas
             throwUnknown( aPropertyName );
     }
 
-    void PropertySetHelper::removeVetoableChangeListener( const ::rtl::OUString&                                  /*aPropertyName*/,
+    void PropertySetHelper::removeVetoableChangeListener( const OUString&                                  /*aPropertyName*/,
                                                           const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     {
         // ignore request, no listener added in the first place

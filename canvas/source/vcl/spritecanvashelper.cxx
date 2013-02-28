@@ -36,7 +36,6 @@
 #include "spritecanvashelper.hxx"
 #include "canvascustomsprite.hxx"
 
-
 using namespace ::com::sun::star;
 
 #define FPS_BOUNDS Rectangle(0,0,130,90)
@@ -158,7 +157,7 @@ namespace vclcanvas
         }
 
         void renderInfoText( OutputDevice&          rOutDev,
-                             const ::rtl::OUString& rStr,
+                             const OUString& rStr,
                              const Point&           rPos )
         {
             Font aVCLFont;
@@ -641,8 +640,8 @@ namespace vclcanvas
             sal_Int32 nCount(0);
 
             mpRedrawManager->forEachSprite( makeAdder(nCount,sal_Int32(1)) );
-            ::rtl::OUString text(
-                ::rtl::OUString::valueOf(
+            OUString text(
+                OUString::valueOf(
                     // disambiguate overload...
                     static_cast<sal_Int64>(nCount) ) );
 

@@ -53,13 +53,13 @@ ChartTypeUnoDlg::~ChartTypeUnoDlg()
 //-------------------------------------------------------------------------
 // lang::XServiceInfo
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ChartTypeUnoDlg::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ChartTypeUnoDlg::getImplementationName() throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString ChartTypeUnoDlg::getImplementationName_Static() throw(uno::RuntimeException)
+OUString ChartTypeUnoDlg::getImplementationName_Static() throw(uno::RuntimeException)
 {
     return CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME;
 }
@@ -72,9 +72,9 @@ ChartTypeUnoDlg::~ChartTypeUnoDlg()
 
 //-------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > ChartTypeUnoDlg::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ChartTypeUnoDlg::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
+    uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = CHART_TYPE_DIALOG_SERVICE_NAME;
     return aSNS;
 }

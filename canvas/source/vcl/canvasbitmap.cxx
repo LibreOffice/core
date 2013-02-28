@@ -79,7 +79,7 @@ namespace vclcanvas
         return OUString( IMPLEMENTATION_NAME );
     }
 
-    sal_Bool SAL_CALL CanvasBitmap::supportsService( const ::rtl::OUString& ServiceName ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
     {
         return ServiceName == SERVICE_NAME;
     }
