@@ -39,6 +39,7 @@
 #include "TableConnectionData.hxx"
 #include "TableFieldDescription.hxx"
 #include "UITools.hxx"
+#include "QueryPropertiesDialog.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -551,6 +552,9 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             if( aReturn.bEnabled )
                 aReturn.aValue = makeAny( m_nLimit );
             break;
+        case SID_QUERY_PROP_DLG:
+            aReturn.bEnabled = m_bGraphicalDesign;
+            break;
         case ID_BROWSER_QUERY_EXECUTE:
             aReturn.bEnabled = sal_True;
             break;
@@ -726,6 +730,10 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 aArgs[0].Value >>= m_nLimit;
                 setModified(sal_True);
             }
+            break;
+        case SID_QUERY_PROP_DLG:
+            grabFocusFromLimitBox(*this);
+            execute_QueryPropDlg();
             break;
         case ID_BROWSER_QUERY_EXECUTE:
             grabFocusFromLimitBox(*this);
@@ -1160,6 +1168,7 @@ void OQueryController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBAddRelation",     SID_RELATION_ADD_RELATION,  CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:DBQueryPreview",    SID_DB_QUERY_PREVIEW,       CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBLimit",           SID_QUERY_LIMIT,            CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:DBQueryPropertiesDialog", SID_QUERY_PROP_DLG,         CommandGroup::FORMAT );
 
 #if OSL_DEBUG_LEVEL > 1
     implDescribeSupportedFeature( ".uno:DBShowParseTree",   ID_EDIT_QUERY_SQL );
@@ -1252,6 +1261,20 @@ void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollectio
     m_nSplitPos = o_rViewSettings.getOrDefault( "SplitterPosition", m_nSplitPos );
     m_nVisibleRows = o_rViewSettings.getOrDefault( "VisibleRows", m_nVisibleRows );
     m_aFieldInformation = o_rViewSettings.getOrDefault( "Fields", m_aFieldInformation );
+}
+// -----------------------------------------------------------------------------
+void OQueryController::execute_QueryPropDlg()
+{
+    QueryPropertiesDialog aQueryPropDlg(
+        getContainer(), m_bDistinct, m_nLimit );
+
+    if( aQueryPropDlg.Execute() == RET_OK )
+    {
+        m_bDistinct = aQueryPropDlg.getDistinct();
+        m_nLimit = aQueryPropDlg.getLimit();
+        InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
+        InvalidateFeature( SID_QUERY_LIMIT, 0, sal_True );
+    }
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
