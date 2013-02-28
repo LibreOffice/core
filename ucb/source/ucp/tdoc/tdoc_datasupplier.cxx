@@ -107,14 +107,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
 
 }
 
-//=========================================================================
-//=========================================================================
-//
 // DataSupplier Implementation.
-//
-//=========================================================================
-//=========================================================================
-
 ResultSetDataSupplier::ResultSetDataSupplier(
                 const uno::Reference< uno::XComponentContext >& rxContext,
                 const rtl::Reference< Content >& rContent,
@@ -123,14 +116,12 @@ ResultSetDataSupplier::ResultSetDataSupplier(
 {
 }
 
-//=========================================================================
 // virtual
 ResultSetDataSupplier::~ResultSetDataSupplier()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
 // virtual
 rtl::OUString
 ResultSetDataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
@@ -155,7 +146,6 @@ ResultSetDataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     return rtl::OUString();
 }
 
-//=========================================================================
 // virtual
 uno::Reference< ucb::XContentIdentifier >
 ResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
@@ -184,7 +174,6 @@ ResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContentIdentifier >();
 }
 
-//=========================================================================
 // virtual
 uno::Reference< ucb::XContent >
 ResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
@@ -221,7 +210,6 @@ ResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContent >();
 }
 
-//=========================================================================
 // virtual
 sal_Bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 {
@@ -292,7 +280,6 @@ sal_Bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     return bFound;
 }
 
-//=========================================================================
 // virtual
 sal_uInt32 ResultSetDataSupplier::totalCount()
 {
@@ -343,21 +330,18 @@ sal_uInt32 ResultSetDataSupplier::totalCount()
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
 // virtual
 sal_uInt32 ResultSetDataSupplier::currentCount()
 {
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
 // virtual
 sal_Bool ResultSetDataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }
 
-//=========================================================================
 // virtual
 uno::Reference< sdbc::XRow >
 ResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
@@ -388,7 +372,6 @@ ResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
     return uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
 // virtual
 void ResultSetDataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
@@ -398,13 +381,11 @@ void ResultSetDataSupplier::releasePropertyValues( sal_uInt32 nIndex )
         m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
 // virtual
 void ResultSetDataSupplier::close()
 {
 }
 
-//=========================================================================
 // virtual
 void ResultSetDataSupplier::validate()
     throw( ucb::ResultSetException )
@@ -413,7 +394,6 @@ void ResultSetDataSupplier::validate()
         throw ucb::ResultSetException();
 }
 
-//=========================================================================
 bool ResultSetDataSupplier::queryNamesOfChildren()
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -440,7 +420,6 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
     return true;
 }
 
-//=========================================================================
 ::rtl::OUString
 ResultSetDataSupplier::assembleChildURL( const ::rtl::OUString& aName )
 {
