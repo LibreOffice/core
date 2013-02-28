@@ -40,6 +40,8 @@
 #include <vcl/toolbox.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -63,6 +65,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::document;
 
 static bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
 
@@ -674,9 +677,13 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 {
     if (!mbIsSaveMode)
     {
-        uno::Sequence< PropertyValue > aArgs(1);
+        uno::Sequence< PropertyValue > aArgs(3);
         aArgs[0].Name = "AsTemplate";
-        aArgs[0].Value <<= sal_True;
+        aArgs[0].Value <<= sal_False;
+        aArgs[1].Name = "MacroExecutionMode";
+        aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+        aArgs[2].Name = "UpdateDocMode";
+        aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
 
         TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
 
@@ -974,9 +981,13 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
 
 void SfxTemplateManagerDlg::OnTemplateEdit ()
 {
-    uno::Sequence< PropertyValue > aArgs(1);
+    uno::Sequence< PropertyValue > aArgs(3);
     aArgs[0].Name = "AsTemplate";
     aArgs[0].Value <<= sal_False;
+    aArgs[1].Name = "MacroExecutionMode";
+    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+    aArgs[2].Name = "UpdateDocMode";
+    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
 
     uno::Reference< XStorable > xStorable;
     std::set<const ThumbnailViewItem*>::const_iterator pIter;
