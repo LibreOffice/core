@@ -13,6 +13,10 @@ $(eval $(call gb_ExternalProject_use_unpacked,xmlsec,xmlsec))
 
 $(eval $(call gb_ExternalProject_use_external,xmlsec,libxml2))
 
+$(eval $(call gb_ExternalProject_use_external,xmlsec,nss3))
+
+$(eval $(call gb_ExternalProject_use_external,xmlsec,openssl))
+
 $(eval $(call gb_ExternalProject_register_targets,xmlsec,\
 	build \
 ))

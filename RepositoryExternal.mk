@@ -2283,6 +2283,8 @@ endef
 endif # GUIBASE=unx
 
 
+gb_ExternalProject__use_nss3:=
+
 ifeq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 gb_LinkTarget__use_nss3:=
@@ -2355,6 +2357,16 @@ define gb_LinkTarget__use_ssl3
 $(call gb_LinkTarget_use_package,$(1),nss)
 $(call gb_LinkTarget_use_libraries,$(1),\
 	ssl3 \
+)
+
+endef
+
+define gb_ExternalProject__use_nss3
+$(call gb_ExternalProject_use_package,$(1),nss)
+$(call gb_ExternalProject_use_libraries,$(1),\
+	nspr4 \
+	nss3 \
+	smime3 \
 )
 
 endef
