@@ -56,7 +56,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-
 // never import whole leaf namespaces, since this will result in
 // absolutely weird effects during (Koenig) name lookup
 using namespace ::com::sun::star;
@@ -79,7 +78,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString( "Canvas test" ) );
+            SetText( OUString( "Canvas test" ) );
             SetSizePixel( Size( 600, 450 ) );
             EnablePaint( true );
             Show();
@@ -139,8 +138,8 @@ class DemoRenderer
 
             lang::Locale aLocale;
             rendering::FontInfo aFontInfo;
-            aFontInfo.FamilyName = ::rtl::OUString( "Swiss" );
-            aFontInfo.StyleName = ::rtl::OUString( "SansSerif" );
+            aFontInfo.FamilyName = OUString( "Swiss" );
+            aFontInfo.StyleName = OUString( "SansSerif" );
             geometry::Matrix2D aFontMatrix( 1, 0,
                                             0, 1 );
             rendering::FontRequest aFontRequest( aFontInfo, 12.0, 0.0, aLocale );
@@ -164,10 +163,10 @@ class DemoRenderer
                                     maViewState, maRenderState );
         }
 
-        void drawStringAt( ::rtl::OString aString, double x, double y )
+        void drawStringAt( OString aString, double x, double y )
         {
             rendering::StringContext aText;
-            aText.Text = ::rtl::OStringToOUString( aString, RTL_TEXTENCODING_UTF8 );
+            aText.Text = OStringToOUString( aString, RTL_TEXTENCODING_UTF8 );
             aText.StartPosition = 0;
             aText.Length = aString.getLength();
             rendering::RenderState aRenderState( maRenderState );
@@ -290,7 +289,7 @@ class DemoRenderer
             //mxCanvas->drawPolyPolygon( xPP, maViewState, aRenderState );
         }
 
-        void drawTitle( rtl::OString aTitle )
+        void drawTitle( OString aTitle )
         {
             // FIXME: text anchoring to be done
             double nStringWidth = aTitle.getLength() * 8.0;
@@ -301,7 +300,7 @@ class DemoRenderer
         {
             rendering::RenderState maOldRenderState = maRenderState; // push
 
-            drawTitle( ::rtl::OString( "Rectangles" ) );
+            drawTitle( OString( "Rectangles" ) );
 
             drawRect( Rectangle( 20, 30, 70, 60 ), maColorRed, 8 );
             // color mediumseagreen, stipple fill, outline black
@@ -317,7 +316,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width(), 0.0 );
 
-            drawTitle( ::rtl::OString( "Ellipses" ) );
+            drawTitle( OString( "Ellipses" ) );
 
             const basegfx::B2DPoint aCenter( maBox.Width()*.5,
                                              maBox.Height()*.5 );
@@ -348,11 +347,11 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width() * 2.0, 0.0 );
 
-            drawTitle( ::rtl::OString( "Text" ) );
+            drawTitle( OString( "Text" ) );
 
             translate( 0.0,
                        maBox.Height() * .5 );
-            drawTitle( ::rtl::OString( "This is lame" ) );
+            drawTitle( OString( "This is lame" ) );
 
             maRenderState = maOldRenderState; // pop
         }
@@ -362,7 +361,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( 0.0, maBox.Height() );
 
-            drawTitle( ::rtl::OString( "Images" ) );
+            drawTitle( OString( "Images" ) );
 
             uno::Reference< rendering::XBitmap > xBitmap(mxCanvas, uno::UNO_QUERY);
 
@@ -395,7 +394,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width(), maBox.Height() );
 
-            drawTitle( ::rtl::OString( "Lines" ) );
+            drawTitle( OString( "Lines" ) );
 
             drawPolishDiamond( 70.0, 80.0 );
             drawHilbert( 140.0, 140.0 );
@@ -408,7 +407,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width() * 2.0, maBox.Height() );
 
-            drawTitle( ::rtl::OString( "Curves" ) );
+            drawTitle( OString( "Curves" ) );
 
             translate( maBox.Width() * .5, maBox.Height() * .5 );
 
@@ -457,7 +456,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( 0.0, maBox.Height() * 2.0 );
 
-            drawTitle( ::rtl::OString( "Arcs" ) );
+            drawTitle( OString( "Arcs" ) );
 
 
             //begin hacks
@@ -536,7 +535,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width() * 1.0, maBox.Height() * 2.0 );
 
-            drawTitle( ::rtl::OString( "Polgyons" ) );
+            drawTitle( OString( "Polgyons" ) );
 
             int sides= 3;
             for (int i= 1; i <= 4; i++)
@@ -553,7 +552,7 @@ class DemoRenderer
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( maBox.Width() * 2.0, maBox.Height() * 2.0 );
 
-            drawTitle( ::rtl::OString( "Widgets" ) );
+            drawTitle( OString( "Widgets" ) );
 
             maRenderState = maOldRenderState; // pop
         }
@@ -620,7 +619,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
     catch (const uno::Exception &e)
     {
         fprintf( stderr, "Exception '%s' thrown\n" ,
-                 ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                 OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
 
@@ -641,7 +640,7 @@ void DemoApp::Main()
 
     for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
     {
-        ::rtl::OUString aParam = GetCommandLineParam( i );
+        OUString aParam = GetCommandLineParam( i );
 
         if( aParam == "--help" || aParam == "-h" )
             bHelp = true;

@@ -176,13 +176,13 @@ namespace
 
     private:
         // Ifc XServiceName
-        virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException)
+        virtual OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException)
         {
             return OUString( SERVICE_NAME );
         }
 
         // Ifc XSimpleCanvas
-        virtual void SAL_CALL selectFont( const ::rtl::OUString& sFontName,
+        virtual void SAL_CALL selectFont( const OUString& sFontName,
                                           double                 size,
                                           ::sal_Bool             bold,
                                           ::sal_Bool             italic ) throw (uno::RuntimeException)

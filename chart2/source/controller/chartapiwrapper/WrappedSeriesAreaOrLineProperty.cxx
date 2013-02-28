@@ -33,11 +33,11 @@ namespace wrapper
 {
 
 WrappedSeriesAreaOrLineProperty::WrappedSeriesAreaOrLineProperty(
-      const rtl::OUString& rOuterName
-    , const rtl::OUString& rInnerAreaTypeName
-    , const rtl::OUString& rInnerLineTypeName
+      const OUString& rOuterName
+    , const OUString& rInnerAreaTypeName
+    , const OUString& rInnerLineTypeName
     , DataSeriesPointWrapper* pDataSeriesPointWrapper )
-    : WrappedProperty( rOuterName, rtl::OUString() )
+    : WrappedProperty( rOuterName, OUString() )
     , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
     , m_aInnerAreaTypeName( rInnerAreaTypeName )
     , m_aInnerLineTypeName( rInnerLineTypeName )
@@ -48,7 +48,7 @@ WrappedSeriesAreaOrLineProperty::~WrappedSeriesAreaOrLineProperty()
 }
 
 //virtual
-::rtl::OUString WrappedSeriesAreaOrLineProperty::getInnerName() const
+OUString WrappedSeriesAreaOrLineProperty::getInnerName() const
 {
     if( m_pDataSeriesPointWrapper && !m_pDataSeriesPointWrapper->isSupportingAreaProperties() )
         return m_aInnerLineTypeName;

@@ -134,7 +134,7 @@ uno::Reference< chart2::data::XDataProvider > lcl_getDataProviderFromContact(
 }
 
 void lcl_ConvertRangeFromXML(
-    ::rtl::OUString & rInOutRange,
+    OUString & rInOutRange,
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     if( !rInOutRange.isEmpty())
@@ -143,14 +143,14 @@ void lcl_ConvertRangeFromXML(
             lcl_getDataProviderFromContact( spChart2ModelContact ), uno::UNO_QUERY );
         if( xConverter.is())
         {
-            ::rtl::OUString aResult = xConverter->convertRangeFromXML( rInOutRange );
+            OUString aResult = xConverter->convertRangeFromXML( rInOutRange );
             rInOutRange = aResult;
         }
     }
 }
 
 void lcl_ConvertRangeToXML(
-    ::rtl::OUString & rInOutRange,
+    OUString & rInOutRange,
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     if( !rInOutRange.isEmpty())
@@ -159,7 +159,7 @@ void lcl_ConvertRangeToXML(
             lcl_getDataProviderFromContact( spChart2ModelContact ), uno::UNO_QUERY );
         if( xConverter.is())
         {
-            ::rtl::OUString aResult = xConverter->convertRangeToXML( rInOutRange );
+            OUString aResult = xConverter->convertRangeToXML( rInOutRange );
             rInOutRange = aResult;
         }
     }
@@ -904,10 +904,10 @@ WrappedStatisticPropertySetProperty::WrappedStatisticPropertySetProperty(
     , tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< Reference< beans::XPropertySet > >(
             (ePropertySetType == PROPERTY_SET_TYPE_REGRESSION)
-            ? rtl::OUString("DataRegressionProperties")
+            ? OUString("DataRegressionProperties")
             : (ePropertySetType == PROPERTY_SET_TYPE_ERROR_BAR)
-              ? rtl::OUString("DataErrorProperties")
-              : rtl::OUString("DataMeanValueProperties")
+              ? OUString("DataErrorProperties")
+              : OUString("DataMeanValueProperties")
             , uno::Any(), spChart2ModelContact, ePropertyType  )
         , m_eType( ePropertySetType )
 {

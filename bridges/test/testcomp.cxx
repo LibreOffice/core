@@ -39,19 +39,19 @@
 #include <cppuhelper/weak.hxx>
 
 using namespace ::test;
-using namespace ::rtl;
-using namespace ::test;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::bridge;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::test::performance;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #include "testcomp.h"
 
 
 void parseCommandLine( char *argv[] ,
-                       ::rtl::OUString *pConnection , ::rtl::OUString *pProtocol ,
+                       OUString *pConnection , OUString *pProtocol ,
                        sal_Bool *pbLatency , sal_Bool *pbReverse)
 {
     sal_Int32 nArgIndex = 1;
@@ -92,7 +92,7 @@ Any OInstanceProvider::queryInterface( const  Type & aType ) throw ( RuntimeExce
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-    OInstanceProvider::getInstance( const ::rtl::OUString& sObjectName )
+    OInstanceProvider::getInstance( const OUString& sObjectName )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::uno::RuntimeException)
 {
@@ -176,7 +176,7 @@ public:
         {}
     virtual OUString SAL_CALL getString_attr() throw(::com::sun::star::uno::RuntimeException)
         { return _aDummyString; }
-    virtual void SAL_CALL setString_attr( const ::rtl::OUString& /* _attributestring */) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setString_attr( const OUString& /* _attributestring */) throw(::com::sun::star::uno::RuntimeException)
         {}
     virtual Reference< XInterface > SAL_CALL getInterface_attr() throw(::com::sun::star::uno::RuntimeException)
         { return Reference< XInterface >(); }
@@ -214,7 +214,7 @@ public:
         {}
     virtual OUString SAL_CALL getString() throw(::com::sun::star::uno::RuntimeException)
         { return _aDummyString; }
-    virtual void SAL_CALL setString( const ::rtl::OUString& /* _string */) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setString( const OUString& /* _string */) throw(::com::sun::star::uno::RuntimeException)
         {}
     virtual Reference< XInterface > SAL_CALL getInterface() throw(::com::sun::star::uno::RuntimeException)
         { return Reference< XInterface >(); }
@@ -293,7 +293,7 @@ Any OCallMe::queryInterface( const  Type & aType )  throw ( RuntimeException )
     return OWeakObject::queryInterface( aType );
 }
 
-void OCallMe::call( const ::rtl::OUString& s, sal_Int32 nToDo )
+void OCallMe::call( const OUString& s, sal_Int32 nToDo )
     throw( RuntimeException, ::test::TestBridgeException)
 {
     if( nToDo < 0 )
@@ -318,7 +318,7 @@ void SAL_CALL OCallMe::drawLine( sal_Int32 /* x1 */, sal_Int32 /* y1 */, sal_Int
     // do nothings
 }
 
-void OCallMe::callOneway( const ::rtl::OUString& /* s */, sal_Int32 nToDo )
+void OCallMe::callOneway( const OUString& /* s */, sal_Int32 nToDo )
     throw(RuntimeException)
 {
     OUString sDummy;
@@ -343,11 +343,11 @@ void OCallMe::callOneway( const ::rtl::OUString& /* s */, sal_Int32 nToDo )
     return types;
 }
 
-::rtl::OUString OCallMe::getsAttribute() throw(RuntimeException)
+OUString OCallMe::getsAttribute() throw(RuntimeException)
 {
     return m_sAttribute;
 }
-void OCallMe::setsAttribute( const ::rtl::OUString& _sattribute )
+void OCallMe::setsAttribute( const OUString& _sattribute )
      throw(RuntimeException)
 {
     m_sAttribute = _sattribute;
@@ -469,7 +469,7 @@ Reference< ::test::XInterfaceTest > SAL_CALL OTestFactory::createInterfaceTest( 
 
 //  public:
 //      virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-//             getInstance( const ::rtl::OUString& sObjectName )
+//             getInstance( const OUString& sObjectName )
 //                   throw( ::com::sun::star::container::NoSuchElementException,
 //                          ::com::sun::star::uno::RuntimeException);
 //  };
@@ -749,8 +749,8 @@ void testRemote( const Reference< XInterface > &rRemote )
 
 
 
-Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
-                                         const ::rtl::OUString &sDllName,
+Reference <XInterface > createComponent( const OUString &sService ,
+                                         const OUString &sDllName,
                                          const Reference < XMultiServiceFactory > &rSMgr )
 {
     Reference< XInterface > rInterface;

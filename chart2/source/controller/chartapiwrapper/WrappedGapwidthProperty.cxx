@@ -41,11 +41,11 @@ const sal_Int32 DEFAULT_OVERLAP = 0;
 //-----------------------------------------------------------------------------
 
 WrappedBarPositionProperty_Base::WrappedBarPositionProperty_Base(
-                  const ::rtl::OUString& rOuterName
-                , const ::rtl::OUString& rInnerSequencePropertyName
+                  const OUString& rOuterName
+                , const OUString& rInnerSequencePropertyName
                 , sal_Int32 nDefaultValue
                 , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-            : WrappedDefaultProperty( rOuterName, rtl::OUString(), uno::makeAny( nDefaultValue ) )
+            : WrappedDefaultProperty( rOuterName, OUString(), uno::makeAny( nDefaultValue ) )
             , m_nDimensionIndex(0)
             , m_nAxisIndex(0)
             , m_spChart2ModelContact( spChart2ModelContact )

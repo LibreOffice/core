@@ -35,7 +35,6 @@
 
 #include <canvas/parametricpolypolygon.hxx>
 
-
 using namespace ::com::sun::star;
 
 namespace canvas
@@ -52,7 +51,7 @@ namespace canvas
 
     ParametricPolyPolygon* ParametricPolyPolygon::create(
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
-        const ::rtl::OUString& rServiceName,
+        const OUString& rServiceName,
         const uno::Sequence< uno::Any >& rArgs )
     {
         uno::Sequence< uno::Sequence< double > > colorSequence(2);
@@ -208,7 +207,7 @@ namespace canvas
         return OUString( IMPLEMENTATION_NAME );
     }
 
-    sal_Bool SAL_CALL ParametricPolyPolygon::supportsService( const ::rtl::OUString& ServiceName ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL ParametricPolyPolygon::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
     {
         return ServiceName == SERVICE_NAME;
     }

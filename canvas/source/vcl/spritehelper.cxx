@@ -396,7 +396,7 @@ namespace vclcanvas
                     rTargetSurface.SetTextColor( COL_RED );
                     rTargetSurface.SetFont( aVCLFont );
 
-                    ::rtl::OUString text( ::rtl::math::doubleToUString( getPriority(),
+                    OUString text( ::rtl::math::doubleToUString( getPriority(),
                                                                         rtl_math_StringFormat_F,
                                                                         2,'.',NULL,' ') );
 

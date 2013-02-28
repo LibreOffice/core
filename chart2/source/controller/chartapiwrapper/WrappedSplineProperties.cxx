@@ -45,7 +45,7 @@ template< typename PROPERTYTYPE >
 class WrappedSplineProperty : public WrappedProperty
 {
 public:
-    explicit WrappedSplineProperty( const ::rtl::OUString& rOuterName, const ::rtl::OUString& rInnerName
+    explicit WrappedSplineProperty( const OUString& rOuterName, const OUString& rInnerName
         , const ::com::sun::star::uno::Any& rDefaulValue
         , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty(rOuterName,OUString())

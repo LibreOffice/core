@@ -50,6 +50,7 @@ using ::osl::MutexGuard;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
 
 //-----------------------------------------------------------------------------
 
@@ -213,7 +214,7 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
 
 namespace
 {
-static const ::rtl::OUString lcl_aServiceName("com.sun.star.comp.chart.Legend");
+static const OUString lcl_aServiceName("com.sun.star.comp.chart.Legend");
 
 enum
 {
@@ -337,10 +338,10 @@ void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
-::rtl::OUString SAL_CALL LegendWrapper::getShapeType()
+OUString SAL_CALL LegendWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
-    return rtl::OUString( "com.sun.star.chart.ChartLegend" );
+    return OUString( "com.sun.star.chart.ChartLegend" );
 }
 
 // ____ XComponent ____
@@ -431,9 +432,9 @@ const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
 
 // ================================================================================
 
-Sequence< ::rtl::OUString > LegendWrapper::getSupportedServiceNames_Static()
+Sequence< OUString > LegendWrapper::getSupportedServiceNames_Static()
 {
-    Sequence< ::rtl::OUString > aServices( 4 );
+    Sequence< OUString > aServices( 4 );
     aServices[ 0 ] = "com.sun.star.chart.ChartLegend";
     aServices[ 1 ] = "com.sun.star.drawing.Shape";
     aServices[ 2 ] = "com.sun.star.xml.UserDefinedAttributesSupplier";

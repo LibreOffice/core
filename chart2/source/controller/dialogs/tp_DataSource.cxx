@@ -336,8 +336,8 @@ DataSourceTabPage::DataSourceTabPage(
     // set button text
     sal_Unicode cBlackUpPointingTriangle( 0x25b2 );
     sal_Unicode cBlackDownPointingTriangle( 0x25bc );
-    m_aBTN_UP.SetText( rtl::OUString( cBlackUpPointingTriangle ));
-    m_aBTN_DOWN.SetText( rtl::OUString( cBlackDownPointingTriangle ));
+    m_aBTN_UP.SetText( OUString( cBlackUpPointingTriangle ));
+    m_aBTN_DOWN.SetText( OUString( cBlackDownPointingTriangle ));
 
     // init controls
     m_aLB_ROLE.SetTabs( lcl_pRoleListBoxTabs, MAP_APPFONT );
@@ -482,7 +482,7 @@ void DataSourceTabPage::fillSeriesListBox()
                 if( nIndex != -1 )
                     aLabel = String( aResString.replaceAt(
                                          nIndex, aReplacementStr.getLength(),
-                                         rtl::OUString::valueOf(nUnnamedSeriesIndex)));
+                                         OUString::valueOf(nUnnamedSeriesIndex)));
             }
             if( aLabel.Len() == 0 )
                 aLabel = String( ::chart::SchResId( STR_DATA_UNNAMED_SERIES ));
@@ -834,7 +834,7 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
 }
 
 void DataSourceTabPage::listeningFinished(
-    const ::rtl::OUString & rNewRange )
+    const OUString & rNewRange )
 {
     // rNewRange becomes invalid after removing the listener
     OUString aRange( rNewRange );

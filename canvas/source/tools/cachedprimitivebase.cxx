@@ -26,7 +26,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-
 using namespace ::com::sun::star;
 
 #define IMPLEMENTATION_NAME "canvas::CachedPrimitiveBase"
@@ -87,7 +86,7 @@ namespace canvas
         return OUString( IMPLEMENTATION_NAME );
     }
 
-    sal_Bool SAL_CALL CachedPrimitiveBase::supportsService( const ::rtl::OUString& ServiceName ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL CachedPrimitiveBase::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
     {
         return ServiceName == SERVICE_NAME;
     }

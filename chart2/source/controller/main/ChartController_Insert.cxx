@@ -496,7 +496,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         aItemConverter.FillItemSet( aItemSet );
         ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
             ObjectIdentifier::createClassifiedIdentifierWithParent(
-                objType, ::rtl::OUString(), m_aSelection.getSelectedCID()));
+                objType, OUString(), m_aSelection.getSelectedCID()));
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
@@ -543,7 +543,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
                 bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X);
 
             aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
-                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, rtl::OUString() ) );
+                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, OUString() ) );
 
             if( aDlg.Execute() == RET_OK )
             {
