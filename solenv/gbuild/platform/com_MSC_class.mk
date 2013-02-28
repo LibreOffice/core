@@ -459,29 +459,6 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 
 endef
 
-# SrsPartTarget class
-
-ifeq ($(gb_FULLDEPS),$(true))
-gb_SrsPartTarget__command_target = $(OUTDIR)/bin/makedepend$(gb_Executable_EXT)
-define gb_SrsPartTarget__command_dep
-$(call gb_Helper_abbreviate_dirs,\
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(INCLUDE) \
-		$(DEFS) \
-		$(2) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(call gb_SrsPartTarget_get_target,$(1)) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-	> $(call gb_SrsPartTarget_get_dep_target,$(1)))
-endef
-else
-gb_SrsPartTarget__command_target =
-gb_SrsPartTarget__command_dep =
-endif
-
 # WinResTarget class
 
 gb_WinResTarget_POSTFIX :=.res
