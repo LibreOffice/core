@@ -48,8 +48,8 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 else
 $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_ExternalProject_run,build,\
-		MAKE="$(MAKE) -j1" \
-		$(if $(filter LINUX FREEBSD ANDROID SOLARIS IOS,$(OS)),./Configure,\
+		unset MAKEFLAGS \
+		&& $(if $(filter LINUX FREEBSD ANDROID SOLARIS IOS,$(OS)),./Configure,\
 		$(if $(filter WNT,$(OS)),$(PERL) Configure,./config)) \
 			$(OPENSSL_PLATFORM) \
 			$(if $(filter ANDROID,$(OS)),\
@@ -59,8 +59,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 			shared no-idea \
 			$(if $(SYSBASE),-I$(SYSBASE)/usr/include -L$(SYSBASE)/usr/lib)))) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-		&& export MAKEFLAGS="$(MAKEFLAGS:r=)" \
-		&& $(MAKE) -j1 build_libs \
+		&& $(MAKE) build_libs \
 			CC="$(CC) $(if $(filter-out WNT,$(OS)),\
 			$(if $(filter TRUE,$(HAVE_GCC_VISIBILITY_FEATURE)),\
 			-fvisibility=hidden))" \
