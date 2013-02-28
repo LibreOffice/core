@@ -754,7 +754,6 @@ public:
         if (rDamageRect.getWidth() <= 0 ||
             rDamageRect.getHeight() <= 0)
         {
-            LOGE("Damage region has zero or negative size");
             return;
         }
         Rectangle aRect( std::max((long) 0, (long) rDamageRect.getMinX() ),
