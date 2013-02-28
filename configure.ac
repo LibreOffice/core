@@ -4108,7 +4108,6 @@ if test "$cross_compiling" = "yes"; then
     cp config.log ../config.Build.log
     mkdir -p ../config_build
     cp config_host/*.h ../config_build
-    cp config_host/udkversion.mk ../config_build
     . ./bin/get_config_variables COM GUI OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR SOLARINC SOLARLIB WORKDIR
 
     for V in COM GUI OS CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
@@ -4177,14 +4176,6 @@ AC_SUBST(WORKDIR_FOR_BUILD)
 dnl ===================================================================
 dnl Our version is defined by the AC_INIT() at the top of this script.
 dnl ===================================================================
-
-UDK_MAJOR=3
-UDK_MINOR=2
-UDK_MICRO=7
-
-AC_SUBST(UDK_MAJOR)
-AC_SUBST(UDK_MINOR)
-AC_SUBST(UDK_MICRO)
 
 set `echo AC_PACKAGE_VERSION | sed "s/\./ /g"`
 
@@ -11837,7 +11828,7 @@ if test -f config_host.mk; then
     config_md5=`$MD5SUM config_host.mk | sed "s/ .*//"`
 fi
 
-AC_CONFIG_FILES([config_host.mk Makefile lo.xcent solenv/inc/minor.mk config_host/udkversion.mk instsetoo_native/util/openoffice.lst])
+AC_CONFIG_FILES([config_host.mk Makefile lo.xcent solenv/inc/minor.mk instsetoo_native/util/openoffice.lst])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])

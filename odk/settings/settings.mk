@@ -193,9 +193,6 @@ URLPREFIX=file://
 COMID=gcc3
 CPPU_ENV=gcc3
 
-# Include UDK version numbers
-include $(PRJ)/include/udkversion.mk
-
 #SALLIB=-luno_sal
 #CPPULIB=-luno_cppu
 #CPPUHELPERLIB=-luno_cppuhelperC52
@@ -326,9 +323,6 @@ DELRECURSIVE=rm -rf
 COPY=cp
 URLPREFIX=file://
 
-# Include UDK version numbers
-include $(PRJ)/include/udkversion.mk
-
 SALLIB=-luno_sal
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
@@ -437,9 +431,6 @@ DEL=rm -f
 DELRECURSIVE=rm -rf
 COPY=cp
 URLPREFIX=file://
-
-# Include UDK version numbers
-include $(PRJ)/include/udkversion.mk
 
 SALLIB=-luno_sal
 CPPULIB=-luno_cppu
@@ -560,9 +551,6 @@ DEL=rm -f
 DELRECURSIVE=rm -rf
 COPY=cp
 URLPREFIX=file://
-
-# Include UDK version numbers
-include $(PRJ)/include/udkversion.mk
 
 SALLIB=-luno_sal
 CPPULIB=-luno_cppu

@@ -9,9 +9,6 @@
 
 $(eval $(call gb_Module_Module,odk))
 
-# needed in several makefiles here
-include $(BUILDDIR)/config_host/udkversion.mk
-
 $(eval $(call gb_Module_add_targets,odk,\
 	CustomTarget_odkcommon \
 	$(if $(filter WNT,$(OS)),CustomTarget_cli) \
