@@ -898,7 +898,7 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString
     //              in our member list m_lFactories! VAriable nPropertyStart marks start position of every factory
     //              and her properties in expanded property/value list. The defines PROPERTHANDLE_xxx are used as offset values
     //              added to nPropertyStart. So we can address every property relative in these lists.
-    //              If we found any valid values ... we reset all existing informations for corresponding m_lFactories-entry and
+    //              If we found any valid values ... we reset all existing information for corresponding m_lFactories-entry and
     //              use a pointer to these struct in memory directly to set new values.
     //              But we set it only, if bInstalled is true. Otherwise all other values of a factory can be undeclared .. They
     //              shouldn't be used then.

@@ -264,7 +264,7 @@ protected:
 
     /** remove a object in the container. No plausibility checks are done, e.g. whether
         or not there exists an object with the given name or the object is non-NULL. This is the responsibility of the caller.<BR>
-        Additionally all object-related informations within the registry will be deleted. The new object config node,
+        Additionally all object-related information within the registry will be deleted. The new object config node,
         where the caller may want to store the new objects information, is returned.<BR>
         The old component will not be disposed, this is the callers responsibility, too.
         @param          _rName              the objects name

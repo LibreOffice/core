@@ -52,7 +52,7 @@ namespace framework{
 
     @descr  Using of this class makes it possible to get information about the
             format type of a given URL or stream. The returned internal type name
-            can be used to get more informations about this format. Further this
+            can be used to get more information about this format. Further this
             class provides full access to the configuration data and following
             implementations will support some special query modes.
 

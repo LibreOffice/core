@@ -1897,7 +1897,7 @@ public class Cache
      *
      *  It checks if all made registrations are valid;
      *  try to repair some simple problems;
-     *  create missing informations on demand ...
+     *  create missing information on demand ...
      *
      *  @param  nFormat
      *          specify, which configuration format

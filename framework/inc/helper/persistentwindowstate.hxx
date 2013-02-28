@@ -45,7 +45,7 @@ namespace framework{
                     a listener on one frame which container window was created by ourself.
                     We listen for frame action events and everytimes a component will deattached from a frame
                     we store its current position and size to the configuration. Everytimes a new component is
-                    attached to a frame first time(!) we restore this informations again.
+                    attached to a frame first time(!) we restore this information again.
 
     @base           ThreadHelpBase
                         guarantee right initialized lock member during startup of instances of this class.

@@ -78,7 +78,7 @@ public class DocumentView extends    JFrame
     /**
      * @member  mxFrame             office frame which contains the document of this view
      *
-     * @member  maStatusView        special panel wich show available status informations of currently loaded document
+     * @member  maStatusView        special panel wich show available status information of currently loaded document
      * @member  maDocumentView      use JNI mechanism to plug an office window into our own java UI container (used for inplace mode only!)
      * @member  maCustomizeView     special panel makes it possible to toggle menubar/toolbar or objectbar of loaded document
      * @member  maInterceptor       interceptor thread which intercept "new" menu of office frame to open new frames inside this java application
@@ -149,7 +149,7 @@ public class DocumentView extends    JFrame
         paCommands.add(mbtExport);
         paCommands.add(mbtExit);
 
-        // create view to show status informations of opened file
+        // create view to show status information of opened file
         maStatusView = new StatusView();
 
         // create view for toggle different bar's of document

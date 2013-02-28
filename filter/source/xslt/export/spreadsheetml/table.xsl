@@ -818,7 +818,7 @@
 				<!-- issue in Excel: can not have an empty 'DateTime' cell -->
 				<xsl:attribute name="ss:Type">DateTime</xsl:attribute>
 				<!-- Gathering information of two StarOffice date/time attributes
-				Excel always needs both informations in one attribute -->
+				Excel always needs both pieces of information in one attribute -->
 				<xsl:choose>
 					<xsl:when test="@office:date-value">
 					<!-- office:date-value may contain time (after 'T')-->

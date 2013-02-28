@@ -832,7 +832,7 @@
     <group oor:name="TrustedAuthor">
       <info>
         <author>GT</author>
-        <desc>All Certificate informations needed to handle and identify the
+        <desc>All Certificate information needed to handle and identify the
         signature.</desc>
       </info>
       <prop oor:name="SubjectName" oor:type="xs:string">

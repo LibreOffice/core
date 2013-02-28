@@ -25,7 +25,7 @@ package complex.loadAllDocuments;
 
 /**
  * Implemets a simple status indicator, which
- * provide informations about state of a load request.
+ * provide information about state of a load request.
  * It can be used as an argument e.g. for loadComponentFromURL().
  */
 public class StatusIndicator implements com.sun.star.task.XStatusIndicator

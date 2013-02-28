@@ -614,7 +614,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() th
 /*-************************************************************************************************************//**
     @interface  XComponentLoader
     @short      try to load given URL into a task
-    @descr      You can give us some informations about the content, which you will load into a frame.
+    @descr      You can give us some information about the content, which you will load into a frame.
                 We search or create this target for you, make a type detection of given URL and try to load it.
                 As result of this operation we return the new created component or nothing, if loading failed.
 

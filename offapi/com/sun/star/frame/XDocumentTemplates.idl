@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module frame {
 /** provides a high level API to organize document templates
 
     <p>
-    Template informations are saved as links to the original content
+    Template information are saved as links to the original content
     and organized in groups. This data should be persistent and can be
     updated by calling special method <member>XDocumentTemplates::update()</member>.
     A real implementation of this interface can do that on top of

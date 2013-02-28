@@ -55,11 +55,11 @@ namespace framework
 {
 
 //---------------------------------------
-/** @short  hold all needed informations for an asynchronous dispatch alive.
+/** @short  hold all needed information for an asynchronous dispatch alive.
 
     @descr  Because some operations are forced to be executed asynchronously
             (e.g. requested by our CreashSave/Recovery dialog) ... we must make sure
-            that these informations wont be set as "normal" members of our AtoRecovery
+            that these information wont be set as "normal" members of our AtoRecovery
             instance. Otherwise they can disturb our normal AutoSave-timer handling.
             e.g. it can be unclear then, which progress has to be used for storing documents ...
  */
@@ -217,7 +217,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         };
 
         //---------------------------------------
-        /** @short  combine different informations about one office document. */
+        /** @short  combine different information about one office document. */
         struct TDocumentInfo
         {
             public:
@@ -381,7 +381,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         ETimerType m_eTimerType;
 
         //---------------------------------------
-        /** @short  this cache is used to hold all informations about
+        /** @short  this cache is used to hold all information about
                     recovery/emergency save documents alive.
          */
         TDocumentList m_lDocCache;
@@ -765,7 +765,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     the base path for saving such temp files.
 
             @param  rInfo
-                    points to an informations structure, where
+                    points to an information structure, where
                     e.g. the document, its modified state, the count
                     of autosave-retries etcpp. exists.
                     Its used also to return the new temp file name
@@ -833,7 +833,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             @param  pInfo
                     if sOperation is an update, this parameter must be different from NULL
-                    and is used to send informations regarding the current handled document.
+                    and is used to send information regarding the current handled document.
 
             @return [css::frame::FeatureStateEvent]
                     the event structure for sending.

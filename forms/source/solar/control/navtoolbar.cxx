@@ -249,7 +249,7 @@ namespace frm
         m_pToolbar->SetOutStyle( TOOLBOX_STYLE_FLAT );
         m_pToolbar->Show();
 
-        // need the SfxApplication for retrieving informations about our
+        // need the SfxApplication for retrieving information about our
         // items. We could duplicate all the information here in our lib
         // (such as the item text and the image), but why should we?
 

@@ -73,7 +73,7 @@ public:
 
 /** Interface to work with header of po/pot files
 
-    This class stores informations which are in header of
+    This class stores information which is in header of
     a po file. It's main function to generate header to
     template po files(pot).
 */

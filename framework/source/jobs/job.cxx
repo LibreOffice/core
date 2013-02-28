@@ -55,7 +55,7 @@ DEFINE_XTYPEPROVIDER_4( Job                           ,
 /**
     @short      standard ctor
     @descr      It initialize this new instance. But it set some generic parameters here only.
-                Specialized informations (e.g. the alias or service name ofthis job) will be set
+                Specialized information (e.g. the alias or service name ofthis job) will be set
                 later using the method setJobData().
 
     @param      xSMGR
@@ -85,7 +85,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& x
 /**
     @short      standard ctor
     @descr      It initialize this new instance. But it set some generic parameters here only.
-                Specialized informations (e.g. the alias or service name ofthis job) will be set
+                Specialized information (e.g. the alias or service name ofthis job) will be set
                 later using the method setJobData().
 
     @param      xSMGR
@@ -181,7 +181,7 @@ void Job::setJobData( const JobData& aData )
     @param  lDynamicArgs
                 optional arguments for job execution
                 In case the represented job is a configured one (which uses static
-                arguments too) all informations will be merged!
+                arguments too) all information will be merged!
 */
 void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs )
 {
@@ -257,7 +257,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     #endif
 
     // deinitialize the environment and mark this job as finished ...
-    // but don't overwrite any informations about STOPPED or might DISPOSED jobs!
+    // but don't overwrite any information about STOPPED or might DISPOSED jobs!
     impl_stopListening();
     if (m_eRunState == E_RUNNING)
         m_eRunState = E_STOPPED_OR_FINISHED;
@@ -356,7 +356,7 @@ void Job::die()
                 b) it's specific configuration data (Different for every job.)
                 c) some environment values          (e.g. the frame, for which this job was started)
                 d) any other dynamic data           (e.g. parameters of a dispatch() request)
-            We collect all these informations and generate one list which include all others.
+            We collect all these information and generate one list which include all others.
 
     @param  lDynamicArgs
                 list of dynamic arguments (given by a corresponding dispatch() call)

@@ -371,7 +371,7 @@ namespace
         if (nIndex<0 || nIndex>=xParentIndex->getCount())
             return; // nothing to do
 
-        // then we need informations about the listeners supported by the control and the model
+        // then we need information about the listeners supported by the control and the model
         Sequence< Type> aModelListeners;
         Sequence< Type> aControlListeners;
 

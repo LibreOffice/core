@@ -2313,7 +2313,7 @@ void SfxViewFrame::ExecView_Impl
 
 //-------------------------------------------------------------------------
 /* TODO as96863:
-        This method try to collect informations about the count of currently open documents.
+        This method try to collect information about the count of currently open documents.
         But the algorithm is implemented very simple ...
         E.g. hidden documents should be ignored here ... but they are counted.
         TODO: export special helper "framework::FrameListAnalyzer" within the framework module

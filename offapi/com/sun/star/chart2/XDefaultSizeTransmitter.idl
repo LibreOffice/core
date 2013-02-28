@@ -31,7 +31,7 @@ module star
 module chart2
 {
 
-/** Allows to set a default size. This size will be used in case no further informations are available.
+/** Allows to set a default size. This size will be used in case no further information si available.
  */
 interface XDefaultSizeTransmitter : ::com::sun::star::uno::XInterface
 {

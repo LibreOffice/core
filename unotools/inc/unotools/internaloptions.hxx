@@ -37,7 +37,7 @@
 class SvtInternalOptions_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about internal features
+    @short          collect information about internal features
     @descr          -
 
     @implements     -

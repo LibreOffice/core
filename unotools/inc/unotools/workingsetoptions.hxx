@@ -39,7 +39,7 @@
 class SvtWorkingSetOptions_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about security features
+    @short          collect information about security features
     @descr          -
 
     @implements     -

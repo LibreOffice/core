@@ -81,7 +81,7 @@ namespace com { namespace sun { namespace star { namespace container {
     class XStringKeyMap;
 }}}}
 
-// enum and struct to get informations via the Doc-Position
+// enum and struct to get information via the Doc-Position
 
 struct SwContentAtPos
 {

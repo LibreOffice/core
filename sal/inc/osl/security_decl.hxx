@@ -26,7 +26,7 @@
 namespace osl
 {
 
-/** capsulate security informations for one user.
+/** capsulate security information for one user.
     A object of this class is used to execute a process with the rights an
     security options of a scecified user.
     @see Process::executeProcess

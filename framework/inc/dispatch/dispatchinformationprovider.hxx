@@ -38,7 +38,7 @@
 namespace framework{
 
 /*-************************************************************************************************************//**
-    @short          a helper to merge dispatch informations of different sources together.
+    @short          a helper to merge dispatch information of different sources together.
 *//*-*************************************************************************************************************/
 class DispatchInformationProvider : public  css::frame::XDispatchInformationProvider
                                   , private ThreadHelpBase

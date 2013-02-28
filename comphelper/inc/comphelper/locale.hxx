@@ -221,7 +221,7 @@ class COMPHELPER_DLLPUBLIC Locale
         void setVariant(const ::rtl::OUString& sVariant);
 
         //---------------------------------------
-        /** @short      take over new Locale informations.
+        /** @short      take over new Locale information.
 
             @seealso    Locale(const ::rtl::OUString& sISO)
 

@@ -36,7 +36,7 @@
 class SvtToolPanelOptions_Impl;
 class Link;
 
-/** collect informations about sidebar group
+/** collect information about sidebar group
 
     \attention This class is partially threadsafe.
 */

@@ -50,11 +50,11 @@ exception DocumentMacroConfirmationRequest : ClassifiedInteractionRequest
     ::com::sun::star::embed::XStorage
             DocumentStorage;
 
-    /** contains informations about the ODF version of the document
+    /** contains information about the ODF version of the document
     */
     string DocumentVersion;
 
-    /** contains informations about the signatures in the document
+    /** contains information about the signatures in the document
     */
     sequence< ::com::sun::star::security::DocumentSignatureInformation >
             DocumentSignatureInformation;

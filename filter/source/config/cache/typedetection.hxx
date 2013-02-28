@@ -284,12 +284,12 @@ private:
     //---------------------------------------
 
     /** @short      validate the specified type and its relation ships
-                    and set all needed informations related to this type
+                    and set all needed information related to this type
                     in the specified descriptor.
 
-        @descr      Related informations are: - corresponding filter
-                                              - media type
-                                              - ...
+        @descr      Related information are: - corresponding filter
+                                             - media type
+                                             - ...
 
         @param      rDescriptor
                     provides access to the outside MediaDescriptor.
@@ -307,11 +307,11 @@ private:
     //---------------------------------------
 
     /** @short      validate the specified filter and its relation ships
-                    and set all needed informations related to this filter
+                    and set all needed information related to this filter
                     in the specified descriptor.
 
-        @descr      Related informations are: - corresponding type
-                                              - ...
+        @descr      Related information are: - corresponding type
+                                             - ...
 
         @param      rDescriptor
                     provides access to the outside MediaDescriptor.

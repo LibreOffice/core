@@ -343,7 +343,7 @@ void OFrames::impl_resetObject()
 void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFrame > >&  seqDestination  ,
                                      const  Sequence< css::uno::Reference< XFrame > >&  seqSource       )
 {
-    // Get some informations about the sequences.
+    // Get some information about the sequences.
     sal_Int32                       nSourceCount        = seqSource.getLength();
     sal_Int32                       nDestinationCount   = seqDestination.getLength();
     const css::uno::Reference< XFrame >*        pSourceAccess       = seqSource.getConstArray();

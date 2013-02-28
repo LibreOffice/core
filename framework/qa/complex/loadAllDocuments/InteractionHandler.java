@@ -65,7 +65,7 @@ public class InteractionHandler implements XInteractionHandler
     /**
      * Called to start the interaction, because the outside code whish to solve
      * a detected problem or to inform the user about something.
-     * We safe the informations here and can handle two well known continuations
+     * We save the information here and can handle two well known continuations
      * only.
      * [abort and retry].
      *

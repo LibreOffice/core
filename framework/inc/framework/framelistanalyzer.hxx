@@ -29,7 +29,7 @@ namespace framework{
 /** analyze and split the current available frame list of a given frames supplier
     into different parts.
 
-    These analyzed informations can be used e.g. to decide if it's neccessary
+    These analyzed information can be used e.g. to decide if it's neccessary
     to switch into the backing mode, close the current active frame only or
     exit the whole application explicitly or implicitly.
  */

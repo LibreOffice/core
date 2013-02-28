@@ -70,7 +70,7 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
 
 /**
     @short      standard ctor
-    @descr      These initialize a new instance of ths class with needed informations for work.
+    @descr      These initialize a new instance of ths class with needed information for work.
 
     @param      rxContext
                     reference to uno servicemanager for creation of new services

@@ -180,7 +180,7 @@ void JobResult::operator=( const JobResult& rCopy )
     @short      checks for existing parts of the analyzed result
     @descr      The internal flag mask was set after analyzing of the pure result.
                 An user of us can check here, if the required part was realy part
-                of this result. Otherwhise it would use invalid informations ...
+                of this result. Otherwhise it would use invalid information ...
                 by using our other members!
 
     @param      eParts

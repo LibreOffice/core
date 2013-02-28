@@ -37,7 +37,7 @@ class SvtMiscOptions_Impl;
 class Link;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about misc group
+    @short          collect information about misc group
     @descr          -
 
     @implements     -

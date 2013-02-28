@@ -35,7 +35,7 @@ namespace framework{
 /*-****************************************************************************************************//**
     @short      initialize instance with neccessary informations
     @descr      We need a valid uno service manager to create or instanciate new services.
-                All other informations to create frames or tasks come in on right interface methods.
+                All other information to create frames or tasks come in on right interface methods.
 
     @param      xSMGR
                     points to the valid uno service manager

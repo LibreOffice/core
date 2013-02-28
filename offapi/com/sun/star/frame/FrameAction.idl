@@ -27,7 +27,7 @@
     of the desktop
 
     <p>
-    Interest listener can get informations about loaded/reloaded or unloaded
+    Interest listener can get information about loaded/reloaded or unloaded
     components into a <type>Frame</type>.
     </p>
 

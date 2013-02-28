@@ -37,7 +37,7 @@ namespace uui
 
 /*-************************************************************************************************************//**
     @short      initialize filter dialog with start values
-    @descr      We set some neccessary informations on these instance for later working and create internal structures.
+    @descr      We set some neccessary information on these instance for later working and create internal structures.
                 After construction user should call "SetFilters()" and "SetURL()" to fill listbox with selectable filter
                 names and set file name of file, which should be used for selected filter.
 
@@ -98,7 +98,7 @@ void FilterDialog::SetURL( const String& sURL )
     @param      "pFilterNames", pointer to list of filter names, which should be used for later operations.
     @return     -
 
-    @onerror    We clear list box and forget our currently set filter informations completly!
+    @onerror    We clear list box and forget our currently set filter information completly!
     @threadsafe no
 *//*-*************************************************************************************************************/
 void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )

@@ -48,7 +48,7 @@ enum EViewType
 };
 
 /*-************************************************************************************************************//**
-    @short          collect informations about view features
+    @short          collect information about view features
     @descr          We support different basetypes of views like dialogs, tab-dialogs, tab-pages and normal windows.
                     You must specify your basetype by using right enum value and must give us a valid name for your
                     subkey in registry! We support some fix features for some bastypes and user data as string for all!

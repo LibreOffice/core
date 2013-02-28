@@ -220,7 +220,7 @@ void SAL_CALL SoundHandler::impl_initService()
 
 /*-************************************************************************************************************//**
     @short      standard ctor
-    @descr      These initialize a new instance of this class with needed informations for work.
+    @descr      These initialize a new instance of this class with needed information for work.
 
     @seealso    using at owner
 
@@ -396,8 +396,8 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
 
 /*-************************************************************************************************************//**
     @short      call back of sound player
-    @descr      Our player call us back to give us some informations.
-                We use this informations to callback our might existing listener.
+    @descr      Our player call us back to give us some information.
+                We use this information to callback our might existing listener.
 
     @seealso    method dispatchWithNotification()
 

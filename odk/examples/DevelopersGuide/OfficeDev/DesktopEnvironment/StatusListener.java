@@ -95,7 +95,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
     /**
      * ctor
      * It initialize an instance of this class only.
-     * We sett all neccessary informations on our internal member - that's it
+     * We set all neccessary information on our internal member - that's it
      */
     StatusListener( /*IN*/ Component                   rControl   ,
                     /*IN*/ String                      sTrueText  ,

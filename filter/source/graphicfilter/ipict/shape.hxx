@@ -23,8 +23,8 @@ namespace PictReaderShape {
   /** draws a line from orig to dest knowing penSize
 
   Attention: in order to draw horizontal/vertical/small lines, this function can instead draw a rectangle or
-            a polygon. In this case, we retrieve the line informations from VirtualDev ( GetLineColor )
-        and we use them as fill informations ( SetFillColor ). We restore after the VirtualDev state.
+        a polygon. In this case, we retrieve the line information from VirtualDev ( GetLineColor )
+        and we use them as fill information ( SetFillColor ). We restore after the VirtualDev state.
 
         This implies also that this function must be modified if we use real pattern to draw these primitives.
    */

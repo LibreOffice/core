@@ -347,7 +347,7 @@ void ScFiltersTest::testFunctionsODS()
     //test mathematical functions
     createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 2, PureString);
-    //test informations functions
+    //test information functions
     createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 3);
 
@@ -372,7 +372,7 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         //test cached formula results of mathematical functions
         createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
         testFile(aCSVFileName, pDoc, 2, PureString);
-        //test cached formula results of informations functions
+        //test cached formula results of information functions
         createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
         testFile(aCSVFileName, pDoc, 3);
 

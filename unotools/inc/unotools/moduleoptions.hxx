@@ -47,7 +47,7 @@
 class SvtModuleOptions_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about installation state of modules
+    @short          collect information about installation state of modules
     @descr          Use these class to get installation state of different office modules like writer, calc etc
                     Further you can ask for additional informations; e.g. name of standard template file, which
                     should be used by corresponding module; or short/long name of these module factory.

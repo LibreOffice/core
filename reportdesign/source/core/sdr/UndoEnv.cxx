@@ -211,7 +211,7 @@ void OXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
-    // check if it's an object we have cached informations about
+    // check if it's an object we have cached information about
     Reference< XPropertySet > xSourceSet(e.Source, UNO_QUERY);
     if ( xSourceSet.is() )
     {

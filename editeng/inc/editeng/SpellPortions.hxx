@@ -52,7 +52,7 @@ struct SpellPortion
     /** contains the language applied to the text. It has to match the script type.
      */
     LanguageType    eLanguage;
-    /** for wrong words this reference is filled with the error informations otherwise
+    /** for wrong words this reference is filled with the error information otherwise
         it's an empty reference
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives> xAlternatives;

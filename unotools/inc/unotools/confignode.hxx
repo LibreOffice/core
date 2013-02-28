@@ -179,7 +179,7 @@ namespace utl
         virtual void clear() throw();
 
         // -----------------------
-        // meta informations about the node
+        // meta information about the node
 
         /// checks whether or not the object represents a set node.
         sal_Bool isSetNode() const;

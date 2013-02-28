@@ -36,7 +36,7 @@ module com { module sun { module star { module document {
  */
 published interface XViewDataSupplier: com::sun::star::uno::XInterface
 {
-    /** retrieve informations about currently opened view to restore it later
+    /** retrieve information about currently opened view to restore it later
 
         @returns
             a <type scope="com::sun::star::container">XIndexAccess</type>,

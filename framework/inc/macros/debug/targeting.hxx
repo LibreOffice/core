@@ -47,7 +47,7 @@
         Log format for parameter e.g.: Desktop::findFrame( "frame1", 23 ) my name is "desktop"
         Log format for steps     e.g.: desktop--
 
-        With this macro you can log informations about search parameter of method "findFrame()" of an service.
+        With this macro you can log information about search parameter of method "findFrame()" of an service.
         Use it at beginning of search only!
     _____________________________________________________________________________________________________________*/
 
@@ -73,7 +73,7 @@
     /*_____________________________________________________________________________________________________________
         LOG_PARAMETER_QUERYDISPATCH( SSERVICE, SFRAMENAME, AURL, STARGETNAME, NSEARCHFLAGS )
 
-        With this macro you can log informations about search parameter of method "queryDispatch()" of an service.
+        With this macro you can log information about search parameter of method "queryDispatch()" of an service.
         Use it at beginning of search only!
     _____________________________________________________________________________________________________________*/
 
@@ -98,7 +98,7 @@
     /*_____________________________________________________________________________________________________________
         LOG_PARAMETER_LOADCOMPONENTFROMURL( SSERVICE, SFRAMENAME, SURL, STARGETNAME, NSEARCHFLAGS, SEQPARAMETER )
 
-        With this macro you can log informations about search parameter of method "loadComponentFromURL()" of an service.
+        With this macro you can log information about search parameter of method "loadComponentFromURL()" of an service.
         Use it at beginning of search only!
     _____________________________________________________________________________________________________________*/
 
@@ -133,7 +133,7 @@
     /*_____________________________________________________________________________________________________________
         LOG_RESULT_FINDFRAME( SSERVICE, SFRAMENAME, XFRAME )
 
-        With this macro you can log informations about search result of "findFrame()".
+        With this macro you can log information about search result of "findFrame()".
         Use it at the end of this method only!
     _____________________________________________________________________________________________________________*/
 
@@ -165,7 +165,7 @@
     /*_____________________________________________________________________________________________________________
         LOG_RESULT_QUERYDISPATCH( SSERVICE, SFRAMENAME, XDISPATCHER )
 
-        With this macro you can log informations about search result of "queryDispatch()".
+        With this macro you can log information about search result of "queryDispatch()".
         Use it at the end of this method only!
     _____________________________________________________________________________________________________________*/
 
@@ -192,7 +192,7 @@
     /*_____________________________________________________________________________________________________________
         LOG_RESULT_LOADCOMPONENTFROMURL( SSERVICE, SFRAMENAME, XCOMPONENT )
 
-        With this macro you can log informations about search result of "loadComponentFromURL()".
+        With this macro you can log information about search result of "loadComponentFromURL()".
         Use it at the end of this method only!
     _____________________________________________________________________________________________________________*/
 

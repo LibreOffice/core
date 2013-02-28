@@ -143,7 +143,7 @@ private:
      */
     sal_Int32 m_nSearchFlags;
 
-    /** @short  contains all needed informations about the resource,
+    /** @short  contains all needed information about the resource,
                 which should be loaded.
 
         @descr  Inside this struct e.g. the URL, its type and filter name,
@@ -241,7 +241,7 @@ public:
                 points to the resource, which should be loaded.
 
         @param  lMediaDescriptor
-                contains additional informations for the following load request.
+                contains additional information for the following load request.
 
         @param  xBaseFrame
                 points to the frame which must be used as start point for target search.

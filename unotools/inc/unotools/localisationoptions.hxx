@@ -34,7 +34,7 @@
 class SvtLocalisationOptions_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about localisation features
+    @short          collect information about localisation features
     @descr          -
 
     @implements     -

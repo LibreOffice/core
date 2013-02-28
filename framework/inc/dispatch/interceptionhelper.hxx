@@ -267,7 +267,7 @@ class InterceptionHelper : public  css::frame::XDispatchProvider
         /** @short      release an interceptor.
 
             @descr      Remove the registered interceptor from our internal list
-                        and delete all special informations about it.
+                        and delete all special information about it.
 
             @param      xInterceptor
                         reference to the interceptor, which wish to be deregistered.

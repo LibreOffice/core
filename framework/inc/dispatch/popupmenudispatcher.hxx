@@ -52,7 +52,7 @@
 namespace framework{
 
 /*-************************************************************************************************************//**
-    We must save informations about our listener and URL for listening.
+    We must save information about our listener and URL for listening.
     We implement this as a hashtable for strings.
 *//*-*************************************************************************************************************/
 

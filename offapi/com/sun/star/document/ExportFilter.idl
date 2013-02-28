@@ -72,7 +72,7 @@ published service ExportFilter
         <p>
         A filter object must be created by global service <type>FilterFactory</type>.
         If filter supports this optional interface, he will be initialized by the factory directly
-        after creation. The factory will pass follow informations to this new instance:
+        after creation. The factory will pass the following information to this new instance:
             <ul>
                 <li>first item will be a set of configuration data of the filter</li>
                 <li>after that will follow may given optional parameters of call
@@ -90,7 +90,7 @@ published service ExportFilter
 
         <p>
         This internal filter name can be used on service <type>FilterFactory</type>
-        to get further informations about it (e.g. his registration for mime types or extensions etc.)
+        to get further information about it (e.g. his registration for mime types or extensions etc.)
         It's important that returned string is the "internal name" of the filter which must be
         unambiguous against all other registered filters in current installation.
         </p>

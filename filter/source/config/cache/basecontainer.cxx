@@ -476,7 +476,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     // <- SAFE
 
     // create a specialized enumeration helper, which
-    // provides the collected informations outside.
+    // provides the collected information outside.
     // It hold a reference to us ... and call our container interface directly.
     // be aware of some direct callbacks if it will be created :-)
 

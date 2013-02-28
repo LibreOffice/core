@@ -99,7 +99,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
         css::uno::Reference< css::task::XInteractionHandler > m_xHandler;
 
         /** This list describe which and how incoming interactions must be handled.
-            Further it contains all collected informations after this interaction
+            Further it contains all collected information after this interaction
             object was used.*/
         InteractionList m_lInteractionRules;
 
@@ -215,7 +215,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                         specify the interaction.
 
             @param      pReturn
-                        provides informations about:
+                        provides information about:
                         - the count how often this interaction was handled during the
                           lifetime of this helper.
                         - the interaction itself, so it can be analyzed further

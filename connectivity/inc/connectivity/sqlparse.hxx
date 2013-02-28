@@ -149,7 +149,7 @@ namespace connectivity
         static OSQLParseNodesGarbageCollector*  s_pGarbageCollector;
         static sal_Int32                        s_nRefCount;
 
-    // informations on the current parse action
+    // information on the current parse action
         const IParseContext*        m_pContext;
         OSQLParseNode*              m_pParseTree;   // result from parsing
         ::std::auto_ptr< OSQLParser_Data >

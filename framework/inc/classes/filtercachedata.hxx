@@ -569,17 +569,17 @@ class DataContainer : private ThreadHelpBase
 
     public:
 
-        FileTypeHash            m_aTypeCache                ;     /// hold all informations about registered file types
-        FilterHash              m_aFilterCache              ;     /// hold all informations about registered filters
-        DetectorHash            m_aDetectorCache            ;     /// hold all informations about registered detect services
-        LoaderHash              m_aLoaderCache              ;     /// hold all informations about registered loader services
-        ContentHandlerHash      m_aContentHandlerCache      ;     /// hold all informations about registered content handler services
+        FileTypeHash            m_aTypeCache                ;     /// hold all information about registered file types
+        FilterHash              m_aFilterCache              ;     /// hold all information about registered filters
+        DetectorHash            m_aDetectorCache            ;     /// hold all information about registered detect services
+        LoaderHash              m_aLoaderCache              ;     /// hold all information about registered loader services
+        ContentHandlerHash      m_aContentHandlerCache      ;     /// hold all information about registered content handler services
         PerformanceHash         m_aFastFilterCache          ;     /// hold all registered filter for a special file type
         PerformanceHash         m_aFastDetectorCache        ;     /// hold all registered detect services for a special file type
         PerformanceHash         m_aFastLoaderCache          ;     /// hold all registered loader services for a special file type
         PerformanceHash         m_aFastContentHandlerCache  ;     /// hold all registered content handler services for a special file type
         PreferredHash           m_aPreferredTypesCache      ;     /// assignment of extensions to preferred types for it
-        Loader                  m_aGenericLoader            ;     /// informations about our default frame loader
+        Loader                  m_aGenericLoader            ;     /// information about our default frame loader
         ::rtl::OUString         m_sLocale                   ;     /// current set locale of configuration to handle right UIName from set of all UINames!
         sal_Bool                m_bTypesModified            ;
         sal_Bool                m_bFiltersModified          ;

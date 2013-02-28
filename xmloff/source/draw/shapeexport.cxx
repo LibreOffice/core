@@ -426,7 +426,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     }
 
     // ----------------------------------------
-    // prepare animation informations if needed
+    // prepare animation information if needed
     // ----------------------------------------
     if( mxAnimationsExporter.is() )
         mxAnimationsExporter->prepare( xShape, mrExport );
@@ -592,7 +592,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 #endif
 
     // ----------------------------------------
-    // collect animation informations if needed
+    // collect animation information if needed
     // ----------------------------------------
     if( mxAnimationsExporter.is() )
         mxAnimationsExporter->collect( xShape, mrExport );

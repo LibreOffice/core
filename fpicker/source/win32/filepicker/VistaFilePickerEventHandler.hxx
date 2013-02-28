@@ -131,7 +131,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         /** start listening for file picker events on the given file open dialog COM object.
          *
          *  The broadcaster will be cached internaly so deregistration will be easy.
-         *  Further all needed informations are capsulated within this class (e.g. the listener handler).
+         *  Further all needed information are capsulated within this class (e.g. the listener handler).
          *  Nobody outside must know such informations.
          *
          *  Nothing will happen if an inconsistent state will be detected

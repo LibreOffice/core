@@ -524,7 +524,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::disposing" );
-    // check if it's an object we have cached informations about
+    // check if it's an object we have cached information about
     if (m_pPropertySetCache)
     {
         Reference< XPropertySet > xSourceSet(e.Source, UNO_QUERY);

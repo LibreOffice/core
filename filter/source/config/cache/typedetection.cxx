@@ -1246,7 +1246,7 @@ sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      ::comphelper::
     aLock.clear();
     // <- SAFE
 
-    // remove all related informations from the descriptor
+    // remove all related information from the descriptor
     impl_removeTypeFilterFromDescriptor(rDescriptor);
     return sal_False;
 }
@@ -1276,7 +1276,7 @@ sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper
     }
     catch(const css::container::NoSuchElementException&){}
 
-    // remove all related informations from the descriptor
+    // remove all related information from the descriptor
     impl_removeTypeFilterFromDescriptor(rDescriptor);
     return sal_False;
 }

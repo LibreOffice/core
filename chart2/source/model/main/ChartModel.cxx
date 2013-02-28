@@ -345,7 +345,7 @@ sal_Bool SAL_CALL ChartModel::attachResource( const ::rtl::OUString& rURL
 
     //@todo ? check rURL ??
     //@todo ? evaluate m_aMediaDescriptor;
-    //@todo ? ... ??? --> nothing, this method is only for setting informations
+    //@todo ? ... ??? --> nothing, this method is only for setting information
 
     return sal_True;
 }

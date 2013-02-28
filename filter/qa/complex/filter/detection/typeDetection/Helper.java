@@ -363,7 +363,7 @@ public class Helper  {
     /**
      *  Fills the Hashtable m_hFileURLs with all file names and their URL
      *  and the Hashtable m_hFilesTypes with all file names and their file
-     *  type name. This informations are extracted from "files.csv"
+     *  type name. This information are extracted from "files.csv"
      *  This is for faster access to get fileURL and fileType of fileAlias
      */
     public void createFilesList(){

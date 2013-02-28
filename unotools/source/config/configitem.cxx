@@ -406,7 +406,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
     for ( i=0; i<nCount; ++i)
         lStates[i] = sal_False;
 
-    // no access - no informations ...
+    // no access - no information ...
     Reference< XHierarchicalNameAccess > xHierarchyAccess = GetTree();
     if (!xHierarchyAccess.is())
         return lStates;

@@ -279,7 +279,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
             if (xInfoBox == null)
                 return;
 
-            // fill it with all given informations and show it
+            // fill it with all given information and show it
             xInfoBox.setCaptionText(sTitle);
             xInfoBox.setMessageText(sMessage);
             xInfoBox.execute();
