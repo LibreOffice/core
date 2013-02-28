@@ -185,10 +185,10 @@ bootstrap: compilerplugins
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.build all slowcheck
 ifeq ($(OS),ANDROID)
-	cd android && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) android
 endif
 ifeq ($(OS),IOS)
-	cd ios && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
 endif
 
 build-nocheck : export SKIP_TESTS := YES
