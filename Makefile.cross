@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))config_build.mk
+include $(BUILDDIR)/config_build.mk
 
 gb_Side := build
 include $(SOLARENV)/gbuild/gbuild.mk

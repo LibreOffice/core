@@ -126,11 +126,11 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/config_host.mk \
         $(BUILDDIR)/config_host.mk.stamp \
         $(BUILDDIR)/config_host/*.h \
+        $(BUILDDIR)/config_host/*.mk \
         $(BUILDDIR)/configure \
         $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
         $(BUILDDIR)/lo.xcent \
-        $(BUILDDIR)/solenv/inc/minor.mk \
-        $(BUILDDIR)/warn
+        $(BUILDDIR)/solenv/inc/minor.mk
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
 #
