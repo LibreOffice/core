@@ -224,9 +224,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     get(m_pAdaptBox,"checkAdaptBox");
     // Strings stored in UI
     get(m_pInsideText,"labelInner");
-    aInsideText = m_pInsideText->GetText();
     get(m_pOutsideText,"labelOuter");
-    aOutsideText = m_pOutsideText->GetText();
     get(m_pPrintRangeQueryText,"labelMsg");
 
     bBorderModified = sal_False;
@@ -374,6 +372,8 @@ void SvxPageDescPage::Init_Impl()
 {
     aLeftText = m_pLeftMarginLbl->GetText();
     aRightText = m_pRightMarginLbl->GetText();
+    aInsideText = m_pInsideText->GetText();
+    aOutsideText = m_pOutsideText->GetText();
 
         // adjust the handler
     m_pLayoutBox->SetSelectHdl( LINK( this, SvxPageDescPage, LayoutHdl_Impl ) );
@@ -897,8 +897,6 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl)
 {
     // switch inside outside
     const sal_uInt16 nPos = PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() );
-
-    OUString aAux();
 
     if ( nPos == SVX_PAGE_MIRROR )
     {
