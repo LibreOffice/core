@@ -97,7 +97,6 @@ endif # COM=MSC
 ifeq ($(DISABLE_ATL),)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_oleautobridge \
-	Library_oleautobridge2 \
 ))
 endif # DISABLE_ATL
 

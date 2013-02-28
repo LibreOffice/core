@@ -633,7 +633,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     oleautobridge \
-    oleautobridge2 \
     smplmail \
     wininetbe1 \
 ))
