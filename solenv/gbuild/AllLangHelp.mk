@@ -120,6 +120,16 @@ $(foreach lang,$(gb_AllLangHelp_LANGS),$(call gb_HelpTarget_add_files,$(call gb_
 
 endef
 
+# Add a localized file from helpdir under a new name.
+#
+# This is a hack needed for err.html in shared help module.
+#
+# gb_AllLangHelp_add_helpdir_file module filename file
+define gb_AllLangHelp_add_helpdir_file
+$(foreach lang,$(gb_AllLangHelp_LANGS),$(call gb_HelpTarget_add_helpdir_file,$(call gb_AllLangHelp__get_helpname,$(1),$(lang)),$(2),$(3)))
+
+endef
+
 # gb_AllLangHelp__use_module module other-module lang
 define gb_AllLangHelp__use_module
 $(call gb_HelpTarget_use_module,$(call gb_AllLangHelp__get_helpname,$(1),$(3)),$(call gb_AllLangHelp__get_helpname,$(2),$(3)))

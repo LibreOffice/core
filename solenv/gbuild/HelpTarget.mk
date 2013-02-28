@@ -273,6 +273,7 @@ RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 	$(if $(HELP_CONFIGDIR),-add $(HELP_MODULE).cfg $(HELP_CONFIGDIR)/$(HELP_LANG)/$(HELP_MODULE).cfg) \
 	$(if $(HELP_TREE),-add $(HELP_MODULE).tree $(HELP_TREE)) \
 	$(foreach file,$(HELP_ADD_FILES),-add $(notdir $(file)) $(file)) \
+	$(foreach extra,$(HELP_EXTRA_ADD_FILES),-add $(subst :, ,$(extra))) \
 	$(HELP_FILES) \
 	$(if $(HELP_LINKED_MODULES),\
 		$(shell cat $(foreach module,$(HELP_LINKED_MODULES),$(call gb_HelpTarget_get_filelist,$(module)))) \
@@ -311,6 +312,7 @@ $(call gb_HelpLinkTarget_get_clean_target,%) :
 define gb_HelpLinkTarget_HelpLinkTarget
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_ADD_FILES :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_CONFIGDIR :=
+$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_EXTRA_ADD_FILES :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_FILES :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_MODULE := $(2)
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_LANG := $(3)
@@ -359,6 +361,17 @@ endef
 define gb_HelpLinkTarget_add_file
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_ADD_FILES += $(2)
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(2)
+
+endef
+
+# Add an arbitrary file to the help pack under a new name.
+#
+# The file will be added to the root directory of the pack.
+#
+# gb_HelpLinkTarget_add_renamed_file target filename file
+define gb_HelpLinkTarget_add_renamed_file
+$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_EXTRA_ADD_FILES += $(strip $(2)):$(strip $(3))
+$(call gb_HelpLinkTarget_get_target,$(1)) : $(3)
 
 endef
 
@@ -678,6 +691,17 @@ endef
 # gb_HelpTarget_add_files target file(s)
 define gb_HelpTarget_add_files
 $(foreach file,$(2),$(call gb_HelpTarget_add_file,$(1),$(file)))
+
+endef
+
+# Add a localized file from helpdir under a new name.
+#
+# This is a hack needed for err.html in shared help module.
+#
+# gb_HelpTarget_add_helpdir_file target filename file
+define gb_HelpTarget_add_helpdir_file
+$(call gb_HelpLinkTarget_add_renamed_file,$(1),$(2),$(call gb_HelpTarget__get_helpfile,$(1),$(3)))
+$(call gb_HelpTarget__add_file,$(1),$(2))
 
 endef
 
