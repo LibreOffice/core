@@ -579,6 +579,11 @@ registerWithDefaultAdapter( DBusConnection *pConnection )
     return pService;
 }
 
+#else
+
+// MSVC needs this definition even though it's never used
+struct sd::BluetoothServerImpl { };
+
 #endif // LINUX_BLUETOOTH
 
 BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
