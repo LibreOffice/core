@@ -1648,6 +1648,7 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
             {
                 maDisplayName = sValue;
             }
+            break;
             case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY :
             {
                 bDisplay = IsXMLToken(sValue, XML_TRUE);
