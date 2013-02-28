@@ -271,7 +271,7 @@ RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 	-idxcaption $(gb_HelpLinkTarget_IDXCAPTIONTARGET) \
 	-idxcontent $(gb_HelpLinkTarget_IDXCONTENTTARGET) \
 	-sty $(gb_HelpLinkTarget_EMBEDTARGET) \
-	$(if $(HELP_CONFIGDIR),-add $(HELP_MODULE).cfg $(HELP_CONFIGDIR)/$(HELP_LANG)/$(HELP_MODULE).cfg) \
+	$(if $(and $(HELP_CONFIGDIR),$(HELP_INDEXED)),-add $(HELP_MODULE).cfg $(HELP_CONFIGDIR)/$(HELP_LANG)/$(HELP_MODULE).cfg) \
 	$(if $(HELP_TREE),-add $(HELP_MODULE).tree $(HELP_TREE)) \
 	$(foreach file,$(HELP_ADD_FILES),-add $(notdir $(file)) $(file)) \
 	$(foreach extra,$(HELP_EXTRA_ADD_FILES),-add $(subst :, ,$(extra))) \
@@ -488,6 +488,8 @@ endef
 
 gb_HelpTarget_DEFAULT_LANG := en-US
 
+gb_HelpTarget_COMMAND := zip
+
 gb_HelpTarget__get_module = $(patsubst %/$(call gb_HelpTarget__get_lang,$(1)),%,$(1))
 gb_HelpTarget__get_lang = $(lastword $(subst /, ,$(1)))
 gb_HelpTarget__test_default_lang = $(filter $(gb_HelpTarget_DEFAULT_LANG),$(1))
@@ -514,10 +516,12 @@ $(if $(call gb_HelpTarget__is_default_lang,$(1)) \
 )
 endef
 
-define gb_HelpTarget__make_workdir_rule
-$$(call gb_HelpTarget_get_workdir,%)$(2) :
-	touch $$@
-
+define gb_HelpTarget__get_command
+$(call gb_Output_announce,$(2),$(true),HLP,4)
+cd $(call gb_HelpTarget_get_workdir,$(2)) && \
+$(gb_HelpJarTarget_COMMAND) -q -0 -rX $(1) \
+	$(HELP_PACK_FILES) \
+	$(if $(and $(HELP_CONFIGDIR),$(HELP_INDEXED)),$(HELP_MODULE).cfg)
 endef
 
 $(dir $(call gb_HelpTarget_get_target,%)).dir :
@@ -532,17 +536,11 @@ $(call gb_HelpTarget_get_translation_target,%) :
 	rm -f $@ && mv $(call var2file,$@.tmp,100,$(HELP_FILES)) $@
 
 $(call gb_HelpTarget_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),HLP,4)
-	touch $@
+	$(call gb_HelpTarget__get_command,$@,$*)
 
 # All processing is done and the results can be packed into a zip.
 $(call gb_HelpTarget_get_packing_target,%) :
 	touch $@
-
-# make pattern rules for all file types possibly included in a help zip
-$(eval $(foreach ext,.css .db .ht .html .idxl/segments.gen .idxl/segments_1 .jar .key,\
-	$(call gb_HelpTarget__make_workdir_rule,$(ext)) \
-))
 
 .PHONY : $(call gb_HelpTarget_get_clean_target,%)
 $(call gb_HelpTarget_get_clean_target,%) :
@@ -559,8 +557,11 @@ $(call gb_HelpTarget_get_clean_target,%) :
 #
 # gb_HelpTarget_HelpTarget target module lang
 define gb_HelpTarget_HelpTarget
+$(call gb_HelpTarget_get_target,$(1)) : HELP_CONFIGDIR :=
 $(call gb_HelpTarget_get_target,$(1)) : HELP_MODULE := $(2)
+$(call gb_HelpTarget_get_target,$(1)) : HELP_INDEXED :=
 $(call gb_HelpTarget_get_target,$(1)) : HELP_LANG := $(3)
+$(call gb_HelpTarget_get_target,$(1)) : HELP_PACK_FILES :=
 
 $(call gb_HelpTarget_get_translation_target,$(1)) : HELP_FILES :=
 
@@ -574,20 +575,17 @@ $(if $(call gb_HelpTarget__test_default_lang,$(3)),,$(call gb_HelpTarget__HelpTa
 $(call gb_HelpLinkTarget_HelpLinkTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpIndexTarget_HelpIndexTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpJarTarget_HelpJarTarget,$(1),$(2),$(4))
-$(call gb_Zip_Zip_internal_nodeliver,$(call gb_HelpTarget_get_zipname,$(1)),$(4))
 
 $(call gb_HelpLinkTarget_get_preparation_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) :| $(call gb_HelpTarget_get_workdir,$(1))/.dir
 $(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
-$(call gb_Zip_get_target,$(call gb_HelpTarget_get_zipname,$(1))) : $(call gb_HelpTarget_get_packing_target,$(1))
-$(call gb_HelpTarget_get_target,$(1)) : $(call gb_Zip_get_target,$(call gb_HelpTarget_get_zipname,$(1)))
+$(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpTarget_get_packing_target,$(1))
 
 $(call gb_HelpTarget_get_packing_target,$(1)) :| $(dir $(call gb_HelpTarget_get_packing_target,$(1))).dir
 $(call gb_HelpTarget_get_target,$(1)) :| $(dir $(call gb_HelpTarget_get_target,$(1))).dir
 $(call gb_HelpTarget_get_translation_target,$(1)) :| $(dir $(call gb_HelpTarget_get_translation_target,$(1))).dir
 
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpLinkTarget_get_clean_target,$(1))
-$(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_Zip_get_clean_target,$(call gb_HelpTarget_get_zipname,$(1)))
 
 endef
 
@@ -610,23 +608,22 @@ endef
 define gb_HelpTarget__add_index_files
 $(call gb_HelpTarget__add_file,$(1),$(2).db)
 $(call gb_HelpTarget__add_file,$(1),$(2).ht)
-$(call gb_HelpTarget__add_file,$(1),$(2).idxl/segments.gen)
-$(call gb_HelpTarget__add_file,$(1),$(2).idxl/segments_1)
+$(call gb_HelpTarget__add_file,$(1),$(2).idxl)
 $(call gb_HelpTarget__add_file,$(1),$(2).key)
 
 endef
 
 # gb_HelpTarget__add_file target file
 define gb_HelpTarget__add_file
-$(call gb_Zip_add_file,$(call gb_HelpTarget_get_zipname,$(1)),$(2))
-$(call gb_HelpTarget_get_workdir,$(1))/$(2) : $(call gb_HelpTarget_get_packing_target,$(1))
+$(call gb_HelpTarget_get_target,$(1)) : HELP_PACK_FILES += $(2)
 
 endef
 
 # gb_HelpTarget_set_configdir target configdir
 define gb_HelpTarget_set_configdir
 $(call gb_HelpLinkTarget_set_configdir,$(1),$(SRCDIR)/$(2))
-$(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).cfg)
+
+$(call gb_HelpTarget_get_target,$(1)) : HELP_CONFIGDIR := $(SRCDIR)/$(2)
 
 endef
 
@@ -653,6 +650,8 @@ endef
 define gb_HelpTarget_set_indexed
 $(call gb_HelpLinkTarget_set_indexed,$(1))
 $(call gb_HelpTarget__add_index_files,$(1),$(call gb_HelpTarget__get_module,$(1)))
+
+$(call gb_HelpTarget_get_target,$(1)) : HELP_INDEXED := $(true)
 
 $(call gb_HelpIndexTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 $(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpIndexTarget_get_target,$(1))

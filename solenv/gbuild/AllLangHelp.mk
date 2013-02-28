@@ -54,14 +54,14 @@ $(call gb_HelpTarget_HelpTarget,$(3),$(1),$(2))
 $(call gb_HelpTarget_set_configdir,$(3),$(gb_AllLangHelp_AUXDIR))
 $(call gb_HelpTarget_set_helpdir,$(3),$(gb_AllLangHelp_HELPDIR))
 
-$(call gb_HelpTarget_get_outdir_target,$(4)) : $(call gb_HelpTarget_get_zipfile,$(3))
+$(call gb_HelpTarget_get_outdir_target,$(4)) : $(call gb_HelpTarget_get_target,$(3))
 $(call gb_HelpTarget_get_outdir_target,$(4)) :| $(dir $(call gb_HelpTarget_get_outdir_target,$(4))).dir
 $(call gb_AllLangHelp_get_target,$(1)) : $(call gb_HelpTarget_get_outdir_target,$(4))
 $(call gb_AllLangHelp_get_target,$(1)) : $(call gb_HelpTarget_get_target,$(3))
 $(call gb_AllLangHelp_get_clean_target,$(1)) : $(call gb_HelpTarget_get_clean_target,$(3))
 $(call gb_AllLangHelp_get_clean_target,$(1)) : HELP_DELIVERABLES += $(call gb_HelpTarget_get_outdir_target,$(4))
 
-$(call gb_Deliver_add_deliverable,$(call gb_HelpTarget_get_outdir_target,$(4)),$(call gb_HelpTarget_get_zipfile,$(3)),$(1))
+$(call gb_Deliver_add_deliverable,$(call gb_HelpTarget_get_outdir_target,$(4)),$(call gb_HelpTarget_get_target,$(3)),$(1))
 
 endef
 
