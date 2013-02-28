@@ -50,7 +50,6 @@ use installer::packagelist;
 use installer::parameter;
 use installer::pathanalyzer;
 use installer::profiles;
-use installer::scppatchsoname;
 use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::setupscript;
@@ -634,16 +633,6 @@ sub run {
         installer::scpzipfiles::resolving_scpzip_replace_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, "File", $languagestringref);
 
         #####################################
-        # Files with flag PATCH_SO_NAME
-        #####################################
-
-        installer::logger::print_message( "... analyzing files with flag PATCH_SO_NAME ...\n" );
-
-        # Editing files with flag PATCH_SO_NAME.
-
-        installer::scppatchsoname::resolving_patchsoname_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, "File", $languagestringref);
-
-        #####################################
         # Files with flag HIDDEN
         #####################################
 
@@ -678,11 +667,9 @@ sub run {
 
         installer::scriptitems::get_Source_Directory_For_Files_From_Includepathlist($scpactionsinproductlanguageresolvedarrayref, $includepatharrayref_lang, $dirsinproductlanguageresolvedarrayref, "ScpActions");
 
-        # Editing scpactions with flag SCPZIP_REPLACE and PATCH_SO_NAME.
+        # Editing scpactions with flag SCPZIP_REPLACE.
 
         installer::scpzipfiles::resolving_scpzip_replace_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
-
-        installer::scppatchsoname::resolving_patchsoname_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
 
         #########################################################
         # language dependent links part
