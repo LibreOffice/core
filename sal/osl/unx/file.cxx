@@ -859,11 +859,10 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
     {
         if (uFlags & osl_File_OpenFlag_Write)
         {
-            // Or should we just silently "open" it read-only and let write
-            // attempts, if any, fail then later?
-            OSL_TRACE("osl_openFile(%s, writeable), not possible!", cpFilePath);
-            errno = EPERM;
-            return osl_File_E_PERM;
+            // It seems to work better to silently "open" it read-only
+            // and let write attempts, if any, fail later. Otherwise
+            // loading a document from /assets fails with that idiotic
+            // "General Error" dialog...
         }
         void *address;
         size_t size;
