@@ -1052,7 +1052,9 @@ void SmParser::Align()
 
             // allow for just one align statement in 5.0
             if (CONVERT_40_TO_50 != GetConversion() && TokenInGroup(TGALIGN))
-            {   Error(PE_DOUBLE_ALIGN);
+            {
+                Error(PE_DOUBLE_ALIGN);
+                delete pSNode;
                 return;
             }
         }
