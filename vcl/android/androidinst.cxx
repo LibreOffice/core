@@ -1024,6 +1024,9 @@ Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
     case AMOTION_EVENT_ACTION_MOVE:
         eventKind = SALEVENT_MOUSEMOVE;
         break;
+    default:
+        LOGE("Java_org_libreoffice_experimental_desktop_Desktop_touch: Invalid action %d", action);
+        return;
     }
 
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
