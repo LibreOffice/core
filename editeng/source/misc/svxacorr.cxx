@@ -393,8 +393,8 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
     // Two capital letters at the beginning of word?
     for(n = 0; n < aDelimiters.size() - 1; n++)
     {
-        nSttPos = aDelimiters.at( n );
-        nEndPos = aDelimiters.at( n + 1 );
+        nSttPos = aDelimiters[n];
+        nEndPos = aDelimiters[n + 1];
 
         if( nSttPos+2 < nEndPos &&
             IsUpperLetter( rCC.getCharacterType( rTxt, nSttPos )) &&
