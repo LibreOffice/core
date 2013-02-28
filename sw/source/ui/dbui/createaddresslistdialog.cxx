@@ -199,6 +199,9 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
         if(nContentHeight < m_aScrollBar.GetSizePixel().Height())
         {
             nContentHeight = m_aScrollBar.GetSizePixel().Height();
+            // Reset the scrollbar's thumb to the top before it is disabled.
+            m_aScrollBar.DoScroll(0);
+            m_aScrollBar.SetThumbPos(0);
             m_aScrollBar.Enable(sal_False);
         }
         else
@@ -207,11 +210,21 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
             m_aScrollBar.SetRange(Range(0, nLines));
             m_aScrollBar.SetThumbPos(0);
             m_aScrollBar.SetVisibleSize(nVisibleLines);
+            // Reset the scroll bar position (especially if items deleted)
+            m_aScrollBar.DoScroll(m_aScrollBar.GetRangeMax());
+            m_aScrollBar.DoScroll(0);
         }
         Size aWinOutputSize(m_aWinOutputSize);
         aWinOutputSize.Height() = nContentHeight;
         m_aWindow.SetOutputSizePixel(aWinOutputSize);
 
+    }
+    // Even if no items in m_aEdits, the scrollbar will still exist;
+    // we might as well disable it.
+    if (m_aEdits.size() < 1) {
+        m_aScrollBar.DoScroll(0);
+        m_aScrollBar.SetThumbPos(0);
+        m_aScrollBar.Enable(sal_False);
     }
 }
 
