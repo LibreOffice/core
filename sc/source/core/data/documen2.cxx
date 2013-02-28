@@ -530,7 +530,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
             if (pSourceDoc->maTabs[i])
                 if (!pMarks || pMarks->GetTableSelect(i))
                 {
-                    rtl::OUString aString;
+                    OUString aString;
                     pSourceDoc->maTabs[i]->GetName(aString);
                     if ( i < static_cast<SCTAB>(maTabs.size()) )
                     {
@@ -564,7 +564,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
             maTabs.resize(nTab+1, NULL );
         }
         maTabs[nTab] = new ScTable(this, nTab,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baeh")));
+                            OUString("baeh"));
         if (nTab < static_cast<SCTAB>(pSourceDoc->maTabs.size()) && pSourceDoc->maTabs[nTab])
             maTabs[nTab]->SetLayoutRTL( pSourceDoc->maTabs[nTab]->IsLayoutRTL() );
     }
@@ -587,7 +587,7 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 maTabs.resize( nTab + 1, NULL );
             }
             maTabs.at(nTab) = new ScTable(this, nTab,
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("temp")),
+                                    OUString("temp"),
                                     bExtras, bExtras);
         }
 
@@ -765,7 +765,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 {
     if (SC_TAB_APPEND == nNewPos  || nNewPos >= static_cast<SCTAB>(maTabs.size()))
         nNewPos = static_cast<SCTAB>(maTabs.size());
-    rtl::OUString aName;
+    OUString aName;
     GetName(nOldPos, aName);
 
     //  vorneweg testen, ob der Prefix als gueltig erkannt wird
@@ -890,7 +890,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     return bValid;
 }
 
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModuleName, const rtl::OUString& sModuleSource );
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName, const OUString& sModuleSource );
 
 sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
@@ -915,7 +915,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     bool bValid = true;
     if (bInsertNew)             // neu einfuegen
     {
-        rtl::OUString aName;
+        OUString aName;
         pSrcDoc->GetName(nSrcPos, aName);
         CreateValidTabName(aName);
         bValid = InsertTab(nDestPos, aName);
@@ -999,14 +999,14 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         SfxObjectShell* pSrcShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
         if ( pSrcShell )
         {
-            rtl::OUString aLibName("Standard");
+            OUString aLibName("Standard");
             const BasicManager *pBasicManager = pSrcShell->GetBasicManager();
             if (pBasicManager && !pBasicManager->GetName().isEmpty())
             {
                 aLibName = pSrcShell->GetBasicManager()->GetName();
             }
-            rtl::OUString sCodeName;
-            rtl::OUString sSource;
+            OUString sCodeName;
+            OUString sSource;
             uno::Reference< script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
             uno::Reference< container::XNameContainer > xLib;
             if( xLibContainer.is() )
@@ -1017,9 +1017,9 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
             if( xLib.is() )
             {
-                rtl::OUString sSrcCodeName;
+                OUString sSrcCodeName;
                 pSrcDoc->GetCodeName( nSrcPos, sSrcCodeName );
-                rtl::OUString sRTLSource;
+                OUString sRTLSource;
                 xLib->getByName( sSrcCodeName ) >>= sRTLSource;
                 sSource = sRTLSource;
             }

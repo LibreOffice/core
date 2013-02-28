@@ -134,9 +134,9 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
     {
         // Get Custom prefix
         const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-        rtl::OUString aString = rOpt.GetInitTabPrefix();
+        OUString aString = rOpt.GetInitTabPrefix();
 
-        aString += rtl::OUString::valueOf(static_cast<sal_Int32>(nTab+1));
+        aString += OUString::valueOf(static_cast<sal_Int32>(nTab+1));
         if ( _bNeedsNameCheck )
             CreateValidTabName( aString );  // no doubles
         if (nTab < static_cast<SCTAB>(maTabs.size()))
@@ -163,7 +163,7 @@ bool ScDocument::HasTable( SCTAB nTab ) const
     return false;
 }
 
-bool ScDocument::GetName( SCTAB nTab, rtl::OUString& rName ) const
+bool ScDocument::GetName( SCTAB nTab, OUString& rName ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
@@ -171,19 +171,19 @@ bool ScDocument::GetName( SCTAB nTab, rtl::OUString& rName ) const
             maTabs[nTab]->GetName( rName );
             return true;
         }
-    rName = rtl::OUString();
+    rName = OUString();
     return false;
 }
 
-rtl::OUString ScDocument::GetCopyTabName( SCTAB nTab ) const
+OUString ScDocument::GetCopyTabName( SCTAB nTab ) const
 {
     if (nTab < static_cast<SCTAB>(maTabNames.size()))
         return maTabNames[nTab];
     else
-        return rtl::OUString();
+        return OUString();
 }
 
-bool ScDocument::SetCodeName( SCTAB nTab, const rtl::OUString& rName )
+bool ScDocument::SetCodeName( SCTAB nTab, const OUString& rName )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
     {
@@ -193,11 +193,11 @@ bool ScDocument::SetCodeName( SCTAB nTab, const rtl::OUString& rName )
             return true;
         }
     }
-    OSL_TRACE( "**** can't set code name %s", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE( "**** can't set code name %s", OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr() );
     return false;
 }
 
-bool ScDocument::GetCodeName( SCTAB nTab, rtl::OUString& rName ) const
+bool ScDocument::GetCodeName( SCTAB nTab, OUString& rName ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
@@ -205,13 +205,13 @@ bool ScDocument::GetCodeName( SCTAB nTab, rtl::OUString& rName ) const
             maTabs[nTab]->GetCodeName( rName );
             return true;
         }
-    rName = rtl::OUString();
+    rName = OUString();
     return false;
 }
 
-bool ScDocument::GetTable( const rtl::OUString& rName, SCTAB& rTab ) const
+bool ScDocument::GetTable( const OUString& rName, SCTAB& rTab ) const
 {
-    rtl::OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpperName = ScGlobal::pCharClass->uppercase(rName);
 
     for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
@@ -240,7 +240,7 @@ void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
 }
 
 
-bool ScDocument::ValidTabName( const rtl::OUString& rName )
+bool ScDocument::ValidTabName( const OUString& rName )
 {
     if (rName.isEmpty())
         return false;
@@ -280,14 +280,14 @@ bool ScDocument::ValidTabName( const rtl::OUString& rName )
 }
 
 
-bool ScDocument::ValidNewTabName( const rtl::OUString& rName ) const
+bool ScDocument::ValidNewTabName( const OUString& rName ) const
 {
     bool bValid = ValidTabName(rName);
     TableContainer::const_iterator it = maTabs.begin();
     for (; it != maTabs.end() && bValid; ++it)
         if ( *it )
         {
-            rtl::OUString aOldName;
+            OUString aOldName;
             (*it)->GetName(aOldName);
             bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
         }
@@ -295,7 +295,7 @@ bool ScDocument::ValidNewTabName( const rtl::OUString& rName ) const
 }
 
 
-void ScDocument::CreateValidTabName(rtl::OUString& rName) const
+void ScDocument::CreateValidTabName(OUString& rName) const
 {
     if ( !ValidTabName(rName) )
     {
@@ -303,7 +303,7 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
 
         // Get Custom prefix
         const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-        rtl::OUString aStrTable = rOpt.GetInitTabPrefix();
+        OUString aStrTable = rOpt.GetInitTabPrefix();
 
         bool         bOk   = false;
 
@@ -314,7 +314,7 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
 
         for ( SCTAB i = static_cast<SCTAB>(maTabs.size())+1; !bOk ; i++ )
         {
-            rtl::OUStringBuffer aBuf;
+            OUStringBuffer aBuf;
             aBuf.append(aStrTable);
             aBuf.append(static_cast<sal_Int32>(i));
             rName = aBuf.makeStringAndClear();
@@ -331,7 +331,7 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
         if ( !ValidNewTabName(rName) )
         {
             SCTAB i = 1;
-            rtl::OUStringBuffer aName;
+            OUStringBuffer aName;
             do
             {
                 i++;
@@ -345,15 +345,15 @@ void ScDocument::CreateValidTabName(rtl::OUString& rName) const
     }
 }
 
-void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB nCount) const
+void ScDocument::CreateValidTabNames(std::vector<OUString>& aNames, SCTAB nCount) const
 {
     aNames.clear();//ensure that the vector is empty
 
     // Get Custom prefix
     const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-    rtl::OUString aStrTable = rOpt.GetInitTabPrefix();
+    OUString aStrTable = rOpt.GetInitTabPrefix();
 
-    rtl::OUStringBuffer rName;
+    OUStringBuffer rName;
     bool         bOk   = false;
 
     // First test if the prefix is valid, if so only avoid doubles
@@ -379,19 +379,19 @@ void ScDocument::CreateValidTabNames(std::vector<rtl::OUString>& aNames, SCTAB n
     }
 }
 
-void ScDocument::AppendTabOnLoad(const rtl::OUString& rName)
+void ScDocument::AppendTabOnLoad(const OUString& rName)
 {
     SCTAB nTabCount = static_cast<SCTAB>(maTabs.size());
     if (!ValidTab(nTabCount))
         // max table count reached.  No more tables.
         return;
 
-    rtl::OUString aName = rName;
+    OUString aName = rName;
     CreateValidTabName(aName);
     maTabs.push_back( new ScTable(this, nTabCount, aName) );
 }
 
-void ScDocument::SetTabNameOnLoad(SCTAB nTab, const rtl::OUString& rName)
+void ScDocument::SetTabNameOnLoad(SCTAB nTab, const OUString& rName)
 {
     if (!ValidTab(nTab) || static_cast<SCTAB>(maTabs.size()) <= nTab)
         return;
@@ -413,7 +413,7 @@ void ScDocument::InvalidateStreamOnSave()
     }
 }
 
-bool ScDocument::InsertTab( SCTAB nPos, const rtl::OUString& rName,
+bool ScDocument::InsertTab( SCTAB nPos, const OUString& rName,
             bool bExternalDocument )
 {
     SCTAB   nTabCount = static_cast<SCTAB>(maTabs.size());
@@ -494,7 +494,7 @@ bool ScDocument::InsertTab( SCTAB nPos, const rtl::OUString& rName,
 }
 
 
-bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<rtl::OUString>& rNames,
+bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
             bool bExternalDocument, bool bNamesValid )
 {
     SCTAB   nNewSheets = static_cast<SCTAB>(rNames.size());
@@ -752,7 +752,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets, ScDocument* pRefUndoDoc 
 }
 
 
-bool ScDocument::RenameTab( SCTAB nTab, const rtl::OUString& rName, bool /* bUpdateRef */,
+bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool /* bUpdateRef */,
         bool bExternalDocument )
 {
     bool bValid = false;
@@ -768,7 +768,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const rtl::OUString& rName, bool /* bUpd
             for (i=0; (i< static_cast<SCTAB>(maTabs.size())) && bValid; i++)
                 if (maTabs[i] && (i != nTab))
                 {
-                    rtl::OUString aOldName;
+                    OUString aOldName;
                     maTabs[i]->GetName(aOldName);
                     bValid = !ScGlobal::GetpTransliteration()->isEqual( rName, aOldName );
                 }
@@ -1669,7 +1669,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
         xPoolHelper = pSrcDoc->xPoolHelper;
 
 
-        rtl::OUString aString;
+        OUString aString;
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
             {
@@ -1705,7 +1705,7 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
         if (pSrcDoc->pShell->GetMedium())
             maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
 
-        rtl::OUString aString;
+        OUString aString;
         if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
             maTabs.resize(nTab2 + 1, NULL);
         for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
@@ -1725,7 +1725,7 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, bool bColInfo, bool bRowI
 {
     if (bIsUndo)
     {
-        rtl::OUString aString;
+        OUString aString;
         if (nTab2 >= static_cast<SCTAB>(maTabs.size()))
         {
             maTabs.resize(nTab2+1,NULL);
@@ -1906,12 +1906,12 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     {
         if( *itr )
         {
-            rtl::OUString aTabName;
+            OUString aTabName;
             (*itr)->GetName(aTabName);
             pClipDoc->maTabNames.push_back(aTabName);
         }
         else
-            pClipDoc->maTabNames.push_back(rtl::OUString());
+            pClipDoc->maTabNames.push_back(OUString());
     }
 
     pClipDoc->aDocName = aDocName;
@@ -1993,12 +1993,12 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         {
             if( *itr )
             {
-                rtl::OUString aTabName;
+                OUString aTabName;
                 (*itr)->GetName(aTabName);
                 pClipDoc->maTabNames.push_back(aTabName);
             }
             else
-                pClipDoc->maTabNames.push_back(rtl::OUString());
+                pClipDoc->maTabNames.push_back(OUString());
         }
 
         PutInOrder( nCol1, nCol2 );
@@ -2901,7 +2901,7 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
             if (nTab >= static_cast<SCTAB>(maTabs.size()))
                 maTabs.resize(nTab + 1,NULL);
             maTabs[nTab] = new ScTable(this, nTab,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("temp")),
+                            OUString("temp"),
                             bExtras, bExtras);
         }
 
@@ -2921,7 +2921,7 @@ void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, bool bForceT
         if (nTab >= static_cast<SCTAB>(maTabs.size()))
             maTabs.resize(nTab + 1,NULL);
         maTabs[nTab] = new ScTable(this, nTab,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("temp")),
+                        OUString("temp"),
                         bExtras, bExtras);
     }
 
@@ -2930,7 +2930,7 @@ void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, bool bForceT
 }
 
 
-bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const rtl::OUString& rString,
+bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
                             ScSetStringParam* pParam )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -2959,22 +2959,22 @@ OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab )
         return EMPTY_OUSTRING;
 }
 
-void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rString )
+void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->GetInputString( nCol, nRow, rString );
     else
-        rString = rtl::OUString();
+        rString = OUString();
 }
 
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
 {
-    rtl::OUString aString;
+    OUString aString;
     GetInputString( nCol, nRow, nTab, aString);
     rString = aString;
 }
 
-sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, rtl::OUString& rString )
+sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rString )
 {
     // Used in formulas (add-in parameters etc), so it must use the same semantics as
     // ScInterpreter::GetCellString: always format values as numbers.
@@ -3123,18 +3123,18 @@ void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
 }
 
 
-void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, rtl::OUString& rFormula ) const
+void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rFormula ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
             maTabs[nTab]->GetFormula( nCol, nRow, rFormula );
     else
-        rFormula = rtl::OUString();
+        rFormula = OUString();
 }
 
 
 void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula ) const
 {
-    rtl::OUString aString;
+    OUString aString;
     GetFormula( nCol, nRow, nTab, aString);
     rFormula = aString;
 }
@@ -5416,26 +5416,26 @@ sal_uLong ScDocument::GetCodeCount() const
 }
 
 
-void ScDocument::PageStyleModified( SCTAB nTab, const rtl::OUString& rNewName )
+void ScDocument::PageStyleModified( SCTAB nTab, const OUString& rNewName )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->PageStyleModified( rNewName );
 }
 
 
-void ScDocument::SetPageStyle( SCTAB nTab, const rtl::OUString& rName )
+void ScDocument::SetPageStyle( SCTAB nTab, const OUString& rName )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetPageStyle( rName );
 }
 
 
-const rtl::OUString ScDocument::GetPageStyle( SCTAB nTab ) const
+const OUString ScDocument::GetPageStyle( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetPageStyle();
 
-    return rtl::OUString();
+    return OUString();
 }
 
 
@@ -5615,7 +5615,7 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 
     if ( nTab + 1 < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab+1] )
     {
-        rtl::OUString aNew = maTabs[nTab+1]->GetPageStyle();
+        OUString aNew = maTabs[nTab+1]->GetPageStyle();
         if ( aNew != maTabs[nTab]->GetPageStyle() )
         {
             SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aNew, SFX_STYLE_FAMILY_PAGE );

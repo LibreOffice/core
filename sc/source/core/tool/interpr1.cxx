@@ -2453,14 +2453,14 @@ void ScInterpreter::ScCell()
             else if( aInfoType.EqualsAscii( "ADDRESS" ) )
             {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
                 sal_uInt16 nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ABS) : (SCA_ABS_3D);
-                rtl::OUString aStr;
+                OUString aStr;
                 aCellPos.Format( aStr, nFlags, pDok, pDok->GetAddressConvention() );
                 PushString(aStr);
             }
             else if( aInfoType.EqualsAscii( "FILENAME" ) )
             {   // file name and table name: 'FILENAME'#$TABLE
                 SCTAB nTab = aCellPos.Tab();
-                rtl::OUString aFuncResult;
+                OUString aFuncResult;
                 if( nTab < pDok->GetTableCount() )
                 {
                     if( pDok->GetLinkMode( nTab ) == SC_LINK_VALUE )
@@ -2470,12 +2470,12 @@ void ScInterpreter::ScCell()
                         SfxObjectShell* pShell = pDok->GetDocumentShell();
                         if( pShell && pShell->GetMedium() )
                         {
-                            rtl::OUStringBuffer aBuf;
+                            OUStringBuffer aBuf;
                             aBuf.append(sal_Unicode('\''));
                             const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();
                             aBuf.append(rURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS));
                             aBuf.appendAscii("'#$");
-                            rtl::OUString aTabName;
+                            OUString aTabName;
                             pDok->GetName( nTab, aTabName );
                             aBuf.append(aTabName);
                             aFuncResult = aBuf.makeStringAndClear();
@@ -2487,8 +2487,8 @@ void ScInterpreter::ScCell()
             else if( aInfoType.EqualsAscii( "COORD" ) )
             {   // address, lotus 1-2-3 formatted: $TABLE:$COL$ROW
                 // Yes, passing tab as col is intentional!
-                rtl::OUStringBuffer aFuncResult;
-                rtl::OUString aCellStr;
+                OUStringBuffer aFuncResult;
+                OUString aCellStr;
                 ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
                     aCellStr, (SCA_COL_ABSOLUTE|SCA_VALID_COL), NULL, pDok->GetAddressConvention() );
                 aFuncResult.append(aCellStr);
@@ -2518,7 +2518,7 @@ void ScInterpreter::ScCell()
                     c = 'l';
                 else
                     c = HasCellValueData( pCell ) ? 'v' : 'b';
-                PushString( rtl::OUString(c) );
+                PushString( OUString(c) );
             }
             else if( aInfoType.EqualsAscii( "WIDTH" ) )
             {   // column width (rounded off as count of zero characters in standard font and size)
@@ -2531,7 +2531,7 @@ void ScInterpreter::ScCell()
                 // font color doesn't matter here
                 pDok->GetDefPattern()->GetFont( aDefFont, SC_AUTOCOL_BLACK, pPrinter );
                 pPrinter->SetFont( aDefFont );
-                long nZeroWidth = pPrinter->GetTextWidth( rtl::OUString( '0' ) );
+                long nZeroWidth = pPrinter->GetTextWidth( OUString( '0' ) );
                 pPrinter->SetFont( aOldFont );
                 pPrinter->SetMapMode( aOldMode );
                 int nZeroCount = (int)(pDok->GetColWidth( aCellPos.Col(), aCellPos.Tab() ) / nZeroWidth);
@@ -2554,7 +2554,7 @@ void ScInterpreter::ScCell()
                         case SVX_HOR_JUSTIFY_REPEAT:    c = '\\'; break;
                     }
                 }
-                PushString( rtl::OUString(c) );
+                PushString( OUString(c) );
             }
             else if( aInfoType.EqualsAscii( "PROTECT" ) )
             {   // 1 = cell locked
@@ -2601,7 +2601,7 @@ void ScInterpreter::ScCellExternal()
         return;
     }
 
-    rtl::OUString aInfoType = GetString();
+    OUString aInfoType = GetString();
     if (nGlobalError)
     {
         PushIllegalParameter();
@@ -2652,7 +2652,7 @@ void ScInterpreter::ScCellExternal()
     {
         // 'file URI'#$SheetName
 
-        const rtl::OUString* p = pRefMgr->getExternalFileName(nFileId);
+        const OUString* p = pRefMgr->getExternalFileName(nFileId);
         if (!p)
         {
             // In theory this should never happen...
@@ -2660,7 +2660,7 @@ void ScInterpreter::ScCellExternal()
             return;
         }
 
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         aBuf.append(sal_Unicode('\''));
         aBuf.append(*p);
         aBuf.appendAscii("'#$");
@@ -2675,7 +2675,7 @@ void ScInterpreter::ScCellExternal()
                 PushString(pToken->GetString());
             break;
             case svDouble:
-                PushString(rtl::OUString::valueOf(pToken->GetDouble()));
+                PushString(OUString::valueOf(pToken->GetDouble()));
             break;
             case svError:
                 PushString(ScGlobal::GetErrorString(pToken->GetError()));
@@ -2698,7 +2698,7 @@ void ScInterpreter::ScCellExternal()
             default:
                 ;
         }
-        PushString(rtl::OUString(c));
+        PushString(OUString(c));
     }
     else if ( aInfoType == "FORMAT" )
     {
@@ -2862,7 +2862,7 @@ void ScInterpreter::ScIsFormula()
 void ScInterpreter::ScFormula()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFormula" );
-    rtl::OUString aFormula;
+    OUString aFormula;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -3205,7 +3205,7 @@ void ScInterpreter::ScPropper()
         xub_StrLen nPos = 1;
         while( nPos < nLen )
         {
-            rtl::OUString aTmpStr( pStr[nPos-1] );
+            OUString aTmpStr( pStr[nPos-1] );
             if ( !ScGlobal::pCharClass->isLetter( aTmpStr, 0 ) )
                 pStr[nPos] = pUpr[nPos];
             else
@@ -3508,7 +3508,7 @@ void ScInterpreter::ScCode()
         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
         RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
-    PushInt( (sal_uChar) rtl::OUStringToOString(rtl::OUString(rStr.GetChar(0)), osl_getThreadTextEncoding(), convertFlags).toChar() );
+    PushInt( (sal_uChar) OUStringToOString(OUString(rStr.GetChar(0)), osl_getThreadTextEncoding(), convertFlags).toChar() );
 }
 
 
@@ -3528,7 +3528,7 @@ void ScInterpreter::ScChar()
             RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT;
 
         sal_Char cEncodedChar = static_cast<sal_Char>(fVal);
-        rtl::OUString aStr(&cEncodedChar, 1,  osl_getThreadTextEncoding(), convertFlags);
+        OUString aStr(&cEncodedChar, 1,  osl_getThreadTextEncoding(), convertFlags);
         PushString(aStr);
     }
 }
@@ -3538,14 +3538,14 @@ void ScInterpreter::ScChar()
  * Takashi Nakamoto <bluedwarf@ooo>
  * erAck: added Excel compatibility conversions as seen in issue's test case. */
 
-static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
+static OUString lcl_convertIntoHalfWidth( const OUString & rStr )
 {
     static bool bFirstASCCall = true;
     static utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), 0 );
 
     if( bFirstASCCall )
     {
-        aTrans.loadModuleByImplName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FULLWIDTH_HALFWIDTH_LIKE_ASC" )), LANGUAGE_SYSTEM );
+        aTrans.loadModuleByImplName( OUString( "FULLWIDTH_HALFWIDTH_LIKE_ASC" ), LANGUAGE_SYSTEM );
         bFirstASCCall = false;
     }
 
@@ -3553,14 +3553,14 @@ static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
 }
 
 
-static ::rtl::OUString lcl_convertIntoFullWidth( const ::rtl::OUString & rStr )
+static OUString lcl_convertIntoFullWidth( const OUString & rStr )
 {
     static bool bFirstJISCall = true;
     static utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), 0 );
 
     if( bFirstJISCall )
     {
-        aTrans.loadModuleByImplName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HALFWIDTH_FULLWIDTH_LIKE_JIS" )), LANGUAGE_SYSTEM );
+        aTrans.loadModuleByImplName( OUString( "HALFWIDTH_FULLWIDTH_LIKE_JIS" ), LANGUAGE_SYSTEM );
         bFirstJISCall = false;
     }
 
@@ -3604,7 +3604,7 @@ void ScInterpreter::ScUnicode()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScUnicode" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        const rtl::OUString& rStr = GetString();
+        const OUString& rStr = GetString();
         if (rStr.isEmpty())
             PushIllegalParameter();
         else
@@ -3626,7 +3626,7 @@ void ScInterpreter::ScUnichar()
         else
         {
             sal_uInt32 nCodePoint = static_cast<sal_uInt32>( dVal );
-            rtl::OUString aStr( &nCodePoint, 1 );
+            OUString aStr( &nCodePoint, 1 );
             PushString( aStr );
         }
     }
@@ -4911,7 +4911,7 @@ public:
         return mbColVec ? mrMat.GetDouble(0, i) : mrMat.GetDouble(i, 0);
     }
 
-    rtl::OUString GetString(SCSIZE i) const
+    OUString GetString(SCSIZE i) const
     {
         return mbColVec ? mrMat.GetString(0, i) : mrMat.GetString(i, 0);
     }
@@ -4961,8 +4961,8 @@ static sal_Int32 lcl_CompareMatrix2Query(
     if (!bByString)
         return 1;       // string always greater than numeric
 
-    const rtl::OUString aStr1 = rMat.GetString(i);
-    const rtl::OUString& rStr2 = rEntry.GetQueryItem().maString;
+    const OUString aStr1 = rMat.GetString(i);
+    const OUString& rStr2 = rEntry.GetQueryItem().maString;
 
     return ScGlobal::GetCollator()->compareString(aStr1, rStr2); // case-insensitive
 }
@@ -5005,7 +5005,7 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
     }
     else if (rMat.IsString(rIndex))
     {
-        rtl::OUString aStr( rMat.GetString(rIndex));
+        OUString aStr( rMat.GetString(rIndex));
         if (bReverse)
             while (rIndex > 0 && rMat.IsString(rIndex-1) &&
                     aStr == rMat.GetString(rIndex-1))
@@ -7099,7 +7099,7 @@ void ScInterpreter::CalculateLookup(bool HLookup)
         //!!!!!!!
         //! TODO: enable regex on matrix strings
         //!!!!!!!
-                    const rtl::OUString& rParamStr = rItem.maString;
+                    const OUString& rParamStr = rItem.maString;
                     if ( bSorted )
                     {
                         static CollatorWrapper* pCollator = ScGlobal::GetCollator();
@@ -7483,7 +7483,7 @@ ScDBQueryParamBase* ScInterpreter::GetDBParams( bool& rMissingField )
 
                 ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
                 sal_uInt32 nIndex = 0;
-                const rtl::OUString& rQueryStr = rItem.maString;
+                const OUString& rQueryStr = rItem.maString;
                 bool bNumber = pFormatter->IsNumberFormat(
                     rQueryStr, nIndex, rItem.mfVal);
                 rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
@@ -8811,7 +8811,7 @@ void ScInterpreter::ScRept()
         {
             const xub_StrLen nLen = aStr.Len();
             xub_StrLen n = (xub_StrLen) fAnz;
-            rtl::OUStringBuffer aRes(n*nLen);
+            OUStringBuffer aRes(n*nLen);
             while( n-- )
                 aRes.append(aStr);
             PushString( aRes.makeStringAndClear() );

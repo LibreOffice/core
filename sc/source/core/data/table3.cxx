@@ -80,13 +80,13 @@ using namespace ::com::sun::star::i18n;
     @return Returns TRUE if a numeral element is found in a given string, or
     FALSE if no numeral element is found.
 */
-bool SplitString( const rtl::OUString &sWhole,
-    rtl::OUString &sPrefix, rtl::OUString &sSuffix, double &fNum )
+bool SplitString( const OUString &sWhole,
+    OUString &sPrefix, OUString &sSuffix, double &fNum )
 {
     i18n::LocaleDataItem aLocaleItem = ScGlobal::pLocaleData->getLocaleItem();
 
     // Get prefix element
-    rtl::OUString sEmpty, sUser = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-" ));
+    OUString sEmpty, sUser = OUString( "-" );
     ParseResult aPRPre = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::IDENTNAME, sWhole, 0,
         KParseTokens::ANY_LETTER, sUser, KParseTokens::ANY_LETTER, sUser );
@@ -137,7 +137,7 @@ bool SplitString( const rtl::OUString &sWhole,
 short Compare( const String &sInput1, const String &sInput2,
                const bool bCaseSens, const ScUserListData* pData, const CollatorWrapper *pCW )
 {
-    rtl::OUString sStr1( sInput1 ), sStr2( sInput2 ), sPre1, sSuf1, sPre2, sSuf2;
+    OUString sStr1( sInput1 ), sStr2( sInput2 ), sPre1, sSuf1, sPre2, sSuf2;
 
     do
     {
@@ -401,8 +401,8 @@ short ScTable::CompareCell( sal_uInt16 nSort,
 
             if ( bStr1 && bStr2 )           // nur Strings untereinander als String vergleichen!
             {
-                rtl::OUString aStr1;
-                rtl::OUString aStr2;
+                OUString aStr1;
+                OUString aStr2;
                 if (eType1 == CELLTYPE_STRING)
                     aStr1 = ((ScStringCell*)pCell1)->GetString();
                 else
@@ -919,7 +919,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     //  (frueher nur, wenn eine Spalte mehrfach vorkam)
     bool bTestPrevSub = ( nLevelCount > 1 );
 
-    rtl::OUString  aSubString;
+    OUString  aSubString;
     String  aOutString;
 
     bool bIgnoreCase = !rParam.bCaseSens;
@@ -974,7 +974,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     bChanged = false;
                     if (!bTotal)
                     {
-                        rtl::OUString aString;
+                        OUString aString;
                         for (i=0; i<=aRowEntry.nGroupNo && !bChanged; i++)
                         {
                             GetString( nGroupCol[i], nRow, aString );
@@ -983,7 +983,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             //  wenn sortiert, ist "leer" eine eigene Gruppe
                             //  sonst sind leere Zellen unten erlaubt
                             bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
-                                            aString != rtl::OUString(*pCompString[i]) );
+                                            aString != OUString(*pCompString[i]) );
                         }
                         if ( bChanged && bTestPrevSub )
                         {
@@ -1352,7 +1352,7 @@ public:
         bool bOk = false;
         bool bTestEqual = false;
         bool bMatchWholeCell = mbMatchWholeCell;
-        rtl::OUString  aCellStr;
+        OUString  aCellStr;
         if (isPartialTextMatchOp(rEntry))
             // may have to do partial textural comparison.
             bMatchWholeCell = false;
@@ -1451,7 +1451,7 @@ public:
                 }
                 else
                 {
-                    const rtl::OUString& rQueryStr = rItem.maString;
+                    const OUString& rQueryStr = rItem.maString;
                     String aCell( mpTransliteration->transliterate(
                         aCellStr, ScGlobal::eLnge, 0, aCellStr.getLength(),
                         NULL ) );
@@ -1839,7 +1839,7 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
 SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
 {
     ScQueryParam    aParam( rParamOrg );
-    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StrSetType;
+    typedef boost::unordered_set<OUString, OUStringHash> StrSetType;
     StrSetType aStrSet;
 
     bool    bStarted = false;
@@ -1889,12 +1889,12 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
                 bResult = true;
             else
             {
-                rtl::OUString aStr;
+                OUString aStr;
                 for (SCCOL k=aParam.nCol1; k <= aParam.nCol2; k++)
                 {
-                    rtl::OUString aCellStr;
+                    OUString aCellStr;
                     GetString(k, j, aCellStr);
-                    rtl::OUStringBuffer aBuf(aStr);
+                    OUStringBuffer aBuf(aStr);
                     aBuf.append(aCellStr);
                     aBuf.append(static_cast<sal_Unicode>(1));
                     aStr = aBuf.makeStringAndClear();
@@ -1946,7 +1946,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 {
     bool    bValid = true;
     SCCOL* pFields = new SCCOL[nCol2-nCol1+1];
-    rtl::OUString  aCellStr;
+    OUString  aCellStr;
     SCCOL   nCol = nCol1;
     OSL_ENSURE( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
     SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
@@ -1955,7 +1955,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     // Erste Zeile muessen Spaltenkoepfe sein
     while (bValid && (nCol <= nCol2))
     {
-        rtl::OUString aQueryStr;
+        OUString aQueryStr;
         GetUpperCellString(nCol, nRow1, aQueryStr);
         bool bFound = false;
         SCCOL i = rQueryParam.nCol1;
@@ -2037,7 +2037,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
 
     bool bValid;
     bool bFound;
-    rtl::OUString aCellStr;
+    OUString aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = nRow1;
     OSL_ENSURE( rQueryParam.nTab != SCTAB_MAX, "rQueryParam.nTab no value, not bad but no good" );
@@ -2075,7 +2075,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
             GetUpperCellString(nCol1 + 1, nRow, aCellStr);
             for (SCCOL i=rQueryParam.nCol1; (i <= nDBCol2) && (!bFound); i++)
             {
-                rtl::OUString aFieldStr;
+                OUString aFieldStr;
                 if ( nTab == nDBTab )
                     GetUpperCellString(i, nDBRow1, aFieldStr);
                 else
@@ -2118,7 +2118,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         // Vierte Spalte Wert
         if (bValid)
         {
-            rtl::OUString aStr;
+            OUString aStr;
             GetString(nCol1 + 3, nRow, aStr);
             rEntry.GetQueryItem().maString = aStr;
             rEntry.bDoQuery = true;

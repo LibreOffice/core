@@ -65,7 +65,7 @@
 
 using namespace formula;
 using namespace ::com::sun::star;
-using rtl::OUString;
+using ::rtl::OUString;
 using ::std::vector;
 
 
@@ -128,8 +128,8 @@ void ScCompiler::fillFromAddInMap( NonConstOpCodeMapPtr xMap,FormulaGrammar::Gra
         char const * const * ppSymbol =
             reinterpret_cast< char const * const * >(
                     reinterpret_cast< char const * >(pMap) + nSymbolOffset);
-        xMap->putExternal( rtl::OUString::createFromAscii( *ppSymbol),
-                rtl::OUString::createFromAscii( pMap->pOriginal));
+        xMap->putExternal( OUString::createFromAscii( *ppSymbol),
+                OUString::createFromAscii( pMap->pOriginal));
     }
 }
 
@@ -155,7 +155,7 @@ void ScCompiler::fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap )
         const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
         if (pFuncData)
         {
-            ::rtl::OUString aName;
+            OUString aName;
             if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
                 xMap->putExternalSoftly( aName, pFuncData->GetOriginalName());
             else
@@ -177,7 +177,7 @@ void ScCompiler::DeInit()
 bool ScCompiler::IsEnglishSymbol( const String& rName )
 {
     // function names are always case-insensitive
-    rtl::OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
 
     // 1. built-in function name
     OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
@@ -192,7 +192,7 @@ bool ScCompiler::IsEnglishSymbol( const String& rName )
     }
 
     // 3. new (uno) add in functions
-    rtl::OUString aIntName = ScGlobal::GetAddInCollection()->FindFunction(aUpper, false);
+    OUString aIntName = ScGlobal::GetAddInCollection()->FindFunction(aUpper, false);
     if (!aIntName.isEmpty())
     {
         return true;
@@ -635,11 +635,11 @@ static bool lcl_parseExternalName(
 static String lcl_makeExternalNameStr( const String& rFile, const String& rName,
         const sal_Unicode cSep, bool bODF )
 {
-    String aFile( rFile), aName( rName), aEscQuote( RTL_CONSTASCII_USTRINGPARAM("''"));
+    String aFile( rFile), aName( rName), aEscQuote( "''");
     aFile.SearchAndReplaceAllAscii( "'", aEscQuote);
     if (bODF)
         aName.SearchAndReplaceAllAscii( "'", aEscQuote);
-    rtl::OUStringBuffer aBuf( aFile.Len() + aName.Len() + 9);
+    OUStringBuffer aBuf( aFile.Len() + aName.Len() + 9);
     if (bODF)
         aBuf.append( sal_Unicode( '['));
     aBuf.append( sal_Unicode( '\''));
@@ -687,8 +687,8 @@ static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
 struct Convention_A1 : public ScCompiler::Convention
 {
     Convention_A1( FormulaGrammar::AddressConvention eConv ) : ScCompiler::Convention( eConv ) { }
-    static void MakeColStr( rtl::OUStringBuffer& rBuffer, SCCOL nCol );
-    static void MakeRowStr( rtl::OUStringBuffer& rBuffer, SCROW nRow );
+    static void MakeColStr( OUStringBuffer& rBuffer, SCCOL nCol );
+    static void MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow );
 
     ParseResult parseAnyToken( const String& rFormula,
                                xub_StrLen nSrcPos,
@@ -702,7 +702,7 @@ struct Convention_A1 : public ScCompiler::Convention
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names because of Xcl :-/
-        static const String aAddAllowed(rtl::OUString("?#"));
+        static const String aAddAllowed(OUString("?#"));
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }
@@ -713,7 +713,7 @@ struct Convention_A1 : public ScCompiler::Convention
     }
 };
 
-void Convention_A1::MakeColStr( rtl::OUStringBuffer& rBuffer, SCCOL nCol )
+void Convention_A1::MakeColStr( OUStringBuffer& rBuffer, SCCOL nCol )
 {
     if ( !ValidCol( nCol) )
         rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
@@ -721,7 +721,7 @@ void Convention_A1::MakeColStr( rtl::OUStringBuffer& rBuffer, SCCOL nCol )
         ::ScColToAlpha( rBuffer, nCol);
 }
 
-void Convention_A1::MakeRowStr( rtl::OUStringBuffer& rBuffer, SCROW nRow )
+void Convention_A1::MakeRowStr( OUStringBuffer& rBuffer, SCROW nRow )
 {
     if ( !ValidRow(nRow) )
         rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
@@ -762,7 +762,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
 
-    void MakeOneRefStrImpl( rtl::OUStringBuffer&    rBuffer,
+    void MakeOneRefStrImpl( OUStringBuffer&    rBuffer,
                             const ScCompiler&       rComp,
                             const ScSingleRefData&  rRef,
                             bool                    bForceTab,
@@ -804,7 +804,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
 
-    void MakeRefStrImpl( rtl::OUStringBuffer&   rBuffer,
+    void MakeRefStrImpl( OUStringBuffer&   rBuffer,
                          const ScCompiler&      rComp,
                          const ScComplexRefData&    rRef,
                          bool bSingleRef,
@@ -838,7 +838,7 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append(sal_Unicode(']'));
     }
 
-    void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
+    void MakeRefStr( OUStringBuffer&   rBuffer,
                      const ScCompiler&      rComp,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
@@ -872,7 +872,7 @@ struct ConventionOOO_A1 : public Convention_A1
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('#'), false);
     }
 
-    bool makeExternalSingleRefStr( ::rtl::OUStringBuffer& rBuffer, sal_uInt16 nFileId,
+    bool makeExternalSingleRefStr( OUStringBuffer& rBuffer, sal_uInt16 nFileId,
                                    const String& rTabName, const ScSingleRefData& rRef,
                                    ScExternalRefManager* pRefMgr, bool bDisplayTabName, bool bEncodeUrl ) const
     {
@@ -887,7 +887,7 @@ struct ConventionOOO_A1 : public Convention_A1
                 else
                     aFile = INetURLObject::decode(*p, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
             }
-            aFile.SearchAndReplaceAllAscii("'", rtl::OUString("''"));
+            aFile.SearchAndReplaceAllAscii("'", OUString("''"));
 
             rBuffer.append(sal_Unicode('\''));
             rBuffer.append(aFile);
@@ -911,7 +911,7 @@ struct ConventionOOO_A1 : public Convention_A1
         return true;
     }
 
-    void makeExternalRefStrImpl( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
@@ -941,14 +941,14 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append( sal_Unicode(']'));
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, false);
     }
 
-    void makeExternalRefStrImpl( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
@@ -1008,7 +1008,7 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append( sal_Unicode(']'));
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1025,7 +1025,7 @@ const ScCompiler::Convention * const ScCompiler::pConvOOO_A1 = &ConvOOO_A1;
 struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 {
     ConventionOOO_A1_ODF() : ConventionOOO_A1 (FormulaGrammar::CONV_ODF) { }
-    void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
+    void MakeRefStr( OUStringBuffer&   rBuffer,
                      const ScCompiler&      rComp,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
@@ -1038,14 +1038,14 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('#'), true);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, true);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1068,7 +1068,7 @@ struct ConventionXL
         bool bHasDoc = false;
 
         rDocName.Erase();
-        rtl::OUString aTmp;
+        OUString aTmp;
         if (rRef.IsTabDeleted() ||
             !rComp.GetDoc()->GetName( rRef.nTab, aTmp ))
         {
@@ -1095,7 +1095,7 @@ struct ConventionXL
         return bHasDoc;
     }
 
-    static void MakeDocStr( rtl::OUStringBuffer& rBuf,
+    static void MakeDocStr( OUStringBuffer& rBuf,
                             const ScCompiler& rComp,
                             const ScComplexRefData& rRef,
                             bool bSingleRef )
@@ -1163,7 +1163,7 @@ struct ConventionXL
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('!'), false);
     }
 
-    static void makeExternalDocStr( ::rtl::OUStringBuffer& rBuffer, const String& rFullName, bool bEncodeUrl )
+    static void makeExternalDocStr( OUStringBuffer& rBuffer, const String& rFullName, bool bEncodeUrl )
     {
         // Format that is easier to deal with inside OOo, because we use file
         // URL, and all characetrs are allowed.  Check if it makes sense to do
@@ -1193,7 +1193,7 @@ struct ConventionXL
         rBuffer.append(sal_Unicode(']'));
     }
 
-    static void makeExternalTabNameRange( ::rtl::OUStringBuffer& rBuf, const OUString& rTabName,
+    static void makeExternalTabNameRange( OUStringBuffer& rBuf, const OUString& rTabName,
                                           const vector<OUString>& rTabNames,
                                           const ScComplexRefData& rRef )
     {
@@ -1271,7 +1271,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     ConventionXL_A1() : Convention_A1( FormulaGrammar::CONV_XL_A1 ) { }
     ConventionXL_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1( eConv ) { }
 
-    void makeSingleCellStr( ::rtl::OUStringBuffer& rBuf, const ScSingleRefData& rRef ) const
+    void makeSingleCellStr( OUStringBuffer& rBuf, const ScSingleRefData& rRef ) const
     {
         if (!rRef.IsColRel())
             rBuf.append(sal_Unicode('$'));
@@ -1281,7 +1281,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         MakeRowStr(rBuf, rRef.nRow);
     }
 
-    void MakeRefStr( rtl::OUStringBuffer&   rBuf,
+    void MakeRefStr( OUStringBuffer&   rBuf,
                      const ScCompiler&      rComp,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
@@ -1354,7 +1354,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names
-        const rtl::OUString aAddAllowed("?!");
+        const OUString aAddAllowed("?!");
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }
@@ -1377,7 +1377,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1402,7 +1402,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         makeSingleCellStr(rBuffer, aRef);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1448,7 +1448,7 @@ const ScCompiler::Convention * const ScCompiler::pConvXL_OOX = &ConvXL_OOX;
 //-----------------------------------------------------------------------------
 
 static void
-r1c1_add_col( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
+r1c1_add_col( OUStringBuffer &rBuf, const ScSingleRefData& rRef )
 {
     rBuf.append( sal_Unicode( 'C' ) );
     if( rRef.IsColRel() )
@@ -1460,7 +1460,7 @@ r1c1_add_col( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
         rBuf.append( OUString::number( rRef.nCol + 1 ) );
 }
 static void
-r1c1_add_row( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
+r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef )
 {
     rBuf.append( sal_Unicode( 'R' ) );
     if( rRef.IsRowRel() )
@@ -1477,7 +1477,7 @@ r1c1_add_row( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
 struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 {
     ConventionXL_R1C1() : ScCompiler::Convention( FormulaGrammar::CONV_XL_R1C1 ) { }
-    void MakeRefStr( rtl::OUStringBuffer&   rBuf,
+    void MakeRefStr( OUStringBuffer&   rBuf,
                      const ScCompiler&      rComp,
                      const ScComplexRefData& rRef,
                      bool bSingleRef ) const
@@ -1553,7 +1553,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
             KParseTokens::ASC_UNDERSCORE ;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names
-        const rtl::OUString aAddAllowed("?-[]!");
+        const OUString aAddAllowed("?-[]!");
 
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
@@ -1577,7 +1577,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1603,7 +1603,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         r1c1_add_col(rBuffer, aRef);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1726,8 +1726,8 @@ void ScCompiler::CheckTabQuotes( String& rString,
         case FormulaGrammar::CONV_XL_OOX :
             if( bNeedsQuote )
             {
-                const rtl::OUString one_quote(static_cast<sal_Unicode>('\''));
-                const rtl::OUString two_quote("''");
+                const OUString one_quote(static_cast<sal_Unicode>('\''));
+                const OUString two_quote("''");
                 // escape embedded quotes
                 rString.SearchAndReplaceAll( one_quote, two_quote );
             }
@@ -2781,7 +2781,7 @@ bool ScCompiler::IsReference( const String& rName )
     if ( ch1 == cDecSep )
         return false;
     // Who was that imbecile introducing '.' as the sheet name separator!?!
-    if ( CharClass::isAsciiNumeric( rtl::OUString(ch1) ) )
+    if ( CharClass::isAsciiNumeric( OUString(ch1) ) )
     {
         // Numerical sheet name is valid.
         // But English 1.E2 or 1.E+2 is value 100, 1.E-2 is 0.01
@@ -3484,9 +3484,9 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     String aOld( aRef[j] );
                     String aStr2;
                     const sal_Unicode* p = aRef[j].GetBuffer();
-                    while ( *p && CharClass::isAsciiNumeric( rtl::OUString(*p) ) )
+                    while ( *p && CharClass::isAsciiNumeric( OUString(*p) ) )
                         aStr2 += *p++;
-                    aRef[j] = rtl::OUString( p );
+                    aRef[j] = OUString( p );
                     aRef[j] += aStr2;
                     if ( bColons || aRef[j] != aOld )
                     {
@@ -3552,7 +3552,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // Short cut for references when reading ODF to speedup things.
     if (mnPredetectedReference)
     {
-        rtl::OUString aStr( cSymbol);
+        OUString aStr( cSymbol);
         if (!IsPredetectedReference( aStr) && !IsExternalNamedRange( aStr))
         {
             /* TODO: it would be nice to generate a #REF! error here, which
@@ -3595,7 +3595,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     }
     else
     {
-        rtl::OUString aTmpStr( cSymbol[0] );
+        OUString aTmpStr( cSymbol[0] );
         bMayBeFuncName = ScGlobal::pCharClass->isLetter( aTmpStr, 0 );
         bAsciiNonAlnum = false;
     }
@@ -3616,7 +3616,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     do
     {
         mbRewind = false;
-        const rtl::OUString aOrg( cSymbol );
+        const OUString aOrg( cSymbol );
 
         if (bAsciiNonAlnum)
         {
@@ -3713,7 +3713,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     return true;
 }
 
-void ScCompiler::CreateStringFromXMLTokenArray( rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp )
+void ScCompiler::CreateStringFromXMLTokenArray( OUString& rFormula, OUString& rFormulaNmsp )
 {
     bool bExternal = GetGrammar() == FormulaGrammar::GRAM_EXTERNAL;
     sal_uInt16 nExpectedCount = bExternal ? 2 : 1;
@@ -5066,7 +5066,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
 }
 
 
-void ScCompiler::CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaToken* pTokenP)
+void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP)
 {
     FormulaToken* t = pTokenP;
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
@@ -5094,7 +5094,7 @@ void ScCompiler::CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaT
     }
 }
 
-void ScCompiler::CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer,
+void ScCompiler::CreateStringFromMatrix( OUStringBuffer& rBuffer,
                                            FormulaToken* pTokenP)
 {
     const ScMatrix* pMatrix = static_cast<ScToken*>(pTokenP)->GetMatrix();
@@ -5139,7 +5139,7 @@ void ScCompiler::CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer,
     rBuffer.append( mxSymbols->getSymbol(ocArrayClose) );
 }
 
-void ScCompiler::CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
+void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
 {
     const OpCode eOp = _pTokenP->GetOpCode();
     ScSingleRefData& rRef = static_cast<ScToken*>(_pTokenP)->GetSingleRef();
@@ -5164,15 +5164,15 @@ void ScCompiler::CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,FormulaT
         pConv->MakeRefStr( rBuffer, *this, aRef, true );
 }
 // -----------------------------------------------------------------------------
-void ScCompiler::CreateStringFromDoubleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
+void ScCompiler::CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
 {
     pConv->MakeRefStr( rBuffer, *this, static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false );
 }
 // -----------------------------------------------------------------------------
-void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
+void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pTokenP)
 {
     const OpCode eOp = _pTokenP->GetOpCode();
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     switch ( eOp )
     {
         case ocName:
@@ -5205,7 +5205,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
 // -----------------------------------------------------------------------------
 void ScCompiler::LocalizeString( String& rName )
 {
-    ::rtl::OUString aName(rName);
+    OUString aName(rName);
     ScGlobal::GetAddInCollection()->LocalizeString( aName );
     rName = aName;
 }
@@ -5251,7 +5251,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
         {
             if ( _bIsEnglish )
             {
-                ::rtl::OUString aName;
+                OUString aName;
                 if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
                     aEntry.Name = aName;
                 else
@@ -5259,7 +5259,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
             }
             else
                 aEntry.Name = pFuncData->GetUpperLocal();
-            aEntry.Token.Data <<= ::rtl::OUString( pFuncData->GetOriginalName());
+            aEntry.Token.Data <<= OUString( pFuncData->GetOriginalName());
             _rVec.push_back( aEntry);
         }
     }

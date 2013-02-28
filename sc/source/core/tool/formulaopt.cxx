@@ -87,12 +87,12 @@ void ScFormulaOptions::ResetFormulaSeparators()
 }
 
 void ScFormulaOptions::GetDefaultFormulaSeparators(
-    rtl::OUString& rSepArg, rtl::OUString& rSepArrayCol, rtl::OUString& rSepArrayRow)
+    OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow)
 {
     // Defaults to the old separator values.
-    rSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-    rSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-    rSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM("|"));
+    rSepArg = OUString(";");
+    rSepArrayCol = OUString(";");
+    rSepArrayRow = OUString("|");
 
     const Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
@@ -131,12 +131,12 @@ void ScFormulaOptions::GetDefaultFormulaSeparators(
         // if the decimal and list separators are equal, set the
         // parameter separator to be ';', unless they are both
         // semicolon in which case don't change the decimal separator.
-        rSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+        rSepArg = OUString(";");
 
-    rSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+    rSepArrayCol = OUString(",");
     if (cDecSep == sal_Unicode(','))
-        rSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-    rSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+        rSepArrayCol = OUString(".");
+    rSepArrayRow = OUString(";");
 }
 
 const LocaleDataWrapper& ScFormulaOptions::GetLocaleDataWrapper()
@@ -195,7 +195,7 @@ ScTpFormulaItem::~ScTpFormulaItem()
 
 String ScTpFormulaItem::GetValueText() const
 {
-    return rtl::OUString("ScTpFormulaItem");
+    return OUString("ScTpFormulaItem");
 }
 
 int ScTpFormulaItem::operator==( const SfxPoolItem& rItem ) const
@@ -249,7 +249,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 }
 
 ScFormulaCfg::ScFormulaCfg() :
-    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_FORMULA )) )
+    ConfigItem( OUString( CFGPATH_FORMULA ) )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);

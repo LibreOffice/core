@@ -967,19 +967,19 @@ ScAutoFormat::iterator ScAutoFormat::find(const ScAutoFormatData* pData)
     return itEnd;
 }
 
-ScAutoFormat::const_iterator ScAutoFormat::find(const rtl::OUString& rName) const
+ScAutoFormat::const_iterator ScAutoFormat::find(const OUString& rName) const
 {
     return maData.find(rName);
 }
 
-ScAutoFormat::iterator ScAutoFormat::find(const rtl::OUString& rName)
+ScAutoFormat::iterator ScAutoFormat::find(const OUString& rName)
 {
     return maData.find(rName);
 }
 
 bool ScAutoFormat::insert(ScAutoFormatData* pNew)
 {
-    rtl::OUString aName = pNew->GetName();
+    OUString aName = pNew->GetName();
     return maData.insert(aName, pNew).second;
 }
 
@@ -1019,7 +1019,7 @@ bool ScAutoFormat::Load()
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
-    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
+    aURL.Append( OUString( sAutoTblFmtName ) );
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ );
     SvStream* pStream = aMedium.GetInStream();
@@ -1080,7 +1080,7 @@ bool ScAutoFormat::Save()
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
-    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
+    aURL.Append( OUString( sAutoTblFmtName ) );
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE );
     SvStream* pStream = aMedium.GetOutStream();

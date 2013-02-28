@@ -94,7 +94,7 @@ ScTpPrintItem::~ScTpPrintItem()
 
 String ScTpPrintItem::GetValueText() const
 {
-    return rtl::OUString("ScTpPrintItem");
+    return OUString("ScTpPrintItem");
 }
 
 int ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
@@ -134,7 +134,7 @@ Sequence<OUString> ScPrintCfg::GetPropertyNames()
 }
 
 ScPrintCfg::ScPrintCfg() :
-    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_PRINT )) )
+    ConfigItem( OUString( CFGPATH_PRINT ) )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);

@@ -47,7 +47,7 @@ bool ScDBData::less::operator() (const ScDBData& left, const ScDBData& right) co
     return ScGlobal::GetpTransliteration()->compareString(left.GetUpperName(), right.GetUpperName()) < 0;
 }
 
-ScDBData::ScDBData( const ::rtl::OUString& rName,
+ScDBData::ScDBData( const OUString& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bByR, bool bHasH) :
@@ -103,7 +103,7 @@ ScDBData::ScDBData( const ScDBData& rData ) :
 {
 }
 
-ScDBData::ScDBData( const ::rtl::OUString& rName, const ScDBData& rData ) :
+ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     ScRefreshTimer      ( rData ),
     mpSortParam(new ScSortParam(*rData.mpSortParam)),
     mpQueryParam(new ScQueryParam(*rData.mpQueryParam)),
@@ -210,9 +210,9 @@ ScDBData::~ScDBData()
 }
 
 
-::rtl::OUString ScDBData::GetSourceString() const
+OUString ScDBData::GetSourceString() const
 {
-    ::rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     if (mpImportParam->bImport)
     {
         aBuf.append(mpImportParam->aDBName);
@@ -222,9 +222,9 @@ ScDBData::~ScDBData()
     return aBuf.makeStringAndClear();
 }
 
-::rtl::OUString ScDBData::GetOperations() const
+OUString ScDBData::GetOperations() const
 {
-    ::rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     if (mpQueryParam->GetEntryCount())
     {
         const ScQueryEntry& rEntry = mpQueryParam->GetEntry(0);
@@ -636,9 +636,9 @@ public:
 
 class FindByUpperName : public unary_function<ScDBData, bool>
 {
-    const ::rtl::OUString& mrName;
+    const OUString& mrName;
 public:
-    FindByUpperName(const ::rtl::OUString& rName) : mrName(rName) {}
+    FindByUpperName(const OUString& rName) : mrName(rName) {}
     bool operator() (const ScDBData& r) const
     {
         return r.GetUpperName() == mrName;
@@ -680,7 +680,7 @@ ScDBData* ScDBCollection::NamedDBs::findByIndex(sal_uInt16 nIndex)
     return itr == maDBs.end() ? NULL : &(*itr);
 }
 
-ScDBData* ScDBCollection::NamedDBs::findByUpperName(const ::rtl::OUString& rName)
+ScDBData* ScDBCollection::NamedDBs::findByUpperName(const OUString& rName)
 {
     DBsType::iterator itr = find_if(
         maDBs.begin(), maDBs.end(), FindByUpperName(rName));
@@ -770,7 +770,7 @@ ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
     if (!pData)
     {
         // Insert a new db data.  They all have identical names.
-        rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_GLOBAL_NONAME));
+        OUString aName(STR_DB_GLOBAL_NONAME);
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScDBData> pNew(new ScDBData(
             aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),

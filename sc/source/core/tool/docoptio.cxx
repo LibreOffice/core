@@ -145,7 +145,7 @@ ScTpCalcItem::~ScTpCalcItem()
 
 String ScTpCalcItem::GetValueText() const
 {
-    return rtl::OUString("ScTpCalcItem");
+    return OUString("ScTpCalcItem");
 }
 
 //------------------------------------------------------------------------
@@ -229,14 +229,14 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCDOCLAYOUTOPT_TABSTOP] = OUString(RTL_CONSTASCII_USTRINGPARAM( "TabStop/Metric") );
+        pNames[SCDOCLAYOUTOPT_TABSTOP] = OUString( "TabStop/Metric" );
 
     return aNames;
 }
 
 ScDocCfg::ScDocCfg() :
-    aCalcItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CALC )) ),
-    aLayoutItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DOCLAYOUT)))
+    aCalcItem( OUString( CFGPATH_CALC ) ),
+    aLayoutItem(OUString(CFGPATH_DOCLAYOUT))
 {
     sal_Int32 nIntVal = 0;
 
