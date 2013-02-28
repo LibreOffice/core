@@ -210,10 +210,6 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                     const ARect &rSrcRect,
                                     int nDestX, int nDestY)
 {
-    LOGI("Blit frame src %d,%d->%d,%d to position %d, %d",
-             rSrcRect.left, rSrcRect.top, rSrcRect.right, rSrcRect.bottom,
-             nDestX, nDestY);
-
     basebmp::RawMemorySharedArray aSrcData = aDev->getBuffer();
     basegfx::B2IVector aDevSize = aDev->getSize();
     sal_Int32 nStride = aDev->getScanlineStride();
@@ -278,7 +274,6 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
     ANativeWindow_Buffer aOutBuffer;
     memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
 
-    int32_t nRet = 0;
     if (pBuffer != NULL)
         aOutBuffer = *pBuffer;
     else
@@ -288,26 +283,11 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
 
         //    ARect aRect;
         LOGI("pre lock #3");
-        nRet = ANativeWindow_lock(pWindow, &aOutBuffer, NULL);
+        ANativeWindow_lock(pWindow, &aOutBuffer, NULL);
     }
-    LOGI("Frame count: %d locked window %d returned " // rect:  %d,%d->%d,%d "
-             "buffer: %dx%d stride %d, format %d, bits %p",
-             (int)getFrames().size(),
-             nRet, // aRect.left, aRect.top, aRect.right, aRect.bottom,
-             aOutBuffer.width, aOutBuffer.height, aOutBuffer.stride,
-             aOutBuffer.format, aOutBuffer.bits);
+
     if (aOutBuffer.bits != NULL)
     {
-
-#if 0   // pre-'clean' the buffer with cruft:
-        // hard-code / guess at a format ...
-        int32_t *p = (int32_t *)aOutBuffer.bits;
-        for (int32_t y = 0; y < aOutBuffer.height; y++)
-        {
-            for (int32_t x = 0; x < aOutBuffer.stride; x++)
-                *p++ = (y << 24) + (x << 10) + 0xff ;
-        }
-#endif
         int i = 0;
         std::list< SalFrame* >::const_iterator it;
         for ( it = getFrames().begin(); it != getFrames().end(); i++, it++ )
