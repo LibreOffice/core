@@ -1,6 +1,0 @@
-
-here are some hints about our use of the startup directory.
-
-the .INCLUDEDIRS line in startup.mk gives you the oportunity of switching
-to your own set of central makefiles.
-

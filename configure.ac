@@ -3144,7 +3144,7 @@ if test "$_os" = "WINNT"; then
         fi
         AC_SUBST(BUILD_X64)
 
-        # These are passed to the environment and then used in set_wntx64.mk
+        # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
         AC_SUBST(CXX_X64_BINARY)
         AC_SUBST(LINK_X64_BINARY)
         AC_SUBST(LIBMGR_X64_BINARY)
@@ -4053,7 +4053,6 @@ if test "$cross_compiling" = "yes"; then
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
-        solenv/inc/postset.mk \
         solenv/inc/minor.mk.in \
         instsetoo_native/util/openoffice.lst.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
