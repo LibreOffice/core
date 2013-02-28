@@ -48,15 +48,17 @@ endif
 
 else # $(OS)
 
-icu_CFLAGS:="$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer) \
-	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
+icu_CFLAGS:="$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
 	$(if $(SYSBASE),-I$(SYSBASE)/usr/include) \
-	$(if $(debug),-g,\
-	$(if $(filter GCC,$(COM)),-O2 -fno-strict-aliasing,-O))"
-icu_CXXFLAGS:="$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer) \
-	$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
-	$(if $(debug),-g,\
-	$(if $(filter GCC,$(COM)),-O2 -fno-strict-aliasing,-O))"
+	$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
+	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
+	$(if $(filter $(true),$(gb_SYMBOL)),-g) \
+	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
+icu_CXXFLAGS:="$(if $(filter IOS,$(OS)),-DUCONFIG_NO_FILE_IO) \
+	$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) \
+	$(if $(filter GCC,$(COM)),-fno-strict-aliasing) \
+	$(if $(filter $(true),$(gb_SYMBOL)),-g) \
+	$(if $(filter ANDROID,$(OS)),-fvisibility=hidden -fno-omit-frame-pointer)"
 icu_LDFLAGS:="$(if $(filter TRUE,$(HAVE_LD_HASH_STYLE)),-Wl$(COMMA)--hash-style=$(WITH_LINKER_HASH_STYLE)) \
 	    $(if $(SYSBASE),-L../lib -L../../lib -L../stubdata -L../../stubdata -L$(SYSBASE)/usr/lib) \
 	    $(if $(filter TRUE,$(HAVE_LD_BSYMBOLIC_FUNCTIONS)),\
