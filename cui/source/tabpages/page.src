@@ -48,8 +48,8 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "C6/5 Envelope" ; PAPERSIZE_C65 ; > ;
         < "C5 Envelope" ; PAPERSIZE_C5 ; > ;
         < "C4 Envelope" ; PAPERSIZE_C4 ; > ;
-        < "#6 3/4 (Personal) Envelope" ; PAPERSIZE_COM675; > ;
-        < "#8 (Monarch) Envelope" ; PAPERSIZE_MONARCH; > ;
+        < "#6¾ Envelope" ; PAPERSIZE_COM675; > ;
+        < "#7¾ (Monarch) Envelope" ; PAPERSIZE_MONARCH; > ;
         < "#9 Envelope" ; PAPERSIZE_COM9; > ;
         < "#10 Envelope" ; PAPERSIZE_COM10; > ;
         < "#11 Envelope" ; PAPERSIZE_COM11; > ;
