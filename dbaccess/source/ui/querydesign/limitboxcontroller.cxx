@@ -16,105 +16,41 @@
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
 
+#include "LimitBox.hxx"
 #include "dbu_reghelper.hxx"
-#include "dbu_qry.hrc"
 #include "moduledbu.hxx"
 
-#define ALL_STRING ModuleRes(STR_QUERY_LIMIT_ALL).toString()
-#define ALL_INT -1
 
 using namespace ::com::sun::star;
-
-////////////////
-///LimitBox
-////////////////
 
 namespace dbaui
 {
 
-namespace global{
-
-/// Default values
-sal_Int64 aDefLimitAry[] =
+class LimitBoxImpl: public LimitBox
 {
-    5,
-    10,
-    20,
-    50
+    public:
+        LimitBoxImpl( Window* pParent, LimitBoxController* pCtrl );
+        virtual ~LimitBoxImpl();
+
+        virtual long    Notify( NotifyEvent& rNEvt );
+
+    private:
+        LimitBoxController* m_pControl;
 };
 
-}
-
-
-LimitBox::LimitBox( Window* pParent, LimitBoxController* pCtrl )
-    : NumericBox( pParent, WinBits( WB_DROPDOWN | WB_VSCROLL) )
+LimitBoxImpl::LimitBoxImpl( Window* pParent, LimitBoxController* pCtrl )
+    : LimitBox( pParent, WinBits( WB_DROPDOWN | WB_VSCROLL) )
     , m_pControl( pCtrl )
 {
-    SetShowTrailingZeros( sal_False );
-    SetDecimalDigits( 0 );
-    SetMin( -1 );
-    SetMax( 9999 );
-    LoadDefaultLimits();
-
-    Size aSize(
-        CalcMinimumSize().Width() + 20 ,
-        CalcWindowSizePixel(GetEntryCount() + 1) );
-    SetSizePixel(aSize);
 }
 
-LimitBox::~LimitBox()
+LimitBoxImpl::~LimitBoxImpl()
 {
 }
 
-void LimitBox::Reformat()
+long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
 {
-
-    if( GetText() == ALL_STRING )
-    {
-        SetValue( -1 );
-    }
-    ///Reformat only when text is not All
-    else
-    {
-        ///Not allow user to type -1
-        if( GetText() == "-1" )
-        {
-            Undo();
-        }
-        else
-            NumericBox::Reformat();
-    }
-}
-
-void LimitBox::ReformatAll()
-{
-    ///First entry is All, which do not need numeric reformat
-    if ( GetEntryCount() > 0 )
-    {
-        RemoveEntry( 0 );
-        NumericBox::ReformatAll();
-        InsertEntry( ALL_STRING, 0);
-    }
-    else
-    {
-        NumericBox::ReformatAll();
-    }
-}
-
-OUString LimitBox::CreateFieldText( sal_Int64 nValue ) const
-{
-    if( nValue == ALL_INT )
-        return ALL_STRING;
-    else
-        return NumericBox::CreateFieldText( nValue );
-}
-
-long LimitBox::Notify( NotifyEvent& rNEvt )
-{
-    long nReturn = NumericBox::Notify( rNEvt );
-
     switch ( rNEvt.GetType() )
     {
         case EVENT_LOSEFOCUS:
@@ -125,36 +61,10 @@ long LimitBox::Notify( NotifyEvent& rNEvt )
             m_pControl->dispatchCommand( aArgs );
             break;
         }
-        case EVENT_KEYINPUT:
-        {
-            const sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
-            if( nCode == KEY_RETURN )
-            {
-                GrabFocusToDocument();
-            }
-            break;
-        }
     }
-    return nReturn;
+    return LimitBox::Notify( rNEvt );
 }
 
-///Initialize entries
-void LimitBox::LoadDefaultLimits()
-{
-    SetValue( ALL_INT );
-    InsertEntry( ALL_STRING );
-
-    const unsigned nSize =
-        sizeof(global::aDefLimitAry)/sizeof(global::aDefLimitAry[0]);
-    for( unsigned nIndex = 0; nIndex< nSize; ++nIndex)
-    {
-        InsertValue( global::aDefLimitAry[nIndex] );
-    }
-}
-
-/////////////////////////
-///LimitBoxController
-/////////////////////////
 
 LimitBoxController::LimitBoxController(
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager ) :
@@ -263,7 +173,8 @@ uno::Reference< awt::XWindow > SAL_CALL LimitBoxController::createItemWindow(
     if ( pParent )
     {
         SolarMutexGuard aSolarMutexGuard;
-        m_pLimitBox = new LimitBox(pParent, this);
+        m_pLimitBox = new LimitBoxImpl(pParent, this);
+        m_pLimitBox->SetSizePixel(m_pLimitBox->GetOptimalSize());
         xItemWindow = VCLUnoHelper::GetInterface( m_pLimitBox );
     }
 

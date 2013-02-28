@@ -48,6 +48,9 @@
     <glade-widget-class title="Text Encoding ListBox" name="svxlo-SvxTextEncodingBox"
                         generic-name="TextEncodingBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Limit ListBox" name="dbulo-LimitBox"
+                        generic-name="LimitBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Font Preview" name="svxlo-SvxFontPrevWindow"
                         generic-name="Font Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

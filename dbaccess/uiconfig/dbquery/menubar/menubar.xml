@@ -43,7 +43,7 @@
             <menu:menuitem menu:id=".uno:Copy"/>
             <menu:menuitem menu:id=".uno:Paste"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:DBDistinctValues"/>
+            <menu:menuitem menu:id=".uno:DBQueryPropertiesDialog"/>
             <menu:menuitem menu:id=".uno:SbaNativeSql"/>
             <menu:menuitem menu:id=".uno:DBClearQuery"/>
             <menu:menuitem menu:id=".uno:SbaExecuteSql"/>
