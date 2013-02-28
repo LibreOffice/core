@@ -12,21 +12,12 @@ $(eval $(call gb_Module_Module,soltools))
 ifneq ($(CROSS_COMPILING),YES)
 $(eval $(call gb_Module_add_targets,soltools,\
     Executable_cpp \
-    Executable_javadep \
     Executable_makedepend \
 ))
-
-ifeq ($(OS)$(COM),SOLARISC52)
-$(eval $(call gb_Module_add_targets,soltools,\
-    Executable_adjustvisibility \
-))
-endif # SOLARISC52
-
 endif # CROSS_COMPILING
 
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Module_add_targets,soltools,\
-    Executable_ldump4 \
     Package_inc \
 ))
 endif # WNTMSC

@@ -29,7 +29,6 @@
 $(eval $(call gb_Helper_register_executables,NONE, \
     HelpIndexer \
     HelpLinker \
-    adjustvisibility \
     bestreversemap \
     bmp \
     bmpsum \
@@ -45,8 +44,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     gsicheck \
     helpex \
     idxdict \
-    javadepend \
-	ldump4 \
     lngconvex \
     localize \
     makedepend \
