@@ -83,9 +83,6 @@ endef
 
 # SrsPartTarget class
 
-# defined by platform
-#  gb_SrsPartTarget__command_dep
-
 gb_ResTarget_RSCDEPS := $(call gb_Executable_get_runtime_dependencies,rsc)
 gb_ResTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(call gb_Executable_get_command,rsc)
 
@@ -105,8 +102,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) \
-		$(gb_ResTarget_RSCDEPS) $(gb_SrsPartTarget__command_target)
-	$(call gb_SrsPartTarget__command_dep,$*,$<)
+		$(gb_ResTarget_RSCDEPS)
 	$(call gb_SrsPartTarget__command,$@,$*,$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
