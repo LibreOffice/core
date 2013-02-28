@@ -217,7 +217,7 @@ OUString ControlHelper::getLabel( sal_Int16 nControlId )
     return retVal;
 }
 
-void ControlHelper::setLabel( sal_Int16 nControlId, const NSString* aLabel )
+void ControlHelper::setLabel( sal_Int16 nControlId, NSString* aLabel )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "label", aLabel);
 
@@ -954,7 +954,7 @@ void ControlHelper::createFilterControl() {
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-NSTextField* ControlHelper::createLabelWithString(const NSString* labelString) {
+NSTextField* ControlHelper::createLabelWithString(NSString* labelString) {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__, "label", labelString);
 
     NSTextField *textField = [NSTextField new];
