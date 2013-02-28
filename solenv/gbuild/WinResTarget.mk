@@ -17,21 +17,7 @@ $(call gb_WinResTarget_get_target,$(1)) : INCLUDE := $(SOLARINC)
 $(call gb_WinResTarget_get_clean_target,$(1)) : RCFILE :=
 $(call gb_WinResTarget_get_target,$(1)) : RCFILE :=
 
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_WinResTarget_get_dep_target,$(1)) : DEFS := $$(gb_WinResTarget_DEFAULTDEFS)
-$(call gb_WinResTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_WinResTarget_INCLUDE)
-$(call gb_WinResTarget_get_dep_target,$(1)) : RCFILE :=
-
--include $(call gb_WinResTarget_get_dep_target,$(1))
-endif
-
 endef
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_WinResTarget_get_dep_target,%) : $(gb_WinResTarget__command_target)
-	$(call gb_WinResTarget__command_dep,$@,$*,$<)
-endif
-
 
 $(call gb_WinResTarget_get_target,%) : $(call gb_Package_get_target,solenv_inc)
 	$(call gb_WinResTarget__command,$@,$*,$<)
@@ -39,8 +25,7 @@ $(call gb_WinResTarget_get_target,%) : $(call gb_Package_get_target,solenv_inc)
 $(call gb_WinResTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),RC ,3)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_WinResTarget_get_target,$*) \
-			$(call gb_WinResTarget_get_dep_target,$*))
+		rm -f $(call gb_WinResTarget_get_target,$*))
 
 define gb_WinResTarget_set_defs
 $$(call gb_Output_error,gb_WinResTarget_set_defs: use gb_WinResTarget_add_defs instead.)
@@ -49,27 +34,15 @@ endef
 define gb_WinResTarget_add_defs
 $(call gb_WinResTarget_get_target,$(1)) : DEFS += $(2)
 
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_WinResTarget_get_dep_target,$(1)) : DEFS += $(2)
-endif
-
 endef
 
 define gb_WinResTarget__add_include
 $(call gb_WinResTarget_get_target,$(1)) : INCLUDE += -I$(2)
 
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_WinResTarget_get_dep_target,$(1)) : INCLUDE += -I$(2)
-endif
-
 endef
 
 define gb_WinResTarget_set_include
 $(call gb_WinResTarget_get_target,$(1)) : INCLUDE := $(2)
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_WinResTarget_get_dep_target,$(1)) : INCLUDE := $(2)
-endif
 
 endef
 
@@ -81,10 +54,6 @@ define gb_WinResTarget_set_rcfile
 $(call gb_WinResTarget_get_clean_target,$(1)) : RCFILE := $(SRCDIR)/$(strip $(2)).rc
 $(call gb_WinResTarget_get_target,$(1)) : RCFILE := $(SRCDIR)/$(strip $(2)).rc
 $(call gb_WinResTarget_get_target,$(1)) : $(SRCDIR)/$(strip $(2)).rc
-
-ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_WinResTarget_get_dep_target,$(1)) : RCFILE := $(SRCDIR)/$(strip $(2)).rc
-endif
 
 endef
 

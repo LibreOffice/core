@@ -475,33 +475,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(RCFILE) )
 endef
 
-$(eval $(call gb_Helper_make_dep_targets,\
-	WinResTarget \
-))
-
-ifeq ($(gb_FULLDEPS),$(true))
-gb_WinResTarget__command_target = $(OUTDIR)/bin/makedepend$(gb_Executable_EXT)
-define gb_WinResTarget__command_dep
-$(call gb_Output_announce,RC:$(2),$(true),DEP,1)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(INCLUDE) \
-		$(DEFS) \
-		$(RCFILE) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(3) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-	> $(1))
-endef
-else
-gb_WinResTarget__command_target =
-gb_WinResTarget__command_dep =
-endif
-
 # InstallModuleTarget class
 
 define gb_InstallModuleTarget_InstallModuleTarget_platform
