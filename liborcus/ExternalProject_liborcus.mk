@@ -50,7 +50,7 @@ else
 # must be built with debug STL if --enable-dbgutil
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter ANDROID,$(OS)),LIBS='-lgnustl_shared -lm') \
+		$(if $(filter ANDROID,$(OS)),LIBS='-lgnustl_shared -lm' CPPFLAGS="-D_GLIBCXX_HAS_GTHREADS") \
 		./configure \
 			--with-pic \
 			--enable-static \
