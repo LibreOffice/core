@@ -852,14 +852,13 @@ SalInstance *CreateSalInstance()
     LOGI("Android: CreateSalInstance!");
     AndroidSalInstance* pInstance = new AndroidSalInstance( new SalYieldMutex() );
     new AndroidSalData( pInstance );
-// FIXME: we init VCL in a different thread from where we run the mainloop [!] ...
-//    pInstance->AcquireYieldMutex(1);
+    pInstance->AcquireYieldMutex(1);
     return pInstance;
 }
 
 void DestroySalInstance( SalInstance *pInst )
 {
-//    pInst->ReleaseYieldMutex();
+    pInst->ReleaseYieldMutex();
     delete pInst;
 }
 
