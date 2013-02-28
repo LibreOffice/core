@@ -226,6 +226,8 @@ public class Desktop
 
         @Override public boolean onTouchEvent(MotionEvent event)
         {
+            gestureDetector.onTouchEvent(event);
+
             if (!renderedOnce)
                 return super.onTouchEvent(event);
 
