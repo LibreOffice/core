@@ -203,7 +203,6 @@ OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiS
     : m_xInst(xInst), m_refCount(0),
       m_smgr( smgr),
       m_factoryHandle( 0 ),
-      m_nApplRegHandle( 0 )
 {
     m_guid = *pGuid;
 

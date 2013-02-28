@@ -144,7 +144,6 @@ protected:
     DWORD               m_factoryHandle;
     Reference<XBridgeSupplier2> m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;
-    unsigned long       m_nApplRegHandle;
 };
 
 /*****************************************************************************
