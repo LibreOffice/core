@@ -151,6 +151,9 @@ public:
     const SfxSlot*   GetSlot( sal_uInt16 nMsgId );
     SfxStateCache*   GetStateCache( sal_uInt16 nId, sal_uInt16 *pPos = 0 );
     SAL_DLLPRIVATE SfxStateCache* GetAnyStateCache_Impl( sal_uInt16 nId );
+    /**
+     * @param rpState the caller has to delete the pointer
+     */
     SfxItemState     QueryState( sal_uInt16 nSID, SfxPoolItem* &rpState );
 
     const SfxPoolItem*  ExecuteSynchron( sal_uInt16 nSlot,
