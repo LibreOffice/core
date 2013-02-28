@@ -428,6 +428,7 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
                 *pNamesOfChildren ) )
         {
             OSL_FAIL( "Got no list of children!" );
+            delete pNamesOfChildren;
             m_pImpl->m_bThrowException = sal_True;
             return false;
         }
