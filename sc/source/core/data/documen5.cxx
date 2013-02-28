@@ -91,16 +91,16 @@ static void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataRec
     {
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
+            OUString("CellRangeRepresentation"), -1,
             uno::makeAny( rRanges ), beans::PropertyState_DIRECT_VALUE );
         aArgs[1] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
+            OUString("HasCategories"), -1,
             uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         aArgs[2] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
+            OUString("FirstCellAsLabel"), -1,
             uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
         aArgs[3] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
+            OUString("DataRowSource"), -1,
             uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
         xReceiver->setArguments( aArgs );
     }
@@ -136,7 +136,7 @@ void ScDocument::UpdateAllCharts()
                     uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                     if ( xIPObj.is() )
                     {
-                        ::rtl::OUString aIPName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                        OUString aIPName = ((SdrOle2Obj*)pObject)->GetPersistName();
 
                         for (size_t nPos = 0; nPos < nDataCount; ++nPos)
                         {

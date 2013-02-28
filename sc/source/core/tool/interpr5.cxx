@@ -3318,11 +3318,11 @@ void ScInterpreter::ScInfo()
         String aStr = GetString();
         ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::GetLocale(), ocInfo);
         if( aStr.EqualsAscii( "SYSTEM" ) )
-            PushString( String( RTL_CONSTASCII_USTRINGPARAM( SC_INFO_OSVERSION ) ) );
+            PushString( String( SC_INFO_OSVERSION ) );
         else if( aStr.EqualsAscii( "OSVERSION" ) )
-            PushString( String( RTL_CONSTASCII_USTRINGPARAM( "Windows (32-bit) NT 5.01" ) ) );
+            PushString( String( "Windows (32-bit) NT 5.01" ) );
         else if( aStr.EqualsAscii( "RELEASE" ) )
-            PushString( ::utl::Bootstrap::getBuildIdData( ::rtl::OUString() ) );
+            PushString( ::utl::Bootstrap::getBuildIdData( OUString() ) );
         else if( aStr.EqualsAscii( "NUMFILE" ) )
             PushDouble( 1 );
         else if( aStr.EqualsAscii( "RECALC" ) )

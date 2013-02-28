@@ -3538,14 +3538,14 @@ void ScInterpreter::ScChar()
  * Takashi Nakamoto <bluedwarf@ooo>
  * erAck: added Excel compatibility conversions as seen in issue's test case. */
 
-static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
+static OUString lcl_convertIntoHalfWidth( const OUString & rStr )
 {
     static bool bFirstASCCall = true;
     static utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), 0 );
 
     if( bFirstASCCall )
     {
-        aTrans.loadModuleByImplName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FULLWIDTH_HALFWIDTH_LIKE_ASC" )), LANGUAGE_SYSTEM );
+        aTrans.loadModuleByImplName( OUString( "FULLWIDTH_HALFWIDTH_LIKE_ASC" ), LANGUAGE_SYSTEM );
         bFirstASCCall = false;
     }
 
@@ -3553,14 +3553,14 @@ static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
 }
 
 
-static ::rtl::OUString lcl_convertIntoFullWidth( const ::rtl::OUString & rStr )
+static OUString lcl_convertIntoFullWidth( const OUString & rStr )
 {
     static bool bFirstJISCall = true;
     static utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), 0 );
 
     if( bFirstJISCall )
     {
-        aTrans.loadModuleByImplName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HALFWIDTH_FULLWIDTH_LIKE_JIS" )), LANGUAGE_SYSTEM );
+        aTrans.loadModuleByImplName( OUString( "HALFWIDTH_FULLWIDTH_LIKE_JIS" ), LANGUAGE_SYSTEM );
         bFirstJISCall = false;
     }
 

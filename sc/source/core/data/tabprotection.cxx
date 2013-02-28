@@ -66,9 +66,9 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
     switch (eHash)
     {
         case PASSHASH_SHA1:
-            return OUString(RTL_CONSTASCII_USTRINGPARAM(URI_SHA1));
+            return OUString(URI_SHA1);
         case PASSHASH_XL:
-            return OUString(RTL_CONSTASCII_USTRINGPARAM(URI_XLS_LEGACY));
+            return OUString(URI_XLS_LEGACY);
         case PASSHASH_UNSPECIFIED:
         default:
             ;

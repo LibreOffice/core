@@ -2904,7 +2904,7 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell,
             if (nTab >= static_cast<SCTAB>(maTabs.size()))
                 maTabs.resize(nTab + 1,NULL);
             maTabs[nTab] = new ScTable(this, nTab,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("temp")),
+                            rtl::OUString("temp"),
                             bExtras, bExtras);
         }
 
@@ -2924,7 +2924,7 @@ void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, bool bForceT
         if (nTab >= static_cast<SCTAB>(maTabs.size()))
             maTabs.resize(nTab + 1,NULL);
         maTabs[nTab] = new ScTable(this, nTab,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("temp")),
+                        rtl::OUString("temp"),
                         bExtras, bExtras);
     }
 

@@ -564,7 +564,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
             maTabs.resize(nTab+1, NULL );
         }
         maTabs[nTab] = new ScTable(this, nTab,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baeh")));
+                            rtl::OUString("baeh"));
         if (nTab < static_cast<SCTAB>(pSourceDoc->maTabs.size()) && pSourceDoc->maTabs[nTab])
             maTabs[nTab]->SetLayoutRTL( pSourceDoc->maTabs[nTab]->IsLayoutRTL() );
     }
@@ -587,7 +587,7 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 maTabs.resize( nTab + 1, NULL );
             }
             maTabs.at(nTab) = new ScTable(this, nTab,
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("temp")),
+                                    rtl::OUString("temp"),
                                     bExtras, bExtras);
         }
 

@@ -1019,7 +1019,7 @@ bool ScAutoFormat::Load()
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
-    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
+    aURL.Append( String( sAutoTblFmtName ) );
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ );
     SvStream* pStream = aMedium.GetInStream();
@@ -1080,7 +1080,7 @@ bool ScAutoFormat::Save()
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
-    aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
+    aURL.Append( String( sAutoTblFmtName ) );
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE );
     SvStream* pStream = aMedium.GetOutStream();

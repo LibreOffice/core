@@ -294,7 +294,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
         SetError( mnStringNoValueError);
         return fValue;
     }
-    ::rtl::OUString aStr( rStr);
+    OUString aStr( rStr);
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nParseEnd;
     // Decimal and group separator 0 => only integer and possibly exponent,
@@ -3116,7 +3116,7 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
     rtl::OUString sCodeName;
-    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CodeName") ) ) >>= sCodeName;
+    xProps->getPropertyValue( rtl::OUString( "CodeName" ) ) >>= sCodeName;
     // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
     // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
     // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
@@ -3127,7 +3127,7 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     uno::Reference< uno::XInterface > xIf;
     if ( pBasMgr && !pBasMgr->GetName().isEmpty() )
     {
-        String sProj = String( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        String sProj = String( "Standard" );
         if ( !pDok->GetDocumentShell()->GetBasicManager()->GetName().isEmpty() )
         {
             sProj = pDok->GetDocumentShell()->GetBasicManager()->GetName();
@@ -3158,7 +3158,7 @@ static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPa
         xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( pDok->GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
         if ( xVBARange.is() )
         {
-            String sDummy(RTL_CONSTASCII_USTRINGPARAM("A-Range") );
+            String sDummy("A-Range");
             SbxObjectRef aObj = GetSbUnoObject( sDummy, uno::Any( xVBARange ) );
             SetSbUnoObjectDfltPropName( aObj );
             bOk = pPar->PutObject( aObj );

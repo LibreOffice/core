@@ -118,7 +118,7 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
 
 void ScDocument::SetAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap)
 {
-    rtl::OUString aGlobalStr(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME));
+    rtl::OUString aGlobalStr(STR_GLOBAL_RANGE_NAME);
     boost::ptr_map<rtl::OUString,ScRangeName>::const_iterator itr = rRangeMap.begin(), itrEnd = rRangeMap.end();
     for (; itr!=itrEnd; ++itr)
     {
@@ -169,7 +169,7 @@ void ScDocument::GetRangeNameMap(std::map<rtl::OUString, ScRangeName*>& aRangeNa
     {
         pRangeName = new ScRangeName();
     }
-    rtl::OUString aGlobal(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME));
+    rtl::OUString aGlobal(STR_GLOBAL_RANGE_NAME);
     aRangeNameMap.insert(std::pair<rtl::OUString, ScRangeName*>(aGlobal, pRangeName));
 }
 

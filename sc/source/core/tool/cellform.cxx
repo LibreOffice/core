@@ -105,7 +105,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, rtl::OUStrin
                             (!pFCell->GetDocument()->GetMacroInterpretLevel()
                             || pFCell->IsRunning()) )
                     {
-                        rString = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..."));
+                        rString = rtl::OUString("...");
                     }
                     else
                     {

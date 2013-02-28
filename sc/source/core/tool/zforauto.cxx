@@ -30,7 +30,7 @@ static const sal_Char pStandardName[] = "Standard";
 //------------------------------------------------------------------------
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
-    sFormatstring   ( RTL_CONSTASCII_USTRINGPARAM( pStandardName ) ),
+    sFormatstring   ( pStandardName ),
     eLnge           (LANGUAGE_SYSTEM),
     eSysLnge        (LANGUAGE_GERMAN)       // sonst passt "Standard" nicht
 {

@@ -141,7 +141,7 @@ ScDPSource::~ScDPSource()
     delete pResData;
 }
 
-const ::rtl::OUString* ScDPSource::GetGrandTotalName() const
+const OUString* ScDPSource::GetGrandTotalName() const
 {
     return mpGrandTotalName.get();
 }
@@ -1366,7 +1366,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
     return GetHierarchiesObject();
 }
 
-::rtl::OUString SAL_CALL ScDPDimension::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDPDimension::getName() throw(uno::RuntimeException)
 {
     if (!aName.isEmpty())
         return aName;
@@ -1374,7 +1374,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
         return pSource->GetData()->getDimensionName( nDim );
 }
 
-void SAL_CALL ScDPDimension::setName( const ::rtl::OUString& rNewName ) throw(uno::RuntimeException)
+void SAL_CALL ScDPDimension::setName( const OUString& rNewName ) throw(uno::RuntimeException)
 {
     //  used after cloning
     aName = rNewName;
@@ -1667,9 +1667,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
     else if (aPropertyName.equalsAscii(SC_UNO_DP_LAYOUTNAME))
-        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString("");
     else if (aPropertyName.equalsAscii(SC_UNO_DP_FIELD_SUBTOTALNAME))
-        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString("");
     else if (aPropertyName.equalsAscii(SC_UNO_DP_HAS_HIDDEN_MEMBER))
         aRet <<= static_cast<sal_Bool>(mbHasHiddenMember);
     else if (aPropertyName.equalsAscii(SC_UNO_DP_FLAGS))
@@ -1830,19 +1830,19 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
     return GetLevelsObject();
 }
 
-::rtl::OUString SAL_CALL ScDPHierarchy::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDPHierarchy::getName() throw(uno::RuntimeException)
 {
     rtl::OUString aRet;        //! globstr-ID !!!!
     switch (nHier)
     {
         case SC_DAPI_HIERARCHY_FLAT:
-            aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flat"));
+            aRet = rtl::OUString("flat");
             break;  //! name ???????
         case SC_DAPI_HIERARCHY_QUARTER:
-            aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quarter"));
+            aRet = rtl::OUString("Quarter");
             break;  //! name ???????
         case SC_DAPI_HIERARCHY_WEEK:
-            aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Week"));
+            aRet = rtl::OUString("Week");
             break;  //! name ???????
         default:
             OSL_FAIL( "ScDPHierarchy::getName: unexpected hierarchy" );
@@ -1851,7 +1851,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
     return aRet;
 }
 
-void SAL_CALL ScDPHierarchy::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
+void SAL_CALL ScDPHierarchy::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
     OSL_FAIL("not implemented");        //! exception?
 }
@@ -2118,7 +2118,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
     return uno::Sequence<sheet::MemberResult>(0);       //! Error?
 }
 
-::rtl::OUString SAL_CALL ScDPLevel::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDPLevel::getName() throw(uno::RuntimeException)
 {
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( pSource->IsDateDimension( nSrcDim ) )
@@ -2130,16 +2130,16 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
             switch ( nLev )
             {
                 case SC_DAPI_LEVEL_YEAR:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Year"));
+                    aRet = rtl::OUString("Year");
                     break;
                 case SC_DAPI_LEVEL_QUARTER:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quarter"));
+                    aRet = rtl::OUString("Quarter");
                     break;
                 case SC_DAPI_LEVEL_MONTH:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Month"));
+                    aRet = rtl::OUString("Month");
                     break;
                 case SC_DAPI_LEVEL_DAY:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Day"));
+                    aRet = rtl::OUString("Day");
                     break;
                 default:
                     OSL_FAIL( "ScDPLevel::getName: unexpected level" );
@@ -2151,13 +2151,13 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
             switch ( nLev )
             {
                 case SC_DAPI_LEVEL_YEAR:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Year"));
+                    aRet = rtl::OUString("Year");
                     break;
                 case SC_DAPI_LEVEL_WEEK:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Week"));
+                    aRet = rtl::OUString("Week");
                     break;
                 case SC_DAPI_LEVEL_WEEKDAY:
-                    aRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Weekday"));
+                    aRet = rtl::OUString("Weekday");
                     break;
                 default:
                     OSL_FAIL( "ScDPLevel::getName: unexpected level" );
@@ -2175,7 +2175,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
     return pDim->getName();
 }
 
-void SAL_CALL ScDPLevel::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
+void SAL_CALL ScDPLevel::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
     OSL_FAIL("not implemented");        //! exception?
 }
@@ -2362,7 +2362,7 @@ ScDPMembers::~ScDPMembers()
 
 // XNameAccess implementation using getCount/getByIndex
 
-sal_Int32 ScDPMembers::GetIndexFromName( const ::rtl::OUString& rName ) const
+sal_Int32 ScDPMembers::GetIndexFromName( const OUString& rName ) const
 {
     if ( aHashMap.empty() )
     {
@@ -2646,12 +2646,12 @@ rtl::OUString ScDPMember::GetNameStr() const
     return rtl::OUString();
 }
 
-::rtl::OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException)
 {
     return GetNameStr();
 }
 
-void SAL_CALL ScDPMember::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
+void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
     OSL_FAIL("not implemented");        //! exception?
 }

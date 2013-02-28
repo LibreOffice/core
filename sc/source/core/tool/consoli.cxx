@@ -793,7 +793,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                 if (ppTitlePos && ppTitles && ppRowHeaders)
                 {
-                    String aDelim( RTL_CONSTASCII_USTRINGPARAM(" / ") );
+                    String aDelim( " / " );
                     for (SCSIZE nPos=0; nPos<nDataCount; nPos++)
                     {
                         SCSIZE nTPos = ppTitlePos[nArrY][nPos];

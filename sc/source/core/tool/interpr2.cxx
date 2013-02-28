@@ -2851,7 +2851,7 @@ void ScInterpreter::ScEuroConvert()
             double fToRate;
             int    nFromDec;
             int    nToDec;
-            String aEur( RTL_CONSTASCII_USTRINGPARAM("EUR"));
+            String aEur( "EUR");
             if ( lclConvertMoney( aFromUnit, fFromRate, nFromDec )
                 && lclConvertMoney( aToUnit, fToRate, nToDec ) )
             {

@@ -155,7 +155,7 @@ void ScCompiler::fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap )
         const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
         if (pFuncData)
         {
-            ::rtl::OUString aName;
+            OUString aName;
             if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
                 xMap->putExternalSoftly( aName, pFuncData->GetOriginalName());
             else
@@ -635,7 +635,7 @@ static bool lcl_parseExternalName(
 static String lcl_makeExternalNameStr( const String& rFile, const String& rName,
         const sal_Unicode cSep, bool bODF )
 {
-    String aFile( rFile), aName( rName), aEscQuote( RTL_CONSTASCII_USTRINGPARAM("''"));
+    String aFile( rFile), aName( rName), aEscQuote( "''");
     aFile.SearchAndReplaceAllAscii( "'", aEscQuote);
     if (bODF)
         aName.SearchAndReplaceAllAscii( "'", aEscQuote);
@@ -872,7 +872,7 @@ struct ConventionOOO_A1 : public Convention_A1
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('#'), false);
     }
 
-    bool makeExternalSingleRefStr( ::rtl::OUStringBuffer& rBuffer, sal_uInt16 nFileId,
+    bool makeExternalSingleRefStr( OUStringBuffer& rBuffer, sal_uInt16 nFileId,
                                    const String& rTabName, const ScSingleRefData& rRef,
                                    ScExternalRefManager* pRefMgr, bool bDisplayTabName, bool bEncodeUrl ) const
     {
@@ -911,7 +911,7 @@ struct ConventionOOO_A1 : public Convention_A1
         return true;
     }
 
-    void makeExternalRefStrImpl( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
@@ -941,14 +941,14 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append( sal_Unicode(']'));
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, false);
     }
 
-    void makeExternalRefStrImpl( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    void makeExternalRefStrImpl( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr, bool bODF ) const
     {
@@ -1008,7 +1008,7 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append( sal_Unicode(']'));
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1038,14 +1038,14 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('#'), true);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
         makeExternalRefStrImpl( rBuffer, rCompiler, nFileId, rTabName, rRef, pRefMgr, true);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1163,7 +1163,7 @@ struct ConventionXL
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('!'), false);
     }
 
-    static void makeExternalDocStr( ::rtl::OUStringBuffer& rBuffer, const String& rFullName, bool bEncodeUrl )
+    static void makeExternalDocStr( OUStringBuffer& rBuffer, const String& rFullName, bool bEncodeUrl )
     {
         // Format that is easier to deal with inside OOo, because we use file
         // URL, and all characetrs are allowed.  Check if it makes sense to do
@@ -1193,7 +1193,7 @@ struct ConventionXL
         rBuffer.append(sal_Unicode(']'));
     }
 
-    static void makeExternalTabNameRange( ::rtl::OUStringBuffer& rBuf, const OUString& rTabName,
+    static void makeExternalTabNameRange( OUStringBuffer& rBuf, const OUString& rTabName,
                                           const vector<OUString>& rTabNames,
                                           const ScComplexRefData& rRef )
     {
@@ -1271,7 +1271,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     ConventionXL_A1() : Convention_A1( FormulaGrammar::CONV_XL_A1 ) { }
     ConventionXL_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1( eConv ) { }
 
-    void makeSingleCellStr( ::rtl::OUStringBuffer& rBuf, const ScSingleRefData& rRef ) const
+    void makeSingleCellStr( OUStringBuffer& rBuf, const ScSingleRefData& rRef ) const
     {
         if (!rRef.IsColRel())
             rBuf.append(sal_Unicode('$'));
@@ -1377,7 +1377,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1402,7 +1402,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         makeSingleCellStr(rBuffer, aRef);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1577,7 +1577,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         return ConventionXL::makeExternalNameStr(rFile, rName);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -1603,7 +1603,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         r1c1_add_col(rBuffer, aRef);
     }
 
-    virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+    virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                      sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                      ScExternalRefManager* pRefMgr ) const
     {
@@ -5205,7 +5205,7 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
 // -----------------------------------------------------------------------------
 void ScCompiler::LocalizeString( String& rName )
 {
-    ::rtl::OUString aName(rName);
+    OUString aName(rName);
     ScGlobal::GetAddInCollection()->LocalizeString( aName );
     rName = aName;
 }
@@ -5251,7 +5251,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
         {
             if ( _bIsEnglish )
             {
-                ::rtl::OUString aName;
+                OUString aName;
                 if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
                     aEntry.Name = aName;
                 else
@@ -5259,7 +5259,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
             }
             else
                 aEntry.Name = pFuncData->GetUpperLocal();
-            aEntry.Token.Data <<= ::rtl::OUString( pFuncData->GetOriginalName());
+            aEntry.Token.Data <<= OUString( pFuncData->GetOriginalName());
             _rVec.push_back( aEntry);
         }
     }
