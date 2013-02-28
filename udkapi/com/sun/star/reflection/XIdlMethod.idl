@@ -55,13 +55,13 @@ published interface XIdlMethod: com::sun::star::reflection::XIdlMember
     */
     sequence<XIdlClass> getParameterTypes();
 
-    /** Returns formal parameter informations of the reflected method
+    /** Returns formal parameter information of the reflected method
         in order of IDL declaration.
         Parameter information reflects the parameter's access mode (in, out, inout),
         the parameter's name and formal type.
 
         @return
-                parameter informations of reflected method
+                parameter information of reflected method
     */
     sequence<ParamInfo> getParameterInfos();
 

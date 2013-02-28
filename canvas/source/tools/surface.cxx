@@ -468,7 +468,7 @@ namespace canvas
         if( mpFragment )
         {
             // now we need to 'select' the fragment, which will in turn
-            // pull informations from the image on demand.
+            // pull information from the image on demand.
             // in case this fragment is still not located on any of the
             // available pages ['naked'], we force the page manager to
             // do it now, no way to defer this any longer...

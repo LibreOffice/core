@@ -474,7 +474,7 @@ public class Protocol extends JComponent
     // ____________________
     /**
      * For some modes it's neccessary, that we write some additional
-     * informations to the log. E.g. for html we must generate close targets.
+     * information to the log. E.g. for html we must generate close targets.
      */
     public synchronized void finish()
     {
@@ -513,7 +513,7 @@ public class Protocol extends JComponent
     /**
      * log an exception.
      *
-     * It uses all informations available by this exception object
+     * It uses all information available by this exception object
      * to generate the log. So exceptions are printed out using a
      * standard format.
      *

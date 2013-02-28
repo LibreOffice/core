@@ -84,7 +84,7 @@ class Job : public  css::lang::XTypeProvider
     private:
 
         /**
-            hold all neccessary informations about this job.
+            hold all neccessary information about this job.
             It can be used for both modes: with and without configuration.
          */
         JobData m_aJobCfg;
@@ -133,7 +133,7 @@ class Job : public  css::lang::XTypeProvider
         /**
             A job can return a dispatch result event after finishing its work.
             We have to transport it to any outside interested listener then.
-            (see m_xResultSourceFake for further informations too!)
+            (see m_xResultSourceFake for further information too!)
          */
         css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
 

@@ -58,7 +58,7 @@ enum EHistoryType
 class SvtHistoryOptions_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about history features
+    @short          collect information about history features
     @descr          -
 
     @implements     -

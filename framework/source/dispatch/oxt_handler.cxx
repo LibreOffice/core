@@ -67,7 +67,7 @@ DEFINE_INIT_SERVICE                 (   Oxt_Handler,
 
 /*-************************************************************************************************************//**
     @short      standard ctor
-    @descr      These initialize a new instance of this class with needed informations for work.
+    @descr      These initialize a new instance of this class with needed information for work.
 
     @seealso    using at owner
 

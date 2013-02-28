@@ -35,7 +35,7 @@
 class SvtFontOptions_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about font features
+    @short          collect information about font features
     @descr          -
 
     @implements     -

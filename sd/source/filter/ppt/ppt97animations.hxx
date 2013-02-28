@@ -77,7 +77,7 @@ class Ppt97AnimationInfoAtom
 };
 
 /** this is a helping class for import of PPT 97 animations
-        1. use the constructor Ppt97Animation( SvStream& rIn ) to import informations from the stream
+        1. use the constructor Ppt97Animation( SvStream& rIn ) to import information from the stream
         2. use the set methods to modify and complete the data
         3. use the method createAndSetCustomAnimationEffect( ) to create an effect in sd model
     */

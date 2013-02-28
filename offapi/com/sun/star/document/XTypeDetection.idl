@@ -63,7 +63,7 @@ published interface XTypeDetection: com::sun::star::uno::XInterface
         <p>
         Instead of <member>XTypeDetection::queryTypeByURL()</member> this function
         use a <type>MediaDescriptor</type> to specify the document for detection.
-        Such descriptor hold different informations about the document.
+        Such descriptor hold different information about the document.
         He will be passed to any part of made detection process and every part
         can change it to actualize it.
         The property <member>MediaDescriptor::URL</member> should be set on

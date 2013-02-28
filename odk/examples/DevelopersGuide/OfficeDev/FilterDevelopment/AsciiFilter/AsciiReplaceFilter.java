@@ -403,7 +403,7 @@ public class AsciiReplaceFilter
          *          the target text model to put the data in
          *
          * @param aOptions
-         *          capsulate all other neccessary informations for this filter request
+         *          capsulate all other neccessary information for this filter request
          *          (streams, replace values ...)
          *
          * @return a bool value which describes if method was successfully or not.
@@ -535,7 +535,7 @@ public class AsciiReplaceFilter
          *          the source text model to get the data from
          *
          * @param aOptions
-         *          capsulate all other neccessary informations for this filter request
+         *          capsulate all other neccessary information for this filter request
          *          (streams, replace values ...)
          *
          * @return a bool value which describes if method was successfully or not.

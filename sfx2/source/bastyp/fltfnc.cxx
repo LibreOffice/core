@@ -936,8 +936,8 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
 
     if( aResult >>= lFilterProperties )
     {
-        // collect informations to add filter to container
-        // (attention: some informations aren't available on filter directly ... you must search for corresponding type too!)
+        // collect information to add filter to container
+        // (attention: some information aren't available on filter directly ... you must search for corresponding type too!)
         sal_Int32       nFlags          = 0 ;
         sal_Int32       nClipboardId    = 0 ;
         sal_Int32       nDocumentIconId = 0 ;

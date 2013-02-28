@@ -565,7 +565,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
         ::rtl::OUString("TimeIntervall")) >>= nAutoSaveTime;
     }
     catch(const css::uno::Exception&)
-        { OSL_FAIL("Could not find needed informations for AutoSave feature."); }
+        { OSL_FAIL("Could not find needed information for AutoSave feature."); }
 }
 
 SvtSaveOptions_Impl::~SvtSaveOptions_Impl()

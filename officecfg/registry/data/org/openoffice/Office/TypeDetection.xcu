@@ -21,7 +21,7 @@
     <!---
         Attention: Please dont merge any changes into this file! Its deprecated for further versions.
                    Use the new configuration schema org.openoffice.TypeDetection/ and its related sub
-                   structures. Contact as96863 to get further informations about this fact.
+                   structures. Contact as96863 to get further information about this fact.
     --->
 
     <node oor:name="Types"/>

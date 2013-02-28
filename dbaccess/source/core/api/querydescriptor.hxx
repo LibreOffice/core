@@ -74,7 +74,7 @@ protected:
 public:
     OQueryDescriptor_Base(::osl::Mutex& _rMutex,::cppu::OWeakObject& _rMySelf);
     /** constructs the object with a UNO QueryDescriptor. If you use this ctor, the resulting object
-        won't have any column informations (the column container will be empty)
+        won't have any column information (the column container will be empty)
     */
     OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf);
 

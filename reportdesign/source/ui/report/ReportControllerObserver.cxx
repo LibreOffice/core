@@ -145,7 +145,7 @@ public:
     void SAL_CALL OXReportControllerObserver::disposing(const lang::EventObject& e) throw( uno::RuntimeException )
     {
         (void) e;
-        // check if it's an object we have cached informations about
+        // check if it's an object we have cached information about
         uno::Reference< beans::XPropertySet > xSourceSet(e.Source, uno::UNO_QUERY);
         if ( xSourceSet.is() )
         {

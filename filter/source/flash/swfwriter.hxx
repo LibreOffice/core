@@ -414,7 +414,7 @@ private:
 
     const PolyPolygon* mpClipPolyPolygon;
 
-    /** holds the informations of the objects defined in the movie stream
+    /** holds the information of the objects defined in the movie stream
         while executing defineShape
     */
     typedef std::vector<sal_uInt16> CharacterIdVector;

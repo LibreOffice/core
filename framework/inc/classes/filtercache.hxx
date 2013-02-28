@@ -54,7 +54,7 @@ namespace framework{
 
 /*-************************************************************************************************************//**
     @short          cache for all filter and type information
-    @descr          Frameloader- and filterfactory need some informations about our current registered filters and types.
+    @descr          Frameloader - and filterfactory need some information about our current registered filters and types.
                     For better performance its neccessary to cache all needed values.
 
     @implements     -
@@ -121,7 +121,7 @@ class FilterCache   :   private ThreadHelpBase
 
         /*-****************************************************************************************************//**
             @short      search routines to find items which match given parameter
-            @descr      Mostly we search for a type first and get all informations about filter, detector and loader
+            @descr      Mostly we search for a type first and get all information about filter, detector and loader
                         services from the other configuration tables which are registered for this type.
                         These operations support a FindFirst/Next mechanism.
                         If you call search...( ... nStartEntry=0 ... ) we search for
@@ -168,7 +168,7 @@ class FilterCache   :   private ThreadHelpBase
 
         /*-****************************************************************************************************//**
             @short      get all properties of a cache entry by given name
-            @descr      If you need additional informations about our internal cache values
+            @descr      If you need additional information about our internal cache values
                         you can use these methods to get a list of all cached config values
                         and subkeys of specified entry.
 

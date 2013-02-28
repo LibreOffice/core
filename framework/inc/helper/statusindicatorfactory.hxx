@@ -64,7 +64,7 @@ namespace framework{
 
 //===============================================
 /**
-    @descr  This struct hold some informations about all currently running progress proccesses.
+    @descr  This struct hold some information about all currently running progress proccesses.
             Because the can be used on a stack, we must cache her states but must paint only
             the top most one.
  */

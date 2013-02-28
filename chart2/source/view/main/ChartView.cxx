@@ -2806,7 +2806,7 @@ void SAL_CALL ChartView::update() throw (uno::RuntimeException)
     //#i100778# migrate all imported or old documents to a plot area sizing exclusive axes (in case the save settings allow for this):
     //Although in general it is a bad idea to change the model from within the view this is exceptionally the best place to do this special conversion.
     //When a view update is requested (what happens for creating the metafile or displaying
-    //the chart in edit mode or printing) it is most likely that all necessary informations are available - like the underlying spreadsheet data for example.
+    //the chart in edit mode or printing) it is most likely that all necessary information are available - like the underlying spreadsheet data for example.
     //Those data is important for the correct axis lable sizes which are needed during conversion.
     if( DiagramHelper::switchDiagramPositioningToExcludingPositioning( m_xChartModel, true, false ) )
         impl_updateView();

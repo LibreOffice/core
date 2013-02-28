@@ -936,7 +936,7 @@ bool ATSLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) cons
 
 // -----------------------------------------------------------------------
 /**
- * ATSLayout::InitGIA() : get many informations about layouted text
+ * ATSLayout::InitGIA() : get many information about layouted text
  *
  * Fills arrays of information about the gylph layout previously done
  *  in ASTLayout::LayoutText() : glyph advance (width), glyph delta Y (from baseline),

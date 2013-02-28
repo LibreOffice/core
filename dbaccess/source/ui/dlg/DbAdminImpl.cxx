@@ -599,7 +599,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
             implTranslateProperty(_rDest, aDirect->first, aValue);
         }
 
-        // get the additional informations
+        // get the additional information
         Sequence< PropertyValue > aAdditionalInfo;
         try
         {

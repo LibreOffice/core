@@ -35,7 +35,7 @@
 */
 class SvtSlideSorterBarOptions_Impl;
 
-/** collect informations about sidebar group
+/** collect information about sidebar group
 
     \attention This class is partially threadsafe.
 */

@@ -100,7 +100,7 @@ published service ExtendedTypeDetectionFactory
 
         <p>
         Against simple property search it provides some complex algorithms too.
-        For further informations please read the SDK documentation.
+        For further information please read the SDK documentation.
         </p>
      */
     [optional] interface com::sun::star::container::XContainerQuery;

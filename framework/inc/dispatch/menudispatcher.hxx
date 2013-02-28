@@ -50,7 +50,7 @@
 namespace framework{
 
 /*-************************************************************************************************************//**
-    We must save informations about our listener and URL for listening.
+    We must save information about our listener and URL for listening.
     We implement this as a hashtable for strings.
 *//*-*************************************************************************************************************/
 
@@ -95,7 +95,7 @@ class MenuDispatcher   :   // interfaces
 
         /*-****************************************************************************************************//**
             @short      standard ctor
-            @descr      These initialize a new instance of ths class with needed informations for work.
+            @descr      These initialize a new instance of ths class with needed information for work.
 
             @seealso    using at owner
 

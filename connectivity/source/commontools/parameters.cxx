@@ -171,7 +171,7 @@ namespace dbtools
         if ( !m_xInnerParamColumns.is() )
             return;
 
-        // strip previous index informations
+        // strip previous index information
         if ( _bSecondRun )
         {
             for ( ParameterInformation::iterator aParamInfo = m_aParameterInformation.begin();

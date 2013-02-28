@@ -357,7 +357,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL BackingComp::impl_createIns
 /** returns a new factory instance for instances of this class.
 
     It uses a helper class of the cppuhelper project as factory.
-    It will be initialized with all neccessary informations and
+    It will be initialized with all neccessary information and
     will be able afterwards to create instance of this class.
     This factory call us back inside our method impl_createInstance().
     So we can create and initialize ourself. Only filtering of creation

@@ -40,7 +40,7 @@ module com { module sun { module star { module document {
     <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
     Such descriptors will be passed to different functions, included into possible
     load/save processes. Every member of such process can use this descriptor
-    and may change it if to actualize the informations about the document.
+    and may change it if to actualize the information about the document.
     So this descriptor should be used as an in/out parameter.
     </p>
 

@@ -235,7 +235,7 @@ class FilterCache : public BaseLock
                     was already loaded from the underlying configuration.
 
             @descr  This information can be used to detect missing
-                    informations and load it on demand.
+                    information and load it on demand.
 
             @see    EFillState
             @see    load()
@@ -323,12 +323,12 @@ class FilterCache : public BaseLock
         /** @short      force special fill state of this cache.
 
             @descr      This method check if all requested items/properties already
-                        exists. Only missing informations will be readed.
+                        exists. Only missing information will be readed.
                         Otherwise this method does nothing!
 
                         This method must be called from every user of this cache
                         everytimes it need a filled cache. Normaly we load
-                        only standard informations into this cache on startup.
+                        only standard information into this cache on startup.
                         After a few seconds we start a special thread, which
                         may fill this cache completely. But if somehwere outside
                         need a filled cache before ... it can run into trouble,
@@ -338,7 +338,7 @@ class FilterCache : public BaseLock
                         Of course it would be possible to supress this special load thread
                         in general and start it manualy inside this load() request.
                         The outside code decide then, if and when this cache will be filled
-                        with all available informations ...
+                        with all available information ...
 
             @param      bByThread
                         indicates using of this method by our global "load-on-demand-thread".
@@ -363,7 +363,7 @@ class FilterCache : public BaseLock
 
             @descr      This information can be used e.g. to start
                         a search on top of this cache with a minimum on
-                        informations ... and do it again, if some other
+                        information ... and do it again, if some other
                         cache items seems to be available after calling of "loadAll()"
                         on this cache and first search does not had any valid results.
 
@@ -379,7 +379,7 @@ class FilterCache : public BaseLock
                         the specified criteria.
 
             @descr      The returned key names can be used at another method "getItem()"
-                        of this cache to get further informations about this item.
+                        of this cache to get further information about this item.
 
             @attention  Please note: because this cache can be used inside multithreaded
                         environments, such returned key name can point to an already removed
@@ -674,7 +674,7 @@ class FilterCache : public BaseLock
 
             @param      eProvider
                         specify the needed configuration provider.
-                        see EConfigProvider for further informations ...
+                        see EConfigProvider for further information ...
 
             @attention  If a configuration access was opened successfully
                         all neccessary listener connections will be established

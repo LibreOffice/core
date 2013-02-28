@@ -107,7 +107,7 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
         //---------------------------------------
-        /** @short  provide informations abou the parsing state.
+        /** @short  provide information about the parsing state.
 
             @descr  We use it to find out the line and column, where
                     an error occure.

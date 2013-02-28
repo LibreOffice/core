@@ -258,7 +258,7 @@ void JobData::setEvent( const ::rtl::OUString& sEvent ,
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // take over the new informations - which differ against set on of method setAlias()!
+    // take over the new information - which differ against set on of method setAlias()!
     m_sEvent = sEvent;
     m_eMode  = E_EVENT;
 
@@ -343,7 +343,7 @@ void JobData::setResult( const JobResult& aResult )
     // overwrite the last saved result
     m_aLastExecutionResult = aResult;
 
-    // Don't use his informations to update
+    // Don't use his information to update
     // e.g. the arguments of this job. It must be done
     // from outside! Here we save this information only.
 
@@ -484,7 +484,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     @descr  Because jobs can be executed by the dispatch framework using an uno service name
             directly - an executed job must not have any configuration realy. Such jobs
             must provide the right interfaces only! But after finishing jobs can return
-            some informations (e.g. for updating her configuration ...). We must know
+            some information (e.g. for updating her configuration ...). We must know
             if such request is valid or not then.
 
     @return sal_True if the represented job is part of the underlying configuration package.
@@ -702,7 +702,7 @@ css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css
 
                 But note: that does not set defaults for internal used members, which
                 does not relate to any job property! e.g. the reference to the global
-                uno service manager. Such informations are used for internal processes only
+                uno service manager. Such information is used for internal processes only
                 and are neccessary for our work.
  */
 void JobData::impl_reset()

@@ -973,7 +973,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
 
         // If configuration could not be opened ... but factory method does not throwed an exception
         // trigger throwing of our own CorruptedFilterConfigurationException.
-        // Let message empty. The normal exception text show enough informations to the user.
+        // Let message empty. The normal exception text show enough information to the user.
         if (! xCfg.is())
             throw css::uno::Exception(
                     _FILTER_CONFIG_FROM_ASCII_("Got NULL reference on opening configuration file ... but no exception."),
@@ -1047,7 +1047,7 @@ void FilterCache::impl_validateAndOptimize()
         CacheItem       aType = pIt->second;
 
         // create list of all known detect services / frame loader / content handler on demand
-        // Because these informations are available as type properties!
+        // Because these information are available as type properties!
         ::rtl::OUString sDetectService;
         aType[PROPNAME_DETECTSERVICE ] >>= sDetectService;
         if (!sDetectService.isEmpty())
@@ -1384,7 +1384,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     }
 
     // ------------------------------------------
-    // b) We need all type informations ...
+    // b) We need all type information ...
     if (
         ((eRequiredState & E_CONTAINS_TYPES) == E_CONTAINS_TYPES) &&
         ((m_eFillState   & E_CONTAINS_TYPES) != E_CONTAINS_TYPES)
@@ -1401,7 +1401,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     }
 
     // ------------------------------------------
-    // c) We need all filter informations ...
+    // c) We need all filter information ...
     if (
         ((eRequiredState & E_CONTAINS_FILTERS) == E_CONTAINS_FILTERS) &&
         ((m_eFillState   & E_CONTAINS_FILTERS) != E_CONTAINS_FILTERS)
@@ -1418,7 +1418,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     }
 
     // ------------------------------------------
-    // c) We need all frame loader informations ...
+    // c) We need all frame loader information ...
     if (
         ((eRequiredState & E_CONTAINS_FRAMELOADERS) == E_CONTAINS_FRAMELOADERS) &&
         ((m_eFillState   & E_CONTAINS_FRAMELOADERS) != E_CONTAINS_FRAMELOADERS)
@@ -1435,7 +1435,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
     }
 
     // ------------------------------------------
-    // d) We need all content handler informations ...
+    // d) We need all content handler information ...
     if (
         ((eRequiredState & E_CONTAINS_CONTENTHANDLERS) == E_CONTAINS_CONTENTHANDLERS) &&
         ((m_eFillState   & E_CONTAINS_CONTENTHANDLERS) != E_CONTAINS_CONTENTHANDLERS)

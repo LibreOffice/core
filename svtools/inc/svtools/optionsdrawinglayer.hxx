@@ -40,7 +40,7 @@
 class SvtOptionsDrawinglayer_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about startup features
+    @short          collect information about startup features
     @descr          -
 
     @implements     -

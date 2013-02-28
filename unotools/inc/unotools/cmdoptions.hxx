@@ -42,7 +42,7 @@
 class SvtCommandOptions_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about dynamic menus
+    @short          collect information about dynamic menus
     @descr          Make it possible to configure dynamic menu structures of menus like "new" or "wizard".
 
     @implements     -

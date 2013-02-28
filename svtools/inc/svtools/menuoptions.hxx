@@ -35,7 +35,7 @@ class Link;
 class SvtMenuOptions_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about menu features
+    @short          collect information about menu features
     @descr          -
 
     @implements     -

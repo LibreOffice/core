@@ -1491,7 +1491,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (!xModel.is())
         return css::uno::Reference< css::frame::XFrame >();
 
-    // get some more informations ...
+    // get some more information ...
 
     // A valid set URL means: there is already a location for this document.
     // => it was saved there or opened from there. Such Documents can not be used here.

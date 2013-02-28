@@ -1941,7 +1941,7 @@ sal_uLong SwTableBox::GetSttIdx() const
     return pSttNd ? pSttNd->GetIndex() : 0;
 }
 
-    // retrieve informations from the client
+    // retrieve information from the client
 bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )

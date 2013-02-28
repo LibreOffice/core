@@ -1140,7 +1140,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
     {
         // determine if dragging is allowed
         // (Yes, this is controller (not view) functionality. But collecting and evaluating all the
-        // informations necessary via UNO would be quite difficult (if not impossible) so
+        // information necessary via UNO would be quite difficult (if not impossible) so
         // my laziness says 'do it here' ...)
         long nRow = GetRowAtYPosPixel(_rPosPixel.Y());
         sal_uInt16 nColPos = GetColumnAtXPosPixel(_rPosPixel.X());

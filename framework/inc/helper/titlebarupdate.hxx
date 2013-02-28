@@ -156,7 +156,7 @@ class TitleBarUpdate : // interfaces
         /** @short  set a new icon and title on the title bar of our connected frame window.
 
             @descr  It does not check if an update is realy needed. That has to be done outside.
-                    It retrieves all needed informations and update the title bar - nothing less -
+                    It retrieves all needed information and update the title bar - nothing less -
                     nothing more.
          */
         void impl_forceUpdate();

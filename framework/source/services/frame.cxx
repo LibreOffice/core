@@ -285,7 +285,7 @@ Frame::~Frame()
 /*-************************************************************************************************************//**
     @interface  XComponentLoader
     @short      try to load given URL into a task
-    @descr      You can give us some informations about the content, which you will load into a frame.
+    @descr      You can give us some information about the content, which you will load into a frame.
                 We search or create this target for you, make a type detection of given URL and try to load it.
                 As result of this operation we return the new created component or nothing, if loading failed.
 
@@ -1225,7 +1225,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
 
 /*-****************************************************************************************************//**
     @short      returns active state
-    @descr      Call it to get informations about current active state of this frame.
+    @descr      Call it to get information about current active state of this frame.
 
     @seealso    method activate()
     @seealso    method deactivate()
@@ -2708,7 +2708,7 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
     // Sometimes used by dispose() => soft exceptions!
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    // Log informations about order of events to file!
+    // Log information about order of events to file!
     // (only activated in debug version!)
     LOG_FRAMEACTIONEVENT( "Frame", m_sName, aAction )
 

@@ -1680,7 +1680,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     if ( !xDocRecovery.is() )
         return;
 
-    // get all needed informations of this document
+    // get all needed information of this document
     // We need it to update our cache or to locate already existing elements there!
     AutoRecovery::TDocumentInfo aNew;
     aNew.Document = xDocument;

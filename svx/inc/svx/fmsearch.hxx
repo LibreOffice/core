@@ -57,7 +57,7 @@ struct FmFoundRecordInformation
 };
 
 // ===================================================================================================
-// = struct FmSearchContext - informations for the search in different contexts
+// = struct FmSearchContext - information for the search in different contexts
 // ===================================================================================================
 
 struct FmSearchContext

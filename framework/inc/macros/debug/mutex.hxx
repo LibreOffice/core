@@ -43,7 +43,7 @@
     /*_____________________________________________________________________________________________________________
         LOG_LOCKTYPE( _EFALLBACK, _ECURRENT )
 
-        Write informations about current set lock type for whole framework project to special file.
+        Write information about current set lock type for whole framework project to special file.
     _____________________________________________________________________________________________________________*/
 
     #define LOG_LOCKTYPE( _EFALLBACK, _ECURRENT )                                                               \

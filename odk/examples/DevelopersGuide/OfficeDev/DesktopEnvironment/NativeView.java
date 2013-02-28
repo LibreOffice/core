@@ -88,8 +88,8 @@ public class NativeView extends java.awt.Canvas
 
     /**
      * to guarantee right resize handling inside a swing container
-     * (e.g. JSplitPane) we must provide some informations about our
-     * prefered/minimum and maximum size.
+     * (e.g. JSplitPane) we must provide some information about our
+     * preferred/minimum and maximum size.
      */
     public Dimension getPreferredSize()
     {
@@ -140,8 +140,8 @@ public class NativeView extends java.awt.Canvas
      * window messages ... But if it doesn't check for an already registered
      * instance of this handler it will do it twice and produce a stack overflow
      * because such method call herself in a never ending loop ...
-     * So we try to use the JNI code one times only and safe already getted
-     * informations inside this class.
+     * So we try to use the JNI code one time only and save already getted
+     * information inside this class.
      */
     public  native int  getNativeWindowSystemType();
     private native long getNativeWindow(); // private! => use getHWND() with cache mechanism!

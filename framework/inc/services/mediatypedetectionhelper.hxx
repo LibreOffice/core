@@ -63,7 +63,7 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper2< ::com::sun::
 
         /*-****************************************************************************************************//**
             @short      standard ctor
-            @descr      These initialize a new instance of this class with all needed informations for work.
+            @descr      These initialize a new instance of this class with all needed information for work.
 
             @seealso    -
 

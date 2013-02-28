@@ -310,7 +310,7 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
     // Special feature: It's allowed for frames using a top level window only!
     // We must create a special listener service and couple it with the new created task frame.
     // He will restore or save the window state of it ...
-    // See used classes for further informations too.
+    // See used classes for further information too.
     PersistentWindowState* pPersistentStateHandler = new PersistentWindowState(xSMGR);
     css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pPersistentStateHandler), css::uno::UNO_QUERY_THROW);
 

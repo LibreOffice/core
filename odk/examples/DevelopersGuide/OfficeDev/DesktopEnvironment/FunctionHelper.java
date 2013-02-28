@@ -699,7 +699,7 @@ public class FunctionHelper
             // filter exist for HTML export. Normaly this filter should be searched
             // inside the filter configuration but this little demo doesn't do so.
             // (see service com.sun.star.document.FilterFactory for further
-            // informations too)
+            // information too)
             // Well known filter names are used directly. They must exist in current
             // office installation. Otherwise this code will fail. But to prevent
             // this code against missing filters it check for existing state of it.

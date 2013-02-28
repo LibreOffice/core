@@ -107,7 +107,7 @@ typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContaine
 class AddonsOptions_Impl;
 
 /*-************************************************************************************************************//**
-    @short          collect informations about menu features
+    @short          collect information about menu features
     @descr          -
 
     @implements     -

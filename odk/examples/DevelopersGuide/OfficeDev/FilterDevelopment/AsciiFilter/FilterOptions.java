@@ -44,7 +44,7 @@ import com.sun.star.uno.UnoRuntime;
   @description  Our filter needs some neccessary properties for working:
                     - a stream for input or output
                     - or an URL for creating such streams
-                    - informations about required action on filtering
+                    - information about required action on filtering
 
   @attention    This class mustn't be threadsafe - because instances of it
                 are used temp. only - not as members. So no concurrent access

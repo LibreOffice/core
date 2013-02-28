@@ -40,7 +40,7 @@ namespace framework{
 
 
 /**
-    @short  holds all neccessary informations about a job and
+    @short  holds all neccessary information about a job and
             handle it's configuration (if any exist!)
     @descr  It can be used rom different use cases as a container
             (or proxy) for all config data of a registered job.

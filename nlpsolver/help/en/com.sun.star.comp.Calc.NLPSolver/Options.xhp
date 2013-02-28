@@ -113,7 +113,7 @@
                <paragraph xml-lang="en-US" id="par_id0503200917103891" role="tablecontent" l10n="NEW">Show Enhanced Solver Status</paragraph>
             </tablecell>
             <tablecell>
-               <paragraph xml-lang="en-US" id="par_id0503200917103832" role="tablecontent" l10n="NEW">If <emph>enabled</emph>, an additional dialog is shown during the solving process which gives informations about the current progress, the level of stagnation, the currently best known solution as well as the possibility, to stop or resume the solver.</paragraph>
+               <paragraph xml-lang="en-US" id="par_id0503200917103832" role="tablecontent" l10n="NEW">If <emph>enabled</emph>, an additional dialog is shown during the solving process which gives information about the current progress, the level of stagnation, the currently best known solution as well as the possibility, to stop or resume the solver.</paragraph>
             </tablecell>
          </tablerow>
       </table>
@@ -185,7 +185,7 @@
                <paragraph xml-lang="en-US" id="par_id0603200910401382" role="tablecontent" l10n="NEW">Size of Library</paragraph>
             </tablecell>
             <tablecell>
-               <paragraph xml-lang="en-US" id="par_id060320091040136" role="tablecontent" l10n="NEW">… defines the amount of informations to store in the public library. Each individual stores knowledge there and asks for informations.</paragraph>
+               <paragraph xml-lang="en-US" id="par_id060320091040136" role="tablecontent" l10n="NEW">… defines the amount of information to store in the public library. Each individual stores knowledge there and asks for informations.</paragraph>
             </tablecell>
          </tablerow>
       </table>

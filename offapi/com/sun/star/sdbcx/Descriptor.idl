@@ -30,10 +30,10 @@
     A descriptor is commonly created by the container of a specific object, such as, tables or views.
     After the creation of the descriptor the properties have to be filled.
     Afterwards, you append the descriptor to the container and the container creates a new object based
-    on the informations of the descriptor. The descriptor can be used to create several objects.
+    on the information of the descriptor. The descriptor can be used to create several objects.
     </p>
     <p>
-    A descriptor contains at least the informations of the name of an object.
+    A descriptor contains at least the information of the name of an object.
     </p>
     @see com::sun::star::sdbcx::XAppend
  */

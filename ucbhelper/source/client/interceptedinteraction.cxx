@@ -40,7 +40,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
     const InterceptedRequest&,
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >&)
 {
-    // default behaviour! see impl_interceptRequest() for further informations ...
+    // default behaviour! see impl_interceptRequest() for further information ...
     return E_NOT_INTERCEPTED;
 }
 

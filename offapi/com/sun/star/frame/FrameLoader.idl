@@ -62,9 +62,9 @@ published service FrameLoader
         the <type>FrameLoaderFactory</type> after creation
         if optional interface <type scope="com::sun::star::lang">XInitialization</type>
         is supported. Value of function <member scope="com::sun::star::container">XNamed::getName()</member>
-    can be used on service <type>FrameLoaderFactory</type> to get further informations about this loader.
+        can be used on service <type>FrameLoaderFactory</type> to get further information about this loader.
         Setting of this name by calling <member scope="com::sun::star::container">XNamed::setName()</member>
-    must be forwarded to same factory service. He should decide, if it's allowed or not.
+        must be forwarded to same factory service. He should decide, if it's allowed or not.
         The reason: prevent code against name ambiguities.
         </p>
      */

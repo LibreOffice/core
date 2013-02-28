@@ -72,7 +72,7 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
         /*-****************************************************************************************************//**
             @short      standard ctor
-            @descr      These initialize a new instance of this class with all needed informations for work.
+            @descr      These initialize a new instance of this class with all needed information for work.
                         We share framecontainer with owner implementation! It's a threadsafe container.
 
             @seealso    -
