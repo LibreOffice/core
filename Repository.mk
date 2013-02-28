@@ -694,10 +694,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     nputils \
     pdfimport_s \
     plugcon \
-	$(if $(filter $(COM),MSC), \
-        quickstarter \
-		seterror \
-    ) \
+	quickstarter \
+	seterror \
     ssleay32 \
     ooopathutils \
     sample \
