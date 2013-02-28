@@ -204,8 +204,8 @@ VirtualDevice::~VirtualDevice()
 sal_Bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
     SAL_INFO( "vcl.gdi",
-            "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
-            << rNewSize.Height() << ", " << bErase << " )" );
+              "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
+              << rNewSize.Height() << ", " << int(bErase) << " )" );
 
     if ( !mpVirDev )
         return sal_False;
