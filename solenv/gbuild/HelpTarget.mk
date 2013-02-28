@@ -295,17 +295,10 @@ $(dir $(call gb_HelpLinkTarget_get_target,%))%/.dir :
 $(call gb_HelpLinkTarget_get_target,%) : $(gb_HelpLinkTarget_DEPS)
 	$(call gb_HelpLinkTarget__command,$@,$*)
 
-$(call gb_HelpLinkTarget_get_preparation_target,%) :
-	touch $@
-
 .PHONY : $(call gb_HelpLinkTarget_get_clean_target,%)
 $(call gb_HelpLinkTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),HLK,3)
-	$(call gb_Helper_abbreviate_dirs,\
-		rm -f \
-			$(call gb_HelpLinkTarget_get_target,$*) \
-			$(call gb_HelpLinkTarget_get_preparation_target,$*) \
-	)
+	rm -f $(call gb_HelpLinkTarget_get_target,$*)
 
 # Create a help linking target.
 #
@@ -323,9 +316,7 @@ $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_SRCDIR :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_TREE :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_WORKDIR := $(4)
 
-$(call gb_HelpLinkTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_preparation_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) :| $(dir $(call gb_HelpLinkTarget_get_target,$(1))).dir
-$(call gb_HelpLinkTarget_get_preparation_target,$(1)) :| $(dir $(call gb_HelpLinkTarget_get_preparation_target,$(1))).dir
 
 endef
 
@@ -569,7 +560,7 @@ $(call gb_HelpIndexTarget_HelpIndexTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpJarTarget_HelpJarTarget,$(1),$(2),$(4))
 
 $(call gb_HelpTarget_get_linked_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
-$(call gb_HelpLinkTarget_get_preparation_target,$(1)) : $(call gb_HelpTarget_get_linked_target,$(1))
+$(call gb_HelpLinkTarget_get_target,$(1)) : $(call gb_HelpTarget_get_linked_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) :| $(call gb_HelpTarget_get_workdir,$(1))/.dir
 $(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 
