@@ -78,7 +78,7 @@ namespace vcl
     }
 
     //--------------------------------------------------------------------
-    static StringEntryIdentifier findMatchingEntry( const String& _searchString, QuickSelectionEngine_Data& _engineData )
+    static StringEntryIdentifier findMatchingEntry( const OUString& _searchString, QuickSelectionEngine_Data& _engineData )
     {
         const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
             // TODO: do we really need the Window's settings here? The original code used it ...
@@ -138,14 +138,14 @@ namespace vcl
                     m_pData->aSingleSearchChar.reset();
             }
 
-            XubString aSearchTemp( m_pData->sCurrentSearchString );
+            OUString aSearchTemp( m_pData->sCurrentSearchString );
 
             StringEntryIdentifier pMatchingEntry = findMatchingEntry( aSearchTemp, *m_pData );
             OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: found %p", pMatchingEntry );
-            if ( !pMatchingEntry && ( aSearchTemp.Len() > 1 ) && !!m_pData->aSingleSearchChar )
+            if ( !pMatchingEntry && (aSearchTemp.getLength() > 1) && !!m_pData->aSingleSearchChar )
             {
                 // if there's only one letter in the search string, use a different search mode
-                aSearchTemp = *m_pData->aSingleSearchChar;
+                aSearchTemp = OUString(*m_pData->aSingleSearchChar);
                 pMatchingEntry = findMatchingEntry( aSearchTemp, *m_pData );
             }
 
