@@ -392,7 +392,11 @@ static sal_Bool parseDuration(const xmlChar* aString, sal_Bool& bNegative, sal_I
     }
 
     if (pString[0] != 'P')
+    {
+        rtl_freeMemory(pString0);
         return sal_False;
+    }
+
     pString++;
     char* pToken = pString;
     while(pToken[0] != 0)
