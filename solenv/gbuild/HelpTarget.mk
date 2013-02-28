@@ -399,7 +399,7 @@ gb_HelpIndexTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,HelpInd
 gb_HelpIndexTarget_COMMAND := $(call gb_Executable_get_command,HelpIndexer)
 
 define gb_HelpIndexTarget__command
-$(call gb_Output_announce,$*,$(false),HIX,3)
+$(call gb_Output_announce,$*,$(true),HIX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	(\
 		$(gb_HelpIndexTarget_COMMAND) \
