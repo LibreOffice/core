@@ -446,7 +446,7 @@ void ModelData_Impl::CheckInteractionHandler()
     {
         try {
             m_aMediaDescrHM[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) ]
-                <<= task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_pOwner->GetServiceFactory()), 0);
+                <<= task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), 0);
         }
         catch( const uno::Exception& )
         {
@@ -554,7 +554,7 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilte
                     if( !aServiceName.isEmpty() )
                     {
                         uno::Reference< ui::dialogs::XExecutableDialog > xFilterDialog(
-                                                    m_pOwner->GetServiceFactory()->createInstance( aServiceName ), uno::UNO_QUERY );
+                                                    comphelper::getProcessServiceFactory()->createInstance( aServiceName ), uno::UNO_QUERY );
                         uno::Reference< beans::XPropertyAccess > xFilterProperties( xFilterDialog, uno::UNO_QUERY );
 
                         if( xFilterDialog.is() && xFilterProperties.is() )
@@ -619,7 +619,7 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
         // check whether save is acceptable by the configuration
         // it is done only for documents that have persistence already
         uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            comphelper::getComponentContext(m_pOwner->GetServiceFactory()),
+                            comphelper::getProcessComponentContext(),
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
                             ::comphelper::ConfigurationHelper::E_STANDARD );
         if ( !xCommonConfig.is() )
@@ -1164,7 +1164,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
                 util::URL aURL;
                 aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SetDocumentProperties"));
 
-                uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( ::comphelper::getComponentContext(m_pOwner->GetServiceFactory()) ) );
+                uno::Reference < util::XURLTransformer > xTransformer( util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
                 if ( xTransformer->parseStrict( aURL ) )
                 {
                     uno::Reference< frame::XDispatch > xDispatch = xFrameDispatch->queryDispatch(
@@ -1248,7 +1248,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
         {
             // adjust the extension to the type
             uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
-                m_pOwner->GetServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection")) ),
+                comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection")) ),
                 uno::UNO_QUERY );
             if ( xTypeDetection.is() )
             {
@@ -1278,22 +1278,8 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
 // class SfxStoringHelper
 //=========================================================================
 //-------------------------------------------------------------------------
-SfxStoringHelper::SfxStoringHelper( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: m_xFactory( xFactory )
+SfxStoringHelper::SfxStoringHelper()
 {
-}
-
-//-------------------------------------------------------------------------
-uno::Reference< lang::XMultiServiceFactory > SfxStoringHelper::GetServiceFactory()
-{
-    if ( !m_xFactory.is() )
-    {
-        m_xFactory = ::comphelper::getProcessServiceFactory();
-        if( !m_xFactory.is() )
-            throw uno::RuntimeException(); // TODO:
-    }
-
-    return m_xFactory;
 }
 
 //-------------------------------------------------------------------------
@@ -1302,7 +1288,7 @@ uno::Reference< container::XNameAccess > SfxStoringHelper::GetFilterConfiguratio
     if ( !m_xFilterCFG.is() )
     {
         m_xFilterCFG = uno::Reference< container::XNameAccess >(
-            GetServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory")) ),
+            comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory")) ),
             uno::UNO_QUERY );
 
         if ( !m_xFilterCFG.is() )
@@ -1331,7 +1317,7 @@ uno::Reference< ::com::sun::star::frame::XModuleManager2 > SfxStoringHelper::Get
     if ( !m_xModuleManager.is() )
     {
         m_xModuleManager = frame::ModuleManager::create(
-            comphelper::getComponentContext(GetServiceFactory()));
+            comphelper::getProcessComponentContext() );
     }
 
     return m_xModuleManager;

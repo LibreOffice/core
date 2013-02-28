@@ -891,8 +891,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
                 try
                 {
-                    uno::Reference< lang::XMultiServiceFactory > xEmptyFactory;
-                    SfxStoringHelper aHelper( xEmptyFactory );
+                    SfxStoringHelper aHelper;
                     uno::Sequence< beans::PropertyValue > aDispatchArgs( 1 );
                     aDispatchArgs[0].Name = "SaveTo";
                     aDispatchArgs[0].Value <<= (sal_Bool)sal_True;

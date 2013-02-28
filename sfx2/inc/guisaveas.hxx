@@ -21,7 +21,6 @@
 #define _SFX_GUISAVEAS_HXX_
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -47,18 +46,16 @@ class SfxStoringHelper
     friend class ModelData_Impl;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xFilterCFG;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery > m_xFilterQuery;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 > m_xModuleManager;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceFactory();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetFilterConfiguration();
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery > GetFilterQuery();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 > GetModuleManager();
 
 public:
-    SfxStoringHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    SfxStoringHelper();
 
     sal_Bool GUIStoreModel(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,

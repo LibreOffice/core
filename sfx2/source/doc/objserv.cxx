@@ -658,8 +658,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( !pSlot )
                     throw uno::Exception();
 
-                uno::Reference< lang::XMultiServiceFactory > xEmptyFactory;
-                SfxStoringHelper aHelper( xEmptyFactory );
+                SfxStoringHelper aHelper;
 
                 if ( QueryHiddenInformation( bIsPDFExport ? WhenCreatingPDF : WhenSaving, NULL ) == RET_YES )
                 {
