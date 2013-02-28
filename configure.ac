@@ -4185,9 +4185,6 @@ UDK_MICRO=7
 AC_SUBST(UDK_MAJOR)
 AC_SUBST(UDK_MINOR)
 AC_SUBST(UDK_MICRO)
-AC_DEFINE_UNQUOTED(SAL_UDK_MAJOR,"$UDK_MAJOR")
-AC_DEFINE_UNQUOTED(SAL_UDK_MINOR,"$UDK_MINOR")
-AC_DEFINE_UNQUOTED(SAL_UDK_MICRO,"$UDK_MICRO")
 
 set `echo AC_PACKAGE_VERSION | sed "s/\./ /g"`
 
@@ -11846,7 +11843,6 @@ AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
-AC_CONFIG_HEADERS([config_host/config_udkversion.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])
 AC_CONFIG_HEADERS([config_host/config_version.h])
 AC_OUTPUT
