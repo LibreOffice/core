@@ -51,7 +51,6 @@ namespace dbaui
 {
     class OQueryContainerWindow;
 
-    class OQueryController;
     typedef ::comphelper::OPropertyContainer                            OQueryController_PBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< OQueryController > OQueryController_PABase;
     class OQueryController  :public OJoinController
@@ -116,6 +115,8 @@ namespace dbaui
         ::rtl::OUString translateStatement( bool _bFireStatementChange = true );
 
         ::rtl::OUString getDefaultName() const;
+
+        void execute_QueryPropDlg();
 
     protected:
         // all the features which should be handled by this class
