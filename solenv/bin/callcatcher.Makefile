@@ -18,13 +18,6 @@ export AR:=callarchive ar
 else
 export AR:=callarchive $(AR)
 endif
-#old-school ones, can go post-gbuildification is complete
-export LINK:=$(CXX)
-ifeq ($(LIBMGR),)
-export LIBMGR:=callarchive ar
-else
-export LIBMGR:=callarchive $(LIBMGR)
-endif
 export dbglevel:=2
 
 include $(SOLARENV)/gbuild/gbuild.mk
@@ -33,9 +26,6 @@ findunusedcode:
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.build
 	ooinstall -l $(DEVINSTALLDIR)/opt
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.build subsequentcheck
-	callanalyse \
-        $(WORKDIR)/LinkTarget/*/* \
-	    */$(OUTPATH)/bin/* \
-	    */$(OUTPATH)/lib/* > unusedcode.all
+	callanalyse $(WORKDIR)/LinkTarget/*/* > unusedcode.all
 
 # vim: set noet sw=4 ts=4:

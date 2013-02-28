@@ -336,7 +336,7 @@ findunusedcode:
 	@echo unexport CFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
 	@echo unexport CXXFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
 	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
-	@$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile findunusedcode
+	$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile findunusedcode
 	@grep ::.*\( unusedcode.all \
               | grep -v ^Atom \
               | grep -v ^atom:: \
