@@ -34,11 +34,7 @@
 
 using namespace ::ucbhelper;
 
-//########################################################################
-//#                                                                      #
 //# ComboBox-Control, which is filled with all current framenames        #
-//#                                                                      #
-//########################################################################
 
 /*************************************************************************
 |*
@@ -76,17 +72,8 @@ SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
 SvxFramesComboBox::~SvxFramesComboBox ()
 {
 }
-//########################################################################
-//#                                                                      #
-//# ComboBox-Control for URL's with History and Autocompletion           #
-//#                                                                      #
-//########################################################################
 
-/*************************************************************************
-|*
-|* Contructor / Destructor
-|*
-|************************************************************************/
+//# ComboBox-Control for URL's with History and Autocompletion           #
 
 SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart )
 : SvtURLBox         ( pParent, eSmart ),
@@ -131,17 +118,7 @@ long SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
     return SvtURLBox::PreNotify( rNEvt );
 }
 
-//########################################################################
-//#                                                                      #
 //# Hyperlink-Dialog: Tabpages-Baseclass                                 #
-//#                                                                      #
-//########################################################################
-
-/*************************************************************************
-|*
-|* Con/Destructor, Initialize
-|*
-\************************************************************************/
 
 SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
                                                    const ResId &rResId,
@@ -227,12 +204,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
     mbStdControlsInit = sal_True;
 }
 
-/*************************************************************************
-|*
-|* Move Extra-Window
-|*
-\************************************************************************/
-
+// Move Extra-Window
 sal_Bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, sal_Bool bDisConnectDlg )
 {
     sal_Bool bReturn =  mpMarkWnd->MoveTo ( aNewPos );
@@ -243,12 +215,7 @@ sal_Bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, sal_Bool bDisCo
     return ( !bReturn && IsMarkWndVisible() );
 }
 
-/*************************************************************************
-|*
-|* Show Extra-Window
-|*
-\************************************************************************/
-
+// Show Extra-Window
 void SvxHyperlinkTabPageBase::ShowMarkWnd ()
 {
     ( ( Window* ) mpMarkWnd )->Show();
@@ -289,12 +256,7 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
     mpMarkWnd->SetSizePixel( Size( aExtraWndSize.Width(), aDlgSize.Height() ) );
 }
 
-/*************************************************************************
-|*
-|* Fill Dialogfields
-|*
-\************************************************************************/
-
+// Fill Dialogfields
 void SvxHyperlinkTabPageBase::FillStandardDlgFields ( SvxHyperlinkItem* pHyperlinkItem )
 {
     // Frame
@@ -333,91 +295,51 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( SvxHyperlinkItem* pHyperli
         mpBtScript->Enable();
 }
 
-/*************************************************************************
-|*
-|* Any action to do after apply-button is pressed
-|*
-\************************************************************************/
-
+// Any action to do after apply-button is pressed
 void SvxHyperlinkTabPageBase::DoApply ()
 {
     // default-implemtation : do nothing
 }
 
-/*************************************************************************
-|*
-|* Ask page whether an insert is possible
-|*
-\************************************************************************/
-
+// Ask page whether an insert is possible
 sal_Bool SvxHyperlinkTabPageBase::AskApply ()
 {
     // default-implementation
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|* This method would be called from bookmark-window to set new mark-string
-|*
-\************************************************************************/
-
+// This method would be called from bookmark-window to set new mark-string
 void SvxHyperlinkTabPageBase::SetMarkStr ( String& /*aStrMark*/ )
 {
     // default-implemtation : do nothing
 }
 
-/*************************************************************************
-|*
-|* This method will be called from the dialog-class if the state off
-|* the online-mode has changed.
-|*
-\************************************************************************/
-
+// This method will be called from the dialog-class if the state off
+// the online-mode has changed.
 void SvxHyperlinkTabPageBase::SetOnlineMode( sal_Bool /*bEnable*/ )
 {
     // default-implemtation : do nothing
 }
 
-/*************************************************************************
-|*
-|* Set initial focus
-|*
-|************************************************************************/
-
+// Set initial focus
 void SvxHyperlinkTabPageBase::SetInitFocus()
 {
     GrabFocus();
 }
 
-/*************************************************************************
-|*
-|* Ask dialog whether the curretn doc is a HTML-doc
-|*
-|************************************************************************/
-
+// Ask dialog whether the curretn doc is a HTML-doc
 sal_Bool SvxHyperlinkTabPageBase::IsHTMLDoc() const
 {
     return ((SvxHpLinkDlg*)mpDialog)->IsHTMLDoc();
 }
 
-/*************************************************************************
-|*
-|* retrieve dispatcher
-|*
-|************************************************************************/
-
+// retrieve dispatcher
 SfxDispatcher* SvxHyperlinkTabPageBase::GetDispatcher() const
 {
     return ((SvxHpLinkDlg*)mpDialog)->GetDispatcher();
 }
 
-/*************************************************************************
-|*
-|* Click on imagebutton : Script
-|*
-|************************************************************************/
-
+// Click on imagebutton : Script
 IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
 {
     SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
@@ -480,12 +402,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
     return( 0L );
 }
 
-/*************************************************************************
-|*
-|* Get Macro-Infos
-|*
-|************************************************************************/
-
+// Get Macro-Infos
 sal_uInt16 SvxHyperlinkTabPageBase::GetMacroEvents()
 {
     SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
@@ -502,12 +419,7 @@ SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
     return ( (SvxMacroTableDtor*)pHyperlinkItem->GetMacroTbl() );
 }
 
-/*************************************************************************
-|*
-|* try to detect the current protocol that is used in aStrURL
-|*
-|************************************************************************/
-
+// try to detect the current protocol that is used in aStrURL
 String SvxHyperlinkTabPageBase::GetSchemeFromURL( String aStrURL )
 {
     String aStrScheme;
@@ -559,12 +471,7 @@ void SvxHyperlinkTabPageBase::GetDataFromCommonFields( String& aStrName,
         eMode = (SvxLinkInsertMode) ( sal_uInt16(eMode) | HLINK_HTMLMODE );
 }
 
-/*************************************************************************
-|*
-|* reset dialog-fields
-|*
-|************************************************************************/
-
+// reset dialog-fields
 void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 {
     ///////////////////////////////////////
@@ -587,12 +494,7 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
     }
 }
 
-/*************************************************************************
-|*
-|* Fill output-ItemSet
-|*
-|************************************************************************/
-
+// Fill output-ItemSet
 sal_Bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
 {
     String aStrURL, aStrName, aStrIntName, aStrFrame;
@@ -640,12 +542,7 @@ String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
     return aStrUiURL;
 }
 
-/*************************************************************************
-|*
-|* Activate / Deactivate Tabpage
-|*
-|************************************************************************/
-
+// Activate / Deactivate Tabpage
 void SvxHyperlinkTabPageBase::ActivatePage( const SfxItemSet& rItemSet )
 {
     ///////////////////////////////////////
