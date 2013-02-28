@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///Gg\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///KA\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///MQ\u003d",
         "filename": "sd/source/core/drawdoc.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///Gw\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Why?",
+      "parentUuid": "AAAAV3///MQ\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///MM\u003d",
         "filename": "sd/source/core/drawdoc.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "I would move the \"do\"  between \"templates\" and \"exist\" or remove it completely",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Gs\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Why?",
+      "parentUuid": "AAAAV3///MM\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///Gc\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///ME\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///MA\u003d",
         "filename": "sd/source/core/drawdoc.cxx",
         "patchSetId": 1
@@ -98,6 +170,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "In my eyes, mentioning the method name does not provide additional benefit here and below... or does it? How do you see this?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Go\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///MA\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -121,6 +211,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///Gk\u003d",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Re: both changes: Why?",
+      "parentUuid": "AAAAV3///L8\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///L0\u003d",
         "filename": "sd/source/core/drawdoc2.cxx",
         "patchSetId": 1
@@ -132,6 +240,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "I would remove the initials \"(PB)\" here...",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///II\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///L0\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -155,6 +281,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///IE\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///Lw\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///Ls\u003d",
         "filename": "sd/source/core/drawdoc2.cxx",
         "patchSetId": 1
@@ -166,6 +310,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "PowerPoint is written with a capital P in the middle :-) (see http://office.microsoft.com/powerpoint/)",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///IA\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done, grudgingly. I accept those nonsensical camel-casings when it comes to stuff I like, but this is just a part of MSO.",
+      "parentUuid": "AAAAV3///Ls\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -189,6 +351,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///H8\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Why?",
+      "parentUuid": "AAAAV3///Lo\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///Lg\u003d",
         "filename": "sd/source/core/drawdoc2.cxx",
         "patchSetId": 1
@@ -200,6 +380,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "sounds strange to me, maybe better: \"no Autolayout yet -\u003e initialize\"? (also for the two identical comments below)",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///H4\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///Lg\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -223,6 +421,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///H0\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Why?",
+      "parentUuid": "AAAAV3///Lc\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///LY\u003d",
         "filename": "sd/source/core/drawdoc2.cxx",
         "patchSetId": 1
@@ -234,6 +450,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "missing space between \"execute\" and \"HitTest\"?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Hw\u003d",
+        "filename": "sd/source/core/drawdoc2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///LY\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -274,6 +508,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///Hs\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///LM\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///LI\u003d",
         "filename": "sd/source/core/drawdoc3.cxx",
         "patchSetId": 1
@@ -285,6 +537,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "Why did you add a fullstop (\".\") in this line and the comments below? No big deal, but inconsistent :-)",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///G4\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///LI\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -308,6 +578,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///Ho\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Hum, well... that was deliberate, as I was not sure what \"ex.\" meant.",
+      "parentUuid": "AAAAV3///K8\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///K4\u003d",
         "filename": "sd/source/core/drawdoc3.cxx",
         "patchSetId": 1
@@ -319,6 +607,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "here, you missed translating a comment",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///Hk\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Good catch. Done.",
+      "parentUuid": "AAAAV3///K4\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -342,6 +648,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///Hg\u003d",
+        "filename": "sd/source/core/drawdoc3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///K0\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///Kk\u003d",
         "filename": "sd/source/core/drawdoc4.cxx",
         "patchSetId": 1
@@ -353,6 +677,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "Why a fullstop here at the end of the line?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///HE\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///Kk\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -376,6 +718,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///HY\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///Kg\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///Kc\u003d",
         "filename": "sd/source/core/drawdoc4.cxx",
         "patchSetId": 1
@@ -387,6 +747,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///HA\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///Kc\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -410,6 +788,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///G8\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///KY\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///KU\u003d",
         "filename": "sd/source/core/drawdoc4.cxx",
         "patchSetId": 1
@@ -421,6 +817,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///HU\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///KU\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -444,6 +858,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///HQ\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///KQ\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///KM\u003d",
         "filename": "sd/source/core/drawdoc4.cxx",
         "patchSetId": 1
@@ -461,6 +893,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3///HM\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///KM\u003d",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3///KI\u003d",
         "filename": "sd/source/core/drawdoc4.cxx",
         "patchSetId": 1
@@ -472,6 +922,24 @@
       "writtenOn": "2013-02-27T22:17:08Z",
       "side": 1,
       "message": "why a fullstop here?",
+      "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3///HI\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1000044
+      },
+      "writtenOn": "2013-02-28T09:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///KI\u003d",
       "revId": "6a956a0f6b825aff83b5253f9081ef95f67766f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
