@@ -173,14 +173,13 @@ friend class ContentEventListener_Impl;
     Reference< XCommandEnvironment >    m_xEnv;
     Reference< XContentEventListener >  m_xContentEventListener;
     mutable osl::Mutex                  m_aMutex;
-    sal_Int32                           m_nCommandId;
 
 private:
     void reinit( const Reference< XContent >& xContent );
     void disposing(const EventObject& Source);
 
 public:
-    Content_Impl() : m_nCommandId( 0 ) {};
+    Content_Impl() {};
     Content_Impl( const Reference< XComponentContext >& rCtx,
                   const Reference< XContent >& rContent,
                   const Reference< XCommandEnvironment >& rEnv );
@@ -190,7 +189,6 @@ public:
     const rtl::OUString&           getURL() const;
     Reference< XContent >          getContent();
     Reference< XCommandProcessor > getCommandProcessor();
-    sal_Int32 getCommandId();
     Reference< XComponentContext > getComponentContext()
     { assert(m_xCtx.is()); return m_xCtx; }
 
@@ -1088,8 +1086,7 @@ Content_Impl::Content_Impl( const Reference< XComponentContext >& rCtx,
                             const Reference< XCommandEnvironment >& rEnv )
 : m_xCtx( rCtx ),
   m_xContent( rContent ),
-  m_xEnv( rEnv ),
-  m_nCommandId( 0 )
+  m_xEnv( rEnv )
 {
     assert(rCtx.is());
     if ( m_xContent.is() )
@@ -1111,7 +1108,6 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
     osl::MutexGuard aGuard( m_aMutex );
 
     m_xCommandProcessor = 0;
-    m_nCommandId = 0;
 
     // #92581# - Don't reset m_aURL!!!
 
@@ -1175,7 +1171,6 @@ void Content_Impl::disposing( const EventObject& Source )
 
         xContent = m_xContent;
 
-        m_nCommandId = 0;
         m_aURL = rtl::OUString();
         m_xCommandProcessor = 0;
         m_xContent = 0;
@@ -1267,24 +1262,6 @@ Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
 }
 
 //=========================================================================
-sal_Int32 Content_Impl::getCommandId()
-{
-    if ( m_nCommandId == 0 )
-    {
-        osl::MutexGuard aGuard( m_aMutex );
-
-        if ( m_nCommandId == 0 )
-        {
-            Reference< XCommandProcessor > xProc = getCommandProcessor();
-            if ( xProc.is() )
-                m_nCommandId = xProc->createCommandIdentifier();
-        }
-    }
-
-    return m_nCommandId;
-}
-
-//=========================================================================
 Any Content_Impl::executeCommand( const Command& rCommand )
 {
     Reference< XCommandProcessor > xProc = getCommandProcessor();
@@ -1292,7 +1269,7 @@ Any Content_Impl::executeCommand( const Command& rCommand )
         return Any();
 
     // Execute command
-    return xProc->execute( rCommand, getCommandId(), m_xEnv );
+    return xProc->execute( rCommand, 0, m_xEnv );
 }
 
 //=========================================================================
