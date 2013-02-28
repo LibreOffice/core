@@ -16,6 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define STR_IMAGE_ORIGINAL_SIZE 1
-#define STR_IMAGE_VIEW_SIZE 2
-#define STR_IMAGE_CAPACITY 3
+#define STR_IMAGE_ORIGINAL_SIZE 256
+#define STR_IMAGE_VIEW_SIZE 257
+#define STR_IMAGE_CAPACITY 258
