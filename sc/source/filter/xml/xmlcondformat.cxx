@@ -570,6 +570,7 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                 break;
             case XML_TOK_CONDITION_APPLY_STYLE_NAME:
                 sStyle = sValue;
+                break;
             case XML_TOK_CONDITION_BASE_CELL_ADDRESS:
                 sAddress = sValue;
             default:
