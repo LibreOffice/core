@@ -21,11 +21,6 @@
 #define _REGISTRY_REGTYPE_H_
 
 #include <sal/types.h>
-#include <sal/udkversion.h>
-
-// version number of the library. This number is used for the load on call
-// mechanism and must be modifed when the library will be upgraded to a new version.
-#define LIBRARY_VERSION SAL_UDK_MAJOR
 
 /// defines the type of a registry handle used in the C API.
 typedef void*       RegHandle;
