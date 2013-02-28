@@ -728,9 +728,10 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
 void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::insertRow" );
-    OUStringBuffer aSql( "INSERT INTO " + m_aComposedTableName + " ( ");
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
+
+    OUStringBuffer aSql( "INSERT INTO " + m_aComposedTableName + " ( ");
 
     // set values and column names
     OUStringBuffer aValues(OUString(" VALUES ( "));

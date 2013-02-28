@@ -156,9 +156,10 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
 void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::insertRow" );
-    OUStringBuffer aSql("INSERT INTO " + m_aComposedTableName + " ( ");
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
+
+    OUStringBuffer aSql("INSERT INTO " + m_aComposedTableName + " ( ");
 
     // set values and column names
     ::rtl::OUStringBuffer aValues(" VALUES ( ");
