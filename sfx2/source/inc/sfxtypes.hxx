@@ -125,8 +125,6 @@ struct StringList_Impl : private Resource
 
 };
 
-#define GPF() *(int*)0 = 0
-
 #endif // #ifndef _SFX_SFXTYPES_HXX
 
 
