@@ -14,6 +14,6 @@ endif
 gb_Side := host
 include $(SOLARENV)/gbuild/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/Module_tail_build.mk))
+$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/RepositoryModule.mk))
 
 # vim: set noet sw=4 ts=4:

@@ -22,9 +22,9 @@
 # instead of those above.
 
 
-$(eval $(call gb_Module_Module,tail_build))
+$(eval $(call gb_Module_Module,libreoffice))
 
-$(eval $(call gb_Module_add_moduledirs,tail_build,\
+$(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
 	$(call gb_Helper_optional,AFMS,afms) \
 	android \
@@ -235,7 +235,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 ))
 
 ifeq ($(MERGELIBS),TRUE)
-$(eval $(call gb_Module_add_targets,tail_build,\
+$(eval $(call gb_Module_add_targets,libreoffice,\
 	Library_merged \
 ))
 endif
@@ -244,20 +244,20 @@ endif
 # libraries takes enormous amounts of RAM.	To prevent annoying OOM situations
 # etc., try to prevent linking these in parallel by adding artificial build
 # order dependencies here.
-define tailbuild_serialize1
+define repositorymodule_serialize1
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) \
 	:| $(foreach lib,$(2),$(call gb_Library_get_target,$(lib)))
 endef
 
-define tailbuild_serialize
+define repositorymodule_serialize
 $(if $(filter-out 0 1,$(words $(1))),\
-$(call tailbuild_serialize1,$(firstword $(1)),$(wordlist 2,$(words $(1)),$(1))))
+$(call repositorymodule_serialize1,$(firstword $(1)),$(wordlist 2,$(words $(1)),$(1))))
 $(if $(strip $(1)),\
-$(call tailbuild_serialize,$(wordlist 2,$(words $(1)),$(1))))
+$(call repositorymodule_serialize,$(wordlist 2,$(words $(1)),$(1))))
 endef
 
 ifeq (all,$(filter all,$(MAKECMDGOALS)))
-$(eval $(call tailbuild_serialize,\
+$(eval $(call repositorymodule_serialize,\
 	scfilt \
 	$(if $(filter SCRIPTING,$(BUILD_TYPE)),vbaobj) \
 	sc msword swui sw sd \
