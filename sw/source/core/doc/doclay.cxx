@@ -1347,8 +1347,10 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
                 pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
                 pNewSet->Put( SvxOpaqueItem( RES_OPAQUE, sal_True ) );
-                pNewSet->Put( SwFmtVertOrient( text::VertOrientation::TOP ) );
-                pNewSet->Put( SwFmtHoriOrient( text::HoriOrientation::CENTER ) );
+
+                sal_Int16 eVert = bBefore ? text::VertOrientation::BOTTOM : text::VertOrientation::TOP;
+                pNewSet->Put( SwFmtVertOrient( 0, eVert ) );
+                pNewSet->Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER ) );
 
                 aFrmSize = pOldFmt->GetFrmSize();
                 aFrmSize.SetWidthPercent( 100 );

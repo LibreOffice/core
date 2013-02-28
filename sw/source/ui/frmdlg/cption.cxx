@@ -239,11 +239,6 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
             break;
     }
     m_pPosBox->SelectEntryPos(1);
-    if (eType & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_DRW))
-    {
-        m_pPosText->Enable( sal_False );
-        m_pPosBox->Enable( sal_False );
-    }
 
     m_pCategoryBox->GetModifyHdl().Call(m_pCategoryBox);
 
