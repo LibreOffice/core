@@ -299,7 +299,7 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
     if (aOutBuffer.bits != NULL)
     {
 
-#if 1   // pre-'clean' the buffer with cruft:
+#if 0   // pre-'clean' the buffer with cruft:
         // hard-code / guess at a format ...
         int32_t *p = (int32_t *)aOutBuffer.bits;
         for (int32_t y = 0; y < aOutBuffer.height; y++)
