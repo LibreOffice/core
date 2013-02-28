@@ -32,7 +32,11 @@
 
 #ifdef ANDROID
 #  include <jni.h>
+#  include <android/log.h>
 #  include <salhelper/thread.hxx>
+
+#  define LOGTAG "LibreOffice/sofficemain"
+#  define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
 #endif
 
 int SVMain();
@@ -79,8 +83,8 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     return SVMain();
 #if defined ANDROID
     } catch (const ::com::sun::star::uno::Exception &e) {
-        fprintf (stderr, "Not handled UNO exception at main: '%s'\n",
-                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        LOGI("Unhandled UNO exception: '%s'",
+             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         throw; // to get exception type printed
     }
 #endif
@@ -96,7 +100,7 @@ public:
         int nRet;
         do {
             nRet = soffice_main();
-            fprintf( stderr, "nRet %d\n", nRet );
+            LOGI("soffice_main returned %d", nRet );
         } while (nRet == 81 || nRet == 79); // pretend to re-start.
         exit (nRet);
     }
@@ -106,7 +110,6 @@ extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_experimental_desktop_Desktop_spawnMain(JNIEnv* /* env */,
                                                             jobject /* dummy */)
 {
-    fprintf(stderr, "Spawn main!\n");
     new MainThread();
 }
 #endif
