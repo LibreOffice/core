@@ -232,7 +232,6 @@ public class Desktop
                 return super.onTouchEvent(event);
 
             super.onTouchEvent(event);
-            Log.d(TAG, "onTouch (" + event.getX() + "," + event.getY() + ")");
 
             // Just temporary hack. We should not show the keyboard
             // unconditionally on a ACTION_UP event here. The LO level
@@ -261,8 +260,6 @@ public class Desktop
         }
 
         @Override public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-            Log.d(TAG, "onCreateInputConnection");
-
             BaseInputConnection fic = new LOInputConnection(this, true);
             outAttrs.actionLabel = null;
             outAttrs.inputType = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
@@ -272,7 +269,6 @@ public class Desktop
         }
 
         @Override public boolean onCheckIsTextEditor() {
-            Log.d(TAG, "onCheckIsTextEditor");
             return renderedOnce;
         }
     }
@@ -285,7 +281,6 @@ public class Desktop
         }
 
         @Override public boolean commitText(CharSequence text, int newCursorPosition) {
-            Log.i(TAG, "commitText(" + text + ", " + newCursorPosition + ")");
             for (int i = 0; i < text.length(); i++) {
                 Desktop.key(text.charAt(i), Desktop.getTimestamp());
             }
