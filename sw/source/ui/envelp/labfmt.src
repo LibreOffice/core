@@ -302,6 +302,12 @@ String STR_PHEIGHT
 {
     Text [ en-US ] = "Page Height" ;
 };
+WarningBox WB_PREDEFINED_LABEL
+{
+    BUTTONS = WB_OK;
+    DEFBUTTON = WB_DEF_OK;
+    Message [ en-US ] = "Predefined labels cannot be overwritten, use another name." ;
+};
 ModalDialog DLG_SAVE_LABEL
 {
     HelpID = HID_SAVE_LABEL_DLG ;

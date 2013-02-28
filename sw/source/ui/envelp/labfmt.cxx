@@ -617,7 +617,9 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
     const std::vector<OUString>& rMan = rCfg.GetManufacturers();
     for (sal_uInt16 i = 0; i < rMan.size(); i++)
+    {
         aMakeCB.InsertEntry(rMan[i]);
+    }
 }
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
@@ -627,6 +629,12 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
     String sType(aTypeED.GetText());
     if(rCfg.HasLabel(sMake, sType))
     {
+        if ( rCfg.IsPredefinedLabel(sMake, sType) )
+        {
+            SAL_WARN( "IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)", "label is predefined and cannot be overwritten" );
+            WarningBox( this, SW_RES( WB_PREDEFINED_LABEL ) ).Execute();
+            return 0;
+        }
         String sTmp(aQueryMB.GetMessText());
         String sQuery(sTmp);
         sQuery.SearchAndReplace(rtl::OUString("%1"), sMake);

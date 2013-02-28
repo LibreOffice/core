@@ -71,13 +71,14 @@
 #define STR_ROWS     (RC_LABFMT_BEGIN +  8)
 #define STR_PWIDTH   (RC_LABFMT_BEGIN +  9)
 #define STR_PHEIGHT  (RC_LABFMT_BEGIN + 10)
+#define WB_PREDEFINED_LABEL (RC_LABFMT_BEGIN + 11)
 
 // overflow check ********************************************************
 
-#define LABFMT_ACT_END  STR_PHEIGHT
+#define LABFMT_ACT_END WB_PREDEFINED_LABEL
 
 #if LABFMT_ACT_END > RC_LABFMT_END
-#error Resource-Ueberlauf in #file, #line
+#error Resource overflow in #file, #line
 #endif
 
 #endif

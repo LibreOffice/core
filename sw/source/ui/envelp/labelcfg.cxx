@@ -59,6 +59,18 @@ static inline OUString lcl_getValue(xmlreader::XmlReader& reader,
     return sTmp;
 }
 
+static Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
+{
+    Sequence<OUString> aProperties(2);
+    OUString* pProperties = aProperties.getArray();
+    for(sal_Int32 nProp = 0; nProp < 2; nProp++)
+        pProperties[nProp] = rPrefix;
+
+    pProperties[ 0] += "Name";
+    pProperties[ 1] += "Measure";
+    return aProperties;
+}
+
 SwLabelConfig::SwLabelConfig() :
     ConfigItem("Office.Labels/Manufacturer")
 {
@@ -72,6 +84,7 @@ SwLabelConfig::SwLabelConfig() :
     OUString sName;
     OUString sMeasure;
 
+    // fill m_aLabels and m_aManufacturers with the predefined labels
     res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
     assert(res == xmlreader::XmlReader::RESULT_BEGIN &&
@@ -105,7 +118,10 @@ SwLabelConfig::SwLabelConfig() :
                     xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("measure")));
             // Ending label mark
             lcl_assertEndingItem(reader);
-            m_aLabels[sManufacturer][sName] = sMeasure;
+            if ( m_aLabels.find( sManufacturer ) == m_aLabels.end() )
+                m_aManufacturers.push_back( sManufacturer );
+            m_aLabels[sManufacturer][sName].m_aMeasure = sMeasure;
+            m_aLabels[sManufacturer][sName].m_bPredefined = true;
         }
         // Get next manufacturer or end
         res = reader.nextItem(
@@ -115,7 +131,35 @@ SwLabelConfig::SwLabelConfig() :
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
     assert(res == xmlreader::XmlReader::RESULT_DONE);
 
-    FillManufacturers();
+    // add to m_aLabels and m_aManufacturers the custom labels
+    const Sequence<rtl::OUString>& rMan = GetNodeNames( OUString() );
+    const rtl::OUString* pMan = rMan.getConstArray();
+    for ( sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++ )
+    {
+        sManufacturer = pMan[nMan];
+        const Sequence<OUString> aLabels = GetNodeNames( sManufacturer );
+        const OUString* pLabels = aLabels.getConstArray();
+        for( sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++ )
+        {
+            OUString sPrefix( sManufacturer );
+            sPrefix += "/";
+            sPrefix += pLabels[nLabel];
+            sPrefix += "/";
+            Sequence<OUString> aPropNames = lcl_CreatePropertyNames( sPrefix );
+            Sequence<Any>   aValues = GetProperties( aPropNames );
+            const Any* pValues = aValues.getConstArray();
+            if (aValues.getLength() >= 1)
+                if(pValues[0].hasValue())
+                    pValues[0] >>= sName;
+            if (aValues.getLength() >= 2)
+                if(pValues[1].hasValue())
+                    pValues[1] >>= sMeasure;
+            if ( m_aLabels.find( sManufacturer ) == m_aLabels.end() )
+                m_aManufacturers.push_back( sManufacturer );
+            m_aLabels[sManufacturer][sName].m_aMeasure = sMeasure;
+            m_aLabels[sManufacturer][sName].m_bPredefined = false;
+        }
+    }
 }
 
 SwLabelConfig::~SwLabelConfig()
@@ -127,32 +171,6 @@ void SwLabelConfig::Commit() {}
 
 void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-void SwLabelConfig::FillManufacturers()
-{
-    m_aManufacturers.clear();
-    for (std::map< OUString, std::map<OUString, OUString> >::iterator it =
-            m_aLabels.begin(); it != m_aLabels.end(); ++it)
-        m_aManufacturers.push_back( it->first );
-
-    const com::sun::star::uno::Sequence<rtl::OUString>& rMan = GetNodeNames(OUString());
-    const rtl::OUString* pMan = rMan.getConstArray();
-    for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
-        if (m_aLabels.find( pMan[nMan] ) == m_aLabels.end())
-            m_aManufacturers.push_back( pMan[nMan] );
-}
-
-static Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
-{
-    Sequence<OUString> aProperties(2);
-    OUString* pProperties = aProperties.getArray();
-    for(sal_Int32 nProp = 0; nProp < 2; nProp++)
-        pProperties[nProp] = rPrefix;
-
-    pProperties[ 0] += "Name";
-    pProperties[ 1] += "Measure";
-    return aProperties;
-}
-
 static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeasure, const OUString& rManufacturer)
 {
     SwLabRec* pNewRec = new SwLabRec;
@@ -161,7 +179,7 @@ static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeas
     pNewRec->lPHeight = 0;
     pNewRec->aType = rType;
     //all values are contained as colon-separated 1/100 mm values
-    //except for the continuous flag ('C'/'S')
+    //except for the continuous flag ('C'/'S') and nCols, nRows (sal_Int32)
     String sMeasure(rMeasure);
     sal_uInt16 nTokenCount = comphelper::string::getTokenCount(sMeasure, ';');
     for(sal_uInt16 i = 0; i < nTokenCount; i++)
@@ -183,7 +201,7 @@ static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeas
             case 10 : pNewRec->lPHeight  = MM100_TO_TWIP(nVal);  break;
         }
     }
-    // lines added for compatibility with custom label defintions saved before patch 44516
+    // lines added for compatibility with custom label definitions saved before patch fdo#44516
     if (pNewRec->lPWidth == 0 || pNewRec->lPHeight == 0)
     {
         // old style definition (no paper dimensions), calculate probable values
@@ -194,7 +212,7 @@ static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeas
 }
 
 static Sequence<PropertyValue> lcl_CreateProperties(
-    Sequence<OUString>& rPropNames, const SwLabRec& rRec)
+    Sequence<OUString>& rPropNames, OUString& rMeasure, const SwLabRec& rRec)
 {
     const OUString* pNames = rPropNames.getConstArray();
     Sequence<PropertyValue> aRet(rPropNames.getLength());
@@ -209,19 +227,19 @@ static Sequence<PropertyValue> lcl_CreateProperties(
             case 0: pValues[nProp].Value <<= OUString(rRec.aType); break;
             case 1:
             {
-                OUString sTmp;
-                sTmp += rRec.bCont ? OUString("C") : OUString("S");           sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHDist) );       sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lVDist));        sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lWidth)  );      sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHeight) );      sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lLeft)   );      sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lUpper)  );      sTmp += sColon;
-                sTmp += OUString::valueOf(rRec.nCols   );                     sTmp += sColon;
-                sTmp += OUString::valueOf(rRec.nRows   );                     sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lPWidth)  );     sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lPHeight)  );
-                pValues[nProp].Value <<= sTmp;
+                rMeasure = "";
+                rMeasure += rRec.bCont ? OUString( "C" ) : OUString( "S" );      rMeasure += sColon;
+                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lHDist ) );   rMeasure += sColon;
+                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lVDist ) );   rMeasure += sColon;
+                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lWidth ) );   rMeasure += sColon;
+                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lHeight ) );  rMeasure += sColon;
+                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lLeft ) );    rMeasure += sColon;
+                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lUpper ) );   rMeasure += sColon;
+                rMeasure += OUString::valueOf( rRec.nCols );                     rMeasure += sColon;
+                rMeasure += OUString::valueOf( rRec.nRows );                     rMeasure += sColon;
+                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lPWidth ) );  rMeasure += sColon;
+                rMeasure += OUString::valueOf( TWIP_TO_MM100( rRec.lPHeight ) );
+                pValues[nProp].Value <<= rMeasure;
             }
             break;
         }
@@ -229,80 +247,21 @@ static Sequence<PropertyValue> lcl_CreateProperties(
     return aRet;
 }
 
+// function fills SwLabDlg with label definitions for manufacturer rManufacturer
 void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr)
 {
     OUString sManufacturer(wrapConfigurationElementName(rManufacturer));
-    const Sequence<OUString> aLabels = GetNodeNames(sManufacturer);
-    const OUString* pLabels = aLabels.getConstArray();
-    for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
-    {
-        OUString sPrefix(sManufacturer);
-        sPrefix += "/";
-        sPrefix += pLabels[nLabel];
-        sPrefix += "/";
-        Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
-        Sequence<Any>   aValues = GetProperties(aPropNames);
-        const Any* pValues = aValues.getConstArray();
-        OUString sType;
-        OUString sMeasure;
-        if (aValues.getLength() >= 1)
-            if(pValues[0].hasValue())
-                pValues[0] >>= sType;
-        if (aValues.getLength() >= 2)
-            if(pValues[1].hasValue())
-                pValues[1] >>= sMeasure;
-        // Remove default value if we have one from configuration
-        if(m_aLabels.find(rManufacturer) != m_aLabels.end())
-            m_aLabels[rManufacturer].erase(sType);
-        rLabArr.push_back( lcl_CreateSwLabRec(sType, sMeasure, rManufacturer) );
-    }
-    // Add default labels
     if (m_aLabels.find(rManufacturer) == m_aLabels.end())
         return;
-    for (std::map<OUString, OUString>::iterator it =
-            m_aLabels[rManufacturer].begin();
+    for (std::map<OUString, SwLabelMeasure>::iterator it = m_aLabels[rManufacturer].begin();
             it != m_aLabels[rManufacturer].end(); ++it)
-        rLabArr.push_back( lcl_CreateSwLabRec(it->first, it->second, rManufacturer) );
+        rLabArr.push_back( lcl_CreateSwLabRec(it->first, it->second.m_aMeasure, rManufacturer) );
 }
 
 sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType)
 {
-    if (m_aLabels.find(rManufacturer) != m_aLabels.end())
-        if (m_aLabels[rManufacturer].find(rType) != m_aLabels[rManufacturer].end())
-            return true;
-
-    bool bFound = false;
-    for (size_t nNode = 0; nNode < m_aManufacturers.size() && !bFound; nNode++)
-    {
-        if (m_aManufacturers[nNode] == rManufacturer)
-            bFound = true;
-    }
-    if(bFound)
-    {
-        OUString sManufacturer(wrapConfigurationElementName(rManufacturer));
-        const Sequence<OUString> aLabels = GetNodeNames(sManufacturer);
-        const OUString* pLabels = aLabels.getConstArray();
-        for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
-        {
-            OUString sPrefix(sManufacturer);
-            sPrefix += "/";
-            sPrefix += pLabels[nLabel];
-            sPrefix += "/";
-            Sequence<OUString> aProperties(1);
-            aProperties.getArray()[0] = sPrefix;
-            aProperties.getArray()[0] += "Name";
-            Sequence<Any>   aValues = GetProperties(aProperties);
-            const Any* pValues = aValues.getConstArray();
-            if(pValues[0].hasValue())
-            {
-                OUString sTmp;
-                pValues[0] >>= sTmp;
-                if(rType == sTmp)
-                    return sal_True;
-            }
-        }
-    }
-    return sal_False;
+    return ( ( m_aLabels.find(rManufacturer) != m_aLabels.end() ) &&
+             ( m_aLabels[rManufacturer].find(rType) != m_aLabels[rManufacturer].end() ) );
 }
 
 static bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
@@ -314,75 +273,85 @@ static bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
     return false;
 }
 
-void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
-        const rtl::OUString& rType, const SwLabRec& rRec)
+// label is always saved as a custom label
+// predefined labels can NOT be overwritten by custom labels with same manufacturer/name
+void SwLabelConfig::SaveLabel( const rtl::OUString& rManufacturer,
+        const rtl::OUString& rType, const SwLabRec& rRec )
 {
-    bool bFound = false;
-    for (size_t nNode = 0; nNode < m_aManufacturers.size() && !bFound; nNode++)
+    OUString sFoundNode;
+    bool bManufacturerNodeFound;
+    if ( m_aLabels.find( rManufacturer ) == m_aLabels.end() ||
+         GetNodeNames( rManufacturer ).getLength() == 0 )
     {
-        if (m_aManufacturers[nNode] == rManufacturer)
-            bFound = true;
-    }
-    if(!bFound)
-    {
-        if(!AddNode(OUString(), rManufacturer))
+        bManufacturerNodeFound = false;
+        // manufacturer node does not exist, add (and also to m_aManufacturers)
+        if ( !AddNode( OUString(), rManufacturer ) )
         {
             OSL_FAIL("New configuration node could not be created");
             return ;
         }
-        else
-        {
-            FillManufacturers();
-        }
+        m_aManufacturers.push_back( rManufacturer );
     }
+    else
+        bManufacturerNodeFound = true;
 
-    OUString sManufacturer(wrapConfigurationElementName(rManufacturer));
-    const Sequence<OUString> aLabels = GetNodeNames(sManufacturer);
-    const OUString* pLabels = aLabels.getConstArray();
-    OUString sFoundNode;
-    for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
+    if ( !bManufacturerNodeFound ||
+         m_aLabels[rManufacturer].find( rType ) == m_aLabels[rManufacturer].end() )
     {
-        OUString sPrefix(sManufacturer);
-        sPrefix += "/";
-        sPrefix += pLabels[nLabel];
-        sPrefix += "/";
-        Sequence<OUString> aProperties(1);
-        aProperties.getArray()[0] = sPrefix;
-        aProperties.getArray()[0] += "Name";
-        Sequence<Any>   aValues = GetProperties(aProperties);
-        const Any* pValues = aValues.getConstArray();
-        if(pValues[0].hasValue())
-        {
-            OUString sTmp;
-            pValues[0] >>= sTmp;
-            if(rType == sTmp)
-            {
-                sFoundNode = pLabels[nLabel];
-                break;
-            }
-        }
-    }
-    // if not found - generate a unique node name
-    if(sFoundNode.isEmpty())
-    {
+        // type does not yet exist, add to config
+        const Sequence<OUString> aLabels = GetNodeNames( rManufacturer );
         sal_Int32 nIndex = aLabels.getLength();
-        OUString sPrefix("Label");
+        OUString sPrefix( "Label" );
         sFoundNode = sPrefix;
-        sFoundNode += OUString::valueOf(nIndex);
-        while(lcl_Exists(sFoundNode, aLabels))
+        sFoundNode += OUString::valueOf( nIndex );
+        while ( lcl_Exists( sFoundNode, aLabels ) )
         {
             sFoundNode = sPrefix;
             sFoundNode += OUString::valueOf(nIndex++);
         }
     }
-    OUString sPrefix(wrapConfigurationElementName(rManufacturer));
+    else
+    {
+        // get the appropiate node
+        OUString sManufacturer( wrapConfigurationElementName( rManufacturer ) );
+        const Sequence<OUString> aLabels = GetNodeNames( sManufacturer );
+        const OUString* pLabels = aLabels.getConstArray();
+        for (sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
+        {
+            OUString sPrefix( sManufacturer );
+            sPrefix += "/";
+            sPrefix += pLabels[nLabel];
+            sPrefix += "/";
+            Sequence<OUString> aProperties(1);
+            aProperties.getArray()[0] = sPrefix;
+            aProperties.getArray()[0] += "Name";
+            Sequence<Any> aValues = GetProperties( aProperties );
+            const Any* pValues = aValues.getConstArray();
+            if ( pValues[0].hasValue() )
+            {
+                OUString sTmp;
+                pValues[0] >>= sTmp;
+                if ( rType == sTmp )
+                {
+                    sFoundNode = pLabels[nLabel];
+                    break;
+                }
+            }
+        }
+    }
+
+    OUString sPrefix( wrapConfigurationElementName( rManufacturer ) );
     sPrefix += "/";
     sPrefix += sFoundNode;
     sPrefix += "/";
-    Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
-    Sequence<PropertyValue> aPropValues = lcl_CreateProperties(aPropNames, rRec);
-    SetSetProperties(wrapConfigurationElementName(rManufacturer), aPropValues);
+    Sequence<OUString> aPropNames = lcl_CreatePropertyNames( sPrefix );
+    OUString sMeasure;
+    Sequence<PropertyValue> aPropValues = lcl_CreateProperties( aPropNames, sMeasure, rRec );
+    SetSetProperties( wrapConfigurationElementName( rManufacturer ), aPropValues );
 
+    //update m_aLabels
+    m_aLabels[rManufacturer][rType].m_aMeasure = sMeasure;
+    m_aLabels[rManufacturer][rType].m_bPredefined = false;
 }
 
 
