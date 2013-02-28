@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,solenv_minor_mk,$(SRCDIR)/solenv/inc))
+$(eval $(call gb_Package_Package,solenv_minor_mk,$(BUILDDIR)/solenv/inc))
 
 $(eval $(call gb_Package_add_file,solenv_minor_mk,inc/$(UPD)minor.mk,minor.mk))
 $(eval $(call gb_Package_add_file,solenv_minor_mk,inc/minormkchanged.flg,minor.mk))

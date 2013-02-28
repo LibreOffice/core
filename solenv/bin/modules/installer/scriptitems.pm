@@ -672,7 +672,7 @@ sub replace_setup_variables
 
     if ( $localbuild =~ /^\s*(\w+?)(\d+)\s*$/ ) { $localbuild = $2; }   # using "680" instead of "src680"
 
-    my $buildidstring = `git log -n 1 --pretty=format:"%H"`;
+    my $buildidstring = `cd $ENV{'SRCDIR'} 2>&1 >/dev/null && git log -n 1 --pretty=format:"%H"`;
     if ($? || !$buildidstring) {
         $buildidstring = $localbuild . $localminor . "(Build:" . $installer::globals::buildid . ")";
     }

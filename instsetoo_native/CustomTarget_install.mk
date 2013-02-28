@@ -81,7 +81,7 @@ $(call instsetoo_native_msitemplates,$(1))
 cd $(dir $@) \
 $(foreach pkgformat,$(5),\
 && $(PERL) -w $< \
-	-f $(SRCDIR)/instsetoo_native/util/openoffice.lst \
+	-f $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 	-l $(subst $(WHITESPACE),$(COMMA),$(strip $(2))) \
 	-p LibreOffice$(if $(filter TRUE,$(ENABLE_RELEASE_BUILD)),,_Dev)$(3) \
 	-u $(instsetoo_OUT) \

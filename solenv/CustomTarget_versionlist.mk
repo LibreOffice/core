@@ -27,12 +27,12 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,solenv/versionlist))
 
-include $(SRCDIR)/solenv/inc/minor.mk
+include $(BUILDDIR)/solenv/inc/minor.mk
 
 $(call gb_CustomTarget_get_target,solenv/versionlist) : $(call gb_CustomTarget_get_workdir,solenv/versionlist)/versionlist.hrc
 
 $(call gb_CustomTarget_get_workdir,solenv/versionlist)/versionlist.hrc : \
-	$(SRCDIR)/solenv/inc/minor.mk \
+	$(BUILDDIR)/solenv/inc/minor.mk \
 	| $(call gb_CustomTarget_get_workdir,solenv/versionlist)/.dir
 
 $(call gb_CustomTarget_get_workdir,solenv/versionlist)/versionlist.hrc :
