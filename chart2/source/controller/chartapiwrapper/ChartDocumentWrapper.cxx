@@ -1240,6 +1240,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                                 uno::UNO_QUERY );
                     bCreateDiagram = true;
                 }
+                break;
             case SERVICE_NAME_PIE_DIAGRAM:
                 if( xManagerFact.is())
                 {
