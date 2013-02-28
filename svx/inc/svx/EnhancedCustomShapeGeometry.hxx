@@ -83,7 +83,13 @@ struct mso_CustomShape
     sal_uInt32                              nHandles;
 };
 
-#define MSO_I | (sal_Int32)0x80000000
+// 0x80000000 is used as magic constant all over the customshape code where
+// it is squeezed into signed int32 type that cannot preserve this value. Good
+// compilers notice the problem and have every right to complain or error-out.
+// Using the magic constant already casted down consolidates the problem and is
+// the least invasive way to fix it until the code gets its well deserved makeover.
+#define Mx80000000 static_cast<sal_Int32>(0x80000000)
+#define MSO_I | Mx80000000
 
 sal_Bool            SortFilledObjectsToBackByDefault( MSO_SPT eSpType );
 SVX_DLLPUBLIC sal_Bool          IsCustomShapeFilledByDefault( MSO_SPT eSpType );

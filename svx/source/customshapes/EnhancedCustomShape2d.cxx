@@ -697,8 +697,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nCoordTop           ( 0 ),
     nCoordWidth         ( 21600 ),
     nCoordHeight        ( 21600 ),
-    nXRef               ( 0x80000000 ),
-    nYRef               ( 0x80000000 ),
+    nXRef               ( Mx80000000 ),
+    nYRef               ( Mx80000000 ),
     nFlags              ( 0 ),
     nColorData          ( 0 ),
     bTextFlow           ( sal_False ),
@@ -798,7 +798,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     }
      fXScale = nCoordWidth == 0 ? 0.0 : (double)aLogicRect.GetWidth() / (double)nCoordWidth;
      fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
-     if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
+     if( (nXRef != Mx80000000) && aLogicRect.GetHeight() )
     {
         fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
         if ( fXRatio > 1 )
@@ -808,7 +808,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     }
     else
         fXRatio = 1.0;
-    if ( (sal_uInt32)nYRef != 0x80000000 && aLogicRect.GetWidth() )
+    if( (nYRef != Mx80000000) && aLogicRect.GetWidth() )
     {
         fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
         if ( fYRatio > 1 )
