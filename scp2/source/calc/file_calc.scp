@@ -82,10 +82,5 @@ File gid_File_Exe_Scalc
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(scalc);
-  #ifdef WNT
-    FileDescription = "%PRODUCTNAME Calc";
-    Styles = (PACKED, PATCH_SO_NAME);
-  #else
     Styles = (PACKED);
-  #endif
 End

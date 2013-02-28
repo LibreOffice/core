@@ -495,11 +495,7 @@ File gid_Brand_File_Bin_Soffice
     Styles = (PACKED, SUBST_FILENAME);
 #else
     Name = EXENAME(soffice);
-  #ifdef WNT
-    Styles = (PACKED, PATCH_SO_NAME);
-  #else
     Styles = (PACKED);
-  #endif
 #endif
 End
 
@@ -515,11 +511,7 @@ End
 File gid_Brand_File_Bin_Soffice_Bin
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-#if defined WNT
-    Styles = (PACKED, PATCH_SO_NAME);
-#else
     Styles = (PACKED);
-#endif
     Name = "soffice.bin";
 End
 

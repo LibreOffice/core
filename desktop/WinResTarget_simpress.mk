@@ -34,6 +34,7 @@ $(eval $(call gb_WinResTarget_set_include,simpress/src,\
 
 $(eval $(call gb_WinResTarget_add_defs,simpress/src,\
     -DRES_APP_NAME=simpress \
+    -DRES_APP_FILEDESC="$(PRODUCTNAME) Impress" \
     -DRES_APP_ICON=icons/impress_app.ico \
     -DVERVARIANT=$(BUILD) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \

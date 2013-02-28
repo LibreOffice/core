@@ -47,10 +47,5 @@ File gid_File_Exe_Sdraw
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(sdraw);
-  #ifdef WNT
-    FileDescription = "%PRODUCTNAME Draw";
-    Styles = (PACKED, PATCH_SO_NAME);
-  #else
     Styles = (PACKED);
-  #endif
 End

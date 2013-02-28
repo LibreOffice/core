@@ -14,7 +14,10 @@ $(eval $(call gb_WinResTarget_use_custom_headers,crashrep,\
 ))
 
 $(eval $(call gb_WinResTarget_add_defs,crashrep,\
-	-DVERVARIANT=$(BUILD) \
+    -DRES_APP_NAME=crashrep \
+    -DRES_APP_FILEDESC="$(PRODUCTNAME) Crashreporter" \
+    -DVERVARIANT=$(BUILD) \
+    -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
 $(eval $(call gb_WinResTarget_set_rcfile,crashrep,crashrep/source/win32/crashrep))
