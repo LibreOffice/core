@@ -670,18 +670,17 @@ namespace sw { namespace mark
 #endif
     }
 
-    struct LazyTextFieldmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
+    struct LazyFieldmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
     {
-        ::boost::shared_ptr<IMark> const m_pTextFieldmark;
+        ::boost::shared_ptr<IMark> const m_pFieldmark;
         SwDoc *const m_pDoc;
-        LazyTextFieldmarkDeleter(
+        LazyFieldmarkDeleter(
                 ::boost::shared_ptr<IMark> const& pMark, SwDoc *const pDoc)
-            : m_pTextFieldmark(pMark), m_pDoc(pDoc)
+            : m_pFieldmark(pMark), m_pDoc(pDoc)
         { }
-        virtual ~LazyTextFieldmarkDeleter()
+        virtual ~LazyFieldmarkDeleter()
         {
-            dynamic_cast<TextFieldmark*>(m_pTextFieldmark.get())
-                ->ReleaseDoc(m_pDoc);
+            dynamic_cast<Fieldmark *>(m_pFieldmark.get())->ReleaseDoc(m_pDoc);
         }
     };
 
@@ -713,12 +712,7 @@ namespace sw { namespace mark
                     "<MarkManager::deleteMark(..)>"
                     " - Bookmark not found.");
                 m_vFieldmarks.erase(ppFieldmark);
-                sw::mark::TextFieldmark* pTextFieldmark = dynamic_cast<sw::mark::TextFieldmark*>(ppMark->get());
-                if (pTextFieldmark)
-                {
-                    ret.reset(
-                        new LazyTextFieldmarkDeleter(*ppMark, m_pDoc));
-                }
+                ret.reset(new LazyFieldmarkDeleter(*ppMark, m_pDoc));
                 break;
             }
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:

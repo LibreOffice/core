@@ -213,6 +213,8 @@ namespace sw {
             virtual void SetFieldHelptext(const ::rtl::OUString& aFieldHelptext)
                 { m_aFieldHelptext = aFieldHelptext; }
 
+            virtual void ReleaseDoc(SwDoc* const) = 0;
+
             virtual void Invalidate();
             virtual rtl::OUString ToString() const;
 
@@ -228,7 +230,7 @@ namespace sw {
         public:
             TextFieldmark(const SwPaM& rPaM);
             virtual void InitDoc(SwDoc* const io_pDoc);
-            void ReleaseDoc(SwDoc* const pDoc);
+            virtual void ReleaseDoc(SwDoc* const pDoc);
         };
 
         class CheckboxFieldmark
@@ -238,6 +240,7 @@ namespace sw {
         public:
             CheckboxFieldmark(const SwPaM& rPaM);
             virtual void InitDoc(SwDoc* const io_pDoc);
+            virtual void ReleaseDoc(SwDoc* const pDoc);
             bool IsChecked() const;
             void SetChecked(bool checked);
 
