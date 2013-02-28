@@ -50,15 +50,9 @@ namespace ole_adapter
 
 #include <initguid.h>
 
-#ifndef OWNGUID
 // GUID used since 5.2 ( src569 m)
 // {82154420-0FBF-11d4-8313-005004526AB4}
 DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
-#else
-// Alternative GUID
-// {D9BB9D1D-BFA9-4357-9F11-9A2E9061F06E}
-DEFINE_GUID(OID_ServiceManager, 0xd9bb9d1d, 0xbfa9, 0x4357, 0x9f, 0x11, 0x9a, 0x2e, 0x90, 0x61, 0xf0, 0x6e);
-#endif
 
 extern  rtl_StandardModuleCount globalModuleCount;
 
@@ -205,12 +199,10 @@ STDMETHODIMP ProviderOleWrapper_Impl::LockServer(int /*fLock*/)
 
 OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiServiceFactory>& smgr,
                                                          const Reference<XInterface>& xInst,
-                                                         GUID* pGuid,
-                                                         sal_Bool bAsApplication )
+                                                         GUID* pGuid )
     : m_xInst(xInst), m_refCount(0),
       m_smgr( smgr),
       m_factoryHandle( 0 ),
-      m_bAsApplication( bAsApplication ),
       m_nApplRegHandle( 0 )
 {
     m_guid = *pGuid;
@@ -242,17 +234,12 @@ sal_Bool OneInstanceOleWrapper_Impl::registerClass()
             REGCLS_MULTIPLEUSE,
             &m_factoryHandle);
 
-    if ( hresult == NOERROR && m_bAsApplication )
-        hresult = RegisterActiveObject( this, m_guid, ACTIVEOBJECT_WEAK, &m_nApplRegHandle );
-
     return (hresult == NOERROR);
 }
 
 sal_Bool OneInstanceOleWrapper_Impl::deregisterClass()
 {
     HRESULT hresult1 = NOERROR;
-    if ( m_bAsApplication )
-        hresult1 = RevokeActiveObject( m_nApplRegHandle, NULL );
 
     HRESULT hresult2 = CoRevokeClassObject(m_factoryHandle);
 
@@ -635,12 +622,7 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
         a >>= m_bridgeSupplier;
     }
 
-#ifndef OWNGUID
-    sal_Bool bOLERegister = sal_False;
-#else
-    sal_Bool bOLERegister = sal_True;
-#endif
-    sal_Bool ret = provideInstance( m_smgr, (GUID*)&OID_ServiceManager, bOLERegister );
+    sal_Bool ret = provideInstance( m_smgr, (GUID*)&OID_ServiceManager );
     (void)ret;
 }
 
@@ -718,9 +700,10 @@ sal_Bool OleServer_Impl::provideService(const Reference<XSingleServiceFactory>& 
     return pFac->registerClass();
 }
 
-sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUID* guid, sal_Bool bAsApplication )
+sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUID* guid)
 {
-    IClassFactoryWrapper* pFac = new OneInstanceOleWrapper_Impl( m_smgr, xInst, guid, bAsApplication );
+    IClassFactoryWrapper* pFac =
+        new OneInstanceOleWrapper_Impl( m_smgr, xInst, guid );
 
     pFac->AddRef();
     m_wrapperList.push_back(pFac);

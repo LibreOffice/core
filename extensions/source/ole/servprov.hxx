@@ -121,7 +121,7 @@ class OneInstanceOleWrapper_Impl : public IClassFactoryWrapper
 {
 public:
 
-    OneInstanceOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID* pGuid, sal_Bool bAsApplication );
+    OneInstanceOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID* pGuid );
     virtual ~OneInstanceOleWrapper_Impl();
 
     sal_Bool registerClass();
@@ -145,7 +145,6 @@ protected:
     Reference<XBridgeSupplier2> m_bridgeSupplier;
     Reference<XMultiServiceFactory> m_smgr;
     unsigned long       m_nApplRegHandle;
-    sal_Bool            m_bAsApplication;
 };
 
 /*****************************************************************************
@@ -253,7 +252,7 @@ public:
 protected:
 
     sal_Bool provideService(const Reference<XSingleServiceFactory>& xMulFact, GUID* guid);
-    sal_Bool provideInstance(const Reference<XInterface>& xInst, GUID* guid, sal_Bool bAsApplication );
+    sal_Bool provideInstance(const Reference<XInterface>& xInst, GUID* guid);
 
     list< IClassFactoryWrapper* > m_wrapperList;
     Reference< XBridgeSupplier2 >   m_bridgeSupplier;
