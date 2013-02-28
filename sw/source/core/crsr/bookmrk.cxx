@@ -357,6 +357,13 @@ namespace sw { namespace mark
         // want this for checkboxes
         this->GetMarkEnd( ).nContent--;
     }
+
+    void CheckboxFieldmark::ReleaseDoc(SwDoc* const pDoc)
+    {
+        lcl_RemoveFieldMarks(this, pDoc,
+                CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+    }
+
     void CheckboxFieldmark::SetChecked(bool checked)
     {
         if ( IsChecked() != checked )
