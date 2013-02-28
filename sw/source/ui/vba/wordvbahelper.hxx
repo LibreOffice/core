@@ -45,7 +45,7 @@ namespace ooo
         css::uno::Reference< css::style::XStyle > getDefaultParagraphStyle( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
         css::uno::Reference< css::text::XTextRange > getFirstObjectPosition( const css::uno::Reference< css::text::XText >& xText ) throw (css::uno::RuntimeException);
         css::uno::Reference< css::text::XText > getCurrentXText( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
-        sal_Bool gotoSelectedObjectAnchor( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
+        bool gotoSelectedObjectAnchor( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
 
     enum E_DIRECTION
     {

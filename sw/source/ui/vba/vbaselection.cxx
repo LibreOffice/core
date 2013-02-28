@@ -736,9 +736,9 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
                     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
                     rtl::OUString aPageStyleName;
                     xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PageStyleName"))) >>= aPageStyleName;
-                    sal_Bool bFirstPage = sal_False;
+                    bool bFirstPage = false;
                     if ( aPageStyleName == "First Page" )
-                        bFirstPage = sal_True;
+                        bFirstPage = true;
                     if( nView == word::WdSeekView::wdSeekFirstPageHeader )
                     {
                         if( bFirstPage )
@@ -959,22 +959,22 @@ uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable() throw( uno::R
     return xTextTable;
 }
 
-sal_Bool SwVbaSelection::IsInTable() throw( uno::RuntimeException )
+bool SwVbaSelection::IsInTable() throw( uno::RuntimeException )
 {
     uno::Reference< text::XTextTable > xTextTable = GetXTextTable();
     if( xTextTable.is() )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
-sal_Bool SwVbaSelection::HasSelection() throw( uno::RuntimeException )
+bool SwVbaSelection::HasSelection() throw( uno::RuntimeException )
 {
     uno::Reference< text::XTextRange > xStart = mxTextViewCursor->getStart();
     uno::Reference< text::XTextRange > xEnd = mxTextViewCursor->getEnd();
     uno::Reference< text::XTextRangeCompare > xTRC( mxTextViewCursor->getText(), uno::UNO_QUERY_THROW );
     if( xTRC->compareRegionStarts( xStart, xEnd ) == 0 && xTRC->compareRegionEnds( xStart, xEnd ) == 0 )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
 void SwVbaSelection::GetSelectedCellRange( rtl::OUString& sTLName, rtl::OUString& sBRName ) throw( uno::RuntimeException )

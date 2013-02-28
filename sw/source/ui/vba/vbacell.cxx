@@ -42,13 +42,13 @@ SwVbaCell::~SwVbaCell()
 ::sal_Int32 SAL_CALL SwVbaCell::getWidth() throw (css::uno::RuntimeException)
 {
     SwVbaTableHelper aTableHelper( mxTextTable );
-    return aTableHelper.GetColWidth( mnColumn, mnRow, sal_True );
+    return aTableHelper.GetColWidth( mnColumn, mnRow, true );
 }
 
 void SAL_CALL SwVbaCell::setWidth( ::sal_Int32 _width ) throw (css::uno::RuntimeException)
 {
     SwVbaTableHelper aTableHelper( mxTextTable );
-    aTableHelper.SetColWidth( _width, mnColumn, mnRow, sal_True );
+    aTableHelper.SetColWidth( _width, mnColumn, mnRow, true );
 }
 
 uno::Any SAL_CALL SwVbaCell::getHeight() throw (css::uno::RuntimeException)

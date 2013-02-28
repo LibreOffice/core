@@ -199,7 +199,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
     aTab.FillChar = cLeader;
 
     uno::Sequence< style::TabStop > aOldTabs = lcl_getTabStops( mxParaProps );
-    sal_Bool bOverWriter = sal_False;
+    bool bOverWriter = false;
 
     sal_Int32 nTabs = aOldTabs.getLength();
     uno::Sequence< style::TabStop > aNewTabs( nTabs + 1 );
@@ -211,7 +211,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
     {
         if( pOldTab[nIndex].Position == nPosition )
         {
-            bOverWriter = sal_True;
+            bOverWriter = true;
             pOldTab[nIndex] = aTab;
             break;
         }

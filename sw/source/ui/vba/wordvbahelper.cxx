@@ -161,16 +161,16 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
     return xText;
 }
 
-sal_Bool gotoSelectedObjectAnchor( const uno::Reference< frame::XModel>& xModel ) throw (uno::RuntimeException)
+bool gotoSelectedObjectAnchor( const uno::Reference< frame::XModel>& xModel ) throw (uno::RuntimeException)
 {
-    sal_Bool isObjectSelected = sal_False;
+    bool isObjectSelected = false;
     uno::Reference< text::XTextContent > xTextContent( xModel->getCurrentSelection(), uno::UNO_QUERY );
     if( xTextContent.is() )
     {
         uno::Reference< text::XTextRange > xTextRange( xTextContent->getAnchor(), uno::UNO_QUERY_THROW );
         uno::Reference< view::XSelectionSupplier > xSelectSupp( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
         xSelectSupp->select( uno::makeAny( xTextRange ) );
-        isObjectSelected = sal_True;
+        isObjectSelected = true;
     }
     return isObjectSelected;
 }

@@ -46,8 +46,8 @@ private:
     css::uno::Reference< css::text::XTextRange > GetSelectedRange() throw ( css::uno::RuntimeException );
     void GetSelectedCellRange( rtl::OUString& sTLName, rtl::OUString& sBRName ) throw ( css::uno::RuntimeException );
     css::uno::Reference< css::text::XTextTable > GetXTextTable() throw ( css::uno::RuntimeException );
-    sal_Bool IsInTable() throw ( css::uno::RuntimeException );
-    sal_Bool HasSelection() throw ( css::uno::RuntimeException );
+    bool IsInTable() throw ( css::uno::RuntimeException );
+    bool HasSelection() throw ( css::uno::RuntimeException );
 
 public:
     SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel ) throw ( css::uno::RuntimeException );

@@ -157,7 +157,7 @@ SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw 
     return pStart;
 }
 
-void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, sal_Bool /*bCurRowOnly*/ )
+void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, bool /*bCurRowOnly*/ )
 {
     rCols.SetLeftMin ( 0 );
     rCols.SetLeft    ( 0 );
@@ -188,7 +188,7 @@ sal_Int32 SwVbaTableHelper::GetRightSeparator( SwTabCols& rCols, sal_Int32 nNum)
     return i - 1;
 }
 
-sal_Int32 SwVbaTableHelper::GetColWidth( sal_Int32 nCol, sal_Int32 nRow, sal_Bool bCurRowOnly ) throw (uno::RuntimeException)
+sal_Int32 SwVbaTableHelper::GetColWidth( sal_Int32 nCol, sal_Int32 nRow, bool bCurRowOnly ) throw (uno::RuntimeException)
 {
     SwTableBox* pStart = GetTabBox( nCol, nRow );
     SwTabCols aCols;
@@ -230,7 +230,7 @@ sal_Int32 SwVbaTableHelper::GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) thro
     return nWidth;
 }
 
-void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow, sal_Bool bCurRowOnly ) throw (css::uno::RuntimeException)
+void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow, bool bCurRowOnly ) throw (css::uno::RuntimeException)
 {
     double dAbsWidth = Millimeter::getInHundredthsOfOneMillimeter( _width );
     sal_Int32 nTableWidth = getTableWidth( );

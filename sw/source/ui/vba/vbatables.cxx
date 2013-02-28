@@ -48,15 +48,15 @@ static uno::Any lcl_createTable( const uno::Reference< XHelperInterface >& xPare
     return uno::makeAny( xTable );
 }
 
-static sal_Bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTable )
+static bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTable )
 {
     uno::Reference< text::XTextContent > xTextContent( xTable, uno::UNO_QUERY_THROW );
     uno::Reference< text::XText > xText = xTextContent->getAnchor()->getText();
     uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY_THROW );
     rtl::OUString aImplName = xServiceInfo->getImplementationName();
     if ( aImplName == "SwXHeadFootText" )
-        return sal_True;
-    return sal_False;
+        return true;
+    return false;
 }
 
 typedef ::cppu::WeakImplHelper1< css::container::XEnumeration > EnumBase;
