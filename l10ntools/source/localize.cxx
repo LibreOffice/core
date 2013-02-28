@@ -388,32 +388,6 @@ bool includeProject(OString const & project) {
     return false;
 }
 
-bool excludeDirectory(OString const & directory) {
-    // Cf. OUTPATH=* in configure.in:
-    static OString const excluded[] = {
-        "callcatcher",
-        "unxaig",
-        "unxand",
-        "unxdfly",
-        "unxfbsd",
-        "unxios",
-        "unxkfg",
-        "unxlng",
-        "unxmac",
-        "unxnbsd",
-        "unxobsd",
-        "unxsog",
-        "unxsol",
-        "unxubt",
-        "wntmsc" };
-    for (size_t i = 0; i != SAL_N_ELEMENTS(excluded); ++i) {
-        if (directory.startsWith(excluded[i])) {
-            return true;
-        }
-    }
-    return false;
-}
-
 /// Handle one directory in the hierarchy.
 ///
 /// Ignores symlinks and instead explicitly descends into clone/* or src/*,
@@ -487,7 +461,7 @@ void handleDirectory(
             break;
         default:
             if (stat.getFileType() == osl::FileStatus::Directory) {
-                if (level == 2 || !excludeDirectory(sFileName)) {
+                if (level == 2) {
                     OString pr(projectRoot);
                     if (!pr.isEmpty()) {
                         pr += OString('/');
