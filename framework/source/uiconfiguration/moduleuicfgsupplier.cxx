@@ -110,8 +110,8 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
     {
         // Retrieve known modules and insert them into our boost::unordered_map to speed-up access time.
         Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY_THROW );
-        const Sequence< ::rtl::OUString >     aNameSeq   = xNameAccess->getElementNames();
-        const ::rtl::OUString*                pNameSeq   = aNameSeq.getConstArray();
+        const Sequence< OUString >     aNameSeq   = xNameAccess->getElementNames();
+        const OUString*                pNameSeq   = aNameSeq.getConstArray();
         for ( sal_Int32 n = 0; n < aNameSeq.getLength(); n++ )
             m_aModuleToModuleUICfgMgrMap.insert( ModuleToModuleCfgMgr::value_type(  pNameSeq[n], Reference< XUIConfigurationManager >() ));
     }
@@ -175,7 +175,7 @@ throw ( RuntimeException )
 }
 
 // XModuleUIConfigurationManagerSupplier
-Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const ::rtl::OUString& ModuleIdentifier )
+Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const OUString& ModuleIdentifier )
 throw ( NoSuchElementException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::getUIConfigurationManager" );
@@ -193,7 +193,7 @@ throw ( NoSuchElementException, RuntimeException)
     // Create instance on demand
     if ( !pIter->second.is() )
     {
-        ::rtl::OUString sShort;
+        OUString sShort;
         try
         {
             Sequence< PropertyValue > lProps;
@@ -210,17 +210,17 @@ throw ( NoSuchElementException, RuntimeException)
         }
         catch( const Exception& )
         {
-            sShort = ::rtl::OUString();
+            sShort = OUString();
         }
 
         if (sShort.isEmpty())
             throw NoSuchElementException();
         PropertyValue   aArg;
         Sequence< Any > aArgs( 2 );
-        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleShortName" ));
+        aArg.Name = OUString( "ModuleShortName" );
         aArg.Value <<= sShort;
         aArgs[0] <<= aArg;
-        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
+        aArg.Name = OUString( "ModuleIdentifier" );
         aArg.Value <<= ModuleIdentifier;
         aArgs[1] <<= aArg;
 

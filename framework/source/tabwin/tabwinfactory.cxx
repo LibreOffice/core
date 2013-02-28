@@ -78,7 +78,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TabWinFactory::createInstan
     const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& )
 throw ( css::uno::Exception, css::uno::RuntimeException )
 {
-    const rtl::OUString aTopWindowArgName( RTL_CONSTASCII_USTRINGPARAM( "TopWindow" ));
+    const OUString aTopWindowArgName( "TopWindow");
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );

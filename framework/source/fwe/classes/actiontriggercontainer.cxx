@@ -71,7 +71,7 @@ void ActionTriggerContainer::release() throw()
 
 
 // XMultiServiceFactory
-Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const ::rtl::OUString& aServiceSpecifier )
+Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
 throw ( ::com::sun::star::uno::Exception, RuntimeException)
 {
     if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGER ))
@@ -81,37 +81,37 @@ throw ( ::com::sun::star::uno::Exception, RuntimeException)
     else if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGERSEPARATOR ))
         return (OWeakObject *)( new ActionTriggerSeparatorPropertySet());
     else
-        throw com::sun::star::uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unknown service specifier!" )), (OWeakObject *)this );
+        throw com::sun::star::uno::RuntimeException( OUString( "Unknown service specifier!" ), (OWeakObject *)this );
 }
 
 
-Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
+Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
 throw ( Exception, RuntimeException)
 {
     return createInstance( ServiceSpecifier );
 }
 
 
-Sequence< ::rtl::OUString > SAL_CALL ActionTriggerContainer::getAvailableServiceNames()
+Sequence< OUString > SAL_CALL ActionTriggerContainer::getAvailableServiceNames()
 throw ( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aSeq( 3 );
+    Sequence< OUString > aSeq( 3 );
 
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGER ));
-    aSeq[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERCONTAINER ));
-    aSeq[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERSEPARATOR ));
+    aSeq[0] = OUString( SERVICENAME_ACTIONTRIGGER );
+    aSeq[1] = OUString( SERVICENAME_ACTIONTRIGGERCONTAINER );
+    aSeq[2] = OUString( SERVICENAME_ACTIONTRIGGERSEPARATOR );
 
     return aSeq;
 }
 
 // XServiceInfo
-::rtl::OUString SAL_CALL ActionTriggerContainer::getImplementationName()
+OUString SAL_CALL ActionTriggerContainer::getImplementationName()
 throw ( RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER ));
+    return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER );
 }
 
-sal_Bool SAL_CALL ActionTriggerContainer::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL ActionTriggerContainer::supportsService( const OUString& ServiceName )
 throw ( RuntimeException )
 {
     if ( ServiceName.equalsAscii( SERVICENAME_ACTIONTRIGGERCONTAINER ))
@@ -120,12 +120,12 @@ throw ( RuntimeException )
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ActionTriggerContainer::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL ActionTriggerContainer::getSupportedServiceNames()
 throw ( RuntimeException )
 {
-    Sequence< ::rtl::OUString > seqServiceNames( 1 );
+    Sequence< OUString > seqServiceNames( 1 );
 
-    seqServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERCONTAINER ));
+    seqServiceNames[0] = OUString( SERVICENAME_ACTIONTRIGGERCONTAINER );
     return seqServiceNames;
 }
 

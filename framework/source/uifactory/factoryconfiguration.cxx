@@ -50,9 +50,9 @@ using namespace ::com::sun::star::frame;
 
 namespace framework
 {
-rtl::OUString getHashKeyFromStrings( const rtl::OUString& aCommandURL, const rtl::OUString& aModuleName )
+OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aModuleName )
 {
-    rtl::OUStringBuffer aKey( aCommandURL );
+    OUStringBuffer aKey( aCommandURL );
     aKey.appendAscii( "-" );
     aKey.append( aModuleName );
     return aKey.makeStringAndClear();
@@ -61,12 +61,12 @@ rtl::OUString getHashKeyFromStrings( const rtl::OUString& aCommandURL, const rtl
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
-ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( const Reference< XComponentContext >& rxContext, const ::rtl::OUString& _sRoot,bool _bAskValue ) :
+ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( const Reference< XComponentContext >& rxContext, const OUString& _sRoot,bool _bAskValue ) :
     ThreadHelpBase(),
-    m_aPropCommand( RTL_CONSTASCII_USTRINGPARAM( "Command" )),
-    m_aPropModule( RTL_CONSTASCII_USTRINGPARAM( "Module" )),
-    m_aPropController( RTL_CONSTASCII_USTRINGPARAM( "Controller" )),
-    m_aPropValue( RTL_CONSTASCII_USTRINGPARAM( "Value" )),
+    m_aPropCommand( "Command" ),
+    m_aPropModule( "Module" ),
+    m_aPropController( "Controller" ),
+    m_aPropValue( "Value" ),
     m_sRoot(_sRoot),
     m_bConfigAccessInitialized( sal_False ),
     m_bAskValue(_bAskValue)
@@ -85,7 +85,7 @@ ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
         xContainer->removeContainerListener(m_xConfigAccessListener);
 }
 
-rtl::OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const
+OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::getServiceFromCommandModule" );
     // SAFE
@@ -97,15 +97,15 @@ rtl::OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule
     else if ( !rModule.isEmpty() )
     {
         // Try to detect if we have a generic popup menu controller
-        pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rtl::OUString() ));
+        pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, OUString() ));
 
         if ( pIter != m_aMenuControllerMap.end() )
             return pIter->second.m_aImplementationName;
     }
 
-    return rtl::OUString();
+    return OUString();
 }
-rtl::OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const
+OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::getValueFromCommandModule" );
     // SAFE
@@ -118,38 +118,38 @@ rtl::OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( 
     else if ( !rModule.isEmpty() )
     {
         // Try to detect if we have a generic popup menu controller
-        pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rtl::OUString() ));
+        pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, OUString() ));
 
         if ( pIter != m_aMenuControllerMap.end() )
             return pIter->second.m_aValue;
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 
 void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
-    const rtl::OUString& rCommandURL,
-    const rtl::OUString& rModule,
-    const rtl::OUString& rServiceSpecifier )
+    const OUString& rCommandURL,
+    const OUString& rModule,
+    const OUString& rServiceSpecifier )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::addServiceToCommandModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
-    rtl::OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
-    m_aMenuControllerMap.insert( MenuControllerMap::value_type( aHashKey,ControllerInfo(rServiceSpecifier,::rtl::OUString()) ));
+    OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
+    m_aMenuControllerMap.insert( MenuControllerMap::value_type( aHashKey,ControllerInfo(rServiceSpecifier,OUString()) ));
 }
 
 void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
-    const rtl::OUString& rCommandURL,
-    const rtl::OUString& rModule )
+    const OUString& rCommandURL,
+    const OUString& rModule )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
-    rtl::OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
+    OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
     m_aMenuControllerMap.erase( aHashKey );
 }
 
@@ -157,10 +157,10 @@ void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
 void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::elementInserted" );
-    rtl::OUString   aCommand;
-    rtl::OUString   aModule;
-    rtl::OUString   aService;
-    rtl::OUString   aValue;
+    OUString   aCommand;
+    OUString   aModule;
+    OUString   aService;
+    OUString   aValue;
 
     // SAFE
     ResetableGuard aLock( m_aLock );
@@ -169,7 +169,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const Cont
     {
         // Create hash key from command and module as they are together a primary key to
         // the UNO service that implements the popup menu controller.
-        rtl::OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
+        OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
         ControllerInfo& rControllerInfo = m_aMenuControllerMap[ aHashKey ];
         rControllerInfo.m_aImplementationName = aService;
         rControllerInfo.m_aValue = aValue;
@@ -179,10 +179,10 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const Cont
 void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::elementRemoved" );
-    rtl::OUString   aCommand;
-    rtl::OUString   aModule;
-    rtl::OUString   aService;
-    rtl::OUString   aValue;
+    OUString   aCommand;
+    OUString   aModule;
+    OUString   aService;
+    OUString   aValue;
 
     // SAFE
     ResetableGuard aLock( m_aLock );
@@ -191,7 +191,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const Cont
     {
         // Create hash key from command and module as they are together a primary key to
         // the UNO service that implements the popup menu controller.
-        rtl::OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
+        OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
         m_aMenuControllerMap.erase( aHashKey );
     }
 }
@@ -223,7 +223,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
         Sequence< Any > aArgs( 1 );
         PropertyValue   aPropValue;
 
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+        aPropValue.Name  = OUString( "nodepath" );
         aPropValue.Value <<= m_sRoot;
         aArgs[0] <<= aPropValue;
 
@@ -262,13 +262,13 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
     ResetableGuard aLock( m_aLock );
     if ( m_xConfigAccess.is() )
     {
-        Sequence< rtl::OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();
+        Sequence< OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();
 
-        rtl::OUString aCommand;
-        rtl::OUString aModule;
-        rtl::OUString aService;
-        rtl::OUString aHashKey;
-        rtl::OUString aValue;
+        OUString aCommand;
+        OUString aModule;
+        OUString aService;
+        OUString aHashKey;
+        OUString aValue;
 
         m_aMenuControllerMap.clear();
         for ( sal_Int32 i = 0; i < aPopupMenuControllers.getLength(); i++ )
@@ -293,7 +293,7 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
     }
 }
 
-sal_Bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any& aElement, rtl::OUString& aCommand, rtl::OUString& aModule, rtl::OUString& aServiceSpecifier,rtl::OUString& aValue  ) const
+sal_Bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue  ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::impl_getElementProps" );
     Reference< XPropertySet > xPropertySet;

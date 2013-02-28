@@ -91,13 +91,13 @@ void ActionTriggerSeparatorPropertySet::release() throw()
 }
 
 // XServiceInfo
-::rtl::OUString SAL_CALL ActionTriggerSeparatorPropertySet::getImplementationName()
+OUString SAL_CALL ActionTriggerSeparatorPropertySet::getImplementationName()
 throw ( RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR ));
+    return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR );
 }
 
-sal_Bool SAL_CALL ActionTriggerSeparatorPropertySet::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL ActionTriggerSeparatorPropertySet::supportsService( const OUString& ServiceName )
 throw ( RuntimeException )
 {
     if ( ServiceName.equalsAscii( SERVICENAME_ACTIONTRIGGERSEPARATOR ))
@@ -106,11 +106,11 @@ throw ( RuntimeException )
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ActionTriggerSeparatorPropertySet::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL ActionTriggerSeparatorPropertySet::getSupportedServiceNames()
 throw ( RuntimeException )
 {
-    Sequence< ::rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERSEPARATOR ));
+    Sequence< OUString > seqServiceNames( 1 );
+    seqServiceNames[0] = OUString( SERVICENAME_ACTIONTRIGGERSEPARATOR );
     return seqServiceNames;
 }
 
@@ -287,7 +287,7 @@ const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticProp
 {
     const Property pActionTriggerPropertys[] =
     {
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SeparatorType" )), HANDLE_TYPE, ::getCppuType((sal_Int16*)0), PropertyAttribute::TRANSIENT )
+        Property( OUString( "SeparatorType" ), HANDLE_TYPE, ::getCppuType((sal_Int16*)0), PropertyAttribute::TRANSIENT )
     };
 
     // Use it to initialize sequence!

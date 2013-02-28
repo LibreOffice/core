@@ -70,7 +70,7 @@ AddonMenu::~AddonMenu()
 
 // ------------------------------------------------------------------------
 // Check if command URL string has the unique prefix to identify addon popup menus
-sal_Bool AddonPopupMenu::IsCommandURLPrefix( const ::rtl::OUString& aCmdURL )
+sal_Bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
 {
     const char aPrefixCharBuf[] = ADDONSPOPUPMENU_URL_PREFIX_STR;
 
@@ -176,7 +176,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
         PopupMenu* pHelpMenu = pMergeMenuBar->GetPopupMenu( SID_HELPMENU );
         if ( !pHelpMenu )
         {
-            sal_uInt16 nId = FindMenuId(pMergeMenuBar, rtl::OUString(".uno:HelpMenu"));
+            sal_uInt16 nId = FindMenuId(pMergeMenuBar, OUString(".uno:HelpMenu"));
             if ( nId != USHRT_MAX )
                 pHelpMenu = pMergeMenuBar->GetPopupMenu( nId );
         }
@@ -190,7 +190,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
             AddonsOptions aOptions;
 
             // try to detect the about menu item with the command URL
-            sal_uInt16 nId = FindMenuId(pHelpMenu, rtl::OUString(".uno:About"));
+            sal_uInt16 nId = FindMenuId(pHelpMenu, OUString(".uno:About"));
             sal_uInt16 nInsPos = pHelpMenu->GetItemPos( nId );
 
             Sequence< Sequence< PropertyValue > > aAddonSubMenu;
@@ -227,11 +227,11 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
         AddonsOptions   aAddonsOptions;
         sal_uInt16          nInsertPos = nMergeAtPos;
 
-        ::rtl::OUString                              aTitle;
-        ::rtl::OUString                              aURL;
-        ::rtl::OUString                              aTarget;
-        ::rtl::OUString                              aImageId;
-        ::rtl::OUString                              aContext;
+        OUString                              aTitle;
+        OUString                              aURL;
+        OUString                              aTarget;
+        OUString                              aImageId;
+        OUString                              aContext;
         Sequence< Sequence< PropertyValue > > aAddonSubMenu;
         sal_uInt16                                nUniqueMenuId = ADDONMENU_ITEMID_START;
 
@@ -287,11 +287,11 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
     sal_uInt32                                  nCount              = aAddonMenuDefinition.getLength();
     AddonsOptions                           aAddonsOptions;
 
-    ::rtl::OUString aTitle;
-    ::rtl::OUString aURL;
-    ::rtl::OUString aTarget;
-    ::rtl::OUString aImageId;
-    ::rtl::OUString aContext;
+    OUString aTitle;
+    OUString aURL;
+    OUString aTarget;
+    OUString aImageId;
+    OUString aContext;
 
     for ( i = 0; i < nCount; ++i )
     {
@@ -300,7 +300,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
         if ( !IsCorrectContext( rModel, aContext ) || ( aTitle.isEmpty() && aURL.isEmpty() ))
             continue;
 
-        if ( aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:separator" )))
+        if ( aURL == OUString( "private:separator" ))
             bInsertSeparator = sal_True;
         else
         {
@@ -348,11 +348,11 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
 
 // Retrieve the menu entry property values from a sequence
 void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenuEntry,
-                                     ::rtl::OUString& rTitle,
-                                     ::rtl::OUString& rURL,
-                                     ::rtl::OUString& rTarget,
-                                     ::rtl::OUString& rImageId,
-                                     ::rtl::OUString& rContext,
+                                     OUString& rTitle,
+                                     OUString& rURL,
+                                     OUString& rTarget,
+                                     OUString& rImageId,
+                                     OUString& rContext,
                                      Sequence< Sequence< PropertyValue > >& rAddonSubMenu )
 {
     // Reset submenu parameter
@@ -360,7 +360,7 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
 
     for ( int i = 0; i < rAddonMenuEntry.getLength(); i++ )
     {
-        ::rtl::OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
+        OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
         if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_URL )
             rAddonMenuEntry[i].Value >>= rURL;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_TITLE )
@@ -377,7 +377,7 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
 }
 
 // Check if the context string matches the provided xModel context
-sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, const ::rtl::OUString& aContext )
+sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, const OUString& aContext )
 {
     if ( rModel.is() )
     {
@@ -387,7 +387,7 @@ sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, 
             sal_Int32 nIndex = 0;
             do
             {
-                ::rtl::OUString aToken = aContext.getToken( 0, ',', nIndex );
+                OUString aToken = aContext.getToken( 0, ',', nIndex );
 
                 if ( xServiceInfo->supportsService( aToken ))
                     return sal_True;

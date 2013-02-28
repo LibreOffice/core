@@ -37,7 +37,7 @@
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
 
-#define UIRESOURCE_URL                  RTL_CONSTASCII_USTRINGPARAM( "private:resource" )
+#define UIRESOURCE_URL                  "private:resource"
 #define UIRESOURCETYPE_TOOLBAR          "toolbar"
 #define UIRESOURCETYPE_STATUSBAR        "statusbar"
 #define UIRESOURCETYPE_MENUBAR          "menubar"
@@ -52,7 +52,7 @@ bool isToolboxHorizontalAligned( ToolBox* pToolBox );
 bool isReverseOrderDockingArea( const sal_Int32 nDockArea );
 bool isHorizontalDockingArea( const sal_Int32 nDockArea );
 bool isHorizontalDockingArea( const ::com::sun::star::ui::DockingArea& nDockArea );
-::rtl::OUString retrieveToolbarNameFromHelpURL( Window* pWindow );
+OUString retrieveToolbarNameFromHelpURL( Window* pWindow );
 ToolBox* getToolboxPtr( Window* pWindow );
 Window* getWindowFromXUIElement( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& xUIElement );
 SystemWindow* getTopSystemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xWindow );
@@ -61,14 +61,14 @@ void setZeroRectangle( ::Rectangle& rRect );
 bool lcl_checkUIElement(const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& xUIElement,::com::sun::star::awt::Rectangle& _rPosSize, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xWindow);
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const css::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParent, const char* pService );
 WindowAlign ImplConvertAlignment( sal_Int16 aAlignment );
-::rtl::OUString getElementTypeFromResourceURL( const ::rtl::OUString& aResourceURL );
-void parseResourceURL( const rtl::OUString& aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
+OUString getElementTypeFromResourceURL( const OUString& aResourceURL );
+void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUString& aElementName );
 ::Rectangle putAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect );
 ::com::sun::star::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect );
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > impl_getModelFromFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 sal_Bool implts_isPreviewModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 sal_Bool implts_isFrameOrWindowTop( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
-void impl_setDockingWindowVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rDockingWindowName, bool bVisible );
+void impl_setDockingWindowVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const OUString& rDockingWindowName, bool bVisible );
 void impl_addWindowListeners( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xThis, const ::com::sun::star::uno::Reference< css::ui::XUIElement >& xUIElement );
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > implts_createToolkitWindow( const css::uno::Reference< ::com::sun::star::awt::XToolkit2 >& rToolkit, const css::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParent );
 

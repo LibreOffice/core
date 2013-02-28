@@ -48,11 +48,11 @@ using namespace ::com::sun::star::beans ;
 using namespace ::com::sun::star::lang  ;
 using namespace ::com::sun::star;
 
-#define ROOTNODE_ADDONMENU                              OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Addons" ))
-#define PATHDELIMITER                                   OUString(RTL_CONSTASCII_USTRINGPARAM("/"             ))
+#define ROOTNODE_ADDONMENU                              OUString("Office.Addons" )
+#define PATHDELIMITER                                   OUString("/"             )
 #define SEPARATOR_URL_STR                               "private:separator"
 #define SEPARATOR_URL_LEN                               17
-#define SEPARATOR_URL                                   OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATOR_URL_STR ))
+#define SEPARATOR_URL                                   OUString( SEPARATOR_URL_STR )
 
 #define PROPERTYNAME_URL                                ADDONSMENUITEM_PROPERTYNAME_URL
 #define PROPERTYNAME_TITLE                              ADDONSMENUITEM_PROPERTYNAME_TITLE
@@ -63,32 +63,32 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_CONTROLTYPE                        ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE
 #define PROPERTYNAME_WIDTH                              ADDONSMENUITEM_PROPERTYNAME_WIDTH
 
-#define PROPERTYNAME_IMAGESMALL                         OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmall" ))
-#define PROPERTYNAME_IMAGEBIG                           OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBig" ))
-#define PROPERTYNAME_IMAGESMALLHC                       OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallHC" ))
-#define PROPERTYNAME_IMAGEBIGHC                         OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigHC" ))
-#define PROPERTYNAME_IMAGESMALL_URL                     OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallURL" ))
-#define PROPERTYNAME_IMAGEBIG_URL                       OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigURL" ))
-#define PROPERTYNAME_IMAGESMALLHC_URL                   OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallHCURL" ))
-#define PROPERTYNAME_IMAGEBIGHC_URL                     OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigHCURL" ))
+#define PROPERTYNAME_IMAGESMALL                         OUString("ImageSmall" )
+#define PROPERTYNAME_IMAGEBIG                           OUString("ImageBig" )
+#define PROPERTYNAME_IMAGESMALLHC                       OUString("ImageSmallHC" )
+#define PROPERTYNAME_IMAGEBIGHC                         OUString("ImageBigHC" )
+#define PROPERTYNAME_IMAGESMALL_URL                     OUString("ImageSmallURL" )
+#define PROPERTYNAME_IMAGEBIG_URL                       OUString("ImageBigURL" )
+#define PROPERTYNAME_IMAGESMALLHC_URL                   OUString("ImageSmallHCURL" )
+#define PROPERTYNAME_IMAGEBIGHC_URL                     OUString("ImageBigHCURL" )
 
-#define IMAGES_NODENAME                                 OUString(RTL_CONSTASCII_USTRINGPARAM("UserDefinedImages" ))
-#define PRIVATE_IMAGE_URL                               OUString(RTL_CONSTASCII_USTRINGPARAM("private:image/" ))
+#define IMAGES_NODENAME                                 OUString("UserDefinedImages" )
+#define PRIVATE_IMAGE_URL                               OUString("private:image/" )
 
-#define PROPERTYNAME_MERGEMENU_MERGEPOINT               OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
-#define PROPERTYNAME_MERGEMENU_MERGECOMMAND             OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
-#define PROPERTYNAME_MERGEMENU_MERGECOMMANDPARAMETER    OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommandParameter" ))
-#define PROPERTYNAME_MERGEMENU_MERGEFALLBACK            OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
-#define PROPERTYNAME_MERGEMENU_MERGECONTEXT             OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
-#define PROPERTYNAME_MERGEMENU_MENUITEMS                OUString(RTL_CONSTASCII_USTRINGPARAM("MenuItems" ))
+#define PROPERTYNAME_MERGEMENU_MERGEPOINT               OUString("MergePoint" )
+#define PROPERTYNAME_MERGEMENU_MERGECOMMAND             OUString("MergeCommand" )
+#define PROPERTYNAME_MERGEMENU_MERGECOMMANDPARAMETER    OUString("MergeCommandParameter" )
+#define PROPERTYNAME_MERGEMENU_MERGEFALLBACK            OUString("MergeFallback" )
+#define PROPERTYNAME_MERGEMENU_MERGECONTEXT             OUString("MergeContext" )
+#define PROPERTYNAME_MERGEMENU_MENUITEMS                OUString("MenuItems" )
 
-#define PROPERTYNAME_MERGETOOLBAR_TOOLBAR               OUString(RTL_CONSTASCII_USTRINGPARAM("MergeToolBar" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGEPOINT            OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMAND          OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMANDPARAMETER OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommandParameter" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGEFALLBACK         OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT          OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
-#define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          OUString(RTL_CONSTASCII_USTRINGPARAM("ToolBarItems" ))
+#define PROPERTYNAME_MERGETOOLBAR_TOOLBAR               OUString("MergeToolBar" )
+#define PROPERTYNAME_MERGETOOLBAR_MERGEPOINT            OUString("MergePoint" )
+#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMAND          OUString("MergeCommand" )
+#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMANDPARAMETER OUString("MergeCommandParameter" )
+#define PROPERTYNAME_MERGETOOLBAR_MERGEFALLBACK         OUString("MergeFallback" )
+#define PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT          OUString("MergeContext" )
+#define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          OUString("ToolBarItems" )
 
 // The following order is mandatory. Please add properties at the end!
 #define INDEX_URL             0
@@ -245,7 +245,7 @@ class AddonsOptions_Impl : public ConfigItem
         const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const ;
         const OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
-        Image                                           GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
+        Image                                           GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
         const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const;
         bool                                            GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbarInstructions ) const;
 
@@ -299,8 +299,8 @@ class AddonsOptions_Impl : public ConfigItem
 
         sal_Bool             ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& aAddonMenuSeq );
         sal_Bool             ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeMenuBarSeq );
-        sal_Bool             ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< rtl::OUString >& rAddonOfficeToolBarResNames );
-        sal_Bool             ReadToolBarItemSet( const rtl::OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
+        sal_Bool             ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames );
+        sal_Bool             ReadToolBarItemSet( const OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
         sal_Bool             ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
         sal_Bool             ReadImages( ImageManager& aImageManager );
         sal_Bool             ReadMenuMergeInstructions( MergeMenuInstructionContainer& rContainer );
@@ -349,7 +349,7 @@ class AddonsOptions_Impl : public ConfigItem
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuProperties;
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuBarPartProperties;
         AddonToolBars                                     m_aCachedToolBarPartProperties;
-        std::vector< rtl::OUString >                      m_aCachedToolBarPartResourceNames;
+        std::vector< OUString >                      m_aCachedToolBarPartResourceNames;
         Sequence< Sequence< PropertyValue > >             m_aCachedHelpMenuProperties;
         Reference< util::XMacroExpander >                 m_xMacroExpander;
         ImageManager                                      m_aImageManager;
@@ -414,8 +414,8 @@ AddonsOptions_Impl::AddonsOptions_Impl()
 
     // Enable notification mechanism of ouer baseclass.
     // We need it to get information about changes outside these class on ouer used configuration keys!
-    Sequence< rtl::OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AddonUI" ));
+    Sequence< OUString > aNotifySeq( 1 );
+    aNotifySeq[0] = OUString( "AddonUI" );
     EnableNotification( aNotifySeq );
 }
 
@@ -521,7 +521,7 @@ const OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nInd
     if ( nIndex < m_aCachedToolBarPartResourceNames.size() )
         return m_aCachedToolBarPartResourceNames[nIndex];
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 //*****************************************************************************************************************
@@ -560,7 +560,7 @@ bool AddonsOptions_Impl::GetMergeToolbarInstructions(
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const
+Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const
 {
     Image aImage;
 
@@ -582,7 +582,7 @@ Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool b
 sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
-    OUString             aAddonMenuNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/AddonMenu" ));
+    OUString             aAddonMenuNodeName( "AddonUI/AddonMenu" );
     Sequence< OUString > aAddonMenuNodeSeq = GetNodeNames( aAddonMenuNodeName );
     OUString             aAddonMenuItemNode( aAddonMenuNodeName + m_aPathDelimiter );
 
@@ -621,7 +621,7 @@ sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue
 sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
-    OUString             aAddonHelpMenuNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeHelp" ));
+    OUString             aAddonHelpMenuNodeName( "AddonUI/OfficeHelp" );
     Sequence< OUString > aAddonHelpMenuNodeSeq = GetNodeNames( aAddonHelpMenuNodeName );
     OUString             aAddonHelpMenuItemNode( aAddonHelpMenuNodeName + m_aPathDelimiter );
 
@@ -660,7 +660,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValu
 sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeMenuBarSeq )
 {
     // Read the OfficeMenuBar set and fill property sequences
-    OUString             aAddonMenuBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeMenuBar" ));
+    OUString             aAddonMenuBarNodeName( "AddonUI/OfficeMenuBar" );
     Sequence< OUString > aAddonMenuBarNodeSeq = GetNodeNames( aAddonMenuBarNodeName );
     OUString             aAddonMenuBarNode( aAddonMenuBarNodeName + m_aPathDelimiter );
 
@@ -713,10 +713,10 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< rtl::OUString >& rAddonOfficeToolBarResNames )
+sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< OUString >& rAddonOfficeToolBarResNames )
 {
     // Read the OfficeToolBar set and fill property sequences
-    OUString             aAddonToolBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolBar" ));
+    OUString             aAddonToolBarNodeName( "AddonUI/OfficeToolBar" );
     Sequence< OUString > aAddonToolBarNodeSeq = GetNodeNames( aAddonToolBarNodeName );
     OUString             aAddonToolBarNode( aAddonToolBarNodeName + m_aPathDelimiter );
 
@@ -737,7 +737,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeTo
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const rtl::OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
+sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
 {
     sal_Bool                    bInsertSeparator        = sal_False;
     sal_uInt32                  nToolBarItemCount       = rAddonOfficeToolBarSeq.getLength();
@@ -808,7 +808,7 @@ void AddonsOptions_Impl::InsertToolBarSeparator( Sequence< Sequence< PropertyVal
 sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 {
     // Read the user-defined Images set and fill image manager
-    OUString                aAddonImagesNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/Images" ));
+    OUString                aAddonImagesNodeName( "AddonUI/Images" );
     Sequence< OUString > aAddonImagesNodeSeq = GetNodeNames( aAddonImagesNodeName );
     OUString                aAddonImagesNode( aAddonImagesNodeName + m_aPathDelimiter );
 
@@ -878,7 +878,7 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
 
 sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
-    const OUString aMenuMergeRootName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeMenuBarMerging/" ));
+    const OUString aMenuMergeRootName( "AddonUI/OfficeMenuBarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aMenuMergeRootName );
     OUString                aAddonMergeNode( aMenuMergeRootName );
@@ -964,7 +964,7 @@ sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstr
 //*****************************************************************************************************************
 sal_Bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
 {
-    const OUString aToolbarMergeRootName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolbarMerging/" ));
+    const OUString aToolbarMergeRootName( "AddonUI/OfficeToolbarMerging/" );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aToolbarMergeRootName );
     OUString                aAddonMergeNode( aToolbarMergeRootName );
@@ -1695,7 +1695,7 @@ bool AddonsOptions::GetMergeToolbarInstructions(
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const
+Image AddonsOptions::GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetImageFromURL( aURL, bBig, bNoScale );
@@ -1704,7 +1704,7 @@ Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig ) const
+Image AddonsOptions::GetImageFromURL( const OUString& aURL, sal_Bool bBig ) const
 {
     return GetImageFromURL( aURL, bBig, sal_False );
 }

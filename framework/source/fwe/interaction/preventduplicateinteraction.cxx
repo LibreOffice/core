@@ -24,7 +24,7 @@
 
 namespace framework{
 
-#define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))
+#define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER                 OUString("com.sun.star.comp.uui.UUIInteractionHandler")
 
 PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : ThreadHelpBase2()

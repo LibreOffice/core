@@ -116,9 +116,9 @@ MenuStyleItem MenuItemStyles[ ] = {
 sal_Int32 nMenuStyleItemEntries = (sizeof (MenuItemStyles) / sizeof (MenuItemStyles[0]));
 
 static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
-                                   ::rtl::OUString&                       rCommandURL,
-                                   ::rtl::OUString&                       rLabel,
-                                   ::rtl::OUString&                       rHelpURL,
+                                   OUString&                       rCommandURL,
+                                   OUString&                       rLabel,
+                                   OUString&                       rHelpURL,
                                    Reference< XIndexAccess >&      rSubMenu,
                                    sal_Int16&                      rType,
                                    sal_Int16&                      rStyle )
@@ -160,12 +160,12 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
 ReadMenuDocumentHandlerBase::ReadMenuDocumentHandlerBase() :
     m_xLocator( 0 ),
     m_xReader( 0 ),
-    m_aType( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE )),
-    m_aLabel( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL )),
-    m_aContainer( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER )),
-    m_aHelpURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL )),
-    m_aCommandURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL )),
-    m_aStyle( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ))
+    m_aType( ITEM_DESCRIPTOR_TYPE ),
+    m_aLabel( ITEM_DESCRIPTOR_LABEL ),
+    m_aContainer( ITEM_DESCRIPTOR_CONTAINER ),
+    m_aHelpURL( ITEM_DESCRIPTOR_HELPURL ),
+    m_aCommandURL( ITEM_DESCRIPTOR_COMMANDURL ),
+    m_aStyle( ITEM_DESCRIPTOR_STYLE )
 {
 }
 
@@ -174,13 +174,13 @@ ReadMenuDocumentHandlerBase::~ReadMenuDocumentHandlerBase()
 }
 
 void SAL_CALL ReadMenuDocumentHandlerBase::ignorableWhitespace(
-    const ::rtl::OUString& )
+    const OUString& )
 throw( SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL ReadMenuDocumentHandlerBase::processingInstruction(
-    const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
+    const OUString& /*aTarget*/, const OUString& /*aData*/ )
 throw( SAXException, RuntimeException )
 {
 }
@@ -192,22 +192,22 @@ throw(  SAXException, RuntimeException )
     m_xLocator = xLocator;
 }
 
-::rtl::OUString ReadMenuDocumentHandlerBase::getErrorLineString()
+OUString ReadMenuDocumentHandlerBase::getErrorLineString()
 {
     char buffer[32];
 
     if ( m_xLocator.is() )
     {
         snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
-        return ::rtl::OUString::createFromAscii( buffer );
+        return OUString::createFromAscii( buffer );
     }
     else
-        return ::rtl::OUString();
+        return OUString();
 }
 
 void ReadMenuDocumentHandlerBase::initPropertyCommon(
-    Sequence< PropertyValue > &rProps, const rtl::OUString &rCommandURL,
-    const rtl::OUString &rHelpId, const rtl::OUString &rLabel, sal_Int16 nItemStyleBits )
+    Sequence< PropertyValue > &rProps, const OUString &rCommandURL,
+    const OUString &rHelpId, const OUString &rLabel, sal_Int16 nItemStyleBits )
 {
     rProps[0].Name = m_aCommandURL;
     rProps[1].Name = m_aHelpURL;
@@ -252,15 +252,15 @@ void SAL_CALL OReadMenuDocumentHandler::endDocument(void)
 {
     if ( m_nElementDepth > 0 )
     {
-        ::rtl::OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "A closing element is missing!" ));
+        OUString aErrorMessage = getErrorLineString();
+        aErrorMessage += OUString( "A closing element is missing!" );
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
 
 
 void SAL_CALL OReadMenuDocumentHandler::startElement(
-    const ::rtl::OUString& aName, const Reference< XAttributeList > &xAttrList )
+    const OUString& aName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException )
 {
     if ( m_bMenuBarMode )
@@ -279,13 +279,13 @@ throw( SAXException, RuntimeException )
 }
 
 
-void SAL_CALL OReadMenuDocumentHandler::characters(const rtl::OUString&)
+void SAL_CALL OReadMenuDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 
-void SAL_CALL OReadMenuDocumentHandler::endElement( const ::rtl::OUString& aName )
+void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException )
 {
     if ( m_bMenuBarMode )
@@ -299,8 +299,8 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const ::rtl::OUString& aName
             m_bMenuBarMode = sal_False;
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUBAR )))
             {
-                ::rtl::OUString aErrorMessage = getErrorLineString();
-                aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "closing element menubar expected!" ));
+                OUString aErrorMessage = getErrorLineString();
+                aErrorMessage += OUString( "closing element menubar expected!" );
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -339,7 +339,7 @@ void SAL_CALL OReadMenuBarHandler::endDocument(void)
 
 
 void SAL_CALL OReadMenuBarHandler::startElement(
-    const ::rtl::OUString& rName, const Reference< XAttributeList > &xAttrList )
+    const OUString& rName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException )
 {
     if ( m_bMenuMode )
@@ -351,9 +351,9 @@ throw( SAXException, RuntimeException )
     {
         ++m_nElementDepth;
 
-        ::rtl::OUString aHelpId;
-        ::rtl::OUString aCommandId;
-        ::rtl::OUString aLabel;
+        OUString aHelpId;
+        OUString aCommandId;
+        OUString aLabel;
         sal_Int16 nItemBits(0);
 
         m_bMenuMode = sal_True;
@@ -371,8 +371,8 @@ throw( SAXException, RuntimeException )
             // read attributes for menu
             for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
             {
-                ::rtl::OUString aName = xAttrList->getNameByIndex( i );
-                ::rtl::OUString aValue = xAttrList->getValueByIndex( i );
+                OUString aName = xAttrList->getNameByIndex( i );
+                OUString aValue = xAttrList->getValueByIndex( i );
                 if ( aName == ATTRIBUTE_ID )
                     aCommandId = aValue;
                 else if ( aName == ATTRIBUTE_LABEL )
@@ -381,11 +381,11 @@ throw( SAXException, RuntimeException )
                     aHelpId = aValue;
                 else if ( aName == ATTRIBUTE_STYLE )
                 {
-                    ::rtl::OUString aTemp( aValue );
+                    OUString aTemp( aValue );
                     sal_Int32 nIndex = 0;
                     do
                     {
-                        ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
+                        OUString aToken = aTemp.getToken( 0, '+', nIndex );
                         if ( !aToken.isEmpty() )
                         {
                             if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
@@ -410,8 +410,8 @@ throw( SAXException, RuntimeException )
             }
             else
             {
-                ::rtl::OUString aErrorMessage = getErrorLineString();
-                aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "attribute id for element menu required!" ));
+                OUString aErrorMessage = getErrorLineString();
+                aErrorMessage += OUString( "attribute id for element menu required!" );
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
 
@@ -421,20 +421,20 @@ throw( SAXException, RuntimeException )
     }
     else
     {
-        ::rtl::OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "element menu expected!" ));
+        OUString aErrorMessage = getErrorLineString();
+        aErrorMessage += OUString( "element menu expected!" );
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
 
 
-void SAL_CALL OReadMenuBarHandler::characters(const rtl::OUString&)
+void SAL_CALL OReadMenuBarHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 
-void OReadMenuBarHandler::endElement( const ::rtl::OUString& aName )
+void OReadMenuBarHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException )
 {
     if ( m_bMenuMode )
@@ -447,8 +447,8 @@ void OReadMenuBarHandler::endElement( const ::rtl::OUString& aName )
             m_bMenuMode = sal_False;
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
             {
-                ::rtl::OUString aErrorMessage = getErrorLineString();
-                aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "closing element menu expected!" ));
+                OUString aErrorMessage = getErrorLineString();
+                aErrorMessage += OUString( "closing element menu expected!" );
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -490,7 +490,7 @@ void SAL_CALL OReadMenuHandler::endDocument(void)
 
 
 void SAL_CALL OReadMenuHandler::startElement(
-    const ::rtl::OUString& aName, const Reference< XAttributeList > &xAttrList )
+    const OUString& aName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException )
 {
     if ( m_bMenuPopupMode )
@@ -507,20 +507,20 @@ throw( SAXException, RuntimeException )
     }
     else
     {
-        ::rtl::OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown element found!" ));
+        OUString aErrorMessage = getErrorLineString();
+        aErrorMessage += OUString( "unknown element found!" );
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
 
 
-void SAL_CALL OReadMenuHandler::characters(const rtl::OUString&)
+void SAL_CALL OReadMenuHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 
-void SAL_CALL OReadMenuHandler::endElement( const ::rtl::OUString& aName )
+void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException )
 {
     if ( m_bMenuPopupMode )
@@ -533,8 +533,8 @@ void SAL_CALL OReadMenuHandler::endElement( const ::rtl::OUString& aName )
             m_bMenuPopupMode = sal_False;
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUPOPUP )))
             {
-                ::rtl::OUString aErrorMessage = getErrorLineString();
-                aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "closing element menupopup expected!" ));
+                OUString aErrorMessage = getErrorLineString();
+                aErrorMessage += OUString( "closing element menupopup expected!" );
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -577,7 +577,7 @@ void SAL_CALL OReadMenuPopupHandler::endDocument(void)
 }
 
 void SAL_CALL OReadMenuPopupHandler::startElement(
-    const ::rtl::OUString& rName, const Reference< XAttributeList > &xAttrList )
+    const OUString& rName, const Reference< XAttributeList > &xAttrList )
 throw( SAXException, RuntimeException )
 {
     ++m_nElementDepth;
@@ -586,9 +586,9 @@ throw( SAXException, RuntimeException )
         m_xReader->startElement( rName, xAttrList );
     else if ( rName == ELEMENT_MENU )
     {
-        ::rtl::OUString aHelpId;
-        ::rtl::OUString aCommandId;
-        ::rtl::OUString aLabel;
+        OUString aHelpId;
+        OUString aCommandId;
+        OUString aLabel;
         sal_Int16 nItemBits(0);
 
         m_bMenuMode = sal_True;
@@ -601,8 +601,8 @@ throw( SAXException, RuntimeException )
         // read attributes for menu
         for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
         {
-            ::rtl::OUString aName = xAttrList->getNameByIndex( i );
-            ::rtl::OUString aValue = xAttrList->getValueByIndex( i );
+            OUString aName = xAttrList->getNameByIndex( i );
+            OUString aValue = xAttrList->getValueByIndex( i );
             if ( aName == ATTRIBUTE_ID )
                 aCommandId = aValue;
             else if ( aName == ATTRIBUTE_LABEL )
@@ -611,11 +611,11 @@ throw( SAXException, RuntimeException )
                 aHelpId = aValue;
             else if ( aName == ATTRIBUTE_STYLE )
             {
-                ::rtl::OUString aTemp( aValue );
+                OUString aTemp( aValue );
                 sal_Int32 nIndex = 0;
                 do
                 {
-                    ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
+                    OUString aToken = aTemp.getToken( 0, '+', nIndex );
                     if ( !aToken.isEmpty() )
                     {
                         if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
@@ -641,8 +641,8 @@ throw( SAXException, RuntimeException )
         }
         else
         {
-            ::rtl::OUString aErrorMessage = getErrorLineString();
-            aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "attribute id for element menu required!" ));
+            OUString aErrorMessage = getErrorLineString();
+            aErrorMessage += OUString( "attribute id for element menu required!" );
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
 
@@ -651,15 +651,15 @@ throw( SAXException, RuntimeException )
     }
     else if ( rName == ELEMENT_MENUITEM )
     {
-        ::rtl::OUString aHelpId;
-        ::rtl::OUString aCommandId;
-        ::rtl::OUString aLabel;
+        OUString aHelpId;
+        OUString aCommandId;
+        OUString aLabel;
         sal_Int16 nItemBits(0);
         // read attributes for menu item
         for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
         {
-            ::rtl::OUString aName = xAttrList->getNameByIndex( i );
-            ::rtl::OUString aValue = xAttrList->getValueByIndex( i );
+            OUString aName = xAttrList->getNameByIndex( i );
+            OUString aValue = xAttrList->getValueByIndex( i );
             if ( aName == ATTRIBUTE_ID )
                 aCommandId = aValue;
             else if ( aName == ATTRIBUTE_LABEL )
@@ -668,11 +668,11 @@ throw( SAXException, RuntimeException )
                 aHelpId = aValue;
             else if ( aName == ATTRIBUTE_STYLE )
             {
-                ::rtl::OUString aTemp( aValue );
+                OUString aTemp( aValue );
                 sal_Int32 nIndex = 0;
                 do
                 {
-                    ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
+                    OUString aToken = aTemp.getToken( 0, '+', nIndex );
                     if ( !aToken.isEmpty() )
                     {
                         if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
@@ -702,7 +702,7 @@ throw( SAXException, RuntimeException )
     else if ( rName == ELEMENT_MENUSEPARATOR )
     {
         Sequence< PropertyValue > aMenuSeparator( 1 );
-        aMenuSeparator[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+        aMenuSeparator[0].Name = OUString( ITEM_DESCRIPTOR_TYPE );
         aMenuSeparator[0].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINE;
 
         m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuSeparator ) );
@@ -711,20 +711,20 @@ throw( SAXException, RuntimeException )
     }
     else
     {
-        ::rtl::OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown element found!" ));
+        OUString aErrorMessage = getErrorLineString();
+        aErrorMessage += OUString( "unknown element found!" );
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
 
 
-void SAL_CALL OReadMenuPopupHandler::characters(const rtl::OUString&)
+void SAL_CALL OReadMenuPopupHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 
-void SAL_CALL OReadMenuPopupHandler::endElement( const ::rtl::OUString& aName )
+void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
     throw( SAXException, RuntimeException )
 {
     --m_nElementDepth;
@@ -737,8 +737,8 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const ::rtl::OUString& aName )
             m_bMenuMode = sal_False;
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
             {
-                ::rtl::OUString aErrorMessage = getErrorLineString();
-                aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "closing element menu expected!" ));
+                OUString aErrorMessage = getErrorLineString();
+                aErrorMessage += OUString( "closing element menu expected!" );
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -751,8 +751,8 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const ::rtl::OUString& aName )
         {
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUITEM )))
             {
-                ::rtl::OUString aErrorMessage = getErrorLineString();
-                aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "closing element menuitem expected!" ));
+                OUString aErrorMessage = getErrorLineString();
+                aErrorMessage += OUString( "closing element menuitem expected!" );
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -760,8 +760,8 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const ::rtl::OUString& aName )
         {
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUSEPARATOR )))
             {
-                ::rtl::OUString aErrorMessage = getErrorLineString();
-                aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "closing element menuseparator expected!" ));
+                OUString aErrorMessage = getErrorLineString();
+                aErrorMessage += OUString( "closing element menuseparator expected!" );
                 throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
             }
         }
@@ -782,7 +782,7 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
+    m_aAttributeType =  OUString( ATTRIBUTE_TYPE_CDATA );
 }
 
 
@@ -803,26 +803,26 @@ throw ( SAXException, RuntimeException )
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MENUBAR_DOCTYPE )) );
-        m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+        xExtendedDocHandler->unknown( OUString( MENUBAR_DOCTYPE ) );
+        m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
-    pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_MENU )),
+    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_MENU ),
                          m_aAttributeType,
-                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_MENU )) );
+                         OUString( XMLNS_MENU ) );
 
-    pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
+    pList->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
                          m_aAttributeType,
-                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "menubar" )) );
+                         OUString( "menubar" ) );
 
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUBAR )), pList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENUBAR ), pList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     WriteMenu( m_xMenuBarContainer );
 
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUBAR )) );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUBAR ) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
 
@@ -840,9 +840,9 @@ throw ( SAXException, RuntimeException )
         aAny = rMenuContainer->getByIndex( nItemPos );
         if ( aAny >>= aProps )
         {
-            ::rtl::OUString    aCommandURL;
-            ::rtl::OUString    aLabel;
-            ::rtl::OUString    aHelpURL;
+            OUString    aCommandURL;
+            OUString    aLabel;
+            OUString    aHelpURL;
             sal_Int16   nType( ::com::sun::star::ui::ItemType::DEFAULT );
             sal_Int16   nItemBits( 0 );
             Reference< XIndexAccess > xSubMenu;
@@ -861,28 +861,28 @@ throw ( SAXException, RuntimeException )
                     ::comphelper::AttributeList* pListMenu = new ::comphelper::AttributeList;
                     Reference< XAttributeList > xListMenu( (XAttributeList *)pListMenu , UNO_QUERY );
 
-                    pListMenu->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
+                    pListMenu->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
                                             m_aAttributeType,
                                             aCommandURL );
 
                     if ( !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL))) )
-                        pListMenu->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
+                        pListMenu->AddAttribute( OUString( ATTRIBUTE_NS_LABEL ),
                                                  m_aAttributeType,
                                                  aLabel );
 
-                    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-                    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )), xListMenu );
-                    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-                    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )), m_xEmptyList );
-                    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+                    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENU ), xListMenu );
+                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+                    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENUPOPUP ), m_xEmptyList );
+                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
                     WriteMenu( xSubMenu );
 
-                    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-                    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )) );
-                    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-                    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
-                    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+                    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUPOPUP ) );
+                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+                    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENU ) );
+                    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                     bSeparator = sal_False;
                 }
             }
@@ -908,31 +908,31 @@ throw ( SAXException, RuntimeException )
 }
 
 
-void OWriteMenuDocumentHandler::WriteMenuItem( const ::rtl::OUString& aCommandURL, const ::rtl::OUString& aLabel, const ::rtl::OUString& aHelpURL, sal_Int16 nStyle )
+void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
+    pList->AddAttribute( OUString( ATTRIBUTE_NS_ID ),
                                 m_aAttributeType,
                                 aCommandURL );
 
     if ( !aHelpURL.isEmpty() )
     {
-        pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_HELPID )),
+        pList->AddAttribute( OUString( ATTRIBUTE_NS_HELPID ),
                              m_aAttributeType,
                              aHelpURL );
     }
 
     if ( !aLabel.isEmpty() && !aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)) )
     {
-        pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
+        pList->AddAttribute( OUString( ATTRIBUTE_NS_LABEL ),
                                 m_aAttributeType,
                                 aLabel );
     }
     if (( nStyle > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)) ))
     {
-        rtl::OUString aValue;
+        OUString aValue;
         MenuStyleItem* pStyle = MenuItemStyles;
 
         for ( sal_Int32 nIndex = 0; nIndex < nMenuStyleItemEntries; ++nIndex, ++pStyle )
@@ -940,28 +940,28 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const ::rtl::OUString& aCommandUR
             if ( nStyle & pStyle->nBit )
             {
                 if ( !aValue.isEmpty() )
-                    aValue = aValue.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("+") ) );
-                aValue += rtl::OUString::createFromAscii( pStyle->attrName );
+                    aValue = aValue.concat( OUString( "+" ) );
+                aValue += OUString::createFromAscii( pStyle->attrName );
             }
         }
-        pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_STYLE )),
+        pList->AddAttribute( OUString( ATTRIBUTE_NS_STYLE ),
                                 m_aAttributeType,
                                 aValue );
     }
 
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUITEM )), xList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUITEM )) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENUITEM ), xList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUITEM ) );
 }
 
 
 void OWriteMenuDocumentHandler::WriteMenuSeparator()
 {
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUSEPARATOR )), m_xEmptyList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUSEPARATOR )) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_MENUSEPARATOR ), m_xEmptyList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUSEPARATOR ) );
 }
 
 } // namespace framework

@@ -91,22 +91,22 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
     {
         Reference< XNameAccess > xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
 
-        rtl::OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPageHeader" ));
-        rtl::OUString aHeaderFooterIsOnStr(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" ));
+        OUString aCmd( ".uno:InsertPageHeader" );
+        OUString aHeaderFooterIsOnStr( "HeaderIsOn" );
         if ( m_bFooter )
         {
-            aCmd = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPageFooter" ));
-            aHeaderFooterIsOnStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" ));
+            aCmd = OUString( ".uno:InsertPageFooter" );
+            aHeaderFooterIsOnStr = OUString( "FooterIsOn" );
         }
-        const rtl::OUString aIsPhysicalStr( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ));
-        const rtl::OUString aDisplayNameStr( RTL_CONSTASCII_USTRINGPARAM( "DisplayName" ));
+        const OUString aIsPhysicalStr( "IsPhysical" );
+        const OUString aDisplayNameStr( "DisplayName" );
 
         try
         {
             Reference< XNameContainer > xNameContainer;
-            if ( xStyleFamilies->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageStyles" ))) >>= xNameContainer )
+            if ( xStyleFamilies->getByName( OUString(  "PageStyles" )) >>= xNameContainer )
             {
-                Sequence< rtl::OUString > aSeqNames = xNameContainer->getElementNames();
+                Sequence< OUString > aSeqNames = xNameContainer->getElementNames();
 
                 sal_uInt16   nId = 2;
                 sal_uInt16  nCount = 0;
@@ -116,19 +116,19 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                 sal_Bool bFirstItemInserted( sal_False );
                 for ( sal_Int32 n = 0; n < aSeqNames.getLength(); n++ )
                 {
-                    rtl::OUString aName = aSeqNames[n];
+                    OUString aName = aSeqNames[n];
                     Reference< XPropertySet > xPropSet( xNameContainer->getByName( aName ), UNO_QUERY );
                     if ( xPropSet.is() )
                     {
                         sal_Bool bIsPhysical( sal_False );
                         if (( xPropSet->getPropertyValue( aIsPhysicalStr ) >>= bIsPhysical ) && bIsPhysical )
                         {
-                            rtl::OUString aDisplayName;
+                            OUString aDisplayName;
                             sal_Bool      bHeaderIsOn( sal_False );
                             xPropSet->getPropertyValue( aDisplayNameStr ) >>= aDisplayName;
                             xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;
 
-                            rtl::OUStringBuffer aStrBuf( aCmd );
+                            OUStringBuffer aStrBuf( aCmd );
                             aStrBuf.appendAscii( "?PageStyle:string=");
                             aStrBuf.append( aDisplayName );
                             aStrBuf.appendAscii( "&On:bool=" );
@@ -136,7 +136,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                                 aStrBuf.appendAscii( "true" );
                             else
                                 aStrBuf.appendAscii( "false" );
-                            rtl::OUString aCommand( aStrBuf.makeStringAndClear() );
+                            OUString aCommand( aStrBuf.makeStringAndClear() );
                             pVCLPopupMenu->InsertItem( nId, aDisplayName, MIB_CHECKABLE );
                             if ( !bFirstItemInserted )
                             {
@@ -164,7 +164,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                     // Insert special item for all command
                     pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, String( FwlResId( STR_MENU_HEADFOOTALL )), 0, OString(), 0 );
 
-                    rtl::OUStringBuffer aStrBuf( aCmd );
+                    OUStringBuffer aStrBuf( aCmd );
                     aStrBuf.appendAscii( "?On:bool=" );
 
                     // Command depends on check state of first menu item entry

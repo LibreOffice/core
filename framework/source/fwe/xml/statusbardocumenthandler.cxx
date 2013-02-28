@@ -93,8 +93,8 @@ static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 
 static void ExtractStatusbarItemParameters(
     const Sequence< PropertyValue > rProp,
-    ::rtl::OUString&                       rCommandURL,
-    ::rtl::OUString&                       rHelpURL,
+    OUString&                       rCommandURL,
+    OUString&                       rHelpURL,
     sal_Int16&                      rOffset,
     sal_Int16&                      rStyle,
     sal_Int16&                      rWidth )
@@ -151,25 +151,25 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     ThreadHelpBase( &Application::GetSolarMutex() ),
     m_aStatusBarItems( rStatusBarItems )
 {
-    ::rtl::OUString aNamespaceStatusBar( RTL_CONSTASCII_USTRINGPARAM( XMLNS_STATUSBAR ));
-    ::rtl::OUString aNamespaceXLink( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK ));
-    ::rtl::OUString aSeparator( RTL_CONSTASCII_USTRINGPARAM( XMLNS_FILTER_SEPARATOR ));
+    OUString aNamespaceStatusBar( XMLNS_STATUSBAR );
+    OUString aNamespaceXLink( XMLNS_XLINK );
+    OUString aSeparator( XMLNS_FILTER_SEPARATOR );
 
     // create hash map
     for ( int i = 0; i < (int)SB_XML_ENTRY_COUNT; i++ )
     {
         if ( StatusBarEntries[i].nNamespace == SB_NS_STATUSBAR )
         {
-            ::rtl::OUString temp( aNamespaceStatusBar );
+            OUString temp( aNamespaceStatusBar );
             temp += aSeparator;
-            temp += ::rtl::OUString::createFromAscii( StatusBarEntries[i].aEntryName );
+            temp += OUString::createFromAscii( StatusBarEntries[i].aEntryName );
             m_aStatusBarMap.insert( StatusBarHashMap::value_type( temp, (StatusBar_XML_Entry)i ) );
         }
         else
         {
-            ::rtl::OUString temp( aNamespaceXLink );
+            OUString temp( aNamespaceXLink );
             temp += aSeparator;
-            temp += ::rtl::OUString::createFromAscii( StatusBarEntries[i].aEntryName );
+            temp += OUString::createFromAscii( StatusBarEntries[i].aEntryName );
             m_aStatusBarMap.insert( StatusBarHashMap::value_type( temp, (StatusBar_XML_Entry)i ) );
         }
     }
@@ -197,14 +197,14 @@ throw(  SAXException, RuntimeException )
     if (( m_bStatusBarStartFound && !m_bStatusBarEndFound ) ||
         ( !m_bStatusBarStartFound && m_bStatusBarEndFound )     )
     {
-        ::rtl::OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No matching start or end element 'statusbar' found!" ));
+        OUString aErrorMessage = getErrorLineString();
+        aErrorMessage += OUString( "No matching start or end element 'statusbar' found!" );
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::startElement(
-    const ::rtl::OUString& aName, const Reference< XAttributeList > &xAttribs )
+    const OUString& aName, const Reference< XAttributeList > &xAttribs )
 throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -218,8 +218,8 @@ throw(  SAXException, RuntimeException )
             {
                 if ( m_bStatusBarStartFound )
                 {
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'statusbar:statusbar' cannot be embeded into 'statusbar:statusbar'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'statusbar:statusbar' cannot be embeded into 'statusbar:statusbar'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -231,20 +231,20 @@ throw(  SAXException, RuntimeException )
             {
                 if ( !m_bStatusBarStartFound )
                 {
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'statusbar:statusbaritem' must be embeded into element 'statusbar:statusbar'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'statusbar:statusbaritem' must be embeded into element 'statusbar:statusbar'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
                 if ( m_bStatusBarItemStartFound )
                 {
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element statusbar:statusbaritem is not a container!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element statusbar:statusbaritem is not a container!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                ::rtl::OUString    aCommandURL;
-                ::rtl::OUString    aHelpURL;
+                OUString    aCommandURL;
+                OUString    aHelpURL;
                 sal_Int16   nItemBits( ItemStyle::ALIGN_CENTER|ItemStyle::DRAW_IN3D );
                 sal_Int16   nWidth( 0 );
                 sal_Int16   nOffset( STATUSBAR_OFFSET );
@@ -283,8 +283,8 @@ throw(  SAXException, RuntimeException )
                                 }
                                 else
                                 {
-                                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Attribute statusbar:align must have one value of 'left','right' or 'center'!" ));
+                                    OUString aErrorMessage = getErrorLineString();
+                                    aErrorMessage += OUString( "Attribute statusbar:align must have one value of 'left','right' or 'center'!" );
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -308,8 +308,8 @@ throw(  SAXException, RuntimeException )
                                 }
                                 else
                                 {
-                                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Attribute statusbar:autosize must have value 'true' or 'false'!" ));
+                                    OUString aErrorMessage = getErrorLineString();
+                                    aErrorMessage += OUString( "Attribute statusbar:autosize must have value 'true' or 'false'!" );
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -323,8 +323,8 @@ throw(  SAXException, RuntimeException )
                                     nItemBits &= ~ItemStyle::AUTO_SIZE;
                                 else
                                 {
-                                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Attribute statusbar:autosize must have value 'true' or 'false'!" ));
+                                    OUString aErrorMessage = getErrorLineString();
+                                    aErrorMessage += OUString( "Attribute statusbar:autosize must have value 'true' or 'false'!" );
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -338,8 +338,8 @@ throw(  SAXException, RuntimeException )
                                     nItemBits &= ~ItemStyle::OWNER_DRAW;
                                 else
                                 {
-                                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Attribute statusbar:ownerdraw must have value 'true' or 'false'!" ));
+                                    OUString aErrorMessage = getErrorLineString();
+                                    aErrorMessage += OUString( "Attribute statusbar:ownerdraw must have value 'true' or 'false'!" );
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -371,19 +371,19 @@ throw(  SAXException, RuntimeException )
 
                 if ( !bCommandURL )
                 {
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute statusbar:url must have a value!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Required attribute statusbar:url must have a value!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
                         else
                         {
                             Sequence< PropertyValue > aStatusbarItemProp( 6 );
-                            aStatusbarItemProp[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ));
-                            aStatusbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ));
-                            aStatusbarItemProp[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_OFFSET ));
-                            aStatusbarItemProp[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ));
-                            aStatusbarItemProp[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_WIDTH ));
-                            aStatusbarItemProp[5].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
+                            aStatusbarItemProp[0].Name = OUString( ITEM_DESCRIPTOR_COMMANDURL );
+                            aStatusbarItemProp[1].Name = OUString( ITEM_DESCRIPTOR_HELPURL );
+                            aStatusbarItemProp[2].Name = OUString( ITEM_DESCRIPTOR_OFFSET );
+                            aStatusbarItemProp[3].Name = OUString( ITEM_DESCRIPTOR_STYLE );
+                            aStatusbarItemProp[4].Name = OUString( ITEM_DESCRIPTOR_WIDTH );
+                            aStatusbarItemProp[5].Name = OUString( ITEM_DESCRIPTOR_TYPE );
 
                             aStatusbarItemProp[0].Value <<= aCommandURL;
                             aStatusbarItemProp[1].Value <<= aHelpURL;
@@ -403,7 +403,7 @@ throw(  SAXException, RuntimeException )
     }
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::endElement(const ::rtl::OUString& aName)
+void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
 throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -417,8 +417,8 @@ throw(  SAXException, RuntimeException )
             {
                 if ( !m_bStatusBarStartFound )
                 {
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "End element 'statusbar' found, but no start element 'statusbar'" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "End element 'statusbar' found, but no start element 'statusbar'" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -430,8 +430,8 @@ throw(  SAXException, RuntimeException )
             {
                 if ( !m_bStatusBarItemStartFound )
                 {
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "End element 'statusbar:statusbaritem' found, but no start element 'statusbar:statusbaritem'" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "End element 'statusbar:statusbaritem' found, but no start element 'statusbar:statusbaritem'" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -445,18 +445,18 @@ throw(  SAXException, RuntimeException )
     }
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::characters(const ::rtl::OUString&)
+void SAL_CALL OReadStatusBarDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
-void SAL_CALL OReadStatusBarDocumentHandler::ignorableWhitespace(const ::rtl::OUString&)
+void SAL_CALL OReadStatusBarDocumentHandler::ignorableWhitespace(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::processingInstruction(
-    const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
+    const OUString& /*aTarget*/, const OUString& /*aData*/ )
 throw(  SAXException, RuntimeException )
 {
 }
@@ -470,7 +470,7 @@ throw(  SAXException, RuntimeException )
     m_xLocator = xLocator;
 }
 
-::rtl::OUString OReadStatusBarDocumentHandler::getErrorLineString()
+OUString OReadStatusBarDocumentHandler::getErrorLineString()
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -479,10 +479,10 @@ throw(  SAXException, RuntimeException )
     if ( m_xLocator.is() )
     {
         snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
-        return ::rtl::OUString::createFromAscii( buffer );
+        return OUString::createFromAscii( buffer );
     }
     else
-        return ::rtl::OUString();
+        return OUString();
 }
 
 
@@ -499,9 +499,9 @@ OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType    = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
-    m_aXMLXlinkNS       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
-    m_aXMLStatusBarNS   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_STATUSBAR_PREFIX ));
+    m_aAttributeType    = OUString( ATTRIBUTE_TYPE_CDATA );
+    m_aXMLXlinkNS       = OUString( XMLNS_XLINK_PREFIX );
+    m_aXMLStatusBarNS   = OUString( XMLNS_STATUSBAR_PREFIX );
 }
 
 OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler()
@@ -519,23 +519,23 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STATUSBAR_DOCTYPE )) );
-        m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+        xExtendedDocHandler->unknown( OUString( STATUSBAR_DOCTYPE ) );
+        m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_STATUSBAR )),
+    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_STATUSBAR ),
                          m_aAttributeType,
-                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_STATUSBAR )) );
+                         OUString( XMLNS_STATUSBAR ) );
 
-    pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
+    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_XLINK ),
                          m_aAttributeType,
-                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK )) );
+                         OUString( XMLNS_XLINK ) );
 
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_STATUSBAR )), pList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_STATUSBAR ), pList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     sal_Int32  nItemCount = m_aStatusBarItems->getCount();
     Any        aAny;
@@ -546,8 +546,8 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
         aAny = m_aStatusBarItems->getByIndex( nItemPos );
         if ( aAny >>= aProps )
         {
-            ::rtl::OUString    aCommandURL;
-            ::rtl::OUString    aHelpURL;
+            OUString    aCommandURL;
+            OUString    aHelpURL;
             sal_Int16   nStyle( ItemStyle::ALIGN_CENTER|ItemStyle::DRAW_IN3D );
             sal_Int16   nWidth( 0 );
             sal_Int16   nOffset( STATUSBAR_OFFSET );
@@ -565,9 +565,9 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
         }
     }
 
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_STATUSBAR )) );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_STATUSBAR ) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
 
@@ -576,8 +576,8 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
 //_________________________________________________________________________________________________________________
 
 void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
-    const rtl::OUString& rCommandURL,
-    const rtl::OUString& /*rHelpURL*/,
+    const OUString& rCommandURL,
+    const OUString& /*rHelpURL*/,
     sal_Int16            nOffset,
     sal_Int16            nStyle,
     sal_Int16            nWidth )
@@ -589,7 +589,7 @@ throw ( SAXException, RuntimeException )
     if (m_aAttributeURL.isEmpty() )
     {
         m_aAttributeURL = m_aXMLXlinkNS;
-        m_aAttributeURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_URL ));
+        m_aAttributeURL += OUString( ATTRIBUTE_URL );
     }
 
     // save required attribute (URL)
@@ -598,73 +598,73 @@ throw ( SAXException, RuntimeException )
     // alignment
     if ( nStyle & ItemStyle::ALIGN_RIGHT )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN )),
+        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_ALIGN ),
                              m_aAttributeType,
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN_RIGHT )) );
+                             OUString( ATTRIBUTE_ALIGN_RIGHT ) );
     }
     else if ( nStyle & ItemStyle::ALIGN_CENTER )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN )),
+        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_ALIGN ),
                              m_aAttributeType,
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN_CENTER )) );
+                             OUString( ATTRIBUTE_ALIGN_CENTER ) );
     }
     else
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN )),
+        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_ALIGN ),
                              m_aAttributeType,
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ALIGN_LEFT )) );
+                             OUString( ATTRIBUTE_ALIGN_LEFT ) );
     }
 
     // style ( SIB_IN is default )
     if ( nStyle & ItemStyle::DRAW_FLAT )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE )),
+        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_STYLE ),
                              m_aAttributeType,
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE_FLAT )) );
+                             OUString( ATTRIBUTE_STYLE_FLAT ) );
     }
     else if ( nStyle & ItemStyle::DRAW_OUT3D )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE )),
+        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_STYLE ),
                              m_aAttributeType,
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_STYLE_OUT )) );
+                             OUString( ATTRIBUTE_STYLE_OUT ) );
     }
 
     // autosize (default sal_False)
     if ( nStyle & ItemStyle::AUTO_SIZE )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_AUTOSIZE )),
+        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_AUTOSIZE ),
                              m_aAttributeType,
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) );
+                             OUString( ATTRIBUTE_BOOLEAN_TRUE ) );
     }
 
     // ownerdraw (default sal_False)
     if ( nStyle & ItemStyle::OWNER_DRAW )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_OWNERDRAW )),
+        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_OWNERDRAW ),
                              m_aAttributeType,
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BOOLEAN_TRUE )) );
+                             OUString( ATTRIBUTE_BOOLEAN_TRUE ) );
     }
 
     // width (default 0)
     if ( nWidth > 0 )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_WIDTH )),
+        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_WIDTH ),
                              m_aAttributeType,
-                             ::rtl::OUString::valueOf( (sal_Int32)nWidth ) );
+                             OUString::valueOf( (sal_Int32)nWidth ) );
     }
 
     // offset (default STATUSBAR_OFFSET)
     if ( nOffset != STATUSBAR_OFFSET )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_OFFSET )),
+        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_OFFSET ),
                              m_aAttributeType,
-                             ::rtl::OUString::valueOf( (sal_Int32)nOffset ) );
+                             OUString::valueOf( (sal_Int32)nOffset ) );
     }
 
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_STATUSBARITEM )), xList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_STATUSBARITEM )) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_STATUSBARITEM ), xList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_STATUSBARITEM ) );
 }
 
 } // namespace framework

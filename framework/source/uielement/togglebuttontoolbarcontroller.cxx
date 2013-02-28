@@ -62,7 +62,7 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
     Style                                    eStyle,
-    const ::rtl::OUString&                          aCommand ) :
+    const OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand ),
     m_eStyle( eStyle )
 {
@@ -93,9 +93,9 @@ Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 
     Sequence<PropertyValue> aArgs( 2 );
 
     // Add key modifier to argument list
-    aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+    aArgs[0].Name = OUString( "KeyModifier" );
     aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
+    aArgs[1].Name = OUString( "Text" );
     aArgs[1].Value <<= m_aCurrentSelection;
     return aArgs;
 }
@@ -116,7 +116,7 @@ throw (::com::sun::star::uno::RuntimeException)
         const sal_uInt32 nCount = m_aDropdownMenuList.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
-            rtl::OUString aLabel( m_aDropdownMenuList[i] );
+            OUString aLabel( m_aDropdownMenuList[i] );
             aPopup.InsertItem( sal_uInt16( i+1 ), aLabel );
             if ( aLabel == m_aCurrentSelection )
                 aPopup.CheckItem( sal_uInt16( i+1 ), sal_True );
@@ -148,7 +148,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
             {
                 if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "List", 4 ))
                 {
-                    Sequence< ::rtl::OUString > aList;
+                    Sequence< OUString > aList;
                     m_aDropdownMenuList.clear();
 
                     rControlCommand.Arguments[i].Value >>= aList;
@@ -157,9 +157,9 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
 
                     // send notification
                     uno::Sequence< beans::NamedValue > aInfo( 1 );
-                    aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ));
+                    aInfo[0].Name  = OUString( "List" );
                     aInfo[0].Value <<= aList;
-                    addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListChanged" )),
+                    addNotifyInfo( OUString( "ListChanged" ),
                                 getDispatchFromCommand( m_aCommandURL ),
                                 aInfo );
 
@@ -184,9 +184,9 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
 
                         // send notification
                         uno::Sequence< beans::NamedValue > aInfo( 1 );
-                        aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ItemChecked" ));
+                        aInfo[0].Name  = OUString( "ItemChecked" );
                         aInfo[0].Value <<= nPos;
-                        addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pos" )),
+                        addNotifyInfo( OUString( "Pos" ),
                                     getDispatchFromCommand( m_aCommandURL ),
                                     aInfo );
                     }
@@ -196,7 +196,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
         }
         else if ( rControlCommand.Command.equalsAsciiL( "AddEntry", 8 ))
         {
-            rtl::OUString   aText;
+            OUString   aText;
             for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
             {
                 if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
@@ -211,7 +211,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
         {
             sal_Int32      nPos( COMBOBOX_APPEND );
             sal_Int32      nSize = sal_Int32( m_aDropdownMenuList.size() );
-            rtl::OUString  aText;
+            OUString  aText;
             for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
             {
                 if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
@@ -227,7 +227,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                     rControlCommand.Arguments[i].Value >>= aText;
             }
 
-            std::vector< ::rtl::OUString >::iterator aIter = m_aDropdownMenuList.begin();
+            std::vector< OUString >::iterator aIter = m_aDropdownMenuList.begin();
             aIter += nPos;
             m_aDropdownMenuList.insert( aIter, aText );
         }
@@ -242,7 +242,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                     {
                         if ( nPos < sal_Int32( m_aDropdownMenuList.size() ))
                         {
-                            std::vector< ::rtl::OUString >::iterator aIter = m_aDropdownMenuList.begin();
+                            std::vector< OUString >::iterator aIter = m_aDropdownMenuList.begin();
                             aIter += nPos;
                             m_aDropdownMenuList.erase( aIter );
                         }
@@ -257,7 +257,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
             {
                 if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
                 {
-                    rtl::OUString aText;
+                    OUString aText;
                     if ( rControlCommand.Arguments[i].Value >>= aText )
                     {
                         sal_Int32 nSize = sal_Int32( m_aDropdownMenuList.size() );
@@ -265,7 +265,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                         {
                             if ( m_aDropdownMenuList[j] == aText )
                             {
-                                std::vector< ::rtl::OUString >::iterator aIter = m_aDropdownMenuList.begin();
+                                std::vector< OUString >::iterator aIter = m_aDropdownMenuList.begin();
                                 aIter += j;
                                 m_aDropdownMenuList.erase( aIter );
                                 break;

@@ -93,8 +93,8 @@ TabWindow::TabWindow( const css::uno::Reference< css::lang::XMultiServiceFactory
     , m_bInitialized( sal_False )
     , m_bDisposed( sal_False )
     , m_nNextTabID( 1 )
-    , m_aTitlePropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ))
-    , m_aPosPropName( RTL_CONSTASCII_USTRINGPARAM( "Position" ))
+    , m_aTitlePropName( "Title" )
+    , m_aPosPropName( "Position" )
     , m_xServiceManager( xServiceManager )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
@@ -156,7 +156,7 @@ TabControl* TabWindow::impl_GetTabControl( const css::uno::Reference< css::awt::
         return NULL;
 }
 
-void TabWindow::impl_SetTitle( const ::rtl::OUString& rTitle )
+void TabWindow::impl_SetTitle( const OUString& rTitle )
 {
     if ( m_xTopWindow.is() )
     {
@@ -244,7 +244,7 @@ IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl )
 
     sal_Int32 nPageId = pTabControl->GetCurPageId();
 
-    rtl::OUString aTitle = pTabControl->GetPageText( sal_uInt16( nPageId ));
+    OUString aTitle = pTabControl->GetPageText( sal_uInt16( nPageId ));
     impl_SetTitle( aTitle );
     aLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -274,8 +274,8 @@ IMPL_LINK( TabWindow, Deactivate, TabControl*, pTabControl )
 void SAL_CALL TabWindow::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    const rtl::OUString aTopWindowArgName( RTL_CONSTASCII_USTRINGPARAM( "TopWindow" ));
-    const rtl::OUString aSizeArgName( RTL_CONSTASCII_USTRINGPARAM( "Size" ));
+    const OUString aTopWindowArgName( "TopWindow" );
+    const OUString aSizeArgName( "Size" );
 
     css::awt::Size aDefaultSize( 500, 500 );
     css::awt::Size aSize( aDefaultSize );
@@ -605,7 +605,7 @@ throw (css::uno::RuntimeException)
 
     sal_Int32 nNextTabID( m_nNextTabID++ );
 
-    rtl::OUString aTitle;
+    OUString aTitle;
     TabControl* pTabControl = impl_GetTabControl( m_xTabControlWindow );
     if ( pTabControl )
         pTabControl->InsertPage( sal_uInt16( nNextTabID ), aTitle );
@@ -669,10 +669,10 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException)
         {
             comphelper::SequenceAsHashMap aSeqHashMap( Properties );
 
-            ::rtl::OUString aTitle  = pTabControl->GetPageText( sal_uInt16( ID ));
+            OUString aTitle  = pTabControl->GetPageText( sal_uInt16( ID ));
             sal_Int32       nNewPos = nPos;
 
-            aTitle = aSeqHashMap.getUnpackedValueOrDefault< ::rtl::OUString >(
+            aTitle = aSeqHashMap.getUnpackedValueOrDefault< OUString >(
                                     m_aTitlePropName, aTitle );
             pTabControl->SetPageText( sal_uInt16( ID ), aTitle );
             nNewPos = aSeqHashMap.getUnpackedValueOrDefault< sal_Int32 >(
@@ -715,7 +715,7 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException)
             throw css::lang::IndexOutOfBoundsException();
         else
         {
-            rtl::OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
+            OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
                           nPos   = pTabControl->GetPagePos( sal_uInt16( ID ));
 
             css::uno::Sequence< css::beans::NamedValue > aSeq( 2 );
@@ -749,7 +749,7 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException)
         else
         {
             sal_Int32 nOldID     = pTabControl->GetCurPageId();
-            rtl::OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
+            OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
             pTabControl->SetCurPageId( sal_uInt16( ID ));
             pTabControl->SelectTabPage( sal_uInt16( ID ));
             impl_SetTitle( aTitle );

@@ -51,18 +51,18 @@
 #define ADDONSMENUITEM_CONTEXT_LEN                      7
 #define ADDONSMENUITEM_IMAGEIDENTIFIER_LEN              15
 
-#define ADDONSMENUITEM_PROPERTYNAME_URL                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_URL             ))
-#define ADDONSMENUITEM_PROPERTYNAME_TITLE               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_TITLE           ))
-#define ADDONSMENUITEM_PROPERTYNAME_TARGET              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_TARGET          ))
-#define ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_IMAGEIDENTIFIER ))
-#define ADDONSMENUITEM_PROPERTYNAME_CONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_CONTEXT         ))
-#define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_SUBMENU         ))
-#define ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_CONTROLTYPE     ))
-#define ADDONSMENUITEM_PROPERTYNAME_WIDTH               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_WIDTH           ))
+#define ADDONSMENUITEM_PROPERTYNAME_URL                 OUString(ADDONSMENUITEM_STRING_URL             )
+#define ADDONSMENUITEM_PROPERTYNAME_TITLE               OUString(ADDONSMENUITEM_STRING_TITLE           )
+#define ADDONSMENUITEM_PROPERTYNAME_TARGET              OUString(ADDONSMENUITEM_STRING_TARGET          )
+#define ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER     OUString(ADDONSMENUITEM_STRING_IMAGEIDENTIFIER )
+#define ADDONSMENUITEM_PROPERTYNAME_CONTEXT             OUString(ADDONSMENUITEM_STRING_CONTEXT         )
+#define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             OUString(ADDONSMENUITEM_STRING_SUBMENU         )
+#define ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE         OUString(ADDONSMENUITEM_STRING_CONTROLTYPE     )
+#define ADDONSMENUITEM_PROPERTYNAME_WIDTH               OUString(ADDONSMENUITEM_STRING_WIDTH           )
 
 #define ADDONSPOPUPMENU_URL_PREFIX_STR                  "private:menu/Addon"
 
-#define ADDONSPOPUPMENU_URL_PREFIX                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ADDONSPOPUPMENU_URL_PREFIX_STR ))
+#define ADDONSPOPUPMENU_URL_PREFIX                      OUString( ADDONSPOPUPMENU_URL_PREFIX_STR )
 
 namespace framework
 {
@@ -71,23 +71,23 @@ typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com:
 
 struct FWE_DLLPUBLIC MergeMenuInstruction
 {
-    ::rtl::OUString     aMergePoint;
-    ::rtl::OUString     aMergeCommand;
-    ::rtl::OUString     aMergeCommandParameter;
-    ::rtl::OUString     aMergeFallback;
-    ::rtl::OUString     aMergeContext;
+    OUString     aMergePoint;
+    OUString     aMergeCommand;
+    OUString     aMergeCommandParameter;
+    OUString     aMergeFallback;
+    OUString     aMergeContext;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > aMergeMenu;
 };
 typedef ::std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
 
 struct FWE_DLLPUBLIC MergeToolbarInstruction
 {
-    ::rtl::OUString     aMergeToolbar;
-    ::rtl::OUString     aMergePoint;
-    ::rtl::OUString     aMergeCommand;
-    ::rtl::OUString     aMergeCommandParameter;
-    ::rtl::OUString     aMergeFallback;
-    ::rtl::OUString     aMergeContext;
+    OUString     aMergeToolbar;
+    OUString     aMergePoint;
+    OUString     aMergeCommand;
+    OUString     aMergeCommandParameter;
+    OUString     aMergeFallback;
+    OUString     aMergeContext;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > aMergeToolbarItems;
 };
 
@@ -235,7 +235,7 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
 
-        const ::rtl::OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
+        const OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************//**
             @short      Retrieves all available merge instructions for the Office menu bar
@@ -260,7 +260,7 @@ class FWE_DLLPUBLIC AddonsOptions
 
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
-        bool GetMergeToolbarInstructions( const ::rtl::OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbar ) const;
+        bool GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbar ) const;
 
         /*-****************************************************************************************************//**
             @short      Gets the Add-On help menu part of all addon components registered
@@ -286,8 +286,8 @@ class FWE_DLLPUBLIC AddonsOptions
             @onerror    An empty image
         *//*-*****************************************************************************************************/
 
-        Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
-        Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig ) const;
+        Image GetImageFromURL( const OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
+        Image GetImageFromURL( const OUString& aURL, sal_Bool bBig ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods

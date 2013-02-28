@@ -34,7 +34,7 @@
 #include "uielement/popupmenucontroller.hxx"
 #include "services.h"
 
-using rtl::OUString;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -49,8 +49,8 @@ namespace framework
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   PopupMenuController                         ,
                                             OWeakObject                      ,
-                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ) )            ,
-                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.framework.PopupMenuController" ) )
+                                            OUString( "com.sun.star.frame.ToolbarController" )            ,
+                                            OUString( "com.sun.star.comp.framework.PopupMenuController" )
                                         )
 
 DEFINE_INIT_SERVICE                     (   PopupMenuController, {} )
@@ -165,10 +165,10 @@ bool PopupMenuController::CreatePopupMenuController() throw (Exception)
     Sequence< Any > aSeq( 2 );
     PropertyValue aPropValue;
 
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+    aPropValue.Name = OUString( "ModuleName" );
     aPropValue.Value <<= getModuleName();
     aSeq[0] <<= aPropValue;
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+    aPropValue.Name = OUString( "Frame" );
     aPropValue.Value <<= m_xFrame;
     aSeq[1] <<= aPropValue;
 

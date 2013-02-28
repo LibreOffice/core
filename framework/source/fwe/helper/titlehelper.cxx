@@ -91,7 +91,7 @@ void TitleHelper::setOwner(const css::uno::Reference< css::uno::XInterface >& xO
 }
 
 //-----------------------------------------------
-::rtl::OUString SAL_CALL TitleHelper::getTitle()
+OUString SAL_CALL TitleHelper::getTitle()
     throw (css::uno::RuntimeException)
 {
     // SYNCHRONIZED ->
@@ -127,7 +127,7 @@ void TitleHelper::connectWithUntitledNumbers (const css::uno::Reference< css::fr
 }
 
 //-----------------------------------------------
-void SAL_CALL TitleHelper::setTitle(const ::rtl::OUString& sTitle)
+void SAL_CALL TitleHelper::setTitle(const OUString& sTitle)
     throw (css::uno::RuntimeException)
 {
     // SYNCHRONIZED ->
@@ -261,7 +261,7 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
     // SYNCHRONIZED ->
     aLock.reset ();
 
-         m_sTitle        = ::rtl::OUString ();
+         m_sTitle        = OUString ();
          m_nLeasedNumber = css::frame::UntitledNumbersConst::INVALID_NUMBER;
 
     aLock.clear ();
@@ -351,8 +351,8 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
        )
         return;
 
-    ::rtl::OUString sTitle;
-    ::rtl::OUString sURL  ;
+    OUString sTitle;
+    OUString sURL  ;
 
     css::uno::Reference< css::frame::XStorable > xURLProvider(xModel , css::uno::UNO_QUERY);
     if (xURLProvider.is())
@@ -370,7 +370,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         if (nLeasedNumber == css::frame::UntitledNumbersConst::INVALID_NUMBER)
             nLeasedNumber = xNumbers->leaseNumber (xOwner);
 
-        ::rtl::OUStringBuffer sNewTitle(256);
+        OUStringBuffer sNewTitle(256);
         sNewTitle.append (xNumbers->getUntitledPrefix ());
         if (nLeasedNumber != css::frame::UntitledNumbersConst::INVALID_NUMBER)
             sNewTitle.append ((::sal_Int32)nLeasedNumber);
@@ -422,7 +422,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
        )
         return;
 
-    ::rtl::OUStringBuffer sTitle(256);
+    OUStringBuffer sTitle(256);
 
     if (nLeasedNumber == css::frame::UntitledNumbersConst::INVALID_NUMBER)
         nLeasedNumber = xNumbers->leaseNumber (xOwner);
@@ -451,7 +451,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
     // SYNCHRONIZED ->
     aLock.reset ();
 
-        ::rtl::OUString sNewTitle       = sTitle.makeStringAndClear ();
+        OUString sNewTitle       = sTitle.makeStringAndClear ();
         sal_Bool        bChanged        = !init && m_sTitle != sNewTitle;
                         m_sTitle        = sNewTitle;
                         m_nLeasedNumber = nLeasedNumber;
@@ -485,7 +485,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     if ( ! xComponent.is ())
         xComponent = xFrame->getComponentWindow ();
 
-    ::rtl::OUStringBuffer sTitle (256);
+    OUStringBuffer sTitle (256);
 
     impl_appendComponentTitle   (sTitle, xComponent);
     impl_appendProductName      (sTitle);
@@ -495,7 +495,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     // SYNCHRONIZED ->
     aLock.reset ();
 
-        ::rtl::OUString sNewTitle = sTitle.makeStringAndClear ();
+        OUString sNewTitle = sTitle.makeStringAndClear ();
         sal_Bool        bChanged  = !init && m_sTitle != sNewTitle;
                         m_sTitle  = sNewTitle;
 
@@ -507,7 +507,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
 }
 
 //*****************************************************************************************************************
-void TitleHelper::impl_appendComponentTitle (      ::rtl::OUStringBuffer&                       sTitle    ,
+void TitleHelper::impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
                                              const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
     css::uno::Reference< css::frame::XTitle > xTitle(xComponent, css::uno::UNO_QUERY);
@@ -518,9 +518,9 @@ void TitleHelper::impl_appendComponentTitle (      ::rtl::OUStringBuffer&       
 }
 
 //*****************************************************************************************************************
-void TitleHelper::impl_appendProductName (::rtl::OUStringBuffer& sTitle)
+void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
 {
-    rtl::OUString name(utl::ConfigManager::getProductName());
+    OUString name(utl::ConfigManager::getProductName());
     if (!name.isEmpty())
     {
         if (sTitle.getLength() != 0)
@@ -530,7 +530,7 @@ void TitleHelper::impl_appendProductName (::rtl::OUStringBuffer& sTitle)
 }
 
 //*****************************************************************************************************************
-void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
+void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
 {
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
@@ -546,9 +546,9 @@ void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
             css::frame::ModuleManager::create(xContext);
 
-        const ::rtl::OUString                 sID     = xModuleManager->identify(xOwner);
+        const OUString                 sID     = xModuleManager->identify(xOwner);
               ::comphelper::SequenceAsHashMap lProps  = xModuleManager->getByName (sID);
-        const ::rtl::OUString                 sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, ::rtl::OUString());
+        const OUString                 sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, OUString());
 
         // An UIname property is an optional value !
         // So please add it to the title in case it does realy exists only.
@@ -564,19 +564,19 @@ void TitleHelper::impl_appendModuleName (::rtl::OUStringBuffer& sTitle)
 
 //*****************************************************************************************************************
 #ifdef DBG_UTIL
-void TitleHelper::impl_appendDebugVersion (::rtl::OUStringBuffer& sTitle)
+void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
 {
-    rtl::OUString version(utl::ConfigManager::getProductVersion());
+    OUString version(utl::ConfigManager::getProductVersion());
     sTitle.append(' ');
     sTitle.append(version);
-    ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("development"));
-    ::rtl::OUString sVersion = ::utl::Bootstrap::getBuildIdData(sDefault);
+    OUString sDefault("development");
+    OUString sVersion = ::utl::Bootstrap::getBuildIdData(sDefault);
     sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ["));
     sTitle.append(sVersion);
     sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM("]"));
 }
 #else
-void TitleHelper::impl_appendDebugVersion (::rtl::OUStringBuffer&)
+void TitleHelper::impl_appendDebugVersion (OUStringBuffer&)
 {
 }
 #endif
@@ -640,10 +640,10 @@ void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitl
 }
 
 //-----------------------------------------------
-::rtl::OUString TitleHelper::impl_convertURL2Title(const ::rtl::OUString& sURL)
+OUString TitleHelper::impl_convertURL2Title(const OUString& sURL)
 {
     INetURLObject   aURL (sURL);
-    ::rtl::OUString sTitle;
+    OUString sTitle;
 
     if (aURL.GetProtocol() == INET_PROT_FILE)
     {

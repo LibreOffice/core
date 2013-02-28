@@ -64,7 +64,7 @@ ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XMultiServi
     m_bConfigRead( sal_False ),
     m_xServiceManager( xServiceManager )
 {
-    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( comphelper::getComponentContext(m_xServiceManager), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Controller/Registered/ToolBar" )) );
+    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( comphelper::getComponentContext(m_xServiceManager), OUString( "/org.openoffice.Office.UI.Controller/Registered/ToolBar" ) );
     m_pConfigAccess->acquire();
 }
 
@@ -86,7 +86,7 @@ ToolbarControllerFactory::~ToolbarControllerFactory()
 
 // XMultiComponentFactory
 Reference< XInterface > SAL_CALL ToolbarControllerFactory::createInstanceWithContext(
-    const ::rtl::OUString& aServiceSpecifier,
+    const OUString& aServiceSpecifier,
     const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
@@ -99,7 +99,7 @@ throw (Exception, RuntimeException)
         m_pConfigAccess->readConfigurationData();
     }
 
-    rtl::OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( aServiceSpecifier, rtl::OUString() );
+    OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( aServiceSpecifier, OUString() );
     if ( !aServiceName.isEmpty() )
         return m_xServiceManager->createInstance( aServiceName );
     else
@@ -108,15 +108,15 @@ throw (Exception, RuntimeException)
 }
 
 Reference< XInterface > SAL_CALL ToolbarControllerFactory::createInstanceWithArgumentsAndContext(
-    const ::rtl::OUString&                  ServiceSpecifier,
+    const OUString&                  ServiceSpecifier,
     const Sequence< Any >&                  Arguments,
     const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
-    const rtl::OUString aPropModuleName( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
-    const rtl::OUString aPropValueName( RTL_CONSTASCII_USTRINGPARAM( "Value" ));
+    const OUString aPropModuleName( "ModuleName" );
+    const OUString aPropValueName( "Value" );
 
-    rtl::OUString   aPropName;
+    OUString   aPropName;
     PropertyValue   aPropValue;
 
     // Retrieve the optional module name form the Arguments sequence. It is used as a part of
@@ -139,7 +139,7 @@ throw (Exception, RuntimeException)
 
     // Append the command URL to the Arguments sequence so that one controller can be
     // used for more than one command URL.
-    aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
+    aPropValue.Name     = OUString( "CommandURL" );
     aPropValue.Value  <<= ServiceSpecifier;
     aNewArgs[nAppendIndex] <<= aPropValue;
 
@@ -147,7 +147,7 @@ throw (Exception, RuntimeException)
     {
         // Append the optional value argument. It's an empty string if no additional info
         // is provided to the controller.
-        rtl::OUString aValue = m_pConfigAccess->getValueFromCommandModule( ServiceSpecifier, aPropName );
+        OUString aValue = m_pConfigAccess->getValueFromCommandModule( ServiceSpecifier, aPropName );
         aPropValue.Name = aPropValueName;
         aPropValue.Value <<= aValue;
         aNewArgs[nAppendIndex+1] <<= aPropValue;
@@ -163,7 +163,7 @@ throw (Exception, RuntimeException)
             m_pConfigAccess->readConfigurationData();
         }
 
-        rtl::OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( ServiceSpecifier, aPropName );
+        OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( ServiceSpecifier, aPropName );
         Reference< XMultiServiceFactory > xServiceManager( m_xServiceManager );
 
         aLock.unlock();
@@ -177,16 +177,16 @@ throw (Exception, RuntimeException)
     }
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ToolbarControllerFactory::getAvailableServiceNames()
+Sequence< OUString > SAL_CALL ToolbarControllerFactory::getAvailableServiceNames()
 throw (RuntimeException)
 {
-    return Sequence< ::rtl::OUString >();
+    return Sequence< OUString >();
 }
 
 // XUIControllerRegistration
 sal_Bool SAL_CALL ToolbarControllerFactory::hasController(
-    const ::rtl::OUString& aCommandURL,
-    const rtl::OUString& aModuleName )
+    const OUString& aCommandURL,
+    const OUString& aModuleName )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -201,9 +201,9 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 void SAL_CALL ToolbarControllerFactory::registerController(
-    const ::rtl::OUString& aCommandURL,
-    const ::rtl::OUString& aModuleName,
-    const ::rtl::OUString& aControllerImplementationName )
+    const OUString& aCommandURL,
+    const OUString& aModuleName,
+    const OUString& aControllerImplementationName )
 throw (RuntimeException)
 {
     // SAFE
@@ -220,8 +220,8 @@ throw (RuntimeException)
 }
 
 void SAL_CALL ToolbarControllerFactory::deregisterController(
-    const ::rtl::OUString& aCommandURL,
-    const rtl::OUString& aModuleName )
+    const OUString& aCommandURL,
+    const OUString& aModuleName )
 throw (RuntimeException)
 {
     // SAFE

@@ -80,9 +80,9 @@ bool isHorizontalDockingArea( const sal_Int32 nDockArea )
   return isHorizontalDockingArea(static_cast< ui::DockingArea >( nDockArea ));
 }
 
-::rtl::OUString retrieveToolbarNameFromHelpURL( Window* pWindow )
+OUString retrieveToolbarNameFromHelpURL( Window* pWindow )
 {
-    ::rtl::OUString aToolbarName;
+    OUString aToolbarName;
 
     if ( pWindow->GetType() == WINDOW_TOOLBOX )
     {
@@ -94,7 +94,7 @@ bool isHorizontalDockingArea( const sal_Int32 nDockArea )
             if ( !aToolbarName.isEmpty() && ( i > 0 ) && (( i + 1 ) < aToolbarName.getLength() ))
                 aToolbarName = aToolbarName.copy( i+1 ); // Remove ".HelpId:" protocol from toolbar name
             else
-              aToolbarName = ::rtl::OUString();
+              aToolbarName = OUString();
         }
     }
     return aToolbarName;
@@ -169,7 +169,7 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< un
     // describe window properties.
     css::awt::WindowDescriptor aDescriptor;
     aDescriptor.Type                =   awt::WindowClass_SIMPLE;
-    aDescriptor.WindowServiceName   =   ::rtl::OUString::createFromAscii( pService );
+    aDescriptor.WindowServiceName   =   OUString::createFromAscii( pService );
     aDescriptor.ParentIndex         =   -1;
     aDescriptor.Parent              =   uno::Reference< awt::XWindowPeer >( rParent, uno::UNO_QUERY );
     aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0);
@@ -194,15 +194,15 @@ WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
         return WINDOWALIGN_BOTTOM;
 }
 
-::rtl::OUString getElementTypeFromResourceURL( const ::rtl::OUString& aResourceURL )
+OUString getElementTypeFromResourceURL( const OUString& aResourceURL )
 {
-    ::rtl::OUString aType;
+    OUString aType;
 
-    ::rtl::OUString aUIResourceURL( UIRESOURCE_URL );
+    OUString aUIResourceURL( UIRESOURCE_URL );
     if ( aResourceURL.indexOf( aUIResourceURL ) == 0 )
     {
         sal_Int32       nIndex = 0;
-        ::rtl::OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
+        OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
         aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
 
         return aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
@@ -211,13 +211,13 @@ WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
     return aType;
 }
 
-void parseResourceURL( const rtl::OUString& aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName )
+void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUString& aElementName )
 {
-    ::rtl::OUString aUIResourceURL( UIRESOURCE_URL );
+    OUString aUIResourceURL( UIRESOURCE_URL );
     if ( aResourceURL.indexOf( aUIResourceURL ) == 0 )
     {
         sal_Int32       nIndex = 0;
-        ::rtl::OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
+        OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
         aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
 
         aElementType = aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
@@ -299,9 +299,9 @@ sal_Bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFram
     return sal_False;
 }
 
-void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, const ::rtl::OUString& rDockingWindowName, bool bVisible )
+void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName, bool bVisible )
 {
-    const ::rtl::OUString aDockWinPrefixCommand( RTL_CONSTASCII_USTRINGPARAM( "DockingWindow" ));
+    const OUString aDockWinPrefixCommand( "DockingWindow" );
 
     sal_Int32 nID    = rDockingWindowName.toInt32();
     sal_Int32 nIndex = nID - DOCKWIN_ID_BASE;
@@ -309,10 +309,10 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComp
     css::uno::Reference< css::frame::XDispatchProvider > xProvider(rFrame, css::uno::UNO_QUERY);
     if ( nIndex >= 0 && xProvider.is() )
     {
-        ::rtl::OUString aDockWinCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
-        ::rtl::OUString aDockWinArgName( aDockWinPrefixCommand );
+        OUString aDockWinCommand( ".uno:" );
+        OUString aDockWinArgName( aDockWinPrefixCommand );
 
-        aDockWinArgName += ::rtl::OUString::valueOf( nIndex );
+        aDockWinArgName += OUString::valueOf( nIndex );
 
         css::uno::Sequence< css::beans::PropertyValue > aArgs(1);
         aArgs[0].Name  = aDockWinArgName;
@@ -324,7 +324,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComp
         xDispatcher->executeDispatch(
             xProvider,
             aDockWinCommand,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
+            OUString("_self"),
             0,
             aArgs);
     }

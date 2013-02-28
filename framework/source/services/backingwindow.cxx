@@ -122,7 +122,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
         virtual ~RecentFilesStringLength() {}
 
         // XStringWidth
-        sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
+        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
             throw (::com::sun::star::uno::RuntimeException)
         {
             return aString.getLength();
@@ -160,16 +160,16 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
         Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
         Sequence<Any> args(1);
         PropertyValue val(
-            rtl::OUString( "nodepath" ),
+            OUString( "nodepath" ),
             0,
-            Any(rtl::OUString( "/org.openoffice.Office.Common/Help/StartCenter")),
+            Any(OUString( "/org.openoffice.Office.Common/Help/StartCenter")),
             PropertyState_DIRECT_VALUE);
         args.getArray()[0] <<= val;
         Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
         if( xNameAccess.is() )
         {
             //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-            Any value( xNameAccess->getByName(rtl::OUString("StartCenterHideExternalLinks")) );
+            Any value( xNameAccess->getByName(OUString("StartCenterHideExternalLinks")) );
             mnHideExternalLinks = value.get<sal_Int32>();
         }
     }
@@ -298,7 +298,7 @@ void BackingWindow::prepareRecentFileMenu()
         for ( sal_Int32 i = 0; i < nPickListMenuItems; i++ )
         {
             Sequence< PropertyValue >& rPickListEntry = aHistoryList[i];
-            rtl::OUString aURL, aFilter, aFilterOpt, aTitle;
+            OUString aURL, aFilter, aFilterOpt, aTitle;
 
             for ( sal_Int32 j = 0; j < rPickListEntry.getLength(); j++ )
             {
@@ -328,27 +328,27 @@ void BackingWindow::prepareRecentFileMenu()
             rArgsList.realloc( nArgs );
 
             nArgs--;
-            rArgsList[nArgs].Name = rtl::OUString( "FilterName" );
+            rArgsList[nArgs].Name = OUString( "FilterName" );
             rArgsList[nArgs].Value = makeAny( aFilter );
 
             if( !aFilterOpt.isEmpty() )
             {
                 nArgs--;
-                rArgsList[nArgs].Name = rtl::OUString( "FilterOptions" );
+                rArgsList[nArgs].Name = OUString( "FilterOptions" );
                 rArgsList[nArgs].Value = makeAny( aFilterOpt );
             }
 
             // documents in the picklist will never be opened as templates
             nArgs--;
-            rArgsList[nArgs].Name = rtl::OUString( "AsTemplate" );
+            rArgsList[nArgs].Name = OUString( "AsTemplate" );
             rArgsList[nArgs].Value = makeAny( (sal_Bool) sal_False );
 
             nArgs--;
-            rArgsList[nArgs].Name = rtl::OUString( "Referer" );
-            rArgsList[nArgs].Value = makeAny( rtl::OUString( "private:user"  ) );
+            rArgsList[nArgs].Name = OUString( "Referer" );
+            rArgsList[nArgs].Value = makeAny( OUString( "private:user"  ) );
 
             // and finally create an entry in the popupmenu
-            rtl::OUString   aMenuTitle;
+            OUString   aMenuTitle;
             INetURLObject   aURLObj( aURL );
 
             if ( aURLObj.GetProtocol() == INET_PROT_FILE )
@@ -357,8 +357,8 @@ void BackingWindow::prepareRecentFileMenu()
                 // path and abbreviate it with a special function:
                 String aFileSystemPath( aURLObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-                rtl::OUString   aSystemPath( aFileSystemPath );
-                rtl::OUString   aCompactedSystemPath;
+                OUString   aSystemPath( aFileSystemPath );
+                OUString   aCompactedSystemPath;
 
                 oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
                 if ( !nError )
@@ -372,7 +372,7 @@ void BackingWindow::prepareRecentFileMenu()
                 Reference< util::XStringWidth > xStringLength( new RecentFilesStringLength() );
                 aMenuTitle = aURLObj.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
             }
-            rtl::OUStringBuffer aBuf( aMenuTitle.getLength() + 5 );
+            OUStringBuffer aBuf( aMenuTitle.getLength() + 5 );
             if( i < 9 )
             {
                 aBuf.append( sal_Unicode( '~' ) );
@@ -492,17 +492,17 @@ void BackingWindow::initControls()
 
     // collect the URLs of the entries in the File/New menu
     SvtModuleOptions    aModuleOptions;
-    std::set< rtl::OUString > aFileNewAppsAvailable;
+    std::set< OUString > aFileNewAppsAvailable;
     SvtDynamicMenuOptions aOpt;
     Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
-    const rtl::OUString sURLKey( "URL"  );
+    const OUString sURLKey( "URL"  );
 
     const Sequence< PropertyValue >* pNewMenu = aNewMenu.getConstArray();
     const Sequence< PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
     for ( ; pNewMenu != pNewMenuEnd; ++pNewMenu )
     {
         comphelper::SequenceAsHashMap aEntryItems( *pNewMenu );
-        rtl::OUString sURL( aEntryItems.getUnpackedValueOrDefault( sURLKey, rtl::OUString() ) );
+        OUString sURL( aEntryItems.getUnpackedValueOrDefault( sURLKey, OUString() ) );
         if ( !sURL.isEmpty() )
             aFileNewAppsAvailable.insert( sURL );
     }
@@ -622,14 +622,14 @@ void BackingWindow::loadImage( const ResId& i_rId, PushButton& i_rButton )
 
 void BackingWindow::layoutButton(
                           const char* i_pURL, int nColumn, int i_nExtraWidth,
-                          const std::set<rtl::OUString>& i_rURLS,
+                          const std::set<OUString>& i_rURLS,
                           SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
                           PushButton& i_rBtn,
                           MnemonicGenerator& i_rMnemns,
                           const String& i_rStr
                           )
 {
-    rtl::OUString aURL( i_pURL ? rtl::OUString::createFromAscii( i_pURL ) : rtl::OUString() );
+    OUString aURL( i_pURL ? OUString::createFromAscii( i_pURL ) : OUString() );
     // setup button
     i_rBtn.SetPaintTransparent( sal_True );
     i_rBtn.SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
@@ -880,24 +880,24 @@ IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
             Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
             Sequence<Any> args(1);
             PropertyValue val(
-                rtl::OUString( "nodepath" ),
+                OUString( "nodepath" ),
                 0,
-                Any(rtl::OUString::createFromAscii(pNodePath)),
+                Any(OUString::createFromAscii(pNodePath)),
                 PropertyState_DIRECT_VALUE);
             args.getArray()[0] <<= val;
             Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
             if( xNameAccess.is() )
             {
-                rtl::OUString sURL;
+                OUString sURL;
                 //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-                Any value( xNameAccess->getByName(rtl::OUString::createFromAscii(pNode)) );
-                sURL = value.get<rtl::OUString> ();
+                Any value( xNameAccess->getByName(OUString::createFromAscii(pNode)) );
+                sURL = value.get<OUString> ();
                 localizeWebserviceURI(sURL);
 
                 Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                     com::sun::star::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
                 //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-                xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
+                xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
             }
         }
         catch (const Exception&)
@@ -912,27 +912,27 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 {
     // dispatch the appropriate URL and end the dialog
     if( pButton == &maWriterButton )
-        dispatchURL( rtl::OUString( WRITER_URL ) );
+        dispatchURL( OUString( WRITER_URL ) );
     else if( pButton == &maCalcButton )
-        dispatchURL( rtl::OUString( CALC_URL ) );
+        dispatchURL( OUString( CALC_URL ) );
     else if( pButton == &maImpressButton )
-        dispatchURL( rtl::OUString( IMPRESS_WIZARD_URL ) );
+        dispatchURL( OUString( IMPRESS_WIZARD_URL ) );
     else if( pButton == &maDrawButton )
-        dispatchURL( rtl::OUString( DRAW_URL ) );
+        dispatchURL( OUString( DRAW_URL ) );
     else if( pButton == &maDBButton )
-        dispatchURL( rtl::OUString( BASE_URL ) );
+        dispatchURL( OUString( BASE_URL ) );
     else if( pButton == &maMathButton )
-        dispatchURL( rtl::OUString( MATH_URL ) );
+        dispatchURL( OUString( MATH_URL ) );
     else if( pButton == &maOpenButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString("Referer");
-        pArg[0].Value <<= rtl::OUString("private:user");
+        pArg[0].Name = OUString("Referer");
+        pArg[0].Value <<= OUString("private:user");
 
-        dispatchURL( rtl::OUString( OPEN_URL ), rtl::OUString(), xFrame, aArgs );
+        dispatchURL( OUString( OPEN_URL ), OUString(), xFrame, aArgs );
     }
     else if( pButton == &maTemplateButton )
     {
@@ -940,10 +940,10 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString("Referer");
-        pArg[0].Value <<= rtl::OUString("private:user");
+        pArg[0].Name = OUString("Referer");
+        pArg[0].Value <<= OUString("private:user");
 
-        dispatchURL( rtl::OUString( TEMPLATE_URL ), rtl::OUString(), xFrame, aArgs );
+        dispatchURL( OUString( TEMPLATE_URL ), OUString(), xFrame, aArgs );
     }
     return 0;
 }
@@ -956,7 +956,7 @@ IMPL_LINK( BackingWindow, SelectHdl, Button*, pButton )
         if( nItem >= 0 && nItem < sal_Int32(maRecentFiles.size()) )
         {
             Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
-            dispatchURL( maRecentFiles[nItem].aTargetURL, rtl::OUString(), xFrame, maRecentFiles[nItem].aArgSeq );
+            dispatchURL( maRecentFiles[nItem].aTargetURL, OUString(), xFrame, maRecentFiles[nItem].aArgSeq );
         }
     }
     return 0;
@@ -1003,8 +1003,8 @@ static long implDispatchDelayed( void*, void* pArg )
     return 0;
 }
 
-void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
-                                 const rtl::OUString& rTarget,
+void BackingWindow::dispatchURL( const OUString& i_rURL,
+                                 const OUString& rTarget,
                                  const Reference< XDispatchProvider >& i_xProv,
                                  const Sequence< PropertyValue >& i_rArgs )
 {

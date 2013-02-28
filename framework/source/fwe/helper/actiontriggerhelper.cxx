@@ -54,7 +54,7 @@ sal_Bool IsSeparator( Reference< XPropertySet > xPropertySet )
     Reference< XServiceInfo > xServiceInfo( xPropertySet, UNO_QUERY );
     try
     {
-        return xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERSEPARATOR )) );
+        return xServiceInfo->supportsService( OUString( SERVICENAME_ACTIONTRIGGERSEPARATOR ) );
     }
     catch (const Exception&)
     {
@@ -75,13 +75,13 @@ void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
     try
     {
         // mandatory properties
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" )) );
+        a = xActionTriggerPropertySet->getPropertyValue( OUString( "Text" ) );
         a >>= aMenuLabel;
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" )) );
+        a = xActionTriggerPropertySet->getPropertyValue( OUString( "CommandURL" ) );
         a >>= aCommandURL;
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Image" )) );
+        a = xActionTriggerPropertySet->getPropertyValue( OUString( "Image" ) );
         a >>= xBitmap;
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SubContainer" )) );
+        a = xActionTriggerPropertySet->getPropertyValue( OUString( "SubContainer" ) );
         a >>= xSubContainer;
     }
     catch (const Exception&)
@@ -91,7 +91,7 @@ void GetMenuItemAttributes( Reference< XPropertySet > xActionTriggerPropertySet,
     // optional properties
     try
     {
-        a = xActionTriggerPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpURL" )) );
+        a = xActionTriggerPropertySet->getPropertyValue( OUString( "HelpURL" ) );
         a >>= aHelpURL;
     }
     catch (const Exception&)
@@ -105,7 +105,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
     if ( xIndexAccess.is() )
     {
         AddonsOptions aAddonOptions;
-        OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+        OUString aSlotURL( "slot:" );
 
         for ( sal_Int32 i = 0; i < xIndexAccess->getCount(); i++ )
         {
@@ -252,7 +252,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
     if ( xMultiServiceFactory.is() )
     {
         xPropSet = Reference< XPropertySet >(   xMultiServiceFactory->createInstance(
-                                                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ActionTrigger" )) ),
+                                                    OUString( "com.sun.star.ui.ActionTrigger" ) ),
                                                 UNO_QUERY );
 
         Any a;
@@ -262,18 +262,18 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
             // Retrieve the menu attributes and set them in our PropertySet
             OUString aLabel = pMenu->GetItemText( nItemId );
             a <<= aLabel;
-            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" )), a );
+            xPropSet->setPropertyValue( OUString( "Text" ), a );
 
             OUString aCommandURL = pMenu->GetItemCommand( nItemId );
 
             if ( aCommandURL.isEmpty() )
             {
-                aCommandURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                aCommandURL = OUString( "slot:" );
                 aCommandURL += OUString::valueOf( (sal_Int32)nItemId );
             }
 
             a <<= aCommandURL;
-            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" )), a );
+            xPropSet->setPropertyValue( OUString( "CommandURL" ), a );
 
             Image aImage = pMenu->GetItemImage( nItemId );
             if ( !!aImage )
@@ -281,7 +281,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
                 // We use our own optimized XBitmap implementation
                 Reference< XBitmap > xBitmap( static_cast< cppu::OWeakObject* >( new ImageWrapper( aImage )), UNO_QUERY );
                 a <<= xBitmap;
-                xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Image" )), a );
+                xPropSet->setPropertyValue( OUString( "Image" ), a );
             }
         }
         catch (const Exception&)
@@ -298,7 +298,7 @@ Reference< XPropertySet > CreateActionTriggerSeparator( const Reference< XIndexC
     if ( xMultiServiceFactory.is() )
     {
         return Reference< XPropertySet >(   xMultiServiceFactory->createInstance(
-                                                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ActionTriggerSeparator" )) ),
+                                                OUString( "com.sun.star.ui.ActionTriggerSeparator" ) ),
                                             UNO_QUERY );
     }
 
@@ -311,7 +311,7 @@ Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XInd
     if ( xMultiServiceFactory.is() )
     {
         return Reference< XIndexContainer >( xMultiServiceFactory->createInstance(
-                                                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ActionTriggerContainer" )) ),
+                                                OUString( "com.sun.star.ui.ActionTriggerContainer" ) ),
                                              UNO_QUERY );
     }
 
@@ -353,7 +353,7 @@ void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexCon
                     Reference< XIndexContainer > xSubContainer = CreateActionTriggerContainer( rActionTriggerContainer );
 
                     a <<= xSubContainer;
-                    xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SubContainer" )), a );
+                    xPropSet->setPropertyValue( OUString( "SubContainer" ), a );
                     FillActionTriggerContainerWithMenu( pPopupMenu, xSubContainer );
                 }
             }
@@ -383,7 +383,7 @@ void ActionTriggerHelper::FillActionTriggerContainerFromMenu(
 
 Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
     const Menu* pMenu,
-    const ::rtl::OUString* pMenuIdentifier )
+    const OUString* pMenuIdentifier )
 {
     return new RootActionTriggerContainer( pMenu, pMenuIdentifier );
 }
