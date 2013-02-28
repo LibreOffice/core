@@ -57,7 +57,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     propex \
     reg2bin \
     regsvrex \
-    renewpo \
     rsc \
     rscdep \
     saxparser \

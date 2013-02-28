@@ -36,7 +36,6 @@ $(eval $(call gb_Module_add_targets,l10ntools,\
     Executable_xrmex \
     Executable_localize \
     Executable_transex3 \
-    Executable_renewpo \
     Executable_propex \
     Executable_treex \
     Executable_stringex \
