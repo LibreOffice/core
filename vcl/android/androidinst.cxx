@@ -278,8 +278,6 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
     ANativeWindow_Buffer aOutBuffer;
     memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
 
-    LOGI("RedrawWindows");
-
     int32_t nRet = 0;
     if (pBuffer != NULL)
         aOutBuffer = *pBuffer;
@@ -318,8 +316,9 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
 
             if (pFrame->IsVisible())
             {
-                LOGI("render visible frame %d", i );
-#ifndef REGION_RE_RENDER
+#ifndef REGION_RE_RENDER // (It isn't defined, don't know where it
+                         // would/could bem so this branch is the one
+                         // that is used)
                 BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
 #else
                 // Sadly it seems that due to double buffering, we don't
@@ -353,7 +352,6 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
     if (pBuffer && pWindow)
         ANativeWindow_unlockAndPost(pWindow);
 
-    LOGI("done render!");
     maRedrawRegion.SetEmpty();
     mbQueueReDraw = false;
 }
