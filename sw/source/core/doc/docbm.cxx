@@ -644,16 +644,24 @@ namespace sw { namespace mark
             }
         }
 
-        // we just remembered the iterators to delete, so we do not need to search
-        // for the boost::shared_ptr<> (the entry in m_vMarks) again
-        // reverse iteration, since erasing an entry invalidates iterators
-        // behind it (the iterators in vMarksToDelete are sorted)
-        for(vector<const_iterator_t>::reverse_iterator pppMark = vMarksToDelete.rbegin();
-            pppMark != vMarksToDelete.rend();
-            ++pppMark)
         {
-            deleteMark(*pppMark);
-        }
+            // fdo#61016 delay the deletion of the fieldmark characters
+            // to prevent that from deleting the marks on that position
+            // which would invalidate the iterators in vMarksToDelete
+            vector< ::boost::shared_ptr<ILazyDeleter> > vDelay;
+            vDelay.reserve(vMarksToDelete.size());
+            // we just remembered the iterators to delete, so we do not need to
+            // search for the boost::shared_ptr<> (the entry in m_vMarks) again.
+            // reverse iteration, since erasing an entry invalidates iterators
+            // behind it (the iterators in vMarksToDelete are sorted)
+            for (vector<const_iterator_t>::reverse_iterator pppMark
+                    = vMarksToDelete.rbegin();
+                pppMark != vMarksToDelete.rend();
+                ++pppMark)
+            {
+                vDelay.push_back(deleteMark(*pppMark));
+            }
+        } // scope to kill vDelay
         if(isSortingNeeded)
             sortMarks();
 #if 0
@@ -662,9 +670,26 @@ namespace sw { namespace mark
 #endif
     }
 
-    void MarkManager::deleteMark(const const_iterator_t ppMark)
+    struct LazyTextFieldmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
     {
-        if(ppMark == m_vMarks.end()) return;
+        ::boost::shared_ptr<IMark> const m_pTextFieldmark;
+        SwDoc *const m_pDoc;
+        LazyTextFieldmarkDeleter(
+                ::boost::shared_ptr<IMark> const& pMark, SwDoc *const pDoc)
+            : m_pTextFieldmark(pMark), m_pDoc(pDoc)
+        { }
+        virtual ~LazyTextFieldmarkDeleter()
+        {
+            dynamic_cast<TextFieldmark*>(m_pTextFieldmark.get())
+                ->ReleaseDoc(m_pDoc);
+        }
+    };
+
+    ::boost::shared_ptr<IDocumentMarkAccess::ILazyDeleter>
+        MarkManager::deleteMark(const const_iterator_t ppMark)
+    {
+        ::boost::shared_ptr<ILazyDeleter> ret;
+        if (ppMark == m_vMarks.end()) return ret;
 
         switch(IDocumentMarkAccess::GetType(**ppMark))
         {
@@ -690,7 +715,10 @@ namespace sw { namespace mark
                 m_vFieldmarks.erase(ppFieldmark);
                 sw::mark::TextFieldmark* pTextFieldmark = dynamic_cast<sw::mark::TextFieldmark*>(ppMark->get());
                 if (pTextFieldmark)
-                    pTextFieldmark->ReleaseDoc(m_pDoc);
+                {
+                    ret.reset(
+                        new LazyTextFieldmarkDeleter(*ppMark, m_pDoc));
+                }
                 break;
             }
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:
@@ -721,6 +749,7 @@ namespace sw { namespace mark
         pMark_t xHoldPastErase = *aI;
         m_aMarkNamesSet.erase(ppMark->get()->GetName());
         m_vMarks.erase(aI);
+        return ret;
     }
 
     void MarkManager::deleteMark(const IMark* const pMark)
