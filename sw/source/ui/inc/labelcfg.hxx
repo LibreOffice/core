@@ -28,10 +28,16 @@
 class SwLabRecs;
 class SwLabRec;
 
+struct SwLabelMeasure
+{
+    OUString m_aMeasure;     // string contains the label dimensions
+    bool     m_bPredefined;  // used to distinguish predefined from user-defined labels
+};
+
 class SW_DLLPUBLIC SwLabelConfig : public utl::ConfigItem
 {
     std::vector<rtl::OUString> m_aManufacturers;
-    std::map< OUString, std::map<OUString, OUString> > m_aLabels;
+    std::map< OUString, std::map<OUString, SwLabelMeasure> > m_aLabels;
 
 public:
     SwLabelConfig();
@@ -40,11 +46,12 @@ public:
     virtual void Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
-    void FillManufacturers();
     void    FillLabels(const rtl::OUString& rManufacturer, SwLabRecs& rLabArr);
     const std::vector<rtl::OUString>& GetManufacturers() const {return m_aManufacturers;}
 
     sal_Bool    HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType);
+    bool        IsPredefinedLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType)
+                  { return m_aLabels[rManufacturer][rType].m_bPredefined; };
     void        SaveLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType,
                             const SwLabRec& rRec);
 };
