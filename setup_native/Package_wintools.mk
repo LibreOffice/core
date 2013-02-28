@@ -10,7 +10,7 @@
 $(eval $(call gb_Package_Package,setup_native_wintools,$(call gb_CustomTarget_get_workdir,setup_native/wintools)))
 
 $(eval $(call gb_Package_add_files,setup_native_wintools,bin,\
-	mackcab.exe \
+	makecab.exe \
 	msidb.exe \
 	msiinfo.exe \
 	msimsp.exe \
