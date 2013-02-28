@@ -383,19 +383,10 @@ $(call gb_HelpLinkTarget_get_target,$(1)) : $(3)
 
 endef
 
-# Use help files from another help module for references.
-#
-# gb_HelpLinkTarget_use_module target help
-define gb_HelpLinkTarget_use_module
-$(call gb_HelpLinkTarget_get_preparation_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(2))
-
-endef
-
 # Link with help files from another help module.
 #
 # gb_HelpLinkTarget_use_linked_module target help
 define gb_HelpLinkTarget_use_linked_module
-$(call gb_HelpLinkTarget_use_module,$(1),$(2))
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_LINKED_MODULES += $(2)
 
 endef
@@ -530,10 +521,15 @@ $(dir $(call gb_HelpTarget_get_target,%)).dir :
 $(dir $(call gb_HelpTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-# Translation of the module's .xhp files is done. Also creates the list
-# for gb_HelpTarget_get_filelist.
+# Translation of the module's .xhp files and all used modules is done.
+# Also creates the list for gb_HelpTarget_get_filelist.
 $(call gb_HelpTarget_get_translation_target,%) :
 	rm -f $@ && mv $(call var2file,$@.tmp,100,$(HELP_FILES)) $@
+
+# Translation of the module's .xhp files and all used and linked modules
+# is done.
+$(call gb_HelpTarget_get_linked_target,%) :
+	touch $@
 
 $(call gb_HelpTarget_get_target,%) :
 	$(call gb_HelpTarget__get_command,$@,$*)
@@ -547,6 +543,7 @@ $(call gb_HelpTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),HLP,4)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf \
+			$(call gb_HelpTarget_get_linked_target,$*) \
 			$(call gb_HelpTarget_get_packing_target,$*) \
 			$(call gb_HelpTarget_get_target,$*) \
 			$(call gb_HelpTarget_get_translation_target,$*) \
@@ -576,11 +573,13 @@ $(call gb_HelpLinkTarget_HelpLinkTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpIndexTarget_HelpIndexTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpJarTarget_HelpJarTarget,$(1),$(2),$(4))
 
-$(call gb_HelpLinkTarget_get_preparation_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
+$(call gb_HelpTarget_get_linked_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
+$(call gb_HelpLinkTarget_get_preparation_target,$(1)) : $(call gb_HelpTarget_get_linked_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) :| $(call gb_HelpTarget_get_workdir,$(1))/.dir
 $(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 $(call gb_HelpTarget_get_target,$(1)) : $(call gb_HelpTarget_get_packing_target,$(1))
 
+$(call gb_HelpTarget_get_linked_target,$(1)) :| $(dir $(call gb_HelpTarget_get_linked_target,$(1))).dir
 $(call gb_HelpTarget_get_packing_target,$(1)) :| $(dir $(call gb_HelpTarget_get_packing_target,$(1))).dir
 $(call gb_HelpTarget_get_target,$(1)) :| $(dir $(call gb_HelpTarget_get_target,$(1))).dir
 $(call gb_HelpTarget_get_translation_target,$(1)) :| $(dir $(call gb_HelpTarget_get_translation_target,$(1))).dir
@@ -595,7 +594,7 @@ $(call gb_HelpTranslateTarget_HelpTranslateTarget,$(1),$(3))
 $(call gb_HelpTreeTarget_HelpTreeTarget,$(1),$(3))
 
 $(call gb_HelpTarget_get_translation_target,$(1)) : $(call gb_HelpTranslateTarget_get_target,$(1))
-$(call gb_HelpTreeTarget_get_target,$(1)) : $(call gb_HelpTranslateTarget_get_target,$(1))
+$(call gb_HelpTreeTarget_get_target,$(1)) : $(call gb_HelpTarget_get_linked_target,$(1))
 
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpTranslateTarget_get_clean_target,$(1))
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpTreeTarget_get_clean_target,$(1))
@@ -723,7 +722,7 @@ endef
 
 # gb_HelpTarget_use_module target module
 define gb_HelpTarget_use_module
-$(call gb_HelpLinkTarget_use_module,$(1),$(2))
+$(call gb_HelpTarget_get_translation_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(2))
 
 endef
 
@@ -736,6 +735,7 @@ endef
 # gb_HelpTarget_use_linked_module target module
 define gb_HelpTarget_use_linked_module
 $(call gb_HelpLinkTarget_use_linked_module,$(1),$(2))
+$(call gb_HelpTarget_get_linked_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(2))
 
 endef
 

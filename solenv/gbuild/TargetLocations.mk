@@ -126,6 +126,7 @@ gb_HelpJarTarget_get_target = $(WORKDIR)/HelpJarTarget/$(1).done
 gb_HelpLinkTarget_get_preparation_target = $(WORKDIR)/HelpLinkTarget/$(1).prepare
 gb_HelpLinkTarget_get_target = $(WORKDIR)/HelpLinkTarget/$(1).done
 gb_HelpTarget_get_filelist = $(WORKDIR)/HelpTarget/$(1).filelist
+gb_HelpTarget_get_linked_target = $(WORKDIR)/HelpTarget/$(1).translate
 gb_HelpTarget_get_packing_target = $(WORKDIR)/HelpTarget/$(1).packing
 gb_HelpTarget_get_target = $(WORKDIR)/HelpTarget/$(1).zip
 gb_HelpTarget_get_translation_target = $(call gb_HelpTarget_get_filelist,$(1))
