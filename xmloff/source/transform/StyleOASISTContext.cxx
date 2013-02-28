@@ -315,18 +315,26 @@ void XMLPropertiesTContext_Impl::StartElement(
                     break;
                 case XML_OPTACTION_INTERPOLATION:
                     {
-                        // 0: none
-                        sal_Int32 nSplineType = 0;
+                        // 0: none (default)
+                        sal_Int32 nLineType = 0;
                         if( IsXMLToken( rAttrValue, XML_CUBIC_SPLINE ))
-                            nSplineType = 1;
+                            nLineType = 1;
                         else if( IsXMLToken( rAttrValue, XML_B_SPLINE ))
-                            nSplineType = 2;
+                            nLineType = 2;
+                        else if( IsXMLToken( rAttrValue, XML_STEP_START )    || IsXMLToken( rAttrValue, XML_GNM_STEP_START ) )
+                            nLineType = 3;
+                        else if( IsXMLToken( rAttrValue, XML_STEP_END )      || IsXMLToken( rAttrValue, XML_GNM_STEP_END ) )
+                            nLineType = 4;
+                        else if( IsXMLToken( rAttrValue, XML_STEP_CENTER_X ) || IsXMLToken( rAttrValue, XML_GNM_STEP_CENTER_X ) )
+                            nLineType = 5;
+                        else if( IsXMLToken( rAttrValue, XML_STEP_CENTER_Y ) || IsXMLToken( rAttrValue, XML_GNM_STEP_CENTER_Y ) )
+                            nLineType = 6;
 
                         pAttrList->AddAttribute(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_CHART,
                                 GetXMLToken( XML_SPLINES )),
-                            OUString::valueOf( nSplineType ));
+                            OUString::valueOf( nLineType ));
                     }
                     break;
                 case XML_OPTACTION_INTERVAL_MAJOR:
