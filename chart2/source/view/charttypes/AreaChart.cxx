@@ -287,6 +287,135 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
     rPolyPoly=aTmp;
 }
 
+bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, chart2::CurveStyle eCurveStyle, PlottingPositionHelper* pPosHelper, drawing::PolyPolygonShape3D &aPoly )
+{
+    drawing::PolyPolygonShape3D aSteppedPoly;
+
+    aSteppedPoly.SequenceX.realloc(0);
+    aSteppedPoly.SequenceY.realloc(0);
+    aSteppedPoly.SequenceZ.realloc(0);
+
+    sal_uInt32 nOuterCount = aStartPoly.SequenceX.getLength();
+    if ( !nOuterCount )
+        return false;
+
+    aSteppedPoly.SequenceX.realloc(nOuterCount);
+    aSteppedPoly.SequenceY.realloc(nOuterCount);
+    aSteppedPoly.SequenceZ.realloc(nOuterCount);
+    for( sal_uInt32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
+    {
+        if( aStartPoly.SequenceX[nOuter].getLength() <= 1 )
+            continue; //we need at least two points
+
+        sal_uInt32 nMaxIndexPoints = aStartPoly.SequenceX[nOuter].getLength()-1; // is >1
+        sal_uInt32 nNewIndexPoints = 0;
+        if ( CurveStyle_STEP_START==eCurveStyle || CurveStyle_STEP_END==eCurveStyle)
+            nNewIndexPoints = nMaxIndexPoints * 2 + 1;
+        else
+            nNewIndexPoints = nMaxIndexPoints * 3 + 1;
+
+        const double* pOldX = aStartPoly.SequenceX[nOuter].getConstArray();
+        const double* pOldY = aStartPoly.SequenceY[nOuter].getConstArray();
+        const double* pOldZ = aStartPoly.SequenceZ[nOuter].getConstArray();
+
+        aSteppedPoly.SequenceX[nOuter].realloc( nNewIndexPoints );
+        aSteppedPoly.SequenceY[nOuter].realloc( nNewIndexPoints );
+        aSteppedPoly.SequenceZ[nOuter].realloc( nNewIndexPoints );
+
+        double* pNewX = aSteppedPoly.SequenceX[nOuter].getArray();
+        double* pNewY = aSteppedPoly.SequenceY[nOuter].getArray();
+        double* pNewZ = aSteppedPoly.SequenceZ[nOuter].getArray();
+
+        pNewX[0] = pOldX[0];
+        pNewY[0] = pOldY[0];
+        pNewZ[0] = pOldZ[0];
+        for( sal_uInt32 oi = 0; oi < nMaxIndexPoints; oi++ )
+        {
+            switch ( eCurveStyle )
+            {
+                case CurveStyle_STEP_START:
+                     /**           O
+                                   |
+                                   |
+                                   |
+                             O-----+
+                     */
+                    // create the intermediate point
+                    pNewX[1+oi*2] = pOldX[oi+1];
+                    pNewY[1+oi*2] = pOldY[oi];
+                    pNewZ[1+oi*2] = pOldZ[oi];
+                    // and now the normal one
+                    pNewX[1+oi*2+1] = pOldX[oi+1];
+                    pNewY[1+oi*2+1] = pOldY[oi+1];
+                    pNewZ[1+oi*2+1] = pOldZ[oi+1];
+                    break;
+                case CurveStyle_STEP_END:
+                     /**    +------O
+                            |
+                            |
+                            |
+                            O
+                     */
+                    // create the intermediate point
+                    pNewX[1+oi*2] = pOldX[oi];
+                    pNewY[1+oi*2] = pOldY[oi+1];
+                    pNewZ[1+oi*2] = pOldZ[oi];
+                    // and now the normal one
+                    pNewX[1+oi*2+1] = pOldX[oi+1];
+                    pNewY[1+oi*2+1] = pOldY[oi+1];
+                    pNewZ[1+oi*2+1] = pOldZ[oi+1];
+                    break;
+                case CurveStyle_STEP_CENTER_X:
+                     /**        +--O
+                                |
+                                |
+                                |
+                             O--+
+                     */
+                    // create the first intermediate point
+                    pNewX[1+oi*3] = (pOldX[oi]+pOldX[oi+1])/2;
+                    pNewY[1+oi*3] = pOldY[oi];
+                    pNewZ[1+oi*3] = pOldZ[oi];
+                    // create the second intermediate point
+                    pNewX[1+oi*3+1] = (pOldX[oi]+pOldX[oi+1])/2;
+                    pNewY[1+oi*3+1] = pOldY[oi+1];
+                    pNewZ[1+oi*3+1] = pOldZ[oi];
+                    // and now the normal one
+                    pNewX[1+oi*3+2] = pOldX[oi+1];
+                    pNewY[1+oi*3+2] = pOldY[oi+1];
+                    pNewZ[1+oi*3+2] = pOldZ[oi+1];
+                    break;
+                case CurveStyle_STEP_CENTER_Y:
+                     /**           O
+                                   |
+                             +-----+
+                             |
+                             O
+                     */
+                    // create the first intermediate point
+                    pNewX[1+oi*3] = pOldX[oi];
+                    pNewY[1+oi*3] = (pOldY[oi]+pOldY[oi+1])/2;
+                    pNewZ[1+oi*3] = pOldZ[oi];
+                    // create the second intermediate point
+                    pNewX[1+oi*3+1] = pOldX[oi+1];
+                    pNewY[1+oi*3+1] = (pOldY[oi]+pOldY[oi+1])/2;
+                    pNewZ[1+oi*3+1] = pOldZ[oi];
+                    // and now the normal one
+                    pNewX[1+oi*3+2] = pOldX[oi+1];
+                    pNewY[1+oi*3+2] = pOldY[oi+1];
+                    pNewZ[1+oi*3+2] = pOldZ[oi+1];
+                    break;
+                default:
+                    // this should never be executed
+                    OSL_FAIL("Unknown curvestyle in AreaChart::create_stepped_line");
+            }
+        }
+    }
+    Clipping::clipPolygonAtRectangle( aSteppedPoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
+
+    return true;
+}
+
 bool AreaChart::impl_createLine( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pSeriesPoly
                 , PlottingPositionHelper* pPosHelper )
@@ -309,8 +438,20 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
         lcl_removeDuplicatePoints( aSplinePoly, *pPosHelper );
         Clipping::clipPolygonAtRectangle( aSplinePoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
-    else
+    else if (CurveStyle_STEP_START==m_eCurveStyle ||
+             CurveStyle_STEP_END==m_eCurveStyle ||
+             CurveStyle_STEP_CENTER_Y==m_eCurveStyle ||
+             CurveStyle_STEP_CENTER_X==m_eCurveStyle
+            )
     {
+        if (!create_stepped_line(*pSeriesPoly, m_eCurveStyle, pPosHelper, aPoly))
+        {
+            return false;
+        }
+    }
+    else
+    { // default to creating a straight line
+        SAL_WARN_IF(CurveStyle_LINES != m_eCurveStyle, "chart2.areachart", "Unknown curve style");
         bool bIsClipped = false;
         if( m_bConnectLastToFirstPoint && !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
         {

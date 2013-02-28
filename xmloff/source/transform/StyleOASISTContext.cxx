@@ -315,7 +315,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                     break;
                 case XML_OPTACTION_INTERPOLATION:
                     {
-                        // 0: none
+                        // 0: none (default)
                         sal_Int32 nSplineType = 0;
                         if( IsXMLToken( rAttrValue, XML_CUBIC_SPLINE ))
                             nSplineType = 1;

@@ -2556,6 +2556,16 @@ namespace xmloff { namespace token {
         TOKEN( "interpolation",                XML_INTERPOLATION ),
         TOKEN( "cubic-spline",                 XML_CUBIC_SPLINE ),
         TOKEN( "b-spline",                     XML_B_SPLINE ),
+        TOKEN( "step-start",                   XML_STEP_START ),
+        TOKEN( "step-end",                     XML_STEP_END ),
+        TOKEN( "step-center-x",                XML_STEP_CENTER_X ),
+        TOKEN( "step-center-y",                XML_STEP_CENTER_Y ),
+        // the gnm: values should only used for reading Gnumeric ods file
+        // these values should never be written
+        TOKEN( "gnm:step-start",               XML_GNM_STEP_START ),
+        TOKEN( "gnm:step-end",                 XML_GNM_STEP_END ),
+        TOKEN( "gnm:step-center-x",            XML_GNM_STEP_CENTER_X ),
+        TOKEN( "gnm:step-center-y",            XML_GNM_STEP_CENTER_Y ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:database:1.0",     XML_N_DB_OASIS ),
 
         TOKEN( "show-filter-button",                   XML_SHOW_FILTER_BUTTON ),

@@ -290,10 +290,20 @@ SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
 {
     // this is neither an enum nor a constants group, but just a
     // documented long property
-    { ::xmloff::token::XML_NONE,         0 },
-    { ::xmloff::token::XML_CUBIC_SPLINE, 1 },
-    { ::xmloff::token::XML_B_SPLINE,     2 },
-    { ::xmloff::token::XML_TOKEN_INVALID,0 }
+    { ::xmloff::token::XML_NONE,               0 },
+    { ::xmloff::token::XML_CUBIC_SPLINE,       1 },
+    { ::xmloff::token::XML_B_SPLINE,           2 },
+    { ::xmloff::token::XML_STEP_START,         3 },
+    { ::xmloff::token::XML_STEP_END,           4 },
+    { ::xmloff::token::XML_STEP_CENTER_X,      5 },
+    { ::xmloff::token::XML_STEP_CENTER_Y,      6 },
+    // the GNM values should only be used for reading Gnumeric ods files
+    // they should never be used for writing ods file
+    { ::xmloff::token::XML_GNM_STEP_START,     7 },
+    { ::xmloff::token::XML_GNM_STEP_END,       8 },
+    { ::xmloff::token::XML_GNM_STEP_CENTER_X,  9 },
+    { ::xmloff::token::XML_GNM_STEP_CENTER_Y, 10 },
+    { ::xmloff::token::XML_TOKEN_INVALID,      0 }
 };
 
 SvXMLEnumMapEntry aXMLChartDataLabelPlacementEnumMap[] =
