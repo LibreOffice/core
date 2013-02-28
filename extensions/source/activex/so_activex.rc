@@ -118,7 +118,7 @@ END
 // Generated from the TEXTINCLUDE 3 resource.
 //
 
-1 TYPELIB SO_ACTIVEX_TLB_DIR\so_activex.tlb
+1 TYPELIB SO_ACTIVEX_TLB
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
