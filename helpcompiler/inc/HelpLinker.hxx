@@ -59,6 +59,7 @@ public:
     HelpLinker()
         : m_pIndexerPreProcessor(NULL)
         , m_bUseLangRoot(true)
+        , m_bCreateIndex(true)
     {}
     ~HelpLinker()
         { delete m_pIndexerPreProcessor; }
@@ -84,6 +85,7 @@ private:
     fs::path indexDirParentName;
     IndexerPreProcessor* m_pIndexerPreProcessor;
     bool m_bUseLangRoot;
+    bool m_bCreateIndex;
     void initIndexerPreProcessor();
     void link() throw( HelpProcessingException );
     void addBookmark( FILE* pFile_DBHelp, std::string thishid,

@@ -155,6 +155,7 @@ endef
 # gb_AllLangHelp__use_linked_module module other-module lang
 define gb_AllLangHelp__use_linked_module
 $(call gb_HelpTarget_use_linked_module,$(call gb_AllLangHelp__get_helpname,$(1),$(3)),$(call gb_AllLangHelp__get_helpname,$(2),$(3)))
+$(call gb_HelpTarget_set_indexed,$(call gb_AllLangHelp__get_helpname,$(1),$(3)))
 
 endef
 

@@ -398,6 +398,9 @@ void HelpLinker::link() throw( HelpProcessingException )
             throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
         }
 
+        if (!m_bCreateIndex)
+            continue;
+
         std::string documentPath = streamTable.document_path;
         if (documentPath.find("/") == 0)
             documentPath = documentPath.substr(1);
@@ -736,6 +739,8 @@ void HelpLinker::main( std::vector<std::string> &args,
         }
         else if (args[i].compare("-nolangroot") == 0)
             m_bUseLangRoot = false;
+        else if (args[i].compare("-noindex") == 0)
+            m_bCreateIndex = false;
         else
             helpFiles.push_back(args[i]);
         ++i;

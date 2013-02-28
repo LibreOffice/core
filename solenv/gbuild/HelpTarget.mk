@@ -262,6 +262,7 @@ $(call gb_Output_announce,$(2),$(true),HLK,3)
 RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\
 	-lang $(HELP_LANG) \
 	-mod $(HELP_MODULE) \
+	$(if $(HELP_INDEXED),,-noindex) \
 	-nolangroot \
 	-o $(WORKDIR)/dummy.zip \
 	-src $(HELP_SRCDIR) \
@@ -314,6 +315,7 @@ $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_ADD_FILES :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_CONFIGDIR :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_EXTRA_ADD_FILES :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_FILES :=
+$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_INDEXED :=
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_MODULE := $(2)
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_LANG := $(3)
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_LINKED_MODULES :=
@@ -343,6 +345,12 @@ endef
 define gb_HelpLinkTarget_set_treefile
 $(call gb_HelpLinkTarget_get_target,$(1)) : HELP_TREE := $(2)
 $(call gb_HelpLinkTarget_get_target,$(1)) : $(2)
+
+endef
+
+# gb_HelpLinkTarget_set_indexed target
+define gb_HelpLinkTarget_set_indexed
+$(call gb_HelpLinkTarget_get_target,$(1)) : HELP_INDEXED := $(true)
 
 endef
 
@@ -568,12 +576,9 @@ $(call gb_HelpIndexTarget_HelpIndexTarget,$(1),$(2),$(3),$(4))
 $(call gb_HelpJarTarget_HelpJarTarget,$(1),$(2),$(4))
 $(call gb_Zip_Zip_internal_nodeliver,$(call gb_HelpTarget_get_zipname,$(1)),$(4))
 
-$(call gb_HelpTarget__add_initial_files,$(1),$(2),$(4))
-
 $(call gb_HelpLinkTarget_get_preparation_target,$(1)) : $(call gb_HelpTarget_get_translation_target,$(1))
 $(call gb_HelpLinkTarget_get_target,$(1)) :| $(call gb_HelpTarget_get_workdir,$(1))/.dir
-$(call gb_HelpIndexTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
-$(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpIndexTarget_get_target,$(1))
+$(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
 $(call gb_Zip_get_target,$(call gb_HelpTarget_get_zipname,$(1))) : $(call gb_HelpTarget_get_packing_target,$(1))
 $(call gb_HelpTarget_get_target,$(1)) : $(call gb_Zip_get_target,$(call gb_HelpTarget_get_zipname,$(1)))
 
@@ -582,7 +587,6 @@ $(call gb_HelpTarget_get_target,$(1)) :| $(dir $(call gb_HelpTarget_get_target,$
 $(call gb_HelpTarget_get_translation_target,$(1)) :| $(dir $(call gb_HelpTarget_get_translation_target,$(1))).dir
 
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpLinkTarget_get_clean_target,$(1))
-$(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpIndexTarget_get_clean_target,$(1))
 $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_Zip_get_clean_target,$(call gb_HelpTarget_get_zipname,$(1)))
 
 endef
@@ -600,10 +604,10 @@ $(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpTreeTarget_get_clean
 
 endef
 
-# Add always-present files into the zip.
+# Add index files into the zip.
 #
-# gb_HelpTarget__add_initial_files target module workdir
-define gb_HelpTarget__add_initial_files
+# gb_HelpTarget__add_index_files target module
+define gb_HelpTarget__add_index_files
 $(call gb_HelpTarget__add_file,$(1),$(2).db)
 $(call gb_HelpTarget__add_file,$(1),$(2).ht)
 $(call gb_HelpTarget__add_file,$(1),$(2).idxl/segments.gen)
@@ -640,6 +644,19 @@ $(if $(call gb_HelpTarget__is_default_lang,$(1)),,\
 )
 $(call gb_HelpLinkTarget_set_treefile,$(1),$(call gb_HelpTarget__get_treefile,$(1),$(2)))
 $(call gb_HelpTarget__add_file,$(1),$(call gb_HelpTarget__get_module,$(1)).tree)
+
+endef
+
+# Produce full text search index, bookmark list, etc.
+#
+# gb_HelpTarget_set_indexed target
+define gb_HelpTarget_set_indexed
+$(call gb_HelpLinkTarget_set_indexed,$(1))
+$(call gb_HelpTarget__add_index_files,$(1),$(call gb_HelpTarget__get_module,$(1)))
+
+$(call gb_HelpIndexTarget_get_target,$(1)) : $(call gb_HelpLinkTarget_get_target,$(1))
+$(call gb_HelpTarget_get_packing_target,$(1)) : $(call gb_HelpIndexTarget_get_target,$(1))
+$(call gb_HelpTarget_get_clean_target,$(1)) : $(call gb_HelpIndexTarget_get_clean_target,$(1))
 
 endef
 
