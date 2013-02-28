@@ -118,6 +118,7 @@ public:
     void testN779642();
     void testTbLrHeight();
     void testFdo53985();
+    void testFdo59638();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -187,6 +188,7 @@ void Test::run()
         {"n779642.docx", &Test::testN779642},
         {"tblr-height.docx", &Test::testTbLrHeight},
         {"fdo53985.docx", &Test::testFdo53985},
+        {"fdo59638.docx", &Test::testFdo59638},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1205,6 +1207,29 @@ void Test::testFdo53985()
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTables->getCount()); // Only 4 tables were imported.
+}
+
+void Test::testFdo59638()
+{
+    // The problem was that w:lvlOverride inside w:num was ignores by dmapper.
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "BulletChar")
+        {
+            // Was '*', should be 'o'.
+            CPPUNIT_ASSERT_EQUAL(OUString("\xEF\x82\xB7", 3, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            return;
+        }
+    }
+    CPPUNIT_FAIL("no BulletChar property");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

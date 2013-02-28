@@ -495,7 +495,7 @@ uno::Sequence< uno::Sequence< beans::PropertyValue > > ListDef::GetPropertyValue
     for ( sal_Int32 i = 0; i < nThisCount; i++ )
     {
         uno::Sequence< beans::PropertyValue > level = aThis[i];
-        if ( level.getLength( ) == 0 )
+        if ( level.hasElements() )
         {
             // If the element contains something, merge it
             lcl_mergeProperties( level, aAbstract[i] );
@@ -953,6 +953,13 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 StyleSheetTablePtr pStylesTable = m_rDMapper.GetStyleSheetTable( );
                 const StyleSheetEntryPtr pStyle = pStylesTable->FindStyleSheetByISTD( sStyleName );
                 pLevel->SetParaStyle( pStyle );
+            }
+            break;
+            case NS_ooxml::LN_CT_Num_lvlOverride:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (pProperties.get())
+                    pProperties->resolve(*this);
             }
             break;
             case NS_ooxml::LN_EG_RPrBase_rFonts: //contains font properties
