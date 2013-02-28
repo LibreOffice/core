@@ -138,6 +138,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">_Format code</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">formated</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -331,6 +332,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Category</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">categorylb</property>
                 <attributes>
                   <attribute name="weight" value="semibold"/>
                 </attributes>
@@ -403,6 +405,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">F_ormat</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">formatlb</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -491,6 +494,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Language</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">languagelb</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
