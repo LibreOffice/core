@@ -46,6 +46,55 @@ enum CurveStyle
      */
     B_SPLINES,
 
+    /** Data points are connected via a 2-segmented stepped line.
+        The line starts horizontally.
+                   O
+                   |
+                   |
+                   |
+             O-----+
+     */
+    STEP_START,
+
+    /** Data points are connected via a 2-segmented stepped line.
+        The line ends horizontally.
+            +------O
+            |
+            |
+            |
+            O
+     */
+    STEP_END,
+
+    /** Data points are connected via a 3-segmented stepped line.
+        The lines is horizontal till the center of the X values.
+                +--O
+                |
+                |
+                |
+             O--+
+     */
+    STEP_CENTER_X,
+
+    /** Data points are connected via a 3-segmented stepped line.
+        The lines is horizontal at the center of the Y values.
+                   O
+                   |
+             +-----+
+             |
+             O
+     */
+    STEP_CENTER_Y,
+
+    /** These have the same meaning as above,
+        but are linked to the older Gnumeric attributes before
+        ODF1.3 was approved.
+     */
+    GNM_STEP_START,
+    GNM_STEP_END,
+    GNM_STEP_CENTER_X,
+    GNM_STEP_CENTER_Y,
+
     /**
      */
     NURBS
