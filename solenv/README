@@ -32,3 +32,8 @@ gdb/
 inc/
 	old / increasingly obsolete dmake setup and includes, we are
 	trying to entirely rid ourselves of this
+
+src/
+	useful standard / re-usable component map files for components
+	which shouldn't export anything more than a few registration
+	symbols.
