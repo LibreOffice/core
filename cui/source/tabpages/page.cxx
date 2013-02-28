@@ -224,7 +224,9 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     get(m_pAdaptBox,"checkAdaptBox");
     // Strings stored in UI
     get(m_pInsideText,"labelInner");
+    aInsideText = m_pInsideText->GetText();
     get(m_pOutsideText,"labelOuter");
+    aOutsideText = m_pOutsideText->GetText();
     get(m_pPrintRangeQueryText,"labelMsg");
 
     bBorderModified = sal_False;
@@ -370,8 +372,8 @@ SvxPageDescPage::~SvxPageDescPage()
 
 void SvxPageDescPage::Init_Impl()
 {
-    //aLeftText = m_pLeftMarginLbl->GetText();
-    //aRightText = m_pRightMarginLbl->GetText();
+    aLeftText = m_pLeftMarginLbl->GetText();
+    aRightText = m_pRightMarginLbl->GetText();
 
         // adjust the handler
     m_pLayoutBox->SetSelectHdl( LINK( this, SvxPageDescPage, LayoutHdl_Impl ) );
@@ -896,21 +898,23 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl)
     // switch inside outside
     const sal_uInt16 nPos = PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() );
 
+    OUString aAux();
+
     if ( nPos == SVX_PAGE_MIRROR )
     {
-        if ( m_pLeftMarginLbl->GetText() != m_pInsideText->GetText() )
-            m_pLeftMarginLbl->SetText( m_pInsideText->GetText() );
+        if ( m_pLeftMarginLbl->GetText() != aInsideText )
+               m_pLeftMarginLbl->SetText( aInsideText );
 
-        if ( m_pRightMarginLbl->GetText() != m_pOutsideText->GetText() )
-            m_pRightMarginLbl->SetText( m_pOutsideText->GetText() );
+        if ( m_pRightMarginLbl->GetText() != aOutsideText )
+            m_pRightMarginLbl->SetText( aOutsideText );
     }
     else
     {
-        if ( m_pLeftMarginLbl->GetText() != m_pLeftMarginLbl->GetText() )
-            m_pLeftMarginLbl->SetText( m_pLeftMarginLbl->GetText() );
+        if ( m_pLeftMarginLbl->GetText() != aLeftText )
+            m_pLeftMarginLbl->SetText( aLeftText );
 
-        if ( m_pRightMarginLbl->GetText() != m_pRightMarginLbl->GetText() )
-            m_pRightMarginLbl->SetText( m_pRightMarginLbl->GetText() );
+        if ( m_pRightMarginLbl->GetText() != aRightText )
+            m_pRightMarginLbl->SetText( aRightText );
     }
     UpdateExample_Impl( true );
     return 0;
