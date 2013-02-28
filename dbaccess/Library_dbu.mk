@@ -166,6 +166,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/dlg/paramdialog \
     dbaccess/source/ui/dlg/queryfilter \
     dbaccess/source/ui/dlg/queryorder \
+    dbaccess/source/ui/dlg/QueryPropertiesDialog \
     dbaccess/source/ui/dlg/RelationDlg \
     dbaccess/source/ui/dlg/sqlmessage \
     dbaccess/source/ui/dlg/tablespage \
@@ -214,6 +215,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/querydesign/JoinDesignView \
     dbaccess/source/ui/querydesign/JoinExchange \
     dbaccess/source/ui/querydesign/JoinTableView \
+    dbaccess/source/ui/querydesign/LimitBox \
     dbaccess/source/ui/querydesign/limitboxcontroller \
     dbaccess/source/ui/querydesign/QTableConnection \
     dbaccess/source/ui/querydesign/QTableConnectionData \

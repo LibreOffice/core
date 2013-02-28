@@ -12,38 +12,14 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <svtools/toolboxcontroller.hxx>
-#include <vcl/field.hxx>
+#include <rtl/ustring.hxx>
 
 #include "apitools.hxx"
 
 namespace dbaui
 {
 
-class LimitBoxController;
-
-/**
- * Input box to add limit to an SQL query (maximum number of result's rows)
- * This box is reachable on the Query Design Toolbar
- */
-class LimitBox: public NumericBox
-{
-    public:
-        LimitBox( Window* pParent, LimitBoxController* pCtrl );
-        virtual ~LimitBox();
-
-        virtual long        Notify( NotifyEvent& rNEvt );
-
-        virtual OUString    CreateFieldText( sal_Int64 nValue ) const;
-
-        virtual void        Reformat();
-        virtual void        ReformatAll();
-
-    private:
-        LimitBoxController* m_pControl;
-
-        void LoadDefaultLimits();
-};
-
+class LimitBoxImpl;
 
 /**
  * A ToolboxController to paste LimitBox onto the Query Design Toolbar
@@ -83,7 +59,7 @@ class LimitBoxController: public svt::ToolboxController,
         using svt::ToolboxController::dispatchCommand;
 
     private:
-        LimitBox* m_pLimitBox;
+        LimitBoxImpl* m_pLimitBox;
 };
 
 } ///dbaui namespace
