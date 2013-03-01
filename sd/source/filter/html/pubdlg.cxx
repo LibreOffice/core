@@ -385,11 +385,11 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     CreatePages();
     Load();
 
-    //setzt die Ausgangsseite
+    // sets the output page
     aAssistentFunc.GotoPage(1);
     aLastPageButton.Disable();
 
-    //Buttonbelegung
+    // button assignment
     aFinishButton.SetClickHdl(LINK(this,SdPublishingDlg,FinishHdl));
     aLastPageButton.SetClickHdl(LINK(this,SdPublishingDlg,LastPageHdl));
     aNextPageButton.SetClickHdl(LINK(this,SdPublishingDlg,NextPageHdl));
