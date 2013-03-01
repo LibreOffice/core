@@ -601,15 +601,34 @@ public:
     // throws FileFormatException:
     virtual rtl::Reference< MapCursor > createRootCursor() const = 0;
 
+    // throws FileFormatException:
+    virtual rtl::Reference< Entity > findEntity(rtl::OUString const & name)
+        const = 0;
+
 protected:
     SAL_DLLPRIVATE Provider() {}
 
     virtual SAL_DLLPRIVATE ~Provider() throw ();
 };
 
+class LO_DLLPUBLIC_UNOIDL Manager: public salhelper::SimpleReferenceObject {
+public:
+    Manager() {}
+
+    void addProvider(rtl::Reference< Provider > const & provider);
+
+    // throws FileFormatException:
+    rtl::Reference< Entity > findEntity(rtl::OUString const & name) const;
+
+private:
+    virtual SAL_DLLPRIVATE ~Manager() throw ();
+
+    std::vector< rtl::Reference< Provider > > providers_;
+};
+
 // throws FileFormatException, NoSuchFileException:
 LO_DLLPUBLIC_UNOIDL rtl::Reference< Provider > loadProvider(
-    rtl::OUString const & uri);
+    rtl::Reference< Manager > const & manager, rtl::OUString const & uri);
 
 }
 

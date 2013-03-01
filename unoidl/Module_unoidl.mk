@@ -10,6 +10,7 @@
 $(eval $(call gb_Module_Module,unoidl))
 
 $(eval $(call gb_Module_add_targets,unoidl, \
+    Executable_reg2unoidl \
     Library_unoidl \
     Package_inc \
 ))

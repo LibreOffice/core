@@ -1251,6 +1251,13 @@ rtl::Reference< MapCursor > UnoidlProvider::createRootCursor() const {
     return new UnoidlCursor(file_, mapBegin_, mapSize_);
 }
 
+rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
+{
+    bool cnst;
+    sal_uInt32 off = find(name, &cnst);
+    return off == 0 || cnst ? rtl::Reference< Entity >() : getEntity(off);
+}
+
 sal_uInt32 UnoidlProvider::find(OUString const & name, bool * constant) const {
     detail::MapEntry const * mapBegin = mapBegin_;
     sal_uInt32 mapSize = mapSize_;

@@ -35,7 +35,6 @@ ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,registry,\
     StaticLibrary_registry_helper \
-    Executable_reg2bin \
     Executable_regmerge \
     Executable_regview \
     Executable_regcompare \

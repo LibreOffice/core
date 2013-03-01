@@ -7,28 +7,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOIDL_UNOIDLPROVIDER_HXX
-#define INCLUDED_UNOIDL_UNOIDLPROVIDER_HXX
+#ifndef INCLUDED_UNOIDL_LEGACYPROVIDER_HXX
+#define INCLUDED_UNOIDL_LEGACYPROVIDER_HXX
 
 #include "sal/config.h"
 
+#include "registry/registry.hxx"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 #include "unoidl/detail/dllapi.hxx"
 #include "unoidl/unoidl.hxx"
 
 namespace rtl { class OUString; }
-namespace unoidl { namespace detail {
-    class MappedFile;
-    struct MapEntry;
-} }
 
 namespace unoidl {
 
-class LO_DLLPUBLIC_UNOIDL UnoidlProvider: public Provider {
+class LO_DLLPUBLIC_UNOIDL LegacyProvider: public Provider {
 public:
     // throws FileFormatException, NoSuchFileException:
-    explicit UnoidlProvider(rtl::OUString const & uri);
+    LegacyProvider(
+        rtl::Reference< Manager > const & manager, rtl::OUString const & uri);
 
     // throws FileFormatException:
     virtual rtl::Reference< MapCursor > createRootCursor() const;
@@ -37,21 +35,11 @@ public:
     virtual rtl::Reference< Entity > findEntity(rtl::OUString const & name)
         const;
 
-    // throws FileFormatException:
-    sal_uInt32 find(rtl::OUString const & name, bool * constant = 0) const;
-
-    // throws FileFormatException:
-    rtl::Reference< Entity > getEntity(sal_uInt32 offset) const;
-
-    // throws FileFormatException:
-    ConstantValue getConstant(sal_uInt32 offset) const;
-
 private:
-    virtual SAL_DLLPRIVATE ~UnoidlProvider() throw ();
+    virtual SAL_DLLPRIVATE ~LegacyProvider() throw ();
 
-    rtl::Reference< detail::MappedFile > file_;
-    detail::MapEntry const * mapBegin_;
-    sal_uInt32 mapSize_;
+    rtl::Reference< Manager > manager_;
+    mutable RegistryKey ucr_;
 };
 
 }

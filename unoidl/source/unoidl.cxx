@@ -13,6 +13,7 @@
 
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
+#include "unoidl/legacyprovider.hxx"
 #include "unoidl/unoidl.hxx"
 #include "unoidl/unoidlprovider.hxx"
 
@@ -57,9 +58,40 @@ ServiceBasedSingletonEntity::~ServiceBasedSingletonEntity() throw () {}
 
 Provider::~Provider() throw () {}
 
-rtl::Reference< Provider > loadProvider(OUString const & uri) {
-    return new UnoidlProvider(uri);
+rtl::Reference< Provider > loadProvider(
+    rtl::Reference< Manager > const & manager, OUString const & uri)
+{
+    try {
+        return new UnoidlProvider(uri);
+    } catch (FileFormatException & e) {
+        SAL_INFO(
+            "unoidl",
+            "FileFormatException \"" << e.getDetail() << "\", retrying <" << uri
+                << "> as legacy format");
+        return new LegacyProvider(manager, uri);
+    }
 }
+
+void Manager::addProvider(rtl::Reference< Provider > const & provider) {
+    assert(provider.is());
+    providers_.push_back(provider);
+}
+
+rtl::Reference< Entity > Manager::findEntity(rtl::OUString const & name) const {
+    //TODO: add caching
+    for (std::vector< rtl::Reference< Provider > >::const_iterator i(
+             providers_.begin());
+         i != providers_.end(); ++i)
+    {
+        rtl::Reference< Entity > ent((*i)->findEntity(name));
+        if (ent.is()) {
+            return ent;
+        }
+    }
+    return rtl::Reference< Entity >();
+}
+
+Manager::~Manager() throw () {}
 
 }
 

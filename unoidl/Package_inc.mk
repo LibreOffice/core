@@ -10,6 +10,7 @@
 $(eval $(call gb_Package_Package,unoidl_inc,$(SRCDIR)/unoidl/inc/unoidl))
 
 $(eval $(call gb_Package_add_file,unoidl_inc,inc/unoidl/detail/dllapi.hxx,detail/dllapi.hxx))
+$(eval $(call gb_Package_add_file,unoidl_inc,inc/unoidl/legacyprovider.hxx,legacyprovider.hxx))
 $(eval $(call gb_Package_add_file,unoidl_inc,inc/unoidl/unoidl.hxx,unoidl.hxx))
 $(eval $(call gb_Package_add_file,unoidl_inc,inc/unoidl/unoidlprovider.hxx,unoidlprovider.hxx))
 

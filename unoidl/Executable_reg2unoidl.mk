@@ -7,15 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Executable_Executable,reg2bin))
+$(eval $(call gb_Executable_Executable,reg2unoidl))
 
-$(eval $(call gb_Executable_add_exception_objects,reg2bin, \
-    registry/tools/reg2bin \
+$(eval $(call gb_Executable_add_exception_objects,reg2unoidl, \
+    unoidl/source/reg2unoidl \
 ))
 
-$(eval $(call gb_Executable_use_libraries,reg2bin, \
-    reg \
+$(eval $(call gb_Executable_use_libraries,reg2unoidl, \
     sal \
+    salhelper \
+    unoidl \
 ))
 
 # vim: set noet sw=4 ts=4:

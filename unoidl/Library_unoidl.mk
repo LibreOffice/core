@@ -12,11 +12,13 @@ $(eval $(call gb_Library_Library,unoidl))
 $(eval $(call gb_Library_add_defs,unoidl,-DLO_DLLIMPLEMENTATION_UNOIDL))
 
 $(eval $(call gb_Library_add_exception_objects,unoidl, \
+    unoidl/source/legacyprovider \
     unoidl/source/unoidl \
     unoidl/source/unoidlprovider \
 ))
 
 $(eval $(call gb_Library_use_libraries,unoidl, \
+    reg \
     sal \
     salhelper \
 ))
