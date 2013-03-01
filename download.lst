@@ -1,5 +1,5 @@
-CDR_MD5SUM := bfc46d536c39b03563ab2a0e3beaf51b
-export CDR_TARBALL := libcdr-0.0.10.tar.bz2
+CDR_MD5SUM := 107a3d18f637b342684b3c21eb0fcd7d
+export CDR_TARBALL := libcdr-0.0.11.tar.bz2
 MSPUB_MD5SUM := 881c4628ec5f54d47f35d5d19e335662
 export MSPUB_TARBALL := libmspub-0.0.5.tar.bz2
 VISIO_MD5SUM := 92bde158f249b9b27f76f48cc65a0242
