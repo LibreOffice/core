@@ -12,7 +12,7 @@ sdremote_DIR := $(call gb_CustomTarget_get_workdir,android/sdremote)
 
 $(call gb_CustomTarget_get_target,android/sdremote) : $(sdremote_DIR)/done
 
-$(sdremote_DIR)/done : $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
+$(sdremote_DIR)/done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
 	cd $(SRCDIR)/android/sdremote && $(MAKE) all
 	mkdir -p $(WORKDIR)/installation/bin

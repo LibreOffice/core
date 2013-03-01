@@ -20,7 +20,7 @@ $(call gb_CustomTarget_get_target,android/docloader) : \
 # out Bootstrap while another is building stuff that depends on it.
 # Yeah, this sucks
 
-$(docloader_DIR)/done : $(sdremote_DIR)/done
+$(docloader_DIR)/done : $(sdremote_DIR)/done $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
 	cd $(SRCDIR)/android/experimental/DocumentLoader && $(MAKE) all
 	mkdir -p $(WORKDIR)/installation/bin
