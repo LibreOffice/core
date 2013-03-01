@@ -1657,11 +1657,7 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
 void NeonSession::abort()
     throw ( DAVException )
 {
-    if ( m_pHttpSession )
-    {
-        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
-        ne_close_connection( m_pHttpSession );
-    }
+    SAL_INFO("ucb.ucp.webdav", "neon commands cannot be aborted");
 }
 
 // -------------------------------------------------------------------

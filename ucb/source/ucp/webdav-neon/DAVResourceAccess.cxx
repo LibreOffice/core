@@ -553,10 +553,8 @@ void DAVResourceAccess::GET(
 void DAVResourceAccess::abort()
   throw( DAVException )
 {
-    // 17.11.09 (tkr): abort currently disabled caused by issue i106766
-    // initialize();
-    // m_xSession->abort();
-    OSL_TRACE( "Not implemented. -> #i106766#" );
+    initialize();
+    m_xSession->abort();
 }
 
 //=========================================================================
