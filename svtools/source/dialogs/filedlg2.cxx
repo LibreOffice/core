@@ -545,7 +545,7 @@ void ImpPathDialog::PreExecute()
     {
         Size aDlgSize = GetPathDialog()->GetOutputSizePixel();
         GetPathDialog()->SetOutputSizePixel( Size( aDlgSize.Width()+nMaxWidth-aSize.Width(), aDlgSize.Height() ) );
-        aSize.Width() = nMaxWidth;
+        aSize.setWidth(nMaxWidth);
 
         if( pOkBtn )
             pOkBtn->SetSizePixel( aSize );
@@ -554,8 +554,6 @@ void ImpPathDialog::PreExecute()
         if( pLoadBtn )
             pLoadBtn->SetSizePixel( aSize );
     }
-    else
-        nMaxWidth = aSize.Width();
 
     for ( n = nOwnChildren; n < nChildren; n++ )
     {
