@@ -325,7 +325,7 @@ sub get_downloadname_productname
 
     if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $start = "LibreOffice"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "LOdev" ) { $start = "LibO-Dev"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOfficeDev" ) { $start = "LibreOfficeDev"; }
 
     if ( $allvariables->{'PRODUCTNAME'} eq "OxygenOffice" ) { $start = "OOOP"; }
 

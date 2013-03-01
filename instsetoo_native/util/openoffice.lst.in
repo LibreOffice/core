@@ -93,7 +93,7 @@ LibreOffice_Dev
     {
         variables
         {
-            PRODUCTNAME LOdev
+            PRODUCTNAME LibreOfficeDev
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             UNIXBASISROOTNAME lodev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
@@ -137,9 +137,9 @@ LibreOffice_Dev
         active          1
         compression     5
         script          setup_osl
-        downloadname    LibO-dev_{productversion}_{os}_install_{languages}
-        langpackdownloadname    LibO-dev_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    LibO-dev_{productversion}_helppack_{os}_install_{languages}
+        downloadname    LibreOfficeDev_{productversion}_{os}_install_{languages}
+        langpackdownloadname    LibreOfficeDev_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    LibreOfficeDev_{productversion}_helppack_{os}_install_{languages}
         include         {solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
     }
 }
@@ -187,10 +187,10 @@ LibreOffice_Dev_SDK
 {
     Settings
     {
-        downloadname LibO-Dev-SDK_{packageversion}_{os}_install_{languages}
+        downloadname LibreOfficeDev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LOdev
+            PRODUCTNAME LibreOfficeDev
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             UNIXBASISROOTNAME lodev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
@@ -232,7 +232,7 @@ LibreOffice_Test
 {
     Settings
     {
-        downloadname LO-Test_{packageversion}_{os}_install_{languages}
+        downloadname LibreOffice-Test_{packageversion}_{os}_install_{languages}
         variables
         {
             PRODUCTNAME LibreOffice
@@ -271,10 +271,10 @@ LibreOffice_Dev_Test
 {
     Settings
     {
-        downloadname LO-Dev-Test_{packageversion}_{os}_install_{languages}
+        downloadname LibreOfficeDev-Test_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LOdev
+            PRODUCTNAME LibreOfficeDev
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             UNIXBASISROOTNAME lodev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
