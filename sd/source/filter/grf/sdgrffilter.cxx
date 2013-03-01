@@ -224,7 +224,7 @@ sal_Bool SdGRFFilter::Import()
                 double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();
                 double fWinWH = (double) aPagSize.Width() / aPagSize.Height();
 
-                // Grafik an Pagesize anpassen (skaliert)
+                // adjust graphic to page size (scales)
                 if( fGrfWH < fWinWH )
                 {
                     aGrfSize.Width() = (long) ( aPagSize.Height() * fGrfWH );
@@ -237,7 +237,7 @@ sal_Bool SdGRFFilter::Import()
                 }
             }
 
-            // Ausgaberechteck fuer Grafik setzen
+            // set output rectangle for graphic
             aPos.X() = ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLftBorder();
             aPos.Y() = ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetUppBorder();
 
