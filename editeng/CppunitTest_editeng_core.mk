@@ -81,6 +81,7 @@ $(eval $(call gb_CppunitTest_use_components,editeng_core,\
     configmgr/source/configmgr \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     sfx2/util/sfx \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \

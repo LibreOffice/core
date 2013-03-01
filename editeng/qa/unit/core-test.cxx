@@ -38,6 +38,7 @@
 #include "editeng/eeitem.hxx"
 #include "editeng/editids.hrc"
 #include "editeng/editdoc.hxx"
+#include "editeng/svxacorr.hxx"
 #include "editeng/unofield.hxx"
 
 #include <com/sun/star/text/textfield/Type.hpp>
@@ -61,9 +62,15 @@ public:
      */
     void testUnoTextFields();
 
+    /**
+     * AutoCorrect tests
+     */
+    void testAutocorrect();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
+    CPPUNIT_TEST(testAutocorrect);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -218,6 +225,115 @@ void Test::testUnoTextFields()
         uno::Sequence<rtl::OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.presentation.textfield.DateTime");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
+    }
+}
+
+class TestAutoCorrDoc : public SvxAutoCorrDoc
+{
+public:
+    TestAutoCorrDoc(const OUString &rText, LanguageType eLang)
+        : m_sText(rText)
+        , m_eLang(eLang)
+    {
+    }
+    OUString getResult() const
+    {
+        return m_sText.toString();
+    }
+private:
+    OUStringBuffer m_sText;
+    LanguageType m_eLang;
+    virtual sal_Bool Delete( xub_StrLen nStt, xub_StrLen nEnd )
+    {
+        //fprintf(stderr, "TestAutoCorrDoc::Delete\n");
+        m_sText.remove(nStt, nEnd-nStt);
+        return true;
+    }
+    virtual sal_Bool Insert( xub_StrLen nPos, const String& rTxt )
+    {
+        //fprintf(stderr, "TestAutoCorrDoc::Insert\n");
+        m_sText.insert(nPos, rTxt);
+        return true;
+    }
+    virtual sal_Bool Replace( xub_StrLen nPos, const String& rTxt )
+    {
+        //fprintf(stderr, "TestAutoCorrDoc::Replace\n");
+        return ReplaceRange( nPos, rTxt.Len(), rTxt );
+    }
+    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt )
+    {
+        //fprintf(stderr, "TestAutoCorrDoc::ReplaceRange %d %d %s\n", nPos, nLen, OUStringToOString(rTxt, RTL_TEXTENCODING_UTF8).getStr());
+        m_sText.remove(nPos, nLen);
+        m_sText.insert(nPos, rTxt);
+        return true;
+    }
+    virtual sal_Bool SetAttr( xub_StrLen, xub_StrLen, sal_uInt16, SfxPoolItem& )
+    {
+        //fprintf(stderr, "TestAutoCorrDoc::SetAttr\n");
+        return true;
+    }
+    virtual sal_Bool SetINetAttr( xub_StrLen, xub_StrLen, const String& )
+    {
+        //fprintf(stderr, "TestAutoCorrDoc::SetINetAttr\n");
+        return true;
+    }
+    virtual const String* GetPrevPara( sal_Bool )
+    {
+        //fprintf(stderr, "TestAutoCorrDoc::GetPrevPara\n");
+        return NULL;
+    }
+    virtual sal_Bool ChgAutoCorrWord( sal_uInt16& rSttPos,
+                sal_uInt16 nEndPos, SvxAutoCorrect& rACorrect,
+                const String** ppPara )
+    {
+        //fprintf(stderr, "TestAutoCorrDoc::ChgAutoCorrWord\n");
+
+        if (m_sText.isEmpty())
+            return false;
+
+        const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(m_sText.toString(), rSttPos, nEndPos, *this, m_eLang);
+        if (pFnd && pFnd->IsTextOnly())
+        {
+            m_sText.remove(rSttPos, nEndPos);
+            m_sText.insert(rSttPos, pFnd->GetLong());
+            if( ppPara )
+                *ppPara = NULL;//&pCurNode->GetString();
+            return true;
+        }
+
+        return false;
+    }
+};
+
+//https://bugs.freedesktop.org/show_bug.cgi?id=55693
+//Two capitalized letters are not corrected if dash or slash are directly
+//before the two letters
+void Test::testAutocorrect()
+{
+    OUString sShareAutocorrFile;
+    OUString sUserAutocorrFile;
+    SvxAutoCorrect aAutoCorrect(sShareAutocorrFile, sUserAutocorrFile);
+
+    {
+        OUString sInput("TEst-TEst");
+        sal_Unicode cNextChar(' ');
+        OUString sExpected("Test-Test ");
+
+        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
+        aAutoCorrect.AutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+
+        CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
+    }
+
+    {
+        OUString sInput("TEst/TEst");
+        sal_Unicode cNextChar(' ');
+        OUString sExpected("Test/Test ");
+
+        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
+        aAutoCorrect.AutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+
+        CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
     }
 }
 

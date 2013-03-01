@@ -1458,11 +1458,14 @@ sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
 
         if( nHelpId )
         {
-            nHelpId -= 1;
-            Application::GetHelp()->OpenHelpAgent( aHelpIds[nHelpId] );
+            Help* pHelp = Application::GetHelp();
+            if (pHelp)
+            {
+                nHelpId -= 1;
+                Application::GetHelp()->OpenHelpAgent( aHelpIds[nHelpId] );
+            }
         }
     }
-
 
     return nRet;
 }
