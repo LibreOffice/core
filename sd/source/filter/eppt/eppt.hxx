@@ -171,10 +171,10 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         std::vector<rtl::OUString>      maSlideNameList;
         rtl::OUString                   maBaseURI;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText >             mXText;             // TextRef des globalen Text
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText >             mXText;             // TextRef of the global text
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >             mXCursor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >              mXCursorText;       // TextRef des Teilstuecks des Cursors
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           mXCursorPropSet;    // die Properties des Teilstueckes
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >              mXCursorText;       // TextRef of part of the cursor
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           mXCursorPropSet;    // properties of the part
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >              mXTextField;
         sal_uInt32          mnTextStyle;
 
@@ -193,13 +193,13 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          mnExEmbed;
         SvMemoryStream*     mpExEmbed;
 
-        sal_uInt32          mnDrawings;         // anzahl Slides +  masterpages + notes +  handout
+        sal_uInt32          mnDrawings;         // number of Slides +  masterpages + notes +  handout
         sal_uInt32          mnPagesWritten;
         sal_uInt32          mnUniqueSlideIdentifier;
         sal_uInt32          mnTxId;             // Identifier determined by the HOST (PP) ????
-        sal_uInt32          mnDiaMode;          // 0 -> manuell
-                                                // 1 -> halbautomatisch
-                                                // 2 -> automatisch
+        sal_uInt32          mnDiaMode;          // 0 -> manual
+                                                // 1 -> semi-automatic
+                                                // 2 -> automatic
 
         sal_uInt32          mnShapeMasterTitle;
         sal_uInt32          mnShapeMasterBody;
@@ -270,7 +270,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         void                ImplCreateTable( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt );
 
-        sal_Bool                            ImplCloseDocument();        // die font-, hyper-, Soundliste wird geschrieben ..
+        sal_Bool                            ImplCloseDocument();        // we write the font, hyper and sound list
 
         virtual void        ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterID, sal_uInt16 nMode,
                                             sal_Bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet );

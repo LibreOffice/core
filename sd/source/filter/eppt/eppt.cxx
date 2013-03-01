@@ -90,7 +90,7 @@ void PPTWriter::exportPPTPre( const std::vector< com::sun::star::beans::Property
     if ( !mrStg.Is() )
         return;
 
-    // MasterPages + Slides und Notizen + NotesMasterPage
+    // master pages + slides and notes + notes master page
     mnDrawings = mnMasterPages + ( mnPages << 1 ) + 1;
 
     if ( mXStatusIndicator.is() )
@@ -169,9 +169,9 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->OpenContainer( EPP_Slide );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
     *mpStrm << rLayout.nLayout;
-    mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs ( 8Stueck )
-    *mpStrm << (sal_uInt32)(nMasterNum | 0x80000000)// master ID ( ist gleich 0x80000000 bei einer masterpage   )
-            << (sal_uInt32)nPageNum + 0x100         // notes ID ( ist gleich null wenn keine notizen vorhanden )
+    mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs (8 parts)
+    *mpStrm << (sal_uInt32)(nMasterNum | 0x80000000)// master ID (equals 0x80000000 on a master page)
+            << (sal_uInt32)nPageNum + 0x100         // notes ID (equals null if no notes are present)
             << nMode
             << (sal_uInt16)0;                       // padword
 
@@ -185,12 +185,12 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     {
         switch ( *(sal_Int32*)aAny.getValue() )
         {
-            case 1 :        // automatisch
+            case 1 :        // automatic
                 mnDiaMode++;
-            case 2 :        // halbautomatisch
+            case 2 :        // semi-automatic
                 mnDiaMode++;
             default :
-            case 0 :        // manuell
+            case 0 :        // manual
             break;
         }
     }
@@ -226,7 +226,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         sal_uInt8   nDirection = 0;
         sal_uInt8   nTransitionType = 0;
         sal_uInt16  nBuildFlags = 1;        // advange by mouseclick
-        sal_Int32       nSlideTime = 0;         // muss noch !!!
+        sal_Int32       nSlideTime = 0;         // still has to !!!
         sal_uInt8   nSpeed = 1;
 
         if ( GetPropertyValue( aAny, mXPagePropSet, rtl::OUString( "Speed" ) ) )
@@ -277,7 +277,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( rLayout, aSolverContainer, NORMAL, sal_False, nPageNum );    // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( rLayout, aSolverContainer, NORMAL, sal_False, nPageNum );    // the shapes of the pages are created in the PPT document
     mpPptEscherEx->LeaveGroup();
 
     if ( bHasBackground )
@@ -358,8 +358,8 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
     *mpStrm << (sal_Int32)EPP_LAYOUT_TITLEANDBODYSLIDE  // slide layout -> title and body slide
             << (sal_uInt8)1 << (sal_uInt8)2 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0     // placeholderID
-            << (sal_uInt32)0        // master ID ( ist gleich null bei einer masterpage )
-            << (sal_uInt32)0        // notes ID ( ist gleich null wenn keine notizen vorhanden )
+            << (sal_uInt32)0        // master ID (equals null at a master page)
+            << (sal_uInt32)0        // notes ID (equals null if no notes are present)
             << (sal_uInt16)0        // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
             << (sal_uInt16)0;       // padword
 
@@ -418,7 +418,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
 
     mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, sal_True );    // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, sal_True );    // the shapes of the pages are created in the PPT document
     mpPptEscherEx->LeaveGroup();
 
     ImplWriteBackground( aXBackgroundPropSet );
@@ -720,7 +720,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
         ImplCreateHeaderFooterStrings( *mpStrm, mXPagePropSet );
     mpPptEscherEx->CloseContainer();
 
-    mpPptEscherEx->OpenContainer( EPP_SlideListWithText );      // Animation info fuer die Slides
+    mpPptEscherEx->OpenContainer( EPP_SlideListWithText );      // animation information for the slides
 
     for ( i = 0; i < mnPages; i++ )
     {
@@ -732,7 +732,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 << (sal_Int32)i + 0x100                             // slideId - Unique slide identifier, used for OLE link monikers for example
                 << (sal_uInt32)0;                               // reserved, usualy 0
 
-        if ( !GetPageByIndex( i, NORMAL ) )                     // sehr aufregend: noch einmal ueber alle seiten
+        if ( !GetPageByIndex( i, NORMAL ) )                     // very exciting: once again through all pages
             return sal_False;
         SetCurrentStyleSheet( GetMasterIndex( NORMAL ) );
 
@@ -746,7 +746,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
     }
     mpPptEscherEx->CloseContainer();    // EPP_SlideListWithText
 
-    mpPptEscherEx->OpenContainer( EPP_SlideListWithText, 2 );   // Animation info fuer die notes
+    mpPptEscherEx->OpenContainer( EPP_SlideListWithText, 2 );   // animation information for the notes
     for( i = 0; i < mnPages; i++ )
     {
         mpPptEscherEx->AddAtom( 20, EPP_SlidePersistAtom );
@@ -820,7 +820,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                         nFlags |= 1;
                 }
 
-                if ( ImplGetPropertyValue( rtl::OUString( "IsEndless" ) ) ) // muesste eigendlich heissen IsNotEndless !=)"�()&
+                if ( ImplGetPropertyValue( rtl::OUString( "IsEndless" ) ) ) // the correct name would be IsNotEndless: WTF?
                 {
                     sal_Bool bBool = sal_False;
                     mAny >>= bBool;
@@ -867,7 +867,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                         {
                             mpPptEscherEx->OpenContainer( EPP_NamedShows );
                             sal_uInt32 nCustomShowIndex = 0;
-                            for( i = 0; i < nCount; i++ )        // Anzahl der Custom Shows
+                            for( i = 0; i < nCount; i++ )        // number of custom shows
                             {
                                 if ( !pUString[ i ].isEmpty() )
                                 {
@@ -889,7 +889,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                             mpPptEscherEx->BeginAtom();
 
                                             sal_Int32 nSlideCount = aXIC->getCount();
-                                            for ( sal_Int32 j = 0; j < nSlideCount; j++ )   // Anzahl der Slides
+                                            for ( sal_Int32 j = 0; j < nSlideCount; j++ )   // number of slides
                                             {
                                                 mAny = aXIC->getByIndex( j );
                                                 if ( mAny.getValue() )
@@ -1165,7 +1165,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
 
-    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, sal_False );  // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, sal_False );  // the shapes of the pages are created in the PPT document
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -1362,12 +1362,12 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
 
     sal_uInt32  i, nPos, nOfs, nPersistOfs = mpStrm->Tell();
     sal_uInt32  nPersistEntrys = 0;
-    *mpStrm << (sal_uInt32)0 << (sal_uInt32)0 << (sal_uInt32)0;         // Record Header und ersten Eintrag ueberspringen
+    *mpStrm << (sal_uInt32)0 << (sal_uInt32)0 << (sal_uInt32)0;         // skip record header and first entry
 
     // Document pesist schreiben
         nPersistEntrys++;
         *mpStrm << (sal_uInt32)0;
-    // MasterPages persists schreiben
+    // write MasterPages persists
     for ( i = 0; i < mnMasterPages; i++ )
     {
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_MainMaster | i );
@@ -1377,14 +1377,14 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
             mpPptEscherEx->InsertAtPersistOffset( EPP_MAINMASTER_PERSIST_KEY | i, ++nPersistEntrys );
         }
     }
-    // MainNotesMaster persist schreiben
+    // write MainNotesMaster persist
     nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_MainNotes );
     if ( nOfs )
     {
         *mpStrm << nOfs;
         mpPptEscherEx->InsertAtPersistOffset( EPP_MAINNOTESMASTER_PERSIST_KEY, ++nPersistEntrys );
     }
-    // Slide persists schreiben -> es gilt hier auch den EPP_SlidePersistAtome mit einem gueltigen wert zu beschreiben
+    // write slide persists -> we have to write a valid value into EPP_SlidePersistAtome too
     for ( i = 0; i < mnPages; i++ )
     {
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_Slide | i );
@@ -1394,7 +1394,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
             mpPptEscherEx->InsertAtPersistOffset( EPP_MAINSLIDE_PERSIST_KEY | i, ++nPersistEntrys );
         }
     }
-    // Notes persists schreiben
+    // write Notes persists
     for ( i = 0; i < mnPages; i++ )
     {
         nOfs = mpPptEscherEx->PtGetOffsetByID( EPP_Persist_Notes | i );
@@ -1445,7 +1445,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
     }
     nPos = mpStrm->Tell();
     mpStrm->Seek( nPersistOfs );
-    mpPptEscherEx->AddAtom( ( nPersistEntrys + 1 ) << 2, EPP_PersistPtrIncrementalBlock );      // Record Header eintragen
+    mpPptEscherEx->AddAtom( ( nPersistEntrys + 1 ) << 2, EPP_PersistPtrIncrementalBlock );      // insert Record Header
     *mpStrm << (sal_uInt32)( ( nPersistEntrys << 20 ) | 1 );
     mpStrm->Seek( nPos );
 
