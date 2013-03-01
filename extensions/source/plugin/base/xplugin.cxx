@@ -444,8 +444,6 @@ void XPlugin_Impl::modelChanged()
 
     m_nProvidingState = PROVIDING_MODEL_UPDATE;
 
-    destroyInstance();
-
     m_aDescription = fitDescription( getCreationURL() );
     if( m_aDescription.Mimetype.isEmpty() )
     {
@@ -459,6 +457,8 @@ void XPlugin_Impl::modelChanged()
                       aURL,
                       0, 0, (sal_Bool)(aURL.compareToAscii( "file:", 5 ) == 0) );
     m_nProvidingState = PROVIDING_NONE;
+
+    destroyInstance();
 }
 
 OUString XPlugin_Impl::getCreationURL()
