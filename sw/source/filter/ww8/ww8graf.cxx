@@ -1560,7 +1560,10 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         aLine.SetBorderLineStyle(nIdx);
 
         for(sal_uInt16 nLine = 0; nLine < 4; ++nLine)
-            rBox.SetLine(new SvxBorderLine( aLine ), nLine);
+        {
+            //aLine is cloned by SetLine
+            rBox.SetLine(&aLine, nLine);
+        }
     }
 
     return nOutsideThick;
