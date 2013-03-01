@@ -40,7 +40,6 @@ using com::sun::star::io::XInputStream;
 using com::sun::star::io::XSeekable;
 using com::sun::star::uno::Sequence;
 using namespace ::rtl;
-using rtl::OString;
 using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -75,16 +74,12 @@ throw (RuntimeException)
     {
         if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name == "URL" )
-            pValue[i].Value >>= sURL;
     }
     if ( !xInputStream.is() )
     {
         OSL_ASSERT( 0 );
         return sal_False;
     }
-    OString sFileName;
-    sFileName = OUStringToOString(sURL, RTL_TEXTENCODING_INFO_ASCII);
 
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService (  "com.sun.star.comp.Draw.XMLOasisImporter"  );
@@ -142,6 +137,9 @@ throw( com::sun::star::uno::RuntimeException )
         else if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= xInputStream;
     }
+
+    if (!xInputStream.is())
+        return ::rtl::OUString();
 
     WPXSvInputStream input( xInputStream );
 

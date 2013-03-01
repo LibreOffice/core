@@ -19,7 +19,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <xmloff/attrlist.hxx>
@@ -36,7 +35,6 @@
 #include <iostream>
 
 using namespace ::com::sun::star::uno;
-using rtl::OString;
 using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -72,16 +70,12 @@ throw (RuntimeException)
     {
         if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name == "URL" )
-            pValue[i].Value >>= sURL;
     }
     if ( !xInputStream.is() )
     {
         OSL_ASSERT( 0 );
         return sal_False;
     }
-    OString sFileName;
-    sFileName = OUStringToOString(sURL, RTL_TEXTENCODING_INFO_ASCII);
 
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService (  "com.sun.star.comp.Writer.XMLOasisImporter"  );
@@ -142,26 +136,10 @@ throw( com::sun::star::uno::RuntimeException )
             location=i;
         else if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name == "URL" )
-            pValue[i].Value >>= sURL;
     }
 
-    Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
     if (!xInputStream.is())
-    {
-        try
-        {
-            ::ucbhelper::Content aContent(sURL, xEnv, mxContext);
-            xInputStream = aContent.openStream();
-        }
-        catch ( ... )
-        {
-            return ::rtl::OUString();
-        }
-
-        if (!xInputStream.is())
-            return ::rtl::OUString();
-    }
+        return ::rtl::OUString();
 
     WPXSvInputStream input( xInputStream );
 

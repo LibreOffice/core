@@ -19,7 +19,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <xmloff/attrlist.hxx>
@@ -100,8 +99,6 @@ throw (RuntimeException)
     {
         if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name == "URL" )
-            pValue[i].Value >>= sURL;
     }
     if ( !xInputStream.is() )
     {
@@ -194,26 +191,10 @@ throw( RuntimeException )
             location=i;
         else if ( pValue[i].Name == "InputStream" )
             pValue[i].Value >>= xInputStream;
-        else if ( pValue[i].Name == "URL" )
-            pValue[i].Value >>= sURL;
     }
 
-        Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
     if (!xInputStream.is())
-    {
-        try
-        {
-            Content aContent(sURL, xEnv, mxContext);
-                    xInputStream = aContent.openStream();
-        }
-        catch ( ... )
-        {
-            return OUString();
-        }
-
-        if (!xInputStream.is())
-            return OUString();
-    }
+        return OUString();
 
     WPXSvInputStream input( xInputStream );
 
