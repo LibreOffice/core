@@ -2935,7 +2935,9 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
                 for( int i = 0; i < nLen; i++ )
                 {
                     OUString sFamilyName, sStyleName;
-                    sal_Int16 eFamily, ePitch, eCharSet;
+                    sal_Int16 eFamily(FAMILY_DONTKNOW),
+                        ePitch(PITCH_DONTKNOW),
+                        eCharSet(RTL_TEXTENCODING_DONTKNOW);
 
                     aAnySeq[nSeqIndex++] >>= sFamilyName;
                     aAnySeq[nSeqIndex++] >>= sStyleName;
