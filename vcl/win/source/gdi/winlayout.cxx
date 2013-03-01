@@ -63,6 +63,8 @@ using ::rtl::OUString;
 using ::rtl::OString;
 using ::rtl::OUStringToOString;
 
+#include <config_mingw.h>
+
 // =======================================================================
 
 // win32 specific physical font instance
@@ -1189,7 +1191,9 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
     aScriptControl.fNeutralOverride = aScriptState.fOverrideDirection;
     aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
+#ifdef HAVE_FMERGENEUTRALITEMS
     aScriptControl.fMergeNeutralItems = true;
+#endif
     // determine relevant substring and work only on it
     // when Bidi status is unknown we need to look at the whole string though
     mnSubStringMin = 0;

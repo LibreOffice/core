@@ -5350,6 +5350,23 @@ using namespace std;
     AC_SUBST(MINGW_GXXDLL)
 fi
 
+if test "$WITH_MINGW" = "yes"; then
+    AC_MSG_CHECKING([for fMergeNeutralItems in SCRIPT_CONTROL])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+    [
+    #include <usp10.h>
+    ],
+    [
+    SCRIPT_CONTROL c;
+    c.fMergeNeutralItems = 1;
+    ])],
+    [
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(HAVE_FMERGENEUTRALITEMS)
+    ],
+    [AC_MSG_RESULT(no)])
+fi
+
 dnl ===================================================================
 dnl Extra checking for the SunOS compiler
 dnl ===================================================================
@@ -11842,6 +11859,7 @@ AC_CONFIG_FILES([solenv/inc/minor.mk.tmp:solenv/inc/minor.mk.in],
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
+AC_CONFIG_HEADERS([config_host/config_mingw.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])
 AC_CONFIG_HEADERS([config_host/config_vclplug.h])

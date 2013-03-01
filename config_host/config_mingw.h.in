@@ -1,0 +1,6 @@
+#ifndef CONFIG_MINGW
+#define CONFIG_MINGW
+
+#undef HAVE_FMERGENEUTRALITEMS
+
+#endif
