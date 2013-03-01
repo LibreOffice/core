@@ -45,7 +45,7 @@
 
 #include <svx/svdattr.hxx>
 #include "eetext.hxx"
-#include <svx/xtable.hxx>           // fuer RGB_Color
+#include <svx/xtable.hxx>           // for RGB_Color
 #include <editeng/bulletitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -131,8 +131,8 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
 
 /*************************************************************************
 |*
-|* eine Liste der Gliederungstextvorlagen fuer ein Praesentationlayout
-|* erstellen, der Aufrufer muss die Liste wieder loeschen
+|* Create a list of outline text templates for a presentation layout.
+|* The caller has to delete the list.
 |*
 \************************************************************************/
 
@@ -156,7 +156,7 @@ void SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName, std::v
 
 /*************************************************************************
 |*
-|* StyleSheets mit Defaultweren fuer das genannte Praesentationslayout erzeugen
+|* Create style sheets with default values for the named presentation layout
 |*
 \************************************************************************/
 
@@ -177,7 +177,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
     mpDoc->getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
 
-    // Font fuer Titel und Gliederung
+    // Font for title and outline
     SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
                               aLatinFont.GetCharSet(), EE_CHAR_FONTINFO );
 
@@ -190,7 +190,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     Font aBulletFont( GetBulletFont() );
 
     /**************************************************************************
-    * Gliederungsebenen
+    * outline levels
     **************************************************************************/
     String aName(SdResId(STR_LAYOUT_OUTLINE));
     String aHelpFile;
@@ -216,7 +216,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
             pSheet->SetParent( String() );
 
-            // Attributierung fuer Level 1, die anderen Ebenen "erben"
+            // attributing for level 1, the others levels inherit
             if (nLevel == 1)
             {
                 SfxItemSet&     rSet = pSheet->GetItemSet();
@@ -324,7 +324,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     }
 
     /**************************************************************************
-    * Titel
+    * Title
     **************************************************************************/
     aName = String(SdResId(STR_LAYOUT_TITLE));
     aName.Insert(aPrefix, 0);
@@ -369,7 +369,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     }
 
     /**************************************************************************
-    * Untertitel
+    * Subtitle
     **************************************************************************/
     aName = String(SdResId(STR_LAYOUT_SUBTITLE));
     aName.Insert(aPrefix, 0);
@@ -417,7 +417,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     }
 
     /**************************************************************************
-    * Notizen
+    * Notes
     **************************************************************************/
     aName = String(SdResId(STR_LAYOUT_NOTES));
     aName.Insert(aPrefix, 0);
@@ -461,7 +461,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     }
 
     /**************************************************************************
-    * Hintergrundobjekte
+    * Background objects
     **************************************************************************/
     aName = String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS));
     aName.Insert(aPrefix, 0);
@@ -476,7 +476,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
         rBackgroundObjectsSet.Put(SdrShadowItem(sal_False));
         rBackgroundObjectsSet.Put(SdrShadowColorItem(Color(COL_GRAY)));
-        rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm Schattendistanz
+        rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm shadow distance
         rBackgroundObjectsSet.Put(SdrShadowYDistItem(200));
         // #i16874# enable kerning by default but only for new documents
         rBackgroundObjectsSet.Put( SvxAutoKernItem( sal_True, EE_CHAR_PAIRKERNING ) );
@@ -484,7 +484,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     }
 
     /**************************************************************************
-    * Hintergrund
+    * Background
     **************************************************************************/
     aName = String(SdResId(STR_LAYOUT_BACKGROUND));
     aName.Insert(aPrefix, 0);
@@ -508,10 +508,9 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
 /*************************************************************************
 |*
-|* Graphik-StyleSheets  aus dem Quellpool in diesen Pool kopieren
+|* Copy graphic style sheets from source pool into this pool
 |*
-|* (rSourcePool kann nicht const sein, weil SfxStyleSheetPoolBase::Find
-|*  nicht const ist)
+|* (rSourcePool can not be const since SfxStyleSheetPoolBase::Find isn't const)
 |*
 \************************************************************************/
 
@@ -644,14 +643,12 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
 /*************************************************************************
 |*
-|* StyleSheets des genannten Praesentationslayouts aus dem Quellpool in diesen
-|* Pool kopieren. Kopiert werden nur solche StyleSheets, die in diesem Pool
-|* noch nicht vorhanden sind.
-|* pCreatedSheets wird - wenn ungleich NULL - mit Zeigern auf die erzeugten
-|* StyleSheets gefuellt.
+|* Copy style sheets of the named presentation layout from the source pool into
+|* this pool. Copies only the style sheets which aren't yet in this pool.
+|* If not NULL, pCreatedSheets is filled with pointers to the created style
+|* sheets.
 |*
-|* (rSourcePool kann nicht const sein, weil SfxStyleSheetPoolBase::Find
-|*  nicht const ist)
+|* (rSourcePool can not be const since SfxStyleSheetPoolBase::Find isn't const)
 |*
 \************************************************************************/
 
@@ -672,7 +669,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
             DBG_ASSERT(pSourceSheet, "CopyLayoutSheets: Quellvorlage nicht gefunden");
             if (pSourceSheet)
             {
-                // falls einer mit Methusalem-Doks. ankommt
+                // In the case one comes with Methusalem-Docs.
                 SfxStyleSheetBase& rNewSheet = Make(*it, SD_STYLE_FAMILY_MASTERPAGE);
                 rNewSheet.SetHelpId( sEmpty, pSourceSheet->GetHelpId( sEmpty ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
@@ -681,7 +678,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
         }
     }
 
-    // Sonderbehandlung fuer Gliederungsvorlagen: Parentbeziehungen aufbauen
+    // Special treatment for outline templates: create parent relation
     std::vector<SfxStyleSheetBase*> aOutlineSheets;
     CreateOutlineSheetList(rLayoutName,aOutlineSheets);
 
@@ -710,8 +707,8 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 
 /*************************************************************************
 |*
-|* Liste mit den Namen der Praesentationsvorlagen eines Layouts erzeugen.
-|* Die Liste und die enthaltenen Strings gehoeren dem Caller!
+|* Create list with names of the presentation templates of a layout.
+|* The list and the containing strings are owned by the caller!
 |*
 \************************************************************************/
 
@@ -756,8 +753,8 @@ void SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName, std::ve
 
 /*************************************************************************
 |*
-|* Liste mit Zeigern auf Praesentationsvorlagen eines Layouts erzeugen.
-|* Die Liste gehoert dem Caller!
+|* Create a list with pointer to presentation templates of a layout.
+|* The list is owned by the caller!
 |*
 \************************************************************************/
 
@@ -780,7 +777,7 @@ void SdStyleSheetPool::CreateLayoutSheetList(const String& rLayoutName, SdStyleS
 
 /*************************************************************************
 |*
-|* ggfs. PseudoStyleSheets erzeugen
+|* Create pseudo style sheets if necessary
 |*
 \************************************************************************/
 
@@ -866,7 +863,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
 
 /*************************************************************************
 |*
-|* Standard-Styles den richtigen Namen in der Programm-Sprache geben
+|* Set the correct name in the program language to the standard styles
 |*
 \************************************************************************/
 
@@ -930,7 +927,7 @@ void SdStyleSheetPool::UpdateStdNames()
                 case HID_SD_CELL_STYLE_LAST_COLUMN:     nNameId = STR_POOLSHEET_LAST_COLUMN; break;
 
                 default:
-                    // 0 oder falsche (alte) HelpId
+                    // 0 or wrong (old) HelpId
                     bHelpKnown = sal_False;
             }
             if( bHelpKnown )
@@ -951,12 +948,12 @@ void SdStyleSheetPool::UpdateStdNames()
 
                     if ( !pSheetFound )
                     {
-                        // Sheet existiert noch nicht: Altes Sheet wird umbenannt
-                        pStyle->SetName( aNewName );    // setzt auch Parents um
+                        // Sheet does not yet exist: rename old sheet
+                        pStyle->SetName( aNewName );    // transform also parents
                     }
                     else
                     {
-                        // Sheet existiert schon: Altes Sheet muss entfernt werden
+                        // Sheet does exist: old sheet has to be removed
                         aEraseList.push_back( pStyle );
                     }
                 }
@@ -964,12 +961,12 @@ void SdStyleSheetPool::UpdateStdNames()
         }
     }
 
-    // Styles, welche nicht umbenannt werden konnten, muessen entfernt werden
+    // styles that could not be renamed, must be removed
     for ( size_t i = 0, n = aEraseList.size(); i < n; ++i )
         Remove( aEraseList[ i ] );
 }
 // --------------------------------------------------------------------
-// Neues SvxNumBulletItem fuer das jeweilige StyleSheet setzen
+// Set new SvxNumBulletItem for the respective style sheet
 // --------------------------------------------------------------------
 
 void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
@@ -983,7 +980,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
     {
         case HID_STANDARD_STYLESHEET_NAME :
         {
-            // Standard-Vorlage
+            // Standard template
             SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
             aNumberFormat.SetBulletFont(&rBulletFont);
             aNumberFormat.SetBulletChar( 0x25CF ); // StarBats: 0xF000 + 34
@@ -1012,7 +1009,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             /* title gets same bullet as subtitle and not that page symbol anymore */
         case HID_PSEUDOSHEET_SUBTITLE :
         {
-            // Untertitel-Vorlage
+            // Subtitle template
             SvxNumRule* pDefaultRule = ((SvxNumBulletItem*) rSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
             DBG_ASSERT( pDefaultRule, "Wo ist mein Default? [CL]" );
 
@@ -1041,7 +1038,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
         case HID_PSEUDOSHEET_OUTLINE + 1 :
         {
-            // Gliederungs-Vorlage
+            // Outline template
             SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
             aNumberFormat.SetBulletColor(Color(COL_AUTO));
             aNumberFormat.SetStart(1);
@@ -1109,7 +1106,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
 /*************************************************************************
 |*
-|* Standard Bullet-Font erzeugen (ohne Groesse)
+|* Create standard bullet font (without size)
 |*
 \************************************************************************/
 
