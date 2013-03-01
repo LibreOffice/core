@@ -650,7 +650,7 @@ sal_Bool ImplSdPPTImport::Import()
                             aName += " ";
                             aName += OUString::number( nLevel + 1 );
                             SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
-                            DBG_ASSERT( pOutlineSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden" );
+                            DBG_ASSERT( pOutlineSheet, "Template for outline object not found" );
                             if ( pOutlineSheet )
                             {
                                 pParagraphs[ nLevel ] = new PPTParagraphObj( *pPPTStyleSheet, nOutlinerInstance, nLevel );
