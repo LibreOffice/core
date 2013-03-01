@@ -35,7 +35,7 @@ test "" = "$(grep '^Signed-off-by: ' "$1" |
 
 # Check that the first line exists, and is not an asterisk
 
-if [ -z "`head -n 1 $1 | grep -v '^[ \t]*\*$'`" ] ; then
+if [ -z "`head -n 1 $1 | grep -v '^[[:blank:]]*\*$'`" ] ; then
     abort "$1" "Please provide the general description on the first line."
 fi
 
