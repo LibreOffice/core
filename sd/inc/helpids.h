@@ -63,7 +63,7 @@
 #define HID_SD_NAVIGATOR_TBI_DRAGTYPE                           "SD_HID_SD_NAVIGATOR_TBI_DRAGTYPE"
 #define HID_SD_NAVIGATOR_TBI_SHAPE_FILTER                       "SD_HID_SD_NAVIGATOR_TBI_SHAPE_FILTER"
 
-// Toolboxen
+// tool boxes
 #define HID_SD_DRAW_TOOLBOX                                     "SD_HID_SD_DRAW_TOOLBOX"
 #define HID_SD_DRAW_OBJ_TOOLBOX                                 "SD_HID_SD_DRAW_OBJ_TOOLBOX"
 #define HID_SD_DRAW_OPTIONS_TOOLBOX                             "SD_HID_SD_DRAW_OPTIONS_TOOLBOX"

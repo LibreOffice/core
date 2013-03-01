@@ -57,26 +57,26 @@
 #define SD_IF_SDTOOLPANELPANESHELL      SFX_INTERFACE_SD_START + 29
 #define SD_IF_SDTOOLPANELSHELL          SFX_INTERFACE_SD_START + 30
 
-// Inventor-Id fuer StarDraw UserData
+// Inventor-Id for StarDraw UserData
 const sal_uInt32 SdUDInventor=sal_uInt32('S')*0x00000001+
                           sal_uInt32('D')*0x00000100+
                           sal_uInt32('U')*0x00010000+
                           sal_uInt32('D')*0x01000000;
 
-// Object-Ids fuer StarDraw UserData
+// Object-Ids for StarDraw UserData
 #define SD_ANIMATIONINFO_ID 1
 #define SD_IMAPINFO_ID      2
 
-// FamilyId der Praesentationsvorlagen
+// FamilyId of presentation templates
 #define SD_STYLE_FAMILY_GRAPHICS        SFX_STYLE_FAMILY_PARA
 #define SD_STYLE_FAMILY_PSEUDO          SFX_STYLE_FAMILY_PSEUDO
 #define SD_STYLE_FAMILY_CELL            SFX_STYLE_FAMILY_FRAME
 #define SD_STYLE_FAMILY_MASTERPAGE      SFX_STYLE_FAMILY_PAGE       // ex LT_FAMILY
 
-// Trennzeichen zwischen Layoutname und Vorlagenname der Praesentationsvorlagen
+// Separator between layout name and template name of presentation templates
 #define SD_LT_SEPARATOR "~LT~"
 
-// Optionsstream-Identifier
+// option-stream identifier
 #define SD_OPTION_MORPHING  "Morph"
 #define SD_OPTION_VECTORIZE "Vectorize"
 

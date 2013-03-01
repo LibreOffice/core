@@ -21,7 +21,7 @@
 
 #include <sfx2/sfx.hrc>
 
-// HelpIDs fuer Vorlagen
+// Helper IDs for templates
 #define HID_STANDARD_STYLESHEET_NAME        (HID_SD_START + 70)
 #define HID_POOLSHEET_OBJWITHARROW          (HID_SD_START + 71)
 #define HID_POOLSHEET_OBJWITHSHADOW         (HID_SD_START + 72)
@@ -184,7 +184,7 @@
 #define SID_CONNECTOR_LINES_CIRCLE_END      (SID_SD_START+144)
 #define SID_CONNECTOR_LINES_CIRCLES         (SID_SD_START+145)
 
-// Options-Leisten Slot-IDs
+// Option pane slot IDs
 #define SID_SOLID_CREATE                    (SID_SD_START+151)
 #define SID_HELPLINES_USE                   (SID_SD_START+152)
 #define SID_HELPLINES_MOVE                  (SID_SD_START+153)
@@ -212,7 +212,7 @@
 #define SID_LINE_CIRCLE_ARROW               (SID_SD_START+176)
 #define SID_LINE_ARROW_SQUARE               (SID_SD_START+177)
 #define SID_LINE_SQUARE_ARROW               (SID_SD_START+178)
-// und noch weitere...
+// and even more...
 
 #define ID_VAL_ENDINTENS                    (SID_SD_START+197)
 #define ID_VAL_STARTINTENS                  (SID_SD_START+198)
@@ -266,7 +266,7 @@
 #define ID_VAL_WIDTH                        (SID_SD_START+247)
 #define ID_VAL_PANEL_INDEX                  (SID_SD_START+249)
 
-// nur zum austesten, um nicht jedesmal APP:HRC ff. durchbuilden zu  muessen
+// just for tests, namely that APP:HRC ff. has not to be build every time
 #define ID_VAL_DUMMY0                       (SID_SD_START+230)
 #define ID_VAL_DUMMY1                       (SID_SD_START+231)
 #define ID_VAL_DUMMY2                       (SID_SD_START+232)

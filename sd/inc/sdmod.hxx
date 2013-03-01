@@ -118,7 +118,7 @@ public:
 
     SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
 
-    //virtuelle Methoden fuer den Optionendialog
+    // virtual methods for the option dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );

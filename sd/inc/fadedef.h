@@ -20,7 +20,7 @@
 #ifndef _SD_FADEDEF_H
 #define _SD_FADEDEF_H
 
-// muss angepasst werden!
+// has to be adjusted!
 #define FADE_EFFECT_COUNT 57
 
 enum FadeSpeed
@@ -29,7 +29,7 @@ enum FadeSpeed
     FADE_SPEED_MEDIUM,
     FADE_SPEED_FAST
 };
-// muss angepasst werden!
+// has to be adjusted!
 #define FADE_SPEED_COUNT 3
 
 #endif  // _SD_FADEDEF_H

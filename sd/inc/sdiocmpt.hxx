@@ -55,8 +55,8 @@ private:
     sal_uInt16 nVersion;
 
 public:
-                // nNewMode: STREAM_READ oder STREAM_WRITE
-                // nVer:     nur beim Schreiben angeben
+                // nNewMode: STREAM_READ or STREAM_WRITE
+                // nVer:     specify only when writing
             SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode,
                        sal_uInt16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
             ~SdIOCompat();

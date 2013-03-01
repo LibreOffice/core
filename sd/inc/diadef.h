@@ -27,7 +27,7 @@ enum PresChange
     PRESCHANGE_SEMIAUTO = 2
 };
 
-// muss angepasst werden!
+// has to be adjusted
 #define PRESCHANGE_COUNT 3
 
 #endif // _SD_DIADEF_H

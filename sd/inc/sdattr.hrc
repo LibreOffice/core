@@ -21,13 +21,13 @@
 
 #include <sfx2/sfx.hrc>
 
-// Anfang Page-Attribute
+// Begin page attributes
 #define ATTR_PAGE_START         SID_SD_START + 1234
 #define ATTR_PAGE_OBJECTS       ATTR_PAGE_START + 2
 #define ATTR_PAGE_LAYOUT        ATTR_PAGE_START + 3
 #define ATTR_PAGE_END           ATTR_PAGE_LAYOUT
 
-// Layer-Attribute
+// Layer attributes
 #define ATTR_LAYER_START        ATTR_PAGE_END + 1
 #define ATTR_LAYER_NAME         ATTR_LAYER_START
 #define ATTR_LAYER_VISIBLE      ATTR_LAYER_START + 1
@@ -38,7 +38,7 @@
 #define ATTR_LAYER_DESC         ATTR_LAYER_START + 6
 #define ATTR_LAYER_END          ATTR_LAYER_DESC
 
-// Anfang Dia-Attribute
+// Begin Dia attribute
 #define ATTR_DIA_START          ATTR_LAYER_END + 1
 #define ATTR_DIA_EFFECT         ATTR_DIA_START
 #define ATTR_DIA_SPEED          ATTR_DIA_START + 1
@@ -47,7 +47,7 @@
 #define ATTR_DIA_SOUNDFILE      ATTR_DIA_START + 5
 #define ATTR_DIA_END            ATTR_DIA_SOUNDFILE
 
-// Praesentations-Attribute
+// presentation attributes
 #define ATTR_PRESENT_START              ATTR_DIA_END + 1
 #define ATTR_PRESENT_ALL                ATTR_PRESENT_START
 #define ATTR_PRESENT_CUSTOMSHOW         ATTR_PRESENT_START + 1
@@ -67,24 +67,24 @@
 #define ATTR_PRESENT_DISPLAY            ATTR_PRESENT_START + 15
 #define ATTR_PRESENT_END                ATTR_PRESENT_DISPLAY
 
-// Transformations-Attribute
+// transformation attributes
 #define ATTR_TRANSF_START       ATTR_PRESENT_END + 1
 #define ATTR_TRANSF_ANGLE       ATTR_TRANSF_START + 7
 #define ATTR_TRANSF_END         ATTR_TRANSF_ANGLE
 
-// Raster-Attribute
+// grid attributes
 #define ATTR_GRID_START         ATTR_TRANSF_END + 1
 #define ATTR_GRID_ORIGIN_Y      ATTR_GRID_START + 8
 #define ATTR_GRID_END           ATTR_GRID_ORIGIN_Y
 
-// Bildschirm-Attribute
+// display attributes
 #define ATTR_DISPLAY_START              ATTR_GRID_END + 1
 #define ATTR_DISPLAY_ADJUSTLINES        ATTR_DISPLAY_START + 8
 #define ATTR_DISPLAY_END                ATTR_DISPLAY_ADJUSTLINES
 
 #define ATTR_TBX_DUMMY                  ATTR_DISPLAY_END + 1
 
-// Animations-Attribute
+// animation attributes
 #define ATTR_ANIMATION_START            ATTR_TBX_DUMMY + 1
 #define ATTR_ANIMATION_ACTIVE           ATTR_ANIMATION_START
 #define ATTR_ANIMATION_EFFECT           ATTR_ANIMATION_START + 1
@@ -154,7 +154,7 @@
 #define ATTR_PRESLAYOUT_CHECK_MASTERS   ATTR_PRESLAYOUT_START + 3
 #define ATTR_PRESLAYOUT_END             ATTR_PRESLAYOUT_CHECK_MASTERS
 
-// Pack & Go Attribute
+// Pack & go attributes
 #define ATTR_PACKNGO_START              ATTR_PRESLAYOUT_END + 1
 #define ATTR_PACKNGO_MEDIUMSIZE         ATTR_PACKNGO_START + 3
 //      ATTR_PACKNGO_END                ATTR_PACKNGO_MEDIUMSIZE

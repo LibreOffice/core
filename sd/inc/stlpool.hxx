@@ -62,7 +62,7 @@ public:
 
     SfxStyleSheetBase*  GetTitleSheet(const String& rLayoutName);
 
-                        // Caller muss Liste loeschen
+                        // Caller has to delete the list
     void                CreateOutlineSheetList(const String& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles);
 
     /** creates all layout style sheets for the givin layout name if they

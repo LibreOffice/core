@@ -18,9 +18,9 @@
  */
 
 /*************************************************************************
-|* Enthielt frueher auch die Klasse SdPresentationLayoutDlg (wird jetzt nicht
-|* mehr benoetigt). Dieses File ist auf ungeklaerte Weise aus dem PVCS
-|* verschwunden und wird jetzt neu eingecheckt und enthaelt nur noch den enum.
+|* Contained once the class SdPresentationLayoutDlg (not needed anymore).
+|* This file disappeared in a mysterious way from the PVCS. It is newly
+|* checked in and does only contain the enumerator.
 \************************************************************************/
 
 #ifndef _SD_PRLAYOUT_HXX_
