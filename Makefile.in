@@ -184,12 +184,6 @@ bootstrap: compilerplugins
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.build all slowcheck
-ifeq ($(OS),ANDROID)
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) android
-endif
-ifeq ($(OS),IOS)
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) ios
-endif
 
 build-nocheck : export SKIP_TESTS := YES
 build-nocheck : build

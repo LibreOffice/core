@@ -27,6 +27,7 @@ $(eval $(call gb_Module_Module,tail_build))
 $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	accessibility \
 	$(call gb_Helper_optional,AFMS,afms) \
+	android \
 	animations \
 	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
 	apple_remote \
@@ -97,6 +98,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_build,\
 	$(call gb_Helper_optional,DESKTOP,idlc) \
 	instsetoo_native \
 	io \
+	ios \
 	javaunohelper \
 	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
 	$(call gb_Helper_optional,JPEG,jpeg) \

@@ -134,7 +134,8 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 else
 # When run just from the command line, we don't have any app bundle to
 # copy or move the executable to. So do nothing.
-$(call gb_CustomTarget_get_target,ios/Viewer_app) : $(call gb_Executable_get_target,Viewer)
+$(call gb_CustomTarget_get_target,ios/Viewer_app) : $(call gb_Executable_get_target,Viewer) \
+	$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 
 $(call gb_CustomTarget_get_clean_target,ios/Viewer_app) :
 # Here we just assume that Xcode's settings are default, or something

@@ -12,7 +12,7 @@ sdremote_DIR := $(call gb_CustomTarget_get_workdir,android/sdremote)
 
 $(call gb_CustomTarget_get_target,android/sdremote) : $(sdremote_DIR)/done
 
-$(sdremote_DIR)/done :
+$(sdremote_DIR)/done : $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,1)
 	cd $(SRCDIR)/android/sdremote && $(MAKE) clean && $(MAKE) all
 	mkdir -p $(SRCDIR)/instsetoo_native/$(INPATH)/bin
