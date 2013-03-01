@@ -250,8 +250,8 @@ interface OutlineView
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
-     // Vorlagen
-     // kein Menueeintrag
+     // Templates
+     // no menu entry
     SID_STYLE_FAMILY2 // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -266,14 +266,14 @@ interface OutlineView
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-     // Vorlagen
-     // kein Menueeintrag
+     // Templates
+     // no menu entry
     SID_STYLE_FAMILY5 // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
     ]
-     // kein Menueeintrag
+     // no menu entry
     SID_STYLE_EDIT // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -281,7 +281,7 @@ interface OutlineView
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-     // kein Menueeintrag
+     // no menu entry
     SID_STYLE_UPDATE_BY_EXAMPLE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -289,7 +289,7 @@ interface OutlineView
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-     // kein Menueeintrag
+     // no menu entry
     SID_STYLE_WATERCAN // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -297,7 +297,7 @@ interface OutlineView
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-     // kein Menueeintrag
+     // no menu entry
     SID_STYLE_NEW_BY_EXAMPLE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -305,7 +305,7 @@ interface OutlineView
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-     // kein Menueeintrag
+     // no menu entry
     SID_STYLE_NEW // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -313,7 +313,7 @@ interface OutlineView
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
-     // kein Menueeintrag
+     // no menu entry
     SID_STYLE_DELETE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

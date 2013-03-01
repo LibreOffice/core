@@ -111,7 +111,7 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-     // Menue-Messages fuer temporaere Funktionen mit Dialog
+     // Menu messages for temporary functions with dialog
     SID_ATTR_ZOOM // ole : no, status : no
     [
         ExecMethod = FuTemporary ;
@@ -1228,7 +1228,7 @@ interface DrawView
         Export = FALSE ;
     ]
      //////////////////////////////////////////////////////////////////////
-     // Beginn FormSlots
+     // Begin FormSlots
     SID_FM_CREATE_CONTROL
     [
         ExecMethod = FuPermanent ;
@@ -1243,7 +1243,7 @@ interface DrawView
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
     ]
-     // Ende FormSlots
+     // End FormSlots
      //////////////////////////////////////////////////////////////////////
     SID_ATTR_FILL_STYLE // ole : no, status : ?
     [
@@ -1681,9 +1681,9 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-     // Problem mit SID_ATTR_FILL_STYLE:
-     // frueher XFillStyle, jetzt Property FillStyle (Get/Set)
-     // deswegen Export = FALSE !
+     // problem with SID_ATTR_FILL_STYLE:
+     // former XFillStyle, now property FillStyle (Get/Set)
+     // therefore Export = FALSE !
     SID_SETFILLSTYLE // ole : no, status : play rec
     [
         ExecMethod = AttrExec ;
@@ -1705,9 +1705,9 @@ interface DrawView
         ExecMethod = AttrExec ;
         StateMethod = AttrState ;
     ]
-     // Problem mit SID_ATTR_LINE_WIDTH:
-     // frueher XLineWidth, jetzt Property LineWidth (Get/Set)
-     // deswegen Export = FALSE !
+     // problem with SID_ATTR_LINE_WIDTH:
+     // former XLineWidth, now property LineWidth (Get/Set)
+     // therefore Export = FALSE !
     SID_SETLINEWIDTH // ole : no, status : play rec
     [
         ExecMethod = AttrExec ;
@@ -1720,9 +1720,9 @@ interface DrawView
         StateMethod = AttrState ;
     ]
      //DB: FillColor -> SetFillColor
-     // Problem mit SID_ATTR_FILL_COLOR:
-     // frueher XFillColor, jetzt Property FillColor (Get/Set)
-     // deswegen Export = FALSE !
+     // problem with SID_ATTR_FILL_COLOR:
+     // former XFillColor, now property FillColor (Get/Set)
+     // therefore Export = FALSE !
     SID_SETFILLCOLOR // ole : no, status : play rec
     [
         ExecMethod = AttrExec ;
@@ -1939,7 +1939,7 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-     // Slots in der Optionsleiste
+     // slots in the option pane
     SID_BEZIER_EDIT // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
