@@ -235,14 +235,14 @@ sal_Bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
 
 void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize )
 {
-    // kleiner id check
+    // just a simple id check
 
     if ( !nId )
         return;
     if ( nId == 0xffffffff )
         nId = 0;
 
-    // keine doppelten PropId's zulassen, sortieren
+    // do not allow same PropId's, sort
     boost::ptr_vector<PropEntry>::iterator iter;
     for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter )
     {
@@ -333,7 +333,7 @@ void Section::Read( SvStorageStream *pStrm )
         *pStrm >> nPropId >> nPropOfs;
         nCurrent = pStrm->Tell();
         pStrm->Seek( nPropOfs + nSecOfs );
-        if ( nPropId )                  // dictionary wird nicht eingelesen
+        if ( nPropId )                  // do not read dictionary
         {
 
             *pStrm >> nPropType;
