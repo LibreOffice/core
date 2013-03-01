@@ -1009,7 +1009,7 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
 
     /* mfe: if dest file is symbolic link remove the link and place the file instead (hro says so) */
     /* mfe: if source is a link copy the link and not the file it points to (hro says so) */
-    sal_Char pszLinkContent[PATH_MAX];
+    sal_Char pszLinkContent[PATH_MAX+1];
 
     pszLinkContent[0] = '\0';
 
@@ -1021,7 +1021,7 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
     else
-        pszLinkContent[ nRet ] = 0;
+       pszLinkContent[ nRet ] = 0;
 
     nRet = symlink(pszLinkContent,pszDestFileName);
 
