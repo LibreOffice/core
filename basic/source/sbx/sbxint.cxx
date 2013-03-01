@@ -881,7 +881,10 @@ start:
             *p->pDouble = ImpSalUInt64ToDouble( n ); break;
         case SbxBYREF | SbxCURRENCY:
             if ( n > ( SbxMAXSALINT64 / CURRENCY_FACTOR ) )
-                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXSALINT64;
+            {
+                 SbxBase::SetError( SbxERR_OVERFLOW );
+                 n = SbxMAXSALINT64;
+            }
             *p->pnInt64 = ( sal_Int64) ( n * CURRENCY_FACTOR ); break;
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = n; break;
