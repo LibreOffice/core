@@ -971,4 +971,20 @@ Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
         LOGW("No focused frame to emit event on");
 }
 
+// public static native void zoom(float scale, int x, int y);
+extern "C" SAL_JNI_EXPORT void JNICALL
+Java_org_libreoffice_experimental_desktop_Desktop_zoom(JNIEnv * /* env */,
+                                                       jobject /* clazz */,
+                                                       jfloat scale,
+                                                       jint x,
+                                                       jint y)
+{
+    (void) x;
+    (void) y;
+
+    if (scale > 1.05) {
+    } else if (scale < 0.95) {
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

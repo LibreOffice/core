@@ -50,6 +50,7 @@ public class Desktop
     public static native void setViewSize(int width, int height);
     public static native void key(char c, short timestamp);
     public static native void touch(int action, int x, int y, short timestamp);
+    public static native void zoom(float scale, int x, int y);
 
     /**
      * This class contains the state that is initialized once and never changes
@@ -162,18 +163,54 @@ public class Desktop
         Bitmap mBitmap;
         boolean renderedOnce;
         ScaleGestureDetector gestureDetector;
+        float scale = 1;
 
         public BitmapView()
         {
             super(Desktop.this);
             setFocusableInTouchMode(true);
+
+            // While a scale gesture (two-finger pinch / spread to
+            // zoom out / in) is in progress we just scale the bitmap
+            // view (UI elements too, which of course is a bit silly).
+            // When the scale gesture has finished, we ask LO to zoom
+            // the document (and reset the view scale, it will be
+            // replaced by one where the document (not UI elements) is
+            // displayed at a different zoom level).
+
+            // Is that sane? Would it be too slow to ask LO to zoom
+            // continuously while the gesture is in progress?
+
             gestureDetector =
                 new ScaleGestureDetector(Desktop.this,
                                          new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                                             @Override public boolean onScaleBegin(ScaleGestureDetector detector)
+                                             {
+                                                 Log.i(TAG, "onScaleBegin: pivot=(" + detector.getFocusX() + ", " + detector.getFocusY() + ")");
+                                                 setPivotX(detector.getFocusX());
+                                                 setPivotY(detector.getFocusY());
+                                                 return true;
+                                             }
+
                                              @Override public boolean onScale(ScaleGestureDetector detector)
                                              {
-                                                 Log.i(TAG, "onScale: " + detector.getScaleFactor());
+                                                 float s = detector.getScaleFactor();
+                                                 if (s > 0.95 && s < 1.05)
+                                                     return false;
+                                                 scale *= s;
+                                                 Log.i(TAG, "onScale: " + s + " => " + scale);
+                                                 setScaleX(scale);
+                                                 setScaleY(scale);
                                                  return true;
+                                             }
+
+                                             @Override public void onScaleEnd(ScaleGestureDetector detector)
+                                             {
+                                                 Log.i(TAG, "onScaleEnd: " + scale);
+                                                 Desktop.zoom(scale, (int) detector.getFocusX(), (int) detector.getFocusY());
+                                                 scale = 1;
+                                                 setScaleX(scale);
+                                                 setScaleY(scale);
                                              }
                                          });
         }
@@ -226,7 +263,8 @@ public class Desktop
 
         @Override public boolean onTouchEvent(MotionEvent event)
         {
-            gestureDetector.onTouchEvent(event);
+            if (gestureDetector.onTouchEvent(event))
+                return true;
 
             if (!renderedOnce)
                 return super.onTouchEvent(event);
