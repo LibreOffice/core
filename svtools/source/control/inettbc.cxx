@@ -181,7 +181,7 @@ void SvtMatchContext_Impl::FillPicklist(std::vector<rtl::OUString>& rPickList)
 void SvtMatchContext_Impl::Stop()
 {
     css::uno::Reference< css::ucb::XCommandProcessor > proc;
-    sal_Int32 id;
+    sal_Int32 id(0);
     {
         osl::MutexGuard g(mutex_);
         if (!stopped_) {
