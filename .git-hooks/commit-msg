@@ -62,6 +62,14 @@ if [ -n "`sed '/^#/,$d' $1 | grep '^[[:space:]]\+\*.*:'`" -a -z "`grep '^\*' $1`
     abort "$1" "Please don't use whitespace in front of '* file: Description.' entries."
 fi
 
+# Check that lines do not start with '#<something>' (possibly accidental commit,
+# such as starting the message with '#ifdef', git commits start with '#<whitespace>'.
+
+if [ -n "`grep '^#[^[:blank:]]' $1`" ] ; then
+    abort "$1" "Possible accidental comment in the commit message (leading # without space)."
+fi
+
+
 #------------------ copied gerrit commit-msg hook to handle ChangeId -->
 # From Gerrit Code Review 2.3
 #
