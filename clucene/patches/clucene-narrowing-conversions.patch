@@ -23,3 +23,14 @@
  };
  const int32_t QueryParserTokenManager::jjnextStates[]={
  		15, 17, 18, 29, 32, 23, 33, 30, 20, 21, 32, 23, 33, 31, 34, 27,
+--- src/core/CLucene/queryParser/legacy/Lexer.cpp.sav	2013-03-01 09:25:18.000000000 +0100
++++ src/core/CLucene/queryParser/legacy/Lexer.cpp 09:25:12.000000000 +0100
+@@ -117,7 +117,7 @@ bool Lexer::GetNextToken(QueryToken* tok
+       if( _istspace(ch)!=0 ) {
+          continue;
+       }
+-      TCHAR buf[2] = {ch,'\0'};
++      TCHAR buf[2] = {TCHAR(ch),'\0'};
+       switch(ch) {
+          case '+':
+             token->set(buf, QueryToken::PLUS);
