@@ -715,16 +715,15 @@ public:
         // Clobber the UI fonts
 #if 0
         psp::FastPrintFontInfo aInfo;
-        aInfo.m_aFamilyName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Roboto" ) );
+        aInfo.m_aFamilyName = rtl::OUString( "Roboto" );
         aInfo.m_eItalic = ITALIC_NORMAL;
         aInfo.m_eWeight = WEIGHT_NORMAL;
         aInfo.m_eWidth = WIDTH_NORMAL;
         psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
 #endif
 
-        // FIXME: is 12 point enough ?
-        Font aFont( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Roboto" ) ),
-                    Size( 0, 14 ) );
+        // FIXME: is 14 point enough ?
+        Font aFont( rtl::OUString( "Roboto" ), Size( 0, 14 ) );
 
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
         aStyleSet.SetAppFont( aFont );
@@ -776,7 +775,7 @@ void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
 
 const OUString& SalGetDesktopEnvironment()
 {
-    static rtl::OUString aEnv( RTL_CONSTASCII_USTRINGPARAM( "android" ) );
+    static rtl::OUString aEnv( "android" );
     return aEnv;
 }
 
