@@ -186,27 +186,27 @@ String STR_GLUEPOINTSOBJECTBARSHELL
 {
     Text [ en-US ] = "Glue Points Mode" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String STR_LAYOUT_TITLE
 {
     Text = "Titel" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String STR_LAYOUT_OUTLINE
 {
     Text = "Gliederung" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String STR_LAYOUT_BACKGROUND
 {
     Text = "Hintergrund" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String STR_LAYOUT_BACKGROUNDOBJECTS
 {
     Text = "Hintergrundobjekte" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String STR_LAYOUT_NOTES
 {
     Text = "Notizen" ;
@@ -235,7 +235,7 @@ String STR_NOT_ENOUGH_MEMORY
 {
     Text [ en-US ] = "Not enough memory!\nThe action will be aborted." ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String STR_LAYOUT_SUBTITLE
 {
     Text = "Untertitel" ;
