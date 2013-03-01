@@ -486,6 +486,10 @@ PDFOutDev::PDFOutDev( PDFDoc* pDoc ) :
     m_pUtf8Map( new UnicodeMap((char*)"UTF-8", gTrue, &mapUTF8) )
 {
 }
+PDFOutDev::~PDFOutDev()
+{
+    delete m_pUtf8Map;
+}
 
 void PDFOutDev::startPage(int /*pageNum*/, GfxState* state)
 {
