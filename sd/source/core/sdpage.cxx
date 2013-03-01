@@ -106,9 +106,9 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, sal_Bool bMasterPage)
 ,   mfTransitionDuration(2.0)
 ,   mbIsPrecious(true)
 {
-    // Der Layoutname der Seite wird von SVDRAW benutzt, um die Praesentations-
-    // vorlagen der Gliederungsobjekte zu ermitteln. Darum enthaelt er bereits
-    // den Bezeichner fuer die Gliederung (STR_LAYOUT_OUTLINE).
+    // The name of the layout of the page is used by SVDRAW to determine the
+    // presentation template of the outline objects. Therefore, it already
+    // contains the designator for the outline (STR_LAYOUT_OUTLINE).
     OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME).toString());
     aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
     maLayoutName = aBuf.makeStringAndClear();
@@ -344,7 +344,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
         case PRESOBJ_HANDOUT:
         {
-            //Erste Standardseite am SdrPageObj vermerken
+            // Save the first standard page at SdrPageObj
             // #i105146# We want no content to be displayed for PK_HANDOUT,
             // so just never set a page as content
             pSdrObj = new SdrPageObj(0);
@@ -353,7 +353,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
         case PRESOBJ_PAGE:
         {
-            //Notizseite am SdrPageObj vermerken
+            // Save note pages at SdrPageObj
             sal_uInt16 nDestPageNum(GetPageNum());
 
             if(nDestPageNum)
@@ -411,8 +411,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
             if (mbMaster)
             {
-                // Bei Praesentationsobjekten auf der MasterPage soll die
-                // Groesse vom Benutzwer frei waehlbar sein
+                // The size of presentation objects on the master page have to
+                // be freely selectable by the user.
 
                 // potential problem: This action was still NOT
                 // adapted for vertical text. This sure needs to be done.
@@ -490,12 +490,12 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         {
             SdrLayerAdmin& rLayerAdmin = pModel->GetLayerAdmin();
 
-            // Hintergrundobjekte der MasterPage
+            // background objects of the master page
             pSdrObj->SetLayer( rLayerAdmin.
                 GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False) );
         }
 
-        // Objekt am StyleSheet anmelden
+        // Subscribe object at the style sheet
         // Set style only when one was found (as in 5.2)
         if( mePageKind != PK_HANDOUT )
         {
@@ -553,8 +553,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
 /*************************************************************************
 |*
-|* Es werden Praesentationsobjekte auf der Page erzeugt.
-|* Alle Praesentationsobjekte erhalten einen UserCall auf die Page.
+|* Creates presentation objects on the master page.
+|* All presentation objects get a UserCall to the page.
 |*
 \************************************************************************/
 
@@ -670,9 +670,9 @@ SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 
 /*************************************************************************
 |*
-|* Das Praesentationsobjekt rObj hat sich geaendert und wird nicht mehr
-|* durch das Praesentationsobjekt der MasterPage referenziert.
-|* Der UserCall wird geloescht.
+|* The presentation object rObj has changed and is no longer referenzed by the
+|* presentation object of the master page.
+|* The UserCall is deleted.
 |*
 \************************************************************************/
 
@@ -708,8 +708,8 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                     }
                     else if (pModel)
                     {
-                        // MasterPage-Objekt wurde veraendert, daher
-                        // Objekte auf allen Seiten anpassen
+                        // Object of the master page changed, therefore adjust
+                        // object on all pages
                         sal_uInt16 nPageCount = ((SdDrawDocument*) pModel)->GetSdPageCount(mePageKind);
 
                         for (sal_uInt16 i = 0; i < nPageCount; i++)
@@ -718,8 +718,8 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
 
                             if (pLoopPage && this == &(pLoopPage->TRG_GetMasterPage()))
                             {
-                                // Seite hoert auf diese MasterPage, daher
-                                // AutoLayout anpassen
+                                // Page listens to this master page, therefore
+                                // adjust AutoLayout
                                 pLoopPage->SetAutoLayout(pLoopPage->GetAutoLayout());
                             }
                         }
@@ -738,7 +738,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
 
 /*************************************************************************
 |*
-|* Erzeugt auf einer MasterPage Hintergrund, Titel- und Layout-Bereich
+|* Creates on a master page: background, title- and layout area
 |*
 \************************************************************************/
 
@@ -760,7 +760,7 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
     }
 
     /**************************************************************************
-    * Hintergrund, Titel- und Layout-Bereich werden angelegt
+    * create background, title- and layout area
     **************************************************************************/
     if( mePageKind == PK_STANDARD )
     {
@@ -955,7 +955,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
 
 /*************************************************************************
 |*
-|* Titelbereich zurueckgeben
+|* return title area
 |*
 \************************************************************************/
 
@@ -966,7 +966,7 @@ Rectangle SdPage::GetTitleRect() const
     if (mePageKind != PK_HANDOUT)
     {
         /******************************************************************
-        * Standard- oder Notiz-Seite: Titelbereich
+        * standard- or note page: title area
         ******************************************************************/
         Point aTitlePos ( GetLftBorder(), GetUppBorder() );
         Size aTitleSize ( GetSize() );
@@ -985,7 +985,7 @@ Rectangle SdPage::GetTitleRect() const
             Point aPos = aTitlePos;
             aPos.Y() += long( aTitleSize.Height() * 0.076 );
 
-            // Hoehe beschraenken
+            // limit height
             aTitleSize.Height() = (long) (aTitleSize.Height() * 0.375);
 
             Size aPartArea = aTitleSize;
@@ -1006,7 +1006,7 @@ Rectangle SdPage::GetTitleRect() const
 
             if ( pRefPage )
             {
-                // tatsaechliche Seitengroesse in das Handout-Rechteck skalieren
+                // scale actually page size into handout rectangle
                 double fH = (double) aPartArea.Width()  / pRefPage->GetWdt();
                 double fV = (double) aPartArea.Height() / pRefPage->GetHgt();
 
@@ -1033,7 +1033,7 @@ Rectangle SdPage::GetTitleRect() const
 
 /*************************************************************************
 |*
-|* Gliederungsbereich zurueckgeben
+|* return outline area
 |*
 \************************************************************************/
 
@@ -1074,7 +1074,7 @@ Rectangle SdPage::GetLayoutRect() const
 
 /**************************************************************************
 |*
-|* Diese Methode weist ein AutoLayout zu
+|* assign a AutoLayout
 |*
 \*************************************************************************/
 
@@ -1593,7 +1593,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
 
 /*************************************************************************
 |*
-|* Objekt einfuegen
+|* insert object
 |*
 \************************************************************************/
 
@@ -1618,7 +1618,7 @@ void SdPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertRea
 
 /*************************************************************************
 |*
-|* Objekt loeschen
+|* remove object
 |*
 \************************************************************************/
 
@@ -1630,7 +1630,7 @@ SdrObject* SdPage::RemoveObject(sal_uLong nObjNum)
 
 /*************************************************************************
 |*
-|* Objekt loeschen, ohne Broadcast
+|* remove object without broadcast
 |*
 \************************************************************************/
 
@@ -1683,8 +1683,8 @@ void SdPage::SetSize(const Size& aSize)
 
         if (aOldSize.Height() == 10 && aOldSize.Width() == 10)
         {
-            // Die Seite bekommt erstmalig eine gueltige Groesse gesetzt,
-            // daher wird nun die Orientation initialisiert
+            // this page gets a valid size for the first time. Therefore
+            // we initialize the orientation.
             if (aSize.Width() > aSize.Height())
             {
                 meOrientation = ORIENTATION_LANDSCAPE;
@@ -1740,7 +1740,7 @@ void SdPage::SetLwrBorder(sal_Int32 nBorder)
 
 /*************************************************************************
 |*
-|* Setzt BackgroundFullSize und ruft dann AdjustBackground auf
+|* Sets BackgroundFullSize and then calls AdjustBackground
 |*
 \************************************************************************/
 
@@ -1754,12 +1754,11 @@ void SdPage::SetBackgroundFullSize( sal_Bool bIn )
 
 /*************************************************************************
 |*
-|* Alle Objekte an neue Seitengroesse anpassen
+|* Adjust all objects to new page size.
 |*
-|* bScaleAllObj: Alle Objekte werden in die neue Flaeche innerhalb der
-|* Seitenraender skaliert. Dabei werden die Position, Groesse und bei
-|* Praesentationsobjekten auf der MasterPage auch die Schrifthoehe der
-|* Praesentationsvorlagen skaliert.
+|* bScaleAllObj: all objects are scaled into the new area within the page
+|* margins. We scale the position and size. For presentation objects on the
+|* master page, we also scale the font height of the presentation template.
 |*
 \************************************************************************/
 
@@ -1776,8 +1775,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     sal_Int32 nUpper = rNewBorderRect.Top();
     sal_Int32 nLower = rNewBorderRect.Bottom();
 
-    // Negative Werte stehen fuer nicht zu aendernde Werte
-    // -> aktuelle Werte verwenden
+    // negative values are fixed values
+    // -> use up to date values
     if (aNewPageSize.Width() < 0)
     {
         aNewPageSize.Width() = GetWdt();
@@ -1827,12 +1826,12 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     {
         sal_Bool bIsPresObjOnMaster = sal_False;
 
-        // Alle Objekte
+        // all Objects
         pObj = GetObj(nObj);
 
         if (mbMaster && IsPresObj(pObj))
         {
-            // Es ist ein Praesentationsobjekt auf der MasterPage
+            // There is a presentation object on the master page
             bIsPresObjOnMaster = sal_True;
         }
 
@@ -1844,7 +1843,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
             if (!pObj->IsEdgeObj())
             {
                 /**************************************************************
-                * Objekt skalieren
+                * Scale objects
                 **************************************************************/
                 if (mbScaleObjects)
                 {
@@ -1861,7 +1860,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                     if (bIsPresObjOnMaster)
                     {
                         /**********************************************************
-                        * Praesentationsvorlage: Texthoehe anpassen
+                        * presentation template: adjust test height
                         **********************************************************/
                         sal_uInt16 nIndexTitle = 0;
                         sal_uInt16 nIndexOutline = 0;
@@ -1912,7 +1911,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
                                 if (pOutlineSheet)
                                 {
-                                    // Neue Fonthoehe berechnen
+                                    // Calculate new font height
                                     SfxItemSet aTempSet(pOutlineSheet->GetItemSet());
 
                                     SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT);
@@ -1936,17 +1935,18 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                     }
 
-                                    // Bullet anpassen
+                                    // adjust bullet
                                     ((SdStyleSheet*) pOutlineSheet)->AdjustToFontHeight(aTempSet, sal_False);
 
-                                    // Sonderbehandlung: die INVALIDS auf NULL-Pointer
-                                    // zurueckgesetzen (sonst landen INVALIDs oder
-                                    // Pointer auf die DefaultItems in der Vorlage;
-                                    // beides wuerde die Attribut-Vererbung unterbinden)
+                                    // Special treatment: reset the INVALIDS to
+                                    // NULL pointer (otherwise we have INVALID's
+                                    // or pointer to the DefaultItems in the
+                                    // template; both would suppress the
+                                    // attribute inheritance)
                                     aTempSet.ClearInvalidItems();
 
-                                    // Sonderbehandlung: nur die gueltigen Anteile des
-                                    // BulletItems
+                                    // Special treatment: only the valid parts
+                                    // of the BulletItems
                                     if (aTempSet.GetItemState(EE_PARA_BULLET) == SFX_ITEM_AVAILABLE)
                                     {
                                         SvxBulletItem aOldBulItem((SvxBulletItem&) pOutlineSheet->GetItemSet().Get(EE_PARA_BULLET));
@@ -1982,7 +1982,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                               pObj->GetOutlinerParaObject() )
                     {
                         /******************************************************
-                        * Normales Textobjekt: Texthoehe anpassen
+                        * normal text object: adjust text height
                         ******************************************************/
                         sal_uLong nScriptType = pObj->GetOutlinerParaObject()->GetTextObject().GetScriptType();
                         sal_uInt16 nWhich = EE_CHAR_FONTHEIGHT;
@@ -2003,7 +2003,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
             if (mbScaleObjects && !pObj->IsEdgeObj())
             {
                 /**************************************************************
-                * Objektposition skalieren
+                * scale object position
                 **************************************************************/
                 Point aNewPos;
 
@@ -2041,12 +2041,12 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
     {
         pNewObj = rPage.CreatePresObj(PRESOBJ_OUTLINE, bVertical, aRect);
 
-        // Text des Untertitels in das PRESOBJ_OUTLINE setzen
+        // Set text of the subtitle into PRESOBJ_OUTLINE
         OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
 
         if(pOutlParaObj)
         {
-            // Text umsetzen
+            // assign text
             ::sd::Outliner* pOutl = pModel->GetInternalOutliner( sal_True );
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
@@ -2057,7 +2057,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
 
             for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
             {
-                // Neue Vorlage zuweisen
+                // assign new template
                 String aName(rPage.GetLayoutName());
                 aName += sal_Unicode( ' ' );
                 aName += OUString::number( nLevel );
@@ -2077,7 +2077,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
                 }
             }
 
-            // LRSpace-Item loeschen
+            // Remove LRSpace item
             SfxItemSet aSet(pModel->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
             aSet.Put(pNewObj->GetMergedItemSet());
@@ -2101,12 +2101,12 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
         // is there an outline shape we can use to replace empty subtitle shape?
         pNewObj = rPage.CreatePresObj(PRESOBJ_TEXT, bVertical, aRect);
 
-        // Text des Gliederungsobjekts in das PRESOBJ_TITLE setzen
+        // Set text of the outline object into PRESOBJ_TITLE
         OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
 
         if(pOutlParaObj)
         {
-            // Text umsetzen
+            // assign text
             ::sd::Outliner* pOutl = pModel->GetInternalOutliner();
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
@@ -2115,7 +2115,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             pOutl->Clear();
             pNewObj->SetEmptyPresObj(sal_False);
 
-            // Linken Einzug zuruecksetzen
+            // reset left indent
             SfxItemSet aSet(pModel->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
             aSet.Put(pNewObj->GetMergedItemSet());
@@ -2282,7 +2282,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
 
 /*************************************************************************
 |*
-|* Liefert den PresObjKind eines Objektes zurueck
+|* Returns the PresObjKind of a object
 |*
 \************************************************************************/
 
@@ -2330,7 +2330,7 @@ void SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eKind )
 
 /*************************************************************************
 |*
-|* Text des Objektes setzen
+|* Set the text of a object
 |*
 \************************************************************************/
 
@@ -2470,7 +2470,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 
 /*************************************************************************
 |*
-|* Layoutname setzen
+|* Set the name of the layout
 |*
 \************************************************************************/
 void SdPage::SetLayoutName(OUString aName)
@@ -2489,7 +2489,7 @@ void SdPage::SetLayoutName(OUString aName)
 
 /*************************************************************************
 |*
-|* Seitenname zurueckgeben und ggf. generieren
+|* Return the page name and generates it if necessary
 |*
 \************************************************************************/
 
@@ -2520,7 +2520,7 @@ const String& SdPage::GetName() const
         else
         {
             /******************************************************************
-            * Defaultname fuer Handzettelseiten
+            * default name for note pages
             ******************************************************************/
             aCreatedPageName = String(SdResId(STR_LAYOUT_DEFAULT_NAME));
         }
@@ -2558,7 +2558,7 @@ Orientation SdPage::GetOrientation() const
 
 /*************************************************************************
 |*
-|* Liefert den Default-Text eines PresObjektes zurueck
+|* returns the default text of a PresObjektes
 |*
 \************************************************************************/
 
