@@ -1627,7 +1627,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_NORMAL;
             break;
         default:
-            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
+            SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             aSkip.setParsed(false);
@@ -1904,7 +1904,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
             break;
         default:
-            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle symbol '" << lcl_RtfToString(nKeyword) << "'");
+            SAL_INFO("writerfilter", "TODO handle symbol '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
             break;
     }
@@ -2593,7 +2593,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue("CornerRadius", uno::makeAny(sal_Int32(83)));
                 break;
         default:
-            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
+            SAL_INFO("writerfilter", "TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
             break;
     }
@@ -3415,7 +3415,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         default:
-            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
+            SAL_INFO("writerfilter", "TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
             break;
     }
@@ -3512,7 +3512,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
             }
             break;
         default:
-            SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle toggle '" << lcl_RtfToString(nKeyword) << "'");
+            SAL_INFO("writerfilter", "TODO handle toggle '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
             break;
     }
