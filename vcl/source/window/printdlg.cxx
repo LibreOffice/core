@@ -449,11 +449,7 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
     mpBorderCB->Check( i_rMPS.bDrawBorder );
     mpNupRowsEdt->SetValue( i_rMPS.nRows );
     mpNupColEdt->SetValue( i_rMPS.nColumns );
-    for( sal_uInt16 i = 0; i < mpNupOrderBox->GetEntryCount(); i++ )
-    {
-        if( int(sal_IntPtr(mpNupOrderBox->GetEntryData( i ))) == i_rMPS.nOrder )
-            mpNupOrderBox->SelectEntryPos( i );
-    }
+    mpNupOrderBox->SelectEntryPos( i_rMPS.nOrder );
     if( i_rMPS.nRows != 1 || i_rMPS.nColumns != 1 )
     {
         mpNupPagesBox->SelectEntryPos( mpNupPagesBox->GetEntryCount()-1 );
@@ -1438,8 +1434,7 @@ void PrintDialog::updateNup()
 
     aMPS.bDrawBorder        = maNUpPage.mpBorderCB->IsChecked();
 
-    int nOrderMode = int(sal_IntPtr(maNUpPage.mpNupOrderBox->GetEntryData(
-                           maNUpPage.mpNupOrderBox->GetSelectEntryPos() )));
+    int nOrderMode = maNUpPage.mpNupOrderBox->GetSelectEntryPos();
     if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_LRTB )
         aMPS.nOrder = PrinterController::LRTB;
     else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBLR )
@@ -1449,8 +1444,7 @@ void PrintDialog::updateNup()
     else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBRL )
         aMPS.nOrder = PrinterController::TBRL;
 
-    int nOrientationMode = int(sal_IntPtr(maNUpPage.mpNupOrientationBox->GetEntryData(
-                                 maNUpPage.mpNupOrientationBox->GetSelectEntryPos() )));
+    int nOrientationMode = maNUpPage.mpNupOrientationBox->GetSelectEntryPos();
     if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE )
         aMPS.aPaperSize = maNupLandscapeSize;
     else if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT )
