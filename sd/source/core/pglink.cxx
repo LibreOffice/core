@@ -54,7 +54,7 @@ SdPageLink::~SdPageLink()
 
 /*************************************************************************
 |*
-|* Daten haben sich geaendert
+|* Date have changed
 |*
 \************************************************************************/
 
@@ -67,8 +67,8 @@ SdPageLink::~SdPageLink()
     if (pLinkManager)
     {
         /**********************************************************************
-        * Nur Standardseiten duerfen gelinkt sein
-        * Die entsprechenden Notizseiten werden automatisch aktualisiert
+        * Only standard pages are allowed to be linked
+        * The corresponding note pages are updated automaticly
         **********************************************************************/
         String aFileName;
         String aBookmarkName;
@@ -83,11 +83,11 @@ SdPageLink::~SdPageLink()
         if (pBookmarkDoc)
         {
             /******************************************************************
-            * Die gelinkte Seite wird im Model replaced
+            * the linked page is replaced in the model
             ******************************************************************/
             if (aBookmarkName.Len() == 0)
             {
-                // Kein Seitenname angegeben: es wird die erste Seite genommen
+                // no page name specified: we assume it is the first page
                 aBookmarkName = pBookmarkDoc->GetSdPage(0, PK_STANDARD)->GetName();
                 pPage->SetBookmarkName(aBookmarkName);
             }
@@ -119,13 +119,13 @@ SdPageLink::~SdPageLink()
 
 /*************************************************************************
 |*
-|* Link an oder abmelden
+|* Connect or disconnect link
 |*
 \************************************************************************/
 
 void SdPageLink::Closed()
 {
-    // Die Verbindung wird aufgehoben
+    // the connection is closed
     pPage->SetFileName(String());
     pPage->SetBookmarkName(String());
 
