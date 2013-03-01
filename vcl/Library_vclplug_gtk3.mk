@@ -35,7 +35,6 @@ $(eval $(call gb_Library_add_cxxflags,vclplug_gtk3,\
 
 $(eval $(call gb_Library_add_defs,vclplug_gtk3,\
     -DVCLPLUG_GTK_IMPLEMENTATION \
-    -DLIBO_VERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,vclplug_gtk3))
