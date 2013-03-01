@@ -1,4 +1,4 @@
-include ../../../config_host.mk
+include $(BUILDDIR)/config_host.mk
 
 # The default target just builds.
 all: build-ant

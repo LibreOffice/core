@@ -23,8 +23,8 @@ $(call gb_CustomTarget_get_target,android/docloader) : \
 $(docloader_DIR)/done : $(sdremote_DIR)/done
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
 	cd $(SRCDIR)/android/experimental/DocumentLoader && $(MAKE) all
-	mkdir -p $(SRCDIR)/instsetoo_native/$(INPATH)/bin
-	cp $(SRCDIR)/android/experimental/DocumentLoader/bin/*-debug.apk $(SRCDIR)/instsetoo_native/$(INPATH)/bin
+	mkdir -p $(WORKDIR)/installation/bin
+	cp $(SRCDIR)/android/experimental/DocumentLoader/bin/*-debug.apk $(WORKDIR)/installation/bin
 
 $(call gb_CustomTarget_get_clean_target,android/docloader) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),MAK,2)

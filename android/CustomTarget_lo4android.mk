@@ -24,8 +24,8 @@ $(call gb_CustomTarget_get_target,android/lo4android) : \
 $(lo4android_DIR)/done : $(docloader_DIR)/done
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
 	cd $(SRCDIR)/android/experimental/LibreOffice4Android && $(MAKE) all
-	mkdir -p $(SRCDIR)/instsetoo_native/$(INPATH)/bin
-	cp $(SRCDIR)/android/experimental/LibreOffice4Android/bin/*-debug.apk $(SRCDIR)/instsetoo_native/$(INPATH)/bin
+	mkdir -p $(WORKDIR)/installation/bin
+	cp $(SRCDIR)/android/experimental/LibreOffice4Android/bin/*-debug.apk $(WORKDIR)/installation/bin
 
 $(call gb_CustomTarget_get_clean_target,android/lo4android) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),MAK,2)
