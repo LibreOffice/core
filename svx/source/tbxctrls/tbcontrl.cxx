@@ -1831,6 +1831,7 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
 // -----------------------------------------------------------------------
 SvxStyleToolBoxControl::~SvxStyleToolBoxControl()
 {
+    delete pImpl;
 }
 
 // -----------------------------------------------------------------------
