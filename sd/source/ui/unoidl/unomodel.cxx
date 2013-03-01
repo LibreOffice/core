@@ -50,6 +50,7 @@
 #include <svx/unopool.hxx>
 #include <svx/svdorect.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/fontitem.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svx/svdpool.hxx>
 #include <editeng/unolingu.hxx>
@@ -172,6 +173,15 @@ const sal_Int32 WID_MODEL_RUNTIMEUID = 9;
 const sal_Int32 WID_MODEL_BUILDID = 10;
 const sal_Int32 WID_MODEL_HASVALIDSIGNATURES = 11;
 const sal_Int32 WID_MODEL_DIALOGLIBS = 12;
+const sal_Int32 WID_MODEL_FONTS = 13;
+
+#ifndef SEQTYPE
+ #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
+  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
+ #else
+  #define SEQTYPE(x) &(x)
+ #endif
+#endif
 
 const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
@@ -190,6 +200,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { MAP_CHAR_LEN("DialogLibraries"),              WID_MODEL_DIALOGLIBS,   &::getCppuType((const uno::Reference< script::XLibraryContainer > *)0), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,   &::getCppuType(static_cast< const rtl::OUString * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
+        { MAP_CHAR_LEN("Fonts"),                        WID_MODEL_FONTS,   SEQTYPE(::getCppuType((uno::Sequence<uno::Any>*)0)), beans::PropertyAttribute::READONLY, 0},
         { 0,0,0,0,0,0 }
     };
     static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
@@ -1253,6 +1264,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
         case WID_MODEL_BASICLIBS:
         case WID_MODEL_RUNTIMEUID: // is read-only
         case WID_MODEL_DIALOGLIBS:
+        case WID_MODEL_FONTS:
             throw beans::PropertyVetoException();
         default:
             throw beans::UnknownPropertyException();
@@ -1330,6 +1342,52 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
         case WID_MODEL_HASVALIDSIGNATURES:
             aAny <<= hasValidSignatures();
             break;
+        case WID_MODEL_FONTS:
+            {
+                uno::Sequence<uno::Any> aSeq;
+                int nSeqIndex = 0;
+
+                sal_uInt16 aWhichIds[3] = { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
+                                            EE_CHAR_FONTINFO_CTL };
+
+                const SfxItemPool& rPool = mpDoc->GetPool();
+                const SfxPoolItem* pItem;
+
+                for( sal_uInt16 i=0; i<3; i++ )
+                {
+                    sal_uInt16 nWhichId = aWhichIds[i];
+                    sal_uInt32 nItems = rPool.GetItemCount2( nWhichId );
+
+                    aSeq.realloc( aSeq.getLength() + nItems*5 + 5 );
+
+                    for( sal_uInt32 j = 0; j < nItems; ++j )
+                    {
+                        if( 0 != (pItem = rPool.GetItem2( nWhichId, j ) ) )
+                        {
+                            const SvxFontItem *pFont = (const SvxFontItem *)pItem;
+
+                            aSeq[nSeqIndex++] <<= OUString(pFont->GetFamilyName());
+                            aSeq[nSeqIndex++] <<= OUString(pFont->GetStyleName());
+                            aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetFamily());
+                            aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetPitch());
+                            aSeq[nSeqIndex++] <<= sal_Int16(pFont->GetCharSet());
+                        }
+                    }
+
+                    const SvxFontItem& rFont = (const SvxFontItem&)rPool.GetDefaultItem( nWhichId );
+
+                    aSeq[nSeqIndex++] <<= OUString(rFont.GetFamilyName());
+                    aSeq[nSeqIndex++] <<= OUString(rFont.GetStyleName());
+                    aSeq[nSeqIndex++] <<= sal_Int16(rFont.GetFamily());
+                    aSeq[nSeqIndex++] <<= sal_Int16(rFont.GetPitch());
+                    aSeq[nSeqIndex++] <<= sal_Int16(rFont.GetCharSet());
+
+                }
+
+                aSeq.realloc( nSeqIndex );
+                aAny <<= aSeq;
+            break;
+            }
         default:
             throw beans::UnknownPropertyException();
     }
