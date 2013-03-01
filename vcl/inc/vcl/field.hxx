@@ -51,7 +51,7 @@ private:
     sal_Bool                    mbDefaultLocale;
 
 protected:
-    SAL_DLLPRIVATE void     ImplSetText( const XubString& rText, Selection* pNewSel = NULL );
+    SAL_DLLPRIVATE void     ImplSetText( const OUString& rText, Selection* pNewSel = NULL );
     SAL_DLLPRIVATE sal_Bool     ImplGetEmptyFieldValue() const  { return mbEmptyFieldValue; }
 
     void                    SetEmptyFieldValueData( sal_Bool bValue ) { mbEmptyFieldValue = bValue; }
@@ -103,18 +103,18 @@ public:
 class VCL_DLLPUBLIC PatternFormatter : public FormatterBase
 {
 private:
-    rtl::OString m_aEditMask;
-    XubString               maFieldString;
-    XubString               maLiteralMask;
-    sal_uInt16                  mnFormatFlags;
-    sal_Bool                    mbSameMask;
-    sal_Bool                    mbInPattKeyInput;
+    OString                m_aEditMask;
+    OUString               maFieldString;
+    OUString               maLiteralMask;
+    sal_uInt16             mnFormatFlags;
+    sal_Bool               mbSameMask;
+    sal_Bool               mbInPattKeyInput;
 
 protected:
                             PatternFormatter();
 
-    SAL_DLLPRIVATE void ImplSetMask(const rtl::OString& rEditMask,
-        const XubString& rLiteralMask);
+    SAL_DLLPRIVATE void ImplSetMask(const OString& rEditMask,
+        const OUString& rLiteralMask);
     SAL_DLLPRIVATE sal_Bool     ImplIsSameMask() const { return mbSameMask; }
     SAL_DLLPRIVATE sal_Bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
 
@@ -123,16 +123,16 @@ public:
 
     virtual void            Reformat();
 
-    void SetMask(const rtl::OString& rEditMask, const XubString& rLiteralMask );
-    const rtl::OString& GetEditMask() const { return m_aEditMask; }
-    const XubString&        GetLiteralMask() const  { return maLiteralMask; }
+    void SetMask(const OString& rEditMask, const OUString& rLiteralMask );
+    const OString& GetEditMask() const { return m_aEditMask; }
+    const OUString&        GetLiteralMask() const  { return maLiteralMask; }
 
     void                    SetFormatFlags( sal_uInt16 nFlags ) { mnFormatFlags = nFlags; }
     sal_uInt16                  GetFormatFlags() const { return mnFormatFlags; }
 
-    void                    SetString( const XubString& rStr );
-    XubString               GetString() const;
-    sal_Bool                    IsStringModified() const { return !(GetString().Equals( maFieldString )); }
+    void                    SetString( const OUString& rStr );
+    OUString                GetString() const;
+    sal_Bool                IsStringModified() const { return !(GetString() == maFieldString ); }
 };
 
 // --------------------
@@ -242,7 +242,7 @@ public:
 
     virtual void            SetUnit( FieldUnit meUnit );
     FieldUnit               GetUnit() const { return meUnit; }
-    void                    SetCustomUnitText( const XubString& rStr );
+    void                    SetCustomUnitText( const OUString& rStr );
     const OUString&         GetCustomUnitText() const { return maCustomUnitText; }
     const OUString&         GetCurUnitText() const { return maCurUnitText; }
 
