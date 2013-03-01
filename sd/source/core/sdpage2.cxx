@@ -55,21 +55,22 @@ extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString&
 
 /*************************************************************************
 |*
-|* SetPresentationLayout, setzt: Layoutnamen, Masterpage-Verkn�pfung und
-|* Vorlagen fuer Praesentationsobjekte
+|* Sets: names of layout, master page links and templates for presentation
+|* objects
 |*
-|* Vorraussetzungen: - Die Seite muss bereits das richtige Model kennen!
-|*                   - Die entsprechende Masterpage muss bereits im Model sein.
-|*                   - Die entsprechenden StyleSheets muessen bereits im
-|*                     im StyleSheetPool sein.
+|* Preconditions: - The page has to know the correct model!
+|*                - The corresponding master page has to be in the model.
+|*                - The corresponding style sheets have to be in the style sheet
+|*                  pool.
 |*
-|*  bReplaceStyleSheets = sal_True : Benannte StyleSheets werden ausgetauscht
-|*                        sal_False: Alle StyleSheets werden neu zugewiesen
+|*  bReplaceStyleSheets = sal_True : Named style sheets are replaced
+|*                        sal_False: All style sheets are reassigned
 |*
-|*  bSetMasterPage      = sal_True : MasterPage suchen und zuweisen
+|*  bSetMasterPage      = sal_True : search and assign master page
 |*
-|*  bReverseOrder       = sal_False: MasterPages von vorn nach hinten suchen
-|*                        sal_True : MasterPages von hinten nach vorn suchen (fuer Undo-Action)
+|*  bReverseOrder       = sal_False: search master page from head to tail
+|*                        sal_True : search master page from tail to head
+|*                                   (for undo operations)
 |*
 \************************************************************************/
 
@@ -79,7 +80,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                                    sal_Bool bReverseOrder)
 {
     /*********************************************************************
-    |* Layoutname der Seite
+    |* Name of the layout of the page
     \********************************************************************/
     OUString aOldLayoutName(maLayoutName);    // merken
     OUStringBuffer aBuf(rLayoutName);
@@ -87,7 +88,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     maLayoutName = aBuf.makeStringAndClear();
 
     /*********************************************************************
-    |* ggf. Masterpage suchen und setzen
+    |* search and replace master page if necessary
     \********************************************************************/
     if (bSetMasterPage && !IsMasterPage())
     {
@@ -132,11 +133,11 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     }
 
     /*********************************************************************
-    |* Vorlagen fuer Praesentationsobjekte
+    |* templates for presentation objects
     \********************************************************************/
-    // Listen mit:
-    // - Vorlagenzeigern fuer Gliederungstextobjekt (alte und neue Vorlagen)
-    // -Replacedaten fuer OutlinerParaObject
+    // list with:
+    // - pointer to templates for outline text object (old and new templates)
+    // - replace-data for OutlinerParaObject
     std::vector<SfxStyleSheetBase*> aOutlineStyles;
     std::vector<SfxStyleSheetBase*> aOldOutlineStyles;
     boost::ptr_vector<StyleReplaceData> aReplList;
@@ -177,7 +178,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
 
                     if (bReplaceStyleSheets && pSheet)
                     {
-                        // Replace anstatt Set
+                        // Replace instead Set
                         StyleReplaceData* pReplData = new StyleReplaceData;
                         pReplData->nNewFamily = pSheet->GetFamily();
                         pReplData->nFamily    = pSheet->GetFamily();
@@ -234,9 +235,9 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
         else if (pObj->GetObjInventor() == SdrInventor &&
                  pObj->GetObjIdentifier() == OBJ_TITLETEXT)
         {
-            // PresObjKind nicht ueber GetPresObjKind() holen, da dort nur
-            // die PresObjListe beruecksichtigt wird. Es sollen aber alle
-            // "Titelobjekte" hier beruecksichtigt werden (Paste aus Clipboard usw.)
+            // We do net get PresObjKind via GetPresObjKind() since there are
+            // only PresObjListe considered. But we want to consider all "Title
+            // objects" here (paste from clipboard etc.)
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TITLE);
 
             if (pSheet)
@@ -255,8 +256,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
 
 /*************************************************************************
 |*
-|* das Gliederungstextobjekt bei den Vorlagen fuer die Gliederungsebenen
-|* abmelden
+|* disconnect outline text object from templates for outline levels
 |*
 \************************************************************************/
 
@@ -286,7 +286,7 @@ void SdPage::EndListenOutlineText()
 
 /*************************************************************************
 |*
-|* Neues Model setzen
+|* Set new model
 |*
 \************************************************************************/
 
@@ -294,7 +294,7 @@ void SdPage::SetModel(SdrModel* pNewModel)
 {
     DisconnectLink();
 
-    // Model umsetzen
+    // assign model
     FmFormPage::SetModel(pNewModel);
 
     ConnectLink();
@@ -302,7 +302,7 @@ void SdPage::SetModel(SdrModel* pNewModel)
 
 /*************************************************************************
 |*
-|* Ist die Seite read-only?
+|* Is this page read-only?
 |*
 \************************************************************************/
 
@@ -313,7 +313,7 @@ bool SdPage::IsReadOnly() const
 
 /*************************************************************************
 |*
-|* Beim sfx2::LinkManager anmelden
+|* Connect to sfx2::LinkManager
 |*
 \************************************************************************/
 
@@ -326,14 +326,14 @@ void SdPage::ConnectLink()
         ( (SdDrawDocument*) pModel)->IsNewOrLoadCompleted())
     {
         /**********************************************************************
-        * Anmelden
-        * Nur Standardseiten duerfen gelinkt sein
+        * Connect
+        * Only standard pages are allowed to be linked
         **********************************************************************/
         ::sd::DrawDocShell* pDocSh = ((SdDrawDocument*) pModel)->GetDocSh();
 
         if (!pDocSh || !pDocSh->GetMedium()->GetOrigURL().equals(maFileName))
         {
-            // Keine Links auf Dokument-eigene Seiten!
+            // No links to document owned pages!
             mpPageLink = new SdPageLink(this, maFileName, maBookmarkName);
             String aFilterName(SdResId(STR_IMPRESS));
             pLinkManager->InsertFileLink(*mpPageLink, OBJECT_CLIENT_FILE,
@@ -346,7 +346,7 @@ void SdPage::ConnectLink()
 
 /*************************************************************************
 |*
-|* Beim sfx2::LinkManager abmelden
+|* Disconnect from sfx2::LinkManager
 |*
 \************************************************************************/
 
@@ -357,8 +357,8 @@ void SdPage::DisconnectLink()
     if (pLinkManager && mpPageLink)
     {
         /**********************************************************************
-        * Abmelden
-        * (Bei Remove wird *pGraphicLink implizit deleted)
+        * Disconnect
+        * (remove deletes *pGraphicLink implicit)
         **********************************************************************/
         pLinkManager->Remove(mpPageLink);
         mpPageLink=NULL;
@@ -410,7 +410,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
     // header footer
     setHeaderFooterSettings( rSrcPage.getHeaderFooterSettings() );
 
-    mpPageLink           = NULL;    // Wird beim Einfuegen ueber ConnectLink() gesetzt
+    mpPageLink           = NULL;    // is set when inserting via ConnectLink()
 }
 
 
