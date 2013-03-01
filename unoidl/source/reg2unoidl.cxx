@@ -246,19 +246,31 @@ void writeKind(
     write8(file, v);
 }
 
+struct Item {
+    explicit Item(rtl::Reference< unoidl::Entity > const & theEntity):
+        entity(theEntity)
+    {}
+
+    rtl::Reference< unoidl::Entity > entity;
+    sal_uInt64 nameOffset;
+    sal_uInt64 dataOffset;
+};
+
+struct ConstItem {
+    explicit ConstItem(unoidl::ConstantValue const & theConstant):
+        constant(theConstant)
+    {}
+
+    unoidl::ConstantValue constant;
+    sal_uInt64 nameOffset;
+    sal_uInt64 dataOffset;
+};
+
 sal_uInt64 writeMap(
     osl::File & file, rtl::Reference< unoidl::MapCursor > const & cursor,
     std::size_t * rootSize)
 {
     assert(cursor.is());
-    struct Item {
-        explicit Item(rtl::Reference< unoidl::Entity > const & theEntity):
-            entity(theEntity)
-        {}
-        rtl::Reference< unoidl::Entity > entity;
-        sal_uInt64 nameOffset;
-        sal_uInt64 dataOffset;
-    };
     std::map< OUString, Item > map;
     for (;;) {
         OUString name;
@@ -468,15 +480,6 @@ sal_uInt64 writeMap(
                 rtl::Reference< unoidl::ConstantGroupEntity > ent2(
                     static_cast< unoidl::ConstantGroupEntity * >(
                         i->second.entity.get()));
-                struct ConstItem {
-                    explicit ConstItem(
-                        unoidl::ConstantValue const & theConstant):
-                        constant(theConstant)
-                    {}
-                    unoidl::ConstantValue constant;
-                    sal_uInt64 nameOffset;
-                    sal_uInt64 dataOffset;
-                };
                 std::map< OUString, ConstItem > cmap;
                 for (std::vector< unoidl::ConstantGroupEntity::Member >::
                          const_iterator j(ent2->getMembers().begin());
