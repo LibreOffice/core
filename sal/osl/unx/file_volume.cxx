@@ -80,8 +80,7 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 
 #elif defined(MACOSX)
 
-#include <ufs/ufs/quota.h>
-//#include <ctype.h>
+#include <sys/quota.h>
 #include <sys/param.h>
 #include <sys/mount.h>
 #define HAVE_STATFS_H
