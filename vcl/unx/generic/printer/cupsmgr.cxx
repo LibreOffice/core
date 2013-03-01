@@ -894,7 +894,10 @@ const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
         osl_unloadModule( pLib );
     }
 #if OSL_DEBUG_LEVEL > 1
-    else fprintf( stderr, "loading of module %s failed\n", OUStringToOString( aLib, osl_getThreadTextEncoding() ).getStr() );
+    else
+    {
+        fprintf( stderr, "loading of module %s failed\n", _XSALSET_LIBNAME );
+    }
 #endif
 
     return pRet;
