@@ -47,10 +47,17 @@ endif
 
 else
 
-# must be built with debug STL if --enable-dbgutil
+# Must be built with debug GNU C++ library if --enable-dbgutil has
+# caused the LO code to be built thusly.
+
+# The LIBS setting for Android is needed to get the orcus-xml-dump
+# executable to build successfully. We obviously don't actually need
+# that executable on Android, but we don't want to bother with
+# patching out building it for Android.
+
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter ANDROID,$(OS)),LIBS='-lgnustl_shared -lm' CPPFLAGS="-D_GLIBCXX_HAS_GTHREADS") \
+		$(if $(filter ANDROID,$(OS)),LIBS='-lgnustl_shared -lm') \
 		./configure \
 			--with-pic \
 			--enable-static \
