@@ -1,68 +1,60 @@
 The MySQL driver for LibreOffice.
 
-== Status ==
-
-The code is on a PREVIEW level. PREVIEW means pre-alpha.
-
+It ships as an extension (.oxt file).
 
 == Requirements ==
 
-The MySQL driver for OpenOffice.org (MySQL Connector/OpenOffice.org - C/OOo)
+The MySQL driver for LibreOffice (MySQL Connector/LibreOffice - C/LibO)
 requires two external libraries to be build:
 
  1) The MySQL Client Library (libmysql)
- 2) The MySQL Connector/C++ Library (libmysqlcppcon)
+ 2) The MySQL Connector/C++ Library (libmysqlcppconn)
 
-At the time of writing neither of the two libraries are part of the CWS!
-Before you can build the MySQL driver for OpenOffice.org you must install
-the two required libraries on your system before you can compile the driver.
+libmysql is not included as an external and needs to be provided by
+the build environment, but libmysqlcppconn is provided as an external
+and will be automatically compiled if you pass
+"--without-system-mysql-cppconn" to autogen.sh.
 
-You need the two libraries because the MySQL driver for OpenOffice.org
-does not feature an implementation of the MySQL Client Server
-communication protocol. The protocol implementation is part of the MySQL
-Client Library. And the SDBC(X) style OpenOffice.org driver is implemented as a
-wrapper of the MySQL Connector/C++ Library which implements a JDBC interface and
-in turn uses the C based MySQL Client Library.
+The MySQL driver for LibreOffice does not reimplement the MySQL
+Client/Server communication protocol. The protocol implementation is
+part of the MySQL Client Library. The SDBC(X) driver is implemented as
+a wrapper of the MySQL Connector/C++ Library which implements a
+JDBC-like interface (which suits SDBC(X) well) and which in turn uses
+the C based MySQL Client Library.
 
-1) MySQL Client Library (libmysql)
+== Variants ==
 
-The MySQL Client Library (libmysql) is part of the MySQL Server. You need to
-download and install the MySQL Server. Use a binary distribution of
-MySQL 5.0.x or MySQL 5.1.x. Check the MySQL manual for instructions, e.g.
-for Unix:
+If configured with --with-system-mysql, the driver will *not* ship a
+copy of the MySQL client C library and will expect it to be installed
+in a standard location on each system that it runs on. That is usually
+the right choice to create a native package/port for GNU/Linux, BSD,
+etc, where the packaging system handles dependencies and will ensure
+the availability of the MySQL client C library in the standard
+location.
 
- http://dev.mysql.com/doc/refman/5.1/en/installing-binary.html
+If configured with --with-libmysql-path, the driver will ship a copy
+of the MySQL client C library so that it works "out of the box" on any
+system. That is usually the right choice to create a stand-alone .oxt
+file that users can just install through the LibreOffice extensions
+manager, as is typical for Microsoft Windows and Apple MacOS X native
+(as opposed to MacPorts/fink/pkgsrc/...).
 
+== Installing the Requirements ==
+
+On modern/free-as-in-free-speech Unices, libmysql and libmysqlcppconn
+are probably available as a package/port. Install them using your
+distribution's tools. Make sure to install the development packages
+(whose name usually ends with -dev or -devel), and not only the
+libraries themselves. You can use --with-system-mysql or
+--with-libmysql-path=/usr/ (but not both).
+
+Else you can install the MySQL Client Library from official MySQL
+packages at http://dev.mysql.com/downloads/connector/c/ .
+They have source and binary distributions for several platforms.
+
+You can also install the MySQL Client Library (libmysql) as part of
+the MySQL Server, version 5.0 or later. Check the MySQL manual for
+instructions: http://dev.mysql.com/doc/refman/5.5/en/installing.html
 The typical installation path of the libmysql.so on Unix is
 /usr/local/mysql/lib/mysql/ .
-
-2) MySQL Connector/C++ (libmysqlcppcon)
-
-Download and install the latest version of the MySQL Connector/C++, see
-http://forge.mysql.com/wiki/Connector_C++ . Check out the source
-from the bzr repository.
-
-3) Tweaking library paths
-
-At the time of writing you might have to *manually* tweak library paths and
-library names by patching makefile.mk. This is a temporary hack. The makefile
-will be improved later.
-
-However, for the moment check the makefile.mk if the compilation fails due to
-"missing" libraries (= libraries not found). For example, check the following
-settings:
-
-  MYSQL_INCDIR=/usr/local/include
-  MYSQL_LIBDIR=/usr/local/lib
-  [...]
-  MYSQL_INCDIR=/usr/local/include
-  MYSQL_LIBDIR=/usr/local/lib
-  [...]
-  MYSQL_INC=-I$(MYSQL_INCDIR)
-  MYSQL_LIB=-L$(MYSQL_LIBDIR) -lmysqlclient -rdynamic -lz -lcrypt -lnsl -lm
-  MYSQL_LIBFILE=$(MYSQL_LIBDIR)$/libmysqlclient.so.16
-  MYSQL_CPPCONN_LIBFILE=$(MYSQL_LIBDIR)$/libmysqlcppconn.so
-  [...]
-
-A common issue is libmysqlclient.so.15 vs. libmysqlclient.so.16 .
 
