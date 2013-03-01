@@ -23,7 +23,7 @@
 #include <svx/globlmn.hrc>
 #endif
  //
- // Werkzeugleiste
+ // toolbox bar
  //
 ToolBox SD_TOOLBOX
 {
@@ -127,7 +127,7 @@ ToolBox SD_TOOLBOX
     };
 };
  //
- // Objektleiste
+ // object bar
  //
 #if SD_TOOLBOX == RID_DRAW_TOOLBOX
 ToolBox RID_DRAW_OBJ_TOOLBOX
@@ -171,7 +171,7 @@ ToolBox RID_GRAPHIC_OBJ_TOOLBOX
     };
 };
  //
- // Optionsleiste
+ // option bar
  //
 #if SD_TOOLBOX == RID_DRAW_TOOLBOX
 ToolBox RID_DRAW_OPTIONS_TOOLBOX

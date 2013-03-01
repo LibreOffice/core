@@ -299,7 +299,7 @@ void SdTransferable::CreateData()
             mbOwnDocument = sal_True;
         }
 
-        // Groesse der Source-Seite uebernehmen
+        // Use dimension of source page
         SdrPageView*        pPgView = mpSdView->GetSdrPageView();
         SdPage*             pOldPage = (SdPage*) pPgView->GetPage();
         SdrModel*           pOldModel = mpSdView->GetModel();
@@ -341,7 +341,7 @@ void SdTransferable::CreateData()
         else
             maVisArea.SetSize( pPage->GetSize() );
 
-        // Die Ausgabe soll am Nullpunkt erfolgen
+        // output is at the zero point
         maVisArea.SetPos( Point() );
     }
 }

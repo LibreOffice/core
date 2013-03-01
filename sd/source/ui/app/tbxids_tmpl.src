@@ -21,7 +21,7 @@
 #define SEPARATOR       ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
 #define TBI(x)          ToolBoxItem { x };
  //
- // Werkzeugleiste
+ // Toolbox bar
  //
 #define TBI_OBJECT_SELECT \
     ToolBoxItem\
@@ -260,7 +260,7 @@
     };
 
  //
- // Objektleiste
+ // Object bar
  //
 #define TBI_FORMAT_BEZIER_EDIT_RC \
     ToolBoxItem\
@@ -377,7 +377,7 @@
 
 
  //
- // Optionsleiste
+ // Option bar
  //
 #define TBI_FORMAT_BEZIER_EDIT \
     ToolBoxItem\

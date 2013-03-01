@@ -157,13 +157,13 @@ void SdDLL::RegisterControllers()
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
 
-    // StatusBarControls registrieren
+    // register StatusBarControls
     SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pMod );
     SvxPosSizeStatusBarControl::RegisterControl( SID_ATTR_SIZE, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
 
-    // MenuControls fuer PopupMenu
+    // MenuControls for PopupMenu
     SvxFontMenuControl::RegisterControl( SID_ATTR_CHAR_FONT, pMod );
     SvxFontSizeMenuControl::RegisterControl( SID_ATTR_CHAR_FONTHEIGHT, pMod );
 

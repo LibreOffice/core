@@ -21,10 +21,10 @@
 #include "helpids.h"
 
 #define SEPARATOR       MenuItem { Separator = TRUE; };
- // DUMMY ist eine ID wo ein SubMenu folgt
- // (muss jeweils immer erhoeht werden!)
+ // DUMMY is a ID where a SubMenu is following
+ // (it has to be increased every time!)
 #define DUMMY 333
- // Nichtobjektbezogen
+ // not object related
 
 #define MN_DISTRIBUTE \
     MenuItem\
@@ -93,7 +93,7 @@
         Text [ en-US ] = "~Delete" ; \
     };
 
- // Seiten-Attribute
+ // page attributes
 #define MN_MODIFY_PAGE \
     MenuItem\
     {\
@@ -270,7 +270,7 @@
         Text [ en-US ] = "~Rename Page" ; \
     };
 
- // Grafik-Attribute
+ // graphic attributes
 #define MN_LINE \
     MenuItem\
     {\
@@ -343,7 +343,7 @@
         Text [ en-US ] = "Edit ~Points" ; \
     };
 
- // Anordnung
+ // arrangement
 #define MN_POSITION \
     MenuItem\
     {\
@@ -409,7 +409,7 @@
         };\
     };
 
- // Text-Elemente
+ // text elements
 #define MN_CHAR \
     MenuItem\
     {\
@@ -537,7 +537,7 @@
         Text [ en-US ] = "S~pecial Character..." ; \
     };
 
- // Text-Ausrichtung
+ // test orientation
 #define MN_TEXT_ALIGN\
     MenuItem\
     {\
@@ -580,7 +580,7 @@
         };\
     };
 
- // Objekt-Ausrichtung
+ // object orientation
 #define MN_OBJECT_ALIGN \
     MenuItem\
     {\
@@ -633,7 +633,7 @@
         };\
     };
 
- // Bezier-Funktionen
+ // Bezier functions
 #define MN_CLOSE_OBJECT \
     MenuItem\
     {\
@@ -714,7 +714,7 @@
         Text [ en-US ] = "~Reduce Points" ; \
     };
 
- // Gruppen-/Kombination-Funktionen
+ // group/combination functions
 #define MN_GROUP \
     MenuItem\
     {\
@@ -804,7 +804,7 @@
         Text [ en-US ] = "Presentation ~Object..." ; \
     };
 
- // Diverse allgemeine Funktionen
+ // diverse common functions
 #define MN_DELETE \
     MenuItem\
     {\

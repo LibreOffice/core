@@ -102,16 +102,16 @@ void SdDLL::Init()
     // register your controllers here
     RegisterControllers();
 
-    // SvDraw-Felder registrieren
+    // register SvDraw-Fields
     SdrRegisterFieldClasses();
 
-    // 3D-Objekt-Factory eintragen
+    // register 3D-Objekt-Factory
     E3dObjFactory();
 
-    // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
+    // register ::com::sun::star::form::component::Form-Object-Factory
     FmFormObjFactory();
 
-    // Objekt-Factory eintragen
+    // register Object-Factory
     SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
 
     // register your exotic remote controlls here
