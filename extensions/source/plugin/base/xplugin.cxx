@@ -444,9 +444,8 @@ void XPlugin_Impl::modelChanged()
 
     m_nProvidingState = PROVIDING_MODEL_UPDATE;
 
-    destroyInstance();
-
     m_aDescription = fitDescription( getCreationURL() );
+    destroyInstance();
     if( m_aDescription.Mimetype.isEmpty() )
     {
         m_nProvidingState = PROVIDING_NONE;
