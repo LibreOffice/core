@@ -311,13 +311,12 @@ const ScDPSaveDimension* getDimension(
 
             return rPageDims[nPos];
         }
-        break;
         case ScDPOutputGeometry::Data:
         break;
         case ScDPOutputGeometry::None:
         break;
         default:
-            ;
+            break;
     }
     return NULL;
 }
@@ -335,8 +334,9 @@ ScDPOutputGeometry::FieldType toFieldType(sal_uInt16 nOrient)
         case sheet::DataPilotFieldOrientation_ROW:
             return ScDPOutputGeometry::Row;
         case sheet::DataPilotFieldOrientation_HIDDEN:
+            break;
         default:
-            ;
+            break;
     }
     return ScDPOutputGeometry::None;
 }
@@ -442,8 +442,9 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
                 ++mnDataFieldCount;
             break;
             case sheet::DataPilotFieldOrientation_HIDDEN:
+                break;
             default:
-                ;
+                break;
         }
 
         pDPSave->AddDimension(pDim);
@@ -575,7 +576,7 @@ void ScXMLDataPilotTableContext::SetGrandTotal(
             maColGrandTotal.maDisplayName = rDisplayName;
         break;
         default:
-            ;
+            break;
     }
 }
 
@@ -863,7 +864,7 @@ ScXMLDataPilotGrandTotalContext::ScXMLDataPilotGrandTotalContext(
                 maDisplayName = rAttrValue;
             break;
             default:
-                ;
+                break;
         }
     }
 }
@@ -893,7 +894,7 @@ void ScXMLDataPilotGrandTotalContext::EndElement()
             eOrient = XML_COLUMN;
         break;
         default:
-            ;
+            break;
     }
     mpTableContext->SetGrandTotal(eOrient, mbVisible, maDisplayName);
 }
