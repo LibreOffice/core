@@ -34,10 +34,10 @@
 */
 
 
-sal_Bool SwWrtShell::_SttWrd()
+bool SwWrtShell::_SttWrd()
 {
     if ( IsSttPara() )
-        return 1;
+        return true;
         /*
             * temporaeren Cursor ohne Selektion erzeugen
             */
@@ -49,7 +49,7 @@ sal_Bool SwWrtShell::_SttWrd()
     ClearMark();
         // falls vorher Mark gesetzt war, zusammenfassen
     Combine();
-    return 1;
+    return true;
 }
 /*
  * Das Ende eines Wortes ist das Folgen von Trennzeichen auf
@@ -60,10 +60,10 @@ sal_Bool SwWrtShell::_SttWrd()
 
 
 
-sal_Bool SwWrtShell::_EndWrd()
+bool SwWrtShell::_EndWrd()
 {
     if ( IsEndWrd() )
-        return 1;
+        return true;
         // temporaeren Cursor ohne Selektion erzeugen
     Push();
     ClearMark();
@@ -73,7 +73,7 @@ sal_Bool SwWrtShell::_EndWrd()
     ClearMark();
         // falls vorher Mark gesetzt war, zusammenfassen
     Combine();
-    return 1;
+    return true;
 }
 
 

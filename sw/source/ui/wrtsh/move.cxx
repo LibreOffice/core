@@ -40,7 +40,7 @@ const long nReadOnlyScrollOfst = 10;
 class ShellMoveCrsr
 {
     SwWrtShell* pSh;
-    sal_Bool bAct;
+    bool bAct;
 public:
     inline ShellMoveCrsr( SwWrtShell* pWrtSh, sal_Bool bSel )
     {
@@ -472,7 +472,7 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
     //auf dem Stack gemerkt werden.
     sal_Bool bIsFrmSel = sal_False;
 
-    sal_Bool bIsObjSel = sal_False;
+    bool bIsObjSel = false;
 
     //Zielposition liegt jetzt innerhalb des sichtbaren Bereiches -->
     //Cursor an die Zielposition setzen; merken, dass keine Ziel-

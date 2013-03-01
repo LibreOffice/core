@@ -249,7 +249,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     // update fields
     void    UpdateInputFlds( SwInputFieldList* pLst = 0, sal_Bool bOnlyInSel = sal_False );
 
-    void    NoEdit(sal_Bool bHideCrsr = sal_True);
+    void    NoEdit(bool bHideCrsr = true);
     void    Edit();
 
     sal_Bool IsRetainSelection() const { return mbRetainSelection; }
@@ -299,7 +299,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     void    InsertColumnBreak();
     void    InsertFootnote(const String &, sal_Bool bEndNote = sal_False, sal_Bool bEdit = sal_True );
     void    SplitNode( sal_Bool bAutoFormat = sal_False, sal_Bool bCheckTableStart = sal_True );
-    sal_Bool    CanInsert();
+    bool    CanInsert();
 
     // indexes
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
@@ -475,7 +475,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 private:
 
     SW_DLLPRIVATE void  OpenMark();
-    SW_DLLPRIVATE void  CloseMark( sal_Bool bOkFlag );
+    SW_DLLPRIVATE void  CloseMark( bool bOkFlag );
 
     SW_DLLPRIVATE String    GetWrdDelim();
     SW_DLLPRIVATE String    GetSDelim();
@@ -537,8 +537,8 @@ private:
     SW_DLLPRIVATE sal_Bool  PopCrsr(sal_Bool bUpdate, sal_Bool bSelect = sal_False);
 
     // take END cursor along when PageUp / -Down
-    SW_DLLPRIVATE sal_Bool _SttWrd();
-    SW_DLLPRIVATE sal_Bool _EndWrd();
+    SW_DLLPRIVATE bool _SttWrd();
+    SW_DLLPRIVATE bool _EndWrd();
     SW_DLLPRIVATE sal_Bool _NxtWrd();
     SW_DLLPRIVATE sal_Bool _PrvWrd();
     // #i92468#

@@ -33,7 +33,7 @@ inline void SwWrtShell::OpenMark()
     SetMark();
 }
 
-inline void SwWrtShell::CloseMark( sal_Bool bOkFlag )
+inline void SwWrtShell::CloseMark( bool bOkFlag )
 {
     if( bOkFlag )
         UpdateAttr();

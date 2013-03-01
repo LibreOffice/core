@@ -144,7 +144,7 @@ static SvxAutoCorrect* lcl_IsAutoCorr()
     return pACorr;
 }
 
-void SwWrtShell::NoEdit(sal_Bool bHideCrsr)
+void SwWrtShell::NoEdit(bool bHideCrsr)
 {
     if(bHideCrsr)
         HideCrsr();
@@ -203,7 +203,8 @@ void SwWrtShell::Insert( const String &rStr )
     if( !CanInsert() )
         return;
 
-    sal_Bool bStarted = sal_False, bHasSel = HasSelection(),
+    bool bStarted = false;
+    sal_Bool bHasSel = HasSelection(),
         bCallIns = bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
@@ -228,7 +229,7 @@ void SwWrtShell::Insert( const String &rStr )
         }
 
         StartUndo(UNDO_REPLACE, &aRewriter);
-        bStarted = sal_True;
+        bStarted = true;
         bDeleted = DelRight() != 0;
     }
 
@@ -272,12 +273,12 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
 
     EnterSelFrmMode();
 
-    sal_Bool bSetGrfSize = sal_True;
-    sal_Bool bOwnMgr     = sal_False;
+    bool bSetGrfSize = true;
+    bool bOwnMgr     = false;
 
     if ( !pFrmMgr )
     {
-        bOwnMgr = sal_True;
+        bOwnMgr = true;
         pFrmMgr = new SwFlyFrmAttrMgr( sal_True, this, FRMMGR_TYPE_GRF );
 
         // VORSICHT
@@ -296,7 +297,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
             pFrmMgr->SetSize( aSz );
         }
         else if ( aSz.Width() != DFLT_WIDTH && aSz.Height() != DFLT_HEIGHT )
-            bSetGrfSize = sal_False;
+            bSetGrfSize = false;
 
         pFrmMgr->SetHeightSizeType(ATT_FIX_SIZE);
 
@@ -474,7 +475,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     //   no break should be inserted.
     //3. If an selektion is passed to a StarMath object, this object should
     //   not be activated. sal_False should be returned then.
-    sal_Bool bStarMath = sal_True;
+    bool bStarMath = true;
     sal_Bool bActivate = sal_True;
 
     // set parent to get correct VisArea(in case of object needing parent printer)
@@ -652,7 +653,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         return; // the replacement image is completely controlled by container in this case
 
     sal_Int64 nMisc = 0;
-    sal_Bool bLinkingChart = sal_False;
+    bool bLinkingChart = false;
 
     try
     {
@@ -761,7 +762,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     Fraction aScaleWidth( 1, 1 );
     Fraction aScaleHeight( 1, 1 );
 
-    sal_Bool bUseObjectSize = sal_False;
+    bool bUseObjectSize = false;
 
     // solange keine vernuenftige Size vom Object kommt, kann nichts
     // skaliert werden
@@ -812,7 +813,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             if ( nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE )
             {
                 // the object must not be scaled, the size stored in object must be used for restoring
-                bUseObjectSize = sal_True;
+                bUseObjectSize = true;
             }
             else
             {
@@ -1611,7 +1612,7 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
             SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,
             0   );
     GetPaMAttr( pCrsr, aCoreSet );
-    sal_Bool bReset = sal_False;
+    bool bReset = false;
     SfxItemIter aParaIter( aCoreSet );
     const SfxPoolItem* pParaItem = aParaIter.FirstItem();
     while( pParaItem )
@@ -1623,7 +1624,7 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
                SFX_ITEM_SET == rStyleSet.GetItemState(nWhich))
             {
                 aCoreSet.ClearItem(nWhich);
-                bReset = sal_True;
+                bReset = true;
             }
         }
         pParaItem = aParaIter.NextItem();
@@ -1654,14 +1655,14 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
     ResetCursorStack();
     if(CanInsert())
     {
-        sal_Bool bStarted = sal_False;
+        bool bStarted = false;
         if(HasSelection())
         {
                 // nur hier klammern, da das normale Insert schon an der
                 // Editshell geklammert ist
             StartAllAction();
             StartUndo(UNDO_INSERT);
-            bStarted = sal_True;
+            bStarted = true;
             DelRight();
         }
         SwEditShell::AutoCorrect( rACorr, IsInsMode(), cChar );
@@ -1741,7 +1742,7 @@ sal_Bool SwWrtShell::Pop( sal_Bool bOldCrsr )
     return bRet;
 }
 
-sal_Bool SwWrtShell::CanInsert()
+bool SwWrtShell::CanInsert()
 {
     return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
 }
@@ -1810,7 +1811,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
     addCurrentPosition();
     StartAllAction();
     StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
-    sal_Bool bExecute = sal_True;
+    bool bExecute = true;
     sal_Bool bCrsrSet = sal_False;
     for( sal_uInt16 nFrom = 0, nTo = GetPageDescCnt();
             nFrom < nTo; ++nFrom )
@@ -1829,7 +1830,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                 EndAllAction();
 
                 Window* pParent = &GetView().GetViewFrame()->GetWindow();
-                sal_Bool bRet = RET_YES == QueryBox( pParent, ResId( RID_SVXQBX_DELETE_HEADFOOT,
+                bool bRet = RET_YES == QueryBox( pParent, ResId( RID_SVXQBX_DELETE_HEADFOOT,
                                         DIALOG_MGR() ) ).Execute();
                 bExecute = bRet;
                 StartAllAction();

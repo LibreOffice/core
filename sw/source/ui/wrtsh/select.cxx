@@ -48,7 +48,7 @@ using namespace ::com::sun::star::util;
 
 
 static long nStartDragX = 0, nStartDragY = 0;
-static sal_Bool  bStartDrag = sal_False;
+static bool  bStartDrag = false;
 
 void SwWrtShell::Invalidate()
 {
@@ -429,7 +429,7 @@ void SwWrtShell::EndSelect()
  * zu erweitern.
  */
 
-inline sal_Bool operator<(const Point &rP1,const Point &rP2)
+inline bool operator<(const Point &rP1,const Point &rP2)
 {
     return rP1.Y() < rP2.Y() || (rP1.Y() == rP2.Y() && rP1.X() < rP2.X());
 }
@@ -735,7 +735,7 @@ void SwWrtShell::EnterSelFrmMode(const Point *pPos)
     {
         nStartDragX = pPos->X();
         nStartDragY = pPos->Y();
-        bStartDrag = sal_True;
+        bStartDrag = true;
     }
     bLayoutMode = sal_True;
     HideCrsr();
@@ -754,7 +754,7 @@ void SwWrtShell::LeaveSelFrmMode()
     fnDrag          = &SwWrtShell::BeginDrag;
     fnEndDrag       = &SwWrtShell::EndDrag;
     bLayoutMode = sal_False;
-    bStartDrag = sal_False;
+    bStartDrag = false;
     Edit();
     SwBaseShell::SetFrmMode( FLY_DRAG_END, this );
     Invalidate();

@@ -105,11 +105,11 @@ SwWebView::~SwWebView()
 void SwWebView::SelectShell()
 {
     // Entscheidung, ob UpdateTable gerufen werden muss
-    sal_Bool bUpdateTable = sal_False;
+    bool bUpdateTable = false;
     const SwFrmFmt* pCurTableFmt = GetWrtShell().GetTableFmt();
     if(pCurTableFmt && pCurTableFmt != GetLastTblFrmFmt())
     {
-        bUpdateTable = sal_True; // kann erst spaeter ausgefuehrt werden
+        bUpdateTable = true; // kann erst spaeter ausgefuehrt werden
     }
     SetLastTblFrmFmt(pCurTableFmt);
     //SEL_TBL und SEL_TBL_CELLS koennen verodert sein!
@@ -153,15 +153,15 @@ void SwWebView::SelectShell()
             rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
         }
 
-        sal_Bool bInitFormShell = sal_False;
+        bool bInitFormShell = false;
         if( !GetFormShell() )
         {
-            bInitFormShell = sal_True;
+            bInitFormShell = true;
             SetFormShell( new FmFormShell( this ) );
             rDispatcher.Push( *GetFormShell() );
         }
 
-        sal_Bool bSetExtInpCntxt = sal_False;
+        bool bSetExtInpCntxt = false;
         _nSelectionType = nNewSelectionType;
         SetSelectionType( _nSelectionType );
         ShellModes eShellMode;
@@ -232,7 +232,7 @@ void SwWebView::SelectShell()
         }
         else
         {
-            bSetExtInpCntxt = sal_True;
+            bSetExtInpCntxt = true;
             eShellMode = SHELL_MODE_TEXT;
             if ( _nSelectionType & nsSelectionType::SEL_NUM )
             {
@@ -256,7 +256,7 @@ void SwWebView::SelectShell()
         if( !GetDocShell()->IsReadOnly() )
         {
             if( bSetExtInpCntxt && GetWrtShell().HasReadonlySel() )
-                bSetExtInpCntxt = sal_False;
+                bSetExtInpCntxt = false;
 
             InputContext aCntxt( GetEditWin().GetInputContext() );
             aCntxt.SetOptions( bSetExtInpCntxt

@@ -63,8 +63,8 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
     // #105332# restore undo state
     DoUndo(bSaveDoesUndo);
 
-    sal_Bool bCreateXSelection = sal_False;
-    const sal_Bool bFrmSelected = IsFrmSelected() || IsObjSelected();
+    bool bCreateXSelection = false;
+    const bool bFrmSelected = IsFrmSelected() || IsObjSelected();
     if ( IsSelection() )
     {
         if ( bFrmSelected )
@@ -74,18 +74,18 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
         // bei Cursor setzen
         fnKillSel = &SwWrtShell::ResetSelect;
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        bCreateXSelection = sal_True;
+        bCreateXSelection = true;
     }
     else if ( bFrmSelected )
     {
         EnterSelFrmMode();
-        bCreateXSelection = sal_True;
+        bCreateXSelection = true;
     }
     else if( (CNT_GRF | CNT_OLE ) & GetCntType() )
     {
         SelectObj( GetCharRect().Pos() );
         EnterSelFrmMode();
-        bCreateXSelection = sal_True;
+        bCreateXSelection = true;
     }
 
     if( bCreateXSelection )

@@ -76,7 +76,7 @@ TYPEINIT1(SwDrawBaseShell,SwBaseShell)
 SwDrawBaseShell::SwDrawBaseShell(SwView &_rView):
     SwBaseShell( _rView )
 {
-    GetShell().NoEdit(sal_True);
+    GetShell().NoEdit(true);
 
     SwEditWin& rWin = GetView().GetEditWin();
 

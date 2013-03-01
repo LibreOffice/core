@@ -4729,7 +4729,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     {
         pApplyTempl = new SwApplyTemplate( rTempl );
               SetPointer( POINTER_FILL );//@todo #i20119# maybe better a new brush pointer here in future
-              rSh.NoEdit( sal_False );
+              rSh.NoEdit( false );
               bIdle = rSh.GetViewOptions()->IsIdle();
               ((SwViewOption *)rSh.GetViewOptions())->SetIdle( sal_False );
     }
@@ -4737,7 +4737,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     {
         pApplyTempl = new SwApplyTemplate( rTempl );
         SetPointer( POINTER_FILL );
-        rSh.NoEdit( sal_False );
+        rSh.NoEdit( false );
         bIdle = rSh.GetViewOptions()->IsIdle();
         ((SwViewOption *)rSh.GetViewOptions())->SetIdle( sal_False );
     }
@@ -4745,7 +4745,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     {
         pApplyTempl = new SwApplyTemplate( rTempl );
         SetPointer( POINTER_FILL  );
-        rSh.NoEdit( sal_False );
+        rSh.NoEdit( false );
         bIdle = rSh.GetViewOptions()->IsIdle();
         ((SwViewOption *)rSh.GetViewOptions())->SetIdle( sal_False );
     }
