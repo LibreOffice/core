@@ -43,17 +43,17 @@ struct SOParagraph
     sal_Int16               nBulletFlags;
     String                  sPrefix;
     String                  sSuffix;
-    String                  sGraphicUrl;            // String auf eine Graphic
+    String                  sGraphicUrl;            // String to a graphic
     Size                    aBuGraSize;
-    sal_uInt32              nNumberingType;         // in wirlichkeit ist dies ein SvxEnum
+    sal_uInt32              nNumberingType;         // this is actually a SvxEnum
     sal_uInt32              nHorzAdjust;
     sal_uInt32              nBulletColor;
     sal_Int32               nBulletOfs;
-    sal_Int16               nStartWith;             // Start der nummerierung
+    sal_Int16               nStartWith;             // start of numbering
     sal_Int16               nTextOfs;
-    sal_Int16               nBulletRealSize;        // GroessenVerhaeltnis in Proz
-    sal_Int16               nDepth;                 // aktuelle tiefe
-    sal_Unicode             cBulletId;              // wenn Numbering Type == CharSpecial
+    sal_Int16               nBulletRealSize;        // scale in percent
+    sal_Int16               nDepth;                 // actual depth
+    sal_Unicode             cBulletId;              // if Numbering Type == CharSpecial
     ::com::sun::star::awt::FontDescriptor       aFontDesc;
 
     sal_Bool                bExtendedBulletsUsed;

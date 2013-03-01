@@ -424,7 +424,7 @@ sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
         return sal_False;
     SetCurrentStyleSheet( nPageNum );
 
-    if ( !ImplGetPropertyValue( mXPagePropSet, rtl::OUString( "Background" ) ) )                // Backgroundshape laden
+    if ( !ImplGetPropertyValue( mXPagePropSet, rtl::OUString( "Background" ) ) )                // load background shape
         return sal_False;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet;
     if ( !( mAny >>= aXBackgroundPropSet ) )
@@ -501,7 +501,7 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
             {
                 if ( ImplGetPropertyValue( aXPropertySet, rtl::OUString( "Number" ) ) )
                     nRetValue |= *(sal_Int16*)mAny.getValue();
-                if ( nRetValue & 0xffff )           // ueberlauf vermeiden
+                if ( nRetValue & 0xffff )           // avoid overflow
                     nRetValue--;
             }
         }
@@ -756,7 +756,7 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
 
         rtl::OStringBuffer aTypeBuffer(rtl::OUStringToOString(
             mXShape->getShapeType(), RTL_TEXTENCODING_UTF8));
-        // "com.sun.star." entfernen
+        // remove "com.sun.star."
         aTypeBuffer.remove(0, RTL_CONSTASCII_LENGTH("com.sun.star."));
 
         sal_Int32 nPos = aTypeBuffer.toString().indexOf("Shape");

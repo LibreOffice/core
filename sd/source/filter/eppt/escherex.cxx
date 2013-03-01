@@ -241,7 +241,7 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
         OpenContainer( ESCHER_SpContainer );
         AddAtom( 16, ESCHER_Spgr, 1 );
         PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
-        *mpOutStrm  << (sal_Int32)aRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
+        *mpOutStrm  << (sal_Int32)aRect.Left()  // bounding box for the grouped shapes to which they are attached
                     << (sal_Int32)aRect.Top()
                     << (sal_Int32)aRect.Right()
                     << (sal_Int32)aRect.Bottom();

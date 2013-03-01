@@ -122,8 +122,8 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
     else
     {
         rSt << rLev.mnAsianOrComplexFont
-            << (sal_uInt16)0xffff       // unbekannt
-            << (sal_uInt16)0xffff       // unbekannt
+            << (sal_uInt16)0xffff       // unknown
+            << (sal_uInt16)0xffff       // unknown
             << rLev.mnFontHeight
             << nFontColor
             << rLev.mnEscapement;
