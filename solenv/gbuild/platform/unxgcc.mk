@@ -106,7 +106,7 @@ endif
 
 ifeq ($(ENABLE_LTO),TRUE)
 ifneq ($(COM_GCC_IS_CLANG),TRUE)
-gb_LinkTarget_LDFLAGS += -fuse-linker-plugin $(gb_COMPILERDEFAULTOPTFLAGS)
+gb_LinkTarget_LTOFLAGS += -fuse-linker-plugin $(gb_COMPILERDEFAULTOPTFLAGS)
 endif
 endif
 
