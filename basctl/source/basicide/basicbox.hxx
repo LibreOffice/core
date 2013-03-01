@@ -76,7 +76,7 @@ private:
 class LibBox : public DocListenerBox
 {
 private:
-    String          aCurText;
+    OUString        aCurText;
     bool            bIgnoreSelect;
     bool            bFillBox;
     com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
@@ -118,9 +118,9 @@ public:
 class LanguageBox : public DocListenerBox
 {
 private:
-    String          m_sNotLocalizedStr;
-    String          m_sDefaultLanguageStr;
-    String          m_sCurrentText;
+    OUString        m_sNotLocalizedStr;
+    OUString        m_sDefaultLanguageStr;
+    OUString        m_sCurrentText;
 
     bool            m_bIgnoreSelect;
 
