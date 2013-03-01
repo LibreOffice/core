@@ -30,7 +30,6 @@ String RID_SAVE_PASSWORD
     Text [ en-US ] = "~Remember password";
 };
 
-
 String STR_WARNING_BROKENSIGNATURE_TITLE
 {
     Text [ en-US ] = "Invalid Document Signature" ;
@@ -397,5 +396,9 @@ Resource RID_UUI_ERRHDL
         Text [ en-US ] = "Component cannot be loaded, possibly broken or incomplete installation.\nFull error message:\n\n $(ARG1).";
     };
 
+    String (ERRCODE_UUI_IO_WARN_CANTSAVE_MACROS & ERRCODE_RES_MASK)
+    {
+        Text [ en-US ] = "You are saving to a macro-free document format, the macros contained in this document will not be saved.\nDo you wish to continue?";
+    };
 
 };

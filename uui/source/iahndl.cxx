@@ -784,11 +784,26 @@ UUIInteractionHelper::handleRequest_impl(
         task::ErrorCodeRequest aErrorCodeRequest;
         if (aAnyRequest >>= aErrorCodeRequest)
         {
-            handleGenericErrorRequest( aErrorCodeRequest.ErrCode,
+            // Sucky special handling for xlsx macro filter warning
+            if ( (sal_uInt32)ERRCODE_SFX_VBASIC_CANTSAVE_STORAGE == (sal_uInt32)aErrorCodeRequest.ErrCode)
+            {
+                std::vector< rtl::OUString > aArguments;
+                handleErrorHandlerRequest( task::InteractionClassification_WARNING,
+                                       ERRCODE_UUI_IO_WARN_CANTSAVE_MACROS,
+                                       aArguments,
                                        rRequest->getContinuations(),
                                        bObtainErrorStringOnly,
                                        bHasErrorString,
                                        rErrorString);
+            }
+            else
+            {
+                handleGenericErrorRequest( aErrorCodeRequest.ErrCode,
+                                       rRequest->getContinuations(),
+                                       bObtainErrorStringOnly,
+                                       bHasErrorString,
+                                       rErrorString);
+            }
             return true;
         }
 
