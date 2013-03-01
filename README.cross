@@ -175,8 +175,8 @@ Once you have compiled it, you may want to try to run it, for instance
 using Wine:
 
 $ cd /tmp
-$ tar xf <your-build-dir>/instsetoo_native/wntgcci.pro/LibreOffice_Dev/archive/install/en-US/LibO-Dev_3.6.0alpha0_Win_x86_install-arc_en-US.tar.gz
-$ cd LibO-Dev_3.6.0alpha0_Win_x86_install-arc_en-US/LOdev\ 3.6/program
+$ tar xf <your-build-dir>/workdir/wntgcci.pro/installation/LibreOffice_Dev/archive/install/en-US/LibO-Dev_4.1.0.0.alpha0_Win_x86_archive.tar.gz
+$ cd LibO-Dev_4.1.0.0.alpha0_Win_x86_archive/LOdev\ 4.1/program/
 $ wine soffice.exe
 
 NB. it is important to unpack somewhere low in the hierarchy structure (like
