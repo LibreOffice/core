@@ -593,7 +593,6 @@ BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
 #ifdef LINUX_BLUETOOTH
     mpImpl.reset(new BluetoothServerImpl());
 #endif
-    (void) mpImpl; // Avoid warning: private field 'mpImpl' is not used
 }
 
 BluetoothServer::~BluetoothServer()

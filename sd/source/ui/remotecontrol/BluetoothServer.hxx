@@ -42,7 +42,9 @@ namespace sd
         enum { UNKNOWN, DISCOVERABLE, NOT_DISCOVERABLE } meWasDiscoverable;
         static BluetoothServer *spServer;
 
+#ifdef LINUX_BLUETOOTH
         boost::scoped_ptr<BluetoothServerImpl> mpImpl;
+#endif
         virtual void SAL_CALL run();
 
         void cleanupCommunicators();
