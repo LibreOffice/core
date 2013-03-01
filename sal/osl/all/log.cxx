@@ -62,6 +62,10 @@
 bool sal_use_syslog;
 #endif
 
+#ifdef ANDROID
+#include <android/log.h>
+#endif
+
 // Avoid the use of other sal code in this file as much as possible, so that
 // this code can be called from other sal code without causing endless
 // recursion.
@@ -209,27 +213,54 @@ void log(
     char const * message)
 {
     std::ostringstream s;
+#ifndef ANDROID
 #ifdef HAVE_SYSLOG_H
     if (!sal_use_syslog)
 #endif
         s << toString(level) << ':';
+#endif
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
-        s << /*no where*/' ' << message << '\n';
+        s << /*no area or where */ ' ' << message << '\n';
     } else {
-        s << area << ':' << OSL_DETAIL_GETPID << ':'
-          << osl::Thread::getCurrentIdentifier() << ':';
+#ifdef ANDROID
+        // The area will be used as the "tag", and log info already contgains the pid on Android
+#else
+        s << area << ':' << OSL_DETAIL_GETPID << ':';
+#endif
+        s << osl::Thread::getCurrentIdentifier() << ':';
         if (strncmp(where, SRCDIR, sizeof(SRCDIR)-1) == 0)
             s << where+sizeof(SRCDIR);
         else
             s << where;
         s << message << '\n';
     }
+#ifdef ANDROID
+    int android_log_level;
+    switch (level) {
+    case SAL_DETAIL_LOG_LEVEL_INFO:
+        android_log_level = ANDROID_LOG_INFO;
+        break;
+    case SAL_DETAIL_LOG_LEVEL_WARN:
+        android_log_level = ANDROID_LOG_WARN;
+        break;
+    case SAL_DETAIL_LOG_LEVEL_DEBUG:
+        android_log_level = ANDROID_LOG_DEBUG;
+        break;
+    default:
+        android_log_level = ANDROID_LOG_INFO;
+        break;
+    }
+    if (area == NULL)
+        area = "LibreOffice";
+    __android_log_print(android_log_level, area, "%s", s.str().c_str());
+#else
 #ifdef HAVE_SYSLOG_H
     if (sal_use_syslog)
         syslog(toSyslogPriority(level), "%s", s.str().c_str());
     else
 #endif
         std::fputs(s.str().c_str(), stderr);
+#endif
 }
 
 }
