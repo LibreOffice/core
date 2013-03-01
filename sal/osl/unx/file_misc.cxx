@@ -1021,8 +1021,16 @@ static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
     else
-        pszLinkContent[ nRet ] = 0;
-
+    {
+        if (nRet != PATH_MAX)
+        {
+           pszLinkContent[ nRet ] = 0;
+        }
+        else
+        {
+           pszLinkContent[PATH_MAX - 1] = 0;
+        }
+    }
     nRet = symlink(pszLinkContent,pszDestFileName);
 
     if ( nRet < 0 )
