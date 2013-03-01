@@ -13,16 +13,21 @@ docloader_DIR := $(call gb_CustomTarget_get_workdir,android/experimental/Documen
 $(call gb_CustomTarget_get_target,android/docloader) : \
 	$(docloader_DIR)/done
 
-# We know that CustomTarget_sdremote.mk is included first, so sdremote_DIR is
-# defined.  We want that to be built completely first, so that we can
-# serialize Ant access to Bootstrap, which is used both by DocumentLoader and
-# sdremote. We don't want one Ant to be cleaning out Bootstrap while another
-# is building stuff that depends on it. Yeah, this sucks
+# We know that CustomTarget_sdremote.mk is included first, so
+# sdremote_DIR is defined. We want that to be built completely first,
+# so that we can serialize Ant access to Bootstrap, which is used both
+# by DocumentLoader and sdremote. We don't want one Ant to be cleaning
+# out Bootstrap while another is building stuff that depends on it.
+# Yeah, this sucks
 
 $(docloader_DIR)/done : $(sdremote_DIR)/done
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,1)
-	cd $(SRCDIR)/android/experimental/DocumentLoader && $(MAKE) clean && $(MAKE) all
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
+	cd $(SRCDIR)/android/experimental/DocumentLoader && $(MAKE) all
 	mkdir -p $(SRCDIR)/instsetoo_native/$(INPATH)/bin
 	cp $(SRCDIR)/android/experimental/DocumentLoader/bin/*-debug.apk $(SRCDIR)/instsetoo_native/$(INPATH)/bin
+
+$(call gb_CustomTarget_get_clean_target,android/docloader) :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),MAK,2)
+	cd $(SRCDIR)/android/experimental/DocumentLoader && $(MAKE) clean
 
 # vim: set noet sw=4 ts=4:

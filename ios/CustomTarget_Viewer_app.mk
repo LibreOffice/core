@@ -56,7 +56,7 @@ appdir=$(dir $(SCRIPT_OUTPUT_FILE_0))
 buildid=$(shell git log -1 --format=%H)
 
 $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
-	$(call gb_Output_announce,$@,fii,APP,2)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
 	mkdir -p $(appdir)/ure
 	mv $(call gb_Executable_get_target,Viewer) $(SCRIPT_OUTPUT_FILE_0)
 #
@@ -138,6 +138,7 @@ $(call gb_CustomTarget_get_target,ios/Viewer_app) : $(call gb_Executable_get_tar
 	$(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 
 $(call gb_CustomTarget_get_clean_target,ios/Viewer_app) :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),APP,2)
 # Here we just assume that Xcode's settings are default, or something
 	rm -rf experimental/Viewer/build
 

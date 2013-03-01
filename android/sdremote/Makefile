@@ -11,14 +11,14 @@ include ../../config_host.mk
 all: properties translations.done
 	mkdir -p ../abs-lib/libs
 	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar ../abs-lib/libs
-	$(ANT) debug
+	$(ANT) -quiet debug
 
 properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../abs-lib/local.properties
 
 clean: properties translations.clean
-	$(ANT) clean
+	$(ANT) -quiet -keep-going clean
 
 install: all
 	$(ANDROID_SDK_HOME)/platform-tools/adb install -r ./bin/ImpressRemote-debug.apk
@@ -55,6 +55,6 @@ translations.done: $(foreach lang,$(call android_get_langlist),$(call android_ge
 translations.clean:
 	rm -rf $(foreach lang,$(call android_get_langlist),$(call android_get_podir,$(lang)))
 	rm -rf $(foreach lang,$(call android_get_langlist),translations-$(lang).db)
-	rm translations.done
+	rm -f translations.done
 
 # vim: set noet sw=4 ts=4:

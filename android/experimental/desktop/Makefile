@@ -153,7 +153,7 @@ setup-jars:
 	done
 
 build-ant: android_version_setup copy-stuff link-so properties setup-jars
-	unset JAVA_HOME && $(ANT) debug
+	unset JAVA_HOME && $(ANT) -quiet debug
 
 run:
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/.Desktop
