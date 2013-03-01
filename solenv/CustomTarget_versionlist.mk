@@ -27,19 +27,15 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,solenv/versionlist))
 
-include $(BUILDDIR)/solenv/inc/minor.mk
-
-$(call gb_CustomTarget_get_target,solenv/versionlist) : $(call gb_CustomTarget_get_workdir,solenv/versionlist)/versionlist.hrc
-
-$(call gb_CustomTarget_get_workdir,solenv/versionlist)/versionlist.hrc : \
-	$(BUILDDIR)/solenv/inc/minor.mk \
-	| $(call gb_CustomTarget_get_workdir,solenv/versionlist)/.dir
+$(eval $(call gb_CustomTarget_register_targets,solenv/versionlist,\
+	versionlist.hrc \
+))
 
 $(call gb_CustomTarget_get_workdir,solenv/versionlist)/versionlist.hrc :
 	$(call gb_Output_announce,solenv/versionlist,$(true),ECH,1)
-	echo '#define VERSION $(VERSIONMAJOR)' > $@ && \
-	echo '#define SUBVERSION $(VERSIONMINOR)' >> $@ && \
-	echo '#define MICROVERSION $(VERSIONMICRO)' >> $@ && \
-	echo '#define VER_YEARRANGE $(COPYRIGHTYEARRANGE)' >> $@
+	echo '#define VERSION $(LIBO_VERSION_MAJOR)' > $@ && \
+	echo '#define SUBVERSION $(LIBO_VERSION_MINOR)' >> $@ && \
+	echo '#define MICROVERSION $(LIBO_VERSION_MICRO)' >> $@ && \
+	echo '#define VER_YEARRANGE 2000-$(LIBO_THIS_YEAR)' >> $@
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

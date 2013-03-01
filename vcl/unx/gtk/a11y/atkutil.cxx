@@ -43,6 +43,7 @@
 #include "atkutil.hxx"
 
 #include <gtk/gtk.h>
+#include <config_version.h>
 
 #include <set>
 
@@ -689,11 +690,7 @@ ooo_atk_util_get_toolkit_name (void)
 static G_CONST_RETURN gchar *
 ooo_atk_util_get_toolkit_version (void)
 {
-    /*
-     * Version is passed in as a -D flag when this file is
-     * compiled.
-     */
-    return LIBO_VERSION;
+    return LIBO_VERSION_DOTTED;
 }
 
 /*****************************************************************************/

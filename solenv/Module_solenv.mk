@@ -30,7 +30,6 @@ $(eval $(call gb_Module_Module,solenv))
 $(eval $(call gb_Module_add_targets,solenv,\
 	CustomTarget_versionlist \
 	Package_inc \
-	Package_minor \
 ))
 
 ifeq ($(CROSS_COMPILING),$(false))

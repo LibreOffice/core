@@ -36,7 +36,7 @@ $(eval $(call gb_WinResTarget_add_defs,swriter/src,\
     -DRES_APP_NAME=swriter \
     -DRES_APP_FILEDESC="$(PRODUCTNAME) Writer" \
     -DRES_APP_ICON=icons/writer_app.ico \
-    -DVERVARIANT=$(BUILD) \
+    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 

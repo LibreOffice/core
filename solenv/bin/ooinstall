@@ -71,17 +71,8 @@ if ($help) {
     exit 1;
 }
 
-my $BUILD=undef;
-my $LAST_MINOR=undef;
-open MINORMK, "$ENV{'BUILDDIR'}/solenv/inc/minor.mk";
-while (<MINORMK>) {
-    my $t = "\$" . $_;
-    if (/^BUILD/ || /^LAST_MINOR/) {
-        eval $t;
-    }
-}
-close MINORMK;
-$ENV{LAST_MINOR} = $LAST_MINOR;
+my $BUILD=$ENV{LIBO_VERSION_PATCH};
+$ENV{LAST_MINOR} = 'm0';
 $ENV{OUT} = "../$ENV{'INPATH'}";
 $ENV{LOCAL_OUT} = $ENV{OUT};
 $ENV{LOCAL_COMMON_OUT} = $ENV{OUT};

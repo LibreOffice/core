@@ -4053,7 +4053,6 @@ if test "$cross_compiling" = "yes"; then
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
-        solenv/inc/minor.mk.in \
         instsetoo_native/util/openoffice.lst.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
     cp configure CONF-FOR-BUILD
@@ -11845,17 +11844,6 @@ if test -f config_host.mk; then
 fi
 
 AC_CONFIG_FILES([config_host.mk Makefile lo.xcent instsetoo_native/util/openoffice.lst])
-# Unlike AC_CONFIG_HEADERS, AC_CONFIG_FILES updates the target file even if the contents
-# would be unchanged, avoid that.
-AC_CONFIG_FILES([solenv/inc/minor.mk.tmp:solenv/inc/minor.mk.in],
-    [
-    AC_MSG_NOTICE([creating solenv/inc/minor.mk])
-    if diff solenv/inc/minor.mk.tmp solenv/inc/minor.mk >/dev/null 2>&1 ; then
-        AC_MSG_NOTICE([solenv/inc/minor.mk is unchanged])
-    else
-        cp -f solenv/inc/minor.mk.tmp solenv/inc/minor.mk
-    fi
-    ])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
