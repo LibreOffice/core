@@ -2721,6 +2721,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aFontIndexes.push_back(nParam);
                 m_nCurrentFontIndex = getFontIndex(nParam);
             }
+            else if (m_aStates.top().nDestinationState == DESTINATION_LISTLEVEL)
+            {
+                RTFSprms aFontSprms;
+                aFontSprms.set(NS_sprm::LN_CRgFtc0, RTFValue::Pointer_t(new RTFValue(getFontIndex(nParam))));
+                RTFSprms aRunPropsSprms;
+                aRunPropsSprms.set(NS_ooxml::LN_EG_RPrBase_rFonts, RTFValue::Pointer_t(new RTFValue(RTFSprms(), aFontSprms)));
+                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_rPr, RTFValue::Pointer_t(new RTFValue(RTFSprms(), aRunPropsSprms)));
+            }
             else
             {
                 int nFontIndex = getFontIndex(nParam);

@@ -143,6 +143,7 @@ public:
     void testFdo59419();
     void testFdo58076_2();
     void testFdo59953();
+    void testFdo59638();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -258,6 +259,7 @@ void Test::run()
         {"fdo59419.rtf", &Test::testFdo59419},
         {"fdo58076-2.rtf", &Test::testFdo58076_2},
         {"fdo59953.rtf", &Test::testFdo59953},
+        {"fdo59638.rtf", &Test::testFdo59638},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1118,6 +1120,29 @@ void Test::testFdo59953()
     // Cell width of A1 was 4998 (e.g. not set / not wide enough, ~50% of total width)
     uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(7650), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
+}
+
+void Test::testFdo59638()
+{
+    // The problem was that w:lvlOverride inside w:num was ignores by dmapper.
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "BulletChar")
+        {
+            // Was '*', should be 'o'.
+            CPPUNIT_ASSERT_EQUAL(OUString("\xEF\x82\xB7", 3, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            return;
+        }
+    }
+    CPPUNIT_FAIL("no BulletChar property");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
