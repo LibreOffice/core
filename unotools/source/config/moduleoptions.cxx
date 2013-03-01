@@ -311,9 +311,9 @@ struct FactoryInfo
         //---------------------------------------------------------------------------------------------------------
         void setIcon( sal_Int32 nNewIcon )
         {
-            if( nNewIcon != nNewIcon )
+            if( nIcon != nNewIcon )
             {
-                nNewIcon     = nNewIcon;
+                nIcon = nNewIcon;
                 bChangedIcon = sal_True;
             }
         };
