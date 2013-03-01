@@ -285,3 +285,17 @@
                  --len;
              }
          }
+--- misc/icu/source/tools/genuca/genuca.cpp	2009-01-15 08:46:02.000000000 +0100
++++ misc/build/icu/source/tools/genuca/genuca.cpp	2013-01-30 07:45:01.000000000 +0100
+@@ -904,9 +904,9 @@
+       {0x20000, 0x2A6D6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //6 CJK_IMPLICIT_TAG,   /* 0x20000-0x2A6D6*/
+       {0x2F800, 0x2FA1D, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //7 CJK_IMPLICIT_TAG,   /* 0x2F800-0x2FA1D*/
+ #endif
+-      {0xAC00, 0xD7B0, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24) },  //0 HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
++      {0xAC00, 0xD7B0, static_cast<int32_t>(UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24)) },  //0 HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
+       //{0xD800, 0xDC00, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24)  },  //1 LEAD_SURROGATE_TAG,  /* D800-DBFF*/
+-      {0xDC00, 0xE000, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24) },  //2 TRAIL_SURROGATE DC00-DFFF
++      {0xDC00, 0xE000, static_cast<int32_t>(UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24)) },  //2 TRAIL_SURROGATE DC00-DFFF
+       // Now directly handled in the collation code by the swapCJK function. 
+       //{0x3400, 0x4DB6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //3 CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
+       //{0x4E00, 0x9FA6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //4 CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
