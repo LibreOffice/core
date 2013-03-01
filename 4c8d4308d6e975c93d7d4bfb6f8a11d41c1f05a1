@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///Bg\u003d",
+        "filename": "vcl/unx/gtk/a11y/atkutil.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-03-01T14:24:36Z",
+      "side": 0,
+      "message": "I hope the only change is here:\n$(UPD)$(LAST_MINOR) - \u003e LIBO_VERSION_DOTTED\nIs this allowed / fine?",
+      "revId": "4c8d4308d6e975c93d7d4bfb6f8a11d41c1f05a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
