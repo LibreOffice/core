@@ -73,7 +73,9 @@ IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
 
 IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
 {
+#ifdef ENABLE_SDREMOTE
     RemoteServer::restoreDiscoverable();
+#endif
     Close();
     return 0;
 }
