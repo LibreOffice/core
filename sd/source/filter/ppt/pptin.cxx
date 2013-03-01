@@ -505,7 +505,7 @@ sal_Bool ImplSdPPTImport::Import()
     if ( mbDocumentFound )
     {
         rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
-        // HyperList lesen / Indexe der einzelnen Eintraege setzen
+        // read hyperlist / set indices of the entries
         DffRecordHeader aHyperHd;
         if ( SeekToRec( rStCtrl, PPT_PST_ExObjList, maDocHd.GetRecEndFilePos(), &aHyperHd ) )
         {
@@ -597,18 +597,18 @@ sal_Bool ImplSdPPTImport::Import()
 
                     ///////////////////////////////////////////////////////////
                     // create layoutstylesheets, set layoutname and stylesheet
-                    // (nur auf Standard- und Notizseiten)
+                    // (only on standard and not pages)
                     ///////////////////////////////////////////////////////////
                     String aLayoutName( SdResId( STR_LAYOUT_DEFAULT_NAME ) );
                     if ( nMasterNum > 2 )
                     {
                         if ( ePgKind == PK_STANDARD )
-                        {   // Standardseite: Neues Praesentationslayout erzeugen
+                        {   // standard page: create new presentation layout
                             aLayoutName = String( SdResId( STR_LAYOUT_DEFAULT_TITLE_NAME ) );
                             aLayoutName += OUString::number( (sal_Int32)( ( nMasterNum + 1 ) / 2 - 1 ) );
                             ( (SdStyleSheetPool*)mpDoc->GetStyleSheetPool() )->CreateLayoutStyleSheets( aLayoutName );
                         }
-                        else    // Notizseite: Praesentationslayout von der Standardseite verwenden
+                        else    // note page: use presentation layout of standard page
                             aLayoutName = ( (SdPage*)mpDoc->GetMasterPage( nMasterNum - 1 ) )->GetName();
                     }
                     pPage->SetName( aLayoutName );
@@ -994,7 +994,7 @@ sal_Bool ImplSdPPTImport::Import()
         }
         else
         {
-            // Das kann bei Dokumentvorlagen vorkommen
+            // that can happen by document templates
             eAktPageKind = PPT_SLIDEPAGE;
             SdrPage* pPage = MakeBlancPage( sal_False );
             pSdrModel->InsertPage( pPage );
@@ -1031,7 +1031,7 @@ sal_Bool ImplSdPPTImport::Import()
         rStCtrl.Seek( nFPosMerk );
     }
     ///////////////////////////////////////////////////////////////////
-    // Handzettel und Notiz-Seiten erzeugen                          //
+    // create handout and note pages                                 //
     ///////////////////////////////////////////////////////////////////
     bOk = mpDoc->CreateMissingNotesAndHandoutPages();
     if ( bOk )
@@ -1047,7 +1047,7 @@ sal_Bool ImplSdPPTImport::Import()
             const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
             if ( pSlideLayout )
             {
-                switch ( pSlideLayout->eLayout )            // Praesentationslayouts fuer Standard-Seiten
+                switch ( pSlideLayout->eLayout )            // presentation layout for standard pages
                 {
                     case PPT_LAYOUT_TITLEANDBODYSLIDE :
                     {
@@ -1145,11 +1145,11 @@ sal_Bool ImplSdPPTImport::Import()
 
                     case PPT_LAYOUT_BOTTOMROW2COLUMNS :
                     case PPT_LAYOUT_BLANCSLIDE :
-                    case PPT_LAYOUT_MASTERSLIDE :           // Layout der Standard- und Titel-MasterPage
+                    case PPT_LAYOUT_MASTERSLIDE :           // layout of the standard and title master page
                     case PPT_LAYOUT_TITLEMASTERSLIDE :
-                    case PPT_LAYOUT_MASTERNOTES :           // Layout der Notizen-MasterPage
-                    case PPT_LAYOUT_NOTESTITLEBODY :        // Praesentationslayout fuer Notiz-Seiten
-                    case PPT_LAYOUT_HANDOUTLAYOUT :         // Praesentationslayout fuer Handzettelseiten
+                    case PPT_LAYOUT_MASTERNOTES :           // layout of the note master page
+                    case PPT_LAYOUT_NOTESTITLEBODY :        // presentation layout for note pages
+                    case PPT_LAYOUT_HANDOUTLAYOUT :         // presentation layout for handout
                         eAutoLayout = AUTOLAYOUT_NONE;
                     break;
                 }
@@ -1158,7 +1158,7 @@ sal_Bool ImplSdPPTImport::Import()
             }
         }
         //////////////////////////////////////////////////////////////
-        // Handzettel-MasterPage: Autolayout setzen                 //
+        // handout master page: auto layout                         //
         //////////////////////////////////////////////////////////////
         SdPage* pHandoutMPage = mpDoc->GetMasterSdPage( 0, PK_HANDOUT );
         pHandoutMPage->SetAutoLayout( AUTOLAYOUT_HANDOUT6, sal_True, sal_True );
@@ -1237,7 +1237,7 @@ sal_Bool ImplSdPPTImport::Import()
             }
         }
         DffRecordHeader aCustomShowHeader;
-        // custom show einlesen und setzen
+        // read and set custom show
         rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
         if ( SeekToRec( rStCtrl, PPT_PST_NamedShows, maDocHd.GetRecEndFilePos(), &aCustomShowHeader ) )
         {
@@ -1447,7 +1447,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Import von Seiten
+// Import of pages
 //
 //////////////////////////////////////////////////////////////////////////
 
@@ -1473,7 +1473,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
 {
     sal_uLong nFilePosMerk = rStCtrl.Tell();
 
-    // PageKind an der Seite setzen (bisher nur PK_STANDARD oder PK_NOTES)
+    // set PageKind at page (up to now only PK_STANDARD or PK_NOTES)
     if ( pPage->GetPageKind() == PK_STANDARD )
     {
         PptSlidePersistList* pPersistList = GetPageList( eAktPageKind );
@@ -1520,12 +1520,12 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                 sal_Int8    nDirection, nTransitionType, nByteDummy, nSpeed;
                                 sal_Int16   nBuildFlags;
                                 sal_Int32   nSlideTime, nSoundRef;
-                                rStCtrl >> nSlideTime           // Standzeit (in Ticks)
-                                        >> nSoundRef            // Index in SoundCollection
-                                        >> nDirection           // Richtung des Ueberblendeffekts
-                                        >> nTransitionType      // Ueberblendeffekt
+                                rStCtrl >> nSlideTime           // time to show (in Ticks)
+                                        >> nSoundRef            // Index of SoundCollection
+                                        >> nDirection           // direction of fade effect
+                                        >> nTransitionType      // fade effect
                                         >> nBuildFlags          // Buildflags (s.u.)
-                                        >> nSpeed               // Geschwindigkeit (langsam, mittel, schnell)
+                                        >> nSpeed               // speed (slow, medium, fast)
                                         >> nByteDummy >> nByteDummy >> nByteDummy;
 
                                 switch ( nTransitionType )
@@ -1533,37 +1533,37 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                     case PPT_TRANSITION_TYPE_BLINDS :
                                     {
                                         if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_VERTICAL_STRIPES );// Vertikal blenden
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_VERTICAL_STRIPES );        // fade vertical
                                         else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_HORIZONTAL_STRIPES );// Horizontal blenden
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_HORIZONTAL_STRIPES );      // fade horizontal
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_CHECKER :
                                     {
                                         if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_HORIZONTAL_CHECKERBOARD );// Vertikal versetzt einblenden ??
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_HORIZONTAL_CHECKERBOARD ); // fade vertical with offset ??
                                         else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_VERTICAL_CHECKERBOARD );// Horizontal versetzt einblenden ??
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_VERTICAL_CHECKERBOARD );   // fade horizontal with offset ??
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_COVER :
                                     {
                                         if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_RIGHT );     // Von rechts ueberdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_RIGHT );         // overlay from right
                                         else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_BOTTOM );    // Von unten ueberdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_BOTTOM );        // overlay from bottom
                                         else if ( nDirection == 2 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LEFT );      // Von links ueberdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LEFT );          // overlay from left
                                         else if ( nDirection == 3 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_TOP );       // Von oben ueberdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_TOP );           // overlay from top
                                         else if ( nDirection == 4 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERRIGHT );// Von rechts unten ueberdecken ??
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERRIGHT );    // overlay from bottom right ??
                                         else if ( nDirection == 5 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERLEFT ); // Von links unten ueberdecken ??
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LOWERLEFT );     // overlay from bottom left ??
                                         else if ( nDirection == 6 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERRIGHT );// Von rechts oben ueberdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERRIGHT );    // overlay from top right
                                         else if ( nDirection == 7 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERLEFT ); // Von links oben ueberdecken ??
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_MOVE_FROM_UPPERLEFT );     // overlay from top left ??
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_NONE :
@@ -1571,7 +1571,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                         if ( nBuildFlags )
                                         {
                                             if ( nDirection == 0 )
-                                                pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // Direkt
+                                                pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_NONE );                // direct
                                             else if ( nDirection == 1 )
                                             {
                                                 pPage->setTransitionType( animations::TransitionType::BARWIPE );
@@ -1584,74 +1584,74 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_DISSOLVE :
-                                        pPage->SetFadeEffect(::com::sun::star::presentation::FadeEffect_DISSOLVE);                  // Aufloesen
+                                        pPage->SetFadeEffect(::com::sun::star::presentation::FadeEffect_DISSOLVE);                      // dissolve
                                     break;
                                     case PPT_TRANSITION_TYPE_RANDOM_BARS :
                                     {
                                         if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_HORIZONTAL_LINES );    // Horizontale Linien
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_HORIZONTAL_LINES );        // horizontal lines
                                         else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_VERTICAL_LINES );      // Vertikale Linien
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_VERTICAL_LINES );          // vertical lines
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_SPLIT :
                                     {
                                         if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_OPEN_VERTICAL );   // Horizontal oeffnen
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_OPEN_VERTICAL );           // open horizontal ??
                                         else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_CLOSE_VERTICAL );  // Horizontal schliessen
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_CLOSE_VERTICAL );          // close horizontal ??
                                         else if ( nDirection == 2 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_OPEN_HORIZONTAL ); // Vertikal oeffnen
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_OPEN_HORIZONTAL );         // open vertical ??
                                         else if ( nDirection == 3 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_CLOSE_HORIZONTAL );// Vertikal schliessen
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_CLOSE_HORIZONTAL );        // close vertical ??
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_STRIPS :
                                     {
                                         if ( nDirection == 4 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERRIGHT );// Diagonal nach links oben
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERRIGHT );    // diagonal to top left
                                         else if ( nDirection == 5 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERLEFT ); // Diagonal nach rechts oben
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERLEFT );     // diagonal to top right
                                         else if ( nDirection == 6 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERRIGHT );// Diagonal nach links unten
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERRIGHT );    // diagonal to bottom left
                                         else if ( nDirection == 7 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERLEFT ); // Diagonal nach rechts unten
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERLEFT );     // diagonal to bottom right
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_PULL :
                                     {
                                         if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT );     // Nach links aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT );         // uncover to left
                                         else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP );      // Nach oben aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP );          // uncover to top
                                         else if ( nDirection == 2 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_RIGHT );    // Nach rechts aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_RIGHT );        // uncover to right
                                         else if ( nDirection == 3 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_BOTTOM );   // Nach unten aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_BOTTOM );       // uncover to bottom
                                         else if ( nDirection == 4 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERLEFT );// Nach links oben aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERLEFT );    // uncover to top left
                                         else if ( nDirection == 5 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT );// Nach rechts oben aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT );   // uncover to top right
                                         else if ( nDirection == 6 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERLEFT );// Nach links unten aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERLEFT );    // uncover to bottom left
                                         else if ( nDirection == 7 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT );// Nach rechts unten aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT );   // uncover to bottom right
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_WIPE :
                                     {
                                         if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_RIGHT ); // Von rechts rollen
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_RIGHT );         // roll from right
                                         else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_BOTTOM );// Von unten rollen
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_BOTTOM );        // roll from bottom
                                         else if ( nDirection == 2 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_LEFT );  // Von links rollen
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_LEFT );          // roll from left
                                         else if ( nDirection == 3 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_TOP );   // Von oben rollen
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_TOP );           // roll from top
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_RANDOM :
-                                        pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_RANDOM );              // Automatisch
+                                        pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_RANDOM );                      // automatic
                                     break;
                                     case PPT_TRANSITION_TYPE_FADE :
                                     {
@@ -1663,9 +1663,9 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                     case PPT_TRANSITION_TYPE_ZOOM :
                                     {
                                         if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_CENTER );// Von innen einblenden
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_FROM_CENTER );        // fade from center
                                         else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER );  // Von aussen einblenden
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER );          // fade from the outside
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_DIAMOND :
@@ -1744,14 +1744,14 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                 }
 
                                 if ( nSpeed == 0 )
-                                    pPage->setTransitionDuration( 3.0 );        // langsam
+                                    pPage->setTransitionDuration( 3.0 );    // slow
                                 else if ( nSpeed == 1 )
-                                    pPage->setTransitionDuration( 2.0 );    // mittel
+                                    pPage->setTransitionDuration( 2.0 );    // medium
                                 else if ( nSpeed == 2 )
-                                    pPage->setTransitionDuration( 1.0 );    // schnell
+                                    pPage->setTransitionDuration( 1.0 );    // fast
 
                                 if ( nBuildFlags & 0x400 )                      // slidechange by time
-                                {   // Standzeit (in Ticks)
+                                {   // time to show (in Ticks)
                                     pPage->SetPresChange( PRESCHANGE_AUTO );
                                     pPage->SetTime( nSlideTime / 1000 );
                                 }
@@ -1759,9 +1759,9 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                     pPage->SetPresChange( mePresChange );
 
                                 if ( nBuildFlags & 4 )
-                                    pPage->SetExcluded( sal_True );                 // Dia nicht anzeigen
+                                    pPage->SetExcluded( sal_True );             // don't show slide
                                 if ( nBuildFlags & 16 )
-                                {   // Dia mit Soundeffekt
+                                {   // slide with sound effect
                                     pPage->SetSound( sal_True );
                                     String aSoundFile( ReadSound( nSoundRef ) );
                                     pPage->SetSoundFile( aSoundFile );
@@ -1840,10 +1840,10 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Import von Sounds
+// import of sounds
 //
-// Die Sounds werden nicht nur als String importiert sondern auch
-// in die Gallery einefuegt, falls dort noch nicht vorhanden.
+// Not only the sounds are imported as string, they are also inserted to
+// the gallery if they are not already there.
 //
 ///////////////////////////////////////////////////////////////////////////
 
@@ -1887,9 +1887,8 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                 }
                 if ( bDone )
                 {
-                    // ueberpruefen, ob diese Sound-Datei schon
-                    // existiert. Wenn nicht, exportiere diese
-                    // in unser lokales Sound-Verzeichnis.
+                    // Check if this sound file already exists.
+                    // If not, it is exported to our local sound directory.
                     sal_Bool    bSoundExists = sal_False;
                     ::std::vector< String > aSoundList;
 
@@ -2021,16 +2020,16 @@ String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Import von Objekten
+// import of objects
 //
 //////////////////////////////////////////////////////////////////////////
 
 void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName )
 {
-    // Lokale Informationen in pInfo eintragen
+    // set local information into pInfo
     if( pIAtom->nSoundRef )
     {
-        pInfo->SetBookmark( ReadSound( pIAtom->nSoundRef ) );   // Pfad zum Soundfile in MSDOS-Notation
+        pInfo->SetBookmark( ReadSound( pIAtom->nSoundRef ) );   // path to sound file in MS DOS notation
         pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_SOUND;           // RunProgramAction
     }
 
@@ -2040,7 +2039,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
         case 0x02 :                                         // RunProgramAction
         {
             pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_PROGRAM;
-            pInfo->SetBookmark( aMacroName );                   // Programmname in aBookmark
+            pInfo->SetBookmark( aMacroName );                   // program name in aBookmark
         }
         break;
         case 0x03 :                                         // JumpAction
@@ -2109,7 +2108,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                     case 10:
                     break;
 
-                    case 7:                                         // hyperlink auf eine Seite
+                    case 7:                                         // hyperlink to a page
                     {
                         if ( !pPtr->aConvSubString.isEmpty() )
                         {
@@ -2411,7 +2410,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                                 switch ( pSlideLayout->aPlacementId[ i ] )
                                 {
-                                    case 0 :            // Lage im Titelbereich
+                                    case 0 :            // position in title area
                                     {
                                         if ( aLogicRect != aTitleRect )
                                             pPresObj->SetUserCall( NULL );
@@ -2421,12 +2420,12 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                     case 1:
                                     {
                                         if ( pSlideLayout->eLayout == PPT_LAYOUT_TITLEANDBODYSLIDE )
-                                        {   // Lage im Outlinebereich
+                                        {   // position in outline area
                                             if ( aLogicRect != aOutlineRect )
                                                 pPresObj->SetUserCall( NULL );
                                         }
                                         else if ( pSlideLayout->eLayout == PPT_LAYOUT_2COLUMNSANDTITLE )
-                                        {   // Lage im Outlinebereich links
+                                        {   // position in outline area left
                                             if (Abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
                                                 Abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
                                                 Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
@@ -2437,7 +2436,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                             }
                                         }
                                         else if ( pSlideLayout->eLayout == PPT_LAYOUT_2ROWSANDTITLE )
-                                        {   // Lage im Outlinebereich oben
+                                        {   // position in outline area top
                                             if (Abs(aLogicRect.Left()  - aOutlineRect.Left())  > MAX_USER_MOVE ||
                                                 Abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE ||
                                                 Abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE)
@@ -2447,7 +2446,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                         }
                                         else if (Abs(aLogicRect.Left() - aOutlineRect.Left()) > MAX_USER_MOVE ||
                                                  Abs(aLogicRect.Top()  - aOutlineRect.Top())  > MAX_USER_MOVE)
-                                        {   // Lage im Outlinebereich links oben
+                                        {   // position in outline area top left
                                             pPresObj->SetUserCall( NULL );
                                         }
                                     }
@@ -2456,7 +2455,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                     case 2:
                                     {
                                         if ( pSlideLayout->eLayout == PPT_LAYOUT_2COLUMNSANDTITLE )
-                                        {   // Lage im Outlinebereich rechts
+                                        {   // position in outline area right
                                             if (Abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE ||
                                                 Abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
                                                 Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
@@ -2467,7 +2466,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                             }
                                         }
                                         else if ( pSlideLayout->eLayout == PPT_LAYOUT_2ROWSANDTITLE )
-                                        {   // Lage im Outlinebereich unten
+                                        {   // position in outline area bottom
                                             if (Abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
                                                 Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
                                                 Abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE)
@@ -2477,14 +2476,14 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                         }
                                         else if (Abs(aLogicRect.Right() - aOutlineRect.Right()) > MAX_USER_MOVE ||
                                                  Abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE)
-                                        {   // Lage im Outlinebereich rechts oben
+                                        {   // position in outline area top right
                                             pPresObj->SetUserCall(NULL);
                                         }
                                     }
                                     break;
 
                                     case 3:
-                                    {   // Lage im Outlinebereich links unten
+                                    {   // position in outline area bottom left
                                         if (Abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
                                             Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
                                         {
@@ -2494,7 +2493,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                     break;
 
                                     case 4:
-                                    {   // Lage im Outlinebereich rechts unten
+                                    {   // position in outline area bottom right
                                         if (Abs(aLogicRect.Right() - aOutlineRect.Right())   > MAX_USER_MOVE ||
                                             Abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE)
                                         {
@@ -2525,7 +2524,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 {
     SdrObject* pObj = SdrPowerPointImport::ProcessObj( rSt, rObjData, pData, rTextRect, pRet );
 
-    // Animationseffekte des Objektes lesen
+    // read animation effect of object
     if ( pObj )
     {
         // further setup placeholder objects
