@@ -85,7 +85,7 @@ $(foreach pkgformat,$(5),\
 	-l $(subst $(WHITESPACE),$(COMMA),$(strip $(2))) \
 	-p LibreOffice$(if $(filter TRUE,$(ENABLE_RELEASE_BUILD)),,_Dev)$(3) \
 	-u $(instsetoo_OUT) \
-	-buildid $(BUILD) \
+	-buildid $(LIBO_VERSION_PATCH) \
 	$(if $(filter WNT,$(OS)), \
 		-msitemplate $(dir $@)msi_templates \
 		-msilanguage $(dir $@)win_ulffiles \

@@ -16,7 +16,7 @@ $(eval $(call gb_WinResTarget_use_custom_headers,crashrep,\
 $(eval $(call gb_WinResTarget_add_defs,crashrep,\
     -DRES_APP_NAME=crashrep \
     -DRES_APP_FILEDESC="$(PRODUCTNAME) Crashreporter" \
-    -DVERVARIANT=$(BUILD) \
+    -DVERVARIANT=$(LIBO_VERSION_PATCH) \
     -DRES_APP_VENDOR="$(OOO_VENDOR)" \
 ))
 
