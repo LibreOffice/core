@@ -334,17 +334,12 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    sal_Bool DocumentMacroMode::hasMacroLibrary() const
+    sal_Bool DocumentMacroMode::containerHasBasicMacros( const Reference< XLibraryContainer >& xContainer )
     {
         sal_Bool bHasMacroLib = sal_False;
-#ifndef DISABLE_SCRIPTING
         try
         {
-            Reference< XEmbeddedScripts > xScripts( m_pData->m_rDocumentAccess.getEmbeddedDocumentScripts() );
-            Reference< XLibraryContainer > xContainer;
-            if ( xScripts.is() )
-                xContainer.set( xScripts->getBasicLibraries(), UNO_QUERY_THROW );
-
+            // a library container exists; check if it's empty
             Reference< XVBACompatibility > xDocVBAMode( xContainer, UNO_QUERY );
             sal_Bool bIsVBAMode = ( xDocVBAMode.is() && xDocVBAMode->getVBACompatibilityMode() );
             if ( xContainer.is() )
@@ -384,6 +379,30 @@ namespace sfx2
                     }
                 }
             }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return bHasMacroLib;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool DocumentMacroMode::hasMacroLibrary() const
+    {
+        sal_Bool bHasMacroLib = sal_False;
+#ifndef DISABLE_SCRIPTING
+        try
+        {
+            Reference< XEmbeddedScripts > xScripts( m_pData->m_rDocumentAccess.getEmbeddedDocumentScripts() );
+            Reference< XLibraryContainer > xContainer;
+            if ( xScripts.is() )
+                xContainer.set( xScripts->getBasicLibraries(), UNO_QUERY_THROW );
+            bHasMacroLib = containerHasBasicMacros( xContainer );
+
+            Reference< XVBACompatibility > xDocVBAMode( xContainer, UNO_QUERY );
+            sal_Bool bIsVBAMode = ( xDocVBAMode.is() && xDocVBAMode->getVBACompatibilityMode() );
+
             if ( bIsVBAMode && !bHasMacroLib && xScripts.is() )
             {
                 Reference< XLibraryContainer > xDlgContainer( xScripts->getDialogLibraries(), UNO_QUERY );
