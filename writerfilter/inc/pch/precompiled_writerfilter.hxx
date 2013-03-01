@@ -206,10 +206,10 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/embeddedfontshelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/embeddedfontshelper.hxx>
 #include <vcl/wmf.hxx>
 #include <vector>
 #include <xmloff/odffields.hxx>

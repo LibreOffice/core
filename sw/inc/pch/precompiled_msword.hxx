@@ -246,13 +246,13 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <utility>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/embeddedfontshelper.hxx>
 #include <vcl/font.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/embeddedfontshelper.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/wmf.hxx>

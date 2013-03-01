@@ -601,6 +601,7 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <rsc/rscsfx.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
@@ -771,6 +772,7 @@
 #include <svx/chrtitem.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/clipfmtitem.hxx>
+#include <svx/compressgraphicdialog.hxx>
 #include <svx/contdlg.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -1090,6 +1092,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmlreader/xmlreader.hxx>
 #include<vcl/window.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

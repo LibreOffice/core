@@ -247,6 +247,7 @@
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

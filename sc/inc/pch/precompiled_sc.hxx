@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "basegfx/matrix/b2dhommatrix.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 #include "basegfx/range/b2drange.hxx"
@@ -893,6 +894,7 @@
 #include <unotools/useroptions.hxx>
 #include <utility>
 #include <vbahelper/vbaaccesshelper.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/field.hxx>

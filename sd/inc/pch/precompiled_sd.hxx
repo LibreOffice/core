@@ -441,6 +441,7 @@
 #include <new>
 #include <numeric>
 #include <o3tl/compat_functional.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
@@ -469,6 +470,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
+#include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
