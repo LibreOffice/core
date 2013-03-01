@@ -436,9 +436,20 @@ public:
 
 class VCL_DLLPUBLIC VclFrame : public VclBin
 {
+private:
+    Window *m_pLabel;
+private:
+    friend class VclBuilder;
+    void designate_label(Window *pWindow);
 public:
-    VclFrame(Window *pParent) : VclBin(pParent) {}
+    VclFrame(Window *pParent)
+        : VclBin(pParent)
+        , m_pLabel(NULL)
+    {
+    }
     void set_label(const OUString &rLabel);
+    virtual Window *get_child();
+    virtual const Window *get_child() const;
     Window *get_label_widget();
     const Window *get_label_widget() const;
 protected:

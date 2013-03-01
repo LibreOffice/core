@@ -1088,10 +1088,8 @@ Size VclFrame::calculateRequisition() const
 {
     Size aRet(0, 0);
 
-    WindowImpl* pWindowImpl = ImplGetWindowImpl();
-
     const Window *pChild = get_child();
-    const Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    const Window *pLabel = get_label_widget();
 
     if (pChild && pChild->IsVisible())
         aRet = getLayoutRequisition(*pChild);
@@ -1121,11 +1119,8 @@ void VclFrame::setAllocation(const Size &rAllocation)
         rAllocation.Height() - rFrameStyle.top - rFrameStyle.bottom);
     Point aChildPos(rFrameStyle.left, rFrameStyle.top);
 
-    WindowImpl* pWindowImpl = ImplGetWindowImpl();
-
-    //The label widget is the last (of two) children
     Window *pChild = get_child();
-    Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    Window *pLabel = get_label_widget();
 
     if (pLabel && pLabel->IsVisible())
     {
@@ -1141,12 +1136,22 @@ void VclFrame::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
+void VclFrame::designate_label(Window *pWindow)
+{
+    assert(pWindow->GetParent() == this);
+    m_pLabel = pWindow;
+}
+
 const Window *VclFrame::get_label_widget() const
 {
-    //The label widget is the last (of two) children
-    const Window *pChild = get_child();
+    assert(GetChildCount() == 2);
+    if (m_pLabel)
+        return m_pLabel;
+    //The label widget is normally the first (of two) children
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
-    return pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) //no label exists
+        return NULL;
+    return pWindowImpl->mpFirstChild;
 }
 
 Window *VclFrame::get_label_widget()
@@ -1154,9 +1159,25 @@ Window *VclFrame::get_label_widget()
     return const_cast<Window*>(const_cast<const VclFrame*>(this)->get_label_widget());
 }
 
+const Window *VclFrame::get_child() const
+{
+    assert(GetChildCount() == 2);
+    //The child widget is the normally the last (of two) children
+    const WindowImpl* pWindowImpl = ImplGetWindowImpl();
+    if (!m_pLabel)
+        return pWindowImpl->mpLastChild;
+    if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) //only label exists
+        return NULL;
+    return pWindowImpl->mpLastChild;
+}
+
+Window *VclFrame::get_child()
+{
+    return const_cast<Window*>(const_cast<const VclFrame*>(this)->get_child());
+}
+
 void VclFrame::set_label(const rtl::OUString &rLabel)
 {
-    //The label widget is the last (of two) children
     Window *pLabel = get_label_widget();
     assert(pLabel);
     pLabel->SetText(rLabel);

@@ -1425,7 +1425,20 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
             return false;
     }
     //honour relative box positions with pack group
-    return m_pBuilder->get_window_packing_data(pA).m_nPosition < m_pBuilder->get_window_packing_data(pB).m_nPosition;
+    bPackA = m_pBuilder->get_window_packing_data(pA).m_nPosition;
+    bPackB = m_pBuilder->get_window_packing_data(pB).m_nPosition;
+    if (bPackA < bPackB)
+        return true;
+    if (bPackA > bPackB)
+        return false;
+    //sort labels of Frames before body
+    if (pA->GetParent() == pB->GetParent())
+    {
+        const VclFrame *pFrameParent = dynamic_cast<const VclFrame*>(pA->GetParent());
+        if (pFrameParent && pA == pFrameParent->get_label_widget())
+            return true;
+    }
+    return false;
 }
 
 void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
@@ -1487,6 +1500,15 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                     }
                     else
                     {
+                        // We want to sort labels before contents of frames
+                        // for key board traversal, especially if there
+                        // are multiple widgets using the same mnemonic
+                        if (sType.equals("label"))
+                        {
+                            if (VclFrame *pFrameParent = dynamic_cast<VclFrame*>(pParent))
+                                pFrameParent->designate_label(pCurrentChild);
+                        }
+
                         //To-Do make reorder a virtual in Window, move this foo
                         //there and see above
                         std::vector<Window*> aChilds;
