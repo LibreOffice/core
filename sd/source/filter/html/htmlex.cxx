@@ -93,12 +93,12 @@ using namespace ::com::sun::star::document;
 
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
-// Parameter aus Itemset abfragen
+// get parameter from Itemset
 
 #define RESTOHTML( res ) StringToHTMLString(String(SdResId(res)))
 #define S2H( str ) StringToHTMLString( str )
 
-// bei Aenderungen auch NUM_BUTTONS in pubdlg.hxx aendern!!
+// when changing, also change NUM_BUTTONS in pubdlg.hxx!!
 const char *pButtonNames[NUM_BUTTONS] =
 {
     "first-inactive.png",
@@ -129,7 +129,7 @@ const char *pButtonNames[NUM_BUTTONS] =
 #define BTN_LESS    11
 
 // *********************************************************************
-// Hilfsklasse fuer das simple erzeugen von Dateien lokal/remote
+// Helper class for the simple creation of files local/remote
 // *********************************************************************
 class EasyFile
 {
@@ -149,7 +149,7 @@ public:
 };
 
 // *********************************************************************
-// Hilfsklasse fuer das einbinden von Textattributen in die Html-Ausgabe
+// Helper class for the embedding of text attributes into the html output
 // *********************************************************************
 class HtmlState
 {
@@ -178,7 +178,7 @@ public:
 };
 
 // =====================================================================
-// alle noch offennen Tags schliessen
+// close all still open tags
 // =====================================================================
 String HtmlState::Flush()
 {
@@ -195,7 +195,7 @@ String HtmlState::Flush()
 }
 
 // =====================================================================
-// c'tor mit Defaultfarbe fuer die Seite
+// c'tor with default color for the page
 // =====================================================================
 HtmlState::HtmlState( Color aDefColor )
 {
@@ -209,7 +209,7 @@ HtmlState::HtmlState( Color aDefColor )
 }
 
 // =====================================================================
-// aktiviert/deaktiviert Fettdruck
+// enables/disables bold print
 // =====================================================================
 String HtmlState::SetWeight( bool bWeight )
 {
@@ -225,7 +225,7 @@ String HtmlState::SetWeight( bool bWeight )
 }
 
 // =====================================================================
-// aktiviert/deaktiviert Italic
+// enables/disables italic
 // =====================================================================
 String HtmlState::SetItalic( bool bItalic )
 {
@@ -241,7 +241,7 @@ String HtmlState::SetItalic( bool bItalic )
 }
 
 // =====================================================================
-// aktiviert/deaktiviert Unterstrichen
+// enables/disables underlines
 // =====================================================================
 String HtmlState::SetUnderline( bool bUnderline )
 {
@@ -257,7 +257,7 @@ String HtmlState::SetUnderline( bool bUnderline )
 }
 
 // =====================================================================
-// aktiviert/deaktiviert Durchstreichen
+// enables/disables strike through
 // =====================================================================
 String HtmlState::SetStrikeout( bool bStrike )
 {
@@ -273,7 +273,7 @@ String HtmlState::SetStrikeout( bool bStrike )
 }
 
 // =====================================================================
-// Setzt die angegebenne Textfarbe
+// Sets the specified text color
 // =====================================================================
 String HtmlState::SetColor( Color aColor )
 {
@@ -303,7 +303,7 @@ String HtmlState::SetColor( Color aColor )
 }
 
 // =====================================================================
-// aktiviert/deaktiviert einen Hyperlink
+// enables/disables a hyperlink
 // =====================================================================
 String HtmlState::SetLink( const String& aLink, const String& aTarget )
 {
@@ -337,7 +337,7 @@ String HtmlState::SetLink( const String& aLink, const String& aTarget )
 }
 
 // *********************************************************************
-// class HtmlExport Methoden
+// methods of the class HtmlExport
 // *********************************************************************
 
 static String getParagraphStyle( SdrOutliner* pOutliner, sal_uInt16 nPara )
@@ -357,7 +357,7 @@ static String getParagraphStyle( SdrOutliner* pOutliner, sal_uInt16 nPara )
 }
 
 // =====================================================================
-// Konstruktor fuer die Html Export Hilfsklasse
+// constructor for the html export helper classes
 // =====================================================================
 HtmlExport::HtmlExport(
     OUString aPath,
@@ -420,7 +420,7 @@ HtmlExport::HtmlExport(
 HtmlExport::~HtmlExport()
 {
     // ------------------------------------------------------------------
-    // Listen loeschen
+    // delete lists
     // ------------------------------------------------------------------
     if(mpImageFiles && mpHTMLFiles && mpThumbnailFiles && mpPageNames && mpTextFiles )
     {
@@ -644,7 +644,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     mnHeightPixel = (sal_uInt16)(mnWidthPixel/dRatio);
 
     //------------------------------------------------------------------
-    // Ziel ausklamuestern...
+    // we come up with a destination...
 
     INetURLObject aINetURLObj( maPath );
     DBG_ASSERT( aINetURLObj.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
@@ -671,7 +671,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
 }
 
 ///////////////////////////////////////////////////////////////////////
-// Exportiert das im Konstruktor angegebenne Impress Dokument nach HTML
+// exports the (in the c'tor specified impress document) to html
 ///////////////////////////////////////////////////////////////////////
 void HtmlExport::ExportHtml()
 {
@@ -685,7 +685,7 @@ void HtmlExport::ExportHtml()
     }
     else if( mbDocColors )
     {
-        // Standard Farben fuer das Farbschema 'Aus Dokument'
+        // default colors for the color schema 'From Document'
         SetDocColors();
         maFirstPageColor = maBackColor;
     }
@@ -693,7 +693,7 @@ void HtmlExport::ExportHtml()
     // get name for downloadable presentation if needed
     if( mbDownload )
     {
-        // Separator such und Extension ausblenden
+        // fade out separator search and extension
         sal_uInt16 nSepPos = maDocFileName.Search( sal_Unicode('.') );
 
         if(nSepPos != STRING_NOTFOUND)
@@ -714,7 +714,7 @@ void HtmlExport::ExportHtml()
     mpDocSh->SetWaitCursor( true );
 
     //------------------------------------------------------------------
-    // Exceptions sind doch was schoennes...
+    // Exceptions are cool...
 
     CreateFileNames();
 
@@ -795,7 +795,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
 
     if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
-        // Standard Textfarbe aus Outline-Vorlage der ersten Seite
+        // default text color from the outline template of the first page
         pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_OUTLINE);
         if(pSheet == NULL)
             pSheet = pPage->GetStyleSheetForPresObj(PRESOBJ_TEXT);
@@ -813,7 +813,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
             maTextColor = ((SvxColorItem*)rSet.GetItem(EE_CHAR_COLOR,sal_True))->GetValue();
     }
 
-    // Standard Hintergrundfarbe aus Background der MasterPage der ersten Seite
+    // default background from the background of the master page of the first page
     maBackColor = pPage->GetPageBackgroundColor();
 
     if( maTextColor == COL_AUTO )
@@ -961,7 +961,7 @@ bool HtmlExport::SavePresentation()
 }
 
 // =====================================================================
-// Image-Dateien anlegen
+// create image files
 // =====================================================================
 bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 {
@@ -1034,7 +1034,7 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 }
 
 // =====================================================================
-// Ermittelt das SdrTextObject mit dem Layout Text dieser Seite
+// get SdrTextObject with layout text of this page
 // =====================================================================
 SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
 {
@@ -1056,7 +1056,7 @@ SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
 }
 
 // =====================================================================
-// HTML-Text Versionen fuer Impress Seiten erzeugen
+// create HTML text version of impress pages
 // =====================================================================
 
 String HtmlExport::WriteMetaCharset() const
@@ -1087,7 +1087,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
             SetDocColors( pPage );
         }
 
-// HTML Kopf
+// HTML head
         String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
@@ -1096,10 +1096,10 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         aStr.AppendAscii( "</head>\r\n" );
         aStr += CreateBodyTag();
 
-// Navigationsleiste
+// navigation bar
         aStr += CreateNavBar(nSdPage, true);
 
-// Seitentitel
+// page title
         String sTitleText( CreateTextForTitle(pOutliner,pPage, pPage->GetPageBackgroundColor()) );
         aStr.AppendAscii( "<h1 style=\"");
         aStr.Append( getParagraphStyle( pOutliner, 0 ) );
@@ -1107,10 +1107,10 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         aStr += sTitleText;
         aStr.AppendAscii( "</h1>\r\n" );
 
-// Gliederungstext schreiben
+// write outline text
         aStr += CreateTextForPage( pOutliner, pPage, true, pPage->GetPageBackgroundColor() );
 
-// Notizen
+// notes
         if(mbNotes)
         {
             SdPage* pNotesPage = maNotesPages[ nSdPage ];
@@ -1126,7 +1126,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
             }
         }
 
-// Seite beenden
+// clsoe page
         aStr.AppendAscii( "</body>\r\n</html>" );
 
         bOk = WriteHtml( *mpTextFiles[nSdPage], false, aStr );
@@ -1173,7 +1173,7 @@ bool HtmlExport::WriteHtml( const String& rFileName, bool bAddExtension, const S
 
 // =====================================================================
 
-/** Erzeugt den Outliner Text fuer das Titelobjekt einer Seite
+/** creates a outliner text for the title objects of a page
  */
 String HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor )
 {
@@ -1196,7 +1196,7 @@ String HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, co
 }
 
 // =====================================================================
-// Erzeugt den Outliner Text fuer eine Seite
+// creates a outliner text for a page
 // =====================================================================
 String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                                       SdPage* pPage,
@@ -1294,7 +1294,7 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
 }
 
 // =====================================================================
-// Erzeugt den Outliner Text fuer eine Notizseite
+// creates a outliner text for a note page
 // =====================================================================
 String HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
                                            SdPage* pPage,
@@ -1329,7 +1329,7 @@ String HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
 }
 
 // =====================================================================
-// Wandelt einen Paragraphen des Outliners in Html
+// converts a paragraph of the outliner to html
 // =====================================================================
 String HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_uLong nPara, const Color& rBackgroundColor )
 {
@@ -1374,8 +1374,9 @@ String HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_uLong nPar
 }
 
 // =====================================================================
-// Erzeugt anhand der Attribute im angegebennen Set und dem gegebennen
-// HtmlState die noetigen Html-Tags um die Attribute zu uebernehmen
+// Depending on the attributes of the specified set and the specified
+// HtmlState, it creates the needed html tags in order to get the
+// attributes.
 // =====================================================================
 String HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, const Color& rBackgroundColor )
 {
@@ -1465,7 +1466,7 @@ String HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, 
 }
 
 // =====================================================================
-// HTML-Wrapper fuer Bild-Dateien erzeugen
+// create HTML wrapper for picture files
 // =====================================================================
 bool HtmlExport::CreateHtmlForPresPages()
 {
@@ -1475,10 +1476,9 @@ bool HtmlExport::CreateHtmlForPresPages()
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
     {
-        // Klickbare Objekte finden (auch auf der Masterpage) und
-        // in Liste stellen. In umgekehrter Zeichenreihenfolge in
-        // die Liste stellen, da in HTML bei Ueberlappungen die
-        // _erstgenannte_ Area wirkt.
+        // find clickable objects (also on the master page) and put it in the
+        // list. This in reverse order character order since in html the first
+        // area is taken in the case they overlap.
 
         SdPage* pPage = maPages[ nSdPage ];
 
@@ -1491,7 +1491,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
         while (!bMasterDone)
         {
-            // sal_True = rueckwaerts
+            // sal_True = backwards
             SdrObjListIter aIter(*pPage, IM_DEEPWITHGROUPS, sal_True);
 
             SdrObject* pObject = aIter.Next();
@@ -1514,7 +1514,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                 pObject = aIter.Next();
             }
-            // jetzt zur Masterpage oder beenden
+            // now to the master page or finishing
             if (!pPage->IsMasterPage())
                 pPage = (SdPage*)(&(pPage->TRG_GetMasterPage()));
             else
@@ -1575,7 +1575,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         if( mbSlideSound && pPage->IsSoundOn() )
             aStr += InsertSound( pPage->GetSoundFile() );
 
-// Navigationsleiste
+// navigation bar
         if(!mbFrames )
             aStr += CreateNavBar( nSdPage, false );
 // Image
@@ -1589,7 +1589,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
         aStr.AppendAscii( "></center>\r\n" );
 
-// Notizen
+// notes
         if(mbNotes && !mbFrames)
         {
             SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
@@ -1608,7 +1608,7 @@ bool HtmlExport::CreateHtmlForPresPages()
             }
         }
 
-// ggfs. Imagemap erzeugen
+// create Imagemap if necessary
         if (!aClickableObjects.empty())
         {
             aStr.AppendAscii( "<map name=\"map0\">\r\n" );
@@ -1626,8 +1626,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                 sal_uLong nPageWidth = pPage->GetSize().Width() - pPage->GetLftBorder() -
                                    pPage->GetRgtBorder();
 
-                // das BoundRect bezieht sich auf den physikalischen
-                // Seitenursprung, nicht auf den Koordinatenursprung
+                // BoundRect is relative to the physical page origin, not the
+                // origin of ordinates
                 aRect.Move(-pPage->GetLftBorder(), -pPage->GetUppBorder());
 
                 double fLogicToPixel = ((double)mnWidthPixel) / nPageWidth;
@@ -1639,8 +1639,8 @@ bool HtmlExport::CreateHtmlForPresPages()
 
 
                 /*************************************************************
-                |* wenn das Objekt eine eigene Imagemap enthaelt, werden ihre
-                |* Areas in diese Imagemap eingefuegt
+                |* insert areas into Imagemap of the object, if the object has
+                |* such a Imagemap
                 \************************************************************/
                 if (pIMapInfo)
                 {
@@ -1652,15 +1652,15 @@ bool HtmlExport::CreateHtmlForPresPages()
                         sal_uInt16 nType = pArea->GetType();
                         String aURL( pArea->GetURL() );
 
-                        // ggfs. Seiten- oder Objektnamen umwandeln in den
-                        // Namen der entsprechenden HTML-Datei
+                        // if necessary, convert page and object names into the
+                        // corresponding names of the html file
                         sal_Bool        bIsMasterPage;
                         sal_uInt16      nPgNum = mpDoc->GetPageByName( aURL, bIsMasterPage );
                         SdrObject*  pObj = NULL;
 
                         if (nPgNum == SDRPAGE_NOTFOUND)
                         {
-                            // Ist das Bookmark ein Objekt?
+                            // is the bookmark a object?
                             pObj = mpDoc->GetObj( aURL );
                             if (pObj)
                                 nPgNum = pObj->GetPage()->GetPageNum();
@@ -1678,7 +1678,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                 Rectangle aArea(((IMapRectangleObject*)pArea)->
                                                  GetRectangle(false));
 
-                                // Umrechnung in Pixelkoordinaten
+                                // conversion into pixel coordinates
                                 aArea.Move(aLogPos.X() - pPage->GetLftBorder(),
                                            aLogPos.Y() - pPage->GetUppBorder());
                                 aArea.Left()   = (long)(aArea.Left() * fLogicToPixel);
@@ -1717,7 +1717,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             default:
                             {
-                                DBG_WARNING("unbekannter IMAP_OBJ_Typ");
+                                DBG_WARNING("unknown IMAP_OBJ_type");
                             }
                             break;
                         }
@@ -1727,8 +1727,8 @@ bool HtmlExport::CreateHtmlForPresPages()
 
 
                 /*************************************************************
-                |* wenn es eine presentation::ClickAction gibt, Bookmark bestimmen und eine
-                |* Area fuer das ganze Objekt erzeugen
+                |* if there is a presentation::ClickAction, determine bookmark
+                |* and create area for the whole object
                 \************************************************************/
                 if( pInfo )
                 {
@@ -1745,7 +1745,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             if( nPgNum == SDRPAGE_NOTFOUND )
                             {
-                                // Ist das Bookmark ein Objekt?
+                                // is the bookmark a object?
                                 pObj = mpDoc->GetObj(pInfo->GetBookmark());
                                 if (pObj)
                                     nPgNum = pObj->GetPage()->GetPageNum();
@@ -1796,10 +1796,10 @@ bool HtmlExport::CreateHtmlForPresPages()
                             break;
                     }
 
-                    // jetzt die Areas
+                    // and now the areas
                     if( aHRef.Len() )
                     {
-                        // ein Kreis?
+                        // a circle?
                         if (pObject->GetObjInventor() == SdrInventor &&
                             pObject->GetObjIdentifier() == OBJ_CIRC  &&
                             bIsSquare )
@@ -1809,7 +1809,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                                     aRect.Top() + nRadius,
                                                     aHRef);
                         }
-                        // ein Polygon?
+                        // a polygon?
                         else if (pObject->GetObjInventor() == SdrInventor &&
                                  (pObject->GetObjIdentifier() == OBJ_PATHLINE ||
                                   pObject->GetObjIdentifier() == OBJ_PLIN ||
@@ -1817,7 +1817,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                         {
                             aStr += CreateHTMLPolygonArea(((SdrPathObj*)pObject)->GetPathPoly(), Size(-pPage->GetLftBorder(), -pPage->GetUppBorder()), fLogicToPixel, aHRef);
                         }
-                        // was anderes: das BoundRect nehmen
+                        // something completely different: use the BoundRect
                         else
                         {
                             aStr += CreateHTMLRectArea(aRect, aHRef);
@@ -1843,14 +1843,14 @@ bool HtmlExport::CreateHtmlForPresPages()
 }
 
 // =====================================================================
-// Uebersichtsseite erzeugen
+// create overview pages
 // =====================================================================
 bool HtmlExport::CreateContentPage()
 {
     if( mbDocColors )
         SetDocColors();
 
-    // Html Kopf
+    // html head
     String aStr(maHTMLHeader);
     aStr += WriteMetaCharset();
     aStr.AppendAscii( "  <title>" );
@@ -1858,7 +1858,7 @@ bool HtmlExport::CreateContentPage()
     aStr.AppendAscii( "</title>\r\n</head>\r\n" );
     aStr += CreateBodyTag();
 
-    // Seitenkopf
+    // page head
     aStr.AppendAscii( "<center>\r\n" );
 
     if(mbHeader)
@@ -1882,7 +1882,7 @@ bool HtmlExport::CreateContentPage()
 
     aStr.AppendAscii( "<center><table width=\"90%\"><tr>\r\n" );
 
-    // Inhaltsverzeichnis
+    // table of content
     aStr.AppendAscii( "<td valign=\"top\" align=\"left\" width=\"25%\">\r\n" );
     aStr.AppendAscii( "<h3>" );
     aStr += RESTOHTML(STR_HTMLEXP_CONTENTS);
@@ -1900,7 +1900,7 @@ bool HtmlExport::CreateContentPage()
     }
     aStr.AppendAscii( "</td>\r\n" );
 
-    // Dokument Infos
+    // document information
     aStr.AppendAscii( "<td valign=\"top\" align=\"left\" width=\"75%\">\r\n" );
 
     if(maAuthor.Len())
@@ -1980,7 +1980,7 @@ bool HtmlExport::CreateContentPage()
 }
 
 // =====================================================================
-// Notiz Seiten erzeugen (fuer Frames)
+// create note pages (for frames)
 // =====================================================================
 bool HtmlExport::CreateNotesPages()
 {
@@ -1993,7 +1993,7 @@ bool HtmlExport::CreateNotesPages()
         if( mbDocColors )
             SetDocColors( pPage );
 
-        // Html Kopf
+        // Html head
         String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
@@ -2022,7 +2022,7 @@ bool HtmlExport::CreateNotesPages()
 }
 
 // =====================================================================
-// Outline Seiten erzeugen (fuer Frames)
+// create outline pages (for frames)
 // =====================================================================
 bool HtmlExport::CreateOutlinePages()
 {
@@ -2033,10 +2033,10 @@ bool HtmlExport::CreateOutlinePages()
         SetDocColors();
     }
 
-    // Seite 0 wird der zugeklappte Outline, Seite 1 der aufgeklappte
+    // page 0 will be the closed outline, page 1 the opened
     for (sal_Int32 nPage = 0; nPage < (mbImpress?2:1) && bOk; ++nPage)
     {
-        // Html Kopf
+        // Html head
         String aStr(maHTMLHeader);
         aStr += WriteMetaCharset();
         aStr.AppendAscii( "  <title>" );
@@ -2086,18 +2086,18 @@ bool HtmlExport::CreateOutlinePages()
 }
 
 // =====================================================================
-// Dateinamen festlegen
+// set file name
 // =====================================================================
 void HtmlExport::CreateFileNames()
 {
-    // Listen mit neuen Dateinamen anlegen
+    // create lists with new file names
     mpHTMLFiles = new String*[mnSdPageCount];
     mpImageFiles = new String*[mnSdPageCount];
     mpThumbnailFiles = new String*[mnSdPageCount];
     mpPageNames = new String*[mnSdPageCount];
     mpTextFiles = new String*[mnSdPageCount];
 
-    mbHeader = false;   // Ueberschrift auf Uebersichtsseite?
+    mbHeader = false;   // headline on overview page?
 
     for (sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
     {
@@ -2164,8 +2164,8 @@ String HtmlExport::getDocumentTitle()
     {
         if(mbImpress)
         {
-            // falls es ein nicht-leeres Titelobjekt gibt, dessen ersten Absatz
-            // als Seitentitel benutzen
+            // if there is a non-empty title object, use their first passage
+            // as page title
             SdPage* pSdPage = mpDoc->GetSdPage(0, PK_STANDARD);
             SdrObject* pTitleObj = pSdPage->GetPresObj(PRESOBJ_TITLE);
             if (pTitleObj && !pTitleObj->IsEmptyPresObj())
@@ -2247,7 +2247,7 @@ static const char * JS_CollapseOutline =
     "}\r\n\r\n";
 
 // ====================================================================
-// Seite mit den Frames erzeugen
+// create page with the frames
 // ====================================================================
 bool HtmlExport::CreateFrames()
 {
@@ -2355,13 +2355,13 @@ bool HtmlExport::CreateFrames()
 }
 
 // ====================================================================
-// Buttonleiste fuer Standard ausgeben
-// Es werden 4 html files erstellt
-// navbar0.htm Navigationsleiste Grafik fuer erste Seite
-// navbar1.htm Navigationsleiste Grafik fuer zweite bis vorletzte Seite
-// navbar2.htm Navigationsleiste Grafik fuer letzte Seite
-// navbar3.htm Navigationsleiste Outline zugeklappt
-// navbar4.htm Navigationsleiste Outline aufgeklappt
+// create button bar for standard
+// we create the following html files
+// navbar0.htm navigation bar graphic for the first page
+// navbar1.htm navigation bar graphic for the second until second last page
+// navbar2.htm navigation bar graphic for the last page
+// navbar3.htm navigation outline closed
+// navbar4.htm navigation outline open
 // ====================================================================
 bool HtmlExport::CreateNavBarFrames()
 {
@@ -2384,7 +2384,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr += CreateBodyTag();
         aStr.AppendAscii( "<center>\r\n" );
 
-    // erste Seite
+    // first page
         aButton = String(SdResId(STR_HTMLEXP_FIRSTPAGE));
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
@@ -2396,7 +2396,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr += aButton;
         aStr.AppendAscii( "\r\n" );
 
-    // zur vorherigen Seite
+    // to the previous page
         aButton = String(SdResId(STR_PUBLISH_BACK));
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
@@ -2408,7 +2408,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr += aButton;
         aStr.AppendAscii( "\r\n" );
 
-    // zur naechsten Seite
+    // to the next page
         aButton = String(SdResId(STR_PUBLISH_NEXT));
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
@@ -2420,7 +2420,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr += aButton;
         aStr.AppendAscii( "\r\n" );
 
-    // zur letzten Seite
+    // to the last page
         aButton = String(SdResId(STR_HTMLEXP_LASTPAGE));
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
@@ -2437,19 +2437,19 @@ bool HtmlExport::CreateNavBarFrames()
         aStr += aButton;
         aStr.AppendAscii( "\r\n" );
 
-    // Inhalt
+    // content
         if (mbContentsPage)
         {
             aButton = String(SdResId(STR_PUBLISH_OUTLINE));
             if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_INDEX), aButton);
 
-            // zur Uebersicht
+            // to the overview
             aStr += CreateLink(maIndex, aButton, String(RTL_CONSTASCII_USTRINGPARAM("_top")));
             aStr.AppendAscii( "\r\n" );
         }
 
-    // Textmodus
+    // text mode
         if(mbImpress)
         {
             aButton = String(SdResId(STR_HTMLEXP_SETTEXT));
@@ -2462,7 +2462,7 @@ bool HtmlExport::CreateNavBarFrames()
             aStr.AppendAscii( "\r\n" );
         }
 
-    // Und fertich...
+    // and finished...
         aStr.AppendAscii( "</center>\r\n" );
         aStr.AppendAscii( "</body>\r\n</html>" );
 
@@ -2475,7 +2475,7 @@ bool HtmlExport::CreateNavBarFrames()
             mpProgress->SetState(++mnPagesWritten);
     }
 
-    // Jetzt kommt die Navigatonsleiste Outliner zugeklappt...
+    // the navigation bar outliner closed...
     if(bOk)
     {
         String aStr(maHTMLHeader);
@@ -2500,7 +2500,7 @@ bool HtmlExport::CreateNavBarFrames()
             mpProgress->SetState(++mnPagesWritten);
     }
 
-    // ... und jetzt Outliner aufgeklappt
+    // ... and the outliner open
     if( bOk )
     {
         String aStr(maHTMLHeader);
@@ -2529,11 +2529,11 @@ bool HtmlExport::CreateNavBarFrames()
 }
 
 // ====================================================================
-// Buttonleiste fuer Standard ausgeben
+// create button bar for standard
 // ====================================================================
 String HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
 {
-    // Navigationsleiste vorbereiten
+    // prepare button bar
     String aStrNavFirst( SdResId(STR_HTMLEXP_FIRSTPAGE) );
     String aStrNavPrev( SdResId(STR_PUBLISH_BACK) );
     String aStrNavNext( SdResId(STR_PUBLISH_NEXT) );
@@ -2579,7 +2579,7 @@ String HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
 
     String aStr( RTL_CONSTASCII_USTRINGPARAM("<center>\r\n")); //<table><tr>\r\n");
 
-    // erste Seite
+    // first page
     if(nSdPage > 0)
         aStr += CreateLink(bIsText?*mpTextFiles[0]:*mpHTMLFiles[0],aStrNavFirst);
     else
@@ -2653,7 +2653,7 @@ bool HtmlExport::CreateBitmaps()
 }
 
 // =====================================================================
-// Erzeugt den <body> Tag, inkl. der eingestellten Farbattribute
+// creates the <body> tag, including the specified color attributes
 // =====================================================================
 String HtmlExport::CreateBodyTag() const
 {
@@ -2684,7 +2684,7 @@ String HtmlExport::CreateBodyTag() const
 }
 
 // =====================================================================
-// Erzeugt einen Hyperlink
+// creates a hyperlink
 // =====================================================================
 String HtmlExport::CreateLink( const String& aLink,
                                const String& aText,
@@ -2705,7 +2705,7 @@ String HtmlExport::CreateLink( const String& aLink,
 }
 
 // =====================================================================
-// Erzeugt ein Image-tag
+// creates a image tag
 // =====================================================================
 String HtmlExport::CreateImage( const String& aImage, const String& aAltText,
                                 sal_Int16 nWidth,
@@ -2745,7 +2745,7 @@ String HtmlExport::CreateImage( const String& aImage, const String& aAltText,
 }
 
 // =====================================================================
-// Area fuer Kreis erzeugen; es werden Pixelkoordinaten erwartet
+// create area for a circle; we expect pixel coordinates
 // =====================================================================
 String HtmlExport::ColorToHTMLString( Color aColor )
 {
@@ -2762,7 +2762,7 @@ String HtmlExport::ColorToHTMLString( Color aColor )
 }
 
 // =====================================================================
-// Area fuer Kreis erzeugen; es werden Pixelkoordinaten erwartet
+// create area for a circle; we expect pixel coordinates
 // =====================================================================
 String HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
                                          sal_uLong nCenterX,
@@ -2785,7 +2785,7 @@ String HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
 
 
 // =====================================================================
-// Area fuer Polygon erzeugen; es werden Pixelkoordinaten erwartet
+// create area for a polygon; we expect pixel coordinates
 // =====================================================================
 String HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPolyPolygon,
     Size aShift, double fFactor, const String& rHRef ) const
@@ -2804,9 +2804,8 @@ String HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPoly
         {
             const ::basegfx::B2DPoint aB2DPoint(aPolygon.getB2DPoint(nPoint));
             Point aPnt(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
-            // das Koordinaten beziehen sich auf den
-            // physikalischen Seitenursprung, nicht auf den
-            // Koordinatenursprung
+            // coordinates are relative to the physical page origin, not the
+            // origin of ordinates
             aPnt.Move(aShift.Width(), aShift.Height());
 
             aPnt.X() = (long)(aPnt.X() * fFactor);
@@ -2827,7 +2826,7 @@ String HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPoly
 }
 
 // =====================================================================
-// Area fuer Rechteck erzeugen; es werden Pixelkoordinaten erwartet
+// create area for a rectangle; we expect pixel coordinates
 // =====================================================================
 String HtmlExport::CreateHTMLRectArea( const Rectangle& rRect,
                                        const String& rHRef ) const
@@ -2849,8 +2848,7 @@ String HtmlExport::CreateHTMLRectArea( const Rectangle& rRect,
 }
 
 // =====================================================================
-// StringToHTMLString, konvertiert einen String in
-// seine HTML-Repraesentation (Umlaute etc.)
+// escapes a string for html
 // =====================================================================
 String HtmlExport::StringToHTMLString( const String& rString )
 {
@@ -2861,7 +2859,7 @@ String HtmlExport::StringToHTMLString( const String& rString )
 }
 
 // =====================================================================
-// Erzeugt die URL einer bestimmten Seite
+// creates a url for a specific page
 // =====================================================================
 String HtmlExport::CreatePageURL( sal_uInt16 nPgNum )
 {
@@ -2958,7 +2956,7 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
 
 static const char * ASP_Scripts[] = { "common.inc", "webcast.asp", "show.asp", "savepic.asp", "poll.asp", "editpic.asp" };
 
-/** erzeugt und speichert die f�r WebShow ben�tigte ASP Scripte */
+/** creates and saves the ASP scripts for WebShow */
 bool HtmlExport::CreateASPScripts()
 {
     for( sal_uInt16 n = 0; n < (sizeof( ASP_Scripts ) / sizeof(char *)); n++ )
@@ -2979,7 +2977,7 @@ bool HtmlExport::CreateASPScripts()
 
 static const char *PERL_Scripts[] = { "webcast.pl", "common.pl", "editpic.pl", "poll.pl", "savepic.pl", "show.pl" };
 
-/** erzeugt und speichert die f�r WebShow ben�tigte PERL Scripte */
+/** creates and saves the PERL scripts for WebShow */
 bool HtmlExport::CreatePERLScripts()
 {
     for( sal_uInt16 n = 0; n < (sizeof( PERL_Scripts ) / sizeof(char *)); n++ )
@@ -2999,7 +2997,7 @@ bool HtmlExport::CreatePERLScripts()
     return true;
 }
 
-/** Erzeugt eine Liste mit den Namen der gespeicherten Images */
+/** creates a list with names of the saved images */
 bool HtmlExport::CreateImageFileList()
 {
     String aStr;
@@ -3021,7 +3019,7 @@ bool HtmlExport::CreateImageFileList()
     return bOk;
 }
 
-/** Erzeugt das File mit der aktuellen Seitennumer */
+/** creates a file with the actual page number */
 bool HtmlExport::CreateImageNumberFile()
 {
     String aFull( maExportPath );
@@ -3276,7 +3274,7 @@ sal_uLong EasyFile::close()
 
     if( pMedium )
     {
-        // uebertragen
+        // transmitted
         pMedium->Close();
         pMedium->Commit();
 
