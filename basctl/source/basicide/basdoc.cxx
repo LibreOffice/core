@@ -70,7 +70,7 @@ void DocShell::SetPrinter( SfxPrinter* pPr )
         pPrinter.reset(pPr);
 }
 
-void DocShell::FillClass( SvGlobalName*, sal_uInt32*, String*, String*, String*, sal_Int32, sal_Bool bTemplate) const
+void DocShell::FillClass( SvGlobalName*, sal_uInt32*, OUString*, OUString*, OUString*, sal_Int32, sal_Bool bTemplate) const
 {
     (void)bTemplate;
     DBG_ASSERT( !bTemplate, "No template for Basic" );
