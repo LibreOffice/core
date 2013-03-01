@@ -28,7 +28,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
-#include "hdft.hrc"
+
 #include <svl/intitem.hxx>
 
 #define _SVX_HDFT_CXX
@@ -139,7 +139,7 @@ SfxTabPage* SvxFooterPage::Create( Window* pParent, const SfxItemSet& rSet )
 
 SvxHeaderPage::SvxHeaderPage( Window* pParent, const SfxItemSet& rAttr ) :
 
-    SvxHFPage( pParent, RID_SVXPAGE_HEADER, rAttr, SID_ATTR_PAGE_HEADERSET )
+    SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_HEADERSET )
 
 {
 }
@@ -148,69 +148,86 @@ SvxHeaderPage::SvxHeaderPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
 
-    SvxHFPage( pParent, RID_SVXPAGE_FOOTER, rAttr, SID_ATTR_PAGE_FOOTERSET )
+    SvxHFPage( pParent, rAttr, SID_ATTR_PAGE_FOOTERSET )
 
 {
 }
 
 // -----------------------------------------------------------------------
 
-SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAttr, sal_uInt16 nSetId ) :
+SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId ) :
 
-    SfxTabPage( pParent, SVX_RES( nResId ), rAttr ),
-
-    aFrm            ( this, SVX_RES( FL_FRAME ) ),
-    aTurnOnBox      ( this, SVX_RES( CB_TURNON ) ),
-    aCntSharedBox   ( this, SVX_RES( CB_SHARED ) ),
-    aCntSharedFirstBox   ( this, SVX_RES( CB_SHARED_FIRST ) ),
-    aLMLbl          ( this, SVX_RES( FT_LMARGIN ) ),
-    aLMEdit         ( this, SVX_RES( ED_LMARGIN ) ),
-    aRMLbl          ( this, SVX_RES( FT_RMARGIN ) ),
-    aRMEdit         ( this, SVX_RES( ED_RMARGIN ) ),
-    aDistFT         ( this, SVX_RES( FT_DIST ) ),
-    aDistEdit       ( this, SVX_RES( ED_DIST ) ),
-    aDynSpacingCB   ( this, SVX_RES( CB_DYNSPACING ) ),
-    aHeightFT       ( this, SVX_RES( FT_HEIGHT ) ),
-    aHeightEdit     ( this, SVX_RES( ED_HEIGHT ) ),
-    aHeightDynBtn   ( this, SVX_RES( CB_HEIGHT_DYN ) ),
-    aBspWin         ( this, SVX_RES( WN_BSP ) ),
-    aBackgroundBtn  ( this, SVX_RES( BTN_EXTRAS ) ),
-
+    SfxTabPage( pParent, "HFFormatPage", "svx/ui/headfootformatpage.ui", rSet ),
     nId                         ( nSetId ),
     pBBSet                      ( NULL ),
     bDisableQueryBox            ( sal_False ),
     bEnableBackgroundSelector   ( sal_True )
 
 {
+    get(m_pFrm,"frameHdrOn");
+    get(m_pPageLbl,"labelHeaderFooterFormat");
+    get(m_pTurnOnBox,"checkHeaderOn");
+    get(m_pCntSharedBox,"checkSameLR");
+    get(m_pCntSharedFirstBox,"checkSameFP");
+    get(m_pLMEdit,"spinMargLeft");
+    get(m_pLMLbl,"labelLeftMarg");
+    get(m_pRMEdit,"spinMargRight");
+    get(m_pRMLbl,"labelRightMarg");
+    get(m_pDistEdit,"spinSpacing");
+    get(m_pDistFT,"labelSpacing");
+    get(m_pDynSpacingCB,"checkDynSpacing");
+    get(m_pHeightFT,"labelHeight");
+    get(m_pHeightEdit,"spinHeight");
+    get(m_pHeightDynBtn,"checkAutofit");
+    get(m_pBspWin,"drawingareaPageHF");
+    get(m_pBackgroundBtn,"buttonMore");
+
+    get(m_pFooterOn,"labelFooterOn");
+    get(m_pFooterLbl,"labelFooter");
+    get(m_pHeaderOn,"labelHeaderOn");
+    get(m_pHeaderLbl,"labelHeader");
+    get(m_pMsg,"labelMsg");
+
+    //swap header <-> footer in UI
+    if(nId == SID_ATTR_PAGE_FOOTERSET)
+    {
+        m_pPageLbl->SetText(m_pFooterLbl->GetText());
+        m_pTurnOnBox->SetText(m_pFooterOn->GetText());
+    }
+    else //Header
+    {
+        m_pPageLbl->SetText(m_pHeaderLbl->GetText());
+        m_pTurnOnBox->SetText(m_pHeaderOn->GetText());
+    }
+
     InitHandler();
-    aBspWin.EnableRTL( sal_False );
+    m_pBspWin->EnableRTL( sal_False );
 
     // This Page needs ExchangeSupport
     SetExchangeSupport();
 
-    FreeResource();
 
     // Set metrics
-    FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
-    SetFieldUnit( aDistEdit, eFUnit );
-    SetFieldUnit( aHeightEdit, eFUnit );
-    SetFieldUnit( aLMEdit, eFUnit );
-    SetFieldUnit( aRMEdit, eFUnit );
+    FieldUnit eFUnit = GetModuleFieldUnit( rSet );
+    SetFieldUnit( *m_pDistEdit, eFUnit );
+    SetFieldUnit( *m_pHeightEdit, eFUnit );
+    SetFieldUnit( *m_pLMEdit, eFUnit );
+    SetFieldUnit( *m_pRMEdit, eFUnit );
 
-    aTurnOnBox.SetAccessibleRelationMemberOf( &aFrm );
-    aCntSharedBox.SetAccessibleRelationMemberOf( &aFrm );
-    aCntSharedFirstBox.SetAccessibleRelationMemberOf( &aFrm );
-    aLMLbl.SetAccessibleRelationMemberOf( &aFrm );
-    aLMEdit.SetAccessibleRelationMemberOf( &aFrm );
-    aRMLbl.SetAccessibleRelationMemberOf( &aFrm );
-    aRMEdit.SetAccessibleRelationMemberOf( &aFrm );
-    aDistFT.SetAccessibleRelationMemberOf( &aFrm );
-    aDistEdit.SetAccessibleRelationMemberOf( &aFrm );
-    aDynSpacingCB.SetAccessibleRelationMemberOf( &aFrm );
-    aHeightFT.SetAccessibleRelationMemberOf( &aFrm );
-    aHeightEdit.SetAccessibleRelationMemberOf( &aFrm );
-    aHeightDynBtn.SetAccessibleRelationMemberOf( &aFrm );
-    aBackgroundBtn.SetAccessibleRelationMemberOf(&aFrm);
+    m_pTurnOnBox->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pCntSharedBox->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pCntSharedFirstBox->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pLMLbl->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pLMEdit->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pRMLbl->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pRMEdit->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pDistFT->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pDistEdit->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pDynSpacingCB->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pHeightFT->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pHeightEdit->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pHeightDynBtn->SetAccessibleRelationMemberOf( m_pFrm );
+    m_pBackgroundBtn->SetAccessibleRelationMemberOf(m_pFrm);
 }
 
 // -----------------------------------------------------------------------
@@ -257,14 +274,14 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
 
     //--------------------------------------------------------------------
 
-    aSet.Put( SfxBoolItem( nWOn,      aTurnOnBox.IsChecked() ) );
-    aSet.Put( SfxBoolItem( nWDynamic, aHeightDynBtn.IsChecked() ) );
-    aSet.Put( SfxBoolItem( nWShared,  aCntSharedBox.IsChecked() ) );
-    aSet.Put( SfxBoolItem( nWSharedFirst,  aCntSharedFirstBox.IsChecked() ) );
-    if(aDynSpacingCB.IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
+    aSet.Put( SfxBoolItem( nWOn,      m_pTurnOnBox->IsChecked() ) );
+    aSet.Put( SfxBoolItem( nWDynamic, m_pHeightDynBtn->IsChecked() ) );
+    aSet.Put( SfxBoolItem( nWShared,  m_pCntSharedBox->IsChecked() ) );
+    aSet.Put( SfxBoolItem( nWSharedFirst,  m_pCntSharedFirstBox->IsChecked() ) );
+    if(m_pDynSpacingCB->IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
     {
         SfxBoolItem* pBoolItem = (SfxBoolItem*)pPool->GetDefaultItem(nWDynSpacing).Clone();
-        pBoolItem->SetValue(aDynSpacingCB.IsChecked());
+        pBoolItem->SetValue(m_pDynSpacingCB->IsChecked());
         aSet.Put(*pBoolItem);
         delete pBoolItem;
     }
@@ -272,8 +289,8 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
     // Size
     SvxSizeItem aSizeItem( (const SvxSizeItem&)rOldSet.Get( nWSize ) );
     Size        aSize( aSizeItem.GetSize() );
-    long        nDist = GetCoreValue( aDistEdit, eUnit );
-    long        nH    = GetCoreValue( aHeightEdit, eUnit );
+    long        nDist = GetCoreValue( *m_pDistEdit, eUnit );
+    long        nH    = GetCoreValue( *m_pHeightEdit, eUnit );
 
     nH += nDist; // add distance
     aSize.Height() = nH;
@@ -282,8 +299,8 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
 
     // Margins
     SvxLRSpaceItem aLR( nWLRSpace );
-    aLR.SetLeft( (sal_uInt16)GetCoreValue( aLMEdit, eUnit ) );
-    aLR.SetRight( (sal_uInt16)GetCoreValue( aRMEdit, eUnit ) );
+    aLR.SetLeft( (sal_uInt16)GetCoreValue( *m_pLMEdit, eUnit ) );
+    aLR.SetRight( (sal_uInt16)GetCoreValue( *m_pRMEdit, eUnit ) );
     aSet.Put( aLR );
 
     SvxULSpaceItem aUL( nWULSpace );
@@ -344,7 +361,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
         const SfxBoolItem& rHeaderOn =
             (const SfxBoolItem&)rHeaderSet.Get(GetWhich(SID_ATTR_PAGE_ON));
 
-        aTurnOnBox.Check(rHeaderOn.GetValue());
+        m_pTurnOnBox->Check(rHeaderOn.GetValue());
 
         if ( rHeaderOn.GetValue() )
         {
@@ -361,33 +378,33 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
                 (const SvxULSpaceItem&)rHeaderSet.Get( GetWhich( SID_ATTR_ULSPACE ) );
             const SvxLRSpaceItem& rLR =
                 (const SvxLRSpaceItem&)rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
-            if(aDynSpacingCB.IsVisible())
+            if(m_pDynSpacingCB->IsVisible())
             {
                 const SfxBoolItem& rDynSpacing =
                     (const SfxBoolItem&)rHeaderSet.Get(GetWhich(SID_ATTR_HDFT_DYNAMIC_SPACING));
-                aDynSpacingCB.Check(rDynSpacing.GetValue());
+                m_pDynSpacingCB->Check(rDynSpacing.GetValue());
             }
 
 
             if ( nId == SID_ATTR_PAGE_HEADERSET )
             {   // Header
-                SetMetricValue( aDistEdit, rUL.GetLower(), eUnit );
-                SetMetricValue( aHeightEdit, rSize.GetSize().Height() - rUL.GetLower(), eUnit );
+                SetMetricValue( *m_pDistEdit, rUL.GetLower(), eUnit );
+                SetMetricValue( *m_pHeightEdit, rSize.GetSize().Height() - rUL.GetLower(), eUnit );
             }
             else
             {   // Footer
-                SetMetricValue( aDistEdit, rUL.GetUpper(), eUnit );
-                SetMetricValue( aHeightEdit, rSize.GetSize().Height() - rUL.GetUpper(), eUnit );
+                SetMetricValue( *m_pDistEdit, rUL.GetUpper(), eUnit );
+                SetMetricValue( *m_pHeightEdit, rSize.GetSize().Height() - rUL.GetUpper(), eUnit );
             }
 
-            aHeightDynBtn.Check(rDynamic.GetValue());
-            SetMetricValue( aLMEdit, rLR.GetLeft(), eUnit );
-            SetMetricValue( aRMEdit, rLR.GetRight(), eUnit );
-            aCntSharedBox.Check(rShared.GetValue());
+            m_pHeightDynBtn->Check(rDynamic.GetValue());
+            SetMetricValue( *m_pLMEdit, rLR.GetLeft(), eUnit );
+            SetMetricValue( *m_pRMEdit, rLR.GetRight(), eUnit );
+            m_pCntSharedBox->Check(rShared.GetValue());
             if (pSharedFirst)
-                aCntSharedFirstBox.Check(pSharedFirst->GetValue());
+                m_pCntSharedFirstBox->Check(pSharedFirst->GetValue());
             else
-                aCntSharedFirstBox.Hide();
+                m_pCntSharedFirstBox->Hide();
         }
         else
             pSetItem = 0;
@@ -402,27 +419,27 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
         if ( pExt1 && pExt1->ISA(SfxBoolItem) && pExt2 && pExt2->ISA(SfxBoolItem) )
             nDefaultDist = DEF_DIST_CALC;
 
-        SetMetricValue( aDistEdit, nDefaultDist, SFX_MAPUNIT_100TH_MM );
-        SetMetricValue( aHeightEdit, 500, SFX_MAPUNIT_100TH_MM );
+        SetMetricValue( *m_pDistEdit, nDefaultDist, SFX_MAPUNIT_100TH_MM );
+        SetMetricValue( *m_pHeightEdit, 500, SFX_MAPUNIT_100TH_MM );
     }
 
     if ( !pSetItem )
     {
-        aTurnOnBox.Check( sal_False );
-        aHeightDynBtn.Check( sal_True );
-        aCntSharedBox.Check( sal_True );
-        aCntSharedFirstBox.Check( sal_True );
+        m_pTurnOnBox->Check( sal_False );
+        m_pHeightDynBtn->Check( sal_True );
+        m_pCntSharedBox->Check( sal_True );
+        m_pCntSharedFirstBox->Check( sal_True );
     }
 
     TurnOnHdl(0);
 
-    aTurnOnBox.SaveValue();
-    aDistEdit.SaveValue();
-    aHeightEdit.SaveValue();
-    aHeightDynBtn.SaveValue();
-    aLMEdit.SaveValue();
-    aRMEdit.SaveValue();
-    aCntSharedBox.SaveValue();
+    m_pTurnOnBox->SaveValue();
+    m_pDistEdit->SaveValue();
+    m_pHeightEdit->SaveValue();
+    m_pHeightDynBtn->SaveValue();
+    m_pLMEdit->SaveValue();
+    m_pRMEdit->SaveValue();
+    m_pCntSharedBox->SaveValue();
     RangeHdl( 0 );
 
     const SfxPoolItem* pItem = 0;
@@ -435,8 +452,8 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
         nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
         if(nHtmlMode & HTMLMODE_ON)
         {
-            aCntSharedBox.Hide();
-            aBackgroundBtn.Hide();
+            m_pCntSharedBox->Hide();
+            m_pBackgroundBtn->Hide();
         }
     }
 
@@ -444,72 +461,73 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
 void SvxHFPage::InitHandler()
 {
-    aTurnOnBox.SetClickHdl(LINK(this,   SvxHFPage, TurnOnHdl));
-    aDistEdit.SetModifyHdl(LINK(this,   SvxHFPage, DistModify));
-    aDistEdit.SetLoseFocusHdl(LINK(this, SvxHFPage, RangeHdl));
+    m_pTurnOnBox->SetClickHdl(LINK(this,   SvxHFPage, TurnOnHdl));
+    m_pDistEdit->SetModifyHdl(LINK(this,   SvxHFPage, DistModify));
+    m_pDistEdit->SetLoseFocusHdl(LINK(this, SvxHFPage, RangeHdl));
 
-    aHeightEdit.SetModifyHdl(LINK(this,     SvxHFPage, HeightModify));
-    aHeightEdit.SetLoseFocusHdl(LINK(this,SvxHFPage,RangeHdl));
+    m_pHeightEdit->SetModifyHdl(LINK(this,     SvxHFPage, HeightModify));
+    m_pHeightEdit->SetLoseFocusHdl(LINK(this,SvxHFPage,RangeHdl));
 
-    aLMEdit.SetModifyHdl(LINK(this,         SvxHFPage, BorderModify));
-    aLMEdit.SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeHdl));
-    aRMEdit.SetModifyHdl(LINK(this,         SvxHFPage, BorderModify));
-    aRMEdit.SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeHdl));
-    aBackgroundBtn.SetClickHdl(LINK(this,SvxHFPage, BackgroundHdl));
+    m_pLMEdit->SetModifyHdl(LINK(this,         SvxHFPage, BorderModify));
+    m_pLMEdit->SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeHdl));
+    m_pRMEdit->SetModifyHdl(LINK(this,         SvxHFPage, BorderModify));
+    m_pRMEdit->SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeHdl));
+    m_pBackgroundBtn->SetClickHdl(LINK(this,SvxHFPage, BackgroundHdl));
 }
 
 IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
 {
-    if ( aTurnOnBox.IsChecked() )
+    if ( m_pTurnOnBox->IsChecked() )
     {
-        aDistFT.Enable();
-        aDistEdit.Enable();
-        aDynSpacingCB.Enable();
-        aHeightFT.Enable();
-        aHeightEdit.Enable();
-        aHeightDynBtn.Enable();
-        aLMLbl.Enable();
-        aLMEdit.Enable();
-        aRMLbl.Enable();
-        aRMEdit.Enable();
+        m_pDistFT->Enable();
+        m_pDistEdit->Enable();
+        m_pDynSpacingCB->Enable();
+        m_pHeightFT->Enable();
+        m_pHeightEdit->Enable();
+        m_pHeightDynBtn->Enable();
+        m_pLMLbl->Enable();
+        m_pLMEdit->Enable();
+        m_pRMLbl->Enable();
+        m_pRMEdit->Enable();
 
-        sal_uInt16 nUsage = aBspWin.GetUsage();
+        sal_uInt16 nUsage = m_pBspWin->GetUsage();
 
         if( nUsage == SVX_PAGE_RIGHT || nUsage == SVX_PAGE_LEFT )
-            aCntSharedBox.Disable();
+            m_pCntSharedBox->Disable();
         else
         {
-            aCntSharedBox.Enable();
-            aCntSharedFirstBox.Enable();
+            m_pCntSharedBox->Enable();
+            m_pCntSharedFirstBox->Enable();
         }
-        aBackgroundBtn.Enable();
+        m_pBackgroundBtn->Enable();
     }
     else
     {
         sal_Bool bDelete = sal_True;
 
-        if ( !bDisableQueryBox && pBox && aTurnOnBox.GetSavedValue() == sal_True )
+        if ( !bDisableQueryBox && pBox && m_pTurnOnBox->GetSavedValue() == sal_True )
             bDelete = ( QueryBox( this, SVX_RES( RID_SVXQBX_DELETE_HEADFOOT ) ).Execute() == RET_YES );
 
         if ( bDelete )
         {
-            aDistFT.Disable();
-            aDistEdit.Disable();
-            aDynSpacingCB.Enable(sal_False);
-            aHeightFT.Disable();
-            aHeightEdit.Disable();
-            aHeightDynBtn.Disable();
+            m_pDistFT->Disable();
+            m_pDistEdit->Disable();
+            m_pDynSpacingCB->Enable(sal_False);
+            m_pHeightFT->Disable();
+            m_pHeightEdit->Disable();
+            m_pHeightDynBtn->Disable();
 
-            aLMLbl.Disable();
-            aLMEdit.Disable();
-            aRMLbl.Disable();
-            aRMEdit.Disable();
+            m_pLMLbl->Disable();
+            m_pLMEdit->Disable();
+            m_pRMLbl->Disable();
+            m_pRMEdit->Disable();
 
-            aCntSharedBox.Disable();
-            aBackgroundBtn.Disable();
+            m_pCntSharedBox->Disable();
+            m_pBackgroundBtn->Disable();
+            m_pCntSharedFirstBox->Disable();
         }
         else
-            aTurnOnBox.Check();
+            m_pTurnOnBox->Check();
     }
     UpdateExample();
     return 0;
@@ -574,9 +592,9 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
         {
             const SvxBrushItem& rItem = (const SvxBrushItem&)pBBSet->Get( nWhich );
             if ( nId == SID_ATTR_PAGE_HEADERSET )
-                aBspWin.SetHdColor( rItem.GetColor() );
+                m_pBspWin->SetHdColor( rItem.GetColor() );
             else
-                aBspWin.SetFtColor( rItem.GetColor() );
+                m_pBspWin->SetFtColor( rItem.GetColor() );
         }
 
         //----------------------------------------------------------------
@@ -588,9 +606,9 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
             const SvxBoxItem& rItem = (const SvxBoxItem&)pBBSet->Get( nWhich );
 
             if ( nId == SID_ATTR_PAGE_HEADERSET )
-                aBspWin.SetHdBorder( rItem );
+                m_pBspWin->SetHdBorder( rItem );
             else
-                aBspWin.SetFtBorder( rItem );
+                m_pBspWin->SetFtBorder( rItem );
         }
 
         UpdateExample();
@@ -603,21 +621,21 @@ void SvxHFPage::UpdateExample()
 {
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
-        aBspWin.SetHeader( aTurnOnBox.IsChecked() );
-        aBspWin.SetHdHeight( GetCoreValue( aHeightEdit, SFX_MAPUNIT_TWIP ) );
-        aBspWin.SetHdDist( GetCoreValue( aDistEdit, SFX_MAPUNIT_TWIP ) );
-        aBspWin.SetHdLeft( GetCoreValue( aLMEdit, SFX_MAPUNIT_TWIP ) );
-        aBspWin.SetHdRight( GetCoreValue( aRMEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetHeader( m_pTurnOnBox->IsChecked() );
+        m_pBspWin->SetHdHeight( GetCoreValue( *m_pHeightEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetHdDist( GetCoreValue( *m_pDistEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetHdLeft( GetCoreValue( *m_pLMEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetHdRight( GetCoreValue( *m_pRMEdit, SFX_MAPUNIT_TWIP ) );
     }
     else
     {
-        aBspWin.SetFooter( aTurnOnBox.IsChecked() );
-        aBspWin.SetFtHeight( GetCoreValue( aHeightEdit, SFX_MAPUNIT_TWIP ) );
-        aBspWin.SetFtDist( GetCoreValue( aDistEdit, SFX_MAPUNIT_TWIP ) );
-        aBspWin.SetFtLeft( GetCoreValue( aLMEdit, SFX_MAPUNIT_TWIP ) );
-        aBspWin.SetFtRight( GetCoreValue( aRMEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetFooter( m_pTurnOnBox->IsChecked() );
+        m_pBspWin->SetFtHeight( GetCoreValue( *m_pHeightEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetFtDist( GetCoreValue( *m_pDistEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetFtLeft( GetCoreValue( *m_pLMEdit, SFX_MAPUNIT_TWIP ) );
+        m_pBspWin->SetFtRight( GetCoreValue( *m_pRMEdit, SFX_MAPUNIT_TWIP ) );
     }
-    aBspWin.Invalidate();
+    m_pBspWin->Invalidate();
 }
 
 void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
@@ -639,7 +657,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
             {
                 const SvxBrushItem& rItem = (const SvxBrushItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetHdColor( rItem.GetColor() );
+                m_pBspWin->SetHdColor( rItem.GetColor() );
             }
             nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
 
@@ -647,7 +665,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             {
                 const SvxBoxItem& rItem =
                     (const SvxBoxItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetHdBorder( rItem );
+                m_pBspWin->SetHdBorder( rItem );
             }
         }
     }
@@ -669,7 +687,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             if ( rTmpSet.GetItemState( nWhich ) == SFX_ITEM_SET )
             {
                 const SvxBrushItem& rItem = (const SvxBrushItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetFtColor( rItem.GetColor() );
+                m_pBspWin->SetFtColor( rItem.GetColor() );
             }
             nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
 
@@ -677,7 +695,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             {
                 const SvxBoxItem& rItem =
                     (const SvxBoxItem&)rTmpSet.Get( nWhich );
-                aBspWin.SetFtBorder( rItem );
+                m_pBspWin->SetFtBorder( rItem );
             }
         }
     }
@@ -686,23 +704,23 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
     {
         const SvxBrushItem& rItem = (const SvxBrushItem&)rSet.Get( nWhich );
-        aBspWin.SetColor( rItem.GetColor() );
+        m_pBspWin->SetColor( rItem.GetColor() );
         const Graphic* pGrf = rItem.GetGraphic();
 
         if ( pGrf )
         {
             Bitmap aBitmap = pGrf->GetBitmap();
-            aBspWin.SetBitmap( &aBitmap );
+            m_pBspWin->SetBitmap( &aBitmap );
         }
         else
-            aBspWin.SetBitmap( NULL );
+            m_pBspWin->SetBitmap( NULL );
     }
     nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
 
     if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
     {
         const SvxBoxItem& rItem = (const SvxBoxItem&)rSet.Get( nWhich );
-        aBspWin.SetBorder( rItem );
+        m_pBspWin->SetBorder( rItem );
     }
 }
 
@@ -715,13 +733,13 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         // Set left and right margins
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)*pItem;
 
-        aBspWin.SetLeft( rLRSpace.GetLeft() );
-        aBspWin.SetRight( rLRSpace.GetRight() );
+        m_pBspWin->SetLeft( rLRSpace.GetLeft() );
+        m_pBspWin->SetRight( rLRSpace.GetRight() );
     }
     else
     {
-        aBspWin.SetLeft( 0 );
-        aBspWin.SetRight( 0 );
+        m_pBspWin->SetLeft( 0 );
+        m_pBspWin->SetRight( 0 );
     }
 
     pItem = GetItem( rSet, SID_ATTR_ULSPACE );
@@ -731,13 +749,13 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         // Set top and bottom margins
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)*pItem;
 
-        aBspWin.SetTop( rULSpace.GetUpper() );
-        aBspWin.SetBottom( rULSpace.GetLower() );
+        m_pBspWin->SetTop( rULSpace.GetUpper() );
+        m_pBspWin->SetBottom( rULSpace.GetLower() );
     }
     else
     {
-        aBspWin.SetTop( 0 );
-        aBspWin.SetBottom( 0 );
+        m_pBspWin->SetTop( 0 );
+        m_pBspWin->SetBottom( 0 );
     }
 
     sal_uInt16 nUsage = SVX_PAGE_ALL;
@@ -746,14 +764,14 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     if ( pItem )
         nUsage = ( (const SvxPageItem*)pItem )->GetPageUsage();
 
-    aBspWin.SetUsage( nUsage );
+    m_pBspWin->SetUsage( nUsage );
 
     if ( SVX_PAGE_RIGHT == nUsage || SVX_PAGE_LEFT == nUsage )
-        aCntSharedBox.Disable();
+        m_pCntSharedBox->Disable();
     else
     {
-        aCntSharedBox.Enable();
-        aCntSharedFirstBox.Enable();
+        m_pCntSharedBox->Enable();
+        m_pCntSharedFirstBox->Enable();
     }
     pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE );
 
@@ -762,7 +780,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         // Orientation and Size from the PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)*pItem;
         // if the size is already swapped (Landscape)
-        aBspWin.SetSize( rSize.GetSize() );
+        m_pBspWin->SetSize( rSize.GetSize() );
     }
 
     // Evaluate Header attribute
@@ -786,11 +804,11 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
                 rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
             long nDist = rUL.GetLower();
 
-            aBspWin.SetHdHeight( rSize.GetSize().Height() - nDist );
-            aBspWin.SetHdDist( nDist );
-            aBspWin.SetHdLeft( rLR.GetLeft() );
-            aBspWin.SetHdRight( rLR.GetRight() );
-            aBspWin.SetHeader( sal_True );
+            m_pBspWin->SetHdHeight( rSize.GetSize().Height() - nDist );
+            m_pBspWin->SetHdDist( nDist );
+            m_pBspWin->SetHdLeft( rLR.GetLeft() );
+            m_pBspWin->SetHdRight( rLR.GetRight() );
+            m_pBspWin->SetHeader( sal_True );
         }
         else
             pSetItem = 0;
@@ -798,12 +816,12 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        aBspWin.SetHeader( sal_False );
+        m_pBspWin->SetHeader( sal_False );
 
         if ( SID_ATTR_PAGE_HEADERSET == nId )
         {
-            aCntSharedBox.Disable();
-            aCntSharedFirstBox.Disable();
+            m_pCntSharedBox->Disable();
+            m_pCntSharedFirstBox->Disable();
         }
     }
     pSetItem = 0;
@@ -826,11 +844,11 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
                 rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
             long nDist = rUL.GetUpper();
 
-            aBspWin.SetFtHeight( rSize.GetSize().Height() - nDist );
-            aBspWin.SetFtDist( nDist );
-            aBspWin.SetFtLeft( rLR.GetLeft() );
-            aBspWin.SetFtRight( rLR.GetRight() );
-            aBspWin.SetFooter( sal_True );
+            m_pBspWin->SetFtHeight( rSize.GetSize().Height() - nDist );
+            m_pBspWin->SetFtDist( nDist );
+            m_pBspWin->SetFtLeft( rLR.GetLeft() );
+            m_pBspWin->SetFtRight( rLR.GetRight() );
+            m_pBspWin->SetFooter( sal_True );
         }
         else
             pSetItem = 0;
@@ -838,12 +856,12 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        aBspWin.SetFooter( sal_False );
+        m_pBspWin->SetFooter( sal_False );
 
         if ( SID_ATTR_PAGE_FOOTERSET == nId )
         {
-            aCntSharedBox.Disable();
-            aCntSharedFirstBox.Disable();
+            m_pCntSharedBox->Disable();
+            m_pCntSharedFirstBox->Disable();
         }
     }
 
@@ -851,16 +869,16 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
-        aBspWin.SetTable( sal_True );
-        aBspWin.SetHorz( ( (SfxBoolItem*)pItem )->GetValue() );
+        m_pBspWin->SetTable( sal_True );
+        m_pBspWin->SetHorz( ( (SfxBoolItem*)pItem )->GetValue() );
     }
 
     pItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
 
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
-        aBspWin.SetTable( sal_True );
-        aBspWin.SetVert( ( (SfxBoolItem*)pItem )->GetValue() );
+        m_pBspWin->SetTable( sal_True );
+        m_pBspWin->SetVert( ( (SfxBoolItem*)pItem )->GetValue() );
     }
     ResetBackground_Impl( rSet );
     RangeHdl( 0 );
@@ -875,16 +893,16 @@ int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
 
 IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
 {
-    long nHHeight = aBspWin.GetHdHeight();
-    long nHDist   = aBspWin.GetHdDist();
+    long nHHeight = m_pBspWin->GetHdHeight();
+    long nHDist   = m_pBspWin->GetHdDist();
 
-    long nFHeight = aBspWin.GetFtHeight();
-    long nFDist   = aBspWin.GetFtDist();
+    long nFHeight = m_pBspWin->GetFtHeight();
+    long nFDist   = m_pBspWin->GetFtDist();
 
     long nHeight = Max( (long)MINBODY,
-        static_cast<long>(aHeightEdit.Denormalize( aHeightEdit.GetValue( FUNIT_TWIP ) ) ) );
-    long nDist   = aTurnOnBox.IsChecked() ?
-        static_cast<long>(aDistEdit.Denormalize( aDistEdit.GetValue( FUNIT_TWIP ) )) : 0;
+        static_cast<long>(m_pHeightEdit->Denormalize( m_pHeightEdit->GetValue( FUNIT_TWIP ) ) ) );
+    long nDist   = m_pTurnOnBox->IsChecked() ?
+        static_cast<long>(m_pDistEdit->Denormalize( m_pDistEdit->GetValue( FUNIT_TWIP ) )) : 0;
 
     long nMin;
     long nMax;
@@ -901,13 +919,13 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
     }
 
     // Current values of the side edges
-    long nBT = aBspWin.GetTop();
-    long nBB = aBspWin.GetBottom();
-    long nBL = aBspWin.GetLeft();
-    long nBR = aBspWin.GetRight();
+    long nBT = m_pBspWin->GetTop();
+    long nBB = m_pBspWin->GetBottom();
+    long nBL = m_pBspWin->GetLeft();
+    long nBR = m_pBspWin->GetRight();
 
-    long nH  = aBspWin.GetSize().Height();
-    long nW  = aBspWin.GetSize().Width();
+    long nH  = m_pBspWin->GetSize().Height();
+    long nW  = m_pBspWin->GetSize().Width();
 
     // Borders
     if ( nId == SID_ATTR_PAGE_HEADERSET )
@@ -916,11 +934,11 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
         nMin = ( nH - nBB - nBT ) / 5; // 20%
         nMax = Max( nH - nMin - nHDist - nFDist - nFHeight - nBB - nBT,
                     nMin );
-        aHeightEdit.SetMax( aHeightEdit.Normalize( nMax ), FUNIT_TWIP );
+        m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FUNIT_TWIP );
         nMin = ( nH - nBB - nBT ) / 5; // 20%
         nDist = Max( nH - nMin - nHHeight - nFDist - nFHeight - nBB - nBT,
                      long(0) );
-        aDistEdit.SetMax( aDistEdit.Normalize( nDist ), FUNIT_TWIP );
+        m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FUNIT_TWIP );
     }
     else
     {
@@ -928,21 +946,21 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
         nMin = ( nH - nBT - nBB ) / 5; // 20%
         nMax = Max( nH - nMin - nFDist - nHDist - nHHeight - nBT - nBB,
                     nMin );
-        aHeightEdit.SetMax( aHeightEdit.Normalize( nMax ), FUNIT_TWIP );
+        m_pHeightEdit->SetMax( m_pHeightEdit->Normalize( nMax ), FUNIT_TWIP );
         nMin = ( nH - nBT - nBB ) / 5; // 20%
         nDist = Max( nH - nMin - nFHeight - nHDist - nHHeight - nBT - nBB,
                      long(0) );
-        aDistEdit.SetMax( aDistEdit.Normalize( nDist ), FUNIT_TWIP );
+        m_pDistEdit->SetMax( m_pDistEdit->Normalize( nDist ), FUNIT_TWIP );
     }
 
     // Limit Indentation
     nMax = nW - nBL - nBR -
-           static_cast<long>(aRMEdit.Denormalize( aRMEdit.GetValue( FUNIT_TWIP ) )) - MINBODY;
-    aLMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );
+           static_cast<long>(m_pRMEdit->Denormalize( m_pRMEdit->GetValue( FUNIT_TWIP ) )) - MINBODY;
+    m_pLMEdit->SetMax( m_pLMEdit->Normalize( nMax ), FUNIT_TWIP );
 
     nMax = nW - nBL - nBR -
-           static_cast<long>(aLMEdit.Denormalize( aLMEdit.GetValue( FUNIT_TWIP ) )) - MINBODY;
-    aRMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );
+           static_cast<long>(m_pLMEdit->Denormalize( m_pLMEdit->GetValue( FUNIT_TWIP ) )) - MINBODY;
+    m_pRMEdit->SetMax( m_pLMEdit->Normalize( nMax ), FUNIT_TWIP );
     return 0;
 }
 
@@ -954,17 +972,17 @@ static void lcl_Move(Window& rWin, sal_Int32 nDiff)
 }
 void SvxHFPage::EnableDynamicSpacing()
 {
-    aDynSpacingCB.Show();
+    m_pDynSpacingCB->Show();
     //move all following controls
     Window* aMoveWindows[] =
     {
-        &aHeightFT,
-        &aHeightEdit,
-        &aHeightDynBtn,
-        &aBackgroundBtn,
+        m_pHeightFT,
+        m_pHeightEdit,
+        m_pHeightDynBtn,
+        m_pBackgroundBtn,
         0
     };
-    sal_Int32 nOffset = aTurnOnBox.GetPosPixel().Y() - aCntSharedBox.GetPosPixel().Y();
+    sal_Int32 nOffset = m_pTurnOnBox->GetPosPixel().Y() - m_pCntSharedBox->GetPosPixel().Y();
     sal_Int32 nIdx = 0;
     while(aMoveWindows[nIdx])
         lcl_Move(*aMoveWindows[nIdx++], nOffset);

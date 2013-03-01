@@ -14,6 +14,7 @@ $(eval $(call gb_UI_add_uifiles,svx,\
 	svx/uiconfig/ui/asianphoneticguidedialog \
 	svx/uiconfig/ui/chineseconversiondialog \
 	svx/uiconfig/ui/compressgraphicdialog \
+	svx/uiconfig/ui/headfootformatpage \
 	svx/uiconfig/ui/redlinecontrol \
 	svx/uiconfig/ui/redlinefilterpage \
 	svx/uiconfig/ui/redlineviewpage \

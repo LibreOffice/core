@@ -49,29 +49,22 @@
 // class ScHFPage
 //==================================================================
 
-ScHFPage::ScHFPage( Window* pParent, sal_uInt16 nResId,
-                    const SfxItemSet& rSet, sal_uInt16 nSetId )
+ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
 
-    :   SvxHFPage   ( pParent, nResId, rSet, nSetId ),
-        aBtnEdit    ( this, ScResId( RID_SCBTN_HFEDIT ) ),
+    :   SvxHFPage   ( pParent, rSet, nSetId ),
         aDataSet    ( *rSet.GetPool(),
                        ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT,
                        ATTR_PAGE, ATTR_PAGE, 0 ),
         nPageUsage  ( (sal_uInt16)SVX_PAGE_ALL ),
         pStyleDlg   ( NULL )
 {
+    get(m_pBtnEdit,"buttonEdit");
+
     SetExchangeSupport();
 
     SfxViewShell*   pSh = SfxViewShell::Current();
     ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,pSh);
-    Point           aPos( aBackgroundBtn.GetPosPixel() );
-
-    // aBackgroundBtn position not changed anymore
-
-    aPos.X() += aBackgroundBtn.GetSizePixel().Width();
-    aPos.X() += LogicToPixel( Size(3,0), MAP_APPFONT ).Width();
-    aBtnEdit.SetPosPixel( aPos );
-    aBtnEdit.Show();
+    m_pBtnEdit->Show();
 
     aDataSet.Put( rSet );
 
@@ -83,15 +76,15 @@ ScHFPage::ScHFPage( Window* pParent, sal_uInt16 nResId,
         aStrPageStyle = pDoc->GetPageStyle( pViewData->GetTabNo() );
     }
 
-    aBtnEdit.SetClickHdl    ( LINK( this, ScHFPage, BtnHdl ) );
-    aTurnOnBox.SetClickHdl  ( LINK( this, ScHFPage, TurnOnHdl ) );
+    m_pBtnEdit->SetClickHdl    ( LINK( this, ScHFPage, BtnHdl ) );
+    m_pTurnOnBox->SetClickHdl  ( LINK( this, ScHFPage, TurnOnHdl ) );
 
     if ( nId == SID_ATTR_PAGE_HEADERSET )
-        aBtnEdit.SetHelpId( HID_SC_HEADER_EDIT );
+        m_pBtnEdit->SetHelpId( HID_SC_HEADER_EDIT );
     else
-        aBtnEdit.SetHelpId( HID_SC_FOOTER_EDIT );
+        m_pBtnEdit->SetHelpId( HID_SC_FOOTER_EDIT );
 
-    aBtnEdit.SetAccessibleRelationMemberOf(&aFrm);
+    m_pBtnEdit->SetAccessibleRelationMemberOf(m_pFrm);
 }
 
 //------------------------------------------------------------------
@@ -132,7 +125,7 @@ sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 
 void ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
-    sal_uInt16              nPageWhich = GetWhich( SID_ATTR_PAGE );
+    sal_uInt16          nPageWhich = GetWhich( SID_ATTR_PAGE );
     const SvxPageItem&  rPageItem  = (const SvxPageItem&)
                                      rSet.Get(nPageWhich);
 
@@ -173,12 +166,12 @@ void ScHFPage::DeactivatePage()
 
 IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 {
-    SvxHFPage::TurnOnHdl( &aTurnOnBox );
+    SvxHFPage::TurnOnHdl( m_pTurnOnBox );
 
-    if ( aTurnOnBox.IsChecked() )
-        aBtnEdit.Enable();
+    if ( m_pTurnOnBox->IsChecked() )
+        m_pBtnEdit->Enable();
     else
-        aBtnEdit.Disable();
+        m_pBtnEdit->Disable();
 
     return 0;
 }
@@ -188,10 +181,9 @@ IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 
 IMPL_LINK_NOARG(ScHFPage, BtnHdl)
 {
-    //  Wenn der Bearbeiten-Dialog direkt aus dem Click-Handler des Buttons
-    //  aufgerufen wird, funktioniert im Bearbeiten-Dialog unter OS/2 das
-    //  GrabFocus nicht (Bug #41805#).
-    //  Mit dem neuen StarView sollte dieser Workaround wieder raus koennen!
+    // When the Edit-Dialog is directly called up from the Button's Click-Handler,
+    // the GraveFocus from the Edit-Dialog under OS/2 doesn't work.(Bug #41805#).
+    // With the new StarView, this workaround should be again considered!
 
     Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ) );
     return 0;
@@ -207,8 +199,8 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
         return 0;
     }
 
-    if (   aCntSharedBox.IsEnabled()
-        && !aCntSharedBox.IsChecked() )
+    if (   m_pCntSharedBox->IsEnabled()
+        && !m_pCntSharedBox->IsChecked() )
     {
         sal_uInt16 nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
                             ? RID_SCDLG_HFED_HEADER
@@ -227,9 +219,9 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
     }
     else
     {
-        String              aText;
+        OUString  aText;
         SfxNoLayoutSingleTabDialog* pDlg = new SfxNoLayoutSingleTabDialog( this, aDataSet, 42 );
-        sal_Bool bRightPage =   aCntSharedBox.IsChecked()
+        sal_Bool bRightPage =   m_pCntSharedBox->IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );
 
         if ( nId == SID_ATTR_PAGE_HEADERSET )
@@ -252,11 +244,8 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
         SvxNumType eNumType = ((const SvxPageItem&)aDataSet.Get(ATTR_PAGE)).GetNumType();
         ((ScHFEditPage*)pDlg->GetTabPage())->SetNumType(eNumType);
 
-        aText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " (" ));
-        aText += ScGlobal::GetRscString( STR_PAGESTYLE );
-        aText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-        aText += aStrPageStyle;
-        aText += ')';
+        aText += " (" + ScGlobal::GetRscString( STR_PAGESTYLE );
+        aText += ": " + aStrPageStyle + ")";
 
         pDlg->SetText( aText );
 
@@ -276,7 +265,7 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
 //==================================================================
 
 ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
-    : ScHFPage( pParent, RID_SVXPAGE_HEADER, rSet, SID_ATTR_PAGE_HEADERSET )
+    : ScHFPage( pParent, rSet, SID_ATTR_PAGE_HEADERSET )
 {
 }
 
@@ -299,7 +288,7 @@ sal_uInt16* ScHeaderPage::GetRanges()
 //==================================================================
 
 ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
-    : ScHFPage( pParent, RID_SVXPAGE_FOOTER, rSet, SID_ATTR_PAGE_FOOTERSET )
+    : ScHFPage( pParent, rSet, SID_ATTR_PAGE_FOOTERSET )
 {
 }
 
