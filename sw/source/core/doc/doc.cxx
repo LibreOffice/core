@@ -1548,14 +1548,14 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     rPagePairs.clear();
     rValidPagesSet.clear();
 
-    rtl::OUString aPageRange;
+    OUString aPageRange;
     // PageContent :
     // 0 -> print all pages (default if aPageRange is empty)
     // 1 -> print range according to PageRange
     // 2 -> print selection
     const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
     if (nContent == 1)
-        aPageRange = rOptions.getStringValue( "PageRange", rtl::OUString() );
+        aPageRange = rOptions.getStringValue( "PageRange", OUString() );
     if (aPageRange.isEmpty())    // empty string -> print all
     {
         // set page range to print to 'all pages'
@@ -1729,24 +1729,24 @@ bool SwDoc::IncrementalDocStatCalculate( long nTextNodes )
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
     sal_Int32 n=0;
-    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount"));
+    aStat[n].Name = OUString("TableCount");
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nTbl;
-    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageCount"));
+    aStat[n].Name = OUString("ImageCount");
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nGrf;
-    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectCount"));
+    aStat[n].Name = OUString("ObjectCount");
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nOLE;
     if ( mpDocStat->nPage )
     {
-        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount"));
+        aStat[n].Name = OUString("PageCount");
         aStat[n++].Value <<= (sal_Int32)mpDocStat->nPage;
     }
-    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphCount"));
+    aStat[n].Name = OUString("ParagraphCount");
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nPara;
-    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount"));
+    aStat[n].Name = OUString("WordCount");
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nWord;
-    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount"));
+    aStat[n].Name = OUString("CharacterCount");
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nChar;
-    aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount"));
+    aStat[n].Name = OUString("NonWhitespaceCharacterCount");
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nCharExcludingSpaces;
 
     // For e.g. autotext documents there is no pSwgInfo (#i79945)
@@ -1854,7 +1854,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 // Return the names of all set references in the Doc
 //JP 24.06.96: If the array pointer is 0, then just return whether a RefMark is set in the Doc
 // OS 25.06.96: From now on we always return the reference count
-sal_uInt16 SwDoc::GetRefMarks( std::vector<rtl::OUString>* pNames ) const
+sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
 {
     const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;

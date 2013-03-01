@@ -70,7 +70,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             ReadXML->SetBlockMode( sal_False );
             // Ole objects fails to display when inserted into document
             // because the ObjectReplacement folder ( and contents are missing )
-            rtl::OUString sObjReplacements( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
+            OUString sObjReplacements( "ObjectReplacements" );
             if ( xRoot->hasByName( sObjReplacements ) )
             {
                 uno::Reference< document::XStorageBasedDocument > xDocStor( pDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
@@ -92,7 +92,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
     }
     else
     {
-        String aStreamName = aFolderName + rtl::OUString(".xml");
+        String aStreamName = aFolderName + OUString(".xml");
         try
         {
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
@@ -179,7 +179,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
             long nTmp = SOT_FORMATSTR_ID_STARWRITER_60;
             bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
 
-            OUString sStreamName(RTL_CONSTASCII_USTRINGPARAM("atevent.xml"));
+            OUString sStreamName("atevent.xml");
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
                 sStreamName, embed::ElementModes::READ );
             OSL_ENSURE(xDocStream.is(), "Can't create stream");
@@ -214,8 +214,8 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 
                     // get filter
                     OUString sFilterComponent = bOasis
-                        ? OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"))
-                        : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLAutotextEventsImporter"));
+                        ? OUString("com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter")
+                        : OUString("com.sun.star.comp.Writer.XMLAutotextEventsImporter");
                     uno::Reference< xml::sax::XDocumentHandler > xFilter(
                         xServiceFactory->createInstanceWithArguments(
                             sFilterComponent, aFilterArguments),
@@ -285,7 +285,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
     sal_uLong n = 0;
     sal_Bool bTextOnly = sal_True;
     String aFolderName = GeneratePackageName ( rShort );
-    String aStreamName = aFolderName + rtl::OUString(".xml");
+    String aStreamName = aFolderName + OUString(".xml");
     rText.Erase();
 
     try
@@ -295,7 +295,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
         if ( !xAccess->hasByName( aStreamName ) || !xRoot->isStreamElement( aStreamName ) )
         {
             bTextOnly = sal_False;
-            aStreamName = rtl::OUString("content.xml");
+            aStreamName = OUString("content.xml");
         }
 
         uno::Reference < io::XStream > xContents = xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
@@ -355,7 +355,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
     }
     */
     String aFolderName( rPackageName );
-    String aStreamName = aFolderName + rtl::OUString(".xml");
+    String aStreamName = aFolderName + OUString(".xml");
 
     uno::Reference< uno::XComponentContext > xContext =
         comphelper::getProcessComponentContext();
@@ -370,10 +370,10 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
                 embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
     uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-    OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
+    OUString aMime ( "text/xml" );
     Any aAny;
     aAny <<= aMime;
-    xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
+    xSet->setPropertyValue( OUString("MediaType"), aAny );
     uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
        uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
        xSrc->setOutputStream(xOut);
@@ -422,7 +422,7 @@ void SwXMLTextBlocks::ReadInfo( void )
 {
     try
     {
-    const OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
+    const OUString sDocName( XMLN_BLOCKLIST );
     uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
     if ( xAccess.is() && xAccess->hasByName( sDocName ) && xBlkRoot->isStreamElement( sDocName ) )
     {
@@ -473,7 +473,7 @@ void SwXMLTextBlocks::WriteInfo( void )
             comphelper::getProcessComponentContext();
 
         uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
-        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
+        OUString sDocName( XMLN_BLOCKLIST );
 
         /*
         if ( xBlkRoot->IsContained( sDocName) )
@@ -492,14 +492,14 @@ void SwXMLTextBlocks::WriteInfo( void )
         OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
         Any aAny;
         aAny <<= aMime;
-        xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
+        xSet->setPropertyValue( OUString("MediaType"), aAny );
         uno::Reference < io::XOutputStream > xOut = xDocStream->getOutputStream();
         uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
         xSrc->setOutputStream(xOut);
 
         uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
-        SwXMLBlockListExport aExp( xContext, *this, OUString(RTL_CONSTASCII_USTRINGPARAM(XMLN_BLOCKLIST)), xHandler);
+        SwXMLBlockListExport aExp( xContext, *this, OUString(XMLN_BLOCKLIST), xHandler);
 
         aExp.exportDoc( XML_BLOCK_LIST );
 
@@ -557,7 +557,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
         try
         {
             xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::WRITE );
-            OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("atevent.xml") );
+            OUString sStreamName("atevent.xml" );
             long nTmp = SOT_FORMATSTR_ID_STARWRITER_60;
             bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
 
@@ -565,10 +565,10 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
                         embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-            OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
+            OUString aMime( "text/xml" );
             Any aAny;
             aAny <<= aMime;
-            xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
+            xSet->setPropertyValue( OUString("MediaType"), aAny );
             uno::Reference < io::XOutputStream > xOutputStream = xDocStream->getOutputStream();
 
             // get XML writer
@@ -592,8 +592,8 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
 
             // get filter component
             OUString sFilterComponent = bOasis
-                ? OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"))
-                : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLAutotextEventsExporter"));
+                ? OUString("com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter")
+                : OUString("com.sun.star.comp.Writer.XMLAutotextEventsExporter");
             uno::Reference< document::XExporter > xExporter(
                 xServiceFactory->createInstanceWithArguments(
                     sFilterComponent, aParams), UNO_QUERY);

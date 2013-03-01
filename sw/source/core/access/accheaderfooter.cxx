@@ -84,13 +84,13 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
         throw( RuntimeException )
 {
     if( AccessibleRole::HEADER == GetRole() )
-        return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationNameHeader));
+        return OUString(sImplementationNameHeader);
     else
-        return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationNameFooter));
+        return OUString(sImplementationNameFooter);
 }
 
 sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(
-        const ::rtl::OUString& sTestServiceName)
+        const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
     if( sTestServiceName.equalsAsciiL( sAccessibleServiceName,
@@ -109,10 +109,10 @@ Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     if( AccessibleRole::HEADER == GetRole() )
-        pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceNameHeader) );
+        pArray[0] = OUString( sServiceNameHeader );
     else
-        pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceNameFooter) );
-    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
+        pArray[0] = OUString( sServiceNameFooter );
+    pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }
 

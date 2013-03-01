@@ -283,14 +283,14 @@ FinalThreadManager::~FinalThreadManager()
 }
 
 // com.sun.star.uno.XServiceInfo:
-::rtl::OUString SAL_CALL FinalThreadManager::getImplementationName() throw (css::uno::RuntimeException)
+OUString SAL_CALL FinalThreadManager::getImplementationName() throw (css::uno::RuntimeException)
 {
     return comp_FinalThreadManager::_getImplementationName();
 }
 
-::sal_Bool SAL_CALL FinalThreadManager::supportsService(::rtl::OUString const & serviceName) throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< ::rtl::OUString > serviceNames = comp_FinalThreadManager::_getSupportedServiceNames();
+    css::uno::Sequence< OUString > serviceNames = comp_FinalThreadManager::_getSupportedServiceNames();
     for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
         if (serviceNames[i] == serviceName)
             return sal_True;
@@ -298,7 +298,7 @@ FinalThreadManager::~FinalThreadManager()
     return sal_False;
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames() throw (css::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames() throw (css::uno::RuntimeException)
 {
     return comp_FinalThreadManager::_getSupportedServiceNames();
 }
@@ -451,17 +451,15 @@ void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& ) thr
 // component helper namespace
 namespace comp_FinalThreadManager {
 
-    ::rtl::OUString SAL_CALL _getImplementationName()
+    OUString SAL_CALL _getImplementationName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.util.comp.FinalThreadManager"));
+        return OUString("com.sun.star.util.comp.FinalThreadManager");
     }
 
-    css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
+    css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
     {
-        css::uno::Sequence< ::rtl::OUString > s(1);
-        s[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.util.JobManager"));
+        css::uno::Sequence< OUString > s(1);
+        s[0] = OUString("com.sun.star.util.JobManager");
         return s;
     }
 

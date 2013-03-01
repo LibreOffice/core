@@ -108,14 +108,14 @@ const SwTxtNode* SwAccessibleParagraph::GetTxtNode() const
     return pNode;
 }
 
-::rtl::OUString SwAccessibleParagraph::GetString()
+OUString SwAccessibleParagraph::GetString()
 {
     return GetPortionData().GetAccessibleString();
 }
 
-::rtl::OUString SwAccessibleParagraph::GetDescription()
+OUString SwAccessibleParagraph::GetDescription()
 {
-    return ::rtl::OUString(); // provide empty description for paragraphs
+    return OUString(); // provide empty description for paragraphs
 }
 
 sal_Int32 SwAccessibleParagraph::GetCaretPos()
@@ -355,11 +355,11 @@ void SwAccessibleParagraph::GetStates(
 
 void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
 {
-    ::rtl::OUString sOldText( GetString() );
+    OUString sOldText( GetString() );
 
     ClearPortionData();
 
-    const ::rtl::OUString& rText = GetString();
+    const OUString& rText = GetString();
 
     if( rText != sOldText )
     {
@@ -391,8 +391,8 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
 
     if( bNewIsHeading != bOldIsHeading || rText != sOldText )
     {
-        ::rtl::OUString sNewDesc( GetDescription() );
-        ::rtl::OUString sOldDesc;
+        OUString sNewDesc( GetDescription() );
+        OUString sOldDesc;
         {
             osl::MutexGuard aGuard( aMutex );
             sOldDesc = sDesc;
@@ -484,7 +484,7 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     SolarMutexGuard aGuard;
 
     bIsHeading = IsHeading();
-    SetName( ::rtl::OUString() ); // set an empty accessibility name for paragraphs
+    SetName( OUString() ); // set an empty accessibility name for paragraphs
 
     // If this object has the focus, then it is remembered by the map itself.
     nOldCaretPos = GetCaretPos();
@@ -618,7 +618,7 @@ sal_Bool SwAccessibleParagraph::IsValidRange(
 
 sal_Bool SwAccessibleParagraph::GetCharBoundary(
     i18n::Boundary& rBound,
-    const ::rtl::OUString&,
+    const OUString&,
     sal_Int32 nPos )
 {
     rBound.startPos = nPos;
@@ -628,7 +628,7 @@ sal_Bool SwAccessibleParagraph::GetCharBoundary(
 
 sal_Bool SwAccessibleParagraph::GetWordBoundary(
     i18n::Boundary& rBound,
-    const ::rtl::OUString& rText,
+    const OUString& rText,
     sal_Int32 nPos )
 {
     sal_Bool bRet = sal_False;
@@ -653,7 +653,7 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
 
         // It's a word if the first character is an alpha-numeric character.
         bRet = GetAppCharClass().isLetterNumeric(
-            rtl::OUString(rText[rBound.startPos]) );
+            OUString(rText[rBound.startPos]) );
     }
     else
     {
@@ -667,7 +667,7 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
 
 sal_Bool SwAccessibleParagraph::GetSentenceBoundary(
     i18n::Boundary& rBound,
-    const ::rtl::OUString&,
+    const OUString&,
     sal_Int32 nPos )
 {
     GetPortionData().GetSentenceBoundary( rBound, nPos );
@@ -676,7 +676,7 @@ sal_Bool SwAccessibleParagraph::GetSentenceBoundary(
 
 sal_Bool SwAccessibleParagraph::GetLineBoundary(
     i18n::Boundary& rBound,
-    const ::rtl::OUString& rText,
+    const OUString& rText,
     sal_Int32 nPos )
 {
     if( rText.getLength() == nPos )
@@ -688,7 +688,7 @@ sal_Bool SwAccessibleParagraph::GetLineBoundary(
 
 sal_Bool SwAccessibleParagraph::GetParagraphBoundary(
     i18n::Boundary& rBound,
-    const ::rtl::OUString& rText,
+    const OUString& rText,
     sal_Int32 )
 {
     rBound.startPos = 0;
@@ -698,7 +698,7 @@ sal_Bool SwAccessibleParagraph::GetParagraphBoundary(
 
 sal_Bool SwAccessibleParagraph::GetAttributeBoundary(
     i18n::Boundary& rBound,
-    const ::rtl::OUString&,
+    const OUString&,
     sal_Int32 nPos )
 {
     GetPortionData().GetAttributeBoundary( rBound, nPos );
@@ -707,7 +707,7 @@ sal_Bool SwAccessibleParagraph::GetAttributeBoundary(
 
 sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
     i18n::Boundary& rBound,
-    const ::rtl::OUString& rText,
+    const OUString& rText,
     sal_Int32 nPos )
 {
     sal_Bool bRet = sal_False;
@@ -747,7 +747,7 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
 
 sal_Bool SwAccessibleParagraph::GetTextBoundary(
     i18n::Boundary& rBound,
-    const ::rtl::OUString& rText,
+    const OUString& rText,
     sal_Int32 nPos,
     sal_Int16 nTextType )
     throw (
@@ -800,7 +800,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
     return bRet;
 }
 
-::rtl::OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -973,14 +973,14 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
     return SwAccessibleContext::getBackground();
 }
 
-::rtl::OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
+OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
         throw( uno::RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
+    return OUString(sImplementationName);
 }
 
 sal_Bool SAL_CALL SwAccessibleParagraph::supportsService(
-        const ::rtl::OUString& sTestServiceName)
+        const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
@@ -989,13 +989,13 @@ sal_Bool SAL_CALL SwAccessibleParagraph::supportsService(
                                              sizeof(sAccessibleServiceName)-1 );
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
         throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aRet(2);
-    ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
-    pArray[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
+    uno::Sequence< OUString > aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString( sServiceName );
+    pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }
 
@@ -1155,7 +1155,7 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
-    ::rtl::OUString sText( GetString() );
+    OUString sText( GetString() );
 
     // return character (if valid)
     if( IsValidChar(nIndex, sText.getLength() ) )
@@ -1170,14 +1170,14 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
 // <_getDefaultAttributesImpl(..)> and <_getRunAttributesImpl(..)>
 uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     sal_Int32 nIndex,
-    const uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
+    const uno::Sequence< OUString >& aRequestedAttributes )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
 
     SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
-    const ::rtl::OUString& rText = GetString();
+    const OUString& rText = GetString();
 
     if( ! IsValidChar( nIndex, rText.getLength() ) )
         throw lang::IndexOutOfBoundsException();
@@ -1216,7 +1216,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
 // #i63870#
 void SwAccessibleParagraph::_getDefaultAttributesImpl(
-        const uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+        const uno::Sequence< OUString >& aRequestedAttributes,
         tAccParaPropValMap& rDefAttrSeq,
         const bool bOnlyCharAttrs )
 {
@@ -1294,14 +1294,14 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         // add property value entry for the paragraph style
         if ( !bOnlyCharAttrs && pTxtNode->GetTxtColl() )
         {
-            const ::rtl::OUString sParaStyleName =
-                    ::rtl::OUString::createFromAscii(
+            const OUString sParaStyleName =
+                    OUString::createFromAscii(
                             GetPropName( UNO_NAME_PARA_STYLE_NAME ).pName );
             if ( aDefAttrSeq.find( sParaStyleName ) == aDefAttrSeq.end() )
             {
                 PropertyValue rPropVal;
                 rPropVal.Name = sParaStyleName;
-                uno::Any aVal( uno::makeAny( ::rtl::OUString( pTxtNode->GetTxtColl()->GetName() ) ) );
+                uno::Any aVal( uno::makeAny( OUString( pTxtNode->GetTxtColl()->GetName() ) ) );
                 rPropVal.Value = aVal;
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
@@ -1314,8 +1314,8 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         // resolve value text::WritingMode2::PAGE of property value entry WritingMode
         if ( !bOnlyCharAttrs && GetFrm() )
         {
-            const ::rtl::OUString sWritingMode =
-                    ::rtl::OUString::createFromAscii(
+            const OUString sWritingMode =
+                    OUString::createFromAscii(
                             GetPropName( UNO_NAME_WRITING_MODE ).pName );
             tAccParaPropValMap::iterator aIter = aDefAttrSeq.find( sWritingMode );
             if ( aIter != aDefAttrSeq.end() )
@@ -1367,7 +1367,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     }
     else
     {
-        const ::rtl::OUString* pReqAttrs = aRequestedAttributes.getConstArray();
+        const OUString* pReqAttrs = aRequestedAttributes.getConstArray();
         const sal_Int32 nLength = aRequestedAttributes.getLength();
         for( sal_Int32 i = 0; i < nLength; ++i )
         {
@@ -1381,7 +1381,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
 }
 
 uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
-        const uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
+        const uno::Sequence< OUString >& aRequestedAttributes )
         throw ( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -1391,7 +1391,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
     _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq );
 
     // #i92233#
-    static rtl::OUString sMMToPixelRatio(RTL_CONSTASCII_USTRINGPARAM("MMToPixelRatio"));
+    static OUString sMMToPixelRatio("MMToPixelRatio");
     bool bProvideMMToPixelRatio( false );
     {
         if ( aRequestedAttributes.getLength() == 0 )
@@ -1400,7 +1400,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         }
         else
         {
-            const rtl::OUString* aRequestedAttrIter =
+            const OUString* aRequestedAttrIter =
                   ::std::find( ::comphelper::stl_begin( aRequestedAttributes ),
                                ::comphelper::stl_end( aRequestedAttributes ),
                                sMMToPixelRatio );
@@ -1442,7 +1442,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
 
 void SwAccessibleParagraph::_getRunAttributesImpl(
         const sal_Int32 nIndex,
-        const uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+        const uno::Sequence< OUString >& aRequestedAttributes,
         tAccParaPropValMap& rRunAttrSeq )
 {
     // create PaM for character at position <nIndex>
@@ -1495,7 +1495,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         tAccParaPropValMap aRunAttrSeq;
         {
             tAccParaPropValMap aDefAttrSeq;
-            uno::Sequence< ::rtl::OUString > aDummy;
+            uno::Sequence< OUString > aDummy;
             _getDefaultAttributesImpl( aDummy, aDefAttrSeq, true ); // #i82637#
 
             const SfxItemPropertyMap& rPropMap =
@@ -1537,7 +1537,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         }
         else
         {
-            const ::rtl::OUString* pReqAttrs = aRequestedAttributes.getConstArray();
+            const OUString* pReqAttrs = aRequestedAttributes.getConstArray();
             const sal_Int32 nLength = aRequestedAttributes.getLength();
             for( sal_Int32 i = 0; i < nLength; ++i )
             {
@@ -1555,7 +1555,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
 
 uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
         sal_Int32 nIndex,
-        const uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
+        const uno::Sequence< OUString >& aRequestedAttributes )
         throw ( lang::IndexOutOfBoundsException,
                 uno::RuntimeException )
 {
@@ -1563,7 +1563,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
     {
-        const ::rtl::OUString& rText = GetString();
+        const OUString& rText = GetString();
         if ( !IsValidChar( nIndex, rText.getLength() ) )
         {
             throw lang::IndexOutOfBoundsException();
@@ -1738,7 +1738,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
         : -1L;
 }
 
-::rtl::OUString SwAccessibleParagraph::getSelectedText()
+OUString SwAccessibleParagraph::getSelectedText()
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1749,7 +1749,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     sal_Bool bSelected = GetSelection( nStart, nEnd );
     return bSelected
            ? GetString().copy( nStart, nEnd - nStart )
-           : ::rtl::OUString();
+           : OUString();
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectionStart()
@@ -1812,7 +1812,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     return bRet;
 }
 
-::rtl::OUString SwAccessibleParagraph::getText()
+OUString SwAccessibleParagraph::getText()
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1822,7 +1822,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     return GetString();
 }
 
-::rtl::OUString SwAccessibleParagraph::getTextRange(
+OUString SwAccessibleParagraph::getTextRange(
     sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
@@ -1830,7 +1830,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
-    ::rtl::OUString sText( GetString() );
+    OUString sText( GetString() );
 
     if ( IsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
     {
@@ -1851,7 +1851,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
-    const ::rtl::OUString rText = GetString();
+    const OUString rText = GetString();
     // implement the silly specification that first position after
     // text must return an empty string, rather than throwing an
     // IndexOutOfBoundsException, except for LINE, where the last
@@ -1883,7 +1883,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
-    const ::rtl::OUString rText = GetString();
+    const OUString rText = GetString();
 
     /*accessibility::*/TextSegment aResult;
     aResult.SegmentStart = -1;
@@ -1930,7 +1930,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     /*accessibility::*/TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
-    const ::rtl::OUString rText = GetString();
+    const OUString rText = GetString();
 
     // implement the silly specification that first position after
     // text must return an empty string, rather than throwing an
@@ -2011,10 +2011,10 @@ sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
 sal_Bool SwAccessibleParagraph::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    return replaceText( nStartIndex, nEndIndex, ::rtl::OUString() );
+    return replaceText( nStartIndex, nEndIndex, OUString() );
 }
 
-sal_Bool SwAccessibleParagraph::insertText( const ::rtl::OUString& sText, sal_Int32 nIndex )
+sal_Bool SwAccessibleParagraph::insertText( const OUString& sText, sal_Int32 nIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     return replaceText( nIndex, nIndex, sText );
@@ -2022,14 +2022,14 @@ sal_Bool SwAccessibleParagraph::insertText( const ::rtl::OUString& sText, sal_In
 
 sal_Bool SwAccessibleParagraph::replaceText(
     sal_Int32 nStartIndex, sal_Int32 nEndIndex,
-    const ::rtl::OUString& sReplacement )
+    const OUString& sReplacement )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
 
-    const ::rtl::OUString& rText = GetString();
+    const OUString& rText = GetString();
 
     if( IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
     {
@@ -2090,7 +2090,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
 
-    const ::rtl::OUString& rText = GetString();
+    const OUString& rText = GetString();
 
     if( ! IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
         throw lang::IndexOutOfBoundsException();
@@ -2114,8 +2114,8 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
 
     // create sorted sequences accoring to index array
-    uno::Sequence< ::rtl::OUString > aNames( nLength );
-    ::rtl::OUString* pNames = aNames.getArray();
+    uno::Sequence< OUString > aNames( nLength );
+    OUString* pNames = aNames.getArray();
     uno::Sequence< uno::Any > aValues( nLength );
     uno::Any* pValues = aValues.getArray();
     for( i = 0; i < nLength; i++ )
@@ -2141,7 +2141,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     return bRet;
 }
 
-sal_Bool SwAccessibleParagraph::setText( const ::rtl::OUString& sText )
+sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
     throw (uno::RuntimeException)
 {
     return replaceText(0, GetString().getLength(), sText);
@@ -2504,7 +2504,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex
     GetPortionData().GetBoundaryOfLine( nLineNo, aLineBound );
 
     /*accessibility::*/TextSegment aTextAtLine;
-    const ::rtl::OUString rText = GetString();
+    const OUString rText = GetString();
     aTextAtLine.SegmentText = rText.copy( aLineBound.startPos,
                                           aLineBound.endPos - aLineBound.startPos );
     aTextAtLine.SegmentStart = aLineBound.startPos;

@@ -203,7 +203,7 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
     OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return 0;
-    rtl::OUString aOldName (aNames[nIdx]->aPackageName);
+    OUString aOldName (aNames[nIdx]->aPackageName);
     aShort = rNewShort;
     aPackageName = GeneratePackageName( aShort );
 
@@ -211,9 +211,9 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
     {
         if (IsOnlyTextBlock ( nIdx ) )
         {
-            rtl::OUString sExt(".xml");
-            rtl::OUString aOldStreamName( aOldName ); aOldStreamName += sExt;
-            rtl::OUString aNewStreamName( aPackageName ); aNewStreamName += sExt;
+            OUString sExt(".xml");
+            OUString aOldStreamName( aOldName ); aOldStreamName += sExt;
+            OUString aNewStreamName( aPackageName ); aNewStreamName += sExt;
 
             xRoot = xBlkRoot->openStorageElement( aOldName, embed::ElementModes::READWRITE );
             try
@@ -311,8 +311,8 @@ sal_uLong SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rP
         xRoot = xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::READWRITE );
 
         uno::Reference< beans::XPropertySet > xRootProps( xRoot, uno::UNO_QUERY_THROW );
-        ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("MediaType") );
-        ::rtl::OUString aMime( SotExchange::GetFormatMimeType( SOT_FORMATSTR_ID_STARWRITER_8 ) );
+        OUString aPropName( "MediaType" );
+        OUString aMime( SotExchange::GetFormatMimeType( SOT_FORMATSTR_ID_STARWRITER_8 ) );
         xRootProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
     }
     catch (const uno::Exception&)
@@ -536,11 +536,11 @@ sal_Bool SwXMLTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
 
 sal_Bool SwXMLTextBlocks::IsFileUCBStorage( const String & rFileName)
 {
-    rtl::OUString aName( rFileName );
+    OUString aName( rFileName );
     INetURLObject aObj( aName );
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        rtl::OUString aURL;
+        OUString aURL;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
         aObj.SetURL( aURL );
         aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -559,12 +559,12 @@ short SwXMLTextBlocks::GetFileType ( void ) const
     return SWBLK_XML;
 }
 
-rtl::OUString SwXMLTextBlocks::GeneratePackageName ( const String& rShort )
+OUString SwXMLTextBlocks::GeneratePackageName ( const String& rShort )
 {
     String aRet = rShort;
     xub_StrLen nPos = 0;
     sal_Unicode pDelims[] = { '!', '/', ':', '.', '\\', 0 };
-    rtl::OString sByte(rtl::OUStringToOString(aRet, RTL_TEXTENCODING_UTF7));
+    rtl::OString sByte(OUStringToOString(aRet, RTL_TEXTENCODING_UTF7));
     aRet = rtl::OStringToOUString(sByte, RTL_TEXTENCODING_ASCII_US);
     while( STRING_NOTFOUND != ( nPos = aRet.SearchChar( pDelims, nPos )))
     {

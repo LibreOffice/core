@@ -64,7 +64,7 @@ protected:
 
 private:
 
-    ::rtl::OUString sName;  // immutable outside constructor
+    OUString sName;  // immutable outside constructor
 
     // The parent if it has been retrieved. This is always an
     // SwAccessibleContext. (protected by Mutex)
@@ -92,7 +92,7 @@ private:
     void InitStates();
 
 protected:
-    void SetName( const ::rtl::OUString& rName ) { sName = rName; }
+    void SetName( const OUString& rName ) { sName = rName; }
     inline sal_Int16 GetRole() const
     {
         return nRole;
@@ -232,12 +232,12 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -308,20 +308,20 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
-        supportsService (const ::rtl::OUString& sServiceName)
+        supportsService (const OUString& sServiceName)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.  In this case that is just
         the AccessibleContext service.
     */
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
              throw (::com::sun::star::uno::RuntimeException);
 
@@ -367,7 +367,7 @@ public:
     // #i88070# - get all additional accessible children
     void GetAdditionalAccessibleChildren( std::vector< Window* >* pChildren );
 
-    const ::rtl::OUString& GetName() const { return sName; }
+    const OUString& GetName() const { return sName; }
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
 
@@ -381,9 +381,9 @@ public:
         return Select( 0, pObj, bAdd );
     }
 
-    static ::rtl::OUString GetResource( sal_uInt16 nResId,
-                                        const ::rtl::OUString *pArg1 = 0,
-                                        const ::rtl::OUString *pArg2 = 0 );
+    static OUString GetResource( sal_uInt16 nResId,
+                                        const OUString *pArg1 = 0,
+                                        const OUString *pArg2 = 0 );
 
 
 };
@@ -395,7 +395,7 @@ const sal_Char sMissingWindow[] = "window is missing";
 #define THROW_RUNTIME_EXCEPTION( ifc, msg )                                 \
     ::com::sun::star::uno::Reference < ifc > xThis( this );                 \
     ::com::sun::star::uno::RuntimeException aExcept(                        \
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(msg) ), xThis );       \
+        OUString( msg ), xThis );       \
     throw aExcept;
 
 #define CHECK_FOR_DEFUNC_THIS( ifc, ths )                                   \
@@ -403,7 +403,7 @@ const sal_Char sMissingWindow[] = "window is missing";
     {                                                                       \
         ::com::sun::star::uno::Reference < ifc > xThis( ths );              \
         ::com::sun::star::lang::DisposedException aExcept(                  \
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(sDefunc) ),        \
+            OUString( sDefunc ),        \
             xThis );                                                        \
         throw aExcept;                                                      \
     }

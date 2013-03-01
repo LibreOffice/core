@@ -378,11 +378,11 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
 OUString SAL_CALL SwAccessibleDocument::getImplementationName()
         throw( uno::RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
+    return OUString(sImplementationName);
 }
 
 sal_Bool SAL_CALL SwAccessibleDocument::supportsService(
-        const ::rtl::OUString& sTestServiceName)
+        const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
@@ -396,8 +396,8 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceName
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
-    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
+    pArray[0] = OUString( sServiceName );
+    pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }
 

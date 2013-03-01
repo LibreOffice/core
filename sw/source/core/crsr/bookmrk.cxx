@@ -80,12 +80,12 @@ namespace
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
         if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
         {
-            io_pDoc->InsertString(aStartPaM, rtl::OUString(aStartMark));
+            io_pDoc->InsertString(aStartPaM, OUString(aStartMark));
             rStart.nContent--;
         }
         if ( aEndMark && ( ch_end != aEndMark ) )
         {
-            io_pDoc->InsertString(aEndPaM, rtl::OUString(aEndMark));
+            io_pDoc->InsertString(aEndPaM, OUString(aEndMark));
             rEnd.nContent++;
         }
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
@@ -128,7 +128,7 @@ namespace
 namespace sw { namespace mark
 {
     MarkBase::MarkBase(const SwPaM& aPaM,
-        const ::rtl::OUString& rName)
+        const OUString& rName)
         : SwModify(0)
         , m_pPos1(new SwPosition(*(aPaM.GetPoint())))
         , m_aName(rName)
@@ -159,9 +159,9 @@ namespace sw { namespace mark
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
     }
 
-    rtl::OUString MarkBase::ToString( ) const
+    OUString MarkBase::ToString( ) const
     {
-        rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("Mark: ( Name, [ Node1, Index1 ] ): ( "));
         buf.append( m_aName ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", [ "));
         buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
@@ -175,17 +175,17 @@ namespace sw { namespace mark
     MarkBase::~MarkBase()
     { }
 
-    ::rtl::OUString MarkBase::GenerateNewName(const ::rtl::OUString& rPrefix)
+    OUString MarkBase::GenerateNewName(const OUString& rPrefix)
     {
         static rtlRandomPool aPool = rtl_random_createPool();
-        static ::rtl::OUString sUniquePostfix;
+        static OUString sUniquePostfix;
         static sal_Int32 nCount = SAL_MAX_INT32;
-        ::rtl::OUStringBuffer aResult(rPrefix);
+        OUStringBuffer aResult(rPrefix);
         if(nCount == SAL_MAX_INT32)
         {
             sal_Int32 nRandom;
             rtl_random_getBytes(aPool, &nRandom, sizeof(nRandom));
-            sUniquePostfix = ::rtl::OUStringBuffer(13).append('_').append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
+            sUniquePostfix = OUStringBuffer(13).append('_').append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
             nCount = 0;
         }
         // putting the counter in front of the random parts will speed up string comparisons
@@ -204,15 +204,15 @@ namespace sw { namespace mark
 
     // TODO: everything else uses MarkBase::GenerateNewName ?
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
-        : MarkBase(rPaM, rtl::OUString("__NavigatorReminder__"))
+        : MarkBase(rPaM, OUString("__NavigatorReminder__"))
     { }
 
     UnoMark::UnoMark(const SwPaM& aPaM)
-        : MarkBase(aPaM, MarkBase::GenerateNewName(rtl::OUString("__UnoMark__")))
+        : MarkBase(aPaM, MarkBase::GenerateNewName(OUString("__UnoMark__")))
     { }
 
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
-        : MarkBase(aPaM, MarkBase::GenerateNewName(rtl::OUString("__DdeLink__")))
+        : MarkBase(aPaM, MarkBase::GenerateNewName(OUString("__DdeLink__")))
         , m_aRefObj(NULL)
     { }
 
@@ -242,8 +242,8 @@ namespace sw { namespace mark
 
     Bookmark::Bookmark(const SwPaM& aPaM,
         const KeyCode& rCode,
-        const ::rtl::OUString& rName,
-        const ::rtl::OUString& rShortName)
+        const OUString& rName,
+        const OUString& rShortName)
         : DdeBookmark(aPaM)
         , ::sfx2::Metadatable()
         , m_aCode(rCode)
@@ -298,15 +298,15 @@ namespace sw { namespace mark
     }
 
     Fieldmark::Fieldmark(const SwPaM& rPaM)
-        : MarkBase(rPaM, MarkBase::GenerateNewName(rtl::OUString("__Fieldmark__")))
+        : MarkBase(rPaM, MarkBase::GenerateNewName(OUString("__Fieldmark__")))
     {
         if(!IsExpanded())
             SetOtherMarkPos(GetMarkPos());
     }
 
-    rtl::OUString Fieldmark::ToString( ) const
+    OUString Fieldmark::ToString( ) const
     {
-        rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
             "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( "));
         buf.append( m_aName ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
@@ -368,7 +368,7 @@ namespace sw { namespace mark
     {
         if ( IsChecked() != checked )
         {
-            (*GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_RESULT))] = makeAny(checked);
+            (*GetParameters())[OUString(ODF_FORMCHECKBOX_RESULT)] = makeAny(checked);
             // mark document as modified
             SwDoc *const pDoc( GetMarkPos().GetDoc() );
             if ( pDoc )
@@ -379,15 +379,15 @@ namespace sw { namespace mark
     bool CheckboxFieldmark::IsChecked() const
     {
         bool bResult = false;
-        parameter_map_t::const_iterator pResult = GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_RESULT)));
+        parameter_map_t::const_iterator pResult = GetParameters()->find(OUString(ODF_FORMCHECKBOX_RESULT));
         if(pResult != GetParameters()->end())
             pResult->second >>= bResult;
         return bResult;
     }
 
-    rtl::OUString CheckboxFieldmark::toString( ) const
+    OUString CheckboxFieldmark::toString( ) const
     {
-        rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
             "CheckboxFieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( "));
         buf.append( m_aName ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));

@@ -563,7 +563,7 @@ uno::Reference< XAccessible> SAL_CALL
     {
         uno::Reference < XAccessibleContext > xThis( this );
         lang::IndexOutOfBoundsException aExcept(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("index out of bounds") ),
+                OUString( "index out of bounds" ),
                 xThis );
         throw aExcept;
     }
@@ -968,7 +968,7 @@ OUString SAL_CALL SwAccessibleContext::getImplementationName()
 }
 
 sal_Bool SAL_CALL
-    SwAccessibleContext::supportsService (const ::rtl::OUString& )
+    SwAccessibleContext::supportsService (const OUString& )
         throw (uno::RuntimeException)
 {
     OSL_ENSURE( !this, "supports service needs to be overloaded" );
@@ -1411,12 +1411,12 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
 
     if( pArg1 )
     {
-        sStr.SearchAndReplace( rtl::OUString("$(ARG1)"),
+        sStr.SearchAndReplace( OUString("$(ARG1)"),
                                String( *pArg1 ) );
     }
     if( pArg2 )
     {
-        sStr.SearchAndReplace( rtl::OUString("$(ARG2)"),
+        sStr.SearchAndReplace( OUString("$(ARG2)"),
                                String( *pArg2 ) );
     }
 

@@ -124,7 +124,7 @@ const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
         {
             try
             {
-                rtl::OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ProofreadingIterator"));
+                OUString aServiceName("com.sun.star.linguistic2.ProofreadingIterator");
                 m_xGCIterator = uno::Reference< linguistic2::XProofreadingIterator >
                     ( xMgr->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
             }
@@ -382,7 +382,7 @@ SwDoc::SwDoc()
     _InitFieldTypes();
 
     // Create a default OutlineNumRule (for Filters)
-    mpOutlineRule = new SwNumRule( rtl::OUString::createFromAscii( SwNumRule::GetOutlineRuleName() ),
+    mpOutlineRule = new SwNumRule( OUString::createFromAscii( SwNumRule::GetOutlineRuleName() ),
                                   // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
                                   OUTLINE_RULE );
@@ -810,7 +810,7 @@ void SwDoc::ClearDoc()
     InitTOXTypes();
 
     // create a dummy pagedesc for the layout
-    sal_uInt16 nDummyPgDsc = MakePageDesc(rtl::OUString("?DUMMY?"));
+    sal_uInt16 nDummyPgDsc = MakePageDesc(OUString("?DUMMY?"));
     SwPageDesc* pDummyPgDsc = maPageDescs[ nDummyPgDsc ];
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
@@ -851,7 +851,7 @@ void SwDoc::ClearDoc()
     maListStyleLists.clear();
 
     // creation of new outline numbering rule
-    mpOutlineRule = new SwNumRule( rtl::OUString::createFromAscii( SwNumRule::GetOutlineRuleName() ),
+    mpOutlineRule = new SwNumRule( OUString::createFromAscii( SwNumRule::GetOutlineRuleName() ),
                                   // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
                                   OUTLINE_RULE );

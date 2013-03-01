@@ -1728,7 +1728,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         if( xModel.is() )
         {
             uno::Any aVal;
-            OUString sName(RTL_CONSTASCII_USTRINGPARAM("ButtonType"));
+            OUString sName("ButtonType");
             uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
 
             uno::Reference< beans::XPropertySetInfo >  xInfo = xSet->getPropertySetInfo();
@@ -2131,7 +2131,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
             {
                 try
                 {
-                    aBaseline = xSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BaseLine") ) );
+                    aBaseline = xSet->getPropertyValue( OUString( "BaseLine" ) );
                 }
                 catch ( uno::Exception& )
                 {

@@ -48,7 +48,7 @@ SwAccessiblePreview::~SwAccessiblePreview()
 OUString SwAccessiblePreview::getImplementationName( )
     throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( sImplementationName ) );
+    return OUString( sImplementationName );
 }
 
 sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )
@@ -61,8 +61,8 @@ Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
     throw( RuntimeException )
 {
     Sequence<OUString> aSeq( 2 );
-    aSeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( sServiceName ) );
-    aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( sAccessibleServiceName ) );
+    aSeq[0] = OUString( sServiceName );
+    aSeq[1] = OUString( sAccessibleServiceName );
     return aSeq;
 }
 

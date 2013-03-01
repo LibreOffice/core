@@ -531,7 +531,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
         uno::Reference< awt::XControlModel >  xModel = ((SdrUnoObj*)pObj)->GetUnoControlModel();
         uno::Any aVal;
         uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
-        OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+        OUString sName("Name");
         if( xSet.is() )
             aVal = xSet->getPropertyValue( sName );
         if( bInsInPage )
@@ -1867,8 +1867,8 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         {
             sal_Bool bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
             sal_Bool bIsAutoGrammar = sal_False;
-            SvtLinguConfig().GetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        UPN_IS_GRAMMAR_AUTO )) ) >>= bIsAutoGrammar;
+            SvtLinguConfig().GetProperty( OUString(
+                        UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
 
             if (bIsOnlineSpell && bIsAutoGrammar)
                 StartGrammarChecking( *this );
