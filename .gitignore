@@ -46,7 +46,7 @@
 /config_host.mk
 /config_host.mk.last
 /config_host.mk.stamp
-/config_build/config_*.h
+/config_build
 /config_build.mk
 /configure
 /lo.xcent
