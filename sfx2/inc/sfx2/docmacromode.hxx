@@ -287,6 +287,7 @@ namespace sfx2
         static sal_Bool
                 storageHasMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage );
 
+        static sal_Bool containerHasBasicMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xContainter );
         /** checks the macro execution mode while loading the document.
 
             This must be called when the loading is effectively finished, but before any macro action

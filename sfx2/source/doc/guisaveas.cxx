@@ -79,6 +79,13 @@
 #include <sfxtypes.hxx>
 #include "alienwarn.hxx"
 
+#include <sfx2/docmacromode.hxx>
+#include <svx/svxerr.hxx>
+#include <comphelper/interaction.hxx>
+#include <com/sun/star/task/ErrorCodeRequest.hpp>
+#include <rtl/ref.hxx>
+#include <framework/interaction.hxx>
+#include <svtools/sfxecode.hxx>
 #include "../appl/app.hrc"
 
 // flags that specify requested operation
@@ -707,6 +714,19 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     return nResult;
 }
 
+sal_Bool hasMacros( const uno::Reference< frame::XModel >& xModel  )
+{
+    sal_Bool bHasMacros = sal_False;
+    uno::Reference< script::XLibraryContainer > xContainer;
+    uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY );
+    if ( xProps.is() )
+    {
+        xProps->getPropertyValue( "BasicLibraries" ) >>= xContainer;
+        bHasMacros = sfx2::DocumentMacroMode::containerHasBasicMacros( xContainer );
+    }
+    return bHasMacros;
+}
+
 sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
 {
     ::comphelper::SequenceAsHashMap aFiltPropsHM;
@@ -754,6 +774,41 @@ sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
                                                     ::rtl::OUString() );
         if ( !aPreusedFilterName.equals( aFilterName ) && !aUIName.equals( aDefUIName ) )
         {
+            // is it possible to get these names from somewhere and not just
+            // hardcode them?
+            OUString sXLSXFilter("Calc MS Excel 2007 XML");
+            OUString sOtherXLSXFilter("Calc Office Open XML");
+            bool bHasMacros = hasMacros( GetModel() );
+            if ( bHasMacros && (  aFilterName == sXLSXFilter  ||  aFilterName == sOtherXLSXFilter ) )
+            {
+                uno::Reference< task::XInteractionHandler > xHandler;
+                GetMediaDescr()[ OUString( "InteractionHandler" ) ] >>= xHandler;
+                bool bResult = false;
+                if ( xHandler.is() )
+                {
+                    try
+                    {
+                        task::ErrorCodeRequest aErrorCode;
+                        aErrorCode.ErrCode = ERRCODE_SFX_VBASIC_CANTSAVE_STORAGE;
+
+                        uno::Any aRequest = uno::makeAny( aErrorCode );
+                        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
+
+                        ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
+                        aContinuations[ 0 ] = pApprove.get();
+
+                        ::rtl::Reference< ::comphelper::OInteractionAbort > pAbort( new ::comphelper::OInteractionAbort );
+                        aContinuations[ 1 ] = pAbort.get();
+                        xHandler->handle(::framework::InteractionRequest::CreateRequest (aRequest,aContinuations));
+                        bResult = pApprove->wasSelected();
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+                    if ( !bResult )
+                        return STATUS_SAVEAS;
+                }
+            }
             if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefUIName, sal_True ) )
                 return STATUS_SAVEAS_STANDARDNAME;
         }
