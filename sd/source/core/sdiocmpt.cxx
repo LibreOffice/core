@@ -96,7 +96,7 @@ void old_SdrDownCompat::CloseSubRecord()
 
 /*************************************************************************
 |*
-|* Konstruktor, schreibt bzw. liest Versionsnummer
+|* Constructor, writes and reads version number
 |*
 \************************************************************************/
 
