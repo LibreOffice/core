@@ -67,16 +67,16 @@ uno::Reference< i18n::XCharacterClassification > ImplGetCharClass()
 
 // -----------------------------------------------------------------------
 
-static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const String& rStr )
+static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
 {
-    if ( rStr.Len() == 1 )
-        *pBuf++ = rStr.GetChar(0);
-    else if ( rStr.Len() == 0 )
+    if ( rStr.getLength() == 1 )
+        *pBuf++ = rStr[0];
+    else if ( rStr.isEmpty() )
         ;
     else
     {
-        memcpy( pBuf, rStr.GetBuffer(), rStr.Len() * sizeof(sal_Unicode) );
-        pBuf += rStr.Len();
+        memcpy( pBuf, rStr.getStr(), rStr.getLength() * sizeof(sal_Unicode) );
+        pBuf += rStr.getLength();
     }
     return pBuf;
 }
@@ -233,31 +233,31 @@ static int ImplKommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
 
 // -----------------------------------------------------------------------
 
-static XubString ImplPatternReformat( const XubString& rStr,
-                                      const rtl::OString& rEditMask,
-                                      const XubString& rLiteralMask,
-                                      sal_uInt16 nFormatFlags )
+static OUString ImplPatternReformat( const OUString& rStr,
+                                     const OString& rEditMask,
+                                     const OUString& rLiteralMask,
+                                     sal_uInt16 nFormatFlags )
 {
     if (rEditMask.isEmpty())
         return rStr;
 
-    XubString   aStr    = rStr;
-    XubString   aOutStr = rLiteralMask;
+    OUString    aStr    = rStr;
+    OUStringBuffer    aOutStr = OUString(rLiteralMask);
     sal_Unicode cTempChar;
     sal_Unicode cChar;
     sal_Unicode cLiteral;
     sal_Char    cMask;
-    xub_StrLen  nStrIndex = 0;
-    xub_StrLen  i = 0;
-    xub_StrLen  n;
+    sal_Int32   nStrIndex = 0;
+    sal_Int32   i = 0;
+    sal_Int32   n;
 
     while ( i < rEditMask.getLength() )
     {
-        if ( nStrIndex >= aStr.Len() )
+        if ( nStrIndex >= aStr.getLength() )
             break;
 
-        cChar = aStr.GetChar(nStrIndex);
-        cLiteral = rLiteralMask.GetChar(i);
+        cChar = aStr[nStrIndex];
+        cLiteral = rLiteralMask[i];
         cMask = rEditMask[i];
 
         // current position is a literal
@@ -292,7 +292,7 @@ static XubString ImplPatternReformat( const XubString& rStr,
             if ( cTempChar )
             {
                 // use this character
-                aOutStr.SetChar( i, cTempChar );
+                aOutStr[i] = cTempChar;
                 nStrIndex++;
             }
             else
@@ -311,7 +311,7 @@ static XubString ImplPatternReformat( const XubString& rStr,
                         {
                             if ( rEditMask[n] == EDITMASK_LITERAL )
                             {
-                                if ( ImplKommaPointCharEqual( cChar, rLiteralMask.GetChar( n ) ) )
+                                if ( ImplKommaPointCharEqual( cChar, rLiteralMask[n] ) )
                                     i = n+1;
 
                                 break;
@@ -330,18 +330,18 @@ static XubString ImplPatternReformat( const XubString& rStr,
         i++;
     }
 
-    return aOutStr;
+    return aOutStr.makeStringAndClear();
 }
 
 // -----------------------------------------------------------------------
 
-static void ImplPatternMaxPos( const XubString rStr, const rtl::OString& rEditMask,
+static void ImplPatternMaxPos( const OUString rStr, const OString& rEditMask,
                                sal_uInt16 nFormatFlags, sal_Bool bSameMask,
-                               sal_uInt16 nCursorPos, sal_uInt16& rPos )
+                               sal_uInt16 nCursorPos, sal_Int32& rPos )
 {
 
     // last position must not be longer than the contained string
-    xub_StrLen nMaxPos = rStr.Len();
+    sal_Int32 nMaxPos = rStr.getLength();
 
     // if non empty literals are allowed ignore blanks at the end as well
     if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) )
@@ -349,13 +349,13 @@ static void ImplPatternMaxPos( const XubString rStr, const rtl::OString& rEditMa
         while ( nMaxPos )
         {
             if ( (rEditMask[nMaxPos-1] != EDITMASK_LITERAL) &&
-                 (rStr.GetChar(nMaxPos-1) != ' ') )
+                 (rStr[nMaxPos-1] != ' ') )
                 break;
             nMaxPos--;
         }
 
         // if we are in front of a literal, continue search until first character after the literal
-        xub_StrLen nTempPos = nMaxPos;
+        sal_Int32 nTempPos = nMaxPos;
         while ( nTempPos < rEditMask.getLength() )
         {
             if ( rEditMask[nTempPos] != EDITMASK_LITERAL )
@@ -370,7 +370,7 @@ static void ImplPatternMaxPos( const XubString rStr, const rtl::OString& rEditMa
     if ( rPos > nMaxPos )
         rPos = nMaxPos;
 
-    // charactr should not move left
+    // character should not move left
     if ( rPos < nCursorPos )
         rPos = nCursorPos;
 }
@@ -378,21 +378,21 @@ static void ImplPatternMaxPos( const XubString rStr, const rtl::OString& rEditMa
 // -----------------------------------------------------------------------
 
 static void ImplPatternProcessStrictModify( Edit* pEdit,
-                                            const rtl::OString& rEditMask,
-                                            const XubString& rLiteralMask,
+                                            const OString& rEditMask,
+                                            const OUString& rLiteralMask,
                                             sal_uInt16 nFormatFlags, sal_Bool bSameMask )
 {
-    XubString aText = pEdit->GetText();
+    OUString aText = pEdit->GetText();
 
     // remove leading blanks
     if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) )
     {
-        xub_StrLen i = 0;
-        xub_StrLen nMaxLen = aText.Len();
+        sal_Int32 i = 0;
+        sal_Int32 nMaxLen = aText.getLength();
         while ( i < nMaxLen )
         {
             if ( (rEditMask[i] != EDITMASK_LITERAL) &&
-                 (aText.GetChar( i ) != ' ') )
+                 (aText[i] != ' ') )
                 break;
 
             i++;
@@ -400,18 +400,18 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
         // keep all literal characters
         while ( i && (rEditMask[i] == EDITMASK_LITERAL) )
             i--;
-        aText.Erase( 0, i );
+        aText = aText.copy( i );
     }
 
-    XubString aNewText = ImplPatternReformat( aText, rEditMask, rLiteralMask, nFormatFlags );
+    OUString aNewText = ImplPatternReformat( aText, rEditMask, rLiteralMask, nFormatFlags );
     if ( aNewText != aText )
     {
         // adjust selection such that it remains at the end if it was there before
         Selection aSel = pEdit->GetSelection();
-        sal_uLong nMaxSel = Max( aSel.Min(), aSel.Max() );
-        if ( nMaxSel >= aText.Len() )
+        sal_Int64 nMaxSel = Max( aSel.Min(), aSel.Max() );
+        if ( nMaxSel >= aText.getLength() )
         {
-            xub_StrLen nMaxPos = aNewText.Len();
+            sal_Int32 nMaxPos = aNewText.getLength();
             ImplPatternMaxPos( aNewText, rEditMask, nFormatFlags, bSameMask, (xub_StrLen)nMaxSel, nMaxPos );
             if ( aSel.Min() == aSel.Max() )
             {
@@ -450,11 +450,11 @@ static xub_StrLen ImplPatternLeftPos(const rtl::OString& rEditMask, xub_StrLen n
 
 static xub_StrLen ImplPatternRightPos( const XubString& rStr, const rtl::OString& rEditMask,
                                        sal_uInt16 nFormatFlags, sal_Bool bSameMask,
-                                       xub_StrLen nCursorPos )
+                                       sal_Int32 nCursorPos )
 {
     // search non-literal successor
-    xub_StrLen nNewPos = nCursorPos;
-    xub_StrLen nTempPos = nNewPos;
+    sal_Int32 nNewPos = nCursorPos;
+    sal_Int32 nTempPos = nNewPos;
     while ( nTempPos < rEditMask.getLength() )
     {
         if ( rEditMask[nTempPos+1] != EDITMASK_LITERAL )
@@ -471,8 +471,8 @@ static xub_StrLen ImplPatternRightPos( const XubString& rStr, const rtl::OString
 // -----------------------------------------------------------------------
 
 static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                        const rtl::OString& rEditMask,
-                                        const XubString& rLiteralMask,
+                                        const OString& rEditMask,
+                                        const OUString& rLiteralMask,
                                         sal_Bool bStrictFormat,
                                         sal_uInt16 nFormatFlags,
                                         sal_Bool bSameMask,
@@ -486,9 +486,9 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     sal_Unicode cChar       = rKEvt.GetCharCode();
     sal_uInt16      nKeyCode    = aCode.GetCode();
     sal_Bool        bShift      = aCode.IsShift();
-    xub_StrLen  nCursorPos  = (xub_StrLen)aOldSel.Max();
-    xub_StrLen  nNewPos;
-    xub_StrLen  nTempPos;
+    sal_Int32  nCursorPos = static_cast<sal_Int32>(aOldSel.Max());
+    sal_Int32  nNewPos;
+    sal_Int32  nTempPos;
 
     if ( nKeyCode && !aCode.IsMod1() && !aCode.IsMod2() )
     {
@@ -543,7 +543,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             // all was selected by the focus
             Selection aSel( aOldSel );
             aSel.Justify();
-            nCursorPos = (xub_StrLen)aSel.Min();
+            nCursorPos = static_cast<sal_Int32>(aSel.Min());
             ImplPatternMaxPos( pEdit->GetText(), rEditMask, nFormatFlags, bSameMask, nCursorPos, nNewPos );
             aSel.Max() = nNewPos;
             if ( bShift )
@@ -555,22 +555,23 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( (nKeyCode == KEY_BACKSPACE) || (nKeyCode == KEY_DELETE) )
         {
-            XubString   aStr( pEdit->GetText() );
-            XubString   aOldStr = aStr;
+            OUString          aOldStr( pEdit->GetText() );
+            OUStringBuffer    aStr( aOldStr );
             Selection   aSel = aOldSel;
 
             aSel.Justify();
-            nNewPos = (xub_StrLen)aSel.Min();
+            nNewPos = static_cast<sal_Int32>(aSel.Min());
 
              // if selection then delete it
             if ( aSel.Len() )
             {
                 if ( bSameMask )
-                    aStr.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
+                    aStr.remove( static_cast<sal_Int32>(aSel.Min()), static_cast<sal_Int32>(aSel.Len()) );
                 else
                 {
-                    XubString aRep = rLiteralMask.Copy( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
-                    aStr.Replace( (xub_StrLen)aSel.Min(), aRep.Len(), aRep );
+                    OUString aRep = rLiteralMask.copy( static_cast<sal_Int32>(aSel.Min()), static_cast<sal_Int32>(aSel.Len()) );
+                    aStr.remove( aSel.Min(), aRep.getLength() );
+                    aStr.insert( aSel.Min(), aRep );
                 }
             }
             else
@@ -581,29 +582,28 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                     nNewPos = ImplPatternLeftPos( rEditMask, nTempPos );
                 }
                 else
-                    nTempPos = ImplPatternRightPos( aStr, rEditMask, nFormatFlags, bSameMask, nNewPos );
+                    nTempPos = ImplPatternRightPos( aStr.toString(), rEditMask, nFormatFlags, bSameMask, nNewPos );
 
                 if ( nNewPos != nTempPos )
                 {
                     if ( bSameMask )
                     {
                         if ( rEditMask[nNewPos] != EDITMASK_LITERAL )
-                            aStr.Erase( nNewPos, 1 );
+                            aStr.remove( nNewPos, 1 );
                     }
                     else
                     {
-                        XubString aTempStr = rLiteralMask.Copy( nNewPos, 1 );
-                        aStr.Replace( nNewPos, aTempStr.Len(), aTempStr );
+                        aStr[nNewPos] = rLiteralMask[nNewPos];
                     }
                 }
             }
 
-            if ( aOldStr != aStr )
+            if ( aOldStr != aStr.toString() )
             {
                 if ( bSameMask )
-                    aStr = ImplPatternReformat( aStr, rEditMask, rLiteralMask, nFormatFlags );
+                    aStr = ImplPatternReformat( aStr.toString(), rEditMask, rLiteralMask, nFormatFlags );
                 rbInKeyInput = sal_True;
-                pEdit->SetText( aStr, Selection( nNewPos ) );
+                pEdit->SetText( aStr.toString(), Selection( nNewPos ) );
                 pEdit->SetModifyFlag();
                 pEdit->Modify();
                 rbInKeyInput = sal_False;
@@ -653,7 +653,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                     {
                         // only valid if no literal present
                         if ( (rEditMask[nTempPos+1] != EDITMASK_LITERAL ) &&
-                             ImplKommaPointCharEqual( cChar, rLiteralMask.GetChar(nTempPos) ) )
+                             ImplKommaPointCharEqual( cChar, rLiteralMask[nTempPos] ) )
                         {
                             nTempPos++;
                             ImplPatternMaxPos( pEdit->GetText(), rEditMask, nFormatFlags, bSameMask, nNewPos, nTempPos );
@@ -676,35 +676,35 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         cChar = 0;
     if ( cChar )
     {
-        XubString   aStr = pEdit->GetText();
+        OUStringBuffer  aStr = pEdit->GetText();
         sal_Bool        bError = sal_False;
         if ( bSameMask && pEdit->IsInsertMode() )
         {
             // crop spaces and literals at the end until current position
-            xub_StrLen n = aStr.Len();
+            sal_Int32 n = aStr.getLength();
             while ( n && (n > nNewPos) )
             {
-                if ( (aStr.GetChar( n-1 ) != ' ') &&
+                if ( (aStr[n-1] != ' ') &&
                      ((n > rEditMask.getLength()) || (rEditMask[n-1] != EDITMASK_LITERAL)) )
                     break;
 
                 n--;
             }
-            aStr.Erase( n );
+            aStr.truncate( n );
 
             if ( aSel.Len() )
-                aStr.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
+                aStr.remove( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
 
-            if ( aStr.Len() < rEditMask.getLength() )
+            if ( aStr.getLength() < rEditMask.getLength() )
             {
                 // possibly extend string until cursor position
-                if ( aStr.Len() < nNewPos )
-                    aStr += rLiteralMask.Copy( aStr.Len(), nNewPos-aStr.Len() );
-                if ( nNewPos < aStr.Len() )
-                    aStr.Insert( cChar, nNewPos );
+                if ( aStr.getLength() < nNewPos )
+                    aStr.append( rLiteralMask.copy( aStr.getLength(), nNewPos-aStr.getLength() ));
+                if ( nNewPos < aStr.getLength() )
+                    aStr.insert( cChar, nNewPos );
                 else if ( nNewPos < rEditMask.getLength() )
-                    aStr += cChar;
-                aStr = ImplPatternReformat( aStr, rEditMask, rLiteralMask, nFormatFlags );
+                    aStr.append(cChar);
+                aStr = ImplPatternReformat( aStr.toString(), rEditMask, rLiteralMask, nFormatFlags );
             }
             else
                 bError = sal_True;
@@ -714,21 +714,22 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             if ( aSel.Len() )
             {
                 // delete selection
-                XubString aRep = rLiteralMask.Copy( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
-                aStr.Replace( (xub_StrLen)aSel.Min(), aRep.Len(), aRep );
+                OUString aRep = rLiteralMask.copy( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
+                aStr.remove( aSel.Min(), aRep.getLength() );
+                aStr.insert( aSel.Min(), aRep );
             }
 
-            if ( nNewPos < aStr.Len() )
-                aStr.SetChar( nNewPos, cChar );
+            if ( nNewPos < aStr.getLength() )
+                aStr[nNewPos] = cChar;
             else if ( nNewPos < rEditMask.getLength() )
-                aStr += cChar;
+                aStr.append(cChar);
         }
 
         if ( !bError )
         {
             rbInKeyInput = sal_True;
-            Selection aNewSel( ImplPatternRightPos( aStr, rEditMask, nFormatFlags, bSameMask, nNewPos ) );
-            pEdit->SetText( aStr, aNewSel );
+            Selection aNewSel( ImplPatternRightPos( aStr.toString(), rEditMask, nFormatFlags, bSameMask, nNewPos ) );
+            pEdit->SetText( aStr.toString(), aNewSel );
             pEdit->SetModifyFlag();
             pEdit->Modify();
             rbInKeyInput = sal_False;
@@ -740,14 +741,13 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-void PatternFormatter::ImplSetMask(const rtl::OString& rEditMask,
-                                    const XubString& rLiteralMask)
+void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLiteralMask)
 {
-    m_aEditMask      = rEditMask;
+    m_aEditMask     = rEditMask;
     maLiteralMask   = rLiteralMask;
     mbSameMask      = sal_True;
 
-    if ( m_aEditMask.getLength() != maLiteralMask.Len() )
+    if ( m_aEditMask.getLength() != maLiteralMask.getLength() )
     {
         OUStringBuffer aBuf(maLiteralMask);
         if (m_aEditMask.getLength() < aBuf.getLength())
@@ -759,7 +759,7 @@ void PatternFormatter::ImplSetMask(const rtl::OString& rEditMask,
 
     // Strict mode allows only the input mode if only equal characters are allowed as mask and if
     // only spaces are specified which are not allowed by the mask
-    xub_StrLen  i = 0;
+    sal_Int32   i = 0;
     sal_Char    c = 0;
     while ( i < rEditMask.getLength() )
     {
@@ -773,9 +773,9 @@ void PatternFormatter::ImplSetMask(const rtl::OString& rEditMask,
                 mbSameMask = sal_False;
                 break;
             }
-            if ( i < rLiteralMask.Len() )
+            if ( i < rLiteralMask.getLength() )
             {
-                if ( rLiteralMask.GetChar( i ) != ' ' )
+                if ( rLiteralMask[i] != ' ' )
                 {
                     mbSameMask = sal_False;
                     break;
@@ -810,8 +810,8 @@ PatternFormatter::~PatternFormatter()
 
 // -----------------------------------------------------------------------
 
-void PatternFormatter::SetMask( const rtl::OString& rEditMask,
-                                const XubString& rLiteralMask )
+void PatternFormatter::SetMask( const OString& rEditMask,
+                                const OUString& rLiteralMask )
 {
     ImplSetMask( rEditMask, rLiteralMask );
     ReformatAll();
@@ -819,7 +819,7 @@ void PatternFormatter::SetMask( const rtl::OString& rEditMask,
 
 // -----------------------------------------------------------------------
 
-void PatternFormatter::SetString( const XubString& rStr )
+void PatternFormatter::SetString( const OUString& rStr )
 {
     maFieldString = rStr;
     if ( GetField() )
@@ -831,7 +831,7 @@ void PatternFormatter::SetString( const XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-XubString PatternFormatter::GetString() const
+OUString PatternFormatter::GetString() const
 {
     if ( !GetField() )
         return ImplGetSVEmptyStr();
@@ -975,7 +975,7 @@ void PatternBox::Modify()
 
 void PatternBox::ReformatAll()
 {
-    XubString aStr;
+    OUString aStr;
     SetUpdateMode( sal_False );
     sal_uInt16 nEntryCount = GetEntryCount();
     for ( sal_uInt16 i=0; i < nEntryCount; i++ )
@@ -1002,38 +1002,33 @@ static ExtDateFieldFormat ImplGetExtFormat( DateFormat eOld )
 
 // -----------------------------------------------------------------------
 
-static sal_uInt16 ImplCutNumberFromString( XubString& rStr )
+static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
 {
-    // Nach Zahl suchen
-    while ( rStr.Len() && !(rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
-        rStr.Erase( 0, 1 );
-    if ( !rStr.Len() )
-        return 0;
-    XubString aNumStr;
-    while ( rStr.Len() && (rStr.GetChar( 0 ) >= '0' && rStr.GetChar( 0 ) <= '9') )
-    {
-        aNumStr.Insert( rStr.GetChar( 0 ) );
-        rStr.Erase( 0, 1 );
+    sal_Int32 i1 = 0;
+    while (i1 != rStr.getLength() && !(rStr[i1] >= '0' && rStr[i1] <= '9')) {
+        ++i1;
     }
-    return (sal_uInt16)aNumStr.ToInt32();
+    sal_Int32 i2 = i1;
+    while (i2 != rStr.getLength() && rStr[i2] >= '0' && rStr[i2] <= '9') {
+        ++i2;
+    }
+    sal_Int32 nValue = rStr.copy(i1, i2-i1).toInt32();
+    rStr = rStr.copy(i2+1);
+    return nValue;
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplCutMonthName( XubString& rStr, const XubString& _rLookupMonthName )
+static sal_Bool ImplCutMonthName( OUString& rStr, const OUString& _rLookupMonthName )
 {
-    sal_uInt16 nPos = rStr.Search( _rLookupMonthName );
-    if ( nPos != STRING_NOTFOUND )
-    {
-        rStr.Erase( 0, nPos + _rLookupMonthName.Len() );
-        return sal_True;
-    }
-    return sal_False;
+    sal_Int32 index = 0;
+    rStr = rStr.replaceFirst(_rLookupMonthName, OUString(), &index);
+    return index >= 0;
 }
 
 // -----------------------------------------------------------------------
 
-static sal_uInt16 ImplCutMonthFromString( XubString& rStr, const CalendarWrapper& rCalendarWrapper )
+static sal_uInt16 ImplCutMonthFromString( OUString& rStr, const CalendarWrapper& rCalendarWrapper )
 {
     // search for a month' name
     for ( sal_uInt16 i=1; i <= 12; i++ )
@@ -1054,10 +1049,10 @@ static sal_uInt16 ImplCutMonthFromString( XubString& rStr, const CalendarWrapper
 
 // -----------------------------------------------------------------------
 
-static String ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, ExtDateFieldFormat eFormat )
+static OUString ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, ExtDateFieldFormat eFormat )
 {
     if ( ( eFormat == XTDATEF_SHORT_YYMMDD_DIN5008 ) || ( eFormat == XTDATEF_SHORT_YYYYMMDD_DIN5008 ) )
-        return rtl::OUString("-");
+        return OUString("-");
     else
         return rLocaleDataWrapper.getDateSep();
 }
@@ -1070,7 +1065,7 @@ static sal_Bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFi
     if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
          (nGroup == KEYGROUP_MISC)||
          ((cChar >= '0') && (cChar <= '9')) ||
-         (cChar == ImplGetDateSep( rLocaleDataWrapper, eFormat ).GetChar(0) ) )
+         (cChar == ImplGetDateSep( rLocaleDataWrapper, eFormat )[0]) )
         return sal_False;
     else
         return sal_True;
@@ -1078,7 +1073,7 @@ static sal_Bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFi
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFieldFormat eDateFormat,
+static sal_Bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFormat eDateFormat,
                               const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper,
                               const AllSettings& )
 {
@@ -1087,7 +1082,7 @@ static sal_Bool ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFie
     sal_uInt16 nYear = 0;
     sal_Bool bYear = sal_True;
     sal_Bool bError = sal_False;
-    String aStr( rStr );
+    OUString aStr( rStr );
 
     if ( eDateFormat == XTDATEF_SYSTEM_LONG )
     {
@@ -1115,18 +1110,18 @@ static sal_Bool ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFie
     else
     {
         // Check if year is present:
-        String aDateSep = ImplGetDateSep( rLocaleDataWrapper, eDateFormat );
-        sal_uInt16 nSepPos = aStr.Search( aDateSep );
-        if ( nSepPos == STRING_NOTFOUND )
+        OUString aDateSep = ImplGetDateSep( rLocaleDataWrapper, eDateFormat );
+        sal_Int32 nSepPos = aStr.indexOf( aDateSep );
+        if ( nSepPos < 0 )
             return sal_False;
-        nSepPos = aStr.Search( aDateSep, nSepPos+1 );
-        if ( ( nSepPos == STRING_NOTFOUND ) || ( nSepPos == (aStr.Len()-1) ) )
+        nSepPos = aStr.indexOf( aDateSep, nSepPos+1 );
+        if ( ( nSepPos < 0 ) || ( nSepPos == (aStr.getLength()-1) ) )
         {
             bYear = sal_False;
             nYear = Date( Date::SYSTEM ).GetYear();
         }
 
-        const sal_Unicode* pBuf = aStr.GetBuffer();
+        const sal_Unicode* pBuf = aStr.getStr();
         ImplSkipDelimiters( pBuf );
 
         switch ( eDateFormat )
@@ -1256,7 +1251,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
     sal_Unicode aBuf[128];
     sal_Unicode* pBuf = aBuf;
 
-    String aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), GetExtDateFormat( sal_True ) );
+    OUString aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), GetExtDateFormat( sal_True ) );
     sal_uInt16 nDay = rDate.GetDay();
     sal_uInt16 nMonth = rDate.GetMonth();
     sal_uInt16 nYear = rDate.GetYear();
@@ -1405,12 +1400,12 @@ void DateField::ImplDateSpinArea( sal_Bool bUp )
         Date aDate( GetDate() );
         Selection aSelection = GetField()->GetSelection();
         aSelection.Justify();
-        XubString aText( GetText() );
-        if ( (xub_StrLen)aSelection.Len() == aText.Len() )
+        OUString aText( GetText() );
+        if ( (sal_Int32)aSelection.Len() == aText.getLength() )
             ImplDateIncrementDay( aDate, bUp );
         else
         {
-            xub_StrLen nDateArea = 0;
+            sal_Int8 nDateArea = 0;
 
             ExtDateFieldFormat eFormat = GetExtDateFormat( sal_True );
             if ( eFormat == XTDATEF_SYSTEM_LONG )
@@ -1421,12 +1416,12 @@ void DateField::ImplDateSpinArea( sal_Bool bUp )
             else
             {
                 // search area
-                xub_StrLen nPos = 0;
-                String aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), eFormat );
-                for ( xub_StrLen i = 1; i <= 3; i++ )
+                sal_Int32 nPos = 0;
+                OUString aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), eFormat );
+                for ( sal_Int8 i = 1; i <= 3; i++ )
                 {
-                    nPos = aText.Search( aDateSep, nPos );
-                    if ( nPos >= (sal_uInt16)aSelection.Max() )
+                    nPos = aText.indexOf( aDateSep, nPos );
+                    if ( nPos >= (sal_Int32)aSelection.Max() )
                     {
                         nDateArea = i;
                         break;
@@ -2185,10 +2180,10 @@ static sal_Bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplIsOnlyDigits( const String& _rStr )
+static sal_Bool ImplIsOnlyDigits( const OUStringBuffer& _rStr )
 {
-    const sal_Unicode* _pChr = _rStr.GetBuffer();
-    for ( xub_StrLen i = 0; i < _rStr.Len(); ++i, ++_pChr )
+    const sal_Unicode* _pChr = _rStr.getStr();
+    for ( sal_Int32 i = 0; i < _rStr.getLength(); ++i, ++_pChr )
     {
         if ( *_pChr < '0' || *_pChr > '9' )
             return sal_False;
@@ -2198,11 +2193,11 @@ static sal_Bool ImplIsOnlyDigits( const String& _rStr )
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const String& _rStr )
+static sal_Bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const OUStringBuffer& _rStr )
 {
     if ( !_bSkipInvalidCharacters )
     {
-        if ( ( _rStr.Len() > 2 ) || ( _rStr.Len() < 1 ) || !ImplIsOnlyDigits( _rStr ) )
+        if ( ( _rStr.getLength() > 2 ) || ( _rStr.getLength() < 1 ) || !ImplIsOnlyDigits( _rStr ) )
             return sal_False;
     }
     return sal_True;
@@ -2210,31 +2205,31 @@ static sal_Bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const 
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplCutTimePortion( String& _rStr, xub_StrLen _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
+static sal_Bool ImplCutTimePortion( OUStringBuffer& _rStr, xub_StrLen _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
 {
-    String sPortion = _rStr.Copy( 0, _nSepPos );
-    _rStr.Erase( 0, _nSepPos + 1 );
+    OUString sPortion(_rStr.getStr(), _nSepPos );
+    _rStr = _rStr.copy( _nSepPos + 1 );
 
     if ( !ImplIsValidTimePortion( _bSkipInvalidCharacters, sPortion ) )
         return sal_False;
-    *_pPortion = (short)sPortion.ToInt32();
+    *_pPortion = (short)sPortion.toInt32();
     return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
+static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
                               TimeFieldFormat eFormat, sal_Bool bDuration,
                               const LocaleDataWrapper& rLocaleDataWrapper, sal_Bool _bSkipInvalidCharacters = sal_True )
 {
-    XubString   aStr    = rStr;
+    OUStringBuffer    aStr    = rStr;
     short       nHour   = 0;
     short       nMinute = 0;
     short       nSecond = 0;
     short       n100Sec = 0;
     Time        aTime( 0, 0, 0 );
 
-    if ( !rStr.Len() )
+    if ( rStr.isEmpty() )
         return sal_False;
 
     // Search for separators
@@ -2249,53 +2244,53 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
         {
             if (string::equals(rLocaleDataWrapper.getTimeSep(), aSepStr[i]))
                 continue;
-            for ( xub_StrLen j = 0; j < aStr.Len(); j++ )
+            for ( sal_Int32 j = 0; j < aStr.getLength(); j++ )
             {
-                if (aStr.GetChar( j ) == aSepStr[i])
-                    aStr.SetChar( j, rLocaleDataWrapper.getTimeSep()[0] );
+                if (aStr[j] == aSepStr[i])
+                    aStr[j] = rLocaleDataWrapper.getTimeSep()[0];
             }
         }
     }
 
     sal_Bool bNegative = sal_False;
-    xub_StrLen nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
-    if ( aStr.GetChar( 0 ) == '-' )
+    sal_Int32 nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
+    if ( aStr[0] == '-' )
         bNegative = sal_True;
     if ( eFormat != TIMEF_SEC_CS )
     {
-        if ( nSepPos == STRING_NOTFOUND )
-            nSepPos = aStr.Len();
+        if ( nSepPos < 0 )
+            nSepPos = aStr.getLength();
         if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nHour ) )
             return sal_False;
 
-        nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
-        if ( aStr.GetChar( 0 ) == '-' )
+        nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
+        if ( aStr[0] == '-' )
             bNegative = sal_True;
-        if ( nSepPos != STRING_NOTFOUND )
+        if ( nSepPos >= 0 )
         {
             if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nMinute ) )
                 return sal_False;
 
-            nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
-            if ( aStr.GetChar( 0 ) == '-' )
+            nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
+            if ( aStr[0] == '-' )
                 bNegative = sal_True;
-            if ( nSepPos != STRING_NOTFOUND )
+            if ( nSepPos >= 0 )
             {
                 if ( !ImplCutTimePortion( aStr, nSepPos, _bSkipInvalidCharacters, &nSecond ) )
                     return sal_False;
-                if ( aStr.GetChar( 0 ) == '-' )
+                if ( aStr[0] == '-' )
                     bNegative = sal_True;
-                n100Sec = (short)aStr.ToInt32();
+                n100Sec = (short)aStr.toString().toInt32();
             }
             else
-                nSecond = (short)aStr.ToInt32();
+                nSecond = (short)aStr.toString().toInt32();
         }
         else
-            nMinute = (short)aStr.ToInt32();
+            nMinute = (short)aStr.toString().toInt32();
     }
-    else if ( nSepPos == STRING_NOTFOUND )
+    else if ( nSepPos < 0 )
     {
-        nSecond = (short)aStr.ToInt32();
+        nSecond = (short)aStr.toString().toInt32();
         nMinute += nSecond / 60;
         nSecond %= 60;
         nHour += nMinute / 60;
@@ -2303,27 +2298,27 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
     }
     else
     {
-        nSecond = (short)aStr.Copy( 0, nSepPos ).ToInt32();
-        aStr.Erase( 0, nSepPos+1 );
+        nSecond = (short)aStr.copy( 0, nSepPos ).toString().toInt32();
+        aStr.remove( 0, nSepPos+1 );
 
-        nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
-        if ( aStr.GetChar( 0 ) == '-' )
+        nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
+        if ( aStr[0] == '-' )
             bNegative = sal_True;
-        if ( nSepPos != STRING_NOTFOUND )
+        if ( nSepPos >= 0 )
         {
             nMinute = nSecond;
-            nSecond = (short)aStr.Copy( 0, nSepPos ).ToInt32();
-            aStr.Erase( 0, nSepPos+1 );
+            nSecond = (short)aStr.copy( 0, nSepPos ).toString().toInt32();
+            aStr.remove( 0, nSepPos+1 );
 
-            nSepPos = aStr.Search( rLocaleDataWrapper.getTimeSep() );
-            if ( aStr.GetChar( 0 ) == '-' )
+            nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
+            if ( aStr[0] == '-' )
                 bNegative = sal_True;
-            if ( nSepPos != STRING_NOTFOUND )
+            if ( nSepPos >= 0 )
             {
                 nHour   = nMinute;
                 nMinute = nSecond;
-                nSecond = (short)aStr.Copy( 0, nSepPos ).ToInt32();
-                aStr.Erase( 0, nSepPos+1 );
+                nSecond = (short)aStr.copy( 0, nSepPos ).toString().toInt32();
+                aStr.remove( 0, nSepPos+1 );
             }
             else
             {
@@ -2338,13 +2333,13 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
             nHour += nMinute / 60;
             nMinute %= 60;
         }
-        n100Sec = (short)aStr.ToInt32();
+        n100Sec = (short)aStr.toString().toInt32();
 
         if ( n100Sec )
         {
             xub_StrLen nLen = 1; // at least one digit, otherwise n100Sec==0
 
-            while ( aStr.GetChar(nLen) >= '0' && aStr.GetChar(nLen) <= '9' )
+            while ( aStr[nLen] >= '0' && aStr[nLen] <= '9' )
                 nLen++;
 
             if ( nLen > 2 )
@@ -2357,13 +2352,9 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
                 // round if negative?
                 n100Sec = (n100Sec + 5) / 10;
             }
-            else
+            else if ( nLen == 1 )
             {
-                while( nLen < 2 )
-                {
-                    n100Sec = n100Sec * 10;
-                    nLen++;
-                }
+                n100Sec = n100Sec * 10;
             }
         }
     }
@@ -2382,16 +2373,16 @@ static sal_Bool ImplTimeGetValue( const XubString& rStr, Time& rTime,
              (nSecond < 0) || (n100Sec < 0) )
             return sal_False;
 
-        aStr.ToUpperAscii();
+        OUString aUpperCaseStr = aStr.toString().toAsciiUpperCase();
         OUString aAM(rLocaleDataWrapper.getTimeAM().toAsciiUpperCase());
         OUString aPM(rLocaleDataWrapper.getTimePM().toAsciiUpperCase());
         OUString aAM2("AM");  // aAM is localized
         OUString aPM2("PM");  // aPM is localized
 
-        if ( (nHour < 12) && ( ( aStr.Search( aPM ) != STRING_NOTFOUND ) || ( aStr.Search( aPM2 ) != STRING_NOTFOUND ) ) )
+        if ( (nHour < 12) && ( ( aUpperCaseStr.indexOf( aPM ) >= 0 ) || ( aUpperCaseStr.indexOf( aPM2 ) >= 0 ) ) )
             nHour += 12;
 
-        if ( (nHour == 12) && ( ( aStr.Search( aAM ) != STRING_NOTFOUND ) || ( aStr.Search( aAM2 ) != STRING_NOTFOUND ) ) )
+        if ( (nHour == 12) && ( ( aUpperCaseStr.indexOf( aAM ) >= 0 ) || ( aUpperCaseStr.indexOf( aAM2 ) >= 0 ) ) )
             nHour = 0;
 
         aTime = Time( (sal_uInt16)nHour, (sal_uInt16)nMinute, (sal_uInt16)nSecond,
@@ -2502,7 +2493,7 @@ void TimeField::ImplTimeSpinArea( sal_Bool bUp )
     {
         xub_StrLen nTimeArea = 0;
         Time aTime( GetTime() );
-        XubString aText( GetText() );
+        OUString aText( GetText() );
         Selection aSelection( GetField()->GetSelection() );
 
         // Area suchen
@@ -2510,8 +2501,8 @@ void TimeField::ImplTimeSpinArea( sal_Bool bUp )
         {
             for ( xub_StrLen i = 1, nPos = 0; i <= 4; i++ )
             {
-                xub_StrLen nPos1 = aText.Search( ImplGetLocaleDataWrapper().getTimeSep(), nPos );
-                xub_StrLen nPos2 = aText.Search( ImplGetLocaleDataWrapper().getTime100SecSep(), nPos );
+                sal_Int32 nPos1 = aText.indexOf( ImplGetLocaleDataWrapper().getTimeSep(), nPos );
+                sal_Int32 nPos2 = aText.indexOf( ImplGetLocaleDataWrapper().getTime100SecSep(), nPos );
                 nPos = nPos1 < nPos2 ? nPos1 : nPos2;
                 if ( nPos >= (xub_StrLen)aSelection.Max() )
                 {
@@ -2524,8 +2515,8 @@ void TimeField::ImplTimeSpinArea( sal_Bool bUp )
         }
         else
         {
-            xub_StrLen nPos = aText.Search( ImplGetLocaleDataWrapper().getTime100SecSep() );
-            if ( nPos == STRING_NOTFOUND || nPos >= (xub_StrLen)aSelection.Max() )
+            sal_Int32 nPos = aText.indexOf( ImplGetLocaleDataWrapper().getTime100SecSep() );
+            if ( nPos < 0 || nPos >= (xub_StrLen)aSelection.Max() )
                 nTimeArea = 3;
             else
                 nTimeArea = 4;
@@ -2742,7 +2733,7 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
 
     if ( GetField() )
     {
-        XubString aStr;
+        OUString aStr;
         sal_Bool bSec    = sal_False;
         sal_Bool b100Sec = sal_False;
         if ( meFormat != TIMEF_NONE )
