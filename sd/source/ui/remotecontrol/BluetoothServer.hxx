@@ -14,11 +14,14 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
+#  define LINUX_BLUETOOTH
+#endif
+
 namespace sd
 {
     class Communicator;
 
-    struct BluetoothServerImpl;
     class BluetoothServer:
         public osl::Thread
     {
@@ -43,7 +46,8 @@ namespace sd
         static BluetoothServer *spServer;
 
 #ifdef LINUX_BLUETOOTH
-        boost::scoped_ptr<BluetoothServerImpl> mpImpl;
+        struct Impl;
+        boost::scoped_ptr<Impl> mpImpl;
 #endif
         virtual void SAL_CALL run();
 

@@ -14,10 +14,6 @@
 
 #include <sal/log.hxx>
 
-#if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
-#  define LINUX_BLUETOOTH
-#endif
-
 #ifdef LINUX_BLUETOOTH
   #include <glib.h>
   #include <dbus/dbus.h>
@@ -93,18 +89,18 @@ struct DBusObject {
     }
 };
 
-struct sd::BluetoothServerImpl {
+struct sd::BluetoothServer::Impl {
     // the glib mainloop running in the thread
     GMainContext *mpContext;
     DBusConnection *mpConnection;
     DBusObject *mpService;
     volatile bool mbExitMainloop;
 
-    BluetoothServerImpl() :
-        mpContext( g_main_context_new() ),
-        mpConnection( NULL ),
-        mpService( NULL ),
-        mbExitMainloop( false )
+    Impl()
+        : mpContext( g_main_context_new() )
+        , mpConnection( NULL )
+        , mpService( NULL )
+        , mbExitMainloop( false )
     { }
 
     DBusObject *getAdapter()
@@ -579,11 +575,6 @@ registerWithDefaultAdapter( DBusConnection *pConnection )
     return pService;
 }
 
-#else
-
-// MSVC needs this definition even though it's never used
-struct sd::BluetoothServerImpl { };
-
 #endif // LINUX_BLUETOOTH
 
 BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
@@ -591,7 +582,7 @@ BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
     mpCommunicators( pCommunicators )
 {
 #ifdef LINUX_BLUETOOTH
-    mpImpl.reset(new BluetoothServerImpl());
+    mpImpl.reset(new BluetoothServer::Impl());
 #endif
 }
 
