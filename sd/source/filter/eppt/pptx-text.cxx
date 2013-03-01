@@ -460,7 +460,7 @@ sal_uInt32 PortionObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPositi
 }
 
 //  -----------------------------------------------------------------------
-// Rueckgabe:                           0 = kein TextField
+// Return:                              0 = no TextField
 //  bit28->31   text field type :
 //                                      1 = Date
 //                                      2 = Time
@@ -501,7 +501,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                                 {
                                     sal_Bool bBool = sal_False;
                                     aAny >>= bBool;
-                                    if ( !bBool )  // Fixed DateFields gibt es in PPT nicht
+                                    if ( !bBool )  // Fixed DateFields does not exist in PPT
                                     {
                                         if ( GetPropertyValue( aAny, xFieldPropSet, rtl::OUString( "Format" ) ), sal_True )
                                         {
@@ -893,17 +893,17 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                         if ( !aFontDesc.Name.isEmpty() )
                         {
-                            nParaFlags |= 0x90; // wir geben den Font und den Charset vor
+                            nParaFlags |= 0x90; // we define the font and charset
                         }
                     }
-                    case SVX_NUM_CHARS_UPPER_LETTER :       // zaehlt von a-z, aa - az, ba - bz, ...
+                    case SVX_NUM_CHARS_UPPER_LETTER :       // count from a-z, aa - az, ba - bz, ...
                     case SVX_NUM_CHARS_LOWER_LETTER :
                     case SVX_NUM_ROMAN_UPPER :
                     case SVX_NUM_ROMAN_LOWER :
                     case SVX_NUM_ARABIC :
-                    case SVX_NUM_PAGEDESC :                 // Numerierung aus der Seitenvorlage
+                    case SVX_NUM_PAGEDESC :                 // numbering from the page template
                     case SVX_NUM_BITMAP :
-                    case SVX_NUM_CHARS_UPPER_LETTER_N :     // zaehlt von  a-z, aa-zz, aaa-zzz
+                    case SVX_NUM_CHARS_UPPER_LETTER_N :     // count from a-z, aa-zz, aaa-zzz
                     case SVX_NUM_CHARS_LOWER_LETTER_N :
                     {
                         if ( nNumberingType != SVX_NUM_CHAR_SPECIAL )
@@ -1145,17 +1145,17 @@ void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
     nBulletFlags = rParagraphObj.nBulletFlags;
     sPrefix = rParagraphObj.sPrefix;
     sSuffix = rParagraphObj.sSuffix;
-    sGraphicUrl = rParagraphObj.sGraphicUrl;            // String auf eine Graphic
+    sGraphicUrl = rParagraphObj.sGraphicUrl;            // String to a graphic
     aBuGraSize = rParagraphObj.aBuGraSize;
-    nNumberingType = rParagraphObj.nNumberingType;      // in wirlichkeit ist dies ein SvxEnum
+    nNumberingType = rParagraphObj.nNumberingType;      // this is actually a SvxEnum
     nHorzAdjust = rParagraphObj.nHorzAdjust;
     nBulletColor = rParagraphObj.nBulletColor;
     nBulletOfs = rParagraphObj.nBulletOfs;
-    nStartWith = rParagraphObj.nStartWith;              // Start der nummerierung
+    nStartWith = rParagraphObj.nStartWith;              // start of numbering
     nTextOfs = rParagraphObj.nTextOfs;
-    nBulletRealSize = rParagraphObj.nBulletRealSize;    // GroessenVerhaeltnis in Proz
-    nDepth = rParagraphObj.nDepth;                      // aktuelle tiefe
-    cBulletId = rParagraphObj.cBulletId;                // wenn Numbering Type == CharSpecial
+    nBulletRealSize = rParagraphObj.nBulletRealSize;    // scale in percent
+    nDepth = rParagraphObj.nDepth;                      // actual depth
+    cBulletId = rParagraphObj.cBulletId;                // if Numbering Type == CharSpecial
     aFontDesc = rParagraphObj.aFontDesc;
 
     bExtendedBulletsUsed = rParagraphObj.bExtendedBulletsUsed;
