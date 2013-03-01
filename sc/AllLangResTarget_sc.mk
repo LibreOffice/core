@@ -89,7 +89,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/docshell/tpstat.src \
     sc/source/ui/optdlg/calcoptionsdlg.src \
     sc/source/ui/pagedlg/pagedlg.src \
-    sc/source/ui/pagedlg/tphf.src \
     sc/source/ui/pagedlg/hfedtdlg.src \
     sc/source/ui/styleui/scstyles.src \
     sc/source/ui/styleui/styledlg.src \

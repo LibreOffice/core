@@ -20,7 +20,6 @@
 #ifndef SC_TPHF_HXX
 #define SC_TPHF_HXX
 
-
 #include <svx/hdft.hxx>
 
 class ScStyleDlg;
@@ -40,7 +39,6 @@ public:
 
 protected:
                     ScHFPage( Window* pParent,
-                              sal_uInt16 nResId,
                               const SfxItemSet& rSet,
                               sal_uInt16 nSetId );
 
@@ -50,10 +48,10 @@ protected:
     virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
 
 private:
-    PushButton          aBtnEdit;
+    PushButton*         m_pBtnEdit;
     SfxItemSet          aDataSet;
-    String              aStrPageStyle;
-    sal_uInt16              nPageUsage;
+    OUString            aStrPageStyle;
+    sal_uInt16          nPageUsage;
     const ScStyleDlg*   pStyleDlg;
 
 #ifdef _TPHF_CXX
