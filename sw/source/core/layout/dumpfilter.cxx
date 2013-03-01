@@ -42,15 +42,15 @@
 
 using namespace ::com::sun::star;
 
-::rtl::OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw( uno::RuntimeException )
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Writer.LayoutDump" ) );
+    return OUString( "com.sun.star.comp.Writer.LayoutDump" );
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSeq( 1 );
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportFilter" ) );
+    uno::Sequence< OUString > aSeq( 1 );
+    aSeq[0] = OUString( "com.sun.star.document.ExportFilter" );
     return aSeq;
 }
 
@@ -179,17 +179,17 @@ namespace sw
     }
 
     // XServiceInfo
-    ::rtl::OUString LayoutDumpFilter::getImplementationName(  )
+    OUString LayoutDumpFilter::getImplementationName(  )
         throw (uno::RuntimeException)
     {
         return LayoutDumpFilter_getImplementationName();
     }
 
-    sal_Bool LayoutDumpFilter::supportsService( const ::rtl::OUString& rServiceName )
+    sal_Bool LayoutDumpFilter::supportsService( const OUString& rServiceName )
         throw (uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > seqServiceNames = getSupportedServiceNames();
-        const rtl::OUString* pArray = seqServiceNames.getConstArray();
+        uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();
+        const OUString* pArray = seqServiceNames.getConstArray();
         for ( sal_Int32 nCounter=0; nCounter < seqServiceNames.getLength(); nCounter++ )
         {
             if ( pArray[nCounter] == rServiceName )
@@ -200,7 +200,7 @@ namespace sw
         return sal_False ;
     }
 
-    uno::Sequence< ::rtl::OUString > LayoutDumpFilter::getSupportedServiceNames()
+    uno::Sequence< OUString > LayoutDumpFilter::getSupportedServiceNames()
         throw (uno::RuntimeException)
     {
         return LayoutDumpFilter_getSupportedServiceNames();

@@ -40,7 +40,7 @@ using container::XNameContainer;
 using xforms::XModel;
 using frame::XModule;
 using xforms::XFormsUIHelper1;
-using rtl::OUString;
+using ::rtl::OUString;
 
 
 Reference<XNameContainer> SwDoc::getXForms() const
@@ -78,12 +78,12 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
             xModule = xModule.query( pShell->GetModel() );
         OSL_ENSURE( xModule.is(), "SwDoc::initXForms: no XModule at the document!" );
         if ( xModule.is() )
-            xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xforms.XMLFormDocument" ) ) );
+            xModule->setIdentifier( OUString( "com.sun.star.xforms.XMLFormDocument" ) );
 
         // create default model
         if( bCreateDefaultModel && mxXForms.is() )
         {
-            OUString sName(RTL_CONSTASCII_USTRINGPARAM("Model 1"));
+            OUString sName("Model 1");
             Reference<XModel> xModel(
                 lcl_createInstance( "com.sun.star.xforms.Model" ),
                 UNO_QUERY );
@@ -92,7 +92,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
             {
                 xModel->setID( sName );
                 Reference<XFormsUIHelper1>( xModel, UNO_QUERY )->newInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("Instance 1")),
+                    OUString("Instance 1"),
                     OUString(), sal_True );
                 xModel->initialize();
                 mxXForms->insertByName( sName, makeAny( xModel ) );

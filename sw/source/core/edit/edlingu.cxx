@@ -408,14 +408,14 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     //!! Please check SwSpellIter also when modifying this
     //!!
 
-    uno::Any    aConvRet( makeAny( rtl::OUString() ) );
+    uno::Any    aConvRet( makeAny( OUString() ) );
     SwEditShell *pMySh = GetSh();
     if( !pMySh )
         return aConvRet;
 
     OSL_ENSURE( GetEnd(), "SwConvIter::Continue() ohne Start?");
 
-    rtl::OUString aConvText;
+    OUString aConvText;
     bool bGoOn = true;
     do {
         SwPaM *pCrsr = pMySh->GetCrsr();
@@ -471,7 +471,7 @@ sal_Bool SwHyphIter::IsAuto()
 {
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
     return xProp.is() ? *(sal_Bool*)xProp->getPropertyValue(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UPN_IS_HYPH_AUTO)) ).getValue()
+                                OUString(UPN_IS_HYPH_AUTO) ).getValue()
                       : sal_False;
 }
 
@@ -652,7 +652,7 @@ void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
         DelSoftHyph( *pCrsr );
         pSttPos->nContent += nHyphPos;
         SwPaM aRg( *pSttPos );
-        pDoc->InsertString( aRg, rtl::OUString(CHAR_SOFTHYPHEN) );
+        pDoc->InsertString( aRg, OUString(CHAR_SOFTHYPHEN) );
         // Durch das Einfuegen des SoftHyphs ist ein Zeichen hinzugekommen
 //JP 18.07.95: warum, ist doch ein SwIndex, dieser wird doch mitverschoben !!
 //        pSttPos->nContent++;
@@ -807,7 +807,7 @@ uno::Any SwEditShell::SpellContinue(
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
     ++mnStartAction;
-    rtl::OUString aRet;
+    OUString aRet;
     uno::Reference< uno::XInterface >  xRet;
     if (pConvArgs)
     {
@@ -1023,7 +1023,7 @@ uno::Reference< XSpellAlternatives >
                     // implementation here by providing an additional parameter.
                     Sequence< PropertyValue > aPropVals(1);
                     PropertyValue &rVal = aPropVals.getArray()[0];
-                    rVal.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_MAX_NUMBER_OF_SUGGESTIONS ));
+                    rVal.Name = OUString( UPN_MAX_NUMBER_OF_SUGGESTIONS );
                     rVal.Value <<= (sal_Int16) 7;
 
                     xSpellAlt = xSpell->spell( aWord, eActLang, aPropVals );
@@ -1090,7 +1090,7 @@ bool SwEditShell::GetGrammarCorrection(
     linguistic2::ProofreadingResult /*out*/ &rResult,    // the complete result
     sal_Int32 /*out*/ &rErrorPosInText,                     // offset of error position in string that was grammar checked...
     sal_Int32 /*out*/ &rErrorIndexInResult,                 // index of error in rResult.aGrammarErrors
-    uno::Sequence< rtl::OUString > /*out*/ &rSuggestions,   // suggestions to be used for the error found
+    uno::Sequence< OUString > /*out*/ &rSuggestions,   // suggestions to be used for the error found
     const Point *pPt, SwRect &rSelectRect )
 {
     bool bRes = false;
@@ -1123,7 +1123,7 @@ bool SwEditShell::GetGrammarCorrection(
 
                 // Expand the string:
                 const ModelToViewHelper aConversionMap(*pNode);
-                rtl::OUString aExpandText = aConversionMap.getViewText();
+                OUString aExpandText = aConversionMap.getViewText();
                 // get XFlatParagraph to use...
                 uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNode, aExpandText, aConversionMap );
 
@@ -1592,7 +1592,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         if( bGrammarErrorFound )
         {
             const ModelToViewHelper aConversionMap(*(SwTxtNode*)pCrsr->GetNode());
-            rtl::OUString aExpandText = aConversionMap.getViewText();
+            OUString aExpandText = aConversionMap.getViewText();
             xub_StrLen nSentenceEnd = (xub_StrLen)aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition );
             // remove trailing space
             if( aExpandText[nSentenceEnd - 1] == ' ' )

@@ -54,7 +54,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <comcore.hrc>
 
-using rtl::OUString;
+using ::rtl::OUString;
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
@@ -66,13 +66,13 @@ private:
     typedef std::deque<SwOLEObj *> OleObjects_t;
     OleObjects_t m_OleObjects;
     sal_Int32 m_nLRU_InitSize;
-    uno::Sequence< rtl::OUString > GetPropertyNames();
+    uno::Sequence< OUString > GetPropertyNames();
 
 public:
     SwOLELRUCache();
 
     virtual void Notify( const uno::Sequence<
-                                rtl::OUString>& aPropertyNames );
+                                OUString>& aPropertyNames );
     virtual void Commit();
     void Load();
 
@@ -299,7 +299,7 @@ sal_Bool SwOLENode::RestorePersistentData()
             xChild->setParent( p->GetModel() );
 
         OSL_ENSURE( aOLEObj.aName.Len(), "No object name!" );
-        ::rtl::OUString aObjName;
+        OUString aObjName;
         if ( !p->GetEmbeddedObjectContainer().InsertEmbeddedObject( aOLEObj.xOLERef.GetObject(), aObjName ) )
         {
             if ( xChild.is() )
@@ -428,7 +428,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     // Wir hauen das Ding auf SvPersist-Ebene rein
     // TODO/LATER: check if using the same naming scheme for all apps works here
-    ::rtl::OUString aNewName/*( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) )*/;
+    OUString aNewName/*( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) )*/;
     SfxObjectShell* pSrc = GetDoc()->GetPersist();
 
     pPersistShell->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
@@ -532,8 +532,8 @@ sal_Bool SwOLENode::UpdateLinkURL_Impl()
 
                     // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
                     uno::Sequence< beans::PropertyValue > aArgs( 1 );
-                    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-                    aArgs[0].Value <<= ::rtl::OUString( aNewLinkURL );
+                    aArgs[0].Name = OUString( "URL" );
+                    aArgs[0].Value <<= OUString( aNewLinkURL );
                     xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                     maLinkURL = aNewLinkURL;
@@ -729,7 +729,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
             p->DoInitNew( NULL );
         }
 
-        ::rtl::OUString aObjName;
+        OUString aObjName;
         uno::Reference < container::XChild > xChild( xOLERef.GetObject(), uno::UNO_QUERY );
         if ( xChild.is() && xChild->getParent() != p->GetModel() )
             // it is possible that the parent was set already
@@ -781,7 +781,7 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
                 aArea.SetSize( Size( 5000,  5000 ) );
             // TODO/LATER: set replacement graphic for dead object
             // It looks as if it should work even without the object, because the replace will be generated automatically
-            ::rtl::OUString aTmpName;
+            OUString aTmpName;
             xObj = p->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_DUMMY_CLASSID ).GetByteSequence(), aTmpName );
         }
         // else
@@ -899,15 +899,15 @@ SwOLELRUCache::SwOLELRUCache()
     Load();
 }
 
-uno::Sequence< rtl::OUString > SwOLELRUCache::GetPropertyNames()
+uno::Sequence< OUString > SwOLELRUCache::GetPropertyNames()
 {
     Sequence< OUString > aNames( 1 );
     OUString* pNames = aNames.getArray();
-    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/OLE_Objects"));
+    pNames[0] = OUString("Writer/OLE_Objects");
     return aNames;
 }
 
-void SwOLELRUCache::Notify( const uno::Sequence< rtl::OUString>&  )
+void SwOLELRUCache::Notify( const uno::Sequence< OUString>&  )
 {
     Load();
 }

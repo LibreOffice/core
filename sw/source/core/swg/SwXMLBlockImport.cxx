@@ -37,7 +37,7 @@ SwXMLBlockListImport::SwXMLBlockListImport(
 :   SvXMLImport( xContext, 0 ),
     rBlockList (rBlocks)
 {
-    GetNamespaceMap().Add( OUString ( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__block_list ) ),
+    GetNamespaceMap().Add( OUString ( sXML_np__block_list ),
                            GetXMLToken ( XML_N_BLOCK_LIST ),
                            XML_NAMESPACE_BLOCKLIST );
 }
@@ -72,10 +72,10 @@ SwXMLTextBlockImport::SwXMLTextBlockImport(
     bTextOnly ( bNewTextOnly ),
     m_rText ( rNewText )
 {
-    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
+    GetNamespaceMap().Add( OUString( sXML_np__office ),
                             GetXMLToken(XML_N_OFFICE_OOO),
                             XML_NAMESPACE_OFFICE );
-    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__text ) ),
+    GetNamespaceMap().Add( OUString( sXML_np__text ),
                             GetXMLToken(XML_N_TEXT_OOO),
                             XML_NAMESPACE_TEXT );
 }

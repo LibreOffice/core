@@ -34,12 +34,12 @@ SwSmartTagMgr& SwSmartTagMgr::Get()
     if ( !mpTheSwSmartTagMgr )
     {
         mpTheSwSmartTagMgr = new SwSmartTagMgr( SwDocShell::Factory().GetModuleName() );
-        mpTheSwSmartTagMgr->Init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")));
+        mpTheSwSmartTagMgr->Init(OUString("Writer"));
     }
     return *mpTheSwSmartTagMgr;
 }
 
-SwSmartTagMgr::SwSmartTagMgr( const rtl::OUString& rModuleName ) :
+SwSmartTagMgr::SwSmartTagMgr( const OUString& rModuleName ) :
     SmartTagMgr( rModuleName )
 {
 }

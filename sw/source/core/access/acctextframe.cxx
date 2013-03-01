@@ -171,7 +171,7 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
 OUString SAL_CALL SwAccessibleTextFrame::getImplementationName()
         throw( uno::RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
+    return OUString(sImplementationName);
 }
 
 sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(
@@ -189,8 +189,8 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNam
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
-    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
+    pArray[0] = OUString( sServiceName );
+    pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }
 

@@ -45,7 +45,7 @@ uno::Reference< util::XJobManager >& SwThreadJoiner::GetThreadJoiner()
         mpThreadJoiner =
             uno::Reference< util::XJobManager >(
                 ::comphelper::getProcessServiceFactory()->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.JobManager")) ),
+                    OUString("com.sun.star.util.JobManager") ),
                 uno::UNO_QUERY );
     }
 

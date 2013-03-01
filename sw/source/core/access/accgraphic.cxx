@@ -47,11 +47,11 @@ SwAccessibleGraphic::~SwAccessibleGraphic()
 OUString SAL_CALL SwAccessibleGraphic::getImplementationName()
         throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
+    return OUString(sImplementationName);
 }
 
 sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(
-        const ::rtl::OUString& sTestServiceName)
+        const OUString& sTestServiceName)
     throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
@@ -65,8 +65,8 @@ Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
-    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
+    pArray[0] = OUString( sServiceName );
+    pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }
 

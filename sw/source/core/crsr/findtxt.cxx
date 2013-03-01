@@ -420,7 +420,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     bool bRemoveSoftHyphens = true;
     if ( bRegSearch )
     {
-        const rtl::OUString a00AD(RTL_CONSTASCII_USTRINGPARAM("\\x00AD"));
+        const OUString a00AD("\\x00AD");
         if ( -1 != rSearchOpt.searchString.indexOf( a00AD ) )
              bRemoveSoftHyphens = false;
     }
@@ -664,7 +664,7 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
             aStr = comphelper::string::remove(aStr, CH_TXTATR_BREAKWORD);
             aStr = comphelper::string::remove(aStr, CH_TXTATR_INWORD);
             xub_StrLen nStart = 0;
-            rtl::OUString sX( 'x' );
+            OUString sX( 'x' );
             if( pPam->Start()->nContent > 0 )
             {
                 aStr.Insert( sX, 0 );

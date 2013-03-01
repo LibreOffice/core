@@ -70,7 +70,7 @@ void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
     Reference < XAccessibleContext > xThis( &rContext );
     Reference < XAccessibleSelection >xSelThis( xThis, UNO_QUERY );
     lang::IndexOutOfBoundsException aExcept(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("index out of bounds") ),
+                OUString( "index out of bounds" ),
                 xSelThis );                                     \
     throw aExcept;
 }

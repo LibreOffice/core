@@ -451,8 +451,7 @@ void SwAccessibleTableData_Impl::CheckRowAndCol(
     {
         uno::Reference < XAccessibleTable > xThis( pThis );
         lang::IndexOutOfBoundsException aExcept(
-               OUString( RTL_CONSTASCII_USTRINGPARAM(
-                       "row or column index out of range") ),
+               OUString( "row or column index out of range" ),
                xThis );
         throw aExcept;
     }
@@ -1276,7 +1275,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
 OUString SAL_CALL SwAccessibleTable::getImplementationName()
         throw( uno::RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
+    return OUString(sImplementationName);
 }
 
 sal_Bool SAL_CALL SwAccessibleTable::supportsService(
@@ -1294,8 +1293,8 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
-    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
+    pArray[0] = OUString( sServiceName );
+    pArray[1] = OUString( sAccessibleServiceName );
     return aRet;
 }
 
@@ -1699,11 +1698,11 @@ uno::Reference< XAccessibleTable >
 
 //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL SwAccessibleTableColHeaders::getImplementationName (void)
+OUString SAL_CALL SwAccessibleTableColHeaders::getImplementationName (void)
         throw (uno::RuntimeException)
 {
     static const sal_Char sImplName[] = "com.sun.star.comp.Writer.SwAccessibleTableColumnHeadersView";
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplName));
+    return OUString(sImplName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

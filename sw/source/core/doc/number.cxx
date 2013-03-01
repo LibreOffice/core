@@ -738,7 +738,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     {
         bool bOldHadPrefix = true;
         bool bFirstIteration = true;
-        ::rtl::OUString sOldPrefix;
+        OUString sOldPrefix;
 
         const SwNodeNum* pWorkingNodeNum( &rNodeNum );
         do
@@ -801,7 +801,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 {
                     aRefNumStr.Insert(sOldPrefix, 0);
                 }
-                sOldPrefix = ::rtl::OUString();
+                sOldPrefix = OUString();
 
                 bOldHadPrefix = ( aExtremities.nPrefixChars >  0);
 
@@ -1133,7 +1133,7 @@ namespace numfunc
 
                 @author OD
             */
-            uno::Sequence<rtl::OUString> GetPropNames() const;
+            uno::Sequence<OUString> GetPropNames() const;
 
             /** loads default bullet configuration properties and applies
                 values to internal data
@@ -1152,7 +1152,7 @@ namespace numfunc
 
                 @author OD
             */
-            virtual void Notify( const uno::Sequence<rtl::OUString>& aPropertyNames );
+            virtual void Notify( const uno::Sequence<OUString>& aPropertyNames );
             virtual void Commit();
 
             // default bullet list configuration data
@@ -1178,9 +1178,9 @@ namespace numfunc
     }
 
     SwDefBulletConfig::SwDefBulletConfig()
-        : ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/Numbering/DefaultBulletList")) ),
+        : ConfigItem( OUString("Office.Writer/Numbering/DefaultBulletList") ),
           // default bullet font is now OpenSymbol
-          msFontname( rtl::OUString("OpenSymbol") ),
+          msFontname( OUString("OpenSymbol") ),
           mbUserDefinedFontname( false ),
           meFontWeight( WEIGHT_DONTKNOW ),
           meFontItalic( ITALIC_NONE ),
@@ -1201,7 +1201,7 @@ namespace numfunc
 
     void SwDefBulletConfig::SetToDefault()
     {
-        msFontname = rtl::OUString("OpenSymbol");
+        msFontname = OUString("OpenSymbol");
         mbUserDefinedFontname = false;
         meFontWeight = WEIGHT_DONTKNOW;
         meFontItalic = ITALIC_NONE;
@@ -1218,30 +1218,30 @@ namespace numfunc
         mnLevelChars[9] = 0x2022;
     }
 
-    uno::Sequence<rtl::OUString> SwDefBulletConfig::GetPropNames() const
+    uno::Sequence<OUString> SwDefBulletConfig::GetPropNames() const
     {
-        uno::Sequence<rtl::OUString> aPropNames(13);
-        rtl::OUString* pNames = aPropNames.getArray();
-        pNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletFont/FontFamilyname"));
-        pNames[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletFont/FontWeight"));
-        pNames[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletFont/FontItalic"));
-        pNames[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl1"));
-        pNames[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl2"));
-        pNames[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl3"));
-        pNames[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl4"));
-        pNames[7] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl5"));
-        pNames[8] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl6"));
-        pNames[9] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl7"));
-        pNames[10] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl8"));
-        pNames[11] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl9"));
-        pNames[12] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletCharLvl10"));
+        uno::Sequence<OUString> aPropNames(13);
+        OUString* pNames = aPropNames.getArray();
+        pNames[0] = OUString("BulletFont/FontFamilyname");
+        pNames[1] = OUString("BulletFont/FontWeight");
+        pNames[2] = OUString("BulletFont/FontItalic");
+        pNames[3] = OUString("BulletCharLvl1");
+        pNames[4] = OUString("BulletCharLvl2");
+        pNames[5] = OUString("BulletCharLvl3");
+        pNames[6] = OUString("BulletCharLvl4");
+        pNames[7] = OUString("BulletCharLvl5");
+        pNames[8] = OUString("BulletCharLvl6");
+        pNames[9] = OUString("BulletCharLvl7");
+        pNames[10] = OUString("BulletCharLvl8");
+        pNames[11] = OUString("BulletCharLvl9");
+        pNames[12] = OUString("BulletCharLvl10");
 
         return aPropNames;
     }
 
     void SwDefBulletConfig::LoadConfig()
     {
-        uno::Sequence<rtl::OUString> aPropNames = GetPropNames();
+        uno::Sequence<OUString> aPropNames = GetPropNames();
         uno::Sequence<uno::Any> aValues =
                                                     GetProperties( aPropNames );
         const uno::Any* pValues = aValues.getConstArray();
@@ -1257,7 +1257,7 @@ namespace numfunc
                     {
                         case 0:
                         {
-                            rtl::OUString aStr;
+                            OUString aStr;
                             pValues[nProp] >>= aStr;
                             msFontname = aStr;
                             mbUserDefinedFontname = true;
@@ -1306,7 +1306,7 @@ namespace numfunc
         mpFont->SetItalic( meFontItalic );
     }
 
-    void SwDefBulletConfig::Notify( const uno::Sequence<rtl::OUString>& )
+    void SwDefBulletConfig::Notify( const uno::Sequence<OUString>& )
     {
         SetToDefault();
         LoadConfig();
@@ -1368,7 +1368,7 @@ namespace numfunc
 
                 @author OD
             */
-            com::sun::star::uno::Sequence<rtl::OUString> GetPropNames() const;
+            com::sun::star::uno::Sequence<OUString> GetPropNames() const;
 
             /** loads configuration properties and applies values to internal data
 
@@ -1380,7 +1380,7 @@ namespace numfunc
 
                 @author OD
             */
-            virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+            virtual void Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames );
             virtual void Commit();
 
             // configuration data
@@ -1398,7 +1398,7 @@ namespace numfunc
     }
 
     SwNumberingUIBehaviorConfig::SwNumberingUIBehaviorConfig()
-        : ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/Numbering/UserInterfaceBehavior")) ),
+        : ConfigItem( OUString("Office.Writer/Numbering/UserInterfaceBehavior") ),
           mbChangeIndentOnTabAtFirstPosOfFirstListItem( sal_True )
     {
         SetToDefault();
@@ -1413,11 +1413,11 @@ namespace numfunc
         mbChangeIndentOnTabAtFirstPosOfFirstListItem = sal_True;
     }
 
-    com::sun::star::uno::Sequence<rtl::OUString> SwNumberingUIBehaviorConfig::GetPropNames() const
+    com::sun::star::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames() const
     {
-        com::sun::star::uno::Sequence<rtl::OUString> aPropNames(1);
-        rtl::OUString* pNames = aPropNames.getArray();
-        pNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ChangeIndentOnTabAtFirstPosOfFirstListItem"));
+        com::sun::star::uno::Sequence<OUString> aPropNames(1);
+        OUString* pNames = aPropNames.getArray();
+        pNames[0] = OUString("ChangeIndentOnTabAtFirstPosOfFirstListItem");
 
         return aPropNames;
     }
@@ -1426,7 +1426,7 @@ namespace numfunc
 
     void SwNumberingUIBehaviorConfig::LoadConfig()
     {
-        com::sun::star::uno::Sequence<rtl::OUString> aPropNames = GetPropNames();
+        com::sun::star::uno::Sequence<OUString> aPropNames = GetPropNames();
         com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues =
                                                     GetProperties( aPropNames );
         const com::sun::star::uno::Any* pValues = aValues.getConstArray();
@@ -1455,7 +1455,7 @@ namespace numfunc
         }
     }
 
-    void SwNumberingUIBehaviorConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames )
+    void SwNumberingUIBehaviorConfig::Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames )
     {
         (void) aPropertyNames;
         SetToDefault();
