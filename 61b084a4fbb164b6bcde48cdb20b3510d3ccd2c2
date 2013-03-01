@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3///CI\u003d",
+        "filename": "i18npool/source/localedata/data/tr_TR.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-01T13:21:35Z",
+      "side": 1,
+      "message": "For backwards compatibility with existing documents the symbol can\u0027t be simply changed. Citing from i18npool/source/localedata/data/locale.dtd comment for ATTLIST Currency  legacyOnly:\n\nCurrency elements must not be changed to contain only a different\nCurrencySymbol element without changing the CurrencyID and BankSymbol\nelements, instead the entire Currency element must be duplicated, the old\nelement needs this \u0027legacyOnly\u0027 attribute be added and \u0027default\u0027 and\n\u0027usedInCompatibleFormatCodes\u0027 attributes must be set to \"false\", and only\nin the new duplicated Currency element the CurrencySymbol element be\nchanged.\n\nFor example see below the already existing entry for TRY/YTL in this tr_TR.xml file.",
+      "revId": "61b084a4fbb164b6bcde48cdb20b3510d3ccd2c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
