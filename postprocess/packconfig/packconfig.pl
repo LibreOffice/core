@@ -217,12 +217,11 @@ sub create_zip_archive
     print_message("creating config archive ...") if $verbose;
     my $zip = Archive::Zip->new();
 
-    # on Mac OS X Intel we have unxmacxi.pro, on Mac OS X PowerPC unxmacxp.pro .. and so on
     my $platform = $ENV{INPATH};
 
     foreach ( sort keys %{$zip_hash_ref} ) {
         my $path = "$files_path/$_";
-    # only Mac OS X Aqua is concerned here
+    # only Mac OS X is concerned here
     # but changes for other platforms can easely be added following the same principle
     if ( ( $platform =~ /^.*macx*/) && ($path =~ /^.*menubar.xml/ ) ) {
         $path = modify_mac_menus($path);
@@ -241,10 +240,7 @@ sub create_zip_archive
 
 sub modify_mac_menus
 {
-    my $path_base = "$ENV{'SOLARENV'}";
-    $path_base =~ s/solenv//;
-
-    my $new_file_name = "$path_base"."postprocess"."\/"."$ENV{INPATH}"."\/"."misc"."\/"."$_";
+    my $new_file_name = "$ENV{'WORKDIR'}/CustomTarget/postprocess/misc/$_";
 
     my $new_directory = $new_file_name;
     $new_directory =~ s/\/menubar.xml//;
