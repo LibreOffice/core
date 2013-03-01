@@ -67,7 +67,7 @@ void Directory::scanSubDir( int nLevels )
     readDirectory( sFullName );
     dump();
     if( nLevels > 0 ) {
-        for( std::vector< transex::Directory >::iterator iter = aDirVec.begin() ; iter != aDirVec.end() || nLevels > 0 ; ++iter , nLevels-- )
+        for( std::vector< transex::Directory >::iterator iter = aDirVec.begin() ; iter != aDirVec.end() && nLevels > 0 ; ++iter , nLevels-- )
         {
             ( *iter ).scanSubDir();
         }
