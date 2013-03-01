@@ -417,7 +417,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType)
+    void OPropertyExport::exportRelativeTargetLocation(const OUString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType)
     {
         DBG_CHECK_PROPERTY( _sPropertyName, ::rtl::OUString );
 

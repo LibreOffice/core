@@ -62,7 +62,7 @@ namespace xmloff
             nSeparatorPos = aEvent->first.indexOf(EVENT_NAME_SEPARATOR);
             OSL_ENSURE(-1 != nSeparatorPos, "OFormEventsImportContext::EndElement: invalid (unrecognized) event name!");
             pTranslated->ListenerType = aEvent->first.copy(0, nSeparatorPos);
-            pTranslated->EventMethod = aEvent->first.copy(nSeparatorPos + EVENT_NAME_SEPARATOR.length);
+            pTranslated->EventMethod = aEvent->first.copy(nSeparatorPos + sizeof(EVENT_NAME_SEPARATOR) - 1);
 
             ::rtl::OUString sLibrary;
 
@@ -71,18 +71,18 @@ namespace xmloff
             pEventDescriptionEnd    =   pEventDescription + aEvent->second.getLength();
             for (;pEventDescription != pEventDescriptionEnd; ++pEventDescription)
             {
-                if ((pEventDescription->Name.equalsAsciiL(EVENT_LOCALMACRONAME.ascii, EVENT_LOCALMACRONAME.length)) ||
-                    (pEventDescription->Name.equalsAsciiL(EVENT_SCRIPTURL.ascii, EVENT_SCRIPTURL.length)))
+                if ((pEventDescription->Name.equals(EVENT_LOCALMACRONAME)) ||
+                    (pEventDescription->Name.equals(EVENT_SCRIPTURL)))
                     pEventDescription->Value >>= pTranslated->ScriptCode;
-                else if (pEventDescription->Name.equalsAsciiL(EVENT_TYPE.ascii, EVENT_TYPE.length))
+                else if (pEventDescription->Name.equals(EVENT_TYPE))
                     pEventDescription->Value >>= pTranslated->ScriptType;
-                else if (pEventDescription->Name.equalsAsciiL(EVENT_LIBRARY.ascii, EVENT_LIBRARY.length))
+                else if (pEventDescription->Name.equals(EVENT_LIBRARY))
                     pEventDescription->Value >>= sLibrary;
             }
 
-            if (pTranslated->ScriptType.equalsAsciiL(EVENT_STARBASIC.ascii, EVENT_STARBASIC.length))
+            if (pTranslated->ScriptType.equals(EVENT_STARBASIC))
             {
-                if (sLibrary.equalsAsciiL(EVENT_STAROFFICE.ascii, EVENT_STAROFFICE.length))
+                if (sLibrary.equals(EVENT_STAROFFICE))
                     sLibrary = EVENT_APPLICATION;
 
                 if ( !sLibrary.isEmpty() )

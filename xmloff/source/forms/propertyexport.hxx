@@ -62,7 +62,7 @@ namespace xmloff
         StringSet       m_aRemainingProps;
             // see examinePersistence
 
-        void exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType);
+        void exportRelativeTargetLocation(const OUString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType);
 
     protected:
         IFormsExportContext&    m_rContext;
