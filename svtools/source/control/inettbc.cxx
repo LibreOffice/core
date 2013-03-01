@@ -25,13 +25,16 @@
 #include <svtools/inettbc.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#include <com/sun/star/ucb/XCommandProcessor2.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
@@ -98,9 +101,13 @@ class SvtMatchContext_Impl: public salhelper::Thread
     String                          aBaseURL;
     String                          aText;
     SvtURLBox*                      pBox;
-    sal_Bool                            bStop;
     sal_Bool                            bOnlyDirectories;
     sal_Bool                            bNoSelection;
+
+    osl::Mutex mutex_;
+    bool stopped_;
+    css::uno::Reference< css::ucb::XCommandProcessor > processor_;
+    sal_Int32 commandId_;
 
     DECL_STATIC_LINK(               SvtMatchContext_Impl, Select_Impl, void* );
 
@@ -129,9 +136,9 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     , aBaseURL( pBoxP->aBaseURL )
     , aText( rText )
     , pBox( pBoxP )
-    , bStop( sal_False )
     , bOnlyDirectories( pBoxP->bOnlyDirectories )
     , bNoSelection( pBoxP->bNoSelection )
+    , stopped_(false)
 {
     aLink.CreateMutex();
 
@@ -173,7 +180,19 @@ void SvtMatchContext_Impl::FillPicklist(std::vector<rtl::OUString>& rPickList)
 
 void SvtMatchContext_Impl::Stop()
 {
-    bStop = sal_True;
+    css::uno::Reference< css::ucb::XCommandProcessor > proc;
+    sal_Int32 id;
+    {
+        osl::MutexGuard g(mutex_);
+        if (!stopped_) {
+            stopped_ = true;
+            proc = processor_;
+            id = commandId_;
+        }
+    }
+    if (proc.is()) {
+        proc->abort(id);
+    }
     terminate();
 }
 
@@ -193,10 +212,12 @@ void SvtMatchContext_Impl::execute( )
 IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
 {
     // avoid recursion through cancel button
-    if( pThis->bStop )
     {
-        // completions was stopped, no display
-        return 0;
+        osl::MutexGuard g(pThis->mutex_);
+        if (pThis->stopped_) {
+            // Completion was stopped, no display:
+            return 0;
+        }
     }
 
     SvtURLBox* pBox = pThis->pBox;
@@ -543,9 +564,13 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
 void SvtMatchContext_Impl::doExecute()
 {
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
-    if( bStop )
+    {
         // have we been stopped while we were waiting for the mutex?
-        return;
+        osl::MutexGuard g(mutex_);
+        if (stopped_) {
+            return;
+        }
+    }
 
     // Reset match lists
     aCompletions.clear();
@@ -587,7 +612,81 @@ void SvtMatchContext_Impl::doExecute()
                 if ( aMainURL.Len() )
                 {
                     // if text input is a directory, it must be part of the match list! Until then it is scanned
-                    if ( UCBContentHelper::IsFolder( aMainURL ) && aURLObject.hasFinalSlash() )
+                    bool folder = false;
+                    if (aURLObject.hasFinalSlash()) {
+                        try {
+                            css::uno::Reference< css::uno::XComponentContext >
+                                ctx(comphelper::getProcessComponentContext());
+                            css::uno::Reference<
+                                css::ucb::XUniversalContentBroker > ucb(
+                                    css::ucb::UniversalContentBroker::create(
+                                        ctx));
+                            css::uno::Sequence< css::beans::Property > prop(1);
+                            prop[0].Name = "IsFolder";
+                            prop[0].Handle = -1;
+                            prop[0].Type = cppu::UnoType< bool >::get();
+                            css::uno::Any res;
+                            css::uno::Reference< css::ucb::XCommandProcessor >
+                                proc(
+                                    ucb->queryContent(
+                                        ucb->createContentIdentifier(aMainURL)),
+                                    css::uno::UNO_QUERY_THROW);
+                            css::uno::Reference< css::ucb::XCommandProcessor2 >
+                                proc2(proc, css::uno::UNO_QUERY);
+                            sal_Int32 id = proc->createCommandIdentifier();
+                            try {
+                                {
+                                    osl::MutexGuard g(mutex_);
+                                    processor_ = proc;
+                                    commandId_ = id;
+                                }
+                                res = proc->execute(
+                                    css::ucb::Command(
+                                        "getPropertyValues", -1,
+                                        css::uno::makeAny(prop)),
+                                    id,
+                                    css::uno::Reference<
+                                        css::ucb::XCommandEnvironment >());
+                            } catch (...) {
+                                if (proc2.is()) {
+                                    try {
+                                        proc2->releaseCommandIdentifier(id);
+                                    } catch (css::uno::RuntimeException & e) {
+                                        SAL_WARN(
+                                            "svtools.control",
+                                            "ignoring UNO RuntimeException "
+                                            << e.Message);
+                                    }
+                                }
+                                throw;
+                            }
+                            if (proc2.is()) {
+                                proc2->releaseCommandIdentifier(id);
+                            }
+                            {
+                                osl::MutexGuard g(mutex_);
+                                processor_.clear();
+                                // At least the neon-based WebDAV UCP does not
+                                // properly support aborting commands, so return
+                                // anyway now if an abort request had been
+                                // ignored and the command execution only
+                                // returned "successfully" after some timeout:
+                                if (stopped_) {
+                                    return;
+                                }
+                            }
+                            css::uno::Reference< css::sdbc::XRow > row(
+                                res, css::uno::UNO_QUERY_THROW);
+                            folder = row->getBoolean(1) && !row->wasNull();
+                        } catch (css::uno::Exception & e) {
+                            SAL_WARN(
+                                "svtools.control",
+                                "ignoring UNO Exception " << typeid(*&e).name()
+                                << ": " << e.Message);
+                            return;
+                        }
+                    }
+                    if ( folder )
                             Insert( aText, aMatch );
                     else
                         // otherwise the parent folder will be taken
