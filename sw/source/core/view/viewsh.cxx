@@ -1029,7 +1029,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
         return;
 
 #if OSL_DEBUG_LEVEL > 1
-    if ( bInEndAction )
+    if ( mbInEndAction )
     {
         //Is someone rescheduling again?
         OSL_ENSURE( !this, "Scroll waehrend einer EndAction." );
