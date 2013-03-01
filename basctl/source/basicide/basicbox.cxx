@@ -175,8 +175,8 @@ void LibBox::Update( const SfxStringItem* pItem )
     if ( pItem )
     {
         aCurText = pItem->GetValue();
-        if ( aCurText.Len() == 0 )
-            aCurText = String( IDEResId( RID_STR_ALL ) );
+        if ( aCurText.isEmpty() )
+            aCurText = OUString( IDEResId( RID_STR_ALL ) );
     }
 
     if ( GetSelectEntry() != aCurText )
@@ -209,8 +209,8 @@ void LibBox::FillBox()
     ClearBox();
 
     // create list box entries
-    sal_uInt16 nPos = InsertEntry( String( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
-    SetEntryData( nPos, new LibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, String() ) );
+    sal_uInt16 nPos = InsertEntry( OUString( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
+    SetEntryData( nPos, new LibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, OUString() ) );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
 
@@ -243,11 +243,11 @@ void LibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLo
 
     for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
     {
-        String aLibName = pLibNames[ i ];
+        OUString aLibName = pLibNames[ i ];
         if ( eLocation == rDocument.getLibraryLocation( aLibName ) )
         {
-            String aName( rDocument.getTitle( eLocation ) );
-            String aEntryText( CreateMgrAndLibStr( aName, aLibName ) );
+            OUString aName( rDocument.getTitle( eLocation ) );
+            OUString aEntryText( CreateMgrAndLibStr( aName, aLibName ) );
             sal_uInt16 nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
             SetEntryData( nPos, new LibEntry( rDocument, eLocation, aLibName ) );
         }
@@ -317,7 +317,7 @@ void LibBox::NotifyIDE()
     {
         ScriptDocument aDocument( pEntry->GetDocument() );
         SfxUsrAnyItem aDocumentItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, uno::makeAny( aDocument.getDocumentOrNull() ) );
-        String aLibName = pEntry->GetLibName();
+        OUString aLibName = pEntry->GetLibName();
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute(
@@ -417,10 +417,10 @@ void LanguageBox::FillBox()
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
             bool bIsCurrent = localesAreEqual( aCurrentLocale, pLocale[i] );
             LanguageType eLangType = LanguageTag( pLocale[i] ).getLanguageType();
-            String sLanguage = aLangTable.GetString( eLangType );
+            OUString sLanguage = aLangTable.GetString( eLangType );
             if ( bIsDefault )
             {
-                sLanguage += ' ';
+                sLanguage += " ";
                 sLanguage += m_sDefaultLanguageStr;
             }
             sal_uInt16 nPos = InsertEntry( sLanguage );

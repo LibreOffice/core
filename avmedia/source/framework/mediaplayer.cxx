@@ -67,7 +67,7 @@ MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, Window
 
     SetPosSizePixel( Point( 0, 0 ), aSize );
     SetMinOutputSizePixel( aSize );
-    SetText( String( AVMEDIA_RESID( AVMEDIA_STR_MEDIAPLAYER ) ) );
+    SetText( OUString( AVMEDIA_RESID( AVMEDIA_STR_MEDIAPLAYER ) ) );
     implInit();
     mpMediaWindow->show();
 }
