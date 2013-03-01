@@ -2553,7 +2553,7 @@ void SAL_CALL OStylesHelper::replaceByName( const ::rtl::OUString& aName, const 
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     TStyleElements::iterator aFind = m_aElements.find(aName);
-    if ( aFind != m_aElements.end() )
+    if ( aFind == m_aElements.end() )
         throw container::NoSuchElementException();
     if ( !aElement.isExtractableTo(m_aType) )
         throw lang::IllegalArgumentException();
