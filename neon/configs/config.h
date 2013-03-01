@@ -53,10 +53,14 @@
 /* #undef HAVE_EXPAT */
 
 /* Define to 1 if you have the `fcntl' function. */
-/* #undef HAVE_FCNTL */
+#ifdef UNX
+#define HAVE_FCNTL 1
+#endif
 
 /* Define to 1 if you have the <fcntl.h> header file. */
-/* #undef HAVE_FCNTL_H */
+#ifdef UNX
+#define HAVE_FCNTL_H 1
+#endif
 
 /* Define to 1 if you have the `fstat64' function. */
 #define HAVE_FSTAT64
@@ -71,7 +75,9 @@
 /* #undef HAVE_GETNAMEINFO */
 
 /* Define to 1 if you have the `getsockopt' function. */
-/* #undef HAVE_GETSOCKOPT */
+#ifdef UNX
+#define HAVE_GETSOCKOPT 1
+#endif
 
 /* Define if GnuTLS support is enabled */
 /* #undef HAVE_GNUTLS */
@@ -234,7 +240,9 @@
 #endif
 
 /* Define to 1 if the system has the type `socklen_t'. */
-/* #undef HAVE_SOCKLEN_T */
+#ifdef UNX
+#define HAVE_SOCKLEN_T 1
+#endif
 
 /* Define to 1 if you have the `SSL_SESSION_cmp' function. */
 /* #undef HAVE_SSL_SESSION_CMP */
