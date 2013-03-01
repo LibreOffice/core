@@ -136,6 +136,7 @@ class SdXMLExport : public SvXMLExport
 
     virtual void _ExportStyles(sal_Bool bUsed);
     virtual void _ExportAutoStyles();
+    virtual void _ExportFontDecls();
     virtual void _ExportMasterStyles();
     virtual void _ExportContent();
     // #82003#

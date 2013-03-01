@@ -1806,6 +1806,12 @@ void SdXMLExport::_ExportMeta()
 
 //////////////////////////////////////////////////////////////////////////////
 
+void SdXMLExport::_ExportFontDecls()
+{
+    GetFontAutoStylePool(); // make sure the pool is created
+    SvXMLExport::_ExportFontDecls();
+}
+
 void SdXMLExport::_ExportContent()
 {
     // export <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl> elements
@@ -2807,25 +2813,25 @@ uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno:
 }
 
 SERVICE( XMLImpressExportOasis, "com.sun.star.comp.Impress.XMLOasisExporter", "XMLImpressExportOasis", sal_False, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-SERVICE( XMLImpressStylesExportOasis, "com.sun.star.comp.Impress.XMLOasisStylesExporter", "XMLImpressStylesExportOasis", sal_False, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+SERVICE( XMLImpressStylesExportOasis, "com.sun.star.comp.Impress.XMLOasisStylesExporter", "XMLImpressStylesExportOasis", sal_False, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
 SERVICE( XMLImpressContentExportOasis, "com.sun.star.comp.Impress.XMLOasisContentExporter", "XMLImpressContentExportOasis", sal_False, EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
 SERVICE( XMLImpressMetaExportOasis, "com.sun.star.comp.Impress.XMLOasisMetaExporter", "XMLImpressMetaExportOasis", sal_False, EXPORT_OASIS|EXPORT_META );
 SERVICE( XMLImpressSettingsExportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsExporter", "XMLImpressSettingsExportOasis", sal_False, EXPORT_OASIS|EXPORT_SETTINGS );
 
 SERVICE( XMLImpressExportOOO, "com.sun.star.comp.Impress.XMLExporter", "XMLImpressExportOOO", sal_False, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-SERVICE( XMLImpressStylesExportOOO, "com.sun.star.comp.Impress.XMLStylesExporter", "XMLImpressStylesExportOOO", sal_False, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+SERVICE( XMLImpressStylesExportOOO, "com.sun.star.comp.Impress.XMLStylesExporter", "XMLImpressStylesExportOOO", sal_False, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
 SERVICE( XMLImpressContentExportOOO, "com.sun.star.comp.Impress.XMLContentExporter", "XMLImpressContentExportOOO", sal_False, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
 SERVICE( XMLImpressMetaExportOOO, "com.sun.star.comp.Impress.XMLMetaExporter", "XMLImpressMetaExportOOO", sal_False, EXPORT_META );
 SERVICE( XMLImpressSettingsExportOOO, "com.sun.star.comp.Impress.XMLSettingsExporter", "XMLImpressSettingsExportOOO", sal_False, EXPORT_SETTINGS );
 
 SERVICE( XMLDrawExportOasis, "com.sun.star.comp.Draw.XMLOasisExporter", "XMLDrawExportOasis", sal_True, EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-SERVICE( XMLDrawStylesExportOasis, "com.sun.star.comp.Draw.XMLOasisStylesExporter", "XMLDrawStylesExportOasis", sal_True, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+SERVICE( XMLDrawStylesExportOasis, "com.sun.star.comp.Draw.XMLOasisStylesExporter", "XMLDrawStylesExportOasis", sal_True, EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
 SERVICE( XMLDrawContentExportOasis, "com.sun.star.comp.Draw.XMLOasisContentExporter", "XMLDrawContentExportOasis", sal_True, EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
 SERVICE( XMLDrawMetaExportOasis, "com.sun.star.comp.Draw.XMLOasisMetaExporter", "XMLDrawMetaExportOasis", sal_True, EXPORT_OASIS|EXPORT_META );
 SERVICE( XMLDrawSettingsExportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsExporter", "XMLDrawSettingsExportOasis", sal_True, EXPORT_OASIS|EXPORT_SETTINGS );
 
 SERVICE( XMLDrawExportOOO, "com.sun.star.comp.Draw.XMLExporter", "XMLDrawExportOOO", sal_True, EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED );
-SERVICE( XMLDrawStylesExportOOO, "com.sun.star.comp.Draw.XMLStylesExporter", "XMLDrawStylesExportOOO", sal_True, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+SERVICE( XMLDrawStylesExportOOO, "com.sun.star.comp.Draw.XMLStylesExporter", "XMLDrawStylesExportOOO", sal_True, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS );
 SERVICE( XMLDrawContentExportOOO, "com.sun.star.comp.Draw.XMLContentExporter", "XMLDrawContentExportOOO", sal_True, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
 SERVICE( XMLDrawMetaExportOOO, "com.sun.star.comp.Draw.XMLMetaExporter", "XMLDrawMetaExportOOO", sal_True, EXPORT_META );
 SERVICE( XMLDrawSettingsExportOOO, "com.sun.star.comp.Draw.XMLSettingsExporter", "XMLDrawSettingsExportOOO", sal_True, EXPORT_SETTINGS );
@@ -2844,7 +2850,7 @@ OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeExcept
         {
             case EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
                 return XMLDrawExportOOO_getImplementationName();
-            case EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES:
+            case EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS:
                 return XMLDrawStylesExportOOO_getImplementationName();
             case EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
                 return XMLDrawContentExportOOO_getImplementationName();
@@ -2855,7 +2861,7 @@ OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeExcept
 
             case EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
                 return XMLDrawExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES:
+            case EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS:
                 return XMLDrawStylesExportOasis_getImplementationName();
             case EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
                 return XMLDrawContentExportOasis_getImplementationName();
@@ -2876,7 +2882,7 @@ OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeExcept
         {
             case EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
                 return XMLImpressExportOOO_getImplementationName();
-            case EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES:
+            case EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS:
                 return XMLImpressStylesExportOOO_getImplementationName();
             case EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
                 return XMLImpressContentExportOOO_getImplementationName();
@@ -2886,7 +2892,7 @@ OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeExcept
                 return XMLImpressSettingsExportOOO_getImplementationName();
             case EXPORT_OASIS|EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS|EXPORT_FONTDECLS|EXPORT_EMBEDDED:
                 return XMLImpressExportOasis_getImplementationName();
-            case EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES:
+            case EXPORT_OASIS|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS:
                 return XMLImpressStylesExportOasis_getImplementationName();
             case EXPORT_OASIS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS:
                 return XMLImpressContentExportOasis_getImplementationName();
@@ -2904,14 +2910,46 @@ OUString SAL_CALL SdXMLExport::getImplementationName() throw( uno::RuntimeExcept
 XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
 {
     bool bEmbedFonts = false;
-    Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
-    if( xFac.is() )
-    {
-        Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), UNO_QUERY );
-        if( xProps.is() )
-            xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
+    if( getExportFlags() & EXPORT_CONTENT ) {
+        Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
+        if( xFac.is() )
+            {
+                Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), UNO_QUERY );
+                if( xProps.is() )
+                    xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
+
+            }
     }
-    return new XMLFontAutoStylePool( *this, bEmbedFonts );
+
+    XMLFontAutoStylePool *pPool = new XMLFontAutoStylePool( *this, bEmbedFonts );
+
+    Reference< beans::XPropertySet > xProps( GetModel(), UNO_QUERY );
+    if ( xProps.is() ) {
+        Sequence<Any> aAnySeq;
+        if( xProps->getPropertyValue(OUString("Fonts")) >>= aAnySeq )
+        {
+            if( aAnySeq.getLength() % 5 == 0 )
+            {
+                int nLen = aAnySeq.getLength() / 5;
+                int nSeqIndex = 0;
+                for( int i = 0; i < nLen; i++ )
+                {
+                    OUString sFamilyName, sStyleName;
+                    sal_Int16 eFamily, ePitch, eCharSet;
+
+                    aAnySeq[nSeqIndex++] >>= sFamilyName;
+                    aAnySeq[nSeqIndex++] >>= sStyleName;
+                    aAnySeq[nSeqIndex++] >>= eFamily;
+                    aAnySeq[nSeqIndex++] >>= ePitch;
+                    aAnySeq[nSeqIndex++] >>= eCharSet;
+
+                    pPool->Add( sFamilyName, sStyleName, FontFamily( eFamily ), FontPitch( ePitch ), rtl_TextEncoding( eCharSet ) );
+                }
+            }
+        }
+    }
+
+    return pPool;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
