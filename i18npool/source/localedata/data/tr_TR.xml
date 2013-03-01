@@ -88,22 +88,22 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>#.##0[$TL-41F];-#.##0[$TL-41F]</FormatCode>
+      <FormatCode>#.##0[$₺-41F];-#.##0[$₺-41F]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>#.##0,00[$TL-41F];-#.##0,00[$TL-41F]</FormatCode>
+      <FormatCode>#.##0,00[$₺-41F];-#.##0,00[$₺-41F]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>#.##0[$TL-41F];[RED]-#.##0[$TL-41F]</FormatCode>
+      <FormatCode>#.##0[$₺-41F];[RED]-#.##0[$₺-41F]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>#.##0,00[$TL-41F];[RED]-#.##0,00[$TL-41F]</FormatCode>
+      <FormatCode>#.##0,00[$₺-41F];[RED]-#.##0,00[$₺-41F]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>#.##0,00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>#.##0,--[$TL-41F];[RED]-#.##0,--[$TL-41F]</FormatCode>
+      <FormatCode>#.##0,--[$₺-41F];[RED]-#.##0,--[$₺-41F]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>DD.MM.YY</FormatCode>
@@ -341,12 +341,19 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>TRY</CurrencyID>
-      <CurrencySymbol>TL</CurrencySymbol>
+      <CurrencySymbol>₺</CurrencySymbol>
       <BankSymbol>TRY</BankSymbol>
       <CurrencyName>Türk Lirası</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
     <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
+      <CurrencyID>TRY</CurrencyID>
+      <CurrencySymbol>TL</CurrencySymbol>
+      <BankSymbol>TRY</BankSymbol>
+      <CurrencyName>Yeni Türk Lirası</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+     <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
       <CurrencyID>TRY</CurrencyID>
       <CurrencySymbol>YTL</CurrencySymbol>
       <BankSymbol>TRY</BankSymbol>
