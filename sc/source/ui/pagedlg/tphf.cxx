@@ -181,8 +181,8 @@ IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 
 IMPL_LINK_NOARG(ScHFPage, BtnHdl)
 {
-    // When the Edit-Dialog is directly called up from the Button's Click-Handler,
-    // the GraveFocus from the Edit-Dialog under OS/2 doesn't work.(Bug #41805#).
+    // When the Edit-Dialog is directly called from the Button's Click-Handler,
+    // the GrabFocus from the Edit-Dialog under OS/2 doesn't work.(Bug #41805#).
     // With the new StarView, this workaround should be again considered!
 
     Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ) );
