@@ -22,7 +22,7 @@
 
 #include <cppuhelper/implbase4.hxx>
 #include <propertysetbase.hxx>
-#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -68,7 +68,7 @@ namespace xforms
  */
 typedef cppu::ImplInheritanceHelper4<
     PropertySetBase,
-    com::sun::star::xforms::XModel,
+    com::sun::star::xforms::XModel2,
     com::sun::star::xforms::XFormsUIHelper1,
     com::sun::star::util::XUpdatable,
     com::sun::star::lang::XUnoTunnel
@@ -281,7 +281,35 @@ public:
     virtual XSet_t SAL_CALL getSubmissions()
         throw( RuntimeException_t );
 
+    // XPropertySet
 
+    virtual css::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p)
+        throw( css::uno::RuntimeException )
+        { return PropertySetBase::getPropertyValue(p); }
+
+    virtual void SAL_CALL addPropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
+        throw( css::uno::RuntimeException )
+        { PropertySetBase::addPropertyChangeListener(p1, p2); }
+
+    virtual void SAL_CALL removePropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
+        throw( css::uno::RuntimeException )
+        { PropertySetBase::removePropertyChangeListener(p1, p2); }
+
+    virtual void SAL_CALL addVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
+        throw( css::uno::RuntimeException )
+        { PropertySetBase::addVetoableChangeListener(p1, p2); }
+
+    virtual void SAL_CALL removeVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
+        throw( css::uno::RuntimeException )
+        { PropertySetBase::removeVetoableChangeListener(p1, p2); }
+
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo()
+        throw( css::uno::RuntimeException )
+        { return PropertySetBase::getPropertySetInfo(); }
+
+   virtual void SAL_CALL setPropertyValue(const rtl::OUString& p1, const com::sun::star::uno::Any& p2)
+        throw( css::uno::RuntimeException )
+        { PropertySetBase::setPropertyValue(p1, p2); }
 
     //
     // XFormsUIHelper1 & friends:

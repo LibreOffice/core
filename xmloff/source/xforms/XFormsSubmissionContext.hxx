@@ -31,6 +31,7 @@
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
+    namespace xforms { class XModel2; }
 } } }
 namespace rtl { class OUString; }
 class SvXMLImport;
@@ -47,7 +48,7 @@ public:
     XFormsSubmissionContext( SvXMLImport& rImport,
                              sal_uInt16 nPrefix,
                              const rtl::OUString& rLocalName,
-                             const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xModel );
+                             const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2>& xModel );
     virtual ~XFormsSubmissionContext();
 
 

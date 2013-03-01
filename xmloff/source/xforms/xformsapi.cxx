@@ -26,7 +26,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
-#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xforms/Model.hpp>
+#include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 
@@ -48,8 +49,9 @@ using com::sun::star::container::XNameAccess;
 using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::xforms::XFormsSupplier;
 using com::sun::star::xforms::XDataTypeRepository;
+using com::sun::star::xforms::Model;
+using com::sun::star::xforms::XModel2;
 using com::sun::star::container::XNameContainer;
-using comphelper::getProcessServiceFactory;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Exception;
@@ -57,26 +59,16 @@ using com::sun::star::uno::Exception;
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-static Reference<XPropertySet> lcl_createPropertySet( const OUString& rServiceName )
+Reference<XModel2> xforms_createXFormsModel()
 {
-    Reference<XMultiServiceFactory> xFactory = getProcessServiceFactory();
-    DBG_ASSERT( xFactory.is(), "can't get service factory" );
-
-    Reference<XPropertySet> xModel( xFactory->createInstance( rServiceName ),
-                                    UNO_QUERY_THROW );
-    DBG_ASSERT( xModel.is(), "can't create model" );
+    Reference<XModel2> xModel = Model::create( comphelper::getProcessComponentContext() );
 
     return xModel;
 }
 
-Reference<XPropertySet> xforms_createXFormsModel()
-{
-    return lcl_createPropertySet( "com.sun.star.xforms.Model" );
-}
-
 void xforms_addXFormsModel(
     const Reference<frame::XModel>& xDocument,
-    const Reference<XPropertySet>& xModel )
+    const Reference<xforms::XModel2>& xModel )
 {
     bool bSuccess = false;
     try
@@ -129,7 +121,7 @@ static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
                 sal_Int32 nNames = aNames.getLength();
                 for( sal_Int32 n = 0; (n < nNames) && !xRet.is(); n++ )
                 {
-                    Reference<xforms::XModel> xModel(
+                    Reference<xforms::XModel2> xModel(
                         xForms->getByName( pNames[n] ), UNO_QUERY );
                     if( xModel.is() )
                     {

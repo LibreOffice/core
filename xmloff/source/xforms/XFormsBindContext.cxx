@@ -30,7 +30,7 @@
 #include <xmloff/nmspmap.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xforms/XModel2.hpp>
 
 #include <tools/debug.hxx>
 
@@ -42,7 +42,7 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XAttributeList;
-using com::sun::star::xforms::XModel;
+using com::sun::star::xforms::XModel2;
 using namespace xmloff::token;
 
 
@@ -69,9 +69,9 @@ XFormsBindContext::XFormsBindContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XPropertySet>& xModel ) :
+    const Reference<XModel2>& xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
-        mxModel( xModel, UNO_QUERY_THROW ),
+        mxModel( xModel ),
         mxBinding( NULL )
 {
     // attach binding to model

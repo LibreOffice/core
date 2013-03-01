@@ -46,7 +46,7 @@ Reference<XInterface> Model_CreateInstance(
     const Reference<XMultiServiceFactory>& )
     throw( RuntimeException )
 {
-    return static_cast<XPropertySet*>( new xforms::Model );
+    return static_cast<XPropertySet*>( static_cast<PropertySetBase*>( new xforms::Model ) );
 }
 
 Reference<XInterface> XForms_CreateInstance(

@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace xml { namespace dom { class XDocument; } }
     namespace beans { class XPropertySet; }
-    namespace xforms { class XModel; }
+    namespace xforms { class XModel2; }
 } } }
 namespace rtl { class OUString; }
 class SvXMLImport;
@@ -42,7 +42,7 @@ class SvXMLImportContext;
 /** import the xforms:instance element */
 class XFormsInstanceContext : public TokenContext
 {
-    com::sun::star::uno::Reference<com::sun::star::xforms::XModel> mxModel;
+    com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> mxModel;
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument> mxInstance;
     rtl::OUString msId;
     rtl::OUString msURL;
@@ -52,7 +52,7 @@ public:
     XFormsInstanceContext( SvXMLImport& rImport,
                            sal_uInt16 nPrfx,
                            const ::rtl::OUString& rLName,
-                           com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xModel );
+                           const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> & xModel );
     virtual ~XFormsInstanceContext();
 
 

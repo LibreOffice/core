@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xforms/XModel2.hpp>
 
 
 using rtl::OUString;
@@ -78,7 +78,7 @@ XFormsModelContext::~XFormsModelContext()
 }
 
 
-Reference<XPropertySet> XFormsModelContext::getModel()
+Reference<css::xforms::XModel2> XFormsModelContext::getModel()
 {
     return mxModel;
 }
@@ -126,10 +126,7 @@ SvXMLImportContext* XFormsModelContext::HandleChild(
         break;
     case XML_SCHEMA:
         pContext = new SchemaContext(
-            GetImport(), nPrefix, rLocalName,
-            Reference<com::sun::star::xforms::XModel>( mxModel,
-                                                       UNO_QUERY_THROW )
-                ->getDataTypeRepository() );
+            GetImport(), nPrefix, rLocalName, mxModel->getDataTypeRepository() );
         break;
     default:
         OSL_FAIL( "Boooo!" );

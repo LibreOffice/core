@@ -366,6 +366,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	UriAbbreviation \
 	URLTransformer \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xforms,\
+	Model \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/crypto,\
 	NSSInitializer \
 	SEInitializer \
@@ -4072,6 +4075,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xforms,\
 	XFormsSupplier \
 	XFormsUIHelper1 \
 	XModel \
+	XModel2 \
 	XSubmission \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml,\

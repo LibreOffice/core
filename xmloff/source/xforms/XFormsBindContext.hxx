@@ -31,7 +31,7 @@
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
-    namespace xforms { class XModel; }
+    namespace xforms { class XModel2; }
 } } }
 namespace rtl { class OUString; }
 class SvXMLImport;
@@ -41,7 +41,7 @@ class SvXMLImportContext;
 /** import the xforms:binding element */
 class XFormsBindContext : public TokenContext
 {
-    const com::sun::star::uno::Reference<com::sun::star::xforms::XModel> mxModel;
+    const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> mxModel;
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> mxBinding;
 
 public:
@@ -49,7 +49,7 @@ public:
     XFormsBindContext( SvXMLImport& rImport,
                        sal_uInt16 nPrefix,
                        const rtl::OUString& rLocalName,
-                       const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xModel );
+                       const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2>& xModel );
     virtual ~XFormsBindContext();
 
 

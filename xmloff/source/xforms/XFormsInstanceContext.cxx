@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xforms/XModel2.hpp>
 #include <tools/debug.hxx>
 
 #include <xmloff/xmlnmspe.hxx>
@@ -43,7 +43,7 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Sequence;
-using com::sun::star::xforms::XModel;
+using com::sun::star::xforms::XModel2;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::xml::sax::XAttributeList;
@@ -64,9 +64,9 @@ XFormsInstanceContext::XFormsInstanceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    Reference<XPropertySet> xModel ) :
+    const Reference<XModel2> & xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributes, aEmptyMap ),
-        mxModel( Reference<XModel>( xModel, UNO_QUERY ) )
+        mxModel( xModel )
 {
     DBG_ASSERT( mxModel.is(), "need model" );
 }

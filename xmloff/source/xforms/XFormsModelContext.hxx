@@ -22,6 +22,7 @@
 
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/xforms/XModel2.hpp>
 
 
 //
@@ -39,7 +40,7 @@ class SvXMLImportContext;
 /** import the xforms:model element */
 class XFormsModelContext : public TokenContext
 {
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> mxModel;
+    com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> mxModel;
 
 public:
 
@@ -48,7 +49,7 @@ public:
                         const ::rtl::OUString& rLName );
     virtual ~XFormsModelContext();
 
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> getModel();
+    com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> getModel();
 
     //
     // implement SvXMLImportContext & TokenContext methods:

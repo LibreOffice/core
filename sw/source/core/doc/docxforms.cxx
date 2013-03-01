@@ -23,7 +23,8 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XModule.hpp>
-#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xforms/Model.hpp>
+#include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
@@ -37,7 +38,7 @@ using uno::UNO_QUERY;
 using uno::makeAny;
 using uno::Exception;
 using container::XNameContainer;
-using xforms::XModel;
+using xforms::XModel2;
 using frame::XModule;
 using xforms::XFormsUIHelper1;
 using ::rtl::OUString;
@@ -84,19 +85,13 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
         if( bCreateDefaultModel && mxXForms.is() )
         {
             OUString sName("Model 1");
-            Reference<XModel> xModel(
-                lcl_createInstance( "com.sun.star.xforms.Model" ),
-                UNO_QUERY );
-            OSL_ENSURE( xModel.is(), "no model?" );
-            if( xModel.is() )
-            {
-                xModel->setID( sName );
-                Reference<XFormsUIHelper1>( xModel, UNO_QUERY )->newInstance(
-                    OUString("Instance 1"),
-                    OUString(), sal_True );
-                xModel->initialize();
-                mxXForms->insertByName( sName, makeAny( xModel ) );
-            }
+            Reference<XModel2> xModel = xforms::Model::create( comphelper::getProcessComponentContext() );
+            xModel->setID( sName );
+            Reference<XFormsUIHelper1>( xModel, uno::UNO_QUERY_THROW )->newInstance(
+                OUString("Instance 1"),
+                OUString(), sal_True );
+            xModel->initialize();
+            mxXForms->insertByName( sName, makeAny( xModel ) );
             OSL_ENSURE( mxXForms->hasElements(), "can't create XForms model" );
         }
 

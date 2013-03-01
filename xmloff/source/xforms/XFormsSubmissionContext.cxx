@@ -32,7 +32,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xforms/XModel2.hpp>
 
 #include <tools/debug.hxx>
 
@@ -40,7 +40,7 @@ using rtl::OUString;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XAttributeList;
-using com::sun::star::xforms::XModel;
+using com::sun::star::xforms::XModel2;
 
 using namespace com::sun::star::uno;
 using namespace xmloff::token;
@@ -72,17 +72,15 @@ XFormsSubmissionContext::XFormsSubmissionContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference<XPropertySet>& xModel ) :
+    const Reference<XModel2>& xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
         mxSubmission()
 {
     // register submission with model
     DBG_ASSERT( xModel.is(), "need model" );
-    Reference<XModel> xXModel( xModel, UNO_QUERY );
-    DBG_ASSERT( xXModel.is(), "need XModel" );
-    mxSubmission = xXModel->createSubmission().get();
+    mxSubmission = xModel->createSubmission().get();
     DBG_ASSERT( mxSubmission.is(), "can't create submission" );
-    xXModel->getSubmissions()->insert( makeAny( mxSubmission ) );
+    xModel->getSubmissions()->insert( makeAny( mxSubmission ) );
 }
 
 XFormsSubmissionContext::~XFormsSubmissionContext()
