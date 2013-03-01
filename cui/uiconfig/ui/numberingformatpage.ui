@@ -330,7 +330,7 @@
               <object class="GtkLabel" id="categoryft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Category</property>
+                <property name="label" translatable="yes">C_ategory</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">categorylb</property>
                 <attributes>
@@ -403,7 +403,7 @@
               <object class="GtkLabel" id="formatft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">F_ormat</property>
+                <property name="label" translatable="yes">Fo_rmat</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">formatlb</property>
                 <attributes>
