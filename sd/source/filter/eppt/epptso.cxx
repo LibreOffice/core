@@ -480,10 +480,10 @@ sal_Bool PPTWriter::ImplCloseDocument()
         mpExEmbed->Seek( STREAM_SEEK_TO_END );
         sal_uInt32 nExEmbedSize = mpExEmbed->Tell();
 
-        // nEnviroment : Gesamtgroesse des Environment Containers
-        sal_uInt32 nEnvironment = maFontCollection.GetCount() * 76      // 68 bytes pro Fontenityatom und je 8 Bytes fuer die Header
-                                + 8                                     // 1 FontCollection Container
-                                + 20                                    // SrKinsoku Container
+        // nEnviroment : whole size of the environment container
+        sal_uInt32 nEnvironment = maFontCollection.GetCount() * 76      // 68 bytes per Fontenityatom and 8 Bytes per header
+                                + 8                                     // 1 FontCollection container
+                                + 20                                    // SrKinsoku container
                                 + 18                                    // 1 TxSiStyleAtom
                                 + aTxMasterStyleAtomStrm.Tell()         // 1 TxMasterStyleAtom;
                                 + mpStyleSheet->SizeOfTxCFStyleAtom();
@@ -498,7 +498,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
         nBytesToInsert += ImplMasterSlideListContainer( NULL );
         nBytesToInsert += ImplDocumentListContainer( NULL );
 
-        // nBytes im Stream einfuegen, und abhaengige Container anpassen
+        // insert nBytes into stream and adjust depending container
         mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert, false );
 
         // CREATE HYPERLINK CONTAINER
@@ -1085,9 +1085,8 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
     if ( ( mnAngle >= ( 45 << 16 ) && mnAngle < ( 135 << 16 ) ) ||
             ( mnAngle >= ( 225 << 16 ) && mnAngle < ( 315 << 16 ) ) )
     {
-        // In diesen beiden Bereichen steht in PPT gemeinerweise die
-        // BoundingBox bereits senkrecht. Daher muss diese VOR
-        // DER ROTATION flachgelegt werden.
+        // Maddeningly, in those two areas of PPT is the BoundingBox already
+        // vertical. Therefore, we need to put down it BEFORE THE ROTATION.
         ::com::sun::star::awt::Point
             aTopLeft( (sal_Int32)( maRect.Left() + fWidthHalf - fHeightHalf ), (sal_Int32)( maRect.Top() + fHeightHalf - fWidthHalf ) );
         Size    aNewSize( maRect.GetHeight(), maRect.GetWidth() );
@@ -1180,7 +1179,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         case 2 :
                         {
                             rOut << (sal_uInt32)( EPP_DateTimeMCAtom << 16 ) << (sal_uInt32)8
-                                 << (sal_uInt32)( pFieldEntry->nFieldStartPos )         // TxtOffset auf TxtField;
+                                 << (sal_uInt32)( pFieldEntry->nFieldStartPos )         // TxtOffset to TxtField;
                                  << (sal_uInt8)( pFieldEntry->nFieldType & 0xff )       // Type
                                  << (sal_uInt8)0 << (sal_uInt16)0;                      // PadBytes
                         }
@@ -1275,7 +1274,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
         aTextObj.WriteTextSpecInfo( &rOut );
 
-        // Star Office Default TabSizes schreiben ( wenn noetig )
+        // write Star Office Default TabSizes (if necessary)
         if ( aTextObj.ParagraphCount() )
         {
             pPara = aTextObj.GetParagraph(0);
@@ -2051,7 +2050,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
                 {
                     if ( *pIter == aBookmark )
                     {
-                        // Bookmark ist ein link zu einer Dokumentseite
+                        // Bookmark is a link to a document page
                         nAction = 4;
                         nHyperLinkType = 7;
 
@@ -2236,10 +2235,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
     nIndices = nInstance = nLastPer = nShapeCount = nEffectCount = 0;
 
-    sal_Bool bIsTitlePossible = sal_True;           // bei mehr als einem title geht powerpoint in die knie
+    sal_Bool bIsTitlePossible = sal_True;           // powerpoint is not able to handle more than one title
 
-    sal_uInt32  nOutlinerCount = 0;             // die gliederungsobjekte muessen dem layout entsprechen,
-    sal_uInt32  nPrevTextStyle = 0;                // es darf nicht mehr als zwei geben
+    sal_uInt32  nOutlinerCount = 0;                 // the outline objects have to conform to the layout,
+    sal_uInt32  nPrevTextStyle = 0;                 // there are no more than two allowed
 
     nOlePictureId = 0;
 
@@ -2770,7 +2769,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
 
-                // ein GraphicObject kann auch ein ClickMe Element sein
+                // a GraphicObject can also be a ClickMe element
                 if ( mbEmptyPresObj && ( ePageType == NORMAL ) )
                 {
                     nPlaceHolderAtom = rLayout.nUsedObjectPlaceHolder;
@@ -2789,7 +2788,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if ( mXText.is() )
                         mnTextSize = mXText->getString().getLength();
 
-                    if ( mnTextSize )                                       // graphic object oder Flachenfuellung
+                    if ( mnTextSize )                                       // graphic object or area fill
                     {
                         /* SJ #i34951#: because M. documents are not allowing GraphicObjects containing text, we
                         have to create a simpe Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
@@ -2869,7 +2868,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt );
                                 aPropertyOptions.Commit( *mpStrm );
                                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-                                *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();      // oben, links, rechts, unten ????
+                                *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();      // top, left, right, bottom ????
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientData );
                                 mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
                                 *mpStrm << (sal_uInt32)0                                                        // PlacementID
@@ -2884,9 +2883,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 const sal_Unicode* pString = aUString.getStr();
                                 for ( sal_uInt32 i = 0; i < mnTextSize; i++ )
                                 {
-                                    nChar = pString[ i ];       // 0xa -> 0xb weicher Zeilenumbruch
+                                    nChar = pString[ i ];       // 0xa -> 0xb soft newline
                                     if ( nChar == 0xa )
-                                        nChar++;                // 0xd -> 0xd harter Zeilenumbruch
+                                        nChar++;                // 0xd -> 0xd hard newline
                                     *mpStrm << nChar;
                                 }
                                 mpPptEscherEx->AddAtom( 6, EPP_BaseTextPropAtom );
@@ -2961,7 +2960,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 ImplAdjustFirstLineLineSpacing( aTextObj, aPropOpt2 );
                                 aPropOpt2.Commit( *mpStrm );
                                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-                                *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();  // oben, links, rechts, unten ????
+                                *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();  // top, left, right, bottom ????
                                 mpPptEscherEx->OpenContainer( ESCHER_ClientData );
                                 mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
                                 *mpStrm << (sal_uInt32)1                                                        // PlacementID
@@ -3502,7 +3501,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             mpPptEscherEx->LeaveGroup();
         }
     }
-    ClearGroupTable();                              // gruppierungen wegschreiben, sofern noch irgendwelche offen sind, was eigendlich nicht sein sollte
+    ClearGroupTable();                              // storing groups if any are still open, which should not be the case
     nGroups = GetGroupsClosed();
     for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() ) ;
     mnPagesWritten++;
@@ -3569,7 +3568,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
     mpPptEscherEx->OpenContainer( ESCHER_SpgrContainer );
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
     mpPptEscherEx->AddAtom( 16, ESCHER_Spgr, 1 );
-    *mpStrm     << (sal_Int32)maRect.Left() // Bounding box fuer die Gruppierten shapes an die sie attached werden
+    *mpStrm     << (sal_Int32)maRect.Left() // Bounding box for the grouped shapes to which they are attached
                 << (sal_Int32)maRect.Top()
                 << (sal_Int32)maRect.Right()
                 << (sal_Int32)maRect.Bottom();
