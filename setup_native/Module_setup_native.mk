@@ -24,7 +24,7 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 ))
 endif
 
-ifeq ($(OS),WNT)
+ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Module_add_targets,setup_native,\
         Library_instooofiltmsi \
 	Library_jfregca \
