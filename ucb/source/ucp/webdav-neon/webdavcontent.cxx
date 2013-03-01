@@ -782,8 +782,8 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
             {
                 try
                 {
-                    const ResourceType & rType = getResourceType( xEnv );
-                    switch ( rType )
+                    ResourceType eType = getResourceType( xEnv );
+                    switch ( eType )
                     {
                     case UNKNOWN:
                     case DAV:
@@ -877,8 +877,8 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
             {
                 try
                 {
-                    const ResourceType & rType = getResourceType( xEnv );
-                    switch ( rType )
+                    ResourceType eType = getResourceType( xEnv );
+                    switch ( eType )
                     {
                         case UNKNOWN:
                         case DAV:
@@ -1175,11 +1175,11 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         /////////////////////////////////////////////////////////////////////
 
         // First, identify whether resource is DAV or not
-        const ResourceType & rType = getResourceType( xEnv, xResAccess );
-
         bool bNetworkAccessAllowed = true;
+        ResourceType eType = getResourceType(
+            xEnv, xResAccess, &bNetworkAccessAllowed );
 
-        if ( DAV == rType )
+        if ( eType == DAV )
         {
             // cache lookup... getResourceType may fill the props cache via
             // PROPFIND!
@@ -1269,8 +1269,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     }
                     catch ( DAVException const & e )
                     {
-                        bNetworkAccessAllowed
-                            = shouldAccessNetworkAfterException( e );
+                        bNetworkAccessAllowed = bNetworkAccessAllowed
+                            && shouldAccessNetworkAfterException( e );
 
                         if ( !bNetworkAccessAllowed )
                         {
@@ -1341,7 +1341,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         NeonUri aUri( xResAccess->getURL() );
         aUnescapedTitle = aUri.GetPathBaseNameUnescaped();
 
-        if ( rType == UNKNOWN )
+        if ( eType == UNKNOWN )
         {
             xProps.reset( new ContentProperties( aUnescapedTitle ) );
         }
@@ -1349,7 +1349,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // For DAV resources we only know the Title, for non-DAV
         // resources we additionally know that it is a document.
 
-        if ( rType == DAV )
+        if ( eType == DAV )
         {
             //xProps.reset(
             //    new ContentProperties( aUnescapedTitle ) );
@@ -3070,83 +3070,93 @@ Content::getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess )
 }
 
 //=========================================================================
-const Content::ResourceType & Content::getResourceType(
+Content::ResourceType Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv,
-                    const std::auto_ptr< DAVResourceAccess > & rResAccess )
+                    const std::auto_ptr< DAVResourceAccess > & rResAccess,
+                    bool * networkAccessAllowed)
     throw ( uno::Exception )
 {
-    if ( m_eResourceType == UNKNOWN )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-        ResourceType eResourceType;
-        eResourceType = m_eResourceType;
-
-        const rtl::OUString & rURL = rResAccess->getURL();
-        const rtl::OUString aScheme(
-            rURL.copy( 0, rURL.indexOf( ':' ) ).toAsciiLowerCase() );
-
-        if ( aScheme == FTP_URL_SCHEME )
-        {
-            eResourceType = FTP;
+        osl::MutexGuard g(m_aMutex);
+        if (m_eResourceType != UNKNOWN) {
+            return m_eResourceType;
         }
-        else
+    }
+
+    ResourceType eResourceType;
+
+    const rtl::OUString & rURL = rResAccess->getURL();
+    const rtl::OUString aScheme(
+        rURL.copy( 0, rURL.indexOf( ':' ) ).toAsciiLowerCase() );
+
+    if ( aScheme == FTP_URL_SCHEME )
+    {
+        eResourceType = FTP;
+    }
+    else
+    {
+        try
         {
-            try
+            // Try to fetch some frequently used property value, e.g. those
+            // used when loading documents... along with identifying whether
+            // this is a DAV resource.
+            std::vector< DAVResource > resources;
+            std::vector< rtl::OUString > aPropNames;
+            uno::Sequence< beans::Property > aProperties( 5 );
+            aProperties[ 0 ].Name = rtl::OUString("IsFolder");
+            aProperties[ 1 ].Name = rtl::OUString("IsDocument");
+            aProperties[ 2 ].Name = rtl::OUString("IsReadOnly");
+            aProperties[ 3 ].Name = rtl::OUString("MediaType");
+            aProperties[ 4 ].Name = DAVProperties::SUPPORTEDLOCK;
+
+            ContentProperties::UCBNamesToDAVNames( aProperties, aPropNames );
+
+            rResAccess->PROPFIND( DAVZERO, aPropNames, resources, xEnv );
+
+            if ( resources.size() == 1 )
             {
-                // Try to fetch some frequently used property value, e.g. those
-                // used when loading documents... along with identifying whether
-                // this is a DAV resource.
-                std::vector< DAVResource > resources;
-                std::vector< rtl::OUString > aPropNames;
-                uno::Sequence< beans::Property > aProperties( 5 );
-                aProperties[ 0 ].Name
-                    = rtl::OUString("IsFolder");
-                aProperties[ 1 ].Name
-                    = rtl::OUString("IsDocument");
-                aProperties[ 2 ].Name
-                    = rtl::OUString("IsReadOnly");
-                aProperties[ 3 ].Name
-                    = rtl::OUString("MediaType");
-                aProperties[ 4 ].Name
-                    = DAVProperties::SUPPORTEDLOCK;
-
-                ContentProperties::UCBNamesToDAVNames(
-                    aProperties, aPropNames );
-
-                rResAccess->PROPFIND(
-                    DAVZERO, aPropNames, resources, xEnv );
-
-                if ( resources.size() == 1 )
-                {
-                    m_xCachedProps.reset(
-                        new CachableContentProperties( resources[ 0 ] ) );
-                    m_xCachedProps->containsAllNames(
-                        aProperties, m_aFailedPropNames );
-                }
-
-                eResourceType = DAV;
+                osl::MutexGuard g(m_aMutex);
+                m_xCachedProps.reset(
+                    new CachableContentProperties( resources[ 0 ] ) );
+                m_xCachedProps->containsAllNames(
+                    aProperties, m_aFailedPropNames );
             }
-            catch ( DAVException const & e )
-            {
-                rResAccess->resetUri();
 
-                if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
-                {
-                    // Status SC_METHOD_NOT_ALLOWED is a safe indicator that the
-                    // resource is NON_DAV
-                    eResourceType = NON_DAV;
-                }
+            eResourceType = DAV;
+        }
+        catch ( DAVException const & e )
+        {
+            rResAccess->resetUri();
+
+            if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
+            {
+                // Status SC_METHOD_NOT_ALLOWED is a safe indicator that the
+                // resource is NON_DAV
+                eResourceType = NON_DAV;
+            }
+            else if (networkAccessAllowed != 0)
+            {
+                *networkAccessAllowed = *networkAccessAllowed
+                    && shouldAccessNetworkAfterException(e);
             }
         }
+    }
+
+    osl::MutexGuard g(m_aMutex);
+    if (m_eResourceType == UNKNOWN) {
         m_eResourceType = eResourceType;
+    } else {
+        SAL_WARN_IF(
+            eResourceType != m_eResourceType, "ucb.ucp.webdav",
+            "different resource types for <" << rURL << ">: "
+            << +eResourceType << " vs. " << +m_eResourceType);
     }
     return m_eResourceType;
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
 //=========================================================================
-const Content::ResourceType & Content::getResourceType(
+Content::ResourceType Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw ( uno::Exception )
 {

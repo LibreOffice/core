@@ -133,16 +133,17 @@ private:
     getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess );
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    const ResourceType &
+    ResourceType
     getResourceType( const ::com::sun::star::uno::Reference<
                          ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw ( ::com::sun::star::uno::Exception );
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const ResourceType &
+    ResourceType
     getResourceType( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
-                     const std::auto_ptr< DAVResourceAccess > & rResAccess )
+                     const std::auto_ptr< DAVResourceAccess > & rResAccess,
+                     bool * networkAccessAllowed = 0)
         throw ( ::com::sun::star::uno::Exception );
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
