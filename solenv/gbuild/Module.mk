@@ -292,7 +292,7 @@ $$(eval $$(gb_Extensions_final_hook))
 endef
 
 $(call gb_Postprocess_get_target,AllModulesButInstsetNative) :
-	$(call gb_Output_announce,All modules but instset: $^,$(true),ALL)
+	$(call gb_Output_announce,All modules but instset: $(subst $(WORKDIR)/Module/,,$^),$(true),ALL)
 	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && touch $@)
 
 # vim: set noet sw=4:
