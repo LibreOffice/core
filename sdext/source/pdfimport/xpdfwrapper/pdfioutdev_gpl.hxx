@@ -152,6 +152,7 @@ namespace pdfi
 
     public:
         explicit PDFOutDev( PDFDoc* pDoc );
+        ~PDFOutDev();
 
         //----- get info about output device
 
