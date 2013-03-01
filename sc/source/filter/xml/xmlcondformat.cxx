@@ -573,6 +573,7 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                 break;
             case XML_TOK_CONDITION_BASE_CELL_ADDRESS:
                 sAddress = sValue;
+                break;
             default:
                 break;
         }
@@ -767,6 +768,7 @@ ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                 break;
             case XML_TOK_COND_DATE_STYLE:
                 sStyle = sValue;
+                break;
             default:
                 break;
         }
