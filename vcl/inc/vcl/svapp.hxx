@@ -50,6 +50,8 @@ class KeyCode;
 class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
+class ZoomEvent;
+class ScrollEvent;
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/connection/XConnection.hpp>
@@ -229,6 +231,8 @@ public:
 
     static sal_uLong                PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
     static sal_uLong                PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
+    static sal_uLong            PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent );
+    static sal_uLong            PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent );
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
 
     static sal_uLong                PostUserEvent( const Link& rLink, void* pCaller = NULL );

@@ -922,10 +922,9 @@ Java_org_libreoffice_experimental_desktop_Desktop_key(JNIEnv * /* env */,
                                                       jchar c,
                                                       jshort /* timestamp */)
 {
-    KeyEvent aEvent(c, c, 0);
-
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
+        KeyEvent aEvent(c, c, 0);
         Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pFocus->GetWindow(), &aEvent);
         Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pFocus->GetWindow(), &aEvent);
     }
@@ -942,30 +941,30 @@ Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
                                                         jint y,
                                                         jshort /* timestamp */)
 {
-    MouseEvent aEvent;
-
-    sal_uLong nEvent;
-    switch (action) {
-    case AMOTION_EVENT_ACTION_DOWN:
-        aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
-        nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
-        break;
-    case AMOTION_EVENT_ACTION_UP:
-        aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
-        nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
-        break;
-    case AMOTION_EVENT_ACTION_MOVE:
-        aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT);
-        nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
-        break;
-    default:
-        LOGE("Java_org_libreoffice_experimental_desktop_Desktop_touch: Invalid action %d", action);
-        return;
-    }
-
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
-    if (pFocus)
+    if (pFocus) {
+        MouseEvent aEvent;
+        sal_uLong nEvent;
+
+        switch (action) {
+        case AMOTION_EVENT_ACTION_DOWN:
+            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
+            break;
+        case AMOTION_EVENT_ACTION_UP:
+            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+            nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
+            break;
+        case AMOTION_EVENT_ACTION_MOVE:
+            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT);
+            nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
+            break;
+        default:
+            LOGE("Java_org_libreoffice_experimental_desktop_Desktop_touch: Invalid action %d", action);
+            return;
+        }
         Application::PostMouseEvent(nEvent, pFocus->GetWindow(), &aEvent);
+    }
     else
         LOGW("No focused frame to emit event on");
 }
@@ -978,12 +977,13 @@ Java_org_libreoffice_experimental_desktop_Desktop_zoom(JNIEnv * /* env */,
                                                        jint x,
                                                        jint y)
 {
-    (void) x;
-    (void) y;
-
-    if (scale > 1.05) {
-    } else if (scale < 0.95) {
+    SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
+    if (pFocus) {
+        ZoomEvent aEvent( Point( x, y ), scale);
+        Application::PostZoomEvent(VCLEVENT_WINDOW_ZOOM, pFocus->GetWindow(), &aEvent);
     }
+    else
+        LOGW("No focused frame to emit event on");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -887,6 +887,20 @@ sal_uLong Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEven
     return nEventId;
 }
 
+sal_uLong Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent* pZoomEvent )
+{
+    const SolarMutexGuard aGuard;
+    sal_uLong               nEventId = 0;
+
+    if( pWin && pZoomEvent )
+    {
+        // Implement...
+        (void) nEvent;
+    }
+
+    return nEventId;
+}
+
 // -----------------------------------------------------------------------------
 
 IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )

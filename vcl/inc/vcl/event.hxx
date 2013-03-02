@@ -177,6 +177,66 @@ inline MouseEvent::MouseEvent( const Point& rPos, sal_uInt16 nClicks,
     mnCode      = nButtons | nModifier;
 }
 
+class VCL_DLLPUBLIC ZoomEvent
+{
+private:
+    Point           maCenter;
+    float           mfScale;
+
+public:
+    ZoomEvent() :
+        mfScale( 1 )
+    {
+    }
+
+    ZoomEvent( const Point& rCenter,
+               float fScale ) :
+        maCenter( rCenter ),
+        mfScale( fScale )
+    {
+    }
+
+    const Point& GetCenter() const
+    {
+        return maCenter;
+    }
+
+    float GetScale() const
+    {
+        return mfScale;
+    }
+};
+
+class VCL_DLLPUBLIC ScrollEvent
+{
+private:
+    int mnXOffset;
+    int mnYOffset;
+
+public:
+    ScrollEvent() :
+        mnXOffset( 0 ),
+        mnYOffset( 0 )
+    {
+    }
+
+    ScrollEvent( int xOffset, int yOffset ) :
+        mnXOffset( xOffset ),
+        mnYOffset( yOffset )
+    {
+    }
+
+    int GetXOffset() const
+    {
+        return mnXOffset;
+    }
+
+    int GetYOffset() const
+    {
+        return mnYOffset;
+    }
+};
+
 // -------------
 // - HelpEvent -
 // -------------
