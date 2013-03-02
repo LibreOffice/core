@@ -57,11 +57,15 @@ File gid_File_Basic_Formwiz
     Name = "basicsrvform.zip";
 End
 
+#ifndef DISABLE_SCRIPTING
+
 File gid_File_Basic_Scriptbindinglib
     Dir = gid_Dir_Basic_Scriptbindinglib;
     ARCHIVE_TXT_FILE_BODY;
     Name = "scriptbindinglib.zip";
 End
+
+#endif
 
 File gid_File_Basic_Template
     Dir = gid_Dir_Basic_Template;
