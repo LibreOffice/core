@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+6A\u003d",
+        "filename": "udkapi/com/sun/star/beans/PropertyAttribute.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-02T17:30:10Z",
+      "side": 0,
+      "message": "This should stay as it guarantees backwards compatibility.",
+      "revId": "db7a441342f7a22d23492dbd25b113e9573db192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
