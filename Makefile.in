@@ -84,13 +84,42 @@ endef
 
 $(eval $(call gbuild_modules_rules,$(filter-out Module%,$(subst /, ,$(subst $(SRCDIR)/,,$(wildcard $(SRCDIR)/*/Module_*.mk))))))
 
-# run a JunitTest - relies on naming convention (module prefix)
-$(WORKDIR)/JunitTest/%/done :
-	cd $(firstword $(subst _, ,$*)) && $(GNUMAKE) $(GMAKE_OPTIONS) $@
-
-# run a CppunitTest - relies on naming convention (module prefix)
-$(WORKDIR)/CppunitTest/%.test :
-	cd $(firstword $(subst _, ,$*)) && $(GNUMAKE) $(GMAKE_OPTIONS) $@
+gbuild_TARGETS := AllLangHelp \
+	AllLangResTarget \
+	AllLangZip \
+	AutoInstallLibs \
+	CliLibrary \
+	CliNativeLibrary \
+	CliUnoApiTarget \
+	Configuration \
+	CppunitTest \
+	CustomTarget \
+	Dictionary \
+	Executable \
+	Extension \
+	ExternalPackage \
+	ExternalProject \
+	InstallModule \
+	InstallScript \
+	InternalUnoApi \
+	Jar \
+	JunitTest \
+	Library \
+	Module \
+	Package \
+	Pagein \
+	Pyuno \
+	Rdb \
+	StaticLibrary \
+	UI \
+	UnoApi \
+	UnoApiMerge \
+	UnpackedTarball \
+	WinResTarget \
+	Zip
+# build a generic gbuild target
+$(foreach target,$(gbuild_TARGETS),$(target)_%):
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.build $@
 
 #
 # Clean

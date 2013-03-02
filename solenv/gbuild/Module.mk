@@ -164,6 +164,7 @@ gb_Module_SUBSEQUENTCHECKTARGETSTACK := $(call gb_Module_get_subsequentcheck_tar
 gb_Module_CLEANTARGETSTACK := $(call gb_Module_get_clean_target,$(1)) $(gb_Module_CLEANTARGETSTACK)
 gb_Module_CURRENTMODULE_DEBUG_ENABLED := $(call gb_Module__debug_enabled,$(1))
 gb_Module_CURRENTMODULE_NAME := $(1)
+$(call gb_Helper_make_userfriendly_targets,$(1),Module)
 
 endef
 
