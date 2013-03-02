@@ -294,16 +294,13 @@ rtl::Reference< Entity > readEntity(
                         InterfaceTypeEntity::Method::Parameter::Direction dir;
                         switch (mode) {
                         case RT_PARAM_IN:
-                            dir = InterfaceTypeEntity::Method::Parameter::
-                                Direction::DIRECTION_IN;
+                            dir = InterfaceTypeEntity::Method::Parameter::DIRECTION_IN;
                             break;
                         case RT_PARAM_OUT:
-                            dir = InterfaceTypeEntity::Method::Parameter::
-                                Direction::DIRECTION_OUT;
+                            dir = InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT;
                             break;
                         case RT_PARAM_INOUT:
-                            dir = InterfaceTypeEntity::Method::Parameter::
-                                Direction::DIRECTION_IN_OUT;
+                            dir = InterfaceTypeEntity::Method::Parameter::DIRECTION_IN_OUT;
                             break;
                         default:
                             throw FileFormatException(
