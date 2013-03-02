@@ -30,7 +30,7 @@
 #define USE_MEMORY_ALIGNMENT 4
 #endif /* Def _AIX */
 
-#ifdef __CYGWIN__
+#ifdef _MSC_VER
 #define __windows
 #define CORE_BIG_ENDIAN 0
 #define CORE_LITTLE_ENDIAN 1
@@ -97,7 +97,11 @@
 #ifdef __windows
 #define FILE_O_RDONLY     _O_RDONLY
 #define FILE_O_BINARY     _O_BINARY
-#define PATHNCMP strncasecmp /* MSVC converts paths to lower-case sometimes? */
+#define PATHNCMP _strnicmp /* MSVC converts paths to lower-case sometimes? */
+#define inline __inline
+#define snprintf _snprintf
+#define ssize_t long
+#define S_ISREG(mode) (((mode) & _S_IFMT) == (_S_IFREG)) /* MSVC does not have this macro */
 #else /* not windaube */
 #define FILE_O_RDONLY     O_RDONLY
 #define FILE_O_BINARY     0
@@ -775,10 +779,12 @@ static void emit_unpacked_target(char const*const token, char const*const end)
 {
     /* is there some obvious way to printf N characters that i'm missing? */
     size_t size = end - token + 1;
-    char tmp[size];
+    char* tmp;
+    tmp=malloc(size*sizeof(tmp));
     snprintf(tmp, size, "%s", token);
     fputs(tmp, stdout);
     fputs(".done ", stdout);
+    free(tmp);
 }
 
 /* prefix paths to absolute */
@@ -787,6 +793,7 @@ static inline void print_fullpaths(char* line)
     char* token;
     char* end;
     int boost_count = 0;
+    int token_len;
     const char * unpacked_end = 0; /* end of UnpackedTarget match (if any) */
     /* for UnpackedTarget the target is GenC{,xx}Object, dont mangle! */
     int target_seen = 0;
@@ -805,7 +812,7 @@ static inline void print_fullpaths(char* line)
         while (*end && (' ' != *end) && ('\t' != *end) && (':' != *end)) {
             ++end;
         }
-        int token_len = end - token;
+        token_len = end - token;
         if (target_seen &&
             elide_dependency(token, token_len, &unpacked_end))
         {
@@ -855,8 +862,9 @@ static inline void print_fullpaths(char* line)
 
 static inline char * eat_space_at_end(char * end)
 {
+    char * real_end;
     assert('\0' == *end);
-    char * real_end = end - 1;
+    real_end = end - 1;
     while (' ' == *real_end || '\t' == *real_end || '\n' == *real_end
                 || ':' == *real_end)
     {    /* eat colon and whitespace at end */

@@ -2158,20 +2158,6 @@ else
     SOLARVER=${BUILDDIR}/solver
 fi
 
-dnl ===================================================================
-dnl Extra check for Windows. Cygwin builds need gcc to build concat-deps
-dnl although MSVC is used to build other build-time tools and
-dnl LibreOffice itself.
-dnl ===================================================================
-if test "$build_os" = "cygwin"; then
-    AC_MSG_CHECKING([for Cygwin gcc/g++])
-    if which gcc > /dev/null && which g++ > /dev/null; then
-        AC_MSG_RESULT([found])
-    else
-        AC_MSG_ERROR([Cygwin gcc and g++ are needed, please install them.])
-    fi
-fi
-
 # remenber SYSBASE value
 AC_SUBST(SYSBASE)
 
@@ -2242,32 +2228,34 @@ dnl ===================================================================
 dnl  Checks for C compiler,
 dnl  The check for the C++ compiler is later on.
 dnl ===================================================================
-GCC_HOME_SET="true"
-AC_MSG_CHECKING([gcc home])
-if test -z "$with_gcc_home"; then
-    if test "$enable_icecream" = "yes"; then
-        if test -d "/usr/lib/icecc/bin"; then
-            GCC_HOME="/usr/lib/icecc/"
-        else
-            GCC_HOME="/opt/icecream/"
-        fi
-    else
-        GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
-        GCC_HOME_SET="false"
-    fi
-else
-    GCC_HOME="$with_gcc_home"
-fi
-AC_MSG_RESULT($GCC_HOME)
-AC_SUBST(GCC_HOME)
+if test "$_os" != "WINNT" -a "$WITH_MINGW" != "yes"; then
+	GCC_HOME_SET="true"
+	AC_MSG_CHECKING([gcc home])
+	if test -z "$with_gcc_home"; then
+		if test "$enable_icecream" = "yes"; then
+			if test -d "/usr/lib/icecc/bin"; then
+				GCC_HOME="/usr/lib/icecc/"
+			else
+				GCC_HOME="/opt/icecream/"
+			fi
+		else
+			GCC_HOME=`which gcc | $SED -e s,/bin/gcc,,`
+			GCC_HOME_SET="false"
+		fi
+	else
+		GCC_HOME="$with_gcc_home"
+	fi
+	AC_MSG_RESULT($GCC_HOME)
+	AC_SUBST(GCC_HOME)
 
-if test "$GCC_HOME_SET" = "true"; then
-    if test -z "$CC"; then
-        CC="$GCC_HOME/bin/gcc"
-    fi
-    if test -z "$CXX"; then
-        CXX="$GCC_HOME/bin/g++"
-    fi
+	if test "$GCC_HOME_SET" = "true"; then
+		if test -z "$CC"; then
+			CC="$GCC_HOME/bin/gcc"
+		fi
+		if test -z "$CXX"; then
+			CXX="$GCC_HOME/bin/g++"
+		fi
+	fi
 fi
 
 dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
