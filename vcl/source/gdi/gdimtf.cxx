@@ -210,7 +210,12 @@ MetaAction* GDIMetaFile::NextAction()
 MetaAction* GDIMetaFile::ReplaceAction( MetaAction* pAction, size_t nAction )
 {
     if ( nAction >= aList.size() )
+    {
+        // this method takes ownership of pAction and is
+        // therefore responsible for deleting it
+        pAction->Delete();
         return NULL;
+    }
     //fdo#39995 This does't increment the incoming action ref-count nor does it
     //decrement the outgoing action ref-count
     std::swap(pAction, aList[nAction]);

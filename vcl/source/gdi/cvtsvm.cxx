@@ -627,12 +627,13 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             // Subdivided for better quality for older usages
                             if(1 == aInputPolyPolygon.Count())
                             {
-                                rMtf.ReplaceAction(
+                                MetaAction* pAction = rMtf.ReplaceAction(
                                     new MetaPolyLineAction(
                                         aInputPolyPolygon.GetObject(0),
                                         pPolyLineAction->GetLineInfo()),
                                     nLastPolygonAction);
-                                pPolyLineAction->Delete();
+                                if(pAction)
+                                    pAction->Delete();
                             }
                         }
                         else
@@ -645,11 +646,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 // same sub-polygon count
                                 if(pPolyPolygonAction->GetPolyPolygon().Count() == aInputPolyPolygon.Count())
                                 {
-                                    rMtf.ReplaceAction(
+                                    MetaAction* pAction = rMtf.ReplaceAction(
                                         new MetaPolyPolygonAction(
                                             aInputPolyPolygon),
                                         nLastPolygonAction);
-                                    pPolyPolygonAction->Delete();
+                                    if(pAction)
+                                        pAction->Delete();
                                 }
                             }
                             else
@@ -661,11 +663,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                     // replace MetaPolygonAction
                                     if(1 == aInputPolyPolygon.Count())
                                     {
-                                        rMtf.ReplaceAction(
+                                        MetaAction* pAction = rMtf.ReplaceAction(
                                             new MetaPolygonAction(
                                                 aInputPolyPolygon.GetObject(0)),
                                             nLastPolygonAction);
-                                        pPolygonAction->Delete();
+                                        if(pAction)
+                                            pAction->Delete();
                                     }
                                 }
                             }

@@ -199,6 +199,9 @@ public:
     MetaAction*     NextAction();
     MetaAction*     GetAction( size_t nAction ) const;
     MetaAction*     GetCurAction() const { return GetAction( nCurrentActionElement ); }
+    /**
+     * @param pAction takes ownership
+     */
     MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
 
     const Size&     GetPrefSize() const { return aPrefSize; }

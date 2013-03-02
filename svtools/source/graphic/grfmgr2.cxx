@@ -1311,15 +1311,17 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
             }
             if ( pModAct )
             {
-                rOutMtf.ReplaceAction( pModAct, nCurPos );
-                pAct->Delete();
+                MetaAction* pDeleteAction = rOutMtf.ReplaceAction( pModAct, nCurPos );
+                assert(pDeleteAction);
+                pDeleteAction->Delete();
             }
             else
             {
                 if( pAct->GetRefCount() > 1 )
                 {
-                    rOutMtf.ReplaceAction( pModAct = pAct->Clone(), nCurPos );
-                    pAct->Delete();
+                    MetaAction* pDeleteAction = rOutMtf.ReplaceAction( pModAct = pAct->Clone(), nCurPos );
+                    assert(pDeleteAction);
+                    pDeleteAction->Delete();
                 }
                 else
                     pModAct = pAct;

@@ -742,8 +742,9 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                         else
                             pNewAction = new MetaBmpExScaleAction( aPos, aSize, aGraphic.GetBitmapEx() );
 
-                        aMtf.ReplaceAction( pNewAction, i );
-                        pAction->Delete();
+                        MetaAction* pDeleteAction = aMtf.ReplaceAction( pNewAction, i );
+                        if(pDeleteAction)
+                            pDeleteAction->Delete();
                         break;
                     }
                     default:
