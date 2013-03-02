@@ -1117,7 +1117,10 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
     delete[] pCount;
 
     if ( !bResult )
+    {
+        delete[] pBlurVector;
         return bResult;
+    }
 
     // Swap current bitmap with new bitmap
     ImplAssignWithSize( aNewBitmap );
