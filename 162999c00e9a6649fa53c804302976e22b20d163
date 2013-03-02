@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+7g\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TableUndo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-02T15:39:41Z",
+      "side": 1,
+      "message": "modified-flag",
+      "revId": "162999c00e9a6649fa53c804302976e22b20d163",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
