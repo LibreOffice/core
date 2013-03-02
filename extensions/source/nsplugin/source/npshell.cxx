@@ -784,6 +784,8 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
             {
                 debug_fprintf(NSP_LOG_APPEND, "NPP_StreamAsFile:short write to %s. error: %s \n",
                     localPathNew, strerror(errno));
+                close(fdSrc);
+                close(fdDst);
                 return;
             }
         }
