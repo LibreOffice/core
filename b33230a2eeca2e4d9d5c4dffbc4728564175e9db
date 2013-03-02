@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//++I\u003d",
+        "filename": "offapi/com/sun/star/chart2/XDefaultSizeTransmitter.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-02T02:45:55Z",
+      "side": 1,
+      "message": "Heh, you made a typo ;-)",
+      "revId": "b33230a2eeca2e4d9d5c4dffbc4728564175e9db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
