@@ -433,7 +433,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     if( pSVData->maAppData.mnDispatchLevel == 0 )
         vcl::LazyDelete::flush();
 
-    // the system timer events will not necesseraly come in in non waiting mode
+    // the system timer events will not necessarily come in in non waiting mode
     // e.g. on aqua; need to trigger timer checks manually
     if( pSVData->maAppData.mbNoYield && !pSVData->mbNoCallTimer )
     {
@@ -1782,7 +1782,7 @@ bool InitAccessBridge( bool bShowCancel, bool &rCancelled )
 
 // Disable Java bridge on UNIX
 #if defined UNX
-    (void) bShowCancel; // unsued
+    (void) bShowCancel; // unusued
     (void) rCancelled; // unused
 #else
     bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
