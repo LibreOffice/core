@@ -27,7 +27,7 @@
 namespace dbaui
 {
     // ================================================================================================
-    // OQueryDesignFieldUndoAct - Basisklasse fuer Undos in der Feldauflistung im Abfrageentwurf
+   // OQueryDesignFieldUndoAct - Basisclass for undo's in the fieldlist of a query design
 
 
     class OQueryDesignFieldUndoAct : public OCommentUndoAction
@@ -52,7 +52,7 @@ namespace dbaui
     };
 
     // ================================================================================================
-    // OTabFieldCellModifiedUndoAct - Undo-Klasse fuer Aendern einer Zelle einer Spaltenbeschreibung
+    // OTabFieldCellModifiedUndoAct - undo class to change a line of the column description
 
     class OTabFieldCellModifiedUndoAct : public OQueryDesignFieldUndoAct
     {
@@ -73,7 +73,7 @@ namespace dbaui
     };
 
     // ================================================================================================
-    // OTabFieldSizedUndoAct - Undo-Klasse fuer Aendern einer Spaltenbreite
+    // OTabFieldSizedUndoAct - undo class to change the column width
 
     class OTabFieldSizedUndoAct : public OQueryDesignFieldUndoAct
     {
@@ -90,7 +90,7 @@ namespace dbaui
     };
 
     // ================================================================================================
-    // OTabFieldUndoAct - Basisklasse fuer Undos in der Feldauflistung im Abfrageentwurf, die mit Veraendern einer kompletten Feldbeschreibung zu tun haben
+    // OTabFieldUndoAct - base class for undos in the fieldlist of a query design, which are used to change complete field descriptions
 
     class OTabFieldUndoAct : public OQueryDesignFieldUndoAct
     {
@@ -104,7 +104,7 @@ namespace dbaui
     };
 
     // ================================================================================================
-    // OTabFieldDelUndoAct - Undo-Klasse fuer Loeschen eines Feldes
+    // OTabFieldDelUndoAct - undo class to delete a field
 
     class OTabFieldDelUndoAct : public OTabFieldUndoAct
     {
@@ -118,6 +118,7 @@ namespace dbaui
 
     // ================================================================================================
     // OTabFieldDelUndoAct - Undo-Klasse fuer Anlegen eines Feldes
+    // OTabFieldDelUndoAct - undo class to create a field
 
     class OTabFieldCreateUndoAct : public OTabFieldUndoAct
     {
