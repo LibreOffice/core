@@ -2156,10 +2156,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                                 }
                             }
                             else
-                                pNode->m_aLeaves.push_back(
-                                    new OptionsLeaf(
-                                        sId, sLeafLabel, sLeafURL,
-                                        sEventHdl, sLeafGrpId, nLeafGrpIdx ) );
+                                pNode->m_aLeaves.push_back( pLeaf );
                         }
                     }
                 }
