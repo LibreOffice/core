@@ -37,6 +37,8 @@ $(eval $(call gb_StaticLibrary_use_packages,plugcon,\
     cppu_odk_headers \
     i18npool_inc \
     np_sdk_inc \
+	o3tl_inc \
+	rsc_inc \
     tools_inc \
     unotools_inc \
     vcl_inc \
