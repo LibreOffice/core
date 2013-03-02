@@ -1782,7 +1782,7 @@ bool InitAccessBridge( bool bShowCancel, bool &rCancelled )
 
 // Disable Java bridge on UNIX
 #if defined UNX
-    (void) bShowCancel; // unusued
+    (void) bShowCancel; // unused
     (void) rCancelled; // unused
 #else
     bRet = ImplInitAccessBridge( bShowCancel, rCancelled );
