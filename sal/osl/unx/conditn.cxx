@@ -152,6 +152,8 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
            "sal.osl",
            "pthread_cond_broadcast failed, errno " << nRet << ", \""
                << strerror(nRet) << '"');
+       // try to unlock the mutex
+       pthread_mutex_unlock(&pCond->m_Lock);
        return sal_False;
    }
 
