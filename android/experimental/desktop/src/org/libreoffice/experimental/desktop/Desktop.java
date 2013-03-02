@@ -162,6 +162,7 @@ public class Desktop
     {
         Bitmap mBitmap;
         boolean renderedOnce;
+        boolean scalingInProgress;
         ScaleGestureDetector gestureDetector;
         float scale = 1;
 
@@ -189,6 +190,7 @@ public class Desktop
                                                  Log.i(TAG, "onScaleBegin: pivot=(" + detector.getFocusX() + ", " + detector.getFocusY() + ")");
                                                  setPivotX(detector.getFocusX());
                                                  setPivotY(detector.getFocusY());
+                                                 scalingInProgress = true;
                                                  return true;
                                              }
 
@@ -211,6 +213,7 @@ public class Desktop
                                                  scale = 1;
                                                  setScaleX(scale);
                                                  setScaleY(scale);
+                                                 scalingInProgress = false;
                                              }
                                          });
         }
@@ -229,7 +232,8 @@ public class Desktop
             renderedOnce = true;
 
             // re-call ourselves a bit later ...
-            invalidate();
+            if (!scalingInProgress)
+                invalidate();
         }
 
         @Override public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -263,7 +267,12 @@ public class Desktop
 
         @Override public boolean onTouchEvent(MotionEvent event)
         {
-            if (gestureDetector.onTouchEvent(event))
+            Log.i(TAG, "onTouchEvent, scalingInProgress=" + scalingInProgress);
+
+            // For now, when during scaling we just scale the bitmap
+            // view, if a scaling gesture is in progress no other
+            // touch processing should be done.
+            if (gestureDetector.onTouchEvent(event) && scalingInProgress)
                 return true;
 
             if (!renderedOnce)
