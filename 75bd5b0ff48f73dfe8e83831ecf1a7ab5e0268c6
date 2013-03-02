@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+/I\u003d",
+        "filename": "sc/source/core/data/dpobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-02T01:37:55Z",
+      "side": 1,
+      "message": "I wonder why you did not remove the rtl:: here and in many other places where you removed also RTL_CONSTASCII_USTRINGPARAM.",
+      "revId": "75bd5b0ff48f73dfe8e83831ecf1a7ab5e0268c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

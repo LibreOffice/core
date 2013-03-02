@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+/M\u003d",
+        "filename": "sc/source/core/tool/autoform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-02T01:37:55Z",
+      "side": 0,
+      "message": "While it is techincally not wrong to remove the RTL_CONSTASCII_USTRINGPARAM here, it is sub-optimal regarding runtime behavior. What happens is that a temporary OUString is constructed from the ASCII string and then converted to String.\n\nBest is to also convert the String  to OUString if possible, or if not keep the expression as is and not change it. Here even yet another implicit conversion can be eliminated because INetURLObect::Append() takes an OUString. So if keeping the change we would have two temporary conversions, from OUString to String to OUString.\n\nInstead, please use\n\n aURL.Append( OUString( sAutoTblFmtName ) );",
+      "revId": "c0df4eac5cbab3d7d7b7a0ad00e8fe083f198482",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
