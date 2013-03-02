@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//++k\u003d",
+        "filename": "avmedia/source/framework/mediatoolbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-02T02:12:00Z",
+      "side": 1,
+      "message": "Please don\u0027t replace a default ctor with an empty ASCII string that still needs to be converted to an empty OUString internally by the compiler. Use OUString() instead.",
+      "revId": "b85ee571e99f86aa359469411b2912e908deb976",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//++g\u003d",
+        "filename": "basctl/source/basicide/basicbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-02T02:12:00Z",
+      "side": 1,
+      "message": "Same here, please use OUString() instead of \"\"",
+      "revId": "b85ee571e99f86aa359469411b2912e908deb976",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//++c\u003d",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-02T02:12:00Z",
+      "side": 1,
+      "message": "If you encounter neatly aligned member variables in rows of a class declaration it would be nice if you kept the alignment, in this case by removing two spaces.",
+      "revId": "b85ee571e99f86aa359469411b2912e908deb976",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//++Y\u003d",
+        "filename": "basctl/source/basicide/basicbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-02T02:12:00Z",
+      "side": 1,
+      "message": "Same here, alignment.",
+      "revId": "b85ee571e99f86aa359469411b2912e908deb976",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
