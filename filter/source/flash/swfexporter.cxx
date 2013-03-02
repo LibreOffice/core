@@ -614,7 +614,10 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
             }
 
             if (!nID)
+            {
+                delete pShapeInfo;
                 return;
+            }
 
             pShapeInfo->mnID = nID;
 
