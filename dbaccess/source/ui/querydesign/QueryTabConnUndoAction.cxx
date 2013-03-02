@@ -33,7 +33,7 @@ OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
 {
     DBG_DTOR(OQueryTabConnUndoAction,NULL);
     if (m_bOwnerOfConn)
-    {   // ich besitze die Connection -> loeschen
+    {   // I have the connection -> delete
         m_pOwner->DeselectConn(m_pConnection);
         delete m_pConnection;
     }

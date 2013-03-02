@@ -49,10 +49,10 @@ OTableConnectionData::OTableConnectionData(const TTableWindowData::value_type& _
 void OTableConnectionData::Init()
 {
     //////////////////////////////////////////////////////////////////////
-    // LineDataList mit Defaults initialisieren
+    // initialise linedatalist with defaults
     OSL_ENSURE(m_vConnLineData.empty(), "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
     ResetConnLines();
-        // das legt Defaults an
+        // this creates the defaults
 }
 //------------------------------------------------------------------------
 OTableConnectionData::OTableConnectionData( const OTableConnectionData& rConnData )
@@ -64,14 +64,14 @@ OTableConnectionData::OTableConnectionData( const OTableConnectionData& rConnDat
 void OTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     *this = rSource;
-    // hier ziehe ich mich auf das (nicht-virtuelle) operator= zurueck, das nur meine Members kopiert
+    // here I revert to the (non-virtual) operator =, which only copies my members
 }
 
 //------------------------------------------------------------------------
 OTableConnectionData::~OTableConnectionData()
 {
     DBG_DTOR(OTableConnectionData,NULL);
-    // LineDataList loeschen
+    // delete LineDataList
     OConnectionLineDataVec().swap(m_vConnLineData);
 }
 
@@ -88,7 +88,7 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     // clear line list
     ResetConnLines();
 
-    // und kopieren
+    // and copy
     OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
 
     OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
@@ -104,7 +104,8 @@ sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const String& rSo
 {
     if (sal_uInt16(m_vConnLineData.size()) < nIndex)
         return sal_False;
-        // == ist noch erlaubt, das entspricht einem Append
+
+        // == still allowed, this correponds to a Append
 
     if (m_vConnLineData.size() == nIndex)
         return AppendConnLine(rSourceFieldName, rDestFieldName);

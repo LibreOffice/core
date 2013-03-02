@@ -26,7 +26,7 @@
 namespace dbaui
 {
     // ================================================================================================
-    // OQueryTabWinUndoAct - Undo-Basisklasse fuer alles, was mit Einfuegen/Entfernen von TabWIns zu tun hat zu tun hat
+    // OQueryTabWinUndoAct - undo base class for all which is concerned with insert/remove TabWins
 
     class OQueryTableWindow;
     class OTableConnection;
@@ -37,7 +37,7 @@ namespace dbaui
         ::std::vector<OTableConnection*> m_vTableConnection;
         OQueryTableWindow*               m_pTabWin;
         sal_Bool                             m_bOwnerOfObjects;
-            // bin ich alleiniger Eigentuemer der verwalteten Objekte ? (aendert sich mit jedem Redo oder Undo)
+        // am I the only owner of the managed objects? (changes with every redo or undo)
 
     public:
         OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID);
@@ -49,11 +49,11 @@ namespace dbaui
         virtual void Undo() = 0;
         virtual void Redo() = 0;
 
-        // Zugriff auf das TabWin
+        // access to the TabWin
         void SetTabWin(OQueryTableWindow* pTW) { m_pTabWin = pTW; }
-            // anschliessend sollte das SetOwnership aufgerufen werden
+        // now SetOwnership should be invoked
 
-        // Zugriff auf die verwalteten Connections
+        // access to the managed connections
         sal_uInt16  ConnCount() { return (sal_uInt16)m_vTableConnection.size(); }
 
         ::std::vector<OTableConnection*>*       GetTabConnList() { return &m_vTableConnection; }

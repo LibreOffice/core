@@ -215,10 +215,10 @@ namespace
             }
             pNewConnData->AppendConnLine(*pIter,sRelatedColumn);
 
-            // dann die Conn selber dazu
+            // now add the Conn itself
             OQueryTableConnection aNewConn(_pView, aNewConnData);
-                // der Verweis auf die lokale Variable ist unkritisch, da NotifyQueryTabConn eine neue Kopie anlegt
-            // und mir hinzufuegen (wenn nicht schon existent)
+            // refering to the local variable is not important, as NotifyQueryTabConn creates a new copy
+            // to add me (if not existent)
             _pView->NotifyTabConnection(aNewConn, sal_False);
                 // don't create an Undo-Action for the new connection : the connection is
                 // covered by the Undo-Action for the tabwin, as the "Undo the insert" will
@@ -271,8 +271,7 @@ void OQueryTableView::ReSync()
     OSL_ENSURE((getTableConnections()->size()==0) && (GetTabWinMap()->size()==0),
         "vor OQueryTableView::ReSync() bitte ClearAll aufrufen !");
 
-    // ich brauche eine Sammlung aller Fensternamen, deren Anlegen schief geht, damit ich die entsprechenden Connections
-    // gar nicht erst anlege
+    // I need a set of all window names which cannot be created, in order to prevent the creation of corresponding connections
     ::std::vector<String> arrInvalidTables;
 
     TTableWindowData::reverse_iterator aIter = pTabWinDataList->rbegin();
@@ -283,13 +282,13 @@ void OQueryTableView::ReSync()
         OQueryTableWindowData* pData = static_cast<OQueryTableWindowData*>(aIter->get());
         OTableWindow* pTabWin = createWindow(*aIter);
 
-        // ich gehe jetzt NICHT ueber ShowTabWin, da dieses die Daten des Fensters in die Liste des Docs einfuegt, was
-        // schlecht waere, denn genau von dort hole ich sie ja gerade
-        // also Schritt fuer Schritt
+        // I do not use ShowTabWin as this inserts window data in the list of the document, which
+        // would be bad as I get the data from there
+        // therefore step by step
         if (!pTabWin->Init())
         {
-            // das Initialisieren ging schief, dass heisst, dieses TabWin steht nicht zur Verfuegung, also muss ich es inklusive
-            // seiner Daten am Dokument aufraeumen
+            // could not initialise, meaning TabWin is not available, therefore I should clean it
+            // including its data in the document
             pTabWin->clearListBox();
             delete pTabWin;
             arrInvalidTables.push_back(pData->GetAliasName());
@@ -298,15 +297,15 @@ void OQueryTableView::ReSync()
             continue;
         }
 
-        (*GetTabWinMap())[pData->GetAliasName()] = pTabWin; // am Anfang einfuegen, da ich die DataList ja rueckwaerts durchlaufe
-        // wenn in den Daten keine Position oder Groesse steht -> Default
+        (*GetTabWinMap())[pData->GetAliasName()] = pTabWin; // insert at the beginning, as I walk the datalist reverse
+        // if the data do not contain position or size -> default
         if (!pData->HasPosition() && !pData->HasSize())
             SetDefaultTabWinPosSize(pTabWin);
 
         pTabWin->Show();
     }
 
-    // Verbindungen einfuegen
+    // insert connections
     TTableConnectionData* pTabConnDataList = m_pView->getController().getTableConnectionData();
     TTableConnectionData::reverse_iterator aConIter = pTabConnDataList->rbegin();
 
@@ -314,14 +313,15 @@ void OQueryTableView::ReSync()
     {
         OQueryTableConnectionData* pTabConnData =  static_cast<OQueryTableConnectionData*>(aConIter->get());
 
-        // gibt es die beiden Tabellen zur Connection ?
+        // do both tables for the connection exist ?
         String strTabExistenceTest = pTabConnData->getReferencingTable()->GetWinName();
         sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
         strTabExistenceTest = pTabConnData->getReferencedTable()->GetWinName();
         bInvalid = bInvalid && ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
         if (bInvalid)
-        {   // nein -> Pech gehabt, die Connection faellt weg
+        {
+            // no -> bad luck, no connection
             pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter) ,pTabConnDataList->end());
             continue;
         }
@@ -351,7 +351,7 @@ OTableWindow* OQueryTableView::createWindow(const TTableWindowData::value_type& 
 void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn, sal_Bool _bCreateUndoAction)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    // erst mal schauen, ob ich diese Connection schon habe
+    // let's first check if I have the connection already
     OQueryTableConnection* pTabConn = NULL;
     const ::std::vector<OTableConnection*>* pConnections = getTableConnections();
     ::std::vector<OTableConnection*>::const_iterator aEnd = pConnections->end();
@@ -373,10 +373,11 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
     }
     else
         pTabConn = static_cast<OQueryTableConnection*>(*aIter);
-    // nein -> einfuegen
+
+    // no -> insert
     if (pTabConn == NULL)
     {
-        // die neuen Daten ...
+        // the new data ...
         OQueryTableConnectionData* pNewData = static_cast< OQueryTableConnectionData*>(rNewConn.GetData()->NewInstance());
         pNewData->CopyFrom(*rNewConn.GetData());
         TTableConnectionData::value_type aData(pNewData);
@@ -397,11 +398,11 @@ OTableWindowData* OQueryTableView::CreateImpl(const ::rtl::OUString& _rComposedN
 void OQueryTableView::AddTabWin(const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, sal_Bool bNewTable)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    // das ist die aus der Basisklasse geerbte Methode, die fuehre ich auf die an meinem Parent zurueck, die mir eventuell einen
-    // Alias dazu bastelt und das an mein anderes AddTabWin weiterreicht
+    // this method has been inherited from the base class, linking back to the parent and which constructs
+    // an Alias and which passes on to my other AddTabWin
 
-    // leider ist _rTableName voll qualifiziert, das OQueryDesignView erwartet aber einen String, der
-    // nur aus Schema und Tabelle besteht und keinen Katalog enthaelt.
+    // pity _rTableName is fully qualified, OQueryDesignView expects a string which only
+    // contains schema and tables but no catalog.
     Reference< XConnection> xConnection = m_pView->getController().getConnection();
     if(!xConnection.is())
         return;
@@ -462,9 +463,9 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     OSL_ENSURE(!_rTableName.isEmpty() || !strAlias.isEmpty(), "OQueryTableView::AddTabWin : kein Tabellen- und kein Aliasname !");
-        // wenn der Tabellenname nicht gesetzt ist, steht das fuer ein Dummy-Fenster, das braucht aber wenigstens einen Alias-Namen
+    // if the table name was not set, we have a dummy window, which at least should have an alias name
 
-    // neue Datenstruktur erzeugen
+    // create new data structure
     // first check if this already hav it's data
     sal_Bool bAppend = bNewTable;
     TTableWindowData::value_type pNewTabWinData;
@@ -481,13 +482,13 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
         bAppend = ( aWinIter == aWinEnd );
     if ( bAppend )
         pNewTabWinData = createTableWindowData(_rComposedName, _rTableName, strAlias);
-        // die TabWinData brauche ich nicht in die entsprechende Liste der DocShell eintragen, das macht ShowTabWin
+    // I should not register TabWinData in the corresponding list of DocShell, this is done by ShowTabWin
 
-    // neues Fenster erzeugen
+    // construct new window
     OQueryTableWindow* pNewTabWin = static_cast<OQueryTableWindow*>(createWindow(pNewTabWinData));
-    // das Init kann ich hier weglassen, da das in ShowTabWin passiert
+    // Init is not required, as this is done in ShowTabWin
 
-    // Neue UndoAction
+    // New undo action
     OQueryTabWinShowUndoAct* pUndoAction = new OQueryTabWinShowUndoAct(this);
     pUndoAction->SetTabWin(pNewTabWin); // Fenster
     sal_Bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction,bAppend);
@@ -501,7 +502,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
         return;
     }
 
-    // Relationen zwischen den einzelnen Tabellen anzeigen
+    // show relations between individual tables
     OTableWindowMap* pTabWins = GetTabWinMap();
     if(bNewTable && !pTabWins->empty() && !_rTableName.isEmpty())
     {
@@ -600,7 +601,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
         } while ( false );
     }
 
-    // mein Parent brauche ich, da es vom Loeschen erfahren soll
+    // I need my parent as it should learn about deleting
     m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
 
     if (bSuccess && m_lnkTabWinsChangeHandler.IsSet())
@@ -624,14 +625,14 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
     OTableConnection* pConn = GetTabConn(pSourceWin,pDestWin,true);
     if ( !pConn )
     {
-        // neues Daten-Objekt
+        // new data object
         OQueryTableConnectionData* pNewConnectionData = new OQueryTableConnectionData(pSourceWin->GetData(), pDestWin->GetData());
         TTableConnectionData::value_type aNewConnectionData(pNewConnectionData);
 
         sal_uInt32          nSourceFieldIndex, nDestFieldIndex;
         ETableFieldType eSourceFieldType, eDestFieldType;
 
-        // Namen/Position/Typ der beiden betroffenen Felder besorgen ...
+        // Get name/position/type of both affected fields ...
         // Source
 
         nSourceFieldIndex = jxdSource.pListBox->GetModel()->GetAbsPos(jxdSource.pEntry);
@@ -642,7 +643,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
         nDestFieldIndex = jxdDest.pListBox->GetModel()->GetAbsPos(jxdDest.pEntry);
         eDestFieldType = static_cast< OTableFieldInfo*>(jxdDest.pEntry->GetUserData())->GetKeyType();
 
-        // ... und setzen
+        // ... and set
 
         pNewConnectionData->SetFieldIndex(JTCS_FROM, nSourceFieldIndex);
         pNewConnectionData->SetFieldIndex(JTCS_TO, nDestFieldIndex);
@@ -654,7 +655,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
 
         OQueryTableConnection aNewConnection(this, aNewConnectionData);
         NotifyTabConnection(aNewConnection);
-            // wie immer bei NotifyTabConnection ist das Verwenden lokaler Variablen unkritisch, da sowieso eine Kopie erzeugt wird
+        // as always using local variables for NotifyTabConnection is not important, as we will create a copy
     }
     else
     {
@@ -738,7 +739,7 @@ OQueryTableWindow* OQueryTableView::FindTable(const String& rAliasName)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     OSL_ENSURE(rAliasName.Len(), "OQueryTableView::FindTable : der AliasName sollte nicht leer sein !");
-        // (nicht dass es schadet, aber es ist sinnlos und weist vielleicht auf Fehler beim Aufrufer hin)
+    // (it doesn't harm, but it is useless and maybe reveals errors at the caller
     OTableWindowMap::const_iterator aIter = GetTabWinMap()->find(rAliasName);
     if(aIter != GetTabWinMap()->end())
         return static_cast<OQueryTableWindow*>(aIter->second);
@@ -767,20 +768,20 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     DBG_CHKTHIS(OQueryTableView,NULL);
     OSL_ENSURE(pTabWin != NULL, "OQueryTableView::RemoveTabWin : Fenster sollte ungleich NULL sein !");
 
-    // mein Parent brauche ich, da es vom Loeschen erfahren soll
+    // I need my parent, as this should learn about deleting
     OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
     SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
     rUndoMgr.EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
 
-    // Undo-Action anlegen
+    // construct undo action
     OQueryTabWinDelUndoAct* pUndoAction = new OQueryTabWinDelUndoAct(this);
     pUndoAction->SetTabWin(static_cast< OQueryTableWindow*>(pTabWin));
 
-    // und Fenster verstecken
+    // hide window
     HideTabWin(static_cast< OQueryTableWindow*>(pTabWin), pUndoAction);
 
-    // Undo Actions und Loeschen der Felder in SelectionBrowseBox
+    // undo actions and delete fields in the SelectionBrowseBox
     pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData().get())->GetAliasName() );
 
     m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
@@ -813,7 +814,8 @@ void OQueryTableView::EnsureVisible(const OTableWindow* pWin)
 void OQueryTableView::GetConnection(OQueryTableConnection* pConn)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    // bei mir und dem Dokument einfuegen
+
+    // with me and add document
 
     addConnection( pConn );
 }
@@ -822,8 +824,8 @@ void OQueryTableView::GetConnection(OQueryTableConnection* pConn)
 void OQueryTableView::DropConnection(OQueryTableConnection* pConn)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    // Selektion beachten
-    // bei mir und dem Dokument rausnehmen
+    // check selection here
+    // and take outocument
     RemoveConnection( pConn ,sal_False);
 }
 
@@ -836,11 +838,11 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
     if (pTabWin)
     {
-        // Fenster
-        // die Position in seinen Daten speichern
+       // Window
+        // store its position in its data
         getDesignView()->SaveTabWinUIConfig(pTabWin);
-            // (ich muss ueber das Parent gehen, da nur das die Position der Scrollbars kennt)
-        // dann aus der Liste der TabWins raus und verstecken
+        // (only the parent knows the position of the scrollbar)
+        // then remove it from list of TabWins and hide
         OTableWindowMap::iterator aIter = pTabWins->begin();
         OTableWindowMap::iterator aEnd  = pTabWins->end();
         for ( ;aIter != aEnd ; ++aIter )
@@ -850,20 +852,20 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
                 break;
             }
 
-        pTabWin->Hide();    // nicht zerstoeren, steht im Undo!!
+        pTabWin->Hide();    // do not destroy, is in undo!!
 
-        // die Daten zum TabWin muessen auch aus meiner Verantwortung entlassen werden
+        // data of the TabWin should be released from my responsibility
         TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
         pTabWinDataList->erase( ::std::remove(pTabWinDataList->begin(),pTabWinDataList->end(),pTabWin->GetData()),pTabWinDataList->end());
-            // NICHT loeschen, da ja das TabWin selber - das noch lebt - sie auch noch braucht
-            // Entweder geht es irgendwann wieder in meine Verantwortung ueber, (ueber ShowTabWin), dann fuege ich
-            // auch die Daten wieder ein, oder die Undo-Action, die im Augenblick die alleinige Verantwortung fuer das Fenster
-            // und dessen Daten hat, wird zestoert, dann loescht es beides
+
+        // do not delete, as TabWin itself - still alive - needs it
+        // either I will again be responsible (via ShowTabWin), in which case I insert the data again, or the undo-action
+        // which in this moment has to sole responsibility for the window and its data, will be destroyed, which then deletes both
 
         if (m_pLastFocusTabWin == pTabWin)
             m_pLastFocusTabWin = NULL;
 
-        // Verbindungen, die zum Fenster gehoeren, einsammeln und der UndoAction uebergeben
+        // collect connections belonging to the window and pass to UndoAction
         sal_Int16 nCnt = 0;
         const ::std::vector<OTableConnection*>* pTabConList = getTableConnections();
         ::std::vector<OTableConnection*>::const_iterator aIter2 = pTabConList->begin();
@@ -892,10 +894,10 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
         m_pView->getController().InvalidateFeature(ID_BROWSER_ADDTABLE);
 
-        // der UndoAction sagen, dass das Fenster (inklusive der Connections) jetzt in seinem Besitzt ist
+        // tell UndoAction it owns the window (including the connections)
         pUndoAction->SetOwnership(sal_True);
 
-        // damit habe ich das Doc natuerlich modifiziert
+        // now I have modified the document
         m_pView->getController().setModified( sal_True );
         m_pView->getController().InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
     }
@@ -914,17 +916,17 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
         {
             TTableWindowData::value_type pData = pTabWin->GetData();
             OSL_ENSURE(pData != NULL, "OQueryTableView::ShowTabWin : TabWin hat keine Daten !");
-            // Wenn die Daten schon PosSize haben, diese benutzen
+            // use data when they already have PosSize
             if (pData->HasPosition() && pData->HasSize())
             {
                 Size aSize(CalcZoom(pData->GetSize().Width()),CalcZoom(pData->GetSize().Height()));
                 pTabWin->SetPosSizePixel(pData->GetPosition(), aSize);
             }
             else
-                // ansonsten selber eine Default-Position ermitteln
+                // otherwise get a default position
                 SetDefaultTabWinPosSize(pTabWin);
 
-            // Fenster zeigen und in Liste eintragen
+            // show window and register in the list
             ::rtl::OUString sName = static_cast< OQueryTableWindowData*>(pData.get())->GetAliasName();
             OSL_ENSURE(GetTabWinMap()->find(sName) == GetTabWinMap()->end(),"Alias name already in list!");
             GetTabWinMap()->insert(OTableWindowMap::value_type(sName,pTabWin));
@@ -932,12 +934,13 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
             pTabWin->Show();
 
             pTabWin->Update();
-                // Das Update ist notwendig, damit die Connections an dem Fenster richtig gezeichnet werden. Klingt absurd,
-                // ich weiss. Aber die Listbox haelt sich intern ein Member, was bei ersten Zeichnen (nachdem die Listbox im Init
-                // gerade neu gefuellt wurde) initialisiert wird, und genau dieses Member wird irgendwann benoetigt fuer
-                // GetEntryPos, und dieses wiederum von der Connection, wenn sie ihren Ansatzpunkt am Fenster feststellen will.
 
-            // die Connections
+            // the update is required, to draw the connections of the window. Sounds strangs, I know.
+            // But the listbox holds a member, which is initialised during the first draw (after the listbox was
+            // newly filled in Init), and precisely this member is needed for GetEntryPos, and on its turn it is used by connection,
+            // if it wants to find its connectionpoint to the window. ai
+
+            // the connections
             ::std::vector<OTableConnection*>* pTableCon = pUndoAction->GetTabConnList();
             ::std::vector<OTableConnection*>::iterator aIter = pTableCon->begin();
             ::std::vector<OTableConnection*>::iterator aEnd = pTableCon->end();
@@ -947,13 +950,13 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
 
             pTableCon->clear();
 
-            // und die Daten des Fensters ebenfalls in Liste (des Docs)
+            // and the data of the windows also in the list (of the document)
             if(_bAppend)
                 m_pView->getController().getTableWindowData()->push_back(pTabWin->GetData());
 
             m_pView->getController().InvalidateFeature(ID_BROWSER_ADDTABLE);
 
-            // und der UndoAction sagen, dass das Fenster jetzt meine ist ...
+            // now tell UndoAction, the window is mine....
             pUndoAction->SetOwnership(sal_False);
 
             bSuccess = sal_True;
@@ -961,14 +964,14 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
         else
         {
             //////////////////////////////////////////////////////////////////
-            // Initialisierung fehlgeschlagen
-            // (z.B. wenn Verbindung zur Datenbank in diesem Augenblick unterbrochen worden ist)
+            // initialisation did not succeed
+            // (e.g. if the connection to the database was interrupted in this moment)
             pTabWin->clearListBox();
             delete pTabWin;
         }
     }
 
-    // damit habe ich das Doc natuerlich modifiziert
+    // now of course I changed the document
     if(!m_pView->getController().isReadOnly())
         m_pView->getController().setModified( sal_True );
 

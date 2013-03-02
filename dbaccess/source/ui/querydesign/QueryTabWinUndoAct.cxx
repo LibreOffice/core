@@ -57,7 +57,8 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 {
     DBG_DTOR(OQueryTabWinUndoAct ,NULL);
     if (m_bOwnerOfObjects)
-    {   // wenn ich der alleinige Owner des Fenster bin, muss ich dafuer sorgen, dass es geloescht wird
+    {
+        // I should take care to delete the window if I am the only owner
         OSL_ENSURE(m_pTabWin != NULL, "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : m_pTabWin sollte nicht NULL sein");
         OSL_ENSURE(!m_pTabWin->IsVisible(), "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : *m_pTabWin sollte nicht sichtbar sein");
 
@@ -65,7 +66,7 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
             m_pTabWin->clearListBox();
         delete m_pTabWin;
 
-        // und natuerlich auch die entsprechenden Connections
+        // and of course the corresponding connections
         ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
         ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
         for(;aIter != aEnd;++aIter)

@@ -26,7 +26,7 @@ namespace dbaui
 {
 
     // ================================================================================================
-    // OQuerySizeTabWinUndoAct - Undo-Klasse fuer Groessenveraenderung eines TabWins
+    // OQuerySizeTabWinUndoAct - undo class to change size of TabWins
     class OTableWindow;
     class OJoinSizeTabWinUndoAct : public OQueryDesignUndoAction
     {
@@ -39,9 +39,9 @@ namespace dbaui
 
     public:
         OJoinSizeTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPos, const Size& szOriginalSize, OTableWindow* pTabWin);
-        // Nebenbedingung : es darf nicht gescrollt worden sein, waehrend die neue Groesse/Position ermittelt wurde, das heisst, die Position
-        // hier sind physische, nicht logische Koordinaten
-        // (im Gegensatz zur QueryMoveTabWinUndoAct)
+        // Boundary condition: while retrieving size/position scrolling is not allowed, meaning the position
+        // here returns physical and not logical coordinates
+        // (in contrary to QueryMoveTabWinUndoAct)
 
         virtual void    Undo() { ToggleSizePosition(); }
         virtual void    Redo() { ToggleSizePosition(); }

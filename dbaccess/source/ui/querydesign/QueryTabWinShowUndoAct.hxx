@@ -25,7 +25,7 @@
 namespace dbaui
 {
     // ================================================================================================
-    // OQueryTabWinShowUndoAct - Undo-Klasse fuer Anzeigen eines TabWins
+    // OQueryTabWinShowUndoAct - undo class to show a TabWins
 
     class OQueryTabWinShowUndoAct : public OQueryTabWinUndoAct
     {
@@ -38,7 +38,7 @@ namespace dbaui
     };
 
     // ================================================================================================
-    // OQueryTabWinDelUndoAct - Undo-Klasse fuer Loeschen eines TabWins
+    // OQueryTabWinDelUndoAct - undo class to delete a TabWins
 
     class OQueryTabWinDelUndoAct : public OQueryTabWinUndoAct
     {

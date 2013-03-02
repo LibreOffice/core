@@ -47,7 +47,7 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
     ,m_pTabWin( pParent )
 {
     DBG_CTOR(OTableWindowTitle,NULL);
-    // Hintergrund- und Textfarbe setzen
+    // set background- and text colour
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
     SetTextColor(aSystemStyle.GetButtonTextColor());
@@ -84,7 +84,7 @@ void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
         String aHelpText = m_pTabWin->GetComposedName();
         if( aHelpText.Len())
         {
-            // Hilfe anzeigen
+            // show help
             Rectangle aItemRect(Point(0,0),GetSizePixel());
             aItemRect = LogicToPixel( aItemRect );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
@@ -171,8 +171,7 @@ void OTableWindowTitle::DataChanged(const DataChangedEvent& rDCEvt)
 {
     if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
     {
-        // nehmen wir den worst-case an : die Farben haben sich geaendert, also
-        // mich anpassen
+        // assume worst-case: colours have changed, therefore I have to adept
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
         SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
         SetTextColor(aSystemStyle.GetButtonTextColor());

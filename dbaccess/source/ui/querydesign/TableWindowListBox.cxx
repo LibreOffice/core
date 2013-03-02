@@ -89,7 +89,7 @@ OTableWindowListBox::~OTableWindowListBox()
 SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
 {
     //////////////////////////////////////////////////////////////////////
-    // Liste durchiterieren
+    // iterate through the list
     SvTreeList* pTreeList = GetModel();
     SvTreeListEntry* pEntry = pTreeList->First();
     OJoinDesignView* pView = m_pTabWin->getDesignView();
@@ -131,10 +131,11 @@ void OTableWindowListBox::NotifyScrolled()
 void OTableWindowListBox::NotifyEndScroll()
 {
     if (m_bReallyScrolled)
-        // die Verbindungen, die diese Tabelle eventuell hat, muessen neu gezeichnet werden
+        // connections of this table, if any,  should be redrawn
         m_pTabWin->getTableView()->Invalidate(INVALIDATE_NOCHILDREN);
-        // ohne das INVALIDATE_NOCHILDREN wuerden auch alle Tabellen neu gezeichnet werden,
-        // sprich : es flackert
+
+        // without INVALIDATE_NOCHILDREN all tables would be redrawn,
+        // so: flickering
     m_bReallyScrolled = sal_False;
 }
 
@@ -249,7 +250,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                                          Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
             Rectangle aTopScrollArea( Point(0,0), Size(aOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
 
-            // Wenn Zeiger auf der oberen ScrollingArea steht, nach oben scrollen
+             // scroll up if the pointer is on the upper scroll area
             if( aBottomScrollArea.IsInside(m_aMousePos) )
             {
                 if( !m_aScrollTimer.IsActive() )
@@ -259,8 +260,8 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                 }
             }
 
-            // Wenn Zeiger auf der oberen ScrollingArea steht, nach unten scrollen
-            else if( aTopScrollArea.IsInside(m_aMousePos) )
+           // scroll down if the pointer is on the lower scroll area
+           else if( aTopScrollArea.IsInside(m_aMousePos) )
             {
                 if( !m_aScrollTimer.IsActive() )
                 {
@@ -274,12 +275,12 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                     m_aScrollTimer.Stop();
             }
 
-            // Beim Drag automatisch den richtigen Eintrag selektieren
+            // automatically select right entry when dragging
             if ((FirstSelected() != pEntry) || (FirstSelected() && NextSelected(FirstSelected())))
                 SelectAll(sal_False);
             Select(pEntry, sal_True);
 
-            // Auf den ersten Eintrag (*) kann nicht gedroppt werden
+            // one cannot drop on the first (*) entry
             if(!( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) ))
                 nDND_Action = DND_ACTION_LINK;
         }
@@ -363,7 +364,7 @@ void OTableWindowListBox::GetFocus()
 //------------------------------------------------------------------------------
 IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 {
-    // meinem Elter Bescheid sagen
+    // tell my parent
     Window* pParent = Window::GetParent();
     OSL_ENSURE(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
 
