@@ -332,7 +332,9 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         if( ( 1 == ustrSystemPath->length ) || ( (sal_Unicode)'/' == ustrSystemPath->buffer[1] ) )
         {
             /* osl_getHomeDir returns file URL */
-            osl_getHomeDir( osl_getCurrentSecurity(), &pTmp );
+            oslSecurity pSecurity = osl_getCurrentSecurity();
+            osl_getHomeDir( pSecurity , &pTmp );
+            osl_freeSecurityHandle( pSecurity );
 
             /* remove "file://" prefix */
             rtl_uString_newFromStr_WithLength( &pTmp, pTmp->buffer + 7, pTmp->length - 7 );
