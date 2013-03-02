@@ -288,7 +288,10 @@ static NPError l_NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
                   NULL );
 
     if( ! pMes )
+    {
+        delete[] pArray;
         return NPERR_GENERIC_ERROR;
+    }
 
     NPError aRet = pConnector->GetNPError( pMes );
     delete [] pArray;
