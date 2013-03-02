@@ -51,7 +51,7 @@ namespace dbaui
         OQueryTableView*                    m_pTableView;
 
         EJoinType                           eJoinType;
-        TTableConnectionData::value_type    m_pConnData; // enth"alt linke und rechte Tabelle
+        TTableConnectionData::value_type    m_pConnData; // contains left and right table
         TTableConnectionData::value_type    m_pOrigConnData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
 

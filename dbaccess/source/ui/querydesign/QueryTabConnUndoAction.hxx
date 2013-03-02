@@ -30,7 +30,7 @@ namespace dbaui
     protected:
         OQueryTableConnection*  m_pConnection;
         sal_Bool                    m_bOwnerOfConn;
-            // bin ich alleiniger Eigentuemer der Connection ? (aendert sich mit jedem Redo oder Undo)
+        // am I the only owner of the connection? (changes with every redo and undo)
 
     public:
         OQueryTabConnUndoAction(OQueryTableView* pOwner, sal_uInt16 nCommentID);
@@ -40,7 +40,7 @@ namespace dbaui
         virtual void Redo() = 0;
 
         void SetConnection(OQueryTableConnection* pConn) { m_pConnection = pConn; }
-            // anschliessend bitte SetOwnership
+        // now SetOwnership please
         void SetOwnership(sal_Bool bTakeIt) { m_bOwnerOfConn = bTakeIt; }
     };
 }

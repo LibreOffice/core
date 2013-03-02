@@ -61,7 +61,7 @@ namespace dbaui
     void OTableConnection::Init()
     {
         //////////////////////////////////////////////////////////////////////
-        // Linienliste mit Defaults initialisieren
+        // initialise linelist with defaults
         OConnectionLineDataVec* pLineData = GetData()->GetConnLineDataList();
         OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
         OConnectionLineDataVec::const_iterator aEnd = pLineData->end();
@@ -87,7 +87,7 @@ namespace dbaui
     void OTableConnection::UpdateLineList()
     {
         //////////////////////////////////////////////////////////////////////
-        // Linienliste loeschen
+        // delete linelist
         clearLineData();
 
         Init();
@@ -99,10 +99,10 @@ namespace dbaui
         if( &rConn == this )
             return *this;
 
-        // Linienliste loeschen
+        // delete linelist
         clearLineData();
 
-        // Linienliste kopieren
+        // copy linelist
         if(! rConn.GetConnLineList()->empty() )
         {
             const ::std::vector<OConnectionLine*>* pLine = rConn.GetConnLineList();
@@ -113,9 +113,10 @@ namespace dbaui
                 m_vConnLine.push_back( CreateConnLine( **aIter ));
         }
 
-        // da mir die Daten nicht gehoeren, loesche ich die alten nicht
+
+        // as the data are not mine, I also do not delete the old
         m_pData->CopyFrom(*rConn.GetData());
-            // CopyFrom ist virtuell, damit ist es kein Problem, wenn m_pData von einem von OTableConnectionData abgeleiteten Typ ist
+        // CopyFrom is virtual, therefore it is not a problem if m_pData is a derived type of OTableConnectionData
 
         m_bSelected = rConn.m_bSelected;
         m_pParent = rConn.m_pParent;
@@ -185,10 +186,10 @@ namespace dbaui
         Rectangle rcBounding = GetBoundingRect();
         rcBounding.Bottom() += 1;
         rcBounding.Right() += 1;
-            // ich glaube, dass sich Invalidate und Draw(Rectangle) nicht konsistent verhalten : jedenfalls waere dadurch zu
-            // erklaeren, warum ohne diesen Fake hier beim Loeschen einer Connection ein Strich an ihrem unteren Ende stehen bleibt :
-            // Invalidate erfasst dabei offensichtlich eine Pixelzeile weniger als Draw.
-            // Oder alles haengt ganz anders zusammen ... jedenfalls klappt es so ...
+        // I believe Invalidate and Draw(Rectangle) do not behave consistent: in any case it
+        // could explain, why without the fake here when deleting a connection a dash remains at the lower end:
+        // Invalidate records obviously one pixel line less as Draw.
+        // Or everything works differently .....  in any case it works ....
         m_pParent->Invalidate( rcBounding, INVALIDATE_NOCHILDREN );
 
         return true;
@@ -198,7 +199,7 @@ namespace dbaui
     Rectangle OTableConnection::GetBoundingRect() const
     {
         //////////////////////////////////////////////////////////////////////
-        // Aus allen Linien das umgebende Rechteck bestimmen
+        // determine all lines of the surrounding rectangle
         Rectangle aBoundingRect( Point(0,0), Point(0,0) );
         Rectangle aTempRect;
         ::std::vector<OConnectionLine*>::const_iterator aEnd = m_vConnLine.end();
@@ -207,7 +208,7 @@ namespace dbaui
             aTempRect = (*aIter)->GetBoundingRect();
 
             //////////////////////////////////////////////////////////////////////
-            // Ist das BoundingRect dieser Linie gueltig?
+            // is the BoundingRect of this line valid?
             if( (aTempRect.GetWidth()!=1) && (aTempRect.GetHeight()!=1) )
             {
                 if( (aBoundingRect.GetWidth()==1) && (aBoundingRect.GetHeight()==1) )
@@ -224,7 +225,7 @@ namespace dbaui
     void OTableConnection::Draw( const Rectangle& /*rRect*/ )
     {
         //////////////////////////////////////////////////////////////////////
-        // Linien zeichnen
+        // Draw line
         ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),TConnectionLineDrawFunctor(m_pParent));
     }
     // -----------------------------------------------------------------------------

@@ -53,11 +53,11 @@ namespace dbaui
     class OSelectionBrowseBox : public ::svt::EditBrowseBox
     {
         friend class OQueryDesignView;
-        ::std::vector<bool>                 m_bVisibleRow;  // an Pos steht die RowId
+        ::std::vector<bool>                 m_bVisibleRow;              // at pos we find the RowId
         Timer                               m_timerInvalidate;
 
         long                                m_nSeekRow;
-        BrowserMode                         m_nMode;                        // Merken des BrowseModes
+        BrowserMode                         m_nMode;                    // remember the BrowseModes
         Edit*                               m_pTextCell;
         ::svt::CheckBoxControl*             m_pVisibleCell;
         ::svt::ComboBoxControl*             m_pFieldCell;
@@ -65,13 +65,13 @@ namespace dbaui
         ::svt::ListBoxControl*              m_pTableCell;
         ::svt::ListBoxControl*              m_pOrderCell;
 
-        OTableFieldDescRef                  m_pEmptyEntry;      // default entry in the list may reference more than once
+        OTableFieldDescRef                  m_pEmptyEntry;              // default entry in the list may reference more than once
 
-        sal_Int32                           m_nMaxColumns;              // maximale Anzahl der Spalten in einem Select-Statement
+        sal_Int32                           m_nMaxColumns;              // maximum number of columns in a Select-Statement
 
         String                              m_aFunctionStrings;
-        sal_uInt16                          m_nVisibleCount;                // Anzahl der max sichtbaren Zeilen
-        sal_uInt32                          m_nLastSortColumn;              // index of last (highest) sort column
+        sal_uInt16                          m_nVisibleCount;            // maximum number of visible rows
+        sal_uInt32                          m_nLastSortColumn;          // index of last (highest) sort column
         sal_Bool                            m_bOrderByUnRelated;
         sal_Bool                            m_bGroupByUnRelated;
         sal_Bool                            m_bStopTimer;
@@ -91,8 +91,9 @@ namespace dbaui
         void                        DeleteFields( const String& rAliasName );
 
         bool                        HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo) const;
-        // AddGroupBy:: F"ugt ein Feld mit Funktion == Grupierung. Falls das Feld schon vorhanden ist und ein Aggregate Funktion
-        // benutzt, wird das Flag nicht gesetzt
+
+        // AddGroupBy:: inserts a field with function == grouping. If the fields already exists and uses an aggregate function,
+        // the flag is not set
         void                        AddGroupBy( const OTableFieldDescRef& rInfo,sal_uInt32 _nCurrentPos);
         void                        AddCondition( const OTableFieldDescRef& rInfo,
                                                   const String& rValue,
@@ -108,11 +109,11 @@ namespace dbaui
         sal_uInt16                  FieldsCount();
 
         void                        SetColWidth(sal_uInt16 nColId, long lNewWidth);
-                                    // beachtet im Gegensatz zum SetColumnWidth der Basisklasse auch eine eventuell aktive Zelle in dieser Spalte
+                                        // unlike SetColumnWidth of the base class it checks an active cell in this column
 
         String                      GetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId);
         void                        SetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId, const String& strNewText);
-                                        // Zelleninhalt (als String formatiert) setzen/liefern
+                                        // cell content (formatted as string) set/return
         sal_Int32                   GetNoneVisibleRows() const;
         void                        SetNoneVisbleRow(long nRows);
         sal_Bool                    IsRowVisible(sal_uInt16 _nWhich) const;
@@ -215,11 +216,13 @@ namespace dbaui
 
     private:
         OTableFieldDescRef          FindFirstFreeCol(sal_uInt16& _rColumnPosition);
-            // rCol enthaelt die Nummer (in pOTableFieldDescList) der ersten Spalte, die von sich sagt, dass sie leer ist
-            // wenn es keine solche gibt, ist rCol undefiniert und der Rueckgabewert NULL
+
+            // rCol contains the Nummer (in pOTableFieldDescList) of the first column, which itself tells it is empty
+            // if there are none, rCol is undefined and the returnvalue NULL
         void                        CheckFreeColumns(sal_uInt16& _rColumnPosition);
-            // testet, ob es noch freie Spalten gibt, wenn nicht, wird ein neuer Packen angefuegt
-            // rCol enthaelt die Nummer der ersten freien Spalte (in pOTableFieldDescList)
+
+            // check if empty columns are available, if not,  a new Packen is appended
+            // rCol contains the Nummer of the first empty column (in pOTableFieldDescList)
 
         void            RemoveField( sal_uInt16 nId );
         Rectangle       GetInvalidRect( sal_uInt16 nColId );

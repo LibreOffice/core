@@ -24,13 +24,12 @@
 namespace dbaui
 {
     // ================================================================================================
-    // OQueryDesignUndoAction - Undo-Basisklasse fuer Aktionen im graphischen Abfrageentwurf (ohne Feldliste)
-
+    // OQueryDesignUndoAction - undo base class for actions in graphical query design (without field list)
     class OJoinTableView;
     class OQueryDesignUndoAction : public OCommentUndoAction
     {
     protected:
-        OJoinTableView* m_pOwner;       // in diesem Container spielt sich alles ab
+        OJoinTableView* m_pOwner;       // in this container it all happens
 
     public:
         OQueryDesignUndoAction(OJoinTableView* pOwner, sal_uInt16 nCommentID) : OCommentUndoAction(nCommentID), m_pOwner(pOwner) { }

@@ -215,10 +215,10 @@ namespace
             }
             pNewConnData->AppendConnLine(*pIter,sRelatedColumn);
 
-            // dann die Conn selber dazu
+            // now add the Conn itself
             OQueryTableConnection aNewConn(_pView, aNewConnData);
-                // der Verweis auf die lokale Variable ist unkritisch, da NotifyQueryTabConn eine neue Kopie anlegt
-            // und mir hinzufuegen (wenn nicht schon existent)
+            // refering to the local variable is not important, as NotifyQueryTabConn creates a new copy
+            // to add me (if not existent)
             _pView->NotifyTabConnection(aNewConn, sal_False);
                 // don't create an Undo-Action for the new connection : the connection is
                 // covered by the Undo-Action for the tabwin, as the "Undo the insert" will
@@ -273,7 +273,6 @@ void OQueryTableView::ReSync()
 
 
     // I need a collection of all window names that cannot be created so that I do not initialize connections for them.
-
     ::std::vector<String> arrInvalidTables;
 
     TTableWindowData::reverse_iterator aIter = pTabWinDataList->rbegin();
@@ -315,14 +314,15 @@ void OQueryTableView::ReSync()
     {
         OQueryTableConnectionData* pTabConnData =  static_cast<OQueryTableConnectionData*>(aConIter->get());
 
-        // gibt es die beiden Tabellen zur Connection ?
+        // do both tables for the connection exist ?
         String strTabExistenceTest = pTabConnData->getReferencingTable()->GetWinName();
         sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
         strTabExistenceTest = pTabConnData->getReferencedTable()->GetWinName();
         bInvalid = bInvalid && ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
         if (bInvalid)
-        {   // nein -> Pech gehabt, die Connection faellt weg
+        {
+            // no -> bad luck, no connection
             pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter) ,pTabConnDataList->end());
             continue;
         }
@@ -352,7 +352,7 @@ OTableWindow* OQueryTableView::createWindow(const TTableWindowData::value_type& 
 void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn, sal_Bool _bCreateUndoAction)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    // erst mal schauen, ob ich diese Connection schon habe
+    // let's first check if I have the connection already
     OQueryTableConnection* pTabConn = NULL;
     const ::std::vector<OTableConnection*>* pConnections = getTableConnections();
     ::std::vector<OTableConnection*>::const_iterator aEnd = pConnections->end();
@@ -374,10 +374,11 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
     }
     else
         pTabConn = static_cast<OQueryTableConnection*>(*aIter);
-    // nein -> einfuegen
+
+    // no -> insert
     if (pTabConn == NULL)
     {
-        // die neuen Daten ...
+        // the new data ...
         OQueryTableConnectionData* pNewData = static_cast< OQueryTableConnectionData*>(rNewConn.GetData()->NewInstance());
         pNewData->CopyFrom(*rNewConn.GetData());
         TTableConnectionData::value_type aData(pNewData);
@@ -398,11 +399,11 @@ OTableWindowData* OQueryTableView::CreateImpl(const ::rtl::OUString& _rComposedN
 void OQueryTableView::AddTabWin(const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, sal_Bool bNewTable)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    // This is the method inherited from the base class. I send it back to my parent class and my parent
-    // may build an Alias and send it on to AddTabWin.
+    // this method has been inherited from the base class, linking back to the parent and which constructs
+    // an Alias and which passes on to my other AddTabWin
 
-    // Unfortunately _rTableName is fully qualified, but OQueryDesignView expects a String consisting
-    // of the Schema and Table only and not containing a Catalog.
+    // pity _rTableName is fully qualified, OQueryDesignView expects a string which only
+    // contains schema and tables but no catalog.
     Reference< XConnection> xConnection = m_pView->getController().getConnection();
     if(!xConnection.is())
         return;
@@ -466,7 +467,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
         // If the table is not set, then it is a dummy window, but at least the alias must be set
 
     // build a new data structure
-    // first check if this already hav it's data
+    // first check if this already has its data
     sal_Bool bAppend = bNewTable;
     TTableWindowData::value_type pNewTabWinData;
     TTableWindowData* pWindowData = getDesignView()->getController().getTableWindowData();
@@ -625,14 +626,14 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
     OTableConnection* pConn = GetTabConn(pSourceWin,pDestWin,true);
     if ( !pConn )
     {
-        // new Data object
+        // new data object
         OQueryTableConnectionData* pNewConnectionData = new OQueryTableConnectionData(pSourceWin->GetData(), pDestWin->GetData());
         TTableConnectionData::value_type aNewConnectionData(pNewConnectionData);
 
         sal_uInt32          nSourceFieldIndex, nDestFieldIndex;
         ETableFieldType eSourceFieldType, eDestFieldType;
 
-        // Get the name/position/type of both the effected fields...
+        // Get name/position/type of both affected fields ...
         // Source
 
         nSourceFieldIndex = jxdSource.pListBox->GetModel()->GetAbsPos(jxdSource.pEntry);
@@ -644,7 +645,6 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
         eDestFieldType = static_cast< OTableFieldInfo*>(jxdDest.pEntry->GetUserData())->GetKeyType();
 
         // ... and set them
-
         pNewConnectionData->SetFieldIndex(JTCS_FROM, nSourceFieldIndex);
         pNewConnectionData->SetFieldIndex(JTCS_TO, nDestFieldIndex);
 
@@ -655,7 +655,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
 
         OQueryTableConnection aNewConnection(this, aNewConnectionData);
         NotifyTabConnection(aNewConnection);
-            // As usual with NotifyTabConnection, using a local variable is fine because a copy is made
+        // As usual with NotifyTabConnection, using a local variable is fine because a copy is made
     }
     else
     {
@@ -864,7 +864,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
         if (m_pLastFocusTabWin == pTabWin)
             m_pLastFocusTabWin = NULL;
 
-        // Collect the connections which belong to the window and pass them to the UndoAction
+        // collect connections belonging to the window and pass to UndoAction
         sal_Int16 nCnt = 0;
         const ::std::vector<OTableConnection*>* pTabConList = getTableConnections();
         ::std::vector<OTableConnection*>::const_iterator aIter2 = pTabConList->begin();
@@ -961,7 +961,6 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
         }
         else
         {
-            //////////////////////////////////////////////////////////////////
             // Initiaisation failed
             // (for example when the Connection to the database is not available at the moment)
             pTabWin->clearListBox();

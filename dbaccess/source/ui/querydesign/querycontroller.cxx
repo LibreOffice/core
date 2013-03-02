@@ -147,23 +147,23 @@ namespace dbaui
             OUString rString;
             if (!_pNode->isToken())
             {
-                // Regelnamen als rule: ...
+                // rule name as rule: ...
                 rString = "RULE_ID: " + OUString::valueOf( (sal_Int32)_pNode->getRuleID() ) +
                           "(" + OSQLParser::RuleIDToStr(_pNode->getRuleID()) + ")";
 
 
                 _pParent = _pBox->InsertEntry(rString,_pParent);
 
-                // einmal auswerten wieviel Subtrees dieser Knoten besitzt
+                // determine how much subtrees this node has
                 sal_uInt32 nStop = _pNode->count();
-                // hol dir den ersten Subtree
+                // fetch first subtree
                 for(sal_uInt32 i=0;i<nStop;++i)
                     insertParseTree(_pBox,_pNode->getChild(i),_pParent);
             }
             else
             {
-                // ein Token gefunden
-                // tabs fuer das Einruecken entsprechend nLevel
+                // token found
+                // tabs to insert according to nLevel
 
                 switch (_pNode->getNodeType())
                 {
@@ -177,8 +177,8 @@ namespace dbaui
 
                 case SQL_NODE_COMPARISON:
                     {
-                        rString += "SQL_COMPARISON:" + _pNode->getTokenValue(); // haenge Nodevalue an
-                            // und beginne neu Zeile
+                        rString += "SQL_COMPARISON:" + _pNode->getTokenValue(); // append Nodevalue
+                            // and start new line
                         break;}
 
                 case SQL_NODE_NAME:
@@ -203,12 +203,12 @@ namespace dbaui
 
                 case SQL_NODE_PUNCTUATION:
                     {
-                        rString += "SQL_PUNCTUATION:" + _pNode->getTokenValue(); // haenge Nodevalue an
+                        rString += "SQL_PUNCTUATION:" + _pNode->getTokenValue(); // append Nodevalue
                         break;}
 
                 case SQL_NODE_AMMSC:
                     {
-                        rString += "SQL_AMMSC:" + _pNode->getTokenValue(); // haenge Nodevalue an
+                        rString += "SQL_AMMSC:" + _pNode->getTokenValue(); // append Nodevalue
                         break;}
 
                 default:
