@@ -458,7 +458,7 @@ Ww1Sprm::Ww1Sprm(SvStream& rStream, sal_uLong ulFilePos)
 
 Ww1Sprm::~Ww1Sprm()
 {
-    delete pArr;
+    delete[] pArr;
     delete p;
 }
 
@@ -532,7 +532,7 @@ sal_Bool Ww1Sprm::Fill(sal_uInt16 index, sal_uInt8& nId, sal_uInt16& nL, sal_uIn
 sal_Bool Ww1Sprm::ReCalc()
 {
     sal_Bool bRet = sal_True;
-    delete pArr;
+    delete[] pArr;
     pArr = NULL;
     count = 0;
     if (nCountBytes != 255) // not unused?
