@@ -37,6 +37,7 @@ $(eval $(call gb_StaticLibrary_use_packages,headless,\
 	i18npool_inc \
 	i18nutil_inc \
 	o3tl_inc \
+	rsc_inc \
 	tools_inc \
 	unotools_inc \
 ))
