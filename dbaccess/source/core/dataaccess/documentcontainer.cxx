@@ -39,6 +39,7 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include <comphelper/namedvaluecollection.hxx>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -558,9 +559,9 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
     {
         throw IllegalArgumentException();
     }
-    catch(const WrappedTargetException&)
+    catch(const WrappedTargetException &e)
     {
-        throw;
+        throw WrappedTargetRuntimeException(e.Message, e.Context, e.TargetException);
     }
     return xComp;
 }
