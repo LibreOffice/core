@@ -16,6 +16,24 @@
       "revId": "4c8d4308d6e975c93d7d4bfb6f8a11d41c1f05a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+/Y\u003d",
+        "filename": "vcl/unx/gtk/a11y/atkutil.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-03-02T00:54:19Z",
+      "side": 0,
+      "message": "UPD is quite meaningless nowadays (does it still exist or has Tor killed it already?)\nso i\u0027d call this change an improvement.",
+      "parentUuid": "AAAAV3///Bg\u003d",
+      "revId": "4c8d4308d6e975c93d7d4bfb6f8a11d41c1f05a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
