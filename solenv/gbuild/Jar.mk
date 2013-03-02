@@ -100,6 +100,7 @@ $(eval $(call gb_Module_register_target,$(call gb_Jar_get_outdir_target,$(1)),$(
 $(call gb_Helper_make_userfriendly_targets,$(1),Jar)
 $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_target,$(1)),$(1))
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
+$(call gb_Jar_get_outdir_target,$(1)) :| $(dir $(call gb_Jar_get_outdir_target,$(1))).dir
 
 endef
 
