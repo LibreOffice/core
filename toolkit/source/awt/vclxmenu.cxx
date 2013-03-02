@@ -528,9 +528,7 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
         // if the popup men is not created by stardiv.Toolkit.VCLXPopupMenu
         if( !aRef.is() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pNewRef = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > ;
-            *pNewRef = new VCLXPopupMenu( (PopupMenu*)pMenu );
-            aRef = *pNewRef;
+            aRef = new VCLXPopupMenu( (PopupMenu*)pMenu );
         }
     }
     return aRef;
