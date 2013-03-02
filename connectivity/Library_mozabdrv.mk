@@ -31,6 +31,21 @@ $(eval $(call gb_Library_set_include,mozabdrv,\
 	-I$(SRCDIR)/connectivity/source/drivers/mozab \
 	-I$(SRCDIR)/connectivity/source/inc \
 	-I$(call gb_UnpackedTarball_get_dir,moz_inc) \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/addrbook \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/content \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/embed_base \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/intl \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/mime \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/mozldap \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/msgbase \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/necko \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/pref \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/profile \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/rdf \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/string \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/uconv \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/xpcom \
+	-I$(call gb_UnpackedTarball_get_dir,moz_inc)/xpcom_obsolete \
 	$$(INCLUDE) \
 ))
 
