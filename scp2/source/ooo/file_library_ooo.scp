@@ -42,6 +42,8 @@ STD_LIB_FILE( gid_File_Lib_Ado, ado)
 
 #ifndef DISABLE_SCRIPTING
 
+STD_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
+
 File gid_File_Lib_Basprov
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -62,6 +64,21 @@ File gid_File_Lib_Vbaevent
   #else
     Name = STRING(CONCAT3(vbaevents,.uno,.dll));
   #endif
+End
+
+File gid_File_Lib_Scriptframe
+    LIB_FILE_BODY;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = "libscriptframe.dylib";
+    #else
+       Name = "libscriptframe.so";
+    #endif
+  #else
+    Name = "scriptframe.dll";
+  #endif
+    Dir = SCP2_OOO_BIN_DIR;
+    Styles = (PACKED);
 End
 
 #endif
@@ -280,8 +297,6 @@ File gid_File_Lib_Dlgprov
   #endif
 End
 
-#endif
-
 File gid_File_Lib_Stringresource
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -292,8 +307,6 @@ File gid_File_Lib_Stringresource
     Name = STRING(CONCAT3(stringresource,.uno,.dll));
   #endif
 End
-
-#ifndef DISABLE_SCRIPTING
 
 File gid_File_Lib_Vbaobj
     LIB_FILE_BODY;
@@ -1004,21 +1017,6 @@ STD_LIB_FILE( gid_File_Lib_Sb , sb)
 
 STD_LIB_FILE( gid_File_Lib_Scn, scn)
 
-File gid_File_Lib_Scriptframe
-    LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = "libscriptframe.dylib";
-    #else
-       Name = "libscriptframe.so";
-    #endif
-  #else
-    Name = "scriptframe.dll";
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
 STD_LIB_FILE( gid_File_Lib_Sd , sd)
 STD_LIB_FILE( gid_File_Lib_Sdui, sdui)
 
@@ -1045,8 +1043,6 @@ File gid_File_Lib_Sdbc_2
 End
 
 STD_LIB_FILE( gid_File_Lib_Sdd , sdd)
-
-STD_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 
 File gid_File_Lib_Sfx
     Name = LIBNAME(sfx);

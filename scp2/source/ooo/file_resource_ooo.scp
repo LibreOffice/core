@@ -27,7 +27,11 @@
 
 #include "macros.inc"
 
+#ifndef DISABLE_SCRIPTING
+
 STD_RES_FILE( gid_File_Res_Basctl, basctl)
+
+#endif
 
 STD_RES_FILE( gid_File_Res_Bib, bib )
 
