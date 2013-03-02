@@ -122,6 +122,11 @@ public:
         return std::lower_bound( base_t::begin(), base_t::end(), x, Compare() );
     }
 
+    const_iterator upper_bound( const Value& x ) const
+    {
+        return std::upper_bound( base_t::begin(), base_t::end(), x, Compare() );
+    }
+
     /* Searches the container for an element with a value of x
      * and returns an iterator to it if found, otherwise it returns an
      * iterator to sorted_vector::end (the element past the end of the container).
