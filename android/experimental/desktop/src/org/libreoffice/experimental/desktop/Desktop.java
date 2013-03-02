@@ -171,16 +171,12 @@ public class Desktop
             super(Desktop.this);
             setFocusableInTouchMode(true);
 
-            // While a scale gesture (two-finger pinch / spread to
-            // zoom out / in) is in progress we just scale the bitmap
-            // view (UI elements too, which of course is a bit silly).
-            // When the scale gesture has finished, we ask LO to zoom
-            // the document (and reset the view scale, it will be
-            // replaced by one where the document (not UI elements) is
-            // displayed at a different zoom level).
+            // Is this sane? It is rather slow to ask LO to zoom
+            // continuously while the scaling gesture is in progress.
 
-            // Is that sane? Would it be too slow to ask LO to zoom
-            // continuously while the gesture is in progress?
+            // What we used to do was while a scale gesture was in
+            // progress to just scale the bitmap view (UI elements
+            // too, which of course was a bit silly).
 
             gestureDetector =
                 new ScaleGestureDetector(Desktop.this,
@@ -188,8 +184,6 @@ public class Desktop
                                              @Override public boolean onScaleBegin(ScaleGestureDetector detector)
                                              {
                                                  Log.i(TAG, "onScaleBegin: pivot=(" + detector.getFocusX() + ", " + detector.getFocusY() + ")");
-                                                 setPivotX(detector.getFocusX());
-                                                 setPivotY(detector.getFocusY());
                                                  scalingInProgress = true;
                                                  return true;
                                              }
@@ -201,8 +195,7 @@ public class Desktop
                                                      return false;
                                                  scale *= s;
                                                  Log.i(TAG, "onScale: " + s + " => " + scale);
-                                                 setScaleX(scale);
-                                                 setScaleY(scale);
+                                                 Desktop.zoom(scale, (int) detector.getFocusX(), (int) detector.getFocusY());
                                                  return true;
                                              }
 
@@ -211,8 +204,6 @@ public class Desktop
                                                  Log.i(TAG, "onScaleEnd: " + scale);
                                                  Desktop.zoom(scale, (int) detector.getFocusX(), (int) detector.getFocusY());
                                                  scale = 1;
-                                                 setScaleX(scale);
-                                                 setScaleY(scale);
                                                  scalingInProgress = false;
                                              }
                                          });
@@ -220,8 +211,6 @@ public class Desktop
 
         @Override protected void onDraw(Canvas canvas)
         {
-//            canvas.drawColor(0xFF1ABCDD);
-
             if (mBitmap == null) {
                 Log.i(TAG, "calling Bitmap.createBitmap(" + getWidth() + ", " + getHeight() + ", Bitmap.Config.ARGB_8888)");
                 mBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
@@ -232,8 +221,7 @@ public class Desktop
             renderedOnce = true;
 
             // re-call ourselves a bit later ...
-            if (!scalingInProgress)
-                invalidate();
+            invalidate();
         }
 
         @Override public boolean onKeyDown(int keyCode, KeyEvent event)
