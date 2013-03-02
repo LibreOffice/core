@@ -171,7 +171,7 @@ Example : $(COMP_REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 
 run: $(COMP1_COMP_REGISTERFLAG)
-	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" -writer
+	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" --writer
 
 
 .PHONY: clean

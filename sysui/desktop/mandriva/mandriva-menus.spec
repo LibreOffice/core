@@ -257,7 +257,7 @@ EOF
 # FIXME: Office/Database request in the Cooker ML, leave in Spreadsheets
 # until new group will be created
 #
-GenerateMenu "%unixfilename -base" \
+GenerateMenu "%unixfilename --base" \
 	"More Applications/Databases" \
 	"base" \
 	"%productname %{menuversion} Base" \
@@ -265,7 +265,7 @@ GenerateMenu "%unixfilename -base" \
 	"core01" \
 	"application/vnd.oasis.opendocument.database,application/vnd.sun.xml.base"
 
-GenerateMenu "%unixfilename -calc" \
+GenerateMenu "%unixfilename --calc" \
 	"Office/Spreadsheets" \
 	"calc" \
 	"%productname %{menuversion} Calc" \
@@ -273,7 +273,7 @@ GenerateMenu "%unixfilename -calc" \
 	"calc" \
 	"application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.spreadsheet-template,application/vnd.sun.xml.calc,application/vnd.sun.xml.calc.template,application/vnd.stardivision.calc,application/vnd.stardivision.chart,application/msexcel,application/vnd.ms-excel"
 
-GenerateMenu "%unixfilename -draw" \
+GenerateMenu "%unixfilename --draw" \
 	"Office/Drawing" \
 	"draw" \
 	"%productname %{menuversion} Draw" \
@@ -281,7 +281,7 @@ GenerateMenu "%unixfilename -draw" \
 	"draw" \
 	"application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template,application/vnd.sun.xml.draw,application/vnd.sun.xml.draw.template,application/vnd.stardivision.draw"
 
-GenerateMenu "%unixfilename -impress" \
+GenerateMenu "%unixfilename --impress" \
 	"Office/Presentations" \
 	"impress" \
 	"%productname %{menuversion} Impress" \
@@ -289,7 +289,7 @@ GenerateMenu "%unixfilename -impress" \
 	"impress" \
 	"application/vnd.oasis.opendocument.presentation,application/vnd.oasis.opendocument.presentation-template,application/vnd.sun.xml.impress,application/vnd.sun.xml.impress.template,application/vnd.stardivision.impress,application/mspowerpoint"
 
-GenerateMenu "%unixfilename -writer" \
+GenerateMenu "%unixfilename --writer" \
 	"Office/Wordprocessors" \
 	"writer" \
 	"%productname %{menuversion} Writer" \
@@ -297,7 +297,7 @@ GenerateMenu "%unixfilename -writer" \
 	"writer" \
 	"application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template,application/vnd.oasis.opendocument.text-web,application/vnd.oasis.opendocument.text-master,application/vnd.sun.xml.writer,application/vnd.sun.xml.writer.template,application/vnd.sun.xml.writer.global,application/vnd.stardivision.writer,application/msword,application/vnd.ms-word,application/x-doc,application/rtf"
 
-GenerateMenu "%unixfilename -math" \
+GenerateMenu "%unixfilename --math" \
 	"Office/Wordprocessors" \
 	"math" \
 	"%productname %{menuversion} Math" \
