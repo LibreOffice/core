@@ -1,6 +1,1 @@
 From [http://tagoh.bitbucket.org/liblangtag/]. An interface for BCP47 language tags.
-
-Note that (as far a I recall) liblangtag is the only "bundled"
-(3rd-party) library we have that we configure and build also for MSVC
-using an autotools+libtool based mechanism. That is rather fragile and
-works maybe mostly by accident. So be careful not to break it.

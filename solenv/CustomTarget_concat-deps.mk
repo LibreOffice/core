@@ -9,16 +9,15 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,solenv/concat-deps))
 
-$(call gb_CustomTarget_get_target,solenv/concat-deps) : \
-	$(call gb_CustomTarget_get_workdir,solenv/concat-deps)/concat-deps
+$(eval $(call gb_CustomTarget_register_targets,solenv/concat-deps,\
+	concat-deps$(gb_Executable_EXT_for_build) \
+))
 
-$(call gb_CustomTarget_get_workdir,solenv/concat-deps)/concat-deps : \
-		$(SRCDIR)/solenv/bin/concat-deps.c \
-		| $(call gb_CustomTarget_get_workdir,solenv/concat-deps)/.dir
-	$(call gb_Output_announce,solenv/concat-deps,$(true),GCC,1)
+$(call gb_CustomTarget_get_workdir,solenv/concat-deps)/concat-deps$(gb_Executable_EXT_for_build) : \
+		$(SRCDIR)/solenv/bin/concat-deps.c
+	$(call gb_Output_announce,solenv/concat-deps,$(true),C,1)
 ifeq ($(COM_FOR_BUILD),MSC)
-	# on cygwin force the use of gcc
-	gcc -O2 $< -o $@
+	LIB="$(ILIB)" $(CC_FOR_BUILD) -nologo $(SOLARINC) -O2 $< -Fo$(dir $@) -Fe$(dir $@)
 else
 	$(CC_FOR_BUILD) -O2 $< -o $@
 endif
