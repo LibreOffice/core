@@ -260,7 +260,7 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
     const SfxPoolItem* pFndItem;
     sal_uInt16 nWhich;
 
-    while( sal_True )
+    while( true )
     {
         if( IsInvalidItem( pItem ) )
         {
@@ -830,7 +830,7 @@ static int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_B
     const SfxPoolItem* pNdItem;
     sal_uInt16 nWhich;
 
-    while( sal_True )
+    while( true )
     {
         if( IsInvalidItem( pItem ))
         {
@@ -1072,7 +1072,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         SwPaM* pTextRegion = &aRegion;
         SwPaM aSrchPam( *pCrsr->GetPoint() );
 
-        while( sal_True )
+        while( true )
         {
             if( pSet->Count() ) // any attributes?
             {
@@ -1172,7 +1172,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
             SfxItemIter aIter( *pSet );
             const SfxPoolItem* pItem = aIter.GetCurItem();
-            while( sal_True )
+            while( true )
             {
                 // reset all that are not set with pool defaults
                 if( !IsInvalidItem( pItem ) && SFX_ITEM_SET !=

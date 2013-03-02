@@ -2933,7 +2933,7 @@ SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
 {
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.FirstItem();
-    while( sal_True )
+    while( true )
     {
         aWhichIds.push_back( pItem->Which() );
         if( aIter.IsAtEnd() )

@@ -182,7 +182,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
                     break;      // exit while loop
                 }
                 ++nNum;
-            } while( sal_True );
+            } while( true );
             break;
         }
 
@@ -2473,7 +2473,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
             (void) bResult; // unused in non-debug
             pNew = new _SetGetExpFld( rSectNd, &aPos );
 
-        } while( sal_False );
+        } while( false );
     }
 
     if( !pNew )

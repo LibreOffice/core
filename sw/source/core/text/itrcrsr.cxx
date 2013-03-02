@@ -94,7 +94,7 @@ static void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
             rOrig.Pos().X() += pPor->Width();
             pPor = pPor->GetPortion();
 
-        } while ( sal_True );
+        } while ( true );
 
         OSL_ENSURE( nCharOfst >= nFldIdx, "Request of position inside field failed" );
         sal_uInt16 nLen = nCharOfst - nFldIdx + 1;

@@ -148,10 +148,10 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_LABEL:
             case FN_ENVELOP:
             {
-                sal_Bool bDisable = sal_False;
+                bool bDisable = false;
                 SfxViewShell* pCurrView = SfxViewShell::Current();
                 if( !pCurrView || (pCurrView && !pCurrView->ISA(SwView)) )
-                    bDisable = sal_True;
+                    bDisable = true;
                 SwDocShell *pDocSh = (SwDocShell*) SfxObjectShell::Current();
                 if ( bDisable ||
                     (pDocSh &&    (pDocSh->IsReadOnly() ||

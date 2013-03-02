@@ -260,7 +260,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
                 "mismatch between string length and sequence length!" );
 
         // find all substrings that need to be replaced (and only those)
-        while (sal_True)
+        while (true)
         {
             // get index in original text that matches nPos in new text
             xub_StrLen nIndex;

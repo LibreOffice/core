@@ -472,7 +472,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     ? ( !pMyNd->IsEndNode() || 0 == ( pPtNd = pMyNd->FindTableNode() ))
                     : 0 == ( pPtNd = pMyNd->GetTableNode() ))
                     break;
-            } while( sal_True );
+            } while( true );
         }
 
         // stay on old position

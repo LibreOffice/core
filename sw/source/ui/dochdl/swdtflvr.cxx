@@ -2105,7 +2105,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 rWrtShell.Insert( aSwDDEField );
             }
 
-        } while( sal_False );
+        } while( false );
     }
     else
         pDDETyp = 0;                        // remove FieldTypes again

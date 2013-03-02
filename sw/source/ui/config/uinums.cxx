@@ -291,7 +291,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
         {
             SfxItemIter aIter( pFmt->GetAttrSet() );
             const SfxPoolItem *pCurr = aIter.GetCurItem();
-            while( sal_True )
+            while( true )
             {
                 aItems.push_back( pCurr->Clone() );
                 if( aIter.IsAtEnd() )

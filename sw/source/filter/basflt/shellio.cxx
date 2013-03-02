@@ -811,7 +811,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         SwPaM *pEnd = pPam;
 
         // Erste Runde: Nachsehen, ob eine Selektion besteht.
-        while(sal_True)
+        while(true)
         {
             bHasMark = bHasMark || pPam->HasMark();
             pPam = (SwPaM *) pPam->GetNext();

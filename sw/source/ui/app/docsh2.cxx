@@ -264,7 +264,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if( nAction )
     {
-        sal_Bool bUnlockView = sal_True; //initializing prevents warning
+        bool bUnlockView = true; //initializing prevents warning
         if( pWrtShell )
         {
             bUnlockView = !pWrtShell->IsViewLocked();

@@ -636,7 +636,7 @@ static void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
                 if( pDelPam->GetNext() == pDelPam )
                     break;
                 delete pDelPam->GetNext();
-            } while( sal_True );
+            } while( true );
             delete pDelPam;
 
             pDestDoc->SetRedlineMode_intern( eOld );
@@ -1241,7 +1241,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 pDestTxtNd->SetAttr( aBrkSet );
             }
         }
-    } while( sal_False );
+    } while( false );
 
     // Adjust position (in case it was moved / in another node)
     rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(),

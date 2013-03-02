@@ -143,7 +143,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
                 }
                 else
                     break;
-            } while( sal_True );
+            } while( true );
         }
 
         // nur die Nummer besorgen, ohne Pre-/Post-fixstrings

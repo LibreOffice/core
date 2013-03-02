@@ -1276,7 +1276,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     //the SwActualSection class has a member, which points to an upper(section).
     //When the "inner" section finishs, the upper will used instead.
 
-    while( sal_True )
+    while( true )
     {
         SwNode *pNd = pDoc->GetNodes()[nIndex];
         if ( pNd->IsCntntNode() )

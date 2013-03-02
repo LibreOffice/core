@@ -890,7 +890,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.SSize().Width() /= 2;
             }
             break;
-        } while ( sal_True );
+        } while ( true );
     }
     /* If 'this' is a follow and a prev failed, we need to go to the
      * last line of the master, which is us.
@@ -1292,7 +1292,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                 }
             }
             break;
-        } while( sal_True );
+        } while( true );
     }
     else
         pTmpFollow = GetFollow();

@@ -1403,7 +1403,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     }
     // write configuration
     Commit();
-    }while( sal_False );                    // middle checked loop
+    }while( false );                    // middle checked loop
 
     if( bUndo )
     {

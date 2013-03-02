@@ -619,7 +619,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         {
             SfxItemIter aIter( *pAttr );
             sal_uInt16 nWhich = aIter.GetCurItem()->Which();
-            while( sal_True )
+            while( true )
             {
                 if( pFmt->GetFmtAttr( nWhich ) != *aIter.GetCurItem() )
                 {

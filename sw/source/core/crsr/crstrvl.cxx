@@ -1463,7 +1463,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     String sAttrs;
                     SfxItemIter aIter( aSet );
                     const SfxPoolItem* pItem = aIter.FirstItem();
-                    while( sal_True )
+                    while( true )
                     {
                         if( !IsInvalidItem( pItem ))
                         {

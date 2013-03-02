@@ -663,7 +663,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
         SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         bRet = !IsError( nErr );
 
-    } while( sal_False );
+    } while( false );
 
     SfxObjectShell::LoadFrom( rMedium );
     pDoc->ResetModified();

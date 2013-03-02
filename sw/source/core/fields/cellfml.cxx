@@ -221,7 +221,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
         }
 
 // ?? sonst ist das ein Fehler
-    } while( sal_False );
+    } while( false );
 
     if( !rCalcPara.IsStackOverFlow() )
     {
@@ -675,7 +675,7 @@ String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
         }
 
         nFml = nEnd+1;
-    } while( sal_True );
+    } while( true );
     return aStr;
 }
 
@@ -955,7 +955,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                 if( pTbl->IsHeadline( *pLine ) )
                     rBoxes.erase( rBoxes.begin() + n-- );
             }
-        } while( sal_False );
+        } while( false );
     }
 }
 

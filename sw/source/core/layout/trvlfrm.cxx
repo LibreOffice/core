@@ -1644,7 +1644,7 @@ Point SwRootFrm::GetPagePos( sal_uInt16 nPageNum ) const
     OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
 
     const SwPageFrm *pPage = (const SwPageFrm*)Lower();
-    while ( sal_True )
+    while ( true )
     {
         if ( pPage->GetPhyPageNum() >= nPageNum || !pPage->GetNext() )
             break;
@@ -2192,7 +2192,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                 }
                 break;
             }
-        } while( sal_False );
+        } while( false );
 
         SwCrsrMoveState aTmpState( MV_NONE );
         aTmpState.b2Lines = sal_True;

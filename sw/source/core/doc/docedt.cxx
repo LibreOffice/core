@@ -1766,7 +1766,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         *pEnd = *pStt;
         rPam.DeleteMark();
 
-    } while( sal_False );
+    } while( false );
 
     if( !IsIgnoreRedline() && !GetRedlineTbl().empty() )
         CompressRedlines();

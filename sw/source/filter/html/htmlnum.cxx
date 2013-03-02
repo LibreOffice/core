@@ -768,7 +768,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                             break;
                         }
                     }
-                    while( sal_True );
+                    while( true );
                 }
             }
         }

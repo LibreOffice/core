@@ -792,7 +792,7 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
             SwNodes& rNodes = aPos.nNode.GetNodes();
 
             // go to next/previous CntntNode
-            while( sal_True )
+            while( true )
             {
                 pNd = bSrchForward
                         ? rNodes.GoNextSection( &aPos.nNode, sal_True, !bInReadOnly )

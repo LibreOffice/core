@@ -389,7 +389,7 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
         if ( !GetNextScriptSegment(nIdx, nStart, nEnd, nScript) )
             break;
     }
-    while( sal_True );
+    while( true );
     mpPrinter->SetFont( aOldFont );
 }
 
@@ -425,7 +425,7 @@ void SwDropCapsPict::CheckScript( void )
             nScript = xBreak->getScriptType( maText, nChg );
         else
             break;
-    } while( sal_True );
+    } while( true );
 }
 
 Size SwDropCapsPict::CalcTextSize( void )
@@ -468,7 +468,7 @@ Size SwDropCapsPict::CalcTextSize( void )
         if ( !GetNextScriptSegment(nIdx, nStart, nEnd, nScript) )
             break;
     }
-    while( sal_True );
+    while( true );
     nHeight -= nAscent;
     nCJKHeight -= nCJKAscent;
     nCTLHeight -= nCTLAscent;

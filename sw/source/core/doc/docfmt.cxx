@@ -265,7 +265,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed. -> please inform OD" );
                 SfxItemIter aIter( *pPara->pDelSet );
                 pItem = aIter.FirstItem();
-                while( sal_True )
+                while( true )
                 {
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
@@ -1156,7 +1156,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     sal_uInt16 nWhich;
     const SfxPoolItem* pItem = aIter.GetCurItem();
     SfxItemPool* pSdrPool = GetAttrPool().GetSecondaryPool();
-    while( sal_True )
+    while( true )
     {
         bool bCheckSdrDflt = false;
         nWhich = pItem->Which();

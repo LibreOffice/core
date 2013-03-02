@@ -1421,7 +1421,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     {
         SfxItemIter aIter( rSet );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( sal_True )
+        while( true )
         {
             if( IsInvalidItem( pItem ) )            // Clear
             {
