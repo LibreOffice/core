@@ -1627,7 +1627,7 @@ OUString ResMgr::ReadStringWithoutHook()
     if( (rTop.Flags & RC_NOTFOUND) )
     {
         #if OSL_DEBUG_LEVEL > 0
-        aRet = OUString("<resource not found>");
+        aRet = "<resource not found>";
         #endif
     }
     else

@@ -141,11 +141,6 @@ SwFieldType::SwFieldType( sal_uInt16 nWhichId )
 {
 }
 
-namespace
-{
-    rtl::OUString aEmptyOUStr;
-}
-
 const rtl::OUString& SwFieldType::GetName() const
 {
     return aEmptyOUStr;

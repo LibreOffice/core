@@ -193,7 +193,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     * outline levels
     **************************************************************************/
     String aName(SdResId(STR_LAYOUT_OUTLINE));
-    String aHelpFile;
+    OUString aHelpFile;
 
     SfxStyleSheetBase* pParent = NULL;
     SvxLRSpaceItem aSvxLRSpaceItem( EE_PARA_LRSPACE );
@@ -599,7 +599,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets)
 {
-    String aHelpFile;
+    OUString aHelpFile;
 
     sal_uInt32 nCount = rSourcePool.aStyles.size();
 
@@ -659,7 +659,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
     std::vector<String> aNameList;
     CreateLayoutSheetNames(rLayoutName,aNameList);
 
-    String sEmpty;
+    OUString sEmpty;
     for (std::vector<String>::const_iterator it = aNameList.begin(); it != aNameList.end(); ++it)
     {
         pSheet = Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
@@ -784,7 +784,7 @@ void SdStyleSheetPool::CreateLayoutSheetList(const String& rLayoutName, SdStyleS
 void SdStyleSheetPool::CreatePseudosIfNecessary()
 {
     String aName;
-    String aHelpFile;
+    OUString aHelpFile;
     SfxStyleSheetBase* pSheet = NULL;
     SfxStyleSheetBase* pParent = NULL;
 
@@ -869,7 +869,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
 
 void SdStyleSheetPool::UpdateStdNames()
 {
-    String aHelpFile;
+    OUString aHelpFile;
     sal_uInt32  nCount = aStyles.size();
     std::vector<SfxStyleSheetBase*> aEraseList;
 
@@ -880,7 +880,7 @@ void SdStyleSheetPool::UpdateStdNames()
         if( !pStyle->IsUserDefined() )
         {
             String aOldName     = pStyle->GetName();
-            sal_uLong nHelpId       = pStyle->GetHelpId( aHelpFile );
+            sal_uLong nHelpId   = pStyle->GetHelpId( aHelpFile );
             SfxStyleFamily eFam = pStyle->GetFamily();
 
             sal_Bool bHelpKnown = sal_True;
@@ -972,7 +972,7 @@ void SdStyleSheetPool::UpdateStdNames()
 void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                                          Font& rBulletFont )
 {
-    String aHelpFile;
+    OUString aHelpFile;
     sal_uLong nHelpId = pSheet->GetHelpId( aHelpFile );
     SfxItemSet& rSet = pSheet->GetItemSet();
 

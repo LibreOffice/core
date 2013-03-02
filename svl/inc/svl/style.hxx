@@ -83,8 +83,8 @@ protected:
     SfxStyleFamily          nFamily;        // Familie
 
     UniString               aName, aParent, aFollow;
-    rtl::OUString           maDisplayName;
-    String                  aHelpFile;      // Name der Hilfedatei
+    OUString                maDisplayName;
+    OUString                aHelpFile;      // Name der Hilfedatei
     SfxItemSet*             pSet;           // ItemSet
     sal_uInt16              nMask;          // Flags
 
@@ -138,8 +138,8 @@ public:
     virtual sal_Bool IsHidden() const { return bHidden; }
     virtual void SetHidden( sal_Bool bValue );
 
-    virtual sal_uLong GetHelpId( String& rFile );
-    virtual void   SetHelpId( const String& r, sal_uLong nId );
+    virtual sal_uLong GetHelpId( OUString& rFile );
+    virtual void   SetHelpId( const OUString& r, sal_uLong nId );
 
     virtual SfxItemSet& GetItemSet();
     virtual sal_uInt16 GetVersion() const;

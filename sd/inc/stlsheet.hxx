@@ -61,7 +61,7 @@ public:
     virtual bool        HasParentSupport() const;
     virtual bool        HasClearParentSupport() const;
     virtual bool        SetName( const UniString& );
-    virtual void        SetHelpId( const String& r, sal_uLong nId );
+    virtual void        SetHelpId( const OUString& r, sal_uLong nId );
 
     void        AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingItems = sal_True);
 
