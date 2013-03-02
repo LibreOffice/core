@@ -39,7 +39,6 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
     sal_Bool bCached = FSYS_ACCESS_CACHED == (nAccess & FSYS_ACCESS_CACHED);
     sal_Bool bFloppy = FSYS_ACCESS_FLOPPY == (nAccess & FSYS_ACCESS_FLOPPY);
 
-#ifdef FEAT_FSYS_DOUBLESPEED
     const FileStat *pStatFromDir = bCached ? rDirEntry.ImpGetStat() : 0;
     if ( pStatFromDir )
     {
@@ -56,7 +55,7 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
         aTimeAccessed = pStatFromDir->aTimeAccessed;
     }
     else
-#endif
+
         Update( rDirEntry, bFloppy );
 }
 

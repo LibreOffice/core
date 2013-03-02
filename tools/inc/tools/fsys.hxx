@@ -30,8 +30,6 @@
 #include <cstdarg>
 #include <vector>
 
-#define FEAT_FSYS_DOUBLESPEED
-
 // FSys-Types
 class DirEntry;
 class FileStat;
@@ -188,9 +186,8 @@ class TOOLS_DLLPUBLIC DirEntry
 friend struct DirReader_Impl;
 friend class FileCopier;
 
-#ifdef FEAT_FSYS_DOUBLESPEED
     FileStat*           pStat;      // optional
-#endif
+
     rtl::OString        aName;
     DirEntry*           pParent;
     sal_uIntPtr         nError;
@@ -214,10 +211,9 @@ protected:
     DirEntryFlag        ImpTheFlag() const { return eFlag; };
     DirEntry*           ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize = sal_True );
     DirEntry*           ImpGetParent() { return pParent; }
-#ifdef FEAT_FSYS_DOUBLESPEED
+
     FileStat*           ImpGetStat() const { return pStat; }
     void                ImpSetStat( FileStat *p ) { pStat = p; }
-#endif
 
 protected:
     void                SetError( sal_uIntPtr nErr ) { nError = nErr; }

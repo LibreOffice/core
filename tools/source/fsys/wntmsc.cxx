@@ -275,9 +275,9 @@ USHORT DirReader_Impl::Read()
                 :   FSYS_FLAG_NORMAL;
             DirEntry *pTemp = new DirEntry( rtl::OString(pDosEntry->d_name),
                                             eFlag );
-#ifdef FEAT_FSYS_DOUBLESPEED
+
             pTemp->ImpSetStat( new FileStat( (void*) pDosDir ) );
-#endif
+
             if ( pParent )
                 pTemp->ImpChangeParent( new DirEntry( *pParent ), sal_False );
             if ( pDir->pStatLst ) // Status required by sorting criteria?

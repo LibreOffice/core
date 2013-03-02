@@ -547,9 +547,7 @@ void DirEntry::ImpTrim()
 }
 
 DirEntry::DirEntry( const rtl::OString& rName, DirEntryFlag eDirFlag ) :
-#ifdef FEAT_FSYS_DOUBLESPEED
             pStat( 0 ),
-#endif
             aName( rName )
 {
     DBG_CTOR( DirEntry, ImpCheckDirEntry );
@@ -562,9 +560,7 @@ DirEntry::DirEntry( const rtl::OString& rName, DirEntryFlag eDirFlag ) :
 }
 
 DirEntry::DirEntry( const DirEntry& rOrig ) :
-#ifdef FEAT_FSYS_DOUBLESPEED
             pStat( rOrig.pStat ? new FileStat(*rOrig.pStat) : 0 ),
-#endif
             aName( rOrig.aName )
 {
     DBG_CTOR( DirEntry, ImpCheckDirEntry );
@@ -582,10 +578,8 @@ DirEntry::DirEntry( const DirEntry& rOrig ) :
     }
 }
 
-DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
-#ifdef FEAT_FSYS_DOUBLESPEED
-            : pStat( 0 )
-#endif
+DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle ) :
+            pStat( 0 )
 {
     DBG_CTOR( DirEntry, ImpCheckDirEntry );
 
@@ -636,10 +630,8 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
         eFlag = FSYS_FLAG_INVALID;
 }
 
-DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
-#ifdef FEAT_FSYS_DOUBLESPEED
-            : pStat( 0 )
-#endif
+DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle ) :
+            pStat( 0 )
 {
     DBG_CTOR( DirEntry, ImpCheckDirEntry );
 
@@ -682,10 +674,8 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
         eFlag = FSYS_FLAG_INVALID;
 }
 
-DirEntry::DirEntry( DirEntryFlag eDirFlag )
-#ifdef FEAT_FSYS_DOUBLESPEED
-            : pStat( 0 )
-#endif
+DirEntry::DirEntry( DirEntryFlag eDirFlag ) :
+            pStat( 0 )
 {
     DBG_CTOR( DirEntry, ImpCheckDirEntry );
 
@@ -699,10 +689,8 @@ DirEntry::~DirEntry()
     DBG_DTOR( DirEntry, ImpCheckDirEntry );
 
     delete pParent;
-#ifdef FEAT_FSYS_DOUBLESPEED
-    delete pStat;
-#endif
 
+    delete pStat;
 }
 
 const DirEntry* DirEntry::ImpGetTopPtr() const
