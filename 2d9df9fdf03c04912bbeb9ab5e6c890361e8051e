@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+6I\u003d",
+        "filename": "dbaccess/source/ui/querydesign/QueryDesignFieldUndoAct.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-02T17:14:04Z",
+      "side": 1,
+      "message": "The original text can be deleted",
+      "revId": "2d9df9fdf03c04912bbeb9ab5e6c890361e8051e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
