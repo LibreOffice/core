@@ -2082,6 +2082,7 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
                 // asynchronous error message, because of MsgBoxes
                 PostUserEvent(
                     LINK( this, SvxConfigPage, AsyncInfoMsg ) );
+                delete pNewEntryData;
                 return NULL;
             }
 
