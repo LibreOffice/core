@@ -511,6 +511,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     if ( pProfile == NULL )
     {
+        pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
         OSL_TRACE("Out osl_readProfileString [pProfile==0]");
 #endif
