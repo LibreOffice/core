@@ -237,6 +237,7 @@ void Test::testDerivedSimpleReferenceObject() {
         delete static_cast< DerivedSimpleReferenceObject * >(p);
         throw;
     }
+    delete static_cast< DerivedSimpleReferenceObject * >(p);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
