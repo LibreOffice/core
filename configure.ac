@@ -5005,7 +5005,7 @@ if test "$GXX" = "yes"; then
             fi
         fi
         if test "$_gpp_majmin" -ge "401"; then
-            AC_MSG_ERROR([You need to use the g++-4.0 compiler (g++ $_gpp_version won't work with the MacOSX10.4u.sdk) - set CXX accordingly])
+            AC_MSG_ERROR([You need to use the g++-4.0 compiler (g++ $_gpp_version will not work with the MacOSX10.4u.sdk) - set CXX accordingly])
         else
             AC_MSG_RESULT([implicitly using CXX=$CXX])
         fi
@@ -5036,7 +5036,27 @@ if test "$GXX" = "yes"; then
             }
             ]])],[AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents LibreOffice from being compiled correctly - please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])],[AC_MSG_RESULT([no])],[])
     fi
+    dnl see https://code.google.com/p/android/issues/detail?id=41770
+    if test "$_gpp_majmin" -ge "407"; then
+            glibcxx_threads=no
+            AC_MSG_CHECKING([whether $CXX is broken with boost.thread])
+            AC_LANG_PUSH([C++])
+            AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[
+                #include <bits/c++config.h>]],[[
+                #if !defined(_GLIBCXX_HAVE_GTHR_DEFAULT) \
+                && !defined(_GLIBCXX__PTHREADS) \
+                && !defined(_GLIBCXX_HAS_GTHREADS)
+                choke me
+                #endif
+            ]])],[AC_MSG_RESULT([yes])
+            glibcxx_threads=yes],[AC_MSG_RESULT([no])])
+            AC_LANG_POP([C++])
+            if test $glibcxx_threads = yes; then
+                  BOOST_CXXFLAGS="-D_GLIBCXX_HAS_GTHREADS"
+            fi
+     fi
 fi
+AC_SUBST(BOOST_CXXFLAGS)
 
 #
 # prefx CXX with ccache if needed
