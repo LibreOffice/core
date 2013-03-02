@@ -60,7 +60,7 @@ Size BarGeometryResources::GetSizePixel() const
     if( nWidth < m_aFT_Geometry.GetSizePixel().Width() )
         nWidth = m_aFT_Geometry.GetSizePixel().Width();
 
-    return Size( nHeight, nWidth );
+    return Size( nWidth, nHeight );
 }
 BarGeometryResources::~BarGeometryResources()
 {
