@@ -27,7 +27,6 @@ $(eval $(call gb_Library_add_ldflags,shlxtmsi,\
 $(eval $(call gb_Library_add_exception_objects,shlxtmsi,\
     setup_native/source/win32/customactions/shellextensions/startmenuicon \
     setup_native/source/win32/customactions/shellextensions/upgrade \
-    setup_native/source/win32/customactions/shellextensions/iconcache \
     setup_native/source/win32/customactions/shellextensions/migrateinstallpath \
     setup_native/source/win32/customactions/shellextensions/completeinstallpath \
     setup_native/source/win32/customactions/shellextensions/checkdirectory \

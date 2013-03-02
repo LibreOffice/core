@@ -3,7 +3,6 @@ EXPORTS
 			CheckInstallDirectory
 			CheckPatchList
 			CompleteInstallPath
-			RebuildShellIconCache
 			CreateLayerLinks
 			RemoveLayerLinks
 			MigrateInstallPath

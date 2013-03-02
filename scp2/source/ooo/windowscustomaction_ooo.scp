@@ -158,15 +158,6 @@ WindowsCustomAction gid_Customaction_Shellextensionsdll5
 	Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "FindRelatedProducts");
 End
 
-WindowsCustomAction gid_Customaction_Shellextensionsdll6
-	Name = "Shellextensionsdll6";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "RebuildShellIconCache";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not PATCH", "end");
-End
-
 WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Name = "CheckInstallDirectory";
 	Typ = "65";
