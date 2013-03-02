@@ -567,16 +567,16 @@ namespace
                                     const ::connectivity::OSQLParseNode *pRightTable)
     {
         SqlParseError eErrorCode = eOk;
-        if (pNode->count() == 3 &&  // Ausdruck is geklammert
+        if (pNode->count() == 3 &&  // statment between brackets
             SQL_ISPUNCTUATION(pNode->getChild(0),"(") &&
             SQL_ISPUNCTUATION(pNode->getChild(2),")"))
         {
             eErrorCode = InsertJoinConnection(_pView,pNode->getChild(1), _eJoinType,pLeftTable,pRightTable);
         }
-        else if (SQL_ISRULEOR2(pNode,search_condition,boolean_term) &&          // AND/OR-Verknuepfung:
+        else if (SQL_ISRULEOR2(pNode,search_condition,boolean_term) &&          // AND/OR-joints:
                  pNode->count() == 3)
         {
-            // nur AND Verkn�pfung zulassen
+            // only allow AND joints
             if (!SQL_ISTOKEN(pNode->getChild(1),AND))
                 eErrorCode = eIllegalJoinCondition;
             else if ( eOk == (eErrorCode = InsertJoinConnection(_pView,pNode->getChild(0), _eJoinType,pLeftTable,pRightTable)) )
@@ -2909,19 +2909,20 @@ OUString OQueryDesignView::getStatement()
     OUString aFieldListStr(GenerateSelectList(this,rFieldList,nTabcount>1));
     if( aFieldListStr.isEmpty() )
         return OUString();
-    // Ausnahmebehandlung, wenn keine Felder angegeben worden sind
-    // Dann darf die Tabpage nicht gewechselt werden
-    // Im TabBarSelectHdl wird der SQL-OUString auf STATEMENT_NOFIELDS abgefragt
-    // und eine Errormeldung erzeugt
-    // ----------------- Tabellenliste aufbauen ----------------------
+
+    // Exceptionhandling, if no fields have been passed we should not
+    // change the tab page
+    // TabBarSelectHdl will query the SQL-OUString for STATEMENT_NOFIELDS
+    // and trigger a error message
+    // ----------------- Build table list ----------------------
 
     const ::std::vector<OTableConnection*>* pConnList = m_pTableView->getTableConnections();
     Reference< XConnection> xConnection = rController.getConnection();
     OUString aTableListStr(GenerateFromClause(xConnection,pTabList,pConnList));
     OSL_ENSURE(!aTableListStr.isEmpty(), "OQueryDesignView::getStatement() : unexpected : have Fields, but no Tables !");
-    // wenn es Felder gibt, koennen die nur durch Einfuegen aus einer schon existenten Tabelle entstanden sein; wenn andererseits
-    // eine Tabelle geloescht wird, verschwinden auch die zugehoerigen Felder -> ergo KANN es das nicht geben, dass Felder
-    // existieren, aber keine Tabellen (und aFieldListStr hat schon eine Laenge, das stelle ich oben sicher)
+    // if fields exist now, these only can be created by inserting from an already existing table; if on the other hand
+    // a table is deleted, also the belonging fields will be deleted -> therefore it CANNOT occur that fields
+    // exist but no tables exist (and aFieldListStr has its length, I secure this above)
     OUStringBuffer aHavingStr,aCriteriaListStr;
     // ----------------- Kriterien aufbauen ----------------------
     if (!GenerateCriterias(this,aCriteriaListStr,aHavingStr,rFieldList, nTabcount > 1))
@@ -2941,7 +2942,7 @@ OUString OQueryDesignView::getStatement()
         }
         aCriteriaListStr = aTmp;
     }
-    // ----------------- Statement aufbauen ----------------------
+    // ----------------- construct statement  ----------------------
     OUStringBuffer aSqlCmd(OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")));
     if(rController.isDistinct())
         aSqlCmd.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" DISTINCT ")));
@@ -2954,7 +2955,7 @@ OUString OQueryDesignView::getStatement()
         aSqlCmd.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
         aSqlCmd.append(aCriteriaListStr.makeStringAndClear());
     }
-    // ----------------- GroupBy aufbauen und Anh"angen ------------
+    // ----------------- construct GroupBy and attachen ------------
     Reference<XDatabaseMetaData> xMeta;
     if ( xConnection.is() )
         xMeta = xConnection->getMetaData();
@@ -2963,13 +2964,13 @@ OUString OQueryDesignView::getStatement()
         bUseAlias = bUseAlias || !xMeta->supportsGroupByUnrelated();
 
     aSqlCmd.append(GenerateGroupBy(this,rFieldList,bUseAlias));
-    // ----------------- having Anh"angen ------------
+    // ----------------- attache having  ------------
     if(aHavingStr.getLength())
     {
         aSqlCmd.append(OUString(RTL_CONSTASCII_USTRINGPARAM(" HAVING ")));
         aSqlCmd.append(aHavingStr.makeStringAndClear());
     }
-    // ----------------- Sortierung aufbauen und Anh"angen ------------
+    // ----------------- construct sorting and attach ------------
     OUString sOrder;
     SqlParseError eErrorCode = eOk;
     if ( (eErrorCode = GenerateOrder(this,rFieldList,nTabcount > 1,sOrder)) == eOk)
