@@ -383,7 +383,7 @@ static const sal_Char* parseStateToMessage(ParseState state)
     case PS_MayBeDefaultSeen:
         return "Illegal syntax after MAYBEDEFAULT keyword";
     case PS_RemoveableSeen:
-        return "Illegal syntax after REMOVEABLE keyword";
+        return "Illegal syntax after REMOVABLE keyword";
     case PS_PropertySeen:
         return "Illegal syntax after PROPERTY keyword";
     case PS_PropertyTypeSeen:
@@ -457,7 +457,7 @@ static OString flagToString(sal_uInt32 flag)
     if ( (flag & AF_MAYBEDEFAULT) == AF_MAYBEDEFAULT )
         flagStr += "'maybedefault'";
     if ( (flag & AF_REMOVEABLE) == AF_REMOVEABLE )
-        flagStr += "'removeable'";
+        flagStr += "'removable'";
     if ( (flag & AF_ATTRIBUTE) == AF_ATTRIBUTE )
         flagStr += "'attribute'";
     if ( (flag & AF_PROPERTY) == AF_PROPERTY )

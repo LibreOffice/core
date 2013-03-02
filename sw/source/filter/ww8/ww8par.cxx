@@ -4133,7 +4133,7 @@ void SwWW8ImplReader::ReadDocVars()
             aValue <<= ::rtl::OUString(aDocValueStrings[i]);
             try {
                 xUserDefinedProps->addProperty( name,
-                    beans::PropertyAttribute::REMOVEABLE,
+                    beans::PropertyAttribute::REMOVABLE,
                     aValue );
             } catch (const uno::Exception &) {
                 // ignore

@@ -222,7 +222,7 @@ enum ParseState
     PS_TransientSeen,       // Seen TRANSIENT keyword
     PS_MayBeAmbigiousSeen,  // Seen MAYBEAMBIGIOUS keyword
     PS_MayBeDefaultSeen,    // Seen MAYBEDEFAULT keyword
-    PS_RemoveableSeen,      // Seen REMOVEABLE keyword
+    PS_RemoveableSeen,      // Seen REMOVABLE keyword
 
     PS_PropertySeen,        // Seen PROPERTY keyword
     PS_PropertyTypeSeen,    // Seen type decl for property

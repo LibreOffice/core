@@ -346,7 +346,7 @@ static OString getFieldAccess(RTFieldAccess fieldAccess)
     }
     if ( (fieldAccess & RT_ACCESS_REMOVEABLE) == RT_ACCESS_REMOVEABLE )
     {
-        ret += OString(ret.isEmpty() ? "REMOVEABLE" : ",REMOVEABLE");
+        ret += OString(ret.isEmpty() ? "REMOVABLE" : ",REMOVABLE");
     }
     if ( (fieldAccess & RT_ACCESS_ATTRIBUTE) == RT_ACCESS_ATTRIBUTE )
     {

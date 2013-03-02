@@ -478,7 +478,7 @@ namespace
             PropertyAttributeCache::const_iterator pos = m_rAttribs.find( _rProp.Name );
             OSL_ENSURE( pos != m_rAttribs.end(), "IsDefaultAndNotRemoveable: illegal property name!" );
             if ( pos != m_rAttribs.end() )
-                bRemoveable = ( ( pos->second & PropertyAttribute::REMOVEABLE ) != 0 );
+                bRemoveable = ( ( pos->second & PropertyAttribute::REMOVABLE ) != 0 );
 
             return !bRemoveable;
         }
@@ -871,8 +871,8 @@ namespace
 
         The method takes a property bag, and a sequence of property values to set for this bag.
         Upon return, every property which is not part of the given sequence is
-        <ul><li>removed from the bag, if it's a removeable property</li>
-            <li><em>or</em>reset to its default value, if it's not a removeable property</li>
+        <ul><li>removed from the bag, if it's a removable property</li>
+            <li><em>or</em>reset to its default value, if it's not a removable property</li>
         </ul>.
 
         @param  _rxPropertyBag
@@ -912,7 +912,7 @@ namespace
 
                 // this property is not to be set, but currently exists in the bag.
                 // -> Remove it, or reset it to the default.
-                if ( ( pExistentProperty->Attributes & PropertyAttribute::REMOVEABLE ) != 0 )
+                if ( ( pExistentProperty->Attributes & PropertyAttribute::REMOVABLE ) != 0 )
                     xPropertyContainer->removeProperty( pExistentProperty->Name );
                 else
                     xPropertyState->setPropertyToDefault( pExistentProperty->Name );

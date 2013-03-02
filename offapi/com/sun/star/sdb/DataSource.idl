@@ -162,13 +162,13 @@ published service DataSource
         a large set of such properties, no all of them are effectively used for a concrete data source, nonetheless,
         they're all present in the <code>Settings</code>.<br/>
         Such properties are not removable from the bag, that is, their
-        <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member> attribute is <em>not</em> set.<br/>
+        <member scope="com::sun::star::beans">PropertyAttribute::REMOVABLE</member> attribute is <em>not</em> set.<br/>
         Usually, you'll find that all of this properties have the
         <member scope="com::sun::star::beans::">PropertyState::PropertyState_DEFAULT_VALUE</member> state.</p>
 
         <p><em>User-defined</em> properties are the ones which are added at runtime by any instance. They might or might
         not be removable, this depends on whether or not the code adding them specifies the
-        <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member> attribute. Also, they might
+        <member scope="com::sun::star::beans">PropertyAttribute::REMOVABLE</member> attribute. Also, they might
         or might not have a default value, determined by the
         <member scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</member> attribute at the time they're added
         to the bag.</p>

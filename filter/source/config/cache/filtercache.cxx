@@ -558,7 +558,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
         css::beans::Property aDescription = xItem->getAsProperty();
 
         sal_Bool bFinalized = ((aDescription.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
-        sal_Bool bMandatory = ((aDescription.Attributes & css::beans::PropertyAttribute::REMOVEABLE) != css::beans::PropertyAttribute::REMOVEABLE);
+        sal_Bool bMandatory = ((aDescription.Attributes & css::beans::PropertyAttribute::REMOVABLE) != css::beans::PropertyAttribute::REMOVABLE);
 
         rItem[PROPNAME_FINALIZED] <<= bFinalized;
         rItem[PROPNAME_MANDATORY] <<= bMandatory;

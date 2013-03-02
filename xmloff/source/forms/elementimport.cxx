@@ -372,7 +372,7 @@ namespace xmloff
 
                     xDynamicProperties->addProperty(
                         aPropValues->Name,
-                        PropertyAttribute::BOUND | PropertyAttribute::REMOVEABLE,
+                        PropertyAttribute::BOUND | PropertyAttribute::REMOVABLE,
                         aPropValues->Value
                     );
 

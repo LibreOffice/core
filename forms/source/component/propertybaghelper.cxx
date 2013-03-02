@@ -194,9 +194,9 @@ namespace frm
             throw PropertyExistException( _rName, m_rContext.getPropertiesInterface() );
 
         //----------------------------------------------
-        // normalize the REMOVEABLE attribute - the FormComponent service
-        // requires that all dynamic properties are REMOVEABLE
-        _nAttributes |= PropertyAttribute::REMOVEABLE;
+        // normalize the REMOVABLE attribute - the FormComponent service
+        // requires that all dynamic properties are REMOVABLE
+        _nAttributes |= PropertyAttribute::REMOVABLE;
 
         //----------------------------------------------
         // find a free handle
@@ -214,11 +214,11 @@ namespace frm
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
-        // check whether it's removeable at all
+        // check whether it's removable at all
         Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), UNO_QUERY_THROW );
         Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), UNO_QUERY_THROW );
         Property aProperty( xPSI->getPropertyByName( _rName ) );
-        if ( ( aProperty.Attributes & PropertyAttribute::REMOVEABLE ) == 0 )
+        if ( ( aProperty.Attributes & PropertyAttribute::REMOVABLE ) == 0 )
             throw NotRemoveableException( _rName, xMe );
 
         m_aDynamicProperties.removeProperty( _rName );

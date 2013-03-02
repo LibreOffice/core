@@ -91,7 +91,7 @@ public class PropertyBag extends TestCase
         }
 
         // try removing the property we just added - this should fail, as it does not have
-        // the REMOVEABLE attribute
+        // the REMOVABLE attribute
         caughtExpected = false;
         try
         {
@@ -101,7 +101,7 @@ public class PropertyBag extends TestCase
         catch(com.sun.star.uno.Exception e) { }
         if ( !caughtExpected )
         {
-            fail("removing non-removeable properties is expected to fail - but it didn't");
+            fail("removing non-removable properties is expected to fail - but it didn't");
         }
 
         // try removing a non-existent property
