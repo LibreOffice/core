@@ -70,7 +70,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <editeng/frmdiritem.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/table/BorderLine.hpp>

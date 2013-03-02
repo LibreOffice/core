@@ -20,7 +20,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 
 //============================ RASWriter ==================================

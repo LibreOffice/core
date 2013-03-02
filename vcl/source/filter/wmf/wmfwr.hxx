@@ -24,7 +24,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 
 // -----------------------------------------------------------------------------
 

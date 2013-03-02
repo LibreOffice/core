@@ -32,7 +32,7 @@
 #include <vcl/font.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/lineinfo.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 
 #define ERROR                   0
 #define NULLREGION              1

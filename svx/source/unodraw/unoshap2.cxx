@@ -31,7 +31,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #include <boost/scoped_ptr.hpp>

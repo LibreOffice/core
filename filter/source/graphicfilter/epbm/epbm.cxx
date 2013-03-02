@@ -23,7 +23,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/solar.hrc>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 
 //============================ PBMWriter ==================================

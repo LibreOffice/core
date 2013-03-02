@@ -24,7 +24,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <osl/mutex.hxx>
 #include <editeng/unotext.hxx>
 #include <svx/svdobj.hxx>

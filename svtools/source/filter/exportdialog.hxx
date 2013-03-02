@@ -21,7 +21,7 @@
 #ifndef _EXPORTDIALOG_HXX_
 #define _EXPORTDIALOG_HXX_
 
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

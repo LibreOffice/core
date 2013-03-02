@@ -33,7 +33,7 @@
 #include <vcl/gradient.hxx>
 #include <unotools/configmgr.hxx>
 #include <svl/solar.hrc>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
 #include "strings.hrc"

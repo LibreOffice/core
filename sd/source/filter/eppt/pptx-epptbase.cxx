@@ -32,7 +32,7 @@
 #include <vcl/virdev.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/wmf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docinf.hxx>

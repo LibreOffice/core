@@ -24,7 +24,7 @@
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <svl/solar.hrc>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include "exportdialog.hxx"
 #include <uno/mapping.hxx>
 #include <com/sun/star/frame/XModel.hpp>

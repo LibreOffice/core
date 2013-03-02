@@ -22,7 +22,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <svl/solar.hrc>
 #include <vcl/FilterConfigItem.hxx>
 

@@ -26,7 +26,7 @@
 #include <vcl/gradient.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>

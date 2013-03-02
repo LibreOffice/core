@@ -20,7 +20,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/solar.hrc>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 
 #include <math.h>
 #include <vcl/bmpacc.hxx>

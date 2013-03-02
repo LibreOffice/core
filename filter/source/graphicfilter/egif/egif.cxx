@@ -23,7 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
 #include <svl/solar.hrc>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include "giflzwc.hxx"
 

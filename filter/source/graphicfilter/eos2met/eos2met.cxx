@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 
 #include <math.h>
 #include <tools/stream.hxx>

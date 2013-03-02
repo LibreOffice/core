@@ -42,7 +42,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <comphelper/extract.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/cvtgrf.hxx>
 
 using ::rtl::OUString;
