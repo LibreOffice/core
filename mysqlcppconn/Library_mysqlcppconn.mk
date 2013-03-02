@@ -11,6 +11,11 @@ $(eval $(call gb_Library_Library,mysqlcppconn))
 
 $(eval $(call gb_Library_use_unpacked,mysqlcppconn,mysqlcppconn))
 
+$(eval $(call gb_Library_use_packages,mysqlcppconn,\
+	sal_generated \
+	sal_odk_headers \
+))
+
 $(eval $(call gb_Library_use_externals,mysqlcppconn, \
 	mysql \
 	boost_headers \
