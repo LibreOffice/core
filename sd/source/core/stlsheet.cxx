@@ -662,7 +662,7 @@ bool SdStyleSheet::SetName( const UniString& rName )
 
 // --------------------------------------------------------------------
 
-void SdStyleSheet::SetHelpId( const String& r, sal_uLong nId )
+void SdStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
 {
     SfxStyleSheet::SetHelpId( r, nId );
 
@@ -1073,7 +1073,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
 
         if( (pEntry->nWID == EE_PARA_NUMBULLET) && (GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) )
         {
-            String aStr;
+            OUString aStr;
             const sal_uInt32 nTempHelpId = GetHelpId( aStr );
 
             if( (nTempHelpId >= HID_PSEUDOSHEET_OUTLINE2) && (nTempHelpId <= HID_PSEUDOSHEET_OUTLINE9) )

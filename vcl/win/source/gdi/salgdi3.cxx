@@ -1461,16 +1461,16 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
                                    LOGFONTW& rLogFont,
                                    bool /*bTestVerticalAvail*/ )
 {
-    UniString   aName;
+    OUString   aName;
     if ( pFont->mpFontData )
         aName = pFont->mpFontData->GetFamilyName();
     else
         aName = pFont->GetFamilyName().GetToken( 0 );
 
-    UINT nNameLen = aName.Len();
+    UINT nNameLen = aName.getLength();
     if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
         nNameLen = (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1;
-    memcpy( rLogFont.lfFaceName, aName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
+    memcpy( rLogFont.lfFaceName, aName.getStr(), nNameLen*sizeof( wchar_t ) );
     rLogFont.lfFaceName[nNameLen] = 0;
 
     if( !pFont->mpFontData )
@@ -1520,7 +1520,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
         if( !bAvailable )
         {
             // restore non-vertical name if not vertical mode isn't available
-            memcpy( &rLogFont.lfFaceName[0], aName.GetBuffer(), nNameLen*sizeof(wchar_t) );
+            memcpy( &rLogFont.lfFaceName[0], aName.getStr(), nNameLen*sizeof(wchar_t) );
             if( nNameLen < LF_FACESIZE )
                 rLogFont.lfFaceName[nNameLen] = '\0';
         }

@@ -284,13 +284,13 @@ SfxItemSet& SfxStyleSheetBase::GetItemSet()
 
 // Hilfe-Datei und -ID setzen und abfragen
 
-sal_uLong SfxStyleSheetBase::GetHelpId( String& rFile )
+sal_uLong SfxStyleSheetBase::GetHelpId( OUString& rFile )
 {
     rFile = aHelpFile;
     return nHelpId;
 }
 
-void SfxStyleSheetBase::SetHelpId( const String& rFile, sal_uLong nId )
+void SfxStyleSheetBase::SetHelpId( const OUString& rFile, sal_uLong nId )
 {
     aHelpFile = rFile;
     nHelpId = nId;

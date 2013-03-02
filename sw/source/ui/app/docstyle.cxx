@@ -1705,7 +1705,7 @@ sal_Bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
             if( pDesc->GetPoolHlpFileId() != UCHAR_MAX )
                 aHelpFile = *rDoc.GetDocPattern( pDesc->GetPoolHlpFileId() );
             else
-                aHelpFile.Erase();
+                aHelpFile = "";
         }
         else if( !bCreate )
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
@@ -1733,7 +1733,7 @@ sal_Bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
             if( pNumRule->GetPoolHlpFileId() != UCHAR_MAX )
                 aHelpFile = *rDoc.GetDocPattern( pNumRule->GetPoolHlpFileId() );
             else
-                aHelpFile.Erase();
+                aHelpFile = "";
         }
         else if( !bCreate )
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
@@ -1778,7 +1778,7 @@ sal_Bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
             if( pFmt->GetPoolHlpFileId() != UCHAR_MAX )
                 aHelpFile = *rDoc.GetDocPattern( pFmt->GetPoolHlpFileId() );
             else
-                aHelpFile.Erase();
+                aHelpFile = "";
 
             if( RES_CONDTXTFMTCOLL == pFmt->Which() )
                 _nMask |= SWSTYLEBIT_CONDCOLL;
@@ -1969,13 +1969,13 @@ bool  SwDocStyleSheet::IsUsed() const
 }
 
 
-sal_uLong  SwDocStyleSheet::GetHelpId( String& rFile )
+sal_uLong  SwDocStyleSheet::GetHelpId( OUString& rFile )
 {
     sal_uInt16 nId = 0;
     sal_uInt16 nPoolId = 0;
     unsigned char nFileId = UCHAR_MAX;
 
-    rFile = rtl::OUString("swrhlppi.hlp");
+    rFile = "swrhlppi.hlp";
 
     const SwFmt* pTmpFmt = 0;
     switch( nFamily )
@@ -2069,7 +2069,7 @@ sal_uLong  SwDocStyleSheet::GetHelpId( String& rFile )
 }
 
 
-void  SwDocStyleSheet::SetHelpId( const String& r, sal_uLong nId )
+void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
 {
     sal_uInt8 nFileId = static_cast< sal_uInt8 >(rDoc.SetDocPattern( r ));
     sal_uInt16 nHId = static_cast< sal_uInt16 >(nId); //!! SFX changed over to ULONG arbitrarily!

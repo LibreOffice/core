@@ -238,7 +238,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             if ( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )
             {
                 SfxStyleSheet* pOldStyleSheet = mpView->GetStyleSheet();
-                String aStr;
+                OUString aStr;
 
                 if( // if the object had no style sheet, allow all
                     !pOldStyleSheet ||

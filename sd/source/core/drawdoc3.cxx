@@ -1439,7 +1439,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     else
                     {
                         // create new style
-                        String aHelpFile;
+                        OUString aHelpFile;
                         pMySheet = static_cast<SfxStyleSheet*>( &mxStyleSheetPool->Make(aName, SD_STYLE_FAMILY_MASTERPAGE, pHisSheet->GetMask()) );
                         pMySheet->SetHelpId( aHelpFile, pHisSheet->GetHelpId(aHelpFile) );
                         pMySheet->GetItemSet().ClearItem(0);  // Delete all

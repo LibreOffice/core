@@ -48,6 +48,7 @@
 using namespace com::sun::star;
 
 String aEmptyStr;    // constant string
+OUString aEmptyOUStr;  // remove once aEmptyStr can be changed to OUString
 OUString aDotStr('.'); // constant string
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwAttrSet )

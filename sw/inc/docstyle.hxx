@@ -114,8 +114,8 @@ public:
     virtual const String&   GetParent() const;
     virtual const String&   GetFollow() const;
 
-    virtual sal_uLong GetHelpId( String& rFile );
-    virtual void SetHelpId( const String& r, sal_uLong nId );
+    virtual sal_uLong GetHelpId( OUString& rFile );
+    virtual void SetHelpId( const OUString& r, sal_uLong nId );
 
     /** Preset the members without physical access.
      Used by StyleSheetPool. */
