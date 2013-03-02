@@ -74,7 +74,7 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
         try
         {
             xUserProps->addProperty( m_aCustomPropertyName,
-                    beans::PropertyAttribute::REMOVEABLE, aAny );
+                    beans::PropertyAttribute::REMOVABLE, aAny );
         }
         catch( beans::PropertyExistException& )
         {

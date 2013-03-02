@@ -85,7 +85,7 @@ namespace xmloff
         bool bIsDefaultValue =    m_xPropertyState.is()
                             &&  ( PropertyState_DEFAULT_VALUE == m_xPropertyState->getPropertyState( i_propertyName ) );
         bool bIsDynamicProperty =  m_xPropertyInfo.is()
-                                && ( ( m_xPropertyInfo->getPropertyByName( i_propertyName ).Attributes & PropertyAttribute::REMOVEABLE ) != 0 );
+                                && ( ( m_xPropertyInfo->getPropertyByName( i_propertyName ).Attributes & PropertyAttribute::REMOVABLE ) != 0 );
         return ( !bIsDefaultValue || bIsDynamicProperty );
     }
 
@@ -249,7 +249,7 @@ namespace xmloff
             // no read-only props
             if ( ( pProperties->Attributes & PropertyAttribute::READONLY ) != 0 )
                 // except they're dynamically added
-                if ( ( pProperties->Attributes & PropertyAttribute::REMOVEABLE ) == 0 )
+                if ( ( pProperties->Attributes & PropertyAttribute::REMOVABLE ) == 0 )
                     continue;
             m_aRemainingProps.insert(pProperties->Name);
         }

@@ -192,8 +192,8 @@ public class dbg {
             if ((attr & PropertyAttribute.READONLY) != 0)
                     out.println("\t-READONLY");
 
-            if ((attr & PropertyAttribute.REMOVEABLE) != 0)
-                    out.println("\t-REMOVEABLE");
+            if ((attr & PropertyAttribute.REMOVABLE) != 0)
+                    out.println("\t-REMOVABLE");
 
             if ((attr & PropertyAttribute.TRANSIENT) != 0)
                     out.println("\t-TRANSIENT");

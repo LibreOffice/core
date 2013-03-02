@@ -577,8 +577,8 @@ void SAL_CALL ContentImplHelper::addProperty(
 
         if ( xContainer.is() )
         {
-            // Property is always removeable.
-            Attributes |= beans::PropertyAttribute::REMOVEABLE;
+            // Property is always removable.
+            Attributes |= beans::PropertyAttribute::REMOVABLE;
 
             try
             {
@@ -642,9 +642,9 @@ void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
         beans::Property aProp
             = getPropertySetInfo( xEnv )->getPropertyByName( Name );
 
-        if ( !( aProp.Attributes & beans::PropertyAttribute::REMOVEABLE ) )
+        if ( !( aProp.Attributes & beans::PropertyAttribute::REMOVABLE ) )
         {
-            // Not removeable!
+            // Not removable!
             throw beans::NotRemoveableException();
         }
     }
@@ -684,7 +684,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
             catch ( beans::NotRemoveableException const & )
             {
                 OSL_FAIL(
-                    "ContentImplHelper::removeProperty - Unremoveable!" );
+                    "ContentImplHelper::removeProperty - Unremovable!" );
                 throw;
             }
 

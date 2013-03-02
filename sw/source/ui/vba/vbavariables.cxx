@@ -69,7 +69,7 @@ SwVbaVariables::Add( const rtl::OUString& rName, const uno::Any& rValue ) throw 
     else
         aValue <<= rtl::OUString();
     uno::Reference< beans::XPropertyContainer > xPropertyContainer( mxUserDefined, uno::UNO_QUERY_THROW );
-    xPropertyContainer->addProperty( rName, beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::REMOVEABLE, aValue );
+    xPropertyContainer->addProperty( rName, beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::REMOVABLE, aValue );
 
     return uno::makeAny( uno::Reference< word::XVariable >( new SwVbaVariable( getParent(), mxContext, mxUserDefined, rName ) ) );
 }

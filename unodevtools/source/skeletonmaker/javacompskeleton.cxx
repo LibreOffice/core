@@ -194,7 +194,7 @@ bool checkAttribute(OStringBuffer& attributeValue, sal_uInt16 attribute)
         /* com::sun::star::beans::PropertyValue::READONLY */ 16,
         /* com::sun::star::beans::PropertyValue::MAYBEAMBIGIOUS */ 32,
         /* com::sun::star::beans::PropertyValue::MAYBEDEFAULT */ 64,
-        /* com::sun::star::beans::PropertyValue::REMOVEABLE */ 128,
+        /* com::sun::star::beans::PropertyValue::REMOVABLE */ 128,
         /* com::sun::star::beans::PropertyValue::OPTIONAL */ 256 };
 
     for (sal_uInt16 i = 0; i < 9; i++)
@@ -228,7 +228,7 @@ bool checkAttribute(OStringBuffer& attributeValue, sal_uInt16 attribute)
                 attributeValue.append("PropertyAttribute.MAYBEDEFAULT");
                 break;
             case 128:
-                attributeValue.append("PropertyAttribute.REMOVEABLE");
+                attributeValue.append("PropertyAttribute.REMOVABLE");
                 break;
             case 256:
                 attributeValue.append("PropertyAttribute.OPTIONAL");

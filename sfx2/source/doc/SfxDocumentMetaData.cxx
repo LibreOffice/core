@@ -1337,7 +1337,7 @@ void SAL_CALL SfxDocumentMetaData::init(
         }
         try {
             m_xUserDefined->addProperty(name,
-                css::beans::PropertyAttribute::REMOVEABLE, any);
+                css::beans::PropertyAttribute::REMOVABLE, any);
         } catch (const css::beans::PropertyExistException &) {
             DBG_WARNING1("SfxDocumentMetaData: duplicate: %s",
                     OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
