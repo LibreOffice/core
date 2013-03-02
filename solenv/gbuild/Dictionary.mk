@@ -66,6 +66,7 @@ $(call gb_ExtensionTarget_ExtensionTarget,$(call gb_Dictionary_extensionname,$(1
 $(call gb_Dictionary_add_root_file,$(1),$(2)/$(gb_Dictionary_CONFIGURATION_FILE))
 
 $(call gb_Dictionary_get_target,$(1)) : $(call gb_ExtensionTarget_get_target,$(call gb_Dictionary_extensionname,$(1)))
+$(call gb_Dictionary_get_target,$(1)) :| $(dir $(call gb_Dictionary_get_target,$(1))).dir
 $(call gb_Dictionary_get_clean_target,$(1)) : $(call gb_ExtensionTarget_get_clean_target,$(call gb_Dictionary_extensionname,$(1)))
 
 $(call gb_Deliver_add_deliverable,$(call gb_Dictionary_get_target,$(1)),$(call gb_ExtensionTarget_get_target,$(call gb_Dictionary_extensionname,$(1))),$(1))
