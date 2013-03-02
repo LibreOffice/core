@@ -11,7 +11,7 @@ share_WORKDIR := $(call gb_CustomTarget_get_workdir,sysui/share)
 share_SRCDIR := $(SRCDIR)/sysui/desktop
 
 LAUNCHERLIST_APPS := writer calc draw impress math base printeradmin startcenter
-LAUNCHERLIST := $(LAUNCHERLIST_APPS) qstart javafilter xsltfilter
+LAUNCHERLIST := $(LAUNCHERLIST_APPS) qstart xsltfilter
 LAUNCHERS := $(foreach launcher,$(LAUNCHERLIST),$(share_SRCDIR)/menus/$(launcher).desktop)
 
 MIMELIST := \

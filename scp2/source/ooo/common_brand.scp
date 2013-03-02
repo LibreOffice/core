@@ -77,7 +77,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_Draw,
              gid_Brand_File_Share_Xdg_Extension,
              gid_Brand_File_Share_Xdg_Impress,
-             gid_Brand_File_Share_Xdg_JavaFilter,
              gid_Brand_File_Share_Xdg_Math,
              gid_Brand_File_Share_Xdg_Printeradmin,
              gid_Brand_File_Share_Xdg_QStart,
@@ -731,15 +730,6 @@ File gid_Brand_File_Share_Xdg_StartCenter
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Xdg;
     Name = "startcenter.desktop";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_JavaFilter
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Name = "javafilter.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
 End
 #endif

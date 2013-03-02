@@ -32,9 +32,6 @@ postprocess_XCDS := \
 	lingucomponent.xcd \
 	main.xcd \
 	math.xcd \
-	palm.xcd \
-	pocketexcel.xcd \
-	pocketword.xcd \
 	pyuno.xcd \
 	writer.xcd \
 	xsltfilter.xcd
@@ -365,21 +362,6 @@ postprocess_FILES_math := \
 	$(postprocess_MOD)/org/openoffice/Office/Common-math.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-math.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-math.xcu
-
-postprocess_DEPS_palm := main
-postprocess_FILES_palm := \
-	$(postprocess_MOD)/fcfg_palm_filters.xcu \
-	$(postprocess_MOD)/fcfg_palm_types.xcu
-
-postprocess_DEPS_pocketexcel := main
-postprocess_FILES_pocketexcel := \
-	$(postprocess_MOD)/fcfg_pocketexcel_filters.xcu \
-	$(postprocess_MOD)/fcfg_pocketexcel_types.xcu
-
-postprocess_DEPS_pocketword := main
-postprocess_FILES_pocketword := \
-	$(postprocess_MOD)/fcfg_pocketword_filters.xcu \
-	$(postprocess_MOD)/fcfg_pocketword_types.xcu
 
 postprocess_DEPS_pyuno := main
 postprocess_FILES_pyuno := \

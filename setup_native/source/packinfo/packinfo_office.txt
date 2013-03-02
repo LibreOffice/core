@@ -253,21 +253,6 @@ packageversion = "%ABOUTBOXPRODUCTVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Javafilter"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-javafilter"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-javafilter"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-copyright = "2012 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "Java filter module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%ABOUTBOXPRODUCTVERSION"
-End
-
-Start
 module = "gid_Module_Optional_Activexcontrol"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-activex"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"

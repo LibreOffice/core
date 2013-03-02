@@ -132,7 +132,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         if test "z$OOO_VENDOR" = "zMandriva" ; then
             merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/draw_list.txt
             merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
-            merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Extensions_Script_Provider_For_Python $FILELISTSDIR/pyuno_list.txt
@@ -141,7 +140,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         else
             merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
-            merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/filters_list.txt
             merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/mailmerge_list.txt
             merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Pyuno_LibreLogo   $FILELISTSDIR/pyuno_list.txt
@@ -151,7 +149,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     else
         merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
-        merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Pyuno_LibreLogo   $FILELISTSDIR/common_list.txt
@@ -403,7 +400,6 @@ else
     create_package_directory gid_Module_Root_Files_Images           pkg/libreoffice-common
     create_package_directory gid_Module_Oo_Linguistic               pkg/libreoffice-common
     create_package_directory gid_Module_Optional_Xsltfiltersamples  pkg/libreoffice-common
-    create_package_directory gid_Module_Optional_Javafilter         pkg/libreoffice-common
     create_package_directory gid_Module_Optional_Grfflt             pkg/libreoffice-draw
     create_package_directory gid_Module_Prg_Calc_Bin                pkg/libreoffice-calc
     create_package_directory gid_Module_Prg_Math_Bin                pkg/libreoffice-math

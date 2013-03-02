@@ -83,24 +83,6 @@ End
 
 #ifdef HAVE_WINDOWS_SDK
 
-WindowsCustomAction gid_Customaction_Jfregcadll1
-	Name = "Jfregcadll1";
-	Typ = "65";
-	Source = "jfregca.dll";
-	Target = "install_jf";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=3 And Not PATCH", "end");
-End
-
-WindowsCustomAction gid_Customaction_Jfregcadll2
-	Name = "Jfregcadll2";
-	Typ = "65";
-	Source = "jfregca.dll";
-	Target = "uninstall_jf";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end");
-End
-
 WindowsCustomAction gid_Customaction_sdqsmsidll
 	Name = "sdqsmsidll";
 	Typ = "65";

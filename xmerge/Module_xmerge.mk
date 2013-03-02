@@ -30,12 +30,7 @@ $(eval $(call gb_Module_Module,xmerge))
 
 $(eval $(call gb_Module_add_targets,xmerge,\
 	$(if $(SOLAR_JAVA), \
-		Jar_aportisdoc \
-		Jar_htmlsoff \
-		Jar_pexcel \
-		Jar_pocketword \
 		Jar_xmerge \
 		Jar_XMergeBridge \
 	) \
-	Package_xmergesync \
 ))

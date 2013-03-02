@@ -66,7 +66,6 @@ sub get_registry_component_name
 
     $componentname =~ s/gid_module_/g_m_/g;
     $componentname =~ s/_optional_/_o_/g;
-    $componentname =~ s/_javafilter_/_jf_/g;
 
     # This componentname must be more specific
     my $addon = "_";

@@ -878,33 +878,6 @@ $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_internalgrap
 	xpm_Import \
 )
 
-# fcfg_palm
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_palm_types.xcu,filter/source/config/fragments/types,\
-	writer_AportisDoc_PalmDB_File \
-)
-
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_palm_filters.xcu,filter/source/config/fragments/filters,\
-	AportisDoc_Palm_DB \
-)
-
-# fcfg_pocketexcel
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_pocketexcel_types.xcu,filter/source/config/fragments/types,\
-	calc_Pocket_Excel_File \
-)
-
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_pocketexcel_filters.xcu,filter/source/config/fragments/filters,\
-	Pocket_Excel \
-)
-
-# fcfg_pocketword
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_pocketword_types.xcu,filter/source/config/fragments/types,\
-	writer_PocketWord_File \
-)
-
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_pocketword_filters.xcu,filter/source/config/fragments/filters,\
-	PocketWord_File \
-)
-
 # fcfg_xslt
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/source/config/fragments/types,\
 	calc_ODS_FlatXML \
