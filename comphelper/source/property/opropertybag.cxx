@@ -499,7 +499,7 @@ namespace comphelper
                 if ( m_bAutoAddProperties )
                 {
                     // add the property
-                    sal_Int16 nAttributes = PropertyAttribute::BOUND | PropertyAttribute::REMOVEABLE | PropertyAttribute::MAYBEDEFAULT;
+                    sal_Int16 nAttributes = PropertyAttribute::BOUND | PropertyAttribute::REMOVABLE | PropertyAttribute::MAYBEDEFAULT;
                     addProperty( *pName, nAttributes, pProperty->Value );
                     continue;
                 }

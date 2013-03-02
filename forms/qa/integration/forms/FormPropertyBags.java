@@ -103,8 +103,8 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
         propContainer.addProperty( "SomeNumericValue", PropertyAttribute.BOUND, new Integer( 42 ) );
 
         XPropertySetInfo propertyInfo = textFieldModel.getPropertySetInfo();
-        assure( "Per service definition, dynamic properties are expected to be forced to be removeable",
-            ( propertyInfo.getPropertyByName("SomeBoundText").Attributes & PropertyAttribute.REMOVEABLE ) != 0 );
+        assure( "Per service definition, dynamic properties are expected to be forced to be removable",
+            ( propertyInfo.getPropertyByName("SomeBoundText").Attributes & PropertyAttribute.REMOVABLE ) != 0 );
 
         // a second addition of a property with an existent name should be rejected
         boolean caughtExpected = false;

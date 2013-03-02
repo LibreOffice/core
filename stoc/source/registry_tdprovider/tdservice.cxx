@@ -282,7 +282,7 @@ ServiceTypeDescriptionImpl::getProperties()
         if ( nFlags & RT_ACCESS_MAYBEDEFAULT )
             nAttribs |= beans::PropertyAttribute::MAYBEDEFAULT;
         if ( nFlags & RT_ACCESS_REMOVEABLE )
-            nAttribs |= beans::PropertyAttribute::REMOVEABLE;
+            nAttribs |= beans::PropertyAttribute::REMOVABLE;
 
         OSL_ENSURE( !(nFlags & RT_ACCESS_PROPERTY),
                     "### RT_ACCESS_PROPERTY is unexpected here!" );

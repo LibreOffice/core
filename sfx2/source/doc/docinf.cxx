@@ -156,7 +156,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
                 try
                 {
                     xUserDefined->addProperty( aPropName,
-                        beans::PropertyAttribute::REMOVEABLE, aPropValue );
+                        beans::PropertyAttribute::REMOVABLE, aPropValue );
                 }
                 catch (const uno::Exception&)
                 {

@@ -835,16 +835,16 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
     uno::Reference< ucb::XCommandEnvironment > xEnv;
 
 #if 0
-    // @@@ REMOVEABLE z.Z. nicht richtig an der PropSetInfo gesetzt!!!
+    // @@@ REMOVABLE z.Z. nicht richtig an der PropSetInfo gesetzt!!!
     try
     {
         beans::Property aProp
             = getPropertySetInfo( xEnv, sal_False /* don't cache data */ )
                 ->getPropertyByName( Name );
 
-        if ( !( aProp.Attributes & beans::PropertyAttribute::REMOVEABLE ) )
+        if ( !( aProp.Attributes & beans::PropertyAttribute::REMOVABLE ) )
         {
-            // Not removeable!
+            // Not removable!
             throw beans::NotRemoveableException();
         }
     }

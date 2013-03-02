@@ -351,16 +351,16 @@ public class DocumentProperties
             dur.Seconds = 555;
             dur.MilliSeconds = 444;
 
-            udpc.addProperty("Frobnicate", PropertyAttribute.REMOVEABLE, b);
-            udpc.addProperty("FrobDuration", PropertyAttribute.REMOVEABLE, dur);
-            udpc.addProperty("FrobDuration2", PropertyAttribute.REMOVEABLE, t);
-            udpc.addProperty("FrobEndDate", PropertyAttribute.REMOVEABLE, date);
-            udpc.addProperty("FrobStartTime", PropertyAttribute.REMOVEABLE, dt);
-            udpc.addProperty("Pi", PropertyAttribute.REMOVEABLE, new Double(d));
-            udpc.addProperty("Foo", PropertyAttribute.REMOVEABLE, "bar");
-            udpc.addProperty("Removed", PropertyAttribute.REMOVEABLE, "bar");
+            udpc.addProperty("Frobnicate", PropertyAttribute.REMOVABLE, b);
+            udpc.addProperty("FrobDuration", PropertyAttribute.REMOVABLE, dur);
+            udpc.addProperty("FrobDuration2", PropertyAttribute.REMOVABLE, t);
+            udpc.addProperty("FrobEndDate", PropertyAttribute.REMOVABLE, date);
+            udpc.addProperty("FrobStartTime", PropertyAttribute.REMOVABLE, dt);
+            udpc.addProperty("Pi", PropertyAttribute.REMOVABLE, new Double(d));
+            udpc.addProperty("Foo", PropertyAttribute.REMOVABLE, "bar");
+            udpc.addProperty("Removed", PropertyAttribute.REMOVABLE, "bar");
             // #i94175#: empty property name is valid ODF 1.1
-            udpc.addProperty("", PropertyAttribute.REMOVEABLE, "eeeeek");
+            udpc.addProperty("", PropertyAttribute.REMOVABLE, "eeeeek");
             try {
                 udpc.removeProperty("Info 1");
                 udpc.removeProperty("Removed");
@@ -369,7 +369,7 @@ public class DocumentProperties
             }
 
             try {
-                udpc.addProperty("Forbidden", PropertyAttribute.REMOVEABLE,
+                udpc.addProperty("Forbidden", PropertyAttribute.REMOVABLE,
                     new String[] { "foo", "bar" });
                 fail("inserting value of non-supported type did not fail");
             } catch (IllegalTypeException e) {
@@ -454,14 +454,14 @@ public class DocumentProperties
             xMB.addModifyListener(listener);
             xDP.setAuthor("not me");
             assertTrue("Listener Author", listener.reset());
-            udpc.addProperty("Listener", PropertyAttribute.REMOVEABLE, "foo");
+            udpc.addProperty("Listener", PropertyAttribute.REMOVABLE, "foo");
             assertTrue("Listener UserDefined Add", listener.reset());
             udps.setPropertyValue("Listener", "bar");
             assertTrue("Listener UserDefined Set", listener.reset());
             udpc.removeProperty("Listener");
             assertTrue("Listener UserDefined Remove", listener.reset());
             xMB.removeModifyListener(listener);
-            udpc.addProperty("Listener2", PropertyAttribute.REMOVEABLE, "foo");
+            udpc.addProperty("Listener2", PropertyAttribute.REMOVABLE, "foo");
             assertTrue("Removed Listener UserDefined Add", !listener.reset());
 
             System.out.println("...done");

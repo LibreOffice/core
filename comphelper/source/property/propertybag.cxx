@@ -151,7 +151,7 @@ namespace comphelper
     {
         const Property& rProp = getProperty( _rName );
             // will throw an UnknownPropertyException if necessary
-        if ( ( rProp.Attributes & PropertyAttribute::REMOVEABLE ) == 0 )
+        if ( ( rProp.Attributes & PropertyAttribute::REMOVABLE ) == 0 )
             throw NotRemoveableException( ::rtl::OUString(), NULL );
         const sal_Int32 nHandle = rProp.Handle;
 
