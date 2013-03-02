@@ -207,6 +207,7 @@ void Test::testSimpleReferenceObject() {
         delete static_cast< DerivedSimpleReferenceObject * >(p);
         throw;
     }
+    delete static_cast< DerivedSimpleReferenceObject * >(p);
 }
 
 void Test::testDerivedCondition() {
