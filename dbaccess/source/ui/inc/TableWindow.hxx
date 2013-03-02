@@ -35,7 +35,7 @@ class SvTreeListEntry;
 namespace dbaui
 {
     //////////////////////////////////////////////////////////////////////////
-    // Flags fuer die Groessenanpassung der SbaJoinTabWins
+    // Flags for the size adjustment of SbaJoinTabWins
     const sal_uInt16 SIZING_NONE    = 0x0000;
     const sal_uInt16 SIZING_TOP     = 0x0001;
     const sal_uInt16 SIZING_BOTTOM  = 0x0002;
