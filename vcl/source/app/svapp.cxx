@@ -177,12 +177,17 @@ struct ImplPostEventData
     sal_uLong           mnEventId;
     KeyEvent        maKeyEvent;
     MouseEvent      maMouseEvent;
-
+    ZoomEvent       maZoomEvent;
+    ScrollEvent     maScrollEvent;
 
        ImplPostEventData( sal_uLong nEvent, const Window* pWin, const KeyEvent& rKeyEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maKeyEvent( rKeyEvent ) {}
        ImplPostEventData( sal_uLong nEvent, const Window* pWin, const MouseEvent& rMouseEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maMouseEvent( rMouseEvent ) {}
+       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const ZoomEvent& rZoomEvent ) :
+        mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maZoomEvent( rZoomEvent ) {}
+       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const ScrollEvent& rScrollEvent ) :
+        mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maScrollEvent( rScrollEvent ) {}
 
     ~ImplPostEventData() {}
 };
@@ -894,8 +899,26 @@ sal_uLong Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent*
 
     if( pWin && pZoomEvent )
     {
-        // Implement...
-        (void) nEvent;
+        Point aTransformedPos( pZoomEvent->GetCenter() );
+
+        aTransformedPos.X() += pWin->mnOutOffX;
+        aTransformedPos.Y() += pWin->mnOutOffY;
+
+        const ZoomEvent aTransformedEvent( aTransformedPos, pZoomEvent->GetScale() );
+
+        ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, aTransformedEvent );
+
+        PostUserEvent( nEventId,
+                       STATIC_LINK( NULL, Application, PostEventHandler ),
+                       pPostEventData );
+
+        if( nEventId )
+        {
+            pPostEventData->mnEventId = nEventId;
+            aPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
+        }
+        else
+            delete pPostEventData;
     }
 
     return nEventId;
@@ -936,6 +959,16 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
         case VCLEVENT_WINDOW_KEYUP:
             nEvent = SALEVENT_EXTERNALKEYUP;
             pEventData = &pData->maKeyEvent;
+        break;
+
+        case VCLEVENT_WINDOW_ZOOM:
+            nEvent = SALEVENT_EXTERNALZOOM;
+            pEventData = &pData->maZoomEvent;
+        break;
+
+        case VCLEVENT_WINDOW_SCROLL:
+            nEvent = SALEVENT_EXTERNALSCROLL;
+            pEventData = &pData->maScrollEvent;
         break;
 
         default:

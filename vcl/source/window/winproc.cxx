@@ -2592,6 +2592,37 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
         case SALEVENT_STARTRECONVERSION:
             ImplHandleStartReconversion( pWindow );
             break;
+        case SALEVENT_EXTERNALZOOM:
+            {
+            // Manually tuned to get a pleasing effect at least on my
+            // device... Would be better to actually achieve the
+            // requested scale factor of course.
+            const int ZOOM_FACTOR = 300;
+
+            ZoomEvent* pZoomEvent = (ZoomEvent*) pEvent;
+            SalWheelMouseEvent aSalWheelMouseEvent;
+
+            aSalWheelMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalWheelMouseEvent.mnX = pZoomEvent->GetCenter().getX();
+            aSalWheelMouseEvent.mnY = pZoomEvent->GetCenter().getY();
+
+            if ( pZoomEvent->GetScale() < 1 ) {
+                aSalWheelMouseEvent.mnDelta = - (long) ((1 - pZoomEvent->GetScale()) * ZOOM_FACTOR);
+                aSalWheelMouseEvent.mnNotchDelta = -1;
+            } else {
+                aSalWheelMouseEvent.mnDelta = (long) ((pZoomEvent->GetScale() - 1) * ZOOM_FACTOR);
+                aSalWheelMouseEvent.mnNotchDelta = 1;
+            }
+
+            aSalWheelMouseEvent.mnScrollLines = 1; // ???
+            aSalWheelMouseEvent.mnCode = KEY_MOD1;
+            aSalWheelMouseEvent.mbDeltaIsPixel = 0; // ???
+
+            nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
+            }
+            break;
+        case SALEVENT_EXTERNALSCROLL:
+            break;
 #ifdef DBG_UTIL
         default:
             OSL_TRACE( "ImplWindowFrameProc(): unknown event (%lu)", (sal_uLong)nEvent );
