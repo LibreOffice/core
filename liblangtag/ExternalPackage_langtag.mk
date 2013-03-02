@@ -8,11 +8,9 @@
 #
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,langtag,langtag))
+
 $(eval $(call gb_ExternalPackage_use_external_project,langtag,langtag))
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_ExternalPackage_add_file,langtag,lib/langtag.lib,liblangtag/.libs/langtag.lib))
-else
+
 $(eval $(call gb_ExternalPackage_add_file,langtag,lib/liblangtag.a,liblangtag/.libs/liblangtag.a))
-endif
 
 # vim: set noet sw=4 ts=4:
