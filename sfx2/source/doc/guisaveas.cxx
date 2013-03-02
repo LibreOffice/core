@@ -80,7 +80,6 @@
 #include "alienwarn.hxx"
 
 #include <sfx2/docmacromode.hxx>
-#include <svx/svxerr.hxx>
 #include <comphelper/interaction.hxx>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <rtl/ref.hxx>
