@@ -389,9 +389,9 @@ void ODBExport::exportDataSource()
 
             if ( eToken == XML_TOKEN_INVALID )
             {
-                // for properties which are not REMOVEABLE, we care for their state, and
+                // for properties which are not REMOVABLE, we care for their state, and
                 // only export them if they're not DEFAULTed
-                if ( ( pProperties->Attributes & PropertyAttribute::REMOVEABLE ) == 0 )
+                if ( ( pProperties->Attributes & PropertyAttribute::REMOVABLE ) == 0 )
                 {
                     PropertyState ePropertyState = xSettingsState->getPropertyState( pProperties->Name );
                     if ( PropertyState_DEFAULT_VALUE == ePropertyState )

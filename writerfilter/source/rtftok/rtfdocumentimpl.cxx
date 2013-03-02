@@ -3846,7 +3846,7 @@ int RTFDocumentImpl::popState()
         if (m_xDocumentProperties.is())
         {
             uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
-            xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVEABLE,
+            xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVABLE,
                     uno::makeAny(m_aStates.top().aDestinationText.makeStringAndClear()));
         }
     }

@@ -39,7 +39,7 @@ from com.sun.star.beans.PropertyAttribute import \
      READONLY as PROP_ATTR_READONLY, \
      MAYBEAMBIGUOUS as PROP_ATTR_MAYBEAMBIGUOUS, \
      MAYBEDEFAULT as PROP_ATTR_MAYBEDEFAULT, \
-     REMOVEABLE as PROP_ATTR_REMOVEABLE
+     REMOVABLE as PROP_ATTR_REMOVABLE
 
 def _mode_to_str( mode ):
     ret = "[]"
@@ -53,8 +53,8 @@ def _mode_to_str( mode ):
 
 def _propertymode_to_str( mode ):
     ret = ""
-    if PROP_ATTR_REMOVEABLE & mode:
-        ret = ret + "removeable "
+    if PROP_ATTR_REMOVABLE & mode:
+        ret = ret + "removable "
     if PROP_ATTR_MAYBEDEFAULT & mode:
         ret = ret + "maybedefault "
     if PROP_ATTR_MAYBEAMBIGUOUS & mode:

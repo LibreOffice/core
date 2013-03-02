@@ -2203,7 +2203,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                         = i_xDocProps->getUserDefinedProperties();
                     try {
                         xUDProps->addProperty(aName,
-                            beans::PropertyAttribute::REMOVEABLE,
+                            beans::PropertyAttribute::REMOVABLE,
                             uno::makeAny(::rtl::OUString(aContent)));
                         AddMetaUserDefined(aName);
                         bChanged = true;

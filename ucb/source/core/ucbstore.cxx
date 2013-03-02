@@ -1704,8 +1704,8 @@ void SAL_CALL PersistentPropertySet::addProperty(
         }
     }
 
-    // Property is always removeable.
-    Attributes |= PropertyAttribute::REMOVEABLE;
+    // Property is always removable.
+    Attributes |= PropertyAttribute::REMOVABLE;
 
     // Add property.
 
@@ -1852,7 +1852,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
         if ( !xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
             throw UnknownPropertyException();
 
-        // Property removeable?
+        // Property removable?
         try
         {
             OUString aFullAttrName = aFullPropName;
@@ -1862,9 +1862,9 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
             if ( xRootHierNameAccess->getByHierarchicalName( aFullAttrName )
                     >>= nAttribs )
             {
-                if ( !( nAttribs & PropertyAttribute::REMOVEABLE ) )
+                if ( !( nAttribs & PropertyAttribute::REMOVABLE ) )
                 {
-                    // Not removeable!
+                    // Not removable!
                     throw NotRemoveableException();
                 }
             }

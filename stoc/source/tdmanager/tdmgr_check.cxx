@@ -88,8 +88,8 @@ OUString getPropertyFlagsAsString( sal_Int16 attributes )
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("MAYBEAMBIGUOUS, ") );
     if ((attributes & beans::PropertyAttribute::MAYBEDEFAULT) != 0)
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("MAYBEDEFAULT, ") );
-    if ((attributes & beans::PropertyAttribute::REMOVEABLE) != 0)
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("REMOVEABLE, ") );
+    if ((attributes & beans::PropertyAttribute::REMOVABLE) != 0)
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("REMOVABLE, ") );
     if ((attributes & beans::PropertyAttribute::OPTIONAL) != 0)
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("OPTIONAL") );
     else if (buf.getLength() > 0)

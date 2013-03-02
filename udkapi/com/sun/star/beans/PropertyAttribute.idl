@@ -74,12 +74,12 @@ published constants PropertyAttribute
     /** indicates that the property can be removed
         (i.e., by calling <member>XPropertyContainer::removeProperty</member>).
      */
-    const short REMOVEABLE = 128;
+    const short REMOVABLE = 128;
 
     /** @deprecated
-        same as <const>PropertyAttribute::REMOVEABLE</const>.
+        same as <const>PropertyAttribute::REMOVABLE</const>.
      */
-    const short REMOVABLE = 128;
+    const short REMOVEABLE = 128;
 
     /** indicates that a property is optional.
 

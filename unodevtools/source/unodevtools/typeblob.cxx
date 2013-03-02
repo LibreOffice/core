@@ -264,7 +264,7 @@ RTFieldAccess checkPropertyFlags(short flags) {
         propertyFlags |= RT_ACCESS_MAYBEAMBIGUOUS;
     case PropertyAttribute::MAYBEDEFAULT:
         propertyFlags |= RT_ACCESS_MAYBEDEFAULT;
-    case PropertyAttribute::REMOVEABLE:
+    case PropertyAttribute::REMOVABLE:
         propertyFlags |= RT_ACCESS_REMOVEABLE;
     case PropertyAttribute::OPTIONAL:
         propertyFlags |= RT_ACCESS_OPTIONAL;
