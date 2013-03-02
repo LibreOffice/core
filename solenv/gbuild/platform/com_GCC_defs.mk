@@ -108,7 +108,7 @@ gb_CXXFLAGS_COMMON += -DLIBO_MERGELIBS
 endif
 
 ifeq ($(ENABLE_LTO),TRUE)
-gb_Library_LTOFLAGS := -flto
+gb_Library_LTOFLAGS := -flto -fno-use-linker-plugin
 endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
