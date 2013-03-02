@@ -69,6 +69,7 @@ $(if $(4),,$(error filter_Configuration__add_module: no input files))
 $(5) : \
 	$(addprefix $(SRCDIR)/$(3)/,$(addsuffix .xcu,$(4)))
 $(call gb_XcuModuleTarget_get_outdir_target,$(2)) : $(5)
+$(call gb_XcuModuleTarget_get_outdir_target,$(2)) |: $(dir $(call gb_XcuModuleTarget_get_outdir_target,$(2))).dir
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuModuleTarget_get_outdir_target,$(2)),$(5),$(2))
 endef
