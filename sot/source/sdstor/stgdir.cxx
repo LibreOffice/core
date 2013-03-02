@@ -883,6 +883,10 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
             SetupEntry( nRight, pUpper );
             SetupEntry( nLeaf, pCur );
         }
+        else
+        {
+            delete pCur;
+        }
     }
 }
 
