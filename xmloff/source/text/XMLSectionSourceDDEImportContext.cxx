@@ -57,10 +57,10 @@ XMLSectionSourceDDEImportContext::XMLSectionSourceDDEImportContext(
     Reference<XPropertySet> & rSectPropSet) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         rSectionPropertySet(rSectPropSet),
-        sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM(sAPI_DDECommandFile)),
-        sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM(sAPI_DDECommandType)),
-       sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM(sAPI_DDECommandElement)),
-        sIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsAutomaticUpdate))
+        sDdeCommandFile(sAPI_DDECommandFile),
+        sDdeCommandType(sAPI_DDECommandType),
+       sDdeCommandElement(sAPI_DDECommandElement),
+        sIsAutomaticUpdate(sAPI_IsAutomaticUpdate)
 {
 }
 

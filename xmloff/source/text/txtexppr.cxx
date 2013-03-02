@@ -853,8 +853,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         pAnchorTypeState->maValue >>= eAnchor;
     else if( bNeedsAnchor )
     {
-        Any aAny = rPropSet->getPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AnchorType") ) );
+        Any aAny = rPropSet->getPropertyValue( OUString( "AnchorType" ) );
         aAny >>= eAnchor;
     }
 
@@ -973,7 +972,7 @@ static bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rNam
         xCNSupplier(rExport.GetModel(), UNO_QUERY);
 
     OUString sOutlineName;
-    OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+    OUString sName("Name");
 
     if (xCNSupplier.is())
     {

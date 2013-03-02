@@ -278,82 +278,82 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
                                         XMLPropertyState* pCombinedCharState)
     : rExport(rExp),
       pUsedMasters(NULL),
-      sServicePrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.textfield.")),
-      sFieldMasterPrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FieldMaster.")),
-      sPresentationServicePrefix(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TextField.")),
+      sServicePrefix("com.sun.star.text.textfield."),
+      sFieldMasterPrefix("com.sun.star.text.FieldMaster."),
+      sPresentationServicePrefix("com.sun.star.presentation.TextField."),
 
-    sPropertyAdjust(RTL_CONSTASCII_USTRINGPARAM("Adjust")),
-    sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM("Author")),
-    sPropertyChapterFormat(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat")),
-    sPropertyChapterNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("ChapterNumberingLevel")),
-    sPropertyCharStyleNames(RTL_CONSTASCII_USTRINGPARAM("CharStyleNames")),
-    sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM("Condition")),
-    sPropertyContent(RTL_CONSTASCII_USTRINGPARAM("Content")),
-    sPropertyDataBaseName(RTL_CONSTASCII_USTRINGPARAM("DataBaseName")),
-    sPropertyDataBaseURL(RTL_CONSTASCII_USTRINGPARAM("DataBaseURL")),
-    sPropertyDataColumnName(RTL_CONSTASCII_USTRINGPARAM("DataColumnName")),
-    sPropertyDataCommandType(RTL_CONSTASCII_USTRINGPARAM("DataCommandType")),
-    sPropertyDataTableName(RTL_CONSTASCII_USTRINGPARAM("DataTableName")),
-    sPropertyDate(RTL_CONSTASCII_USTRINGPARAM("Date")),
-    sPropertyDateTime(RTL_CONSTASCII_USTRINGPARAM("DateTime")),
-    sPropertyDateTimeValue(RTL_CONSTASCII_USTRINGPARAM("DateTimeValue")),
-    sPropertyDDECommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement")),
-    sPropertyDDECommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile")),
-    sPropertyDDECommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType")),
-    sPropertyDependentTextFields(RTL_CONSTASCII_USTRINGPARAM("DependentTextFields")),
-    sPropertyFalseContent(RTL_CONSTASCII_USTRINGPARAM("FalseContent")),
-    sPropertyFields(RTL_CONSTASCII_USTRINGPARAM("Fields")),
-    sPropertyFieldSubType(RTL_CONSTASCII_USTRINGPARAM("UserDataType")),
-    sPropertyFileFormat(RTL_CONSTASCII_USTRINGPARAM("FileFormat")),
-    sPropertyFullName(RTL_CONSTASCII_USTRINGPARAM("FullName")),
-    sPropertyHint(RTL_CONSTASCII_USTRINGPARAM("Hint")),
+    sPropertyAdjust("Adjust"),
+    sPropertyAuthor("Author"),
+    sPropertyChapterFormat("ChapterFormat"),
+    sPropertyChapterNumberingLevel("ChapterNumberingLevel"),
+    sPropertyCharStyleNames("CharStyleNames"),
+    sPropertyCondition("Condition"),
+    sPropertyContent("Content"),
+    sPropertyDataBaseName("DataBaseName"),
+    sPropertyDataBaseURL("DataBaseURL"),
+    sPropertyDataColumnName("DataColumnName"),
+    sPropertyDataCommandType("DataCommandType"),
+    sPropertyDataTableName("DataTableName"),
+    sPropertyDate("Date"),
+    sPropertyDateTime("DateTime"),
+    sPropertyDateTimeValue("DateTimeValue"),
+    sPropertyDDECommandElement("DDECommandElement"),
+    sPropertyDDECommandFile("DDECommandFile"),
+    sPropertyDDECommandType("DDECommandType"),
+    sPropertyDependentTextFields("DependentTextFields"),
+    sPropertyFalseContent("FalseContent"),
+    sPropertyFields("Fields"),
+    sPropertyFieldSubType("UserDataType"),
+    sPropertyFileFormat("FileFormat"),
+    sPropertyFullName("FullName"),
+    sPropertyHint("Hint"),
     sPropertyInitials("Initials"),
-    sPropertyInstanceName(RTL_CONSTASCII_USTRINGPARAM("InstanceName")),
-    sPropertyIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate")),
-    sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM("IsConditionTrue")),
-    sPropertyIsDataBaseFormat(RTL_CONSTASCII_USTRINGPARAM("DataBaseFormat")),
-    sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM("IsDate")),
-    sPropertyIsExpression(RTL_CONSTASCII_USTRINGPARAM("IsExpression")),
-    sPropertyIsFixed(RTL_CONSTASCII_USTRINGPARAM("IsFixed")),
-    sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM("IsFixedLanguage")),
-    sPropertyIsHidden(RTL_CONSTASCII_USTRINGPARAM("IsHidden")),
-    sPropertyIsInput(RTL_CONSTASCII_USTRINGPARAM("Input")),
-    sPropertyIsShowFormula(RTL_CONSTASCII_USTRINGPARAM("IsShowFormula")),
-    sPropertyIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible")),
-    sPropertyItems(RTL_CONSTASCII_USTRINGPARAM("Items")),
-    sPropertyLevel(RTL_CONSTASCII_USTRINGPARAM("Level")),
-    sPropertyMacro(RTL_CONSTASCII_USTRINGPARAM("Macro")),
-    sPropertyMeasureKind(RTL_CONSTASCII_USTRINGPARAM("Kind")),
-    sPropertyName(RTL_CONSTASCII_USTRINGPARAM("Name")),
-    sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
-    sPropertyNumberingSeparator(RTL_CONSTASCII_USTRINGPARAM("NumberingSeparator")),
-    sPropertyNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
-    sPropertyOffset(RTL_CONSTASCII_USTRINGPARAM("Offset")),
-    sPropertyOn(RTL_CONSTASCII_USTRINGPARAM("On")),
-    sPropertyPlaceholder(RTL_CONSTASCII_USTRINGPARAM("PlaceHolder")),
-    sPropertyPlaceholderType(RTL_CONSTASCII_USTRINGPARAM("PlaceHolderType")),
-    sPropertyReferenceFieldPart(RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldPart")),
-    sPropertyReferenceFieldSource(RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldSource")),
-    sPropertyReferenceFieldType(RTL_CONSTASCII_USTRINGPARAM("ReferenceFieldType")),
-    sPropertyRevision(RTL_CONSTASCII_USTRINGPARAM("Revision")),
-    sPropertyScriptType(RTL_CONSTASCII_USTRINGPARAM("ScriptType")),
-    sPropertySelectedItem(RTL_CONSTASCII_USTRINGPARAM("SelectedItem")),
-    sPropertySequenceNumber(RTL_CONSTASCII_USTRINGPARAM("SequenceNumber")),
-    sPropertySequenceValue(RTL_CONSTASCII_USTRINGPARAM("SequenceValue")),
-    sPropertySetNumber(RTL_CONSTASCII_USTRINGPARAM("SetNumber")),
-    sPropertySourceName(RTL_CONSTASCII_USTRINGPARAM("SourceName")),
-    sPropertySubType(RTL_CONSTASCII_USTRINGPARAM("SubType")),
-    sPropertyTargetFrame(RTL_CONSTASCII_USTRINGPARAM("TargetFrame")),
-    sPropertyTrueContent(RTL_CONSTASCII_USTRINGPARAM("TrueContent")),
-    sPropertyURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
-    sPropertyURLContent(RTL_CONSTASCII_USTRINGPARAM("URLContent")),
-    sPropertyUserText(RTL_CONSTASCII_USTRINGPARAM("UserText")),
-    sPropertyValue(RTL_CONSTASCII_USTRINGPARAM("Value")),
-    sPropertyVariableName(RTL_CONSTASCII_USTRINGPARAM("VariableName")),
-    sPropertyVariableSubType(RTL_CONSTASCII_USTRINGPARAM("VariableSubtype")),
-      sPropertyHelp(RTL_CONSTASCII_USTRINGPARAM("Help")),
-      sPropertyTooltip(RTL_CONSTASCII_USTRINGPARAM("Tooltip")),
-      sPropertyTextRange(RTL_CONSTASCII_USTRINGPARAM("TextRange")),
+    sPropertyInstanceName("InstanceName"),
+    sPropertyIsAutomaticUpdate("IsAutomaticUpdate"),
+    sPropertyIsConditionTrue("IsConditionTrue"),
+    sPropertyIsDataBaseFormat("DataBaseFormat"),
+    sPropertyIsDate("IsDate"),
+    sPropertyIsExpression("IsExpression"),
+    sPropertyIsFixed("IsFixed"),
+    sPropertyIsFixedLanguage("IsFixedLanguage"),
+    sPropertyIsHidden("IsHidden"),
+    sPropertyIsInput("Input"),
+    sPropertyIsShowFormula("IsShowFormula"),
+    sPropertyIsVisible("IsVisible"),
+    sPropertyItems("Items"),
+    sPropertyLevel("Level"),
+    sPropertyMacro("Macro"),
+    sPropertyMeasureKind("Kind"),
+    sPropertyName("Name"),
+    sPropertyNumberFormat("NumberFormat"),
+    sPropertyNumberingSeparator("NumberingSeparator"),
+    sPropertyNumberingType("NumberingType"),
+    sPropertyOffset("Offset"),
+    sPropertyOn("On"),
+    sPropertyPlaceholder("PlaceHolder"),
+    sPropertyPlaceholderType("PlaceHolderType"),
+    sPropertyReferenceFieldPart("ReferenceFieldPart"),
+    sPropertyReferenceFieldSource("ReferenceFieldSource"),
+    sPropertyReferenceFieldType("ReferenceFieldType"),
+    sPropertyRevision("Revision"),
+    sPropertyScriptType("ScriptType"),
+    sPropertySelectedItem("SelectedItem"),
+    sPropertySequenceNumber("SequenceNumber"),
+    sPropertySequenceValue("SequenceValue"),
+    sPropertySetNumber("SetNumber"),
+    sPropertySourceName("SourceName"),
+    sPropertySubType("SubType"),
+    sPropertyTargetFrame("TargetFrame"),
+    sPropertyTrueContent("TrueContent"),
+    sPropertyURL("URL"),
+    sPropertyURLContent("URLContent"),
+    sPropertyUserText("UserText"),
+    sPropertyValue("Value"),
+    sPropertyVariableName("VariableName"),
+    sPropertyVariableSubType("VariableSubtype"),
+      sPropertyHelp("Help"),
+      sPropertyTooltip("Tooltip"),
+      sPropertyTextRange("TextRange"),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
     SetExportOnlyUsedFieldDeclarations();
@@ -1021,8 +1021,7 @@ void XMLTextFieldExport::ExportField(
     if( bHasHyperlink )
     {
         // export events (if supported)
-        OUString sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM(
-            "HyperLinkEvents"));
+        OUString sHyperLinkEvents("HyperLinkEvents");
         if (xRangePropSetInfo->hasPropertyByName(sHyperLinkEvents))
         {
             Any aAny = xRangePropSet->getPropertyValue(sHyperLinkEvents);
@@ -2246,15 +2245,15 @@ void XMLTextFieldExport::ExportMacro(
     const OUString& rContent )
 {
     // some strings we'll need
-    OUString sEventType( RTL_CONSTASCII_USTRINGPARAM( "EventType" ));
-    OUString sStarBasic( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ));
-    OUString sScript( RTL_CONSTASCII_USTRINGPARAM( "Script" ));
-    OUString sLibrary( RTL_CONSTASCII_USTRINGPARAM( "Library" ));
-    OUString sMacroName( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ));
-    OUString sOnClick( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ));
-    OUString sPropertyMacroLibrary( RTL_CONSTASCII_USTRINGPARAM( "MacroLibrary" ));
-    OUString sPropertyMacroName( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ));
-    OUString sPropertyScriptURL( RTL_CONSTASCII_USTRINGPARAM( "ScriptURL" ));
+    OUString sEventType( "EventType" );
+    OUString sStarBasic( "StarBasic" );
+    OUString sScript( "Script" );
+    OUString sLibrary( "Library" );
+    OUString sMacroName( "MacroName" );
+    OUString sOnClick( "OnClick" );
+    OUString sPropertyMacroLibrary( "MacroLibrary" );
+    OUString sPropertyMacroName( "MacroName" );
+    OUString sPropertyScriptURL( "ScriptURL" );
 
 
     // the description attribute

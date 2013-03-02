@@ -63,9 +63,9 @@ XMLIndexTableSourceContext::XMLIndexTableSourceContext(
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
                                   rPropSet, sal_False),
-        sCreateFromLabels(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromLabels)),
-        sLabelCategory(RTL_CONSTASCII_USTRINGPARAM(sAPI_LabelCategory)),
-        sLabelDisplayType(RTL_CONSTASCII_USTRINGPARAM(sAPI_LabelDisplayType)),
+        sCreateFromLabels(sAPI_CreateFromLabels),
+        sLabelCategory(sAPI_LabelCategory),
+        sLabelDisplayType(sAPI_LabelDisplayType),
         bSequenceOK(sal_False),
         bDisplayFormatOK(sal_False),
         bUseCaption(sal_True)

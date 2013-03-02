@@ -286,14 +286,14 @@ XMLTextColumnsContext::XMLTextColumnsContext(
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps )
 :   XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps )
-,   sSeparatorLineIsOn(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn"))
-,   sSeparatorLineWidth(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineWidth"))
-,   sSeparatorLineColor(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineColor"))
-,   sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight"))
-,   sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment"))
-,   sIsAutomatic(RTL_CONSTASCII_USTRINGPARAM("IsAutomatic"))
-,   sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance"))
-,   sSeparatorLineStyle(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineStyle"))
+,   sSeparatorLineIsOn("SeparatorLineIsOn")
+,   sSeparatorLineWidth("SeparatorLineWidth")
+,   sSeparatorLineColor("SeparatorLineColor")
+,   sSeparatorLineRelativeHeight("SeparatorLineRelativeHeight")
+,   sSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment")
+,   sIsAutomatic("IsAutomatic")
+,   sAutomaticDistance("AutomaticDistance")
+,   sSeparatorLineStyle("SeparatorLineStyle")
 ,   pColumns( 0 )
 ,   pColumnSep( 0 )
 ,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
@@ -393,8 +393,7 @@ void XMLTextColumnsContext::EndElement( )
     if( !xFactory.is() )
         return;
 
-    Reference<XInterface> xIfc = xFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextColumns")));
+    Reference<XInterface> xIfc = xFactory->createInstance(OUString("com.sun.star.text.TextColumns"));
     if( !xIfc.is() )
         return;
 

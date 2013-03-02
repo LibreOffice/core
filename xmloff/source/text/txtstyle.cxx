@@ -119,7 +119,7 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
     Reference < lang::XMultiServiceFactory > xFactory (GetExport().GetModel(), UNO_QUERY);
     if (xFactory.is())
     {
-        OUString sTextDefaults ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.Defaults" ) );
+        OUString sTextDefaults ( "com.sun.star.text.Defaults" );
         Reference < XPropertySet > xPropSet (xFactory->createInstance ( sTextDefaults ), UNO_QUERY);
         if (xPropSet.is())
         {
@@ -148,7 +148,7 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
                        bUsed, XML_STYLE_FAMILY_TEXT_TEXT );
     // get shape export to make sure the frame family is added correctly.
     GetExport().GetShapeExport();
-    exportStyleFamily( "FrameStyles", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), GetFramePropMapper(),
+    exportStyleFamily( "FrameStyles", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), GetFramePropMapper(),
                        bUsed, XML_STYLE_FAMILY_TEXT_FRAME, 0);
     exportNumStyles( bUsed );
     if( !IsBlockMode() )

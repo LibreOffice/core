@@ -57,10 +57,10 @@ XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
 :   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, sal_True)
-,   sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks))
-,   sLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_Level))
-,   sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline))
-,   sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromLevelParagraphStyles))
+,   sCreateFromMarks(sAPI_CreateFromMarks)
+,   sLevel(sAPI_Level)
+,   sCreateFromOutline(sAPI_CreateFromOutline)
+,   sCreateFromLevelParagraphStyles(sAPI_CreateFromLevelParagraphStyles)
     // use all chapters by default
 ,   nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->getCount())
 ,   bUseOutline(sal_True)

@@ -153,8 +153,8 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
     Reference<XPropertySet> & rPropSet,
     sal_Bool bLevelFormats)
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromChapter))
-,   sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsRelativeTabstops))
+,   sCreateFromChapter(sAPI_CreateFromChapter)
+,   sIsRelativeTabstops(sAPI_IsRelativeTabstops)
 ,   bUseLevelFormats(bLevelFormats)
 ,   bChapterIndex(sal_False)
 ,   bRelativeTabs(sal_True)

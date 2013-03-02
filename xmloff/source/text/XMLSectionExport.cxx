@@ -79,63 +79,63 @@ using ::com::sun::star::uno::XInterface;
 XMLSectionExport::XMLSectionExport(
     SvXMLExport& rExp,
     XMLTextParagraphExport& rParaExp)
-:   sCondition(RTL_CONSTASCII_USTRINGPARAM("Condition"))
-,   sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM("CreateFromChapter"))
-,   sCreateFromEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromEmbeddedObjects"))
-,   sCreateFromGraphicObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromGraphicObjects"))
-,   sCreateFromLabels(RTL_CONSTASCII_USTRINGPARAM("CreateFromLabels"))
-,   sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks"))
-,   sCreateFromOtherEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM("CreateFromOtherEmbeddedObjects"))
-,   sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline"))
-,   sCreateFromStarCalc(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarCalc"))
-,   sCreateFromStarChart(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarChart"))
-,   sCreateFromStarDraw(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarDraw"))
-,   sCreateFromStarImage(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarImage"))
-,   sCreateFromStarMath(RTL_CONSTASCII_USTRINGPARAM("CreateFromStarMath"))
-,   sCreateFromTables(RTL_CONSTASCII_USTRINGPARAM("CreateFromTables"))
-,   sCreateFromTextFrames(RTL_CONSTASCII_USTRINGPARAM("CreateFromTextFrames"))
-,   sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement"))
-,   sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile"))
-,   sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType"))
-,   sFileLink(RTL_CONSTASCII_USTRINGPARAM("FileLink"))
-,   sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM("IsCaseSensitive"))
-,   sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
-,   sIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible"))
-,   sLabelCategory(RTL_CONSTASCII_USTRINGPARAM("LabelCategory"))
-,   sLabelDisplayType(RTL_CONSTASCII_USTRINGPARAM("LabelDisplayType"))
-,   sLevel(RTL_CONSTASCII_USTRINGPARAM("Level"))
-,   sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat"))
-,   sLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("LevelParagraphStyles"))
-,   sLinkRegion(RTL_CONSTASCII_USTRINGPARAM("LinkRegion"))
-,   sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM("MainEntryCharacterStyleName"))
-,   sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM("ParaStyleHeading"))
-,   sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel"))
-,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
-,   sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
-,   sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM("UseAlphabeticalSeparators"))
-,   sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM("UseCombinedEntries"))
-,   sUseDash(RTL_CONSTASCII_USTRINGPARAM("UseDash"))
-,   sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM("UseKeyAsEntry"))
-,   sUseLevelFromSource(RTL_CONSTASCII_USTRINGPARAM("UseLevelFromSource"))
-,   sUsePP(RTL_CONSTASCII_USTRINGPARAM("UsePP"))
-,   sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM("UseUpperCase"))
-,   sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated"))
-,   sIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate"))
-,   sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM("IsRelativeTabstops"))
-,   sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("CreateFromLevelParagraphStyles"))
-,   sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex"))
-,   sContentSection(RTL_CONSTASCII_USTRINGPARAM("ContentSection"))
-,   sHeaderSection(RTL_CONSTASCII_USTRINGPARAM("HeaderSection"))
+:   sCondition("Condition")
+,   sCreateFromChapter("CreateFromChapter")
+,   sCreateFromEmbeddedObjects("CreateFromEmbeddedObjects")
+,   sCreateFromGraphicObjects("CreateFromGraphicObjects")
+,   sCreateFromLabels("CreateFromLabels")
+,   sCreateFromMarks("CreateFromMarks")
+,   sCreateFromOtherEmbeddedObjects("CreateFromOtherEmbeddedObjects")
+,   sCreateFromOutline("CreateFromOutline")
+,   sCreateFromStarCalc("CreateFromStarCalc")
+,   sCreateFromStarChart("CreateFromStarChart")
+,   sCreateFromStarDraw("CreateFromStarDraw")
+,   sCreateFromStarImage("CreateFromStarImage")
+,   sCreateFromStarMath("CreateFromStarMath")
+,   sCreateFromTables("CreateFromTables")
+,   sCreateFromTextFrames("CreateFromTextFrames")
+,   sDdeCommandElement("DDECommandElement")
+,   sDdeCommandFile("DDECommandFile")
+,   sDdeCommandType("DDECommandType")
+,   sFileLink("FileLink")
+,   sIsCaseSensitive("IsCaseSensitive")
+,   sIsProtected("IsProtected")
+,   sIsVisible("IsVisible")
+,   sLabelCategory("LabelCategory")
+,   sLabelDisplayType("LabelDisplayType")
+,   sLevel("Level")
+,   sLevelFormat("LevelFormat")
+,   sLevelParagraphStyles("LevelParagraphStyles")
+,   sLinkRegion("LinkRegion")
+,   sMainEntryCharacterStyleName("MainEntryCharacterStyleName")
+,   sParaStyleHeading("ParaStyleHeading")
+,   sParaStyleLevel("ParaStyleLevel")
+,   sTitle("Title")
+,   sName("Name")
+,   sUseAlphabeticalSeparators("UseAlphabeticalSeparators")
+,   sUseCombinedEntries("UseCombinedEntries")
+,   sUseDash("UseDash")
+,   sUseKeyAsEntry("UseKeyAsEntry")
+,   sUseLevelFromSource("UseLevelFromSource")
+,   sUsePP("UsePP")
+,   sUseUpperCase("UseUpperCase")
+,   sIsCommaSeparated("IsCommaSeparated")
+,   sIsAutomaticUpdate("IsAutomaticUpdate")
+,   sIsRelativeTabstops("IsRelativeTabstops")
+,   sCreateFromLevelParagraphStyles("CreateFromLevelParagraphStyles")
+,   sDocumentIndex("DocumentIndex")
+,   sContentSection("ContentSection")
+,   sHeaderSection("HeaderSection")
 
-,   sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection"))
-,   sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection"))
-,   sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey"))
-,   sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm"))
-,   sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"))
-,   sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName"))
+,   sTextSection("TextSection")
+,   sIsGlobalDocumentSection("IsGlobalDocumentSection")
+,   sProtectionKey("ProtectionKey")
+,   sSortAlgorithm("SortAlgorithm")
+,   sLocale("Locale")
+,   sUserIndexName("UserIndexName")
 
-,   sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM("IsCurrentlyVisible"))
-,   sHeadingStyleName(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName"))
+,   sIsCurrentlyVisible("IsCurrentlyVisible")
+,   sHeadingStyleName("HeadingStyleName")
 
 ,   rExport(rExp)
 ,   rParaExport(rParaExp)
@@ -1638,8 +1638,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                                                     UNO_QUERY );
     if ( xTextFieldsSupp.is() )
     {
-        const OUString sFieldMaster_Bibliography(
-            RTL_CONSTASCII_USTRINGPARAM(sAPI_FieldMaster_Bibliography));
+        const OUString sFieldMaster_Bibliography(sAPI_FieldMaster_Bibliography);
 
         // get bibliography field master
         Reference<XNameAccess> xMasters =
@@ -1653,20 +1652,13 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 
             OSL_ENSURE( xPropSet.is(), "field master must have XPropSet" );
 
-            const OUString sBracketBefore(
-                RTL_CONSTASCII_USTRINGPARAM("BracketBefore"));
-            const OUString sBracketAfter(
-                RTL_CONSTASCII_USTRINGPARAM("BracketAfter"));
-            const OUString sIsNumberEntries(
-                RTL_CONSTASCII_USTRINGPARAM("IsNumberEntries"));
-            const OUString sIsSortByPosition(
-                RTL_CONSTASCII_USTRINGPARAM("IsSortByPosition"));
-            const OUString sSortKeys(
-                RTL_CONSTASCII_USTRINGPARAM("SortKeys"));
-            const OUString sSortAlgorithm(
-                RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm"));
-            const OUString sLocale(
-                RTL_CONSTASCII_USTRINGPARAM("Locale"));
+            const OUString sBracketBefore("BracketBefore");
+            const OUString sBracketAfter("BracketAfter");
+            const OUString sIsNumberEntries("IsNumberEntries");
+            const OUString sIsSortByPosition("IsSortByPosition");
+            const OUString sSortKeys("SortKeys");
+            const OUString sSortAlgorithm("SortAlgorithm");
+            const OUString sLocale("Locale");
 
             OUString sTmp;
 

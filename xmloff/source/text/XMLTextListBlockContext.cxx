@@ -62,8 +62,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 ,   msListId()
 ,   msContinueListId()
 {
-    static ::rtl::OUString s_PropNameDefaultListId(
-        RTL_CONSTASCII_USTRINGPARAM("DefaultListId"));
+    static ::rtl::OUString s_PropNameDefaultListId("DefaultListId");
     {
         // get the parent list block context (if any); this is a bit ugly...
         XMLTextListBlockContext * pLB(0);

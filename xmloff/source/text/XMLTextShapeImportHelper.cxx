@@ -47,9 +47,9 @@ XMLTextShapeImportHelper::XMLTextShapeImportHelper(
     XMLShapeImportHelper( rImp, rImp.GetModel(),
                           XMLTextImportHelper::CreateShapeExtPropMapper(rImp) ),
     rImport( rImp ),
-    sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType")),
-    sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo")),
-    sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition"))
+    sAnchorType("AnchorType"),
+    sAnchorPageNo("AnchorPageNo"),
+    sVertOrientPosition("VertOrientPosition")
 {
     Reference < XDrawPageSupplier > xDPS( rImp.GetModel(), UNO_QUERY );
     if( xDPS.is() )

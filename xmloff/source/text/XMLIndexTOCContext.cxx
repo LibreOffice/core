@@ -100,9 +100,9 @@ XMLIndexTOCContext::XMLIndexTOCContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
-,   sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
-,   sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
+,   sTitle("Title")
+,   sIsProtected("IsProtected")
+,   sName("Name")
 ,   bValid(sal_False)
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
@@ -198,9 +198,9 @@ void XMLIndexTOCContext::StartElement(
 
                 // preliminaries
 #ifndef DBG_UTIL
-                OUString sMarker(RTL_CONSTASCII_USTRINGPARAM(" "));
+                OUString sMarker(" ");
 #else
-                OUString sMarker(RTL_CONSTASCII_USTRINGPARAM("Y"));
+                OUString sMarker("Y");
 #endif
                 UniReference<XMLTextImportHelper> rImport =
                     GetImport().GetTextImport();

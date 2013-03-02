@@ -40,17 +40,17 @@ using ::com::sun::star::text::XLineNumberingProperties;
 
 
 XMLLineNumberingExport::XMLLineNumberingExport(SvXMLExport& rExp)
-:   sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName"))
-,   sCountEmptyLines(RTL_CONSTASCII_USTRINGPARAM("CountEmptyLines"))
-,   sCountLinesInFrames(RTL_CONSTASCII_USTRINGPARAM("CountLinesInFrames"))
-,   sDistance(RTL_CONSTASCII_USTRINGPARAM("Distance"))
-,   sInterval(RTL_CONSTASCII_USTRINGPARAM("Interval"))
-,   sSeparatorText(RTL_CONSTASCII_USTRINGPARAM("SeparatorText"))
-,   sNumberPosition(RTL_CONSTASCII_USTRINGPARAM("NumberPosition"))
-,   sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType"))
-,   sIsOn(RTL_CONSTASCII_USTRINGPARAM("IsOn"))
-,   sRestartAtEachPage(RTL_CONSTASCII_USTRINGPARAM("RestartAtEachPage"))
-,   sSeparatorInterval(RTL_CONSTASCII_USTRINGPARAM("SeparatorInterval"))
+:   sCharStyleName("CharStyleName")
+,   sCountEmptyLines("CountEmptyLines")
+,   sCountLinesInFrames("CountLinesInFrames")
+,   sDistance("Distance")
+,   sInterval("Interval")
+,   sSeparatorText("SeparatorText")
+,   sNumberPosition("NumberPosition")
+,   sNumberingType("NumberingType")
+,   sIsOn("IsOn")
+,   sRestartAtEachPage("RestartAtEachPage")
+,   sSeparatorInterval("SeparatorInterval")
 ,   rExport(rExp)
 {
 }

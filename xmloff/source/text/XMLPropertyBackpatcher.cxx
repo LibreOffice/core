@@ -178,8 +178,7 @@ XMLTextImportHelper::MakeBackpatcherImpl()
 
 static ::rtl::OUString const& GetSequenceNumber()
 {
-    static ::rtl::OUString s_SequenceNumber(
-        RTL_CONSTASCII_USTRINGPARAM("SequenceNumber"));
+    static ::rtl::OUString s_SequenceNumber("SequenceNumber");
     return s_SequenceNumber;
 }
 
@@ -219,8 +218,7 @@ XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetSequenceIdBP()
 
 XMLPropertyBackpatcher<OUString>& XMLTextImportHelper::GetSequenceNameBP()
 {
-    static ::rtl::OUString s_SourceName(
-        RTL_CONSTASCII_USTRINGPARAM("SourceName"));
+    static OUString s_SourceName("SourceName");
     if (!m_pBackpatcherImpl->m_pSequenceNameBackpatcher.get())
     {
         m_pBackpatcherImpl->m_pSequenceNameBackpatcher.reset(

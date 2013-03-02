@@ -64,16 +64,11 @@ XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
                                   rPropSet, sal_False),
-        sCreateFromStarCalc(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromStarCalc)),
-        sCreateFromStarChart(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromStarChart)),
-        sCreateFromStarDraw(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromStarDraw)),
-        sCreateFromStarMath(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromStarMath)),
-        sCreateFromOtherEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromOtherEmbeddedObjects)),
+        sCreateFromStarCalc(sAPI_CreateFromStarCalc),
+        sCreateFromStarChart(sAPI_CreateFromStarChart),
+        sCreateFromStarDraw(sAPI_CreateFromStarDraw),
+        sCreateFromStarMath(sAPI_CreateFromStarMath),
+        sCreateFromOtherEmbeddedObjects(sAPI_CreateFromOtherEmbeddedObjects),
         bUseCalc(sal_False),
         bUseChart(sal_False),
         bUseDraw(sal_False),

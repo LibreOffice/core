@@ -117,8 +117,7 @@ void XMLTextParagraphExport::exportTextFootnote(
         if( bHasHyperlink )
         {
             // export events (if supported)
-            OUString sHyperLinkEvents(RTL_CONSTASCII_USTRINGPARAM(
-                "HyperLinkEvents"));
+            OUString sHyperLinkEvents("HyperLinkEvents");
             if (xPropSetInfo->hasPropertyByName(sHyperLinkEvents))
             {
                 Any a = rPropSet->getPropertyValue(sHyperLinkEvents);

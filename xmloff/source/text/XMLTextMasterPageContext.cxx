@@ -52,8 +52,7 @@ Reference < XStyle > XMLTextMasterPageContext::Create()
     if( xFactory.is() )
     {
         Reference < XInterface > xIfc =
-            xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.style.PageStyle")) );
+            xFactory->createInstance(OUString("com.sun.star.style.PageStyle"));
         if( xIfc.is() )
             xNewStyle = Reference < XStyle >( xIfc, UNO_QUERY );
     }
@@ -67,9 +66,9 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         sal_Bool bOverwrite )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE )
-,   sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) )
-,   sPageStyleLayout( RTL_CONSTASCII_USTRINGPARAM( "PageStyleLayout" ) )
-,   sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+,   sIsPhysical( "IsPhysical" )
+,   sPageStyleLayout( "PageStyleLayout" )
+,   sFollowStyle( "FollowStyle" )
 ,   bInsertHeader( sal_False )
 ,   bInsertFooter( sal_False )
 ,   bInsertHeaderLeft( sal_False )

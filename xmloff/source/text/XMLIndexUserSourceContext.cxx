@@ -63,19 +63,14 @@ XMLIndexUserSourceContext::XMLIndexUserSourceContext(
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
                                   rPropSet, sal_True),
-        sCreateFromEmbeddedObjects(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromEmbeddedObjects)),
-        sCreateFromGraphicObjects(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromGraphicObjects)),
-        sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks)),
-        sCreateFromTables(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromTables)),
-        sCreateFromTextFrames(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromTextFrames)),
-        sUseLevelFromSource(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_UseLevelFromSource)),
-        sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(
-            sAPI_CreateFromLevelParagraphStyles)),
-        sUserIndexName(RTL_CONSTASCII_USTRINGPARAM(sAPI_UserIndexName)),
+        sCreateFromEmbeddedObjects(sAPI_CreateFromEmbeddedObjects),
+        sCreateFromGraphicObjects(sAPI_CreateFromGraphicObjects),
+        sCreateFromMarks(sAPI_CreateFromMarks),
+        sCreateFromTables(sAPI_CreateFromTables),
+        sCreateFromTextFrames(sAPI_CreateFromTextFrames),
+        sUseLevelFromSource(sAPI_UseLevelFromSource),
+        sCreateFromLevelParagraphStyles(sAPI_CreateFromLevelParagraphStyles),
+        sUserIndexName(sAPI_UserIndexName),
         bUseObjects(sal_False),
         bUseGraphic(sal_False),
         bUseMarks(sal_False),

@@ -2077,9 +2077,7 @@ void XMLTextParagraphExport::exportParagraph(
                     }
 
                     {
-                        rtl::OUString sParaIsNumberingRestart
-                            (RTL_CONSTASCII_USTRINGPARAM
-                             ("ParaIsNumberingRestart"));
+                        OUString sParaIsNumberingRestart("ParaIsNumberingRestart");
                         bool bIsRestartNumbering = false;
 
                         Reference< XPropertySetInfo >
@@ -2100,9 +2098,7 @@ void XMLTextParagraphExport::exportParagraph(
                                                      XML_RESTART_NUMBERING,
                                                      XML_TRUE);
 
-                            rtl::OUString sNumberingStartValue
-                                (RTL_CONSTASCII_USTRINGPARAM
-                                 ("NumberingStartValue"));
+                            OUString sNumberingStartValue("NumberingStartValue");
 
 
                             if (xPropSetInfo->

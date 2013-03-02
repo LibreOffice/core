@@ -110,8 +110,8 @@ void XMLSectionSourceImportContext::StartElement(
     }
 
     // we only need them once
-    const OUString sFileLink(RTL_CONSTASCII_USTRINGPARAM("FileLink"));
-    const OUString sLinkRegion(RTL_CONSTASCII_USTRINGPARAM("LinkRegion"));
+    const OUString sFileLink("FileLink");
+    const OUString sLinkRegion("LinkRegion");
 
     Any aAny;
     if (!sURL.isEmpty() || !sFilterName.isEmpty())

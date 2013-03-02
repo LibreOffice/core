@@ -93,11 +93,9 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
     if( !sShow.isEmpty() && sTargetFrameName.isEmpty() )
     {
         if( IsXMLToken( sShow, XML_NEW ) )
-            sTargetFrameName =
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("_blank" ) );
+            sTargetFrameName = "_blank";
         else if( IsXMLToken( sShow, XML_REPLACE ) )
-            sTargetFrameName =
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("_self" ) );
+            sTargetFrameName = "_self";
     }
 }
 

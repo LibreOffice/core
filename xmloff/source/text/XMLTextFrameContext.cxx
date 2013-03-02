@@ -288,8 +288,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         }
     }
 
-    OUString sContourPolyPolygon(
-            RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon") );
+    OUString sContourPolyPolygon("ContourPolyPolygon");
     Reference < XPropertySetInfo > xPropSetInfo =
         rPropSet->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName(sContourPolyPolygon ) &&
@@ -313,8 +312,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
             aAny <<= aPoints.GetPointSequenceSequence();
         }
 
-        OUString sIsPixelContour(
-                RTL_CONSTASCII_USTRINGPARAM("IsPixelContour") );
+        OUString sIsPixelContour("IsPixelContour");
         xPropSet->setPropertyValue( sContourPolyPolygon, aAny );
 
         if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
@@ -323,8 +321,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
             xPropSet->setPropertyValue( sIsPixelContour, aAny );
         }
 
-        OUString sIsAutomaticContour(
-                RTL_CONSTASCII_USTRINGPARAM("IsAutomaticContour") );
+        OUString sIsAutomaticContour("IsAutomaticContour");
         if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
         {
             aAny.setValue( &bAuto, ::getBooleanCppuType() );
@@ -505,7 +502,7 @@ void XMLTextFrameContext_Impl::Create( sal_Bool /*bHRefOrBase64*/ )
             }
             else
             {
-                OUString sURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.ServiceName:") );
+                OUString sURL( "vnd.sun.star.ServiceName:" );
                 sURL += sFilterService;
                 xPropSet = GetImport().GetTextImport()
                             ->createAndInsertOLEObject( GetImport(), sURL,
@@ -838,29 +835,29 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
         const Reference< XAttributeList > & rFrameAttrList )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   mbListContextPushed( false )
-,   sWidth(RTL_CONSTASCII_USTRINGPARAM("Width"))
-,   sWidthType(RTL_CONSTASCII_USTRINGPARAM("WidthType"))
-,   sRelativeWidth(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth"))
-,   sHeight(RTL_CONSTASCII_USTRINGPARAM("Height"))
-,   sRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight"))
-,   sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType"))
-,   sIsSyncWidthToHeight(RTL_CONSTASCII_USTRINGPARAM("IsSyncWidthToHeight"))
-,   sIsSyncHeightToWidth(RTL_CONSTASCII_USTRINGPARAM("IsSyncHeightToWidth"))
-,   sHoriOrient(RTL_CONSTASCII_USTRINGPARAM("HoriOrient"))
-,   sHoriOrientPosition(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition"))
-,   sVertOrient(RTL_CONSTASCII_USTRINGPARAM("VertOrient"))
-,   sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition"))
-,   sChainNextName(RTL_CONSTASCII_USTRINGPARAM("ChainNextName"))
-,   sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))
-,   sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
-,   sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))
-,   sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter"))
-,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
-,   sDescription(RTL_CONSTASCII_USTRINGPARAM("Description"))
-,   sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName"))
-,   sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation"))
-,   sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))
-,   sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
+,   sWidth("Width")
+,   sWidthType("WidthType")
+,   sRelativeWidth("RelativeWidth")
+,   sHeight("Height")
+,   sRelativeHeight("RelativeHeight")
+,   sSizeType("SizeType")
+,   sIsSyncWidthToHeight("IsSyncWidthToHeight")
+,   sIsSyncHeightToWidth("IsSyncHeightToWidth")
+,   sHoriOrient("HoriOrient")
+,   sHoriOrientPosition("HoriOrientPosition")
+,   sVertOrient("VertOrient")
+,   sVertOrientPosition("VertOrientPosition")
+,   sChainNextName("ChainNextName")
+,   sAnchorType("AnchorType")
+,   sAnchorPageNo("AnchorPageNo")
+,   sGraphicURL("GraphicURL")
+,   sGraphicFilter("GraphicFilter")
+,   sTitle("Title")
+,   sDescription("Description")
+,   sFrameStyleName("FrameStyleName")
+,   sGraphicRotation("GraphicRotation")
+,   sTextBoxServiceName("com.sun.star.text.TextFrame")
+,   sGraphicServiceName("com.sun.star.text.GraphicObject")
 ,   nType( nNewType )
 ,   eAnchorType( eATyp )
 {
@@ -1252,14 +1249,10 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
                        const OUString& rTargetFrameName,
                        sal_Bool bMap )
 {
-    static ::rtl::OUString s_HyperLinkURL(
-        RTL_CONSTASCII_USTRINGPARAM("HyperLinkURL"));
-    static ::rtl::OUString s_HyperLinkName(
-        RTL_CONSTASCII_USTRINGPARAM("HyperLinkName"));
-    static ::rtl::OUString s_HyperLinkTarget(
-        RTL_CONSTASCII_USTRINGPARAM("HyperLinkTarget"));
-    static ::rtl::OUString s_ServerMap(
-        RTL_CONSTASCII_USTRINGPARAM("ServerMap"));
+    static OUString s_HyperLinkURL("HyperLinkURL");
+    static OUString s_HyperLinkName("HyperLinkName");
+    static ::rtl::OUString s_HyperLinkTarget("HyperLinkTarget");
+    static ::rtl::OUString s_ServerMap("ServerMap");
     if( !xPropSet.is() )
         return;
 

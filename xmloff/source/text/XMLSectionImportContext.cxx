@@ -96,13 +96,13 @@ XMLSectionImportContext::XMLSectionImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sTextSection(RTL_CONSTASCII_USTRINGPARAM(sAPI_TextSection))
-,   sIndexHeaderSection(RTL_CONSTASCII_USTRINGPARAM(sAPI_IndexHeaderSection))
-,   sCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_Condition))
-,   sIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsVisible))
-,   sProtectionKey(RTL_CONSTASCII_USTRINGPARAM(sAPI_ProtectionKey))
-,   sIsProtected(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsProtected))
-,   sIsCurrentlyVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsCurrentlyVisible))
+,   sTextSection(sAPI_TextSection)
+,   sIndexHeaderSection(sAPI_IndexHeaderSection)
+,   sCondition(sAPI_Condition)
+,   sIsVisible(sAPI_IsVisible)
+,   sProtectionKey(sAPI_ProtectionKey)
+,   sIsProtected(sAPI_IsProtected)
+,   sIsCurrentlyVisible(sAPI_IsCurrentlyVisible)
 ,   bProtect(sal_False)
 ,   bCondOK(sal_False)
 ,   bIsVisible(sal_True)
@@ -215,7 +215,7 @@ void XMLSectionImportContext::StartElement(
 #else
                 static const sal_Char sMarker[] = "X";
 #endif
-                OUString sMarkerString(RTL_CONSTASCII_USTRINGPARAM(sMarker));
+                OUString sMarkerString(sMarker);
                 rHelper->InsertString(sMarkerString);
                 rHelper->InsertControlCharacter(
                     ControlCharacter::APPEND_PARAGRAPH );

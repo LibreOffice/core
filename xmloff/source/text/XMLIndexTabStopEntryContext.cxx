@@ -154,8 +154,7 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
     }
 
     // tab character #i21237#
-     pValues[nNextEntry].Name =
-        OUString( RTL_CONSTASCII_USTRINGPARAM("WithTab") );
+     pValues[nNextEntry].Name = OUString( "WithTab" );
     pValues[nNextEntry].Value.setValue( &bWithTab,
                                         ::getBooleanCppuType());
     nNextEntry++;

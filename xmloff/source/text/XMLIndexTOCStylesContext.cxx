@@ -53,7 +53,7 @@ XMLIndexTOCStylesContext::XMLIndexTOCStylesContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(sAPI_LevelParagraphStyles))
+,   sLevelParagraphStyles(sAPI_LevelParagraphStyles)
 ,   rTOCPropertySet(rPropSet)
 {
 }

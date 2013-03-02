@@ -131,12 +131,12 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
         sal_Bool bDefaultStyle )
 :   XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
-,   sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) )
-,   sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) )
-,   sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) )
-,       sOutlineLevel(RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) )
-,   sDropCapCharStyleName( RTL_CONSTASCII_USTRINGPARAM( "DropCapCharStyleName" ) )
-,   sPageDescName( RTL_CONSTASCII_USTRINGPARAM( "PageDescName" ) )
+,   sIsAutoUpdate( "IsAutoUpdate" )
+,   sCategory( "Category" )
+,   sNumberingStyleName( "NumberingStyleName" )
+,       sOutlineLevel("OutlineLevel" )
+,   sDropCapCharStyleName( "DropCapCharStyleName" )
+,   sPageDescName( "PageDescName" )
 ,   nOutlineLevel( -1 )
 ,   bAutoUpdate( sal_False )
 ,   bHasMasterPageName( sal_False )
@@ -258,7 +258,7 @@ void XMLTextStyleContext::SetDefaults( )
         if (xFactory.is())
         {
             Reference < XInterface > xInt = xFactory->createInstance (
-                OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.Defaults" ) ) );
+                OUString ( "com.sun.star.text.Defaults" ) );
             Reference < XPropertySet > xProperties ( xInt, UNO_QUERY );
             if ( xProperties.is() )
                 FillPropertySet ( xProperties );
@@ -439,8 +439,8 @@ void XMLTextStyleContext::FillPropertySet(
             if( !GetAutoName().isEmpty() )
             {
                 OUString sAutoProp = ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT ) ?
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("CharAutoStyleName") ):
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("ParaAutoStyleName") );
+                    OUString( "CharAutoStyleName" ):
+                    OUString( "ParaAutoStyleName" );
                 try
                 {
                     if ( xInfo->hasPropertyByName( sAutoProp ) )
@@ -477,8 +477,7 @@ void XMLTextStyleContext::FillPropertySet(
         // border-model: same
         if( IsDefaultStyle() && GetFamily() == XML_STYLE_FAMILY_TABLE_ROW )
         {
-            OUString sIsSplitAllowed =
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSplitAllowed" ) );
+            OUString sIsSplitAllowed( "IsSplitAllowed" );
             DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sIsSplitAllowed ),
                         "property missing?" );
             rPropSet->setPropertyValue( sIsSplitAllowed,
@@ -489,8 +488,7 @@ void XMLTextStyleContext::FillPropertySet(
 
         if( IsDefaultStyle() && GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE )
         {
-            OUString sCollapsingBorders(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "CollapsingBorders" ) ) );
+            OUString sCollapsingBorders("CollapsingBorders");
             DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ),
                         "property missing?" );
             rPropSet->setPropertyValue( sCollapsingBorders,
@@ -519,14 +517,13 @@ void XMLTextStyleContext::FillPropertySet(
                 rAny >>= sFontName;
                 if ( !sFontName.isEmpty() )
                 {
-                    OUString sStarBats( RTL_CONSTASCII_USTRINGPARAM("StarBats" ) );
-                    OUString sStarMath( RTL_CONSTASCII_USTRINGPARAM("StarMath" ) );
+                    OUString sStarBats( "StarBats" );
+                    OUString sStarMath( "StarMath" );
                     if ( sFontName.equalsIgnoreAsciiCase( sStarBats ) ||
                          sFontName.equalsIgnoreAsciiCase( sStarMath ) )
                     {
                         // construct new value
-                        sFontName = OUString(
-                            RTL_CONSTASCII_USTRINGPARAM("StarSymbol") );
+                        sFontName = OUString("StarSymbol");
                         Any aAny( rAny );
                         aAny <<= sFontName;
 
