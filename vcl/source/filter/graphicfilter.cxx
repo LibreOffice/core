@@ -2006,11 +2006,9 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     if( !aBmp.Convert( (BmpConversion) nColorRes ) )
                         aBmp = aGraphic.GetBitmap();
                 }
-                ResMgr*     pResMgr = ResMgr::CreateResMgr( "svt" );
                 sal_Bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", sal_True );
                 // save RLE encoded?
                 aBmp.Write( rOStm, bRleCoding );
-                delete pResMgr;
 
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
