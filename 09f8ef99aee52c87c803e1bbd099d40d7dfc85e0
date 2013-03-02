@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+7I\u003d",
+        "filename": "dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-02T15:58:45Z",
+      "side": 1,
+      "message": "typo + 1 \"row\" to much ;-)",
+      "revId": "09f8ef99aee52c87c803e1bbd099d40d7dfc85e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+7E\u003d",
+        "filename": "dbaccess/source/ui/querydesign/SelectionBrowseBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-02T15:58:45Z",
+      "side": 1,
+      "message": "I think the \u0027this\u0027 isn\u0027t necessary here",
+      "revId": "09f8ef99aee52c87c803e1bbd099d40d7dfc85e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
