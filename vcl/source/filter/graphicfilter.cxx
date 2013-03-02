@@ -37,7 +37,6 @@
 #include "jpeg/jpeg.hxx"
 #include "ixbm/xbmread.hxx"
 #include "ixpm/xpmread.hxx"
-#include <svl/solar.hrc>
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
 #include <com/sun/star/uno/Reference.h>
@@ -2007,7 +2006,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     if( !aBmp.Convert( (BmpConversion) nColorRes ) )
                         aBmp = aGraphic.GetBitmap();
                 }
-                ResMgr*     pResMgr = CREATERESMGR( svt );
+                ResMgr*     pResMgr = ResMgr::CreateResMgr( "svt" );
                 sal_Bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", sal_True );
                 // save RLE encoded?
                 aBmp.Write( rOStm, bRleCoding );
