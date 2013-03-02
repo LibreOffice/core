@@ -67,8 +67,8 @@ namespace dbaui
                                 m_pContainerListener;
         sal_Int32               m_nMoveCount;           // how often the arrow keys was pressed
         sal_Int32               m_nMoveIncrement;       // how many pixel we should move
-        sal_uInt16                  m_nSizingFlags;
-        sal_Bool                    m_bActive;
+        sal_uInt16              m_nSizingFlags;
+        sal_Bool                m_bActive;
 
         void Draw3DBorder( const Rectangle& rRect );
         // OContainerListener

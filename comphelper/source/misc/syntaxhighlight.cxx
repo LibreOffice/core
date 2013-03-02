@@ -411,9 +411,8 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 reType = TT_COMMENT;
             }
 
-            // Echter Operator, kann hier einfach behandelt werden,
-            // da nicht der wirkliche Operator, wie z.B. += interessiert,
-            // sondern nur die Tatsache, dass es sich um einen handelt.
+            // The real operator; can be easily used since not the actual
+            // operator (e.g. +=) is concerned, but the fact that it is one
             if( reType != TT_COMMENT )
             {
                 reType = TT_OPERATOR;
@@ -422,7 +421,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
         }
     }
 
-    // Objekt-Trenner? Muss vor Number abgehandelt werden
+    // Object separator? Must be handled before Number
     else if( c == '.' && ( peekChar() < '0' || peekChar() > '9' ) )
     {
         reType = TT_OPERATOR;

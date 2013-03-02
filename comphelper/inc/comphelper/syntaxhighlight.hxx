@@ -63,10 +63,10 @@ struct HighlightPortion { sal_uInt16 nBegin; sal_uInt16 nEnd; TokenTypes tokenTy
 typedef std::vector<HighlightPortion> HighlightPortions;
 
 /////////////////////////////////////////////////////////////////////////
-// Hilfsklasse zur Untersuchung von JavaScript-Modulen, zunaechst zum
-// Heraussuchen der Funktionen, spaeter auch zum Syntax-Highlighting verwenden
+// Auxiliary class to support JavaScript modules, next to find functions which
+// will later will be used for syntax highlighting
 
-//  Flags fuer Zeichen-Eigenschaften
+// Flags for character properties
 #define CHAR_START_IDENTIFIER   0x0001
 #define CHAR_IN_IDENTIFIER      0x0002
 #define CHAR_START_NUMBER       0x0004
@@ -81,8 +81,8 @@ typedef std::vector<HighlightPortion> HighlightPortions;
 #define CHAR_EOF                0x00
 
 
-// Sprachmodus des HighLighters (spaeter eventuell feiner
-// differenzieren mit Keyword-Liste, C-Kommentar-Flag)
+// Language mode of the Highlighter (possibly to be refined later with keyword
+// lists, C comment flags)
 enum HighlighterLanguage
 {
     HIGHLIGHT_BASIC,
@@ -92,23 +92,23 @@ enum HighlighterLanguage
 class SimpleTokenizer_Impl
 {
     HighlighterLanguage aLanguage;
-    // Zeichen-Info-Tabelle
+    // Character information tables
     sal_uInt16 aCharTypeTab[256];
 
     const sal_Unicode* mpStringBegin;
     const sal_Unicode* mpActualPos;
 
-    // Zeile und Spalte
+    // Lines and columns
     sal_uInt32 nLine;
     sal_uInt32 nCol;
 
     sal_Unicode peekChar( void )    { return *mpActualPos; }
     sal_Unicode getChar( void )     { nCol++; return *mpActualPos++; }
 
-    // Hilfsfunktion: Zeichen-Flag Testen
+    // Auxiliary function: testing of the character flags
     sal_Bool testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags );
 
-    // Neues Token holen, Leerstring == nix mehr da
+    // Get new token, EmptyString == nothing more over there
     sal_Bool getNextToken( /*out*/TokenTypes& reType,
         /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos );
 
@@ -126,13 +126,11 @@ public:
 };
 
 
-//*** SyntaxHighlighter-Klasse ***
-// Konzept: Der Highlighter wird ueber alle Aenderungen im Source
-// informiert (notifyChange) und liefert dem Aufrufer jeweils die
-// Information zurueck, welcher Zeilen-Bereich des Source-Codes
-// aufgrund dieser Aenderung neu gehighlighted werden muss.
-// Dazu merkt sich Highlighter intern fuer jede Zeile, ob dort
-// C-Kommentare beginnen oder enden.
+//*** SyntaxHighlighter Class ***
+// Concept: the Highlighter will be notified of all changes in the source
+// (notifyChange) and returns the caller the range of lines, which based on the
+// changes, need to be highlighted again. For this the Highlighter marks all
+// lines internally whether or not C comments begin or end.
 class COMPHELPER_DLLPUBLIC SyntaxHighlighter
 {
     HighlighterLanguage eLanguage;
@@ -146,10 +144,9 @@ public:
     SyntaxHighlighter( void );
     ~SyntaxHighlighter( void );
 
-    // HighLighter (neu) initialisieren, die Zeilen-Tabelle wird
-    // dabei komplett geloescht, d.h. im Abschluss wird von einem
-    // leeren Source ausgegangen. In notifyChange() kann dann
-    // nur Zeile 0 angegeben werden.
+    // (Re-)initialize Highlighter. The line-table will be completely erased,
+    // meaning that on completion an empty Source is assumed.
+    // notifyChange() can only be given line 0
     void initialize( HighlighterLanguage eLanguage_ );
 
     void notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,

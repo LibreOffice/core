@@ -131,7 +131,7 @@ namespace dbaui
     };
 
     // ================================================================================================
-    // OTabFieldMovedUndoAct - Undo-class when a field was moved inside the selection
+    // OTabFieldMovedUndoAct - Undo class when a field was moved inside the selection
 
     class OTabFieldMovedUndoAct : public OTabFieldUndoAct
     {
