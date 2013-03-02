@@ -17,7 +17,7 @@ gb_AllLangHelp_TRANLATIONSDIR := $(SRCDIR)/translations
 
 # Creates and delivers all language versions of a module.
 
-gb_AllLangHelp_LANGS := $(gb_WITH_LANG)
+gb_AllLangHelp_LANGS := en-US $(gb_WITH_LANG)
 
 define gb_AllLangHelp__translation_exists
 $(or \
