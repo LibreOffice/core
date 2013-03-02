@@ -5039,8 +5039,9 @@ if test "$GXX" = "yes"; then
     dnl see https://code.google.com/p/android/issues/detail?id=41770
     if test "$_gpp_majmin" -ge "407"; then
             glibcxx_threads=no
-            AC_MSG_CHECKING([whether $CXX is broken with boost.thread])
             AC_LANG_PUSH([C++])
+            AC_REQUIRE_CPP
+            AC_MSG_CHECKING([whether $CXX is broken with boost.thread])
             AC_PREPROC_IFELSE([AC_LANG_PROGRAM([[
                 #include <bits/c++config.h>]],[[
                 #if !defined(_GLIBCXX_HAVE_GTHR_DEFAULT) \
