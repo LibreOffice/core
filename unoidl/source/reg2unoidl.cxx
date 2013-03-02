@@ -753,9 +753,9 @@ SAL_IMPLEMENT_MAIN() {
     std::size_t size;
     try {
         off = writeMap(f, prov->createRootCursor(), &size);
-    } catch (unoidl::FileFormatException & e) {
+    } catch (unoidl::FileFormatException & e1) {
         std::cerr
-            << "Bad input <" << e.getUri() << ">: " << e.getDetail()
+            << "Bad input <" << e1.getUri() << ">: " << e1.getDetail()
             << std::endl;
         std::exit(EXIT_FAILURE);
     }
