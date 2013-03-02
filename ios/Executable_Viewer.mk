@@ -27,4 +27,6 @@ $(eval $(call gb_Executable_add_objcxxobjects,Viewer,\
     ios/experimental/Viewer/Viewer/main \
 ))
 
+$(call gb_Executable_get_target,Viewer) : $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
+
 # vim: set ts=4 sw=4 et:
