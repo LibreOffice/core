@@ -27,6 +27,16 @@ $(eval $(call gb_Executable_add_objcxxobjects,Viewer,\
     ios/experimental/Viewer/Viewer/main \
 ))
 
-$(call gb_Executable_get_target,Viewer) : $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
+# The executables built for iOS link to all LO libs statically. The
+# link command just uses the wildcard function to list all of them.
+# Instead of tediously here declare dependencies on the transitive
+# closure of those from which some object ends up being linked in, we
+# list a few libraries that are high in the dependency forest to make
+# it likely that all necessary libraries are built before this
+# executable is.
+$(eval $(call gb_Executable_use_libraries,Viewer,\
+	msword \
+	scfilt \
+))
 
 # vim: set ts=4 sw=4 et:
