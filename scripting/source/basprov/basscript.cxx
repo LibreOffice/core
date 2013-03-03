@@ -225,11 +225,11 @@ namespace basprov
             // call method
             SbxVariableRef xReturn = new SbxVariable;
             ErrCode nErr = SbxERR_OK;
-            {
-                // if it's a document-based script, temporarily reset ThisComponent to the script invocation context
-                Any aOldThisComponent;
-                if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
-                    aOldThisComponent = m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( m_xDocumentScriptContext ) );
+
+            // if it's a document-based script, temporarily reset ThisComponent to the script invocation context
+            Any aOldThisComponent;
+            if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
+                aOldThisComponent = m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( m_xDocumentScriptContext ) );
 
             if ( m_caller.getLength() && m_caller[ 0 ].hasValue()  )
             {
@@ -239,9 +239,10 @@ namespace basprov
             }
             else
                 nErr = m_xMethod->Call( xReturn );
-                if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
-                    m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
-            }
+
+            if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
+                m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
+
             if ( nErr != SbxERR_OK )
             {
                 // TODO: throw InvocationTargetException ?

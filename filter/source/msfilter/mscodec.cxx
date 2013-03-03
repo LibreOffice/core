@@ -228,9 +228,13 @@ void MSCodec_XorWord95::Decode( sal_uInt8* pnData, sal_Size nBytes )
     for( const sal_uInt8* pnDataEnd = pnData + nBytes; pnData < pnDataEnd; ++pnData )
     {
         const sal_uInt8 cChar = *pnData ^ *pnCurrKey;
-    if (*pnData && cChar)
-        *pnData = cChar;
-        if( pnCurrKey < pnKeyLast ) ++pnCurrKey; else pnCurrKey = mpnKey;
+        if (*pnData && cChar)
+            *pnData = cChar;
+
+        if( pnCurrKey < pnKeyLast )
+            ++pnCurrKey;
+        else
+            pnCurrKey = mpnKey;
     }
 
     // update mnOffset

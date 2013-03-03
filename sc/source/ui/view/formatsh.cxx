@@ -292,8 +292,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         const SfxPoolItem* pFamItem;
         if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY, sal_True, &pFamItem ) )
             eFamily = (SfxStyleFamily)((const SfxUInt16Item*)pFamItem)->GetValue();
-        else
-        if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME, sal_True, &pFamItem ) )
+        else if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME, sal_True, &pFamItem ) )
         {
             String sFamily = ((const SfxStringItem*)pFamItem)->GetValue();
             if (sFamily.CompareToAscii("CellStyles") == COMPARE_EQUAL)

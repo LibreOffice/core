@@ -375,6 +375,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 
     //remember default values for dataseries
     if(xProp.is())
+    {
     try
     {
         mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue(::rtl::OUString("SymbolType"));
@@ -422,7 +423,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         (void)rEx; // avoid warning for pro build
 #endif
     }
-    //
+    } // if
 
     bool bCreateInternalDataProvider = false;
     if( m_rXLinkHRefAttributeToIndicateDataProvider == "." ) //data comes from the chart itself

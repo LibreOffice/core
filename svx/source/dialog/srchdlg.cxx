@@ -1302,8 +1302,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
         }
         pSearchItem->SetLevenshtein( bIsChecked );
     }
-    else
-    if ( pCtrl == &aNotesBtn)
+    else if ( pCtrl == &aNotesBtn)
     {
         if (aNotesBtn.IsChecked())
         {

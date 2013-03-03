@@ -1220,23 +1220,26 @@ Sequence< Reference< XChartType > >
     ::std::vector< Reference< XChartType > > aResult;
 
     if(xDiagram.is())
-    try
     {
-        Reference< XCoordinateSystemContainer > xCooSysCnt(
-            xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-            xCooSysCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        try
         {
-            Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
-            Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
-            ::std::copy( aChartTypeSeq.getConstArray(), aChartTypeSeq.getConstArray() + aChartTypeSeq.getLength(),
-                         ::std::back_inserter( aResult ));
+            Reference< XCoordinateSystemContainer > xCooSysCnt(
+                xDiagram, uno::UNO_QUERY_THROW );
+            Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+                xCooSysCnt->getCoordinateSystems());
+            for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+            {
+                Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
+                Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
+                ::std::copy( aChartTypeSeq.getConstArray(),
+                                aChartTypeSeq.getConstArray() + aChartTypeSeq.getLength(),
+                                ::std::back_inserter( aResult ));
+            }
         }
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
+        catch( const uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
     }
 
     return ContainerHelper::ContainerToSequence( aResult );

@@ -312,28 +312,26 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     //    by others.
     if ( ! xCloseFrame->getCreator().is())
         bCloseFrame = sal_True;
-    else
 
     // b) The help window cant disagree with any request.
     //    Because it doesnt implement a controller - it uses a window only.
     //    Further t cant be the last open frame - if we do all other things
     //    right inside this CloseDispatcher implementation.
     //    => close it!
-    if (aCheck1.m_bReferenceIsHelp)
+    else if (aCheck1.m_bReferenceIsHelp)
         bCloseFrame = sal_True;
-    else
 
     // c) If we are already in "backing mode", we have to terminate
     //    the application, if this special frame is closed.
     //    It doesnt matter, how many other frames (can be the help or hidden frames only)
     //    are open then.
     //    => terminate the application!
-    if (aCheck1.m_bReferenceIsBacking)
+    else if (aCheck1.m_bReferenceIsBacking)
         bTerminateApp = sal_True;
-    else
 
     // d) Otherwhise we have to: close all views to the same document, close the
     //    document inside our own frame and decide then again, what has to be done!
+    else
     {
         if (implts_prepareFrameForClosing(m_xCloseFrame, bAllowSuspend, bCloseAllViewsToo, bControllerSuspended))
         {

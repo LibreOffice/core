@@ -5687,9 +5687,8 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
         {
             if(!this->GetShapeGroupContainerData( rSt, nLength, sal_True, nDrawingContainerId )) return;
         }
-        else
         // blanker Shape Container ? (ausserhalb vom Shape Group Container)
-        if( DFF_msofbtSpContainer == nFbt )
+        else if( DFF_msofbtSpContainer == nFbt )
         {
             if(!this->GetShapeContainerData( rSt, nLength, ULONG_MAX, nDrawingContainerId )) return;
         }
@@ -5725,9 +5724,8 @@ sal_Bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
                 return sal_False;
             bFirst = sal_False;
         }
-        else
         // eingeschachtelter Shape Group Container ?
-        if( DFF_msofbtSpgrContainer == nFbt )
+        else if( DFF_msofbtSpgrContainer == nFbt )
         {
             if ( !this->GetShapeGroupContainerData( rSt, nLength, sal_False, nDrawingContainerId ) )
                 return sal_False;

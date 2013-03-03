@@ -534,8 +534,10 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     // Ask if possible, if page format should be taken over from printer.
     if ( ( bOriChg  || bPgSzChg ) &&
         RET_YES == QueryBox(0, WB_YES_NO | WB_DEF_OK, aMsg).Execute() )
-    // Flags wich changes for  <SetPrinter(SfxPrinter*)> are maintained
-    nChangedFlags |= nNewOpt;
+    {
+        // Flags wich changes for  <SetPrinter(SfxPrinter*)> are maintained
+        nChangedFlags |= nNewOpt;
+    }
 
     // For the MAC to have its "temporary of class String" in next if()
     String aTempPrtName = pNewPrinter->GetName();

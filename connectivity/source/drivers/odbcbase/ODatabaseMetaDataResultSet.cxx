@@ -1134,7 +1134,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
 
     ::rtl::OString aPKQ,aPKO,aPKN;
     if ( catalog.hasValue() )
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
     aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding);
 

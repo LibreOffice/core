@@ -1930,10 +1930,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     else
         pClipDoc->ResetClip(this, pMarks);
 
-//  if ( bUseRangeForVBA )
-//      CopyRangeNamesToClip(pClipDoc, aClipRange, nTab );
-//    else
-        CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, bAllTabs);
+    CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, bAllTabs);
 
     for ( ; i < nEndTab; ++i)
     {

@@ -202,7 +202,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             newStartPos = FindPosInSeq_Impl( offset, startPos );
 
         if( endPos < searchStr.getLength() )
-        newEndPos = FindPosInSeq_Impl( offset, endPos );
+            newEndPos = FindPosInSeq_Impl( offset, endPos );
         else
             newEndPos = in_str.getLength();
 
@@ -289,8 +289,8 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         // JP 20.6.2001: also the start and end positions must be corrected!
         if( startPos < searchStr.getLength() )
             newStartPos = FindPosInSeq_Impl( offset, startPos );
-    else
-        newStartPos = in_str.getLength();
+        else
+            newStartPos = in_str.getLength();
 
         if( endPos )
             newEndPos = FindPosInSeq_Impl( offset, endPos );

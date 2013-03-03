@@ -881,11 +881,14 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, sal_
     const char* pEvent = NULL;
 
     if( rAny >>= fDelay )
-    bHasFDelay = sal_True;
-    else if( rAny >>= eTiming ) {
-    if( eTiming == Timing_INDEFINITE )
-        pDelay = "indefinite";
-    } else if( rAny >>= aEvent ) {
+        bHasFDelay = sal_True;
+    else if( rAny >>= eTiming )
+    {
+        if( eTiming == Timing_INDEFINITE )
+            pDelay = "indefinite";
+    }
+    else if( rAny >>= aEvent )
+    {
     // TODO
     DBG(printf ("animation condition event: TODO\n"));
     DBG(printf ("event offset has value: %d triger: %d source has value: %d\n", aEvent.Offset.hasValue(), aEvent.Trigger, aEvent.Source.hasValue()));
