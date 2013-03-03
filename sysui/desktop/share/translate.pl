@@ -105,7 +105,6 @@ close(SOURCE);
 # process templates
 foreach $template (keys %templates) {
     my $outfile = $templates{$template}->{'outfile'};
-    print "processing template $template in $outfile\n";
 
     # open the template file - ignore sections for which no
     # templates exist

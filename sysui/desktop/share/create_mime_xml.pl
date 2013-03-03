@@ -56,7 +56,6 @@ print '<?xml version="1.0" encoding="UTF-8"?>';
 print '<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">';
 
 foreach $component (sort(keys %mimehash)) {
-    print STDERR "Processing entries for $component";
     # mimetype and glob
     getMimedata($component);
     print '  <mime-type type="'.$mimetype.'">';

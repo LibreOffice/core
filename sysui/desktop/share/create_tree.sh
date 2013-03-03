@@ -19,7 +19,6 @@
 umask 022
 
 if [ "${KDEMAINDIR}" ]; then
-  echo "Copying icons..."
   for i in `cd "${ICON_SOURCE_DIR}"; find ${ICON_THEMES:-hicolor/???x??? hicolor/??x?? hicolor/scalable locolor} -name "*.png" -o -name "*.svg"`
   do
     targetdir=${DESTDIR}/${KDEMAINDIR}/share/icons/`dirname ${i}`
@@ -38,7 +37,6 @@ if [ "${KDEMAINDIR}" ]; then
 fi
 
 if [ "${GNOMEDIR}" ]; then
-  echo "Copying GNOME icons..."
   for i in `cd "${ICON_SOURCE_DIR}/hicolor"; find ??x?? ???x??? scalable -name "*.png" -o -name "*.svg"`
   do
     targetdir=${DESTDIR}/${GNOMEDIR}/share/icons/gnome/`dirname ${i}`
