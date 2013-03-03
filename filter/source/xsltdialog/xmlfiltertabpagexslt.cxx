@@ -57,7 +57,7 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
     maCBNeedsXSLT2( this, ResId (CB_XML_NEEDS_XSLT2, rResMgr ) ),
 
     sHTTPSchema( "http://" ),
-    sSHTTPSchema( "shttp://" ),
+    sSHTTPSchema( "https://" ),
     sFILESchema( "file://" ),
     sFTPSchema( "ftp://" ),
     sInstPath( "$(prog)/" )
@@ -128,7 +128,7 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox& rURLBox, const OUString& rURL )
         rURLBox.SetText( aPath );
     }
     else if( rURL.matchIgnoreAsciiCase( "http://" ) ||
-             rURL.matchIgnoreAsciiCase( "shttp://" ) ||
+             rURL.matchIgnoreAsciiCase( "https://" ) ||
              rURL.matchIgnoreAsciiCase( "ftp://" ) )
     {
         rURLBox.SetBaseURL( rURL );
@@ -156,7 +156,7 @@ OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox& rURLBox )
     OUString aURL;
     OUString aStrPath ( rURLBox.GetText() );
     if( aStrPath.matchIgnoreAsciiCase( "http://" ) ||
-        aStrPath.matchIgnoreAsciiCase( "shttp://" ) ||
+        aStrPath.matchIgnoreAsciiCase( "https://" ) ||
         aStrPath.matchIgnoreAsciiCase( "ftp://" ) )
     {
         return aStrPath;

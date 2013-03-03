@@ -129,7 +129,7 @@ void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference
 {
     if( !rSourceFile.isEmpty() &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("http:") ) != 0) &&
-        (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("shttp:") ) != 0) &&
+        (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("https:") ) != 0) &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("jar:") ) != 0) &&
         (rSourceFile.compareToAscii( RTL_CONSTASCII_STRINGPARAM("ftp:") ) != 0))
     {
