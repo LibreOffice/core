@@ -109,7 +109,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
          aVendor != "BEA Systems, Inc." &&
          aVendor != "Free Software Foundation, Inc." &&
          aVendor != "The FreeBSD Foundation" )
+    {
+        jfw_freeJavaInfo(pInfo);
         return 0;
+    }
 
     rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
     fprintf(stdout, "%s\n", sPaths.getStr());
