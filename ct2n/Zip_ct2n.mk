@@ -49,7 +49,7 @@ $(eval $(call gb_Zip_add_files,ct2n,\
 $(call gb_Zip_get_final_target,ct2n) : $(OUTDIR)/bin/ConvertTextToNumber.oxt
 $(call gb_Zip_get_clean_target,ct2n) : Clean_ConvertTextToNumber_oxt
 
-$(OUTDIR)/bin/ConvertTextToNumber.oxt : $(call gb_Zip_get_target,ct2n)
+$(OUTDIR)/bin/ConvertTextToNumber.oxt : $(call gb_Zip_get_target,ct2n) | $(OUTDIR)/bin/.dir
 	$(call gb_Deliver_deliver,$<,$@)
 
 .PHONY : Clean_ConvertTextToNumber_oxt
