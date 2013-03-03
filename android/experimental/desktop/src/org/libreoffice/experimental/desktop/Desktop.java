@@ -166,7 +166,7 @@ public class Desktop
         boolean scalingInProgress;
         GestureDetector gestureDetector;
         ScaleGestureDetector scaleDetector;
-        float scale = 1;
+        long lastGestureEventTime;
 
         public BitmapView()
         {
@@ -201,27 +201,31 @@ public class Desktop
                                          new ScaleGestureDetector.SimpleOnScaleGestureListener() {
                                              @Override public boolean onScaleBegin(ScaleGestureDetector detector)
                                              {
-                                                 Log.i(TAG, "onScaleBegin: pivot=(" + detector.getFocusX() + ", " + detector.getFocusY() + ")");
                                                  scalingInProgress = true;
+                                                 lastGestureEventTime = System.currentTimeMillis();
                                                  return true;
                                              }
 
                                              @Override public boolean onScale(ScaleGestureDetector detector)
                                              {
-                                                 float s = detector.getScaleFactor();
-                                                 if (s > 0.95 && s < 1.05)
+                                                 long now = System.currentTimeMillis();
+                                                 if (now - lastGestureEventTime < 100)
                                                      return false;
-                                                 scale *= s;
-                                                 Log.i(TAG, "onScale: " + s + " => " + scale);
+                                                 float scale = detector.getScaleFactor();
+                                                 if (scale > 0.95 && scale < 1.05)
+                                                     return false;
+                                                 Log.i(TAG, "onScale: " + scale);
+                                                 lastGestureEventTime = now;
                                                  Desktop.zoom(scale, (int) detector.getFocusX(), (int) detector.getFocusY());
                                                  return true;
                                              }
 
                                              @Override public void onScaleEnd(ScaleGestureDetector detector)
                                              {
+                                                 float scale = detector.getScaleFactor();
                                                  Log.i(TAG, "onScaleEnd: " + scale);
-                                                 Desktop.zoom(scale, (int) detector.getFocusX(), (int) detector.getFocusY());
-                                                 scale = 1;
+                                                 if (!(scale > 0.95 && scale < 1.05))
+                                                     Desktop.zoom(scale, (int) detector.getFocusX(), (int) detector.getFocusY());
                                                  scalingInProgress = false;
                                              }
                                          });

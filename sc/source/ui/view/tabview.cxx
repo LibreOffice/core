@@ -965,7 +965,8 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 
     bool bDone = false;
     const CommandWheelData* pData = rCEvt.GetWheelData();
-    if ( pData && pData->GetMode() == COMMAND_WHEEL_ZOOM )
+    if ( pData && (pData->GetMode() == COMMAND_WHEEL_ZOOM ||
+                   pData->GetMode() == COMMAND_WHEEL_ZOOM_SCALE ) )
     {
         if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
         {
@@ -975,11 +976,16 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             const Fraction& rOldY = aViewData.GetZoomY();
             long nOld = (long)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
             long nNew = nOld;
-            if ( pData->GetDelta() < 0 )
-                nNew = Max( (long) MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
-            else
-                nNew = Min( (long) MAXZOOM, basegfx::zoomtools::zoomIn( nOld ));
-
+            if ( pData->GetMode() == COMMAND_WHEEL_ZOOM_SCALE )
+            {
+                nNew = 100 * (long) ((nOld / 100.0) * (pData->GetDelta() / 100.0));
+            } else
+            {
+                if ( pData->GetDelta() < 0 )
+                    nNew = Max( (long) MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
+                else
+                    nNew = Min( (long) MAXZOOM, basegfx::zoomtools::zoomIn( nOld ));
+            }
             if ( nNew != nOld )
             {
                 // scroll wheel doesn't set the AppOptions default

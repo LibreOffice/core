@@ -116,6 +116,7 @@ inline CommandInputContextData::CommandInputContextData( LanguageType eLang )
 
 #define COMMAND_WHEEL_SCROLL            ((sal_uInt16)0x0001)
 #define COMMAND_WHEEL_ZOOM              ((sal_uInt16)0x0002)
+#define COMMAND_WHEEL_ZOOM_SCALE        ((sal_uInt16)0x0003)
 #define COMMAND_WHEEL_DATAZOOM          ((sal_uInt16)0x0004)
 
 #define COMMAND_WHEEL_PAGESCROLL        ((sal_uLong)0xFFFFFFFF)

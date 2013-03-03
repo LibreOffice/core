@@ -1438,7 +1438,7 @@ static sal_Bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
 
 // -----------------------------------------------------------------------
 
-static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEvt )
+static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
 {
     ImplDelData aDogTag( pWindow );
 
@@ -1454,7 +1454,9 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     sal_uInt16 nCode = rEvt.mnCode;
     bool bHorz = rEvt.mbHorz;
     bool bPixel = rEvt.mbDeltaIsPixel;
-    if ( nCode & KEY_MOD1 )
+    if ( scaleDirectly )
+        nMode = COMMAND_WHEEL_ZOOM_SCALE;
+    else if ( nCode & KEY_MOD1 )
         nMode = COMMAND_WHEEL_ZOOM;
     else if ( nCode & KEY_MOD2 )
         nMode = COMMAND_WHEEL_DATAZOOM;
@@ -2594,14 +2596,6 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             break;
         case SALEVENT_EXTERNALZOOM:
             {
-            // At least in Writer (see SwView::HandleWheelCommands()
-            // in sw/source/ui/uiview/viewport.cxx) the delta value in the event is cheerfully
-            // ignored and only its sign matters, zooming always is one "step" per event.
-            // Thus this factor has no meaning. Will have to fix this probably by adding a new
-            // CommandWheelData mode to actually multiply the current zoom level with a value
-            // specified.
-            const int ZOOM_FACTOR = 100;
-
             ZoomEvent* pZoomEvent = (ZoomEvent*) pEvent;
             SalWheelMouseEvent aSalWheelMouseEvent;
 
@@ -2609,19 +2603,10 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             aSalWheelMouseEvent.mnX = pZoomEvent->GetCenter().getX();
             aSalWheelMouseEvent.mnY = pZoomEvent->GetCenter().getY();
 
-            if ( pZoomEvent->GetScale() < 1 ) {
-                aSalWheelMouseEvent.mnDelta = - (long) ((1 - pZoomEvent->GetScale()) * ZOOM_FACTOR);
-                aSalWheelMouseEvent.mnNotchDelta = -1;
-            } else {
-                aSalWheelMouseEvent.mnDelta = (long) ((pZoomEvent->GetScale() - 1) * ZOOM_FACTOR);
-                aSalWheelMouseEvent.mnNotchDelta = 1;
-            }
+            // Pass on the scale as a percentage of current zoom factor
+            aSalWheelMouseEvent.mnDelta = (long) (pZoomEvent->GetScale() * 100);
 
-            aSalWheelMouseEvent.mnScrollLines = 1; // ???
-            aSalWheelMouseEvent.mnCode = KEY_MOD1;
-            aSalWheelMouseEvent.mbDeltaIsPixel = 0; // ???
-
-            nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
+            nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent, true );
             }
             break;
         case SALEVENT_EXTERNALSCROLL:
