@@ -311,7 +311,7 @@ XubString Application::GetCommandLineParam( sal_uInt16 nParam )
 const XubString& Application::GetAppFileName()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    DBG_ASSERT( pSVData->maAppData.mpAppFileName, "AppFileName vor SVMain ?!" );
+    DBG_ASSERT( pSVData->maAppData.mpAppFileName, "AppFileName should be set to something after SVMain!" );
     if ( pSVData->maAppData.mpAppFileName )
         return *pSVData->maAppData.mpAppFileName;
 
