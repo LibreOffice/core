@@ -133,4 +133,6 @@ $(eval $(call gb_CppunitTest_add_arguments,sd_regression_test,\
     "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \
 ))
 
+$(call gb_CppunitTest_get_target,sd_regression_test) : $(call gb_AllLangResTarget_get_target,sd)
+
 # vim: set noet sw=4 ts=4:

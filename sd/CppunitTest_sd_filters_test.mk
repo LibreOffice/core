@@ -123,4 +123,6 @@ $(eval $(call gb_CppunitTest_use_configuration,sd_filters_test))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,sd_filters_test))
 
+$(call gb_CppunitTest_get_target,sd_filters_test) : $(call gb_AllLangResTarget_get_target,sd)
+
 # vim: set noet sw=4 ts=4:
