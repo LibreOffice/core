@@ -22,6 +22,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -163,13 +164,30 @@ public class Desktop
         Bitmap mBitmap;
         boolean renderedOnce;
         boolean scalingInProgress;
-        ScaleGestureDetector gestureDetector;
+        GestureDetector gestureDetector;
+        ScaleGestureDetector scaleDetector;
         float scale = 1;
 
         public BitmapView()
         {
             super(Desktop.this);
             setFocusableInTouchMode(true);
+
+            gestureDetector =
+                new GestureDetector(Desktop.this,
+                                    new GestureDetector.SimpleOnGestureListener() {
+                                        @Override public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+                                        {
+                                            Log.i(TAG, "onFling: events:" + e1 + ", " + e2 + ", velocity: (" + velocityX + ", " + velocityY + ")");
+                                            return false;
+                                        }
+
+                                        @Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+                                        {
+                                            Log.i(TAG, "onScroll: events:" + e1 + ", " + e2 + ", velocity: (" + velocityX + ", " + velocityY + ")");
+                                            return false;
+                                        }
+                                    });
 
             // Is this sane? It is rather slow to ask LO to zoom
             // continuously while the scaling gesture is in progress.
@@ -178,7 +196,7 @@ public class Desktop
             // progress to just scale the bitmap view (UI elements
             // too, which of course was a bit silly).
 
-            gestureDetector =
+            scaleDetector =
                 new ScaleGestureDetector(Desktop.this,
                                          new ScaleGestureDetector.SimpleOnScaleGestureListener() {
                                              @Override public boolean onScaleBegin(ScaleGestureDetector detector)
@@ -255,12 +273,12 @@ public class Desktop
 
         @Override public boolean onTouchEvent(MotionEvent event)
         {
-            Log.i(TAG, "onTouchEvent, scalingInProgress=" + scalingInProgress);
+            if (gestureDetector.onTouchEvent(event))
+                return true;
 
-            // For now, when during scaling we just scale the bitmap
-            // view, if a scaling gesture is in progress no other
-            // touch processing should be done.
-            if (gestureDetector.onTouchEvent(event) && scalingInProgress)
+            // If a scaling gesture is in progress no other touch
+            // processing should be done.
+            if (scaleDetector.onTouchEvent(event) && scalingInProgress)
                 return true;
 
             if (!renderedOnce)
