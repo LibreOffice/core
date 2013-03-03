@@ -64,7 +64,7 @@ namespace dbtools
                 name is a column name, so an implicit parameter had to be generated for it
             */
             eLinkedByColumnName,
-            /** parameters which are filled externally (i.e. by XParamaters::setXXX, or by the parameter listeners)
+            /** parameters which are filled externally (i.e. by XParameters::setXXX, or by the parameter listeners)
             */
             eFilledExternally
         };

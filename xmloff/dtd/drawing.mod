@@ -789,7 +789,7 @@
 <!ATTLIST draw:plugin %draw-position;>
 <!ATTLIST draw:plugin %draw-end-position; >
 
-<!-- Paramaters -->
+<!-- Parameters -->
 <!ELEMENT draw:param EMPTY>
 <!ATTLIST draw:param draw:name CDATA #IMPLIED>
 <!ATTLIST draw:param draw:value CDATA #IMPLIED>
