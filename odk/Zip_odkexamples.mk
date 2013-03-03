@@ -26,7 +26,7 @@ $(eval $(call gb_Zip_add_files,odkexamples,\
 ))
 
 #FIXME: scp2 seems to require the zip to be in bin
-$(call gb_Zip_get_final_target,odkexamples) : $(OUTDIR)/bin/odkexamples.zip
+$(call gb_Zip_get_final_target,odkexamples) : $(OUTDIR)/bin/odkexamples.zip | $(OUTDIR)/bin/.dir
 $(call gb_Zip_get_clean_target,odkexamples) : clean_odkexamples_zip
 
 $(OUTDIR)/bin/odkexamples.zip : $(call gb_Zip_get_target,odkexamples)
