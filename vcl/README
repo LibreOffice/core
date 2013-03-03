@@ -47,3 +47,15 @@ How the platform abstraction works
 		  SalFrames, SalVirtualDevices, SalPrinters,
 		  Timers, the SolarMutexe, Drag&Drop and other
 		  objects, as well as the primary event loop wrapper.
+
+Note: references to "SV" in the code are in relation to StarView, which is:
+
+	StarView is a portable C++ class library for GUI's. It supports a 
+	portable resource system, a complete GUI-interface including MDI,
+	printing and helpsystem.
+
+	Initially StarView was developed for internal use only. With 
+	StarView, we developed a portable wordprocessor for GUI's which is
+	the successor of our current DOS product.
+
+https://groups.google.com/group/comp.lang.c++/msg/9e8bc18905da32e1?dmode=source&output=gplain&noredirect&pli=1
