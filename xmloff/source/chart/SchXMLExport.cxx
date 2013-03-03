@@ -1078,28 +1078,9 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
         mrAutoStylePool( rASPool ),
         mbHasSeriesLabels( sal_False ),
         mbHasCategoryLabels( sal_False ),
-        mbRowSourceColumns( sal_True )
-        // #110680#
-        // this id depends on the ServiceManager used due to the binary filter stripping.
-        // ,msCLSID( rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
+        mbRowSourceColumns( sal_True ),
+        msCLSID( rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
 {
-    // #110680#
-    // changed initialisation for msCLSID. Compare the ServiceInfo name with
-    // the known name of the LegacyServiceManager.
-    Reference<lang::XServiceInfo> xServiceInfo( mrExport.getComponentContext()->getServiceManager(), uno::UNO_QUERY );
-    DBG_ASSERT( xServiceInfo.is(), "XMultiServiceFactory without xServiceInfo (!)" );
-    OUString rdbURL = xServiceInfo->getImplementationName();
-    OUString implLegacyServiceManagerName(  "com.sun.star.comp.office.LegacyServiceManager"  );
-
-    if( rdbURL.equals( implLegacyServiceManagerName ))
-    {
-        msCLSID = OUString( SvGlobalName( BF_SO3_SCH_CLASSID ).GetHexName());
-    }
-    else
-    {
-        msCLSID = OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName());
-    }
-
     msTableName = OUString( "local-table" );
 
     // create factory

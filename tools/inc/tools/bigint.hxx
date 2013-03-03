@@ -29,7 +29,6 @@ class SvStream;
 #ifdef _TLBIGINT_INT64
 struct SbxINT64;
 struct SbxUINT64;
-namespace binfilter { class SbxINT64Converter; }
 #endif
 
 #define MAX_DIGITS 8
@@ -38,10 +37,6 @@ class Fraction;
 
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED BigInt
 {
-#ifdef _TLBIGINT_INT64
-    friend class ::binfilter::SbxINT64Converter;
-#endif
-
 private:
     long            nVal;
     unsigned short  nNum[MAX_DIGITS];

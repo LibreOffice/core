@@ -79,25 +79,7 @@
 #define SHL_BRUSHITEM   51
 //52 (SHL_SFONTITEM) removed
 
-// #110743#
-// #define SHL_COUNT        53
-// the following added for binary filter project
-// Since an array is created for that values, it is necessary to
-// put them directly behind the defined ones. Else, some space is
-// wasted.
-#define BF_SHL_SVX      53
-#define BF_SHL_ITEM     54
-#define BF_SHL_SVD      55
-#define BF_SHL_EDIT     56
-#define BF_SHL_SCH      57
-#define BF_SHL_SM       58
-#define BF_SHL_CALC     59
-#define BF_SHL_DRAW     60
-#define BF_SHL_WRITER   61
-#define BF_SHL_SVT      62
-#define BF_SHL_SVDDE    63
-
-#define SHL_COUNT       64
+#define SHL_COUNT        53
 
 TOOLS_DLLPUBLIC void** GetAppData( sal_uInt16 nSharedLib );
 

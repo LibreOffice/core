@@ -1083,12 +1083,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                             {
                                 eShapeType = XmlShapeTypeDrawChartShape;
                             }
-                            else if (
-                                sCLSID.equals(rtl::OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName()))
-                                // #110680#
-                                // same reaction for binfilter
-                                || sCLSID.equals(rtl::OUString( SvGlobalName( BF_SO3_SC_CLASSID ).GetHexName()))
-                                )
+                            else if (sCLSID.equals(rtl::OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())))
                             {
                                 eShapeType = XmlShapeTypeDrawSheetShape;
                             }
@@ -1134,8 +1129,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                         rtl::OUString sCLSID;
                         if(xPropSet->getPropertyValue(OUString("CLSID")) >>= sCLSID)
                         {
-                            if( sCLSID.equals(OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())) ||
-                                sCLSID.equals(OUString( SvGlobalName( BF_SO3_SC_CLASSID ).GetHexName())) )
+                            if( sCLSID.equals(OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())) )
                             {
                                 eShapeType = XmlShapeTypePresSheetShape;
                             }
