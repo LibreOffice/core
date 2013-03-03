@@ -649,7 +649,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         return;//double click is handled further in mousebutton up
 
     SdrHdl* pHitSelectionHdl = 0;
-    //switch from move to resize if handle is hit on a resizeable object
+    //switch from move to resize if handle is hit on a resizable object
     if( m_aSelection.isResizeableObjectSelected() )
         pHitSelectionHdl = pDrawViewWrapper->PickHandle( aMPos );
     //only change selection if no selection handles are hit

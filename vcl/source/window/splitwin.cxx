@@ -1193,7 +1193,7 @@ sal_uInt16 SplitWindow::ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
 sal_uInt16 SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
                                    long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos )
 {
-    // Resizeable SplitWindow muss anders behandelt werden
+    // Resizable SplitWindow muss anders behandelt werden
     if ( pWindow->mnWinStyle & WB_SIZEABLE )
     {
         long    nTPos;

@@ -80,7 +80,7 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
-    ImplRegisterProperty( BASEPROPERTY_SIZEABLE ); // resizeable
+    ImplRegisterProperty( BASEPROPERTY_SIZEABLE ); // resizable
     ImplRegisterProperty( BASEPROPERTY_HSCROLL );
     ImplRegisterProperty( BASEPROPERTY_VSCROLL );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );

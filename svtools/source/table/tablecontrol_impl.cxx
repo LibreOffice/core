@@ -966,7 +966,7 @@ namespace svt { namespace table
             ::sal_Int32 flexibility = pColumn->getFlexibility();
             OSL_ENSURE( flexibility >= 0, "TableControl_Impl::impl_ni_calculateColumnWidths: a column's flexibility should be non-negative." );
             if  (   ( flexibility < 0 )                                 // normalization
-                ||  ( !pColumn->isResizable() )                         // column not resizeable => no auto-resize
+                ||  ( !pColumn->isResizable() )                         // column not resizable => no auto-resize
                 ||  ( col <= i_assumeInflexibleColumnsUpToIncluding )   // column shall be treated as inflexible => respec this
                 )
                 flexibility = 0;
