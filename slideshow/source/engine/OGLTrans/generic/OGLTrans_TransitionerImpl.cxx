@@ -1689,7 +1689,7 @@ void OGLTransitionerImpl::disposeTextures()
     }
     if( !mbUseEnteringPixmap ) {
         glDeleteTextures(1,&GLenteringSlide);
-        GLleavingSlide = 0;
+        GLenteringSlide = 0;
     }
 
     mbUseLeavingPixmap = false;
