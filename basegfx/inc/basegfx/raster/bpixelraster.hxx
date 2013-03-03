@@ -81,26 +81,14 @@ namespace basegfx
         // data access read only
         const BPixel& getBPixel(sal_uInt32 nIndex) const
         {
-#ifdef DBG_UTIL
-            if(nIndex >= mnCount)
-            {
-                OSL_FAIL("getBPixel: Access out of range (!)");
-                return BPixel::getEmptyBPixel();
-            }
-#endif
+            assert(nIndex < mnCount); //Access out of range
             return mpContent[nIndex];
         }
 
         // data access read/write
         BPixel& getBPixel(sal_uInt32 nIndex)
         {
-#ifdef DBG_UTIL
-            if(nIndex >= mnCount)
-            {
-                OSL_FAIL("getBPixel: Access out of range (!)");
-                return mpContent[0L];
-            }
-#endif
+            assert(nIndex < mnCount); //Access out of range
             return mpContent[nIndex];
         }
     };
