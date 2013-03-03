@@ -63,7 +63,7 @@ ScDocumentIterator::ScDocumentIterator( ScDocument* pDocument,
     SCTAB nDocMaxTab = pDoc->GetTableCount() - 1;
     PutInOrder( nStartTab, nEndTab );
     if (!ValidTab(nStartTab) || nStartTab > nDocMaxTab ) nStartTab = nDocMaxTab;
-    if (!ValidTab(nEndTab) || nStartTab > nDocMaxTab ) nEndTab = nDocMaxTab;
+    if (!ValidTab(nEndTab) || nEndTab > nDocMaxTab ) nEndTab = nDocMaxTab;
 
     pDefPattern = pDoc->GetDefPattern();
 
