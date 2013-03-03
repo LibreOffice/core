@@ -1110,6 +1110,14 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
             aAny >>= aNegRange;
         }
 
+        aAny = SchXMLTools::getPropertyFromContext("PercentageError",
+                pSeriesStyleContext, pStylesCtxt);
+        if( aAny.hasValue() && aBarStyle == com::sun::star::chart::ErrorBarStyle::RELATIVE )
+        {
+            xBarProp->setPropertyValue("PositiveError", aAny);
+            xBarProp->setPropertyValue("NegativeError", aAny);
+        }
+
         switch(aBarStyle)
         {
             case com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN:
