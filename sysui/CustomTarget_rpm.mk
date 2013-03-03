@@ -16,20 +16,26 @@ define rpm_register_target
 $(call gb_CustomTarget_get_target,sysui/rpm): $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm
 
 $(rpm_WORKDIR)/$(1)-desktop-integration.tar.gz: $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm
-$(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm: $(rpm_SRCDIR)/$(2)/$(2)-menus.spec $(call gb_CustomTarget_get_workdir,sysui/share)/$(1)/create_tree.sh
-	$(RPM) -bb $$< \
-	--buildroot $(rpm_WORKDIR)/$(1)/$(2) \
-	--define "_builddir $(call gb_CustomTarget_get_workdir,sysui/share)/$(1)" \
-	--define "_rpmdir $(rpm_WORKDIR)/$(1)" \
-	--define "_rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" \
-	--define "productname $(PRODUCTNAME.$(1))" \
-	--define "pkgprefix $(1)$(PKGVERSIONSHORT)" \
-	--define "unixfilename $(UNIXFILENAME.$(1))" \
-	--define "productversion $(PRODUCTVERSION)" \
-	--define "iconprefix $(UNIXFILENAME.$(1))" \
-	--define "version $(PKGVERSION)" \
-	--define "release $(LIBO_VERSION_PATCH)" \
-	--define "__debug_install_post %nil"
+$(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSION_PATCH).noarch.rpm : \
+		$(rpm_SRCDIR)/$(2)/$(2)-menus.spec \
+		$(call gb_CustomTarget_get_workdir,sysui/share)/$(1)/create_tree.sh \
+		| $(rpm_WORKDIR)/$(1)/.dir
+	$(call gb_Helper_print_on_error,\
+		$(RPM) -bb $$< \
+			--buildroot $(rpm_WORKDIR)/$(1)/$(2) \
+			--define "_builddir $(call gb_CustomTarget_get_workdir,sysui/share)/$(1)" \
+			--define "_rpmdir $(rpm_WORKDIR)/$(1)" \
+			--define "_rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" \
+			--define "productname $(PRODUCTNAME.$(1))" \
+			--define "pkgprefix $(1)$(PKGVERSIONSHORT)" \
+			--define "unixfilename $(UNIXFILENAME.$(1))" \
+			--define "productversion $(PRODUCTVERSION)" \
+			--define "iconprefix $(UNIXFILENAME.$(1))" \
+			--define "version $(PKGVERSION)" \
+			--define "release $(LIBO_VERSION_PATCH)" \
+			--define "__debug_install_post %nil" \
+		, $$@.log \
+	)
 endef
 
 $(eval $(call gb_CustomTarget_CustomTarget,sysui/rpm))
