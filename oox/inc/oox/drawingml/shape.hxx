@@ -59,8 +59,8 @@ typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 /** Additional information for a chart embedded in a drawing shape. */
 struct ChartShapeInfo
 {
-    ::rtl::OUString     maFragmentPath;     /// Path to related XML stream, e.g. for charts.
-    bool                mbEmbedShapes;      /// True = load chart shapes into chart, false = load into parent drawpage.
+    ::rtl::OUString     maFragmentPath;     ///< Path to related XML stream, e.g. for charts.
+    bool                mbEmbedShapes;      ///< True = load chart shapes into chart, false = load into parent drawpage.
 
     inline explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
 };
@@ -238,19 +238,19 @@ protected:
 private:
     enum FrameType
     {
-        FRAMETYPE_GENERIC,          /// Generic shape, no special type.
-        FRAMETYPE_OLEOBJECT,        /// OLE object embedded in a shape.
-        FRAMETYPE_CHART,            /// Chart embedded in a shape.
-        FRAMETYPE_DIAGRAM,          /// Complex diagram drawing shape.
-        FRAMETYPE_TABLE             /// A table embedded in a shape.
+        FRAMETYPE_GENERIC,          ///< Generic shape, no special type.
+        FRAMETYPE_OLEOBJECT,        ///< OLE object embedded in a shape.
+        FRAMETYPE_CHART,            ///< Chart embedded in a shape.
+        FRAMETYPE_DIAGRAM,          ///< Complex diagram drawing shape.
+        FRAMETYPE_TABLE             ///< A table embedded in a shape.
     };
 
     typedef ::boost::shared_ptr< ::oox::vml::OleObjectInfo >    OleObjectInfoRef;
     typedef ::boost::shared_ptr< ChartShapeInfo >               ChartShapeInfoRef;
 
-    FrameType           meFrameType;        /// Type for graphic frame shapes.
-    OleObjectInfoRef    mxOleObjectInfo;    /// Additional data for OLE objects.
-    ChartShapeInfoRef   mxChartShapeInfo;   /// Additional data for chart shapes.
+    FrameType           meFrameType;        ///< Type for graphic frame shapes.
+    OleObjectInfoRef    mxOleObjectInfo;    ///< Additional data for OLE objects.
+    ChartShapeInfoRef   mxChartShapeInfo;   ///< Additional data for chart shapes.
 
     sal_Int32                       mnRotation;
     sal_Bool                        mbFlipH;
