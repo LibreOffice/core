@@ -67,7 +67,6 @@ throw (RuntimeException)
 #endif
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
-    OUString sURL;
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {

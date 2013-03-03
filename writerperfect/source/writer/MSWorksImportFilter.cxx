@@ -64,7 +64,6 @@ throw (RuntimeException)
 
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
-    OUString sURL;
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
@@ -127,7 +126,6 @@ throw( com::sun::star::uno::RuntimeException )
     OUString sTypeName;
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
-    OUString sURL;
     const PropertyValue *pValue = Descriptor.getConstArray();
     Reference < XInputStream > xInputStream;
     for ( sal_Int32 i = 0 ; i < nLength; i++)

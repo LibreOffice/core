@@ -1337,7 +1337,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             if ( pStringItem )
             {
-                String aPLZ = pStringItem->GetValue();
                 bRet = sal_True /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
             }
 #ifndef DISABLE_SCRIPTING

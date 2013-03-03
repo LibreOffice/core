@@ -560,7 +560,6 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 
             if ( pIMapObj && ( aStr = pIMapObj->GetURL() ).Len() )
             {
-                String      aDescr( pIMapObj->GetAltText() );
                 Rectangle   aLogicPix( LogicToPixel( Rectangle( Point(), GetGraphicSize() ) ) );
                 Rectangle   aScreenRect( OutputToScreenPixel( aLogicPix.TopLeft() ),
                                          OutputToScreenPixel( aLogicPix.BottomRight() ) );

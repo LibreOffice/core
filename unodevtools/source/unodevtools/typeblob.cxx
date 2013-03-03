@@ -176,7 +176,6 @@ void writeMethodData( typereg::Writer& rWriter, sal_uInt32 calculatedMemberOffse
     Sequence< Reference< XMethodParameter > > parameters(xMethod->getParameters());
     Sequence< Reference< XTypeDescription > > exceptions(xMethod->getExceptions());
 
-    OUString name(xMethod->getMemberName());
     sal_uInt16 methodIndex = (sal_uInt16)(xMethod->getPosition()
                                           - calculatedMemberOffset);
     sal_uInt16 paramCount = (sal_uInt16)parameters.getLength();

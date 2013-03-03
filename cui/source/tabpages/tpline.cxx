@@ -1133,7 +1133,6 @@ sal_Bool SvxLineTabPage::FillXLSet_Impl()
 
 void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
 {
-    String      aString;
     XLineStyle  eXLS; // XLINE_NONE, XLINE_SOLID, XLINE_DASH
 
     // Line style

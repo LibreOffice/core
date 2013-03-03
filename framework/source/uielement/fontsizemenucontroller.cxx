@@ -104,7 +104,6 @@ rtl::OUString FontSizeMenuController::retrievePrinterName( com::sun::star::uno::
 void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     // check menu item
-    rtl::OUString   aHeight     = Application::GetSettings().GetUILocaleI18nHelper().GetNum( nHeight, 1, sal_True, sal_False  );
     sal_uInt16          nChecked    = 0;
     sal_uInt16          nItemCount  = rPopupMenu->getItemCount();
     for( sal_uInt16 i = 0; i < nItemCount; i++ )

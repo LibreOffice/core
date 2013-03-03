@@ -419,9 +419,6 @@ FmControlData::FmControlData(
     Reference< XPropertySet >  xSet(m_xFormComponent, UNO_QUERY);
     if( xSet.is() )
     {
-#ifdef DBG_UTIL
-        ::rtl::OUString aEntryName = ::comphelper::getString(xSet->getPropertyValue( FM_PROP_NAME ));
-#endif
         SetText( ::comphelper::getString(xSet->getPropertyValue( FM_PROP_NAME )));
     }
 }

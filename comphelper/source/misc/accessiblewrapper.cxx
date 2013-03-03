@@ -277,9 +277,10 @@ namespace comphelper
                     xContext = xOwningAccessible->getAccessibleContext();
                 if ( xContext.is() )
                 {
-                    ::rtl::OUString sName = xContext->getAccessibleName();
-                    ::rtl::OUString sDescription = xContext->getAccessibleDescription();
-//                  sal_Int32 nPlaceYourBreakpointHere = 0;
+                    //TODO: do something
+                    //::rtl::OUString sName = xContext->getAccessibleName();
+                    //::rtl::OUString sDescription = xContext->getAccessibleDescription();
+                    //sal_Int32 nPlaceYourBreakpointHere = 0;
                 }
             }
             catch( const Exception& /*e*/ )

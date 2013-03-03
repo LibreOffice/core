@@ -435,7 +435,6 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         }
         else if (pPredicateNode->count() == 3)
         {
-            ::rtl::OUString aTableName = pPredicateNode->getChild(0)->getTokenValue();
             if(SQL_ISRULE(pPredicateNode->getChild(2),column_val))
                 aColumnName = pPredicateNode->getChild(2)->getChild(0)->getTokenValue();
             else

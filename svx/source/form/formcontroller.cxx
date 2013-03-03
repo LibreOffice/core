@@ -840,8 +840,6 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                 Reference< XColumnsSupplier> xSupplyCols(m_xModelAsIndex, UNO_QUERY);
                 Reference< XNameAccess> xFields(xSupplyCols->getColumns(), UNO_QUERY);
 
-                ::rtl::OUString aQuote( xMetaData->getIdentifierQuoteString() );
-
                 // now add the filter rows
                 try
                 {

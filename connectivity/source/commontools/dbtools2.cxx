@@ -280,7 +280,6 @@ namespace
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
                     aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PRIMARY KEY ")));
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
@@ -291,7 +290,6 @@ namespace
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
                     aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" UNIQUE ")));
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }

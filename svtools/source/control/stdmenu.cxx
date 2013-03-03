@@ -232,7 +232,6 @@ void FontSizeMenu::SetCurHeight( long nHeight )
     mnCurHeight = nHeight;
 
     // check menu item
-    OUString aHeight = Application::GetSettings().GetUILocaleI18nHelper().GetNum( nHeight, 1, sal_True, sal_False  );
     sal_uInt16      nChecked = 0;
     sal_uInt16      nItemCount = GetItemCount();
     for( sal_uInt16 i = 0; i < nItemCount; i++ )

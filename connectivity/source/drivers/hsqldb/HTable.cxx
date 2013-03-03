@@ -318,7 +318,6 @@ void OHSQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 ::rtl::OUString OHSQLTable::getAlterTableColumnPart()
 {
     ::rtl::OUString sSql(  "ALTER TABLE " );
-    const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
     ::rtl::OUString sComposedName( ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions ) );
     sSql += sComposedName;
@@ -386,8 +385,6 @@ void SAL_CALL OHSQLTable::rename( const ::rtl::OUString& newName ) throw(SQLExce
             sSql += ::rtl::OUString(" VIEW ");
         else
             sSql += ::rtl::OUString(" TABLE ");
-
-        ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
         ::rtl::OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);

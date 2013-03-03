@@ -466,7 +466,6 @@ void printMethods(std::ostream & o,
                         reader.getSuperTypeName(i)));
             }
 
-            OString stype(codemaker::convertString(super.getTypeName()));
             printMethods(o, options, manager, super, generated, delegate,
                             classname, indentation, defaultvalue, propertyhelper);
         }

@@ -132,7 +132,6 @@ void HViews::createView( const Reference< XPropertySet >& descriptor )
     Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
 
     ::rtl::OUString aSql(  "CREATE VIEW " );
-    ::rtl::OUString aQuote  = xConnection->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString sCommand;
 
     aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );

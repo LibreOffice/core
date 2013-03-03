@@ -505,7 +505,6 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
         else
         {
             ::rtl::OUString sSql = getRenameStart();
-            ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
             ::rtl::OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(getMetaData(),newName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);

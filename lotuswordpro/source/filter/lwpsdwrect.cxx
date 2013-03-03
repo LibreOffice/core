@@ -178,8 +178,6 @@ Rectangle SdwRectangle::GetOriginalRect() const
 
         Point aLT(aCenter.X()-(long)((double)nWidth/2+0.5),
             aCenter.Y()-(long)((double)nHeight/2+0.5));
-        Point aRT(aLT.X()+nWidth, aLT.Y());
-        Point aLB(aLT.X(), aLT.Y()-nHeight);
         Point aRB(aLT.X()+nWidth, aLT.Y()+nHeight);
 
         return Rectangle(aLT, aRB);

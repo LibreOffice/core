@@ -1088,7 +1088,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
     else
         pSchemaPat = NULL;
 
-    ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
+    ::rtl::OString aPKQ,aPKO,aPKN;
 
     if ( catalog.hasValue() )
         aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
@@ -1132,7 +1132,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
     else
         pSchemaPat = NULL;
 
-    ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
+    ::rtl::OString aPKQ,aPKO,aPKN;
     if ( catalog.hasValue() )
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
@@ -1170,7 +1170,7 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
                                   const Any& catalog2, const ::rtl::OUString* schema2,
                                   const ::rtl::OUString* table2) throw(SQLException, RuntimeException)
 {
-    ::rtl::OString aPKQ,aPKO,aPKN, aFKQ, aFKO, aFKN;
+    ::rtl::OString aPKQ, aPKN, aFKQ, aFKO, aFKN;
     if ( catalog.hasValue() )
         aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     if ( catalog2.hasValue() )
@@ -1219,7 +1219,7 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl
     else
         pSchemaPat = NULL;
 
-    ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
+    ::rtl::OString aPKQ,aPKO,aPKN;
 
     if ( catalog.hasValue() )
         aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);

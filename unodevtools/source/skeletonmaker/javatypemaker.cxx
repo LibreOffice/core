@@ -404,16 +404,6 @@ void printMethods(std::ostream & o,
     }
     sal_uInt16 method = 0;
     for ( sal_uInt16 i = 0; i < reader.getFieldCount(); ++i ) {
-//         OString fieldName(
-//             codemaker::convertString(reader.getFieldName(i)).
-//             replace('/', '.'));
-//         OString fieldType(
-//             codemaker::convertString(reader.getFieldTypeName(i)).
-//             replace('/', '.'));
-//         attributes.insert(StringPairHashMap::value_type(fieldName,
-//                               std::pair<OString, sal_Int16>(
-//                                   fieldType, reader.getFieldFlags(i))));
-
         o << indentation << "public ";
         printType(o,
             options, manager,
@@ -421,9 +411,6 @@ void printMethods(std::ostream & o,
         o << " get"
           << codemaker::convertString(reader.getFieldName(i)).getStr()
           << "()";
-
-        OUString mn = reader.getMethodName(method);
-        OUString fn = reader.getFieldName(i);
 
         if ( method < reader.getMethodCount()
              && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_GET
@@ -459,7 +446,6 @@ void printMethods(std::ostream & o,
         }
 
         // REMOVE next line
-        OUString tmp = reader.getFieldName(i);
         if ( (reader.getFieldFlags(i) & RT_ACCESS_READONLY) == 0 ) {
             bool setAttrMethod = false;
             o << indentation << "public void set"

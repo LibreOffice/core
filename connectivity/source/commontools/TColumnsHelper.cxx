@@ -178,7 +178,6 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
 
     Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
     ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
-    ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
 
     aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
     aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD "));
