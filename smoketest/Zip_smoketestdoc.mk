@@ -59,7 +59,7 @@ $(WORKDIR)/Zip/smoketestdoc/mimetype :
 $(call gb_Zip_get_final_target,smoketestdoc) : $(OUTDIR)/bin/smoketestdoc.sxw
 $(call gb_Zip_get_clean_target,smoketestdoc) : Clean_smoketestdoc_sxw
 
-$(OUTDIR)/bin/smoketestdoc.sxw : $(call gb_Zip_get_target,smoketestdoc)
+$(OUTDIR)/bin/smoketestdoc.sxw : $(call gb_Zip_get_target,smoketestdoc) | $(OUTDIR)/bin/.dir
 	$(call gb_Deliver_deliver,$<,$@)
 
 .PHONY : Clean_smoketestdoc_sxw
