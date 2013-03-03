@@ -167,6 +167,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         aThesLookUpStr = pStrItem->GetValue();
         nDelimPos = aThesLookUpStr.SearchBackward( '#' );
     }
+    delete pItem;
     if (aThesLookUpStr.Len() > 0 && nDelimPos != STRING_NOTFOUND)
     {
         // get synonym list for sub menu
