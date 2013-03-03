@@ -35,8 +35,6 @@
 
 #include "test/testdllapi.hxx"
 
-using namespace com::sun::star;
-
 #include <vector>
 
 using namespace com::sun::star;

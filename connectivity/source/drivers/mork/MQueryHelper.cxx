@@ -40,7 +40,6 @@ using namespace connectivity::mork;
 using namespace connectivity;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-using namespace connectivity;
 
 
 extern

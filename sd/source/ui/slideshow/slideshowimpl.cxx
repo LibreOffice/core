@@ -92,7 +92,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::presentation;
-using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 
 extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName );

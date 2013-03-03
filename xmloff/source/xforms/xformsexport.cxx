@@ -82,7 +82,6 @@ using com::sun::star::beans::PropertyValue;
 using com::sun::star::xsd::XDataType;
 using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xforms::XFormsSupplier;
-using namespace com::sun::star;
 using com::sun::star::util::Duration;
 
 void exportXForms( SvXMLExport& rExport )

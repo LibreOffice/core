@@ -71,7 +71,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star;
 using namespace ::dbtools;
 using namespace ::comphelper;
 

@@ -72,7 +72,6 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::view;

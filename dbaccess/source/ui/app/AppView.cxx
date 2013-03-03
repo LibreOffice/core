@@ -53,7 +53,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;

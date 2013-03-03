@@ -22,7 +22,6 @@
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
-using namespace ::oox::core;
 using namespace ::oox::drawingml;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
