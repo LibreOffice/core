@@ -2166,60 +2166,42 @@ void SalDisplay::PrintInfo() const
 {
     if( IsDisplay() )
     {
-        fprintf( stderr, "\n" );
-        fprintf( stderr, "Environment\n" );
-        fprintf( stderr, "\t$DISPLAY          \t\"%s\"\n",
-                 GetEnv( "DISPLAY" ) );
-        fprintf( stderr, "\t$SAL_VISUAL       \t\"%s\"\n",
-                 GetEnv( "SAL_VISUAL" ) );
-        fprintf( stderr, "\t$SAL_IGNOREXERRORS\t\"%s\"\n",
-                 GetEnv( "SAL_IGNOREXERRORS" ) );
-        fprintf( stderr, "\t$SAL_PROPERTIES   \t\"%s\"\n",
-                 GetEnv( "SAL_PROPERTIES" ) );
-        fprintf( stderr, "\t$SAL_SYNCHRONIZE  \t\"%s\"\n",
-                 GetEnv( "SAL_SYNCHRONIZE" ) );
+        SAL_INFO( "vcl", "Environment" );
+        SAL_INFO( "vcl", "\t$DISPLAY          \t\"" << GetEnv( "DISPLAY" ) << "\"");
+        SAL_INFO( "vcl", "\t$SAL_VISUAL       \t\"" << GetEnv( "SAL_VISUAL" ) << "\"");
+        SAL_INFO( "vcl", "\t$SAL_IGNOREXERRORS\t\"" << GetEnv( "SAL_IGNOREXERRORS" ) << "\"");
+        SAL_INFO( "vcl", "\t$SAL_PROPERTIES   \t\"" << GetEnv( "SAL_PROPERTIES" ) << "\"");
+        SAL_INFO( "vcl", "\t$SAL_SYNCHRONIZE  \t\"" << GetEnv( "SAL_SYNCHRONIZE" ) << "\"");
 
         char sHostname[ 120 ];
         gethostname (sHostname, 120 );
-        fprintf( stderr, "Client\n" );
-        fprintf( stderr, "\tHost              \t\"%s\"\n",
-                 sHostname );
+        SAL_INFO( "vcl", "Client\n" );
+        SAL_INFO( "vcl", "\tHost              \t\"" << sHostname << "\"");
 
-        fprintf( stderr, "Display\n" );
-        fprintf( stderr, "\tHost              \t\"%s\"\n",
-                 DisplayString(pDisp_) );
-        fprintf( stderr, "\tVendor (Release)  \t\"%s (%d)\"\n",
-                 ServerVendor(pDisp_), VendorRelease(pDisp_) );
-        fprintf( stderr, "\tProtocol          \t%d.%d\n",
-                 ProtocolVersion(pDisp_), ProtocolRevision(pDisp_) );
-        fprintf( stderr, "\tScreen (count,def)\t%d (%d,%d)\n",
-                 m_nXDefaultScreen.getXScreen(),
-                 ScreenCount(pDisp_), DefaultScreen(pDisp_) );
-        fprintf( stderr, "\tshift ctrl alt    \t%s (0x%X) %s (0x%X) %s (0x%X)\n",
-                 KeyStr( nShiftKeySym_ ), sal::static_int_cast< unsigned int >(nShiftKeySym_),
-                 KeyStr( nCtrlKeySym_ ),  sal::static_int_cast< unsigned int >(nCtrlKeySym_),
-                 KeyStr( nMod1KeySym_ ),  sal::static_int_cast< unsigned int >(nMod1KeySym_) );
+        SAL_INFO( "vcl", "Display" );
+        SAL_INFO( "vcl", "\tHost              \t\"" << DisplayString(pDisp_) << "\"");
+        SAL_INFO( "vcl", "\tVendor (Release)  \t\"" << ServerVendor(pDisp_) << " (" << VendorRelease(pDisp_) << ")\"");
+        SAL_INFO( "vcl", "\tProtocol          \t" << ProtocolVersion(pDisp_) << "." << ProtocolRevision(pDisp_) );
+        SAL_INFO( "vcl", "\tScreen (count,def)\t" << m_nXDefaultScreen.getXScreen() << " (" << ScreenCount(pDisp_) << "," << DefaultScreen(pDisp_) << ")");
+        SAL_INFO( "vcl", "\tshift ctrl alt    \t" << KeyStr( nShiftKeySym_ ) << " (0x" << std::hex << sal::static_int_cast< unsigned int >(nShiftKeySym_) << ") "
+                << KeyStr( nCtrlKeySym_ ) << " (0x" << sal::static_int_cast< unsigned int >(nCtrlKeySym_) << ") "
+                << KeyStr( nMod1KeySym_ ) << " (0x" << sal::static_int_cast< unsigned int >(nMod1KeySym_) << ")");
         if( XExtendedMaxRequestSize(pDisp_) * 4 )
-            fprintf( stderr, "\tXMaxRequestSize   \t%ld %ld [bytes]\n",
-                     XMaxRequestSize(pDisp_) * 4, XExtendedMaxRequestSize(pDisp_) * 4 );
+            SAL_INFO( "vcl", "\tXMaxRequestSize   \t" << XMaxRequestSize(pDisp_) * 4 << " " << XExtendedMaxRequestSize(pDisp_) * 4 << " [bytes]");
         if( GetProperties() != PROPERTY_DEFAULT )
-            fprintf( stderr, "\tProperties        \t0x%lX\n", GetProperties() );
-        fprintf( stderr, "\tWMName            \t%s\n", rtl::OUStringToOString( getWMAdaptor()->getWindowManagerName(), osl_getThreadTextEncoding() ).getStr() );
+            SAL_INFO( "vcl", "\tProperties        \t0x" << std::hex << GetProperties() << "\n");
+        SAL_INFO( "vcl", "\tWMName            \t" << getWMAdaptor()->getWindowManagerName() );
     }
-    fprintf( stderr, "Screen\n" );
-    fprintf( stderr, "\tResolution/Size   \t%ld*%ld %ld*%ld %.1lf\"\n",
-             aResolution_.A(), aResolution_.B(),
-             m_aScreens[m_nXDefaultScreen.getXScreen()].m_aSize.Width(),
-             m_aScreens[m_nXDefaultScreen.getXScreen()].m_aSize.Height(),
-             Hypothenuse( DisplayWidthMM ( pDisp_, m_nXDefaultScreen.getXScreen() ),
-                          DisplayHeightMM( pDisp_, m_nXDefaultScreen.getXScreen() ) ) / 25.4 );
-    fprintf( stderr, "\tBlack&White       \t%lu %lu\n",
-             GetColormap(m_nXDefaultScreen).GetBlackPixel(),
-             GetColormap(m_nXDefaultScreen).GetWhitePixel() );
-    fprintf( stderr, "\tRGB               \t0x%lx 0x%lx 0x%lx\n",
-             GetVisual(m_nXDefaultScreen).red_mask,
-             GetVisual(m_nXDefaultScreen).green_mask,
-             GetVisual(m_nXDefaultScreen).blue_mask );
+    SAL_INFO( "vcl", "Screen" );
+    SAL_INFO( "vcl", "\tResolution/Size   \t" << aResolution_.A() << "*" << aResolution_.B()
+            << " " << m_aScreens[m_nXDefaultScreen.getXScreen()].m_aSize.Width() << "*" << m_aScreens[m_nXDefaultScreen.getXScreen()].m_aSize.Height()
+            << " " << (Hypothenuse( DisplayWidthMM ( pDisp_, m_nXDefaultScreen.getXScreen() ),
+                          DisplayHeightMM( pDisp_, m_nXDefaultScreen.getXScreen() ) ) / 25.4 ) << "\"" );
+    SAL_INFO( "vcl", "\tBlack&White       \t" << GetColormap(m_nXDefaultScreen).GetBlackPixel() << " "
+            << GetColormap(m_nXDefaultScreen).GetWhitePixel() );
+    SAL_INFO( "vcl", "\tRGB               \t0x" << std::hex << GetVisual(m_nXDefaultScreen).red_mask
+            << " 0x" << GetVisual(m_nXDefaultScreen).green_mask
+            << " 0x" << GetVisual(m_nXDefaultScreen).blue_mask);
 }
 
 void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight )
