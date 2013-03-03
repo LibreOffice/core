@@ -166,7 +166,8 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
     jobject tempObj;
     static jmethodID mID(NULL);
     if ( !mID  )
-        mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );
+    OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
 
     saveRef( t.pEnv, tempObj );
