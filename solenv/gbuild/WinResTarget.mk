@@ -13,13 +13,13 @@ endef
 
 define gb_WinResTarget_WinResTarget_init
 $(call gb_WinResTarget_get_target,$(1)) : DEFS := $(gb_WinResTarget_DEFAULTDEFS)
-$(call gb_WinResTarget_get_target,$(1)) : INCLUDE := $(SOLARINC)
+$(call gb_WinResTarget_get_target,$(1)) : INCLUDE := $(SOLARINC) -I$(SRCDIR)/config_$(gb_Side)
 $(call gb_WinResTarget_get_clean_target,$(1)) : RCFILE :=
 $(call gb_WinResTarget_get_target,$(1)) : RCFILE :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_WinResTarget_get_dep_target,$(1)) : DEFS := $$(gb_WinResTarget_DEFAULTDEFS)
-$(call gb_WinResTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_WinResTarget_INCLUDE)
+$(call gb_WinResTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_WinResTarget_INCLUDE) -I$(SRCDIR)/config_$(gb_Side)
 $(call gb_WinResTarget_get_dep_target,$(1)) : RCFILE :=
 
 -include $(call gb_WinResTarget_get_dep_target,$(1))
