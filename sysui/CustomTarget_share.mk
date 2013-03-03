@@ -102,14 +102,14 @@ ULFS := documents.ulf \
 	launcher_name.ulf
 
 
-PRODUCTLIST := libreoffice lodev oxygenoffice
+PRODUCTLIST := libreoffice libreofficedev oxygenoffice
 PKGVERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)
 PKGVERSIONSHORT := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)
 PRODUCTNAME.libreoffice := LibreOffice
-PRODUCTNAME.lodev := LibreOfficeDev
+PRODUCTNAME.libreofficeodev := LibreOfficeDev
 PRODUCTNAME.oxygenoffice := OxygenOffice
 UNIXFILENAME.libreoffice := $(PRODUCTNAME.libreoffice)$(PRODUCTVERSION)
-UNIXFILENAME.lodev := $(PRODUCTNAME.lodev)$(PRODUCTVERSION)
+UNIXFILENAME.libreofficedev := $(PRODUCTNAME.libreofficedev)$(PRODUCTVERSION)
 UNIXFILENAME.oxygenoffice := $(PRODUCTNAME.oxygenoffice)$(PRODUCTVERSION)
 
 $(eval $(call gb_CustomTarget_CustomTarget,sysui/share))

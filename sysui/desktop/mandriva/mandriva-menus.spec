@@ -334,7 +334,7 @@ fi
 
 
 %files
-%if "%unixfilename" != "libreoffice%productversion" && "%unixfilename" != "lodev%productversion"
+%if "%unixfilename" != "libreoffice%productversion" && "%unixfilename" != "libreofficedev%productversion"
 # compat symlinks
 %attr(0755,root,root) /opt/%unixfilename
 %attr(0755,root,root) /usr/bin/libreoffice%productversion
