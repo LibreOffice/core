@@ -26,7 +26,13 @@
  *
  *************************************************************************/
 
-#include "versionlist.hrc"
+#include <config_version.h>
+
+#define VERSION LIBO_VERSION_MAJOR
+#define SUBVERSION LIBO_VERSION_MINOR
+#define MICROVERSION LIBO_VERSION_MICRO
+#define VER_YEARRANGE 2000-LIBO_THIS_YEAR
+
 #include <winver.h>
 
 #ifndef PPSX

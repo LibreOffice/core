@@ -27,11 +27,6 @@
 
 $(eval $(call gb_Module_Module,solenv))
 
-$(eval $(call gb_Module_add_targets,solenv,\
-	CustomTarget_versionlist \
-	Package_inc \
-))
-
 ifeq ($(CROSS_COMPILING),$(false))
 $(eval $(call gb_Module_add_targets,solenv,\
 	Executable_concat-deps \
