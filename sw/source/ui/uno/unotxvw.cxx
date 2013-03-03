@@ -87,10 +87,6 @@ using comphelper::HelperBaseNoState;
 
 using ::rtl::OUString;
 
-
-/******************************************************************
- * SwXTextView
- ******************************************************************/
 SwXTextView::SwXTextView(SwView* pSwView) :
     SfxBaseController(pSwView),
     m_SelChangedListeners(m_aMutex),
@@ -335,7 +331,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
     {
         //force immediat shell update
         m_pView->StopShellTimer();
-        // ein interface aus der aktuellen Selektion erzeugen
+        //Generating an interface from the current selection.
         SwWrtShell& rSh = m_pView->GetWrtShell();
         ShellModes  eSelMode = m_pView->GetShellMode();
         switch(eSelMode)
@@ -344,7 +340,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
             {
                 if(rSh.GetTableCrsr())
                 {
-                    OSL_ENSURE(rSh.GetTableFmt(), "kein Tabellenformat?");
+                    OSL_ENSURE(rSh.GetTableFmt(), "not a table format?");
                     uno::Reference< text::XTextTableCursor >  xCrsr = new SwXTextTableCursor(*rSh.GetTableFmt(),
                                                     rSh.GetTableCrsr());
                     aRef = uno::Reference< uno::XInterface >  (xCrsr, uno::UNO_QUERY);
@@ -352,7 +348,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                 }
 
             }
-            // ohne Tabellenselektion wird der Text geliefert
+            //Without a table selection the text will be delivered.
             //break;
             case SHELL_MODE_LIST_TEXT       :
             case SHELL_MODE_TABLE_LIST_TEXT:
@@ -366,12 +362,12 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
             case SHELL_MODE_GRAPHIC         :
             case SHELL_MODE_OBJECT          :
             {
-                //Get FlyFrameFormat; fuer UI Macro Anbindung an Flys
+                //Get FlyFrameFormat; for UI-Macro connection to flys
                 const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt();
                 if (pFmt)
                 {
                     SwXFrame* pxFrame = SwIterator<SwXFrame,SwFmt>::FirstElement(*pFmt);
-                    if(pxFrame)                //das einzige gemeinsame interface fuer alle Frames
+                    if(pxFrame)                //The only common interface for all frames.
                     {
                         aRef = uno::Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
                     }
@@ -668,7 +664,7 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     rOldSh.FillPrtDoc(pTempDoc,  pPrt);
     SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
-    pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//Damit SelectShell gerufen wird.
+    pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//So that SelectShell is called.
     SwWrtShell* pSh = pDocView->GetWrtShellPtr();
 
     IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
@@ -872,9 +868,6 @@ Sequence< OUString > SwXTextView::getSupportedServiceNames(void) throw( RuntimeE
     return aRet;
 }
 
-/******************************************************************
- * SwXTextViewCursor
- ******************************************************************/
 SwXTextViewCursor::SwXTextViewCursor(SwView* pVw) :
     m_pView(pVw),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
@@ -1130,7 +1123,7 @@ void SwXTextViewCursor::gotoRange(
         }
         const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
 
-        //SectionNodes ueberspringen
+        //Skip SectionNodes
         while(pTmp && pTmp->IsSectionNode())
         {
             pTmp = pTmp->StartOfSectionNode();
@@ -1139,8 +1132,8 @@ void SwXTextViewCursor::gotoRange(
         {
             pOwnStartNode = pOwnStartNode->StartOfSectionNode();
         }
-        //ohne Expand darf mit dem ViewCursor ueberall hingesprungen werden
-        //mit Expand nur in der gleichen Umgebung
+        //Without Expand it is allowed to jump out with the ViewCursor everywhere,
+        //with Expand only in the same environment
         if(bExpand &&
             (pOwnStartNode != pTmp ||
             (eSelMode != SHELL_MODE_TABLE_TEXT &&
@@ -1149,16 +1142,16 @@ void SwXTextViewCursor::gotoRange(
                 eSelMode != SHELL_MODE_TEXT)))
             throw uno::RuntimeException();
 
-        //jetzt muss die Selektion erweitert werden
+        //Now, the selection must be expanded.
         if(bExpand)
         {
-            // der Cursor soll alles einschliessen, was bisher von ihm und dem uebergebenen
-            // Range eingeschlossen wurde
+            // The cursor should include everything that has been included
+            // by him and the transfered Range.
             SwPosition aOwnLeft(*aOwnPaM.Start());
             SwPosition aOwnRight(*aOwnPaM.End());
             SwPosition* pParamLeft = rDestPam.Start();
             SwPosition* pParamRight = rDestPam.End();
-            // jetzt sind vier SwPositions da, zwei davon werden gebraucht, also welche?
+            // Now four SwPositions are there, two of them are needed, but which?
             if(aOwnRight > *pParamRight)
                 *aOwnPaM.GetPoint() = aOwnRight;
             else
@@ -1171,7 +1164,7 @@ void SwXTextViewCursor::gotoRange(
         }
         else
         {
-            //der Cursor soll dem uebergebenen Range entsprechen
+            //The cursor shall match the passed range.
             *aOwnPaM.GetPoint() = *rDestPam.GetPoint();
             if(rDestPam.HasMark())
             {
