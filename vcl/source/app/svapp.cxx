@@ -237,7 +237,7 @@ sal_Bool Application::QueryExit()
 {
     WorkWindow* pAppWin = ImplGetSVData()->maWinData.mpAppWin;
 
-    // Aufruf des Close-Handlers des Applikationsfensters
+    // call the close handler of the application window
     if ( pAppWin )
         return pAppWin->Close();
     else
@@ -1082,7 +1082,7 @@ sal_Bool Application::InsertIdleHdl( const Link& rLink, sal_uInt16 nPrio )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // create if not existing
+    // create if does not exist
     if ( !pSVData->maAppData.mpIdleMgr )
         pSVData->maAppData.mpIdleMgr = new ImplIdleMgr;
 
@@ -1219,7 +1219,7 @@ void Application::SetAppName( const XubString& rUniqueName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // create if not existing
+    // create if does not exist
     if ( !pSVData->maAppData.mpAppName )
         pSVData->maAppData.mpAppName = new XubString( rUniqueName );
     else
@@ -1243,7 +1243,7 @@ void Application::SetDisplayName( const OUString& rName )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // create if not existing
+    // create if does not exist
     if ( !pSVData->maAppData.mpDisplayName )
         pSVData->maAppData.mpDisplayName = new OUString( rName );
     else
