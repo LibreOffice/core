@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,rptui,\
     i18nisolang1 \
     rpt \
     sal \
+    salhelper \
     sfx \
     sot \
     svl \

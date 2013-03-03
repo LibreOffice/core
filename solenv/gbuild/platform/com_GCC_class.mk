@@ -44,6 +44,7 @@ $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
 	$(gb_CC) \
+		$(gb_LTOFLAGS) \
 		$(gb_AFLAGS) \
 		-c $(3) \
 		-o $(1)) \
@@ -61,7 +62,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS_SETUP)) \
 	$(gb_CC) \
 		$(DEFS) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
+		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS)) \
@@ -101,7 +102,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS_SETUP)) \
 	$(gb_CXX) \
 		$(DEFS) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
+		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS)) \

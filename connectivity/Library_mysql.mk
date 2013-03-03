@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,mysql,\
 	cppu \
 	cppuhelper \
 	sal \
+	salhelper \
 	dbtools \
 	comphelper \
 	$(gb_UWINAPI) \

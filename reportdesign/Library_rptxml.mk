@@ -45,7 +45,8 @@ $(eval $(call gb_Library_use_libraries,rptxml,\
     editeng \
     rpt \
     sal \
-	sax \
+    salhelper \
+    sax \
     sfx \
     sot \
     svl \

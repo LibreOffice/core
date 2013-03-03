@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,rpt,\
     fwe \
     i18nisolang1 \
     sal \
+    salhelper \
     sfx \
     svl \
     svt \

@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,hsqldb,\
 	dbtools \
 	jvmfwk \
 	sal \
+	salhelper \
 	tl \
 	utl \
 	i18nisolang1 \

@@ -30,6 +30,7 @@ $(eval $(call gb_Executable_use_external,g2g,boost_headers))
 $(eval $(call gb_Executable_use_sdk_api,g2g))
 
 $(eval $(call gb_Executable_use_libraries,g2g,\
+    cppuhelper \
     jvmfwk \
     sal \
     svt \

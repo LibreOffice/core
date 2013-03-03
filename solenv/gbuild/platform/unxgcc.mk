@@ -104,12 +104,11 @@ gb_CXXFLAGS += -Wno-deprecated-declarations
 endif
 endif
 
-# Breaks the build, needs more testing
-#ifeq ($(ENABLE_LTO),TRUE)
-#ifneq ($(COM_GCC_IS_CLANG),TRUE)
-#gb_LinkTarget_LTOFLAGS += -fuse-linker-plugin $(gb_COMPILERDEFAULTOPTFLAGS)
-#endif
-#endif
+ifeq ($(ENABLE_LTO),TRUE)
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
+gb_LTOFLAGS += -fuse-linker-plugin $(gb_COMPILERDEFAULTOPTFLAGS)
+endif
+endif
 
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
@@ -186,7 +185,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
+		$(gb_LTOFLAGS) \
 		$(if $(SOVERSION),-Wl$(COMMA)--soname=$(notdir $(1)).$(SOVERSION)) \
 		$(if $(SOVERSIONSCRIPT),-Wl$(COMMA)--version-script=$(SOVERSIONSCRIPT))\
 		$(subst \d,$$,$(RPATH)) \

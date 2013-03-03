@@ -49,6 +49,7 @@ $(eval $(call gb_Library_use_libraries,sdbt,\
     cppuhelper \
     dbtools \
     sal \
+    salhelper \
     tl \
     utl \
 	$(gb_UWINAPI) \

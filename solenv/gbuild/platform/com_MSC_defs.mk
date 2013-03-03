@@ -280,7 +280,7 @@ define gb_create_deps
 endef
 endif
 
-gb_COMPILER_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
+gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
 
 # Helper class
 

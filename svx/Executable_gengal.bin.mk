@@ -38,12 +38,15 @@ $(eval $(call gb_Executable_set_include,$(svx_GENGALBIN),\
 $(eval $(call gb_Executable_use_external,$(svx_GENGALBIN),boost_headers))
 
 $(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
+    basegfx \
     sal \
     tl \
     svl \
+    svt \
     comphelper \
     cppu \
     cppuhelper \
+    utl \
     vcl \
     svxcore \
 	$(gb_UWINAPI) \
