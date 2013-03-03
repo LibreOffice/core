@@ -134,7 +134,6 @@ void PrintDialog::PrintPreviewWindow::Resize()
     // full page size but not too small either. This also results in much better visual
     // quality of the preview, e.g. when its height approaches the number of text lines
     // find a good scaling factor
-    Size aPreviewMMSize( maPageVDev.PixelToLogic( aScaledSize, MapMode( MAP_100TH_MM ) ) );
 
     double aAspectRatio = aScaledSize.Height() / (double) aScaledSize.Width();
 
