@@ -733,7 +733,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     SwDocPositions eStart = pSearch->bBack ? DOCPOS_END : DOCPOS_START;
     SwDocPositions eEnd = pSearch->bBack ? DOCPOS_START : DOCPOS_END;
 
-    // Suche soll ueberall stattfinden
+    // Search should take place anywhere
     pUnoCrsr->SetRemainInSection(sal_False);
     sal_uInt32 nResult;
     UnoActionContext aContext(pDocShell->GetDoc());
@@ -793,9 +793,8 @@ Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor(vo
 
 }
 
-/* --------------------------------------------------
- * wird fuer findAll/First/Next verwendet
- * --------------------------------------------------*/
+// Used for findAll/First/Next
+
 SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
                                         Reference< XTextCursor > & xCrsr, sal_Bool bAll,
                                                 sal_Int32& nResult,
@@ -853,18 +852,18 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
     util::SearchOptions aSearchOpt;
     pSearch->FillSearchOptions( aSearchOpt );
 
-/*
- * folgende Kombinationen sind erlaubt:
- *  - suche einen im Body:                  -> FND_IN_BODY
- *  - suche alle im Body:                   -> FND_IN_BODYONLY | FND_IN_SELALL
- *  - suche in Selectionen: einen / alle    -> FND_IN_SEL  [ | FND_IN_SELALL ]
- *  - suche im nicht Body: einen / alle     -> FND_IN_OTHER [ | FND_IN_SELALL ]
- *  - suche ueberall alle:                  -> FND_IN_SELALL
+/**
+ * The following combinations are allowed:
+ *  - Search in the body:                   -> FND_IN_BODY
+ *  - Search all in the body:               -> FND_IN_BODYONLY | FND_IN_SELALL
+ *  - Search in selections: one / all       -> FND_IN_SEL  [ | FND_IN_SELALL ]
+ *  - Search outside the body: one / all    -> FND_IN_OTHER [ | FND_IN_SELALL ]
+ *  - Search everywhere all:                -> FND_IN_SELALL
  */
     int eRanges(FND_IN_BODY);
     if(bParentInExtra)
         eRanges = FND_IN_OTHER;
-    if(bAll) //immer - ueberall?
+    if(bAll) //always - everywhere?
         eRanges = FND_IN_SELALL;
     SwDocPositions eStart = !bAll ? DOCPOS_CURR : pSearch->bBack ? DOCPOS_END : DOCPOS_START;
     SwDocPositions eEnd = pSearch->bBack ? DOCPOS_START : DOCPOS_END;
@@ -1070,7 +1069,8 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
     if(IsValid())
     {
         SwPagePreViewPrtData aData;
-        //falls nur einige Properties kommen, dann die akt. Einstellungen benutzen
+        //if only a few properties are coming, then use the current settings
+falls nur einige Properties kommen, dann die akt. Einstellungen benutzen
         const SwPagePreViewPrtData* pData = pDocShell->GetDoc()->GetPreViewPrtData();
         if(pData)
             aData = *pData;
@@ -1213,7 +1213,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
         // #i117783#
         bApplyPagePrintSettingsFromXPagePrintable = sal_True;
         pFrame->GetViewShell()->ExecuteSlot(aReq);
-        // Frame schliessen
+        // Frame close
         pFrame->DoClose();
 
     }
@@ -1428,7 +1428,7 @@ void SwXTextDocument::Reactivate(SwDocShell* pNewDocShell)
 
 void    SwXTextDocument::InitNewDoc()
 {
-    // zunaechst alle Collections invalidieren, dann Referenzen loeschen und Null setzen
+    // first invalidate all collections, then delete references and Set to zero
     if(pxXTextTables)
     {
          XNameAccess* pTbls = pxXTextTables->get();
@@ -1717,7 +1717,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 {
                     aTmpServiceName = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape"));
                 }
-                //hier den Draw - Service suchen
+                //here search for the draw service
                 Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(aTmpServiceName);
                 if(bShape)
                 {
@@ -1744,8 +1744,8 @@ Reference< XInterface >  SwXTextDocument::createInstanceWithArguments(
         throw( Exception, RuntimeException )
 {
     Reference< XInterface >  xInt = createInstance(ServiceSpecifier);
-    //die Any-Sequence dient zur Initialisierung von Objekten, die auf
-    //Parameter zwingend angewiesen sind - bis jetzt haben wir das nicht
+    // The Any-Sequence is for initializing objects that are dependent
+    // on parameters necessarily - so far we have not.
     return xInt;
 }
 
@@ -3137,9 +3137,9 @@ void SAL_CALL SwXTextDocument::operator delete( void * p) throw()
     SwXTextDocumentBaseClass::operator delete(p);
 }
 
-/*---------------------------------------------------
-retrieve languages already used in current document
------------------------------------------------------*/
+/**
+ * retrieve languages already used in current document
+ */
 uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         ::sal_Int16 nScriptTypes,
         ::sal_Int16 nMaxCount )
