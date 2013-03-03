@@ -1554,6 +1554,10 @@ LocaleData::getAllInstalledLocaleNames() throw(RuntimeException)
             }
             seq[nInstalled++] = tmpLocale;
         }
+        else
+        {
+            delete pCachedItem;
+        }
     }
     if ( nInstalled < nbOfLocales )
         seq.realloc( nInstalled );          // reflect reality
