@@ -693,12 +693,6 @@ geometry::RealPoint2D PresenterVerticalScrollBar::GetPoint (
     return geometry::RealPoint2D(nMinor, nMajor);
 }
 
-double PresenterVerticalScrollBar::GetMajor (const double nX, const double nY) const
-{
-    (void)nX;
-    return nY;
-}
-
 double PresenterVerticalScrollBar::GetMinor (const double nX, const double nY) const
 {
     (void)nY;

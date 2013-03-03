@@ -200,9 +200,6 @@ SwRead GetReader( const String& rFltName )
 
 } // namespace SwReaderWriter
 
-void Writer::SetPasswd( const String& ) {}
-
-
 void Writer::SetVersion( const String&, long ) {}
 
 

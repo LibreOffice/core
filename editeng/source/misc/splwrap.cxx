@@ -306,15 +306,6 @@ void SvxSpellWrapper::ChangeWord( const String&, const sal_uInt16 )
 // -----------------------------------------------------------------------
 
 
-String SvxSpellWrapper::GetThesWord()
-{
-    // What word should be looked up?
-    return String();
-}
-
-// -----------------------------------------------------------------------
-
-
 void SvxSpellWrapper::ChangeThesWord( const String& )
 {
     // replace word due to Thesaurus.

@@ -47,7 +47,6 @@ Endl( ostream & io_rStream )
         io_rStream << std::endl;
 //    else
 #endif
-//        static_cast< redirect_out& >(io_rStream).re_endl();
 }
 
 void
@@ -58,7 +57,6 @@ Flush( ostream & io_rStream )
         io_rStream << std::flush;
 //    else
 #endif
-//        static_cast< redirect_out& >(io_rStream).re_flush();
 }
 
 void

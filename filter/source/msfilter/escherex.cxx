@@ -4499,25 +4499,6 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
     mpOutStrm->Seek( nCurPos );
 }
 
-sal_Bool EscherEx::SeekBehindRecHeader( sal_uInt16 nRecType )
-{
-    sal_uInt32  nOldPos, nStreamEnd, nType, nSize;
-
-    nOldPos = mpOutStrm->Tell();
-    nStreamEnd = mpOutStrm->Seek( STREAM_SEEK_TO_END );
-    mpOutStrm->Seek( nOldPos );
-    while ( mpOutStrm->Tell() < nStreamEnd )
-    {
-        *mpOutStrm >> nType >> nSize;
-        if ( ( nType >> 16 ) == nRecType )
-            return sal_True;
-        if ( ( nType & 0xf ) != 0xf )
-            mpOutStrm->SeekRel( nSize );
-    }
-    mpOutStrm->Seek( nOldPos );
-    return sal_False;
-}
-
 void EscherEx::InsertPersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset )
 {
     PtInsert( ESCHER_Persist_PrivateEntry | nKey, nOffset );

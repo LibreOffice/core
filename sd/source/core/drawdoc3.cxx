@@ -1108,18 +1108,6 @@ void SdDrawDocument::CloseBookmarkDoc()
     maBookmarkFile = String();
 }
 
-// Load document (for linked objects)
-const SdrModel* SdDrawDocument::LoadModel(const String& rFileName)
-{
-    return ( OpenBookmarkDoc(rFileName) );
-}
-
-// Close document (for linked objects)
-void SdDrawDocument::DisposeLoadedModels()
-{
-    CloseBookmarkDoc();
-}
-
 // Is this document read-only?
 bool SdDrawDocument::IsReadOnly() const
 {

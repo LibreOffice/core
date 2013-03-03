@@ -560,8 +560,6 @@ protected:
     // This can be used to hide Elements which are painted from outside into the Control
     virtual void    NotifyInvalidating();
 
-    virtual sal_uLong   GetAscInsertionPos( SvTreeListEntry*, SvTreeListEntry* pParent );
-    virtual sal_uLong   GetDescInsertionPos( SvTreeListEntry*, SvTreeListEntry* pParent );
     virtual void    Command( const CommandEvent& rCEvt );
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
@@ -727,8 +725,6 @@ public:
     virtual void    Invalidate( const Rectangle&, sal_uInt16 nFlags = 0 );
 
     void            SetHighlightRange(sal_uInt16 nFirstTab=0,sal_uInt16 nLastTab=0xffff);
-
-    virtual Region  GetDragRegion() const;
 
     // A Parent's Children are turned into Children of the Parent which comes next in hierarchy
     void            RemoveParentKeepChildren( SvTreeListEntry* pParent );

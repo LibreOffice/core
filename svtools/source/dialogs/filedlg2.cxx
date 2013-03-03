@@ -616,10 +616,6 @@ void ImpPathDialog::PreExecute()
     }
 }
 
-void ImpPathDialog::PostExecute()
-{
-}
-
 void ImpPathDialog::SetPath( OUString const & rPath )
 {
     aPath = DirEntry( rPath );

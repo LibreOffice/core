@@ -273,11 +273,6 @@ const ScDPItemData* ScDPTableData::GetMemberById( long nDim, long nId)
     return GetCacheTable().getCache()->GetItemDataById(nDim, static_cast<SCROW>(nId));
 }
 
-SCROW   ScDPTableData::GetIdOfItemData( long  nDim, const ScDPItemData& rData )
-{
-        return GetCacheTable().getCache()->GetIdByItemData((SCCOL) nDim, rData );
- }
-
 const std::vector< SCROW >& ScDPTableData::GetColumnEntries( long nColumn )
 {
     return GetCacheTable().getFieldEntries( nColumn );

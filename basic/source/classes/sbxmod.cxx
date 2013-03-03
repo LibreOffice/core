@@ -982,20 +982,6 @@ void SbModule::SetSource32( const OUString& r )
     EndDefinitions( sal_True );
 }
 
-SbMethod* SbModule::GetFunctionForLine( sal_uInt16 nLine )
-{
-    for( sal_uInt16 i = 0; i < pMethods->Count(); i++ )
-    {
-        SbMethod* p = (SbMethod*) pMethods->Get( i );
-        if( p->GetSbxId() == SBXID_BASICMETHOD )
-        {
-            if( nLine >= p->nLine1 && nLine <= p->nLine2 )
-                return p;
-        }
-    }
-    return NULL;
-}
-
 // Broadcast of a hint to all Basics
 
 static void _SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
@@ -1587,19 +1573,6 @@ sal_Bool SbModule::IsBreakable( sal_uInt16 nLine ) const
         if( nl == nLine )
             return sal_True;
     return sal_False;
-}
-
-size_t SbModule::GetBPCount() const
-{
-    return pBreaks ? pBreaks->size() : 0;
-}
-
-sal_uInt16 SbModule::GetBP( size_t n ) const
-{
-    if( pBreaks && n < pBreaks->size() )
-        return pBreaks->operator[]( n );
-    else
-        return 0;
 }
 
 sal_Bool SbModule::IsBP( sal_uInt16 nLine ) const

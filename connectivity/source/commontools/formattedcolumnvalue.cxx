@@ -262,12 +262,6 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    bool FormattedColumnValue::isNumericField() const
-    {
-        return m_pData->m_bNumericField;
-    }
-
-    //--------------------------------------------------------------------
     const Reference< XColumn >& FormattedColumnValue::getColumn() const
     {
         return m_pData->m_xColumn;

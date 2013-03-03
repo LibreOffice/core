@@ -49,16 +49,13 @@ class StdFrame : public display::CorporateFrame
                         CssStylesExplanation() const;
     virtual const char *
                         DevelopersGuideHtmlRoot() const;
-    virtual bool        SimpleLinks() const;
 
     // ACCESS
     virtual void        Set_DevelopersGuideHtmlRoot(
                             const String &      i_directory );
-    virtual void        Set_SimpleLinks();
 
   private:
     String              sDevelopersGuideHtmlRoot;
-    bool                bSimpleLinks;
 };
 
 

@@ -144,11 +144,6 @@ protected:
                                        Sequence< sal_Int16 >& OutParamIndex,
                                        Sequence< Any >& OutParam);
 
-//    virtual void setValueWithDispId(DISPID dispID, const Any& Value);
-
-//    virtual Any getValueWithDispId(const OUString& sName, DISPID dispID);
-
-
     // UnoConversionUtilities -------------------------------------------------------------------------------
     virtual Reference<XInterface> createUnoWrapperInstance();
     virtual Reference<XInterface> createComWrapperInstance();

@@ -161,9 +161,6 @@ public:
 
     virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
 
-    virtual void                ActivateExtHelp();
-    virtual void                DeactivateExtHelp();
-
     virtual void                FocusChanged();
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 

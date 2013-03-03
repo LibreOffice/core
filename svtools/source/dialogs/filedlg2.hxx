@@ -103,7 +103,6 @@ public:
     virtual OUString    GetPath() const;
 
     virtual void        PreExecute();
-    virtual void        PostExecute();
 
     PathDialog*     GetPathDialog() const   { return pSvPathDialog; }
 

@@ -680,30 +680,6 @@ sal_Bool EdtAutoCorrDoc::SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
     return sal_True;
 }
 
-sal_Bool EdtAutoCorrDoc::HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd )
-{
-    sal_uInt16 nScriptType = mpEditEngine->GetScriptType( EditPaM( pCurNode, nStt ) );
-    sal_uInt16 nScriptFontInfoItemId = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
-
-    const CharAttribList::AttribsType& rAttribs = pCurNode->GetCharAttribs().GetAttribs();
-    CharAttribList::AttribsType::const_iterator it = rAttribs.begin(), itEnd = rAttribs.end();
-    for (; it != itEnd; ++it)
-    {
-        const EditCharAttrib& rAttr = *it;
-        if (rAttr.GetStart() >= nEnd)
-            return false;
-
-        if (rAttr.Which() == nScriptFontInfoItemId &&
-            static_cast<const SvxFontItem*>(rAttr.GetItem())->GetCharSet() == RTL_TEXTENCODING_SYMBOL)
-        {
-            // check if the Attribtuteis within range...
-            if (rAttr.GetEnd() >= nStt)
-                return true;
-        }
-    }
-    return false;
-}
-
 const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
 {
     // Return previous paragraph, so that it can be determined,

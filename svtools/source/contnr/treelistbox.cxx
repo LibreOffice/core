@@ -3571,32 +3571,6 @@ void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
     pImp->RecalcFocusRect();
 }
 
-sal_uLong SvTreeListBox::GetAscInsertionPos(SvTreeListEntry*,SvTreeListEntry*)
-{
-    return LIST_APPEND;
-}
-
-sal_uLong SvTreeListBox::GetDescInsertionPos(SvTreeListEntry*,SvTreeListEntry*)
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    return LIST_APPEND;
-}
-
-Region SvTreeListBox::GetDragRegion() const
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    Rectangle aRect;
-    SvTreeListEntry* pEntry = GetCurEntry();
-    if( pEntry )
-    {
-        Point aPos = GetEntryPosition( pEntry );
-        aRect = ((SvTreeListBox*)this)->GetFocusRect( pEntry, aPos.Y() );
-    }
-    Region aRegion( aRect );
-    return aRegion;
-}
-
-
 void SvTreeListBox::Command( const CommandEvent& rCEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);

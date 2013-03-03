@@ -119,7 +119,6 @@ public:
 
     ScDocument*     GetDocument() const { return pDoc; }
 
-    void            UpdateBasic();              // set DocShell Basic in DrawPages
     void            UseHyphenator();
 
     sal_Bool            GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool bSetVer ) const;

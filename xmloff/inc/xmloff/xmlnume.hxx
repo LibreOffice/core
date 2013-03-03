@@ -75,8 +75,6 @@ protected:
 
     SvXMLExport& GetExport() { return rExport; }
 
-     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >  GetUNONumRule() const;
-
 public:
 
     SvxXMLNumRuleExport( SvXMLExport& rExport );

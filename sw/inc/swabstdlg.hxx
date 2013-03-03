@@ -119,14 +119,6 @@ public:
     virtual void    SetText( const OUString& rStr ) = 0;
 };
 
-class AbstractInsertGrfRulerDlg : public VclAbstractDialog  //add for SwInsertGrfRulerDlg
-{
-public:
-    virtual String          GetGraphicName() = 0;
-    virtual sal_Bool            IsSimpleLine() = 0;
-    virtual sal_Bool            HasImages() const  = 0;
-};
-
 class AbstractInsTableDlg : public VclAbstractDialog  //add for SwInsTableDlg
 {
 public:

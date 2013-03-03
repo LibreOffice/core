@@ -1623,8 +1623,6 @@ public:
     SvStream&       GetStream() const   { return *mpOutStrm; }
     sal_uLong       GetStreamPos() const    { return mpOutStrm->Tell(); }
 
-    virtual sal_Bool SeekBehindRecHeader( sal_uInt16 nRecType );                // the stream has to be in front of a valid Record Headeror Atom
-
                 // features during the creation of the following Containers:
                 //
                 //      ESCHER_DggContainer:    a EscherDgg Atom is automatically being created and managed

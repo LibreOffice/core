@@ -105,8 +105,6 @@ void ScDocShell::InitItems()
             //  andere Anpassungen nach dem Anlegen des DrawLayers
 
         pDrawLayer->SetNotifyUndoActionHdl( LINK( pDocFunc, ScDocFunc, NotifyDrawUndo ) );
-
-        pDrawLayer->UpdateBasic();          // DocShell-Basic in DrawPages setzen
     }
     else
     {
