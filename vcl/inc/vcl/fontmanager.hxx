@@ -530,21 +530,6 @@ public:
 
     // font administration functions
 
-    // for importFonts to provide the user feedback
-    class ImportFontCallback
-    {
-    public:
-        enum FailCondition { NoWritableDirectory, NoAfmMetric, AfmCopyFailed, FontCopyFailed };
-        virtual void importFontsFailed( FailCondition eReason ) = 0;
-        virtual void progress( const rtl::OUString& rFile ) = 0;
-        virtual bool queryOverwriteFile( const rtl::OUString& rFile ) = 0;
-        virtual void importFontFailed( const rtl::OUString& rFile, FailCondition ) = 0;
-        virtual bool isCanceled() = 0;
-
-    protected:
-        ~ImportFontCallback() {}
-    };
-
     /*  system dependendent font matching
 
     <p>

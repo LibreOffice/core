@@ -53,13 +53,6 @@ SdrPage* DlgEdModel::AllocPage(bool bMasterPage)
 
 //----------------------------------------------------------------------------
 
-void DlgEdModel::DlgEdModelChanged(bool bChanged )
-{
-    SetChanged( bChanged );
-}
-
-//----------------------------------------------------------------------------
-
 Window* DlgEdModel::GetCurDocViewWin()
 {
     return 0;

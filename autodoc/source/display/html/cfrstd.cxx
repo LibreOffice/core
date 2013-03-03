@@ -233,8 +233,7 @@ const char * const C_sStdStyle_withDivFrame =
 
 
 StdFrame::StdFrame()
-    :   sDevelopersGuideHtmlRoot(),
-        bSimpleLinks(false)
+    :   sDevelopersGuideHtmlRoot()
 {
 }
 
@@ -291,12 +290,6 @@ StdFrame::DevelopersGuideHtmlRoot() const
     return sDevelopersGuideHtmlRoot;
 }
 
-bool
-StdFrame::SimpleLinks() const
-{
-    return bSimpleLinks;
-}
-
 void
 StdFrame::Set_DevelopersGuideHtmlRoot( const String & i_directory )
 {
@@ -309,12 +302,6 @@ StdFrame::Set_DevelopersGuideHtmlRoot( const String & i_directory )
         }
     }
     sDevelopersGuideHtmlRoot = i_directory;
-}
-
-void
-StdFrame::Set_SimpleLinks()
-{
-    bSimpleLinks = true;
 }
 
 String

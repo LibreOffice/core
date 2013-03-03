@@ -76,7 +76,7 @@
 //48 (SHL_MONEY) removed
 //49 (SHL_HBCI) removed
 //50 (SHL_BASE3D) removed
-#define SHL_BRUSHITEM   51
+//51 (SHL_BRUSHITEM) removed
 //52 (SHL_SFONTITEM) removed
 
 #define SHL_COUNT        53

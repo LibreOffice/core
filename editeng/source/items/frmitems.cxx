@@ -49,7 +49,6 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/types.hxx>
 #include <svl/memberid.hrc>
-#include <svtools/wallitem.hxx>
 #include <svl/cntwall.hxx>
 #include <svtools/borderhelper.hxx>
 #include <rtl/ustring.hxx>

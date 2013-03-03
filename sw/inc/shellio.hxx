@@ -431,7 +431,6 @@ public:
     virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
     virtual sal_uLong Write( SwPaM&, SotStorage&, const String* = 0 );
 
-    virtual void SetPasswd( const String& );
     virtual void SetVersion( const String&, long );
     virtual sal_Bool IsStgWriter() const;
 

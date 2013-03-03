@@ -195,21 +195,6 @@ const String& SfxShell::GetName() const
 
 //--------------------------------------------------------------------
 
-SvGlobalName SfxShell::GetGlobalName() const
-
-/*  [Description]
-
-    Provides the Global Unique Identifier of the Shell object. With this name
-    can the SfxShell instance for example be expressed via OLE Automation, or
-    be found in the Registration Database.
-*/
-
-{
-    return SvGlobalName();
-}
-
-//--------------------------------------------------------------------
-
 SfxDispatcher* SfxShell::GetDispatcher() const
 
 /*  [Description]

@@ -167,7 +167,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/unoimap.hxx,svtools/un
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/urlcontrol.hxx,svtools/urlcontrol.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/valueset.hxx,svtools/valueset.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/viewdataentry.hxx,svtools/viewdataentry.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wallitem.hxx,svtools/wallitem.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wizardmachine.hxx,svtools/wizardmachine.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wizdlg.hxx,svtools/wizdlg.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/xwindowitem.hxx,svtools/xwindowitem.hxx))

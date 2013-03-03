@@ -54,12 +54,10 @@ class CorporateFrame
                         CssStylesExplanation() const = 0;
     virtual const char *
                         DevelopersGuideHtmlRoot() const = 0;
-    virtual bool        SimpleLinks() const = 0;
 
     // ACCESS
     virtual void        Set_DevelopersGuideHtmlRoot(
                             const String &      i_directory ) = 0;
-    virtual void        Set_SimpleLinks() = 0;
 };
 
 

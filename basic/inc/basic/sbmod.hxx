@@ -110,15 +110,10 @@ public:
     const SbxObject* FindType( OUString aTypeName ) const;
 
     virtual sal_Bool IsBreakable( sal_uInt16 nLine ) const;
-    virtual size_t   GetBPCount() const;
-    virtual sal_uInt16 GetBP( size_t n ) const;
     virtual sal_Bool IsBP( sal_uInt16 nLine ) const;
     virtual sal_Bool SetBP( sal_uInt16 nLine );
     virtual sal_Bool ClearBP( sal_uInt16 nLine );
     virtual void     ClearAllBP();
-
-    // Lines of Subs
-    virtual SbMethod*   GetFunctionForLine( sal_uInt16 );
 
     // Store only image, no source (needed for new password protection)
     sal_Bool StoreBinaryData( SvStream& );

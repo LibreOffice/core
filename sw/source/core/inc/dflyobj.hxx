@@ -31,7 +31,6 @@ const sal_uInt32 SWGInventor =  sal_uInt32('S')*0x00000001 +
                                 sal_uInt32('G')*0x00010000;
 
 const sal_uInt16 SwFlyDrawObjIdentifier = 0x0001;
-const sal_uInt16 SwDrawFirst            = 0x0001;
 
 // DrawObjects for Flys
 class SwFlyDrawObj : public SdrObject
@@ -53,7 +52,6 @@ public:
     // for instantiation of this class while loading (via factory)
     virtual sal_uInt32 GetObjInventor()     const;
     virtual sal_uInt16 GetObjIdentifier()   const;
-    virtual sal_uInt16 GetObjVersion()      const;
 };
 
 // virtual objects for Flys

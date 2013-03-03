@@ -113,11 +113,6 @@ void SwImpBlocks::ClearDoc()
     pDoc->ClearDoc();
 }
 
-sal_uLong SwImpBlocks::GetDocForConversion( sal_uInt16 n )
-{
-    return GetDoc( n );
-}
-
 // Erzeugen eines PaMs, der das ganze Dokument umfasst
 SwPaM* SwImpBlocks::MakePaM()
 {

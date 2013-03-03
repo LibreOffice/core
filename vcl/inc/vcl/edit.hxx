@@ -218,7 +218,6 @@ public:
     virtual void        SetModifyHdl( const Link& rLink ) { maModifyHdl = rLink; }
     virtual const Link& GetModifyHdl() const { return maModifyHdl; }
     virtual void        SetUpdateDataHdl( const Link& rLink ) { maUpdateDataHdl = rLink; }
-    virtual const Link& GetUpdateDataHdl() const { return maUpdateDataHdl; }
 
     void                SetSubEdit( Edit* pEdit );
     Edit*               GetSubEdit() const { return mpSubEdit; }

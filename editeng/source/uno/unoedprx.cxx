@@ -677,15 +677,6 @@ void SvxAccessibleTextAdapter::FieldClicked( const SvxFieldItem& rField, sal_uIn
     mrTextForwarder->FieldClicked( rField, nPara, nPos );
 }
 
-sal_Int32 SvxAccessibleTextAdapter::CalcLogicalIndex( sal_uInt16 nPara, sal_uInt16 nEEIndex )
-{
-    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
-
-    SvxAccessibleTextIndex aIndex;
-    aIndex.SetEEIndex(nPara, nEEIndex, *mrTextForwarder);
-    return aIndex.GetIndex();
-}
-
 sal_uInt16 SvxAccessibleTextAdapter::CalcEditEngineIndex( sal_uInt16 nPara, sal_Int32 nLogicalIndex )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");

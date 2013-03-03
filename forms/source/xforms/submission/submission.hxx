@@ -138,7 +138,6 @@ public:
 
     virtual ~CSubmission() {}
 
-    //    virtual CSS::uno::Sequence< rtl::OUString > getSupportedEncodings() = 0;
     virtual void setEncoding(const rtl::OUString& aEncoding)
     {
         m_aEncoding = aEncoding;

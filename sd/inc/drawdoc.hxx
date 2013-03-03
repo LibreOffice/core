@@ -203,8 +203,6 @@ public:
 
     virtual SdrModel*   AllocModel() const;
     virtual SdrPage*    AllocPage(bool bMasterPage);
-    virtual const SdrModel* LoadModel(const String& rFileName);
-    virtual void        DisposeLoadedModels();
     virtual bool    IsReadOnly() const;
     virtual void        SetChanged(sal_Bool bFlag = sal_True);
 

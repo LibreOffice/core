@@ -42,7 +42,6 @@ public:
     virtual void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
     virtual void            GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList ) const;
 
-    virtual sal_Int32       CalcLogicalIndex( sal_uInt16 nPara, sal_uInt16 nEEIndex );
     virtual sal_uInt16          CalcEditEngineIndex( sal_uInt16 nPara, sal_Int32 nLogicalIndex );
 
      virtual sal_uInt16         GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const;

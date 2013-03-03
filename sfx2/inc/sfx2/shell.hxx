@@ -173,9 +173,6 @@ public:
                                 TYPEINFO();
     virtual                     ~SfxShell();
 
-    // TODO/CLEANUP: still needed?!
-    virtual SvGlobalName        GetGlobalName() const;
-
     virtual SfxInterface*       GetInterface() const;
     static SfxInterface*        GetStaticInterface() { return 0; }
 

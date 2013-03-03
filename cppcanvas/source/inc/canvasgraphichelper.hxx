@@ -52,8 +52,6 @@ namespace cppcanvas
             virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
             virtual void                             setClip();
             virtual ::basegfx::B2DPolyPolygon const* getClip() const;
-            virtual void                             setRGBAColor( Color::IntSRGBA );
-            virtual Color::IntSRGBA                  getRGBAColor() const;
             virtual void                             setCompositeOp( CompositeOp aOp );
             virtual CompositeOp                      getCompositeOp() const;
 

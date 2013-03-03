@@ -191,7 +191,6 @@ protected:
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const = 0;
     virtual void UpdateDragAnchor (const double nDragDistance) = 0;
     virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const = 0;
-    virtual double GetMajor (const double nX, const double nY) const = 0;
     virtual double GetMinor (const double nX, const double nY) const = 0;
     virtual void UpdateBorders (void) = 0;
     virtual void UpdateBitmaps (void) = 0;
@@ -260,7 +259,6 @@ protected:
     virtual void UpdateDragAnchor (const double nDragDistance);
     virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const;
     virtual double GetMinor (const double nX, const double nY) const;
-    virtual double GetMajor (const double nX, const double nY) const;
     virtual void UpdateBorders (void);
     virtual void UpdateBitmaps (void);
     virtual void PaintComposite(

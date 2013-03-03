@@ -466,7 +466,6 @@ public:
     void NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObject, SdrText* pText );
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
     virtual OutlinerParaObject* GetEditOutlinerParaObject() const;
-    virtual bool HasOutlinerParaObject() const;
 
     virtual void NbcReformatText();
     virtual void ReformatText();

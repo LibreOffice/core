@@ -1343,14 +1343,6 @@ OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
         return 0;
 }
 
-bool SdrTextObj::HasOutlinerParaObject() const
-{
-    SdrText* pText = getActiveText();
-    if( pText && pText->GetOutlinerParaObject() )
-        return true;
-    return false;
-}
-
 void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
 {
     NbcSetOutlinerParaObjectForText( pTextObject, getActiveText() );

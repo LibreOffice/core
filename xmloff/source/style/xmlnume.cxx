@@ -644,11 +644,6 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 }
 
 
-uno::Reference< ::com::sun::star::container::XIndexReplace >  SvxXMLNumRuleExport::GetUNONumRule() const
-{
-    return uno::Reference< ::com::sun::star::container::XIndexReplace > ();
-}
-
 void SvxXMLNumRuleExport::AddListStyleAttributes()
 {
 }

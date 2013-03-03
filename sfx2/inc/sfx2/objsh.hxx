@@ -500,8 +500,6 @@ public:
     virtual void                SetOrganizerSearchMask(
                                     SfxStyleSheetBasePool* ) const;
 
-    virtual sal_uInt16          GetContentCount( sal_uInt16 nIdx1 = INDEX_IGNORE );
-
     virtual sal_Bool            CanHaveChildren(
                                         sal_uInt16 nIdx1,
                                         sal_uInt16 nIdx2 = INDEX_IGNORE
@@ -514,8 +512,6 @@ public:
                                         sal_uInt16 nPos,
                                         sal_uInt16 nIdx1
                                 );
-
-    virtual void                TriggerHelpPI( sal_uInt16 nIdx1, sal_uInt16 nIdx2 );
 
     virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily);
 
