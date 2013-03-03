@@ -112,7 +112,8 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
     jobject tempObj;
     static jmethodID mID(NULL);
     if ( !mID  )
-        mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );
+    OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
     t.pEnv->DeleteLocalRef((jstring)args[0].l);
     saveRef( t.pEnv, tempObj );
