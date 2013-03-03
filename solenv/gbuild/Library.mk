@@ -235,8 +235,4 @@ $(eval $(foreach method,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))
 
-$(call gb_Postprocess_get_target,AllLibraries) :
-	$(call gb_Output_announce,All libraries: $^,$(true),ALL)
-	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && touch $@)
-
 # vim: set noet sw=4:

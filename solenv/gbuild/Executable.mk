@@ -169,8 +169,4 @@ $(call gb_Executable_get_runtime_target,$(1)) : $(2)
 
 endef
 
-$(call gb_Postprocess_get_target,AllExecutables) :
-	$(call gb_Output_announce,All executables: $^,$(true),ALL)
-	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && touch $@)
-
 # vim: set noet sw=4:

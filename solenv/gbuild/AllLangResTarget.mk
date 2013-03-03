@@ -482,8 +482,4 @@ $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 
 endef
 
-$(call gb_Postprocess_get_target,AllResources) :
-	$(call gb_Output_announce,All resources: $^,$(true),ALL)
-	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@) && touch $@)
-
 # vim: set noet sw=4: 

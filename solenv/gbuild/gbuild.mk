@@ -344,9 +344,11 @@ include $(foreach class, \
 	InstallModule \
 	InstallScript \
 	AutoInstallLibs \
+	Postprocess \
 ,$(GBUILDDIR)/$(class).mk)
 
 $(eval $(call gb_Helper_process_executable_registrations))
+$(eval $(call gb_Postprocess_make_targets))
 
 # optional extensions that should never be essential
 ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)
