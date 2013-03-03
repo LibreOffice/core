@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -213,4 +214,6 @@ Control DLG_CUSTOMANIMATIONPANE
         Text [ en-US ] = "Automatic pre~view" ;
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

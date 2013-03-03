@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 ﻿/*
  * This file is part of the LibreOffice project.
  *
@@ -32,3 +33,6 @@ Image RID_XMLSECTP_LOCK
     };
     MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

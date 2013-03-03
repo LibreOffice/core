@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -202,4 +203,6 @@
 //      SID_RPTUI_END               (SID_RPTUI_START + 199)
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

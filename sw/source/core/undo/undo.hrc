@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -169,4 +170,6 @@
 #define STR_UNDO_NLS                    (UNDO_MORE_STRINGS_BEGIN + 2)
 #define STR_UNDO_PAGEBREAKS             (UNDO_MORE_STRINGS_BEGIN + 3)
 #define STR_UNDO_COLBRKS                (UNDO_MORE_STRINGS_BEGIN + 4)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

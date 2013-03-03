@@ -70,3 +70,4 @@
 #define ROW_10              (ROW_9+RSC_CD_PUSHBUTTON_HEIGHT+RSC_SP_DLG_INNERBORDER_BOTTOM)
 
 #endif // #ifndef _CUI_CERTPATH_HRC
+

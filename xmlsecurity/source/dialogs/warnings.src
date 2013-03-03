@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -103,4 +104,6 @@ ModalDialog RID_XMLSECTP_MACROWARN
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

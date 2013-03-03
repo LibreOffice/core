@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -90,4 +91,6 @@
 #define ST_ENTRY            69
 #define LB_SELECTION        71
 #define HB_SELECTION        72
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

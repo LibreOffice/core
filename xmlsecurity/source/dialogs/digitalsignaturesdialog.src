@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 ﻿/*
  * This file is part of the LibreOffice project.
  *
@@ -39,3 +40,6 @@ QueryBox MSG_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN
     Message [ en-US ] = "Adding or removing a macro signature will remove all document signatures.\n"
         "Do you really want to continue?";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

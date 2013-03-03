@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -52,4 +53,6 @@
 #define ST_RIGHTTAB_ASIAN               54
 #define ST_FILLCHAR_OTHER               55
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

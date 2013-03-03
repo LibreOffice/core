@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -60,4 +61,6 @@
 #define STR_COULD_NOT_CREATE_ADDRESSBOOK    ( STR_MORK_BASE +   32 )
 
 #endif // CONNECTIVITY_RESOURCE_MOZAB_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

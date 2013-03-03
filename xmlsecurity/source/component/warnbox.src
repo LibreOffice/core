@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -24,4 +25,6 @@ WarningBox RID_XMLSECWB_NO_MOZILLA_PROFILE
     DefButton = WB_DEF_OK ;
     Message [ en-US ] = "Digital signatures functionality could not be used, because no Mozilla user profile was found. Please check the Mozilla installation." ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

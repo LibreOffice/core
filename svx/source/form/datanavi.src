@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -1171,4 +1172,6 @@ String RID_STR_DATANAV_LINKWARN_BUTTON
 {
     Text [ en-US ] = "~Edit" ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

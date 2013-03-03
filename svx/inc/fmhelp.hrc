@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -100,4 +101,6 @@
 #define HID_MENU_FM_TEXTATTRIBUTES_SPACING                    "SVX_HID_MENU_FM_TEXTATTRIBUTES_SPACING"
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

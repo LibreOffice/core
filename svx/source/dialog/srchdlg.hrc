@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -78,4 +79,6 @@
 #define STR_LESS_BTN                    102
 
 #endif // #ifndef _SVX_SRCHDLG_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

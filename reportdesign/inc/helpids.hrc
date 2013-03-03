@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -110,4 +111,6 @@
 #define HID_RPT_GROUPSORT_DELETE                      "REPORTDESIGN_HID_RPT_GROUPSORT_DELETE"
 
 #endif //RTPUI_REPORTDESIGN_HELPID_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -2023,4 +2024,6 @@ Resource RID_GLOBSTR
         Text [ en-US ] = "You cannot insert or delete cells when the affected range intersects with pivot table.";
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

@@ -158,3 +158,4 @@ String STR_SVT_PRNDLG_JOBCOUNT
     Text [ en-US ] = "%d documents" ;
 };
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

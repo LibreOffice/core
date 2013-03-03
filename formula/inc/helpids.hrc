@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -40,4 +41,6 @@
 #define HID_FORMULATAB_STRUCT                              "FORMULA_HID_FORMULATAB_STRUCT"
 
 #endif //FORMULA_HELPID_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

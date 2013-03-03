@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -123,4 +124,6 @@ Image IMG_INFO_16
     ImageBitmap = Bitmap { File = "info_16.png" ; };
     MASKCOLOR
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

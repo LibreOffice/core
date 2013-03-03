@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -263,4 +264,6 @@ WarningBox RID_WARNINGBOX_UPDATE_SHARED_EXTENSION
     "Click \'OK\' to update the extensions.\n"
     "Click \'Cancel\' to stop updating the extensions.";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
