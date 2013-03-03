@@ -370,7 +370,7 @@ endef
 define gb_Configuration_Configuration
 $(eval gb_Configuration_NODELIVER_$(1) := $(2))
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
-	$(call gb_Zip_Zip,$(1)_$(lang),$(call gb_XcuResTarget_get_target,$(1)/$(lang)))))
+	$(call gb_Zip_Zip_internal,$(1)_$(lang),$(call gb_XcuResTarget_get_target,$(1)/$(lang)))))
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Configuration_get_target,$(1)) : \
 	 $(call gb_Zip_get_final_target,$(1)_$(lang))))
