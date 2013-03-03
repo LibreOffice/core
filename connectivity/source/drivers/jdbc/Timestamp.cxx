@@ -46,7 +46,8 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
     jobject tempObj;
     static jmethodID mID(NULL);
     if ( !mID  )
-        mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );
+    OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
