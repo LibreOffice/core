@@ -1070,7 +1070,6 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
     {
         SwPagePreViewPrtData aData;
         //if only a few properties are coming, then use the current settings
-falls nur einige Properties kommen, dann die akt. Einstellungen benutzen
         const SwPagePreViewPrtData* pData = pDocShell->GetDoc()->GetPreViewPrtData();
         if(pData)
             aData = *pData;
