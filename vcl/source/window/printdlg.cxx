@@ -177,7 +177,7 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
     {
         GDIMetaFile aMtf( maMtf );
 
-        Size aVDevSize( maPageVDev.GetOutputSizePixel() );
+        const Size aVDevSize( maPageVDev.GetOutputSizePixel() );
         const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
         Size aOrigSize( maOrigSize );
         if( aOrigSize.Width() < 1 )
@@ -198,12 +198,23 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         aMtf.WindStart();
         aMtf.Scale( fScale, fScale );
         aMtf.WindStart();
+
+        const sal_uInt16 nOriginalAA(maPageVDev.GetAntialiasing());
+        maPageVDev.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
+
         aMtf.Play( &maPageVDev, Point( 0, 0 ), aLogicSize );
         maPageVDev.Pop();
 
+        maPageVDev.SetAntialiasing(nOriginalAA);
+
         SetMapMode( MAP_PIXEL );
         maPageVDev.SetMapMode( MAP_PIXEL );
-        DrawOutDev( aOffset, maPreviewSize, Point( 0, 0 ), aVDevSize, maPageVDev );
+
+        // use lanzcos scaling
+        Bitmap aContent(maPageVDev.GetBitmap(Point(0, 0), aVDevSize));
+        aContent.Scale(maPreviewSize, BMP_SCALE_BEST);
+        DrawBitmap(aOffset, aContent);
+
         maPageVDev.SetDrawMode( nOldDrawMode );
     }
 
