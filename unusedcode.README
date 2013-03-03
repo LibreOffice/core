@@ -41,7 +41,7 @@ g) there's more actually unused code then what's listed. The idea is that what's
    code from the "release" binaries which only makes sense in debug/dbgutil
    configurations, and then tackle unused virtual method slots :-)
 
-Symbols that are known to be false alarms are listed in: unused.exclude
+Symbols that are known to be false alarms are listed in: unusedcode.exclude
 
 [1] http://www.skynet.ie/~caolan/Packages/callcatcher.html
 [2] https://bugs.freedesktop.org/show_bug.cgi?id=38832
