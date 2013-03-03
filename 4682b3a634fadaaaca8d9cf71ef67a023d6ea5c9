@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///2s\u003d",
+        "filename": "sw/source/ui/inc/swruler.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000227
+      },
+      "writtenOn": "2013-03-03T22:25:26Z",
+      "side": 1,
+      "message": "Done. Thank you.",
+      "parentUuid": "AAAAT3///9I\u003d",
+      "revId": "4682b3a634fadaaaca8d9cf71ef67a023d6ea5c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAT3///8o\u003d",
         "filename": "sw/source/ui/misc/swruler.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAVn///2o\u003d",
+        "filename": "sw/source/ui/misc/swruler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000227
+      },
+      "writtenOn": "2013-03-03T22:25:26Z",
+      "side": 1,
+      "message": "Thank you again. Done.",
+      "parentUuid": "AAAAT3///8o\u003d",
+      "revId": "4682b3a634fadaaaca8d9cf71ef67a023d6ea5c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAT3///8k\u003d",
         "filename": "sw/source/ui/misc/swruler.cxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2013-01-25T16:19:47Z",
       "side": 1,
       "message": "// To vertically center, get text height and compute the offset\n    long nTextHeight \u003d maVirDev.GetTextHeight( );\n    aLabelPos.Y() \u003d ( aControlRect.GetHeight( ) - nTextHeight ) / 2;",
+      "revId": "4682b3a634fadaaaca8d9cf71ef67a023d6ea5c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+3k\u003d",
+        "filename": "sw/source/ui/misc/swruler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000227
+      },
+      "writtenOn": "2013-03-03T22:25:26Z",
+      "side": 1,
+      "message": "Done but another way",
+      "parentUuid": "AAAAT3///8k\u003d",
       "revId": "4682b3a634fadaaaca8d9cf71ef67a023d6ea5c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
