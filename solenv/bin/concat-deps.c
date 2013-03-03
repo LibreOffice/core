@@ -670,9 +670,9 @@ int fd;
                         rc = EIO;
                     }
                 }
-                close(fd);
                 buffer[*size] = 0;
             }
+            close(fd);
         }
     }
 
