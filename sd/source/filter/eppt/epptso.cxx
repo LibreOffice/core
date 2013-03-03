@@ -3666,7 +3666,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                             for ( sal_Int32 nRowSpan = 1; nRowSpan < xCell->getRowSpan(); nRowSpan++ )
                             {
                                 sal_uInt32 nR = nRowSpan + nRow;
-                                if ( nR < aColumns.size() )
+                                if ( nR < aRows.size() )
                                     nBottom += aRows[ nR ].second;
                                 else
                                     nBottom = maRect.Bottom();
