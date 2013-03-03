@@ -51,6 +51,6 @@ $(odk_WORKDIR)/docs/cpp/ref/index.html: $(DOXY_DEPS)
         -e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),YES,NO)!' \
         -e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(DOXY_STRIP_PATH)!' \
 	$< > $(odk_WORKDIR)/Doxyfile
-	$(DOXYGEN) $(odk_WORKDIR)/Doxyfile
+	$(DOXYGEN) $(odk_WORKDIR)/Doxyfile > /dev/null
 
 # vim: set noet sw=4 ts=4:
