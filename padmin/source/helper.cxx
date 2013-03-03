@@ -31,8 +31,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/processfactory.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
 #include <i18npool/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>

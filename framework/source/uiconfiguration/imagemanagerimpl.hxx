@@ -46,7 +46,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

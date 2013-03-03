@@ -26,7 +26,6 @@
 #include "ModuleHelper.hxx"
 #include "helpids.hrc"
 #include "UITools.hxx"
-#include "uistrings.hrc"
 #include "ReportController.hxx"
 #include "Condition.hxx"
 

@@ -77,7 +77,6 @@
 #include <toolkit/unohlp.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/sfxecode.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>

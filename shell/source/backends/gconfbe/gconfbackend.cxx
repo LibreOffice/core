@@ -33,7 +33,6 @@
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"

@@ -40,7 +40,6 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/accessibilityclient.hxx>
 #include <cppuhelper/typeprovider.hxx>

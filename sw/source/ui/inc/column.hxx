@@ -28,7 +28,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/button.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/basedlgs.hxx>

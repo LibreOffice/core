@@ -36,8 +36,6 @@
 
 #include "..\FOPServiceInfo.hxx"
 
-#include <osl/file.hxx>
-
 #define _WIN32_DCOM
 
 #include <windows.h>

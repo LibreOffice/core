@@ -24,7 +24,6 @@
 // NOT FULLY DECLARED SERVICES
 #include <cosv/tpl/processor.hxx>
 #include <ary/idl/i_gate.hxx>
-#include <ary/idl/i_module.hxx>
 #include <ary/idl/i_service.hxx>
 #include <ary/idl/i_interface.hxx>
 #include <ary/idl/i_struct.hxx>

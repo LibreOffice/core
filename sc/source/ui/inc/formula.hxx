@@ -32,7 +32,6 @@
 
 #include "formula/formula.hxx"
 #include "IAnyRefDialog.hxx"
-#include "anyrefdg.hxx"
 
 class ScViewData;
 class ScDocument;

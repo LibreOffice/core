@@ -33,7 +33,6 @@
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
-#include <stdtypes.h>
 #include <properties.h>
 #include <stdtypes.h>
 #include <uielement/menubarmanager.hxx>

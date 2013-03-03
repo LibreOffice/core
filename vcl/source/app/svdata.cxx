@@ -29,7 +29,6 @@
 #include <tools/gen.hxx>
 #include <unotools/fontcfg.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/string.hxx>
 #include <uno/current_context.hxx>
 
 #include "vcl/configsettings.hxx"

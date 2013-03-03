@@ -36,7 +36,6 @@
 #include <com/sun/star/uno/Any.h>
 #include <tools/solar.h>
 
-#include <svl/itemprop.hxx>
 #include "linguistic/misc.hxx"
 #include "defs.hxx"
 

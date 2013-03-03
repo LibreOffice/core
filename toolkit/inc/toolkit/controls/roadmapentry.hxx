@@ -24,7 +24,6 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include <comphelper/proparrhlp.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 

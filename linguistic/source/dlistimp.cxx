@@ -24,7 +24,6 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <i18npool/mslangid.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories
@@ -38,11 +37,6 @@
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-
-#include "defs.hxx"
-#include "dlistimp.hxx"
-#include "dicimp.hxx"
-#include "lngopt.hxx"
 
 #include "defs.hxx"
 #include "dlistimp.hxx"

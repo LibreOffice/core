@@ -70,7 +70,6 @@
 #include <vcl/taskpanelist.hxx>
 #include <rtl/logfile.hxx>
 #include <svtools/menuoptions.hxx>
-#include <unotools/cmdoptions.hxx>
 #include <boost/bind.hpp>
 #include <svtools/acceleratorexecute.hxx>
 

@@ -25,7 +25,6 @@
 #include <tools/wintypes.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/wintypes.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
 
 #include <com/sun/star/awt/Key.hpp>

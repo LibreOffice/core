@@ -46,7 +46,6 @@
 #include <comphelper/types.hxx>
 #include <functional>
 #include <algorithm>
-#include <toolkit/helper/property.hxx>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;

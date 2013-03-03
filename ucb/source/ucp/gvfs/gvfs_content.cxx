@@ -58,8 +58,6 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
-#include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
-#include <com/sun/star/ucb/NameClashException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>

@@ -28,8 +28,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <comphelper/types.hxx>
 #include "xmlEnums.hxx"
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/numehelp.hxx>
 #include "xmlHelper.hxx"

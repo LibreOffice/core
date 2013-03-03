@@ -64,7 +64,6 @@
 #include "dp_version.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
 #include "ucbhelper/content.hxx"
-#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "salhelper/thread.hxx"
 #include "com/sun/star/uno/Sequence.h"

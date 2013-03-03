@@ -46,7 +46,6 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
-#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 

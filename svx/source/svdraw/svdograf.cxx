@@ -45,7 +45,6 @@
 #include <svx/svdpagv.hxx>
 #include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
-#include <vcl/graphicfilter.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xbitmap.hxx>

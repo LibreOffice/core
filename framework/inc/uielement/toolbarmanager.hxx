@@ -38,14 +38,11 @@
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-
-#include <com/sun/star/frame/XToolbarController.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>

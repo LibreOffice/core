@@ -33,7 +33,6 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/report/XReportControlModel.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <tools/debug.hxx>
 
 namespace rptxml
 {

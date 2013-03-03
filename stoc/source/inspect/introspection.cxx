@@ -57,7 +57,6 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <boost/unordered_map.hpp>
 

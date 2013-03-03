@@ -37,7 +37,6 @@
 #ifdef FREEBSD
 #include <sys/types.h>
 #include <sys/time.h>
-#include <unistd.h>
 #endif
 
 #include <osl/process.h>

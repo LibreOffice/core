@@ -27,7 +27,6 @@
 #include <com/sun/star/report/XShape.hpp>
 #include "xmlCell.hxx"
 #include "xmlstrings.hrc"
-#include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>

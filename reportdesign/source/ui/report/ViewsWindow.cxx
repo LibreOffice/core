@@ -34,7 +34,6 @@
 #include "dlgedclip.hxx"
 #include "ColorChanger.hxx"
 #include "RptObject.hxx"
-#include "RptObject.hxx"
 #include "ModuleHelper.hxx"
 #include "EndMarker.hxx"
 #include <svx/svdpagv.hxx>

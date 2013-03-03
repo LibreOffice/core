@@ -43,10 +43,6 @@
 #include <X11/Xresource.h>
 #include "tools/postx.h"
 
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
-
 namespace vcl_sal {
 
 class NetWMAdaptor : public WMAdaptor

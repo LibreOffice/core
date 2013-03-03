@@ -38,7 +38,6 @@
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 

@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <cppuhelper/factory.hxx>
 
 #include "../dom/documentbuilder.hxx"
 #include "../dom/saxbuilder.hxx"

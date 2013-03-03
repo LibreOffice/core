@@ -56,7 +56,6 @@
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <basic/sbmod.hxx>

@@ -32,7 +32,6 @@
 #include <svgio/svgreader/svgellipsenode.hxx>
 #include <svgio/svgreader/svglinenode.hxx>
 #include <svgio/svgreader/svgpolynode.hxx>
-#include <svgio/svgreader/svgsymbolnode.hxx>
 #include <svgio/svgreader/svgtextnode.hxx>
 #include <svgio/svgreader/svgcharacternode.hxx>
 #include <svgio/svgreader/svgtspannode.hxx>

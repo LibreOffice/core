@@ -27,7 +27,6 @@
 #include "Tools.hxx"
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include "ReportHelperImpl.hxx"
-#include "corestrings.hrc"
 // =============================================================================
 namespace reportdesign
 {

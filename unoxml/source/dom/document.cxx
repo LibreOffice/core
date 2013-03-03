@@ -25,7 +25,6 @@
 #include "cdatasection.hxx"
 #include "documentfragment.hxx"
 #include "text.hxx"
-#include "cdatasection.hxx"
 #include "comment.hxx"
 #include "processinginstruction.hxx"
 #include "entityreference.hxx"

@@ -28,7 +28,6 @@
 #include "hpara.h"
 #include "hbox.h"
 #include "hutil.h"
-#include "hutil.h"
 
 bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
 {

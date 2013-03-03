@@ -69,7 +69,6 @@
 #include <connectivity/dbconversion.hxx>
 #include "UndoActions.hxx"
 #include "UndoEnv.hxx"
-#include <algorithm>
 #include <functional>
 
 namespace rptui

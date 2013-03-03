@@ -48,7 +48,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
-#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces

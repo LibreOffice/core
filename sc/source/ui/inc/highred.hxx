@@ -30,7 +30,6 @@
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
 
-#include <vcl/morebtn.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <svx/ctredlin.hxx>

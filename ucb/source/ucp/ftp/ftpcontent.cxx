@@ -46,8 +46,6 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/fd_inputstream.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
-#include <ucbhelper/contentidentifier.hxx>
-#include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>

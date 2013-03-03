@@ -31,7 +31,6 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svgio/svgreader/svgclippathnode.hxx>
 #include <svgio/svgreader/svgmasknode.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svgio/svgreader/svgmarkernode.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>

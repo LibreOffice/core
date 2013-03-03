@@ -30,7 +30,6 @@
 #include "vcl/decoview.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/help.hxx"
-#include "vcl/decoview.hxx"
 #include "vcl/layout.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/unohelp.hxx"

@@ -32,7 +32,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <rtl/strbuf.hxx>
 #ifdef WNT

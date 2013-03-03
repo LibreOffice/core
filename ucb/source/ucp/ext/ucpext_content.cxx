@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "ucpext_content.hxx"
-
 #include "ucpext_content.hxx"
 #include "ucpext_provider.hxx"
 #include "ucpext_resultset.hxx"
@@ -36,10 +33,7 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
-#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/deployment/PackageInformationProvider.hpp>
 
 #include <ucbhelper/contentidentifier.hxx>

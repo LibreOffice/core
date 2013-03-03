@@ -71,7 +71,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/miscopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/shl.hxx>
 #include <unotools/bootstrap.hxx>

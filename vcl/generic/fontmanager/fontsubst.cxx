@@ -27,7 +27,6 @@
 #include "generic/printergfx.hxx"
 #include "salbmp.hxx"
 #include "impfont.hxx"
-#include "outfont.hxx"
 #include "outdev.h"
 #include "fontsubset.hxx"
 #include "salprn.hxx"

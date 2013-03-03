@@ -49,7 +49,6 @@
 #include "vcl/unohelp2.hxx"
 
 #include "salinst.hxx"
-#include "svdata.hxx"
 #include "svsys.h"
 
 #include "com/sun/star/i18n/XCharacterClassification.hpp"

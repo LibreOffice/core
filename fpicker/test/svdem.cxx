@@ -52,7 +52,6 @@
 #include <vcl/button.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
 #include "../source/office/iodlg.hxx"

@@ -34,8 +34,6 @@ CComModule _Module;
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/process.h>
 #include <cppuhelper/servicefactory.hxx>

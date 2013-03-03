@@ -780,7 +780,6 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uLong nFileKey )
     fprintf( fOutput, "#include <vcl/fixed.hxx>\n" );
     fprintf( fOutput, "#include <vcl/group.hxx>\n" );
     fprintf( fOutput, "#include <vcl/image.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/button.hxx>\n" );
     fprintf( fOutput, "#include <vcl/keycod.hxx>\n" );
     fprintf( fOutput, "#include <vcl/lstbox.hxx>\n" );
     fprintf( fOutput, "#include <vcl/mapmod.hxx>\n" );

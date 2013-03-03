@@ -35,7 +35,6 @@
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 #include <properties.h>
-#include <stdtypes.h>
 #include <uiconfiguration/globalsettings.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
 #include <framework/addonsoptions.hxx>

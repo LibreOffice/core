@@ -24,7 +24,6 @@
 #include "../misc/ImplHelper.hxx"
 #include "../misc/WinClip.hxx"
 #include "DTransHelper.hxx"
-#include "../misc/ImplHelper.hxx"
 #include "TxtCnvtHlp.hxx"
 #include "MimeAttrib.hxx"
 #include "FmtFilter.hxx"

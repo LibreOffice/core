@@ -25,7 +25,6 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <ctype.h>
-#include <string.h>
 
 #if defined(SOLARIS) || defined(AIX)
 #include <sal/alloca.h>

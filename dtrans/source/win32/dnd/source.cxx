@@ -31,7 +31,6 @@
 #include "sourcecontext.hxx"
 #include "../../inc/DtObjFactory.hxx"
 #include <rtl/ustring.h>
-#include <process.h>
 #include <winuser.h>
 #include <stdio.h>
 

@@ -43,7 +43,6 @@
 #include "conditio.hxx"
 #include "stlpool.hxx"
 #include "tabvwsh.hxx"
-#include "conditio.hxx"
 #include "colorscale.hxx"
 #include "colorformat.hxx"
 #include "reffact.hxx"

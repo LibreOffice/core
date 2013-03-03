@@ -36,7 +36,6 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlinjoit.hxx>
-#include <svx/xlinjoit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xdash.hxx>

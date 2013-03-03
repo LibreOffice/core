@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 

@@ -24,7 +24,6 @@
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>

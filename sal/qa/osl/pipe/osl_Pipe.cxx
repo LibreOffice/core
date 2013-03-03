@@ -27,7 +27,6 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 #include "unotest/uniquepipename.hxx"
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 #include <osl/thread.hxx>

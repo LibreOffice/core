@@ -21,7 +21,6 @@
 #include <sanedlg.hxx>
 #include <osl/thread.hxx>
 #include <boost/shared_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>

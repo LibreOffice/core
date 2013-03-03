@@ -41,7 +41,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/types.hxx>
 

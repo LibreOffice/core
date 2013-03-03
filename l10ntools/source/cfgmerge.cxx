@@ -27,7 +27,6 @@
 #include "boost/scoped_ptr.hpp"
 #include "rtl/strbuf.hxx"
 
-#include "common.hxx"
 #include "export.hxx"
 #include "cfgmerge.hxx"
 #include "tokens.h"

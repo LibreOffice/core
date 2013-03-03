@@ -59,7 +59,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/string.hxx>
 
 #include "documentfontsdialog.hxx"
 #include <sfx2/sfx.hrc>

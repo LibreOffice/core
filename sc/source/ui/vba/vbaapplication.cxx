@@ -87,7 +87,6 @@
 #include "excelvbahelper.hxx"
 
 #include <basic/sbmod.hxx>
-#include <basic/sbuno.hxx>
 #include <basic/sbxobj.hxx>
 
 #include "viewutil.hxx"

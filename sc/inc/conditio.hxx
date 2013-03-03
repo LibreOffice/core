@@ -35,8 +35,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#include <map>
-
 class ScBaseCell;
 class ScFormulaCell;
 class ScTokenArray;

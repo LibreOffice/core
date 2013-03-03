@@ -20,13 +20,8 @@
 #define _SW_JAVAEDIT_HXX
 
 #include <svx/stddlg.hxx>
-
 #include <vcl/fixed.hxx>
-
 #include <svtools/svmedit.hxx>
-
-#include <vcl/button.hxx>
-
 #include <vcl/button.hxx>
 
 class SwWrtShell;

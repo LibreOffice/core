@@ -25,7 +25,6 @@
 #include "ReportController.hxx"
 #include "ModuleHelper.hxx"
 #include "ColorChanger.hxx"
-#include "RptResId.hrc"
 #include "helpids.hrc"
 #include "reportformula.hxx"
 #include <com/sun/star/util/URL.hpp>

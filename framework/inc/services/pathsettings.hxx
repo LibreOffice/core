@@ -27,7 +27,6 @@
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 #include <properties.h>
-#include <stdtypes.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>

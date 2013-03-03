@@ -21,7 +21,6 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <osl/diagnose.h>

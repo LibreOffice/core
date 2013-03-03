@@ -37,10 +37,7 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <toolkit/controls/accessiblecontrolcontext.hxx>
 #include <comphelper/container.hxx>
 

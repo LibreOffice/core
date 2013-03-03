@@ -52,7 +52,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/implbase1.hxx>
 

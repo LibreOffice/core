@@ -23,12 +23,8 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <svtools/transfer.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <svtools/treelistbox.hxx>
-#include <svtools/transfer.hxx>
 #include <vcl/floatwin.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/containermultiplexer.hxx>

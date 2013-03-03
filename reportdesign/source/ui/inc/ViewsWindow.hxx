@@ -26,7 +26,6 @@
 #include "ReportSection.hxx"
 #include <comphelper/propmultiplex.hxx>
 #include "cppuhelper/basemutex.hxx"
-#include <svtools/colorcfg.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <svx/svdedtv.hxx>
 #include <SectionView.hxx>

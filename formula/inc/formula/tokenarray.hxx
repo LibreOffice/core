@@ -26,8 +26,6 @@
 #include <tools/solar.h>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 
-#include <limits.h>
-
 namespace formula
 {
 

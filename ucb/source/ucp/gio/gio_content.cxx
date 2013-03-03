@@ -38,12 +38,10 @@
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
-#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkGeneralException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
-#include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
@@ -56,7 +54,6 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
-#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 

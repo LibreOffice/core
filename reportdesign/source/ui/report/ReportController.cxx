@@ -146,7 +146,6 @@
 #include <toolkit/helper/convert.hxx>
 #include "GroupsSorting.hxx"
 #include "PageNumber.hxx"
-#include <toolkit/helper/vclunohelper.hxx>
 #include "UndoEnv.hxx"
 #include "ReportControllerObserver.hxx"
 

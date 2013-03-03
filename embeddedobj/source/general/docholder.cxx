@@ -57,7 +57,6 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>

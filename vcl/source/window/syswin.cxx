@@ -21,7 +21,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>

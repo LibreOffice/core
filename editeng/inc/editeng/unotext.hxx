@@ -43,7 +43,6 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>

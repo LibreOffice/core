@@ -22,7 +22,6 @@
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -33,7 +32,6 @@
 #include <unotools/saveopt.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <connectivity/dbtools.hxx>
-#include <rtl/ustrbuf.hxx>
 
 namespace rptxml
 {

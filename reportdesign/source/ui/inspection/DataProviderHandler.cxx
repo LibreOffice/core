@@ -48,7 +48,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include "helpids.hrc"
-#include "uistrings.hrc"
 #include "RptResId.hrc"
 #include "PropertyForward.hxx"
 //........................................................................

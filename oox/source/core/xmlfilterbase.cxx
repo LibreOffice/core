@@ -45,7 +45,6 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/mediadescriptor.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <comphelper/storagehelper.hxx>
 using ::com::sun::star::uno::XComponentContext;

@@ -71,8 +71,6 @@
 // for debug
 #include <comphelper/anytostring.hxx>
 
-
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>

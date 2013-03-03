@@ -24,7 +24,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include "Tools.hxx"
-#include "corestrings.hrc"
 // =============================================================================
 namespace reportdesign
 {

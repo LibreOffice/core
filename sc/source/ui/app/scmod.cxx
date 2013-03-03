@@ -82,7 +82,6 @@
 #include "inputwin.hxx"
 #include "msgpool.hxx"
 #include "scresid.hxx"
-#include "anyrefdg.hxx"
 #include "dwfunctr.hxx"
 #include "formdata.hxx"
 #include "tpprint.hxx"

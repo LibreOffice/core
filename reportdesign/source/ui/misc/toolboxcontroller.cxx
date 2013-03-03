@@ -25,7 +25,6 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <vcl/svapp.hxx>

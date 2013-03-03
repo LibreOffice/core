@@ -103,7 +103,6 @@
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <unotools/streamwrap.hxx>
-#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 using namespace ::comphelper;

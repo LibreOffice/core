@@ -35,7 +35,6 @@
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/xpath/XXPathExtension.hpp>
 #include <com/sun/star/xml/xpath/Libxml2ExtensionHandle.hpp>

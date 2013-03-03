@@ -31,11 +31,9 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/sequence.hxx>
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
-#include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 using namespace ::com::sun::star::uno;
-//using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;

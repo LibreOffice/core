@@ -45,7 +45,6 @@
 #include <toolkit/controls/tkthrobber.hxx>
 #include <toolkit/controls/animatedimages.hxx>
 #include <toolkit/controls/spinningprogress.hxx>
-#include <toolkit/controls/dialogcontrol.hxx>
 #include <toolkit/controls/tabpagemodel.hxx>
 #include <toolkit/controls/tabpagecontainer.hxx>
 #include "toolkit/dllapi.h"

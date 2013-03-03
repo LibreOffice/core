@@ -33,7 +33,6 @@
 #include "types.hxx"
 #include "formula/grammar.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include "scdllapi.h"
 #include "typedstrdata.hxx"
 #include "compressedarray.hxx"
 #include <tools/fract.hxx>

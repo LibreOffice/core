@@ -44,9 +44,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
-
-#include <vcl/button.hxx>
-
 #include <vcl/button.hxx>
 #include <vcl/morebtn.hxx>
 

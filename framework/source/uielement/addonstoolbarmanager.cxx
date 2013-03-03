@@ -36,7 +36,6 @@
 #include <uielement/spinfieldtoolbarcontroller.hxx>
 #include <uielement/edittoolbarcontroller.hxx>
 #include <uielement/dropdownboxtoolbarcontroller.hxx>
-#include <uielement/toolbarmerger.hxx>
 
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>

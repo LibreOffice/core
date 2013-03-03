@@ -69,13 +69,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <rtl/logfile.hxx>
 #include "svtools/miscopt.hxx"
-#include <framework/addonmenu.hxx>
 #include <uielement/menubarmerger.hxx>
 
 // Be careful removing this "bad" construct. There are serious problems

@@ -23,10 +23,7 @@
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <cppuhelper/servicefactory.hxx>
 
-
 #include <osl/file.hxx>
-
-#include <cppuhelper/servicefactory.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <osl/diagnose.h>

@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <xmloff/prstylei.hxx>

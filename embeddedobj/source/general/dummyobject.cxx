@@ -24,7 +24,6 @@
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/embed/XWindowSupplier.hpp>
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>

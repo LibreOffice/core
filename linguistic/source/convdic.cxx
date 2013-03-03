@@ -24,7 +24,6 @@
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
-#include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
@@ -43,7 +42,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/util/XFlushListener.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

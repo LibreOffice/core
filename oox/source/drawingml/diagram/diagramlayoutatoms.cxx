@@ -31,7 +31,6 @@
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/textrun.hxx"
 #include "oox/drawingml/customshapeproperties.hxx"
-#include "diagramlayoutatoms.hxx"
 #include "layoutnodecontext.hxx"
 
 using namespace ::com::sun::star;

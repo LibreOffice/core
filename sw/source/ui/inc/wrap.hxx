@@ -21,13 +21,8 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
-
 #include <vcl/button.hxx>
-
-#include <vcl/button.hxx>
-
 #include <vcl/fixed.hxx>
-
 #include <vcl/field.hxx>
 
 class Window;

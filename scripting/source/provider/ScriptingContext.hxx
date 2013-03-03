@@ -27,11 +27,8 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
-
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/broadcasthelper.hxx>

@@ -41,7 +41,6 @@
 
 #include "cppu/EnvDcp.hxx"
 #include "cascade_mapping.hxx"
-#include "IdentityMapping.hxx"
 #include "loadmodule.hxx"
 
 using namespace std;

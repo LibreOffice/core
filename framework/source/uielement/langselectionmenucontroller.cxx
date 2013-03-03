@@ -42,7 +42,6 @@
 
 #include <i18npool/mslangid.hxx>
 #include <svl/languageoptions.hxx>
-#include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <svtools/langtab.hxx>
 #include <classes/fwlresid.hxx>
 

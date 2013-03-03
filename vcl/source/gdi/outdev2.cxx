@@ -27,7 +27,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
 #include <vcl/image.hxx>
 
 #include <bmpfast.hxx>

@@ -30,7 +30,6 @@
 #include <vcl/event.hxx>
 
 #include <math.h>
-#include <limits.h>
 
 // -----------
 // - Defines -

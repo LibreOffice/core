@@ -61,8 +61,6 @@ using namespace comphelper;
 using namespace osl;
 using namespace com::sun::star;
 
-#include <comphelper/string.hxx>
-
 #include "date.hxx"
 #include "stdobj.hxx"
 #include <basic/sbstdobj.hxx>

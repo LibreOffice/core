@@ -23,7 +23,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 
 #include <vcl/waitobj.hxx>

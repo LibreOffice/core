@@ -12,10 +12,8 @@
 #ifdef ENABLE_GMENU_INTEGRATION
 
 #include <unx/gtk/gloactiongroup.h>
-
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkframe.hxx>
-#include <unx/gtk/gtksalmenu.hxx>
 
 
 /*

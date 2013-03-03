@@ -28,7 +28,6 @@
 #include <toolkit/helper/property.hxx>
 #include <algorithm>
 #include <functional>
-#include <comphelper/sequence.hxx>
 
 
 #define GCM_PROPERTY_ID_POS_X               1
