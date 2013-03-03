@@ -45,15 +45,20 @@ namespace vcl
     public:
         class PrintPreviewWindow : public Window
         {
+            static const sal_Int32 PREVIEW_BITMAP_WIDTH;
+
             GDIMetaFile         maMtf;
             Size                maOrigSize;
             Size                maPreviewSize;
             VirtualDevice       maPageVDev;
+            Bitmap              maPreviewBitmap;
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
             bool                mbGreyscale;
             FixedLine           maHorzDim;
             FixedLine           maVertDim;
+
+            void preparePreviewBitmap();
 
         public:
             PrintPreviewWindow( Window* pParent );

@@ -84,6 +84,8 @@ PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 {
 }
 
+const sal_Int32 PrintDialog::PrintPreviewWindow::PREVIEW_BITMAP_WIDTH = 1600;
+
 void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
 {
     // react on settings changed
@@ -133,13 +135,11 @@ void PrintDialog::PrintPreviewWindow::Resize()
     // quality of the preview, e.g. when its height approaches the number of text lines
     // find a good scaling factor
     Size aPreviewMMSize( maPageVDev.PixelToLogic( aScaledSize, MapMode( MAP_100TH_MM ) ) );
-    double fZoom = double(maOrigSize.Height())/double(aPreviewMMSize.Height());
-    while( fZoom > 10 )
-    {
-        aScaledSize.Width() *= 2;
-        aScaledSize.Height() *= 2;
-        fZoom /= 2.0;
-    }
+
+    double aAspectRatio = aScaledSize.Height() / (double) aScaledSize.Width();
+
+    aScaledSize.Width()  = PREVIEW_BITMAP_WIDTH;
+    aScaledSize.Height() = PREVIEW_BITMAP_WIDTH * aAspectRatio;
 
     maPageVDev.SetOutputSizePixel( aScaledSize, sal_False );
 
@@ -175,47 +175,9 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
     }
     else
     {
-        GDIMetaFile aMtf( maMtf );
-
-        const Size aVDevSize( maPageVDev.GetOutputSizePixel() );
-        const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
-        Size aOrigSize( maOrigSize );
-        if( aOrigSize.Width() < 1 )
-            aOrigSize.Width() = aLogicSize.Width();
-        if( aOrigSize.Height() < 1 )
-            aOrigSize.Height() = aLogicSize.Height();
-        double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
-
-
-        maPageVDev.Erase();
-        maPageVDev.Push();
-        maPageVDev.SetMapMode( MAP_100TH_MM );
-        sal_uLong nOldDrawMode = maPageVDev.GetDrawMode();
-        if( mbGreyscale )
-            maPageVDev.SetDrawMode( maPageVDev.GetDrawMode() |
-                                    ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
-                                      DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
-        aMtf.WindStart();
-        aMtf.Scale( fScale, fScale );
-        aMtf.WindStart();
-
-        const sal_uInt16 nOriginalAA(maPageVDev.GetAntialiasing());
-        maPageVDev.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
-
-        aMtf.Play( &maPageVDev, Point( 0, 0 ), aLogicSize );
-        maPageVDev.Pop();
-
-        maPageVDev.SetAntialiasing(nOriginalAA);
-
-        SetMapMode( MAP_PIXEL );
-        maPageVDev.SetMapMode( MAP_PIXEL );
-
-        // use lanzcos scaling
-        Bitmap aContent(maPageVDev.GetBitmap(Point(0, 0), aVDevSize));
-        aContent.Scale(maPreviewSize, BMP_SCALE_BEST);
-        DrawBitmap(aOffset, aContent);
-
-        maPageVDev.SetDrawMode( nOldDrawMode );
+        Bitmap aPreviewBitmap(maPreviewBitmap);
+        aPreviewBitmap.Scale(maPreviewSize, BMP_SCALE_BEST);
+        DrawBitmap(aOffset, aPreviewBitmap);
     }
 
     Rectangle aFrameRect( aOffset + Point( -1, -1 ),
@@ -236,10 +198,6 @@ void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
                 pDlg->previewForward();
             else if( pWheelData->GetDelta() < 0 )
                 pDlg->previewBackward();
-            /*
-            else
-                huh ?
-            */
         }
     }
 }
@@ -291,7 +249,49 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     maVertDim.SetText( aBuf.makeStringAndClear() );
 
     Resize();
+    preparePreviewBitmap();
     Invalidate();
+}
+
+void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
+{
+    GDIMetaFile aMtf( maMtf );
+
+    Size aVDevSize( maPageVDev.GetOutputSizePixel() );
+    const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
+    Size aOrigSize( maOrigSize );
+    if( aOrigSize.Width() < 1 )
+        aOrigSize.Width() = aLogicSize.Width();
+    if( aOrigSize.Height() < 1 )
+        aOrigSize.Height() = aLogicSize.Height();
+    double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
+
+
+    maPageVDev.Erase();
+    maPageVDev.Push();
+    maPageVDev.SetMapMode( MAP_100TH_MM );
+    sal_uLong nOldDrawMode = maPageVDev.GetDrawMode();
+    if( mbGreyscale )
+        maPageVDev.SetDrawMode( maPageVDev.GetDrawMode() |
+                                ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
+                                  DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+    aMtf.WindStart();
+    aMtf.Scale( fScale, fScale );
+    aMtf.WindStart();
+
+    const sal_uInt16 nOriginalAA(maPageVDev.GetAntialiasing());
+    maPageVDev.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
+    aMtf.Play( &maPageVDev, Point( 0, 0 ), aLogicSize );
+    maPageVDev.SetAntialiasing(nOriginalAA);
+
+    maPageVDev.Pop();
+
+    SetMapMode( MAP_PIXEL );
+    maPageVDev.SetMapMode( MAP_PIXEL );
+
+    maPreviewBitmap = Bitmap(maPageVDev.GetBitmap(Point(0, 0), aVDevSize));
+
+    maPageVDev.SetDrawMode( nOldDrawMode );
 }
 
 PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( Window* i_pParent )
