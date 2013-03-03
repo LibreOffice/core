@@ -122,7 +122,7 @@ private:
 
     TxtAlign            meAlign;
 
-    sal_Bool                mbIsFormatting      : 1;    // Semaphore wegen der Hook's
+    sal_Bool                mbIsFormatting      : 1;    // semaphore for the Hook's
     sal_Bool                mbFormatted         : 1;
     sal_Bool                mbUpdate            : 1;
     sal_Bool                mbModified          : 1;
@@ -161,7 +161,7 @@ protected:
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > GetInputSequenceChecker() const;
     SAL_DLLPRIVATE sal_Bool IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
 
-    // Broadcasten bzw. Selektionen anpassen:
+    // broadcast or adjust selections
     void                ImpParagraphInserted( sal_uLong nPara );
     void                ImpParagraphRemoved( sal_uLong nPara );
     void                ImpCharsRemoved( sal_uLong nPara, sal_uInt16 nPos, sal_uInt16 nChars );
@@ -210,12 +210,12 @@ protected:
     sal_uLong               CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nPortionLen, const Font* pFont = 0 );
     Range               GetInvalidYOffsets( sal_uLong nPortion );
 
-    // Fuer Undo/Redo
+    // for Undo/Redo
     void                InsertContent( TextNode* pNode, sal_uLong nPara );
     TextPaM             SplitContent( sal_uLong nNode, sal_uInt16 nSepPos );
     TextPaM             ConnectContents( sal_uLong nLeftNode );
 
-    // Ans API uebergebene PaM's und Selektionen auf einen gueltigen Bereich einstellen
+    // adjust PaM's and selections that were transfered to the API to a valid range
     void                ValidateSelection( TextSelection& rSel ) const;
     void                ValidatePaM( TextPaM& rPaM ) const;
 

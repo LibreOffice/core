@@ -25,7 +25,7 @@
 #include <svl/smplhint.hxx>
 #include <tools/string.hxx>
 
-// Fuer Notify, wenn alle Absaetze geloescht wurden...
+// for Notify, if all paragraphs were deleted
 #define TEXT_PARA_ALL               0xFFFFFFFF
 
 class TextPaM

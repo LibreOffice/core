@@ -381,7 +381,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
         {
             aText = mpSubEdit->GetText();
 
-            // Alle Eintraege entfernen, zu denen es einen Entry gibt, der aber nicht selektiert ist.
+            // remove all entries to which there is an selected entry
             xub_StrLen nIndex = 0;
             while ( nIndex != STRING_NOTFOUND )
             {
@@ -403,7 +403,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
                 aText = comphelper::string::strip(aText, ' ');
             }
 
-            // Fehlende Eintraege anhaengen...
+            // attach missing entries
             ::std::set< sal_uInt16 > aSelInText;
             lcl_GetSelectedEntries( aSelInText, aText, mcMultiSep, mpImplLB->GetEntryList() );
             sal_uInt16 nSelectedEntries = mpImplLB->GetEntryList()->GetSelectEntryCount();
@@ -415,7 +415,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
                     if ( aText.Len() && (aText.GetChar( aText.Len()-1 ) != mcMultiSep) )
                         aText += mcMultiSep;
                     if ( aText.Len() )
-                        aText += ' ';   // etwas auflockern
+                        aText += ' ';   // slightly loosen
                     aText += mpImplLB->GetEntryList()->GetEntryText( nP );
                     aText += mcMultiSep;
                 }
@@ -611,8 +611,8 @@ void ComboBox::Resize()
             ImplUpdateFloatSelection();
     }
 
-    // FloatingWindow-Groesse auch im unsichtbare Zustand auf Stand halten,
-    // weil KEY_PGUP/DOWN ausgewertet wird...
+    // adjust the size of the FloatingWindow even when invisible
+    // as KEY_PGUP/DOWN is being processed...
     if ( mpFloatWin )
         mpFloatWin->SetSizePixel( mpFloatWin->CalcFloatSize() );
 }
@@ -724,7 +724,8 @@ void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
             ImplInitDropDownButton( mpBtn );
         }
         Resize();
-        mpImplLB->Resize(); // Wird nicht durch ComboBox::Resize() gerufen, wenn sich die ImplLB nicht aendert.
+        mpImplLB->Resize(); // not called by ComboBox::Resize() if ImplLB is unchanged
+
         SetBackground();    // due to a hack in Window::UpdateSettings the background must be reset
                             // otherwise it will overpaint NWF drawn comboboxes
     }
@@ -857,7 +858,7 @@ void ComboBox::Modify()
 
 void ComboBox::ImplUpdateFloatSelection()
 {
-    // Text in der ListBox in den sichtbaren Bereich bringen
+    // move text in the ListBox into the visible region
     mpImplLB->SetCallSelectionChangedHdl( sal_False );
     if ( !IsMultiSelectionEnabled() )
     {
@@ -1112,11 +1113,11 @@ Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
 
 Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
-    // ggf. werden ScrollBars eingeblendet
+    // show ScrollBars where appropriate
     Size aMinSz = CalcMinimumSize();
     Size aSz;
 
-    // Hoehe
+    // height
     if ( nLines )
     {
         if ( !IsDropDownBox() )
@@ -1127,7 +1128,7 @@ Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
     else
         aSz.Height() = aMinSz.Height();
 
-    // Breite
+    // width
     if ( nColumns )
         aSz.Width() = nColumns * GetTextWidth(rtl::OUString(static_cast<sal_Unicode>('X')));
     else
@@ -1203,7 +1204,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, s
         }
     }
 
-    // Inhalt
+    // contents
     if ( !IsDropDownBox() )
     {
         long        nOnePixel = GetDrawPixel( pDev, 1 );

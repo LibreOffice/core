@@ -49,19 +49,19 @@ struct FltCallDialogParameter
 
 typedef sal_Bool (*PFilterCall)(SvStream & rStream, Graphic & rGraphic,
                                 FilterConfigItem* pConfigItem, sal_Bool bPrefDialog);
-    // Von diesem Typ sind sowohl Export-Filter-Funktionen als auch Import-Filter-Funktionen.
-    // rFileName ist der komplette Pfadname der zu importierenden bzw. zu exportierenden Datei.
-    // pCallBack darf auch NULL sein. pCallerData wird der Callback-Funktion uebergeben.
-    // pOptionsConfig darf NULL sein. Anderenfalls ist die Gruppe des Config schon gesetzt
-    // und darf von dem Filter nicht geaendert werden!
-    // Wenn bPrefDialog==sal_True gilt, wird ggf. ein Preferences-Dialog durchgefuehrt.
+    // Of this type are both export-filter and import-filter functions
+    // rFileName is the complete path to the file to be imported or exported
+    // pCallBack can be NULL. pCallerData is handed to the callback function
+    // pOptionsConfig can be NULL; if not, the group of the config is already set
+    // and may not be changed by this filter!
+    // If bPrefDialog==sal_True, a Preferences-Dialog might be called
 
 typedef sal_Bool ( *PFilterDlgCall )( FltCallDialogParameter& );
-    // Von diesem Typ sind sowohl Export-Filter-Funktionen als auch Import-Filter-Funktionen.
-    // Uebergeben wird ein Pointer auf ein Parent-Fenster und auf die Options-Config.
-    // pOptions und pWindow duerfen NULL sein, in diesem Fall wird sal_False zurueckgeliefert.
-    // Anderenfalls ist die Gruppe der Config schon gesetzt
-    // und darf von dem Filter nicht geaendert werden!
+    // Of this type are both export-filter and import-filter functions
+    // hands a pointer to the parent window and to the options config
+    // pOptions and pWindow can be NULL; in this case sal_False is returned,
+    // otherwise the group of the config is already set
+    // and may not be changed by this filter!
 
 #endif
 
