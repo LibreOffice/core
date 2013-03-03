@@ -405,7 +405,7 @@ Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
     if ( pControl->GetStyle() & WB_EXTRAOFFSET )
         aSize.Width() += 2;
 
-    // GetTextRect verkraftet keinen leeren String:
+    // GetTextRect cannot take and empty string
     if ( aSize.Width() < 0 )
         aSize.Width() = 0;
     if ( aSize.Height() <= 0 )
@@ -892,7 +892,7 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
     }
     else
     {
-        // Haben wir ueberhaupt eine Bitmap
+        // do we have a Bitmap?
         if ( !(!(*pBitmap)) )
         {
             if ( GetStyle() & WB_SCALE )
@@ -1095,7 +1095,7 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 
     Image *pImage = &maImage;
 
-    // Haben wir ueberhaupt ein Image
+    // do we have an image?
     if ( !(!(*pImage)) )
     {
         if ( GetStyle() & WB_SCALE )
