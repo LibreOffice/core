@@ -146,7 +146,6 @@ struct SfxDispatcher_Impl
                                         // 2==ReadOnlyDoc overturned
     sal_uInt16           nFilterCount;  // Number of SIDs in pFilterSIDs
     const sal_uInt16*    pFilterSIDs;   // sorted Array of SIDs
-    sal_uInt16           nStandardMode; // ExecuteMode from PlugInDispatcher
     std::vector<sal_uInt16>* pDisableList;
     sal_uInt32           nDisableFlags;
 };
@@ -325,7 +324,6 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     pImp->bFilterEnabling = sal_False;
     pImp->nFilterCount = 0;
     pImp->pFilterSIDs = 0;
-    pImp->nStandardMode = 0;
     pImp->pDisableList = pSfxApp->GetDisabledSlotList_Impl();
     pImp->nDisableFlags = 0;
 
@@ -2221,11 +2219,6 @@ void SfxDispatcher::SetQuietMode_Impl( sal_Bool bOn )
     SfxBindings* pBindings = GetBindings();
     if ( pBindings )
         pBindings->InvalidateAll(sal_True);
-}
-
-void SfxDispatcher::SetExecuteMode( sal_uInt16 nMode )
-{
-    pImp->nStandardMode = nMode;
 }
 
 SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, const SfxPoolItem* &rpState )

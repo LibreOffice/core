@@ -89,7 +89,6 @@ namespace dbtools
         virtual sal_Int32   getFormatKey() const;
         virtual sal_Int32   getFieldType() const;
         virtual sal_Int16   getKeyType() const;
-        virtual bool        isNumericField() const;
         virtual const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >&
                             getColumn() const;
         virtual const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate >&

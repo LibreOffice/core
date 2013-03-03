@@ -81,11 +81,6 @@ private:
     {
         return mnNumRenders;
     }
-    virtual sal_Int32 getAnimationCount() const
-    {
-        return mnAnimated;
-    }
-
 
     // XShape
     virtual ::rtl::OUString SAL_CALL getShapeType(  ) throw (uno::RuntimeException)

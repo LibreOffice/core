@@ -141,7 +141,6 @@ public:
     virtual long                            GetMembersCount( long nDim );
     virtual const ScDPItemData*   GetMemberByIndex( long nDim, long nIndex );
     virtual const ScDPItemData*   GetMemberById( long nDim, long nId);
-    virtual SCROW                        GetIdOfItemData( long  nDim, const ScDPItemData& rData );
     virtual long                GetSourceDim( long nDim );
     virtual long                Compare( long nDim, long nDataId1, long nDataId2);
 

@@ -38,9 +38,6 @@ class redirect_out : public ostream
   public:
     virtual             ~redirect_out() {}
 
-    void                re_endl()               { do_re_endl(); }
-    void                re_flush()              { do_re_flush(); }
-
     static void         set_(
                             redirect_out &      o_rStdOut,
                             redirect_out &      o_rStdErr )
@@ -54,9 +51,6 @@ class redirect_out : public ostream
     static bool         useme_()                { return pStdOut_ != 0; }
 
   private:
-    virtual void        do_re_endl() = 0;
-    virtual void        do_re_flush() = 0;
-
     // DATA
     static redirect_out *
                         pStdOut_;

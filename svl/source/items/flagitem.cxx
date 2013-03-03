@@ -86,15 +86,6 @@ SfxItemPresentation SfxFlagItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-XubString SfxFlagItem::GetFlagText( sal_uInt8 ) const
-{
-    DBG_CHKTHIS(SfxFlagItem, 0);
-    DBG_WARNING( "calling GetValueText(sal_uInt16) on SfxFlagItem -- overload!" );
-    return XubString();
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt8 SfxFlagItem::GetFlagCount() const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);

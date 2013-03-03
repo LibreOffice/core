@@ -313,38 +313,6 @@ void SfxObjectShell::SetOrganizerSearchMask(
 
 //--------------------------------------------------------------------
 
-sal_uInt16 SfxObjectShell::GetContentCount(sal_uInt16 nIdx)
-{
-    switch(nIdx)
-    {
-        case INDEX_IGNORE:
-            return DEF_CONTENT_COUNT;
-        case CONTENT_STYLE:
-        {
-            SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
-            if(!pStylePool)
-                return 0;
-            SetOrganizerSearchMask(pStylePool);
-            return pStylePool->Count();
-        }
-        case CONTENT_MACRO:
-            break;
-    }
-    return 0;
-}
-
-
-//--------------------------------------------------------------------
-//TODO/CLEANUP: remove this method
-void  SfxObjectShell::TriggerHelpPI(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
-{
-    if(nIdx1==CONTENT_STYLE && nIdx2 != INDEX_IGNORE) //StyleSheets
-    {
-        SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
-        SetOrganizerSearchMask(pStylePool);
-    }
-}
-
 sal_Bool SfxObjectShell::CanHaveChildren(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
 {
     switch(nIdx1)

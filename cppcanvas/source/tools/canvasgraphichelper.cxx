@@ -105,18 +105,6 @@ namespace cppcanvas
             return maRenderState;
         }
 
-        void CanvasGraphicHelper::setRGBAColor( Color::IntSRGBA aColor )
-        {
-            maRenderState.DeviceColor = tools::intSRGBAToDoubleSequence( mxGraphicDevice,
-                                                                         aColor );
-        }
-
-        Color::IntSRGBA CanvasGraphicHelper::getRGBAColor() const
-        {
-            return tools::doubleSequenceToIntSRGBA( mxGraphicDevice,
-                                                    maRenderState.DeviceColor );
-        }
-
         void CanvasGraphicHelper::setCompositeOp( CompositeOp aOp )
         {
             maRenderState.CompositeOperation = (sal_Int8)aOp;

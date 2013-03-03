@@ -46,22 +46,6 @@ public:
             SvXMLImport& rImport);
     virtual ~ScXMLCellImportPropertyMapper();
 
-    /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
-/*  virtual sal_Bool handleSpecialItem(
-            XMLPropertyState& rProperty,
-            ::std::vector< XMLPropertyState >& rProperties,
-            const ::rtl::OUString& rValue,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap ) const;*/
-
-    /** this method is called for every item that has the MID_FLAG_NO_ITEM_IMPORT flag set */
-/*  virtual sal_Bool handleNoItem(
-            sal_Int32 nIndex,
-            ::std::vector< XMLPropertyState >& rProperties,
-               const ::rtl::OUString& rValue,
-               const SvXMLUnitConverter& rUnitConverter,
-               const SvXMLNamespaceMap& rNamespaceMap ) const;*/
-
     /** This method is called when all attributes have been processed. It may be used to remove items that are incomplete */
     virtual void finished(
             ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const;
@@ -180,8 +164,6 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-//  virtual SvXMLImportPropertyMapper *GetImpPropMapper();
-
 public:
 
     XMLTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
@@ -189,12 +171,6 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const bool bAutoStyles );
     virtual ~XMLTableStylesContext();
-
-    // Create child element.
-/*  virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );*/
 
     virtual void EndElement();
 

@@ -247,18 +247,6 @@ void Application::UserEvent( sal_uLong, void* )
 
 // -----------------------------------------------------------------------
 
-void Application::ActivateExtHelp()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void Application::DeactivateExtHelp()
-{
-}
-
-// -----------------------------------------------------------------------
-
 void Application::FocusChanged()
 {
 }

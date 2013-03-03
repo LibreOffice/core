@@ -110,7 +110,6 @@ public:
     const Link&     GetModifyHdl() const                { return aModifyHdlLink; }
 
     void            SetUpdateDataHdl( const Link& rLink ) { aUpdateDataHdlLink = rLink; }
-    const Link&     GetUpdateDataHdl() const { return aUpdateDataHdlLink; }
 
     virtual void    Resize();
     virtual void    GetFocus();

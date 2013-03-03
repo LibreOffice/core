@@ -326,12 +326,6 @@ sal_Bool ScDrawLayer::HasObjects() const
     return bFound;
 }
 
-void ScDrawLayer::UpdateBasic()
-{
-    //  don't create basic until it is needed
-    //! remove this method?
-}
-
 SdrModel* ScDrawLayer::AllocModel() const
 {
     //  Allocated model (for clipboard etc) must not have a pointer

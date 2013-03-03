@@ -23,7 +23,6 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/wallitem.hxx>
 #include <svl/cntwall.hxx>
 #include <sfx2/cntids.hrc>
 #include <svx/dialogs.hrc>

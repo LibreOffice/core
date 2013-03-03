@@ -43,8 +43,6 @@ public:
     DlgEdModel();
     virtual ~DlgEdModel();
 
-    virtual void DlgEdModelChanged( bool bChanged = true );
-
     virtual SdrPage*  AllocPage(bool bMasterPage);
 
     virtual Window* GetCurDocViewWin();

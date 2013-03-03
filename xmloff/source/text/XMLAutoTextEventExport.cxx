@@ -211,7 +211,6 @@ void XMLAutoTextEventExport::_ExportFontDecls() {}
 void XMLAutoTextEventExport::_ExportStyles( sal_Bool ) {}
 void XMLAutoTextEventExport::_ExportAutoStyles() {}
 void XMLAutoTextEventExport::_ExportMasterStyles() {}
-void XMLAutoTextEventExport::_ExportChangeTracking() {}
 void XMLAutoTextEventExport::_ExportContent() {}
 
 

@@ -153,38 +153,6 @@ TURLList* RecoveryCore::getURLListAccess()
 }
 
 //===============================================
-sal_Bool RecoveryCore::existsBrokenTempEntries()
-{
-    TURLList::const_iterator pIt;
-    for (  pIt  = m_lURLs.begin();
-           pIt != m_lURLs.end()  ;
-         ++pIt                   )
-    {
-        const TURLInfo& rInfo = *pIt;
-        if (RecoveryCore::isBrokenTempEntry(rInfo))
-            return sal_True;
-    }
-
-    return sal_False;
-}
-
-//===============================================
-sal_Bool RecoveryCore::existsNonRecoveredEntries()
-{
-    TURLList::const_iterator pIt;
-    for (  pIt  = m_lURLs.begin();
-           pIt != m_lURLs.end()  ;
-         ++pIt                   )
-    {
-        const TURLInfo& rInfo = *pIt;
-        if (rInfo.RecoveryState == E_NOT_RECOVERED_YET)
-            return sal_True;
-    }
-
-    return sal_False;
-}
-
-//===============================================
 sal_Bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
 {
     if (rInfo.TempURL.isEmpty())

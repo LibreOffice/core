@@ -210,12 +210,6 @@ struct PageData
     }
 };
 
-class IPageAllocator
-{
-public:
-  virtual void deallocate (void * p) = 0;
-};
-
 class PageAllocator
 {
     rtl_cache_type * m_cache;
@@ -707,12 +701,10 @@ public:
 
 /*======================================================================*/
 
-class IPageAllocator;
 class IPageAccess
 {
 public:
     virtual storeError initialize (storeAccessMode eAccessMode, sal_uInt16 nPageSize) = 0;
-    virtual IPageAllocator & getAllocator () = 0;
 
 public:
     storeError readPageAt (PageHolder & rPage, sal_uInt32 nOffset)

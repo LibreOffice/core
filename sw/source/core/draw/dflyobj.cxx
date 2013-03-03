@@ -142,11 +142,6 @@ sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
 }
 
 
-sal_uInt16 SwFlyDrawObj::GetObjVersion() const
-{
-    return SwDrawFirst;
-}
-
 // SwVirtFlyDrawObj::CToren, Dtor
 
 // AW: Need own primitive to get the FlyFrame paint working

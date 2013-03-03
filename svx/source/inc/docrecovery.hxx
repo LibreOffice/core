@@ -246,8 +246,6 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         //---------------------------------------
         /** @short  TODO */
-        virtual sal_Bool existsBrokenTempEntries();
-        virtual sal_Bool existsNonRecoveredEntries();
         static sal_Bool isBrokenTempEntry(const TURLInfo& rInfo);
         virtual void saveBrokenTempEntries(const ::rtl::OUString& sSaveDir);
         virtual void saveAllTempEntries(const ::rtl::OUString& sSaveDir);

@@ -150,8 +150,6 @@ public:
     virtual sal_Bool    SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, sal_uInt16 nSlotId, SfxPoolItem& );
     virtual sal_Bool    SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, const String& rURL );
 
-    virtual sal_Bool    HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd );
-
     virtual const String* GetPrevPara( sal_Bool bAtNormalPos );
 
     virtual sal_Bool    ChgAutoCorrWord( sal_uInt16& rSttPos, sal_uInt16 nEndPos,

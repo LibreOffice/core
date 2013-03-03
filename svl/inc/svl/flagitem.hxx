@@ -44,7 +44,6 @@ public:
                                 DBG_DTOR(SfxFlagItem, 0); }
 
     virtual sal_uInt8            GetFlagCount() const;
-    virtual XubString        GetFlagText( sal_uInt8 nFlag ) const;
 
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nVersion) const;

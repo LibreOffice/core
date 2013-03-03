@@ -121,8 +121,6 @@ public:
 
     virtual             ~SfxDispatcher();
 
-    virtual void        SetExecuteMode( sal_uInt16 );
-
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall = SFX_CALLMODE_SLOT,
                                  const SfxPoolItem **pArgs = 0,

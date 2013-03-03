@@ -138,7 +138,6 @@ protected:
     virtual void ScrollArea();                      // Set ScrollArea
     // Replace word
     virtual void ChangeWord( const String& rNewWord, const sal_uInt16 nLang );
-    virtual String GetThesWord();
     // Wort via Thesaurus ersetzen
     virtual void ChangeThesWord( const String& rNewWord );
     virtual void SetLanguage( const sal_uInt16 nLang ); // Change Language
