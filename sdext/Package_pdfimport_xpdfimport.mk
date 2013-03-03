@@ -7,8 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,pdfimport_xcu,$(SRCDIR)/sdext))
+$(eval $(call gb_Package_Package,sdext_pdfimport_pdf,$(SRCDIR)/sdext))
 
-$(eval $(call gb_Package_add_file,pdfimport_xcu,bin/xpdfimport_err.pdf,source/pdfimport/dialogs/xpdfimport_err.pdf))
+$(eval $(call gb_Package_add_file,sdext_pdfimport_pdf,bin/xpdfimport_err.pdf,source/pdfimport/dialogs/xpdfimport_err.pdf))
 
 # vim: set noet sw=4 ts=4:
