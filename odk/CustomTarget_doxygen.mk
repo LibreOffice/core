@@ -27,7 +27,7 @@ odk_INCFILELIST := com/sun/star/uno/Any.h \
 	com/sun/star/uno/Type.hxx
 
 # Cygwin Doxygen needs unix paths
-DOXY_INPUT := $(docu_SRCDIR)/main.dox $(addprefix $(OUTDIR)/inc/,$(odk_INCDIRLIST) $(odk_INCFILELIST))
+DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(addprefix $(OUTDIR)/inc/,$(odk_INCDIRLIST) $(odk_INCFILELIST))
 DOXY_INPUT := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(DOXY_INPUT)),$(DOXY_INPUT))
 DOXY_WORKDIR := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(odk_WORKDIR)/docs/cpp/ref),$(odk_WORKDIR)/docs/cpp/ref)
 DOXY_STRIP_PATH := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(OUTDIR)/inc),$(OUTDIR)/inc)
@@ -48,7 +48,7 @@ $(odk_WORKDIR)/docs/cpp/ref/index.html: $(DOXY_DEPS)
 	sed -e 's!^INPUT = %$$!INPUT = $(DOXY_INPUT)!' \
 	-e 's!^OUTPUT_DIRECTORY = %$$!OUTPUT_DIRECTORY = $(DOXY_WORKDIR)!' \
 	-e 's!^PROJECT_BRIEF = %$$!PROJECT_BRIEF = $(CPPDOCREFNAME)!' \
-        -e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),YES,NO)!' \
+        -e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
         -e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(DOXY_STRIP_PATH)!' \
 	$< > $(odk_WORKDIR)/Doxyfile
 	$(DOXYGEN) $(odk_WORKDIR)/Doxyfile > /dev/null
