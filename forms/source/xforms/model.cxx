@@ -236,7 +236,7 @@ void Model::dbg_assertInvariant() const
 
 
 //
-// MIP managment
+// MIP management
 //
 
 void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )

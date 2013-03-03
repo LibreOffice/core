@@ -1521,7 +1521,7 @@ ScChart2DataProvider::createDataSource(
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
         Reference< chart2::data::XLabeledDataSequence > xCategories = lcl_createLabeledDataSequenceFromTokens(
-            pValueTokens, pLabelTokens, m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transfered!
+            pValueTokens, pLabelTokens, m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
         if ( xCategories.is() )
         {
             aSeqs.push_back( xCategories );
@@ -1547,7 +1547,7 @@ ScChart2DataProvider::createDataSource(
             pLabelTokens.reset(pChartMap->getRowHeaderRanges(static_cast<SCROW>(i)));
         }
         Reference< chart2::data::XLabeledDataSequence > xChartSeries = lcl_createLabeledDataSequenceFromTokens(
-            pValueTokens, pLabelTokens, m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transfered!
+            pValueTokens, pLabelTokens, m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
         if ( xChartSeries.is() && xChartSeries->getValues().is() && xChartSeries->getValues()->getData().getLength() )
         {
             aSeqs.push_back( xChartSeries );

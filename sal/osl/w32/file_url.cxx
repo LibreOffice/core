@@ -1020,7 +1020,7 @@ oslFileError SAL_CALL osl_searchFileURL(
             WIN32_FIND_DATA aFindFileData;
             HANDLE  hFind;
 
-            /* Somthing went wrong, perhaps the path was absolute */
+            /* something went wrong, perhaps the path was absolute */
             error = oslTranslateFileError( GetLastError() );
 
             hFind = FindFirstFile( reinterpret_cast<LPCTSTR>(ustrSysPath->buffer), &aFindFileData );

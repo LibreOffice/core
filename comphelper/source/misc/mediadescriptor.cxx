@@ -575,7 +575,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
     css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
 
     // try to create the content
-    // no content -> no stream => return immediatly with FALSE
+    // no content -> no stream => return immediately with FALSE
     ::ucbhelper::Content                      aContent;
     css::uno::Reference< css::ucb::XContent > xContent;
     try

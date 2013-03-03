@@ -4765,7 +4765,7 @@ we check in the following sequence:
                 }
                 else
                 {
-// change the fragment to accomodate the bookmark (only if the file extension is PDF and
+// change the fragment to accommodate the bookmark (only if the file extension is PDF and
 // the requested action is of the correct type)
                     if(m_aContext.DefaultLinkAction == PDFWriter::URIActionDestination &&
                                bTargetHasPDFExtension && !aFragment.isEmpty() )

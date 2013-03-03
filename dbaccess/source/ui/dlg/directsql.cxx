@@ -264,7 +264,7 @@ DBG_NAME(DirectSQLDialog)
                 }
             }
 
-            // successfull
+            // successful
             sStatus = String(ModuleRes(STR_COMMAND_EXECUTED_SUCCESSFULLY));
 
             // dispose the statement

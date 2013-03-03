@@ -55,7 +55,7 @@ namespace framework
                     public  css::task::XJob                     ,
                     public  css::util::XCloseable               ,
                     // base classes
-                    // Order is neccessary for right initialization!
+                    // Order is necessary for right initialization!
                     private ThreadHelpBase                      , // Struct for right initalization of mutex member! Must be first of baseclasses.
                     public  ::cppu::OWeakObject                   // => XWeak, XInterface
     {

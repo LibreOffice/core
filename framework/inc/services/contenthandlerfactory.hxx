@@ -78,7 +78,7 @@ class ContentHandlerFactory :   // interfaces
                         public  css::container::XNameContainer      ,       // => XNameReplace => XNameAccess => XElementAccess
                         public  css::util::XFlushable               ,
                         // base classes
-                        // Order is neccessary for right initialization of it!
+                        // Order is necessary for right initialization of it!
                         private ThreadHelpBase                      ,
                         private TransactionBase                     ,
                         public  ::cppu::OWeakObject

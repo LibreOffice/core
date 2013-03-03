@@ -146,7 +146,7 @@ void AccessibleShape::Init (void)
             static_cast<document::XEventListener*>(this));
 
     // Beware! Here we leave the paths of the UNO API and descend into the
-    // depths of the core.  Necessary for makeing the edit engine
+    // depths of the core.  Necessary for making the edit engine
     // accessible.
     Reference<text::XText> xText (mxShape, uno::UNO_QUERY);
     if (xText.is())

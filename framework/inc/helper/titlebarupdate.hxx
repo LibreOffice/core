@@ -63,7 +63,7 @@ class TitleBarUpdate : // interfaces
                      , public css::lang::XInitialization
                      , public css::frame::XTitleChangeListener // => XEventListener
                      , public css::frame::XFrameActionListener // => XEventListener
-                       // baseclasses (order neccessary for right initialization!)
+                       // baseclasses (order necessary for right initialization!)
                      , private ThreadHelpBase
                      , public  ::cppu::OWeakObject
 {

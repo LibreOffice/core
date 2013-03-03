@@ -1547,7 +1547,7 @@ namespace dbmm
                     if ( !xSourceLibraries->isLibraryLoaded( *pSourceLibName ) )
                         xSourceLibraries->loadLibrary( *pSourceLibName );
 
-                    // copy the content of this particular libary
+                    // copy the content of this particular library
                     Reference< XNameAccess > xSourceLib( xSourceLibraries->getByName( *pSourceLibName ), UNO_QUERY_THROW );
                     Reference< XNameContainer > xTargetLib( xTargetLibraries->createLibrary( sNewLibName ), UNO_QUERY_THROW );
 

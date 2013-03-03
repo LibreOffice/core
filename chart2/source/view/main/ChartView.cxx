@@ -1462,7 +1462,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
             pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
                 createTransformationSceneToScreen( aVDiagram.getCurrentRectangle() ) ));
         }
-        pVCooSys->updatePositions();//todo: logically this belongs to the condition above, but it seems also to be neccessary to give the axes group shapes the right bounding rects for hit test -  probably caused by bug i106183 -> check again if fixed
+        pVCooSys->updatePositions();//todo: logically this belongs to the condition above, but it seems also to be necessary to give the axes group shapes the right bounding rects for hit test -  probably caused by bug i106183 -> check again if fixed
     }
 
     //create axes and grids for the final size
@@ -2438,7 +2438,7 @@ void ChartView::createShapes()
         .getOrCreateChartRootShape( m_xDrawPage ) );
 
     SdrPage* pPage = ChartView::getSdrPage();
-    if(pPage) //it is neccessary to use the implementation here as the uno page does not provide a propertyset
+    if(pPage) //it is necessary to use the implementation here as the uno page does not provide a propertyset
         pPage->SetSize(Size(aPageSize.Width,aPageSize.Height));
     else
     {

@@ -1737,7 +1737,7 @@ void SvXMLNumFmtExport::Export( sal_Bool bIsAutoStyle )
                     DBG_ASSERT((pFormat->GetType() & NUMBERFORMAT_DEFINED) != 0, "a not user defined numberformat found");
                     //  user-defined and used formats are exported
                     ExportFormat_Impl( *pFormat, nKey );
-                    // if it is a user-defined Format it will be added else nothing will hapen
+                    // if it is a user-defined Format it will be added else nothing will happen
                     pUsedList->SetUsed(nKey);
                 }
 

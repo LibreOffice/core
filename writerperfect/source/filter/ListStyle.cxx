@@ -41,7 +41,7 @@ void OrderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) cons
         listLevelStyleOpen.addAttribute("style:num-format", mPropList["style:num-format"]->getStr());
     if (mPropList["text:start-value"])
     {
-        // odf as to the version 1.1 does require the text:start-value to be a positive integer, means > 0
+        // ODF as to the version 1.1 does require the text:start-value to be a positive integer, means > 0
         if (mPropList["text:start-value"]->getInt() > 0)
             listLevelStyleOpen.addAttribute("text:start-value", mPropList["text:start-value"]->getStr());
         else
@@ -76,7 +76,7 @@ void UnorderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) co
     listLevelStyleOpen.addAttribute("text:style-name", "Bullet_Symbols");
     if (mPropList["text:bullet-char"] && (mPropList["text:bullet-char"]->getStr().len()))
     {
-        // The following is needed because the odf format does not accept bullet chars longer than one character
+        // The following is needed because the ODF format does not accept bullet chars longer than one character
         WPXString::Iter i(mPropList["text:bullet-char"]->getStr());
         i.rewind();
         WPXString sEscapedString(".");

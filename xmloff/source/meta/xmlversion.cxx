@@ -363,7 +363,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             Reference< io::XOutputStream > xOut = xVerStream->getOutputStream();
             if ( !xOut.is() )
-                throw uno::RuntimeException(); // the stream was successfuly opened for writing already
+                throw uno::RuntimeException(); // the stream was successfully opened for writing already
 
             Reference< io::XActiveDataSource > xSrc( xWriter, uno::UNO_QUERY );
             xSrc->setOutputStream(xOut);

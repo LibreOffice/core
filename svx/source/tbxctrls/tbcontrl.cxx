@@ -763,7 +763,7 @@ sal_Bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* 
         pBox->Disable();
     }
 
-    // Fill the FontBox, also the new list if neccessary
+    // Fill the FontBox, also the new list if necessary
     if ( pBox && bChanged )
     {
         if ( *ppFontList )
@@ -1935,7 +1935,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
         pStyleSheetPool->SetSearchMask( eFamily, SFXSTYLEBIT_USED );
 
-        // Check whether fill is neccessary
+        // Check whether fill is necessary
         pStyle = pStyleSheetPool->First();
         //!!! TODO: This condition isn't right any longer, because we always show some default entries
         //!!! so the list doesn't show the count

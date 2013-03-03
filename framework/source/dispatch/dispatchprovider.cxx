@@ -423,7 +423,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
         // Not for controller - not for protocol handler
         // It should be a loadable content - may be a file. Check it ...
-        // This check is neccessary to found out, that
+        // This check is necessary to found out, that
         // support for some protocols isn't installed by user. May be
         // "ftp" isn't available. So we suppress creation of our self dispatcher.
         // The result will be clear. He can't handle it - but he would try it.
@@ -519,7 +519,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
         }
         catch(const css::uno::Exception&) {}
 
-        // look if initialization is neccessary
+        // look if initialization is necessary
         css::uno::Reference< css::lang::XInitialization > xInit( xHandler, css::uno::UNO_QUERY );
         if (xInit.is())
         {

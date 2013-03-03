@@ -1007,7 +1007,7 @@ public class DocumentLoader
 
             // should have document load task publish pageCount before this happens: Shouldn't try to pre-fetch
             // non-existant pages && need to know how many navigation thumbnails to render.
-            // Should put these on anothe serial executor?
+            // Should put these on another serial executor?
             flipper.addView(new PageViewer(0), 0, matchParent);
             for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
                 flipper.addView(new PageViewer(i+1), i+1, matchParent);

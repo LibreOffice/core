@@ -70,7 +70,7 @@
 
 namespace framework{
 
-// This enum can be used to set differnt active states of frames
+// This enum can be used to set different active states of frames
 enum EActiveState
 {
     E_INACTIVE      ,   // I'am not a member of active path in tree and i don't have the focus.
@@ -125,7 +125,7 @@ class Frame :   // interfaces
                 public  css::frame::XTitle                          ,
                 public  css::frame::XTitleChangeBroadcaster         ,
                 // base classes
-                // Order is neccessary for right initialization of this class!
+                // Order is necessary for right initialization of this class!
                 public  ThreadHelpBase                              ,
                 public  TransactionBase                             ,
                 public  PropertySetHelper                           ,   // helper implements ThreadHelpbase, TransactionBase, XPropertySet, XPropertySetInfo

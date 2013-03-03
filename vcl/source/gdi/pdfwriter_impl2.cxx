@@ -98,7 +98,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         }
         if( i_rContext.m_nMaxImageResolution > 50 )
         {
-            // do downsampling if neccessary
+            // do downsampling if necessary
             const Size      aDstSizeTwip( i_pDummyVDev->PixelToLogic( i_pDummyVDev->LogicToPixel( aSize ), MAP_TWIP ) );
             const Size      aBmpSize( aBitmapEx.GetSizePixel() );
             const double    fBmpPixelX = aBmpSize.Width();

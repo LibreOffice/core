@@ -221,7 +221,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         return;
     }
 
-    // short circut for drawing an invisible polygon
+    // short circuit for drawing an invisible polygon
     if( !mbFillColor || (nTransparencePercent >= 100) )
     {
         // short circuit if the polygon border is invisible too
@@ -646,7 +646,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                 if(GetAntialiasing())
                 {
                     // #i102109#
-                    // For MetaFile replay (see task) it may now be neccessary to take
+                    // For MetaFile replay (see task) it may now be necessary to take
                     // into account that the content is AntiAlialised and needs to be masked
                     // like that. Instead of masking, i will use a copy-modify-paste cycle
                     // here (as i already use in the VclPrimiziveRenderer with successs)

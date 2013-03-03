@@ -1514,7 +1514,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
         if ( !bSameLineAgain )
         {
             nIndex = pLine->GetEnd();   // next line start = last line end
-                                        // as nEnd points to the last charecter!
+                                        // as nEnd points to the last character!
 
             sal_uInt16 nEndPortion = pLine->GetEndPortion();
 
@@ -2145,7 +2145,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
             }
 
             // 3. Priority:
-            // before final form of Teh Marbuta, Hah, Dal
+            // before final form of the Marbuta, Hah, Dal
             // 4. Priority:
             // before final form of Alef, Lam or Kaf
             if ( nIdx && nIdx + 1 == aWord.Len() &&
@@ -4306,7 +4306,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara,
 
     if ( !bR2L )
     {
-        // No CTL/Bidi checking neccessary
+        // No CTL/Bidi checking necessary
         nLayoutMode |= ( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
     }
     else

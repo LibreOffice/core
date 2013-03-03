@@ -390,7 +390,7 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
     {
         // Take URL, page name, style name, and page object into account
         // when comparing two descriptors.  When two descriptors are
-        // identical in any of these values then their are thought of as
+        // identical in any of these values then there are thought of as
         // equivalent.  Only the Origin has to be the same in both
         // descriptors.
         return

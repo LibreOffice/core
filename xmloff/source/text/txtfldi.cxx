@@ -711,7 +711,7 @@ void XMLSenderFieldImportContext::ProcessAttribute(
         bool bVal(false);
         bool const bRet = ::sax::Converter::convertBool(bVal, sAttrValue);
 
-        // set bFixed if successfull
+        // set bFixed if successful
         if (bRet) {
             bFixed = bVal;
         }

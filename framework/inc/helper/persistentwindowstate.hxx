@@ -60,7 +60,7 @@ class PersistentWindowState :   // interfaces
                                 public css::lang::XTypeProvider,
                                 public css::lang::XInitialization,
                                 public css::frame::XFrameActionListener, // => XEventListener
-                                // baseclasses (order neccessary for right initialization!)
+                                // baseclasses (order necessary for right initialization!)
                                 private ThreadHelpBase,
                                 public  ::cppu::OWeakObject
 {

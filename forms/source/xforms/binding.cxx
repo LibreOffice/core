@@ -1263,7 +1263,7 @@ void Binding::handleEvent( const XEvent_t& xEvent )
 
         // the modification of the 'mnDeferModifyNotifications'-member
         // is necessary to prevent infinite notication looping.
-        // This can happend in case the binding which caused
+        // This can happened in case the binding which caused
         // the notification chain is listening to those events
         // as well...
         bool bPreserveValueModified = mbValueModified;

@@ -158,7 +158,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
         }
     }
 
-    // the subelement was opened successfuly, remember the storage to let it be locked
+    // the subelement was opened successfully, remember the storage to let it be locked
     m_xOwnStorage = xOwnStor;
 
     return xResult;

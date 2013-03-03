@@ -1103,7 +1103,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
                    ::comphelper::ConfigurationHelper::openConfig(
                         comphelper::getComponentContext(xSMGR),
                         CFG_NODE_OLD,
-                        ::comphelper::ConfigurationHelper::E_STANDARD), // not readonly! Somtimes we need write access there !!!
+                        ::comphelper::ConfigurationHelper::E_STANDARD), // not readonly! Sometimes we need write access there !!!
                    css::uno::UNO_QUERY_THROW);
 
         // SAFE ->

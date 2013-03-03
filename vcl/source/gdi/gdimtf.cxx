@@ -3092,7 +3092,7 @@ sal_Bool GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
         const_cast<GDIMetaFile *>(this)->WindStart();
         const_cast<GDIMetaFile *>(this)->Play( &aVDev, aBackPosPix, aDrawSize );
 
-        // draw overlay if neccessary
+        // draw overlay if necessary
         if ( pOverlay )
             aVDev.DrawBitmapEx( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), *pOverlay );
 

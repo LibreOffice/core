@@ -3006,7 +3006,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
 
     OSL_ENSURE( ppHead, "keinen Attributs-Listenkopf gefunden!" );
 
-    // die aktuelle Psoition als Ende-Position merken
+    // die aktuelle Position als Ende-Position merken
     const SwNodeIndex* pEndIdx = &pPam->GetPoint()->nNode;
     xub_StrLen nEndCnt = pPam->GetPoint()->nContent.GetIndex();
 
@@ -5213,7 +5213,7 @@ void SwHTMLParser::InsertLineBreak()
     }
     else if( pPam->GetPoint()->nContent.GetIndex() )
     {
-        // wenn ein Claer in einem nicht-leeren Absatz ausgefuehrt wurde,
+        // wenn ein clear in einem nicht-leeren Absatz ausgefuehrt wurde,
         // muss anschliessen ein neuer Absatz aufgemacht werden
         // MIB 21.02.97: Eigentlich muesste man hier den unteren Absatz-
         // Absatnd auf 0 drehen. Das geht aber bei sowas wie <BR ..><P>

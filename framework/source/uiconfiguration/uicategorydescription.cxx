@@ -73,7 +73,7 @@ namespace framework
 //  Configuration access class for PopupMenuControllerFactory implementation
 //*****************************************************************************************************************
 
-class ConfigurationAccess_UICategory : // Order is neccessary for right initialization!
+class ConfigurationAccess_UICategory : // Order is necessary for right initialization!
                                         private ThreadHelpBase                           ,
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
 {

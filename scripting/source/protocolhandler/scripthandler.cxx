@@ -162,7 +162,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                     return;
             }
 
-            // Creates a ScriptProvider ( if one is not created allready )
+            // Creates a ScriptProvider ( if one is not created already )
             createScriptProvider();
 
             Reference< provider::XScript > xFunc =

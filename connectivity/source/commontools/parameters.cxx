@@ -472,7 +472,7 @@ namespace dbtools
             ( nSmallestIndexLinkedByColumnName > nLargestIndexNotLinkedByColumnName ),
             "ParameterManager::createOuterParameters: inconsistency!" );
 
-        // for the master-detail links, where the detail field denoted a column name, we created an addtional ("artificial")
+        // for the master-detail links, where the detail field denoted a column name, we created an additional ("artificial")
         // filter, and *appended* it to all other (potentially) existing filters of the row set. This means that the indexes
         // for the parameters resulting from the artifical filter should be larger than any other parameter index, and this
         // is what the assertion checks.

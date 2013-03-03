@@ -247,11 +247,11 @@ namespace vcl
         T* get() { return m_pT; }
 
         // set contents, returning old contents
-        // ownership is transfered !
+        // ownership is transferred !
         T* set( T* i_pNew ) { T* pOld = m_pT; m_pT = i_pNew; return pOld; }
 
         // set contents, deleting old contents
-        // ownership is transfered !
+        // ownership is transferred !
         void reset( T* i_pNew = NULL )
             { OSL_ASSERT( i_pNew != m_pT || i_pNew == NULL ); T* pOld = m_pT; m_pT = i_pNew; delete pOld; }
     };

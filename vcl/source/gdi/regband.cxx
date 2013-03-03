@@ -182,7 +182,7 @@ void ImplRegionBand::ProcessPoints()
 
         ImplRegionBandPoint* pNextBandPoint = pRegionBandPoint->mpNextBandPoint->mpNextBandPoint;
 
-        // remove allready processed points
+        // remove already processed points
         delete pRegionBandPoint->mpNextBandPoint;
         delete pRegionBandPoint;
 
@@ -216,7 +216,7 @@ sal_Bool ImplRegionBand::InsertPoint( long nX, long nLineId,
         return sal_True;
     }
 
-    // look if line allready touched the band
+    // look if line already touched the band
     ImplRegionBandPoint* pRegionBandPoint = mpFirstBandPoint;
     ImplRegionBandPoint* pLastTestedRegionBandPoint = NULL;
     while( pRegionBandPoint )
@@ -272,7 +272,7 @@ sal_Bool ImplRegionBand::InsertPoint( long nX, long nLineId,
     pLastTestedRegionBandPoint = NULL;
     while ( pRegionBandPoint )
     {
-        // new point completly left? -> insert as first point
+        // new point completely left? -> insert as first point
         if ( nX <= pRegionBandPoint->mnX )
         {
             pNewRegionBandPoint                     = new ImplRegionBandPoint;
@@ -409,7 +409,7 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
         if ( (nXLeft >= pSep->mnXLeft) && (nXRight <= pSep->mnXRight) )
             return;
 
-        // new separation completly left? -> new separation!
+        // new separation completely left? -> new separation!
         if ( nXRight < pSep->mnXLeft )
         {
             pNewSep             = new ImplRegionBandSep;
@@ -473,7 +473,7 @@ void ImplRegionBand::Intersect( long nXLeft, long nXRight )
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )
     {
-        // new separation completly outside? -> remove separation
+        // new separation completely outside? -> remove separation
         if ( (nXRight < pSep->mnXLeft) || (nXLeft > pSep->mnXRight) )
             // will be removed from the optimizer
             pSep->mbRemoved = sal_True;
@@ -894,7 +894,7 @@ sal_Bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
         pSecondRectBandSep = pSecondRectBandSep->mpNextSep;
     }
 
-    // differnt number of separations?
+    // different number of separations?
     if ( pOwnRectBandSep || pSecondRectBandSep )
         return sal_False;
 

@@ -203,12 +203,12 @@ namespace svt
             else
                 bIs = m_pContent->isDocument();
 
-            // from here on, we definately know that the content is valid
+            // from here on, we definitely know that the content is valid
             m_eState = VALID;
         }
         catch( const Exception& )
         {
-            // now we're definately invalid
+            // now we're definitely invalid
             m_eState = INVALID;
         }
         return bIs;
@@ -226,12 +226,12 @@ namespace svt
             m_pContent->getPropertyValue( OUString( "Title" ) ) >>= sTitle;
             _rTitle =  sTitle;
 
-            // from here on, we definately know that the content is valid
+            // from here on, we definitely know that the content is valid
             m_eState = VALID;
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            // now we're definately invalid
+            // now we're definitely invalid
             m_eState = INVALID;
         }
     }
@@ -254,14 +254,14 @@ namespace svt
                     const OUString aParentURL( xParent->getIdentifier()->getContentIdentifier() );
                     bRet = ( !aParentURL.isEmpty() && aParentURL != m_pContent->getURL() );
 
-                    // now we're definately valid
+                    // now we're definitely valid
                     m_eState = VALID;
                 }
             }
         }
         catch( const Exception& )
         {
-            // now we're definately invalid
+            // now we're definitely invalid
             m_eState = INVALID;
         }
         return bRet;
@@ -289,12 +289,12 @@ namespace svt
                 }
             }
 
-            // now we're definately valid
+            // now we're definitely valid
             m_eState = VALID;
         }
         catch( const Exception& )
         {
-            // now we're definately invalid
+            // now we're definitely invalid
             m_eState = INVALID;
         }
         return bRet;

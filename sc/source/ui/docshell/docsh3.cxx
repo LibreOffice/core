@@ -115,7 +115,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uI
 
         if ( pPaintLockData )
         {
-            // #i54081# PAINT_EXTRAS still has to be brodcast because it changes the
+            // #i54081# PAINT_EXTRAS still has to be broadcast because it changes the
             // current sheet if it's invalid. All other flags added to pPaintLockData.
             sal_uInt16 nLockPart = nPart & ~PAINT_EXTRAS;
             if ( nLockPart )

@@ -98,7 +98,7 @@ namespace dbaui
         Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
         Link                m_aCreationModeHandler; /// to be called if a new type is selected
         Link                m_aDocumentSelectionHandler;    /// to be called when a document in the RecentDoc list is selected
-        Link                m_aChooseDocumentHandler;       /// to be called when a recent document has been definately chosen
+        Link                m_aChooseDocumentHandler;       /// to be called when a recent document has been definitely chosen
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
         bool                approveDataSourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );

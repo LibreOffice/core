@@ -2507,7 +2507,7 @@ void clearUnoMethodsForBasic( StarBASIC* pBasic )
             if ( pModBasic == pBasic )
             {
                 // for now the solution is to remove the method from the list and to clear it,
-                // but in case the element should be correctly transfered to another StarBASIC,
+                // but in case the element should be correctly transferred to another StarBASIC,
                 // we should either set module parent to NULL without clearing it, or even
                 // set the new StarBASIC as the parent of the module
                 // pObject->SetParent( NULL );

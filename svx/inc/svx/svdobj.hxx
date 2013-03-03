@@ -596,7 +596,7 @@ public:
 
     // #111111#
     // To make clearer that this method may trigger RecalcBoundRect and thus may be
-    // expensive and somtimes problematic (inside a bigger object change You will get
+    // expensive and sometimes problematic (inside a bigger object change You will get
     // non-useful BoundRects sometimes) i rename that method from GetBoundRect() to
     // GetCurrentBoundRect().
     virtual const Rectangle& GetCurrentBoundRect() const;

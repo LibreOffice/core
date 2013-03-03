@@ -491,7 +491,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
     sal_uInt16 nFeat = m_aSupportedFeatures[ _rFeature ].nFeatureId;
     FeatureState aFeatState( GetState( nFeat ) );
 
-    FeatureState& rCachedState = m_aStateCache[nFeat];  // creates if neccessary
+    FeatureState& rCachedState = m_aStateCache[nFeat];  // creates if necessary
     if ( !_bIgnoreCache )
     {
         // check if we really need to notify the listeners : this method may be called much more often than needed, so check

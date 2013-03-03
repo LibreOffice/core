@@ -211,7 +211,7 @@ awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing
     //@todo would like to have a cheaper method to do this transformation
     awt::Point aScreenPoint( static_cast<sal_Int32>(rScenePosition3D.PositionX), static_cast<sal_Int32>(rScenePosition3D.PositionY) );
 
-    //transformation from scene to screen (only neccessary for 3D):
+    //transformation from scene to screen (only necessary for 3D):
     if(3==nDimensionCount)
     {
         //create 3D anchor shape

@@ -996,7 +996,7 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
             rRect = pClip->Frm();
             SWRECTFN( pClip )
 
-            // vertical clipping: Top and Bottom, also to PrtArea if neccessary
+            // vertical clipping: Top and Bottom, also to PrtArea if necessary
             if( rV.GetVertOrient() != text::VertOrientation::NONE &&
                 rV.GetRelationOrient() == text::RelOrientation::PRINT_AREA )
             {

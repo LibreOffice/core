@@ -100,7 +100,7 @@ osl::Mutex &    GetMailMergeMutex()
 enum CloseResult
 {
     eSuccess,       // successfully closed
-    eVetoed,        // vetoed, ownership transfered to the vetoing instance
+    eVetoed,        // vetoed, ownership transferred to the vetoing instance
     eFailed         // failed for some unknown reason
 };
 static CloseResult CloseModelAndDocSh(

@@ -197,7 +197,7 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rt
     ::connectivity::SharedResources aResources;
     const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
     ::dbtools::throwGenericSQLException(sMessage ,*this);
-    // if you have somthing special to say return it here :-)
+    // if you have something special to say return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------

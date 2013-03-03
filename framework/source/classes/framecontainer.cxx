@@ -35,7 +35,7 @@ namespace framework{
  *****************************************************************************************************************/
 FrameContainer::FrameContainer()
         // initialize base classes first.
-        // Order is neccessary for right initilization of his and OUR member ... m_aLock
+        // Order is necessary for right initilization of his and OUR member ... m_aLock
         : ThreadHelpBase ( &Application::GetSolarMutex()                  )
 /*DEPRECATEME
         , m_bAsyncQuit   ( sal_False                                      ) // default must be "disabled"!
@@ -93,7 +93,7 @@ void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xF
 void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     /* SAFE { */
-    // write lock neccessary for follwing erase()!
+    // write lock necessary for follwing erase()!
     WriteGuard aWriteLock( m_aLock );
 
     TFrameIterator aSearchedItem = ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );

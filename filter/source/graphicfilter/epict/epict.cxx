@@ -1191,7 +1191,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             else
             {   // Ppacking (nPackType==0)
 
-                // remeber start of the row in the target:
+                // remember start of the row in the target:
                 nDstRowPos = pPict->Tell();
 
                 // ByteCount (das ist die Groesse der gepackten Zeile) zunaechst 0 (wird spaeter berichtigt):

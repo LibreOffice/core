@@ -1931,7 +1931,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
             ! ( nType == SC_SERVICE_CHDATAPROV &&
                 ( pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL ));
         // this should never happen, i.e. the temporary document should never be
-        // loaded, becuase this unlinks the data
+        // loaded, because this unlinks the data
         OSL_ASSERT( bCreate );
 
         if ( !xRet.is() && bCreate )

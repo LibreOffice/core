@@ -121,7 +121,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
             // do something useful
             // we used an invalid index for accessing a container
         } catch ( Exception ex ) {
-            // something strange has happend!
+            // something strange has happened!
         } catch ( Throwable ex ) {
             // catch java exceptions and do something useful
         }

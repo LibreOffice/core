@@ -40,7 +40,7 @@ class DropTargetListener : private ThreadHelpBase
     // member
     private:
 
-        /// uno service manager to create neccessary services
+        /// uno service manager to create necessary services
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
         /// weakreference to target frame (Don't use a hard reference. Owner can't delete us then!)
         css::uno::WeakReference< css::frame::XFrame > m_xTargetFrame;

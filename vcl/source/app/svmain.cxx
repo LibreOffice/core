@@ -90,7 +90,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 {
     static bool bIn = false;
 
-    // if we crash again, bail out immediatly
+    // if we crash again, bail out immediately
     if ( !bIn )
     {
         sal_uInt16 nVCLException = 0;
@@ -617,7 +617,7 @@ static void SAL_CALL MainWorkerFunction( void* pArgs )
 void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData )
 {
 #ifdef WNT
-    // sal thread alway call CoInitializeEx, so a sysdepen implementation is necessary
+    // sal thread always call CoInitializeEx, so a sysdepen implementation is necessary
 
     unsigned uThreadID;
     hThreadID = (HANDLE)_beginthreadex(
@@ -625,7 +625,7 @@ void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData )
         0,          // stacksize 0 means default
         _threadmain,    // thread worker function
         new WorkerThreadData( pWorker, pThreadData ),       // arguments for worker function
-        0,          // 0 means: create immediatly otherwise use CREATE_SUSPENDED
+        0,          // 0 means: create immediately otherwise use CREATE_SUSPENDED
         &uThreadID );   // thread id to fill
 #else
     hThreadID = osl_createThread( MainWorkerFunction, new WorkerThreadData( pWorker, pThreadData ) );

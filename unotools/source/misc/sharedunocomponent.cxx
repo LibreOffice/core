@@ -196,7 +196,7 @@ namespace utl
 
         // this should be unreachable: As long as we're a CloseListener, we veto the closing. If we're going
         // to close the component ourself, then we revoke ourself as listener *before* the close call. So,
-        // if this here fires, something went definately wrong.
+        // if this here fires, something went definitely wrong.
         OSL_FAIL( "CloseableComponentImpl::notifyClosing: unreachable!" );
     }
 

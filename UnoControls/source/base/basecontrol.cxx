@@ -932,7 +932,7 @@ void BaseControl::impl_paint(           sal_Int32               /*nX*/          
 void BaseControl::impl_recalcLayout( const WindowEvent& /*aEvent*/ )
 {
     // We need as virtual function to support automaticly resizing of derived controls!
-    // But we make it not pure virtual because it's not neccessary for all derived classes!
+    // But we make it not pure virtual because it's not necessary for all derived classes!
 }
 
 //____________________________________________________________________________________________________________

@@ -65,7 +65,7 @@ class SoundHandler  :   // interfaces
                     ,   public  css::frame::XNotifyingDispatch // => XDispatch
                     ,   public  css::document::XExtendedFilterDetection
                         // baseclasses
-                        // Order is neccessary for right initialization!
+                        // Order is necessary for right initialization!
                     ,   private ThreadHelpBase
                     ,   public  ::cppu::OWeakObject
 {

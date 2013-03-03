@@ -1058,7 +1058,7 @@ public:
 
     SwTwips CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const;
 
-    /// Nasty swap for bidi if neccessary
+    /// Nasty swap for bidi if necessary
     bool MiserableRTLFrmFmtHack(SwTwips &rLeft, SwTwips &rRight,
         const sw::Frame &rFrmFmt);
 

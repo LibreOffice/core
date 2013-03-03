@@ -553,7 +553,7 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
 
     gr_segment * pSegment = NULL;
 
-    // Set the SalLayouts values to be the inital ones.
+    // Set the SalLayouts values to be the initial ones.
     SalLayout::AdjustLayout(rArgs);
     // TODO check if this is needed
     if (mnUnitsPerPixel > 1)
@@ -1093,7 +1093,7 @@ void GraphiteLayout::kashidaJustify(std::vector<int>& rDeltaWidths, sal_GlyphId 
 void GraphiteLayout::GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const
 {
     // For each character except the last discover the caret positions
-    // immediatly before and after that character.
+    // immediately before and after that character.
     // This is used for underlines in the GUI amongst other things.
     // It may be used from MultiSalLayout, in which case it must take into account
     // glyphs that have been moved.

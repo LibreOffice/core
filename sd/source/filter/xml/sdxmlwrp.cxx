@@ -385,7 +385,7 @@ sal_Int32 ReadThroughComponent(
     if (!bContainsStream )
     {
         // stream name not found! Then try the compatibility name.
-        // if no stream can be opened, return immediatly with OK signal
+        // if no stream can be opened, return immediately with OK signal
 
         // do we even have an alternative name?
         if ( NULL == pCompatibilityStreamName )

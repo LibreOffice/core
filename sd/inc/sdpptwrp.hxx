@@ -35,7 +35,7 @@ public:
         sal_Bool bShowProgress);
     virtual ~SdPPTFilter (void);
 
-    /// these methods are necassary for the export to PowerPoint
+    /// these methods are necessary for the export to PowerPoint
     sal_Bool        Import();
     sal_Bool        Export();
 

@@ -64,7 +64,7 @@ public:
 //with bPerfect set the converter will only try and convert symbols which have
 //perfect mappings to the windows symbols fonts. With it not set, it will
 //allow somewhat more dubious transformations that are nevertheless
-//recognizably similiar. Even in this mode there will be characters that fail.
+//recognizably similar. Even in this mode there will be characters that fail.
 //The users of this might want to make a distinction between failed characters
 //which were inside and those outside the unicode private area.
 UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly=false);

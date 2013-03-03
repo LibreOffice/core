@@ -197,7 +197,7 @@ void SAL_CALL OQueryContainer::dropByName( const ::rtl::OUString& _rName ) throw
         throw DisposedException( ::rtl::OUString(), *this );
 
     // now simply forward the remove request to the CommandDefinition container, we're a listener for the removal
-    // and thus we do everything neccessary in ::elementRemoved
+    // and thus we do everything necessary in ::elementRemoved
     m_xCommandDefinitions->removeByName(_rName);
 }
 

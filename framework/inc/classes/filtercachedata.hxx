@@ -369,7 +369,7 @@ class SetNodeHash : public ::boost::unordered_map< ::rtl::OUString              
 
         //---------------------------------------------------------------------------------------------------------
         // Append changed, added or removed items to special lists
-        // Neccessary for saving changes
+        // Necessary for saving changes
         //---------------------------------------------------------------------------------------------------------
         void appendChange( const ::rtl::OUString& sName  ,
                                  EModifyState     eState );
@@ -667,7 +667,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
     //-------------------------------------------------------------------------------------------------------------
     private:
         EFilterPackage  m_ePackage                     ;   // ... not realy used yet! should split configuration in STANDARD and ADDITIONAL filter
-        sal_Int32       m_nVersion                     ;   // file format version of configuration! (neccessary for "xml2xcd" transformation!)
+        sal_Int32       m_nVersion                     ;   // file format version of configuration! (necessary for "xml2xcd" transformation!)
         sal_Int32       m_nKeyCountTypes               ;   // follow key counts present count of configuration properties for types/filters ... and depends from m_nVersion - must be set right!
         sal_Int32       m_nKeyCountFilters             ;
         sal_Int32       m_nKeyCountDetectors           ;

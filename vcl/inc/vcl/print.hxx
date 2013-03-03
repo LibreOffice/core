@@ -203,7 +203,7 @@ public:
 
     // read printer options from configuration, parameter decides whether the set for
     // print "to printer" or "to file" should be read.
-    // returns true if config was read, false if an error occured
+    // returns true if config was read, false if an error occurred
     bool                        ReadFromConfig( bool bFile );
 };
 

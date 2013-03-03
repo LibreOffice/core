@@ -1122,7 +1122,7 @@ Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBoxOnScreen( void ) throw
 
 Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBox( void ) throw( RuntimeException )
 {
-    // no guard neccessary, because no one changes mpBoundingBox after creating it
+    // no guard necessary, because no one changes mpBoundingBox after creating it
     ThrowExceptionIfNotAlive();
 
     return *mpBoundingBox;

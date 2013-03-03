@@ -243,7 +243,7 @@ public:
     virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName ) = 0;
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
-    // returns sal_True if creation of subset was successfull
+    // returns sal_True if creation of subset was successful
     // parameters: rToFile: contains a osl file URL to write the subset to
     //             pFont: describes from which font to create a subset
     //             pGlyphIDs: the glyph ids to be extracted

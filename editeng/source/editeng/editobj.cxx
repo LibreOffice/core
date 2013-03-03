@@ -485,7 +485,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
     // pool destruction time of an alien pool, the pool is still alive.
     // When registering would happen at an alien pool which just uses an
     // EditEngineItemPool as some sub-pool, that pool could already
-    // be decoupled and deleted whcih would lead to crashes.
+    // be decoupled and deleted which would lead to crashes.
     pPool = getEditEngineItemPool(pP);
 
     if ( pPool )

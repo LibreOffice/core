@@ -870,7 +870,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
                 break;
             }
-            if ( nRecSize >= 4 )    // minimal escape lenght
+            if ( nRecSize >= 4 )    // minimal escape length
             {
                 sal_uInt16  nMode = 0, nLen = 0;
                 *pWMF >> nMode

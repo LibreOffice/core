@@ -1447,7 +1447,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
             case XLookupBoth:
             case XLookupChars:
 
-                /* nothing to, char allready in pPrintable */
+                /* nothing to, char already in pPrintable */
                 break;
         }
     }

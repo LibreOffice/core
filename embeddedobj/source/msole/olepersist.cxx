@@ -1398,7 +1398,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             catch( const uno::Exception& )
             {
                 // TODO/LATER: detect classID of the object if possible
-                // means that the object inprocess server could not be successfuly instantiated
+                // means that the object inprocess server could not be successfully instantiated
                 GetRidOfComponent();
             }
 

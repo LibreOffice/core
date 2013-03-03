@@ -346,7 +346,7 @@ void PPDDecompressStream::Open( const rtl::OUString& i_rFile )
         }
         else
         {
-            // compression successfull, can get rid of file stream
+            // compression successful, can get rid of file stream
             delete mpFileStream, mpFileStream = NULL;
             mpMemStream->Seek( 0 );
         }

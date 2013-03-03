@@ -688,7 +688,7 @@ namespace cppcanvas
                                                                         nSteps,
                                                                         fBorder,
                                                                         fRotation);
-                            // map odf to svg gradient orientation - x
+                            // map ODF to svg gradient orientation - x
                             // instead of y direction
                             aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aRot90;
                             aGradientService = "LinearGradient";
@@ -714,11 +714,11 @@ namespace cppcanvas
                                                                         nSteps,
                                                                         fAxialBorder,
                                                                         fRotation);
-                            // map odf to svg gradient orientation - x
+                            // map ODF to svg gradient orientation - x
                             // instead of y direction
                             aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aRot90;
 
-                            // map odf axial gradient to 3-stop linear
+                            // map ODF axial gradient to 3-stop linear
                             // gradient - shift left by 0.5
                             basegfx::B2DHomMatrix aShift;
                             aShift.translate(-0.5,0);

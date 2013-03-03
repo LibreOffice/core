@@ -184,7 +184,7 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
                 k = 0;
             rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
         }
-        // If an overflow occured, add to solution
+        // If an overflow occurred, add to solution
         if (nZ & 0xff0000L) // or if(k)
         {
             rErg.nNum[i] = 1;

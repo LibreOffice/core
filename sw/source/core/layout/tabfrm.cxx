@@ -2449,7 +2449,7 @@ void SwTabFrm::MakeAll()
                     }
 
                     // #119477#
-                    // If splitting the table was successfull or not,
+                    // If splitting the table was successful or not,
                     // we do not want to have 'empty' follow tables.
                     if ( GetFollow() && !GetFollow()->GetFirstNonHeadlineRow() )
                         Join();

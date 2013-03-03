@@ -414,7 +414,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    // Copy neccessary member for threadsafe access!
+    // Copy necessary member for threadsafe access!
     // m_aChildFrameContainer is threadsafe himself and he live if we live!!!
     // ...and our transaction is non breakable too ...
     css::uno::Reference< css::frame::XFrame > xActiveChild = m_aChildFrameContainer.getActive();
@@ -771,7 +771,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     //    force using of "if() else if() ..."
     //-----------------------------------------------------------------------------------------------------
 
-    // get threadsafe some neccessary member which are neccessary for following functionality
+    // get threadsafe some necessary member which are neccessary for following functionality
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::frame::XFrame >              xParent      ( m_xParent, css::uno::UNO_QUERY );
@@ -863,7 +863,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
         //  TASK and CREATE are handled special.
         //-------------------------------------------------------------------------------------------------
 
-        // get threadsafe some neccessary member which are neccessary for following functionality
+        // get threadsafe some necessary member which are neccessary for following functionality
         /* SAFE { */
         aReadLock.lock();
         ::rtl::OUString sOwnName = m_sName;
@@ -1058,8 +1058,8 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    // Copy neccessary member and free the lock.
-    // It's not neccessary for m_aChildFrameContainer ... because
+    // Copy necessary member and free the lock.
+    // It's not necessary for m_aChildFrameContainer ... because
     // he is threadsafe himself and live if we live.
     // We use a registered transaction to prevent us against
     // breaks during this operation!
@@ -1099,7 +1099,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
             // But we do nothing then! We are already activated.
             xParent->activate();
         }
-        // Its neccessary to send event NOW - not before.
+        // Its necessary to send event NOW - not before.
         // Activation goes from bottom to top!
         // Thats the reason to activate parent first and send event now.
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_ACTIVATED );
@@ -1158,7 +1158,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    // Copy neccessary member and free the lock.
+    // Copy necessary member and free the lock.
     css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                                     ;
     css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY )                                ;
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -1988,7 +1988,7 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
 
-    // Make snapshot of neccessary member and define default return value.
+    // Make snapshot of necessary member and define default return value.
     css::uno::Reference< css::task::XStatusIndicator >        xExternal(m_xIndicatorInterception.get(), css::uno::UNO_QUERY);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory = m_xIndicatorFactoryHelper;
 
@@ -2424,7 +2424,7 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
 
     if( aEvent.Source == m_xContainerWindow )
     {
-        // NECCESSARY: Impl-method is threadsafe by himself!
+        // NECESSARY: Impl-method is threadsafe by himself!
         aWriteLock.unlock();
         implts_stopWindowListening();
         aWriteLock.lock();
@@ -2797,7 +2797,7 @@ void Frame::implts_setIconOnWindow()
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // Make snapshot of neccessary members and release lock.
+    // Make snapshot of necessary members and release lock.
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >       xContainerWindow( m_xContainerWindow, css::uno::UNO_QUERY );
     css::uno::Reference< css::frame::XController > xController     ( m_xController     , css::uno::UNO_QUERY );
@@ -2897,7 +2897,7 @@ void Frame::implts_startWindowListening()
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // Make snapshot of neccessary member!
+    // Make snapshot of necessary member!
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
     css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
@@ -2937,7 +2937,7 @@ void Frame::implts_stopWindowListening()
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // Make snapshot of neccessary member!
+    // Make snapshot of necessary member!
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
     css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
@@ -3112,7 +3112,7 @@ void Frame::impl_checkMenuCloser()
         xNewCloserFrame = this;
     }
 
-    // Look for neccessary actions ...
+    // Look for necessary actions ...
     // Only if the closer state must be moved from one frame to another one
     // or must be enabled/disabled at all.
     /* STATIC SAFE { */

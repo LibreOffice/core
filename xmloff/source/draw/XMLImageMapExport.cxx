@@ -127,7 +127,7 @@ void XMLImageMapExport::Export(
         }
         // else: container is empty -> nothing to do
     }
-    // else: no container -> nothign to do
+    // else: no container -> nothing to do
 }
 
 

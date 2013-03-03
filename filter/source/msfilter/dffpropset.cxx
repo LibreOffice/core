@@ -1125,7 +1125,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                 sal_uInt32 nMergeFlags = nContent;
 
                 nMergeFlags &=  ( nMergeFlags >> 16 ) | 0xffff0000;             // clearing low word
-                nMergeFlags &= ( ( nCurrentFlags & 0xffff0000 )                 // remove allready hard set
+                nMergeFlags &= ( ( nCurrentFlags & 0xffff0000 )                 // remove already hard set
                                 | ( nCurrentFlags >> 16 ) ) ^ 0xffffffff;       // attributes from mergeflags
                 nCurrentFlags &= ( ( nMergeFlags & 0xffff0000 )                 // apply zero master bits
                                 | ( nMergeFlags >> 16 ) ) ^ 0xffffffff;

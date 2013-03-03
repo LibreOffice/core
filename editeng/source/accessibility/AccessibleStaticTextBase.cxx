@@ -302,7 +302,7 @@ namespace accessibility
         if( !mpTextParagraph )
             throw lang::DisposedException ("object has been already disposed", mxThis );
 
-        // TODO: Have a differnt method on AccessibleEditableTextPara
+        // TODO: Have a different method on AccessibleEditableTextPara
         // that does not care about state changes
         mpTextParagraph->SetParagraphIndex( nPara );
 

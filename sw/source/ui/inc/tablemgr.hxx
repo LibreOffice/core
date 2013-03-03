@@ -71,7 +71,7 @@ public:
     // @deprecated
     void UpdateChart();
 
-    /// @return the XModel of the newly inserted chart if successfull
+    /// @return the XModel of the newly inserted chart if successful
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
         InsertChart( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > &rxDataProvider, sal_Bool bFillWithData, const rtl::OUString &rCellRange, SwFlyFrmFmt** ppFlyFrmFmt = 0 );
 };

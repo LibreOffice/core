@@ -1862,7 +1862,7 @@ sal_Bool SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 uno::Reference< ::com::sun::star::accessibility::XAccessible >
     SwPagePreViewWin::CreateAccessible()
 {
-    SolarMutexGuard aGuard; // this should have happend already!!!
+    SolarMutexGuard aGuard; // this should have happened already!!!
 
     OSL_ENSURE( GetViewShell() != NULL, "We need a view shell" );
     return GetViewShell()->CreateAccessiblePreview();

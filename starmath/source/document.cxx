@@ -277,7 +277,7 @@ void SmDocShell::ArrangeFormula()
 #endif
     }
 
-    // if neccessary get another OutputDevice for which we format
+    // if necessary get another OutputDevice for which we format
     if (!pOutDev)
     {
         SmViewShell *pView = SmGetActiveView();

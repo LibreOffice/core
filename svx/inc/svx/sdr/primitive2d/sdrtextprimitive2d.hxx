@@ -52,7 +52,7 @@ namespace drawinglayer
             // COW) and in exclusive, local form as needed in a primitive
             const OutlinerParaObject                maOutlinerParaObject;
 
-            // remeber last VisualizingPage for which a decomposition was made. If the new target
+            // remember last VisualizingPage for which a decomposition was made. If the new target
             // is not given or different, the decomposition needs to be potentially removed
             // for supporting e.g. page number change on MasterPage objects or the different
             // field renderings in SubGeometry and MasterPage mnode

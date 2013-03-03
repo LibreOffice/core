@@ -222,7 +222,7 @@ void SwIndexMarkPane::InitControls()
     {
         // Controls-Handling
 
-        // onyl if there are more than one
+        // only if there are more than one
         // if equal it lands at the same entry
         pSh->SttCrsrMove();
 
@@ -937,7 +937,7 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
         {
             if(pBox->IsInDropDown())
             {
-                //reset bPhoneticED1_ChangedByUser if a completly new string is selected
+                //reset bPhoneticED1_ChangedByUser if a completely new string is selected
                 bPhoneticED1_ChangedByUser = sal_False;
             }
             if(!bPhoneticED1_ChangedByUser)
@@ -957,7 +957,7 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
         {
             if(pBox->IsInDropDown())
             {
-                //reset bPhoneticED1_ChangedByUser if a completly new string is selected
+                //reset bPhoneticED1_ChangedByUser if a completely new string is selected
                 bPhoneticED2_ChangedByUser = sal_False;
             }
             if(!bPhoneticED2_ChangedByUser)

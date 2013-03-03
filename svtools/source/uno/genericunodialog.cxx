@@ -227,7 +227,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
     SolarMutexGuard aSolarGuard;
 
     Dialog* pDialogToExecute = NULL;
-    // create the dialog, if neccessary
+    // create the dialog, if necessary
     {
         UnoDialogEntryGuard aGuard( *this );
 

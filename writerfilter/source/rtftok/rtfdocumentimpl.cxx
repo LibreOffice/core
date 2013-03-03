@@ -1455,7 +1455,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_OBJECT:
             {
-                // begining of an OLE Object
+                // beginning of an OLE Object
                 m_aStates.top().nDestinationState = DESTINATION_OBJECT;
 
                 // check if the object is in a special container (e.g. a table)

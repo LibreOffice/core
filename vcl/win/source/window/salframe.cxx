@@ -3513,7 +3513,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         {
             bIgnoreCharMsg = FALSE;
             // #101635# if zero is returned here for WM_SYSCHAR (ALT+<key>) Windows will beep
-            // becaus this 'hotkey' was not processed -> better return 1
+            // because this 'hotkey' was not processed -> better return 1
             // except for Alt-SPACE which should always open the sysmenu (#104616#)
 
             // also return zero if a system menubar is available that might process this hotkey

@@ -1256,7 +1256,7 @@ SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
     if(!pSNode)
         return NULL;
 
-    //Move up parent untill we find a node who's
+    //Move up parent until we find a node who's
     //parent is NULL or isn't selected and not a type of:
     //      SmExpressionNode
     //      SmLineNode

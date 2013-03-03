@@ -454,7 +454,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                                     nSubId |= CONVERT_TWIPS;
                                 if (!pItem->PutValue( rProp.Value, nSubId ) )
                                 {
-                                    // ... but it was not convertable
+                                    // ... but it was not convertible
                                     bRet = sal_False;
 #ifdef DBG_UTIL
                                     rtl::OStringBuffer aDbgStr(RTL_CONSTASCII_STRINGPARAM("Property not convertable: "));
@@ -946,7 +946,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DB_UTIL
         if ( nFoundArgs == nCount )
         {
-            // except for the "special" slots: assure that every argument was convertable
+            // except for the "special" slots: assure that every argument was convertible
             rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("MacroPlayer: Some properties didn't match to any formal argument for slot: "));
             aStr.append(pSlot->pUnoName);
             DBG_WARNING( aStr.getStr() );
@@ -1152,7 +1152,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     }
 
 #ifdef DBG_UTIL
-    // now check the itemset: is there any item that is not convertable using the list of formal arguments
+    // now check the itemset: is there any item that is not convertible using the list of formal arguments
     // or the table of additional items?!
     if ( rSet.Count() != nItems )
     {

@@ -2065,7 +2065,7 @@ int MathType::StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation)
     //theres just no way we can now handle any character
     //attributes (from mathtypes perspective) centered
     //over an expression but above template attribute
-    //such as widevec and similiar constructs
+    //such as widevec and similar constructs
     //we have to drop them
     nPendingAttributes=0;
     return nOldPending;
@@ -3189,7 +3189,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
             //theres just no way we can now handle any character
             //attributes (from mathtypes perspective) centered
             //over an expression but above template attributes
-            //such as widevec and similiar constructs
+            //such as widevec and similar constructs
             //we have to drop them
             nOldPending = StartTemplate(0x2f,0x01);
             break;

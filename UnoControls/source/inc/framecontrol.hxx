@@ -56,7 +56,7 @@ namespace unocontrols{
 
 class FrameControl  : public ::com::sun::star::awt::XControlModel
                     , public ::com::sun::star::lang::XConnectionPointContainer
-                    , public BaseControl                                // This order is neccessary for right initialization of m_aMutex!
+                    , public BaseControl                                // This order is necessary for right initialization of m_aMutex!
                     , public ::cppu::OBroadcastHelper
                     , public ::cppu::OPropertySetHelper
 {

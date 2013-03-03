@@ -757,7 +757,7 @@ void ImplListBoxWindow::ImplCallSelect()
 {
     if ( !IsTravelSelect() && GetEntryList()->GetMaxMRUCount() )
     {
-        // Insert the selected entry as MRU, if not allready first MRU
+        // Insert the selected entry as MRU, if not already first MRU
         sal_uInt16 nSelected = GetEntryList()->GetSelectEntryPos( 0 );
         sal_uInt16 nMRUCount = GetEntryList()->GetMRUCount();
         String aSelected = GetEntryList()->GetEntryText( nSelected );

@@ -541,7 +541,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
     {
         const SwTableLine *pLine = rLines[nLine];
 
-        // Determine the postition of the last covered row
+        // Determine the position of the last covered row
         long nOldRPos = nRPos;
         if( nLine < nLines-1 || nParentLineHeight==0 )
         {
@@ -629,7 +629,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
-            // Determine the postition of the last covered column
+            // Determine the position of the last covered column
             sal_uInt32 nOldCPos = nCPos;
             if( nBox < nBoxes-1 || (nParentLineWidth==0 && nLine==0) )
             {

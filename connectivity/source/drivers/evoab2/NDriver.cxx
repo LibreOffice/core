@@ -155,7 +155,7 @@ Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const ::r
         ::dbtools::throwGenericSQLException(sMessage ,*this);
     } // if ( ! acceptsURL(url) )
 
-    // if you have somthing special to say return it here :-)
+    // if you have something special to say return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
 

@@ -108,7 +108,7 @@ void SAL_CALL ConfigFlush::refresh()
 void SAL_CALL ConfigFlush::addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
     throw(css::uno::RuntimeException)
 {
-    // no locks neccessary
+    // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
     m_lListener.addInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XRefreshListener >* >(NULL)),
                              xListener);
@@ -118,7 +118,7 @@ void SAL_CALL ConfigFlush::addRefreshListener(const css::uno::Reference< css::ut
 void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
     throw(css::uno::RuntimeException)
 {
-    // no locks neccessary
+    // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
     m_lListener.removeInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XRefreshListener >* >(NULL)),
                                 xListener);

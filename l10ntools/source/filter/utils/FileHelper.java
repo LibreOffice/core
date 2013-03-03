@@ -106,7 +106,7 @@ public class FileHelper
 
     /**
      * Does the same as getFileURLFromSystemPath() before ... but uses
-     * the given protocol string (e.g."http://") insted of "file:///".
+     * the given protocol string (e.g."http://") instead of "file:///".
      *
      * @param aSystemPath
      *          represent the file in system notation

@@ -128,7 +128,7 @@ class ConfigurationAccess_WindowState : // interfaces
                                         public  XNameContainer                           ,
                                         public  XContainerListener                       ,
                                         // baseclasses
-                                        // Order is neccessary for right initialization!
+                                        // Order is necessary for right initialization!
                                         private ThreadHelpBase                           ,
                                         public  ::cppu::OWeakObject
 {
@@ -197,7 +197,7 @@ class ConfigurationAccess_WindowState : // interfaces
             WINDOWSTATE_MASK_DOCKSIZE       = 32768
         };
 
-        // Cache structure. Valid values are described by tje eMask member. All other values should not be
+        // Cache structure. Valid values are described by the eMask member. All other values should not be
         // provided to outside code!
         struct WindowStateInfo
         {

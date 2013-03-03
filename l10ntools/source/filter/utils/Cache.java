@@ -1045,7 +1045,7 @@ public class Cache
 
                 // generate new property "DetectService"
                 // Every type know its detector diretcly from now. No search
-                // will be neccessary any longer.
+                // will be necessary any longer.
                 aResultMap.put(PROPNAME_DETECTSERVICE, new java.lang.String());
 
                 // analyze the Data property of the original map

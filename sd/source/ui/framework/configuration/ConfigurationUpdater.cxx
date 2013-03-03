@@ -266,7 +266,7 @@ void ConfigurationUpdater::CheckUpdateSuccess (void)
     }
     else
     {
-        // Update was successfull.  Reset the failed update count.
+        // Update was successful.  Reset the failed update count.
         mnFailedUpdateCount = 0;
     }
 }

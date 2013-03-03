@@ -89,7 +89,7 @@ namespace framework
     typedef ::comphelper::OPropertyContainer    LayoutManager_PBase;
     class LayoutManager : public  LayoutManager_Base                    ,
                           // base classes
-                          // Order is neccessary for right initialization!
+                          // Order is necessary for right initialization!
                           private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                           public  ::cppu::OBroadcastHelper              ,
                           public  ILayoutNotifications                  ,

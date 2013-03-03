@@ -2094,7 +2094,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             else
             {
                 if ( !SaveModified( ) )
-                    // give the user a chance to save the current record (if neccessary)
+                    // give the user a chance to save the current record (if necessary)
                     break;
 
                 // maybe the user wanted to reject the modified record ?

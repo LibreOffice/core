@@ -52,7 +52,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
         throw pException;
     }
 
-    // use sal_Int64 here to accomodate all int types
+    // use sal_Int64 here to accommodate all int types
     // uno::Any shift operator whill upcast if necessary
     sal_Int64 nHandle = 0;
     sal_Bool  bXEmbed = sal_False;

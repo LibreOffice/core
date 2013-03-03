@@ -176,7 +176,7 @@ void classname::release()   \
     ::utl::MapType2Id* pMap = static_cast< ::utl::MapType2Id *>(s_pMap);    \
     \
     ::cppu::OImplementationId& rId = (*pMap)[_rTypes];  \
-    /* this will create an entry for the given type sequence, if neccessary */  \
+    /* this will create an entry for the given type sequence, if necessary */  \
     \
     return rId.getImplementationId();   \
 }   \

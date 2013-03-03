@@ -701,7 +701,7 @@ void ImplRegion::InsertBands( long nTop, long nBottom )
         if ( bTopBoundaryInserted && bTop2BoundaryInserted && bBottomBoundaryInserted )
             break;
 
-        // insert bands between two bands if neccessary
+        // insert bands between two bands if necessary
         if ( pBand->mpNextBand )
         {
             if ( (pBand->mnYBottom + 1) < pBand->mpNextBand->mnYTop )
@@ -1373,7 +1373,7 @@ void Region::Union( const Rectangle& rRect )
     long nRight     = Max( rRect.Left(), rRect.Right() );
     long nBottom    = Max( rRect.Top(), rRect.Bottom() );
 
-    // insert bands if the boundaries are not allready in the list
+    // insert bands if the boundaries are not already in the list
     mpImplRegion->InsertBands( nTop, nBottom );
 
     // process union
@@ -1495,7 +1495,7 @@ void Region::Intersect( const Rectangle& rRect )
     if ( mpImplRegion->mnRefCount > 1 )
         ImplCopyData();
 
-    // insert bands if the boundaries are not allready in the list
+    // insert bands if the boundaries are not already in the list
     mpImplRegion->InsertBands( nTop, nBottom );
 
     // process intersections
@@ -1578,7 +1578,7 @@ void Region::Exclude( const Rectangle& rRect )
     long nRight     = Max( rRect.Left(), rRect.Right() );
     long nBottom    = Max( rRect.Top(), rRect.Bottom() );
 
-    // insert bands if the boundaries are not allready in the list
+    // insert bands if the boundaries are not already in the list
     mpImplRegion->InsertBands( nTop, nBottom );
 
     // process exclude
@@ -1640,7 +1640,7 @@ void Region::XOr( const Rectangle& rRect )
     long nRight     = Max( rRect.Left(), rRect.Right() );
     long nBottom    = Max( rRect.Top(), rRect.Bottom() );
 
-    // insert bands if the boundaries are not allready in the list
+    // insert bands if the boundaries are not already in the list
     mpImplRegion->InsertBands( nTop, nBottom );
 
     // process xor
@@ -1706,7 +1706,7 @@ void Region::Union( const Region& rRegion )
     ImplRegionBand* pBand = rRegion.mpImplRegion->mpFirstBand;
     while ( pBand )
     {
-        // insert bands if the boundaries are not allready in the list
+        // insert bands if the boundaries are not already in the list
         mpImplRegion->InsertBands( pBand->mnYTop, pBand->mnYBottom );
 
         // process all elements of the list
@@ -1818,7 +1818,7 @@ void Region::Intersect( const Region& rRegion )
         pBand = rRegion.mpImplRegion->mpFirstBand;
         while ( pBand )
         {
-            // insert bands if the boundaries are not allready in the list
+            // insert bands if the boundaries are not already in the list
             mpImplRegion->InsertBands( pBand->mnYTop, pBand->mnYBottom );
 
             // process all elements of the list
@@ -1853,7 +1853,7 @@ void Region::Intersect( const Region& rRegion )
             pBand = pBand->mpNextBand;
         }
 
-        // remove all untouched bands if bands allready left
+        // remove all untouched bands if bands already left
         ImplRegionBand* pPrevBand = 0;
         pBand = mpImplRegion->mpFirstBand;
         while ( pBand )
@@ -1934,7 +1934,7 @@ void Region::Exclude( const Region& rRegion )
     ImplRegionBand* pBand = rRegion.mpImplRegion->mpFirstBand;
     while ( pBand )
     {
-        // insert bands if the boundaries are not allready in the list
+        // insert bands if the boundaries are not already in the list
         mpImplRegion->InsertBands( pBand->mnYTop, pBand->mnYBottom );
 
         // process all elements of the list
@@ -2012,7 +2012,7 @@ void Region::XOr( const Region& rRegion )
     ImplRegionBand* pBand = rRegion.mpImplRegion->mpFirstBand;
     while ( pBand )
     {
-        // insert bands if the boundaries are not allready in the list
+        // insert bands if the boundaries are not already in the list
         mpImplRegion->InsertBands( pBand->mnYTop, pBand->mnYBottom );
 
         // process all elements of the list
@@ -2824,7 +2824,7 @@ void Region::ImplEndAddRect()
         return;
     }
 
-    // check if we have somthing to optimize
+    // check if we have something to optimize
     if ( !mpImplRegion->mpFirstBand->mpNextBand )
     {
         // update mpImplRegion->mnRectCount, because no OptimizeBandList is called

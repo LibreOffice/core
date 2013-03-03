@@ -717,7 +717,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 
     pContext->AddRef();
 
-    // Remeber old namespace map.
+    // Remember old namespace map.
     if( pRewindMap )
         pContext->SetRewindMap( pRewindMap );
 

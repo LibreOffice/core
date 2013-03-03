@@ -43,7 +43,7 @@ class XMLChangedRegionImportContext : public SvXMLImportContext
     const ::rtl::OUString sEmpty;
 
     /// if we replace the current XTextCursor/XText by the ones for
-    /// the redline, we remeber the old cursor here.
+    /// the redline, we remember the old cursor here.
     ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> xOldCursor;
 

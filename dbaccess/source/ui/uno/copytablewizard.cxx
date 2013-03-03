@@ -1116,7 +1116,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
             aError.NextException = _rEvent.Error;
         else
         {
-            // a non-SQL exception happend
+            // a non-SQL exception happened
             Exception aException;
             OSL_VERIFY( _rEvent.Error >>= aException );
             SQLContext aContext;

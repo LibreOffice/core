@@ -112,7 +112,7 @@ class Desktop   :   // interfaces
                     public  css::task::XInteractionHandler       ,
                     public  css::frame::XUntitledNumbers         ,
                     // base classes
-                    // Order is neccessary for right initialization!
+                    // Order is necessary for right initialization!
                     private ThreadHelpBase                       ,
                     private TransactionBase                      ,
                     public  ::cppu::OBroadcastHelper             ,

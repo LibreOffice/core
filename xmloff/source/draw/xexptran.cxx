@@ -1468,7 +1468,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const SdXMLImExViewBox& rViewBox,
     mbIsClosed( false ),
     mbIsCurve( false ),
     // fdo#47406 - handle writing svg:d path slightly different for
-    // old odf versions and ODF1.2 compat mode - since ~all the legacy
+    // old ODF versions and ODF1.2 compat mode - since ~all the legacy
     // ODF ecosystem interprets relative svg:d paths incorrectly,
     // write out absolute paths in those cases.
     mbRelative( rExport.getDefaultVersion() >= SvtSaveOptions::ODFVER_012 &&

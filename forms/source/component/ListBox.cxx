@@ -1293,7 +1293,7 @@ namespace frm
         {
             Any aReturn;
 
-            // by definition, multiple selected entries are transfered as NULL if the
+            // by definition, multiple selected entries are transferred as NULL if the
             // binding does not support string lists
             if ( _rSelectSequence.getLength() <= 1 )
             {

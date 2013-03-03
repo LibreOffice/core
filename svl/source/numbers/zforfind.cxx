@@ -3333,7 +3333,7 @@ void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
 
 bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,                  // string to be analyzed
                                            short& F_Type,                          // IN: old type, OUT: new type
-                                           double& fOutNumber,                     // OUT: number if convertable
+                                           double& fOutNumber,                     // OUT: number if convertible
                                            const SvNumberformat* pFormat )         // maybe a number format to match against
 {
     OUString aString;

@@ -60,7 +60,7 @@ namespace framework{
 class CloseDispatcher : public css::lang::XTypeProvider
                       , public css::frame::XNotifyingDispatch             // => XDispatch
                       , public css::frame::XDispatchInformationProvider
-                        // baseclasses ... order is neccessary for right initialization!
+                        // baseclasses ... order is necessary for right initialization!
                       , private ThreadHelpBase
                       , public  ::cppu::OWeakObject
 {

@@ -56,7 +56,7 @@ class TagWindowAsModified :   // interfaces
                               public css::lang::XInitialization,
                               public css::frame::XFrameActionListener, // => XEventListener
                               public css::util::XModifyListener,       // => XEventListener
-                              // baseclasses (order neccessary for right initialization!)
+                              // baseclasses (order necessary for right initialization!)
                               private ThreadHelpBase,
                               public  ::cppu::OWeakObject
 {

@@ -283,7 +283,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         Reference< XFormComponent >  xMeAsFormComp(GetUnoControlModel(), UNO_QUERY);
         if (xMeAsFormComp.is())
         {
-            // check if I have another parent (and remove me, if neccessary)
+            // check if I have another parent (and remove me, if necessary)
             Reference< XIndexContainer >  xOldParent(xMeAsFormComp->getParent(), UNO_QUERY);
             if (xOldParent.is())
             {
@@ -459,7 +459,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     Reference< XInterface >  xTopLevelSouce;
     rtl::OUString sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
     if (!xTopLevelSouce.is())
-        // somthing went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
+        // something went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
         return Reference< XInterface > ();
 
     Reference< XIndexContainer >  xDestContainer(_rTopLevelDestContainer);

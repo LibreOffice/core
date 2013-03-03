@@ -148,7 +148,7 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
     if( bNewSelected )
     {
         // remember that object as the one that has the caret. This is
-        // neccessary to notify that object if the cursor leaves it.
+        // necessary to notify that object if the cursor leaves it.
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }

@@ -170,7 +170,7 @@ public class DocumentView extends    JFrame
         if(ViewContainer.mbInplace==true)
         {
             // create view to show opened documents
-            // This special view is neccessary for inplace mode only!
+            // This special view is necessary for inplace mode only!
             maDocumentView = new NativeView();
 
             JSplitPane paSplit = new JSplitPane();

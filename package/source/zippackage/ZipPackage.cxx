@@ -384,7 +384,7 @@ void ZipPackage::parseManifest()
 
             if ( !bManifestParsed )
             {
-                // the manifest.xml could not be successfuly parsed, this is an inconsistent package
+                // the manifest.xml could not be successfully parsed, this is an inconsistent package
                 if ( aPackageMediatype.compareToAscii("application/vnd.") == 0 )
                 {
                     // accept only types that look similar to own mediatypes
@@ -1271,7 +1271,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     {
         if( bUseTemp )
         {
-            // no information loss appeares, thus no special handling is required
+            // no information loss appears, thus no special handling is required
                uno::Any aCaught( ::cppu::getCaughtException() );
 
             // it is allowed to throw WrappedTargetException

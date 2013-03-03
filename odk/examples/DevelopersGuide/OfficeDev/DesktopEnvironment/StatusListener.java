@@ -324,7 +324,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
                 return;
         }
         // Don't look for ignoring actions - it was done already inside original frameAction() call!
-        // deregistration as status listener will be done here everytime - but registration only, if neccessary!
+        // deregistration as status listener will be done here everytime - but registration only, if necessary!
         boolean bRegister = false;
         switch(aEvent.Action.getValue())
         {

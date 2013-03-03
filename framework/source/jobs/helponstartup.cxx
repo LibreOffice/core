@@ -211,7 +211,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 
     // check for right environment.
     // If its not a DocumentEvent, which triggered this job,
-    // we cant work correctly! => return immediatly and do nothing
+    // we cant work correctly! => return immediately and do nothing
     ::rtl::OUString sEnvType = lEnvironment.getUnpackedValueOrDefault(PROP_ENVTYPE, ::rtl::OUString());
     if (!sEnvType.equals(ENVTYPE_DOCUMENTEVENT))
         return ::rtl::OUString();

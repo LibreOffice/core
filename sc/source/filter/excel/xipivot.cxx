@@ -1339,7 +1339,7 @@ void XclImpPivotTable::ReadSxdi( XclImpStream& rStrm )
     if( XclImpPTField* pField = GetFieldAcc( aDataInfo.mnField ) )
     {
         maOrigDataFields.push_back( aDataInfo.mnField );
-        // DataPilot does not support double data fields -> add first appearence to index list only
+        // DataPilot does not support double data fields -> add first appearance to index list only
         if( !pField->HasDataFieldInfo() )
             maFiltDataFields.push_back( aDataInfo.mnField );
         pField->AddDataFieldInfo( aDataInfo );

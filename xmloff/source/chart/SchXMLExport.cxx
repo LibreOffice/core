@@ -1528,7 +1528,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
             if( mxAdditionalShapes.is())
             {
                 // can't call exportShapes with all shapes because the
-                // initialisation happend with the complete draw page and not
+                // initialisation happened with the complete draw page and not
                 // the XShapes object used here. Thus the shapes have to be
                 // exported one by one
                 UniReference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();
@@ -1582,7 +1582,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 }
 
                 // can't call collectShapesAutoStyles with all shapes because
-                // the initialisation happend with the complete draw page and
+                // the initialisation happened with the complete draw page and
                 // not the XShapes object used here. Thus the shapes have to be
                 // exported one by one
                 UniReference< XMLShapeExport > rShapeExport = mrExport.GetShapeExport();

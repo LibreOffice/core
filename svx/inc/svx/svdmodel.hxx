@@ -559,7 +559,7 @@ public:
     void SetUndoComment(const String& rComment);
     void SetUndoComment(const String& rComment, const String& rObjDescr);
 
-    // Das Undo-Managment findet nur statt, wenn kein NotifyUndoAction-Handler
+    // Das Undo-Management findet nur statt, wenn kein NotifyUndoAction-Handler
     // gesetzt ist.
     // Default ist 16. Minimaler MaxUndoActionCount ist 1!
     void  SetMaxUndoActionCount(sal_uIntPtr nAnz);

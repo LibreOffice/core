@@ -1097,7 +1097,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                 }
                                 catch ( const ucb::InteractiveIOException& e )
                                 {
-                                    // exception means that the lock file can not be successfuly accessed
+                                    // exception means that the lock file can not be successfully accessed
                                     // in this case it should be ignored if system file locking is anyway active
                                     if ( bUseSystemLock || !IsOOoLockFileUsed() )
                                     {
@@ -1129,7 +1129,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                 }
                                 catch ( const uno::Exception& )
                                 {
-                                    // exception means that the lock file can not be successfuly accessed
+                                    // exception means that the lock file can not be successfully accessed
                                     // in this case it should be ignored if system file locking is anyway active
                                     if ( bUseSystemLock || !IsOOoLockFileUsed() )
                                     {

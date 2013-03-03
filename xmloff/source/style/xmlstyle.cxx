@@ -444,7 +444,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
             case XML_TOK_STYLE_PAGE_MASTER:
             case XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT:
             {
-                //there is not page family in odf now, so I specify one for it
+                //there is not page family in ODF now, so I specify one for it
                 sal_Bool bDefaultStyle  = XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT == nToken
                     ? sal_True: sal_False;
                 pStyle = new PageStyleContext( GetImport(), p_nPrefix,

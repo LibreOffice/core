@@ -279,7 +279,7 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
             uno::Reference< embed::XStorage > xTempStorage =
                 ::comphelper::OStorageHelper::GetStorageFromURL( aTempURL, embed::ElementModes::READWRITE );
 
-            // the password will be transfered from the xStorage to xTempStorage by storage implemetation
+            // the password will be transferred from the xStorage to xTempStorage by storage implemetation
             xStorage->copyToStorage( xTempStorage );
 
             // the temporary storage was commited by the previous method and it will die by refcount
@@ -1756,7 +1756,7 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
                 // contents, the storag will be broken
                 xOptStorage->attachToURL( aBackupURL, sal_True );
 
-                // the storage is successfuly attached to backup, thus it it owned by the document not by the medium
+                // the storage is successfully attached to backup, thus it it owned by the document not by the medium
                 rSrcMedium.CanDisposeStorage_Impl( sal_False );
                 bResult = sal_True;
             }
@@ -1796,7 +1796,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
             uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
             xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
 
-            // the storage is successfuly disconnected from the original sources, thus the medium must not dispose it
+            // the storage is successfully disconnected from the original sources, thus the medium must not dispose it
             if ( pMediumArg )
                 pMediumArg->CanDisposeStorage_Impl( sal_False );
 

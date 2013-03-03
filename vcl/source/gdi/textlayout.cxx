@@ -141,7 +141,7 @@ namespace vcl
         // normally, controls simulate "zoom" by "zooming" the font. This is responsible for (part of) the discrepancies
         // between text in Writer and text in controls in Writer, though both have the same font.
         // So, if we have a zoom set at the control, then we do not scale the font, but instead modify the map mode
-        // to accomodate for the zoom.
+        // to accommodate for the zoom.
         aTargetMapMode.SetScaleX( m_aZoom );    // TODO: shouldn't this be "current_scale * zoom"?
         aTargetMapMode.SetScaleY( m_aZoom );
 

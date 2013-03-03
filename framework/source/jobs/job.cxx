@@ -203,7 +203,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     css::uno::Reference< css::task::XJob >       xSJob;
     css::uno::Sequence< css::beans::NamedValue > lJobArgs = impl_generateJobArgs(lDynamicArgs);
 
-    // It's neccessary to hold us self alive!
+    // It's necessary to hold us self alive!
     // Otherwhise we might die by ref count ...
     css::uno::Reference< css::task::XJobListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
@@ -681,7 +681,7 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // It's neccessary to check this.
+    // It's necessary to check this.
     // May this job was cancelled by any other reason
     // some milliseconds before. :-)
     if (m_xJob.is() && m_xJob==xJob)

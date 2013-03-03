@@ -817,7 +817,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
 {
     ScDocument* pSrcDoc = rSrcDocShell.GetDocument();
 
-    // set the transfered area to the copyparam to make adjusting formulas possible
+    // set the transferred area to the copyparam to make adjusting formulas possible
     ScClipParam aParam;
     ScRange aRange(0, 0, nSrcPos, MAXCOL, MAXROW, nSrcPos);
     aParam.maRanges.Append(aRange);

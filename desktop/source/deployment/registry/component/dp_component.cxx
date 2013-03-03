@@ -1196,7 +1196,7 @@ void BackendImpl::ComponentPackageImpl::getComponentInfo(
     //       and stoc/source/implreg implementation which rely on the same
     //       services.rdb format!
     //       .../UNO/LOCATION and .../UNO/ACTIVATOR appear not to be written by
-    //       writeRegistryInfo, however, but are knwon, fixed values here, so
+    //       writeRegistryInfo, however, but are known, fixed values here, so
     //       can be passed into extractComponentData
     rtl::OUString url(getURL());
     const Reference<registry::XSimpleRegistry> xMemReg(

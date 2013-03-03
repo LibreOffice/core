@@ -55,7 +55,7 @@ static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWind
         SolarMutexGuard aSolarGuard;
 
         Window*    pWindow     = VCLUnoHelper::GetWindow(xWindow);
-        // check for system window is neccessary to guarantee correct pointer cast!
+        // check for system window is necessary to guarantee correct pointer cast!
         if (pWindow!=NULL && pWindow->IsSystemWindow())
         {
             sal_uLong nMask  = WINDOWSTATE_MASK_ALL;
@@ -82,7 +82,7 @@ static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWind
     SolarMutexGuard aSolarGuard;
 
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-    // check for system window is neccessary to guarantee correct pointer cast!
+    // check for system window is necessary to guarantee correct pointer cast!
     if (
         (pWindow                  ) &&
         (pWindow->IsSystemWindow()) &&

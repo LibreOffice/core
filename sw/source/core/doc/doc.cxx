@@ -1190,7 +1190,7 @@ sal_uInt16 _PostItFld::GetPageNo(
     //by more than one layout instance,
     //we have to decide whether it should be printed once or n-times.
     //Probably only once. For the page number we don't select a random one,
-    //but the PostIt's first occurence in the selected area.
+    //but the PostIt's first occurrence in the selected area.
     rVirtPgNo = 0;
     sal_uInt16 nPos = GetCntnt();
     SwIterator<SwTxtFrm,SwTxtNode> aIter( GetFld()->GetTxtNode() );

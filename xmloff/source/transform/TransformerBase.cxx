@@ -307,7 +307,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     if( !xContext.is() )
         xContext = new XMLTransformerContext( *this, rName );
 
-    // Remeber old namespace map.
+    // Remember old namespace map.
     if( pRewindMap )
         xContext->SetRewindMap( pRewindMap );
 

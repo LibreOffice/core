@@ -329,8 +329,8 @@ void OTools::ThrowException(const OConnection* _pConnection,
 
     // Information for latest operation:
     // when hstmt != SQL_NULL_HSTMT is (Used from SetStatus in SdbCursor, SdbTable, ...),
-    // then the status of the latest statments will be fetched, without the Status of the last
-    // Statments of this connection [what in this case will probably be the same, but the Reference
+    // then the status of the latest statements will be fetched, without the Status of the last
+    // statements of this connection [what in this case will probably be the same, but the Reference
     // Manual isn't totally clear in this...].
     // corresponding for hdbc.
     SQLRETURN n = (*(T3SQLGetDiagRec)_pConnection->getOdbcFunction(ODBC3SQLGetDiagRec))(_nHandleType,_pContext,1,

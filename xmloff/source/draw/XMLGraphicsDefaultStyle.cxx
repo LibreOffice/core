@@ -92,7 +92,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     if( !xDefaults.is() )
         return;
                                             // SJ: #i114750#
-    sal_Bool bWordWrapDefault = sal_True;   // initializing with correct odf fo:wrap-option default
+    sal_Bool bWordWrapDefault = sal_True;   // initializing with correct ODF fo:wrap-option default
     sal_Int32 nUPD( 0 );
     sal_Int32 nBuild( 0 );
     const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );

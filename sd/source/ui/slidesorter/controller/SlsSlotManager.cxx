@@ -1262,7 +1262,7 @@ SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
         switch (eState)
         {
             case UNDEFINED:
-                // Use the first selected page to set the inital value.
+                // Use the first selected page to set the initial value.
                 eState = bState ? EXCLUDED : INCLUDED;
                 break;
 

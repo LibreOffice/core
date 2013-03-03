@@ -136,7 +136,7 @@ private:
     sal_Bool SAL_CALL createStaRequestWindow( );
 
     //---------------------------------------------------------------
-    // message handler functions; remeber these functions are called
+    // message handler functions; remember these functions are called
     // from a different thread context!
     //---------------------------------------------------------------
 

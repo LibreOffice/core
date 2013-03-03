@@ -79,7 +79,7 @@ class MenuDispatcher   :   // interfaces
                                 public css::frame::XDispatch            ,
                                 public css::frame::XFrameActionListener ,
                                 // baseclasses
-                                // Order is neccessary for right initialization!
+                                // Order is necessary for right initialization!
                                 public ThreadHelpBase                       ,
                                 public cppu::OWeakObject
 {

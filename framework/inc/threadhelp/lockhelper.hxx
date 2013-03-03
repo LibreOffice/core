@@ -125,7 +125,7 @@ class FWI_DLLPUBLIC LockHelper : public  IMutex
     //     ... or the solarmuex as "m_pSolarMutex" (must be set from outside! because some components must be vcl-free!)
     //     ... but sometimes you need a shareable osl mutex!
     //     In this case you has some problems: i  ) If your lock type is set to E_OWNMUTEX => it's easy; you can use your member "m_pOwnMutex" - it's a osl mutex.
-    //                                              Creation and using of "m_pShareableOslMutex" isn't neccessary!
+    //                                              Creation and using of "m_pShareableOslMutex" isn't necessary!
     //                                         ii ) Otherwise you have no osl mutex ... so you must create "m_pShareableOslMutex" and use it twice!
     //                                              In this case you must lock two member everytime - "m_pShareableMutex" AND "m_pFairRWLock" or "m_pSolarMutex" or ...
     //                                              It isn't realy fine - but the only possible way.

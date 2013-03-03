@@ -1018,7 +1018,7 @@ TableColumnRef TableModel::getColumn( sal_Int32 nColumn ) const throw (IndexOutO
 
 // -----------------------------------------------------------------------------
 
-/** deletes rows and columns that are completly merged. Must be called between BegUndo/EndUndo! */
+/** deletes rows and columns that are completely merged. Must be called between BegUndo/EndUndo! */
 void TableModel::optimize()
 {
     TableModelNotifyGuard aGuard( this );

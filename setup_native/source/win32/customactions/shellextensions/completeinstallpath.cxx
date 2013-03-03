@@ -90,7 +90,7 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
     }
 
     // If the path INSTALLLOCATION does not end with this string, INSTALLLOCATION is maybe
-    // transfered from an OOo 3.0, OOo 3.1 and OOo 3.2 and need to be changed therefore.
+    // transferred from an OOo 3.0, OOo 3.1 and OOo 3.2 and need to be changed therefore.
 
     if ( pathCompletionRequired )
     {

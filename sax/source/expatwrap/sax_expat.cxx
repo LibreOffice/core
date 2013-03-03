@@ -441,7 +441,7 @@ SaxExpatParser::SaxExpatParser(  )
     LocatorImpl *pLoc = new LocatorImpl( m_pImpl );
     m_pImpl->rDocumentLocator = Reference< XLocator > ( pLoc );
 
-    // performance-Improvment. Reference is needed when calling the startTag callback.
+    // performance-improvement. Reference is needed when calling the startTag callback.
     // Handing out the same object with every call is allowed (see sax-specification)
     m_pImpl->pAttrList = new AttributeList;
     m_pImpl->rAttrList = Reference< XAttributeList > ( m_pImpl->pAttrList );

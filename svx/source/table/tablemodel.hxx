@@ -85,7 +85,7 @@ public:
 
     SdrTableObj* getSdrTableObj() const { return mpTableObj; }
 
-    /** deletes rows and columns that are completly merged. Must be called between BegUndo/EndUndo! */
+    /** deletes rows and columns that are completely merged. Must be called between BegUndo/EndUndo! */
     void optimize();
 
     /// merges the cell at the given position with the given span

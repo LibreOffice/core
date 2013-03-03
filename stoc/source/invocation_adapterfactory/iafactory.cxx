@@ -225,7 +225,7 @@ static inline void constructRuntimeException(
     uno_Any * pExc, const OUString & rMsg )
 {
     RuntimeException exc( rMsg, Reference< XInterface >() );
-    // no conversion neeeded due to binary compatibility + no convertable type
+    // no conversion needed due to binary compatibility + no convertible type
     ::uno_type_any_construct(
         pExc, &exc, ::getCppuType( &exc ).getTypeLibType(), 0 );
 }

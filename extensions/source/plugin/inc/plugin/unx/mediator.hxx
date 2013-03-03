@@ -104,7 +104,7 @@ public:
     virtual ~Mediator();
 
     // mark mediator as invalid. No more messages will be processed,
-    // SendMessage, WaitForMessage, TransactMessage will return immediatly
+    // SendMessage, WaitForMessage, TransactMessage will return immediately
     // with error
     void invalidate() { m_bValid = false; }
 

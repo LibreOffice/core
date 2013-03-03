@@ -134,7 +134,7 @@ public class _XActiveDataControl extends MultiMethodTest {
 
         oObj.start();
 
-        // waiting a little bit for data transfered
+        // waiting a little bit for data transferred
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {

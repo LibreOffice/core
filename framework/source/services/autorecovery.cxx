@@ -500,7 +500,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
     // check if somewhere wish to disable recovery temp. for this office session
-    // This can be done immediatly ... must not been done asynchronous.
+    // This can be done immediately ... must not been done asynchronous.
     if ((eNewJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
     {
         // it's important to set a flag internaly, so AutoRecovery will be supressed - even if it's requested.
@@ -2198,10 +2198,10 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
         // ii)  For a CrashSave ... add it to the list of dangerous documents and
         //      save it after all other documents was saved successfully. That decrease
         //      the chance for a crash inside a crash.
-        //      On the other side it's not neccessary for documents, which are not modified.
+        //      On the other side it's not necessary for documents, which are not modified.
         //      They can be handled normaly - means we patch the corresponding configuration entry only.
         // iii) For a SessionSave ... ignore it! There is no time to wait for this save operation.
-        //      Because the WindowManager will kill the process if it doesnt react immediatly.
+        //      Because the WindowManager will kill the process if it doesnt react immediately.
         //      On the other side we cant risk a concurrent save request ... because we know
         //      that it will produce a crash.
 
@@ -2810,7 +2810,7 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
     sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL));
 
     // Attention: Because "eJob" is used as a flag field the order of checking these
-    // flags is importent. We must preferr job with higher priorities!
+    // flags is important. We must preferr job with higher priorities!
     // E.g. EmergencySave has an higher prio then AutoSave ...
     // On the other side there exist a well defined order between two different jobs.
     // e.g. PrepareEmergencySave must be done before EmergencySave is started of course.
@@ -2968,7 +2968,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // during normal AutoSave more then once. Because
     // it postpone active documents and save it later.
     // That is normaly done by recalling it from a timer.
-    // Here we must do it immediatly!
+    // Here we must do it immediately!
     // Of course this method returns the right state -
     // because it knows, that we are running in ERMERGENCY SAVE mode .-)
 
@@ -3038,7 +3038,7 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     // during normal AutoSave more then once. Because
     // it postpone active documents and save it later.
     // That is normaly done by recalling it from a timer.
-    // Here we must do it immediatly!
+    // Here we must do it immediately!
     // Of course this method returns the right state -
     // because it knows, that we are running in SESSION SAVE mode .-)
 
@@ -3532,7 +3532,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     }
 
     // But inside the MediaDescriptor we must set our own create progress ...
-    // in case there is not already anothe rprogress set.
+    // in case there is not already another progress set.
     rArgs.createItemIfMissing(::comphelper::MediaDescriptor::PROP_STATUSINDICATOR(), xInternalProgress);
 }
 

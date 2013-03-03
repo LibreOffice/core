@@ -663,7 +663,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
     // set to <TRUE/> when we should allow to query for generated values
     sal_Bool            bAutoRetrievingEnabled = sal_False;
 
-    // first try if the jdbc driver is alraedy registered at the driver manager
+    // first try if the jdbc driver is already registered at the driver manager
     SDBThreadAttach t;
     try
     {

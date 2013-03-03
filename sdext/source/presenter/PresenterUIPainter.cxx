@@ -39,7 +39,7 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
 {
     if (PresenterGeometryHelper::AreRectanglesDisjoint(rRepaintBox, rBoundingBox))
     {
-        // The bounding box lies completly outside the repaint area.
+        // The bounding box lies completely outside the repaint area.
         // Nothing has to be repainted.
         return;
     }
@@ -141,7 +141,7 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
 {
     if (PresenterGeometryHelper::AreRectanglesDisjoint(rRepaintBox, rBoundingBox))
     {
-        // The bounding box lies completly outside the repaint area.
+        // The bounding box lies completely outside the repaint area.
         // Nothing has to be repainted.
         return;
     }

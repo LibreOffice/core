@@ -1353,7 +1353,7 @@ void SbModule::RunInit()
 
 void SbModule::AddVarName( const OUString& aName )
 {
-    // see if the name is added allready
+    // see if the name is added already
     std::vector< OUString >::iterator it_end = mModuleVariableNames.end();
     for ( std::vector< OUString >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
     {

@@ -485,7 +485,7 @@ struct AnnotatingVisitor
                               mnCurrStateId,
                               rState));
 
-        // find two representative stop colors (as odf only support
+        // find two representative stop colors (as ODF only support
         // start&end color)
         optimizeGradientStops(rState.maFillGradient);
 
@@ -1675,7 +1675,7 @@ struct ShapeWritingVisitor
                                 "svggraphicstyle"+aStyleId);
 
             // force path coordinates to 100th millimeter, after
-            // putting polygon data at origin (odf viewbox
+            // putting polygon data at origin (ODF viewbox
             // calculations largely untested codepaths, as OOo always
             // writes "0 0 w h" viewboxes)
             basegfx::B2DHomMatrix aNormalize;

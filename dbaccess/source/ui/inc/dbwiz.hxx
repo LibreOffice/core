@@ -113,7 +113,7 @@ protected:
 
     enum ApplyResult
     {
-        AR_LEAVE_MODIFIED,      // somthing was modified and has successfully been committed
+        AR_LEAVE_MODIFIED,      // something was modified and has successfully been committed
         AR_LEAVE_UNCHANGED,     // no changes were made
         AR_KEEP                 // don't leave the page (e.g. because an error occurred)
     };

@@ -194,7 +194,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             /** timer mst be started with a very(!) short time intervall,
                 to poll for the end of an user action, which does not allow saving documents in general */
             E_POLL_TILL_AUTOSAVE_IS_ALLOWED,
-            /** dont start the timer - but calls the same action then before immediatly again! */
+            /** dont start the timer - but calls the same action then before immediately again! */
             E_CALL_ME_BACK
         };
 

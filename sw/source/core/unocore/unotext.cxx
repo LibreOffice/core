@@ -1620,7 +1620,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         // todo: if the start/end is in a table then insert a paragraph
         // before/after, move the start/end nodes, then convert and
-        // remove the addtional paragraphs in the end
+        // remove the additional paragraphs in the end
         if (pStartStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
             SwTableNode * pStartTableNode(pStartStartNode->FindTableNode());

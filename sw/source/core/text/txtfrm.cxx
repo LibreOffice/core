@@ -2473,7 +2473,7 @@ MSHORT SwTxtFrm::GetLineCount( xub_StrLen nPos )
 
 void SwTxtFrm::ChgThisLines()
 {
-    //not necassary to format here (GerFormatted etc.), because we have to come from there!
+    //not necessary to format here (GerFormatted etc.), because we have to come from there!
 
     sal_uLong nNew = 0;
     const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();

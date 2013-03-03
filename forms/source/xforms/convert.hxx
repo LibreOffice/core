@@ -64,7 +64,7 @@ public:
     /// can we convert this type?
     bool hasType( const Type_t& );
 
-    /// get list of convertable types
+    /// get list of convertible types
     Types_t getTypes();
 
     /// convert any to XML representation

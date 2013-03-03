@@ -1372,7 +1372,7 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
         const Rectangle aBmpRect( aPoint, aBmp.GetSizePixel() );
         Rectangle       aSrcRect( rSrcPt, rSrcSz );
 
-        // do cropping if neccessary
+        // do cropping if necessary
         if( aSrcRect.Intersection( aBmpRect ) != aBmpRect )
         {
             if( !aSrcRect.IsEmpty() )
@@ -1383,7 +1383,7 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
 
         if( !aBmp.IsEmpty() )
         {
-            // do downsampling if neccessary
+            // do downsampling if necessary
             Size aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
 
             // #103209# Normalize size (mirroring has to happen outside of this method)

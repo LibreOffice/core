@@ -1163,7 +1163,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
     }
 }
 
-// Create a new SectionFrm for every occurence in the Layout and insert before
+// Create a new SectionFrm for every occurrence in the Layout and insert before
 // the corresponding CntntFrm
 void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
 {

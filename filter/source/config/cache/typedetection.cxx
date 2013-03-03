@@ -533,7 +533,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
 {
     // Can be used to supress execution of some parts of this method
     // if its already clear that detected type is valid or not.
-    // Its neccessary to use shared code at the end, which update
+    // Its necessary to use shared code at the end, which update
     // all return parameters constistency!
     sal_Bool bBreakDetection = sal_False;
 
@@ -652,7 +652,7 @@ sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPr
 {
     // Can be used to supress execution of some parts of this method
     // if its already clear that detected filter is valid or not.
-    // Its neccessary to use shared code at the end, which update
+    // Its necessary to use shared code at the end, which update
     // all return parameters constistency!
     sal_Bool bBreakDetection = sal_False;
 

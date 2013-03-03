@@ -476,7 +476,7 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
     else if ( rName.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
     {
-        // Do NOT map Content-Lenght entity header to DAV:getcontentlength!
+        // Do NOT map Content-Length entity header to DAV:getcontentlength!
         // Only DAV resources have this property.
 
         // Map Content-Length entity header to UCP:Size

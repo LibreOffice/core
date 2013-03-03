@@ -230,7 +230,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
             "OQuery::propertyChange : where did this call come from ?");
 
         if (m_eDoingCurrently == SETTING_PROPERTIES)
-            // we're setting the property ourself, so we will do the neccessary notifications later
+            // we're setting the property ourself, so we will do the necessary notifications later
             return;
 
         // forward this to our own member holding a copy of the property value

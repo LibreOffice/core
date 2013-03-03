@@ -1955,7 +1955,7 @@ void RtfAttributeOutput::CharKerning( const SvxKerningItem& rKerning )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    // in quater points then in twips
+    // in quarter points then in twips
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_EXPND);
     m_aStyles.append((sal_Int32)(rKerning.GetValue() / 5));
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_EXPNDTW);

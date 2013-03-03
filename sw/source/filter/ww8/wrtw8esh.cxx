@@ -593,7 +593,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             SwTwips nLeft = aRect.Left() + nThick;
             SwTwips nRight = aRect.Right() - nThick;
 
-            //Nasty swap for bidi if neccessary
+            //Nasty swap for bidi if necessary
             rWrt.MiserableRTLFrmFmtHack(nLeft, nRight, rFrmFmt);
 
             //xaLeft/yaTop/xaRight/yaBottom - rel. to anchor

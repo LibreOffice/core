@@ -264,7 +264,7 @@ HRESULT OpenIStorageFromURL_Impl( const ::rtl::OUString& aURL, IStorage** ppISto
 
     ::rtl::OUString aFilePath;
     if ( !ppIStorage || ::osl::FileBase::getSystemPathFromFileURL( aURL, aFilePath ) != ::osl::FileBase::E_None )
-        throw uno::RuntimeException(); // TODO: something dangerous happend
+        throw uno::RuntimeException(); // TODO: something dangerous happened
 
     return StgOpenStorage( reinterpret_cast<LPCWSTR>(aFilePath.getStr()),
                              NULL,
@@ -570,7 +570,7 @@ void OleComponent::CreateNewIStorage_Impl()
     // open an IStorage based on the temporary file
     ::rtl::OUString aTempFilePath;
     if ( ::osl::FileBase::getSystemPathFromFileURL( aTempURL, aTempFilePath ) != ::osl::FileBase::E_None )
-        throw uno::RuntimeException(); // TODO: something dangerous happend
+        throw uno::RuntimeException(); // TODO: something dangerous happened
 
     HRESULT hr = StgCreateDocfile( reinterpret_cast<LPCWSTR>(aTempFilePath.getStr()), STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED | STGM_DELETEONRELEASE, 0, &m_pNativeImpl->m_pIStorage );
     if ( FAILED( hr ) || !m_pNativeImpl->m_pIStorage )
@@ -838,7 +838,7 @@ void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL )
 
     ::rtl::OUString aFilePath;
     if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
-        throw uno::RuntimeException(); // TODO: something dangerous happend
+        throw uno::RuntimeException(); // TODO: something dangerous happened
 
     HRESULT hr = OleCreateFromFile( CLSID_NULL,
                                     reinterpret_cast<LPCWSTR>(aFilePath.getStr()),
@@ -868,7 +868,7 @@ void OleComponent::CreateLinkFromFile( const ::rtl::OUString& aFileURL )
 
     ::rtl::OUString aFilePath;
     if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
-        throw uno::RuntimeException(); // TODO: something dangerous happend
+        throw uno::RuntimeException(); // TODO: something dangerous happened
 
     HRESULT hr = OleCreateLinkToFile( reinterpret_cast<LPCWSTR>(aFilePath.getStr()),
                                         IID_IUnknown,

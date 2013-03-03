@@ -1303,7 +1303,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     }
     else
         nNewMode &= ~BROWSER_HIDECURSOR;
-        // should not be neccessary if EnablePermanentCursor is used to change the cursor behaviour, but to be sure ...
+        // should not be necessary if EnablePermanentCursor is used to change the cursor behaviour, but to be sure ...
 
     if (nNewMode != m_nMode)
     {
@@ -1608,7 +1608,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     // there are rows so go to the selected current column
     if (nRecordCount)
         GoToRowColumnId(0, GetColumnId(nCurPos));
-    // else stop the editing if neccessary
+    // else stop the editing if necessary
     else if (IsEditing())
         DeactivateCell();
 

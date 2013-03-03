@@ -670,7 +670,7 @@ void SAL_CALL CWinFileOpenImpl::onSelChanged(HWND)
     // string to the file name edit line
     // this would overwritte our text when we would set
     // the default name in onInitDone, so we have to
-    // remeber that this is the first SelChanged message
+    // remember that this is the first SelChanged message
     // and set the default name here to overwrite the
     // windows setting
     InitialSetDefaultName();

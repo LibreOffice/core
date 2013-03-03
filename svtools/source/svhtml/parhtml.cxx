@@ -1061,7 +1061,7 @@ int HTMLParser::_GetNextToken()
     if (!maOptions.empty())
         maOptions.clear();
 
-    if( !IsParserWorking() )        // Don't continue if already an error occured
+    if( !IsParserWorking() )        // Don't continue if already an error occurred
         return 0;
 
     bool bReadNextCharSave = bReadNextChar;
@@ -1070,7 +1070,7 @@ int HTMLParser::_GetNextToken()
         DBG_ASSERT( !bEndTokenFound,
                     "Read a character despite </SCRIPT> was read?" );
         nNextCh = GetNextChar();
-        if( !IsParserWorking() )        // Don't continue if already an error occured
+        if( !IsParserWorking() )        // Don't continue if already an error occurred
             return 0;
         bReadNextChar = false;
     }

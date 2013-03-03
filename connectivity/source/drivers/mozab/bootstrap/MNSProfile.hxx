@@ -51,7 +51,7 @@ public:
 
 public:
     //We register an factory for Mozilla profile service its CID and CONTRACTID are NS_PROFILE_CID and NS_PROFILE_CONTRACTID
-    //After that, we does not need profile.dll/libprofile.so any more. Our profile service are diffrent from the orginal one in
+    //After that, we does not need profile.dll/libprofile.so any more. Our profile service are different from the orginal one in
     //these areas:
     //1. We do not lock Mozilla Profile,
     //2. We do not change Mozilla Profile settings. We do not change default profile, do not create new profiles and

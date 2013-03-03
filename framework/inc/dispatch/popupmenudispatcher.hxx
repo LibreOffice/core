@@ -84,7 +84,7 @@ class PopupMenuDispatcher :   // interfaces
                                 public css::frame::XFrameActionListener ,
                                 public css::lang::XInitialization       ,
                                 // baseclasses
-                                // Order is neccessary for right initialization!
+                                // Order is necessary for right initialization!
                                 public ThreadHelpBase                   ,
                                 public cppu::OWeakObject
 {

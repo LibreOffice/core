@@ -1383,7 +1383,7 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     sal_uInt16 nCachePos = pImp->nMsgPos;
     const SfxSlot *pSibling = pRealSlot->GetNextSlot();
 
-    // the Slots odf a interfaces ar linked in a circle
+    // the Slots ODF a interfaces ar linked in a circle
     while ( pSibling > pRealSlot )
     {
         SfxStateFunc pSiblingFnc=0;

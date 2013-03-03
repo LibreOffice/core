@@ -834,7 +834,7 @@ void AssignmentPersistentData::Commit()
 
         WaitObject aWaitCursor(this);
 
-        // no matter what we do here, we handled the currently selected data source (no matter if successfull or not)
+        // no matter what we do here, we handled the currently selected data source (no matter if successful or not)
         m_aDatasource.SaveValue();
 
         // create an interaction handler (may be needed for connecting)
@@ -937,7 +937,7 @@ void AssignmentPersistentData::Commit()
     {
         WaitObject aWaitCursor(this);
 
-        // no matter what we do here, we handled the currently selected table (no matter if successfull or not)
+        // no matter what we do here, we handled the currently selected table (no matter if successful or not)
         m_aDatasource.SaveValue();
 
         String sSelectedTable = m_aTable.GetText();

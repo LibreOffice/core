@@ -5596,7 +5596,7 @@ void SwEditWin::SetChainMode( sal_Bool bOn )
 
 uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
-    SolarMutexGuard aGuard;   // this should have happend already!!!
+    SolarMutexGuard aGuard;   // this should have happened already!!!
     SwWrtShell *pSh = rView.GetWrtShellPtr();
     OSL_ENSURE( pSh, "no writer shell, no accessible object" );
     uno::Reference<
@@ -5831,7 +5831,7 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
                     !pACorr ||
                     pACorr->GetSwFlags().bAutoCmpltShowAsTip;
 
-        // Get the neccessary data to show help text.
+        // Get the necessary data to show help text.
         pQuickHlpData->FillStrArr( rSh, rWord, bFromIME );
     }
 

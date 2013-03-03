@@ -57,7 +57,7 @@ namespace framework{
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-class OFrames   :   private ThreadHelpBase      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
+class OFrames   :   private ThreadHelpBase      ,   // Must be the first of baseclasses - Is necessary for right initialization of objects!
                     public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFrames >
 {
     //-------------------------------------------------------------------------------------------------------------

@@ -331,7 +331,7 @@ public class UnoDialog2 extends UnoDialog
                     });
             Helper.setUnoPropertyValues(xControlModel, sPropNames, oPropValues);
             //setControlPropertiesDebug(xControlModel, sPropNames, oPropValues);
-            //System.out.println("  Setting props successfull !");
+            //System.out.println("  Setting props successful !");
             Helper.setUnoPropertyValue(xControlModel, PropertyNames.PROPERTY_NAME, componentName);
         }
         catch (Exception ex)

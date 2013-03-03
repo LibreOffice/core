@@ -444,7 +444,7 @@ bool SbiParser::Parse()
     }
 
     // test for the statement's end -
-    // might also be an ELSE, as there must not neccessary be a : before the ELSE!
+    // might also be an ELSE, as there must not necessary be a : before the ELSE!
 
     if( !IsEos() )
     {
@@ -602,8 +602,8 @@ void SbiParser::Set()
         aLvalue.Gen();
         aExpr.Gen();
         // Its a good idea to distinguish between
-        // set someting = another &
-        // someting = another
+        // set something = another &
+        // something = another
         // ( its necessary for vba objects where set is object
         // specific and also doesn't involve processing default params )
         if( pDef->GetTypeId() )

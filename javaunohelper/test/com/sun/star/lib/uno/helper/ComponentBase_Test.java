@@ -74,7 +74,7 @@ public class ComponentBase_Test
         obj1.nDisposingCalled= 0;
         obj2.nDisposingCalled= 0;
         obj3.nDisposingCalled= 0;
-        comp.dispose(); // allready disposed;
+        comp.dispose(); // already disposed;
         r[i++]= obj1.nDisposingCalled == 0;
 
         boolean bOk= true;

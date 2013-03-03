@@ -127,7 +127,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
             }
         }
         catch ( com.sun.star.uno.RuntimeException ex ) {
-            // something strange has happend!
+            // something strange has happened!
             System.out.println( " Sample caught exception! " + ex );
             System.exit(1);
         }
@@ -245,7 +245,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
             // we used an invalid index for accessing a container
         }
         catch ( com.sun.star.uno.Exception ex ) {
-            // something strange has happend!
+            // something strange has happened!
         }
         catch ( java.lang.Exception ex ) {
             // catch java exceptions and something useful

@@ -724,7 +724,7 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
             mbInitFillColor = sal_True;
 
-            // calculate step count if neccessary
+            // calculate step count if necessary
             if ( !aGradient.GetSteps() )
                 aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
@@ -888,7 +888,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
                         mbInitFillColor = sal_True;
 
-                        // calculate step count if neccessary
+                        // calculate step count if necessary
                         if ( !aGradient.GetSteps() )
                             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
@@ -997,7 +997,7 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
         aRect.Right()++;
         aRect.Bottom()++;
 
-        // calculate step count if neccessary
+        // calculate step count if necessary
         if ( !aGradient.GetSteps() )
             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 

@@ -328,7 +328,7 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
     //sprmSCcolumns - number of columns - 1
     const sal_Int16 nCols = rSection.NoCols();
 
-    if (nCols < 2)          //check for no columns or other wierd state
+    if (nCols < 2)          //check for no columns or other weird state
         return false;
 
     SwFmtCol aCol;                      // Create SwFmtCol

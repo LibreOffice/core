@@ -620,7 +620,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::allTablesAreSelectable(  ) throw(SQLEx
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OEvoabDatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
-    // For now definately read-only, no support for update/delete
+    // For now definitely read-only, no support for update/delete
     return sal_True;
 }
 // -------------------------------------------------------------------------

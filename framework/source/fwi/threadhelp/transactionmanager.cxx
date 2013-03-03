@@ -110,7 +110,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
     }
 
     // Wait for current existing transactions then!
-    // (Only neccessary for changing to E_BEFORECLOSE or E_CLOSE! ...
+    // (Only necessary for changing to E_BEFORECLOSE or E_CLOSE! ...
     // otherwise; if you wait at setting E_WORK another thrad could finish a acquire-call during our unlock() and wait() call
     // ... and we will wait forever here!!!)
     // Don't forget to release access mutex before.

@@ -125,7 +125,7 @@ public class ViewContainer extends Thread
         }
         // If this view is a registered shutdown listener on this view container
         // too, we must call his interface and forget him as possible listener.
-        // It's neccessary to guarantee his dead ...
+        // It's necessary to guarantee his dead ...
         boolean bShutdownView = false;
         synchronized(mlListener)
         {

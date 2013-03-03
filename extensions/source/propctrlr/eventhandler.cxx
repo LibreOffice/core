@@ -909,7 +909,7 @@ namespace pcr
             pEventHolder->addEvent( event->second.nId, event->second.sListenerMethodName, aAssignedScript );
         }
 
-        // the inital selection in the dialog
+        // the initial selection in the dialog
         Sequence< ::rtl::OUString > aNames( pEventHolder->getElementNames() );
         const ::rtl::OUString* pChosenEvent = ::std::find( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength(), rForEvent.sListenerMethodName );
         sal_uInt16 nInitialSelection = (sal_uInt16)( pChosenEvent - aNames.getConstArray() );

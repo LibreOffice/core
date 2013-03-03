@@ -350,7 +350,7 @@ sal_Bool GraphicHelper::createThumb_Impl( const GDIMetaFile& rMtf,
         const_cast< GDIMetaFile& >( rMtf ).WindStart();
         const_cast< GDIMetaFile& >( rMtf ).Play( &aVDev, aBackPosPix, aDrawSize );
 
-        // draw overlay if neccessary
+        // draw overlay if necessary
         if ( pOverlay )
             aVDev.DrawBitmapEx( aOverlayRect.TopLeft(), aOverlayRect.GetSize(), *pOverlay );
 

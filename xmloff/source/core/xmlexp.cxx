@@ -2359,7 +2359,7 @@ uno::Reference< embed::XStorage > SvXMLExport::GetTargetStorage()
     return mpImpl->mxTargetStorage;
 }
 
-/// returns the currently configured default version for odf export
+/// returns the currently configured default version for ODF export
 SvtSaveOptions::ODFDefaultVersion SvXMLExport::getDefaultVersion() const
 {
     if( mpImpl )

@@ -626,7 +626,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     const sal_Int16 eVert = pFmt->GetVertOrient().GetVertOrient();
     const sal_Int16 eRelHori = pFmt->GetHoriOrient().GetRelationOrient();
     const sal_Int16 eRelVert = pFmt->GetVertOrient().GetRelationOrient();
-    //On paragraph bound Flys starting from the new postition a new
+    //On paragraph bound Flys starting from the new position a new
     //anchor must be set. Anchor and the new RelPos is calculated and
     //placed by the Fly itself.
     if( GetFlyFrm()->IsFlyAtCntFrm() )

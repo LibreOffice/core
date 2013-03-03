@@ -88,7 +88,7 @@ private:
 
     OUString m_sODFVersion;
     //Signals if the document contains already a document signature. This is only
-    //importent when we are signing macros and if the value is true.
+    //important when we are signing macros and if the value is true.
     bool m_bHasDocumentSignature;
     bool m_bWarningShowSignMacro;
 

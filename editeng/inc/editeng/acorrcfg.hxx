@@ -89,7 +89,7 @@ public:
 
           SvxAutoCorrect* GetAutoCorrect()          { return pAutoCorrect; }
     const SvxAutoCorrect* GetAutoCorrect() const    { return pAutoCorrect; }
-    // the pointer is transfered to the possession of the ConfigItems!
+    // the pointer is transferred to the possession of the ConfigItems!
     void SetAutoCorrect( SvxAutoCorrect* );
 
     sal_Bool IsAutoFmtByInput() const       { return bAutoFmtByInput; }

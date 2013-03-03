@@ -404,7 +404,7 @@ ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl
         }
     }
 
-    // Not successfull, we have to look into our default vector/boost::unordered_map combination
+    // Not successful, we have to look into our default vector/boost::unordered_map combination
     UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
     pIter = rDefaultHashMap.find( aResourceURL );
     if ( pIter != rDefaultHashMap.end() )

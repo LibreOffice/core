@@ -3546,7 +3546,7 @@ void FmXFormShell::CreateExternalView()
                     "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 sal_Int16 nPosition = (*aOffset).second;
                 nPosition = nPosition + nOffset;
-                    // we alread inserted nOffset additinal columns ....
+                    // we already inserted nOffset additional columns ....
                 pDispatchArgs->Value <<= nPosition;
                 ++pDispatchArgs;
 

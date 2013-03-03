@@ -216,7 +216,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
         {
             // create an intermediate window, which is to be the container window of the frame
             // Do *not* use |this| as container window for the frame, this would result in undefined
-            // responsiblity for this window (as soon as we initialize a frame with a window, the frame
+            // responsibility for this window (as soon as we initialize a frame with a window, the frame
             // is responsible for it's life time, but |this| is controlled by the belonging SfxChildWindow)
             // #i34249#
             Window* pContainerWindow = new Window( this );

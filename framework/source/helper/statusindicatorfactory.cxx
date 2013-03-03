@@ -372,7 +372,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         }
     }
 
-    // Ok the window should be made visible ... becuase it isnt currently visible.
+    // Ok the window should be made visible ... because it isnt currently visible.
     // BUT ..!
     // We need a Hack for our applications: They get her progress from the frame directly
     // on saving documents. Because there is no progress set on the MediaDescriptor.

@@ -5765,7 +5765,7 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     //  und der Text nicht gedreht ist)
     sal_Bool bCanBeReplaced = (ULONG_MAX > nPosGroup) ? sal_False : sal_True;
 
-    // we don't knwo yet whether it's a TextBox
+    // we don't know yet whether it's a TextBox
     MSO_SPT         eShapeType      = mso_sptNil;
 
     // analyze Shape

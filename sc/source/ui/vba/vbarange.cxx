@@ -3371,7 +3371,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
     {
         // Documentation says xlSortRows is default but that doesn't appear to be
         // the case. Also it appears that xlSortColumns is the default which
-        // strangely enought sorts by Row
+        // strangely enough sorts by Row
         nOrientation = ::comphelper::getINT16( Orientation );
         // persist new option to be next calls default
         if ( nOrientation == excel::XlSortOrientation::xlSortRows )

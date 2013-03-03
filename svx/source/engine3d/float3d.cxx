@@ -1743,7 +1743,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_PERSPECTIVE);
 
 // Geometry
-    // Possible determine PoolUnit (in this case this haas not happend in Update() )
+    // Possible determine PoolUnit (in this case this has not happened in Update() )
     if( !mpImpl->pPool )
     {
         OSL_FAIL( "No Pool in GetAttr()! May be incompatible to drviewsi.cxx ?" );

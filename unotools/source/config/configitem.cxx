@@ -1020,7 +1020,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                         {
                             // #i37322#: fallback action: replace with <void/>
                             xCont->replaceByName(pContainerSubNodes[nContSub], Any());
-                            // fallback successfull: continue looping
+                            // fallback successful: continue looping
                             continue;
                         }
                         catch (Exception &)

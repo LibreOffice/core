@@ -895,7 +895,7 @@ sal_Bool LoadEnv::impl_handleContent()
     m_lMediaDescriptor >> lDescriptor;
     css::util::URL aURL = m_aURL;
 
-    // get neccessary container to query for a handler object
+    // get necessary container to query for a handler object
     css::uno::Reference< css::lang::XMultiServiceFactory > xFactory(m_xSMGR->createInstance(SERVICENAME_CONTENTHANDLERFACTORY), css::uno::UNO_QUERY);
     css::uno::Reference< css::container::XContainerQuery > xQuery  (xFactory                                                  , css::uno::UNO_QUERY);
 
@@ -1580,7 +1580,7 @@ void LoadEnv::impl_reactForLoadingState()
         {
             SolarMutexGuard aSolarGuard;
             Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-            // check for system window is neccessary to guarantee correct pointer cast!
+            // check for system window is necessary to guarantee correct pointer cast!
             if (pWindow && pWindow->IsSystemWindow())
                 ((WorkWindow*)pWindow)->Minimize();
         }

@@ -1223,7 +1223,7 @@ void PrinterController::printFilteredPage( int i_nPage )
         mpImplData->mpPrinter->SetPaperBin( mpImplData->mnFixedPaperBin );
     }
 
-    // if full paper is meant to be used, move the output to accomodate for pageoffset
+    // if full paper is meant to be used, move the output to accommodate for pageoffset
     if( aPageSize.bFullPaper )
     {
         Point aPageOffset( mpImplData->mpPrinter->GetPageOffset() );

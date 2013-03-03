@@ -686,7 +686,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
         maShapeIds.push_back( nTextId );
 
-        // AS: Write strikeout and underline, if neccessary.  This code was originally taken from the SVG
+        // AS: Write strikeout and underline, if necessary.  This code was originally taken from the SVG
         //  export facility, although the positioning had to be tweaked a little.  I can't explain the
         //  numbers, but the flash lines up very well with the original OOo document.  All of this should
         //  probably be converted to polygons as part of the meta file, though, as we don't handle any

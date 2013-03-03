@@ -351,7 +351,7 @@ void ImplFreeSalGDI()
         pSalData->mhDitherPal = 0;
     }
 
-    // delete buffers for dithering DIB patterns, if neccessary
+    // delete buffers for dithering DIB patterns, if necessary
     if ( pSalData->mhDitherDIB )
     {
         GlobalUnlock( pSalData->mhDitherDIB );

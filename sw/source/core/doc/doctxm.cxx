@@ -1702,7 +1702,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
             case TOKEN_PAGE_NUMS:
                     // Place holder for the PageNumber; we only respect the first one
                 {
-                    // The count of similiar entries gives the PagerNumber pattern
+                    // The count of similar entries gives the PagerNumber pattern
                     size_t nSize = rBase.aTOXSources.size();
                     if (nSize > 0)
                     {

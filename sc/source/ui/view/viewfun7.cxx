@@ -69,7 +69,7 @@ static void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
         rPos.X() += x + 80;
     if( y < 0 )
         rPos.Y() += y + 200;
-    rPos.X() += rSize.Width() / 2;          // postition at paste is center
+    rPos.X() += rSize.Width() / 2;          // position at paste is center
     rPos.Y() += rSize.Height() / 2;
 }
 
@@ -190,7 +190,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     }
     else
     {
-        bPasteIsMove = false;       // no internal move happend
+        bPasteIsMove = false;       // no internal move happened
 
         SdrView aView(pModel);      // #i71529# never create a base class of SdrView directly!
         SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));

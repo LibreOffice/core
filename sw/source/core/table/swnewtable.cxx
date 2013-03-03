@@ -257,7 +257,7 @@ static void lcl_ChangeRowSpan( const SwTable& rTable, const long nDiff,
     do
     {
         bGoOn = false; // will be set to true if we found a non-master cell
-        // which has to be manipulated => we have to chekc the previous row, too.
+        // which has to be manipulated => we have to check the previous row, too.
         const SwTableLine* pLine = rTable.GetTabLines()[ nRowIdx ];
         sal_uInt16 nBoxCount = pLine->GetTabBoxes().size();
         for( sal_uInt16 nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )

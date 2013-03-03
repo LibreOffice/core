@@ -43,7 +43,7 @@ StgPage::StgPage( short nSize, sal_Int32 nPage )
     , mnSize( nSize )
 {
     OSL_ENSURE( mnSize >= 512, "Unexpected page size is provided!" );
-    // We will write this data to a permanant file later
+    // We will write this data to a permanent file later
     // best to clear if first.
     memset( mpData, 0, mnSize );
 }

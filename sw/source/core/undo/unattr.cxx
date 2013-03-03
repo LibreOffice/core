@@ -180,7 +180,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     if ( !m_pOldSet.get() || !m_pFmt || !IsFmtInDoc( &rContext.GetDoc() ))
         return;
 
-    // #i35443# - If anchor attribute has been successfull
+    // #i35443# - If anchor attribute has been successful
     // restored, all other attributes are also restored.
     // Thus, keep track of its restoration
     bool bAnchorAttrRestored( false );
@@ -189,7 +189,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         bAnchorAttrRestored = RestoreFlyAnchor(rContext);
         if ( bAnchorAttrRestored )
         {
-            // Anchor attribute successfull restored.
+            // Anchor attribute successful restored.
             // Thus, keep anchor position for redo
             SaveFlyAnchor();
         }

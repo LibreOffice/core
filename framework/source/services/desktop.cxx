@@ -841,7 +841,7 @@ void SAL_CALL Desktop::setActiveFrame( const css::uno::Reference< css::frame::XF
     // If nothing will change - do nothing!
     // Otherwise set new active frame ...
     // and deactivate last frame.
-    // It's neccessary for our FrameActionEvent listener on a frame!
+    // It's necessary for our FrameActionEvent listener on a frame!
     css::uno::Reference< css::frame::XFrame > xLastActiveChild = m_aChildTaskContainer.getActive();
     if( xLastActiveChild != xFrame )
     {
@@ -1036,7 +1036,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
     //    force using of "if() else if() ..."
     //-----------------------------------------------------------------------------------------------------
 
-    // get threadsafe some neccessary member which are neccessary for following functionality
+    // get threadsafe some necessary member which are neccessary for following functionality
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
@@ -1086,7 +1086,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
         //  But note: Such flags are not valid for the desktop - especialy SIBLINGS or PARENT.
         //-------------------------------------------------------------------------------------------------
 
-        // get threadsafe some neccessary member which are neccessary for following functionality
+        // get threadsafe some necessary member which are neccessary for following functionality
         /* SAFE { */
         aReadLock.lock();
         ::rtl::OUString sOwnName = m_sName;
@@ -1179,7 +1179,7 @@ void SAL_CALL Desktop::dispose()
 
     // Now - we are alone and its the first call of this method ...
     // otherwise call before had thrown a DisposedException / hopefully .-)
-    // But we dont use the transaction object created before ... we reset it immediatly ...
+    // But we dont use the transaction object created before ... we reset it immediately ...
     // two lines of code ... for what ?
     // The answer: We wished to synchronize concurrent dispose() calls -> OK
     // But next line will wait for all currently running transaction (even if they

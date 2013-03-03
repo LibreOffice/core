@@ -834,7 +834,7 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
             if (mInLayout || mBlockLayoutRequests) {
                 // If we are in a layout traversal, defer notification
                 // by posting. This ensures that the view tree is
-                // in a consistent state and is able to accomodate
+                // in a consistent state and is able to accommodate
                 // new layout or invalidate requests.
                 if (mSelectionNotifier == null) {
                     mSelectionNotifier = new SelectionNotifier();

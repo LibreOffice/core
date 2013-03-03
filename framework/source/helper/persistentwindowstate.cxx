@@ -264,7 +264,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
         SolarMutexGuard aSolarGuard;
 
         Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-        // check for system window is neccessary to guarantee correct pointer cast!
+        // check for system window is necessary to guarantee correct pointer cast!
         if (
             (pWindow                  ) &&
             (pWindow->IsSystemWindow())
@@ -300,7 +300,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     if (!pWindow)
         return;
 
-    // check for system and work window - its neccessary to guarantee correct pointer cast!
+    // check for system and work window - its necessary to guarantee correct pointer cast!
     sal_Bool bSystemWindow = pWindow->IsSystemWindow();
     sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
 

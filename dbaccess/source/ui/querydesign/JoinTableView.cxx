@@ -146,7 +146,7 @@ void OScrollWindowHelper::Resize()
     GetVScrollBar()->SetPageSize( aTotalOutputSize.Height() );
     GetVScrollBar()->SetVisibleSize( aTotalOutputSize.Height() );
 
-    // adjust the ranges of the scrollbars if neccessary
+    // adjust the ranges of the scrollbars if necessary
     long lRange = GetHScrollBar()->GetRange().Max() - GetHScrollBar()->GetRange().Min();
     if (m_pTableView->GetScrollOffset().X() + aTotalOutputSize.Width() > lRange)
         GetHScrollBar()->SetRangeMax(m_pTableView->GetScrollOffset().X() + aTotalOutputSize.Width() + GetHScrollBar()->GetRange().Min());
@@ -1470,7 +1470,7 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                         else if (pNextConn)
                         {
                             GrabFocus();
-                                // neccessary : a conn may be selected even if a tab win has the focus, in this case
+                                // necessary : a conn may be selected even if a tab win has the focus, in this case
                                 // the next travel would select the same conn again if we would not reset te focus ...
                             SelectConn(pNextConn);
                         }

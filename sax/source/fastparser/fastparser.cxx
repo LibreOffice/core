@@ -188,7 +188,7 @@ ParserData::~ParserData()
 Entity::Entity( const ParserData& rData ) :
     ParserData( rData )
 {
-    // performance-Improvment. Reference is needed when calling the startTag callback.
+    // performance-improvement. Reference is needed when calling the startTag callback.
     // Handing out the same object with every call is allowed (see sax-specification)
     mxAttributes.set( new FastAttributeList( mxTokenHandler ) );
 }

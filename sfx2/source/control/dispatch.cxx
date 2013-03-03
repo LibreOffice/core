@@ -1665,7 +1665,7 @@ void SfxDispatcher::FlushImpl()
     if( bAwakeBindings )
         aToDoCopy.clear();
 
-    // If more changes have occured on the stach when
+    // If more changes have occurred on the stach when
     // Activate/Deactivate/Delete:
     if (!bFlushed)
         // If Push/Pop hs been called by someone, theb also EnterReg was called!

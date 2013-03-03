@@ -967,7 +967,7 @@ void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
     long ay = region->y;
     long awidth = region->width;
 
-    /* Get tje cairo surface and the data */
+    /* Get the cairo surface and the data */
     cairo_surface_t* surface = cairo_get_target(cr);
     g_assert(surface != NULL);
     cairo_surface_flush(surface);

@@ -707,8 +707,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 GetMedium()->SetUpdatePickList( sal_True );
 
                 // TODO: in future it must be done in followind way
-                // if document is opened from GUI it is immediatelly appeares in the picklist
-                // if the document is a new one then it appeares in the picklist immediatelly
+                // if document is opened from GUI it is immediatelly appears in the picklist
+                // if the document is a new one then it appears in the picklist immediatelly
                 // after SaveAs operation triggered from GUI
             }
             catch( const task::ErrorCodeIOException& aErrorEx )

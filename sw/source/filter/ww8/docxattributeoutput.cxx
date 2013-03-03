@@ -2557,7 +2557,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                 {
                     if( m_postponedGraphic == NULL )
                         FlyFrameGraphic( pGrfNode, rFrame.GetLayoutSize() );
-                    else // we are writting out attributes, but w:drawing should not be inside w:rPr,
+                    else // we are writing out attributes, but w:drawing should not be inside w:rPr,
                     {    // so write it out later
                         m_postponedGraphic->push_back( PostponedGraphic( pGrfNode, rFrame.GetLayoutSize()));
                     }
@@ -3994,7 +3994,7 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
     if( info.nFtnOffset != 0 )
         fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
             rtl::OString::valueOf( sal_Int32( info.nFtnOffset + 1 )).getStr(), FSEND );
-    if( listtag != 0 ) // we are writting to settings.xml, write also special footnote/endnote list
+    if( listtag != 0 ) // we are writing to settings.xml, write also special footnote/endnote list
     { // there are currently only two hardcoded ones ( see FootnotesEndnotes())
         fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "0", FSEND );
         fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "1", FSEND );

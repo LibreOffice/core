@@ -43,7 +43,7 @@ InputSequenceChecker_hi::~InputSequenceChecker_hi()
  */
 #define __UP  1  // ChandraBindu & Anuswar
 #define __NP  2  // Visarg
-#define __IV    3  // Independant Vowels
+#define __IV    3  // Independent Vowels
 #define __CN    4  // Consonants except _CK & _RC
 #define __CK    5  // Consonants that can be followed by Nukta
 #define __RC    6  // Ra

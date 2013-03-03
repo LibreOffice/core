@@ -194,7 +194,7 @@ struct PDFDict : public PDFContainer
     // removes a name/value pair from the dict
     void eraseValue( const rtl::OString& rName );
     // builds new map as of sub elements
-    // returns NULL if successfull, else the first offending element
+    // returns NULL if successful, else the first offending element
     PDFEntry* buildMap();
 };
 

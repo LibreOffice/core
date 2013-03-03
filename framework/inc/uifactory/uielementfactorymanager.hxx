@@ -48,7 +48,7 @@ namespace framework
 
     class ConfigurationAccess_FactoryManager : // interfaces
                                                     // baseclasses
-                                                    // Order is neccessary for right initialization!
+                                                    // Order is necessary for right initialization!
                                                     private ThreadHelpBase                           ,
                                                     public  ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener>
 {

@@ -2891,7 +2891,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
             mpMedium->GetItemSet()->ClearItem( SID_PASSWORD );
     }
 
-    // nonempty encryption data means hier that the codec was successfuly initialized
+    // nonempty encryption data means hier that the codec was successfully initialized
     return ( aEncryptionData.getLength() != 0 );
 }
 

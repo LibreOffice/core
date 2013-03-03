@@ -7154,7 +7154,7 @@ void Window::setPosSizePixel( long nX, long nY,
 
         // Resize should be called directly. If we havn't
         // set the correct size, we get a second resize from
-        // the system with the correct size. This can be happend
+        // the system with the correct size. This can be happened
         // if the size is to small or to large.
         ImplHandleResize( pWindow, nWidth, nHeight );
     }

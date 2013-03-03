@@ -360,7 +360,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
                         public XSERVICEINFO                 ,
                         public XDIALOG                      ,
                         public XFLUSHABLE                   ,
-                        private ThreadHelpBase              ,   // Order of baseclasses is neccessary for right initialization!
+                        private ThreadHelpBase              ,   // Order of baseclasses is necessary for right initialization!
                         public OBROADCASTHELPER             ,
                         public OPROPERTYSETHELPER           ,
                         public OWEAKOBJECT

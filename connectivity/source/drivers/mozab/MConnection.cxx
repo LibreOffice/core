@@ -417,7 +417,7 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // just simple -> we are close when we are disposed taht means someone called dispose(); (XComponent)
+    // just simple -> we are close when we are disposed that means someone called dispose(); (XComponent)
     return OConnection_BASE::rBHelper.bDisposed;
 }
 // --------------------------------------------------------------------------------

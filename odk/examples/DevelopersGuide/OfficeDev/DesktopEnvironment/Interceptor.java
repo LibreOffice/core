@@ -301,7 +301,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
 
         // deregistration will be done everytime ...
-        // But may it's not neccessary to establish a new registration!
+        // But may it's not necessary to establish a new registration!
         // Don't look for ignoring actions - it was done already inside original frameAction() call!
         boolean bRegister = false;
 
@@ -511,7 +511,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         if (aURL.Complete.startsWith("private:factory") == true)
         {
             // Create view frame for showing loaded documents on demand.
-            // The visible state is neccessary for JNI functionality to get the HWND and plug office
+            // The visible state is necessary for JNI functionality to get the HWND and plug office
             // inside a java window hierarchy!
             DocumentView aNewView = new DocumentView();
             aNewView.setVisible(true);

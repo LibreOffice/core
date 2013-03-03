@@ -192,7 +192,7 @@ namespace utl
 
 //        SharedUNOComponent& operator=( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent );
         // this operator is not implemented by intention. There is no canonic ownership after this operatoer
-        // would hvae been applied: Should the SharedUNOComponent have the ownership of the component,
+        // would have been applied: Should the SharedUNOComponent have the ownership of the component,
         // or shouldn't it? Hard to guess, and probably wrong in 50 percent of all cases, anyway. So,
         // instead of tempting clients of this class to use such a dangerous operator, we do
         // not offer it at all. If you need to assign a Reference< INTERFACE > to your SharedUNOComponent,

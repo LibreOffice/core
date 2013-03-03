@@ -1599,7 +1599,7 @@ void DbFormattedField::updateFromModel( Reference< XPropertySet > _rxModel )
     OUString sText;
     Any aValue = _rxModel->getPropertyValue( FM_PROP_EFFECTIVE_VALUE );
     if ( aValue >>= sText )
-    {   // our effective value is transfered as string
+    {   // our effective value is transferred as string
         pFormattedWindow->SetTextFormatted( sText );
         pFormattedWindow->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
     }

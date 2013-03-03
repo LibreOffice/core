@@ -177,7 +177,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
-    // decide if transformation is neccessary
+    // decide if transformation is necessary
     sal_Bool bTransformationIsNeccessary(fTRShear != 0.0 || fTRRotate != 0.0);
 
     if(bTransformationIsNeccessary)
@@ -1688,7 +1688,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
             }
             else
             {
-                // export empty href for empty placeholders to be valid odf
+                // export empty href for empty placeholders to be valid ODF
                 OUString sEmptyURL;
 
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sEmptyURL );

@@ -945,12 +945,12 @@ throw ( NoSuchElementException, RuntimeException )
     // Fill return value with result
     if ( bSubstitutionCompleted )
     {
-        // Substitution successfull!
+        // Substitution successful!
         aResult = aWorkText;
     }
     else
     {
-        // Substitution not successfull!
+        // Substitution not successful!
         if ( nDepth == nMaxRecursiveDepth )
         {
             // recursion depth reached!

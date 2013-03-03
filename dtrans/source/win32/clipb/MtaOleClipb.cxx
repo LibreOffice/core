@@ -610,7 +610,7 @@ LRESULT CMtaOleClipboard::onDrawClipboard( )
         aGuard.clear( );
     }
 
-    // foward the message to the next viewer in the chain
+    // forward the message to the next viewer in the chain
     if ( IsWindow( m_hwndNextClipViewer ) )
     {
         DWORD_PTR dwpResult;

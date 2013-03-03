@@ -75,7 +75,7 @@ using namespace hierarchy_ucp;
 
 //=========================================================================
 //
-// IMPORTENT: If any property data ( name / type / ... ) are changed, then
+// IMPORTANT: If any property data ( name / type / ... ) are changed, then
 //            HierarchyContent::getPropertyValues(...) must be adapted too!
 //
 //=========================================================================

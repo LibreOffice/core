@@ -163,15 +163,15 @@ public class FilterOptions
             {
                 // ONE argument has the wrong type
                 // But I think we mustn't react here - because we setted
-                // default values for every neccessary item we need.
+                // default values for every necessary item we need.
                 // In case this exception occures - this default exist
                 // and we can live with it.
             }
         }
 
-        // Decide if it's neccessary AND possible to open streams.
+        // Decide if it's necessary AND possible to open streams.
         // Outside user can check for valid FilterOptions by using
-        // corresponding method isValid(). So it's not neccessary to
+        // corresponding method isValid(). So it's not necessary to
         // handle this error here in any case.
         if (m_xInput==null && m_xOutput==null && m_sURL!=null)
             impl_openStreams(bImport);

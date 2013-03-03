@@ -29,7 +29,7 @@
 #define __NSP_FUNC_HXX
 
 
-// Some function diffrent from UNIX and Window.
+// Some function different from UNIX and Window.
 
 /************************ In UNIX ************************/
 

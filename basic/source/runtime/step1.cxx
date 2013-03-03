@@ -386,7 +386,7 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
     }
     else
         pCode = pErrStmnt;
-    if ( pError ) // current in error handler ( and got a Resume Next statment )
+    if ( pError ) // current in error handler ( and got a Resume Next statement )
         SbxErrObject::getUnoErrObject()->Clear();
 
     if( nOp1 > 1 )

@@ -2571,7 +2571,7 @@ void Content::transfer(
             = static_cast< Content * >(
                     xProvider->queryContent( xTargetId ).get() );
 
-        // Announce transfered content in its new folder.
+        // Announce transferred content in its new folder.
         xTarget->inserted();
     }
     catch ( ucb::IllegalIdentifierException const & )

@@ -1235,7 +1235,7 @@ void FilterCache::impl_validateAndOptimize()
          ++pIt                           )
     {
         // Note: of course the default loader must be ignored here.
-        // Because we replace its registration later completly with all
+        // Because we replace its registration later completely with all
         // types, which are not referenced by any other loader.
         // So we can avaoid our code against the complexity of a diff!
         ::rtl::OUString sLoader = pIt->first;

@@ -1870,7 +1870,7 @@ rtl::OUString SimpleResMgr::ReadString( sal_uInt32 nId )
     // sal_uIntPtr nLen = pResHeader->GetLocalOff() - sizeof(RSHEADER_TYPE);
     ResMgr::GetString( sReturn, (const sal_uInt8*)(pResHeader+1) );
 
-    // not neccessary with te current implementation which holds the string table permanently, but to be sure ....
+    // not necessary with te current implementation which holds the string table permanently, but to be sure ....
     // note: pFallback cannot be NULL here and is either the fallback or m_pResImpl
     InternalResMgr::FreeGlobalRes( pResHeader, pResHandle );
     if( m_pResImpl != pFallback )

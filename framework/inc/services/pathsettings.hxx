@@ -52,7 +52,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
                      public  css::lang::XServiceInfo              ,
                      public  css::util::XChangesListener          , // => XEventListener
                      // base classes
-                     // Order is neccessary for right initialization!
+                     // Order is necessary for right initialization!
                      private ThreadHelpBase                       ,
                      public  ::cppu::OBroadcastHelper             ,
                      public  ::cppu::OPropertySetHelper           , // => XPropertySet / XFastPropertySet / XMultiPropertySet

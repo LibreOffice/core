@@ -321,7 +321,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 xSeekable->seek( 0 );
                 xLoadable->load( aArgs );
 
-                // the model is successfuly loaded, create a new storage and store the model to the storage
+                // the model is successfully loaded, create a new storage and store the model to the storage
                 uno::Reference< embed::XStorage > xTmpStorage = CreateTemporarySubstorage( aStorageName );
                 xStorDoc->storeToStorage( xTmpStorage, uno::Sequence< beans::PropertyValue >() );
                 xDocument->close( sal_True );
@@ -422,7 +422,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
 
     if ( bResult )
     {
-        // the conversion was done successfuly, now the additional initializations should happen
+        // the conversion was done successfully, now the additional initializations should happen
 
         MoveListeners();
         m_xWrappedObject->setClientSite( m_xClientSite );

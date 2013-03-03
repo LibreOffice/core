@@ -694,7 +694,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
     }
 
     // The surrounding section must be closed before the current one is
-    // opended, except that it start immediatly before the current one or
+    // opended, except that it start immediately before the current one or
     // another end immediately before the current one
     if( pSurrCol && nSectSttIdx - pSurrSectNd->GetIndex() > 1 &&
         !lcl_html_IsMultiColEnd( rHTMLWrt, nSectSttIdx-1 ) )

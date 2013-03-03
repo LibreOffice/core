@@ -318,7 +318,7 @@ void SdTransferable::CreateData()
         pNewStylePool->CopyLayoutSheets( aOldLayoutName, *pOldStylePool, aCreatedSheets );
     }
 
-    // set VisArea and adjust objects if neccessary
+    // set VisArea and adjust objects if necessary
     if( maVisArea.IsEmpty() &&
         mpSdDrawDocumentIntern && mpSdViewIntern &&
         mpSdDrawDocumentIntern->GetPageCount() )

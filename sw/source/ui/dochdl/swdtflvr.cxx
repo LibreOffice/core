@@ -2112,7 +2112,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
 
     if( !pDDETyp && !bDoublePaste )
     {
-        // remove FieldType again - error occured!
+        // remove FieldType again - error occurred!
         for( j = nSize; j >= INIT_FLDTYPES; --j )
             if( pTyp == rWrtShell.GetFldType( j ) )
             {

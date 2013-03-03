@@ -281,7 +281,7 @@ void ScSelectionTransferObj::CreateCellData()
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
 
             ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-            // bApi = sal_True -> no error mesages
+            // bApi = sal_True -> no error messages
             // #i18364# bStopEdit = sal_False -> don't end edit mode
             // (this may be called from pasting into the edit line)
             sal_Bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, false, sal_True, sal_True, false );

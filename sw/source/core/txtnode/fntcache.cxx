@@ -2567,7 +2567,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
                         !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())
                     nNewColor = COL_BLACK;
                 else
-                    // we take the font color from the appearence page
+                    // we take the font color from the appearance page
                     nNewColor = SwViewOption::GetFontColor().GetColor();
             }
 

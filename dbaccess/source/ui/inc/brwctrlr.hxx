@@ -243,7 +243,7 @@ namespace dbaui
             // is synchronized with a foreign ::com::sun::star::form::DatabaseForm you got elsewhere)
         virtual sal_Bool InitializeForm(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) = 0;
-            // called immediately after a successfull CreateForm
+            // called immediately after a successful CreateForm
             // do any initialization (data source etc.) here. the form should be fully functional after that.
             // return sal_False if you didn't succeed (don't throw exceptions, they won't be caught)
 

@@ -82,7 +82,7 @@ class DispatchProvider  :   // interfaces
                             public  css::lang::XTypeProvider            ,
                             public  css::frame::XDispatchProvider       ,
                             // baseclasses
-                            // Order is neccessary for right initialization!
+                            // Order is necessary for right initialization!
                             private ThreadHelpBase                      ,
                             private TransactionBase                     ,
                             public  ::cppu::OWeakObject

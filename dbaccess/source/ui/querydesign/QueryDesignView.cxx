@@ -567,7 +567,7 @@ namespace
                                     const ::connectivity::OSQLParseNode *pRightTable)
     {
         SqlParseError eErrorCode = eOk;
-        if (pNode->count() == 3 &&  // statment between brackets
+        if (pNode->count() == 3 &&  // statement between brackets
             SQL_ISPUNCTUATION(pNode->getChild(0),"(") &&
             SQL_ISPUNCTUATION(pNode->getChild(2),")"))
         {

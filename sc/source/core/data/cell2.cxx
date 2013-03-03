@@ -1170,7 +1170,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
             aComp2.UpdateDeleteTab( nTable, false, true, bRefChanged, nNewSheets );
             bCompile = true;
         }
-        // no StartListeningTo becuase pTab[nTab] does not exsist!
+        // no StartListeningTo because pTab[nTab] does not exsist!
     }
     else if ( bPosChanged )
         aPos.IncTab();

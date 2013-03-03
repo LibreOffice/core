@@ -704,7 +704,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                 {
                                     GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
                                     *ppNewComp = new VCLXFrame;
-                                    // Frame control needs to recieve
+                                    // Frame control needs to receive
                                     // Mouse events
                                     pGroupBox->SetMouseTransparent( sal_False );
                                 }
@@ -911,7 +911,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
                                 ::com::sun::star::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
-                                // use sal_Int64 here to accomodate all int types
+                                // use sal_Int64 here to accommodate all int types
                                 // uno::Any shift operator whill upcast if necessary
                                 sal_Int64 nWindowHandle = 0;
                                 sal_Bool bXEmbed = sal_False;
@@ -1158,7 +1158,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     Window* pChildWindow = NULL;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
     {
-        // use sal_Int64 here to accomodate all int types
+        // use sal_Int64 here to accommodate all int types
         // uno::Any shift operator whill upcast if necessary
         sal_Int64 nWindowHandle = 0;
         sal_Bool bXEmbed = sal_False;

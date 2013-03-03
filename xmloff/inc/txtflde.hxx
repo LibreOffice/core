@@ -277,7 +277,7 @@ protected:
         sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
-    /// export a string attribute taht gets a QName value
+    /// export a string attribute that gets a QName value
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         sal_uInt16 nValuePrefix,

@@ -364,7 +364,7 @@ public class FunctionHelper
             com.sun.star.awt.XWindow xWindow = impl_createWindow(xCtx, aParentView);
 
             // pass the window the frame as his new container window.
-            // It's neccessary to do it first  - before you call anything else there.
+            // It's necessary to do it first  - before you call anything else there.
             // Otherwhise the frame throws some exceptions for "uninitialized state".
             xFrame.initialize( xWindow );
 
@@ -742,7 +742,7 @@ public class FunctionHelper
                 {
                     // Export can be forced by saving the document and using a
                     // special filter name which can write needed format. Build
-                    // neccessary argument list now.
+                    // necessary argument list now.
                     // Use special flag "Overwrite" too, to prevent operation
                     // against possible exceptions, if file already exist.
                     com.sun.star.beans.PropertyValue[] lProperties =

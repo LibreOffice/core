@@ -727,7 +727,7 @@ void SfxChildWindow::SetFrame( const ::com::sun::star::uno::Reference< ::com::su
                 pImp->xListener = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >( new DisposeListener( this, pImp ) );
 
         // Set new frame in data container
-        // and build new listener connection, if neccessary.
+        // and build new listener connection, if necessary.
         pImp->xFrame = rFrame;
         if( pImp->xFrame.is() )
             pImp->xFrame->addEventListener( pImp->xListener );

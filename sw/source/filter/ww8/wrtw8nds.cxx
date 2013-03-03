@@ -1612,7 +1612,7 @@ void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, xub_StrLen nAkt
     xub_StrLen nNextPos;
 
     // go to next attribute if no bookmark is found or if the bookmark is behind the next attribute position
-    // It may happend that the WhereNext() wasn't used in the previous increment because there was a
+    // It may happened that the WhereNext() wasn't used in the previous increment because there was a
     // bookmark before it. Use that position before trying to find another one.
     bool bNextBookmark = NearestBookmark( nNextPos, nAktPos, true );
     if( nAktPos == aAttrIter->WhereNext() && ( !bNextBookmark || nNextPos > aAttrIter->WhereNext() ) )

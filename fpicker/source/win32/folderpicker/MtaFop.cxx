@@ -191,7 +191,7 @@ CMtaFolderPicker::~CMtaFolderPicker( )
 
         // force the destruction of the sta thread request window
         // and the end of the thread
-        // remeber: DestroyWindow may only be called from within
+        // remember: DestroyWindow may only be called from within
         // the thread that created the window
         if ( IsWindow( m_hwndStaRequestWnd ) )
         {

@@ -145,7 +145,7 @@ Window* ImplGetDefaultWindow()
 
     // First test if we already have a default window.
     // Don't only place a single if..else inside solar mutex lockframe
-    // because then we might have to wait for the solar mutex what is not neccessary
+    // because then we might have to wait for the solar mutex what is not necessary
     // if we already have a default window.
 
     if ( !pSVData->mpDefaultWin )

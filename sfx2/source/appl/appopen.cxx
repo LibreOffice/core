@@ -181,7 +181,7 @@ private:
     try
     {
         // check the encryption data
-        // if the data correct is the stream will be opened successfuly
+        // if the data correct is the stream will be opened successfully
         // and immediatelly closed
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( mxStorage, rEncryptionData );
 
@@ -457,7 +457,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
     aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
     aReq.AppendItem( SfxStringItem( SID_TARGETNAME, rtl::OUString( "_default" ) ) );
 
-    // TODO/LATER: Should the other arguments be transfered as well?
+    // TODO/LATER: Should the other arguments be transferred as well?
     SFX_REQUEST_ARG( rReq, pDefaultPathItem, SfxStringItem, SID_DEFAULTFILEPATH, sal_False);
     if ( pDefaultPathItem )
         aReq.AppendItem( *pDefaultPathItem );

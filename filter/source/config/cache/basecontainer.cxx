@@ -398,7 +398,7 @@ sal_Bool SAL_CALL BaseContainer::hasByName(const ::rtl::OUString& sItem)
 css::uno::Type SAL_CALL BaseContainer::getElementType()
     throw (css::uno::RuntimeException)
 {
-    // no lock neccessary - because the type of our items
+    // no lock necessary - because the type of our items
     // is fix! no internal call or member needed ...
     return ::getCppuType(static_cast< css::uno::Sequence< css::beans::PropertyValue >* >(NULL));
 }
@@ -573,7 +573,7 @@ void SAL_CALL BaseContainer::flush()
 void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
     throw (css::uno::RuntimeException)
 {
-    // no locks neccessary
+    // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
     m_lListener.addInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XFlushListener >* >(NULL)),
                              xListener                                                                           );
@@ -584,7 +584,7 @@ void SAL_CALL BaseContainer::addFlushListener(const css::uno::Reference< css::ut
 void SAL_CALL BaseContainer::removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
     throw (css::uno::RuntimeException)
 {
-    // no locks neccessary
+    // no locks necessary
     // used helper lives if we live and is threadsafe by itself ...
     m_lListener.removeInterface(::getCppuType(static_cast< css::uno::Reference< css::util::XFlushListener >* >(NULL)),
                                 xListener                                                                           );

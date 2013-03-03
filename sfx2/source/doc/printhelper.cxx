@@ -500,7 +500,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
             }
             /* } SAFE */
 
-            // lock for further using of our member isn't neccessary - because
+            // lock for further using of our member isn't necessary - because
             // we truns alone by defenition. Nobody join for us nor use us ...
             moveAndDeleteTemp(&m_pTempFile,m_sTargetURL);
 
@@ -637,7 +637,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // reasons. Otherwhise we break to much external code ...
                 // We try to convert it to a file URL. If its possible
                 // we put the system path to the item set and let vcl work with it.
-                // No ucb or thread will be neccessary then. In case it couldnt be
+                // No ucb or thread will be necessary then. In case it couldnt be
                 // converted its not an URL nor a system path. Then we can't accept
                 // this parameter and have to throw an exception.
                 ::rtl::OUString sSystemPath(sTemp);
@@ -765,11 +765,11 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     // Ok - may be execution before has finished (or started!) printing.
     // And may it was a printing to a file.
-    // Now we have to check if we can move the file (if neccessary) via ucb to his right location.
+    // Now we have to check if we can move the file (if necessary) via ucb to his right location.
     // Cases:
     //  a) printing finished                        => move the file directly and forget the watcher thread
     //  b) printing is asynchron and runs currently => start watcher thread and exit this method
-    //                                                 This thread make all neccessary things by itself.
+    //                                                 This thread make all necessary things by itself.
     if (pUCBPrintTempFile!=NULL)
     {
         // a)

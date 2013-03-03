@@ -1898,7 +1898,7 @@ sal_Bool ImpEditEngine::IsRightToLeft( sal_uInt16 nPara ) const
             // #103045# if DefaultHorizontalTextDirection is set, use that value, otherwise pool default.
             if ( GetDefaultHorizontalTextDirection() != EE_HTEXTDIR_DEFAULT )
             {
-                pFrameDirItem = NULL; // bR2L allready set to default horizontal text direction
+                pFrameDirItem = NULL; // bR2L already set to default horizontal text direction
             }
             else
             {

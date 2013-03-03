@@ -187,7 +187,7 @@ public class Merger
                 m_aCfg.getString (PROP_XMLPACKAGE         ),
                 m_aCfg.getBoolean(PROP_LANGUAGEPACK, false)));
 
-        // counts all transfered fragments
+        // counts all transferred fragments
         // Can be used later to decide, if a generated package file
         // contains "nothing"!
         int nItemCount = 0;
@@ -257,7 +257,7 @@ public class Merger
 
         // Attention!
         // If the package seem to be empty, it make no sense to generate a corresponding
-        // xml file. We should suppress writing of this file on disk completly ...
+        // xml file. We should suppress writing of this file on disk completely ...
         if (nItemCount < 1)
         {
             m_aLog.setWarning("Package is empty and will not result into a xml file on disk!? Please check configuration file.");

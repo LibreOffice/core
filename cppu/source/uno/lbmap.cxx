@@ -249,7 +249,7 @@ static void SAL_CALL mediate_mapInterface(
                 OSL_ENSURE( 0 != pTo, "### cannot release out interface: leaking!" );
                 if (0 != pTo)
                     (*pTo->releaseInterface)( pTo, pOut );
-                *ppOut = 0; // set to 0 anyway, because mapping was not successfull!
+                *ppOut = 0; // set to 0 anyway, because mapping was not successful!
             }
         }
         else

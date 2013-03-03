@@ -1404,7 +1404,7 @@ DialogWindowLayout::DialogWindowLayout (Window* pParent, ObjectCatalog& rObjectC
     ShowPropertyBrowser();
 }
 
-// shows the property browser (and creates if neccessary)
+// shows the property browser (and creates if necessary)
 void DialogWindowLayout::ShowPropertyBrowser ()
 {
     // not exists?
@@ -1416,7 +1416,7 @@ void DialogWindowLayout::ShowPropertyBrowser ()
         // after OnFirstSize():
         if (HasSize())
             AddPropertyBrowser();
-        // updating if neccessary
+        // updating if necessary
         UpdatePropertyBrowser();
     }
     else

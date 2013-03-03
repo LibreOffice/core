@@ -400,7 +400,7 @@ void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     // move before the first row so that isBeforeFirst returns false
-    // the smae for other movement methods
+    // the same for other movement methods
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)

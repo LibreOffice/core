@@ -1598,7 +1598,7 @@ void SwCompareData::CheckForChangesInLine( const CompareData& rData,
         int nDstFrom = i ? pLcsDst[i - 1] + 1 : 0;
         // End of inserted lines (exclusive)
         int nDstTo = ( i == nLcsLen ) ? aCmp.GetLen1() : pLcsDst[i];
-        // Begining of deleted lines (inclusive)
+        // Beginning of deleted lines (inclusive)
         int nSrcFrom = i ? pLcsSrc[i - 1] + 1 : 0;
         // End of deleted lines (exclusive)
         int nSrcTo = ( i == nLcsLen ) ? aCmp.GetLen2() : pLcsSrc[i];

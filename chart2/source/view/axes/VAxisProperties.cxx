@@ -64,8 +64,8 @@ sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
 double lcl_getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
 {
     double fPercent = 0.0; //0<=fPercent<=1
-    //0.0: completly inner
-    //1.0: completly outer
+    //0.0: completely inner
+    //1.0: completely outer
     //0.5: half and half
 
     /*

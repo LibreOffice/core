@@ -119,7 +119,7 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
 
         CDTransObjFactory objFactory;
 
-        // remeber pIDo destroys itself due to the smart pointer
+        // remember pIDo destroys itself due to the smart pointer
         rClipContent = objFactory.createTransferableFromDataObj( m_pWinClipboard->m_xContext, pIDo );
     }
 

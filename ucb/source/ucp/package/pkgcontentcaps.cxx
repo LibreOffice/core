@@ -76,7 +76,7 @@ using namespace package_ucp;
 
 //=========================================================================
 //
-// IMPORTENT: If any property data ( name / type / ... ) are changed, then
+// IMPORTANT: If any property data ( name / type / ... ) are changed, then
 //            Content::getPropertyValues(...) must be adapted too!
 //
 //=========================================================================

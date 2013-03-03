@@ -123,7 +123,7 @@ struct FactoryInfo
         //---------------------------------------------------------------------------------------------------------
         // returns list of properties, which has changed only!
         // We use given value of sNodeBase to build full qualified paths ...
-        // Last sign of it must be "/". Beacuse we use it directly, without any additional things!
+        // Last sign of it must be "/". because we use it directly, without any additional things!
         css::uno::Sequence< css::beans::PropertyValue > getChangedProperties( const ::rtl::OUString& sNodeBase )
         {
             // a) reserve memory for max. count of changed properties
@@ -384,7 +384,7 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
     impl_Read( lFactories );
 
     // Enable notification for changes by using configuration directly.
-    // So we can update our internal values immediatly.
+    // So we can update our internal values immediately.
     EnableNotification( lFactories );
 }
 

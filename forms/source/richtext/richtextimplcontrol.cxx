@@ -299,7 +299,7 @@ namespace frm
         // the AutoPaperSize bits set.
         // So in order to be properly notified, we would need the AutoPaperSize. But, with
         // AutoPaperSize, other things do not work anymore: Either, when we set a MaxAutoPaperSize,
-        // then the view does automatic soft line breaks at the paper end - which we definately do
+        // then the view does automatic soft line breaks at the paper end - which we definitely do
         // want. Or, if we did not set a MaxAutoPaperSize, then the view does not automatically scroll
         // anymore in horizontal direction.
         // So this is some kind of lose-lose situation ... :(

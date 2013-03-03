@@ -79,7 +79,7 @@ class MenuItem extends ToggleButton {
             // #i56538# menu items in Java do not have SELECTABLE ..
             stateSet.remove(javax.accessibility.AccessibleState.SELECTABLE);
 
-            // .. and also ARMED insted of SELECTED
+            // .. and also ARMED instead of SELECTED
             if( stateSet.remove(javax.accessibility.AccessibleState.SELECTED) )
                 stateSet.add(javax.accessibility.AccessibleState.ARMED);
 

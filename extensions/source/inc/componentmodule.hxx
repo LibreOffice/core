@@ -83,7 +83,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             s_pFactoryFunctionPointers;
 
     public:
-        // cna be set as long as no resource has been accessed ...
+        // can be set as long as no resource has been accessed ...
         static void     setResourceFilePrefix(const ::rtl::OString& _rPrefix);
 
         /// get the vcl res manager of the module

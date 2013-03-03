@@ -106,7 +106,7 @@ private:
 };
 
 //---------------------------------------------------------------------------------------------------------
-// initialize instance with all neccessary informations
+// initialize instance with all necessary informations
 // We use it without any further checks on our member then ...!
 //---------------------------------------------------------------------------------------------------------
 RequestFilterSelect_Impl::RequestFilterSelect_Impl( const ::rtl::OUString& sURL )

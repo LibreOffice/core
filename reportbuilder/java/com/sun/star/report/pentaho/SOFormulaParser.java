@@ -212,7 +212,7 @@ public final class SOFormulaParser extends ComponentBase
             catch (ParseException ex)
             {
                 boolean found = false;
-                // error occured so all token must be bad
+                // error occurred so all token must be bad
                 for (int i = 0; i < tokens.size(); i++)
                 {
                     if (!found && ex.currentToken != null && images.get(i).equals(ex.currentToken.image))

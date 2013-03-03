@@ -102,7 +102,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 
     // Set InCntntAttribute not until there is content!
     // Otherwise the layout would format the Fly beforehand but would not find
-    // content; this happend with graphics from the internet.
+    // content; this happened with graphics from the internet.
     if (FLY_AS_CHAR == nRndId)
     {
         // there must be at least the attribute in a TextNode

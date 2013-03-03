@@ -535,7 +535,7 @@ public:
 
 SV_DECL_IMPL_REF( UCBStorage_Impl );
 
-// this struct contains all neccessary information on an element inside a UCBStorage
+// this struct contains all necessary information on an element inside a UCBStorage
 struct UCBStorageElement_Impl
 {
     String                      m_aName;        // the actual URL relative to the root "folder"
@@ -1148,7 +1148,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
 
 sal_Bool UCBStorageStream_Impl::Revert()
 {
-    // if an OLEStorage is created on this stream, no "revert" is neccessary because OLEStorages do nothing on "Revert" !
+    // if an OLEStorage is created on this stream, no "revert" is necessary because OLEStorages do nothing on "Revert" !
     if ( m_bCommited )
     {
         OSL_FAIL("Revert while commit is in progress!" );
@@ -2368,7 +2368,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 return nRet;
             }
 
-            // after successfull root commit all elements names and types are adjusted and all removed elements
+            // after successful root commit all elements names and types are adjusted and all removed elements
             // are also removed from the lists
             for ( size_t i = 0; i < m_aChildrenList.size(); )
             {

@@ -377,7 +377,7 @@ namespace xmloff
         // (This behaviour of examineForms is a performance optimization, to not force
         // the page to create a forms container just to see that it's empty.)
 
-        // So, in such a case, seekPage is considered to be successfull, too, though the
+        // So, in such a case, seekPage is considered to be successful, too, though the
         // page was not yet known
         Reference< XFormsSupplier2 > xFormsSupp( _rxDrawPage, UNO_QUERY );
         if ( xFormsSupp.is() && !xFormsSupp->hasForms() )

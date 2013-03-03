@@ -155,7 +155,7 @@ void SAL_CALL OConnectionPointContainerHelper::unadvise(    const   Type&       
 
 //______________________________________________________________________________________________________________
 //  public but impl method!
-//  Is neccessary to get container member at OConnectionPoint-instance.
+//  Is necessary to get container member at OConnectionPoint-instance.
 //______________________________________________________________________________________________________________
 
 OMultiTypeInterfaceContainerHelper& OConnectionPointContainerHelper::impl_getMultiTypeContainer()

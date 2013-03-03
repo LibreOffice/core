@@ -869,7 +869,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         {
             //If the creation failed because the JRE has been uninstalled then
             //we search another one. As long as there is a javaldx, we should
-            //never come into this situation. javaldx checks alway if the JRE
+            //never come into this situation. javaldx checks always if the JRE
             //still exist.
             JavaInfo * pJavaInfo = NULL;
             if (JFW_E_NONE == jfw_getSelectedJRE(&pJavaInfo))

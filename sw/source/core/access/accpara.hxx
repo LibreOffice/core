@@ -168,7 +168,7 @@ protected:
     /// remove the current portion data
     void ClearPortionData();
 
-    /// get portion data; update if necesary
+    /// get portion data; update if necessary
     SwAccessiblePortionData& GetPortionData()
         throw( com::sun::star::uno::RuntimeException )
     {
