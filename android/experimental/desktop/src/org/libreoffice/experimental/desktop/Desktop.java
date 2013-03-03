@@ -33,8 +33,6 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
 import com.sun.star.awt.Key;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.uno.XComponentContext;
 
 import org.libreoffice.android.Bootstrap;
 
@@ -59,47 +57,17 @@ public class Desktop
      */
     class BootstrapContext
     {
-        public long timingOverhead;
-        public XComponentContext componentContext;
-        public XMultiComponentFactory mcf;
     }
 
     BootstrapContext bootstrapContext;
-    Bundle extras;
-
-    // FIXME: we should prolly manage a bitmap buffer here and give it to
-    // VCL to render into ... and pull the WM/stacking pieces up into the Java ...
-    // [ perhaps ;-]
-    // how can we get an event to "create a window" - need a JNI callback I guess ...
 
     private void initBootstrapContext()
     {
-        try
-        {
-            bootstrapContext = new BootstrapContext();
+        bootstrapContext = new BootstrapContext();
 
-            long t0 = System.currentTimeMillis();
-            long t1 = System.currentTimeMillis();
-            bootstrapContext.timingOverhead = t1 - t0;
+        Bootstrap.setup(this);
 
-            Bootstrap.setup(this);
-
-            // Avoid all the old style OSL_TRACE calls especially in vcl
-            Bootstrap.putenv("SAL_LOG=+WARN+INFO");
-
-            bootstrapContext.componentContext = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
-
-            Log.i(TAG, "context is" + (bootstrapContext.componentContext!=null ? " not" : "") + " null");
-
-            bootstrapContext.mcf = bootstrapContext.componentContext.getServiceManager();
-
-            Log.i(TAG, "mcf is" + (bootstrapContext.mcf!=null ? " not" : "") + " null");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-            finish();
-        }
+        Bootstrap.putenv("SAL_LOG=+WARN+INFO");
     }
 
     @Override public void onCreate(Bundle savedInstanceState)
