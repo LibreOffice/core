@@ -619,6 +619,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
                     if( fRes > pDouble[ 1 ] )
                         fRes = pDouble[ 1 ];
                 }
+                delete[] pDouble;
                 maReslBox.SetValue( (sal_uLong)fRes );
             }
         }
