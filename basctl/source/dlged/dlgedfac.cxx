@@ -84,8 +84,10 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  if ( pObjFactory->nIdentifier == OBJ_DLG_CHECKBOX )
                      pObjFactory->pNewObj = new DlgEdObj( "com.sun.star.awt.UnoControlCheckBoxModel", xDialogSFact );
                  else
+                 {
                      pObjFactory->pNewObj = new DlgEdObj( "com.sun.star.form.component.CheckBox", xDialogSFact );
                      static_cast< DlgEdObj* >( pObjFactory->pNewObj )->MakeDataAware( mxModel );
+                 }
                  break;
             case OBJ_DLG_FORMLIST:
             case OBJ_DLG_LISTBOX:
