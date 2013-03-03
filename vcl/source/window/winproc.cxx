@@ -2594,10 +2594,13 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             break;
         case SALEVENT_EXTERNALZOOM:
             {
-            // Manually tuned to get a pleasing effect at least on my
-            // device... Would be better to actually achieve the
-            // requested scale factor of course.
-            const int ZOOM_FACTOR = 300;
+            // At least in Writer (see SwView::HandleWheelCommands()
+            // in sw/source/ui/uiview/viewport.cxx) the delta value in the event is cheerfully
+            // ignored and only its sign matters, zooming always is one "step" per event.
+            // Thus this factor has no meaning. Will have to fix this probably by adding a new
+            // CommandWheelData mode to actually multiply the current zoom level with a value
+            // specified.
+            const int ZOOM_FACTOR = 100;
 
             ZoomEvent* pZoomEvent = (ZoomEvent*) pEvent;
             SalWheelMouseEvent aSalWheelMouseEvent;
