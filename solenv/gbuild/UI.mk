@@ -111,6 +111,7 @@ define gb_UI_UI
 $(call gb_Package_Package_internal,$(1)_ui,$(SRCDIR))
 $(call gb_UI_get_target,$(1)) :| $(dir $(call gb_UI_get_target,$(1))).dir
 $(call gb_UI_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_ui)
+$(call gb_Postprocess_get_target,AllUIs) : $(call gb_UI_get_target,$(1))
 $(call gb_UI_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_ui)
 
 ifneq ($(gb_UI_LANGS),)

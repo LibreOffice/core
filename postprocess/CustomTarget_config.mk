@@ -21,7 +21,9 @@ $(call gb_CustomTarget_get_workdir,postprocess/config)/uiconfig_%.zip : \
 	@true
 
 $(call gb_CustomTarget_get_workdir,postprocess/config)/uiconfig.zip : \
-		$(SRCDIR)/postprocess/packconfig/packconfig.pl $(call gb_Postprocess_get_target,AllPackages)
+		$(SRCDIR)/postprocess/packconfig/packconfig.pl \
+		$(call gb_Postprocess_get_target,AllPackages) \
+		$(call gb_Postprocess_get_target,AllUIs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	cd $(SRCDIR)/postprocess/packconfig \
 	&& $(PERL) packconfig.pl -i $(OUTDIR)/xml/uiconfig -o $(dir $@)
