@@ -2049,7 +2049,6 @@ throw (::com::sun::star::uno::RuntimeException)
     // Gruppe anw"ahlen ( Gruppe 0 ist intern )
     for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
     {
-        String aName = pAppSlotPool->SeekGroup( i );
         const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
         while ( pSfxSlot )
         {
@@ -2085,7 +2084,6 @@ throw (::com::sun::star::uno::RuntimeException)
         // Gruppe anw"ahlen ( Gruppe 0 ist intern )
         for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
         {
-            String aName = pAppSlotPool->SeekGroup( i );
             const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
             if ( pSfxSlot )
             {

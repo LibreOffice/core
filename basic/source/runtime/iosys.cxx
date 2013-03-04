@@ -703,7 +703,7 @@ namespace
 {
     void WriteLines(SvStream &rStream, const rtl::OString& rStr)
     {
-        rtl::OString aStr(convertLineEnd(rStr, rStream.GetLineDelimiter()) );
+        convertLineEnd(rStr, rStream.GetLineDelimiter());
         write_uInt8s_FromOString(rStream, rStr);
         endl( rStream );
     }

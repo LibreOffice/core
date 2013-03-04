@@ -2858,8 +2858,9 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
     int curr = para->cshape.index;
     if( d->bFirstPara && d->bInBody )
     {
-        if( !pstart )
-            STARTP;
+        if ( !pstart ) {
+        	STARTP;
+		}
         strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
         padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
         rstartEl(ascii("text:bookmark"), rList);
@@ -2869,8 +2870,9 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
     }
     if( d->bInHeader )
     {
-        if( !pstart )
+        if ( !pstart ) {
             STARTP;
+		}
         makeShowPageNum();
         d->bInHeader = false;
     }

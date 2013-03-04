@@ -690,15 +690,6 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
             Reference< XResultSetMetaDataSupplier > xSup(xPrivileges,UNO_QUERY);
             if ( xSup.is() )
             {
-                Reference< XResultSetMetaData > xRsMetaData = xSup->getMetaData();
-                if ( xRsMetaData.is() )
-                {
-                    sal_Int32 nCount = xRsMetaData->getColumnCount();
-                    for (sal_Int32 i=1; i<=nCount; ++i)
-                    {
-                        ::rtl::OUString sColumnName = xRsMetaData->getColumnName(i);
-                    }
-                }
             }
 #endif
 

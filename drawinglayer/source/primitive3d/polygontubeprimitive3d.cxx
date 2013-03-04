@@ -43,9 +43,6 @@ namespace drawinglayer
                 static sal_uInt32 nLineTubeSegments(0L);
                 static attribute::MaterialAttribute3D aLineMaterial;
 
-                // may exclusively change static data, use mutex
-                ::osl::Mutex m_mutex;
-
                 if(nSegments != nLineTubeSegments || !(rMaterial == aLineMaterial))
                 {
                     nLineTubeSegments = nSegments;
@@ -104,9 +101,6 @@ namespace drawinglayer
                 static sal_uInt32 nLineCapSegments(0L);
                 static attribute::MaterialAttribute3D aLineMaterial;
 
-                // may exclusively change static data, use mutex
-                ::osl::Mutex m_mutex;
-
                 if(nSegments != nLineCapSegments || !(rMaterial == aLineMaterial))
                 {
                     nLineCapSegments = nSegments;
@@ -157,9 +151,6 @@ namespace drawinglayer
                 static Primitive3DSequence aLineCapRoundList;
                 static sal_uInt32 nLineCapRoundSegments(0);
                 static attribute::MaterialAttribute3D aLineMaterial;
-
-                // may exclusively change static data, use mutex
-                ::osl::Mutex m_mutex;
 
                 if(nSegments != nLineCapRoundSegments || !(rMaterial == aLineMaterial))
                 {

@@ -127,7 +127,6 @@ certain functionality.
 
 @section jvmfwk
 
-@li @c jfw
 @li @c jfw.level1
 @li @c jfw.level2
 
@@ -152,6 +151,7 @@ certain functionality.
 @li @c sfx2.doc
 @li @c sfx2.notify
 @li @c sfx2.view
+@li @c sfx2.control
 
 @section slideshow
 
@@ -181,6 +181,8 @@ certain functionality.
 @li @c svx.stbcrtls - StatusBarControl
 @li @c svx.table
 @li @c svx.tbxcrtls - ToolboxControl
+@li @c svx.sdr
+@li @c svx.uno
 
 @section toolkit
 
@@ -236,6 +238,7 @@ certain functionality.
 @li @c vcl.gtk - Gtk+ 2/3 plugin
 @li @c vcl.layout - Widget layout
 @li @c vcl.sm - Session Manager
+@li @c vcl.window
 
 @section Writer
 
@@ -264,6 +267,10 @@ certain functionality.
 @li @c xmlsecurity.dialogs - xml security dialogs
 @li @c xmlsecurity.helper
 @li @c xmlsecurity.xmlsec - xmlsec wrapper
+
+@section dbaccess
+
+@li @c dbaccess.ui
 
 @section other
 

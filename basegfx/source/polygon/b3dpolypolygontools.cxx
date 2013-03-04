@@ -56,7 +56,6 @@ namespace basegfx
         B3DPolyPolygon createUnitCubePolyPolygon()
         {
             static B3DPolyPolygon aRetval;
-            ::osl::Mutex m_mutex;
 
             if(!aRetval.count())
             {
@@ -103,7 +102,6 @@ namespace basegfx
         B3DPolyPolygon createUnitCubeFillPolyPolygon()
         {
             static B3DPolyPolygon aRetval;
-            ::osl::Mutex m_mutex;
 
             if(!aRetval.count())
             {

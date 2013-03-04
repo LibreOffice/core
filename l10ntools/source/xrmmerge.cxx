@@ -89,7 +89,6 @@ int InitXrmExport( char *pOutput , char* pFilename)
 /*****************************************************************************/
 {
     // instanciate Export
-    rtl::OString sOutput( pOutput );
     rtl::OString sFilename( pFilename );
     Export::InitLanguages( false );
 

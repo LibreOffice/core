@@ -259,7 +259,6 @@ long SvxGradientTabPage::CheckChanges_Impl()
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         XGradient aGradient = pGradientList->GetGradient( nPos )->GetGradient();
-        String aString = m_pLbGradients->GetSelectEntry();
 
         if( !( aTmpGradient == aGradient ) )
         {
@@ -520,7 +519,6 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         ResMgr& rMgr = CUI_MGR();
-        String aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
         String aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
         String aName( pGradientList->GetGradient( nPos )->GetName() );
         String aOldName = aName;

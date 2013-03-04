@@ -1117,8 +1117,6 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 {
 
 
-    // mutex for parsing
-    static ::osl::Mutex aMutex;
 
     // Guard the parsing
     ::osl::MutexGuard aGuard(getMutex());

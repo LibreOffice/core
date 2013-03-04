@@ -396,8 +396,6 @@ namespace drawinglayer
 
             const basegfx::B3DHomMatrix& getObjectToView() const
             {
-                // on demand WorldToView creation
-                ::osl::Mutex m_mutex;
 
                 if(maObjectToView.isIdentity())
                 {
@@ -409,7 +407,6 @@ namespace drawinglayer
 
             const uno::Sequence< beans::PropertyValue >& getViewInformationSequence() const
             {
-                ::osl::Mutex m_mutex;
 
                 if(!mxViewInformation.hasElements())
                 {
@@ -485,13 +482,11 @@ namespace drawinglayer
         ViewInformation3D::ViewInformation3D(const ViewInformation3D& rCandidate)
         :   mpViewInformation3D(rCandidate.mpViewInformation3D)
         {
-            ::osl::Mutex m_mutex;
             mpViewInformation3D->mnRefCount++;
         }
 
         ViewInformation3D::~ViewInformation3D()
         {
-            ::osl::Mutex m_mutex;
 
             if(mpViewInformation3D->mnRefCount)
             {
@@ -510,7 +505,6 @@ namespace drawinglayer
 
         ViewInformation3D& ViewInformation3D::operator=(const ViewInformation3D& rCandidate)
         {
-            ::osl::Mutex m_mutex;
 
             if(mpViewInformation3D->mnRefCount)
             {

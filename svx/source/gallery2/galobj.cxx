@@ -190,7 +190,6 @@ const String SgaObject::GetTitle() const
     {
         if ( comphelper::string::getTokenCount(aReturnValue, ':') == 3 )
         {
-            String      aPrivateInd  ( aReturnValue.GetToken( 0, ':' ) );
             String      aResourceName( aReturnValue.GetToken( 1, ':' ) );
             sal_Int32   nResId       ( aReturnValue.GetToken( 2, ':' ).ToInt32() );
             if ( aReturnValue.GetToken( 0, ':' ).EqualsAscii( "private" ) &&
