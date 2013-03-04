@@ -979,6 +979,7 @@ Java_org_libreoffice_experimental_desktop_Desktop_zoom(JNIEnv * /* env */,
 {
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
+        SAL_INFO( "vcl.androidinst", "zoom: " << scale << "@(" << x << "," << y << ")" );
         ZoomEvent aEvent( Point( x, y ), scale);
         Application::PostZoomEvent(VCLEVENT_WINDOW_ZOOM, pFocus->GetWindow(), &aEvent);
     }
