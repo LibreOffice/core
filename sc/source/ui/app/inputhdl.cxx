@@ -1950,10 +1950,12 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
         if (!aTester.IsEditable())
         {
             bProtected = true;
-            // We allow read-only input mode activation when explicit cell
-            // activation is requested (double-click or F2) and if it's not
-            // part of an array.
-            bool bShowError = !bInputActivated || aTester.GetMessageId() != STR_PROTECTIONERR;
+            // We allow read-only input mode activation regardless
+            // whether it's part of an array or not or whether explicit cell
+            // activation is requested (double-click or F2) or a click in input
+            // line.
+            bool bShowError = (!bInputActivated || aTester.GetMessageId() != STR_PROTECTIONERR) &&
+                !pActiveViewSh->GetViewData()->GetDocShell()->IsReadOnly();
             if (bShowError)
             {
                 eMode = SC_INPUT_NONE;
