@@ -461,15 +461,13 @@ void handleDirectory(
             break;
         default:
             if (stat.getFileType() == osl::FileStatus::Directory) {
-                if (level == 2) {
-                    OString pr(projectRoot);
-                    if (!pr.isEmpty()) {
-                        pr += OString('/');
-                    }
-                    pr += OString("..");
-                    handleDirectory(stat.getFileURL(), 2, project, pr,
-                                    actualPotDir.concat("/").concat(sFileName));
+                OString pr(projectRoot);
+                if (!pr.isEmpty()) {
+                    pr += OString('/');
                 }
+                pr += OString("..");
+                handleDirectory(stat.getFileURL(), 2, project, pr,
+                                actualPotDir.concat("/").concat(sFileName));
             } else {
                 handleFile(project, projectRoot,
                            stat.getFileURL(), actualPotDir, aPoOutPut);
