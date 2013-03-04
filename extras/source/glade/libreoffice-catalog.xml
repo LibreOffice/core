@@ -57,6 +57,9 @@
     <glade-widget-class title="ValueSet" name="svtlo-ValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="ValueSet" name="swuilo-ColumnValueSet"
+                        generic-name="Set of Value Options" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="CsvTableBox" name="sclo-ScCsvTableBox"
                         generic-name="CSV Table Box" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -65,6 +68,15 @@
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Page Preview" name="svxlo-SvxPageWindow"
                         generic-name="Page Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Page Preview" name="swlo-SwColExample"
+                        generic-name="Page Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Page Preview" name="swlo-SwColumnOnlyExample"
+                        generic-name="Page Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
+                        generic-name="Table Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Text Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
