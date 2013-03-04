@@ -2749,6 +2749,7 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, rtl::OUString& aURL, Sf
     }
     else
         return ERRCODE_ABORT;
+    return ERRCODE_NONE;
 }
 
 // ------------------------------------------------------------------------
