@@ -76,7 +76,7 @@ class DictionaryNeo :
                                         sal_Bool bSimilarOnly = sal_False);
     sal_Bool                    seekEntry(const ::rtl::OUString &rWord, sal_Int32 *pPos,
                                         sal_Bool bSimilarOnly = sal_False);
-    sal_Bool                    isSorted();
+    bool                        isSorted();
 
     sal_Bool                    addEntry_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryEntry > xDicEntry,

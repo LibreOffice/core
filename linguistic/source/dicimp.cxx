@@ -363,7 +363,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
         }
     }
 
-    DBG_ASSERT(isSorted(), "lng : dictionary is not sorted");
+    SAL_WARN_IF(!isSorted(), "linguistic", "dictionary is not sorted");
 
     // since this routine should be called only initialy (prior to any
     // modification to be saved) we reset the bIsModified flag here that
@@ -650,9 +650,9 @@ sal_Bool DictionaryNeo::seekEntry(const OUString &rWord,
     return sal_False;
 }
 
-sal_Bool DictionaryNeo::isSorted()
+bool DictionaryNeo::isSorted()
 {
-    sal_Bool bRes = sal_True;
+    bool bRes = true;
 
     const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
     sal_Int32 nEntries = getCount();
@@ -662,7 +662,7 @@ sal_Bool DictionaryNeo::isSorted()
         if (cmpDicEntry( pEntry[i-1]->getDictionaryWord(),
                          pEntry[i]->getDictionaryWord() ) > 0)
         {
-            bRes = sal_False;
+            bRes = false;
             break;
         }
     }
@@ -709,7 +709,7 @@ sal_Bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > x
                 pEntry[ i+1 ] = pEntry[ i ];
             // insert new entry at specified position
             pEntry[ nPos ] = xDicEntry;
-            DBG_ASSERT(isSorted(), "lng : dictionary entries unsorted");
+            SAL_WARN_IF(!isSorted(), "linguistic", "dictionary entries unsorted");
 
             nCount++;
 
