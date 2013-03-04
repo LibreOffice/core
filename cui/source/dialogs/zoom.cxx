@@ -355,7 +355,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, MetricField *, pEdt )
+IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, NumericField *, pEdt )
 {
     if ( pEdt == m_pColumnsEdit && !m_pColumnsBtn->IsChecked() )
         return 0;

@@ -300,7 +300,7 @@
                                 <property name="draw_indicator">True</property>
                                 <property name="group">automatic</property>
                                 <accessibility>
-                                  <relation type="label-for" target="columnssb:0"/>
+                                  <relation type="label-for" target="columnssb"/>
                                   <relation type="label-for" target="bookmode"/>
                                 </accessibility>
                               </object>
@@ -311,7 +311,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="columnssb:0">
+                              <object class="GtkSpinButton" id="columnssb">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>

@@ -38,7 +38,7 @@ private:
     RadioButton*        m_pAutomaticBtn;
     RadioButton*        m_pSingleBtn;
     RadioButton*        m_pColumnsBtn;
-    MetricField*        m_pColumnsEdit;
+    NumericField*       m_pColumnsEdit;
     CheckBox*           m_pBookModeChk;
 
     OKButton*           m_pOKBtn;
@@ -51,7 +51,7 @@ private:
     DECL_LINK( UserHdl, RadioButton* );
     DECL_LINK(SpinHdl, void *);
     DECL_LINK( ViewLayoutUserHdl, RadioButton* );
-    DECL_LINK( ViewLayoutSpinHdl, MetricField* );
+    DECL_LINK( ViewLayoutSpinHdl, NumericField* );
     DECL_LINK( ViewLayoutCheckHdl, CheckBox* );
     DECL_LINK( OKHdl, Button* );
 #endif
