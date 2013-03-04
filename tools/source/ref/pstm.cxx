@@ -370,11 +370,11 @@ sal_uInt32 SvPersistStream::WriteDummyLen()
     sal_uInt32 nPos = Tell();
 #endif
     sal_uInt32 n0 = 0;
-    *this << n0; // wegen Sun sp
+    *this << n0; // Because of Sun sp
     // Don't assert on stream error
     DBG_ASSERT( GetError() != SVSTREAM_OK
                   || (sizeof( sal_uInt32 ) == Tell() -nPos),
-                "keine 4-Byte fuer Langenangabe" );
+                "No 4 byte as length parameter" );
     return Tell();
 }
 
@@ -563,7 +563,7 @@ sal_uInt32 SvPersistStream::ReadObj
     sal_uInt32  nId = 0;
     sal_uInt16  nClassId;
 
-    rpObj = NULL;   // specification: 0 in case of error
+    rpObj = NULL; // specification: 0 in case of error
     ReadId( *this, nHdr, nId, nClassId );
 
     // get version nummer through masking
@@ -699,7 +699,7 @@ SvStream& operator >>
     rThis.SetStream( &rStm );
 
     sal_uInt8 nVers;
-    rThis >> nVers;    // Version
+    rThis >> nVers; // Version
     if( 0 == nVers )
     {
         sal_uInt32 nCount = 0;

@@ -21,13 +21,9 @@
 
 static void* aAppData[SHL_COUNT];
 
-/***************************************************************************
-|*
-|*    GetAppData()
-|*
-|*    Beschreibung      Daten fuer andere Libs abfragen
-|*
-***************************************************************************/
+/*
+ * Query data for other libraries
+ */
 
 void** GetAppData( sal_uInt16 nSharedLib )
 {
