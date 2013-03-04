@@ -164,9 +164,6 @@ SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId
     bEnableBackgroundSelector   ( sal_True )
 
 {
-    get(m_pFrm,"frameHdrOn");
-    get(m_pPageLbl,"labelHeaderFooterFormat");
-    get(m_pTurnOnBox,"checkHeaderOn");
     get(m_pCntSharedBox,"checkSameLR");
     get(m_pCntSharedFirstBox,"checkSameFP");
     get(m_pLMEdit,"spinMargLeft");
@@ -182,23 +179,19 @@ SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId
     get(m_pBspWin,"drawingareaPageHF");
     get(m_pBackgroundBtn,"buttonMore");
 
-    get(m_pFooterOn,"labelFooterOn");
-    get(m_pFooterLbl,"labelFooter");
-    get(m_pHeaderOn,"labelHeaderOn");
-    get(m_pHeaderLbl,"labelHeader");
-    get(m_pMsg,"labelMsg");
-
     //swap header <-> footer in UI
     if(nId == SID_ATTR_PAGE_FOOTERSET)
     {
-        m_pPageLbl->SetText(m_pFooterLbl->GetText());
-        m_pTurnOnBox->SetText(m_pFooterOn->GetText());
+        get(m_pPageLbl,"labelFooterFormat");
+        get(m_pTurnOnBox, "checkFooterOn");
     }
     else //Header
     {
-        m_pPageLbl->SetText(m_pHeaderLbl->GetText());
-        m_pTurnOnBox->SetText(m_pHeaderOn->GetText());
+        get(m_pPageLbl,"labelHeaderFormat");
+        get(m_pTurnOnBox, "checkHeaderOn");
     }
+    m_pTurnOnBox->Show();
+    m_pPageLbl->Show();
 
     InitHandler();
     m_pBspWin->EnableRTL( sal_False );
@@ -213,21 +206,6 @@ SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId
     SetFieldUnit( *m_pHeightEdit, eFUnit );
     SetFieldUnit( *m_pLMEdit, eFUnit );
     SetFieldUnit( *m_pRMEdit, eFUnit );
-
-    m_pTurnOnBox->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pCntSharedBox->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pCntSharedFirstBox->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pLMLbl->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pLMEdit->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pRMLbl->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pRMEdit->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pDistFT->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pDistEdit->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pDynSpacingCB->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pHeightFT->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pHeightEdit->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pHeightDynBtn->SetAccessibleRelationMemberOf( m_pFrm );
-    m_pBackgroundBtn->SetAccessibleRelationMemberOf(m_pFrm);
 }
 
 // -----------------------------------------------------------------------

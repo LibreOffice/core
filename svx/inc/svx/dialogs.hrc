@@ -159,8 +159,6 @@
 #define RID_SVXDLG_SEARCH                   (RID_SVX_START +  20)
 
 // ResId fuer die PageDialog
-#define RID_SVXPAGE_FOOTER                  (RID_SVX_START +  26)
-#define RID_SVXPAGE_HEADER                  (RID_SVX_START +  27)
 #define RID_SVXQBX_DELETE_HEADFOOT          (RID_SVX_START +  28)
 
 // ResId's fuer Dialoge aus StarDraw

@@ -55,6 +55,7 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/dialog/docrecovery.src \
     svx/source/dialog/fontwork.src \
     svx/source/dialog/frmsel.src \
+    svx/source/dialog/hdft.src \
     svx/source/dialog/imapdlg.src \
     svx/source/dialog/langbox.src \
     svx/source/dialog/language.src \

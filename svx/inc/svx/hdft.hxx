@@ -59,7 +59,6 @@ protected:
 
     SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId );
 
-    VclFrame*        m_pFrm;
     FixedText*       m_pPageLbl;
     CheckBox*        m_pTurnOnBox;
     CheckBox*        m_pCntSharedBox;
@@ -76,12 +75,6 @@ protected:
     CheckBox*        m_pHeightDynBtn;
     SvxPageWindow*   m_pBspWin;
     PushButton*      m_pBackgroundBtn;
-
-    FixedText*       m_pFooterOn;
-    FixedText*       m_pFooterLbl;
-    FixedText*       m_pHeaderOn;
-    FixedText*       m_pHeaderLbl;
-    FixedText*       m_pMsg;
 
     sal_uInt16       nId;
     SfxItemSet*      pBBSet;

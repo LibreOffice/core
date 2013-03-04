@@ -72,8 +72,6 @@
 #define HID_FONTWORK_TBI_STYLE_SLANTX                         "SVX_HID_FONTWORK_TBI_STYLE_SLANTX"
 #define HID_FONTWORK_TBI_STYLE_SLANTY                         "SVX_HID_FONTWORK_TBI_STYLE_SLANTY"
 #define HID_FONTWORK_TBI_STYLE_UPRIGHT                        "SVX_HID_FONTWORK_TBI_STYLE_UPRIGHT"
-#define HID_FORMAT_FOOTER                                     "SVX_HID_FORMAT_FOOTER"
-#define HID_FORMAT_HEADER                                     "SVX_HID_FORMAT_HEADER"
 // free
 #define HID_GALLERY_ICONVIEW                                  "SVX_HID_GALLERY_ICONVIEW"
 #define HID_GALLERY_LISTVIEW                                  "SVX_HID_GALLERY_LISTVIEW"

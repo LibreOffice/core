@@ -58,7 +58,7 @@ ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
         nPageUsage  ( (sal_uInt16)SVX_PAGE_ALL ),
         pStyleDlg   ( NULL )
 {
-    get(m_pBtnEdit,"buttonEdit");
+    get(m_pBtnEdit, "buttonEdit");
 
     SetExchangeSupport();
 
@@ -83,8 +83,6 @@ ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
         m_pBtnEdit->SetHelpId( HID_SC_HEADER_EDIT );
     else
         m_pBtnEdit->SetHelpId( HID_SC_FOOTER_EDIT );
-
-    m_pBtnEdit->SetAccessibleRelationMemberOf(m_pFrm);
 }
 
 //------------------------------------------------------------------
