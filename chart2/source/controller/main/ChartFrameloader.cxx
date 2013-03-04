@@ -141,45 +141,45 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
 
     // call initNew() or load() at XLoadable
     if(!bHaveLoadedModel)
-    try
-    {
-        comphelper::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_URL()));
-        if( aIt != aMediaDescriptor.end())
+        try
         {
-            ::rtl::OUString aURL( (*aIt).second.get< ::rtl::OUString >());
-            if( aURL.matchAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "private:factory/schart" )))
+            comphelper::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_URL()));
+            if( aIt != aMediaDescriptor.end())
             {
-                // create new file
-                uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
-                xLoadable->initNew();
-            }
-            else
-            {
-                aMediaDescriptor.addInputStream();
-                uno::Sequence< beans::PropertyValue > aCompleteMediaDescriptor;
-                aMediaDescriptor >> aCompleteMediaDescriptor;
-                apphelper::MediaDescriptorHelper aMDHelper( aCompleteMediaDescriptor );
-
-                // load file
-                // @todo: replace: aMediaDescriptorHelper.getReducedForModel()
-                uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
-                xLoadable->load( aCompleteMediaDescriptor );
-
-                //resize standalone files to get correct size:
-                if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName.equals( "StarChart 5.0") )
+                ::rtl::OUString aURL( (*aIt).second.get< ::rtl::OUString >());
+                if( aURL.matchAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "private:factory/schart" )))
                 {
-                    awt::Rectangle aRect( xComponentWindow->getPosSize() );
-                    sal_Int16 nFlags=0;
-                    xComponentWindow->setPosSize( aRect.X, aRect.Y, aRect.Width, aRect.Height, nFlags );
+                    // create new file
+                    uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
+                    xLoadable->initNew();
+                }
+                else
+                {
+                    aMediaDescriptor.addInputStream();
+                    uno::Sequence< beans::PropertyValue > aCompleteMediaDescriptor;
+                    aMediaDescriptor >> aCompleteMediaDescriptor;
+                    apphelper::MediaDescriptorHelper aMDHelper( aCompleteMediaDescriptor );
+
+                    // load file
+                    // @todo: replace: aMediaDescriptorHelper.getReducedForModel()
+                    uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
+                    xLoadable->load( aCompleteMediaDescriptor );
+
+                    //resize standalone files to get correct size:
+                    if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName.equals( "StarChart 5.0") )
+                    {
+                        awt::Rectangle aRect( xComponentWindow->getPosSize() );
+                        sal_Int16 nFlags=0;
+                        xComponentWindow->setPosSize( aRect.X, aRect.Y, aRect.Width, aRect.Height, nFlags );
+                    }
                 }
             }
         }
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
+        catch( const uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
 
     return sal_True;
 }

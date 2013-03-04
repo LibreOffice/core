@@ -122,12 +122,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL ctl_component_getFactory( const s
         //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
         IF_NAME_CREATECOMPONENTFACTORY_SINGLE( FrameControl     )
-        else
-        IF_NAME_CREATECOMPONENTFACTORY_SINGLE( ProgressBar      )
-        else
-        IF_NAME_CREATECOMPONENTFACTORY_SINGLE( ProgressMonitor  )
-        else
-        IF_NAME_CREATECOMPONENTFACTORY_SINGLE( StatusIndicator  )
+        else IF_NAME_CREATECOMPONENTFACTORY_SINGLE( ProgressBar      )
+        else IF_NAME_CREATECOMPONENTFACTORY_SINGLE( ProgressMonitor  )
+        else IF_NAME_CREATECOMPONENTFACTORY_SINGLE( StatusIndicator  )
         //=============================================================================
 
         // Factory is valid - service was found.

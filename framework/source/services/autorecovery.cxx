@@ -2817,29 +2817,21 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
 
     if ((eJob & AutoRecovery::E_PREPARE_EMERGENCY_SAVE) == AutoRecovery::E_PREPARE_EMERGENCY_SAVE)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_PREPARE_EMERGENCY_SAVE));
-    else
-    if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
+    else if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_EMERGENCY_SAVE));
-    else
-    if ((eJob & AutoRecovery::E_RECOVERY) == AutoRecovery::E_RECOVERY)
+    else if ((eJob & AutoRecovery::E_RECOVERY) == AutoRecovery::E_RECOVERY)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_RECOVERY));
-    else
-    if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
+    else if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_SAVE));
-    else
-    if ((eJob & AutoRecovery::E_SESSION_QUIET_QUIT) == AutoRecovery::E_SESSION_QUIET_QUIT)
+    else if ((eJob & AutoRecovery::E_SESSION_QUIET_QUIT) == AutoRecovery::E_SESSION_QUIET_QUIT)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_QUIET_QUIT));
-    else
-    if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
+    else if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_RESTORE));
-    else
-    if ((eJob & AutoRecovery::E_ENTRY_BACKUP) == AutoRecovery::E_ENTRY_BACKUP)
+    else if ((eJob & AutoRecovery::E_ENTRY_BACKUP) == AutoRecovery::E_ENTRY_BACKUP)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_BACKUP));
-    else
-    if ((eJob & AutoRecovery::E_ENTRY_CLEANUP) == AutoRecovery::E_ENTRY_CLEANUP)
+    else if ((eJob & AutoRecovery::E_ENTRY_CLEANUP) == AutoRecovery::E_ENTRY_CLEANUP)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_CLEANUP));
-    else
-    if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
+    else if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
         sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_AUTO_SAVE));
     #ifdef ENABLE_WARNINGS
     else if ( eJob != AutoRecovery::E_NO_JOB )

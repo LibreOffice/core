@@ -44,37 +44,39 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
     else
         SetFlag( SBX_FIXED );
     if( p )
-    switch( t & 0x0FFF )
     {
-        case SbxINTEGER:    n |= SbxBYREF; aData.pInteger = (sal_Int16*) p; break;
-        case SbxSALUINT64:  n |= SbxBYREF; aData.puInt64 = (sal_uInt64*) p; break;
-        case SbxSALINT64:
-        case SbxCURRENCY:   n |= SbxBYREF; aData.pnInt64 = (sal_Int64*) p; break;
-        case SbxLONG:       n |= SbxBYREF; aData.pLong = (sal_Int32*) p; break;
-        case SbxSINGLE:     n |= SbxBYREF; aData.pSingle = (float*) p; break;
-        case SbxDATE:
-        case SbxDOUBLE:     n |= SbxBYREF; aData.pDouble = (double*) p; break;
-        case SbxSTRING:     n |= SbxBYREF; aData.pOUString = (OUString*) p; break;
-        case SbxERROR:
-        case SbxUSHORT:
-        case SbxBOOL:       n |= SbxBYREF; aData.pUShort = (sal_uInt16*) p; break;
-        case SbxULONG:      n |= SbxBYREF; aData.pULong = (sal_uInt32*) p; break;
-        case SbxCHAR:       n |= SbxBYREF; aData.pChar = (sal_Unicode*) p; break;
-        case SbxBYTE:       n |= SbxBYREF; aData.pByte = (sal_uInt8*) p; break;
-        case SbxINT:        n |= SbxBYREF; aData.pInt = (int*) p; break;
-        case SbxOBJECT:
-            aData.pObj = (SbxBase*) p;
-            if( p )
-                aData.pObj->AddRef();
-            break;
-        case SbxDECIMAL:
-            aData.pDecimal = (SbxDecimal*) p;
-            if( p )
-                aData.pDecimal->addRef();
-            break;
-        default:
-            DBG_ASSERT( !this, "Angabe eines Pointers unzulaessig" );
-            n = SbxNULL;
+        switch( t & 0x0FFF )
+        {
+            case SbxINTEGER:    n |= SbxBYREF; aData.pInteger = (sal_Int16*) p; break;
+            case SbxSALUINT64:  n |= SbxBYREF; aData.puInt64 = (sal_uInt64*) p; break;
+            case SbxSALINT64:
+            case SbxCURRENCY:   n |= SbxBYREF; aData.pnInt64 = (sal_Int64*) p; break;
+            case SbxLONG:       n |= SbxBYREF; aData.pLong = (sal_Int32*) p; break;
+            case SbxSINGLE:     n |= SbxBYREF; aData.pSingle = (float*) p; break;
+            case SbxDATE:
+            case SbxDOUBLE:     n |= SbxBYREF; aData.pDouble = (double*) p; break;
+            case SbxSTRING:     n |= SbxBYREF; aData.pOUString = (OUString*) p; break;
+            case SbxERROR:
+            case SbxUSHORT:
+            case SbxBOOL:       n |= SbxBYREF; aData.pUShort = (sal_uInt16*) p; break;
+            case SbxULONG:      n |= SbxBYREF; aData.pULong = (sal_uInt32*) p; break;
+            case SbxCHAR:       n |= SbxBYREF; aData.pChar = (sal_Unicode*) p; break;
+            case SbxBYTE:       n |= SbxBYREF; aData.pByte = (sal_uInt8*) p; break;
+            case SbxINT:        n |= SbxBYREF; aData.pInt = (int*) p; break;
+            case SbxOBJECT:
+                aData.pObj = (SbxBase*) p;
+                if( p )
+                    aData.pObj->AddRef();
+                break;
+            case SbxDECIMAL:
+                aData.pDecimal = (SbxDecimal*) p;
+                if( p )
+                    aData.pDecimal->addRef();
+                break;
+            default:
+                DBG_ASSERT( !this, "Angabe eines Pointers unzulaessig" );
+                n = SbxNULL;
+        }
     }
     else
         memset( &aData, 0, sizeof( SbxValues ) );

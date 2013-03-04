@@ -1648,7 +1648,7 @@ void FileDialogHelper_Impl::verifyPath()
         return;
     }
     if (maFileName.indexOf('/') != -1) {
-        SAL_WARN("sfx2", maFileName << " contains /");
+        SAL_WARN("sfx2.dialog", maFileName << " contains /");
         return;
     }
     url.insertName(
@@ -1659,7 +1659,7 @@ void FileDialogHelper_Impl::verifyPath()
         url.GetMainURL(INetURLObject::NO_DECODE), sysPathU);
     if (e != osl::FileBase::E_None) {
         SAL_WARN(
-            "sfx2",
+            "sfx2.dialog",
             "getSystemPathFromFileURL("
                 << url.GetMainURL(INetURLObject::NO_DECODE) << ") failed with "
                 << +e);
@@ -1672,7 +1672,7 @@ void FileDialogHelper_Impl::verifyPath()
              | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         SAL_WARN(
-            "sfx2",
+            "sfx2.dialog",
             "convertToString(" << sysPathU << ") failed for encoding "
                 << +osl_getThreadTextEncoding());
         return;
@@ -1680,7 +1680,7 @@ void FileDialogHelper_Impl::verifyPath()
     struct stat aFileStat;
     if (stat(sysPathC.getStr(), &aFileStat) == -1) {
         SAL_WARN(
-            "sfx2",
+            "sfx2.dialog",
             "stat(" << sysPathC.getStr() << ") failed with errno " << errno);
         return;
     }
