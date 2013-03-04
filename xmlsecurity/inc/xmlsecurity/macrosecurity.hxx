@@ -92,7 +92,6 @@ protected:
 public:
     MacroSecurityTP(Window* _pParent, const OString& rID,
         const OUString& rUIXMLDescription, MacroSecurity* _pDlg);
-    MacroSecurityTP(Window* _pParent, const ResId& _rResId, MacroSecurity* _pDlg);
 
     void SetTabDlg(MacroSecurity* pTabDlg)
     {

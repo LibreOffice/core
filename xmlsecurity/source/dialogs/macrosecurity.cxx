@@ -99,12 +99,6 @@ MacroSecurityTP::MacroSecurityTP(Window* _pParent, const OString& rID,
 {
 }
 
-MacroSecurityTP::MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroSecurity* _pDlg )
-    :TabPage        ( _pParent, _rResId )
-    ,mpDlg          ( _pDlg )
-{
-}
-
 MacroSecurityLevelTP::MacroSecurityLevelTP(Window* _pParent, MacroSecurity* _pDlg)
     : MacroSecurityTP(_pParent, "SecurityLevelPage", "xmlsec/ui/securitylevelpage.ui", _pDlg)
 {

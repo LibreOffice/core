@@ -435,7 +435,6 @@ protected:
 public:
                     FontNameBox( Window* pParent,
                                  WinBits nWinStyle = WB_SORT );
-                    FontNameBox( Window* pParent, const ResId& rResId );
     virtual         ~FontNameBox();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );

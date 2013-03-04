@@ -711,8 +711,6 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbIsInTaskPaneList = sal_False;           // sal_True: window was added to the taskpanelist in the topmost system window
     mpWindowImpl->mnNativeBackground  = 0;              // initialize later, depends on type
     mpWindowImpl->mbCallHandlersDuringInputDisabled = sal_False; // sal_True: call event handlers even if input is disabled
-    mpWindowImpl->mbDisableAccessibleLabelForRelation = sal_False; // sal_True: do not set LabelFor relation on accessible objects
-    mpWindowImpl->mbDisableAccessibleLabeledByRelation = sal_False; // sal_True: do not set LabeledBy relation on accessible objects
     mpWindowImpl->mbHelpTextDynamic = sal_False;          // sal_True: append help id in HELP_DEBUG case
     mpWindowImpl->mbFakeFocusSet = sal_False; // sal_True: pretend as if the window has focus.
     mpWindowImpl->mbHexpand = false;
@@ -9011,9 +9009,6 @@ Window* Window::GetAccessibleRelationMemberOf() const
 
 Window* Window::getAccessibleRelationLabelFor() const
 {
-    if (mpWindowImpl->mbDisableAccessibleLabelForRelation)
-        return NULL;
-
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabelForWindow)
         return mpWindowImpl->mpAccessibleInfos->pLabelForWindow;
 
@@ -9035,9 +9030,6 @@ Window* Window::GetAccessibleRelationLabelFor() const
 
 Window* Window::GetAccessibleRelationLabeledBy() const
 {
-    if (mpWindowImpl->mbDisableAccessibleLabeledByRelation)
-        return NULL;
-
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabeledByWindow)
         return mpWindowImpl->mpAccessibleInfos->pLabeledByWindow;
 

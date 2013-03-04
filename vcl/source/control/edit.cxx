@@ -253,25 +253,6 @@ bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 
 // -----------------------------------------------------------------------
 
-Edit::Edit( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabeledByRelation ) :
-    Control( WINDOW_EDIT )
-{
-    ImplInitEditData();
-    rResId.SetRT( RSC_EDIT );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-    if ( bDisableAccessibleLabeledByRelation )
-        ImplGetWindowImpl()->mbDisableAccessibleLabeledByRelation = sal_True;
-
-    // Derived MultiLineEdit takes care to call Show only after MultiLineEdit
-    // ctor has already started:
-    if ( !(nStyle & WB_HIDE) && rResId.GetRT() != RSC_MULTILINEEDIT )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 Edit::~Edit()
 {
     delete mpDDInfo;

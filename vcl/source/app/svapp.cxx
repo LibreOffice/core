@@ -1647,13 +1647,6 @@ void Application::SetFilterHdl( const Link& rLink )
 
 // -----------------------------------------------------------------------
 
-const Link& Application::GetFilterHdl()
-{
-    return ImplGetSVData()->maGDIData.mpGrfConverter->GetFilterHdl();
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool ImplCallHotKey( const KeyCode& rKeyCode )
 {
     ImplSVData*     pSVData = ImplGetSVData();

@@ -69,14 +69,6 @@ ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
 {
 }
 
-ScCsvControl::ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, const ResId& rResId ) :
-    Control( pParent, rResId ),
-    mrData( rData ),
-    mpAccessible( NULL ),
-    mbValidGfx( false )
-{
-}
-
 ScCsvControl::ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBits nBits ) :
     Control( pParent, nBits ),
     mrData( rData ),

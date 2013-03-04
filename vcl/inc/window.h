@@ -391,8 +391,6 @@ public:
                         mbIsInTaskPaneList:1,
                         mbToolbarFloatingWindow:1,
                         mbCallHandlersDuringInputDisabled:1,
-                        mbDisableAccessibleLabelForRelation:1,
-                        mbDisableAccessibleLabeledByRelation:1,
                         mbHelpTextDynamic:1,
                         mbFakeFocusSet:1,
                         mbHexpand:1,

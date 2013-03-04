@@ -267,7 +267,6 @@ private:
     // ------------------------------------------------------------------------
 public:
     explicit                    ScCsvControl( ScCsvControl& rParent );
-    explicit                    ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, const ResId& rResId );
     explicit                    ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBits nBits );
     virtual                     ~ScCsvControl();
 

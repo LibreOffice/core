@@ -45,19 +45,6 @@ namespace {
             loadPng( rBaseDir + "/program/edition" + rName, rBitmap) ||
             loadPng( rBaseDir + "/program" + rName, rBitmap);
     }
-    static bool loadSvg( const OUString & rPath, BitmapEx &rBitmap)
-    {
-        INetURLObject aObj( rPath );
-        SvgData aSvgData(aObj.PathToFileName());
-        rBitmap = aSvgData.getReplacement();
-        return !rBitmap.IsEmpty();
-    }
-    static bool tryLoadSvg( const OUString& rBaseDir, const OUString& rName, BitmapEx& rBitmap )
-    {
-        return
-            loadSvg( rBaseDir + "/program/edition" + rName, rBitmap) ||
-            loadSvg( rBaseDir + "/program" + rName, rBitmap);
-    }
 }
 
 bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
@@ -81,30 +68,6 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     }
 
     if (tryLoadPng( aBaseDir, aBaseName + aPng, rBitmap))
-        return true;
-
-    return false;
-}
-
-bool Application::LoadBrandSVG (const char *pName, BitmapEx &rBitmap)
-{
-    OUString aBaseDir( "$BRAND_BASE_DIR");
-    rtl::Bootstrap::expandMacros( aBaseDir );
-    rtl::OUString aBaseName( "/" + rtl::OUString::createFromAscii( pName ) );
-    rtl::OUString aSvg( ".svg" );
-
-    rtl_Locale *pLoc = NULL;
-    osl_getProcessLocale (&pLoc);
-    LanguageTag aLanguageTag( *pLoc);
-
-    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
-    for (size_t i=0; i < aFallbacks.size(); ++i)
-    {
-        if (tryLoadSvg( aBaseDir, aBaseName + "-" + aFallbacks[i] + aSvg, rBitmap))
-            return true;
-    }
-
-    if (tryLoadSvg( aBaseDir, aBaseName + aSvg, rBitmap))
         return true;
 
     return false;

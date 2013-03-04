@@ -1049,13 +1049,6 @@ sal_Bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions::GetFactoryShortName( EFactory eFactory ) const
-{
-    ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
-    return m_pDataContainer->GetFactoryShortName( eFactory );
-}
-
-//*****************************************************************************************************************
 ::rtl::OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );

@@ -149,7 +149,6 @@ public:
 
                         Edit( Window* pParent, WinBits nStyle = WB_BORDER );
                         Edit( Window* pParent, const ResId& rResId );
-                        Edit( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabeledByRelation );
                         virtual ~Edit();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );

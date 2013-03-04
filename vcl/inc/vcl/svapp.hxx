@@ -261,7 +261,6 @@ public:
     static void                 SetAppName( const String& rUniqueName );
     static String               GetAppName();
     static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
-    static bool                 LoadBrandSVG( const char *pName, BitmapEx &rBitmap );
 
     // default name of the application for message dialogs and printing
     static void                 SetDisplayName( const OUString& rDisplayName );

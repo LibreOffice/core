@@ -61,7 +61,6 @@ protected:
 public:
                     FixedText( Window* pParent, WinBits nStyle = 0 );
                     FixedText( Window* pParent, const ResId& rResId );
-                    FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation );
                     ~FixedText();
 
     virtual void    Paint( const Rectangle& rRect );

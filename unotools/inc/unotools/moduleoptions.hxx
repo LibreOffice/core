@@ -106,7 +106,6 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
         sal_Bool        IsModuleInstalled         (       EModule          eModule    ) const;
         ::rtl::OUString GetModuleName             (       EModule          eModule    ) const;
         ::rtl::OUString GetFactoryName            (       EFactory         eFactory   ) const;
-        ::rtl::OUString GetFactoryShortName       (       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryStandardTemplate(       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryEmptyDocumentURL(       EFactory         eFactory   ) const;
         ::rtl::OUString GetFactoryDefaultFilter   (       EFactory         eFactory   ) const;

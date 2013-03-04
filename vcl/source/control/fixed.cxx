@@ -175,25 +175,6 @@ FixedText::FixedText( Window* pParent, const ResId& rResId )
 
 // -----------------------------------------------------------------------
 
-FixedText::FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation )
-    : Control( WINDOW_FIXEDTEXT )
-    , m_nMaxWidthChars(-1)
-    , m_nMinWidthChars(-1)
-    , m_pMnemonicWindow(NULL)
-{
-    rResId.SetRT( RSC_TEXT );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-    if ( bDisableAccessibleLabelForRelation )
-        ImplGetWindowImpl()->mbDisableAccessibleLabelForRelation = sal_True;
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 FixedText::ImplGetTextStyle( WinBits nWinStyle )
 {
     sal_uInt16 nTextStyle = TEXT_DRAW_MNEMONIC | TEXT_DRAW_ENDELLIPSIS;
