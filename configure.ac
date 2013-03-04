@@ -8372,18 +8372,11 @@ if test "$WANT_X11" = "yes"; then
     AC_PATH_XTRA
     CPPFLAGS="$CPPFLAGS $X_CFLAGS"
 
-    if test "x$x_includes" = "x"; then
+    if test -z "$x_includes"; then
         x_includes="default_x_includes"
     fi
-    if test "x$x_libraries" = "x"; then
-        x_libraries="default_x_libraries"
-    fi
-    dnl The variables $x_libraries and $x_includes are set.
     if test -z "$x_libraries"; then
-        AC_MSG_ERROR([No X libraries found]) # Exit
-    fi
-    if test -z "$x_includes"; then
-        AC_MSG_ERROR([No X includes found]) # Exit
+        x_libraries="default_x_libraries"
     fi
     CFLAGS="$CFLAGS $X_CFLAGS"
     LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
@@ -8392,33 +8385,6 @@ else
     x_includes="no_x_includes"
     x_libraries="no_x_libraries"
 fi
-if test -z "$x_includes"; then
-    x_includes="no_x_includes"
-fi
-if test -z "$x_libraries"; then
-    x_libraries="no_x_libraries"
-fi
-if test "$x_includes" = "default_x_includes"; then
-    XINC="/usr/include"
-else
-    XINC="$x_includes"
-fi
-AC_SUBST(XINC)
-if test "$x_libraries" = "default_x_libraries"; then
-    XLIB=`$PKG_CONFIG --variable=libdir x11`
-    if test "x$XLIB" = x; then
-        XLIB="/usr/lib"
-    fi
-else
-    XLIB="$x_libraries"
-fi
-if test "$XLIB" != "no_x_libraries" -a "$XLIB" != "/usr/lib" -a "$XLIB" != "/usr/lib64"; then
-    SOLARLIB="$SOLARLIB -L$XLIB"
-fi
-if test "$XINC" != "no_x_includes" -a "$XINC" != "/usr/include"; then
-    SOLARINC="$SOLARINC -I$XINC"
-fi
-AC_SUBST(XLIB)
 
 if test "$WANT_X11" = "yes"; then
     dnl ===================================================================
