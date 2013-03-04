@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+wc\u003d",
+        "filename": "dbaccess/source/ui/browser/brwctrlr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2541,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-04T21:01:09Z",
+      "side": 1,
+      "message": "Note that this doesn\u0027t need an explicit conversion to OUString, it isn\u0027t wrong though, this would be equivalent:\n\n sFieldList +\u003d \";\";",
+      "revId": "3995e50780c7c8805a92e3d4f215daad57afa173",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+wY\u003d",
+        "filename": "dbaccess/source/ui/browser/brwview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-04T21:01:09Z",
+      "side": 1,
+      "message": "Clearer would be to use OUString::isEmpty() in this case, so\n\n if (_rStatus.isEmpty())",
+      "revId": "3995e50780c7c8805a92e3d4f215daad57afa173",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+wQ\u003d",
+        "filename": "dbaccess/source/ui/browser/unodatbr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2100,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-04T21:01:09Z",
+      "side": 1,
+      "message": "Also here, this could instead be\n\n if (_rQueryName.isEmpty())",
+      "revId": "3995e50780c7c8805a92e3d4f215daad57afa173",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+wM\u003d",
+        "filename": "dbaccess/source/ui/browser/unodatbr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2735,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-04T21:01:09Z",
+      "side": 1,
+      "message": "Actually, since OUString::replaceFirst() does not modify the original string, we wouldn\u0027t need the temporary variable sReplace anymore if this was rewritten as\n\n xAnalyzer-\u003esetQuery(sSql.replaceFirst(sFilter,OUString()));",
+      "revId": "3995e50780c7c8805a92e3d4f215daad57afa173",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+wI\u003d",
+        "filename": "dbaccess/source/ui/inc/brwctrlr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-04T21:01:09Z",
+      "side": 1,
+      "message": "Please, if member variables or methods were neatly aligned before, restore the alignment by inserting (or removing) blanks.",
+      "revId": "3995e50780c7c8805a92e3d4f215daad57afa173",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
