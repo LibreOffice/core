@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+yM\u003d",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-04T16:53:26Z",
+      "side": 1,
+      "message": "already now",
+      "revId": "24e3bdaa2d54785b3b101a04df70006222e4ea9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+yI\u003d",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-04T16:53:26Z",
+      "side": 1,
+      "message": "only",
+      "revId": "24e3bdaa2d54785b3b101a04df70006222e4ea9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
