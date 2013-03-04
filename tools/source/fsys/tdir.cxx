@@ -289,7 +289,6 @@ sal_uInt16 Dir::Scan( sal_uInt16 nCount )
 {
 
     sal_uInt16 nRead = 0; // Number of read entries in this round
-    FSysFailOnErrorImpl();
 
     // did not complete
     if ( pReader )

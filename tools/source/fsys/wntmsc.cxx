@@ -114,7 +114,6 @@ sal_Bool DirEntry::ToAbs()
     char *pOld;
     rtl::OString aFullName(rtl::OUStringToOString(GetFull(),
         osl_getThreadTextEncoding()));
-    FSysFailOnErrorImpl();
     if ( GetFullPathName(aFullName.getStr(), 256, sBuf, &pOld) > 511 )
         return sal_False;
 
@@ -143,7 +142,6 @@ String DirEntry::GetVolume() const
         DWORD nMaxCompLen[2];
         DWORD nFlags[2];
         rtl::OString aRootDir = pTop->aName;
-        FSysFailOnErrorImpl();
 
         // Try network device first due to slow samba drives
         if ( !WNetGetConnection( aRootDir.getStr(),
@@ -168,8 +166,6 @@ String DirEntry::GetVolume() const
 sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    FSysFailOnErrorImpl();
 
     if ( eFlag == FSYS_FLAG_CURRENT && !aName.getLength() )
         return sal_True;
@@ -593,9 +589,6 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
             nError = FSYS_ERR_OK;
             return sal_True;
         }
-
-        // Don't show error boxes
-        FSysFailOnErrorImpl();
 
         // Redirect
         String aPath( rDirEntry.GetFull() );

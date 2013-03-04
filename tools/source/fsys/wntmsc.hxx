@@ -63,8 +63,6 @@ inline sal_Bool DRIVE_EXISTS(char c)
     return GetDriveType( aDriveRoot.getStr() ) > 1;
 }
 
-#define FSysFailOnErrorImpl()
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
