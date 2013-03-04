@@ -181,7 +181,6 @@ ImageProducer::ImageProducer() :
     mbConsInit  ( sal_False )
 {
     mpGraphic = new Graphic;
-    DBG_ASSERT( Application::GetFilterHdl().IsSet(), "ImageProducer::ImageProducer(): No filter handler set" );
 }
 
 // ------------------------------------------------------------
