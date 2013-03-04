@@ -16,6 +16,23 @@
       "revId": "e21768ca1f1555c4146b424da18035cd26ba1b1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+3A\u003d",
+        "filename": "vcl/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-03-04T08:21:25Z",
+      "side": 1,
+      "message": "Please replace \"we\" with \"StarDivision\", and \"our\" with \"StarDivision\u0027s\".",
+      "revId": "e21768ca1f1555c4146b424da18035cd26ba1b1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
