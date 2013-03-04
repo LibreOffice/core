@@ -437,16 +437,11 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     get(m_pPgeExampleWN, "pageexample");
     get(m_pFrmExampleWN, "frameexample");
 
-    MetricField *pEd1 = get<MetricField>("width1mf");
-    aEd1.set(pEd1);
-    MetricField *pEd2 = get<MetricField>("width2mf");
-    aEd2.set(pEd2);
-    MetricField *pEd3 = get<MetricField>("width3mf");
-    aEd3.set(pEd3);
-    MetricField *pDistEd1 = get<MetricField>("spacing1mf");
-    aDistEd1.set(pDistEd1);
-    MetricField *pDistEd2 = get<MetricField>("spacing2mf");
-    aDistEd2.set(pDistEd2);
+    connectPercentFieldWrapper(aEd1, "width1mf");
+    connectPercentFieldWrapper(aEd2, "width2mf");
+    connectPercentFieldWrapper(aEd3, "width3mf");
+    connectPercentFieldWrapper(aDistEd1, "spacing1mf");
+    connectPercentFieldWrapper(aDistEd2, "spacing2mf");
 
     SetExchangeSupport();
 
@@ -559,6 +554,14 @@ void SwColumnPage::SetPageWidth(long nPageWidth)
     aEd1.SetMax(nNewMaxWidth, FUNIT_TWIP);
     aEd2.SetMax(nNewMaxWidth, FUNIT_TWIP);
     aEd3.SetMax(nNewMaxWidth, FUNIT_TWIP);
+}
+
+void SwColumnPage::connectPercentFieldWrapper(PercentFieldWrap &rWrap, const OString &rName)
+{
+    MetricField *pFld = get<MetricField>(rName);
+    assert(pFld);
+    rWrap.set(pFld);
+    m_aPercentFieldWrappersMap[pFld] = &rWrap;
 }
 
 void SwColumnPage::Reset(const SfxItemSet &rSet)
@@ -960,8 +963,10 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
                 of the column width is overruled; only an alteration
                 of the column number leads back to that default.
 ------------------------------------------------------------------------*/
-IMPL_LINK( SwColumnPage, GapModify, PercentFieldWrap *, pFld )
+IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
 {
+    PercentFieldWrap *pFld = m_aPercentFieldWrappersMap[pMetricFld];
+    assert(pFld);
     long nActValue = static_cast< long >(pFld->DenormalizePercent(pFld->GetValue(FUNIT_TWIP)));
     if(nCols < 2)
         return 0;
@@ -1031,8 +1036,10 @@ IMPL_LINK( SwColumnPage, GapModify, PercentFieldWrap *, pFld )
     return 0;
 }
 
-IMPL_LINK( SwColumnPage, EdModify, PercentFieldWrap *, pField )
+IMPL_LINK( SwColumnPage, EdModify, MetricField *, pMetricFld )
 {
+    PercentFieldWrap *pField = m_aPercentFieldWrappersMap[pMetricFld];
+    assert(pField);
     pModifiedField = pField;
     Timeout();
     return 0;

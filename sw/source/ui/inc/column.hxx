@@ -134,6 +134,9 @@ class SwColumnPage : public SfxTabPage
     long            nColDist[nMaxCols];
     sal_uInt16          nMinWidth;
     PercentFieldWrap*   pModifiedField;
+
+    std::map<MetricField*, PercentFieldWrap*> m_aPercentFieldWrappersMap;
+
     sal_Bool            bFormat;
     sal_Bool            bFrm;
     sal_Bool            bHtmlMode;
@@ -141,8 +144,8 @@ class SwColumnPage : public SfxTabPage
 
     // Handler
     DECL_LINK( ColModify, NumericField * );
-    DECL_LINK( GapModify, PercentFieldWrap * );
-    DECL_LINK( EdModify, PercentFieldWrap * );
+    DECL_LINK( GapModify, MetricField * );
+    DECL_LINK( EdModify, MetricField * );
     DECL_LINK( AutoWidthHdl, CheckBox * );
     DECL_LINK( SetDefaultsHdl, ValueSet * );
 
@@ -165,6 +168,8 @@ class SwColumnPage : public SfxTabPage
     virtual int     DeactivatePage(SfxItemSet *pSet);
 
     SwColumnPage(Window *pParent, const SfxItemSet &rSet);
+
+    void connectPercentFieldWrapper(PercentFieldWrap &rWrap, const OString &rName);
 
 public:
     virtual ~SwColumnPage();
