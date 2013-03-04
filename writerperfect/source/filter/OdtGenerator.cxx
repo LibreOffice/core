@@ -512,7 +512,7 @@ void OdtGenerator::openHeader(const WPXPropertyList &propList)
 {
     std::vector<DocumentElement *> * pHeaderFooterContentElements = new std::vector<DocumentElement *>;
 
-    if (propList["libwpd:occurence"]->getStr() == "even")
+    if (propList["libwpd:occurrence"]->getStr() == "even")
         mpImpl->mpCurrentPageSpan->setHeaderLeftContent(pHeaderFooterContentElements);
     else
         mpImpl->mpCurrentPageSpan->setHeaderContent(pHeaderFooterContentElements);
@@ -529,7 +529,7 @@ void OdtGenerator::openFooter(const WPXPropertyList &propList)
 {
     std::vector<DocumentElement *> * pHeaderFooterContentElements = new std::vector<DocumentElement *>;
 
-    if (propList["libwpd:occurence"]->getStr() == "even")
+    if (propList["libwpd:occurrence"]->getStr() == "even")
         mpImpl->mpCurrentPageSpan->setFooterLeftContent(pHeaderFooterContentElements);
     else
         mpImpl->mpCurrentPageSpan->setFooterContent(pHeaderFooterContentElements);
