@@ -1115,7 +1115,7 @@ public:
                         mpPoly = new ImplPolygon( nDestSize );
                     }
 
-    virtual         ~ImplPolygonPointFilter() {}
+    virtual         ~ImplPolygonPointFilter() { delete mpPoly; }
 
     virtual void    LastPoint();
     virtual void    Input( const Point& rPoint );
