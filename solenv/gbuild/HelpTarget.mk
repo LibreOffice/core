@@ -74,6 +74,7 @@ $(call gb_HelpTranslatePartTarget_get_target,$(1)) : HELP_LANG := $(2)
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) : POFILES := $(gb_POLOCATION)/$(2)/$(3).po
 
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) : $(gb_POLOCATION)/$(2)/$(3).po
+$(gb_POLOCATION)/$(2)/$(3).po :
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) :| $(dir $(call gb_HelpTranslatePartTarget_get_target,$(1))).dir
 $(call gb_HelpTranslatePartTarget_get_target,$(1)) :| $(call gb_HelpTranslatePartTarget_get_workdir,$(1))/.dir
 
@@ -222,6 +223,7 @@ endef
 define gb_HelpTreeTarget__set_pofiles
 $(call gb_HelpTreeTarget_get_target,$(1)) : POFILES := $(2)
 $(call gb_HelpTreeTarget_get_target,$(1)) : $(2)
+$(2) :
 
 endef
 

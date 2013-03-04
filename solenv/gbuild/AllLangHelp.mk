@@ -21,7 +21,7 @@ gb_AllLangHelp_LANGS := en-US $(gb_WITH_LANG)
 
 define gb_AllLangHelp__translation_exists
 $(or \
-	$(filter en-US,$(1)),\
+	$(filter en-US qtz,$(1)),\
 	$(and \
 		$(wildcard $(SRCDIR)/$(gb_AllLangHelp_AUXDIR)/$(1)),\
 		$(wildcard $(gb_AllLangHelp_TRANLATIONSDIR)/source/$(1)/$(gb_AllLangHelp_HELPDIRNAME)) \
