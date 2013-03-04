@@ -153,7 +153,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="anglemtr: degrees">
+                      <object class="GtkSpinButton" id="anglemtr:0">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>

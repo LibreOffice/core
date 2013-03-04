@@ -684,7 +684,9 @@ namespace
         else if (sUnit == "%")
             eUnit = FUNIT_PERCENT;
 
-        assert(eUnit != FUNIT_NONE); //unknown unit
+        // if lack of unit is not intentional
+        if (sUnit != "0")
+            assert(eUnit != FUNIT_NONE); //unknown unit
 
         return eUnit;
     }
