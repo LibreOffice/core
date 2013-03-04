@@ -39,6 +39,7 @@ public:
     void testEmptySvgFamilyName();
     void testHideAllSections();
     void testOdtBorders();
+    void testFdo56272();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -56,6 +57,7 @@ void Test::run()
         {"empty-svg-family-name.odt", &Test::testEmptySvgFamilyName},
         {"fdo53210.odt", &Test::testHideAllSections},
         {"borders_ooo33.odt", &Test::testOdtBorders},
+        {"fdo56272.odt", &Test::testFdo56272},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -268,6 +270,15 @@ void Test::testOdtBorders()
             }
         }
     } while(xParaEnum->hasMoreElements());
+}
+
+void Test::testFdo56272()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    // Vertical position was incorrect.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
