@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+v8\u003d",
+        "filename": "autodoc/source/parser_i/tokens/tkpstam2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000322
+      },
+      "writtenOn": "2013-03-04T21:30:19Z",
+      "side": 1,
+      "message": "The removed variable \u0027i\u0027 is still referenced here.\nReplace with nNrofStati",
+      "revId": "f3ccc7b16ad41a7460e34d7edaf4a330d1a0c912",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
