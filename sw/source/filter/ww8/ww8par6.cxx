@@ -1641,8 +1641,8 @@ bool SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
 
 static void FlySecur1(short& rSize, const bool bBorder)
 {
-    short nMin = MINFLY +
-        bBorder ? MAX_BORDER_SIZE : MAX_EMPTY_BORDER;
+    const short nMin = MINFLY +
+        (bBorder ? MAX_BORDER_SIZE : MAX_EMPTY_BORDER);
 
     if ( rSize < nMin )
         rSize = nMin;
