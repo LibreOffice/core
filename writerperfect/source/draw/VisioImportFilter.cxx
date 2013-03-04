@@ -142,7 +142,7 @@ throw( com::sun::star::uno::RuntimeException )
 
     if (!sTypeName.isEmpty())
     {
-        if ( location == nLength ) )
+        if ( location == nLength )
         {
             Descriptor.realloc(nLength+1);
             Descriptor[location].Name = "TypeName";
