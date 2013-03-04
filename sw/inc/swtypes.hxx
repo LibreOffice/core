@@ -95,15 +95,9 @@ enum SwLabelType
 };
 
 
-const sal_uInt8 OLD_MAXLEVEL = 5;
-const sal_uInt8 MAXLEVEL = 10;      // Was: numrule.hxx.
-const sal_uInt8 NO_NUM      = 200;  // Was:  numrule.hxx.
+const sal_uInt8 MAXLEVEL = 10;
 
-
-// For paragraphs with NO_NUM but on different levels.
-// This makes the NO_NUM inapplicable.
 const sal_uInt8 NO_NUMLEVEL  = 0x20;    // "or" with the levels.
-
 
 // Some helper functions as macros or inlines.
 
