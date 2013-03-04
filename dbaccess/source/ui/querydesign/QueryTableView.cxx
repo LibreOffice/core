@@ -490,7 +490,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
 
     // New UndoAction
     OQueryTabWinShowUndoAct* pUndoAction = new OQueryTabWinShowUndoAct(this);
-    pUndoAction->SetTabWin(pNewTabWin); // Fenster
+    pUndoAction->SetTabWin(pNewTabWin); // Window
     sal_Bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction,bAppend);
     if(!bSuccess)
     {
