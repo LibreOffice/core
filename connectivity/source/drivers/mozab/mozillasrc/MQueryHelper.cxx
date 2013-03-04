@@ -233,7 +233,7 @@ MQueryHelper::getByIndex( sal_uInt32 nRow )
         {
             return( m_aResults[ nRow -1 ] );
         }
-    } while ( sal_True );
+    } while ( true );
 }
 
 sal_Bool

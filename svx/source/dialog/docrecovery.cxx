@@ -90,7 +90,7 @@ short TabDialog4Recovery::Execute()
 
     Show();
     m_pActualPage = m_lTabPages.begin();
-    while(sal_True)
+    while(true)
     {
         IExtendedTabPage* pPage = *m_pActualPage;
         SetViewWindow(pPage);

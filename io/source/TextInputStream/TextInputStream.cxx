@@ -299,7 +299,7 @@ sal_Int32 OTextInputStream::implReadNext()
         sal_Size nSrcCvtBytes = 0;
         sal_Size nTargetCount = 0;
         sal_Size nSourceCount = 0;
-        while( sal_True )
+        while( true )
         {
             const sal_Int8 *pbSource = mSeqSource.getConstArray();
 

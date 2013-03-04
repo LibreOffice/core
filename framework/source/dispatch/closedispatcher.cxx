@@ -599,7 +599,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
     OSL_ENSURE(sTarget.isEmpty(), "CloseDispatch used for unexpected target. Magic things will happen now .-)");
 
     css::uno::Reference< css::frame::XFrame > xTarget = xFrame;
-    while(sal_True)
+    while(true)
     {
         // a) top frames wil be closed
         if (xTarget->isTop())

@@ -1879,7 +1879,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
     {
         j = 0;
         String sWildcard;
-        while( sal_True )
+        while( true )
         {
             sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
@@ -1919,7 +1919,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         String aExt;
         j = 0;
         String sWildcard;
-        while( sal_True )
+        while( true )
         {
             sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )

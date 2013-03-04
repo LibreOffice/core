@@ -53,7 +53,7 @@ sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_In
 
     sal_Int32 nRead;
     Sequence< sal_Int8 > seqStart;
-    while( sal_True )
+    while( true )
     {
         nRead = m_in->readSomeBytes( seq , nMaxToRead );
 
@@ -409,7 +409,7 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
         m_seqSource = Sequence< sal_Int8 >();
     }
 
-    while( sal_True ) {
+    while( true ) {
 
         /* All invalid characters are transformed to the unicode undefined char */
         nTargetCount +=     rtl_convertTextToUnicode(
@@ -509,7 +509,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
 
     Sequence<sal_Int8>  seqText( nSeqSize );
     sal_Char *pTarget = (sal_Char *) seqText.getArray();
-    while( sal_True ) {
+    while( true ) {
 
         nTargetCount += rtl_convertUnicodeToText(
                                     m_convUnicode2Text,

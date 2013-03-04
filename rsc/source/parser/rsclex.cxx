@@ -110,7 +110,7 @@ sal_uInt32 GetNumber(){
 int MakeToken( YYSTYPE * pTokenVal ){
     int             c1;
 
-    while( sal_True ){  // Kommentare und Leerzeichen ueberlesen
+    while( true ){  // Kommentare und Leerzeichen ueberlesen
         while( isspace( c ) )
             c = pFI->GetFastChar();
         if( '/' == c ){

@@ -1168,7 +1168,7 @@ void WMFReader::ReadWMF()
 
         if( nEndPos - nStartPos )
         {
-            while( sal_True )
+            while( true )
             {
                 nCurrentAction++;
                 nPercent = ( nPos - nStartPos ) * 100 / ( nEndPos - nStartPos );

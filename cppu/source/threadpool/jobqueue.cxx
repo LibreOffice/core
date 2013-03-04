@@ -67,7 +67,7 @@ namespace cppu_threadpool {
         }
 
 
-        while( sal_True )
+        while( true )
         {
             if( bReturnWhenNoJob )
             {

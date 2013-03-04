@@ -195,7 +195,7 @@ SfxMiniRecordReader::SfxMiniRecordReader
     sal_uInt32 nStartPos = pStream->Tell();
 
     // passenden Record suchen
-    while(sal_True)
+    while(true)
     {
         // Header lesen
         DBG( DbgOutf( "SfxFileRec: searching record at %ul", pStream->Tell() ) );

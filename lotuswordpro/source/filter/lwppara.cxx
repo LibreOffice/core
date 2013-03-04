@@ -588,7 +588,7 @@ void LwpPara::RegisterStyle()
                     }
                     bHeading = pNumbering->IsHeading();
 
-                    while(sal_True)
+                    while(true)
                     {
                         /*// When we hit the hint paragraph, we can stop and check the hint.
                         if (qNumberHint && (qPara == qNumberHint->GetPara()) &&

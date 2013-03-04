@@ -1713,7 +1713,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
         if ( pMaskBitmap )
         {
             bDoTrans = sal_True;
-            while (sal_True)
+            while (true)
             {
                 if ( mnLevel == 1 )
                 {

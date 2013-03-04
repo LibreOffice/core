@@ -344,7 +344,7 @@ sal_Bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
         else if ( mnParaSize > 2 )  // name must enlarge the minimum size
         {
             sal_uLong i = 0;
-            while ( sal_True )
+            while ( true )
             {
                 if ( pRGBTable[ i ].name == NULL )
                     break;

@@ -1111,7 +1111,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     {
         SfxItemIter aIter( *this );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( sal_True )
+        while( true )
         {
             sal_uInt16 nWhich = IsInvalidItem( pItem )
                                 ? GetWhichByPos( aIter.GetCurPos() )
@@ -1182,7 +1182,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
     {
         SfxItemIter aIter( *this );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( sal_True )
+        while( true )
         {
             sal_uInt16 nWhich = IsInvalidItem( pItem )
                                 ? GetWhichByPos( aIter.GetCurPos() )

@@ -2286,7 +2286,7 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
                            BOX_LINE_RIGHT, BOX_LINE_BOTTOM };
 
     sal_Int8 cLine;
-    while( sal_True )
+    while( true )
     {
         rStrm >> cLine;
 
@@ -2657,7 +2657,7 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
     pAttr->SetMinDist( ( cFlags & 0x04 ) != 0 );
     pAttr->SetDefDist( _nDefDist );
 
-    while( sal_True )
+    while( true )
     {
         sal_Int8 cLine;
         rStrm >> cLine;

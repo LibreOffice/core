@@ -231,7 +231,7 @@ namespace comphelper
             m_pImpl->aPendingActions.reset();
             m_pImpl->aPendingActions.wait();
         }
-        while ( sal_True );
+        while ( true );
     }
 
 //........................................................................

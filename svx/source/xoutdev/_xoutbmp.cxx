@@ -476,7 +476,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                             nY = nStartY2;
 
                             // diese Schleife wird immer gebreaked da hier ja min. ein Pixel ist
-                            while( sal_True )
+                            while( true )
                             {
                                 if( aBlack == pAcc->GetPixel( nY, nX ) )
                                 {
@@ -513,7 +513,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                             nX = nStartX2;
 
                             // diese Schleife wird immer gebreaked da hier ja min. ein Pixel ist
-                            while( sal_True )
+                            while( true )
                             {
                                 if( aBlack == pAcc->GetPixel( nY, nX ) )
                                 {

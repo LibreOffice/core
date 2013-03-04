@@ -907,7 +907,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
             {
                 SfxItemIter aIter( pOld->aAttrSet );
                 const SfxPoolItem* pItem = aIter.GetCurItem(), *pGet;
-                while( sal_True )
+                while( true )
                 {
                     if( SFX_ITEM_SET == pAkt->aAttrSet.GetItemState(
                         pItem->Which(), sal_False, &pGet ) &&
@@ -1052,7 +1052,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 // at the beginning of a paragraph? Move back one position
                 MovePos( sal_True );
 
-        } while( sal_False );
+        } while( false );
 
         if( pOld )
             delete pOld;
@@ -1290,7 +1290,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
                 if( aIter.IsAtEnd() )
                     break;
                 aIter.NextItem();
-            } while( sal_True );
+            } while( true );
 
             if( !aMrgSet.Count() )
                 return;
@@ -1337,7 +1337,7 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
             if( aIter.IsAtEnd() )
                 break;
             aIter.NextItem();
-        } while( sal_True );
+        } while( true );
     }
 }
 

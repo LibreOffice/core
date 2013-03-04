@@ -79,7 +79,7 @@ private:
 void MyThread::run()
 {
 
-    while ( sal_True )
+    while ( true )
     {
         try
         {

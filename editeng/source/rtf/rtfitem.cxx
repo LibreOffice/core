@@ -270,7 +270,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     pAkt->SetStartPos( *pInsPos );
 
                 pSet = &pAkt->aAttrSet;
-            } while( sal_False );
+            } while( false );
 
             switch( nToken )
             {
@@ -1194,7 +1194,7 @@ ATTR_SETEMPHASIS:
                                                                   &aColor, nDist, eSL ) );
 
                                     bSkip = sal_False;
-                                } while( sal_False );
+                                } while( false );
 
                                 if( bSkip )
                                     SkipGroup();  // at the end of the group
@@ -1891,7 +1891,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
     {
         SfxItemIter aIter( aTmp );
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( sal_True )
+        while( true )
         {
             pAttrPool->SetPoolDefaultItem( *pItem );
             if( aIter.IsAtEnd() )

@@ -109,7 +109,7 @@ void MyThread::latencyTest( const Reference< XConnection > &r )
 void MyThread::run()
 {
 
-    while ( sal_True )
+    while ( true )
     {
         try
         {

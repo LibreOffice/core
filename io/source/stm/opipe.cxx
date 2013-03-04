@@ -148,7 +148,7 @@ OPipeImpl::~OPipeImpl()
 sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
     throw( NotConnectedException, BufferSizeExceededException,RuntimeException )
 {
-    while( sal_True )
+    while( true )
     {
         { // start guarded section
             MutexGuard guard( m_mutexAccess );
@@ -188,7 +188,7 @@ sal_Int32 OPipeImpl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBy
            BufferSizeExceededException,
            RuntimeException )
 {
-    while( sal_True ) {
+    while( true ) {
         {
             MutexGuard guard( m_mutexAccess );
             if( m_bInputStreamClosed )

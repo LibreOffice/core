@@ -863,7 +863,7 @@ void TPGalleryThemeProperties::FillFilterList()
         String aExtensions;
         int j = 0;
         String sWildcard;
-        while( sal_True )
+        while( true )
         {
             sWildcard = rFilter.GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
@@ -938,7 +938,7 @@ void TPGalleryThemeProperties::FillFilterList()
     {
         int j = 0;
         String sWildcard;
-        while( sal_True )
+        while( true )
         {
             sWildcard = rFilter.GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )

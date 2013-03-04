@@ -218,7 +218,7 @@ void OComponentEventThread::run()
             m_aCond.wait();
         }
     }
-    while( sal_True );
+    while( true );
 }
 
 //.........................................................................

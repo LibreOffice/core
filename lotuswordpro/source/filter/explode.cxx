@@ -224,7 +224,7 @@ sal_Int32 Decompression::explode()
     m_nOutputBufferPos = 0;
     /* Now, a bit stream follows, which is decoded as described below: */
     /*  The algorithm terminates as soon as it runs out of bits. */
-    while(sal_True)
+    while(true)
     {
         // read 1 bit (take bits from the lowest value (LSB) to the MSB i.e. bit 0, bit 1 etc ...)
         sal_uInt32 iBit;

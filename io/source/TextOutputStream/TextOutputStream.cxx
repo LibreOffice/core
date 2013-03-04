@@ -127,7 +127,7 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
 
     Sequence<sal_Int8> seqText( nSeqSize );
     sal_Char *pTarget = (sal_Char *) seqText.getArray();
-    while( sal_True )
+    while( true )
     {
         nTargetCount += rtl_convertUnicodeToText(
                                     mConvUnicode2Text,

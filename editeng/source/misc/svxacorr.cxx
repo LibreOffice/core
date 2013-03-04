@@ -1402,7 +1402,7 @@ sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 nRet |= ChgToEnEmDash;
         }
 
-    } while( sal_False );
+    } while( false );
 
     if( nRet )
     {

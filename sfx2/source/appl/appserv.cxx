@@ -442,7 +442,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                 }
             }
-            while( sal_True );
+            while( true );
 
             sal_Bool bOk = ( n == 0);
             rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );

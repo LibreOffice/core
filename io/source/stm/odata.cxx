@@ -1104,7 +1104,7 @@ void OObjectOutputStream::connectToMarkable(void)
 
         // find the markable stream !
         Reference< XInterface > rTry(m_output);
-        while( sal_True ) {
+        while( true ) {
             if( ! rTry.is() )
             {
                 throw NotConnectedException();
@@ -1411,7 +1411,7 @@ void OObjectInputStream::connectToMarkable()
 
         // find the markable stream !
         Reference< XInterface > rTry(m_input);
-        while( sal_True ) {
+        while( true ) {
             if( ! rTry.is() )
             {
                 throw NotConnectedException( );

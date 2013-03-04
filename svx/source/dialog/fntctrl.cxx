@@ -286,7 +286,7 @@ void FontPrevWin_Impl::CheckScript()
             nScript = xBreak->getScriptType( aText, nChg );
         else
             break;
-    } while( sal_True );
+    } while( true );
 }
 
 /*
@@ -355,7 +355,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
         else
             break;
     }
-    while( sal_True );
+    while( true );
     nHeight -= nAscent;
     nCJKHeight -= nCJKAscent;
     nCTLHeight -= nCTLAscent;
@@ -416,7 +416,7 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
         else
             break;
     }
-    while( sal_True );
+    while( true );
     _pPrinter->SetFont( aOldFont );
 }
 

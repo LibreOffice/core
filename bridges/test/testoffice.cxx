@@ -111,7 +111,7 @@ void testWriter(  const Reference < XComponent > & rCmp )
     char pcText[1024];
     pcText[0] = 0;
     printf( "pleast type any text\n" );
-    while( sal_True )
+    while( true )
     {
         scanf( "%s" , pcText );
 

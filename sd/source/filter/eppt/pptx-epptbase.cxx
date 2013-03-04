@@ -246,7 +246,7 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
 
 sal_Bool PPTWriterBase::InitSOIface()
 {
-    while( sal_True )
+    while( true )
     {
         mXDrawPagesSupplier = Reference< XDrawPagesSupplier >( mXModel, UNO_QUERY );
         if ( !mXDrawPagesSupplier.is() )
@@ -275,7 +275,7 @@ sal_Bool PPTWriterBase::InitSOIface()
 
 sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 {
-    while( sal_True )
+    while( true )
     {
         if ( ePageType != meLatestPageType )
         {
@@ -730,7 +730,7 @@ Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
 
 sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
 {
-    while(sal_True)
+    while(true)
     {
         if (  ( bGroup == sal_False ) || ( GetCurrentGroupLevel() == 0 ) )
         {

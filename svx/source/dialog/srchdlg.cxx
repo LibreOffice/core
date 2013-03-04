@@ -188,7 +188,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
     const SfxPoolItem* pItem = aIter.GetCurItem();
     sal_uInt16 nWhich;
 
-    while ( sal_True )
+    while ( true )
     {
         // only test that it is available?
         if( IsInvalidItem( pItem ) )

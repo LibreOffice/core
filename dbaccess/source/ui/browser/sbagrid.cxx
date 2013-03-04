@@ -1216,7 +1216,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
             bHandled = sal_True;
         }
     }
-    while (sal_False);
+    while (false);
 
     if (!bHandled)
         FmGridControl::StartDrag(_nAction, _rPosPixel);
@@ -1448,7 +1448,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             DBG_UNHANDLED_EXCEPTION();
         }
 
-    } while (sal_False);
+    } while (false);
 
     if(nAction != DND_ACTION_COPY && GetEmptyRow().Is())
     {

@@ -83,7 +83,7 @@ sal_Int32 TextRun::insertAt(
                     aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
 
                     sal_Int32 nIndex = 0;
-                    while ( sal_True )
+                    while ( true )
                     {
                         sal_Int32 nCount = 0;
                         sal_Bool bSymbol = ( getText()[ nIndex ] & 0xff00 ) == 0xf000;

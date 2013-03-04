@@ -2511,7 +2511,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                             m_arrRelativeGridColumn.push_back(nViewPos);
                         }
                     }
-                } while (sal_False);
+                } while (false);
             }
             else
             {

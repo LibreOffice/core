@@ -1499,7 +1499,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
 
             sal_Bool bTryTwice = ( eAktPageKind == PPT_SLIDEPAGE );
             sal_Bool bSSSlideInfoAtom = sal_False;
-            while ( sal_True )
+            while ( true )
             {
                 while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPageRecEnd ) )
                 {
@@ -2542,7 +2542,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         if ( maShapeRecords.SeekToContent( rSt, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
         {
             DffRecordHeader& rHdClientData = *maShapeRecords.Current();
-            while( sal_True )
+            while( true )
             {
                 sal_uInt32 nClientDataLen = rHdClientData.GetRecEndFilePos();
                 DffRecordHeader aHd;

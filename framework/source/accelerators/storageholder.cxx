@@ -573,7 +573,7 @@ OUStringList StorageHolder::impl_st_parsePath(const ::rtl::OUString& sPath)
 {
     OUStringList lToken;
     sal_Int32    i  = 0;
-    while (sal_True)
+    while (true)
     {
         ::rtl::OUString sToken = sPath.getToken(0, PATH_SEPERATOR_UNICODE, i);
         if (i < 0)

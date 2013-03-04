@@ -88,7 +88,7 @@ sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rNa
                 break;
             nKey++;
         }
-        while ( sal_True );
+        while ( true );
     }
     ::rtl::Reference<NameSpaceEntry> pEntry(new NameSpaceEntry);
     pEntry->sName   = rName;

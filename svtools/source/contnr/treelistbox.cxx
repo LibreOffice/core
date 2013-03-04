@@ -882,7 +882,7 @@ void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_In
     if ( pEntry )
     {
         SvTreeListEntry* pParentEntry = GetParent( pEntry );
-        while ( sal_True )
+        while ( true )
         {
             sal_uLong i, nCount = GetLevelChildCount( pParentEntry );
             for ( i = 0; i < nCount; ++i )

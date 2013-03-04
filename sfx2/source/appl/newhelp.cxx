@@ -1505,7 +1505,7 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
     if ( !IsWait() )
         EnterWait();
     sal_Bool bSuccess = sal_False;
-// TODO implement locale fallback ... see below    while(sal_True)
+// TODO implement locale fallback ... see below    while(true)
     {
         try
         {

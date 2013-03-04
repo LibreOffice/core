@@ -454,7 +454,7 @@ RTLFUNC(CurDir)
 
     int nSize = _PATH_INCR;
     char* pMem;
-    while( sal_True )
+    while( true )
       {
         pMem = new char[nSize];
         if( !pMem )

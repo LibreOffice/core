@@ -341,7 +341,7 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
             if( nCount > 1 )
             {
                 sal_uInt16 nIdx = 1;
-                while( sal_True )
+                while( true )
                 {
                     const Point& rLast = rPol[ nIdx - 1 ];
                     if( nIdx == nCount )

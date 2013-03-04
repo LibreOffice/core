@@ -669,7 +669,7 @@ void OSaxParserTest::testFile( const Reference < XParser > & rParser )
             Any any;
             any <<= e;
 
-            while(sal_True) {
+            while(true) {
                 SAXParseException *pEx;
                 if( any.getValueType() == getCppuType( &e ) ) {
                     pEx = ( SAXParseException * ) any.getValue();
@@ -736,7 +736,7 @@ void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
         catch( SAXParseException &e ) {
             Any any;
             any <<= e;
-            while(sal_True) {
+            while(true) {
                 if( any.getValueType() == getCppuType( &e ) ) {
                     SAXParseException ex;
                     any >>= ex;
