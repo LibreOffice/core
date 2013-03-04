@@ -30,7 +30,6 @@ namespace svx
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::frame;
 
     #define DECLARE_ASCII(s)        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
     #define TOOLBAR_RESNAME         DECLARE_ASCII("private:resource/toolbar/")

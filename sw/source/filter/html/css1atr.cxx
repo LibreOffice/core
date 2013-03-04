@@ -109,8 +109,6 @@ using ::editeng::SvxBorderLine;
 #define CSS1_FRMSIZE_ANYHEIGHT  0x0e
 #define CSS1_FRMSIZE_PIXEL      0x10
 
-using namespace ::com::sun::star;
-
 //-----------------------------------------------------------------------
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );

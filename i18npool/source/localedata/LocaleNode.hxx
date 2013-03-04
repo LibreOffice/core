@@ -25,9 +25,7 @@
 
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
@@ -36,7 +34,6 @@
 
 using namespace ::rtl;
 using namespace ::std;
-using namespace ::com::sun::star::xml::sax;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

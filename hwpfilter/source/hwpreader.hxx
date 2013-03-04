@@ -51,7 +51,6 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::document;
 
 #include <assert.h>
 

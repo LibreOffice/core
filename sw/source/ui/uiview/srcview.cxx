@@ -93,8 +93,6 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::lang;
 using namespace ::sfx2;
 using ::rtl::OUString;
 using ::com::sun::star::util::SearchOptions;

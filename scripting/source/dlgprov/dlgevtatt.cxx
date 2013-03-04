@@ -50,7 +50,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::reflection;
 
 

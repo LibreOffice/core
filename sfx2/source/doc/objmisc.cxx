@@ -132,8 +132,6 @@ using namespace ::com::sun::star::container;
 #include "appbaslib.hxx"
 #include <openflag.hxx>                 // SFX_STREAM_READWRITE
 
-using namespace ::com::sun::star;
-
 // class SfxHeaderAttributes_Impl ----------------------------------------
 
 class SfxHeaderAttributes_Impl : public SvKeyValueIterator

@@ -73,7 +73,6 @@ using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
-using namespace com::sun::star::registry;
 
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;

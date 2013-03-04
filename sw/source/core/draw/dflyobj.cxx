@@ -46,10 +46,6 @@
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 
-
-using namespace ::com::sun::star;
-
-
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

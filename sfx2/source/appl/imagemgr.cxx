@@ -49,7 +49,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui;
-using namespace ::com::sun::star::frame;
 
 typedef boost::unordered_map< ::rtl::OUString,
                        WeakReference< XImageManager >,

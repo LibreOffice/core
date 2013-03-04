@@ -125,7 +125,6 @@ namespace pcr
     using namespace sdb;
     using namespace sdbc;
     using namespace sdbcx;
-    using namespace form;
     using namespace container;
     using namespace ui::dialogs;
     using namespace inspection;

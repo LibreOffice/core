@@ -54,11 +54,6 @@
 #undef Region
 
 using namespace ::com::sun::star;
-
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
-
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;

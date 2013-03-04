@@ -175,7 +175,6 @@ using namespace sdbc;
 using namespace sdb;
 using namespace ui;
 using namespace ui::dialogs;
-using namespace util;
 using namespace ::dbtools;
 using namespace ::rptui;
 using namespace ::dbaui;

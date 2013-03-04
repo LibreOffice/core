@@ -24,10 +24,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/syslocale.hxx>
 #include <comphelper/types.hxx>
-
-using namespace ::rtl;
-using namespace ::com::sun::star;
-
 #include <tools/rtti.hxx>
 #include <svl/itempool.hxx>
 #include <svl/memberid.hrc>

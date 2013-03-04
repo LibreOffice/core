@@ -94,7 +94,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 
 static const char ITEM_DESCRIPTOR_COMMANDURL[]        = "CommandURL";

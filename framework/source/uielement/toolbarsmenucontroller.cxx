@@ -67,7 +67,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 
 static const char CONFIGURE_TOOLBARS_CMD[]      = "ConfigureDialog";
