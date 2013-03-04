@@ -175,9 +175,9 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
     }
 }
 // -------------------------------------------------------------------------
-void UnoDataBrowserView::showStatus( const String& _rStatus )
+void UnoDataBrowserView::showStatus( const OUString& _rStatus )
 {
-    if (0 == _rStatus.Len())
+    if (_rStatus.isEmpty())
         hideStatus();
     else
     {
@@ -341,7 +341,7 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
 
 DBG_NAME(BrowserViewStatusDisplay)
 // -----------------------------------------------------------------------------
-BrowserViewStatusDisplay::BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const String& _rStatus )
+BrowserViewStatusDisplay::BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const OUString& _rStatus )
     :m_pView(_pView)
 {
     DBG_CTOR(BrowserViewStatusDisplay,NULL);
@@ -354,7 +354,7 @@ BrowserViewStatusDisplay::BrowserViewStatusDisplay( UnoDataBrowserView* _pView, 
 BrowserViewStatusDisplay::~BrowserViewStatusDisplay( )
 {
     if (m_pView)
-        m_pView->showStatus(String());
+        m_pView->showStatus(OUString());
 
     DBG_DTOR(BrowserViewStatusDisplay,NULL);
 }

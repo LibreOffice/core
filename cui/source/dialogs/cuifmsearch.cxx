@@ -83,7 +83,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 }
 
 //------------------------------------------------------------------------
-FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
+FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
     const Link& lnkContextSupplier)
     :ModalDialog(pParent, CUI_RES(RID_SVXDLG_SEARCHFORM))
     ,m_flSearchFor              (this, CUI_RES(FL_SEARCHFOR))
@@ -137,12 +137,12 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, co
         DBG_ASSERT(fmscInitial.arrFields.at(i).is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
 #endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
 
-    for (   ::std::vector< String >::const_iterator context = _rContexts.begin();
+    for (   ::std::vector< OUString >::const_iterator context = _rContexts.begin();
             context != _rContexts.end();
             ++context
         )
     {
-        m_arrContextFields.push_back(String());
+        m_arrContextFields.push_back(OUString());
         m_lbForm.InsertEntry(*context);
     }
     m_lbForm.SelectEntryPos(nInitialContext);
