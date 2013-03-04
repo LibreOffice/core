@@ -139,7 +139,7 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="usemasterpassword">
-                                <property name="label" translatable="yes">Protected _by a  master passwords (recomended)</property>
+                                <property name="label" translatable="yes">Protected _by a  master passwords (recommended)</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
