@@ -16,6 +16,24 @@
       "revId": "61b084a4fbb164b6bcde48cdb20b3510d3ccd2c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+yo\u003d",
+        "filename": "i18npool/source/localedata/data/tr_TR.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-04T14:32:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAV3///CI\u003d",
+      "revId": "61b084a4fbb164b6bcde48cdb20b3510d3ccd2c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
