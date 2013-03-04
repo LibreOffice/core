@@ -48,7 +48,7 @@ submit() {
 }
 
 case "$1" in
-	help|--help)
+	help|--help|"")
 		echo "Usage: ./logerrit subcommand [options]"
 		echo "simple and basic tool to interact with LibreOffice gerrit"
 		echo "subcommands:"
