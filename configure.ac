@@ -4869,6 +4869,10 @@ find_msvc_dlls()
         msvcdlls="$msvcdlls msvcm90.dll Microsoft.VC90.CRT.manifest"
     fi
 
+    if test "$enable_win_mozab_driver" = "yes" -a "$WITH_MINGW" != "YES" ; then
+        msvcdlls="$msvcdlls Microsoft.VC80.CRT.manifest msvcp80.dll msvcr80.dll"
+    fi
+
     for dll in $msvcdlls; do
         if ! test -f "$msvcdllpath/$dll"; then
             AC_MSG_ERROR([can not find $dll in $msvcdllpath])
