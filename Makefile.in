@@ -36,7 +36,13 @@ $(BUILDDIR)/config_host.mk : \
 		$(BUILDDIR)/autogen.lastrun
 	$(SRCDIR)/autogen.sh
 
-# dummy rule in case autogen.lastrun does not exist
+# dummy rule in case any of the above prerequisites are removed, so that a stale
+# Makefile still triggers autogen.sh, or in case autogen.lastrun does not yet
+# exist
+$(SRCDIR)/config_host.mk.in \
+$(SRCDIR)/Makefile.in \
+$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
+$(SRCDIR)/configure.ac \
 $(BUILDDIR)/autogen.lastrun:
 	@true
 
