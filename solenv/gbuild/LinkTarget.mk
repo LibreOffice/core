@@ -816,10 +816,19 @@ $$(call gb_Output_error,\
  gb_LinkTarget_add_linked_libs: use gb_LinkTarget_use_libraries instead.)
 endef
 
+define gb_PrintDeps_info
+$(info LibraryDep: $(4) links against $(2))
+endef
+
 define gb_LinkTarget_use_libraries
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
+endif
+
+# used by bin/module-deps.pl
+ifneq ($(ENABLE_PRINT_DEPS),)
+$$(eval $$(call gb_PrintDeps_info,$(1),$(2),$(3),$(4)))
 endif
 
 gb_LINKED_LIBS := $(if $(filter $(gb_MERGEDLIBS),$(2)), \
