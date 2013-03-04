@@ -1056,6 +1056,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         return;
     bInOuterResizePixel = sal_True;
 
+#if !defined(ANDROID) && !defined(IOS)
 // feststellen, ob Scrollbars angezeigt werden duerfen
     sal_Bool bShowH = sal_True,
          bShowV = sal_True,
@@ -1090,7 +1091,10 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     if(pVScrollbar->IsVisible(sal_False) != bShowV && !bAuto)
         ShowVScrollbar(bShowV);
     pVScrollbar->SetAuto(bAuto);
-
+#else
+    const sal_Bool bAuto = sal_False;
+    const sal_Bool bHAuto = sal_False;
+#endif
     SET_CURR_SHELL( pWrtShell );
     sal_Bool bRepeat = sal_False;
     long nCnt = 0;
@@ -1199,6 +1203,9 @@ void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 
 sal_Bool SwView::UpdateScrollbars()
 {
+#if defined(ANDROID) || defined(IOS)
+    return sal_True;
+#else
     sal_Bool bRet = sal_False;
     if ( !aVisArea.IsEmpty() )
     {
@@ -1243,6 +1250,7 @@ sal_Bool SwView::UpdateScrollbars()
         }
     }
     return bRet;
+#endif
 }
 
 void SwView::Move()
