@@ -1515,9 +1515,11 @@ SwFmtAnchor::~SwFmtAnchor()
 void SwFmtAnchor::SetAnchor( const SwPosition *pPos )
 {
     // anchor only to paragraphs, or start nodes in case of FLY_AT_FLY
+    // also allow table node, this is used when a table is selected and is converted to a frame by the UI
     assert(!pPos
             || ((FLY_AT_FLY == nAnchorId) &&
                     dynamic_cast<SwStartNode*>(&pPos->nNode.GetNode()))
+            || (FLY_AT_PARA == nAnchorId && dynamic_cast<SwTableNode*>(&pPos->nNode.GetNode()))
             || dynamic_cast<SwTxtNode*>(&pPos->nNode.GetNode()));
     m_pCntntAnchor .reset( (pPos) ? new SwPosition( *pPos ) : 0 );
     // Flys anchored AT paragraph should not point into the paragraph content
