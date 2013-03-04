@@ -125,6 +125,9 @@ namespace basegfx
         {
             return (rPixel.maPixelUnion.maCombinedRGBO.mnValue != maPixelUnion.maCombinedRGBO.mnValue);
         }
+
+        // empty element
+        static const BPixel& getEmptyBPixel();
     };
 
     //////////////////////////////////////////////////////////////////////////
