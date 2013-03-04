@@ -609,8 +609,8 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
         GLWin.dpy = reinterpret_cast<unx::Display*>(pChildSysData->pDisplay);
         GLWin.win = pChildSysData->aWindow;
 #if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-    if( mbHasTFPVisual )
-        GLWin.fbc = fbconfigs[i];
+        if( mbHasTFPVisual )
+            GLWin.fbc = fbconfigs[i];
 #endif
         GLWin.vi = vi;
         GLWin.GLXExtensions = unx::glXQueryExtensionsString( GLWin.dpy, GLWin.screen );
@@ -884,8 +884,10 @@ void OGLTransitionerImpl::impl_prepareSlides()
 // TODO
 #ifdef UNX
     if(GLWin.ctx)//if we have a rendering context, let's init the slides
-#endif
+        GLInitSlides();
+#else
     GLInitSlides();
+#endif
 
     SAL_WARN_IF(SlideBitmapLayout.PlaneStride != 0, "slideshow.opengl","only handle no plane stride now");
 

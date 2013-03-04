@@ -1834,6 +1834,7 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
     aSearchBtn.Enable( !bNoSearch );
     aSearchText.Enable( !bNoSearch );
     aSearchLB.Enable( !bNoSearch );
+    aNotesBtn.Enable();
 
     if ( ( SEARCH_OPTIONS_WHOLE_WORDS & nOptions ) != 0 )
         aWordBtn.Enable();
@@ -1843,7 +1844,6 @@ void SvxSearchDialog::EnableControls_Impl( const sal_uInt16 nFlags )
         aBackwardsBtn.Enable();
     else
         aBackwardsBtn.Disable();
-        aNotesBtn.Enable();
     if ( ( SEARCH_OPTIONS_REG_EXP & nOptions ) != 0 )
         aRegExpBtn.Enable();
     else

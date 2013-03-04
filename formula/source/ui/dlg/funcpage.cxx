@@ -235,7 +235,6 @@ const IFunctionDescription* FuncPage::GetFuncDesc( sal_uInt16 nPos ) const
 
 void FuncPage::InitLRUList()
 {
-    ::std::vector< const IFunctionDescription*> aRUFunctions;
     m_pFunctionManager->fillLastRecentlyUsedFunctions(aLRUList);
 }
 

@@ -1903,12 +1903,12 @@ void HwpReader::makeTableStyle(Table *tbl)
 // --------------- cell --------------------- //
     for (int i = 0 ; i < static_cast<int>(tbl->cells.size()); i++)
     {
-	std::list<TCell*>::iterator it = tbl->cells.begin();
+        std::list<TCell*>::iterator it = tbl->cells.begin();
 
-	for( int ii = 0; it != tbl->cells.end(); ++it, ii++ ){
-	if( ii == i )
-	  break;
-	}
+        for( int ii = 0; it != tbl->cells.end(); ++it, ii++ ){
+        if( ii == i )
+          break;
+    }
 
         TCell *tcell = *it;
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
@@ -2858,8 +2858,9 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
     int curr = para->cshape.index;
     if( d->bFirstPara && d->bInBody )
     {
-        if( !pstart )
+        if ( !pstart ) {
             STARTP;
+        }
         strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
         padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
         rstartEl(ascii("text:bookmark"), rList);
@@ -2869,8 +2870,9 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
     }
     if( d->bInHeader )
     {
-        if( !pstart )
+        if ( !pstart ) {
             STARTP;
+        }
         makeShowPageNum();
         d->bInHeader = false;
     }
@@ -3451,12 +3453,12 @@ void HwpReader::makeTable(TxtBox * hbox)
     int j = -1, k = -1;
     for (int i = 0 ; i < static_cast<int>(tbl->cells.size()); i++)
     {
-	std::list<TCell*>::iterator it = tbl->cells.begin();
+        std::list<TCell*>::iterator it = tbl->cells.begin();
 
-	for( int ii = 0; it != tbl->cells.end(); ++it, ii++ ){
-	if( ii == i )
-	  break;
-	}
+        for( int ii = 0; it != tbl->cells.end(); ++it, ii++ ){
+        if( ii == i )
+          break;
+    }
 
         TCell *tcell = *it;
         if( tcell->nRowIndex > j )

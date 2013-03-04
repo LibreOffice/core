@@ -632,7 +632,6 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         ResMgr& rMgr = CUI_MGR();
-        String aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
         String aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
         String aName( pDashList->GetDash( nPos )->GetName() );
         String aOldName = aName;

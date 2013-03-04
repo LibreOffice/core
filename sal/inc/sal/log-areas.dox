@@ -145,6 +145,7 @@ certain functionality.
 
 @section sfx2
 
+@li @c sfx2
 @li @c sfx2.appl
 @li @c sfx2.bastyp
 @li @c sfx2.config
@@ -152,6 +153,7 @@ certain functionality.
 @li @c sfx2.doc
 @li @c sfx2.notify
 @li @c sfx2.view
+@li @c sfx2.control
 
 @section slideshow
 
@@ -181,6 +183,8 @@ certain functionality.
 @li @c svx.stbcrtls - StatusBarControl
 @li @c svx.table
 @li @c svx.tbxcrtls - ToolboxControl
+@li @c svx.sdr
+@li @c svx.uno
 
 @section toolkit
 
@@ -236,6 +240,7 @@ certain functionality.
 @li @c vcl.gtk - Gtk+ 2/3 plugin
 @li @c vcl.layout - Widget layout
 @li @c vcl.sm - Session Manager
+@li @c vcl.window
 
 @section Writer
 
@@ -265,6 +270,11 @@ certain functionality.
 @li @c xmlsecurity.helper
 @li @c xmlsecurity.xmlsec - xmlsec wrapper
 
+@section dbaccess
+
+@li @c dbaccess
+@li @c dbaccess.ui
+
 @section other
 
 @li @c accessibility
@@ -277,7 +287,6 @@ certain functionality.
 @li @c cppcanvas
 @li @c cppuhelper
 @li @c cppu
-@li @c dbaccess
 @li @c forms
 @li @c helpcompiler
 @li @c linguistic

@@ -301,11 +301,11 @@ void SvLinkSource::NotifyDataChanged()
                 }
             }
 
-            if( pImpl->pTimer )
-            {
-                delete pImpl->pTimer;
-                pImpl->pTimer = NULL;
-            }
+        if( pImpl->pTimer )
+        {
+            delete pImpl->pTimer;
+            pImpl->pTimer = NULL;
+        }
     }
 }
 

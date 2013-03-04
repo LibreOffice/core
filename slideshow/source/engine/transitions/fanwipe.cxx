@@ -51,7 +51,7 @@ namespace internal {
     }
     else
     {
-        SAL_WARN_IF( m_fanIn, "slideshow", "FanWipe: m_fanIn is true ?" );
+        SAL_WARN_IF( m_fanIn, "slideshow.opengl", "FanWipe: m_fanIn is true ?" );
         res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 1.0, 0.5, 1.0));
     }
     return res;
