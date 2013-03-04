@@ -71,8 +71,6 @@ inline void Unx2DateAndTime( time_t nDate, Time& rTime, Date& rDate )
     rDate = Date( pTime->tm_mday, pTime->tm_mon + 1, pTime->tm_year + 1900 );
 }
 
-#define FSysFailOnErrorImpl()
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

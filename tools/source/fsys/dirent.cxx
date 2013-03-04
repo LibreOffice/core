@@ -768,7 +768,6 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
         return sal_True;
 #endif
 
-        FSysFailOnErrorImpl();
         DirEntryKind eKind = FileStat( *this, nAccess ).GetKind();
         if ( eKind & ( FSYS_KIND_FILE | FSYS_KIND_DIR ) )
         {
@@ -787,8 +786,6 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
 
 sal_Bool DirEntry::First()
 {
-    FSysFailOnErrorImpl();
-
         String    aUniPathName( GetPath().GetFull() );
         rtl::OString aPathName(rtl::OUStringToOString(aUniPathName, osl_getThreadTextEncoding()));
 
@@ -1454,7 +1451,6 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
                                 return sal_True;
                         else
                         {
-                                FSysFailOnErrorImpl();
                                 String aDirName(pNewDir->GetFull());
                                 rtl::OString bDirName(rtl::OUStringToOString(aDirName, osl_getThreadTextEncoding()));
 
@@ -1518,7 +1514,6 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         return FSYS_ERR_ALREADYEXISTS;
     }
 
-        FSysFailOnErrorImpl();
         String aFrom( GetFull() );
 
         String aTo( aDest.GetFull() );
@@ -1649,7 +1644,6 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
         FSysError eError = FSYS_ERR_OK;
-        FSysFailOnErrorImpl();
 
         // Terminate name string with two '0'
         String aTmpName( GetFull() );
