@@ -10,11 +10,14 @@
 $(eval $(call gb_Module_Module,unoidl))
 
 $(eval $(call gb_Module_add_targets,unoidl, \
-    $(if $(filter DESKTOP,$(BUILD_TYPE)), \
-        Executable_reg2unoidl \
-    ) \
     Library_unoidl \
     Package_inc \
 ))
+
+ifneq ($(CROSS_COMPILING),YES)
+$(eval $(call gb_Module_add_targets,unoidl, \
+    Executable_reg2unoidl \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
