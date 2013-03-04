@@ -8224,13 +8224,13 @@ void Window::ImplCallActivateListeners( Window *pOld )
             //           eg, undocked docking windows (ImplDockFloatWin)
             // #104714#, revert the changes for 100759 because it has a side effect when pOld is a dialog
             //           additionally the gallery is not dockable anymore, so 100759 canot occur
-            if ( ImplGetParent() ) /* && mpWindowImpl->mpFrameWindow == ImplGetParent()->mpWindowImpl->mpFrameWindow ) */
-                ImplGetParent()->ImplCallActivateListeners( pOld );
-            else if( (mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
-            {
-                // top level frame reached: store hint for DefModalDialogParent
-                ImplGetSVData()->maWinData.mpActiveApplicationFrame = mpWindowImpl->mpFrameWindow;
-            }
+        if ( ImplGetParent() ) /* && mpWindowImpl->mpFrameWindow == ImplGetParent()->mpWindowImpl->mpFrameWindow ) */
+            ImplGetParent()->ImplCallActivateListeners( pOld );
+        else if( (mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
+        {
+            // top level frame reached: store hint for DefModalDialogParent
+            ImplGetSVData()->maWinData.mpActiveApplicationFrame = mpWindowImpl->mpFrameWindow;
+        }
         //}
     }
 }

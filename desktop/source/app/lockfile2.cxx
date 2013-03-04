@@ -35,7 +35,6 @@ bool Lockfile_execWarning( Lockfile * that )
     aConfig.SetGroup( LOCKFILE_GROUP );
     rtl::OString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY );
     rtl::OString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY );
-    rtl::OString aStamp = aConfig.ReadKey( LOCKFILE_STAMPKEY );
     rtl::OString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY );
 
     // display warning and return response

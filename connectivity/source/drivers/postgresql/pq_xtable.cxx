@@ -293,8 +293,6 @@ void Table::alterColumnByIndex(
     Reference< com::sun::star::container::XIndexAccess > colums =
         Reference< com::sun::star::container::XIndexAccess>( getColumns(), UNO_QUERY );
     Reference< com::sun::star::beans::XPropertySet> column(colums->getByIndex( index ), UNO_QUERY );
-    OUString oldName = extractStringProperty( column, getStatics().NAME );
-    OUString newName = extractStringProperty( descriptor, getStatics().NAME );
     ::pq_sdbc_driver::alterColumnByDescriptor(
         extractStringProperty( this, getStatics().SCHEMA_NAME ),
         extractStringProperty( this, getStatics().NAME ),
@@ -302,7 +300,6 @@ void Table::alterColumnByIndex(
         m_conn->createStatement(),
         column,
         descriptor );
-//     m_pColumns->rename( oldName, newName );
     m_pColumns->refresh();
 }
 

@@ -321,9 +321,7 @@ void Tables::appendByDescriptor(
             while( xEnum.is() && xEnum->hasMoreElements() )
             {
                 Reference< XPropertySet > column( xEnum->nextElement(), UNO_QUERY );
-                // help text seems to be used by OOo rather than Description
-//                 OUString description = extractStringProperty( column, st.HELP_TEXT );
-                OUString helpText = extractStringProperty( column,st.DESCRIPTION );
+                description = extractStringProperty( column,st.DESCRIPTION );
                 if( description.getLength() )
                 {
                     buf = OUStringBuffer( 128 );

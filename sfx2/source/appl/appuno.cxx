@@ -209,7 +209,7 @@ static char const sDocumentService[] = "DocumentService";
 
 static bool isMediaDescriptor( sal_uInt16 nSlotId )
 {
-	return ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC ||
+    return ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC ||
              nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVEDOC ||
              nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF ||
              nSlotId == SID_DIRECTEXPORTDOCASPDF );
@@ -233,7 +233,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         return;
 
     const ::com::sun::star::beans::PropertyValue* pPropsVal = rArgs.getConstArray();
-	if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
+    if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
         const SfxType* pType = pSlot->GetType();
@@ -352,11 +352,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         sal_Int32 nFoundArgs = 0;
 #endif
         // slot is a method
-		bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
-		sal_uInt16 nMaxArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
+        bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
+        sal_uInt16 nMaxArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
         for ( sal_uInt16 nArgs=0; nArgs<nMaxArgs; nArgs++ )
         {
-			const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArgs] : pSlot->GetFormalArgument( nArgs );
+            const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArgs] : pSlot->GetFormalArgument( nArgs );
             SfxPoolItem* pItem = rArg.CreateItem();
             if ( !pItem )
             {
@@ -1010,8 +1010,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     else
     {
         // slot is a method
-		bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
-		sal_uInt16 nFormalArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->GetFormalArgumentCount();
+        bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
+        sal_uInt16 nFormalArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->GetFormalArgumentCount();
         for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
         {
             // check every formal argument of the method
@@ -1169,12 +1169,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 if ( !pSlot->IsMode(SFX_SLOT_METHOD) && nId == rSet.GetPool()->GetWhich( pSlot->GetSlotId() ) )
                     continue;
 
-				bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
-				sal_uInt16 nFormalArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
+                bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
+                sal_uInt16 nFormalArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
                 sal_uInt16 nArg;
                 for ( nArg=0; nArg<nFormalArgs; ++nArg )
                 {
-					const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArg] : pSlot->GetFormalArgument( nArg );
+                    const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArg] : pSlot->GetFormalArgument( nArg );
                     sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
                     if ( nId == nWhich )
                         break;
@@ -2049,7 +2049,7 @@ throw (::com::sun::star::uno::RuntimeException)
     // Gruppe anw"ahlen ( Gruppe 0 ist intern )
     for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
     {
-        String aName = pAppSlotPool->SeekGroup( i );
+        pAppSlotPool->SeekGroup( i );
         const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
         while ( pSfxSlot )
         {
@@ -2085,7 +2085,7 @@ throw (::com::sun::star::uno::RuntimeException)
         // Gruppe anw"ahlen ( Gruppe 0 ist intern )
         for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
         {
-            String aName = pAppSlotPool->SeekGroup( i );
+            pAppSlotPool->SeekGroup( i );
             const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
             if ( pSfxSlot )
             {

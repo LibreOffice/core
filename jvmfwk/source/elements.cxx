@@ -238,7 +238,7 @@ void NodeJava::load()
     {
         if (!prepareSettingsDocument())
         {
-            SAL_INFO("jvmfwk", "no path to load user settings document from");
+            SAL_INFO("jfw.level1", "no path to load user settings document from");
             return;
         }
     }
@@ -424,7 +424,7 @@ void NodeJava::write() const
 
     if (!prepareSettingsDocument())
     {
-        SAL_INFO("jvmfwk", "no path to write settings document to");
+        SAL_INFO("jfw.level1", "no path to write settings document to");
         return;
     }
 

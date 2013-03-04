@@ -112,7 +112,7 @@ void ODocumentInfoPreview::fill(
             value = conv->convertToSimpleType(aAny, css::uno::TypeClass_STRING).
                 get< rtl::OUString >();
         } catch (css::script::CannotConvertException & e) {
-            SAL_INFO("svtools.contr", "ignored CannotConvertException " << e.Message);
+            SAL_INFO("svtools.contnr", "ignored CannotConvertException " << e.Message);
         }
         if (!value.isEmpty()) {
             insertEntry(name, value);

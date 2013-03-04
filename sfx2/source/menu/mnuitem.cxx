@@ -172,7 +172,7 @@ void SfxMenuControl::StateChanged
         pOwnMenu->EnableItem( GetId(), sal_True );
     else
 #endif
-    pOwnMenu->EnableItem( GetId(), bIsObjMenu
+        pOwnMenu->EnableItem( GetId(), bIsObjMenu
                 ? 0 != pOwnMenu->GetSVMenu()->GetPopupMenu( GetId() )
                 : eState != SFX_ITEM_DISABLED );
 

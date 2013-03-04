@@ -411,20 +411,20 @@ again:  do {                    /* Collect the token    */
     }
     else if (t == LET) {            /* ID must be a macro   */
         if (streq(token, "defined")) {  /* Or defined name  */
-        c1 = c = skipws();
-        if (c == '(')           /* Allow defined(name)  */
-            c = skipws();
-        if (type[c] == LET) {
-            evalue = (lookid(c) != NULL);
-            if (c1 != '('       /* Need to balance  */
-             || skipws() == ')')    /* Did we balance?  */
-            return (DIG);       /* Parsed ok        */
-        }
-        cerror("Bad #if ... defined() syntax", NULLST);
-        return (OP_FAIL);
+            c1 = c = skipws();
+            if (c == '(')           /* Allow defined(name)  */
+                c = skipws();
+            if (type[c] == LET) {
+                evalue = (lookid(c) != NULL);
+                if (c1 != '('       /* Need to balance  */
+                    || skipws() == ')')    /* Did we balance?  */
+                return (DIG);       /* Parsed ok        */
+            }
+            cerror("Bad #if ... defined() syntax", NULLST);
+            return (OP_FAIL);
         }
         else if (streq(token, "sizeof"))    /* New sizeof hackery   */
-        return (dosizeof());        /* Gets own routine */
+            return (dosizeof());        /* Gets own routine */
         /*
          * The Draft ANSI C Standard says that an undefined symbol
          * in an #if has the value zero.  We are a bit pickier,
@@ -433,7 +433,7 @@ again:  do {                    /* Collect the token    */
          */
 #ifdef STRICT_UNDEF
         if (!skip)
-        cwarn("undefined symbol \"%s\" in #if, 0 used", token);
+            cwarn("undefined symbol \"%s\" in #if, 0 used", token);
 #endif
         evalue = 0;
         return (DIG);
@@ -633,13 +633,13 @@ evalnum(int c)
     for (;;) {
         c1 = c;
         if (isascii(c) && isupper(c1))
-        c1 = tolower(c1);
+            c1 = tolower(c1);
 #ifdef EBCDIC
         if (c1 <= 'f')
 #else
         if (c1 >= 'a')
 #endif
-        c1 -= ('a' - 10);
+            c1 -= ('a' - 10);
         else c1 -= '0';
         if (c1 < 0 || c1 >= base)
             break;
