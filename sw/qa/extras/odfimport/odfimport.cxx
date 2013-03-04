@@ -43,6 +43,7 @@ public:
     void testPageStyleLayoutDefault();
     void testPageStyleLayoutRight();
     void testFdo60842();
+    void testFdo56272();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -63,6 +64,7 @@ void Test::run()
         {"hello.odt", &Test::testPageStyleLayoutDefault},
         {"hello.odt", &Test::testPageStyleLayoutRight},
         {"fdo60842.odt", &Test::testFdo60842},
+        {"fdo56272.odt", &Test::testFdo56272},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -301,6 +303,15 @@ void Test::testFdo60842()
     getCell(xTable, "C1", "USD"); // this is the cell with office:string-value
     getCell(xTable, "D1", "");
     getCell(xTable, "E1", "01/04/2012");
+}
+
+void Test::testFdo56272()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    // Vertical position was incorrect.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
