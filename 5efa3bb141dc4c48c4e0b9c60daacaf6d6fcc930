@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+z8\u003d",
+        "filename": "sal/inc/rtl/ustrbuf.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1000099
+      },
+      "writtenOn": "2013-03-04T12:40:18Z",
+      "side": 1,
+      "message": "Can we not reuse the other copy(begin, count) function?",
+      "revId": "5efa3bb141dc4c48c4e0b9c60daacaf6d6fcc930",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
