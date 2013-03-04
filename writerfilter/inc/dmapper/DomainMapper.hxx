@@ -117,6 +117,7 @@ public:
     */
     void processDeferredCharacterProperties(
         const std::map< sal_Int32, com::sun::star::uno::Any >& deferredCharacterProperties );
+    void setInTableStyleRunProps(bool bInTableStyleRunProps);
 
 private:
     // Stream

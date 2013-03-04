@@ -670,6 +670,9 @@ public:
 
     /// If we're importing into a new document, or just pasting to an existing one.
     bool IsNewDoc();
+
+    /// If we're inside <w:rPr>, inside <w:style w:type="table">
+    bool m_bInTableStyleRunProps;
 };
 } //namespace dmapper
 } //namespace writerfilter

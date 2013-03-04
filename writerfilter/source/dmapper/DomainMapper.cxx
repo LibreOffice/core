@@ -2136,7 +2136,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             {
                 rContext->Insert( PROP_CHAR_HEIGHT_COMPLEX, true, aVal );
             }
-            else
+            else if (!m_pImpl->m_bInTableStyleRunProps)
             {
                 //Asian get the same value as Western
                 rContext->Insert( PROP_CHAR_HEIGHT, true, aVal );
@@ -3294,6 +3294,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     }
 }
 
+void DomainMapper::setInTableStyleRunProps(bool bInTableStyleRunProps)
+{
+    m_pImpl->m_bInTableStyleRunProps = bInTableStyleRunProps;
+}
 
 void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32, uno::Any >& deferredCharacterProperties )
 {

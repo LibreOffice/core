@@ -594,7 +594,12 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
 
                     PropertyMapPtr pProps(new PropertyMap());
+                    bool bTableStyleRunProps = m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE && nSprmId == NS_ooxml::LN_CT_Style_rPr;
+                    if (bTableStyleRunProps)
+                        m_pImpl->m_rDMapper.setInTableStyleRunProps(true);
                     m_pImpl->m_rDMapper.sprmWithProps( rSprm, pProps );
+                    if (bTableStyleRunProps)
+                        m_pImpl->m_rDMapper.setInTableStyleRunProps(false);
 
                     m_pImpl->m_pCurrentEntry->pProperties->InsertProps(pProps);
 

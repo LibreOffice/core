@@ -186,7 +186,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bUsingEnhancedFields( false ),
         m_bSdt(false),
         m_xInsertTextRange(xInsertTextRange),
-        m_bIsNewDoc(bIsNewDoc)
+        m_bIsNewDoc(bIsNewDoc),
+        m_bInTableStyleRunProps(false)
 {
     appendTableManager( );
     GetBodyText();
