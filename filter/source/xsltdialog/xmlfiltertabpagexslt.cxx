@@ -163,7 +163,6 @@ OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox& rURLBox )
     }
     else
     {
-        const OUString aBaseURL ( rURLBox.GetBaseURL() );
         osl::FileBase::getFileURLFromSystemPath( aStrPath, aURL );
     }
 

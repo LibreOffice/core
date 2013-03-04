@@ -604,7 +604,6 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
     SvTreeListEntry * pEntry = m_aLB_ROLE.FirstSelected();
     if( pEntry )
     {
-        OUString aRange( m_aEDT_RANGE.GetText());
         OUString aSelectedRoleUI = lcl_GetSelectedRole( m_aLB_ROLE, true );
         OUString aSelectedRange = lcl_GetSelectedRolesRange( m_aLB_ROLE );
 

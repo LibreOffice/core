@@ -223,7 +223,7 @@ ScVbaFont::getSize() throw ( uno::RuntimeException )
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_HEIGHT, sal_True, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
-        return ScVbaFont_BASE::getSize();
+    return ScVbaFont_BASE::getSize();
 }
 
 void SAL_CALL

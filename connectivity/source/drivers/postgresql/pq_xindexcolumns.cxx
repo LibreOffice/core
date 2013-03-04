@@ -192,7 +192,6 @@ void IndexColumns::appendByDescriptor(
            ::com::sun::star::container::ElementExistException,
            ::com::sun::star::uno::RuntimeException)
 {
-    OUString name = extractStringProperty( future, getStatics().NAME );
     throw com::sun::star::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.appendByDescriptor not yet implemented",
         *this, OUString(), 1, Any() );

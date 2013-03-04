@@ -859,8 +859,8 @@ namespace svxform
 
             // test for 5)
     //      if ( bDropTargetIsComponent && (pDropTargetParent != pCurrentParent) )
-                if ( bDropTargetIsComponent )   // TODO : die obige Zeile wieder rein, dann muss aber ExecuteDrop das Vertauschen auch beherrschen
-                    return DND_ACTION_NONE;
+            if ( bDropTargetIsComponent )   // TODO : die obige Zeile wieder rein, dann muss aber ExecuteDrop das Vertauschen auch beherrschen
+                return DND_ACTION_NONE;
 
             // test for 3)
             if ( IsFormEntry(pCurrent) )

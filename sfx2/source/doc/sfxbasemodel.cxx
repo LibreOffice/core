@@ -3158,7 +3158,7 @@ void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Refe
         m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XDocumentEventListener >*)0 ) );
     if ( pIC )
     {
-        SAL_INFO("sfx2", "SfxDocumentEvent: " + aName);
+        SAL_INFO("sfx2.doc", "SfxDocumentEvent: " + aName);
 
         document::DocumentEvent aDocumentEvent( (frame::XModel*)this, aName, xController, uno::Any() );
 
@@ -3171,7 +3171,7 @@ void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Refe
     pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ) );
     if ( pIC )
     {
-        SAL_INFO("sfx2", "SfxEvent: " + aName);
+        SAL_INFO("sfx2.doc", "SfxEvent: " + aName);
 
         document::EventObject aEvent( (frame::XModel*)this, aName );
 
