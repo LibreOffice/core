@@ -770,7 +770,7 @@ namespace editeng
         {
             try
             {
-                ::rtl::OUString aConvText = xExtConverter->getConversionWithOffset(
+                xExtConverter->getConversionWithOffset(
                     m_sCurrentPortion,
                     m_nCurrentStartIndex,
                     m_nCurrentEndIndex - m_nCurrentStartIndex,

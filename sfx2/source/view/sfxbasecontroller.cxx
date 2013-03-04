@@ -1160,7 +1160,7 @@ throw (::com::sun::star::uno::RuntimeException)
     // Select Group ( Group 0 is internal )
     for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
     {
-        String aName = pSlotPool->SeekGroup( i );
+        pSlotPool->SeekGroup( i );
         const SfxSlot* pSfxSlot = pSlotPool->FirstSlot();
         while ( pSfxSlot )
         {
@@ -1196,7 +1196,7 @@ throw (::com::sun::star::uno::RuntimeException)
         SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
         for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
         {
-            String aName = pSlotPool->SeekGroup( i );
+            pSlotPool->SeekGroup( i );
             const SfxSlot* pSfxSlot = pSlotPool->FirstSlot();
             if ( pSfxSlot )
             {

@@ -260,38 +260,32 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( "com.sun.star.text.TextDocument" );
     }
-    else
-    if ( sDocumentService == "web" )
+    else if ( sDocumentService == "web" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( "com.sun.star.text.WebDocument" );
     }
-    else
-    if ( sDocumentService == "global" )
+    else if ( sDocumentService == "global" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( "com.sun.star.text.GlobalDocument" );
     }
-    else
-    if ( sDocumentService == "calc" )
+    else if ( sDocumentService == "calc" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" );
     }
-    else
-    if ( sDocumentService == "draw" )
+    else if ( sDocumentService == "draw" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( "com.sun.star.drawing.DrawingDocument" );
     }
-    else
-    if ( sDocumentService == "impress" )
+    else if ( sDocumentService == "impress" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( "com.sun.star.presentation.PresentationDocument" );
     }
-    else
-    if ( sDocumentService == "math" )
+    else if ( sDocumentService == "math" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( "com.sun.star.formula.FormulaProperties" );

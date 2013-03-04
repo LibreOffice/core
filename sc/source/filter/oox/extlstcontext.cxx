@@ -218,17 +218,8 @@ ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const A
     }
 }
 
-void ExtGlobalContext::onStartElement( const AttributeList& rAttribs )
+void ExtGlobalContext::onStartElement( const AttributeList& /*rAttribs*/ )
 {
-    if(rAttribs.hasAttribute( XML_id ))
-    {
-        rtl::OUString aId = rAttribs.getString( XML_id, rtl::OUString() );
-    }
-
-    if(rAttribs.hasAttribute( XML_uri ))
-    {
-        rtl::OUString aUri = rAttribs.getString( XML_uri, rtl::OUString() );
-    }
 }
 
 ExtLstGlobalContext::ExtLstGlobalContext( WorksheetFragment& rFragment ):

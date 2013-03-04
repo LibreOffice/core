@@ -1398,7 +1398,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
                                                         "application/vnd.openxmlformats-officedocument.presentationml.slide+xml" );
 
     if( mpSlidesFSArray.size() < mnPages )
-    mpSlidesFSArray.resize( mnPages );
+        mpSlidesFSArray.resize( mnPages );
     mpSlidesFSArray[ nPageNum ] = pFS;
 
     const char* pShow = NULL;
@@ -1486,7 +1486,7 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 
     // add slide implicit relation to notes
     if( mpSlidesFSArray.size() >= nPageNum )
-    addRelation( mpSlidesFSArray[ nPageNum ]->getOutputStream(),
+        addRelation( mpSlidesFSArray[ nPageNum ]->getOutputStream(),
              "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide",
              OUStringBuffer()
              .appendAscii( "../notesSlides/notesSlide" )
@@ -1560,7 +1560,7 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
                       .makeStringAndClear(),
                       "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml" );
     if( mpMasterFSArray.size() < mnMasterPages )
-    mpMasterFSArray.resize( mnMasterPages );
+        mpMasterFSArray.resize( mnMasterPages );
     mpMasterFSArray[ nPageNum ] = pFS;
 
     // write theme per master

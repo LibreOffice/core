@@ -188,8 +188,6 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
         bResult &&
         getDimension() == 3 )
     {
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
         bool bGeomFound = false, bGeomAmbiguous = false;
         sal_Int32 aCommonGeom = DiagramHelper::getGeometry3D( xDiagram, bGeomFound, bGeomAmbiguous );

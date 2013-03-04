@@ -219,7 +219,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
     DbgOutf( "SBX: Search %.*s %s %s in %s",
              nLvl++, "                              ",
              ( t >= SbxCLASS_DONTCARE && t <= SbxCLASS_OBJECT )
-             ? pCls[ t-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
+             ? pCls[ t-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr2.getStr() );
 #endif
 
     if( !GetAll( t ) )
@@ -504,7 +504,7 @@ void SbxObject::Insert( SbxVariable* pVar )
         DbgOutf( "SBX: Insert %s %s in %s",
                  ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
                    pVar->GetClass() <= SbxCLASS_OBJECT )
-                 ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
+                 ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr2.getStr() );
 #endif
     }
 }
@@ -547,7 +547,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         DbgOutf( "SBX: Insert %s %s in %s",
                  ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
                    pVar->GetClass() <= SbxCLASS_OBJECT )
-                 ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr1.getStr() );
+                 ? pCls[ pVar->GetClass()-1 ] : "Unknown class", aNameStr1.getStr(), aNameStr2.getStr() );
 #endif
     }
 }

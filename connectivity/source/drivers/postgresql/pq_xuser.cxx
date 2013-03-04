@@ -184,7 +184,6 @@ sal_Int32 User::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
         Statics & st = getStatics();
-        rtl::OUString user = extractStringProperty( this, st.NAME );
 
         rtl::OUStringBuffer buf( 128 );
         buf.append( "User::getPrivileges[" + extractStringProperty( this, st.NAME ) +

@@ -2991,8 +2991,6 @@ sal_Bool DbFilterField::commitControl()
             }
             else
             {
-                // display the error and return sal_False
-                OUString aTitle( SVX_RESSTR(RID_STR_SYNTAXERROR) );
 
                 SQLException aError;
                 aError.Message = aErrorMsg;
