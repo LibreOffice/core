@@ -23,9 +23,9 @@ export dbglevel:=2
 include $(SOLARENV)/gbuild/gbuild.mk
 
 findunusedcode:
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.build
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild
 	ooinstall -l $(DEVINSTALLDIR)/opt
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.build subsequentcheck
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild subsequentcheck
 	callanalyse $(WORKDIR)/LinkTarget/*/* > unusedcode.all
 
 # vim: set noet sw=4 ts=4:

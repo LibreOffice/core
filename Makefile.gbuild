@@ -7,13 +7,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq (,$(SOLARENV))
-include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))config_host.mk
+ifeq (,$(gb_Side))
+gb_Side := host
+endif
+ifeq (,$(BUILDDIR))
+BUILDDIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 endif
 
-gb_Side := host
+include $(BUILDDIR)/config_$(gb_Side).mk
+
 include $(SOLARENV)/gbuild/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/RepositoryModule.mk))
+$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/RepositoryModule_$(gb_Side).mk))
 
 # vim: set noet sw=4 ts=4:
