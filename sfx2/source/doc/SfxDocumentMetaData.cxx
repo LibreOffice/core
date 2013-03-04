@@ -648,10 +648,8 @@ SfxDocumentMetaData::getURLProperties(
                 "com.sun.star.beans.PropertyBag"), m_xContext),
         css::uno::UNO_QUERY_THROW);
     try {
-        OUString dburl =
-            OUString("DocumentBaseURL");
-        OUString hdn =
-            OUString("HierarchicalDocumentName");
+        OUString dburl("DocumentBaseURL");
+        OUString hdn("HierarchicalDocumentName");
         for (sal_Int32 i = 0; i < i_rMedium.getLength(); ++i) {
             if (i_rMedium[i].Name.equals(dburl)) {
                 xPropArg->addProperty(
@@ -682,8 +680,7 @@ getNodeText(css::uno::Reference<css::xml::dom::XNode> i_xNode)
         throw (css::uno::RuntimeException)
 {
     if (!i_xNode.is()) throw css::uno::RuntimeException(
-        OUString(
-                "SfxDocumentMetaData::getNodeText: argument is null"), i_xNode);
+        OUString("SfxDocumentMetaData::getNodeText: argument is null"), i_xNode);
     for (css::uno::Reference<css::xml::dom::XNode> c = i_xNode->getFirstChild();
             c.is();
             c = c->getNextSibling()) {
@@ -762,8 +759,7 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
     } catch (const css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
-                OUString(
-                        "SfxDocumentMetaData::setMetaText: DOM exception"),
+                OUString("SfxDocumentMetaData::setMetaText: DOM exception"),
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
 }
@@ -899,8 +895,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
     } catch (const css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
-                OUString(
-                        "SfxDocumentMetaData::setMetaList: DOM exception"),
+                OUString("SfxDocumentMetaData::setMetaList: DOM exception"),
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
 }
@@ -1040,8 +1035,7 @@ SfxDocumentMetaData::updateElement(const char *i_name,
     } catch (const css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
-                OUString(
-                    "SfxDocumentMetaData::updateElement: DOM exception"),
+                OUString("SfxDocumentMetaData::updateElement: DOM exception"),
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
 }
@@ -1141,8 +1135,7 @@ void SAL_CALL SfxDocumentMetaData::init(
         css::uno::Reference<css::xml::dom::XDocument> i_xDoc)
 {
     if (!i_xDoc.is()) throw css::uno::RuntimeException(
-        OUString(
-                "SfxDocumentMetaData::init: no DOM tree given"), *this);
+        OUString("SfxDocumentMetaData::init: no DOM tree given"), *this);
 
     css::uno::Reference<css::xml::xpath::XXPathAPI> xPath = css::xml::xpath::XPathAPI::create(m_xContext);
 
@@ -1220,8 +1213,7 @@ void SAL_CALL SfxDocumentMetaData::init(
         } catch (const css::xml::dom::DOMException & e) {
             css::uno::Any a(e);
             throw css::lang::WrappedTargetRuntimeException(
-                    OUString(
-                            "SfxDocumentMetaData::init: DOM exception"),
+                    OUString("SfxDocumentMetaData::init: DOM exception"),
                     css::uno::Reference<css::uno::XInterface>(*this), a);
         }
     }
@@ -1703,9 +1695,8 @@ SfxDocumentMetaData::setAutoloadSecs(::sal_Int32 the_value)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
     if (the_value < 0) throw css::lang::IllegalArgumentException(
-        OUString(
-            "SfxDocumentMetaData::setAutoloadSecs: argument is negative"),
-            *this, 0);
+        OUString("SfxDocumentMetaData::setAutoloadSecs: argument is negative"),
+        *this, 0);
     ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
     if (m_AutoloadSecs != the_value) {
@@ -1817,9 +1808,8 @@ SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
     if (the_value < 0) throw css::lang::IllegalArgumentException(
-        OUString(
-                "SfxDocumentMetaData::setEditingCycles: argument is negative"),
-                *this, 0);
+        OUString("SfxDocumentMetaData::setEditingCycles: argument is negative"),
+        *this, 0);
     OUStringBuffer buf;
     ::sax::Converter::convertNumber(buf, the_value);
     setMetaTextAndNotify("meta:editing-cycles", buf.makeStringAndClear());
@@ -1837,9 +1827,8 @@ SfxDocumentMetaData::setEditingDuration(::sal_Int32 the_value)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
     if (the_value < 0) throw css::lang::IllegalArgumentException(
-        OUString(
-            "SfxDocumentMetaData::setEditingDuration: argument is negative"),
-            *this, 0);
+        OUString("SfxDocumentMetaData::setEditingDuration: argument is negative"),
+        *this, 0);
     setMetaTextAndNotify("meta:editing-duration", durationToText(the_value));
 }
 
@@ -1891,8 +1880,7 @@ SfxDocumentMetaData::loadFromStorage(
            css::lang::WrappedTargetException, css::io::IOException)
 {
     if (!xStorage.is()) throw css::lang::IllegalArgumentException(
-        OUString("SfxDocumentMetaData::loadFromStorage:"
-                " argument is null"), *this, 0);
+        OUString("SfxDocumentMetaData::loadFromStorage: argument is null"), *this, 0);
     ::osl::MutexGuard g(m_aMutex);
 
     // open meta data file
@@ -2060,8 +2048,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
         throw;
     } catch (const css::uno::Exception & e) {
         throw css::lang::WrappedTargetException(
-                OUString(
-                    "SfxDocumentMetaData::loadFromMedium: exception"),
+                OUString("SfxDocumentMetaData::loadFromMedium: exception"),
                 css::uno::Reference<css::uno::XInterface>(*this),
                 css::uno::makeAny(e));
     }
@@ -2185,8 +2172,7 @@ SfxDocumentMetaData::createClone()
     } catch (const css::uno::Exception & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
-                OUString(
-                    "SfxDocumentMetaData::createClone: exception"),
+                OUString("SfxDocumentMetaData::createClone: exception"),
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
     return css::uno::Reference<css::util::XCloneable> (pNew);
@@ -2314,8 +2300,7 @@ void SfxDocumentMetaData::createUserDefined()
                 m_xContext->getServiceManager());
         m_xUserDefined.set(
             xMsf->createInstanceWithContext(
-                OUString(
-                    "com.sun.star.beans.PropertyBag"), m_xContext),
+                OUString("com.sun.star.beans.PropertyBag"), m_xContext),
             css::uno::UNO_QUERY_THROW);
         const css::uno::Reference<css::lang::XInitialization> xInit(
             m_xUserDefined, css::uno::UNO_QUERY);
@@ -2347,16 +2332,16 @@ void SfxDocumentMetaData::createUserDefined()
 namespace comp_CompatWriterDocProps {
 
     OUString SAL_CALL _getImplementationName() {
-        return OUString(
-            "CompatWriterDocPropsImpl");
-}
+        return OUString("CompatWriterDocPropsImpl");
+    }
 
-   css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
-   {
+    css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
+    {
         css::uno::Sequence< rtl::OUString > aServiceNames(1);
         aServiceNames[ 0 ] = rtl::OUString( "com.sun.star.writer.DocumentProperties"  );
         return aServiceNames;
-   }
+    }
+
     css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
         const css::uno::Reference< css::uno::XComponentContext > & context)
             SAL_THROW((css::uno::Exception))
@@ -2366,18 +2351,17 @@ namespace comp_CompatWriterDocProps {
     }
 
 }
+
 namespace comp_SfxDocumentMetaData {
 
 OUString SAL_CALL _getImplementationName() {
-    return OUString(
-        "SfxDocumentMetaData");
+    return OUString("SfxDocumentMetaData");
 }
 
 css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > s(1);
-    s[0] = OUString(
-        "com.sun.star.document.DocumentProperties");
+    s[0] = OUString("com.sun.star.document.DocumentProperties");
     return s;
 }
 

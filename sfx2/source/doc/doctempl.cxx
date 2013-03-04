@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -104,8 +105,6 @@ using ::std::advance;
 
 #define TARGET_DIR_URL          "TargetDirURL"
 #define COMMAND_TRANSFER        "transfer"
-
-#define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
 
 //========================================================================
 
@@ -1668,11 +1667,9 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     if ( mbConstructed )
         return sal_True;
 
-    uno::Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     uno::Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-    OUString aService( SERVICENAME_DOCINFO  );
-    uno::Reference< XPersist > xInfo( xFactory->createInstance( aService ), UNO_QUERY );
+    uno::Reference< XPersist > xInfo( document::DocumentProperties::create(xContext), UNO_QUERY );
     mxInfo = xInfo;
 
     mxTemplates = frame::DocumentTemplates::create(xContext);
@@ -1695,7 +1692,7 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     if ( aLongNames.Count() )
         maStandardGroup = aLongNames.GetString( 0 );
 
-    Content aTemplRoot( aRootContent, aCmdEnv, comphelper::getProcessComponentContext() );
+    Content aTemplRoot( aRootContent, aCmdEnv, xContext );
     CreateFromHierarchy( aTemplRoot );
 
     return sal_True;

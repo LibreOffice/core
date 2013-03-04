@@ -178,7 +178,7 @@ class SfxDocTplService_Impl
 {
     uno::Reference< XMultiServiceFactory >           mxFactory;
     uno::Reference< XCommandEnvironment >            maCmdEnv;
-    uno::Reference<XDocumentProperties>  m_xDocProps;
+    uno::Reference< XDocumentProperties>             m_xDocProps;
     uno::Reference< XTypeDetection >                 mxType;
 
     ::osl::Mutex                maMutex;
@@ -1809,12 +1809,10 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        if ( !xFactory.is() )
-            throw uno::RuntimeException();
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
         // get document service name
-        uno::Reference< frame::XModuleManager2 > xModuleManager(
-            frame::ModuleManager::create(comphelper::getComponentContext(xFactory)) );
+        uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
         sDocServiceName = xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) );
         if ( sDocServiceName.isEmpty() )
             throw uno::RuntimeException();
@@ -1823,7 +1821,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         ::rtl::OUString aFilterName;
 
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
-                configuration::theDefaultProvider::get( comphelper::getComponentContext(xFactory) );
+                configuration::theDefaultProvider::get( xContext );
 
         uno::Sequence< uno::Any > aArgs( 1 );
         beans::PropertyValue aPathProp;
