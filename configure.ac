@@ -8102,16 +8102,24 @@ dnl ===================================================================
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([whether to enable build of Mozilla addressbook connectivity driver for Windows])
     if test "$enable_win_mozab_driver" = "yes" -a "$WITH_MINGW" != "YES" ; then
-        AC_MSG_RESULT([yes])
         WITH_MOZAB4WIN=YES
         AC_MSG_RESULT([yes, internal (old windows mozab driver)])
         BUILD_TYPE="$BUILD_TYPE MOZ"
+        MSVC80_DLLS="msvcp80.dll msvcr80.dll Microsoft.VC80.CRT.manifest"
+        MSVC80_DLL_PATH=`cygpath -u "$TARFILE_LOCATION"`
+        for dll in $MSVC80_DLLS; do
+            if ! test -f "$MSVC80_DLL_PATH/$dll"; then
+                AC_MSG_ERROR([can not find $dll in $MSVC80_DLL_PATH needed for the pre-built Mozilla libraries])
+            fi
+        done
     else
         AC_MSG_RESULT([no])
         WITH_MOZAB4WIN=NO
     fi
 fi
 AC_SUBST(WITH_MOZAB4WIN)
+AC_SUBST(MSVC80_DLLS)
+AC_SUBST(MSVC80_DLL_PATH)
 
 dnl ===================================================================
 dnl Check for system NSS

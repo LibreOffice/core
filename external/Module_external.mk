@@ -27,6 +27,7 @@ $(eval $(call gb_Module_add_targets,external,\
 	Package_dbghelp \
 	Package_msms \
 	Package_msvc_dlls \
+	Package_msvc80_dlls \
 ))
 endif
 
