@@ -1277,8 +1277,8 @@ sal_Bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     }
     else if( pWData && COMMAND_WHEEL_ZOOM_SCALE == pWData->GetMode() )
     {
-        long newZoom = 100 * (long) ((pWrtShell->GetViewOptions()->GetZoom() / 100.0) * (pWData->GetDelta() / 100.0));
-        SetZoom( SVX_ZOOM_PERCENT, Max( 20L, Min( 600L, newZoom ) ) );
+        int newZoom = 100 * (pWrtShell->GetViewOptions()->GetZoom() / 100.0) * (pWData->GetDelta() / 100.0);
+        SetZoom( SVX_ZOOM_PERCENT, Max( 20, Min( 600, newZoom ) ) );
         bOk = sal_True;
     }
     else
