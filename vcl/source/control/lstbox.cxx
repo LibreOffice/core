@@ -1291,11 +1291,19 @@ Size ListBox::CalcMinimumSize() const
 
     aSz = CalcSubEditSize();
 
+    bool bAddScrollWidth = false;
+
     if (IsDropDownBox())
     {
         aSz.Height() += 4; // add a space between entry and border
         aSz.Width() += 4;  // add a little breathing space
+        bAddScrollWidth = true;
+    }
+    else
+        bAddScrollWidth = (GetStyle() & WB_VSCROLL) == WB_VSCROLL;
 
+    if (bAddScrollWidth)
+    {
         // try native borders; scrollbar size may not be a good indicator
         // see how large the edit area inside is to estimate what is needed for the dropdown
         ImplControlValue aControlValue;
