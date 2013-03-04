@@ -157,8 +157,8 @@ wf_GEN_rtftok_scanner_cxx=$(writerfilter_WORK)/RTFScanner.cxx
 
 # resourcemodel
 
-wf_GEN_model_QNameToStr_cxx=$(writerfilter_WORK)/qnametostr.cxx
-wf_GEN_ooxml_QNameToStr_tmp=$(writerfilter_WORK)/OOXMLqnameToStr.tmp
+wf_GEN_doctok_QNameToStr_cxx=$(writerfilter_WORK)/doctok/qnametostr.cxx
+wf_GEN_ooxml_QNameToStr_cxx=$(writerfilter_WORK)/ooxml/qnametostr.cxx
 wf_GEN_model_SprmCodeToStr_cxx=$(writerfilter_WORK)/sprmcodetostr.cxx
 wf_GEN_model_SprmCodeToStr_tmp=$(writerfilter_WORK)/sprmcodetostr.tmp
 wf_GEN_doctok_QnameToStr_tmp=$(writerfilter_WORK)/DOCTOKqnameToStr.tmp
@@ -170,17 +170,13 @@ wf_GEN_ooxml_Namespacesmap_xsl=$(writerfilter_WORK)/namespacesmap.xsl
 wf_DEP_ooxml_namespaces_txt=$(OUTDIR)/inc/oox/namespaces.txt
 wf_GEN_ooxml_preprocess_xsl=$(writerfilter_WORK)/modelpreprocess.xsl
 
-$(wf_GEN_ooxml_QNameToStr_tmp): $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed)
+$(wf_GEN_ooxml_QNameToStr_cxx): $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed) $(wf_SRC_ooxml_FactoryTools_xsl)
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(gb_XSLTPROC) $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed)) > $@
 
-$(wf_GEN_doctok_QnameToStr_tmp): $(wf_SRC_doctok_QNameToStr_xsl) $(wf_SRC_doctok_Model) | $(writerfilter_WORK)/.dir
+$(wf_GEN_doctok_QNameToStr_cxx): $(wf_SRC_doctok_QNameToStr_xsl) $(wf_SRC_doctok_Model) $(wf_SRC_doctok_ResourceTools_xsl) | $(writerfilter_WORK)/.dir
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(gb_XSLTPROC) $(wf_SRC_doctok_QNameToStr_xsl) $(wf_SRC_doctok_Model)) > $@
-
-$(wf_GEN_model_QNameToStr_cxx): $(wf_GEN_ooxml_QNameToStr_tmp) $(wf_GEN_doctok_QnameToStr_tmp) $(writerfilter_SRC)/resourcemodel/qnametostrheader $(writerfilter_SRC)/resourcemodel/qnametostrfooter $(wf_SRC_ooxml_FactoryTools_xsl) $(wf_SRC_doctok_ResourceTools_xsl)
-	$(call gb_Output_announce,$@,build,CAT,1)
-	cat $(writerfilter_SRC)/resourcemodel/qnametostrheader $(wf_GEN_ooxml_QNameToStr_tmp) $(wf_GEN_doctok_QnameToStr_tmp) $(writerfilter_SRC)/resourcemodel/qnametostrfooter > $@
 
 $(wf_GEN_model_SprmCodeToStr_tmp) : $(wf_SRC_doctok_SprmCodeToStr_xsl) $(wf_SRC_doctok_Model) | $(writerfilter_WORK)/.dir
 	$(call gb_Output_announce,$@,build,XSL,1)
@@ -218,7 +214,8 @@ wf_all := \
 	$(wf_GEN_ooxml_FastTokens_hxx) \
 	$(wf_GEN_ooxml_GperfFastToken_hxx) \
 	$(wf_GEN_ooxml_NamespaceIds_hxx) \
-	$(wf_GEN_model_QNameToStr_cxx) \
+	$(wf_GEN_doctok_QNameToStr_cxx) \
+	$(wf_GEN_ooxml_QNameToStr_cxx) \
 	$(wf_GEN_model_SprmCodeToStr_cxx) \
 	$(patsubst %,$(writerfilter_WORK)/OOXMLFactory_%.hxx,$(WRITERFILTER_OOXMLNAMESPACES)) \
 	$(patsubst %,$(writerfilter_WORK)/OOXMLFactory_%.cxx,$(WRITERFILTER_OOXMLNAMESPACES)) \

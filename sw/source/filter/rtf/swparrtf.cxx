@@ -151,10 +151,12 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& /*r
     xImporter->setTargetDocument(xDstDoc);
 
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aDescriptor(1);
+    uno::Sequence<beans::PropertyValue> aDescriptor(2);
     aDescriptor[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStrm));
     aDescriptor[0].Value <<= xStream;
+    aDescriptor[1].Name = "IsNewDoc";
+    aDescriptor[1].Value <<= sal_False;
     xFilter->filter(aDescriptor);
 
     return 0;

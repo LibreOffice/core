@@ -632,7 +632,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     uno::Reference<frame::XModel>& xModel, uno::Reference<uno::XInterface>& xWriter,
     uno::Sequence<beans::PropertyValue>& aDescriptor, const rtl::OUString& sName,
     const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
-    const sal_Bool bPlainText, uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
+    uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
 {
     sal_Bool bRet(false);
     uno::Reference<io::XOutputStream> xOut;
@@ -653,10 +653,8 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         {
             xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny(sMediaType));
             OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
-            if (bPlainText)
-                xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), uno::makeAny(false));
 
-            // even plain stream should be encrypted in encrypted documents
+            // advise storage impl to use common encryption
             xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_True) );
         }
 
@@ -858,7 +856,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                 sTextMediaType,
                 bOasis ? rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisMetaExporter"))
                        : rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaExporter")),
-                sal_True, aMetaArgs, pSharedData);
+                aMetaArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta export end" );
         }
@@ -899,7 +897,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                 sTextMediaType,
                 bOasis ? rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisStylesExporter"))
                        : rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesExporter")),
-                false, aStylesArgs, pSharedData);
+                aStylesArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export end" );
         }
@@ -923,7 +921,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                 sTextMediaType,
                 bOasis ? rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisContentExporter"))
                        : rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentExporter")),
-                false, aDocArgs, pSharedData);
+                aDocArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export end" );
         }
@@ -951,7 +949,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                 sTextMediaType,
                 bOasis ? rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLOasisSettingsExporter"))
                        : rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsExporter")),
-                false, aSettingsArgs, pSharedData);
+                aSettingsArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export end" );
         }

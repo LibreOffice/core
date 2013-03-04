@@ -45,6 +45,7 @@
 #include "svx/linectrl.hxx"
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/unoapi.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -169,7 +170,9 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
             {
                 if( pDashItem )
                 {
-                    String aString( pDashItem->GetName() );
+                    String aString;
+                    SvxUnogetInternalNameForItem(
+                        XATTR_LINEDASH, pDashItem->GetName(), aString );
                     pBox->SelectEntry( aString );
                 }
                 else

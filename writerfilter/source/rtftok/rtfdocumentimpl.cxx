@@ -278,7 +278,10 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bIsInFrame(false),
     m_aUnicodeBuffer(),
     m_aHexBuffer(),
-    m_bDeferredContSectBreak(false)
+    m_bIgnoreNextContSectBreak(false),
+    m_bNeedSect(true),
+    m_bWasInFrame(false),
+    m_bHadPicture(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -395,6 +398,11 @@ void RTFDocumentImpl::setNeedPar(bool bNeedPar)
     m_bNeedPar = bNeedPar;
 }
 
+void RTFDocumentImpl::setNeedSect(bool bNeedSect)
+{
+    m_bNeedSect = bNeedSect;
+}
+
 void RTFDocumentImpl::checkNeedPap()
 {
     if (m_bNeedPap)
@@ -473,12 +481,16 @@ void RTFDocumentImpl::parBreak()
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
 
+    m_bHadPicture = false;
+
     // start new one
     Mapper().startParagraphGroup();
 }
 
 void RTFDocumentImpl::sectBreak(bool bFinal = false)
 {
+    SAL_INFO("writerfilter", OSL_THIS_FUNC << ": final? " << bFinal << ", needed? " << m_bNeedSect);
+    bool bNeedSect = m_bNeedSect;
     // If there is no paragraph in this section, then insert a dummy one, as required by Writer
     if (m_bNeedPar)
         dispatchSymbol(RTF_PAR);
@@ -495,10 +507,15 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
         resolveSubstream(aPair.second, aPair.first);
     }
 
-    RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
-    // In case the last section is a continous one, we don't need to output a section break.
-    if (bFinal && pBreak.get() && !pBreak->getInt())
-        m_aStates.top().aSectionSprms.erase(NS_sprm::LN_SBkc);
+    // Normally a section break at the end of the doc is necessary. Unless the
+    // last control word in the document is a section break itself.
+    if (!bNeedSect)
+    {
+        RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
+        // In case the last section is a continous one, we don't need to output a section break.
+        if (bFinal && pBreak.get() && !pBreak->getInt())
+            m_aStates.top().aSectionSprms.erase(NS_sprm::LN_SBkc);
+    }
 
     // Section properties are a paragraph sprm.
     RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms));
@@ -519,6 +536,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
         Mapper().startParagraphGroup();
     }
     m_bNeedPar = true;
+    m_bNeedSect = false;
 }
 
 void RTFDocumentImpl::seek(sal_uInt32 nPos)
@@ -767,13 +785,16 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
     checkFirstRun();
     if (!m_pCurrentBuffer)
+    {
         Mapper().props(pProperties);
+        // Make sure we don't loose these properties with a too early reset.
+        m_bHadPicture = true;
+    }
     else
     {
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
         m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
     }
-
     return 0;
 }
 
@@ -1092,7 +1113,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
     checkUnicode();
-    checkDeferredContSectBreak();
+    setNeedSect();
     RTFSkipDestination aSkip(*this);
     switch (nKeyword)
     {
@@ -1422,7 +1443,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
     if (nKeyword != RTF_HEXCHAR)
         checkUnicode();
-    checkDeferredContSectBreak();
+    setNeedSect();
     RTFSkipDestination aSkip(*this);
     sal_uInt8 cCh = 0;
 
@@ -1480,13 +1501,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_SECT:
             {
-                RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
-                if (pBreak.get() && !pBreak->getInt())
-                {
-                    // This is a continous section break, don't send it yet.
-                    // It's possible that we'll have nothing after this token, and then we should ignore it.
-                    m_bDeferredContSectBreak = true;
-                }
+                if (m_bIgnoreNextContSectBreak)
+                    m_bIgnoreNextContSectBreak = false;
                 else
                     sectBreak();
             }
@@ -1583,6 +1599,22 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pRowValue(new RTFValue(1));
                 if (m_aStates.top().nCells > 0)
                     m_aStates.top().aTableRowSprms.set(NS_sprm::LN_PRow, pRowValue);
+
+                RTFValue::Pointer_t pCellMar = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblCellMar);
+                if (!pCellMar.get())
+                {
+                    // If no cell margins are defined, the default left/right margin is 0 in Word, but not in Writer.
+                    RTFSprms aAttributes;
+                    aAttributes.set(NS_ooxml::LN_CT_TblWidth_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa)));
+                    aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, RTFValue::Pointer_t(new RTFValue(0)));
+                    lcl_putNestedSprm(m_aStates.top().aTableRowSprms,
+                            NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_left,
+                            RTFValue::Pointer_t(new RTFValue(aAttributes)));
+                    lcl_putNestedSprm(m_aStates.top().aTableRowSprms,
+                            NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_right,
+                            RTFValue::Pointer_t(new RTFValue(aAttributes)));
+                }
+
                 writerfilter::Reference<Properties>::Pointer_t const pTableRowProperties(
                         new RTFReferenceProperties(m_aStates.top().aTableRowAttributes, m_aStates.top().aTableRowSprms)
                         );
@@ -1614,9 +1646,17 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
                 if (pBreak.get() && !pBreak->getInt())
                 {
+                    if (m_bWasInFrame)
+                    {
+                        dispatchSymbol(RTF_PAR);
+                        m_bWasInFrame = false;
+                    }
                     dispatchFlag(RTF_SBKPAGE);
                     sectBreak();
                     dispatchFlag(RTF_SBKNONE);
+                    if (m_bNeedPar)
+                        dispatchSymbol(RTF_PAR);
+                    m_bIgnoreNextContSectBreak = true;
                 }
                 else
                 {
@@ -1647,7 +1687,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     checkUnicode();
-    checkDeferredContSectBreak();
+    setNeedSect();
     RTFSkipDestination aSkip(*this);
     int nParam = -1;
     int nSprm = -1;
@@ -1892,10 +1932,17 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             break;
         case RTF_PARD:
-            m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
-            m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
+            if (m_bHadPicture)
+                dispatchSymbol(RTF_PAR);
+            // \pard is allowed between \cell and \row, but in that case it should not reset the fact that we're inside a table.
+            if (m_aStates.top().nCells == 0)
+            {
+                m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
+                m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
+                if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)
+                    m_pCurrentBuffer = 0;
+            }
             m_aStates.top().resetFrame();
-            m_pCurrentBuffer = 0;
             break;
         case RTF_SECTD:
             m_aStates.top().aSectionSprms = m_aDefaultState.aSectionSprms;
@@ -2266,7 +2313,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
     checkUnicode(nKeyword != RTF_U, true);
-    checkDeferredContSectBreak();
+    setNeedSect();
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
     RTFValue::Pointer_t pIntValue(new RTFValue(nParam));
@@ -2642,6 +2689,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CELLX:
             {
                 int nCellX = nParam - m_aStates.top().nCellX;
+
+                // If there is a negative left margin, then the first cellx is relateve to that.
+                RTFValue::Pointer_t pTblInd = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblPrBase_tblInd);
+                if (m_aStates.top().nCellX == 0 && pTblInd.get())
+                {
+                    RTFValue::Pointer_t pWidth = pTblInd->getAttributes().find(NS_ooxml::LN_CT_TblWidth_w);
+                    if (pWidth.get() && pWidth->getInt() < 0)
+                        nCellX = -1 * (pWidth->getInt() - nParam);
+                }
+
                 m_aStates.top().nCellX = nParam;
                 RTFValue::Pointer_t pXValue(new RTFValue(nCellX));
                 m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue, false);
@@ -2675,6 +2732,17 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 RTFValue::Pointer_t pHRule(new RTFValue(hRule));
                 lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
                     NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_hRule, pHRule);
+            }
+            break;
+        case RTF_TRLEFT:
+            {
+                // the value is in twips
+                lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
+                        NS_ooxml::LN_CT_TblPrBase_tblInd, NS_ooxml::LN_CT_TblWidth_type,
+                        RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa)));
+                lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
+                        NS_ooxml::LN_CT_TblPrBase_tblInd, NS_ooxml::LN_CT_TblWidth_w,
+                        RTFValue::Pointer_t(new RTFValue(nParam)));
             }
             break;
         case RTF_COLS:
@@ -2965,7 +3033,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
     checkUnicode();
-    checkDeferredContSectBreak();
+    setNeedSect();
     RTFSkipDestination aSkip(*this);
     int nSprm = -1;
     RTFValue::Pointer_t pBoolValue(new RTFValue(!bParam || nParam != 0));
@@ -3154,6 +3222,7 @@ int RTFDocumentImpl::popState()
     bool bFaltEnd = false;
     bool bPopFrame = false;
     RTFParserState aState(m_aStates.top());
+    m_bWasInFrame = aState.aFrame.inFrame();
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -3501,7 +3570,6 @@ int RTFDocumentImpl::popState()
     {
         if (m_bNeedCr)
             dispatchSymbol(RTF_PAR);
-        m_bDeferredContSectBreak = false;
         sectBreak(true);
     }
 
@@ -3718,15 +3786,6 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
     {
         OUString aString = OStringToOUString(m_aHexBuffer.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
         text(aString);
-    }
-}
-
-void RTFDocumentImpl::checkDeferredContSectBreak()
-{
-    if (m_bDeferredContSectBreak)
-    {
-        m_bDeferredContSectBreak = false;
-        sectBreak();
     }
 }
 

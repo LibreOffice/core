@@ -272,7 +272,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow
     return false;
 }
 
-    //=====  XAccessibleExtendedTable  ========================================
+// =====  XAccessibleExtendedTable  ========================================
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
@@ -315,7 +315,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
     return nChildIndex % static_cast<sal_Int32>(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 }
 
-    //=====  XAccessibleContext  ==============================================
+// =====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL
     ScAccessibleTableBase::getAccessibleChildCount(void)
@@ -323,9 +323,16 @@ sal_Int32 SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return static_cast<sal_Int32>(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
-            (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
-//  return 1;
+
+    // FIXME: representing rows & columns this way is a plain and simple madness.
+    // this needs a radical re-think.
+    sal_Int64 nMax = ((sal_Int64)(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
+                      (sal_Int64)(maRange.aEnd.Col() - maRange.aStart.Col() + 1));
+    if (nMax > SAL_MAX_INT32)
+        nMax = SAL_MAX_INT32;
+    if (nMax < 0)
+        return 0;
+    return static_cast<sal_Int32>(nMax);
 }
 
 uno::Reference< XAccessible > SAL_CALL
@@ -338,6 +345,9 @@ uno::Reference< XAccessible > SAL_CALL
 
     if (nIndex >= getAccessibleChildCount() || nIndex < 0)
         throw lang::IndexOutOfBoundsException();
+
+    // FIXME: representing rows & columns this way is a plain and simple madness.
+    // this needs a radical re-think.
 
     sal_Int32 nRow(0);
     sal_Int32 nColumn(0);

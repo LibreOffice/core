@@ -27,8 +27,9 @@ while (<>) {
         @{$map{$lang}} = ();
     } else {
         @{$map{$lang}} = split(/,/, $dicts);
-        $max = max($max, scalar(@{$map{$lang}}));
     }
+    push(@{$map{$lang}}, ('en')) unless grep($_ eq 'en', @{$map{$lang}});
+    $max = max($max, scalar(@{$map{$lang}}));
 }
 
 ++$max;

@@ -1142,6 +1142,9 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     if( !pPrefs )
         pPrefs = SW_MOD()->GetUsrPref(sal_False);
 
+    mbHScrollbarEnabled = pPrefs->IsViewHScrollBar();
+    mbVScrollbarEnabled = pPrefs->IsViewVScrollBar();
+
     // die Felder aktualisieren
     // ACHTUNG: hochcasten auf die EditShell, um die SS zu nutzen.
     //          In den Methoden wird auf die akt. Shell abgefragt!
@@ -1661,6 +1664,9 @@ void SwPagePreView::ScrollViewSzChg()
             bShowVScrollbar = true;
         }
 
+        if (!mbVScrollbarEnabled)
+            bShowVScrollbar = false;
+
         ShowVScrollbar(bShowVScrollbar);
         pPageUpBtn->Show(bShowVScrollbar);
         pPageDownBtn->Show(bShowVScrollbar);
@@ -1688,6 +1694,9 @@ void SwPagePreView::ScrollViewSzChg()
             pHScrollbar->SetLineSize( nVisWidth / 10 );
             pHScrollbar->SetPageSize( nVisWidth / 2 );
         }
+
+        if (!mbHScrollbarEnabled)
+            bShowHScrollbar = false;
 
         ShowHScrollbar(bShowHScrollbar);
     }
@@ -1901,6 +1910,24 @@ void SwPagePreView::ShowVScrollbar(sal_Bool bShow)
 {
     pVScrollbar->Show(bShow);
     InvalidateBorder();
+}
+
+void SwPagePreView::EnableHScrollbar(bool bEnable)
+{
+    if (mbHScrollbarEnabled != bEnable)
+    {
+        mbHScrollbarEnabled = bEnable;
+        ScrollViewSzChg();
+    }
+}
+
+void SwPagePreView::EnableVScrollbar(bool bEnable)
+{
+    if (mbVScrollbarEnabled != bEnable)
+    {
+        mbVScrollbarEnabled = bEnable;
+        ScrollViewSzChg();
+    }
 }
 
 void SwPagePreView::SetZoom(SvxZoomType eType, sal_uInt16 nFactor)

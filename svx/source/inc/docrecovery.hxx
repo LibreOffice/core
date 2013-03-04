@@ -631,8 +631,8 @@ class RecoveryDialog : public IExtendedTabPage
     //-------------------------------------------
     // member
     private:
-        Window          m_aTitleWin;
         FixedText       m_aTitleFT;
+        Window          m_aTitleWin;
         FixedLine       m_aTitleFL;
         FixedText       m_aDescrFT;
         FixedText       m_aProgressFT;

@@ -97,11 +97,12 @@ struct _PageSz
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< io::XInputStream > xInputStream,
                             uno::Reference< lang::XComponent > xModel,
-                            SourceDocumentType eDocumentType) :
+                            SourceDocumentType eDocumentType,
+                            bool bIsNewDoc ) :
 LoggedProperties(dmapper_logger, "DomainMapper"),
 LoggedTable(dmapper_logger, "DomainMapper"),
 LoggedStream(dmapper_logger, "DomainMapper"),
-    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType )),
+    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, bIsNewDoc )),
     mnBackgroundColor(0), mbIsHighlightSet(false)
 {
     // #i24363# tab stops relative to indent

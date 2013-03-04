@@ -370,7 +370,7 @@ void SAL_CALL KDE4FilePicker::setValue( sal_Int16 controlId, sal_Int16, const un
             case ExtendedFilePickerElementIds::CHECKBOX_SELECTION:
             {
                 QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
-                cb->setChecked(value.getValue());
+                cb->setChecked(value.get<bool>());
                 break;
             }
             case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:

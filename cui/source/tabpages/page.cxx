@@ -70,6 +70,8 @@
 #include <svl/aeitem.hxx>
 #include <sfx2/request.hxx>
 
+#include <numpages.hxx>     // for GetI18nNumbering()
+
 // static ----------------------------------------------------------------
 
 static const long MINBODY       = 284;  // 0,5 cm rounded up in twips
@@ -86,7 +88,6 @@ static sal_uInt16 pRanges[] =
     SID_SWREGISTER_MODE,
     0
 };
-
 // ------- Mapping page layout ------------------------------------------
 
 sal_uInt16 aArr[] =
@@ -362,6 +363,9 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     aPortraitBtn.SetAccessibleRelationMemberOf(&aOrientationFT);
     aLandscapeBtn.SetAccessibleRelationMemberOf(&aOrientationFT);
+
+    // Get the i18n framework numberings and add them to the listbox.
+    SvxNumOptionsTabPage::GetI18nNumbering( aNumberFormatBox, ::std::numeric_limits<sal_uInt16>::max());
 }
 
 // -----------------------------------------------------------------------
@@ -469,8 +473,13 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     aBspWin.SetUsage( nUse );
     LayoutHdl_Impl( 0 );
 
-    // adjust numeration type of the page style
-    aNumberFormatBox.SelectEntryPos( sal::static_int_cast< sal_uInt16 >(eNumType) );
+    //adjust numeration type of the page style
+    //Get the Position of the saved NumType
+    for(int i=0; i<aNumberFormatBox.GetEntryCount(); i++)
+        if(eNumType == (sal_uInt16)(sal_uLong)aNumberFormatBox.GetEntryData(i)){
+            aNumberFormatBox.SelectEntryPos( i );
+            break;
+        }
 
     aPaperTrayBox.Clear();
     sal_uInt8 nPaperBin = PAPERBIN_PRINTER_SETTINGS;
@@ -805,12 +814,12 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         bMod |= sal_True;
     }
 
-
+    //Get the NumType value
     nPos = aNumberFormatBox.GetSelectEntryPos();
-
+    sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)aNumberFormatBox.GetEntryData(nPos);
     if ( nPos != aNumberFormatBox.GetSavedValue() )
     {
-        aPage.SetNumType( (SvxNumType)nPos );
+        aPage.SetNumType( (SvxNumType)nEntryData );
         bMod |= sal_True;
     }
 

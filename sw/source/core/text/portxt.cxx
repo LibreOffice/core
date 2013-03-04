@@ -32,6 +32,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <hintids.hxx>     // CH_TXTATR
+#include <EnhancedPDFExportHelper.hxx>
 #include <SwPortionHandler.hxx>
 #include <porlay.hxx>
 #include <inftxt.hxx>
@@ -727,7 +728,8 @@ SwLinePortion *SwHolePortion::Compress() { return this; }
 void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     // #i16816# tagged pdf support
-    if( rInf.GetVsh() && rInf.GetVsh()->GetViewOptions()->IsPDFExport() )
+    if( rInf.GetVsh() && rInf.GetVsh()->GetViewOptions()->IsPDFExport() &&
+        SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut()) )
     {
         const XubString aTxt( ' ' );
         rInf.DrawText( aTxt, *this, 0, 1, false );

@@ -591,11 +591,6 @@ void WorkbookGlobals::finalize()
         // #i79826# enable updating automatic row height after loading the document
         aPropSet.setProperty( PROP_IsAdjustHeightEnabled, true );
 
-        // Insert all pivot tables. Must be done after loading all sheets and
-        // formulas, because data pilots expect existing source data on
-        // creation.
-        getPivotTables().finalizeImport();
-
         // #i76026# enable Undo after loading the document
         aPropSet.setProperty( PROP_IsUndoEnabled, true );
         // disable editing read-only documents (e.g. from read-only files)
@@ -661,6 +656,14 @@ void WorkbookHelper::finalizeWorkbookImport()
     // workbook settings, document and sheet view settings
     mrBookGlob.getWorkbookSettings().finalizeImport();
     mrBookGlob.getViewSettings().finalizeImport();
+
+    // need to import formulas before scenarios
+    mrBookGlob.getFormulaBuffer().finalizeImport();
+
+    // Insert all pivot tables. Must be done after loading all sheets and
+    // formulas, because data pilots expect existing source data on
+    // creation.
+    getPivotTables().finalizeImport();
 
     // need to import formulas before scenarios
     mrBookGlob.getFormulaBuffer().finalizeImport();

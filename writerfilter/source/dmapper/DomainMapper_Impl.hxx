@@ -374,12 +374,15 @@ private:
 
     std::map< sal_Int32, com::sun::star::uno::Any > deferredCharacterProperties;
 
+    bool m_bIsNewDoc;
+
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,
             uno::Reference< lang::XComponent >  xModel,
-            SourceDocumentType eDocumentType );
+            SourceDocumentType eDocumentType,
+            bool bIsNewDoc );
     DomainMapper_Impl();
     virtual ~DomainMapper_Impl();
 
@@ -649,6 +652,9 @@ public:
      CONTEXT_CHARACTER is going to be used (e.g. by appendText()).
     */
     void processDeferredCharacterProperties();
+
+    /// If we're importing into a new document, or just pasting to an existing one.
+    bool IsNewDoc();
 };
 } //namespace dmapper
 } //namespace writerfilter

@@ -675,7 +675,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
 
 void SvXMLNumFmtExport::WriteFractionElement_Impl(
                             sal_Int32 nInteger, sal_Bool bGrouping,
-                            sal_Int32 nNumerator, sal_Int32 nDenominator )
+                            sal_Int32 nNumeratorDigits, sal_Int32 nDenominatorDigits, sal_Int32 nDenominator )
 {
     FinishTextElement_Impl();
 
@@ -693,17 +693,23 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     }
 
     //  numerator digits
-    if ( nNumerator >= 0 )
+    if ( nNumeratorDigits >= 0 )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,
-                                 OUString::valueOf( nNumerator ) );
+                                 OUString::valueOf( nNumeratorDigits ) );
     }
 
-    //  denominator digits
-    if ( nDenominator >= 0 )
+    if ( nDenominator )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DENOMINATOR_VALUE,
+                              OUString::valueOf( nDenominator) );
+    }
+    //  I guess it's not necessary to export nDenominatorDigits
+    //  if we have a forced denominator ( remove ? )
+    if ( nDenominatorDigits >= 0 )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_DENOMINATOR_DIGITS,
-                              OUString::valueOf( nDenominator ) );
+                              OUString::valueOf( nDenominatorDigits ) );
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_FRACTION,
@@ -1414,7 +1420,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                         //  min-integer-digits attribute must be written.
                                         nInteger = -1;
                                     }
-                                    WriteFractionElement_Impl( nInteger, bThousand, nPrecision, nPrecision );
+                                    sal_Int32 nDenominator = rFormat.GetForcedDenominatorForType( nPart );
+                                    WriteFractionElement_Impl( nInteger, bThousand, nPrecision, nPrecision, nDenominator );
                                     bAnyContent = sal_True;
                                 }
                                 break;

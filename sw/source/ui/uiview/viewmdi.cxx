@@ -73,7 +73,11 @@ using namespace ::com::sun::star::frame;
 
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, sal_Bool bViewOnly )
 {
+    bool const bCrsrIsVisible(pWrtShell->IsCrsrVisible());
     _SetZoom( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
+    // fdo#40465 force the cursor to stay in view whilst zooming
+    if (bCrsrIsVisible)
+        pWrtShell->ShowCrsr();
 }
 
 void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
@@ -319,8 +323,6 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
     (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
 
     (*ppScrollbar)->EnableDrag( sal_True );
-
-    (*ppScrollbar)->SetAuto( sal_True );
 
     if(GetWindow())
         InvalidateBorder();
@@ -670,5 +672,22 @@ sal_Bool SwView::IsVScrollbarVisible()const
     return pVScrollbar->IsVisible( sal_False );
 }
 
+void SwView::EnableHScrollbar(bool bEnable)
+{
+    if (mbHScrollbarEnabled != bEnable)
+    {
+        mbHScrollbarEnabled = bEnable;
+        InvalidateBorder();
+    }
+}
+
+void SwView::EnableVScrollbar(bool bEnable)
+{
+    if (mbVScrollbarEnabled != bEnable)
+    {
+        mbVScrollbarEnabled = bEnable;
+        InvalidateBorder();
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

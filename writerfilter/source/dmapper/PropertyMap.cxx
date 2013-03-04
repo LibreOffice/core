@@ -797,13 +797,13 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection, DomainMapper_Impl& rDM_Impl, uno::Reference<text::XTextRange> xStartingRange)
 {
     uno::Reference< beans::XPropertySet > xRangeProperties;
-    if (bIsFirstSection)
+    if (bIsFirstSection && rDM_Impl.GetBodyText().is())
     {
         uno::Reference<container::XEnumerationAccess> xEnumAccess(rDM_Impl.GetBodyText(), uno::UNO_QUERY_THROW);
         uno::Reference<container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
         xRangeProperties = uno::Reference<beans::XPropertySet>(xEnum->nextElement(), uno::UNO_QUERY_THROW);
     }
-    else
+    else if (xStartingRange.is())
         xRangeProperties = uno::Reference<beans::XPropertySet>(xStartingRange, uno::UNO_QUERY_THROW);
     return xRangeProperties;
 }
@@ -848,7 +848,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( m_nColumnCount > 0 && xSection.is())
             ApplyColumnProperties( xSection );
         uno::Reference<beans::XPropertySet> xRangeProperties(lcl_GetRangeProperties(m_bIsFirstSection, rDM_Impl, m_xStartingRange));
-        xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName));
+        if (xRangeProperties.is())
+            xRangeProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_PAGE_DESC_NAME), uno::makeAny(m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName));
     }
     // If the section is of type "New column" (0x01), then simply insert a column break.
     // But only if there actually are columns on the page, otherwise a column break
@@ -977,7 +978,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         operator[](PropertyDefinition(PROP_GRID_MODE, false)) = uno::makeAny(nGridMode);
 
-        _ApplyProperties( xFollowPageStyle );
+        if (rDM_Impl.IsNewDoc())
+            _ApplyProperties( xFollowPageStyle );
 
         //todo: creating a "First Page" style depends on HasTitlePage und _fFacingPage_
         if( m_bTitlePage )
@@ -986,7 +988,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             PrepareHeaderFooterProperties( true );
             uno::Reference< beans::XPropertySet > xFirstPageStyle = GetPageStyle(
                                 rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), true );
-            _ApplyProperties( xFirstPageStyle );
+            if (rDM_Impl.IsNewDoc())
+                _ApplyProperties( xFirstPageStyle );
 
             sal_Int32 nPaperBin = m_nFirstPaperBin >= 0 ? m_nFirstPaperBin : m_nPaperBin >= 0 ? m_nPaperBin : 0;
             if( nPaperBin )
@@ -1006,8 +1009,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             /* break type
             0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
                 if ((m_bTitlePage && m_bIsFirstSection) || !m_bTitlePage)
-                    xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
-                            uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
+                {
+                    if (xRangeProperties.is())
+                        xRangeProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_DESC_NAME ),
+                                uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName : m_sFollowPageStyleName ));
+                }
                 else
                 {
                     // In this miserable situation (second or later section on a title page), make sure that the header / footer is not lost.

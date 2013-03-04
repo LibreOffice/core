@@ -93,11 +93,11 @@ void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, ViewShell* pSh )
     // Scrollbars on / off
     if(bVScrollChanged)
     {
-        pView->ShowVScrollbar(pNewPref->IsViewVScrollBar());
+        pView->EnableVScrollbar(pNewPref->IsViewVScrollBar());
     }
     if(bHScrollChanged)
     {
-        pView->ShowHScrollbar( pNewPref->IsViewHScrollBar() || pNewPref->getBrowseMode() );
+        pView->EnableHScrollbar( pNewPref->IsViewHScrollBar() || pNewPref->getBrowseMode() );
     }
     //if only the position of the vertical ruler has been changed initiate an update
     if(bVAlignChanged && !bHScrollChanged && !bVScrollChanged)
@@ -172,8 +172,8 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     {
         if(!bViewOnly)
             pPref->SetUIOptions( rUsrPref );
-        pPPView->ShowVScrollbar(pPref->IsViewVScrollBar());
-        pPPView->ShowHScrollbar(pPref->IsViewHScrollBar());
+        pPPView->EnableVScrollbar(pPref->IsViewVScrollBar());
+        pPPView->EnableHScrollbar(pPref->IsViewHScrollBar());
         if(!bViewOnly)
         {
             pPref->SetPagePrevRow(rUsrPref.GetPagePrevRow());

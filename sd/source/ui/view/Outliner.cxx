@@ -381,6 +381,7 @@ void Outliner::EndSpelling (void)
     mpWeakViewShell.reset();
     mpView = NULL;
     mpWindow = NULL;
+    mnStartPageIndex = (sal_uInt16) -1;
 }
 
 
@@ -531,8 +532,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
             // restore start position if nothing was found
             if(!mbStringFound)
                 RestoreStartPosition ();
-            else
-                mnStartPageIndex = (sal_uInt16)-1;
+            mnStartPageIndex = (sal_uInt16)-1;
         }
     }
     else
@@ -657,6 +657,7 @@ bool Outliner::SearchAndReplaceAll (void)
     }
 
     RestoreStartPosition ();
+    mnStartPageIndex = (sal_uInt16)-1;
 
     return true;
 }
@@ -869,6 +870,9 @@ void Outliner::RememberStartPosition (void)
         OSL_ASSERT(pViewShell);
         return;
     }
+
+    if ( mnStartPageIndex != (sal_uInt16) -1 )
+        return;
 
     if (pViewShell->ISA(DrawViewShell))
     {

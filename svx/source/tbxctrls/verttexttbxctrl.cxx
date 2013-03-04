@@ -71,7 +71,6 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
 {
     SvtLanguageOptions aLangOptions;
     sal_Bool bCalc = sal_False;
-    sal_Bool bVisible = GetToolBox().IsItemVisible(GetId());
     sal_Bool bEnabled = sal_False;
     if ( nSID == SID_VERTICALTEXT_STATE )
         bEnabled = aLangOptions.IsVerticalTextEnabled();
@@ -83,16 +82,10 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
         return;
     }
 
-    if(bEnabled)
+    if(!bEnabled)
     {
-        if(!bVisible)
-        {
-            GetToolBox().ShowItem( GetId(), sal_True );
-            bCalc = sal_True;
-        }
-    }
-    else if(bVisible)
-    {
+        // always hide if either IsVerticalTextEnabled or IsCTLFontEnabled
+        // is false
         GetToolBox().HideItem( GetId() );
         bCalc = sal_True;
     }

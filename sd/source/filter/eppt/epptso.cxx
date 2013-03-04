@@ -1316,7 +1316,16 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             }
             nParaFlags >>= 16;
 
-            sal_uInt32  nDefaultTabSize = MapSize( ::com::sun::star::awt::Size( 2011, 1 ) ).Width;
+            sal_Int32 nDefaultTabSizeSrc = 2011; // I've no idea where this number came from, honestly
+            const uno::Reference< beans::XPropertySet > xPropSet( mXModel, uno::UNO_QUERY );
+            if ( xPropSet.is() )
+            {
+                ImplGetPropertyValue( xPropSet, rtl::OUString( "TabStop" ) );
+                sal_Int32 nTabStop( 0 );
+                if ( mAny >>= nTabStop )
+                    nDefaultTabSizeSrc = nTabStop;
+            }
+            const sal_uInt32 nDefaultTabSize = MapSize( awt::Size( nDefaultTabSizeSrc, 1 ) ).Width;
             sal_uInt32  nDefaultTabs = abs( maRect.GetWidth() ) / nDefaultTabSize;
             if ( nTabs )
                 nDefaultTabs -= (sal_Int32)( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize );

@@ -10,6 +10,7 @@ MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math
 Name=%PRODUCTNAME Math
 GenericName=Formula Editor
 Comment=Create and edit scientific formulas and equations by using Math.
+Keywords=Equation;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]

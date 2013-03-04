@@ -956,8 +956,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     SetNewWindowAllowed(!bBrowse);
     // End of disabled multiple window
 
-    ShowVScrollbar(aUsrPref.IsViewVScrollBar());
-    ShowHScrollbar(aUsrPref.IsViewHScrollBar());
+    mbVScrollbarEnabled = aUsrPref.IsViewVScrollBar();
+    mbHScrollbarEnabled = aUsrPref.IsViewHScrollBar();
     pHScrollbar->SetAuto(bBrowse);
     if( aUsrPref.IsViewHRuler() )
         CreateTab();

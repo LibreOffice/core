@@ -145,22 +145,25 @@ void OO3ExtensionMigration::scanUserExtensions( const ::rtl::OUString& sSourceDi
                 //Check next folder as the "real" extension folder is below a temp folder!
                 ::rtl::OUString sExtensionFolderURL = fs.getFileURL();
 
-                osl::DirectoryItem aExtDirItem;
                 osl::Directory     aExtensionRootDir( sExtensionFolderURL );
 
                 nRetCode = aExtensionRootDir.open();
-                if (( nRetCode == osl::Directory::E_None ) &&
-                    ( aExtensionRootDir.getNextItem( aExtDirItem, nHint ) == osl::Directory::E_None ))
+                if ( nRetCode == osl::Directory::E_None )
                 {
-                    bool bFileStatus = aExtDirItem.getFileStatus(fs) == osl::FileBase::E_None;
-                    bool bIsDir      = fs.getFileType() == osl::FileStatus::Directory;
-
-                    if ( bFileStatus && bIsDir )
+                    osl::DirectoryItem aExtDirItem;
+                    while ( aExtensionRootDir.getNextItem( aExtDirItem, nHint ) == osl::Directory::E_None )
                     {
-                        sExtensionFolderURL = fs.getFileURL();
-                        ScanResult eResult = scanExtensionFolder( sExtensionFolderURL );
-                        if ( eResult == SCANRESULT_MIGRATE_EXTENSION )
-                            aMigrateExtensions.push_back( sExtensionFolderURL );
+                        bool bFileStatus = aExtDirItem.getFileStatus(fs) == osl::FileBase::E_None;
+                        bool bIsDir      = fs.getFileType() == osl::FileStatus::Directory;
+
+                        if ( bFileStatus && bIsDir )
+                        {
+                            sExtensionFolderURL = fs.getFileURL();
+                            ScanResult eResult = scanExtensionFolder( sExtensionFolderURL );
+                            if ( eResult == SCANRESULT_MIGRATE_EXTENSION )
+                                aMigrateExtensions.push_back( sExtensionFolderURL );
+                            break;
+                        }
                     }
                 }
             }

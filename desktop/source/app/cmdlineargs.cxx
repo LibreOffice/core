@@ -219,7 +219,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                    }
-                   else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-view" )))
+                   else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "view" )))
                    {
                         // open in viewmode
                         bOpenEvent      = false;
@@ -231,7 +231,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                    }
-                   else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-show" )))
+                   else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "show" )))
                    {
                         // open in viewmode
                         bOpenEvent      = false;
@@ -517,6 +517,15 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
     else if ( aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-psn")) )
     {
         m_psn = true;
+        return true;
+    }
+#endif
+#ifdef WIN32
+    /* fdo#57203 ignore -Embedding on Windows
+       when LibreOffice is launched by COM+
+     */
+    else if ( oArg == "Embedding" )
+    {
         return true;
     }
 #endif
