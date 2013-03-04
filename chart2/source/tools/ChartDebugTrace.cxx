@@ -35,15 +35,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 
-#if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
-
-namespace
-{
-
-} // anonymous namespace
-#endif
-
-
 namespace chart
 {
 namespace debug
