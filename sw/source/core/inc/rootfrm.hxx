@@ -62,7 +62,6 @@ class SwRootFrm: public SwLayoutFrm
     friend void _FrmInit();     //erzeugt pVout
     friend void _FrmFinit();    //loescht pVout
 
-    // PAGES01
     std::vector<SwRect> maPageRects;// returns the current rectangle for each page frame
                                     // the rectangle is extended to the top/bottom/left/right
                                     // for pages located at the outer borders
@@ -349,7 +348,6 @@ public:
     */
     SwPageFrm* GetPageByPageNum( sal_uInt16 _nPageNum ) const;
 
-    // --> PAGES01
     void CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea );
     bool IsLeftToRightViewLayout() const;
     const SwRect& GetPagesArea() const { return maPagesArea; }

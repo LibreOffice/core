@@ -1606,7 +1606,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     }
                     aCoreSet.Put( aZoom );
 
-                    // PAGES01
                     if ( !bBrowseMode )
                     {
                         const SvxViewLayoutItem aViewLayout( rViewOptions.GetViewLayoutColumns(), rViewOptions.IsViewLayoutBookMode() );
@@ -1627,7 +1626,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     }
                 }
 
-                // PAGES01
                 const SfxPoolItem* pViewLayoutItem = 0;
                 if ( pSet && SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_VIEWLAYOUT, sal_True, &pViewLayoutItem))
                 {
@@ -1656,7 +1654,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             if ( pArgs && !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                 ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
-                // PAGES01
                 if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, sal_True, &pItem ))
                 {
                     const sal_uInt16 nColumns = ((const SvxViewLayoutItem *)pItem)->GetValue();
@@ -1679,7 +1676,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         {
             if ( pArgs && ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
-                // PAGES01
                 if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, sal_True, &pItem ))
                 {
                     const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();

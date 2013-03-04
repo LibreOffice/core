@@ -1477,7 +1477,6 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                 if ( IsBodyFrm() )
                     Prt().SSize().Height() = nOldFrmHeight;
 
-                // PAGES01
                 if ( pUp->GetUpper() )
                     static_cast<SwRootFrm*>(pUp->GetUpper())->CheckViewLayout( 0, 0 );
                 //((SwPageFrm*)pUp)->AdjustRootSize( CHG_CHGPAGE, &aOldRect );

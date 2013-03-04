@@ -953,7 +953,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 if( aRect.Width() )
                 {
-                    // PAGES01
                     // make relative to page position:
                     aLongLR.SetLeft ((long)( aRect.Left() - rPageRect.Left() ));
                     aLongLR.SetRight((long)( rPageRect.Right() - aRect.Right()));
@@ -1357,7 +1356,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         {
                             aRect.Pos() += aTmpRect.Pos();
 
-                            // PAGES01
                             // make relative to page position:
                             aColItem.SetLeft ((sal_uInt16)( aRect.Left() - rPageRect.Left() ));
                             aColItem.SetRight((sal_uInt16)( rPageRect.Right() - aRect.Right()));
@@ -1533,7 +1531,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         break;
         case SID_RULER_PAGE_POS:
         {
-            // PAGES01
             SvxPagePosSizeItem aPagePosSize(
                     Point( rPageRect.Left(), rPageRect.Top()) , nPageWidth, nPageHeight);
 

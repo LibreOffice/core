@@ -690,7 +690,6 @@ void SwPageFrm::MakeAll()
     {
         if ( !mbValidPos )
         {
-            // PAGES01
             mbValidPos = sal_True; // positioning of the pages is taken care of by the root frame
         }
 
@@ -814,7 +813,6 @@ void SwPageFrm::MakeAll()
     } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     delete pAccess;
 
-    // PAGES01
     if ( Frm() != aOldRect && GetUpper() )
         static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
 

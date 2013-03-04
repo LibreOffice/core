@@ -663,7 +663,6 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 Frm().Height( Max( rSz.GetHeight(), long(MINLAY) ) );
                 Frm().Width ( Max( rSz.GetWidth(),  long(MINLAY) ) );
 
-                // PAGES01
                 if ( GetUpper() )
                     static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
             }
@@ -885,7 +884,6 @@ inline void SetLastPage( SwPageFrm *pPage )
 |*************************************************************************/
 void SwPageFrm::Cut()
 {
-    // PAGES01
     //AdjustRootSize( CHG_CUTPAGE, 0 );
 
     ViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -943,7 +941,6 @@ void SwPageFrm::Cut()
     // Alle Verbindungen kappen.
     Remove();
 
-    // PAGES01
     if ( pRootFrm )
         static_cast<SwRootFrm*>(pRootFrm)->CheckViewLayout( 0, 0 );
 }
@@ -993,7 +990,7 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     ViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( pSh )
         pSh->SetFirstVisPageInvalid();
-    // PAGES01
+
     getRootFrm()->CheckViewLayout( 0, 0 );
 }
 
@@ -1963,7 +1960,7 @@ void SwRootFrm::UnoRestoreAllActions()
         } while ( pSh != GetCurrShell() );
 }
 
-// PAGES01: Helper functions for SwRootFrm::CheckViewLayout
+// Helper functions for SwRootFrm::CheckViewLayout
 static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset );
 
 static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
@@ -2083,7 +2080,7 @@ static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
     }
 }
 
-// PAGES01: Calculate how the pages have to be positioned
+// Calculate how the pages have to be positioned
 void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
 {
     // #i91432#
