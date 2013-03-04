@@ -40,7 +40,7 @@ import com.sun.star.wizards.web.data.CGSettings;
  * <br/>
  * Since the files are both static and dynamic (some are always the same, 
  * while other change according to user choices) 
- * I divide this tasks to two: all necessary 
+ * I divide this tasks to two: all necessary
  * static files, which should not regularily update are copied upon
  * instanciation.
  * The TOC is generated in refresh(...);
@@ -60,9 +60,9 @@ public class TOCPreview
 
     /**
      * @param xmsf_
-     * @param settings web wizard settings 
-     * @param res resources 
-     * @param tempDir_ destination 
+     * @param settings web wizard settings
+     * @param res resources
+     * @param tempDir_ destination
      * @throws Exception
      */
     public TOCPreview(XMultiServiceFactory xmsf_, CGSettings settings, WebWizardDialogResources res, String tempDir_, XFrame _xFrame)

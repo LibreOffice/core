@@ -36,7 +36,7 @@ import com.sun.star.util.XChangesBatch;
  * name of the property, parent is a HierarchyElement (::com::sun::star::configuration::HierarchyElement)<br/>
  * The get and set methods support hieryrchical property names like "options/gridX". <br/>
  * NOTE: not yet supported, but sometime later, 
- * If you will ommit the "parent" parameter, then the "name" parameter must be in hierarchy form from 
+ * If you will ommit the "parent" parameter, then the "name" parameter must be in hierarchy form from
  * the root of the registry.
  */
 public abstract class Configuration

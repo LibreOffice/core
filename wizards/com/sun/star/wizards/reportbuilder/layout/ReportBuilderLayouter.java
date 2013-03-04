@@ -88,7 +88,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     /**
      * The Constructor is protected, this is a abstract class, use Tabular or other to create an instance.
      * @param _xDefinitionAccess
-     * @param _aResource 
+     * @param _aResource
      */
     protected ReportBuilderLayouter(IReportDefinitionReadAccess _xDefinitionAccess, Resource _aResource)
     {
@@ -182,7 +182,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Remove all fields
-     * @param _xSectionToClear 
+     * @param _xSectionToClear
      */
     private void emptySection(XSection _xSectionToClear)
     {
@@ -717,7 +717,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
      * @param _sFormattedfield as String a dbfield or an other function
      * @param _aRect           .X, .Y are the absolute position (1/100mm) where the formatted field will set
      * @param _nWidth          the width of the field in 1/100mm
-     * @param _aSO 
+     * @param _aSO
      * @return a new Rectangle with the new Rect.X position, Rect.Y will not change.
      */
     protected Rectangle insertFormattedField(XSection _xSection, String _sFormattedfield, Rectangle _aRect, int _nWidth, SectionObject _aSO)

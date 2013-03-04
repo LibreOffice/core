@@ -353,7 +353,7 @@ public class AggregateComponent extends ControlScroller
                 ControlRow oControlRow = ControlRowVector.get(i);
 //              if (i == _index)
 //                  oControlRow.settovoid();
-//              else            
+//              else
                 oControlRow.setVisible(false);
             }
         }

@@ -657,7 +657,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
         /**
          * @param listItem
-         * @return two resource ids for an image referenced in the imaglist resourcefile of the 
+         * @return two resource ids for an image referenced in the imaglist resourcefile of the
          * wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
         public Object[] getImageUrls(Object listItem);

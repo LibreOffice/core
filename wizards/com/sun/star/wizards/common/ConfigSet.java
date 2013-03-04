@@ -379,7 +379,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
     /**
      * Set members might include a property
      * which orders them.
-     * This method reindexes the given member to be 
+     * This method reindexes the given member to be
      * the index number 0
      * Do not forget to call commit() after calling this method.
      * @param confView

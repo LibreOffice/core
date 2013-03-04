@@ -77,7 +77,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 //        {
 //            String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
 //            XMultiServiceFactory xMSF = null;
-//            try 
+//            try
 //            {
 //                xMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
 //                if (xMSF != null)

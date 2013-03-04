@@ -140,7 +140,7 @@ public class NumberFormatter
     
     public int defineNumberFormat(String _FormatString)
     {
-        try 
+        try
         {
             int NewFormatKey = xNumberFormats.queryKey(_FormatString, aLocale, true);
             if (NewFormatKey == -1)
@@ -160,7 +160,7 @@ public class NumberFormatter
     /**
      * returns a numberformat for a FormatString. 
      * @param _FormatString
-     * @param _aLocale 
+     * @param _aLocale
      * @return
      */ 
     public int defineNumberFormat(String _FormatString, Locale _aLocale)

@@ -385,7 +385,7 @@ public class FilterComponent
      * @param iWidth
      * @param FilterCount
      * @param _oQueryMetaData
-     * @param _firstHelpID 
+     * @param _firstHelpID
      */
     public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int iWidth, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {

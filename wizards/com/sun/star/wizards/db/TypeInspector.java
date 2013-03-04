@@ -412,7 +412,7 @@ public class TypeInspector
      *4) DOUBLE
      *5) NUMERIC
      *6) DECIMAL         * 
-     * If no appropriate datatype is found ther first available numeric type after DataType.INTEGER 
+     * If no appropriate datatype is found ther first available numeric type after DataType.INTEGER
      * according to the 'convertDataType' method is returned
      */
     /**TODO the fallback order is the same as implemented in the method 'convertDataType'. 

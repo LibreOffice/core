@@ -263,7 +263,7 @@ public class Control extends Shape
         }
     }
 
-    /** the peer should be retrieved every time before it is used because it 
+    /** the peer should be retrieved every time before it is used because it
      * might be disposed otherwise
      * 
      * @return

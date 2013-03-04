@@ -68,7 +68,7 @@ public interface IReportDocument
     // -------------------------------------------------------------------------    
     /**
      * Is called after first step, set Tablename and the fields, which should occur in the Report.
-     * @param _aType 
+     * @param _aType
      * @param TableName
      * @param FieldNames
      */

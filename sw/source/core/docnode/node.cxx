@@ -1333,7 +1333,7 @@ bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 // Set an Attribute
 sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
 {
-    if( !GetpSwAttrSet() ) // Have the Nodes created by the corresponding AttrSets 
+    if( !GetpSwAttrSet() ) // Have the Nodes created by the corresponding AttrSets
         NewAttrSet( GetDoc()->GetAttrPool() );
 
     OSL_ENSURE( GetpSwAttrSet(), "Why did't we create an AttrSet?");
@@ -1359,7 +1359,7 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            ModifyNotification( &aChgOld, &aChgNew ); // Send all changed ones 
+            ModifyNotification( &aChgOld, &aChgNew ); // Send all changed ones
         }
     }
     return bRet;

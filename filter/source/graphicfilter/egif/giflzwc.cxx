@@ -116,7 +116,7 @@ struct GIFLZWCTreeNode
 {
 
     GIFLZWCTreeNode*    pBrother;       // next node which has the same father
-    GIFLZWCTreeNode*    pFirstChild;    // first 
+    GIFLZWCTreeNode*    pFirstChild;    // first
     sal_uInt16              nCode;          // the code for the string of pixel values which comes about
     sal_uInt16              nValue;         // the pixel value
 };

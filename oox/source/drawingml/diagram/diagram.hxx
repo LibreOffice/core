@@ -39,7 +39,7 @@ namespace oox { namespace drawingml {
 
 namespace dgm {
 
-/** A Connection 
+/** A Connection
  */
 struct Connection
 {

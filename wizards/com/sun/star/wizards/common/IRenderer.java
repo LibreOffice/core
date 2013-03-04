@@ -21,7 +21,7 @@ package com.sun.star.wizards.common;
  * A General interface which gives a string
  * that represents the rendered argument object.
  * Can be used to reference resources, internationalizartion
- * a.s.o 
+ * a.s.o
  */
 public interface IRenderer
 {

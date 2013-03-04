@@ -72,7 +72,7 @@ public class PropertySetHelper
     set a property, 
     @param _sName name of the property to set
     @param _aValue property value as object
-     * @throws java.lang.Exception 
+     * @throws java.lang.Exception
      */
     public void setPropertyValue(String _sName, Object _aValue) throws java.lang.Exception
     {

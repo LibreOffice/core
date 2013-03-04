@@ -56,7 +56,7 @@ public class FTPDialogResources extends Resource
         super(xmsf, UNIT_NAME, MODULE_NAME);
 
         /**
-         * Delete the String, uncomment the getResText method 
+         * Delete the String, uncomment the getResText method
          * 
          */
         resFTPDialog_title = getResText(RID_FTPDIALOG_START + 0);

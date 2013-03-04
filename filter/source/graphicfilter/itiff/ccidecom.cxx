@@ -314,7 +314,7 @@ const CCIHuffmanTableEntry CCIUncompTable[CCIUncompTableSize]={
 // (e.g. an accidentaly key press in the editor) the tables are listed twice
 // and are compared during runtime. (If the comparison fails CCIDcompressor
 // throws an error) The whole thing may appear insane, but an error within the
-// tables would otherwise be really hard to discover and it's very unlikely that 
+// tables would otherwise be really hard to discover and it's very unlikely that
 // one or more sample files run through all codes.
 
 const CCIHuffmanTableEntry CCIWhiteTableSave[CCIWhiteTableSize]={

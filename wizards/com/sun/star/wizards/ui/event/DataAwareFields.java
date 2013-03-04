@@ -22,12 +22,12 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.uno.Any;
 
 /**
- * This class is a factory for Value objects for different types of 
+ * This class is a factory for Value objects for different types of
  * memebers. 
- * Other than some Value implementations classes this class contains static 
+ * Other than some Value implementations classes this class contains static
  * type conversion methods and factory methods.
  * 
- * @see com.sun.star.wizards.ui.event.DataAware.Value 
+ * @see com.sun.star.wizards.ui.event.DataAware.Value
  */
 public class DataAwareFields
 {

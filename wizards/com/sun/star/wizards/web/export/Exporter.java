@@ -36,7 +36,7 @@ public interface Exporter
      * @param source is a CGDocument object.
      * @param targetDirectory contains the URL of a directory to which the file should be exported to.
      * @param xmsf this is a basic multiServiceFactory.
-     * @param task - a task monitoring object. This should advance 
+     * @param task - a task monitoring object. This should advance
      * (call task.advance(true) ) 3 times, while exporting.
      * 
      */

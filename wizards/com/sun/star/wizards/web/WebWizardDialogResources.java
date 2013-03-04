@@ -179,7 +179,7 @@ public class WebWizardDialogResources
     {
         oResource = _oResource;
         /**
-         * Delete the String, uncomment the getResText method 
+         * Delete the String, uncomment the getResText method
          * 
          */
         resWebWizardDialog_title = oResource.getResText(RID_WEBWIZARDDIALOG_START + 1);

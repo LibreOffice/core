@@ -137,7 +137,7 @@ public:
     void incErrorInt( const char* pStr, int nVal ) const;
     // ++nError with output to stderr, pStr should contain "%s", otherwise appended
     void incErrorStr( const char* pStr, const ::rtl::OUString& rVal ) const;
-    // ++nError with output to stderr, pStr should contain "%s %s", otherwise 
+    // ++nError with output to stderr, pStr should contain "%s %s", otherwise
     // appended
     void incErrorStrStr( const char* pStr, const ::rtl::OUString& rVal1, const ::rtl::OUString& rVal2 ) const;
     // used by incError...(), returns a pointer to a static buffer,

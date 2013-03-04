@@ -73,7 +73,7 @@ public class QuerySummary extends QueryMetaData
                 sGroupByFraction = combinePartString(RID_QUERY + 57, GroupFieldNames, RID_QUERY + 58) + sReturnChar;
                 sHavingFraction = combineFilterNameFraction(getGroupByFilterConditions(), RID_QUERY + 59, RID_QUERY + 60);
             }
-            // TODO: remove the last return from the string 
+            // TODO: remove the last return from the string
             sSummary = sFieldNamesFraction + sSortingFraction + sFilterFraction + sAggregateFraction + sGroupByFraction + sHavingFraction;
             sSummary = JavaTools.replaceSubString(sSummary, PropertyNames.EMPTY_STRING, "~");
         }

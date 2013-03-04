@@ -91,7 +91,7 @@ public class FormControlArranger
         setFormSize(_FormSize);
     }
     // Note: on all Controls except for the checkbox the Label has to be set
-    // a bit under the DBControl because its Height is also smaller 
+    // a bit under the DBControl because its Height is also smaller
 
     private int getLabelDiffHeight(int _index)
     {

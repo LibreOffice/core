@@ -169,7 +169,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
             xProps = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, component).getDocumentProperties();
         }
 
-        task.advance(true); //4    
+        task.advance(true); //4
 
         //now use the object to read some document properties.
         if (xProps != null)

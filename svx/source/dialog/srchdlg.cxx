@@ -2177,7 +2177,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
 
     if (bCalcApp)
         aLayoutBtn.SetText( aLayoutCalcStr );
-    else 
+    else
     {
         if (bWriterApp)
             aLayoutBtn.SetText( aLayoutWriterStr);

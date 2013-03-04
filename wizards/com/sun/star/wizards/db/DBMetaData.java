@@ -913,7 +913,7 @@ public class DBMetaData
      * adds the passed document as a report or a form to the database. Afterwards the document is deleted.
      * the document may not be open
      * @param _xComponent
-     * @param _xDocNameAccess 
+     * @param _xDocNameAccess
      * @param i_createTemplate  describes the type of the document: "form" or "report"
      */
     public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)

@@ -470,7 +470,7 @@ public class JavaTools
                 if (FieldInList(_complist, baselist[i]) > -1)
                 {
                     retvector.add(baselist[i]);
-                // here you could call the method of a defined interface to notify the calling method                                           
+                // here you could call the method of a defined interface to notify the calling method
                 }
             }
             retarray = new String[retvector.size()];
@@ -493,7 +493,7 @@ public class JavaTools
                     if (FieldInList(_complist, sValue) != -1)
                     {
                         retvector.add(baselist[i]);
-                    // here you could call the method of a defined interface to notify the calling method                                           
+                    // here you could call the method of a defined interface to notify the calling method
                     }
                 }
                 retarray = new String[retvector.size()][2];
@@ -541,7 +541,7 @@ public class JavaTools
     /**
      * searches a multidimensional array for duplicate fields. According to the following example
      * SlaveFieldName1 ;SlaveFieldName2; SlaveFieldName3
-     * MasterFieldName1;MasterFieldName2;MasterFieldName3 
+     * MasterFieldName1;MasterFieldName2;MasterFieldName3
      * The entries SlaveFieldNameX and MasterFieldNameX are grouped together and then the created groups are compared
      * If a group is duplicate the entry of the second group is returned.
      * @param _scomplist

@@ -320,8 +320,8 @@ public class SystemDialog
     /**
      * @param windowServiceName one of the following strings:
      * "ErrorBox", "WarningBox", "MessBox", "InfoBox", "QueryBox". 
-     * There are other values possible, look 
-     * under src/toolkit/source/awt/vcltoolkit.cxx 
+     * There are other values possible, look
+     * under src/toolkit/source/awt/vcltoolkit.cxx
      * @param windowAttribute see com.sun.star.awt.VclWindowPeerAttribute
      * @return 0 = cancel, 1 = ok, 2 = yes,  3 = no(I'm not sure here) 
      * other values check for yourself ;-)

@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 
 /**
  * Encapsulate a Method invocation.
- * In the constructor one defines a method, a target object and an optional 
+ * In the constructor one defines a method, a target object and an optional
  * Parameter.
  * Then one calls "invoke", with or without a parameter. <br/>
  * Limitations: I do not check anything myself. If the param is not ok, from the

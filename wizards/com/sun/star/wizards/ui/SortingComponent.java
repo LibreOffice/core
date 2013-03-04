@@ -195,7 +195,7 @@ public class SortingComponent
     /**
      * sets the controls of a Sorting criterion to readonly or not. 
      * @param _index index of the Sorting criterion
-     * @param _breadonly 
+     * @param _breadonly
      */
     public void setReadOnly(int _index, boolean _breadonly)
     {

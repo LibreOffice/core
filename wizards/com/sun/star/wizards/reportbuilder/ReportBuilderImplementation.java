@@ -314,7 +314,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     /**
      * Change the current Layouter by a new one with the given Name _sName.
-     * If there exist no other layouter with the given name, nothing happens, the layouter will not change to 
+     * If there exist no other layouter with the given name, nothing happens, the layouter will not change to
      * an illegal one.
      * @param _sName Name of the other layouter.
      */
@@ -636,7 +636,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         String[] a = new String[getLayoutMap().size()];
         String[] b = new String[getLayoutMap().size()];
 
-        // run through the whole layoutmap and 
+        // run through the whole layoutmap and
         final Set<String> aKeys = getLayoutMap().keySet();
         final Iterator<String> aKeyIterator = aKeys.iterator();
         int i = 0;

@@ -1023,7 +1023,7 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGTABLE_OPT_WORKWITHTABLE",    // HID:41242
         "HID:WIZARDS_HID_DLGTABLE_OPT_STARTFORMWIZARD",    // HID:41243
         "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG",    // HID:41244
-        "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA"    // HID:41245        
+        "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA"    // HID:41245
     };
 
     public static String getHelpIdString( int nHelpId )

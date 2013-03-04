@@ -26,7 +26,7 @@ import com.sun.star.wizards.common.PropertyNames;
 /**
  * This class suppoprts imple cases where a UI control can
  * be directly synchronized with a data property.
- * Such controls are: the different text controls 
+ * Such controls are: the different text controls
  * (synchronizing the "Text" , "Value", "Date", "Time" property), 
  * Checkbox controls, Dropdown listbox controls (synchronizing the
  * SelectedItems[] property. 

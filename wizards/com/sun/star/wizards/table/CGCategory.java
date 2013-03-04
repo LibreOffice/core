@@ -48,7 +48,7 @@ public class CGCategory
     {
         try
         {
-            oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables   
+            oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables
             xNameAccessCurBusinessNode = Configuration.getChildNodebyName(
                 UnoRuntime.queryInterface(XNameAccess.class, oconfigView),
                 category);

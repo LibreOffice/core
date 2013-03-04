@@ -33,7 +33,7 @@ enum PCDResolution {
     PCDRES_BASE16,  //  192 x  128
     PCDRES_BASE4,   //  384 x  256
     PCDRES_BASE,    //  768 x  512
-    // the following ones are compressed 
+    // the following ones are compressed
     // and CANNOT be read by us
     PCDRES_4BASE,   // 1536 x 1024
     PCDRES_16BASE   // 3072 x 3072

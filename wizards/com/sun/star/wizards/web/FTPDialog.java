@@ -68,7 +68,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
 
     /**
      * A Constant used for the setLabel(int) method to change the
-     * status-display. "unknown" is the status when the user first 
+     * status-display. "unknown" is the status when the user first
      * opens the dialog, or changes the servername/username/password.
      */
     private final static int STATUS_UNKONWN = 0;
@@ -171,7 +171,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      * @param xmsf
      * @param p the publishert object that contains the data
      * for this dialog
-     * @throws Exception 
+     * @throws Exception
      */
     public FTPDialog(XMultiServiceFactory xmsf, CGPublish p) throws Exception
     {
@@ -401,7 +401,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     }
 
     /**
-     * extract the hostname out of the url used by the 
+     * extract the hostname out of the url used by the
      * publisher. This url does not include the username:password string. 
      * @param ftpUrl
      * @return
@@ -609,7 +609,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     /**
      * changes the status label to disconnected status, and
      * disables the ok and choose-dir buttons.
-     * This method is called also when the hostname, username 
+     * This method is called also when the hostname, username
      * and passwordtext fields change.
      */
     public void disconnect()
@@ -686,7 +686,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     }
 
     /**
-     * changes the text of the status label and 
+     * changes the text of the status label and
      * (TODO) the status image.
      * @param label
      * @param image
@@ -703,7 +703,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     }
 
     /**
-     * called when the user clicks 
+     * called when the user clicks
      * the choose-dir button. ("...")
      * Opens the pickFolder dialog.
      * checks if the returned folder is an ftp folder.

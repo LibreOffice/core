@@ -25,9 +25,9 @@ import com.sun.star.uno.TypeClass;
  * Optional or named parameters in SO are of the Object type in Java.
  * These objects must be converted to the right simple value type.
  * Unfortunately, StarBasic does not know the original desired type,
- * and a value that should be a "Float" is delivered as "Byte". This class 
+ * and a value that should be a "Float" is delivered as "Byte". This class
  * handles the conversions of these types.<br>
- * This class does not log warnings (or throws Exceptions) when the precision 
+ * This class does not log warnings (or throws Exceptions) when the precision
  * of a value is lost.
  */
 public class NumericalHelper
@@ -82,7 +82,7 @@ public class NumericalHelper
 
     /**
      * get a byte value from the object
-     * @param aValue 
+     * @param aValue
      * @return a byte
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -139,7 +139,7 @@ public class NumericalHelper
 
     /**
      * get a char value from the object
-     * @param aValue 
+     * @param aValue
      * @return a char
      * @throws com.sun.star.lang.IllegalArgumentException  if the object cannot be converted
      */
@@ -204,7 +204,7 @@ public class NumericalHelper
 
     /**
      * get a short value from the object
-     * @param aValue 
+     * @param aValue
      * @return a short
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -339,7 +339,7 @@ public class NumericalHelper
     /**
     @param aValue a object this can contain anything
      * @return true, if the value is type of any integer values. double / float are not(!) integer values
-     * @throws com.sun.star.lang.IllegalArgumentException 
+     * @throws com.sun.star.lang.IllegalArgumentException
      */
     public static boolean isInteger(Object aValue) throws com.sun.star.lang.IllegalArgumentException
     {
@@ -397,7 +397,7 @@ public class NumericalHelper
 
     /**
      * get an int value from the object
-     * @param aValue 
+     * @param aValue
      * @return an int
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -453,7 +453,7 @@ public class NumericalHelper
 
     /**
      * get a long value from the object
-     * @param aValue 
+     * @param aValue
      * @return a long
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -509,7 +509,7 @@ public class NumericalHelper
 
     /**
      * get a float value from the object
-     * @param aValue 
+     * @param aValue
      * @return a float
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -565,7 +565,7 @@ public class NumericalHelper
 
     /**
      * get a double value from the object
-     * @param aValue 
+     * @param aValue
      * @return a double
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -621,7 +621,7 @@ public class NumericalHelper
 
     /**
      * get a String value from the object
-     * @param aValue 
+     * @param aValue
      * @return a String
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -671,7 +671,7 @@ public class NumericalHelper
 
     /**
      * get a boolean value from the object
-     * @param aValue 
+     * @param aValue
      * @return a boolean
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -729,7 +729,7 @@ public class NumericalHelper
      * get an int array from an object
      * @param anArrayValue a value that is constructed into an array
      * @return an integer array
-     * @throws com.sun.star.lang.IllegalArgumentException 
+     * @throws com.sun.star.lang.IllegalArgumentException
      */
     public static int[] toIntArray(Object anArrayValue)
             throws com.sun.star.lang.IllegalArgumentException
@@ -763,7 +763,7 @@ public class NumericalHelper
      * get an byte array from an object
      * @param anArrayValue a value that is constructed into an array
      * @return a byte array
-     * @throws com.sun.star.lang.IllegalArgumentException 
+     * @throws com.sun.star.lang.IllegalArgumentException
      */
     public static byte[] toByteArray(Object anArrayValue)
             throws com.sun.star.lang.IllegalArgumentException
@@ -797,7 +797,7 @@ public class NumericalHelper
      * get a short array from an object
      * @param anArrayValue a value that is constructed into an array
      * @return a short array
-     * @throws com.sun.star.lang.IllegalArgumentException 
+     * @throws com.sun.star.lang.IllegalArgumentException
      */
     public static short[] toShortArray(Object anArrayValue)
             throws com.sun.star.lang.IllegalArgumentException
@@ -831,7 +831,7 @@ public class NumericalHelper
      * get a string array from an object
      * @param anArrayValue a value that is constructed into an array
      * @return a short array
-     * @throws com.sun.star.lang.IllegalArgumentException 
+     * @throws com.sun.star.lang.IllegalArgumentException
      */
     public static String[] toStringArray(Object anArrayValue)
             throws com.sun.star.lang.IllegalArgumentException
@@ -866,7 +866,7 @@ public class NumericalHelper
      * @param _aValue a value that is constructed into an int
      * @param _ndefaultValue the value that is returned, if conversion fails, or if 'aValue' is null
      * @return an int value
-     * @throws java.lang.Exception 
+     * @throws java.lang.Exception
      */
     public static int toInt(Object _aValue, int _ndefaultValue) throws Exception
     {
@@ -1183,7 +1183,7 @@ public class NumericalHelper
     /**
      * get the simple int type
      * @param typeObject
-     * @return 
+     * @return
      * @throws com.sun.star.lang.IllegalArgumentException
      */
     static int getInt(TypeObject typeObject)
@@ -1199,7 +1199,7 @@ public class NumericalHelper
 
     /**
      * get the simple float type
-     * @throws com.sun.star.lang.IllegalArgumentException 
+     * @throws com.sun.star.lang.IllegalArgumentException
      */
     static float getFloat(TypeObject typeObject)
             throws com.sun.star.lang.IllegalArgumentException

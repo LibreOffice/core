@@ -23,10 +23,10 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.web.data.CGStyle;
 
 /**
- * the style preview, which is a OOo Document Preview in 
+ * the style preview, which is a OOo Document Preview in
  * an Image Control.
  * This class copies the files needed for this
- * preview from the web wizard work directory 
+ * preview from the web wizard work directory
  * to a given temporary directory, and updates them
  * on request, according to the current style/background selection
  * of the user.
@@ -104,7 +104,7 @@ public class StylePreview
             //copy the background image to the temp directory.
             fileAccess.copy(background, backgroundFilename);
         }
-        //copy the actual css to the temp directory 
+        //copy the actual css to the temp directory
         fileAccess.copy(css, cssFilename);
     }
 

@@ -2122,7 +2122,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 
     *pDataStream >> nHeaderByte;
 
-    // might be better to read the bits as a 16 bit word 
+    // might be better to read the bits as a 16 bit word
     // ( like it is in the spec. )
     sal_uInt8 bits1;
     *pDataStream >> bits1;

@@ -353,7 +353,7 @@ public abstract class ControlScroller
      * the control in guiRow and column
      * @param guiRow 0 based row index
      * @param column 0 based column index
-     * @return the propertyValue object corresponding to 
+     * @return the propertyValue object corresponding to
      * this control.
      */
     protected PropertyValue fieldInfo(int guiRow, int column)
@@ -457,7 +457,7 @@ public abstract class ControlScroller
 
     protected abstract void initializeScrollFields();
 
-    /** inserts a group of controls into the component. The group may either be a row or a column of controls 
+    /** inserts a group of controls into the component. The group may either be a row or a column of controls
      *  The controls should be put on Step 99 (means made invisible at first). All the controlrows that are needed are than
      *  made visible automatically when calling "initialize(_fieldcount)"
      * @param _index The index of the control group

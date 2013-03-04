@@ -228,7 +228,7 @@ public abstract class WWD_Events extends WWD_Startup
                 {
                     (short) 0
                 };
-                // We try to select the same item index again, if possible 
+                // We try to select the same item index again, if possible
                 if (settings.cp_SavedSessions.getSize() > selected[0])
                 {
                     nextSelected[0] = selected[0];
@@ -272,7 +272,7 @@ public abstract class WWD_Events extends WWD_Startup
      * when the user clicks another document
      * in the listbox, this method is called,
      * and couses the display in
-     * the textboxes title,description, author and export format 
+     * the textboxes title,description, author and export format
      * to change
      */
     public void setSelectedDoc(short[] s)
@@ -283,7 +283,7 @@ public abstract class WWD_Events extends WWD_Startup
         if (doc == null)
         {
             fillExportList(EMPTY_STRING_ARRAY);
-        //I try to avoid refreshing the export list if 
+        //I try to avoid refreshing the export list if
         //the same type of document is chosen.
         }
         else if (oldDoc == null || (!oldDoc.appType.equals(doc.appType)))
@@ -329,7 +329,7 @@ public abstract class WWD_Events extends WWD_Startup
             task.removeTaskListener(sd);
         }
         /*
-         * When adding a single document, do not use a 
+         * When adding a single document, do not use a
          * status dialog... 
          */
         else
@@ -506,7 +506,7 @@ public abstract class WWD_Events extends WWD_Startup
     }
 
     /**
-     * updates the ui of a certain publisher 
+     * updates the ui of a certain publisher
      * (the text box url)
      * @param number
      */
@@ -641,7 +641,7 @@ public abstract class WWD_Events extends WWD_Startup
                     }
                 }
                 else
-                {//not a directory, but still exists 
+                {//not a directory, but still exists
                     String message = JavaTools.replaceSubString(resources.resLocalTargetExistsAsfile,
                             path, "%FILENAME");
                     AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(), message, ErrorHandler.ERROR_PROCESS_FATAL);
@@ -883,7 +883,7 @@ public abstract class WWD_Events extends WWD_Startup
     }
 
     /**
-     * this method will be called when the Status Dialog 
+     * this method will be called when the Status Dialog
      * is hidden. 
      * It checks if the "Process" was successfull, and if so,
      * it closes the wizard dialog. 
@@ -931,7 +931,7 @@ public abstract class WWD_Events extends WWD_Startup
      * @param exitOnCreate_ should the wizard close after
      * a successfull create.
      * Default is true,
-     * I have a hidden feature which enables false here 
+     * I have a hidden feature which enables false here
      */
     public void finishWizard(boolean exitOnCreate_)
     {

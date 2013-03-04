@@ -18,8 +18,8 @@
 package com.sun.star.wizards.common;
 
 /**
- * This Interface specifies a method of an object which is 
- * capable of reading adn writing its data out of the 
+ * This Interface specifies a method of an object which is
+ * capable of reading adn writing its data out of the
  * OO Configuration. <br/>
  * There are 2 direct implementations: ConfigGroup and ConfigSet.
  * The root is the first Java Object in the configuration hirarchie.
@@ -29,7 +29,7 @@ public interface ConfigNode
 
     /**
      * reads the object data out of the configuration.
-     * @param  configurationView is a ::com::sun::star::configuration::HierarchyElement 
+     * @param  configurationView is a ::com::sun::star::configuration::HierarchyElement
      * which represents the node corresponding to the Object.
      * @param param a free parameter. Since the intension of this interface is
      * to be used in a tree like way, reading objects and subobjects and so on,

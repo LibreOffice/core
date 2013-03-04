@@ -855,7 +855,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
     }
 
     /**
-     * renders the images and titles of 
+     * renders the images and titles of
      * the layouts
      */
     private class LayoutRenderer implements ImageList.IImageRenderer

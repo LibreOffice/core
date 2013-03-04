@@ -41,10 +41,10 @@ import com.sun.star.document.XDocumentProperties;
 /**
  * This class delivers static convenience methods
  * to use with ucb SimpleFileAccess service.
- * You can also instanciate the class, to encapsulate 
+ * You can also instanciate the class, to encapsulate
  * some functionality of SimpleFileAccess. The instance
  * keeps a reference to an XSimpleFileAccess and an
- * XFileIdentifierConverter, saves the permanent 
+ * XFileIdentifierConverter, saves the permanent
  * overhead of quering for those interfaces, and delivers
  * conveneince methods for using them.
  * These Convenince methods include mainly Exception-handling.
@@ -892,7 +892,7 @@ public class FileAccess
     }
 
     /**
-     * @param path 
+     * @param path
      * @param pathSeparator
      * @return
      */
@@ -947,7 +947,7 @@ public class FileAccess
     }
 
     /**
-     * @param url 
+     * @param url
      * @return the parent dir of the given url.
      * if the path points to file, gives the directory in which the file is.
      */

@@ -74,7 +74,7 @@ public class BackgroundsDialog extends ImageListDialog
 
     /**
      * trigered when the user clicks the "other" button.
-     * opens a "file open" dialog, adds the selected 
+     * opens a "file open" dialog, adds the selected
      * image to the list and to the web wizard configuration,
      * and then jumps to the new image, selecting it in the list.
      * @see #add(String)
@@ -129,7 +129,7 @@ public class BackgroundsDialog extends ImageListDialog
     /**
      * an ImageList Imagerenderer implemtation. 
      * The image URL is the object given from the list model.
-     * the image name, got from the "render" method is 
+     * the image name, got from the "render" method is
      * the filename portion of the url.
      *
      */
@@ -162,7 +162,7 @@ public class BackgroundsDialog extends ImageListDialog
     }
 
     /**
-     * This is a list model for the image list of the 
+     * This is a list model for the image list of the
      * backgrounds dialog.
      * It takes the Backgrounds config set as an argument,
      * and "parses" it to a list of files:
@@ -256,7 +256,7 @@ public class BackgroundsDialog extends ImageListDialog
 
         /**
          * adds the given image url to the list.
-         * if and only if it ends with jpg, jpeg or gif 
+         * if and only if it ends with jpg, jpeg or gif
          * (case insensitive) 
          * @param filename image url.
          */

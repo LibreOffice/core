@@ -35,7 +35,7 @@ import com.sun.star.wizards.common.PropertyNames;
  * in child classes, the updateData() will be binded to UI event calls.
  * <br><br>
  * This class holds references to a Data Object and a Value object.
- * The Value object "knows" how to get and set a value from the 
+ * The Value object "knows" how to get and set a value from the
  * Data Object.
  */
 public abstract class DataAware {
@@ -99,7 +99,7 @@ public abstract class DataAware {
 
     /**
      * gets the current value from the data obejct.
-     * this method delegates the job to 
+     * this method delegates the job to
      * the value object.
      * @return the current value of the data object.
      */
@@ -211,7 +211,7 @@ public abstract class DataAware {
     
     /**
      * Value objects read and write a value from and
-     * to an object. Typically using reflection and JavaBeans properties 
+     * to an object. Typically using reflection and JavaBeans properties
      * or directly using memeber reflection API.
      * DataAware delegates the handling of the DataObject
      * to a Value object.

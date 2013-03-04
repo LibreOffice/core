@@ -124,7 +124,7 @@ public:
             sal_Bool            IsDecimalSeparatorAsLocale() const;
             void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
 
-    // determine whether to ignore changes to the system keyboard/locale/language when 
+    // determine whether to ignore changes to the system keyboard/locale/language when
     // determining the language for newly entered text
             sal_Bool            IsIgnoreLanguageChange() const;
             void                SetIgnoreLanguageChange( sal_Bool bSet);

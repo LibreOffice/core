@@ -78,7 +78,7 @@ public abstract class WWD_General extends WebWizardDialog
     }
 
     /*
-     *  File Dialog methods 
+     *  File Dialog methods
      */
     protected SystemDialog getDocAddDialog()
     {
@@ -145,7 +145,7 @@ public abstract class WWD_General extends WebWizardDialog
     }
 
     /**
-     * returns the document specified 
+     * returns the document specified
      * by the given short array.
      * @param s
      * @return
@@ -185,8 +185,8 @@ public abstract class WWD_General extends WebWizardDialog
     }
 
     /**
-     * returns a publisher object for the given name 
-     * @param name one of the WebWizardConst constants : FTP 
+     * returns a publisher object for the given name
+     * @param name one of the WebWizardConst constants : FTP
      * @return
      */
     protected CGPublish getPublisher(String name)
@@ -239,7 +239,7 @@ public abstract class WWD_General extends WebWizardDialog
         {
             return;
         /*
-         * disbale steps 3-7 
+         * disbale steps 3-7
          */
         }
         for (int i = 3; i < 8; i++)
@@ -247,7 +247,7 @@ public abstract class WWD_General extends WebWizardDialog
             setStepEnabled(i, enabled, true);
         /* in this place i just disable the finish button.
          * later, in the checkPublish, which is only performed if
-         * this one is true, it will be enabled (if the check 
+         * this one is true, it will be enabled (if the check
          * is positive)
          */
         }
@@ -318,7 +318,7 @@ public abstract class WWD_General extends WebWizardDialog
 
     /**
      * @return false either if publishing input is wrong or there
-     * are no publishing targets chosen. returns true when at least 
+     * are no publishing targets chosen. returns true when at least
      * one target is chosen, *and* all
      * which are chosen are legal.
      * If proxies are on, ftp publisher is ignored.
@@ -337,7 +337,7 @@ public abstract class WWD_General extends WebWizardDialog
 
     /**
      * This method checks if the publishing
-     * input is ok, and enables and disables 
+     * input is ok, and enables and disables
      * the 'create' button.
      * public because it is called from
      * an event listener object.

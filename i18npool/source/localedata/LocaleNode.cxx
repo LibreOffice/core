@@ -1666,7 +1666,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         ++nChild;
 
         // Generate partitive Months of Year
-        // Optional, if not present fall back to genitive months, or nominative 
+        // Optional, if not present fall back to genitive months, or nominative
         // months (nouns) if that isn't present either.
         if ( calNode->getChildAt(nChild)->getName() != "PartitiveMonths" )
             --nChild;
@@ -1891,9 +1891,9 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
             incError( "CurrencyID is not ISO 4217");
         str = currencyNode -> findNode ("CurrencySymbol") -> getValue();
         of.writeParameter("currencySymbol", str, nbOfCurrencies);
-        // Check if this currency really is the one used in number format 
-        // codes. In case of ref=... mechanisms it may be that TheCurrency 
-        // couldn't had been determined from the current locale (i.e. is 
+        // Check if this currency really is the one used in number format
+        // codes. In case of ref=... mechanisms it may be that TheCurrency
+        // couldn't had been determined from the current locale (i.e. is
         // empty), silently assume the referred locale has things right.
         if (bCompatible && !sTheCompatibleCurrency.isEmpty() && sTheCompatibleCurrency != str)
             incErrorStrStr( "CurrencySymbol \"%s\" flagged as usedInCompatibleFormatCodes doesn't match \"%s\" determined from format codes.", str, sTheCompatibleCurrency);

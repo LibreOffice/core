@@ -29,7 +29,7 @@ public class ReportImplementationHelper
 
     /**
      * @param _aMSF
-     * @param _nOrientation 
+     * @param _nOrientation
      */
     public ReportImplementationHelper(XMultiServiceFactory _aMSF, int _nOrientation)
     {

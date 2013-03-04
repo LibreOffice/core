@@ -66,7 +66,7 @@ public class ConfigGroup implements ConfigNode
 
     /**
      * convert the primitive type value of the
-     * given Field object to the corresponding 
+     * given Field object to the corresponding
      * Java Object value. 
      * @param field
      * @return the value of the field as a Object.

@@ -51,7 +51,7 @@ public class TextFieldHandler
     /**
      * Creates a new instance of TextFieldHandler
      * @param xMSF
-     * @param xTextDocument 
+     * @param xTextDocument
      */
     public TextFieldHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
     {

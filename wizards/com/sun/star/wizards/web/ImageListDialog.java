@@ -38,7 +38,7 @@ import com.sun.star.wizards.ui.ImageList.Counter;
  * The model and the renderer are
  * still abstract in this class.
  * To use the class one should extend it,
- * in the constructor then set the imageList 
+ * in the constructor then set the imageList
  * properties (member name il) like image size, grid size,
  * model renderer aso, and then call "build".
  * This class uses a counter renderer which
@@ -51,7 +51,7 @@ import com.sun.star.wizards.ui.ImageList.Counter;
  * so dialogs which do not need those, should set the corresponding
  * members showDeselectButton and/or showOtherButton to false.
  * <br/>
- * the consturctor should recieve, among others, an Array of String resources - see 
+ * the consturctor should recieve, among others, an Array of String resources - see
  * constructor documentation for details.
  */
 public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
@@ -89,7 +89,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
      * @param resources_ a string array with the following strings :
      * dialog title, label text, ok, cancel, help, deselect, other.
      * <br/> if "deselect" and "other" are not displayed, 
-     * the array can also be shorter. but if "other" is displayed 
+     * the array can also be shorter. but if "other" is displayed
      * and "deselect" not, both must be there :-(
      */
     public ImageListDialog(
@@ -106,7 +106,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
      * adds the controls to the dialog, depending on
      * the size of the image list.
      * This method should be called by subclasses after setting
-     * the il ImageList member properties 
+     * the il ImageList member properties
      */
     protected void build()
     {

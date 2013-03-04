@@ -137,7 +137,7 @@ public class UCB
     
     public Object executeCommand(Object xContent, String aCommandName, Object aArgument)
         throws com.sun.star.ucb.CommandAbortedException, 
-            com.sun.star.uno.Exception 
+            com.sun.star.uno.Exception
     {
         XCommandProcessor xCmdProcessor = UnoRuntime.queryInterface(
             XCommandProcessor.class, xContent);
@@ -187,7 +187,7 @@ public class UCB
                 {
                     //ignore
                 }
-                else 
+                else
                 {
                     files.add(aTitle);
                 }
@@ -210,7 +210,7 @@ public class UCB
     }
     
     public Object getContentProperty(Object content, String propName, Class<?> type)
-        throws Exception 
+        throws Exception
     {
         Property[] pv = new Property[1];
         pv[0] = new Property();

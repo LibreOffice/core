@@ -96,7 +96,7 @@ public class Process implements WebWizardConst, ProcessErrors
     private UCB ucb;
     public Task myTask;
     /**
-     * This is a cache for exporters, so I do not need to 
+     * This is a cache for exporters, so I do not need to
      * instanciate the same exporter more than once. 
      */
     private Map<CGExporter, Exporter> exporters = new HashMap<CGExporter, Exporter>(3);
@@ -257,7 +257,7 @@ public class Process implements WebWizardConst, ProcessErrors
     }
 
     /**
-     * This method is used to copy style files to a target 
+     * This method is used to copy style files to a target
      * Directory: css and background.
      * Note that this method is static since it is
      * also used when displaying a "preview"
@@ -391,7 +391,7 @@ public class Process implements WebWizardConst, ProcessErrors
         try
         {
             /*
-             * here I create the DOM of the TOC to pass to the XSL 
+             * here I create the DOM of the TOC to pass to the XSL
              */
             Document doc = (Document) settings.cp_DefaultSession.createDOM();
             generate(xmsf, layout, doc, fileAccess, targetDir, task);
@@ -403,7 +403,7 @@ public class Process implements WebWizardConst, ProcessErrors
             return false;
         }
 
-        /* copy files which are not xsl from layout directory to 
+        /* copy files which are not xsl from layout directory to
          * website root.
          */
         try
@@ -590,7 +590,7 @@ public class Process implements WebWizardConst, ProcessErrors
                 }
                 catch (SecurityException sx)
                 {
-                    // nonfatal 
+                    // nonfatal
                     if (!error(sx, item, ERROR_EXPORT_SECURITY, ErrorHandler.ERROR_NORMAL_IGNORE))
                     {
                         return false;
@@ -638,7 +638,7 @@ public class Process implements WebWizardConst, ProcessErrors
                 error(ex, doc, ERROR_DOC_VALIDATE, ErrorHandler.ERROR_PROCESS_FATAL);
                 return false;
             }
-        //get the exporter specified for this document  
+        //get the exporter specified for this document
         }
         CGExporter exporter = (CGExporter) settings.cp_Exporters.getElement(doc.cp_Exporter);
 
@@ -655,7 +655,7 @@ public class Process implements WebWizardConst, ProcessErrors
             String docFilename = FileAccess.getFilename(doc.cp_URL);
 
             String docExt = FileAccess.getExtension(docFilename);
-            String fn = doc.localFilename.substring(0, doc.localFilename.length() - docExt.length() - 1); //filename without extension 
+            String fn = doc.localFilename.substring(0, doc.localFilename.length() - docExt.length() - 1); //filename without extension
 
             /*
              * the copyExporter does not change
@@ -675,7 +675,7 @@ public class Process implements WebWizardConst, ProcessErrors
             }
 
             /*
-             * if two files with the same name 
+             * if two files with the same name
              * need to be exported ? So here
              * i get a new filename, so I do not
              * overwrite files...
@@ -698,9 +698,9 @@ public class Process implements WebWizardConst, ProcessErrors
                 task.advance(true);
             }
             /*
-             * getExporter(..) throws 
+             * getExporter(..) throws
              * IllegalAccessException, InstantiationException, ClassNotFoundException
-             * export() throws Exception 
+             * export() throws Exception
              */
             catch (Exception ex)
             {
@@ -726,7 +726,7 @@ public class Process implements WebWizardConst, ProcessErrors
 
     /**
      * submit an error.
-     * @param ex the exception 
+     * @param ex the exception
      * @param arg1 error argument
      * @param arg2 error argument 2
      * @param errType error type
@@ -753,7 +753,7 @@ public class Process implements WebWizardConst, ProcessErrors
     }
 
     /**
-     * creates an instance of the exporter class 
+     * creates an instance of the exporter class
      * as specified by the
      * exporter object.
      * @param export specifies the exporter to be created
@@ -775,7 +775,7 @@ public class Process implements WebWizardConst, ProcessErrors
     /**
      * searches the an exporter for the given CGExporter object
      * in the cache.
-     * If its not there, creates it, stores it in the cache and 
+     * If its not there, creates it, stores it in the cache and
      * returns it.
      * @param export specifies the needed exporter.
      * @return an Exporter instance

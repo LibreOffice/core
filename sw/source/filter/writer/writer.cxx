@@ -455,7 +455,7 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     OSL_ENSURE( rArr.empty(), "there are still entries available" );
 
     sal_uLong nNd = rNd.GetIndex();
-    std::pair<SwBookmarkNodeTable::const_iterator, SwBookmarkNodeTable::const_iterator> aIterPair 
+    std::pair<SwBookmarkNodeTable::const_iterator, SwBookmarkNodeTable::const_iterator> aIterPair
         = m_pImpl->aBkmkNodePos.equal_range( nNd );
     if( aIterPair.first != aIterPair.second )
     {
