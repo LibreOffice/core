@@ -1111,6 +1111,13 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
             aAny >>= aNegRange;
         }
 
+        aAny = SchXMLTools::getPropertyFromContext("Weight",
+                pSeriesStyleContext, pStylesCtxt);
+        if( aAny.hasValue() )
+        {
+            xBarProp->setPropertyValue("Weight", aAny);
+        }
+
         aAny = SchXMLTools::getPropertyFromContext("PercentageError",
                 pSeriesStyleContext, pStylesCtxt);
         if( aAny.hasValue() && aBarStyle == com::sun::star::chart::ErrorBarStyle::RELATIVE )
