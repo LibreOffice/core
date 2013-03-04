@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+vs\u003d",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-04T21:52:33Z",
+      "side": 1,
+      "message": "I guess this should read instead\n\n Do not delete, assigned to Polygon::mpImplPolygon\n\n... see Polygon::Clip()\n\n mpImplPolygon \u003d aPolygon.mpPoly;\n\nwhere aPolygon is a temporary ImplPolygonPointFilter, and in fact the only place where this class is used.",
+      "revId": "c10ba2951a1596e1eed8bbb291fcbaf722f2e5dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+vo\u003d",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-04T21:52:33Z",
+      "side": 1,
+      "message": "so we\u0027d end up with a dangling pointer after the temporary was destroyed",
+      "revId": "c10ba2951a1596e1eed8bbb291fcbaf722f2e5dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
