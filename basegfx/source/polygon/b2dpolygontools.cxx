@@ -1806,7 +1806,6 @@ namespace basegfx
 
                     if(!aUnitCircleStartQuadrantOne.count())
                     {
-                        ::osl::Mutex m_mutex;
                         aUnitCircleStartQuadrantOne = impCreateUnitCircle(1);
                     }
 
@@ -1818,7 +1817,6 @@ namespace basegfx
 
                     if(!aUnitCircleStartQuadrantTwo.count())
                     {
-                        ::osl::Mutex m_mutex;
                         aUnitCircleStartQuadrantTwo = impCreateUnitCircle(2);
                     }
 
@@ -1830,7 +1828,6 @@ namespace basegfx
 
                     if(!aUnitCircleStartQuadrantThree.count())
                     {
-                        ::osl::Mutex m_mutex;
                         aUnitCircleStartQuadrantThree = impCreateUnitCircle(3);
                     }
 
@@ -1842,7 +1839,6 @@ namespace basegfx
 
                     if(!aUnitCircleStartQuadrantZero.count())
                     {
-                        ::osl::Mutex m_mutex;
                         aUnitCircleStartQuadrantZero = impCreateUnitCircle(0);
                     }
 

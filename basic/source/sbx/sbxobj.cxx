@@ -215,7 +215,6 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
     static sal_uInt16 nLvl = 0;
     static const char* pCls[] = { "DontCare","Array","Value","Variable","Method","Property","Object" };
     rtl::OString aNameStr1(OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
-    rtl::OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
     DbgOutf( "SBX: Search %.*s %s %s in %s",
              nLvl++, "                              ",
              ( t >= SbxCLASS_DONTCARE && t <= SbxCLASS_OBJECT )
@@ -500,7 +499,6 @@ void SbxObject::Insert( SbxVariable* pVar )
             aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
         }
         rtl::OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-        rtl::OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
         DbgOutf( "SBX: Insert %s %s in %s",
                  ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
                    pVar->GetClass() <= SbxCLASS_OBJECT )
@@ -543,7 +541,6 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
             aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
         }
         rtl::OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-        rtl::OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
         DbgOutf( "SBX: Insert %s %s in %s",
                  ( pVar->GetClass() >= SbxCLASS_DONTCARE &&
                    pVar->GetClass() <= SbxCLASS_OBJECT )
@@ -569,8 +566,6 @@ void SbxObject::Remove( SbxVariable* pVar )
         {
             aVarName = PTR_CAST(SbxObject,pVar)->GetClassName();
         }
-        rtl::OString aNameStr1(OUStringToOString(aVarName, RTL_TEXTENCODING_ASCII_US));
-        rtl::OString aNameStr2(OUStringToOString(SbxVariable::GetName(), RTL_TEXTENCODING_ASCII_US));
 #endif
         SbxVariableRef pVar_ = pArray->Get( nIdx );
         if( pVar_->IsBroadcaster() )

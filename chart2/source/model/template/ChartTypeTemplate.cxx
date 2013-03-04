@@ -237,8 +237,8 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
             }
 
         // remove charttype groups from all coordinate systems
-            Sequence< Reference< XChartType > > aOldChartTypesSeq(
-                DiagramHelper::getChartTypesFromDiagram(xDiagram) );
+        Sequence< Reference< XChartType > > aOldChartTypesSeq(
+            DiagramHelper::getChartTypesFromDiagram(xDiagram) );
 
         Reference< XCoordinateSystemContainer > xCoordSysCnt( xDiagram, uno::UNO_QUERY );
         OSL_ASSERT( xCoordSysCnt.is());

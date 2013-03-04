@@ -327,7 +327,6 @@ namespace drawinglayer
 
             const basegfx::B2DRange& getDiscreteViewport() const
             {
-                ::osl::Mutex m_mutex;
 
                 if(maDiscreteViewport.isEmpty() && !maViewport.isEmpty())
                 {
@@ -341,7 +340,6 @@ namespace drawinglayer
 
             const basegfx::B2DHomMatrix& getObjectToViewTransformation() const
             {
-                ::osl::Mutex m_mutex;
 
                 if(maObjectToViewTransformation.isIdentity() &&
                     (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
@@ -355,7 +353,6 @@ namespace drawinglayer
 
             const basegfx::B2DHomMatrix& getInverseObjectToViewTransformation() const
             {
-                ::osl::Mutex m_mutex;
 
                 if(maInverseObjectToViewTransformation.isIdentity() &&
                     (!maObjectTransformation.isIdentity() || !maViewTransformation.isIdentity()))
@@ -463,13 +460,11 @@ namespace drawinglayer
         ViewInformation2D::ViewInformation2D(const ViewInformation2D& rCandidate)
         :   mpViewInformation2D(rCandidate.mpViewInformation2D)
         {
-            ::osl::Mutex m_mutex;
             mpViewInformation2D->mnRefCount++;
         }
 
         ViewInformation2D::~ViewInformation2D()
         {
-            ::osl::Mutex m_mutex;
 
             if(mpViewInformation2D->mnRefCount)
             {
@@ -488,7 +483,6 @@ namespace drawinglayer
 
         ViewInformation2D& ViewInformation2D::operator=(const ViewInformation2D& rCandidate)
         {
-            ::osl::Mutex m_mutex;
 
             if(mpViewInformation2D->mnRefCount)
             {

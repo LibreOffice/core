@@ -1149,7 +1149,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     int nModified = rContext.countValuesModified();
     while( nModified-- &&
         rContext.getModifiedKey( nModified ) != pPageSizeKey )
-    ;
+        ;
 
     if( nModified >= 0 ) // paper was set already, do not modify
     {

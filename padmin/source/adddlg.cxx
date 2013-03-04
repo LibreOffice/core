@@ -495,8 +495,6 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
     rtl::OString aDefMarginTop( aConfig.ReadKey( "MarginTop" ) );
     rtl::OString aDefMarginBottom( aConfig.ReadKey( "MarginBottom" ) );
     rtl::OString aDefScale( aConfig.ReadKey( "Scale" ) );
-    rtl::OString aDefCopies( aConfig.ReadKey( "Copies" ) );
-    rtl::OString aDefDPI( aConfig.ReadKey( "DPI" ) );
 
     aConfig.SetGroup( "devices" );
     int nDevices = aConfig.GetKeyCount();

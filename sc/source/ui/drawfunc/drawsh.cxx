@@ -360,14 +360,14 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
-        SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
-                    &aNewAttr,
-                pViewData->GetDocument()->GetDrawLayer(),
-                pObj,
-                bHasMarked);
-        OSL_ENSURE(pDlg, "Dialogdiet fail!");
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
+    SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
+                &aNewAttr,
+            pViewData->GetDocument()->GetDrawLayer(),
+            pObj,
+            bHasMarked);
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
 

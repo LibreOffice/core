@@ -99,7 +99,7 @@ void CGM::ImplDoClass2()
         {
             if ( pElement->eVDCType == VDC_INTEGER )
                 ImplGetRectangle( pElement->aDeviceViewPort );
-                ImplSetMapMode();
+            ImplSetMapMode();
         }
         break;
         case 0x09 : /*Device Viewport Specification Mode*/

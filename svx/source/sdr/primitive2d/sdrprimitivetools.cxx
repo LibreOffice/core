@@ -33,7 +33,6 @@ namespace drawinglayer
         {
             static vcl::DeleteOnDeinit< BitmapEx > aRetVal(0);
             static basegfx::BColor aColor;
-            ::osl::Mutex m_mutex;
 
             if(!aRetVal.get() || rBColor != aColor)
             {

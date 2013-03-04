@@ -220,8 +220,6 @@ void LwpOleObject::Read()
     {
         m_pObjStrm->QuickReaduInt16();
 
-        OUString sFormat = m_pObjStrm->QuickReadStringPtr();
-
         if (LwpFileHeader::m_nFileRevision < 0x000B)
         {
             // null pointers have a VO_INVALID type

@@ -195,7 +195,7 @@ Context_Docu::PerformStatusFunction( uintt              i_nStatusSignal,
                 throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
             else
                 io_rText.CutToken();
-                pNewToken = new Tok_EOF;
+            pNewToken = new Tok_EOF;
             break;
         case nF_fin_AnyWord:
             pNewToken = new Tok_Word(io_rText.CutToken());
