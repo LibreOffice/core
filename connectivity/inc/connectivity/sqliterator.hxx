@@ -72,8 +72,7 @@ namespace connectivity
         void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName, ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
         // inserts a table into the map
         void                traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange );
-        void                traverseORCriteria(OSQLParseNode * pSearchCondition);
-        void                traverseANDCriteria(OSQLParseNode * pSearchCondition);
+        void                traverseSearchCondition(OSQLParseNode * pSearchCondition);
         void                traverseOnePredicate(
                                                 OSQLParseNode * pColumnRef,
                                                 ::rtl::OUString& aValue,

@@ -985,7 +985,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                     // Function call present
                     pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_True );
                     // check if the column is also a parameter
-                    traverseORCriteria(pColumnRef); // num_value_exp
+                    traverseSearchCondition(pColumnRef); // num_value_exp
 
                     // Do all involved columns of the function belong to one table?
                     if (m_pImpl->m_pTables->size() == 1)
@@ -1251,67 +1251,18 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
     OSL_ENSURE(pComparisonPredicate != NULL,"OSQLParseTreeIterator: error in parse tree!");
 
     //
-    // Process the comparison criteria now (recursively, for a start everything is an OR criterion)
+    // Process the comparison criteria now
     //
 
-    traverseORCriteria(pComparisonPredicate);
+    traverseSearchCondition(pComparisonPredicate);
 
     return !hasErrors();
 }
 
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::traverseORCriteria(OSQLParseNode * pSearchCondition)
+void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondition)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::traverseORCriteria" );
-
-
-    if (
-            pSearchCondition->count() == 3 &&
-            SQL_ISPUNCTUATION(pSearchCondition->getChild(0),"(") &&
-            SQL_ISPUNCTUATION(pSearchCondition->getChild(2),")")
-        )
-    {
-        // Round brackets around the expression
-        traverseORCriteria(pSearchCondition->getChild(1));
-    } else if (SQL_ISRULE(pSearchCondition,search_condition) &&
-        pSearchCondition->count() == 3 &&
-        SQL_ISTOKEN(pSearchCondition->getChild(1),OR))
-    {
-        // OR logic operation
-        for (int i = 0; i < 3; i++) {
-            if (i == 1) continue;       // Skip OR keyword
-
-            // Is the first element an OR again?
-            if (i == 0 &&
-                SQL_ISRULE(pSearchCondition->getChild(0),search_condition) &&
-                pSearchCondition->getChild(0)->count() == 3 &&
-                SQL_ISTOKEN(pSearchCondition->getChild(0)->getChild(1),OR))
-            {
-                // Then process recursively
-                traverseORCriteria(pSearchCondition->getChild(0));
-
-            } else {
-                // AND criteria
-                traverseANDCriteria(pSearchCondition->getChild(i));
-                //  if (! aIteratorStatus.IsSuccessful()) break;
-            }
-
-            //  if (! aIteratorStatus.IsSuccessful()) break;
-        }
-    } else {
-        // Only *one* criterion or one AND logical operation of criteria
-        // Process the AND criteria directly
-        traverseANDCriteria(pSearchCondition);
-        //  if (! aIteratorStatus.IsSuccessful()) return;
-    }
-
-    // Just pass on the error
-}
-
-//-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::traverseANDCriteria" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::traverseSearchCondition" );
 
 
     if (
@@ -1322,29 +1273,31 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
         )
     {
         // Round brackets
-        traverseANDCriteria(pSearchCondition->getChild(1));
+        traverseSearchCondition(pSearchCondition->getChild(1));
     }
     // The first element is an OR logical operation
     else  if ( SQL_ISRULE(pSearchCondition,search_condition) && pSearchCondition->count() == 3 )
     {
+        // if this assert fails, the SQL grammar has changed!
+        assert(SQL_ISTOKEN(pSearchCondition->getChild(1),OR));
         // Then process recursively (use the same row) ...
-        traverseORCriteria(pSearchCondition->getChild(0));
+        traverseSearchCondition(pSearchCondition->getChild(0));
 //      if (! aIteratorStatus.IsSuccessful())
 //          return;
 
         // Continue with the right child
-        traverseANDCriteria(pSearchCondition->getChild(2));
+        traverseSearchCondition(pSearchCondition->getChild(2));
     }
     // The first element is an AND logical operation (again)
     else if ( SQL_ISRULE(pSearchCondition,boolean_term) && pSearchCondition->count() == 3 )
     {
         // Then process recursively (use the same row)
-        traverseANDCriteria(pSearchCondition->getChild(0));
+        traverseSearchCondition(pSearchCondition->getChild(0));
 //      if (! aIteratorStatus.IsSuccessful())
 //          return;
 
         // Continue with the right child
-        traverseANDCriteria(pSearchCondition->getChild(2));
+        traverseSearchCondition(pSearchCondition->getChild(2));
     }
     // Else, process single search criteria (like =, !=, ..., LIKE, IS NULL etc.)
     else if (SQL_ISRULE(pSearchCondition,comparison_predicate) )
@@ -1397,7 +1350,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
         OSL_ENSURE(pSearchCondition->count() == 2,"OSQLParseTreeIterator: error in parse tree!");
         const OSQLParseNode* pPart2 = pSearchCondition->getChild(1);
 
-        traverseORCriteria(pSearchCondition->getChild(0));
+        traverseSearchCondition(pSearchCondition->getChild(0));
         //  if (! aIteratorStatus.IsSuccessful()) return;
 
         OSQLParseNode* pChild = pPart2->getChild(2);
@@ -1412,7 +1365,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
             sal_Int32 nCount = pChild->count();
             for (sal_Int32 i=0; i < nCount; ++i)
             {
-                traverseANDCriteria(pChild->getChild(i));
+                traverseSearchCondition(pChild->getChild(i));
             }
         }
     }
@@ -1598,7 +1551,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
         getColumnRange(pParseNode,aName,rValue);
     else
     {
-        traverseORCriteria(pParseNode);
+        traverseSearchCondition(pParseNode);
         //  if (! aIteratorStatus.IsSuccessful()) return;
     }
 }
