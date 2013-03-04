@@ -310,6 +310,10 @@ int TxtBox::Read(HWPFile & hwpf)
     hwpf.ReadParaList(caption);
 
      if( type == 0 ){ // if table?
+          TCell* *pArr = ::comphelper::newArray_null<TCell *>(ncell);
+          if (!pArr) {
+                return hwpf.SetState(HWP_InvalidFileFormat);
+          }
           Table *tbl = new Table;
           for( ii = 0 ; ii < ncell; ii++)
           {
@@ -317,10 +321,6 @@ int TxtBox::Read(HWPFile & hwpf)
                 tbl->columns.insert(cell[ii].x + cell[ii].w);
                 tbl->rows.insert(cell[ii].y);
                 tbl->rows.insert(cell[ii].y + cell[ii].h);
-          }
-          TCell* *pArr = ::comphelper::newArray_null<TCell *>(ncell);
-          if (!pArr) {
-                return hwpf.SetState(HWP_InvalidFileFormat);
           }
           for( ii = 0 ; ii < ncell; ii++)
           {
