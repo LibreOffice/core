@@ -35,7 +35,7 @@ ErrorBarsTabPage::ErrorBarsTabPage( Window* pParent, const SfxItemSet& rInAttrs 
         m_aErrorBarResources(
             this,
             // the parent is the tab control, of which the parent is the dialog
-            dynamic_cast< Dialog * >( pParent->GetParentDialog() ),
+            pParent->GetParentDialog(),
             rInAttrs, /* bNoneAvailable = */ false )
 {
     FreeResource();
