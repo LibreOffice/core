@@ -964,18 +964,13 @@ StarBASIC::~StarBASIC()
         RemoveFactory( GetSbData()->pFormFac );
         delete GetSbData()->pFormFac; GetSbData()->pFormFac = NULL;
 
-#ifdef DBG_UTIL
-    // There is no need to clean SbiData at program end,
-    // but we dislike MLK's at Purify
-    // TODO: Where else???
-    SbiGlobals** pp = (SbiGlobals**) ::GetAppData( SHL_SBC );
-    SbiGlobals* p = *pp;
-    if( p )
-    {
-        delete p;
-        *pp = 0;
-    }
-#endif
+        SbiGlobals** pp = (SbiGlobals**) ::GetAppData( SHL_SBC );
+        SbiGlobals* p = *pp;
+        if( p )
+        {
+            delete p;
+            *pp = 0;
+        }
     }
     else if( bDocBasic )
     {
