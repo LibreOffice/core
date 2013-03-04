@@ -140,9 +140,9 @@ throw( com::sun::star::uno::RuntimeException )
     if (libmspub::MSPUBDocument::isSupported(&input))
         sTypeName = "draw_Publisher_Document";
 
-    if (sTypeName.getLength())
+    if (!sTypeName.isEmpty())
     {
-        if ( location == Descriptor.getLength() )
+        if ( location == nLength )
         {
             Descriptor.realloc(nLength+1);
             Descriptor[location].Name = "TypeName";

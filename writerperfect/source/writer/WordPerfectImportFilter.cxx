@@ -206,7 +206,7 @@ throw( RuntimeException )
 
     if (!sTypeName.isEmpty())
     {
-        if ( location == Descriptor.getLength() )
+        if ( location == nLength )
         {
             Descriptor.realloc(nLength+1);
             Descriptor[location].Name = "TypeName";
