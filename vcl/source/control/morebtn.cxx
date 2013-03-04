@@ -29,8 +29,8 @@ typedef ::std::vector< Window* > ImplMoreWindowList;
 struct ImplMoreButtonData
 {
     ImplMoreWindowList *mpItemList;
-    XubString           maMoreText;
-    XubString           maLessText;
+    OUString            maMoreText;
+    OUString            maLessText;
 };
 
 // =======================================================================
@@ -219,7 +219,7 @@ OUString MoreButton::GetText() const
 }
 
 // -----------------------------------------------------------------------
-void MoreButton::SetMoreText( const XubString& rText )
+void MoreButton::SetMoreText( const OUString& rText )
 {
     if ( mpMBData )
         mpMBData->maMoreText = rText;
@@ -229,7 +229,7 @@ void MoreButton::SetMoreText( const XubString& rText )
 }
 
 // -----------------------------------------------------------------------
-XubString MoreButton::GetMoreText() const
+OUString MoreButton::GetMoreText() const
 {
     if ( mpMBData )
         return mpMBData->maMoreText;
@@ -238,7 +238,7 @@ XubString MoreButton::GetMoreText() const
 }
 
 // -----------------------------------------------------------------------
-void MoreButton::SetLessText( const XubString& rText )
+void MoreButton::SetLessText( const OUString& rText )
 {
     if ( mpMBData )
         mpMBData->maLessText = rText;
@@ -248,7 +248,7 @@ void MoreButton::SetLessText( const XubString& rText )
 }
 
 // -----------------------------------------------------------------------
-XubString MoreButton::GetLessText() const
+OUString MoreButton::GetLessText() const
 {
     if ( mpMBData )
         return mpMBData->maLessText;

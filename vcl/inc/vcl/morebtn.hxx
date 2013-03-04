@@ -71,10 +71,10 @@ public:
     void                SetText( const OUString& rNewText );
     OUString            GetText() const;
 
-    void                SetMoreText( const XubString& rNewText );
-    void                SetLessText( const XubString& rNewText );
-    XubString           GetMoreText() const;
-    XubString           GetLessText() const;
+    void                SetMoreText( const OUString& rNewText );
+    void                SetLessText( const OUString& rNewText );
+    OUString            GetMoreText() const;
+    OUString            GetLessText() const;
 };
 
 inline void MoreButton::SetState( sal_Bool bNewState )
