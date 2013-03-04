@@ -4874,10 +4874,6 @@ find_msvc_dlls()
             AC_MSG_ERROR([can not find $dll in $msvcdllpath])
         fi
     done
-
-    if test "$enable_win_mozab_driver" = "yes" -a "$WITH_MINGW" != "YES" ; then
-        msvcdlls="$msvcdlls Microsoft.VC80.CRT.manifest msvcp80.dll msvcr80.dll"
-    fi
 }
 
 if test "$build_os" = "cygwin"; then
