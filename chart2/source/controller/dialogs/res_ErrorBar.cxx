@@ -466,7 +466,7 @@ IMPL_LINK( ErrorBarResources, ChooseRange, RangeSelectionButton *, pButton )
         aUIString = String( SchResId( STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS ));
     }
 
-    OSL_ASSERT( m_pParentDialog );
+    assert( m_pParentDialog );
     if( m_pParentDialog )
     {
         lcl_enableRangeChoosing( true, m_pParentDialog );
