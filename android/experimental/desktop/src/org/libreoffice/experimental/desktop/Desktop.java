@@ -134,7 +134,6 @@ public class Desktop
         boolean scalingInProgress;
         GestureDetector gestureDetector;
         ScaleGestureDetector scaleDetector;
-        long lastGestureEventTime;
 
         public BitmapView()
         {
@@ -167,6 +166,8 @@ public class Desktop
             scaleDetector =
                 new ScaleGestureDetector(Desktop.this,
                                          new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                                             long lastGestureEventTime;
+
                                              @Override public boolean onScaleBegin(ScaleGestureDetector detector)
                                              {
                                                  scalingInProgress = true;
