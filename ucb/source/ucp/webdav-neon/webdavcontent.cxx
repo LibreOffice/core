@@ -3083,7 +3083,7 @@ Content::ResourceType Content::getResourceType(
         }
     }
 
-    ResourceType eResourceType;
+    ResourceType eResourceType = UNKNOWN;
 
     const rtl::OUString & rURL = rResAccess->getURL();
     const rtl::OUString aScheme(
