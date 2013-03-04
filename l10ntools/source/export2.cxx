@@ -263,13 +263,8 @@ void Export::RemoveUTF8ByteOrderMarker( ByteString &rString ){
 }
 
 bool Export::hasUTF8ByteOrderMarker( const ByteString &rString ){
-    // Byte order marker signature
-
-    const unsigned char c1 =  0xEF;
-    const unsigned char c2 =  0xBB;
-    const unsigned char c3 =  0xBF;
-
-    const char bom[ 3 ] = { c1 , c2 , c3 };
+    // UTF-8 BOM: Byte order marker signature
+    static const unsigned char bom[3] = { 0xEF, 0xBB, 0xBF };
 
     return      rString.Len() >= 3 &&
                 rString.GetChar( 0 ) == bom[ 0 ] &&
