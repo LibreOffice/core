@@ -68,6 +68,7 @@ static void * load(void * address, char const * symbol) {
     }
     func = dlsym(h, symbol);
     if (func == NULL) {
+        dlclose(h);
         abort();
     }
     return func;
