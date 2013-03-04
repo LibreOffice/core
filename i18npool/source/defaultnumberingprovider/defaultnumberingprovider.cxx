@@ -300,8 +300,8 @@ OUString toRoman( sal_Int32 n )
         n -= ( nOver1000 * nMask );
 
         OUStringBuffer sTmp;
-    while(nOver1000--)
-        sTmp.append(sal_Unicode(*coRomanArr));
+        while(nOver1000--)
+            sTmp.append(sal_Unicode(*coRomanArr));
 
         while( nMask )
         {
@@ -509,11 +509,11 @@ void lcl_formatCharsGR( sal_Unicode table[], int n, OUString& s )
             for (int i = 0; i < myriadPower; i++)
                 sb.append(MYRIAD_SYM);
 
-                sb.append(gr_smallNum(table, n/divisor));
-                n %= divisor;
+            sb.append(gr_smallNum(table, n/divisor));
+            n %= divisor;
 
-                if (n > 0)
-                    sb.append(DOT_SYM);
+            if (n > 0)
+                sb.append(DOT_SYM);
         }
     }
     sb.append(gr_smallNum(table,n));

@@ -85,11 +85,10 @@ extern char *GetOutputFile( int argc, char* argv[])
 }
 
 /*****************************************************************************/
-int InitXrmExport( char *pOutput , char* pFilename)
+int InitXrmExport( char*, char* pFilename)
 /*****************************************************************************/
 {
     // instanciate Export
-    rtl::OString sOutput( pOutput );
     rtl::OString sFilename( pFilename );
     Export::InitLanguages( false );
 

@@ -189,7 +189,6 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
     else if ( _sName == "rpt:master-detail-field" )
     {
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-        static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());
         SAL_WNODEPRECATED_DECLARATIONS_POP

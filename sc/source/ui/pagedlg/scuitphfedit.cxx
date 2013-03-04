@@ -632,7 +632,6 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
-            XubString aEntry(pTextObj.get()->GetText(0));
             if(!bTravelling)
                 aWndCenter.GrabFocus();
         }
@@ -677,7 +676,6 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
-            XubString aEntry2(pTextObj.get()->GetText(0));
             if(!bTravelling)
                 aWndCenter.GrabFocus();
         }

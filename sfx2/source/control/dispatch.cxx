@@ -452,7 +452,7 @@ void SfxDispatcher::Pop
     SfxApplication *pSfxApp = SFX_APP();
 
     SAL_INFO(
-        "sfx2",
+        "sfx2.control",
         "-SfxDispatcher(" << this << (bPush ? ")::Push(" : ")::Pop(")
             << (rShell.GetInterface()
                 ? rShell.GetInterface()->GetClassName() : SAL_STREAM(&rShell))
@@ -1676,7 +1676,7 @@ void SfxDispatcher::FlushImpl()
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         pImp->aFixedObjBars[n].nResId = 0;
 
-    SAL_INFO("sfx2", "SfxDispatcher(" << this << ")::Flush() done");
+    SAL_INFO("sfx2.control", "SfxDispatcher(" << this << ")::Flush() done");
 }
 
 //--------------------------------------------------------------------

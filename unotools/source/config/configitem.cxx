@@ -658,11 +658,13 @@ static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFor
             {
                 OUString * pNames = _rNames.getArray();
                 for(int i = 0; i<_rNames.getLength(); ++i)
-                try
                 {
-                    pNames[i] = xFormatter->composeHierarchicalName(pNames[i]);
+                    try
+                    {
+                        pNames[i] = xFormatter->composeHierarchicalName(pNames[i]);
+                    }
+                    CATCH_INFO("Exception from composeHierarchicalName(): ")
                 }
-                CATCH_INFO("Exception from composeHierarchicalName(): ")
                 break;
             }
         }
@@ -1016,16 +1018,17 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                     catch (const Exception&)
                     {
                         if (isSimpleValueSet)
-                        try
                         {
-                            // #i37322#: fallback action: replace with <void/>
-                            xCont->replaceByName(pContainerSubNodes[nContSub], Any());
-                            // fallback successful: continue looping
-                            continue;
+                            try
+                            {
+                                // #i37322#: fallback action: replace with <void/>
+                                xCont->replaceByName(pContainerSubNodes[nContSub], Any());
+                                // fallback successful: continue looping
+                                continue;
+                            }
+                            catch (Exception &)
+                            {} // propagate original exception, if fallback fails
                         }
-                        catch (Exception &)
-                        {} // propagate original exception, if fallback fails
-
                         throw;
                     }
                 }

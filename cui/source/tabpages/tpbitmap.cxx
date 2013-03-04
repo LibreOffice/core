@@ -515,8 +515,6 @@ long SvxBitmapTabPage::CheckChanges_Impl()
     sal_uInt16 nPos = aLbBitmaps.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        String aString = aLbBitmaps.GetSelectEntry();
-
         if( bBmpChanged )
         {
             ResMgr& rMgr = CUI_MGR();
@@ -789,7 +787,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         ResMgr& rMgr = CUI_MGR();
-        String aNewName( SVX_RES( RID_SVXSTR_BITMAP ) );
         String aDesc( ResId( RID_SVXSTR_DESC_NEW_BITMAP, rMgr ) );
         String aName( pBitmapList->GetBitmap( nPos )->GetName() );
         String aOldName = aName;

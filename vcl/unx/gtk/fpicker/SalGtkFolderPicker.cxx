@@ -116,10 +116,9 @@ rtl::OUString SAL_CALL SalGtkFolderPicker::getDirectory() throw( uno::RuntimeExc
     return aSelectedFolderName;
 }
 
-void SAL_CALL SalGtkFolderPicker::setDescription( const rtl::OUString& rDescription )
+void SAL_CALL SalGtkFolderPicker::setDescription( const rtl::OUString& /*rDescription*/ )
     throw( uno::RuntimeException )
 {
-    ::rtl::OString aDescription = OUStringToOString( rDescription, RTL_TEXTENCODING_UTF8 );
 }
 
 //-----------------------------------------------------------------------------------------

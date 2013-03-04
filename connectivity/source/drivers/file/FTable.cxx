@@ -51,8 +51,6 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::OFileTable" );
     DBG_CTOR( file_OFileTable, NULL );
     construct();
-    TStringVector aVector;
-    //  m_pColumns  = new OColumns(this,m_aMutex,aVector);
     m_aColumns = new OSQLColumns();
 }
 // -------------------------------------------------------------------------

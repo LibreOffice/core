@@ -216,80 +216,124 @@ SvCommand::SvCommand( int argc, char ** argv )
     StringList aList;
 
     if( ResponseFile( &aList, argc, argv ) )
-    for( size_t i = 1; i < aList.size(); i++ )
     {
-        String aParam( *aList[ i ] );
-        sal_Unicode aFirstChar( aParam.GetChar(0) );
-        if( '-' == aFirstChar )
+        for( size_t i = 1; i < aList.size(); i++ )
         {
-            aParam.Erase( 0, 1 );
-            aFirstChar = aParam.GetChar(0);
-            if( aFirstChar == 'F' || aFirstChar == 'f' )
+            String aParam( *aList[ i ] );
+            sal_Unicode aFirstChar( aParam.GetChar(0) );
+            if( '-' == aFirstChar )
             {
                 aParam.Erase( 0, 1 );
                 aFirstChar = aParam.GetChar(0);
-                String aName( aParam.Copy( 1 ) );
-                if( 's' == aFirstChar )
-                { // name of slot output
-                    aSlotMapFile = aName;
-                }
-                else if( 'l' == aFirstChar )
-                { // name of listing
-                    aListFile = aName;
-                }
-                else if( 'i' == aFirstChar )
+                if( aFirstChar == 'F' || aFirstChar == 'f' )
                 {
+                    aParam.Erase( 0, 1 );
+                    aFirstChar = aParam.GetChar(0);
+                    String aName( aParam.Copy( 1 ) );
+                    if( 's' == aFirstChar )
+                    { // name of slot output
+                        aSlotMapFile = aName;
+                    }
+                    else if( 'l' == aFirstChar )
+                    { // name of listing
+                        aListFile = aName;
+                    }
+                    else if( 'i' == aFirstChar )
+                    {
+                    }
+                    else if( 'o' == aFirstChar )
+                    {
+                    }
+                    else if( 'd' == aFirstChar )
+                    { // name of data set file
+                        aDataBaseFile = aName;
+                    }
+                    else if( 'D' == aFirstChar )
+                    {
+                    }
+                    else if( 'C' == aFirstChar )
+                    {
+                    }
+                    else if( 'H' == aFirstChar )
+                    {
+                    }
+                    else if( 'c' == aFirstChar )
+                    {
+                    }
+                    else if( 'h' == aFirstChar )
+                    {
+                    }
+                    else if( 't' == aFirstChar )
+                    {
+                    }
+                    else if( 'm' == aFirstChar )
+                    { // name of info file
+                        aTargetFile = aName;
+                    }
+                    else if( 'r' == aFirstChar )
+                    {
+                    }
+                    else if( 'z' == aFirstChar )
+                    { // name of HelpId file
+                        aHelpIdFile = aName;
+                    }
+                    else if( 'y' == aFirstChar )
+                    { // name of CSV file
+                        aCSVFile = aName;
+                    }
+                    else if( 'x' == aFirstChar )
+                    { // name of IDL file for the CSV file
+                        aExportFile = aName;
+                    }
+                    else if( 'M' == aFirstChar )
+                    {
+                        m_DepFile = aName;
+                    }
+                    else
+                    {
+                        printf(
+                            "unknown switch: %s\n",
+                            rtl::OUStringToOString(
+                                aParam, RTL_TEXTENCODING_UTF8).getStr());
+                        exit( -1 );
+                    }
                 }
-                else if( 'o' == aFirstChar )
+                else if( aParam.EqualsIgnoreCaseAscii( "help" ) || aParam.EqualsIgnoreCaseAscii( "?" ) )
+                { // help
+                    printf( "%s", CommandLineSyntax );
+                }
+                else if( aParam.EqualsIgnoreCaseAscii( "quiet" ) )
                 {
+                    nVerbosity = 0;
                 }
-                else if( 'd' == aFirstChar )
-                { // name of data set file
-                    aDataBaseFile = aName;
-                }
-                else if( 'D' == aFirstChar )
+                else if( aParam.EqualsIgnoreCaseAscii( "verbose" ) )
                 {
+                    nVerbosity = 2;
                 }
-                else if( 'C' == aFirstChar )
-                {
+                else if( aParam.EqualsIgnoreCaseAscii( "syntax" ) )
+                { // help
+                    int j = 0;
+                    while(SyntaxStrings[j])
+                        printf("%s\n",SyntaxStrings[j++]);
                 }
-                else if( 'H' == aFirstChar )
-                {
+                else if( aParam.EqualsIgnoreCaseAscii( "i", 0, 1 ) )
+                { // define include paths
+                    String aName( aParam.Copy( 1 ) );
+                    if( aPath.Len() )
+                        aPath += DirEntry::GetSearchDelimiter();
+                    aPath += aName;
                 }
-                else if( 'c' == aFirstChar )
-                {
-                }
-                else if( 'h' == aFirstChar )
-                {
-                }
-                else if( 't' == aFirstChar )
-                {
-                }
-                else if( 'm' == aFirstChar )
-                { // name of info file
-                    aTargetFile = aName;
-                }
-                else if( 'r' == aFirstChar )
-                {
-                }
-                else if( 'z' == aFirstChar )
-                { // name of HelpId file
-                    aHelpIdFile = aName;
-                }
-                else if( 'y' == aFirstChar )
-                { // name of CSV file
-                    aCSVFile = aName;
-                }
-                else if( 'x' == aFirstChar )
-                { // name of IDL file for the CSV file
-                    aExportFile = aName;
-                }
-                else if( 'M' == aFirstChar )
-                {
-                    m_DepFile = aName;
+                else if( aParam.EqualsIgnoreCaseAscii( "rsc", 0, 3 ) )
+                { // first line in *.srs file
+                    OSL_ENSURE(false, "does anything use this option, doesn't look like it belong here");
+                    if( aList[ i + 1 ] )
+                    {
+                        i++;
+                    }
                 }
                 else
                 {
+                    // temporary compatibility hack
                     printf(
                         "unknown switch: %s\n",
                         rtl::OUStringToOString(
@@ -297,52 +341,10 @@ SvCommand::SvCommand( int argc, char ** argv )
                     exit( -1 );
                 }
             }
-            else if( aParam.EqualsIgnoreCaseAscii( "help" ) || aParam.EqualsIgnoreCaseAscii( "?" ) )
-            { // help
-                printf( "%s", CommandLineSyntax );
-            }
-            else if( aParam.EqualsIgnoreCaseAscii( "quiet" ) )
-            {
-                nVerbosity = 0;
-            }
-            else if( aParam.EqualsIgnoreCaseAscii( "verbose" ) )
-            {
-                nVerbosity = 2;
-            }
-            else if( aParam.EqualsIgnoreCaseAscii( "syntax" ) )
-            { // help
-                int j = 0;
-                while(SyntaxStrings[j])
-                    printf("%s\n",SyntaxStrings[j++]);
-            }
-            else if( aParam.EqualsIgnoreCaseAscii( "i", 0, 1 ) )
-            { // define include paths
-                String aName( aParam.Copy( 1 ) );
-                if( aPath.Len() )
-                    aPath += DirEntry::GetSearchDelimiter();
-                aPath += aName;
-            }
-            else if( aParam.EqualsIgnoreCaseAscii( "rsc", 0, 3 ) )
-            { // first line in *.srs file
-                OSL_ENSURE(false, "does anything use this option, doesn't look like it belong here");
-                if( aList[ i + 1 ] )
-                {
-                    i++;
-                }
-            }
             else
             {
-                // temporary compatibility hack
-                printf(
-                    "unknown switch: %s\n",
-                    rtl::OUStringToOString(
-                        aParam, RTL_TEXTENCODING_UTF8).getStr());
-                exit( -1 );
+                aInFileList.push_back( new String( aParam ) );
             }
-        }
-        else
-        {
-            aInFileList.push_back( new String( aParam ) );
         }
     }
     else

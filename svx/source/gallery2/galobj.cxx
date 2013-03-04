@@ -193,7 +193,7 @@ const String SgaObject::GetTitle() const
             String      aPrivateInd  ( aReturnValue.GetToken( 0, ':' ) );
             String      aResourceName( aReturnValue.GetToken( 1, ':' ) );
             sal_Int32   nResId       ( aReturnValue.GetToken( 2, ':' ).ToInt32() );
-            if ( aReturnValue.GetToken( 0, ':' ).EqualsAscii( "private" ) &&
+            if ( aPrivateInd.EqualsAscii( "private" ) &&
                 aResourceName.Len() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
             {
                 rtl::OString aMgrName(rtl::OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));

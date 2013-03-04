@@ -158,10 +158,8 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLE
 }
 // -------------------------------------------------------------------------
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString sColumnName( getColumnName( column ) );
-
     if ( !m_pTable || !m_pTable->getConnection() )
     {
         OSL_FAIL( "OResultSetMetaData::isSearchable: suspicious: called without table or connection!" );

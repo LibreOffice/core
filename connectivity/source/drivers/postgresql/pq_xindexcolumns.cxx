@@ -187,12 +187,11 @@ void IndexColumns::refresh()
 
 
 void IndexColumns::appendByDescriptor(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& future )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& /*future*/ )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::ElementExistException,
            ::com::sun::star::uno::RuntimeException)
 {
-    OUString name = extractStringProperty( future, getStatics().NAME );
     throw com::sun::star::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.appendByDescriptor not yet implemented",
         *this, OUString(), 1, Any() );

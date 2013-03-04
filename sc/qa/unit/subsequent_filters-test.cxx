@@ -484,14 +484,12 @@ void testDBRanges_Impl(ScDocument* pDoc, sal_Int32 nFormat)
     {
         double aValue;
         pDoc->GetValue(0,10,1, aValue);
-        OUString aString;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: A11: formula result is incorrect", 4.0, aValue);
         pDoc->GetValue(1, 10, 1, aValue);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: B11: formula result is incorrect", 2.0, aValue);
     }
     double aValue;
     pDoc->GetValue(3,10,1, aValue);
-    OUString aString;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: D11: formula result is incorrect", 4.0, aValue);
     pDoc->GetValue(4, 10, 1, aValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet2: E11: formula result is incorrect", 2.0, aValue);
@@ -611,7 +609,6 @@ void testFormats_Impl(ScFiltersTest* pFiltersTest, ScDocument* pDoc, sal_Int32 n
     //test Sheet3 only for ods
     if ( nFormat == ODS || nFormat == XLSX )
     {
-        OUString aCondString = getConditionalFormatString(pDoc, 3,0,2);
         pFiltersTest->createCSVPath(OUString(RTL_CONSTASCII_USTRINGPARAM("conditionalFormatting.")), aCSVFileName);
         testCondFile(aCSVFileName, pDoc, 2);
         // test parent cell style import ( fdo#55198 )

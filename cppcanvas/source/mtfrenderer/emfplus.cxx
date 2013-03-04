@@ -1217,549 +1217,551 @@ namespace cppcanvas
                 }
 
                 if (type != EmfPlusRecordTypeObject || !(flags & 0x8000))
-                switch (type) {
-                case EmfPlusRecordTypeHeader:
-                    sal_uInt32 header, version;
+                {
+                    switch (type) {
+                    case EmfPlusRecordTypeHeader:
+                        sal_uInt32 header, version;
 
-                    rMF >> header >> version >> nHDPI >> nVDPI;
+                        rMF >> header >> version >> nHDPI >> nVDPI;
 
-                    EMFP_DEBUG (printf ("EMF+ Header\n"));
-                    EMFP_DEBUG (printf ("EMF+\theader: 0x%08x version: %u horizontal DPI: %d vertical DPI: %d dual: %d\n", (int)header, (unsigned int)version, (int)nHDPI, (int)nVDPI,(int)( flags & 1)));
+                        EMFP_DEBUG (printf ("EMF+ Header\n"));
+                        EMFP_DEBUG (printf ("EMF+\theader: 0x%08x version: %u horizontal DPI: %d vertical DPI: %d dual: %d\n", (int)header, (unsigned int)version, (int)nHDPI, (int)nVDPI,(int)( flags & 1)));
 
-                    break;
-                case EmfPlusRecordTypeEndOfFile:
-                    EMFP_DEBUG (printf ("EMF+ EndOfFile\n"));
-                    break;
-                case EmfPlusRecordTypeGetDC:
-                    EMFP_DEBUG (printf ("EMF+ GetDC\n"));
-                    EMFP_DEBUG (printf ("EMF+\talready used in svtools wmf/emf filter parser\n"));
-                    break;
-                case EmfPlusRecordTypeObject:
-                    processObjectRecord (rMF, flags, dataSize);
-                    break;
-                case EmfPlusRecordTypeFillPie:
-                    {
-                        sal_uInt32 brushIndexOrColor;
-                        float startAngle, sweepAngle;
+                        break;
+                    case EmfPlusRecordTypeEndOfFile:
+                        EMFP_DEBUG (printf ("EMF+ EndOfFile\n"));
+                        break;
+                    case EmfPlusRecordTypeGetDC:
+                        EMFP_DEBUG (printf ("EMF+ GetDC\n"));
+                        EMFP_DEBUG (printf ("EMF+\talready used in svtools wmf/emf filter parser\n"));
+                        break;
+                    case EmfPlusRecordTypeObject:
+                        processObjectRecord (rMF, flags, dataSize);
+                        break;
+                    case EmfPlusRecordTypeFillPie:
+                        {
+                            sal_uInt32 brushIndexOrColor;
+                            float startAngle, sweepAngle;
 
-                        rMF >> brushIndexOrColor >> startAngle >> sweepAngle;
+                            rMF >> brushIndexOrColor >> startAngle >> sweepAngle;
 
-                        EMFP_DEBUG (printf ("EMF+ FillPie colorOrIndex: %x startAngle: %f sweepAngle: %f\n", (unsigned int)brushIndexOrColor, startAngle, sweepAngle));
+                            EMFP_DEBUG (printf ("EMF+ FillPie colorOrIndex: %x startAngle: %f sweepAngle: %f\n", (unsigned int)brushIndexOrColor, startAngle, sweepAngle));
 
-                        float dx, dy, dw, dh;
+                            float dx, dy, dw, dh;
 
-                        ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
+                            ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
 
-                        EMFP_DEBUG (printf ("EMF+ RectData: %f,%f %fx%f\n", dx, dy, dw, dh));
+                            EMFP_DEBUG (printf ("EMF+ RectData: %f,%f %fx%f\n", dx, dy, dw, dh));
 
-                        startAngle = 2*M_PI*startAngle/360;
-                        sweepAngle = 2*M_PI*sweepAngle/360;
+                            startAngle = 2*M_PI*startAngle/360;
+                            sweepAngle = 2*M_PI*sweepAngle/360;
 
-                        B2DPoint mappedCenter (Map (dx + dw/2, dy + dh/2));
-                        B2DSize mappedSize( MapSize (dw/2, dh/2));
+                            B2DPoint mappedCenter (Map (dx + dw/2, dy + dh/2));
+                            B2DSize mappedSize( MapSize (dw/2, dh/2));
 
-                        double endAngle = startAngle + sweepAngle;
-                        if (endAngle < 0)
-                            endAngle += M_PI*2;
-                        endAngle = fmod (endAngle, M_PI*2);
+                            double endAngle = startAngle + sweepAngle;
+                            if (endAngle < 0)
+                                endAngle += M_PI*2;
+                            endAngle = fmod (endAngle, M_PI*2);
 
-                        if (sweepAngle < 0) {
-                            double tmp = startAngle;
-                            startAngle = endAngle;
-                            endAngle = tmp;
-                        }
-
-                        EMFP_DEBUG (printf ("EMF+ angles: %f,%f  ---> %f,%f\n", startAngle, sweepAngle, startAngle, endAngle));
-
-                        B2DPolygon polygon = tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
-                        polygon.append (mappedCenter);
-                        polygon.setClosed (true);
-
-                        B2DPolyPolygon polyPolygon (polygon);
-                        EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
-                    }
-                    break;
-                case EmfPlusRecordTypeFillPath:
-                    {
-                        sal_uInt32 index = flags & 0xff;
-                        sal_uInt32 brushIndexOrColor;
-
-                        rMF >> brushIndexOrColor;
-
-                        EMFP_DEBUG (printf ("EMF+ FillPath slot: %u\n", (unsigned int)index));
-
-                        EMFPPlusFillPolygon (((EMFPPath*) aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
-                    }
-                    break;
-                case EmfPlusRecordTypeFillRects:
-                    {
-                        EMFP_DEBUG (printf ("EMF+ FillRects\n"));
-
-                        sal_uInt32 brushIndexOrColor;
-                        sal_Int32 rectangles;
-                        ::basegfx::B2DPolygon polygon;
-
-                        rMF >> brushIndexOrColor >> rectangles;
-
-                        EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
-
-                        for (int i=0; i < rectangles; i++) {
-                            if (flags & 0x4000) {
-                                /* 16bit integers */
-                                sal_Int16 x, y, width, height;
-
-                                rMF >> x >> y >> width >> height;
-
-                                polygon.append (Map (x, y));
-                                polygon.append (Map (x + width, y));
-                                polygon.append (Map (x + width, y + height));
-                                polygon.append (Map (x, y + height));
-
-                                EMFP_DEBUG (printf ("EMF+\trectangle: %d,%d %dx%d\n", x, y, width, height));
-                            } else {
-                                /* Single's */
-                                float x, y, width, height;
-
-                                rMF >> x >> y >> width >> height;
-
-                                polygon.append (Map (x, y));
-                                polygon.append (Map (x + width, y));
-                                polygon.append (Map (x + width, y + height));
-                                polygon.append (Map (x, y + height));
-
-                                EMFP_DEBUG (printf ("EMF+\trectangle: %f,%f %fx%f\n", x, y, width, height));
+                            if (sweepAngle < 0) {
+                                double tmp = startAngle;
+                                startAngle = endAngle;
+                                endAngle = tmp;
                             }
 
-                            ::basegfx::B2DPolyPolygon polyPolygon (polygon);
+                            EMFP_DEBUG (printf ("EMF+ angles: %f,%f  ---> %f,%f\n", startAngle, sweepAngle, startAngle, endAngle));
 
+                            B2DPolygon polygon = tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
+                            polygon.append (mappedCenter);
+                            polygon.setClosed (true);
+
+                            B2DPolyPolygon polyPolygon (polygon);
                             EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                         }
                         break;
-                    }
-                case EmfPlusRecordTypeFillPolygon:
-                    {
-                        EMFP_DEBUG (sal_uInt8 index = flags & 0xff);
-                        sal_uInt32 brushIndexOrColor;
-                        sal_Int32 points;
-
-                        rMF >> brushIndexOrColor;
-                        rMF >> points;
-
-                        EMFP_DEBUG (printf ("EMF+ FillPolygon in slot: %d points: %d\n", index, points));
-                        EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", brushIndexOrColor));
-
-                        EMFPPath path (points, true);
-                        path.Read (rMF, flags, *this);
-
-
-                        EMFPPlusFillPolygon (path.GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
-
-                        break;
-                    }
-                case EmfPlusRecordTypeDrawLines:
-                    {
-                        sal_uInt32 index = flags & 0xff;
-                        sal_uInt32 points;
-
-                        rMF >> points;
-
-                        EMFP_DEBUG (printf ("EMF+ DrawLines in slot: %u points: %u\n", (unsigned int)index, (unsigned int)points));
-
-                        EMFPPath path (points, true);
-                        path.Read (rMF, flags, *this);
-
-                        EMFPPen* pen = (EMFPPen*) aObjects [index];
-
-                        rState.isFillColorSet = false;
-                        rState.isLineColorSet = true;
-                        rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
-                                                                                   rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace() );
-                        ::basegfx::B2DPolyPolygon& polygon (path.GetPolygon (*this));
-
-                        polygon.transform( rState.mapModeTransform );
-
-                        rendering::StrokeAttributes aStrokeAttributes;
-
-                        pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
-
-            ActionSharedPtr pPolyAction(
-                internal::PolyPolyActionFactory::createPolyPolyAction(
-                    polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
-
-            if( pPolyAction )
-            {
-                maActions.push_back(
-                    MtfAction(
-                        pPolyAction,
-                        rFactoryParms.mrCurrActionIndex ) );
-
-                rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
-            }
-
-                        break;
-                    }
-                case EmfPlusRecordTypeDrawPath:
-                    {
-                        sal_uInt32 penIndex;
-
-                        rMF >> penIndex;
-
-                        EMFP_DEBUG (printf ("EMF+ DrawPath\n"));
-                        EMFP_DEBUG (printf ("EMF+\tpen: %u\n", (unsigned int)penIndex));
-
-                        EMFPPath* path = (EMFPPath*) aObjects [flags & 0xff];
-                        EMFPPen* pen = (EMFPPen*) aObjects [penIndex & 0xff];
-
-                        SAL_WARN_IF( !pen, "cppcanvas", "EmfPlusRecordTypeDrawPath missing pen" );
-                        SAL_WARN_IF( !path, "cppcanvas", "EmfPlusRecordTypeDrawPath missing path" );
-
-                        if (pen && path)
+                    case EmfPlusRecordTypeFillPath:
                         {
+                            sal_uInt32 index = flags & 0xff;
+                            sal_uInt32 brushIndexOrColor;
+
+                            rMF >> brushIndexOrColor;
+
+                            EMFP_DEBUG (printf ("EMF+ FillPath slot: %u\n", (unsigned int)index));
+
+                            EMFPPlusFillPolygon (((EMFPPath*) aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                        }
+                        break;
+                    case EmfPlusRecordTypeFillRects:
+                        {
+                            EMFP_DEBUG (printf ("EMF+ FillRects\n"));
+
+                            sal_uInt32 brushIndexOrColor;
+                            sal_Int32 rectangles;
+                            ::basegfx::B2DPolygon polygon;
+
+                            rMF >> brushIndexOrColor >> rectangles;
+
+                            EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
+
+                            for (int i=0; i < rectangles; i++) {
+                                if (flags & 0x4000) {
+                                    /* 16bit integers */
+                                    sal_Int16 x, y, width, height;
+
+                                    rMF >> x >> y >> width >> height;
+
+                                    polygon.append (Map (x, y));
+                                    polygon.append (Map (x + width, y));
+                                    polygon.append (Map (x + width, y + height));
+                                    polygon.append (Map (x, y + height));
+
+                                    EMFP_DEBUG (printf ("EMF+\trectangle: %d,%d %dx%d\n", x, y, width, height));
+                                } else {
+                                    /* Single's */
+                                    float x, y, width, height;
+
+                                    rMF >> x >> y >> width >> height;
+
+                                    polygon.append (Map (x, y));
+                                    polygon.append (Map (x + width, y));
+                                    polygon.append (Map (x + width, y + height));
+                                    polygon.append (Map (x, y + height));
+
+                                    EMFP_DEBUG (printf ("EMF+\trectangle: %f,%f %fx%f\n", x, y, width, height));
+                                }
+
+                                ::basegfx::B2DPolyPolygon polyPolygon (polygon);
+
+                                EMFPPlusFillPolygon (polyPolygon, rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                            }
+                            break;
+                        }
+                    case EmfPlusRecordTypeFillPolygon:
+                        {
+                            EMFP_DEBUG (sal_uInt8 index = flags & 0xff);
+                            sal_uInt32 brushIndexOrColor;
+                            sal_Int32 points;
+
+                            rMF >> brushIndexOrColor;
+                            rMF >> points;
+
+                            EMFP_DEBUG (printf ("EMF+ FillPolygon in slot: %d points: %d\n", index, points));
+                            EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", brushIndexOrColor));
+
+                            EMFPPath path (points, true);
+                            path.Read (rMF, flags, *this);
+
+
+                            EMFPPlusFillPolygon (path.GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+
+                            break;
+                        }
+                    case EmfPlusRecordTypeDrawLines:
+                        {
+                            sal_uInt32 index = flags & 0xff;
+                            sal_uInt32 points;
+
+                            rMF >> points;
+
+                            EMFP_DEBUG (printf ("EMF+ DrawLines in slot: %u points: %u\n", (unsigned int)index, (unsigned int)points));
+
+                            EMFPPath path (points, true);
+                            path.Read (rMF, flags, *this);
+
+                            EMFPPen* pen = (EMFPPen*) aObjects [index];
+
                             rState.isFillColorSet = false;
                             rState.isLineColorSet = true;
                             rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
-                                                                                       rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
-                            ::basegfx::B2DPolyPolygon& polygon (path->GetPolygon (*this));
+                                                                                       rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace() );
+                            ::basegfx::B2DPolyPolygon& polygon (path.GetPolygon (*this));
 
                             polygon.transform( rState.mapModeTransform );
+
                             rendering::StrokeAttributes aStrokeAttributes;
 
                             pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
 
-                            ActionSharedPtr pPolyAction(
-                                internal::PolyPolyActionFactory::createPolyPolyAction(
-                                    polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
+                ActionSharedPtr pPolyAction(
+                    internal::PolyPolyActionFactory::createPolyPolyAction(
+                        polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
 
-                            if( pPolyAction )
-                            {
-                                maActions.push_back(
-                                    MtfAction(
-                                        pPolyAction,
-                                        rFactoryParms.mrCurrActionIndex ) );
+                if( pPolyAction )
+                {
+                    maActions.push_back(
+                        MtfAction(
+                            pPolyAction,
+                            rFactoryParms.mrCurrActionIndex ) );
 
-                                rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
-                            }
+                    rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+                }
+
+                            break;
                         }
-                        break;
-                    }
-                case EmfPlusRecordTypeDrawImage:
-                case EmfPlusRecordTypeDrawImagePoints:
-                    {
-                        sal_uInt32 attrIndex;
-                        sal_Int32 sourceUnit;
+                    case EmfPlusRecordTypeDrawPath:
+                        {
+                            sal_uInt32 penIndex;
 
-                        rMF >> attrIndex >> sourceUnit;
+                            rMF >> penIndex;
 
-                        EMFP_DEBUG (printf ("EMF+ %s attributes index: %d source unit: %d\n", type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage", (int)attrIndex, (int)sourceUnit));
-                        EMFP_DEBUG (printf ("EMF+\tTODO: use image attributes\n"));
+                            EMFP_DEBUG (printf ("EMF+ DrawPath\n"));
+                            EMFP_DEBUG (printf ("EMF+\tpen: %u\n", (unsigned int)penIndex));
 
-                        if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
-                            EMFPImage& image = *(EMFPImage *) aObjects [flags & 0xff];
-                            float sx, sy, sw, sh;
-                            sal_Int32 aCount;
+                            EMFPPath* path = (EMFPPath*) aObjects [flags & 0xff];
+                            EMFPPen* pen = (EMFPPen*) aObjects [penIndex & 0xff];
 
-                            ReadRectangle (rMF, sx, sy, sw, sh);
+                            SAL_WARN_IF( !pen, "cppcanvas", "EmfPlusRecordTypeDrawPath missing pen" );
+                            SAL_WARN_IF( !path, "cppcanvas", "EmfPlusRecordTypeDrawPath missing path" );
 
-                            EMFP_DEBUG (printf ("EMF+ %s source rectangle: %f,%f %fx%f\n", type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage", sx, sy, sw, sh));
+                            if (pen && path)
+                            {
+                                rState.isFillColorSet = false;
+                                rState.isLineColorSet = true;
+                                rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
+                                                                                           rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
+                                ::basegfx::B2DPolyPolygon& polygon (path->GetPolygon (*this));
 
-                            ::basegfx::B2DPoint aDstPoint;
-                            ::basegfx::B2DSize aDstSize;
-                            bool bValid = false;
+                                polygon.transform( rState.mapModeTransform );
+                                rendering::StrokeAttributes aStrokeAttributes;
 
-                            if (type == EmfPlusRecordTypeDrawImagePoints) {
-                                rMF >> aCount;
+                                pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
 
-                                if( aCount == 3) { // TODO: now that we now that this value is count we should support it better
-                                    float x1, y1, x2, y2, x3, y3;
+                                ActionSharedPtr pPolyAction(
+                                    internal::PolyPolyActionFactory::createPolyPolyAction(
+                                        polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
 
-                                    ReadPoint (rMF, x1, y1, flags);
-                                    ReadPoint (rMF, x2, y2, flags);
-                                    ReadPoint (rMF, x3, y3, flags);
+                                if( pPolyAction )
+                                {
+                                    maActions.push_back(
+                                        MtfAction(
+                                            pPolyAction,
+                                            rFactoryParms.mrCurrActionIndex ) );
 
-                                    aDstPoint = Map (x1, y1);
-                                    aDstSize = MapSize(x2 - x1, y3 - y1);
+                                    rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+                                }
+                            }
+                            break;
+                        }
+                    case EmfPlusRecordTypeDrawImage:
+                    case EmfPlusRecordTypeDrawImagePoints:
+                        {
+                            sal_uInt32 attrIndex;
+                            sal_Int32 sourceUnit;
+
+                            rMF >> attrIndex >> sourceUnit;
+
+                            EMFP_DEBUG (printf ("EMF+ %s attributes index: %d source unit: %d\n", type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage", (int)attrIndex, (int)sourceUnit));
+                            EMFP_DEBUG (printf ("EMF+\tTODO: use image attributes\n"));
+
+                            if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
+                                EMFPImage& image = *(EMFPImage *) aObjects [flags & 0xff];
+                                float sx, sy, sw, sh;
+                                sal_Int32 aCount;
+
+                                ReadRectangle (rMF, sx, sy, sw, sh);
+
+                                EMFP_DEBUG (printf ("EMF+ %s source rectangle: %f,%f %fx%f\n", type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage", sx, sy, sw, sh));
+
+                                ::basegfx::B2DPoint aDstPoint;
+                                ::basegfx::B2DSize aDstSize;
+                                bool bValid = false;
+
+                                if (type == EmfPlusRecordTypeDrawImagePoints) {
+                                    rMF >> aCount;
+
+                                    if( aCount == 3) { // TODO: now that we now that this value is count we should support it better
+                                        float x1, y1, x2, y2, x3, y3;
+
+                                        ReadPoint (rMF, x1, y1, flags);
+                                        ReadPoint (rMF, x2, y2, flags);
+                                        ReadPoint (rMF, x3, y3, flags);
+
+                                        aDstPoint = Map (x1, y1);
+                                        aDstSize = MapSize(x2 - x1, y3 - y1);
+
+                                        bValid = true;
+                                    }
+                                } else if (type == EmfPlusRecordTypeDrawImage) {
+                                    float dx, dy, dw, dh;
+
+                                    ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
+
+                                    aDstPoint = Map (dx, dy);
+                                    aDstSize = MapSize(dw, dh);
 
                                     bValid = true;
                                 }
-                            } else if (type == EmfPlusRecordTypeDrawImage) {
-                                float dx, dy, dw, dh;
 
-                                ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
-
-                                aDstPoint = Map (dx, dy);
-                                aDstSize = MapSize(dw, dh);
-
-                                bValid = true;
-                            }
-
-                            if (bValid) {
-                                BitmapEx aBmp( image.graphic.GetBitmapEx () );
-                                const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (basegfx::B2DPoint (sx, sy)),
-                                                           ::vcl::unotools::sizeFromB2DSize (basegfx::B2DSize(sw, sh)));
-                                aBmp.Crop( aCropRect );
+                                if (bValid) {
+                                    BitmapEx aBmp( image.graphic.GetBitmapEx () );
+                                    const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (basegfx::B2DPoint (sx, sy)),
+                                                               ::vcl::unotools::sizeFromB2DSize (basegfx::B2DSize(sw, sh)));
+                                    aBmp.Crop( aCropRect );
 
 
-                                Size aSize( aBmp.GetSizePixel() );
-                                if( aSize.Width() > 0 && aSize.Height() > 0 ) {
-                                    ActionSharedPtr pBmpAction (
-                                        internal::BitmapActionFactory::createBitmapAction (
-                                            aBmp,
-                                            rState.mapModeTransform * aDstPoint,
-                                            rState.mapModeTransform * aDstSize,
-                                            rCanvas,
-                                            rState));
+                                    Size aSize( aBmp.GetSizePixel() );
+                                    if( aSize.Width() > 0 && aSize.Height() > 0 ) {
+                                        ActionSharedPtr pBmpAction (
+                                            internal::BitmapActionFactory::createBitmapAction (
+                                                aBmp,
+                                                rState.mapModeTransform * aDstPoint,
+                                                rState.mapModeTransform * aDstSize,
+                                                rCanvas,
+                                                rState));
 
-                                    if( pBmpAction ) {
-                                        maActions.push_back( MtfAction( pBmpAction,
-                                                                        rFactoryParms.mrCurrActionIndex ) );
+                                        if( pBmpAction ) {
+                                            maActions.push_back( MtfAction( pBmpAction,
+                                                                            rFactoryParms.mrCurrActionIndex ) );
 
-                                        rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
+                                            rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
+                                        }
+                                    } else {
+                                        EMFP_DEBUG (printf ("EMF+ warning: empty bitmap\n"));
                                     }
                                 } else {
-                                    EMFP_DEBUG (printf ("EMF+ warning: empty bitmap\n"));
+                                    EMFP_DEBUG (printf ("EMF+ DrawImage(Points) TODO (fixme)\n"));
                                 }
                             } else {
-                                EMFP_DEBUG (printf ("EMF+ DrawImage(Points) TODO (fixme)\n"));
+                                EMFP_DEBUG (printf ("EMF+ DrawImage(Points) TODO (fixme) - possibly unsupported source units for crop rectangle\n"));
                             }
-                        } else {
-                            EMFP_DEBUG (printf ("EMF+ DrawImage(Points) TODO (fixme) - possibly unsupported source units for crop rectangle\n"));
+                            break;
+                        }
+                    case EmfPlusRecordTypeDrawString:
+                        {
+                            EMFP_DEBUG (printf ("EMF+ DrawString\n"));
+
+                            sal_uInt32 brushId;
+                            sal_uInt32 formatId;
+                            sal_uInt32 stringLength;
+
+                            rMF >> brushId >> formatId >> stringLength;
+                            EMFP_DEBUG (printf ("EMF+ DrawString brushId: %x formatId: %x length: %x\n", brushId, formatId, stringLength));
+
+                            if (flags & 0x8000) {
+                                float lx, ly, lw, lh;
+
+                                rMF >> lx >> ly >> lw >> lh;
+
+                                EMFP_DEBUG (printf ("EMF+ DrawString layoutRect: %f,%f - %fx%f\n", lx, ly, lw, lh));
+
+                                rtl::OUString text = read_uInt16s_ToOUString(rMF, stringLength);
+
+                                double cellSize = setFont (flags & 0xff, rFactoryParms, rState);
+                                SET_TEXT_COLOR( brushId );
+
+                                ActionSharedPtr pTextAction(
+                                    TextActionFactory::createTextAction(
+                                                                        // position is just rough guess for now
+                                                                        // we should calculate it exactly from layoutRect or font
+                                        ::vcl::unotools::pointFromB2DPoint ( Map( lx + 0.15*cellSize, ly + cellSize ) ),
+                                        ::Size(),
+                                        ::Color(),
+                                        ::Size(),
+                                        ::Color(),
+                                        text,
+                                        0,
+                                        stringLength,
+                                        NULL,
+                                        rFactoryParms.mrVDev,
+                                        rFactoryParms.mrCanvas,
+                                        rState,
+                                        rFactoryParms.mrParms,
+                                        false ) );
+                                if( pTextAction )
+                                {
+                                    EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
+
+                                    maActions.push_back(
+                                                        MtfAction(
+                                                                  pTextAction,
+                                                                  rFactoryParms.mrCurrActionIndex ) );
+
+                                    rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
+                                }
+                            } else {
+                                EMFP_DEBUG (printf ("EMF+ DrawString TODO - drawing with brush not yet supported\n"));
+                            }
                         }
                         break;
-                    }
-                case EmfPlusRecordTypeDrawString:
-                    {
-                        EMFP_DEBUG (printf ("EMF+ DrawString\n"));
+                    case EmfPlusRecordTypeSetPageTransform:
+                        rMF >> fPageScale;
 
-                        sal_uInt32 brushId;
-                        sal_uInt32 formatId;
-                        sal_uInt32 stringLength;
-
-                        rMF >> brushId >> formatId >> stringLength;
-                        EMFP_DEBUG (printf ("EMF+ DrawString brushId: %x formatId: %x length: %x\n", brushId, formatId, stringLength));
-
-                        if (flags & 0x8000) {
-                            float lx, ly, lw, lh;
-
-                            rMF >> lx >> ly >> lw >> lh;
-
-                            EMFP_DEBUG (printf ("EMF+ DrawString layoutRect: %f,%f - %fx%f\n", lx, ly, lw, lh));
-
-                            rtl::OUString text = read_uInt16s_ToOUString(rMF, stringLength);
-
-                            double cellSize = setFont (flags & 0xff, rFactoryParms, rState);
-                            SET_TEXT_COLOR( brushId );
-
-                            ActionSharedPtr pTextAction(
-                                TextActionFactory::createTextAction(
-                                                                    // position is just rough guess for now
-                                                                    // we should calculate it exactly from layoutRect or font
-                                    ::vcl::unotools::pointFromB2DPoint ( Map( lx + 0.15*cellSize, ly + cellSize ) ),
-                                    ::Size(),
-                                    ::Color(),
-                                    ::Size(),
-                                    ::Color(),
-                                    text,
-                                    0,
-                                    stringLength,
-                                    NULL,
-                                    rFactoryParms.mrVDev,
-                                    rFactoryParms.mrCanvas,
-                                    rState,
-                                    rFactoryParms.mrParms,
-                                    false ) );
-                            if( pTextAction )
-                            {
-                                EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
-
-                                maActions.push_back(
-                                                    MtfAction(
-                                                              pTextAction,
-                                                              rFactoryParms.mrCurrActionIndex ) );
-
-                                rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
-                            }
-                        } else {
-                            EMFP_DEBUG (printf ("EMF+ DrawString TODO - drawing with brush not yet supported\n"));
-                        }
-                    }
-                    break;
-                case EmfPlusRecordTypeSetPageTransform:
-                    rMF >> fPageScale;
-
-                    EMFP_DEBUG (printf ("EMF+ SetPageTransform\n"));
-                    EMFP_DEBUG (printf ("EMF+\tscale: %f unit: %d\n", fPageScale, flags));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
-                    break;
-                case EmfPlusRecordTypeSetRenderingOrigin:
-                    rMF >> nOriginX >> nOriginY;
-                    EMFP_DEBUG (printf ("EMF+ SetRenderingOrigin\n"));
-                    EMFP_DEBUG (printf ("EMF+\torigin [x,y]: %d,%d\n", (int)nOriginX, (int)nOriginY));
-                    break;
-                case EmfPlusRecordTypeSetTextRenderingHint:
-                    EMFP_DEBUG (printf ("EMF+ SetTextRenderingHint\n"));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
-                    break;
-                case EmfPlusRecordTypeSetAntiAliasMode:
-                    EMFP_DEBUG (printf ("EMF+ SetAntiAliasMode\n"));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
-                    break;
-                case EmfPlusRecordTypeSetInterpolationMode:
-                    EMFP_DEBUG (printf ("EMF+ InterpolationMode\n"));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
-                    break;
-                case EmfPlusRecordTypeSetPixelOffsetMode:
-                    EMFP_DEBUG (printf ("EMF+ SetPixelOffsetMode\n"));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
-                    break;
-                case EmfPlusRecordTypeSetCompositingQuality:
-                    EMFP_DEBUG (printf ("EMF+ SetCompositingQuality\n"));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
-                    break;
-                case EmfPlusRecordTypeSave:
-                    EMFP_DEBUG (printf ("EMF+ Save\n"));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
-                    break;
-                case EmfPlusRecordTypeSetWorldTransform: {
-                    EMFP_DEBUG (printf ("EMF+ SetWorldTransform\n"));
-                    XForm transform;
-                    rMF >> transform;
-                    aWorldTransform.Set (transform);
-                    EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
-                            aWorldTransform.eM11, aWorldTransform.eM12,
-                            aWorldTransform.eM21, aWorldTransform.eM22,
-                            aWorldTransform.eDx, aWorldTransform.eDy));
-                    break;
-                }
-                case EmfPlusRecordTypeResetWorldTransform:
-                    EMFP_DEBUG (printf ("EMF+ ResetWorldTransform\n"));
-                    aWorldTransform.SetIdentity ();
-                    break;
-                case EmfPlusRecordTypeMultiplyWorldTransform: {
-                    EMFP_DEBUG (printf ("EMF+ MultiplyWorldTransform\n"));
-                    XForm transform;
-                    rMF >> transform;
-
-                    EMFP_DEBUG (printf ("EMF+\tmatrix m11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
-                            transform.eM11, transform.eM12,
-                            transform.eM21, transform.eM22,
-                            transform.eDx, transform.eDy));
-
-                    if (flags & 0x2000)  // post multiply
-                        aWorldTransform.Multiply (transform);
-                    else {               // pre multiply
-                        transform.Multiply (aWorldTransform);
-                        aWorldTransform.Set (transform);
-                    }
-                    EMFP_DEBUG (printf ("EMF+\tresult world matrix m11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
-                            aWorldTransform.eM11, aWorldTransform.eM12,
-                            aWorldTransform.eM21, aWorldTransform.eM22,
-                            aWorldTransform.eDx, aWorldTransform.eDy));
-                    break;
-                }
-                case EmfPlusRecordTypeSetClipPath:
-                    {
-                        EMFP_DEBUG (printf ("EMF+ SetClipPath\n"));
-                        EMFP_DEBUG (printf ("EMF+\tpath in slot: %d\n", flags & 0xff));
-
-                        EMFPPath& path = *(EMFPPath*) aObjects [flags & 0xff];
-                        ::basegfx::B2DPolyPolygon& clipPoly (path.GetPolygon (*this));
-
-                        clipPoly.transform (rState.mapModeTransform);
-                        updateClipping (clipPoly, rFactoryParms, false);
-
-                        break;
-                    }
-                case EmfPlusRecordTypeSetClipRegion: {
-                    EMFP_DEBUG (printf ("EMF+ SetClipRegion\n"));
-                    EMFP_DEBUG (printf ("EMF+\tregion in slot: %d combine mode: %d\n", flags & 0xff, (flags & 0xff00) >> 8));
-                    EMFPRegion *region = (EMFPRegion*)aObjects [flags & 0xff];
-
-                    // reset clip
-                    if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
-                        updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, false);
-                    } else {
+                        EMFP_DEBUG (printf ("EMF+ SetPageTransform\n"));
+                        EMFP_DEBUG (printf ("EMF+\tscale: %f unit: %d\n", fPageScale, flags));
                         EMFP_DEBUG (printf ("EMF+\tTODO\n"));
-            }
-                    break;
+                        break;
+                    case EmfPlusRecordTypeSetRenderingOrigin:
+                        rMF >> nOriginX >> nOriginY;
+                        EMFP_DEBUG (printf ("EMF+ SetRenderingOrigin\n"));
+                        EMFP_DEBUG (printf ("EMF+\torigin [x,y]: %d,%d\n", (int)nOriginX, (int)nOriginY));
+                        break;
+                    case EmfPlusRecordTypeSetTextRenderingHint:
+                        EMFP_DEBUG (printf ("EMF+ SetTextRenderingHint\n"));
+                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        break;
+                    case EmfPlusRecordTypeSetAntiAliasMode:
+                        EMFP_DEBUG (printf ("EMF+ SetAntiAliasMode\n"));
+                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        break;
+                    case EmfPlusRecordTypeSetInterpolationMode:
+                        EMFP_DEBUG (printf ("EMF+ InterpolationMode\n"));
+                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        break;
+                    case EmfPlusRecordTypeSetPixelOffsetMode:
+                        EMFP_DEBUG (printf ("EMF+ SetPixelOffsetMode\n"));
+                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        break;
+                    case EmfPlusRecordTypeSetCompositingQuality:
+                        EMFP_DEBUG (printf ("EMF+ SetCompositingQuality\n"));
+                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        break;
+                    case EmfPlusRecordTypeSave:
+                        EMFP_DEBUG (printf ("EMF+ Save\n"));
+                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                        break;
+                    case EmfPlusRecordTypeSetWorldTransform: {
+                        EMFP_DEBUG (printf ("EMF+ SetWorldTransform\n"));
+                        XForm transform;
+                        rMF >> transform;
+                        aWorldTransform.Set (transform);
+                        EMFP_DEBUG (printf ("EMF+\tm11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
+                                aWorldTransform.eM11, aWorldTransform.eM12,
+                                aWorldTransform.eM21, aWorldTransform.eM22,
+                                aWorldTransform.eDx, aWorldTransform.eDy));
+                        break;
+                    }
+                    case EmfPlusRecordTypeResetWorldTransform:
+                        EMFP_DEBUG (printf ("EMF+ ResetWorldTransform\n"));
+                        aWorldTransform.SetIdentity ();
+                        break;
+                    case EmfPlusRecordTypeMultiplyWorldTransform: {
+                        EMFP_DEBUG (printf ("EMF+ MultiplyWorldTransform\n"));
+                        XForm transform;
+                        rMF >> transform;
+
+                        EMFP_DEBUG (printf ("EMF+\tmatrix m11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
+                                transform.eM11, transform.eM12,
+                                transform.eM21, transform.eM22,
+                                transform.eDx, transform.eDy));
+
+                        if (flags & 0x2000)  // post multiply
+                            aWorldTransform.Multiply (transform);
+                        else {               // pre multiply
+                            transform.Multiply (aWorldTransform);
+                            aWorldTransform.Set (transform);
+                        }
+                        EMFP_DEBUG (printf ("EMF+\tresult world matrix m11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
+                                aWorldTransform.eM11, aWorldTransform.eM12,
+                                aWorldTransform.eM21, aWorldTransform.eM22,
+                                aWorldTransform.eDx, aWorldTransform.eDy));
+                        break;
+                    }
+                    case EmfPlusRecordTypeSetClipPath:
+                        {
+                            EMFP_DEBUG (printf ("EMF+ SetClipPath\n"));
+                            EMFP_DEBUG (printf ("EMF+\tpath in slot: %d\n", flags & 0xff));
+
+                            EMFPPath& path = *(EMFPPath*) aObjects [flags & 0xff];
+                            ::basegfx::B2DPolyPolygon& clipPoly (path.GetPolygon (*this));
+
+                            clipPoly.transform (rState.mapModeTransform);
+                            updateClipping (clipPoly, rFactoryParms, false);
+
+                            break;
+                        }
+                    case EmfPlusRecordTypeSetClipRegion: {
+                        EMFP_DEBUG (printf ("EMF+ SetClipRegion\n"));
+                        EMFP_DEBUG (printf ("EMF+\tregion in slot: %d combine mode: %d\n", flags & 0xff, (flags & 0xff00) >> 8));
+                        EMFPRegion *region = (EMFPRegion*)aObjects [flags & 0xff];
+
+                        // reset clip
+                        if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
+                            updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, false);
+                        } else {
+                            EMFP_DEBUG (printf ("EMF+\tTODO\n"));
                 }
-            case EmfPlusRecordTypeDrawDriverString: {
-                    EMFP_DEBUG (printf ("EMF+ DrawDriverString, flags: 0x%04x\n", flags));
-            sal_uInt32 brushIndexOrColor;
-            sal_uInt32 optionFlags;
-            sal_uInt32 hasMatrix;
-            sal_uInt32 glyphsCount;
+                        break;
+                    }
+                case EmfPlusRecordTypeDrawDriverString: {
+                        EMFP_DEBUG (printf ("EMF+ DrawDriverString, flags: 0x%04x\n", flags));
+                sal_uInt32 brushIndexOrColor;
+                sal_uInt32 optionFlags;
+                sal_uInt32 hasMatrix;
+                sal_uInt32 glyphsCount;
 
-            rMF >> brushIndexOrColor >> optionFlags >> hasMatrix >> glyphsCount;
+                rMF >> brushIndexOrColor >> optionFlags >> hasMatrix >> glyphsCount;
 
-            EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
-            EMFP_DEBUG (printf ("EMF+\toption flags: 0x%08x\n", (unsigned int)optionFlags));
-            EMFP_DEBUG (printf ("EMF+\thas matrix: %u\n", (unsigned int)hasMatrix));
-            EMFP_DEBUG (printf ("EMF+\tglyphs: %u\n", (unsigned int)glyphsCount));
+                EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
+                EMFP_DEBUG (printf ("EMF+\toption flags: 0x%08x\n", (unsigned int)optionFlags));
+                EMFP_DEBUG (printf ("EMF+\thas matrix: %u\n", (unsigned int)hasMatrix));
+                EMFP_DEBUG (printf ("EMF+\tglyphs: %u\n", (unsigned int)glyphsCount));
 
-            if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
-            float *charsPosX = new float[glyphsCount];
-            float *charsPosY = new float[glyphsCount];
+                if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
+                float *charsPosX = new float[glyphsCount];
+                float *charsPosY = new float[glyphsCount];
 
-            rtl::OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
+                rtl::OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
 
-            for( sal_uInt32 i=0; i<glyphsCount; i++) {
-                rMF >> charsPosX[i] >> charsPosY[i];
-                EMFP_DEBUG (printf ("EMF+\tglyphPosition[%u]: %f, %f\n", (unsigned int)i, charsPosX[i], charsPosY[i]));
-            }
-
-            XForm transform;
-            if( hasMatrix ) {
-                rMF >> transform;
-                EMFP_DEBUG (printf ("EMF+\tmatrix:: %f, %f, %f, %f, %f, %f\n", transform.eM11, transform.eM12, transform.eM21, transform.eM22, transform.eDx, transform.eDy));
-            }
-
-            // add the text action
-            setFont (flags & 0xff, rFactoryParms, rState);
-
-            if( flags & 0x8000 )
-                SET_TEXT_COLOR(brushIndexOrColor);
-
-            ActionSharedPtr pTextAction(
-                TextActionFactory::createTextAction(
-                ::vcl::unotools::pointFromB2DPoint ( Map( charsPosX[0], charsPosY[0] ) ),
-                ::Size(),
-                ::Color(),
-                ::Size(),
-                ::Color(),
-                text,
-                0,
-                glyphsCount,
-                NULL,
-                rFactoryParms.mrVDev,
-                rFactoryParms.mrCanvas,
-                rState,
-                rFactoryParms.mrParms,
-                false ) );
-
-            if( pTextAction )
-            {
-                EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
-
-                maActions.push_back(
-                MtfAction(
-                    pTextAction,
-                    rFactoryParms.mrCurrActionIndex ) );
-
-                rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
-            }
-
-            delete[] charsPosX;
-            delete[] charsPosY;
-            } else {
-            EMFP_DEBUG (printf ("EMF+\tTODO: fonts (non-unicode glyphs chars)\n"));
-            }
-
-                    break;
-        }
-                default:
-                    EMFP_DEBUG (printf ("EMF+ unhandled record type: %d\n", type));
-                    EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                for( sal_uInt32 i=0; i<glyphsCount; i++) {
+                    rMF >> charsPosX[i] >> charsPosY[i];
+                    EMFP_DEBUG (printf ("EMF+\tglyphPosition[%u]: %f, %f\n", (unsigned int)i, charsPosX[i], charsPosY[i]));
                 }
+
+                XForm transform;
+                if( hasMatrix ) {
+                    rMF >> transform;
+                    EMFP_DEBUG (printf ("EMF+\tmatrix:: %f, %f, %f, %f, %f, %f\n", transform.eM11, transform.eM12, transform.eM21, transform.eM22, transform.eDx, transform.eDy));
+                }
+
+                // add the text action
+                setFont (flags & 0xff, rFactoryParms, rState);
+
+                if( flags & 0x8000 )
+                    SET_TEXT_COLOR(brushIndexOrColor);
+
+                ActionSharedPtr pTextAction(
+                    TextActionFactory::createTextAction(
+                    ::vcl::unotools::pointFromB2DPoint ( Map( charsPosX[0], charsPosY[0] ) ),
+                    ::Size(),
+                    ::Color(),
+                    ::Size(),
+                    ::Color(),
+                    text,
+                    0,
+                    glyphsCount,
+                    NULL,
+                    rFactoryParms.mrVDev,
+                    rFactoryParms.mrCanvas,
+                    rState,
+                    rFactoryParms.mrParms,
+                    false ) );
+
+                if( pTextAction )
+                {
+                    EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
+
+                    maActions.push_back(
+                    MtfAction(
+                        pTextAction,
+                        rFactoryParms.mrCurrActionIndex ) );
+
+                    rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
+                }
+
+                delete[] charsPosX;
+                delete[] charsPosY;
+                } else {
+                EMFP_DEBUG (printf ("EMF+\tTODO: fonts (non-unicode glyphs chars)\n"));
+                }
+
+                        break;
+            }
+                    default:
+                        EMFP_DEBUG (printf ("EMF+ unhandled record type: %d\n", type));
+                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    }
+               }
 
                 rMF.Seek (next);
 

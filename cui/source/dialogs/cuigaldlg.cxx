@@ -504,8 +504,8 @@ IMPL_LINK( ActualizeProgress, TimeoutHdl, Timer*, _pTimer )
 
 IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
 {
-  for( long i = 0; i < 128; i++ )
-    Application::Reschedule();
+    for( long i = 0; i < 128; i++ )
+        Application::Reschedule();
 
     Flush();
     Sync();
