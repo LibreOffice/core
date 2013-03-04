@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+wo\u003d",
+        "filename": "UnoControls/source/base/registercontrols.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-04T19:41:57Z",
+      "side": 1,
+      "message": "Please do not reintroduce tabs instead of spaces!",
+      "revId": "f885bd31f351d736dcf0c0cd606d7f410b7ce84e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
