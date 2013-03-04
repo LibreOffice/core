@@ -1422,7 +1422,7 @@ namespace svx
             rLoseFocusHdl.Call( this );
         m_rScrollBar.SetThumbPos( m_rScrollBar.GetThumbPos() + ( _bUp? -1 : 1 ) );
 
-        ( static_cast< HangulHanjaEditDictDialog* >( GetParent() ) )->UpdateScrollbar();
+        ( static_cast< HangulHanjaEditDictDialog* >( GetParentDialog() ) )->UpdateScrollbar();
     }
 
     SuggestionEdit::SuggestionEdit( Window* pParent, const ResId& rResId,

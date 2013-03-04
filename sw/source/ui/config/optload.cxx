@@ -794,7 +794,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
     String sFldTypeName = aCategoryBox.GetText();
 
-    SfxNoLayoutSingleTabDialog *pDlg = dynamic_cast<SfxNoLayoutSingleTabDialog*>(GetParent());
+    SfxNoLayoutSingleTabDialog *pDlg = dynamic_cast<SfxNoLayoutSingleTabDialog*>(GetParentDialog());
     PushButton *pBtn = pDlg ? pDlg->GetOKButton() : NULL;
     if (pBtn)
         pBtn->Enable(sFldTypeName.Len() != 0);

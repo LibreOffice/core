@@ -290,7 +290,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                 pView->DeleteMarked();
                 bProc = sal_True;
                 if( !pView->AreObjectsMarked() )
-                    ((Dialog*)GetParent())->GrabFocusToFirstControl();
+                    GetParentDialog()->GrabFocusToFirstControl();
             }
         }
         break;
@@ -314,12 +314,12 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                     }
                     else
                     {
-                        ((Dialog*)GetParent())->GrabFocusToFirstControl();
+                        GetParentDialog()->GrabFocusToFirstControl();
                     }
                 }
                 else
                 {
-                    ((Dialog*)GetParent())->GrabFocusToFirstControl();
+                    GetParentDialog()->GrabFocusToFirstControl();
                 }
                 bProc = sal_True;
             }

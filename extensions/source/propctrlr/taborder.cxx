@@ -322,7 +322,7 @@ namespace pcr
     {
         SvTreeListBox::ModelHasMoved( _pSource );
 
-        ((TabOrderDialog*)Window::GetParent())->SetModified();
+        ((TabOrderDialog*)GetParentDialog())->SetModified();
     }
 
     //------------------------------------------------------------------------
@@ -332,7 +332,7 @@ namespace pcr
         Image  aImage;
         for (long i=0; i<labs(nRelPos); i++)
         {
-            ((TabOrderDialog*)Window::GetParent())->SetModified();
+            ((TabOrderDialog*)GetParentDialog())->SetModified();
 
             //////////////////////////////////////////////////////////////////////
             // move entries

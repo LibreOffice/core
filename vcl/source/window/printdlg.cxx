@@ -189,7 +189,7 @@ void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
     if( rEvt.GetCommand() == COMMAND_WHEEL )
     {
         const CommandWheelData* pWheelData = rEvt.GetWheelData();
-        PrintDialog* pDlg = dynamic_cast<PrintDialog*>(GetParent());
+        PrintDialog* pDlg = dynamic_cast<PrintDialog*>(GetParentDialog());
         if( pDlg )
         {
             if( pWheelData->GetDelta() > 0 )
