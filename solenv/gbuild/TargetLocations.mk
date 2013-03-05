@@ -176,7 +176,6 @@ gb_PyunoFile_get_target = $(WORKDIR)/Pyuno/$(1)/contents/$(2)
 gb_Rdb_get_target = $(WORKDIR)/Rdb/$(1).rdb
 gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
 gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
-gb_ScpConvertTarget_get_target = $(WORKDIR)/ScpConvertTarget/$(1).ulf
 gb_ScpMergeTarget_get_target = $(WORKDIR)/ScpMergeTarget/$(1).ulf
 gb_ScpPreprocessTarget_get_target = $(WORKDIR)/ScpPreprocessTarget/$(1).pre
 gb_ScpTarget_get_external_target = $(WORKDIR)/ScpTarget/$(1).external
@@ -292,7 +291,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Pyuno \
 	Rdb \
 	ResTarget \
-	ScpConvertTarget \
 	ScpMergeTarget \
 	ScpPreprocessTarget \
 	ScpTarget \
