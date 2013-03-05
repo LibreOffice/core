@@ -51,6 +51,12 @@ void Test::test()
 
     bool bInited = pOffice->initialize( aInstall.getStr() );
     CPPUNIT_ASSERT( bInited );
+
+    rtl::OUString aArgDoc;
+    rtl::Bootstrap::get( rtl::OUString( "arg-testarg.smoketest.doc" ), aArgDoc );
+    OString aDoc = OUStringToOString ( aArgDoc, RTL_TEXTENCODING_UTF8 );
+    fprintf ( stderr, "liblibreoffice doc arg: '%s'\n", aDoc.getStr() );
+    pOffice->documentLoad ( aDoc.getStr() );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

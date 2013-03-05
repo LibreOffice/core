@@ -27,6 +27,7 @@ endif
 
 $(eval $(call gb_CppunitTest_add_arguments,liblibreoffice,\
 	-env:arg-soffice=$(liblibreoffice_SOFFICE_INST) \
+	-env:arg-testarg.smoketest.doc=$(OUTDIR)/bin/smoketestdoc.sxw \
 ))
 
 # vim: set noet sw=4 ts=4:
