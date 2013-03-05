@@ -433,8 +433,9 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
         nAccDimension = std::accumulate(aSubGroupSizes.begin(),
             aSubGroupSizes.end(), nAccDimension);
 
-        long nAvgDimension = nAccDimension /
-            (aMainGroupSizes.size() + aSubGroupSizes.size());
+        size_t nTotalSize = aMainGroupSizes.size() + aSubGroupSizes.size();
+
+        long nAvgDimension = nTotalSize ? nAccDimension / nTotalSize : 0;
 
         long nMaxMainNonOutlier = getMaxNonOutlier(aMainGroupSizes,
             nAvgDimension);
