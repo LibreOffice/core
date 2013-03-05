@@ -14,9 +14,9 @@ odkcommon_ZIPLIST += docs/common/ref
 $(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/common/ref,module-ix.html))
 $(odk_WORKDIR)/docs/common/ref/module-ix.html: $(SRCDIR)/odk/pack/copying/idl_chapter_refs.txt \
 	$(SRCDIR)/odk/docs/common/ref/idl.css $(call gb_UnoApi_get_target,offapi) \
-	$(call gb_Executable_get_target,autodoc)
+	$(call gb_Executable_get_runtime_dependencies,autodoc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AUD,1)
-	$(call gb_Executable_get_target,autodoc) -html $(dir $@) \
+	$(call gb_Helper_execute,autodoc) -html $(dir $@) \
 		-dvgroot "http://wiki.services.openoffice.org/wiki" \
 		-name "LibreOffice $(PRODUCTVERSION) API" \
 		-lg idl -dvgfile $< -t $(OUTDIR)/idl
