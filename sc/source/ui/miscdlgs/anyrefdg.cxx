@@ -668,10 +668,7 @@ ScRefHandler::ScRefHandler( Window &rWindow, SfxBindings* pB, bool bBindRef ):
         pActiveWin(NULL)
 {
     m_aHelper.SetWindow(&m_rWindow);
-    if(m_rWindow.GetHelpId().isEmpty())                //Hack, da im SfxModelessDialog die HelpId
-        m_rWindow.SetHelpId(m_rWindow.GetUniqueId());   //fuer einen ModelessDialog entfernt und
-                                    //in eine UniqueId gewandelt wird, machen
-                                    //wir das an dieser Stelle rueckgaengig.
+    reverseUniqueHelpIdHack(m_rWindow);
     aTimer.SetTimeout(200);
     aTimer.SetTimeoutHdl(LINK( this, ScRefHandler, UpdateFocusHdl));
 
