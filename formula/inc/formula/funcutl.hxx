@@ -44,6 +44,7 @@ protected:
 
 public:
                         RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId );
+                        RefEdit( Window* _pParent, WinBits nStyle = WB_BORDER );
     virtual             ~RefEdit();
 
     void                SetRefString( const XubString& rStr );
@@ -84,8 +85,9 @@ protected:
     virtual void        LoseFocus();
 
 public:
-                        RefButton( Window* _pParent, const ResId& rResId);
-                        RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit ,IControlReferenceHandler* pDlg);
+                        RefButton(Window* _pParent, const ResId& rResId);
+                        RefButton(Window* _pParent, WinBits nStyle = 0);
+                        RefButton(Window* _pParent, const ResId& rResId, RefEdit* pEdit ,IControlReferenceHandler* pDlg);
 
     void                SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
 

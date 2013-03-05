@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 
@@ -854,6 +855,19 @@ RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResI
     aTimer.SetTimeout( SC_ENABLE_TIME );
 }
 
+RefEdit::RefEdit( Window* _pParent, WinBits nStyle ) :
+    Edit( _pParent, nStyle ),
+    pAnyRefDlg( NULL )
+{
+    aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
+    aTimer.SetTimeout( SC_ENABLE_TIME );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRefEdit(Window *pParent, VclBuilder::stringmap &)
+{
+    return new RefEdit(pParent, WB_BORDER);
+}
+
 RefEdit::~RefEdit()
 {
     aTimer.SetTimeoutHdl( Link() );
@@ -956,6 +970,23 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId) :
     pRefEdit( NULL )
 {
     SetStartImage();
+}
+
+RefButton::RefButton( Window* _pParent, WinBits nStyle ) :
+    ImageButton( _pParent, nStyle ),
+    aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
+    aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
+    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
+    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
+    pAnyRefDlg( NULL ),
+    pRefEdit( NULL )
+{
+    SetStartImage();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRefButton(Window *pParent, VclBuilder::stringmap &)
+{
+    return new RefButton(pParent, 0);
 }
 
 RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, IControlReferenceHandler* _pDlg ) :
