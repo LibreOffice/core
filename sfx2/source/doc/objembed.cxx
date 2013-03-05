@@ -156,7 +156,7 @@ void SfxObjectShell::SetMapUnit( MapUnit nMapUnit )
 void SfxObjectShell::FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc ) const
 {
     sal_uInt32 nClipFormat;
-    String aAppName, aShortName;
+    OUString aAppName, aShortName;
     FillClass( &rDesc.maClassName, &nClipFormat, &aAppName, &rDesc.maTypeName, &aShortName, SOFFICE_FILEFORMAT_CURRENT );
 
     rDesc.mnViewAspect = ASPECT_CONTENT;

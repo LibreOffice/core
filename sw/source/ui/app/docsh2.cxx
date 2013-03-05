@@ -1491,9 +1491,9 @@ void SwDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 
 void SwDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
-                                   String * /*pAppName*/,
-                                   String * pLongUserName,
-                                   String * pUserName,
+                                   OUString * /*pAppName*/,
+                                   OUString * pLongUserName,
+                                   OUString * pUserName,
                                    sal_Int32 nVersion,
                                    sal_Bool bTemplate /* = sal_False */) const
 {

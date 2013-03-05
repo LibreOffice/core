@@ -937,9 +937,9 @@ sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
 void DrawDocShell::FillClass(SvGlobalName* pClassName,
                                         sal_uInt32*  pFormat,
-                                        String* ,
-                                        String* pFullTypeName,
-                                        String* pShortTypeName,
+                                        OUString* ,
+                                        OUString* pFullTypeName,
+                                        OUString* pShortTypeName,
                                         sal_Int32 nFileFormat,
                                         sal_Bool bTemplate /* = sal_False */) const
 {
@@ -949,13 +949,13 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
         {
                 *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
                 *pFormat = SOT_FORMATSTR_ID_STARDRAW_60;
-                *pFullTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
+                *pFullTypeName = OUString(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
         }
         else
         {
                 *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
                 *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_60;
-                *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
+                *pFullTypeName = OUString(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
         }
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_8)
@@ -974,7 +974,7 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
         }
     }
 
-    *pShortTypeName = String(SdResId( (meDocType == DOCUMENT_TYPE_DRAW) ?
+    *pShortTypeName = OUString(SdResId( (meDocType == DOCUMENT_TYPE_DRAW) ?
                                       STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT ));
 }
 

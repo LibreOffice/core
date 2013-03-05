@@ -189,9 +189,9 @@ public:
 
     virtual void    FillClass( SvGlobalName * pClassName,
                                sal_uInt32 * pFormat,
-                               String * pAppName,
-                               String * pFullTypeName,
-                               String * pShortTypeName,
+                               OUString * pAppName,
+                               OUString * pFullTypeName,
+                               OUString * pShortTypeName,
                                sal_Int32 nFileFormat,
                                sal_Bool bTemplate = false ) const;
 

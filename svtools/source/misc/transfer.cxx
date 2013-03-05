@@ -155,14 +155,14 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
         aParams += aChar;
     }
 
-    if( rObjDesc.maTypeName.Len() )
+    if( !rObjDesc.maTypeName.isEmpty() )
     {
         aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";typename=\"" ));
         aParams += rObjDesc.maTypeName;
         aParams += aChar;
     }
 
-    if( rObjDesc.maDisplayName.Len() )
+    if( !rObjDesc.maDisplayName.isEmpty() )
     {
         // the display name might contain unacceptable characters, encode all of them
         // this seems to be the only parameter currently that might contain such characters

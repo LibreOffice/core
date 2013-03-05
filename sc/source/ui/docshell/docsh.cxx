@@ -171,9 +171,9 @@ TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-I
 
 void ScDocShell::FillClass( SvGlobalName* pClassName,
                                         sal_uInt32* pFormat,
-                                        String* /* pAppName */,
-                                        String* pFullTypeName,
-                                        String* pShortTypeName,
+                                        OUString* /* pAppName */,
+                                        OUString* pFullTypeName,
+                                        OUString* pShortTypeName,
                                         sal_Int32 nFileFormat,
                                         sal_Bool bTemplate /* = sal_False */) const
 {
@@ -181,8 +181,8 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
         *pFormat        = SOT_FORMATSTR_ID_STARCALC_60;
-        *pFullTypeName  = String( ScResId( SCSTR_LONG_SCDOC_NAME ) );
-        *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
+        *pFullTypeName  = OUString( ScResId( SCSTR_LONG_SCDOC_NAME ) );
+        *pShortTypeName = OUString( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
     }
     else if ( nFileFormat == SOFFICE_FILEFORMAT_8 )
     {

@@ -79,8 +79,8 @@ struct TransferableObjectDescriptor
     Point               maDragStartPos;
     Size                maSize;
     sal_uInt32          mnOle2Misc;
-    String              maTypeName;
-    String              maDisplayName;
+    OUString            maTypeName;
+    OUString            maDisplayName;
     sal_Bool            mbCanLink;
 
     TransferableObjectDescriptor()

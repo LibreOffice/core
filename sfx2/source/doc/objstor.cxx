@@ -315,7 +315,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     if ( xProps.is() )
     {
         SvGlobalName aName;
-        String aFullTypeName, aShortTypeName, aAppName;
+        OUString aFullTypeName, aShortTypeName, aAppName;
         sal_uInt32 nClipFormat=0;
 
         FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
