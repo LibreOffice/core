@@ -39,11 +39,12 @@
 // Dialog Control Id's -----------------------------------------------------------
 
 // strings
+#define RID_STR_SHRINK                  (RID_STRING_START + 0)
+#define RID_STR_EXPAND                  (RID_STRING_START + 1)
 
 // bitmap
 #define RID_BMP_REFBTN1                             (RID_BITMAP_START + 0)
 #define RID_BMP_REFBTN2                             (RID_BITMAP_START + 2)
-
 
 // pages
 #define RID_FORMULATAB_STRUCT                       (RID_PAGE_START + 0)

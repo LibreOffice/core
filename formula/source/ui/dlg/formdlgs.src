@@ -455,6 +455,11 @@ Image RID_BMP_REFBTN1
     MaskColor = STD_MASKCOLOR;
 };
 
+String RID_STR_SHRINK
+{
+    Text [ en-US ] = "Shrink" ;
+};
+
 Image RID_BMP_REFBTN2
 {
     ImageBitmap = Bitmap
@@ -462,4 +467,9 @@ Image RID_BMP_REFBTN2
         File = "refinp2.bmp";
     };
     MaskColor = STD_MASKCOLOR;
+};
+
+String RID_STR_EXPAND
+{
+    Text [ en-US ] = "Expand" ;
 };

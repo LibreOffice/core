@@ -100,7 +100,6 @@ ModelessDialog RID_SCDLG_NAMES_DEFINE
         Pos = MAP_APPFONT ( 205 , 43 ) ;
         Size = MAP_APPFONT ( 15 , 13 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ en-US ] = "Shrink" ;
     };
     CheckBox BTN_PRINTAREA
     {

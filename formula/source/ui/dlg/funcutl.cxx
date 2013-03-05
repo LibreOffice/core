@@ -950,6 +950,8 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId) :
     ImageButton( _pParent, rResId ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
     aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
+    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
+    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( NULL ),
     pRefEdit( NULL )
 {
@@ -960,6 +962,8 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, ICo
     ImageButton( _pParent, rResId ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
     aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
+    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
+    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( _pDlg ),
     pRefEdit( pEdit )
 {
@@ -969,11 +973,13 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, ICo
 void RefButton::SetStartImage()
 {
     SetModeImage( aImgRefStart );
+    SetQuickHelpText( aShrinkQuickHelp );
 }
 
 void RefButton::SetEndImage()
 {
     SetModeImage( aImgRefDone );
+    SetQuickHelpText( aExpandQuickHelp );
 }
 
 void RefButton::SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit )
