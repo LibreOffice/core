@@ -85,9 +85,9 @@ typedef ::std::list< DispatchInformation > DispatchInfoList;
 
 
 // -------------------------------------------------------------------------
-const ::rtl::OUString& getConfirmDeletionURL()
+const OUString& getConfirmDeletionURL()
 {
-    static const ::rtl::OUString sConfirmDeletionURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormSlots/ConfirmDeletion" ) );
+    static const OUString sConfirmDeletionURL(  ".uno:FormSlots/ConfirmDeletion" );
     return sConfirmDeletionURL;
 }
 
@@ -135,7 +135,7 @@ void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< Prop
         Reference< XDispatchProvider > xDispatchProvider( xController->getFrame(), UNO_QUERY_THROW );
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch(
             _rFeatureURL,
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
+            OUString( "_self" ),
             FrameSearchFlag::AUTO
         ) );
 
@@ -267,7 +267,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     {
         OSL_FAIL("OGenericUnoController::Construct: could not create (or start listening at) the database context!");
         // at least notify the user. Though the whole component does not make any sense without the database context ...
-        ShowServiceNotAvailableError(getView(), String("com.sun.star.sdb.DatabaseContext"), sal_True);
+        ShowServiceNotAvailableError(getView(), OUString("com.sun.star.sdb.DatabaseContext"), sal_True);
     }
 
     return sal_True;
@@ -311,14 +311,14 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     try
     {
         if ( !xFrame.is() )
-            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "need a frame" ) ), *this, 1 );
+            throw IllegalArgumentException( OUString( "need a frame" ), *this, 1 );
 
         xParent = xFrame->getContainerWindow();
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
         Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
         if (!pParentWin)
         {
-            throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent window is null")), *this, 1 );
+            throw IllegalArgumentException( OUString( "Parent window is null" ), *this, 1 );
         }
 
         m_aInitParameters.assign( aArguments );
@@ -326,7 +326,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
         ODataView* pView = getView();
         if ( !pView )
-            throw RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unable to create a view")), *this );
+            throw RuntimeException( OUString( "unable to create a view" ), *this );
 
         if ( m_bReadOnly || m_bPreview )
             pView->EnableInput( sal_False );
@@ -397,9 +397,9 @@ Reference< XWindow > SAL_CALL OGenericUnoController::getComponentWindow() throw 
 }
 
 // -----------------------------------------------------------------------
-::rtl::OUString SAL_CALL OGenericUnoController::getViewControllerName() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OGenericUnoController::getViewControllerName() throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
+    return OUString( "Default" );
 }
 
 // -----------------------------------------------------------------------
@@ -485,7 +485,7 @@ namespace
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const Reference< XStatusListener > & xListener, sal_Bool _bIgnoreCache)
+void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature, const Reference< XStatusListener > & xListener, sal_Bool _bIgnoreCache)
 {
     sal_uInt16 nFeat = m_aSupportedFeatures[ _rFeature ].nFeatureId;
     FeatureState aFeatState( GetState( nFeat ) );
@@ -563,7 +563,7 @@ sal_Bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::InvalidateFeature(const ::rtl::OUString& _rURLPath, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
+void OGenericUnoController::InvalidateFeature(const OUString& _rURLPath, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
 {
     ImplInvalidateFeature( m_aSupportedFeatures[ _rURLPath ].nFeatureId, _xListener, _bForceBroadcast );
 }
@@ -690,7 +690,7 @@ void OGenericUnoController::InvalidateAll_Impl()
 }
 
 // -----------------------------------------------------------------------
-Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
+Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     Reference< XDispatch > xReturn;
 
@@ -925,7 +925,7 @@ void OGenericUnoController::implDescribeSupportedFeature( const sal_Char* _pAsci
     OSL_PRECOND( _nFeatureId < FIRST_USER_DEFINED_FEATURE, "OGenericUnoController::implDescribeSupportedFeature: invalid feature id!" );
 
     ControllerFeature aFeature;
-    aFeature.Command = ::rtl::OUString::createFromAscii( _pAsciiCommandURL );
+    aFeature.Command = OUString::createFromAscii( _pAsciiCommandURL );
     aFeature.nFeatureId = _nFeatureId;
     aFeature.GroupId = _nCommandGroup;
 
@@ -1006,7 +1006,7 @@ bool OGenericUnoController::isUserDefinedFeature( const sal_uInt16 _nFeatureId )
 }
 
 //-------------------------------------------------------------------------
-bool OGenericUnoController::isUserDefinedFeature( const ::rtl::OUString& _rFeatureURL ) const
+bool OGenericUnoController::isUserDefinedFeature( const OUString& _rFeatureURL ) const
 {
     SupportedFeatures::const_iterator pos = m_aSupportedFeatures.find( _rFeatureURL );
     OSL_PRECOND( pos != m_aSupportedFeatures.end(),
@@ -1016,12 +1016,12 @@ bool OGenericUnoController::isUserDefinedFeature( const ::rtl::OUString& _rFeatu
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL OGenericUnoController::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
+sal_Bool SAL_CALL OGenericUnoController::supportsService(const OUString& ServiceName) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    Sequence< OUString > aSupported(getSupportedServiceNames());
 
-    const ::rtl::OUString* pArray = aSupported.getConstArray();
-    const ::rtl::OUString* pArrayEnd = aSupported.getConstArray() + aSupported.getLength();
+    const OUString* pArray = aSupported.getConstArray();
+    const OUString* pArrayEnd = aSupported.getConstArray() + aSupported.getLength();
 
     for ( ;( pArray != pArrayEnd ) && !pArray->equals( ServiceName ); ++pArray )
         ;
@@ -1051,15 +1051,15 @@ Reference< XConnection > OGenericUnoController::connect( const Reference< XDataS
 {
     WaitObject aWaitCursor( getView() );
 
-    ODatasourceConnector aConnector( getORB(), getView(), ::rtl::OUString() );
+    ODatasourceConnector aConnector( getORB(), getView(), OUString() );
     Reference< XConnection > xConnection = aConnector.connect( _xDataSource, _pErrorInfo );
     startConnectionListening( xConnection );
 
     return xConnection;
 }
 // -----------------------------------------------------------------------------
-Reference< XConnection > OGenericUnoController::connect( const ::rtl::OUString& _rDataSourceName,
-    const ::rtl::OUString& _rContextInformation, ::dbtools::SQLExceptionInfo* _pErrorInfo )
+Reference< XConnection > OGenericUnoController::connect( const OUString& _rDataSourceName,
+    const OUString& _rContextInformation, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     WaitObject aWaitCursor( getView() );
 
@@ -1084,7 +1084,7 @@ Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Refere
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))),UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue( OUString( "LayoutManager" )),UNO_QUERY);
         }
         catch ( Exception& )
         {
@@ -1099,8 +1099,8 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
     if ( xLayoutManager.is() )
     {
         xLayoutManager->lock();
-        xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" )));
-        xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" )));
+        xLayoutManager->createElement( OUString( "private:resource/menubar/menubar" ));
+        xLayoutManager->createElement( OUString( "private:resource/toolbar/toolbar" ));
         xLayoutManager->unlock();
         xLayoutManager->doLayout();
     }
@@ -1201,7 +1201,7 @@ void OGenericUnoController::executeChecked(const util::URL& _rCommand, const Seq
 //------------------------------------------------------------------------------
 namespace
 {
-    ::rtl::OUString lcl_getModuleHelpModuleName( const Reference< XFrame >& _rxFrame )
+    OUString lcl_getModuleHelpModuleName( const Reference< XFrame >& _rxFrame )
     {
         const sal_Char* pReturn = NULL;
 
@@ -1230,8 +1230,8 @@ namespace
             else
             {
 #if OSL_DEBUG_LEVEL > 0
-                Sequence< ::rtl::OUString > sServiceNames = xSI->getSupportedServiceNames();
-                const ::rtl::OUString* pLoop = sServiceNames.getConstArray();
+                Sequence< OUString > sServiceNames = xSI->getSupportedServiceNames();
+                const OUString* pLoop = sServiceNames.getConstArray();
                 for ( sal_Int32 i=0; i<sServiceNames.getLength(); ++i, ++pLoop )
                 {
                     sal_Int32 nDummy = 0;
@@ -1259,7 +1259,7 @@ namespace
                 const sal_Char** pHelpModuleName = pTransTable + 1;
                 for ( sal_Int32 j=0; j<nTableEntries; ++j )
                 {
-                    if ( xSI->supportsService( ::rtl::OUString::createFromAscii( *pDocumentService ) ) )
+                    if ( xSI->supportsService( OUString::createFromAscii( *pDocumentService ) ) )
                     {   // found a table entry which matches the model's services
                         pReturn = *pHelpModuleName;
                         break;
@@ -1305,16 +1305,16 @@ namespace
         if ( !pReturn )
             pReturn = "swriter";
 
-        return ::rtl::OUString::createFromAscii( pReturn );
+        return OUString::createFromAscii( pReturn );
     }
 }
 
 // -----------------------------------------------------------------------------
 
-void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL )
+void OGenericUnoController::openHelpAgent(OUString const& _suHelpStringURL )
 {
-    rtl::OUString suURL(_suHelpStringURL);
-    rtl::OUString sLanguage(RTL_CONSTASCII_USTRINGPARAM("Language="));
+    OUString suURL(_suHelpStringURL);
+    OUString sLanguage( "Language=" );
     if (suURL.indexOf(sLanguage) == -1)
     {
         AppendConfigToken(suURL, sal_False /* sal_False := add '&' */ );
@@ -1342,7 +1342,7 @@ void OGenericUnoController::openHelpAgent( const URL& _rURL )
         Reference< XDispatchProvider > xDispProv( m_aCurrentFrame.getFrame(), UNO_QUERY );
         Reference< XDispatch > xHelpDispatch;
         if ( xDispProv.is() )
-            xHelpDispatch = xDispProv->queryDispatch(aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_helpagent")), FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
+            xHelpDispatch = xDispProv->queryDispatch(aURL, OUString( "_helpagent" ), FrameSearchFlag::PARENT | FrameSearchFlag::SELF);
         OSL_ENSURE(xHelpDispatch.is(), "SbaTableQueryBrowser::openHelpAgent: could not get a dispatcher!");
         if (xHelpDispatch.is())
         {
@@ -1397,7 +1397,7 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
 
 //=============================================================================
 // XTitle
-::rtl::OUString SAL_CALL OGenericUnoController::getTitle()
+OUString SAL_CALL OGenericUnoController::getTitle()
     throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1408,7 +1408,7 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
 
 //=============================================================================
 // XTitle
-void SAL_CALL OGenericUnoController::setTitle(const ::rtl::OUString& sTitle)
+void SAL_CALL OGenericUnoController::setTitle(const OUString& sTitle)
     throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -1479,7 +1479,7 @@ sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
 }
 
 // -----------------------------------------------------------------------------
-sal_uInt16 OGenericUnoController::registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL )
+sal_uInt16 OGenericUnoController::registerCommandURL( const OUString& _rCompleteCommandURL )
 {
     if ( _rCompleteCommandURL.isEmpty() )
         return 0;
@@ -1538,7 +1538,7 @@ sal_Bool OGenericUnoController::isCommandChecked(sal_uInt16 _nCommandId) const
     return aState.bChecked && (sal_Bool)*aState.bChecked;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OGenericUnoController::isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const
+sal_Bool OGenericUnoController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
 {
     OSL_ENSURE( !_rCompleteCommandURL.isEmpty(), "OGenericUnoController::isCommandEnabled: Empty command url!" );
 

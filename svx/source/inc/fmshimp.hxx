@@ -345,7 +345,7 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxStartingPoint,
         const ::rtl::OUString& _rCurrentLevelPrefix,
         FmFormArray& _out_rForms,
-        ::std::vector< String >& _out_rNames );
+        ::std::vector< OUString >& _out_rNames );
 
     /** checks whether the instance is already disposed, if so, this is reported as assertion error (debug
         builds only) and <TRUE/> is returned.

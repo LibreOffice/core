@@ -85,15 +85,15 @@ SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
     return getSupportedServiceNames_Static();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SbaExternalSourceBrowser::getImplementationName_Static() throw(RuntimeException)
+OUString SbaExternalSourceBrowser::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OFormGridView"));
+    return OUString("org.openoffice.comp.dbu.OFormGridView");
 }
 //-------------------------------------------------------------------------
 ::comphelper::StringSequence SbaExternalSourceBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FormGridView"));
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.FormGridView");
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -102,7 +102,7 @@ Reference< XInterface > SAL_CALL SbaExternalSourceBrowser::Create(const Referenc
     return *(new SbaExternalSourceBrowser( comphelper::getComponentContext(_rxFactory)));
 }
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SbaExternalSourceBrowser::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL SbaExternalSourceBrowser::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
@@ -147,7 +147,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
     if ( aURL.Complete == ".uno:FormSlots/AddGridColumn" )
     {
         // search the argument describing the column to create
-        ::rtl::OUString sControlType;
+        OUString sControlType;
         sal_Int32 nControlPos = -1;
         Sequence< ::com::sun::star::beans::PropertyValue> aControlProps;
         sal_uInt16 i;
@@ -155,7 +155,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         {
             if ( pArguments->Name == "ColumnType" )
             {
-                sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const ::rtl::OUString*)0));
+                sal_Bool bCorrectType = pArguments->Value.getValueType().equals(::getCppuType((const OUString*)0));
                 OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnType\" !");
                 if (bCorrectType)
                     sControlType = ::comphelper::getString(pArguments->Value);
@@ -175,12 +175,12 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                     aControlProps = *(Sequence< ::com::sun::star::beans::PropertyValue>*)pArguments->Value.getValue();
             }
             else
-                OSL_FAIL(rtl::OStringBuffer("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (").append(rtl::OUStringToOString(pArguments->Name, osl_getThreadTextEncoding())).append(") !").getStr());
+                OSL_FAIL(rtl::OStringBuffer("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (").append(OUStringToOString(pArguments->Name, osl_getThreadTextEncoding())).append(") !").getStr());
         }
         if (sControlType.isEmpty())
         {
             OSL_FAIL("SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
-            sControlType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextField"));
+            sControlType = OUString("TextField");
         }
         OSL_ENSURE(aControlProps.getLength(), "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnProperties) !");
 
@@ -203,7 +203,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                 }
                 catch (const Exception&)
                 {
-                    OSL_FAIL(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("SbaExternalSourceBrowser::dispatch : could not set a column property (")).append(rtl::OUStringToOString(pControlProps->Name, RTL_TEXTENCODING_ASCII_US)).append(RTL_CONSTASCII_STRINGPARAM(")!")).getStr());
+                    OSL_FAIL(rtl::OStringBuffer("SbaExternalSourceBrowser::dispatch : could not set a column property (").append(OUStringToOString(pControlProps->Name, RTL_TEXTENCODING_ASCII_US)).append(")!").getStr());
                 }
             }
         }
@@ -251,7 +251,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
 }
 
 //------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrowser::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
+Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrowser::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     Reference< ::com::sun::star::frame::XDispatch >  xReturn;
     if (m_bInQueryDispatch)
@@ -284,7 +284,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
             m_xUrlTransformer->parseStrict( aNewUrl );
 
         // set a new mark
-        aNewUrl.Mark = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DB/FormGridView"));
+        aNewUrl.Mark = OUString("DB/FormGridView");
             // this controller is instantiated when somebody dispatches the ".component:DB/FormGridView" in any
             // frame, so we use "FormGridView" as mark that a dispatch request came from this view
 

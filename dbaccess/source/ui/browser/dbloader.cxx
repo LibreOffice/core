@@ -64,7 +64,7 @@ using namespace dbaui;
 class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
 {
 private:
-    ::rtl::OUString                     m_aURL;
+    OUString                     m_aURL;
     Sequence< PropertyValue>            m_aArgs;
     Reference< XLoadEventListener >     m_xListener;
     Reference< XFrame >                 m_xFrame;
@@ -74,21 +74,21 @@ public:
     ~DBContentLoader();
 
     // XServiceInfo
-    ::rtl::OUString                 SAL_CALL getImplementationName() throw(  );
-    sal_Bool                        SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    Sequence< ::rtl::OUString >     SAL_CALL getSupportedServiceNames(void) throw(  );
+    OUString                 SAL_CALL getImplementationName() throw(  );
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
+    Sequence< OUString >     SAL_CALL getSupportedServiceNames(void) throw(  );
 
     // static methods
-    static ::rtl::OUString          getImplementationName_Static() throw(  )
+    static OUString          getImplementationName_Static() throw(  )
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.DBContentLoader"));
+        return OUString("org.openoffice.comp.dbu.DBContentLoader");
     }
-    static Sequence< ::rtl::OUString> getSupportedServiceNames_Static(void) throw(  );
+    static Sequence< OUString> getSupportedServiceNames_Static(void) throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
     // XLoader
-    virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const ::rtl::OUString& _rURL,
+    virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL cancel(void) throw();
@@ -121,18 +121,18 @@ Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMult
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
-::rtl::OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
+OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
 // -------------------------------------------------------------------------
 
 // XServiceInfo
-sal_Bool SAL_CALL DBContentLoader::supportsService(const ::rtl::OUString& ServiceName) throw(  )
+sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pBegin  = aSNL.getConstArray();
-    const ::rtl::OUString * pEnd    = pBegin + aSNL.getLength();
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pBegin  = aSNL.getConstArray();
+    const OUString * pEnd    = pBegin + aSNL.getLength();
     for( ; pBegin != pEnd; ++pBegin)
         if( *pBegin == ServiceName )
             return sal_True;
@@ -140,17 +140,17 @@ sal_Bool SAL_CALL DBContentLoader::supportsService(const ::rtl::OUString& Servic
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
-Sequence< ::rtl::OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 // -------------------------------------------------------------------------
 // ORegistryServiceManager_Static
-Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
+Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.FrameLoader"));
-    aSNS.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ContentLoader"));
+    Sequence< OUString > aSNS( 2 );
+    aSNS.getArray()[0] = OUString("com.sun.star.frame.FrameLoader");
+    aSNS.getArray()[1] = OUString("com.sun.star.sdb.ContentLoader");
     return aSNS;
 }
 // -------------------------------------------------------------------------
@@ -159,21 +159,21 @@ extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey)
     Reference< XRegistryKey> xKey(reinterpret_cast< XRegistryKey*>(pRegistryKey));
 
     // register content loader for dispatch
-    ::rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM("/"));
+    OUString aImpl("/");
     aImpl += DBContentLoader::getImplementationName_Static();
 
-    ::rtl::OUString aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/Loader"));
+    OUString aImpltwo = aImpl;
+    aImpltwo += OUString("/UNO/Loader");
     Reference< XRegistryKey> xNewKey = xKey->createKey( aImpltwo );
     aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Loader"));
+    aImpltwo += OUString("/Loader");
     Reference< XRegistryKey >  xLoaderKey = xKey->createKey( aImpltwo );
-    xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
-    xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB*")) );
+    xNewKey = xLoaderKey->createKey( OUString("Pattern") );
+    xNewKey->setAsciiValue( OUString(".component:DB*") );
 }
 
 // -----------------------------------------------------------------------
-void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::rtl::OUString& rURL,
+void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -203,13 +203,13 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     INetURLObject aParser( rURL );
     Reference< XController2 > xController;
 
-    const ::rtl::OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+    const OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
     for ( size_t i=0; i < sizeof( aImplementations ) / sizeof( aImplementations[0] ); ++i )
     {
         if ( sComponentURL.equalsAscii( aImplementations[i].pAsciiServiceName ) )
         {
             xController.set( m_xContext->getServiceManager()->
-               createInstanceWithContext( ::rtl::OUString::createFromAscii( aImplementations[i].pAsciiImplementationName ), m_xContext), UNO_QUERY_THROW );
+               createInstanceWithContext( OUString::createFromAscii( aImplementations[i].pAsciiImplementationName ), m_xContext), UNO_QUERY_THROW );
             break;
         }
     }
@@ -222,14 +222,14 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     if  ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )
     {
         sal_Bool bDisableBrowser =  ( sal_False == aLoadArgs.getOrDefault( "ShowTreeViewButton", sal_True ) )   // compatibility name
-                                ||  ( sal_False == aLoadArgs.getOrDefault( (::rtl::OUString)PROPERTY_ENABLE_BROWSER, sal_True ) );
+                                ||  ( sal_False == aLoadArgs.getOrDefault( (OUString)PROPERTY_ENABLE_BROWSER, sal_True ) );
 
         if ( bDisableBrowser )
         {
             try
             {
                 Reference< XModule > xModule( xController, UNO_QUERY_THROW );
-                xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TableDataView" ) ) );
+                xModule->setIdentifier( OUString( "com.sun.star.sdb.TableDataView" ) );
             }
             catch( const Exception& )
             {
@@ -262,7 +262,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     if ( bSuccess )
     {
         Reference< XDataSource > xDataSource    ( aLoadArgs.getOrDefault( "DataSource",       Reference< XDataSource >() ) );
-        ::rtl::OUString          sDataSourceName( aLoadArgs.getOrDefault( "DataSourceName",   ::rtl::OUString()          ) );
+        OUString          sDataSourceName( aLoadArgs.getOrDefault( "DataSourceName",   OUString()          ) );
         Reference< XConnection > xConnection    ( aLoadArgs.getOrDefault( "ActiveConnection", Reference< XConnection >() ) );
         if ( xDataSource.is() )
         {
@@ -290,7 +290,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         try
         {
             Reference<XInitialization > xIni(xController,UNO_QUERY);
-            PropertyValue aFrame(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Frame")),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
+            PropertyValue aFrame(OUString("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
             Sequence< Any > aInitArgs(m_aArgs.getLength()+1);
 
             Any* pBegin = aInitArgs.getArray();

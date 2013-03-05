@@ -104,9 +104,9 @@ namespace dbaui
         OAsyncronousLink        m_aAsyncDisplayError;
         ::dbtools::SQLExceptionInfo m_aCurrentError;
 
-        String                  m_sStateSaveRecord;
-        String                  m_sStateUndoRecord;
-        ::rtl::OUString         m_sModuleIdentifier;
+        OUString                  m_sStateSaveRecord;
+        OUString                  m_sStateUndoRecord;
+        OUString         m_sModuleIdentifier;
 
         // members for asynchronous load operations
         FormControllerImpl*     m_pFormControllerImpl;  // implementing the XFormController
@@ -176,8 +176,8 @@ namespace dbaui
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
         // XModule
-        virtual void SAL_CALL setIdentifier( const ::rtl::OUString& Identifier ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getIdentifier(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setIdentifier( const OUString& Identifier ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getIdentifier(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::awt::XFocusListener
         virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
@@ -329,8 +329,8 @@ namespace dbaui
         void        ExecuteSearch();
 
         void        initializeParser() const; // changes the mutable member m_xParser
-        void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
-        void        applyParserOrder(const ::rtl::OUString& _rOldOrder,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
+        void        applyParserFilter(const OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::OUString& _sOldHaving,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
+        void        applyParserOrder(const OUString& _rOldOrder,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
 
         sal_Int16   getCurrentColumnPosition();
         void        setCurrentColumnPosition( sal_Int16 _nPos );
