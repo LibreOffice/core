@@ -101,7 +101,7 @@ endef
 #
 # Optionally set a specific executable call to use.
 # Example:
-# 	$(call gb_ExternalExecutable_set_external,python,$(PYTHON))
+# 	$(call gb_ExternalExecutable_set_external,genbrk,$(SYSTEM_GENBRK))
 #
 # gb_ExternalExecutable_set_external executable call?
 define gb_ExternalExecutable_set_external
