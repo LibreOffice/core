@@ -9,9 +9,10 @@
 
 $(eval $(call gb_Module_Module,ucpp))
 
-ifneq ($(CROSS_COMPILING),YES)
+# if not cross-compiling or we need ucpp for ODK
+ifneq (,$(if $(CROSS_COMPILING),,T)$(filter ODK,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,ucpp,\
-    Executable_ucpp \
+	Executable_ucpp \
 	UnpackedTarball_ucpp \
 ))
 endif
