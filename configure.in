@@ -1109,6 +1109,10 @@ else
    CygwinVer="false"
 fi
 
+# get info about the system provided release/version details
+head /etc/*-release
+uname -a
+
 dnl ===================================================================
 dnl The following is a list of supported systems.
 dnl Sequential to keep the logic very simple
