@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+jk\u003d",
+        "filename": "basic/source/runtime/iosys.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T13:46:25Z",
+      "side": 1,
+      "message": "Yes, this is correct! The error was introduced by bbc94edb9a91b27910d43610db9994df10dd99e1",
+      "revId": "da8e6ed0b93544c7b4db01bf5726d28c5ea9666f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+jM\u003d",
+        "filename": "connectivity/source/drivers/postgresql/pq_xtables.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T13:46:25Z",
+      "side": 1,
+      "message": "I\u0027m not sure about this.",
+      "revId": "da8e6ed0b93544c7b4db01bf5726d28c5ea9666f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+jI\u003d",
+        "filename": "filter/source/graphicfilter/icgm/class2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T13:46:25Z",
+      "side": 1,
+      "message": "I\u0027m still not sure about this. Maybe it was originally intended to be in the if-block (see above). ImplGetRectangle does the same pElement-\u003eeVDCType \u003d\u003d VDC_INTEGER check, too. Would be good to be able to look into the goodies history (file were moved with 0efdf17a7c48fe697789166e7f59af5d6a7291a1).",
+      "revId": "da8e6ed0b93544c7b4db01bf5726d28c5ea9666f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+jY\u003d",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T13:46:25Z",
+      "side": 1,
+      "message": "here",
+      "revId": "da8e6ed0b93544c7b4db01bf5726d28c5ea9666f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+jc\u003d",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T13:46:25Z",
+      "side": 1,
+      "message": "Ok, this seems right. See ab9bee4720820ebd1a2d851bcb4f7db79145931e. The if-else branch around it was commented out.\n\nSo as it is always the case, please move this up to the block where the other non-conditionals are handled.",
+      "revId": "da8e6ed0b93544c7b4db01bf5726d28c5ea9666f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+jU\u003d",
+        "filename": "svx/source/gallery2/galobj.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T13:46:25Z",
+      "side": 1,
+      "message": "this line should go now",
+      "revId": "da8e6ed0b93544c7b4db01bf5726d28c5ea9666f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
