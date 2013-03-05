@@ -26,6 +26,12 @@ $(eval $(call gb_Library_add_cflags,neon,\
 	-w \
 ))
 
+ifneq ($(debug),)
+$(eval $(call gb_Library_add_cflags,neon,\
+	-DNE_DEBUGGING \
+))
+endif
+
 $(eval $(call gb_Library_set_warnings_not_errors,neon))
 
 $(eval $(call gb_Library_add_generated_cobjects,neon,\
