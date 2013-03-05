@@ -49,7 +49,6 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
  , m_pWindow(NULL)
  , m_pBindings(_pBindings)
  , pAccel( NULL )
- , pHiddenMarks(NULL)
  , nRefTab(0)
  , mpOldEditParent( NULL )
  , bHighLightRef( false )
@@ -346,7 +345,9 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
     }
     return true;
 }
-//----------------------------------------------------------------------------
+
+typedef std::vector<Window*> winvec;
+
 void ScFormulaReferenceHelper::RefInputDone( bool bForced )
 {
     if ( CanInputDone( bForced ) )
@@ -357,39 +358,82 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             bAccInserted = false;
         }
 
-        // restore the parent of the edit field
-        pRefEdit->SetParent(mpOldEditParent);
+        bool bLayoutEnabled = isLayoutEnabled(m_pWindow);
+        //get rid of all this junk when we can
+        if (!bLayoutEnabled)
+        {
+            m_pWindow->SetOutputSizePixel(aOldDialogSize);
+
+            // restore the parent of the edit field
+            pRefEdit->SetParent(mpOldEditParent);
+
+            // Fenster wieder gross
+            m_pWindow->SetOutputSizePixel(aOldDialogSize);
+
+            // pEditCell an alte Position
+            pRefEdit->SetPosSizePixel(aOldEditPos, aOldEditSize);
+
+            // set button position
+            if( pRefBtn )
+            {
+                pRefBtn->SetParent(m_pWindow);
+                pRefBtn->SetPosPixel( aOldButtonPos );
+            }
+        }
 
         // Fenstertitel anpassen
         m_pWindow->SetText(sOldDialogText);
 
-        // Fenster wieder gross
-        m_pWindow->SetOutputSizePixel(aOldDialogSize);
-
-        // pEditCell an alte Position
-        pRefEdit->SetPosSizePixel(aOldEditPos, aOldEditSize);
-
-        // set button position and image
+        // set button image
         if( pRefBtn )
-        {
-            pRefBtn->SetParent(m_pWindow);
-            pRefBtn->SetPosPixel( aOldButtonPos );
             pRefBtn->SetStartImage();
-        }
 
         // Alle anderen: Show();
-        sal_uInt16 nChildren = m_pWindow->GetChildCount();
-        for ( sal_uInt16 i = 0; i < nChildren; i++ )
-            if (pHiddenMarks[i])
-            {
-                m_pWindow->GetChild(i)->GetWindow( WINDOW_CLIENT )->Show();
-            }
-        delete [] pHiddenMarks;
+        for (winvec::iterator aI = m_aHiddenWidgets.begin(); aI != m_aHiddenWidgets.end(); ++aI)
+        {
+            Window *pWindow = *aI;
+            pWindow->Show();
+        }
+        m_aHiddenWidgets.clear();
+
+        if (bLayoutEnabled)
+        {
+            Dialog* pResizeDialog = pRefEdit->GetParentDialog();
+            pResizeDialog->set_border_width(m_nOldBorderWidth);
+            pResizeDialog->get_action_area()->Show();
+            pResizeDialog->setInitialLayoutSize();
+        }
 
         pRefEdit = NULL;
         pRefBtn = NULL;
     }
 }
+
+typedef std::set<Window*> winset;
+
+namespace
+{
+    void hideUnless(Window *pTop, const winset& rVisibleWidgets,
+        winvec &rWasVisibleWidgets)
+    {
+        for (Window* pChild = pTop->GetWindow(WINDOW_FIRSTCHILD); pChild;
+            pChild = pChild->GetWindow(WINDOW_NEXT))
+        {
+            if (!pChild->IsVisible())
+                continue;
+            if (rVisibleWidgets.find(pChild) == rVisibleWidgets.end())
+            {
+                rWasVisibleWidgets.push_back(pChild);
+                pChild->Hide();
+            }
+            else if (isContainerWindow(pChild))
+            {
+                hideUnless(pChild, rVisibleWidgets, rWasVisibleWidgets);
+            }
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {
@@ -404,68 +448,112 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         sNewDialogText  = sOldDialogText;
         sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
 
-        mpOldEditParent = pRefEdit->GetParent();
-
-        // Alte Daten merken
-        aOldDialogSize = m_pWindow->GetOutputSizePixel();
-        aOldEditPos = pRefEdit->GetPosPixel();
-        aOldEditSize = pRefEdit->GetSizePixel();
-        if (pRefBtn)
-            aOldButtonPos = pRefBtn->GetPosPixel();
-
-        pRefEdit->SetParent(m_pWindow);
-        if(pRefBtn)
-            pRefBtn->SetParent(m_pWindow);
-
-        // Alle Elemente ausser EditCell und Button verstecken
-        sal_uInt16 nChildren = m_pWindow->GetChildCount();
-        pHiddenMarks = new bool [nChildren];
-        for (sal_uInt16 i = 0; i < nChildren; i++)
+        bool bLayoutEnabled = isLayoutEnabled(m_pWindow);
+        //get rid of all the !bLayoutEnabled junk when we can
+        //after the last user of this is widget-layout-ified
+        if (!bLayoutEnabled)
         {
-            pHiddenMarks[i] = false;
-            Window* pWin = m_pWindow->GetChild(i);
-            pWin = pWin->GetWindow( WINDOW_CLIENT );
-            if (pWin == (Window*)pRefEdit)
-            {
-                sNewDialogText += m_pWindow->GetChild(i-1)->GetWindow( WINDOW_CLIENT )->GetText();
-            }
-            else if (pWin == (Window*)pRefBtn)
-                ;   // do nothing
-            else if (pWin->IsVisible())
-            {
-                pHiddenMarks[i] = true;
-                pWin->Hide();
-            }
+            mpOldEditParent = pRefEdit->GetParent();
+
+            // Alte Daten merken
+            aOldDialogSize = m_pWindow->GetOutputSizePixel();
+            aOldEditPos = pRefEdit->GetPosPixel();
+            aOldEditSize = pRefEdit->GetSizePixel();
+            if (pRefBtn)
+                aOldButtonPos = pRefBtn->GetPosPixel();
+
+            pRefEdit->SetParent(m_pWindow);
+            if(pRefBtn)
+                pRefBtn->SetParent(m_pWindow);
         }
 
-        // Edit-Feld verschieben und anpassen
-        Size aNewDlgSize(aOldDialogSize.Width(), aOldEditSize.Height());
-        Size aNewEditSize(aNewDlgSize);
-        long nOffset = 0;
-        if (pRefBtn)
+        //collect up edit window contents to use for the title bar
+        for (Window* pChild = firstLogicalChildOfParent(m_pWindow); pChild; pChild = nextLogicalChildOfParent(m_pWindow, pChild))
         {
-            aNewEditSize.Width() -= pRefBtn->GetSizePixel().Width();
-            aNewEditSize.Width() -= aOldButtonPos.X() - (aOldEditPos.X()+aOldEditSize.Width());
-
-            long nHeight = pRefBtn->GetSizePixel().Height();
-            if ( nHeight > aOldEditSize.Height() )
-            {
-                aNewDlgSize.Height() = nHeight;
-                nOffset = (nHeight-aOldEditSize.Height()) / 2;
-            }
-            aNewEditSize.Width() -= nOffset;
+            Window *pWin = pChild->GetWindow(WINDOW_CLIENT);
+            if (pWin == (Window*)pRefEdit || pWin == (Window*)pRefBtn)
+                continue; // do nothing
+            if (pChild->IsVisible() && pWin->GetType() == WINDOW_EDIT)
+                sNewDialogText += pWin->GetText();
         }
-        pRefEdit->SetPosSizePixel(Point(nOffset, nOffset), aNewEditSize);
 
-        // set button position and image
+        Dialog* pResizeDialog = NULL;
+
+        if (!bLayoutEnabled)
+        {
+            for (Window* pChild = m_pWindow->GetWindow(WINDOW_FIRSTCHILD); pChild;
+                pChild = pChild->GetWindow(WINDOW_NEXT))
+            {
+                Window *pWin = pChild->GetWindow(WINDOW_CLIENT);
+                if (pWin == (Window*)pRefEdit || pWin == (Window*)pRefBtn)
+                    continue; // do nothing
+                else if (pWin->IsVisible())
+                {
+                    m_aHiddenWidgets.push_back(pChild);
+                    pChild->Hide();
+                }
+            }
+        }
+        else
+        {
+            //We want just pRefBtn and pRefEdit to be shown
+            //mark widgets we want to be visible, starting with pRefEdit
+            //and all its direct parents.
+            winset m_aVisibleWidgets;
+            pResizeDialog = pRefEdit->GetParentDialog();
+            Window *pContentArea = pResizeDialog->get_content_area();
+            for (Window *pCandidate = pRefEdit;
+                pCandidate != pContentArea && pCandidate->IsVisible();
+                pCandidate = pCandidate->GetWindow(WINDOW_REALPARENT))
+            {
+                m_aVisibleWidgets.insert(pCandidate);
+            }
+            //same again with pRefBtn, except stop if there's a
+            //shared parent in the existing widgets
+            for (Window *pCandidate = pRefBtn;
+                pCandidate != pContentArea && pCandidate->IsVisible();
+                pCandidate = pCandidate->GetWindow(WINDOW_REALPARENT))
+            {
+                if (m_aVisibleWidgets.insert(pCandidate).second)
+                    break;
+            }
+
+            //hide everything except the m_aVisibleWidgets
+            hideUnless(pContentArea, m_aVisibleWidgets, m_aHiddenWidgets);
+        }
+
+        if (!bLayoutEnabled)
+        {
+            // Edit-Feld verschieben und anpassen
+            Size aNewDlgSize(aOldDialogSize.Width(), aOldEditSize.Height());
+            Size aNewEditSize(aNewDlgSize);
+            long nOffset = 0;
+            if (pRefBtn)
+            {
+                aNewEditSize.Width() -= pRefBtn->GetSizePixel().Width();
+                aNewEditSize.Width() -= aOldButtonPos.X() - (aOldEditPos.X()+aOldEditSize.Width());
+
+                long nHeight = pRefBtn->GetSizePixel().Height();
+                if ( nHeight > aOldEditSize.Height() )
+                {
+                    aNewDlgSize.Height() = nHeight;
+                    nOffset = (nHeight-aOldEditSize.Height()) / 2;
+                }
+                aNewEditSize.Width() -= nOffset;
+            }
+            pRefEdit->SetPosSizePixel(Point(nOffset, nOffset), aNewEditSize);
+
+            // set button position
+            if( pRefBtn )
+                pRefBtn->SetPosPixel( Point( aOldDialogSize.Width() - pRefBtn->GetSizePixel().Width(), 0 ) );
+
+            // Fenster verkleinern
+            m_pWindow->SetOutputSizePixel(aNewDlgSize);
+        }
+
+        // set button image
         if( pRefBtn )
-        {
-            pRefBtn->SetPosPixel( Point( aOldDialogSize.Width() - pRefBtn->GetSizePixel().Width(), 0 ) );
             pRefBtn->SetEndImage();
-        }
-
-        // Fenster verkleinern
-        m_pWindow->SetOutputSizePixel(aNewDlgSize);
 
         // Fenstertitel anpassen
         m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
@@ -479,6 +567,14 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         }
         Application::InsertAccel( pAccel.get() );
         bAccInserted = true;
+
+        if (bLayoutEnabled)
+        {
+            m_nOldBorderWidth = pResizeDialog->get_border_width();
+            pResizeDialog->set_border_width(0);
+            pResizeDialog->get_action_area()->Hide();
+            pResizeDialog->setInitialLayoutSize();
+        }
     }
 }
 // -----------------------------------------------------------------------------

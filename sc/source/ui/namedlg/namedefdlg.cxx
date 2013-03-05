@@ -51,24 +51,9 @@
 
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         ScViewData* pViewData, std::map<rtl::OUString, ScRangeName*> aRangeMap,
-        const ScAddress& aCursorPos, const bool bUndo ) :
-    ScAnyRefDlg( pB, pCW, pParent, RID_SCDLG_NAMES_DEFINE ),
-    maEdName( this, ScResId( ED_NAME ) ),
-    maEdRange( this, this, ScResId( ED_RANGE ) ),
-    maRbRange( this, ScResId( RB_RANGE ), &maEdRange, this ),
-    maLbScope( this, ScResId( LB_SCOPE ) ),
-    maBtnMore( this, ScResId( BTN_MORE ) ),
-    maBtnRowHeader( this, ScResId( BTN_ROWHEADER ) ),
-    maBtnColHeader( this, ScResId( BTN_COLHEADER ) ),
-    maBtnPrintArea( this, ScResId( BTN_PRINTAREA ) ),
-    maBtnCriteria( this, ScResId( BTN_CRITERIA ) ),
-    maBtnAdd( this, ScResId( BTN_ADD ) ),
-    maBtnCancel( this, ScResId( BTN_CANCEL ) ),
-    maFtInfo( this, ScResId( FT_INFO ) ),
-    maFtName( this, ScResId( FT_NAME ) ),
-    maFtRange( this, ScResId( FT_RANGE ) ),
-    maFtScope( this, ScResId( FT_SCOPE ) ),
-    maFlDiv( this, ScResId( FL_DIV ) ),
+        const ScAddress& aCursorPos, const bool bUndo )
+    : ScAnyRefDlg( pB, pCW, pParent, "DefineNameDialog", "modules/scalc/ui/definename.ui" )
+    ,
     mbUndo( bUndo ),
     mpDoc( pViewData->GetDocument() ),
     mpDocShell ( pViewData->GetDocShell() ),
@@ -77,37 +62,39 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
     maErrInvalidNameStr( ScGlobal::GetRscString(STR_ERR_NAME_INVALID)),
     maErrNameInUse   ( ScGlobal::GetRscString(STR_ERR_NAME_EXISTS)),
-    maStrInfoDefault ( SC_RESSTR(STR_DEFAULT_INFO)),
     maRangeMap( aRangeMap )
 {
+    get(m_pEdName, "edit");
+    get(m_pEdRange, "range");
+    get(m_pRbRange, "refbutton");
+    m_pRbRange->SetReferences(this, m_pEdRange);
+    get(m_pLbScope, "scope");
+    get(m_pBtnRowHeader, "rowheader");
+    get(m_pBtnColHeader, "colheader");
+    get(m_pBtnPrintArea, "printarea");
+    get(m_pBtnCriteria, "filter");
+    get(m_pBtnAdd, "add");
+    get(m_pBtnCancel, "cancel");
+    get(m_pFtInfo, "label");
+    maStrInfoDefault = m_pFtInfo->GetText();
+
     // Initialize scope list.
-    maLbScope.InsertEntry(maGlobalNameStr);
-    maLbScope.SelectEntryPos(0);
+    m_pLbScope->InsertEntry(maGlobalNameStr);
+    m_pLbScope->SelectEntryPos(0);
     SCTAB n = mpDoc->GetTableCount();
     for (SCTAB i = 0; i < n; ++i)
     {
         rtl::OUString aTabName;
         mpDoc->GetName(i, aTabName);
-        maLbScope.InsertEntry(aTabName);
+        m_pLbScope->InsertEntry(aTabName);
     }
 
-    maBtnCancel.SetClickHdl( LINK( this, ScNameDefDlg, CancelBtnHdl));
-    maBtnAdd.SetClickHdl( LINK( this, ScNameDefDlg, AddBtnHdl ));
-    maBtnMore.SetClickHdl( LINK( this, ScNameDefDlg, MoreBtnHdl ));
-    maEdName.SetModifyHdl( LINK( this, ScNameDefDlg, NameModifyHdl ));
-    maEdRange.SetGetFocusHdl( LINK( this, ScNameDefDlg, AssignGetFocusHdl ) );
+    m_pBtnCancel->SetClickHdl( LINK( this, ScNameDefDlg, CancelBtnHdl));
+    m_pBtnAdd->SetClickHdl( LINK( this, ScNameDefDlg, AddBtnHdl ));
+    m_pEdName->SetModifyHdl( LINK( this, ScNameDefDlg, NameModifyHdl ));
+    m_pEdRange->SetGetFocusHdl( LINK( this, ScNameDefDlg, AssignGetFocusHdl ) );
 
-    maFtInfo.SetStyle(WB_VCENTER);
-    maFtInfo.SetText(maStrInfoDefault);
-
-    maBtnAdd.Disable(); // empty name is invalid
-
-    maBtnRowHeader.Hide();
-    maBtnColHeader.Hide();
-    maBtnCriteria.Hide();
-    maBtnPrintArea.Hide();
-
-    FreeResource();
+    m_pBtnAdd->Disable(); // empty name is invalid
 
     String aAreaStr;
     ScRange aRange;
@@ -116,11 +103,11 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     aRange.Format( aAreaStr, ABS_DREF3D, mpDoc,
             ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
 
-    maEdRange.SetText( aAreaStr );
+    m_pEdRange->SetText( aAreaStr );
 
     Selection aCurSel = Selection( 0, SELECTION_MAX );
-    maEdName.GrabFocus();
-    maEdName.SetSelection( aCurSel );
+    m_pEdName->GrabFocus();
+    m_pEdName->SetSelection( aCurSel );
 }
 
 void ScNameDefDlg::CancelPushed()
@@ -138,7 +125,7 @@ bool ScNameDefDlg::IsFormulaValid()
 {
     ScCompiler aComp( mpDoc, maCursorPos);
     aComp.SetGrammar( mpDoc->GetGrammar() );
-    ScTokenArray* pCode = aComp.CompileString(maEdRange.GetText());
+    ScTokenArray* pCode = aComp.CompileString(m_pEdRange->GetText());
     if (pCode->GetCodeError())
     {
         //TODO: info message
@@ -154,8 +141,8 @@ bool ScNameDefDlg::IsFormulaValid()
 
 bool ScNameDefDlg::IsNameValid()
 {
-    rtl::OUString aScope = maLbScope.GetSelectEntry();
-    rtl::OUString aName = maEdName.GetText();
+    rtl::OUString aScope = m_pLbScope->GetSelectEntry();
+    rtl::OUString aName = m_pEdName->GetText();
 
     ScRangeName* pRangeName = NULL;
     if(aScope == maGlobalNameStr)
@@ -167,45 +154,45 @@ bool ScNameDefDlg::IsNameValid()
         pRangeName = maRangeMap.find(aScope)->second;
     }
 
-    maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
+    m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     if ( aName.isEmpty() )
     {
-        maBtnAdd.Disable();
-        maFtInfo.SetText(maStrInfoDefault);
+        m_pBtnAdd->Disable();
+        m_pFtInfo->SetText(maStrInfoDefault);
         return false;
     }
     else if (!ScRangeData::IsNameValid( aName, mpDoc ))
     {
-        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
-        maFtInfo.SetText(maErrInvalidNameStr);
-        maBtnAdd.Disable();
+        m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        m_pFtInfo->SetText(maErrInvalidNameStr);
+        m_pBtnAdd->Disable();
         return false;
     }
     else if (pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
     {
-        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
-        maFtInfo.SetText(maErrNameInUse);
-        maBtnAdd.Disable();
+        m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        m_pFtInfo->SetText(maErrNameInUse);
+        m_pBtnAdd->Disable();
         return false;
     }
 
     if (!IsFormulaValid())
     {
-        maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
-        maBtnAdd.Disable();
+        m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+        m_pBtnAdd->Disable();
         return false;
     }
 
-    maFtInfo.SetText(maStrInfoDefault);
-    maBtnAdd.Enable();
+    m_pFtInfo->SetText(maStrInfoDefault);
+    m_pBtnAdd->Enable();
     return true;
 }
 
 void ScNameDefDlg::AddPushed()
 {
-    rtl::OUString aScope = maLbScope.GetSelectEntry();
-    rtl::OUString aName = maEdName.GetText();
-    rtl::OUString aExpression = maEdRange.GetText();
+    rtl::OUString aScope = m_pLbScope->GetSelectEntry();
+    rtl::OUString aName = m_pEdName->GetText();
+    rtl::OUString aExpression = m_pEdRange->GetText();
 
     if (aName.isEmpty())
     {
@@ -245,10 +232,10 @@ void ScNameDefDlg::AddPushed()
             if (pNewEntry)
             {
                 nType = nType
-                    | (maBtnRowHeader .IsChecked() ? RT_ROWHEADER  : RangeType(0))
-                    | (maBtnColHeader .IsChecked() ? RT_COLHEADER  : RangeType(0))
-                    | (maBtnPrintArea .IsChecked() ? RT_PRINTAREA  : RangeType(0))
-                    | (maBtnCriteria  .IsChecked() ? RT_CRITERIA   : RangeType(0));
+                    | (m_pBtnRowHeader->IsChecked() ? RT_ROWHEADER  : RangeType(0))
+                    | (m_pBtnColHeader->IsChecked() ? RT_COLHEADER  : RangeType(0))
+                    | (m_pBtnPrintArea->IsChecked() ? RT_PRINTAREA  : RangeType(0))
+                    | (m_pBtnCriteria->IsChecked() ? RT_CRITERIA   : RangeType(0));
                 pNewEntry->AddType(nType);
             }
 
@@ -289,8 +276,8 @@ void ScNameDefDlg::AddPushed()
             {
                 delete pNewEntry;
                 Selection aCurSel = Selection( 0, SELECTION_MAX );
-                maEdRange.GrabFocus();
-                maEdRange.SetSelection( aCurSel );
+                m_pEdRange->GrabFocus();
+                m_pEdRange->SetSelection( aCurSel );
             }
         }
     }
@@ -304,7 +291,7 @@ void ScNameDefDlg::GetNewData(rtl::OUString& rName, rtl::OUString& rScope)
 
 sal_Bool ScNameDefDlg::IsRefInputMode() const
 {
-    return maEdRange.IsEnabled();
+    return m_pEdRange->IsEnabled();
 }
 
 void ScNameDefDlg::RefInputDone( sal_Bool bForced)
@@ -315,14 +302,14 @@ void ScNameDefDlg::RefInputDone( sal_Bool bForced)
 
 void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( maEdRange.IsEnabled() )
+    if ( m_pEdRange->IsEnabled() )
     {
         if ( rRef.aStart != rRef.aEnd )
-            RefInputStart(&maEdRange);
+            RefInputStart(m_pEdRange);
         String aRefStr;
         rRef.Format( aRefStr, ABS_DREF3D, pDocP,
                 ScAddress::Details(pDocP->GetAddressConvention(), 0, 0) );
-        maEdRange.SetRefString( aRefStr );
+        m_pEdRange->SetRefString( aRefStr );
     }
 }
 
@@ -333,47 +320,8 @@ sal_Bool ScNameDefDlg::Close()
 
 void ScNameDefDlg::SetActive()
 {
-    maEdRange.GrabFocus();
+    m_pEdRange->GrabFocus();
     RefInputDone();
-}
-
-namespace {
-
-void MoveWindow( Window& rButton, long nPixel)
-{
-    Point aPoint = rButton.GetPosPixel();
-    aPoint.Y() += nPixel;
-    rButton.SetPosPixel(aPoint);
-}
-
-}
-
-void ScNameDefDlg::MorePushed()
-{
-    Size nSize = GetSizePixel();
-
-    //depending on the state of the button, move all elements below up/down
-    long nPixel = 65;
-    if (!maBtnMore.GetState())
-    {
-        nPixel *= -1;
-        maBtnRowHeader.Hide();
-        maBtnColHeader.Hide();
-        maBtnPrintArea.Hide();
-        maBtnCriteria.Hide();
-    }
-    else
-    {
-        maBtnRowHeader.Show();
-        maBtnColHeader.Show();
-        maBtnPrintArea.Show();
-        maBtnCriteria.Show();
-    }
-    nSize.Height() += nPixel;
-    SetSizePixel(nSize);
-    MoveWindow(maBtnAdd, nPixel);
-    MoveWindow(maBtnCancel, nPixel);
-    MoveWindow(maFlDiv, nPixel);
 }
 
 IMPL_LINK_NOARG(ScNameDefDlg, CancelBtnHdl)
@@ -397,12 +345,6 @@ IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl)
 IMPL_LINK_NOARG(ScNameDefDlg, AssignGetFocusHdl)
 {
     IsNameValid();
-    return 0;
-}
-
-IMPL_LINK_NOARG(ScNameDefDlg, MoreBtnHdl)
-{
-    MorePushed();
     return 0;
 }
 

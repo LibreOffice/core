@@ -43,47 +43,40 @@ class ScViewData;
 class ScNameDefDlg : public ScAnyRefDlg
 {
 private:
-    Edit maEdName;
+    Edit* m_pEdName;
 
-    formula::RefEdit maEdRange;
-    formula::RefButton maRbRange;
+    formula::RefEdit* m_pEdRange;
+    formula::RefButton* m_pRbRange;
 
-    ListBox maLbScope;
+    ListBox* m_pLbScope;
 
-    DisclosureButton maBtnMore;
-    CheckBox maBtnRowHeader;
-    CheckBox maBtnColHeader;
-    CheckBox maBtnPrintArea;
-    CheckBox maBtnCriteria;
+    CheckBox* m_pBtnRowHeader;
+    CheckBox* m_pBtnColHeader;
+    CheckBox* m_pBtnPrintArea;
+    CheckBox* m_pBtnCriteria;
 
-    PushButton maBtnAdd;
-    PushButton maBtnCancel;
-    FixedText maFtInfo;
-    FixedText maFtName;
-    FixedText maFtRange;
-    FixedText maFtScope;
-    FixedLine maFlDiv;
-
+    PushButton* m_pBtnAdd;
+    PushButton* m_pBtnCancel;
+    FixedText* m_pFtInfo;
 
     bool mbUndo; //if true we need to add an undo action after creating a range name
     ScDocument* mpDoc;
     ScDocShell* mpDocShell;
 
     ScAddress maCursorPos;
-    const rtl::OUString maGlobalNameStr;
-    const rtl::OUString maErrInvalidNameStr;
-    const rtl::OUString maErrNameInUse;
-    const rtl::OUString maStrInfoDefault;
+    OUString maStrInfoDefault;
+    const OUString maGlobalNameStr;
+    const OUString maErrInvalidNameStr;
+    const OUString maErrNameInUse;
 
     //hack to call this dialog from Manage Names
-    rtl::OUString maName;
-    rtl::OUString maScope;
+    OUString maName;
+    OUString maScope;
 
     std::map<rtl::OUString, ScRangeName*> maRangeMap;
 
     void CancelPushed();
     void AddPushed();
-    void MorePushed();
 
     bool IsNameValid();
     bool IsFormulaValid();
@@ -92,7 +85,6 @@ private:
     DECL_LINK( AddBtnHdl, void* );
     DECL_LINK( NameModifyHdl, void* );
     DECL_LINK( AssignGetFocusHdl, void * );
-    DECL_LINK( MoreBtnHdl, void* );
 
 protected:
     virtual void    RefInputDone( sal_Bool bForced = sal_False );

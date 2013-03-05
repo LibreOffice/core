@@ -53,7 +53,8 @@ class ScFormulaReferenceHelper
     SfxBindings*        m_pBindings;
     ::std::auto_ptr<Accelerator>
                         pAccel;                 // for Enter/Escape
-    bool*               pHiddenMarks;           // Mark field for hidden Controls
+    ::std::vector<Window*> m_aHiddenWidgets;    // vector of hidden Controls
+    sal_Int32           m_nOldBorderWidth;      // border width for expanded dialog
     SCTAB               nRefTab;                // used for ShowReference
 
     String              sOldDialogText;         // Original title of the dialog window
@@ -196,7 +197,11 @@ public:
 private:
     template<class TBindings, class TChildWindow, class TParentWindow, class TResId>
     ScRefHdlrImplBase( TBindings* pB, TChildWindow* pCW,
-        TParentWindow* pParent, TResId nResId);
+        TParentWindow* pParent, TResId nResId );
+
+    template<class TBindings, class TChildWindow, class TParentWindow >
+    ScRefHdlrImplBase( TBindings* pB, TChildWindow* pCW,
+        TParentWindow* pParent, const OString& rID, const OUString& rUIXMLDescription );
 
     template<class TParentWindow, class TResId, class TArg>
     ScRefHdlrImplBase( TParentWindow* pParent, TResId nResId, const TArg &rArg, SfxBindings *pB = NULL );
@@ -209,12 +214,28 @@ private:
 template<class TWindow, bool bBindRef>
 template<class TBindings, class TChildWindow, class TParentWindow, class TResId>
 ScRefHdlrImplBase<TWindow, bBindRef>::ScRefHdlrImplBase( TBindings* pB, TChildWindow* pCW,
-                 TParentWindow* pParent, TResId nResId):TWindow(pB, pCW, pParent, ScResId(static_cast<sal_uInt16>( nResId ) ) ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
+                 TParentWindow* pParent, TResId nResId)
+    : TWindow(pB, pCW, pParent, ScResId(static_cast<sal_uInt16>( nResId ) ) )
+    , ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef )
+{
+}
+
+template<class TWindow, bool bBindRef>
+template<class TBindings, class TChildWindow, class TParentWindow>
+ScRefHdlrImplBase<TWindow, bBindRef>::ScRefHdlrImplBase( TBindings* pB, TChildWindow* pCW,
+                 TParentWindow* pParent, const OString& rID, const OUString& rUIXMLDescription )
+    : TWindow(pB, pCW, pParent, rID, rUIXMLDescription )
+    , ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef )
+{
+}
 
 template<class TWindow, bool bBindRef >
 template<class TParentWindow, class TResId, class TArg>
 ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, TResId nResIdP, const TArg &rArg, SfxBindings *pB )
-:TWindow( pParent, ScResId(static_cast<sal_uInt16>( nResIdP )), rArg ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
+    : TWindow( pParent, ScResId(static_cast<sal_uInt16>( nResIdP )), rArg ),
+    ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef )
+{
+}
 
 template<class TWindow, bool bBindRef >
 ScRefHdlrImplBase<TWindow,bBindRef>::~ScRefHdlrImplBase(){}
@@ -246,7 +267,15 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
     enum { UNKNOWN_SLOTID = 0U, SLOTID = UNKNOWN_SLOTID };
 
     template<class T1, class T2, class T3, class T4>
-    ScRefHdlrImpl( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4 ):ScRefHdlrImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4 )
+    ScRefHdlrImpl( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4 )
+        : ScRefHdlrImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4)
+    {
+        SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
+    }
+
+    template<class T1, class T2, class T3, class T4, class T5>
+    ScRefHdlrImpl( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4, const T5& rt5 )
+        : ScRefHdlrImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4, rt5)
     {
         SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
     }
@@ -260,7 +289,16 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
 struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
 {
     template<class T1, class T2, class T3, class T4>
-    ScAnyRefDlg( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4 ):ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>(rt1, rt2, rt3, rt4){}
+    ScAnyRefDlg( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4 )
+        : ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>(rt1, rt2, rt3, rt4)
+    {
+    }
+
+    template<class T1, class T2, class T3, class T4, class T5>
+    ScAnyRefDlg( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4, const T5& rt5 )
+        : ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>(rt1, rt2, rt3, rt4, rt5)
+    {
+    }
 };
 //============================================================================
 
