@@ -50,7 +50,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 
 
 else
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure)
+$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
 		CC="$(CC) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 		CXX="$(CXX) $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
@@ -58,13 +58,13 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		OS_TARGET=WINNT RC="$(WINDRES)" OS_RELEASE="5.0" \
 		IMPORT_LIB_SUFFIX=dll.a \
 		NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" \
-		NSINSTALL="$(PYTHON_FOR_BUILD) $(SRCDIR)/nss/nsinstall.py" \
+		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py" \
 		$(MAKE) -j1 nss_build_all \
 	,mozilla/security/nss)
 
 endif
 else # OS!=WNT
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure)
+$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X,$(CPU)),USE_64=1)) \
 		$(if $(filter MACOSX,$(OS)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
@@ -72,7 +72,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(filter YES,$(CROSS_COMPILING)),\
 		$(if $(filter MACOSXP,$(OS)$(CPU)),CPU_ARCH=ppc) \
-		NSINSTALL="$(PYTHON_FOR_BUILD) $(SRCDIR)/nss/nsinstall.py") \
+		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py") \
 		NSDISTMODE=copy \
 		$(MAKE) -j1 nss_build_all \
 	,mozilla/security/nss)

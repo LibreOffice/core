@@ -4076,10 +4076,10 @@ if test "$cross_compiling" = "yes"; then
     cp config.log ../config.Build.log
     mkdir -p ../config_build
     cp config_host/*.h ../config_build
-    . ./bin/get_config_variables COM GUI OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR WORKDIR
+    . ./bin/get_config_variables COM GUI OS PATH CPU CPUNAME CC CXX MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH SYSTEM_LIBXSLT OUTDIR WORKDIR
 
-    for V in COM GUI OS CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
-             PYTHON SYSTEM_LIBXSLT; do
+    for V in COM GUI OS CPU CPUNAME CC CXX MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
+             SYSTEM_LIBXSLT; do
         VV='$'$V
         VV=`eval "echo $VV"`
         if test -n "$VV"; then
@@ -4116,14 +4116,12 @@ else
     CPUNAME_FOR_BUILD="$CPUNAME"
     CPU_FOR_BUILD="$CPU"
     CXX_FOR_BUILD="$CXX"
-    DISABLE_PYTHON_FOR_BUILD="$DISABLE_PYTHON"
     GUI_FOR_BUILD="$GUI"
     INPATH_FOR_BUILD="$INPATH"
     MACOSX_DEPLOYMENT_TARGET_FOR_BUILD="$MACOSX_DEPLOYMENT_TARGET"
     OS_FOR_BUILD="$OS"
     OUTDIR_FOR_BUILD="$OUTDIR"
     OUTPATH_FOR_BUILD="$OUTPATH"
-    PYTHON_FOR_BUILD="$PYTHON"
     WORKDIR_FOR_BUILD="$WORKDIR"
 fi
 AC_SUBST(COM_FOR_BUILD)
@@ -4136,7 +4134,6 @@ AC_SUBST(CXX_FOR_BUILD)
 AC_SUBST(INPATH_FOR_BUILD)
 AC_SUBST(OUTPATH_FOR_BUILD)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET_FOR_BUILD)
-AC_SUBST([PYTHON_FOR_BUILD])
 
 AC_SUBST(OUTDIR_FOR_BUILD)
 AC_SUBST(WORKDIR_FOR_BUILD)
@@ -7282,21 +7279,13 @@ AC_MSG_CHECKING([which Python to use])
 
 case "$enable_python" in
 no|disable)
-    if test $build_os = cygwin; then
-        # Python is required to build nss. In theory we could separate the build-time Python
-        # requirement from the choice whether to include Python stuff in the installer, but why
-        # bother?
-        AC_MSG_ERROR([Python is required at build time when building on Windows])
-    fi
     enable_python=no
     AC_MSG_RESULT([none])
-    DISABLE_PYTHON=TRUE
     ;;
 ""|yes|auto)
     if test "$DISABLE_SCRIPTING" = TRUE -a $build_os != cygwin; then
         AC_MSG_RESULT([no, overridden by --disable-scripting])
         enable_python=no
-        DISABLE_PYTHON=TRUE
     elif test $build_os = cygwin; then
         dnl When building on Windows we don't attempt to use any installed
         dnl "system"  Python.
@@ -7330,8 +7319,6 @@ system)
     AC_MSG_ERROR([Incorrect --enable-python option])
     ;;
 esac
-
-AC_SUBST(DISABLE_PYTHON)
 
 if test $_os = WINNT -a "$WITH_MINGW" != yes -a $enable_python = system; then
     AC_MSG_ERROR([Must use internal Python when building with MSVC])
@@ -7381,24 +7368,6 @@ else
 
         if test "$PYTHON" = :; then
             enable_python=internal
-
-            if test $_os = Darwin; then
-                # See the fixme in gbuild.mk
-
-                # There must be a system Python, 2.6 should be fine (?), to run build-time Python scripts
-                # like filter/source/svg/js2hxx.py. (Is that the only build-time Python script?) If we
-                # don't do this, PYTHON will stay with the value ":" which of course makes runing
-                # build-time Python scripts rather ineffective.
-
-                # Unset variables set by the above AM_PATH_PYTHON so that we acutally do check anew
-                # Finding an (old) system Python should not confuse our already decided intent to build an
-                # internal Python 3.3, that is directed by enable_python = internal.
-                unset PYTHON am_cv_pathless_PYTHON ac_cv_path_PYTHON
-                AM_PATH_PYTHON([2.6])
-            else
-                # For Linux it works to use the internally built Python, see gbuild.mk
-                :
-            fi
         else
             enable_python=system
         fi
@@ -7512,6 +7481,7 @@ internal)
     fi
     ;;
 no)
+    DISABLE_PYTHON=TRUE
     SYSTEM_PYTHON=NO
     ;;
 *)
@@ -7519,14 +7489,7 @@ no)
     ;;
 esac
 
-dnl Cross-build of python requires python that is runnable on the build
-dnl platform, because it is used in the build process
-if test "$cross_compiling" = yes; then
-    if test "$DISABLE_PYTHON" = no -a "$SYSTEM_PYTHON" = no -a "$DISABLE_PYTHON_FOR_BUILD" = yes; then
-        AC_MSG_ERROR([Cross-build of python requires python that is runnable on the build platform. You must not use --disable-python for the 'build' config.])
-    fi
-fi
-
+AC_SUBST(DISABLE_PYTHON)
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
