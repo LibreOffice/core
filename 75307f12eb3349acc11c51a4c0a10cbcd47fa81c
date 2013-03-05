@@ -546,6 +546,40 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3//+rU\u003d",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:29:57Z",
+      "side": 1,
+      "message": "Add opening brace here\n\n {",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+rQ\u003d",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:29:57Z",
+      "side": 1,
+      "message": "... and closing brace here\n\n }",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+rs\u003d",
         "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
         "patchSetId": 2
