@@ -77,7 +77,7 @@ namespace dbaui
         void setSplitter(Splitter* _pSplitter);
         void setTreeView(DBTreeView* _pTreeView);
 
-        void    showStatus( const String& _rStatus );
+        void    showStatus( const OUString& _rStatus );
         void    hideStatus();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >     getContainer() { return m_xMe; }
@@ -98,7 +98,7 @@ namespace dbaui
         UnoDataBrowserView*     m_pView;
 
     public:
-        BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const String& _rStatus );
+        BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const OUString& _rStatus );
         ~BrowserViewStatusDisplay( );
     };
 }
