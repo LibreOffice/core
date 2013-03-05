@@ -280,7 +280,7 @@ namespace vcl
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    int VCL_DLLPUBLIC OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
+    int VCL_DLLPUBLIC OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
 #if !defined(WIN32)
 /**
  * TrueTypeFont constructor.

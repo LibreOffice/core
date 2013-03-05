@@ -1566,7 +1566,7 @@ cleanup:
 }
 #endif
 
-int OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf)
+int OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf)
 {
     allocTrueTypeFont( ttf );
     if( *ttf == NULL )

@@ -11,6 +11,7 @@
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <sft.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 
@@ -19,6 +20,8 @@
 #include <outdev.h>
 #include <outfont.hxx>
 #include <salgdi.hxx>
+
+using namespace vcl;
 
 static void clearDir( const OUString& path )
     {
@@ -63,6 +66,30 @@ void EmbeddedFontsHelper::activateFont( const OUString& fontName, const OUString
     OutputDevice *pDevice = Application::GetDefaultDevice();
     pDevice->AddTempDevFont( fileUrl, fontName );
     pDevice->ImplUpdateAllFontData( true );
+}
+
+// Check if it's (legally) allowed to embed the font file into a document
+// (ttf has a flag allowing this). PhysicalFontFace::IsEmbeddable() appears
+// to have a different meaning (guessing from code, IsSubsettable() might
+// possibly mean it's ttf, while IsEmbeddable() might mean it's type1).
+// So just try to open the data as ttf and see.
+static bool isEmbeddingAllowed( const void* data, long size )
+{
+    TrueTypeFont* font;
+    if( OpenTTFontBuffer( data, size, 0 /*TODO*/, &font ) == SF_OK )
+    {
+        TTGlobalFontInfo info;
+        GetTTGlobalFontInfo( font, &info );
+        CloseTTFont( font );
+        // http://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
+        // font embedding is allowed if either
+        //   no restriction at all (bit 1 clear)
+        //   editting allowed (bit 1 set, bit 3 set)
+        // (preview&print is considered insufficent, as it would force the document to be read-only)
+        int copyright = info.typeFlags & TYPEFLAG_COPYRIGHT_MASK;
+        return ( copyright & 0x02 ) == 0 || ( copyright & 0x08 );
+    }
+    return true; // no known restriction
 }
 
 OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
@@ -128,33 +155,36 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
         long size;
         if( const void* data = graphics->GetEmbedFontData( selected, unicodes, widths, info, &size ))
         {
-            osl::File file( url );
-            if( file.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) == osl::File::E_None )
+            if( isEmbeddingAllowed( data, size ))
             {
-                sal_uInt64 written = 0;
-                sal_uInt64 totalSize = size;
-                bool error = false;
-                while( written < totalSize && !error)
+                osl::File file( url );
+                if( file.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) == osl::File::E_None )
                 {
-                    sal_uInt64 nowWritten;
-                    switch( file.write( static_cast< const char* >( data ) + written, size - written, nowWritten ))
+                    sal_uInt64 written = 0;
+                    sal_uInt64 totalSize = size;
+                    bool error = false;
+                    while( written < totalSize && !error)
                     {
-                        case osl::File::E_None:
-                            written += nowWritten;
-                            break;
-                        case osl::File::E_AGAIN:
-                        case osl::File::E_INTR:
-                            break;
-                        default:
-                            error = true;
-                            break;
+                        sal_uInt64 nowWritten;
+                        switch( file.write( static_cast< const char* >( data ) + written, size - written, nowWritten ))
+                        {
+                            case osl::File::E_None:
+                                written += nowWritten;
+                                break;
+                            case osl::File::E_AGAIN:
+                            case osl::File::E_INTR:
+                                break;
+                            default:
+                                error = true;
+                                break;
+                        }
                     }
+                    file.close();
+                    if( error )
+                        osl::File::remove( url );
+                    else
+                        ok = true;
                 }
-                file.close();
-                if( error )
-                    osl::File::remove( url );
-                else
-                    ok = true;
             }
             graphics->FreeEmbedFontData( data, size );
         }
