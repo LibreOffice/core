@@ -381,7 +381,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
         {
             aText = mpSubEdit->GetText();
 
-            // remove all entries to which there is an selected entry
+            // remove all entries to which there is an entry, but which is not selected
             xub_StrLen nIndex = 0;
             while ( nIndex != STRING_NOTFOUND )
             {
