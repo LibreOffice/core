@@ -1950,7 +1950,7 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
     {
         if ( pTabPage )
         {
-            DBG_ASSERT( !pTabPage->IsVisible() || pTabPage->isLayoutEnabled(),
+            DBG_ASSERT( !pTabPage->IsVisible() || isLayoutEnabled(pTabPage),
                 "TabControl::SetTabPage() - Non-Layout Enabled Page is visible" );
 
             if ( IsDefaultSize() )

@@ -89,6 +89,7 @@
 #include <unotools/optionsdlg.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/help.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include "svtools/treelistentry.hxx"
@@ -938,7 +939,7 @@ IMPL_LINK( OfaTreeOptionsDialog, ImplHandleTreeLayoutTimerHdl, void*, EMPTYARG )
     if (pCurrentPageEntry && aTreeLB.GetParent(pCurrentPageEntry))
     {
         OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pCurrentPageEntry->GetUserData();
-        if (pPageInfo->m_pPage && pPageInfo->m_pPage->isLayoutEnabled())
+        if (pPageInfo->m_pPage && ::isLayoutEnabled(pPageInfo->m_pPage))
             SetPaneSize(pPageInfo->m_pPage);
     }
     return 0;
@@ -1114,7 +1115,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             {
                 pPageInfo->m_pPage->Reset( *pGroupInfo->m_pInItemSet );
             }
-            if (pPageInfo->m_pPage->isLayoutEnabled())
+            if (::isLayoutEnabled(pPageInfo->m_pPage))
                 SetPaneSize(pPageInfo->m_pPage);
         }
     }

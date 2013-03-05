@@ -200,16 +200,9 @@ void TabPage::DeactivatePage()
 {
 }
 
-bool TabPage::isLayoutEnabled() const
-{
-    //Child is a container => we're layout enabled
-    const Window *pChild = GetWindow(WINDOW_FIRSTCHILD);
-    return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(WINDOW_NEXT);
-}
-
 Size TabPage::GetOptimalSize() const
 {
-    if (isLayoutEnabled())
+    if (isLayoutEnabled(this))
         return VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
     return getLegacyBestSizeForChildren(*this);
 }
@@ -217,21 +210,21 @@ Size TabPage::GetOptimalSize() const
 void TabPage::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
     Window::SetPosSizePixel(rAllocPos, rAllocation);
-    if (isLayoutEnabled())
+    if (isLayoutEnabled(this))
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
 }
 
 void TabPage::SetSizePixel(const Size& rAllocation)
 {
     Window::SetSizePixel(rAllocation);
-    if (isLayoutEnabled())
+    if (isLayoutEnabled(this))
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), rAllocation);
 }
 
 void TabPage::SetPosPixel(const Point& rAllocPos)
 {
     Window::SetPosPixel(rAllocPos);
-    if (isLayoutEnabled())
+    if (isLayoutEnabled(this))
         VclContainer::setLayoutAllocation(*GetWindow(WINDOW_FIRSTCHILD), Point(0, 0), GetOutputSizePixel());
 }
 

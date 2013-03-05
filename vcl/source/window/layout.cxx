@@ -1637,4 +1637,11 @@ bool isEnabledInLayout(const Window *pWindow)
     return bEnabled;
 }
 
+bool isLayoutEnabled(const Window *pWindow)
+{
+    //Child is a container => we're layout enabled
+    const Window *pChild = pWindow ? pWindow->GetWindow(WINDOW_FIRSTCHILD) : NULL;
+    return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(WINDOW_NEXT);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

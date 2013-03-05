@@ -635,6 +635,41 @@ public:
 
 VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
 
+//Get first window of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+//i.e. acts like pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
+//in a flat hierarchy where dialogs only have one layer
+//of children
+VCL_DLLPUBLIC Window* firstLogicalChildOfParent(Window *pTopLevel);
+
+//Get next window after pChild of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+//i.e. acts like pChild = pChild->GetWindow(WINDOW_NEXT);
+//in a flat hierarchy where dialogs only have one layer
+//of children
+VCL_DLLPUBLIC Window* nextLogicalChildOfParent(Window *pTopLevel, Window *pChild);
+
+//Get previous window before pChild of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+//i.e. acts like pChild = pChild->GetWindow(WINDOW_PREV);
+//in a flat hierarchy where dialogs only have one layer
+//of children
+VCL_DLLPUBLIC Window* prevLogicalChildOfParent(Window *pTopLevel, Window *pChild);
+
+//Returns true is the Window has a single child which is a container
+VCL_DLLPUBLIC bool isLayoutEnabled(const Window *pWindow);
+
+VCL_DLLPUBLIC inline bool isContainerWindow(const Window &rWindow)
+{
+    WindowType eType = rWindow.GetType();
+    return (eType == WINDOW_CONTAINER || eType == WINDOW_SCROLLWINDOW);
+}
+
+VCL_DLLPUBLIC inline bool isContainerWindow(const Window *pWindow)
+{
+    return pWindow && isContainerWindow(*pWindow);
+}
+
 // retro-fitting utilities //
 
 //Get a Size which is large enough to contain all children with
@@ -652,38 +687,6 @@ bool isVisibleInLayout(const Window *pWindow);
 
 //return true if this window and its stack of containers are all enabled
 bool isEnabledInLayout(const Window *pWindow);
-
-//Get first window of a pTopLevel window as
-//if any intermediate layout widgets didn't exist
-//i.e. acts like pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
-//in a flat hierarchy where dialogs only have one layer
-//of children
-Window* firstLogicalChildOfParent(Window *pTopLevel);
-
-//Get next window after pChild of a pTopLevel window as
-//if any intermediate layout widgets didn't exist
-//i.e. acts like pChild = pChild->GetWindow(WINDOW_NEXT);
-//in a flat hierarchy where dialogs only have one layer
-//of children
-Window* nextLogicalChildOfParent(Window *pTopLevel, Window *pChild);
-
-//Get previous window before pChild of a pTopLevel window as
-//if any intermediate layout widgets didn't exist
-//i.e. acts like pChild = pChild->GetWindow(WINDOW_PREV);
-//in a flat hierarchy where dialogs only have one layer
-//of children
-Window* prevLogicalChildOfParent(Window *pTopLevel, Window *pChild);
-
-inline bool isContainerWindow(const Window &rWindow)
-{
-    WindowType eType = rWindow.GetType();
-    return (eType == WINDOW_CONTAINER || eType == WINDOW_SCROLLWINDOW);
-}
-
-inline bool isContainerWindow(const Window *pWindow)
-{
-    return pWindow && isContainerWindow(*pWindow);
-}
 
 #endif
 

@@ -53,8 +53,6 @@ public:
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
 
-    bool isLayoutEnabled() const;
-
     //To-Do, consider inheriting from VclContainer
     virtual void    SetPosSizePixel(const Point& rNewPos, const Size& rNewSize);
     virtual void    SetPosPixel(const Point& rNewPos);
