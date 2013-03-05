@@ -31,7 +31,6 @@ $(eval $(call gb_Executable_add_exception_objects,autodoc,\
     autodoc/source/exes/adc_uni/main \
     autodoc/source/exes/adc_uni/adc_msg \
     autodoc/source/exes/adc_uni/cmd_run \
-    autodoc/source/parser/tokens/tkp \
     autodoc/source/parser/tokens/tokdeal \
     autodoc/source/parser/tokens/stmstate \
     autodoc/source/parser/tokens/tkpcontx \

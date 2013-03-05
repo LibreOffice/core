@@ -1,11 +1,18 @@
-ScFiltersTest::testColorScaleODS()
-ScFiltersTest::testColorScaleXLSX()
+Application::PostZoomEvent(unsigned long, Window*, ZoomEvent*)
+EditTextObjectImpl::RemoveParaAttribs(unsigned short)
+EditTextObjectImpl::SetParaAttribs(unsigned long, SfxItemSet const&)
+FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
+LanguageTag::reset(_rtl_Locale const&)
+PoEntry::setFuzzy(bool)
+PoEntry::setMsgStr(rtl::OString const&)
+PoHeader::PoHeader(std::basic_ifstream<char, std::char_traits<char> >&)
+ScConditionalFormat::dumpInfo(rtl::OUStringBuffer&) const
+ScDocument::GetEditText(ScAddress const&) const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
-StyleSettings::GetPersonaFooter() const
-TemplateAbstractView::deselectOverlayItem(unsigned short)
-Test::test1Table1Page()
 TextEngine::GetLeftMargin() const
+ThumbnailView::deselectItem(unsigned short)
+XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
 apitest::XCellRangesQuery::testQueryFormulaCells()
 apitest::XDataPilotDescriptor::testGetHiddenFields()
 apitest::XDataPilotFieldGrouping::testCreateDateGroup()
@@ -25,6 +32,7 @@ apitest::XPropertySet::testRemovePropertyChangeListener()
 apitest::XPropertySet::testRemoveVetoableChangeListener()
 apitest::XSheetOutline::testAutoOutline()
 apitest::XSpreadsheetDocument::testGetSheets()
+apitest::XText::testInsertRemoveTextContent()
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
@@ -32,8 +40,12 @@ comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::share
 connectivity::file::OStatement_Base::reset()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
+framework::MenuManager::getContext()
 jfw_plugin::VendorBase::createInstance()
-oox::drawingml::TextListStyle::dump() const # Only used in debug mode
+oox::drawingml::TextListStyle::dump() const
+oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
+sc_apitest::main()
+sd::BluetoothServer::addCommunicator(sd::Communicator*)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)

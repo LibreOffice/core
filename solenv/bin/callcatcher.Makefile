@@ -26,6 +26,8 @@ findunusedcode:
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild
 	ooinstall -l $(DEVINSTALLDIR)/opt
 	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild subsequentcheck
-	callanalyse $(WORKDIR)/LinkTarget/*/* > unusedcode.all
+	callanalyse $(WORKDIR)/LinkTarget/*/* $(WORKDIR)/LinkTarget/*/*/* \
+	  $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs/libcppunit.so* \
+	  > unusedcode.all
 
 # vim: set noet sw=4 ts=4:
