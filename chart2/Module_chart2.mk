@@ -35,11 +35,8 @@ $(eval $(call gb_Module_add_targets,chart2,\
     Package_uiconfig \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,chart2,\
-    CppunitTest_chart2_importtest \
-))
-
 $(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\
+    CppunitTest_chart2_importtest \
     JunitTest_chart2_unoapi \
 ))
 
