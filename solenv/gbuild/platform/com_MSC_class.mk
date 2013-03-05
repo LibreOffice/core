@@ -538,14 +538,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 
 endef
 
-# ScpConvertTarget class
-
-define gb_ScpConvertTarget_ScpConvertTarget_platform
-$(call gb_ScpConvertTarget_get_target,$(1)) :| $(OUTDIR)/bin/msi-encodinglist.txt
-$(call gb_ScpConvertTarget_get_target,$(1)) : SCP_FLAGS := -t $(OUTDIR)/bin/msi-encodinglist.txt
-
-endef
-
 # InstallScript class
 
 gb_InstallScript_EXT := .inf

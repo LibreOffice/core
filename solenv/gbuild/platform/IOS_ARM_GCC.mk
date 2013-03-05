@@ -259,10 +259,6 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 
 endef
 
-# ScpConvertTarget class
-
-gb_ScpConvertTarget_ScpConvertTarget_platform :=
-
 # InstallScript class
 
 gb_InstallScript_EXT := .ins

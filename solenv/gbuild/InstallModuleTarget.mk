@@ -150,43 +150,6 @@ $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir 
 
 endef
 
-# ScpConvertTarget class
-
-# platform:
-#  gb_ScpConvertTarget_ScpConvertTarget_platform
-
-gb_ScpConvertTarget_DEPS := $(call gb_Executable_get_runtime_dependencies,ulfconv)
-gb_ScpConvertTarget_COMMAND := $(call gb_Executable_get_command,ulfconv)
-
-define gb_ScpConvertTarget__command
-$(call gb_Output_announce,$(2),$(true),SCC,1)
-$(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpConvertTarget_COMMAND) $(SCP_FLAGS) -o $(1) $(SCP_CONVERT_ULF) \
-)
-endef
-
-$(dir $(call gb_ScpConvertTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(call gb_ScpConvertTarget_get_target,%) : $(gb_ScpConvertTarget_DEPS)
-	$(call gb_ScpConvertTarget__command,$@,$*)
-
-.PHONY : $(call gb_ScpConvertTarget_get_clean_target,%)
-$(call gb_ScpConvertTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),SCC,1)
-	rm -f $(call gb_ScpConvertTarget_get_target,$*)
-
-# gb_ScpConvertTarget_ScpConvertTarget(<target>,<ulffile>)
-define gb_ScpConvertTarget_ScpConvertTarget
-$(call gb_ScpConvertTarget_get_target,$(1)) : $(2)
-$(call gb_ScpConvertTarget_get_target,$(1)) :| $(dir $(call gb_ScpConvertTarget_get_target,$(1))).dir
-$(call gb_ScpConvertTarget_get_target,$(1)) : SCP_CONVERT_ULF := $(2)
-$(call gb_ScpConvertTarget_get_target,$(1)) : SCP_FLAGS :=
-
-$(call gb_ScpConvertTarget_ScpConvertTarget_platform,$(1))
-
-endef
-
 # ScpTarget class
 
 gb_ScpTarget_TARGET := $(SOLARENV)/bin/pre2par.pl
@@ -232,15 +195,13 @@ endef
 define gb_ScpTarget_set_localized
 ifneq ($(gb_WITH_LANG),)
 $(call gb_ScpMergeTarget_ScpMergeTarget,$(1))
-$(call gb_ScpConvertTarget_ScpConvertTarget,$(1),$(call gb_ScpMergeTarget_get_target,$(1)))
+$(call gb_ScpTarget_get_target,$(1)) : SCP_ULF := $(call gb_ScpMergeTarget_get_target,$(1))
+$(call gb_ScpTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_target,$(1))
 $(call gb_ScpTarget_get_clean_target,$(1)) : $(call gb_ScpMergeTarget_get_clean_target,$(1))
 else
-$(call gb_ScpConvertTarget_ScpConvertTarget,$(1),$(call gb_ScpMergeTarget_get_source,$(1)))
+$(call gb_ScpTarget_get_target,$(1)) : SCP_ULF := $(call gb_ScpMergeTarget_get_source,$(1))
+$(call gb_ScpTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_source,$(1))
 endif
-
-$(call gb_ScpTarget_get_target,$(1)) : $(call gb_ScpConvertTarget_get_target,$(1))
-$(call gb_ScpTarget_get_clean_target,$(1)) : $(call gb_ScpConvertTarget_get_clean_target,$(1))
-$(call gb_ScpTarget_get_target,$(1)) : SCP_ULF := $(call gb_ScpConvertTarget_get_target,$(1))
 
 endef
 
