@@ -522,8 +522,8 @@ AC_ARG_WITH(beanshell-jar,
 AC_ARG_ENABLE(minimizer,
 [  --enable-minimizer          enables the build of the Presentation Minimizer extension
 ],,)
-AC_ARG_ENABLE(presenter-console,
-[  --enable-presenter-console          enables the build of the Presenter Console extension
+AC_ARG_ENABLE(presenter-screen,
+[  --enable-presenter-screen           enables the build of the Presenter Screen extension
 ],,)
 AC_ARG_ENABLE(pdfimport,
 [  --enable-pdfimport          enables the build of the PDF Import extension
@@ -6424,7 +6424,7 @@ fi
 AC_SUBST(ENABLE_MINIMIZER)
 
 AC_MSG_CHECKING([whether to build the Presenter Screen extension])
-if test -n "$enable_presenter_console" -a "$enable_presenter_screen" != "no"; then
+if test -n "$enable_presenter_screen" -a "$enable_presenter_screen" != "no"; then
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_SCREEN=YES
 else
