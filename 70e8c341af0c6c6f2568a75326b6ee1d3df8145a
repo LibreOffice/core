@@ -189,6 +189,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3//+rc\u003d",
+        "filename": "drawinglayer/source/geometry/viewinformation2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:28:06Z",
+      "side": 0,
+      "message": "Instead of removing all those ::osl::Mutex instances I suggest to keep them for now. The intention seems to have been to add mutex guards instead.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+t8\u003d",
         "filename": "filter/source/placeware/exporter.cxx",
         "patchSetId": 2
