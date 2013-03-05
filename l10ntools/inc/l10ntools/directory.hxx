@@ -19,6 +19,9 @@
  *
  *************************************************************/
 
+#ifndef L10NTOOLS_DIRECTORY_HXX
+#define L10NTOOLS_DIRECTORY_HXX
+
 #include <vector>
 #include <algorithm>
 #include <rtl/ustring.hxx>
@@ -33,10 +36,7 @@
 
 #include <stdio.h>
 
-#ifndef L10NTOOLS_FILE_HXX
-#define L10NTOOLS_FILE_HXX
 #include <l10ntools/file.hxx>
-#endif
 
 namespace transex{
 
@@ -73,3 +73,6 @@ class Directory
 };
 
 }
+
+#endif // L10NTOOLS_DIRECTORY_HXX
+

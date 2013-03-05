@@ -24,11 +24,9 @@
 #ifndef _EXPORT_HXX
 #define _EXPORT_HXX
 
-#ifndef L10NTOOLS_DIRECTORY_HXX
-#define L10NTOOLS_DIRECTORY_HXX
 #include <l10ntools/directory.hxx>
-#endif
 
+#include <tagtest.hxx>
 
 // #define MERGE_SOURCE_LANGUAGES <- To merge en-US and de resource
 
@@ -54,31 +52,6 @@
 #define NO_TRANSLATE_ISO        "x-no-translate"
 
 #define JAPANESE_ISO "ja"
-
-
-struct eqstr{
-  sal_Bool operator()(const char* s1, const char* s2) const{
-    return strcmp(s1,s2)==0;
-  }
-};
-
-struct equalByteString{
-        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
-            return rKey1.CompareTo( rKey2 )==COMPARE_EQUAL;
-    }
-};
-struct lessByteString{
-        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
-            return rKey1.CompareTo( rKey2 )==COMPARE_LESS;
-    }
-};
-
-struct hashByteString{
-    size_t operator()( const ByteString& rName ) const{
-                std::hash< const char* > myHash;
-                return myHash( rName.GetBuffer() );
-    }
-};
 
 class PFormEntrys;
 class MergeData;

@@ -19,6 +19,9 @@
  *
  *************************************************************/
 
+#ifndef L10NTOOLS_FILE_HXX
+#define L10NTOOLS_FILE_HXX
+
 #include "rtl/ustring.hxx"
 
 namespace transex
@@ -42,3 +45,6 @@ class File
 };
 
 }
+
+#endif // L10NTOOLS_FILE_HXX
+
