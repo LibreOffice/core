@@ -585,7 +585,7 @@ namespace
         else if (SQL_ISRULE(pNode,comparison_predicate))
         {
             // only the comparison of columns is allowed
-            OSL_ENSURE(pNode->count() == 3,"OQueryDesignView::InsertJoinConnection: Fehler im Parse Tree");
+            OSL_ENSURE(pNode->count() == 3,"OQueryDesignView::InsertJoinConnection: Error in Parse Tree");
             if (!(SQL_ISRULE(pNode->getChild(0),column_ref) &&
                   SQL_ISRULE(pNode->getChild(2),column_ref) &&
                    pNode->getChild(1)->getNodeType() == SQL_NODE_EQUAL))
@@ -703,7 +703,7 @@ namespace
 
                     if  ( pEntryField->isAggreateFunction() )
                     {
-                        OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"Functionname darf hier nicht leer sein! ;-(");
+                        OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"Function name must not be empty! ;-(");
                         OUStringBuffer aTmpStr2( pEntryField->GetFunction());
                         aTmpStr2.appendAscii("(");
                         aTmpStr2.append(aTmpStr.makeStringAndClear());
@@ -1187,7 +1187,7 @@ namespace
                 OTableFieldDescRef  pEntryField = *aIter;
                 if ( pEntryField->IsGroupBy() )
                 {
-                    OSL_ENSURE(!pEntryField->GetField().isEmpty(),"Kein FieldName vorhanden!;-(");
+                    OSL_ENSURE(!pEntryField->GetField().isEmpty(),"No Field Name available!;-(");
                     OUString sGroupByPart = quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
 
                     // only quote the field name when it isn't calculated
@@ -1265,7 +1265,7 @@ namespace
         ::connectivity::OSQLParseNode * pCondition = pNode->getChild(1);
         if ( pCondition ) // no where clause
         {
-            // now we have to chech the other conditions
+            // now we have to check the other conditions
             // first make the logical easier
             ::connectivity::OSQLParseNode::negateSearchCondition(pCondition);
             ::connectivity::OSQLParseNode *pNodeTmp = pNode->getChild(1);
@@ -1817,7 +1817,7 @@ namespace
         rParseIter.getColumnRange( pColumnRef, aColumnName, aTableRange );
 
         sal_Bool bFound(sal_False);
-        OSL_ENSURE(!aColumnName.isEmpty(),"Columnname darf nicht leer sein");
+        OSL_ENSURE(!aColumnName.isEmpty(),"Column name must not be empty");
         if (aTableRange.isEmpty())
         {
             // SELECT column, ...
@@ -1871,7 +1871,7 @@ namespace
                         const ::connectivity::OSQLParseNode *pNode)
     {
         OSL_ENSURE( SQL_ISRULE( pNode, qualified_join ) || SQL_ISRULE( pNode, joined_table ) || SQL_ISRULE( pNode, cross_union ),
-            "OQueryDesignView::InsertJoin: Fehler im Parse Tree");
+            "OQueryDesignView::InsertJoin: Error in the Parse Tree");
 
         if (SQL_ISRULE(pNode,joined_table))
             return InsertJoin(_pView,pNode->getChild(1));
