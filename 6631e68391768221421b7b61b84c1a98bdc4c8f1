@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+i8\u003d",
+        "filename": "solenv/gbuild/InstallModuleTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-03-05T13:50:48Z",
+      "side": 1,
+      "message": "This is wrong. It should be changed to:\n\ndefine gb_ScpTarget_set_localized\nifneq ($(gb_WITH_LANG),)\n$(call gb_ScpMergeTarget_ScpMergeTarget,$(1))\n$(call gb_ScpTarget_get_target,$(1)) : SCP_ULF :\u003d $(call gb_ScpMergeTarget_get_target,$(1))\n$(call gb_ScpTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_target,$(1))\n$(call gb_ScpTarget_get_clean_target,$(1)) : $(call gb_ScpMergeTarget_get_clean_target,$(1))\nelse\n$(call gb_ScpTarget_get_target,$(1)) : SCP_ULF :\u003d $(call gb_ScpMergeTarget_get_source,$(1))\n$(call gb_ScpTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_source,$(1))\nendif\n\nendef\n\nIf it is not immediately clear why, there is a bit of explanation (at least I hope it explains the matter): If building with langs, ScpTarget uses (and depends on) a merged .ulf file produced by ScpMergeTarget. Otherwise it can directly use the .ulf from $(SRCDIR) and no merging is necessary.",
+      "revId": "6631e68391768221421b7b61b84c1a98bdc4c8f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
