@@ -3375,9 +3375,7 @@ aix*)
     PLATFORMID=aix_powerpc
     OUTPATH=unxaigppc
     P_SEP=:
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 cygwin*)
@@ -3410,8 +3408,7 @@ cygwin*)
         ;;
     esac
     SCPDEFS="$SCPDEFS -D_MSC_VER"
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 darwin*)
@@ -3496,9 +3493,7 @@ dragonfly*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 freebsd*)
@@ -3528,9 +3523,7 @@ freebsd*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 kfreebsd*)
@@ -3562,9 +3555,7 @@ kfreebsd*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 linux-gnu*)
@@ -3708,9 +3699,7 @@ linux-gnu*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 linux-android*)
@@ -3781,8 +3770,7 @@ mingw*)
         ;;
     esac
     SOLARINC="$SOLARINC -I$SRC_ROOT/solenv/inc/win32 -I$SRC_ROOT/solenv/inc/$OUTPATH"
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 *netbsd*)
@@ -3824,9 +3812,7 @@ mingw*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 
 openbsd*)
@@ -3856,9 +3842,7 @@ openbsd*)
         ;;
     esac
     SOLARINC="$SOLARINC -I/usr/local/include"
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L/usr/local/lib"
 
     ;;
@@ -3892,9 +3876,7 @@ solaris*)
         ;;
     esac
     SOLARINC="$SOLARINC -I/usr/local/include"
-    SOLARLIB="-L../lib -L$SRC_ROOT/solenv/$OUTPATH/lib"
-    SOLARLIB="$SOLARLIB -L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
-    SOLARLIB="$SOLARLIB -L$SRC_ROOT/solenv/$OUTPATH/lib"
+    SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     SOLARLIB="$SOLARLIB -L$COMPATH/lib"
     SOLARLIB="$SOLARLIB -L/usr/local/bin -L/usr/dt/lib -L/usr/openwin/lib"
     ;;
@@ -4094,7 +4076,7 @@ if test "$cross_compiling" = "yes"; then
     cp config.log ../config.Build.log
     mkdir -p ../config_build
     cp config_host/*.h ../config_build
-    . ./bin/get_config_variables COM GUI OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR SOLARINC SOLARLIB WORKDIR
+    . ./bin/get_config_variables COM GUI OS PATH CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH PYTHON SYSTEM_LIBXSLT OUTDIR WORKDIR
 
     for V in COM GUI OS CPU CPUNAME CC CXX DISABLE_PYTHON MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              PYTHON SYSTEM_LIBXSLT; do
@@ -4106,7 +4088,7 @@ if test "$cross_compiling" = "yes"; then
         fi
     done
 
-    for V in OUTDIR SOLARINC SOLARLIB WORKDIR; do
+    for V in OUTDIR WORKDIR; do
         VV='$'$V
         VV=`eval "echo $VV"`
         VV=`echo $VV | sed -e 's,/CONF-FOR-BUILD,,g'`
@@ -11768,16 +11750,6 @@ AC_SUBST(BUILD_TYPE)
 
 AC_SUBST(SOLARINC)
 AC_SUBST(SOLARLIB)
-
-if test -z "$SOLARINC_FOR_BUILD"; then
-    SOLARINC_FOR_BUILD="$SOLARINC"
-fi
-AC_SUBST(SOLARINC_FOR_BUILD)
-
-if test -z "$SOLARLIB_FOR_BUILD"; then
-    SOLARLIB_FOR_BUILD="$SOLARLIB"
-fi
-AC_SUBST(SOLARLIB_FOR_BUILD)
 
 PathFormat "$PERL"
 PERL="$formatted_path"
