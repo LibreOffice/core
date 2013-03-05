@@ -2603,7 +2603,7 @@ void SwTxtFrm::VisitPortions( SwPortionHandler& rPH ) const
                 pPor = pPor->GetPortion();
             }
 
-            rPH.LineBreak();
+            rPH.LineBreak(pLine->Width());
             pLine = pLine->GetNext();
         }
     }

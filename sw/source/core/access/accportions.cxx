@@ -197,7 +197,7 @@ void SwAccessiblePortionData::Special(
         bLastIsSpecial = sal_True;
 }
 
-void SwAccessiblePortionData::LineBreak()
+void SwAccessiblePortionData::LineBreak(KSHORT /*nWidth*/)
 {
     OSL_ENSURE( !bFinished, "We are already done!" );
 
@@ -223,8 +223,8 @@ void SwAccessiblePortionData::Finish()
     // position before the end
     Special( 0, String(), POR_TERMINATE );
     Special( 0, String(), POR_TERMINATE );
-    LineBreak();
-    LineBreak();
+    LineBreak(0);
+    LineBreak(0);
 
     sAccessibleString = aBuffer.makeStringAndClear();
     bFinished = sal_True;

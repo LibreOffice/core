@@ -193,9 +193,13 @@ class XmlPortionDumper:public SwPortionHandler
         ofs += nLength;
     }
 
-    virtual void LineBreak(  )
+    virtual void LineBreak( KSHORT nWidth )
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "LineBreak" ) );
+        if (nWidth > 0)
+            xmlTextWriterWriteFormatAttribute( writer,
+                                               BAD_CAST( "nWidth" ),
+                                               "%i", ( int ) nWidth );
         xmlTextWriterEndElement( writer );
     }
 

@@ -21,6 +21,7 @@
 #define _SW_PORTIONHANDLER_HXX
 
 #include <tools/solar.h>
+#include <txttypes.hxx>
 
 class String;
 
@@ -76,7 +77,7 @@ public:
     /** line break. This method is called whenever a line break in the
      * layout occurs.
      */
-    virtual void LineBreak() = 0;
+    virtual void LineBreak(KSHORT nWidth) = 0;
 
     /** skip characters. The SwTxtFrame may only display partially
      * display a certain paragraph (e.g. when the paragaph is split
