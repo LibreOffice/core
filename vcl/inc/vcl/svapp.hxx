@@ -330,9 +330,8 @@ public:
     static const Link&          GetFilterHdl();
 
     static void                 EnableHeadlessMode( bool dialogsAreFatal );
-    static sal_Bool                 IsHeadlessModeEnabled();
-
-    static bool IsHeadlessModeRequested();
+    static sal_Bool             IsHeadlessModeEnabled();
+    static bool                 IsHeadlessModeRequested();
         ///< check command line arguments for --headless
 
     static void                 ShowNativeErrorBox(const String& sTitle  ,

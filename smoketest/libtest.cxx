@@ -7,60 +7,32 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// yuck / FIXME ...
-#include "../desktop/inc/liblibreoffice.hxx"
-
+#include <stdio.h>
 #include <assert.h>
+#include <liblibreoffice.hxx>
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-#include <rtl/bootstrap.hxx>
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
-
-class Test: public CppUnit::TestFixture {
-public:
-    virtual void setUp();
-    virtual void tearDown();
-
-private:
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
-
-    void test();
-};
-
-void Test::setUp()
+int main (int argc, char **argv)
 {
+    if( argc < 2 )
+        return -1;
+    LibLibreOffice *pOffice = lo_init( argv[1] );
+    if( !pOffice )
+        return -1;
+    // This separate init is lame I think.
+    if( !pOffice->initialize( argv[1] ) )
+    {
+        fprintf( stderr, "failed to initialize\n" );
+        return -1;
+    }
+    fprintf( stderr, "start to load document '%s'\n", argv[2] );
+    LODocument *pDocument = pOffice->documentLoad( argv[2] );
+    if( !pDocument )
+    {
+        fprintf( stderr, "failed to load document '%s'\n", argv[2] );
+        return -1;
+    }
+    fprintf( stderr, "all tests passed." );
+    return 0;
 }
-void Test::tearDown()
-{
-}
-
-void Test::test()
-{
-    rtl::OUString aArgSoffice;
-    rtl::Bootstrap::get( rtl::OUString( "arg-soffice" ), aArgSoffice );
-    OString aInstall = OUStringToOString( aArgSoffice, RTL_TEXTENCODING_UTF8 );
-    fprintf( stderr, "liblibreoffice test: '%s'\n", aInstall.getStr() );
-    LibLibreOffice *pOffice = lo_init( aInstall.getStr() );
-    CPPUNIT_ASSERT( pOffice != NULL );
-
-    bool bInited = pOffice->initialize( aInstall.getStr() );
-    CPPUNIT_ASSERT( bInited );
-
-    rtl::OUString aArgDoc;
-    rtl::Bootstrap::get( rtl::OUString( "arg-testarg.smoketest.doc" ), aArgDoc );
-    OString aDoc = OUStringToOString ( aArgDoc, RTL_TEXTENCODING_UTF8 );
-    fprintf ( stderr, "liblibreoffice doc arg: '%s'\n", aDoc.getStr() );
-    pOffice->documentLoad ( aDoc.getStr() );
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

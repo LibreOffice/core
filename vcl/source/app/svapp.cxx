@@ -1760,7 +1760,7 @@ bool Application::IsHeadlessModeRequested()
     for (sal_uInt32 i = 0; i < n; ++i) {
         rtl::OUString arg;
         rtl_getAppCommandArg(i, &arg.pData);
-        if ( arg == "--headless" ) {
+        if ( arg == "--headless" || arg == "-headless" ) {
             return true;
         }
     }

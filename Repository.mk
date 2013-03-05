@@ -45,6 +45,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     gsicheck \
     helpex \
     idxdict \
+	libtest \
     lngconvex \
     localize \
     makedepend \

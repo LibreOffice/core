@@ -87,8 +87,20 @@ aBasicErrorFunc( const OUString &rErr, const OUString &rAction )
 }
 
 static void
-initialize_uno( const rtl::OUString &aUserProfileURL )
+initialize_uno( const rtl::OUString &aAppURL )
 {
+    rtl::Bootstrap::setIniFilename( aAppURL + "/fundamentalrc" );
+
+    OUString aValue;
+    rtl::Bootstrap::set( "CONFIGURATION_LAYERS",
+                         "xcsxcu:${BRAND_BASE_DIR}/share/registry "
+                         "res:${BRAND_BASE_DIR}/share/registry "
+//                       "bundledext:${${BRAND_BASE_DIR}/program/unorc:BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini " );
+//                       "sharedext:${${BRAND_BASE_DIR}/program/unorc:SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
+//                       "userext:${${BRAND_BASE_DIR}/program/unorc:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini "
+//                         "user:${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu"
+                         );
+
     xContext = cppu::defaultBootstrap_InitialComponentContext();
     fprintf( stderr, "Uno initialized %d\n", xContext.is() );
     xFactory = xContext->getServiceManager();
@@ -96,8 +108,9 @@ initialize_uno( const rtl::OUString &aUserProfileURL )
     comphelper::setProcessServiceFactory(xSFactory);
 
     // set UserInstallation to user profile dir in test/user-template
-    rtl::Bootstrap aDefaultVars;
-    aDefaultVars.set(rtl::OUString("UserInstallation"), aUserProfileURL );
+//    rtl::Bootstrap aDefaultVars;
+//    aDefaultVars.set(rtl::OUString("UserInstallation"), aAppURL + "../registry" );
+    // configmgr setup ?
 }
 
 bool
@@ -117,15 +130,17 @@ LibLibreOffice_Impl::initialize( const char *app_path )
         return false;
 
     try {
-        initialize_uno( aAppURL + "../registry" );
+        initialize_uno( aAppURL );
         force_c_locale();
+
+        // Force headless
+        rtl::Bootstrap::set( "SAL_USE_VCLPLUGIN", "svp" );
         InitVCL();
-        if (Application::IsHeadlessModeRequested())
-            Application::EnableHeadlessMode(true);
+        Application::EnableHeadlessMode(true);
 
         ErrorHandler::RegisterDisplay( aBasicErrorFunc );
 
-        fprintf (stderr, "do nothing yet");
+        fprintf( stderr, "initialized\n" );
         bInitialized = true;
     } catch (css::uno::Exception & e) {
         fprintf( stderr, "bootstrapping exception '%s'\n",

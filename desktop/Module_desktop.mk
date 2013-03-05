@@ -33,7 +33,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
     AllLangResTarget_dkt \
     Library_deployment \
     Library_deploymentmisc \
-	Library_libreoffice \
     Library_offacc \
     Library_sofficeapp \
     Library_spl \
@@ -42,6 +41,12 @@ $(eval $(call gb_Module_add_targets,desktop,\
     Zip_brand \
     Zip_brand_dev \
 ))
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Module_add_targets,desktop,\
+	Library_libreoffice \
+))
+endif
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\

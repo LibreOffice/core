@@ -21,6 +21,7 @@
 #include "osl/process.h"
 
 #include "rtl/ustrbuf.hxx"
+#include "rtl/bootstrap.hxx"
 
 #include "salinst.hxx"
 #include "generic/gensys.h"
@@ -198,31 +199,22 @@ static SalInstance* autodetect_plugin()
     return pInst;
 }
 
-static SalInstance* check_headless_plugin()
-{
-    int nParams = osl_getCommandArgCount();
-    OUString aParam;
-    for( int i = 0; i < nParams; i++ )
-    {
-        osl_getCommandArg( i, &aParam.pData );
-        if( aParam == "-headless" || aParam == "--headless" )
-        {
-            return tryInstance("svp");
-        }
-    }
-    return NULL;
-}
-
 SalInstance *CreateSalInstance()
 {
-    SalInstance*    pInst = NULL;
+    SalInstance *pInst = NULL;
 
+    OUString aUsePlugin;
     static const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
+    if( pUsePlugin )
+        aUsePlugin = OUString::createFromAscii( pUsePlugin );
+    else
+        rtl::Bootstrap::get( "SAL_USE_VCLPLUGIN", aUsePlugin );
 
-    pInst = check_headless_plugin();
+    if( Application::IsHeadlessModeRequested() )
+        aUsePlugin = "svp";
 
-    if( !pInst && pUsePlugin && *pUsePlugin )
-        pInst = tryInstance( OUString::createFromAscii( pUsePlugin ), true );
+    if( !aUsePlugin.isEmpty() )
+        pInst = tryInstance( aUsePlugin );
 
     if( ! pInst )
         pInst = autodetect_plugin();

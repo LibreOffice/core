@@ -17,6 +17,7 @@ $(eval $(call gb_Library_set_include,libreoffice,\
 $(eval $(call gb_Library_add_libs,libreoffice,\
 	$(if $(filter $(OS),LINUX), \
 		-ldl \
+        -lpthread \
 	) \
 ))
 
