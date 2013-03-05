@@ -25,6 +25,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 
@@ -211,7 +212,7 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectBackground, PushButton*, /*pButton*/
 {
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = ui::dialogs::FilePicker::createDefault(xContext);
+    uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = ui::dialogs::FilePicker::createWithMode(xContext, ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE);
 
     xFilePicker->setMultiSelectionMode( false );
 
