@@ -42,6 +42,10 @@ $(eval $(call gb_Module_add_targets,smoketest,\
 ))
 endif
 
+$(eval $(call gb_Module_add_check_targets,smoketest,\
+	CppunitTest_liblibreoffice \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,smoketest,\
 	CppunitTest_smoketest \
 ))

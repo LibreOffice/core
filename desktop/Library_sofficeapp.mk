@@ -90,6 +90,11 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/migration/migration \
 ))
 
+# liblibreoffice bits
+$(eval $(call gb_Library_add_exception_objects,sofficeapp,\
+	desktop/source/lib/init \
+))
+
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_Library_use_libraries,sofficeapp,tubes))
 endif

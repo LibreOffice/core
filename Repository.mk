@@ -472,6 +472,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     hsqldb \
     index_data \
     java_uno_accessbridge \
+    libreoffice \
     localedata_en \
     localedata_es \
     localedata_euro \

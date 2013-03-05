@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
     AllLangResTarget_dkt \
     Library_deployment \
     Library_deploymentmisc \
+	Library_libreoffice \
     Library_offacc \
     Library_sofficeapp \
     Library_spl \
