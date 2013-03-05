@@ -12,16 +12,13 @@
 
 #include "liblibreoffice.hxx"
 
-typedef int loboolean;
-typedef struct _LODocument LODocument;
-
 class LibLibreOffice_Impl : public LibLibreOffice
 {
 public:
-    virtual loboolean initialize (const char *installPath);
+    virtual bool        initialize (const char *installPath);
 
     virtual LODocument *documentLoad (const char *url);
-    virtual loboolean   documentSave (const char *url);
+    virtual bool        documentSave (const char *url);
 
     virtual ~LibLibreOffice_Impl ();
 };

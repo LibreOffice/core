@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -42,7 +42,7 @@ LibLibreOffice_Impl::documentLoad( const char *docUrl )
     return NULL;
 }
 
-loboolean
+bool
 LibLibreOffice_Impl::documentSave( const char * )
 {
     return 1;
@@ -73,16 +73,18 @@ aBasicErrorFunc( const OUString &rErr, const OUString &rAction )
 static void
 initialize_uno( const rtl::OUString &aUserProfileURL )
 {
+    xContext = cppu::defaultBootstrap_InitialComponentContext();
+    fprintf( stderr, "Uno initialized %d\n", xContext.is() );
+    xFactory = xContext->getServiceManager();
+    xSFactory = uno::Reference<lang::XMultiServiceFactory>(xFactory, uno::UNO_QUERY_THROW);
+    comphelper::setProcessServiceFactory(xSFactory);
+
     // set UserInstallation to user profile dir in test/user-template
     rtl::Bootstrap aDefaultVars;
     aDefaultVars.set(rtl::OUString("UserInstallation"), aUserProfileURL );
-
-    xContext = comphelper::getProcessComponentContext();
-    xFactory = xContext->getServiceManager();
-    xSFactory = uno::Reference<lang::XMultiServiceFactory>(xFactory, uno::UNO_QUERY_THROW);
 }
 
-loboolean
+bool
 LibLibreOffice_Impl::initialize( const char *app_path )
 {
     static bool bInitialized = false;
@@ -122,6 +124,7 @@ extern "C" {
 
 LibLibreOffice *liblibreoffice_hook(void)
 {
+    fprintf( stderr, "create libreoffice object\n" );
     return new LibLibreOffice_Impl();
 }
 

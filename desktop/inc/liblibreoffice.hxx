@@ -10,16 +10,15 @@
 #ifndef _LIBLIBREOFFICE_HXX
 #define _LIBLIBREOFFICE_HXX
 
-typedef int loboolean;
 typedef struct _LODocument LODocument;
 
 class LibLibreOffice
 {
 public:
-    virtual loboolean initialize (const char *installPath) = 0;
+    virtual bool initialize (const char *installPath) = 0;
 
     virtual LODocument *documentLoad (const char *url) = 0;
-    virtual loboolean   documentSave (const char *url) = 0;
+    virtual bool   documentSave (const char *url) = 0;
 
     virtual ~LibLibreOffice () {};
 };

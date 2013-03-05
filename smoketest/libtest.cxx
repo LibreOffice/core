@@ -46,7 +46,11 @@ void Test::test()
     rtl::Bootstrap::get( rtl::OUString( "arg-soffice" ), aArgSoffice );
     OString aInstall = OUStringToOString( aArgSoffice, RTL_TEXTENCODING_UTF8 );
     fprintf( stderr, "liblibreoffice test: '%s'\n", aInstall.getStr() );
-    assert (lo_init( aInstall.getStr() ));
+    LibLibreOffice *pOffice = lo_init( aInstall.getStr() );
+    CPPUNIT_ASSERT( pOffice != NULL );
+
+    bool bInited = pOffice->initialize( aInstall.getStr() );
+    CPPUNIT_ASSERT( bInited );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

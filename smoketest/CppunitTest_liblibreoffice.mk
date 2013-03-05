@@ -15,28 +15,15 @@ $(eval $(call gb_CppunitTest_add_exception_objects,liblibreoffice,\
 	smoketest/libtest \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,liblibreoffice,boost_headers))
-
-$(eval $(call gb_CppunitTest_use_api,liblibreoffice,\
-	offapi \
-	udkapi \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,liblibreoffice,\
-	cppu \
-	cppuhelper \
 	libreoffice \
-	sal \
-	unotest \
 ))
 
 ifeq ($(OS),MACOSX)
-liblibreoffice_SOFFICE_INST := path:$(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS
+liblibreoffice_SOFFICE_INST := $(DEVINSTALLDIR)/opt/LibreOffice.app/Contents/MacOS
 else
-liblibreoffice_SOFFICE_INST := path:$(DEVINSTALLDIR)/opt/program
+liblibreoffice_SOFFICE_INST := $(DEVINSTALLDIR)/opt/program
 endif
-
-$(eval $(call gb_CppunitTest_use_ure,liblibreoffice))
 
 $(eval $(call gb_CppunitTest_add_arguments,liblibreoffice,\
 	-env:arg-soffice=$(liblibreoffice_SOFFICE_INST) \
