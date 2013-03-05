@@ -111,6 +111,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/document,\
 	XMLOasisBasicImporter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing,\
+	ModuleDispatcher \
 	ShapeCollection \
 	SlideRenderer \
 	SlideSorter \
@@ -3614,6 +3615,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/text,\
 	LabelFollow \
 	MailMergeEvent \
 	MailMergeType \
+	ModuleDispatcher \
 	NotePrintMode \
 	PageNumberType \
 	ParagraphVertAlign \

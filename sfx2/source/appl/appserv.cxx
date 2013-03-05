@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -34,6 +35,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/text/ModuleDispatcher.hpp>
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -1376,26 +1378,19 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 return;
             }
 
-            Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
             Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            Reference< com::sun::star::frame::XDispatchProvider > xProv(
-                xORB->createInstance( ::rtl::OUString("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+            Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-            if ( xProv.is() )
-            {
-                ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
-                Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
-                Sequence < com::sun::star::beans::PropertyValue > aSeq;
-                if ( rReq.GetArgs() )
-                    TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
-                Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
-                ::com::sun::star::frame::DispatchResultEvent aEvent;
-                sal_Bool bSuccess = (
-                                     (aResult >>= aEvent) &&
-                                     (aEvent.State == ::com::sun::star::frame::DispatchResultState::SUCCESS)
-                                    );
-                rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
-            }
+            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
+            Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
+            Sequence < beans::PropertyValue > aSeq;
+            if ( rReq.GetArgs() )
+                TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
+            Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+            frame::DispatchResultEvent aEvent;
+            sal_Bool bSuccess = (aResult >>= aEvent) &&
+                                (aEvent.State == frame::DispatchResultState::SUCCESS);
+            rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
         }
         break;
 
@@ -1403,26 +1398,19 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case FN_BUSINESS_CARD :
         case FN_XFORMS_INIT :
         {
-            Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
             Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            Reference< com::sun::star::frame::XDispatchProvider > xProv(
-                xORB->createInstance( ::rtl::OUString("com.sun.star.text.ModuleDispatcher")), UNO_QUERY );
+            Reference< frame::XDispatchProvider > xProv = text::ModuleDispatcher::create( xContext );
 
-            if ( xProv.is() )
-            {
-                ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
-                Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
-                Sequence < com::sun::star::beans::PropertyValue > aSeq;
-                if ( rReq.GetArgs() )
-                    TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
-                Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
-                ::com::sun::star::frame::DispatchResultEvent aEvent;
-                sal_Bool bSuccess = (
-                                     (aResult >>= aEvent) &&
-                                     (aEvent.State == ::com::sun::star::frame::DispatchResultState::SUCCESS)
-                                    );
-                rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
-            }
+            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
+            Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
+            Sequence < beans::PropertyValue > aSeq;
+            if ( rReq.GetArgs() )
+                TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
+            Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+            frame::DispatchResultEvent aEvent;
+            sal_Bool bSuccess = (aResult >>= aEvent) &&
+                                (aEvent.State == frame::DispatchResultState::SUCCESS);
+            rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bSuccess ) );
         }
         break;
 
