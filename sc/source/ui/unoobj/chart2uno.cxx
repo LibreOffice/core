@@ -964,7 +964,8 @@ private:
         setRelative(aData.Ref1);
         setRelative(aData.Ref2);
 
-        // In XML, the end range must explicitly specify sheet name.
+        // In XML, the range must explicitly specify sheet name.
+        aData.Ref1.SetFlag3D(true);
         aData.Ref2.SetFlag3D(true);
 
         if (bExternal)
