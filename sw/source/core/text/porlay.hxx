@@ -397,19 +397,8 @@ inline void SwParaPortion::FormatReset()
     bFollowField = bFixLineHeight = bMargin = sal_False;
 }
 
-#ifdef UNX
-// The ternary expression is too much for the C30
-inline SwLinePortion *SwLineLayout::GetFirstPortion() const
-{
-    SwLinePortion *pTmp = pPortion;
-    if ( !pPortion )
-        pTmp = (SwLinePortion*)this;
-    return( pTmp );
-}
-#else
 inline SwLinePortion *SwLineLayout::GetFirstPortion() const
 { return( pPortion ? pPortion : (SwLinePortion*)this ); }
-#endif
 
 CLASSIO( SwLineLayout )
 CLASSIO( SwParaPortion )
