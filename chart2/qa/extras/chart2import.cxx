@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -73,6 +74,25 @@ void Chart2ImportTest::Fdo60083()
     Reference< beans::XPropertySet > xErrorBarYProps;
     xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
     CPPUNIT_ASSERT(xErrorBarYProps.is());
+    {
+        sal_Int32 nErrorBarStyle;
+        xErrorBarYProps->getPropertyValue("ErrorBarStyle") >>= nErrorBarStyle;
+        CPPUNIT_ASSERT_EQUAL(nErrorBarStyle, static_cast<sal_Int32>(chart::ErrorBarStyle::RELATIVE));
+
+        double nVal;
+        xErrorBarYProps->getPropertyValue("PositiveError") >>= nVal;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, nVal, 1e-8);
+
+        xErrorBarYProps->getPropertyValue("NegativeError") >>= nVal;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, nVal, 1e-8);
+
+        sal_Bool bVal;
+        xErrorBarYProps->getPropertyValue("ShowPositiveError") >>= bVal;
+        CPPUNIT_ASSERT_EQUAL(static_cast<bool>(bVal), true);
+
+        xErrorBarYProps->getPropertyValue("ShowNegativeError") >>= bVal;
+        CPPUNIT_ASSERT_EQUAL(static_cast<bool>(bVal), true);
+    }
 
     // test that x error bars are not imported
     Reference< beans::XPropertySet > xErrorBarXProps;
