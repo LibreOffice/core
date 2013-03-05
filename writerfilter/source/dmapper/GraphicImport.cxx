@@ -926,6 +926,14 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                             xGraphProps->setPropertyValue( rtl::OUString("Width"),
                                    uno::makeAny( aSize.Width ) );
 
+                            text::GraphicCrop aGraphicCrop( 0, 0, 0, 0 );
+                            uno::Reference< beans::XPropertySet > xSourceGraphProps( xShape, uno::UNO_QUERY );
+                            uno::Any aAny = xSourceGraphProps->getPropertyValue( rtl::OUString("GraphicCrop"));
+                            if(aAny >>= aGraphicCrop) {
+                                xGraphProps->setPropertyValue( rtl::OUString("GraphicCrop"),
+                                    uno::makeAny( aGraphicCrop ) );
+                            }
+
                             // We need to drop the shape here somehow
                             uno::Reference< lang::XComponent > xShapeComponent( xShape, uno::UNO_QUERY );
                             xShapeComponent->dispose( );
