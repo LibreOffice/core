@@ -659,9 +659,10 @@ bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
 {
     if( (nType & VCL_INPUT_TIMER) != 0 )
         return CheckTimeout( false );
-    // FIXME: ideally we should check our input queue here ...
-    LOGI("FIXME: AnyInput returns false");
-    return false;
+
+    // Unfortunately there is no way to check for a specific type of
+    // input being queued. That information is too hidden, sigh.
+    return SvpSalInstance::s_pDefaultInstance->PostedEventsInQueue();
 }
 
 class AndroidSalSystem : public SvpSalSystem {

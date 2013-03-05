@@ -96,6 +96,8 @@ public:
 
     void PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
 
+    bool PostedEventsInQueue();
+
     void StartTimer( sal_uLong nMS );
     void StopTimer();
     void Wakeup();
