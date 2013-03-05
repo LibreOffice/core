@@ -630,6 +630,12 @@ private:
     unsigned int m_postitFieldsMaxId;
     int m_anchorId;
     int m_nextFontId;
+    struct EmbeddedFontRef
+    {
+        OString relId;
+        OString fontKey;
+    };
+    std::map< OUString, EmbeddedFontRef > fontFilesMap; // font file url to data
 
     // Remember first cell (used for for default borders/margins) of each table
     std::vector<ww8::WW8TableNodeInfoInner::Pointer_t> tableFirstCells;
