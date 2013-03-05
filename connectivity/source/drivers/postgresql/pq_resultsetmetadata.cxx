@@ -88,8 +88,6 @@ using com::sun::star::sdbc::SQLException;
 using com::sun::star::sdbc::XStatement;
 using com::sun::star::sdbc::XRow;
 using com::sun::star::sdbc::XResultSet;
-// using com::sun::star::sdbc::XRow;
-using com::sun::star::sdbc::XResultSet;
 using com::sun::star::sdbcx::XColumnsSupplier;
 using com::sun::star::sdbcx::XTablesSupplier;
 

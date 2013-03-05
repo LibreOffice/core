@@ -64,7 +64,6 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::deployment::XPackageInformationProvider;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::sdbc::XResultSet;
-    using ::com::sun::star::sdbc::XRow;
     using ::com::sun::star::ucb::XCommandEnvironment;
     /** === end UNO using === **/
     //==================================================================================================================

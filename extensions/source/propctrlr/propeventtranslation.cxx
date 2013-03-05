@@ -34,7 +34,6 @@ namespace pcr
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::NullPointerException;
     /** === end UNO using === **/

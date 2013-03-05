@@ -61,7 +61,6 @@ namespace toolkit
     using ::com::sun::star::util::XCloneable;
     using ::com::sun::star::i18n::XCollator;
     using ::com::sun::star::i18n::Collator;
-    using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::awt::grid::GridDataEvent;
     using ::com::sun::star::lang::EventObject;

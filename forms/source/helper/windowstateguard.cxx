@@ -39,7 +39,6 @@ namespace frm
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
     /** === end UNO using === **/

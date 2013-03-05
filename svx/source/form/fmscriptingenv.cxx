@@ -52,7 +52,6 @@ namespace svxform
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::script::XScriptListener;
     using ::com::sun::star::script::ScriptEvent;
-    using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::reflection::InvocationTargetException;
     using ::com::sun::star::uno::Any;
@@ -64,7 +63,6 @@ namespace svxform
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::beans::XPropertySet;
     /** === end UNO using === **/

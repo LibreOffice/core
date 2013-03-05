@@ -105,7 +105,6 @@ using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::comphelper::MediaDescriptor;
-using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;
 
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()

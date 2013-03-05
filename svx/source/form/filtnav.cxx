@@ -95,7 +95,6 @@ namespace svxform
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::util::XNumberFormatsSupplier;
-    using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::util::XNumberFormatter2;
     using ::com::sun::star::util::NumberFormatter;

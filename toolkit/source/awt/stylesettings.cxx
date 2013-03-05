@@ -51,7 +51,6 @@ namespace toolkit
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::awt::FontDescriptor;
     using ::com::sun::star::awt::XStyleChangeListener;
-    using ::com::sun::star::awt::FontDescriptor;
     /** === end UNO using === **/
 
     //==================================================================================================================

@@ -57,7 +57,6 @@ namespace dbaui
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;

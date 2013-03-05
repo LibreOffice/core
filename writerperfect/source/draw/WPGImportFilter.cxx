@@ -41,8 +41,6 @@ using com::sun::star::io::XSeekable;
 using com::sun::star::uno::Sequence;
 using namespace ::rtl;
 using rtl::OUString;
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::XInterface;
@@ -51,8 +49,6 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::document::XFilter;
 using com::sun::star::document::XExtendedFilterDetection;
-
-using com::sun::star::io::XInputStream;
 using com::sun::star::document::XImporter;
 using com::sun::star::xml::sax::InputSource;
 using com::sun::star::xml::sax::XAttributeList;

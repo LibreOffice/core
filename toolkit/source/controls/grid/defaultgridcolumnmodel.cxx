@@ -42,7 +42,6 @@ namespace toolkit
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::awt::grid::XGridColumn;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::container::XContainerListener;

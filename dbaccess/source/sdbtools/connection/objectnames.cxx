@@ -53,7 +53,6 @@ namespace sdbtools
     using ::com::sun::star::sdbc::XDatabaseMetaData;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::sdbc::XDatabaseMetaData;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdbcx::XTablesSupplier;
     using ::com::sun::star::sdb::XQueriesSupplier;

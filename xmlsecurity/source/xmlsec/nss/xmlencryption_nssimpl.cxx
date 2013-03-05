@@ -54,7 +54,6 @@ using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLEncryption ;
 using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
-using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XMLEncryptionException ;
 
 XMLEncryption_NssImpl :: XMLEncryption_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) {

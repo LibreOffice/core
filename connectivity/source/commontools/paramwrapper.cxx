@@ -38,7 +38,6 @@ namespace param
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::sdbc::XParameters;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;

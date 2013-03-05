@@ -52,7 +52,6 @@ namespace comphelper {
     using ::com::sun::star::document::XDocumentProperties;
     using ::com::sun::star::frame::XStorable;
     using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::frame::XTitle;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::frame::XFrame;
     /** === end UNO using === **/

@@ -110,7 +110,6 @@ using namespace ::svxform;
     using ::com::sun::star::form::binding::XBindableValue;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::container::XIndexAccess;
-    using ::com::sun::star::form::XForm;
     using ::com::sun::star::form::runtime::FormController;
     using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::script::XEventAttacherManager;

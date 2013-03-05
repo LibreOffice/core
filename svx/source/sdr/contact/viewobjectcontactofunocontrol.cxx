@@ -137,7 +137,6 @@ namespace sdr { namespace contact {
     using ::com::sun::star::util::ModeChangeEvent;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::beans::PropertyChangeEvent;
-    using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::container::XContainerListener;
     using ::com::sun::star::container::XContainer;
     using ::com::sun::star::container::ContainerEvent;

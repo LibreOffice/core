@@ -54,7 +54,6 @@ namespace comphelper
     using ::com::sun::star::uno::cpp_release;
     using ::com::sun::star::uno::cpp_queryInterface;
     using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
     /** === end UNO using === **/
 

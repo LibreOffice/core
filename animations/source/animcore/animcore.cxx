@@ -72,7 +72,6 @@ using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::lang::NoSupportException;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::WrappedTargetException;
-using ::com::sun::star::lang::NoSupportException;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::lang::XTypeProvider;
 using ::com::sun::star::container::NoSuchElementException;
