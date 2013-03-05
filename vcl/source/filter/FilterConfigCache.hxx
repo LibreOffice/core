@@ -89,6 +89,7 @@ public:
     sal_uInt16  GetImportFormatNumberForMediaType( const String& rMediaType );
     sal_uInt16  GetImportFormatNumberForShortName( const String& rShortName );
     sal_uInt16  GetImportFormatNumberForTypeName( const String& rType );
+    sal_uInt16  GetImportFormatNumberForExtension( const String& rExt );
     String      GetImportFilterName( sal_uInt16 nFormat );
     String      GetImportFormatName( sal_uInt16 nFormat );
     String      GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);

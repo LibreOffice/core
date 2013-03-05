@@ -333,6 +333,22 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumber( const String& rFormatName )
     return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
 }
 
+/// get the index of the filter that matches this extension
+sal_uInt16 FilterConfigCache::GetImportFormatNumberForExtension( const String& rExt )
+{
+    CacheVector::iterator aIter( aImport.begin() );
+    while ( aIter != aImport.end() )
+    {
+        for ( sal_Int32 i = 0; i < aIter->lExtensionList.getLength(); i++ )
+        {
+            if ( aIter->lExtensionList[i].equalsIgnoreAsciiCase( rExt ) )
+                return sal::static_int_cast< sal_uInt16 >( aIter - aImport.begin() );
+        }
+        aIter++;
+    }
+    return GRFILTER_FORMAT_NOTFOUND;
+}
+
 sal_uInt16 FilterConfigCache::GetImportFormatNumberForMediaType( const String& rMediaType )
 {
     CacheVector::iterator aIter( aImport.begin() );

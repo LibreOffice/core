@@ -787,8 +787,6 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
 
 sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rStream, sal_uInt16& rFormat )
 {
-    sal_uInt16 n = pConfig->GetImportFormatCount();
-
     // ggf. Filter bzw. Format durch anlesen ermitteln,
     // oder durch anlesen zusichern, dass das Format stimmt:
     if( rFormat == GRFILTER_FORMAT_DONTKNOW )
@@ -796,27 +794,17 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
         String aFormatExt;
         if( ImpPeekGraphicFormat( rStream, aFormatExt, sal_False ) )
         {
-            for( sal_uInt16 i = 0; i < n; i++ )
-            {
-                if( pConfig->GetImportFormatExtension( i ).EqualsIgnoreCaseAscii( aFormatExt ) )
-                {
-                    rFormat = i;
-                    return GRFILTER_OK;
-                }
-            }
+            rFormat = pConfig->GetImportFormatNumberForExtension( aFormatExt );
+            if( rFormat != GRFILTER_FORMAT_DONTKNOW )
+                return GRFILTER_OK;
         }
         // ggf. Filter anhand der Datei-Endung raussuchen:
         if( rPath.Len() )
         {
             String aExt( ImpGetExtension( rPath ) );
-            for( sal_uInt16 i = 0; i < n; i++ )
-            {
-                if( pConfig->GetImportFormatExtension( i ).EqualsIgnoreCaseAscii( aExt ) )
-                {
-                    rFormat = i;
-                    return GRFILTER_OK;
-                }
-            }
+            rFormat = pConfig->GetImportFormatNumberForExtension( aExt );
+            if( rFormat != GRFILTER_FORMAT_DONTKNOW )
+                return GRFILTER_OK;
         }
         return GRFILTER_FORMATERROR;
     }
