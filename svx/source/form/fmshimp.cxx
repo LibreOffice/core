@@ -1516,7 +1516,7 @@ void FmXFormShell::ExecuteSearch()
     // eine Sammlung aller (logischen) Formulare
     FmFormArray aEmpty;
     m_aSearchForms.swap( aEmpty );
-    ::std::vector< String > aContextNames;
+    ::std::vector< OUString > aContextNames;
     impl_collectFormSearchContexts_nothrow( m_pShell->GetCurPage()->GetForms(), ::rtl::OUString(), m_aSearchForms, aContextNames );
     OSL_POSTCOND( m_aSearchForms.size() == aContextNames.size(),
         "FmXFormShell::ExecuteSearch: nonsense!" );
@@ -1526,9 +1526,9 @@ void FmXFormShell::ExecuteSearch()
     // filter out the forms which do not contain valid controls at all
     {
         FmFormArray aValidForms;
-        ::std::vector< String > aValidContexts;
+        ::std::vector< OUString > aValidContexts;
         FmFormArray::const_iterator form = m_aSearchForms.begin();
-        ::std::vector< String >::const_iterator contextName = aContextNames.begin();
+        ::std::vector< OUString >::const_iterator contextName = aContextNames.begin();
         for ( ; form != m_aSearchForms.end(); ++form, ++contextName )
         {
             FmSearchContext aTestContext;
@@ -2949,7 +2949,7 @@ Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlMod
 
 //------------------------------------------------------------------------------
 void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInterface>& _rxStartingPoint,
-    const ::rtl::OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< String >& _out_rNames )
+    const ::rtl::OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< OUString >& _out_rNames )
 {
     try
     {

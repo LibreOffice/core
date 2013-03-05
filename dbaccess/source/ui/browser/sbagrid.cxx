@@ -129,24 +129,24 @@ Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiS
 //=======================================================================================
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SbaXGridControl::getImplementationName() throw()
+OUString SAL_CALL SbaXGridControl::getImplementationName() throw()
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException )
+OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dbu.SbaXGridControl"));
+    return OUString("com.sun.star.comp.dbu.SbaXGridControl");
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSupported(3);
-    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.control.InteractionGridControl"));
-    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.control.GridControl"));
-    aSupported[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControl"));
+    Sequence< OUString> aSupported(3);
+    aSupported[0] = OUString("com.sun.star.form.control.InteractionGridControl");
+    aSupported[1] = OUString("com.sun.star.form.control.GridControl");
+    aSupported[2] = OUString("com.sun.star.awt.UnoControl");
     return aSupported;
 }
 DBG_NAME(SbaXGridControl );
@@ -394,7 +394,7 @@ Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeExce
 }
 
 //---------------------------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
+Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     if  (   ( aURL.Complete == ".uno:GridSlots/BrowserAttribs" ) || ( aURL.Complete == ".uno:GridSlots/RowHeight" )
         ||  ( aURL.Complete == ".uno:GridSlots/ColumnAttribs" )  || ( aURL.Complete == ".uno:GridSlots/ColumnWidth" )
@@ -480,17 +480,17 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     const PropertyValue* pArgs = aArgs.getConstArray();
     for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
     {
-        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnViewPos")))
+        if (pArgs->Name == OUString("ColumnViewPos"))
         {
             nColId = pGrid->GetColumnIdFromViewPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnModelPos")))
+        if (pArgs->Name == OUString("ColumnModelPos"))
         {
             nColId = pGrid->GetColumnIdFromModelPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnId")))
+        if (pArgs->Name == OUString("ColumnId"))
         {
             nColId = ::comphelper::getINT16(pArgs->Value);
             break;
@@ -953,18 +953,18 @@ void SbaGridControl::SetBrowserAttrs()
     try
     {
         PropertyValue aArg;
-        aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IntrospectedObject"));
+        aArg.Name = OUString("IntrospectedObject");
         aArg.Value <<= xGridModel;
         Sequence< Any > aDialogArgs(1);
         aDialogArgs[0] <<= aArg;
 
         Reference< XInterface > xDialog = getServiceManager()->createInstanceWithArguments(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.ControlFontDialog")),
+            OUString("com.sun.star.form.ControlFontDialog"),
             aDialogArgs
             );
         if (!xDialog.is())
         {
-            ShowServiceNotAvailableError(this, rtl::OUString("com.sun.star.form.ControlFontDialog"), sal_True);
+            ShowServiceNotAvailableError(this, OUString("com.sun.star.form.ControlFontDialog"), sal_True);
             return;
         }
 
@@ -1239,7 +1239,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     Reference< XConnection > xActiveConnection;
 
     // determine the field to drag
-    ::rtl::OUString sField;
+    OUString sField;
     try
     {
         xActiveConnection = ::dbtools::getConnection(Reference< XRowSet >(getDataSource(),UNO_QUERY));
@@ -1324,7 +1324,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     // the old implementation copied a SBA_FIELDDATAEXCHANGE_FORMAT, too, (which was rather expensive to obtain),
     // but we have no client for this DnD format anymore (the mail part of SO 5.2 was the only client)
 
-    ::rtl::OUString sCellText;
+    OUString sCellText;
     try
     {
         Reference< XGridFieldDataSupplier >  xFieldData(static_cast< XGridPeer* >(GetPeer()), UNO_QUERY);
@@ -1500,7 +1500,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
         // get the dropped string
         TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
-        String sDropped;
+        OUString sDropped;
         if ( !aDropped.GetString( FORMAT_STRING, sDropped ) )
             return DND_ACTION_NONE;
 
@@ -1564,7 +1564,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
             BeforeDrop();
             if(!pImExport->Read())
             {
-                String sError = String(ModuleRes(STR_NO_COLUMNNAME_MATCHING));
+                OUString sError = OUString(ModuleRes(STR_NO_COLUMNNAME_MATCHING));
                 throwGenericSQLException(sError,NULL);
             }
             AfterDrop();
@@ -1590,13 +1590,13 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
     return 0L;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SbaGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
+OUString SbaGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     if ( ::svt::BBTYPE_BROWSEBOX == eObjType )
     {
         SolarMutexGuard aGuard;
-        sRet = String(ModuleRes(STR_DATASOURCE_GRIDCONTROL_DESC));
+        sRet = OUString(ModuleRes(STR_DATASOURCE_GRIDCONTROL_DESC));
     }
     else
         sRet = FmGridControl::GetAccessibleObjectDescription( eObjType,_nPosition);

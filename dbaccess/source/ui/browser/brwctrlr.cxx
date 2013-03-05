@@ -222,10 +222,10 @@ public:
     virtual void SAL_CALL removeParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XModeSelector, base of XFormController
-    virtual void SAL_CALL setMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException);
 
     // XTabController, base of XFormController
     virtual void SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( ::com::sun::star::uno::RuntimeException );
@@ -296,7 +296,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListe
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& /*_ChildController*/ ) throw( RuntimeException, IllegalArgumentException )
 {
     // not supported
-    throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+    throw IllegalArgumentException( OUString(), *this, 1 );
 }
 
 //------------------------------------------------------------------
@@ -335,7 +335,7 @@ Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& /*Parent*/ ) throw (NoSupportException, RuntimeException)
 {
-    throw NoSupportException( ::rtl::OUString(), *this );
+    throw NoSupportException( OUString(), *this );
 }
 
 //------------------------------------------------------------------
@@ -367,7 +367,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener
 Any SAL_CALL SbaXDataBrowserController::FormControllerImpl::getByIndex( ::sal_Int32 /*Index*/ ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     // no sub controllers, never
-    throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+    throw IndexOutOfBoundsException( OUString(), *this );
 }
 
 //------------------------------------------------------------------
@@ -462,28 +462,28 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeParameterList
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setMode( const ::rtl::OUString& _rMode ) throw (NoSupportException, RuntimeException)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setMode( const OUString& _rMode ) throw (NoSupportException, RuntimeException)
 {
     if ( !supportsMode( _rMode ) )
         throw NoSupportException();
 }
 
 //------------------------------------------------------------------
-::rtl::OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  ) throw (RuntimeException)
+OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  ) throw (RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
+    return OUString( "DataMode" );
 }
 
 //------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aModes(1);
-    aModes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
+    Sequence< OUString > aModes(1);
+    aModes[1] = OUString( "DataMode" );
     return aModes;
 }
 
 //------------------------------------------------------------------
-::sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( const ::rtl::OUString& aMode ) throw (RuntimeException)
+::sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( const OUString& aMode ) throw (RuntimeException)
 {
     return aMode.compareToAscii( "DataMode" ) == 0;
 }
@@ -617,7 +617,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_aAsyncDisplayError( LINK( this, SbaXDataBrowserController, OnAsyncDisplayError ) )
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
-    ,m_sModuleIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DataSourceBrowser" ) ) )
+    ,m_sModuleIdentifier( OUString( "com.sun.star.sdb.DataSourceBrowser" ) )
     ,m_pFormControllerImpl(NULL)
     ,m_nFormActionNestingLevel(0)
     ,m_bLoadCanceled( sal_False )
@@ -734,9 +734,9 @@ sal_Bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _r
             for ( sal_Int32 c=0; c<nOrderColumns; ++c )
             {
                 const Reference< XPropertySet > xOrderColumn( xOrderColumns->getByIndex(c), UNO_QUERY_THROW );
-                ::rtl::OUString sColumnName;
+                OUString sColumnName;
                 OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName);
-                ::rtl::OUString sTableName;
+                OUString sTableName;
                 OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName);
                 (void)sColumnName;
                 (void)sTableName;
@@ -842,8 +842,8 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     // marry them
     Reference< ::com::sun::star::container::XNameContainer >  xNameCont(m_xRowSet, UNO_QUERY);
     {
-        String sText(ModuleRes(STR_DATASOURCE_GRIDCONTROL_NAME));
-        xNameCont->insertByName(::rtl::OUString(sText), makeAny(m_xGridModel));
+        OUString sText(ModuleRes(STR_DATASOURCE_GRIDCONTROL_NAME));
+        xNameCont->insertByName(OUString(sText), makeAny(m_xGridModel));
     }
 
     // ---------------
@@ -1180,7 +1180,7 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
 }
 
 // -----------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::setIdentifier( const ::rtl::OUString& _Identifier ) throw (RuntimeException)
+void SAL_CALL SbaXDataBrowserController::setIdentifier( const OUString& _Identifier ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::setIdentifier" );
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1188,7 +1188,7 @@ void SAL_CALL SbaXDataBrowserController::setIdentifier( const ::rtl::OUString& _
 }
 
 // -----------------------------------------------------------------------
-::rtl::OUString SAL_CALL SbaXDataBrowserController::getIdentifier(  ) throw (RuntimeException)
+OUString SAL_CALL SbaXDataBrowserController::getIdentifier(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::getIdentifier" );
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1499,7 +1499,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
             if (xParam.is())
             {
 #ifdef DBG_UTIL
-                ::rtl::OUString sName;
+                OUString sName;
                 xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
                 OSL_ENSURE(sName.equals(pFinalValues->Name), "SbaXDataBrowserController::approveParameter: suspicious value names!");
 #endif
@@ -1591,7 +1591,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts")) ) >>= bAllowInsertions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( OUString("AllowInserts") ) >>= bAllowInsertions );
                     }
                     catch( const Exception& )
                     {
@@ -1610,7 +1610,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes")) ) >>= bAllowDeletions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( OUString("AllowDeletes") ) >>= bAllowDeletions );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ROWCOUNT ) >>= nRowCount );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ISNEW ) >>= bInsertionRow );
                     }
@@ -1727,9 +1727,9 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     break;  // no datasource -> no edit mode
 
                 sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
-                sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts"))));
-                sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowUpdates"))));
-                sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes"))));
+                sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(OUString("AllowInserts")));
+                sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(OUString("AllowUpdates")));
+                sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(OUString("AllowDeletes")));
                 if (!bInsertAllowedAndPossible && !bUpdateAllowedAndPossible && !bDeleteAllowedAndPossible)
                     break;  // no insert/update/delete -> no edit mode
 
@@ -1746,8 +1746,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             {
                 aReturn.bEnabled = sal_False;
                 Reference< XPropertySet >  xActiveSet(getRowSet(), UNO_QUERY);
-                ::rtl::OUString aFilter = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_FILTER));
-                ::rtl::OUString aHaving = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_HAVING_CLAUSE));
+                OUString aFilter = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_FILTER));
+                OUString aHaving = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_HAVING_CLAUSE));
                 if ( !(aFilter.isEmpty() && aHaving.isEmpty()) )
                 {
                     xActiveSet->getPropertyValue( PROPERTY_APPLYFILTER ) >>= aReturn.bChecked;
@@ -1773,7 +1773,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrder,const Reference< XSingleSelectQueryComposer >& _xParser)
+void SbaXDataBrowserController::applyParserOrder(const OUString& _rOldOrder,const Reference< XSingleSelectQueryComposer >& _xParser)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::applyParserOrder" );
     Reference< XPropertySet > xFormSet(getRowSet(), UNO_QUERY);
@@ -1815,7 +1815,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving,const Reference< XSingleSelectQueryComposer >& _xParser)
+void SbaXDataBrowserController::applyParserFilter(const OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::OUString& _sOldHaving,const Reference< XSingleSelectQueryComposer >& _xParser)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::applyParserFilter" );
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -1874,7 +1874,7 @@ Reference< XSingleSelectQueryComposer > SbaXDataBrowserController::createParser_
             xRowSetProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ), UNO_QUERY_THROW );
         xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
 
-        ::rtl::OUString sActiveCommand;
+        OUString sActiveCommand;
         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sActiveCommand );
         if ( !sActiveCommand.isEmpty() )
         {
@@ -1882,22 +1882,22 @@ Reference< XSingleSelectQueryComposer > SbaXDataBrowserController::createParser_
         }
         else
         {
-            ::rtl::OUString sCommand;
+            OUString sCommand;
             OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand );
             sal_Int32 nCommandType = CommandType::COMMAND;
             OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_COMMAND_TYPE ) >>= nCommandType );
             xComposer->setCommand( sCommand, nCommandType );
         }
 
-        ::rtl::OUString sFilter;
+        OUString sFilter;
         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_FILTER ) >>= sFilter );
         xComposer->setFilter( sFilter );
 
-        ::rtl::OUString sHavingClause;
+        OUString sHavingClause;
         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_HAVING_CLAUSE ) >>= sHavingClause );
         xComposer->setHavingClause( sHavingClause );
 
-        ::rtl::OUString sOrder;
+        OUString sOrder;
         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ORDER ) >>= sOrder );
         xComposer->setOrder( sOrder );
     }
@@ -1916,8 +1916,8 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
 
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
 
-    const ::rtl::OUString sOldVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
-    const ::rtl::OUString sOldHaving = m_xParser->getHavingClause();
+    const OUString sOldVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
+    const OUString sOldHaving = m_xParser->getHavingClause();
     Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
     try
     {
@@ -1951,14 +1951,14 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         return;
     }
 
-    ::rtl::OUString sNewVal = bFilter ? xParser->getFilter() : xParser->getOrder();
+    OUString sNewVal = bFilter ? xParser->getFilter() : xParser->getOrder();
     sal_Bool bOldFilterApplied(sal_False);
     if (bFilter)
     {
         try { bOldFilterApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER)); } catch(Exception&) { } ;
     }
 
-    ::rtl::OUString sNewHaving = xParser->getHavingClause();
+    OUString sNewHaving = xParser->getHavingClause();
     if ( sOldVal.equals(sNewVal) && (!bFilter || sOldHaving.equals(sNewHaving)) )
         // nothing to be done
         return;
@@ -1987,22 +1987,22 @@ void SbaXDataBrowserController::ExecuteSearch()
     sal_Int16 nModelCol = getBrowserView()->View2ModelPos(nViewCol);
 
     Reference< XPropertySet >  xCurrentCol(xColumns->getByIndex(nModelCol),UNO_QUERY);
-    String sActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
+    OUString sActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
     // the text within the current cell
-    String sInitialText;
+    OUString sInitialText;
     Reference< ::com::sun::star::container::XIndexAccess >  xColControls(xGridPeer, UNO_QUERY);
     Reference< XInterface >  xCurControl(xColControls->getByIndex(nViewCol),UNO_QUERY);
-    ::rtl::OUString aInitialText;
+    OUString aInitialText;
     if (IsSearchableControl(xCurControl, &aInitialText))
         sInitialText = aInitialText;
 
     // prohibit the synchronization of the grid's display with the cursor's position
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), makeAny(sal_Int32(COL_LIGHTRED)));
+    xModelSet->setPropertyValue(OUString("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
+    xModelSet->setPropertyValue(OUString("AlwaysShowCursor"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(OUString("CursorColor"), makeAny(sal_Int32(COL_LIGHTRED)));
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, getORB()));
 
@@ -2010,8 +2010,8 @@ void SbaXDataBrowserController::ExecuteSearch()
     AbstractFmSearchDialog* pDialog = NULL;
     if ( pFact )
     {
-        ::std::vector< String > aContextNames;
-        aContextNames.push_back( rtl::OUString("Standard") );
+        ::std::vector< OUString > aContextNames;
+        aContextNames.push_back( OUString("Standard") );
         pDialog = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, aContextNames, 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest));
     }
     OSL_ENSURE( pDialog, "SbaXDataBrowserController::ExecuteSearch: could not get the search dialog!" );
@@ -2025,9 +2025,9 @@ void SbaXDataBrowserController::ExecuteSearch()
     }
 
     // restore the grid's normal operating state
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), Any());
+    xModelSet->setPropertyValue(OUString("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(OUString("AlwaysShowCursor"), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
+    xModelSet->setPropertyValue(OUString("CursorColor"), Any());
 }
 
 //------------------------------------------------------------------------------
@@ -2161,10 +2161,10 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 break;
 
             Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
-            const ::rtl::OUString sOldSort = xParser->getOrder();
+            const OUString sOldSort = xParser->getOrder();
             sal_Bool bParserSuccess = sal_False;
             HANDLE_SQL_ERRORS(
-                xParser->setOrder(::rtl::OUString()); xParser->appendOrderByColumn(xField, bSortUp),
+                xParser->setOrder(OUString()); xParser->appendOrderByColumn(xField, bSortUp),
                 bParserSuccess,
                 ModuleRes(SBA_BROWSER_SETTING_ORDER).toString(),
                 "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
@@ -2189,21 +2189,21 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
             // check if the column is a aggregate function
             sal_Bool bHaving = sal_False;
-            ::rtl::OUString sName;
+            OUString sName;
             xField->getPropertyValue(PROPERTY_NAME) >>= sName;
             Reference< XColumnsSupplier > xColumnsSupplier(m_xParser, UNO_QUERY);
             Reference< ::com::sun::star::container::XNameAccess >  xCols = xColumnsSupplier.is() ? xColumnsSupplier->getColumns() : Reference< ::com::sun::star::container::XNameAccess > ();
             if ( xCols.is() && xCols->hasByName(sName) )
             {
                 Reference<XPropertySet> xProp(xCols->getByName(sName),UNO_QUERY);
-                static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
+                static OUString sAgg("AggregateFunction");
                 if ( xProp->getPropertySetInfo()->hasPropertyByName(sAgg) )
                     xProp->getPropertyValue(sAgg) >>= bHaving;
             }
 
             Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
-            const ::rtl::OUString sOldFilter = xParser->getFilter();
-            const ::rtl::OUString sOldHaving = xParser->getHavingClause();
+            const OUString sOldFilter = xParser->getFilter();
+            const OUString sOldHaving = xParser->getHavingClause();
 
             Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
             sal_Bool bApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER));
@@ -2211,7 +2211,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             // -> completely overwrite it, else append one
             if (!bApplied)
             {
-                DO_SAFE( (bHaving ? xParser->setHavingClause(::rtl::OUString()) : xParser->setFilter(::rtl::OUString())), "SbaXDataBrowserController::Execute : caught an exception while resetting the new filter !" );
+                DO_SAFE( (bHaving ? xParser->setHavingClause(OUString()) : xParser->setFilter(::OUString())), "SbaXDataBrowserController::Execute : caught an exception while resetting the new filter !" );
             }
 
             sal_Bool bParserSuccess = sal_False;
@@ -2265,9 +2265,9 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             Reference< XPropertySet >  xSet(getRowSet(), UNO_QUERY);
             if ( xSet.is() )
             {
-                xSet->setPropertyValue(PROPERTY_FILTER,makeAny(::rtl::OUString()));
-                xSet->setPropertyValue(PROPERTY_HAVING_CLAUSE,makeAny(::rtl::OUString()));
-                xSet->setPropertyValue(PROPERTY_ORDER,makeAny(::rtl::OUString()));
+                xSet->setPropertyValue(PROPERTY_FILTER,makeAny(OUString()));
+                xSet->setPropertyValue(PROPERTY_HAVING_CLAUSE,makeAny(OUString()));
+                xSet->setPropertyValue(PROPERTY_ORDER,makeAny(OUString()));
             }
             try
             {
@@ -2520,7 +2520,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
         // the case 'no columns' should be indicated with an empty container, I think ...
     OSL_ENSURE(xModelColumns->getCount() >= xPeerContainer->getCount(), "SbaXDataBrowserController::OnSearchContextRequest : impossible : have more view than model columns !");
 
-    String sFieldList;
+    OUString sFieldList;
     for (sal_Int32 nViewPos=0; nViewPos<xPeerContainer->getCount(); ++nViewPos)
     {
         Reference< XInterface >  xCurrentColumn(xPeerContainer->getByIndex(nViewPos),UNO_QUERY);
@@ -2533,10 +2533,9 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
 
         sal_uInt16 nModelPos = getBrowserView()->View2ModelPos((sal_uInt16)nViewPos);
         Reference< XPropertySet >  xCurrentColModel(xModelColumns->getByIndex(nModelPos),UNO_QUERY);
-        String aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
+        OUString aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
-        sFieldList += aName;
-        sFieldList += ';';
+        sFieldList += aName + ";";
 
         pContext->arrFields.push_back(xCurrentColumn);
     }
@@ -2569,9 +2568,9 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     // let the grid snyc it's display with the cursor
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
-    Any aOld = xModelSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), aOld);
+    Any aOld = xModelSet->getPropertyValue(OUString("DisplayIsSynchron"));
+    xModelSet->setPropertyValue(OUString("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(OUString("DisplayIsSynchron"), aOld);
 
     // and move to the field
     Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
@@ -2616,9 +2615,9 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
         // let the grid snyc its display with the cursor
         Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
         OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnCanceledNotFound : no model set ?!");
-        Any aOld = xModelSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")));
-        xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-        xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), aOld);
+        Any aOld = xModelSet->getPropertyValue(OUString("DisplayIsSynchron"));
+        xModelSet->setPropertyValue(OUString("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+        xModelSet->setPropertyValue(OUString("DisplayIsSynchron"), aOld);
     }
     catch( const Exception& )
     {

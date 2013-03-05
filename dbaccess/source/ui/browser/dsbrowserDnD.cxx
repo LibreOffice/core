@@ -68,8 +68,8 @@ namespace dbaui
     {
         try
         {
-            ::rtl::OUString aName = GetEntryText( _pApplyTo );
-            ::rtl::OUString aDSName = getDataSourceAcessor( m_pTreeView->getListBox().GetRootLevelParent( _pApplyTo ) );
+            OUString aName = GetEntryText( _pApplyTo );
+            OUString aDSName = getDataSourceAcessor( m_pTreeView->getListBox().GetRootLevelParent( _pApplyTo ) );
 
             ODataClipboard* pData = NULL;
             SharedConnection xConnection;
@@ -146,7 +146,7 @@ namespace dbaui
         m_aAsyncDrop.bError         = sal_False;
         m_aAsyncDrop.bHtml          = sal_False;
         m_aAsyncDrop.pDroppedAt     = NULL;
-        m_aAsyncDrop.aUrl           = ::rtl::OUString();
+        m_aAsyncDrop.aUrl           = OUString();
 
 
         // loop through the available formats and see what we can do ...
