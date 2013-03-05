@@ -38,7 +38,6 @@ module com { module sun { module star { module ui { module dialogs {
 
 published service FilePicker : XFilePicker3
 {
-    createDefault();
 
     /** Provides the ability to choose between different custom templates that
         do extend the subset of common controls a FilePicker usually supports.

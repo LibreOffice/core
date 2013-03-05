@@ -21,6 +21,7 @@
 // this file contains code from filectrl.cxx which needs to be compiled with enabled exception hanling
 #include <svtools/filectrl.hxx>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.h>
@@ -37,7 +38,7 @@ void FileControl::ImplBrowseFile( )
         XubString aNewText;
 
         Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-        Reference < dialogs::XFilePicker3 > xFilePicker = dialogs::FilePicker::createDefault( xContext );
+        Reference < dialogs::XFilePicker3 > xFilePicker = dialogs::FilePicker::createWithMode( xContext, dialogs::TemplateDescription::FILEOPEN_SIMPLE );
         // transform the system notation text into a file URL
         ::rtl::OUString sSystemNotation = GetText(), sFileURL;
         oslFileError nError = osl_getFileURLFromSystemPath( sSystemNotation.pData, &sFileURL.pData );
