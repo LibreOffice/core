@@ -22,11 +22,7 @@
 
 #ifndef _PORTXT_HXX
 #define _PORTXT_HXX
-#ifdef GCC
-#include <sys/types.h>
-#else
-#include <new.h>    //fuer size_t, FIXEDMEM aus tools
-#endif
+
 #include <tools/mempool.hxx>
 
 #include "porlin.hxx"
