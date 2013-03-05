@@ -405,7 +405,7 @@ findunusedcode:
 check: dev-install subsequentcheck
 
 dump-deps:
-	$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild
+	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild
 
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
 	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
