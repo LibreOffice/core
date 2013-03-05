@@ -386,7 +386,7 @@ Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
     if ( pControl->GetStyle() & WB_EXTRAOFFSET )
         aSize.Width() += 2;
 
-    // GetTextRect cannot take and empty string
+    // GetTextRect cannot take an empty string
     if ( aSize.Width() < 0 )
         aSize.Width() = 0;
     if ( aSize.Height() <= 0 )

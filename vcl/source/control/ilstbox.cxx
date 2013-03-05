@@ -199,7 +199,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
             // defined values are {-1, 0, 1} which is compatible with StringCompare
             StringCompare eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
 
-            // Schnelles Einfuegen bei sortierten Daten
+            // fast insert for sorted data
             if ( eComp != COMPARE_LESS )
             {
                 insPos = maEntries.size();
@@ -218,7 +218,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
                 }
                 else
                 {
-                    // Binaeres Suchen
+                    // binary search
                     nHigh--;
                     do
                     {
@@ -298,7 +298,7 @@ sal_uInt16 ImplEntryList::FindMatchingEntry( const XubString& rStr, sal_uInt16 n
     sal_uInt16  nPos = LISTBOX_ENTRY_NOTFOUND;
     sal_uInt16  nEntryCount = GetEntryCount();
     if ( !bForward )
-        nStart++;   // wird sofort dekrementiert
+        nStart++;   // decrements right away
 
     const vcl::I18nHelper& rI18nHelper = mpWindow->GetSettings().GetLocaleI18nHelper();
     for ( sal_uInt16 n = nStart; bForward ? ( n < nEntryCount ) : n; )
@@ -738,8 +738,8 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 
     if ( !aMetrics.bText && !aMetrics.bImage && !IsUserDrawEnabled() )
     {
-        // entries which have no (aka an empty) text, and no image, and are not user-drawn, should be
-        // shown nonetheless
+        // entries which have no (aka an empty) text, and no image,
+        // and are not user-drawn, should be shown nonetheless
         aMetrics.nEntryHeight = mnTextHeight + mnBorder;
     }
 
@@ -912,7 +912,7 @@ sal_uInt16 ImplListBoxWindow::GetLastVisibleEntry() const
 
 void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    mbMouseMoveSelect = sal_False;  // Nur bis zum ersten MouseButtonDown
+    mbMouseMoveSelect = sal_False;  // only till the first MouseButtonDown
     maQuickSelectionEngine.Reset();
 
     if ( !IsReadOnly() )
@@ -1005,8 +1005,8 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 }
             }
 
-            // Falls der DD-Button gedrueckt wurde und jemand mit gedrueckter
-            // Maustaste in die ListBox faehrt...
+            // if the DD button was pressed and someone moved into the ListBox
+            // with the mouse button pressed...
             if ( rMEvt.IsLeft() && !rMEvt.IsSynthetic() )
             {
                 if ( !mbMulti && GetEntryList()->GetSelectEntryCount() )
@@ -1045,7 +1045,7 @@ void ImplListBoxWindow::SelectEntry( sal_uInt16 nPos, sal_Bool bSelect )
         {
             if( !mbMulti )
             {
-                // Selektierten Eintrag deselektieren
+                // deselect the selected entry
                 sal_uInt16 nDeselect = GetEntryList()->GetSelectEntryPos( 0 );
                 if( nDeselect != LISTBOX_ENTRY_NOTFOUND )
                 {
@@ -1094,7 +1094,7 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
 
     if( IsEnabled() && mpEntryList->IsEntrySelectable( nSelect ) )
     {
-        // Hier (Single-ListBox) kann nur ein Eintrag deselektiert werden
+        // here (Single-ListBox) only one entry can be deselected
         if( !mbMulti )
         {
             sal_uInt16 nDeselect = mpEntryList->GetSelectEntryPos( 0 );
@@ -1106,7 +1106,7 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
                 bSelectionChanged = sal_True;
             }
         }
-        // MultiListBox ohne Modifier
+        // MultiListBox without Modifier
         else if( mbSimpleMode && !bCtrl && !bShift )
         {
             sal_uInt16 nEntryCount = mpEntryList->GetEntryCount();
@@ -1123,10 +1123,10 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
             mpEntryList->SetLastSelected( nSelect );
             mpEntryList->SetSelectionAnchor( nSelect );
         }
-        // MultiListBox nur mit CTRL/SHIFT oder nicht im SimpleMode
+        // MultiListBox only with CTRL/SHIFT or not in SimpleMode
         else if( ( !mbSimpleMode /* && !bShift */ ) || ( (mbSimpleMode && ( bCtrl || bShift )) || mbStackMode ) )
         {
-            // Space fuer Selektionswechsel
+            // Space for selection change
             if( !bShift && ( ( eLET == LET_KEYSPACE ) || ( eLET == LET_MBDOWN ) ) )
             {
                 sal_Bool bSelect = ( mbStackMode && IsMouseMoveSelect() ) ? sal_True : !mpEntryList->IsEntryPosSelected( nSelect );
@@ -1166,7 +1166,7 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
                 }
                 if( nAnchor != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    // Alle Eintraege vom Anchor bis nSelect muessen selektiert sein
+                    // All entries from achor to nSelect have to be selected
                     sal_uInt16 nStart = Min( nSelect, nAnchor );
                     sal_uInt16 nEnd = Max( nSelect, nAnchor );
                     for ( sal_uInt16 n = nStart; n <= nEnd; n++ )
@@ -1178,7 +1178,7 @@ sal_Bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLE
                         }
                     }
 
-                    // Ggf. muss noch was deselektiert werden...
+                    // if appropriate some more has to be deselected...
                     sal_uInt16 nLast = mpEntryList->GetLastSelected();
                     if ( nLast != LISTBOX_ENTRY_NOTFOUND )
                     {
@@ -1285,7 +1285,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                 mbTrack = sal_True;
             }
 
-            // Folgender Fall tritt nur auf, wenn man ganz kurz die Maustaste drueckt
+            // this case only happens, if the mouse button is pressed very briefly
             if( rTEvt.IsTrackingEnded() && mbTrack )
             {
                 bTrackOrQuickClick = sal_True;
@@ -1419,7 +1419,7 @@ void ImplListBoxWindow::KeyInput( const KeyEvent& rKEvt )
 
 sal_Bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 {
-    // zu selektierender Eintrag
+    // entry to be selected
     sal_uInt16 nSelect = LISTBOX_ENTRY_NOTFOUND;
     LB_EVENT_TYPE eLET = LET_KEYMOVE;
 
@@ -1627,7 +1627,7 @@ sal_Bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 mnSelectModifier = rKEvt.GetKeyCode().GetModifier();
                 ImplCallSelect();
-                bDone = sal_False;  // RETURN nicht abfangen.
+                bDone = sal_False;  // do not catch RETURN
             }
             maQuickSelectionEngine.Reset();
         }
@@ -1829,7 +1829,7 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, sal_Bool bDrawImage, sal_Boo
     if( ! pEntry )
         return;
 
-    // Bei Aenderungen in dieser Methode ggf. auch ImplWin::DrawEntry() anpassen.
+    // when changing this function don't forget to adjust ImplWin::DrawEntry()
 
     if ( mbInUserDraw )
         nPos = mnUserDrawEntry; // real entry, not the matching entry from MRU
@@ -2396,19 +2396,19 @@ void ImplListBox::ImplCheckScrollBars()
     sal_uInt16 nEntries = GetEntryList()->GetEntryCount();
     sal_uInt16 nMaxVisEntries = (sal_uInt16) (aOutSz.Height() / GetEntryHeight());
 
-    // vert. ScrollBar
+    // vertical ScrollBar
     if( nEntries > nMaxVisEntries )
     {
         if( !mbVScroll )
             bArrange = sal_True;
         mbVScroll = sal_True;
 
-        // Ueberpruefung des rausgescrollten Bereichs
+        // check of the scrolled-out region
         if( GetEntryList()->GetSelectEntryCount() == 1 &&
             GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
             ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
         else
-            SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
+            SetTopEntry( GetTopEntry() );   // MaxTop is being checked...
     }
     else
     {
@@ -2418,7 +2418,7 @@ void ImplListBox::ImplCheckScrollBars()
         SetTopEntry( 0 );
     }
 
-    // horz. ScrollBar
+    // horizontal ScrollBar
     if( mbAutoHScroll )
     {
         long nWidth = (sal_uInt16) aOutSz.Width();
@@ -2432,7 +2432,7 @@ void ImplListBox::ImplCheckScrollBars()
                 bArrange = sal_True;
             mbHScroll = sal_True;
 
-            if ( !mbVScroll )   // ggf. brauchen wir jetzt doch einen
+            if ( !mbVScroll )   // maybe we do need one now
             {
                 nMaxVisEntries = (sal_uInt16) ( ( aOutSz.Height() - mpHScrollBar->GetSizePixel().Height() ) / GetEntryHeight() );
                 if( nEntries > nMaxVisEntries )
@@ -2440,16 +2440,16 @@ void ImplListBox::ImplCheckScrollBars()
                     bArrange = sal_True;
                     mbVScroll = sal_True;
 
-                    // Ueberpruefung des rausgescrollten Bereichs
+                    // check of the scrolled-out region
                     if( GetEntryList()->GetSelectEntryCount() == 1 &&
                         GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
                         ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
                     else
-                        SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
+                        SetTopEntry( GetTopEntry() );   // MaxTop is being checked...
                 }
             }
 
-            // Ueberpruefung des rausgescrollten Bereichs
+            // check of the scrolled-out region
             sal_uInt16 nMaxLI = (sal_uInt16) (nMaxWidth - nWidth);
             if ( nMaxLI < GetLeftIndent() )
                 SetLeftIndent( nMaxLI );
@@ -2497,8 +2497,8 @@ void ImplListBox::ImplInitScrollBars()
 
 void ImplListBox::ImplResizeControls()
 {
-    // Hier werden die Controls nur angeordnet, ob die Scrollbars
-    // sichtbar sein sollen wird bereits in ImplCheckScrollBars ermittelt.
+    // Here we only position the Controls; if the Scrollbars are to be
+    // visible is already determined in ImplCheckScrollBars
 
     Size aOutSz = GetOutputSizePixel();
     long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -2528,7 +2528,7 @@ void ImplListBox::ImplResizeControls()
         mpScrollBarBox->Hide();
     }
 
-    // vert. ScrollBar
+    // vertical ScrollBar
     if( mbVScroll )
     {
         // Scrollbar on left or right side?
@@ -2543,7 +2543,7 @@ void ImplListBox::ImplResizeControls()
         SetTopEntry( GetTopEntry() );
     }
 
-    // horz. ScrollBar
+    // horizontal ScrollBar
     if( mbHScroll )
     {
         Point aHPos( ( bMirroring && mbVScroll ) ? nSBWidth : 0, aOutSz.Height() - nSBWidth );
@@ -3070,8 +3070,8 @@ void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, 
 {
     FloatingWindow::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 
-    // Fix #60890# ( MBA ): um auch im aufgeklappten Zustand der Listbox die Gr"o\se einfach zu einen
-    // Aufruf von Resize() "andern zu k"onnen, wird die Position hier ggf. angepa\t
+    // Fix #60890# ( MBA ): to be able to resize the Listbox even in its open state
+    // after a call to Resize(), we adjust its position if necessary
     if ( IsReallyVisible() && ( nFlags & WINDOW_POSSIZE_HEIGHT ) )
     {
         Point aPos = GetParent()->GetPosPixel();
@@ -3089,12 +3089,11 @@ void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, 
 
 //  if( !IsReallyVisible() )
     {
-        // Die ImplListBox erhaelt kein Resize, weil nicht sichtbar.
-        // Die Fenster muessen aber ein Resize() erhalten, damit die
-        // Anzahl der sichtbaren Eintraege fuer PgUp/PgDown stimmt.
-        // Die Anzahl kann auch nicht von List/Combobox berechnet werden,
-        // weil hierfuer auch die ggf. vorhandene vertikale Scrollbar
-        // beruecksichtigt werden muss.
+        // The ImplListBox does not get a Resize() as not visible.
+        // But the windows must get a Resize(), so that the number of
+        // visible entries is correct for PgUp/PgDown.
+        // The number also cannot be calculated by List/Combobox, as for
+        // this the presence of the vertical Scrollbar has to be known.
         mpImplLB->SetSizePixel( GetOutputSizePixel() );
         ((Window*)mpImplLB)->Resize();
         ((Window*)mpImplLB->GetMainWindow())->Resize();
@@ -3130,14 +3129,14 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
 
     if( mbAutoWidth )
     {
-        // AutoSize erstmal nur fuer die Breite...
+        // AutoSize first only for width...
 
         aFloatSz.Width() = aSz.Width() + nLeft + nRight;
-        aFloatSz.Width() += nRight; // etwas mehr Platz sieht besser aus...
+        aFloatSz.Width() += nRight; // adding some space looks better...
 
         if ( ( aFloatSz.Height() < nMaxHeight ) || ( mnDDLineCount && ( mnDDLineCount < mpImplLB->GetEntryList()->GetEntryCount() ) ) )
         {
-            // dann wird noch der vertikale Scrollbar benoetigt
+            // then we also need the vertical Scrollbar
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             aFloatSz.Width() += nSBWidth;
         }
@@ -3151,17 +3150,17 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
     if ( aFloatSz.Height() > nMaxHeight )
         aFloatSz.Height() = nMaxHeight;
 
-    // Minimale Hoehe, falls Hoehe nicht auf Float-Hoehe eingestellt wurde.
-    // Der Parent vom FloatWin muss die DropDown-Combo/Listbox sein.
+    // Minimal height, in case height is not set to Float height.
+    // The parent of FloatWin must be DropDown-Combo/Listbox.
     Size aParentSz = GetParent()->GetSizePixel();
     if( (!mnDDLineCount || !nLines) && ( aFloatSz.Height() < aParentSz.Height() ) )
         aFloatSz.Height() = aParentSz.Height();
 
-    // Nicht schmaler als der Parent werden...
+    // do not get narrower than the parent...
     if( aFloatSz.Width() < aParentSz.Width() )
         aFloatSz.Width() = aParentSz.Width();
 
-    // Hoehe auf Entries alignen...
+    // align height to entries...
     long nInnerHeight = aFloatSz.Height() - nTop - nBottom;
     long nEntryHeight = mpImplLB->GetEntryHeight();
     if ( nInnerHeight % nEntryHeight )
