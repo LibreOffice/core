@@ -259,12 +259,10 @@ bool PNGReaderImpl::ReadNextChunk()
         mrPNGStream >> mnChunkLen >> mnChunkType;
         rChunkData.nType = mnChunkType;
 
-        // #128377#/#149343# sanity check for chunk length
-        if( mnChunkLen < 0 )
-            return false;
+        // fdo#61847 truncate over-long, trailing chunks
         const sal_Size nStreamPos = mrPNGStream.Tell();
-        if( nStreamPos + mnChunkLen >= mnStreamSize )
-            return false;
+        if( mnChunkLen < 0 || nStreamPos + mnChunkLen >= mnStreamSize )
+            mnChunkLen = mnStreamSize - nStreamPos;
 
         // calculate chunktype CRC (swap it back to original byte order)
         sal_uInt32 nChunkType = mnChunkType;
@@ -339,7 +337,8 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
     }
 
     // parse the remaining chunks
-    while( mbStatus && !mbIDAT && ReadNextChunk() )
+    bool bRetFromNextChunk;
+    while( mbStatus && !mbIDAT && (bRetFromNextChunk = ReadNextChunk()) )
     {
         switch( mnChunkType )
         {
@@ -445,9 +444,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             aRet.SetPrefMapMode( MAP_100TH_MM );
             aRet.SetPrefSize( maPhysSize );
         }
-
     }
-
     return aRet;
 }
 
