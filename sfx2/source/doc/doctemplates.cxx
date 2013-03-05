@@ -176,7 +176,7 @@ public:
 
 class SfxDocTplService_Impl
 {
-    uno::Reference< XMultiServiceFactory >           mxFactory;
+    uno::Reference< XComponentContext >              mxContext;
     uno::Reference< XCommandEnvironment >            maCmdEnv;
     uno::Reference< XDocumentProperties>             m_xDocProps;
     uno::Reference< XTypeDetection >                 mxType;
@@ -268,7 +268,7 @@ class SfxDocTplService_Impl
     void                        updateData( DocTemplates_EntryData_Impl *pData );
 
 public:
-                                 SfxDocTplService_Impl( uno::Reference< XMultiServiceFactory > xFactory );
+                                 SfxDocTplService_Impl( const uno::Reference< XComponentContext > & xContext );
                                 ~SfxDocTplService_Impl();
 
     sal_Bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
@@ -451,7 +451,7 @@ void SfxDocTplService_Impl::init_Impl()
         }
 
         OUString const aService = OUString( SERVICENAME_TYPEDETECTION  );
-        mxType = uno::Reference< XTypeDetection > ( mxFactory->createInstance( aService ), UNO_QUERY );
+        mxType = uno::Reference< XTypeDetection > ( mxContext->getServiceManager()->createInstanceWithContext(aService, mxContext), UNO_QUERY );
 
         getDirList();
         readFolderList();
@@ -580,9 +580,7 @@ void SfxDocTplService_Impl::getDirList()
 
     maTemplateDirs = Sequence< OUString >( nCount );
 
-    uno::Reference< XComponentContext > xCtx(
-        comphelper::getComponentContext( mxFactory ) );
-    uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(xCtx);
+    uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxContext);
     const rtl::OUString aPrefix(
         "vnd.sun.star.expand:"  );
 
@@ -1122,10 +1120,10 @@ bool SfxURLRelocator_Impl::propertyCanContainOfficeDir(
 // public SfxDocTplService_Impl
 //-----------------------------------------------------------------------------
 
-SfxDocTplService_Impl::SfxDocTplService_Impl( uno::Reference< XMultiServiceFactory > xFactory )
-: maRelocator( xFactory )
+SfxDocTplService_Impl::SfxDocTplService_Impl( const uno::Reference< XComponentContext > & xContext )
+: maRelocator( xContext )
 {
-    mxFactory       = xFactory;
+    mxContext       = xContext;
     mpUpdater       = NULL;
     mbIsInitialized = sal_False;
     mbLocaleSet     = sal_False;
@@ -1290,7 +1288,7 @@ uno::Sequence< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplate
         {
             uno::Reference< io::XInputStream > xLocStream = aLocContent.openStream();
             if ( xLocStream.is() )
-                aUINames = DocTemplLocaleHelper::ReadGroupLocalizationSequence( xLocStream, comphelper::getComponentContext(mxFactory) );
+                aUINames = DocTemplLocaleHelper::ReadGroupLocalizationSequence( xLocStream, mxContext );
         }
         catch( uno::Exception& )
         {}
@@ -1378,7 +1376,7 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
     sal_Bool bResult = sal_False;
     try {
         uno::Reference< beans::XPropertySet > xTempFile(
-                io::TempFile::create(comphelper::getComponentContext(mxFactory)),
+                io::TempFile::create(mxContext),
                 uno::UNO_QUERY_THROW );
 
         ::rtl::OUString aTempURL;
@@ -1390,7 +1388,7 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
         if ( !xOutStream.is() )
             throw uno::RuntimeException();
 
-        DocTemplLocaleHelper::WriteGroupLocalizationSequence( xOutStream, aUINames, comphelper::getComponentContext(mxFactory));
+        DocTemplLocaleHelper::WriteGroupLocalizationSequence( xOutStream, aUINames, mxContext);
         try {
             // the SAX writer might close the stream
             xOutStream->closeOutput();
@@ -2212,7 +2210,7 @@ SFX_IMPL_SINGLEFACTORY( SfxDocTplService )
 //-----------------------------------------------------------------------------
 SfxDocTplService::SfxDocTplService( const uno::Reference< XMultiServiceFactory >& xFactory )
 {
-    pImp = new SfxDocTplService_Impl( xFactory );
+    pImp = new SfxDocTplService_Impl( comphelper::getComponentContext(xFactory) );
 }
 
 //-----------------------------------------------------------------------------
@@ -2806,8 +2804,8 @@ DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( const OUString& rTitle
 }
 
 // -----------------------------------------------------------------------
-SfxURLRelocator_Impl::SfxURLRelocator_Impl( uno::Reference< XMultiServiceFactory > xFactory )
-: mxFactory( xFactory )
+SfxURLRelocator_Impl::SfxURLRelocator_Impl( const uno::Reference< XComponentContext > & xContext )
+: mxContext( xContext )
 {
 }
 
@@ -2824,12 +2822,9 @@ void SfxURLRelocator_Impl::initOfficeInstDirs()
         osl::MutexGuard aGuard( maMutex );
         if ( !mxOfficeInstDirs.is() )
         {
-            OSL_ENSURE( mxFactory.is(), "No service manager!" );
+            OSL_ENSURE( mxContext.is(), "No service manager!" );
 
-            uno::Reference< XComponentContext > xCtx(
-                comphelper::getComponentContext( mxFactory ) );
-
-            mxOfficeInstDirs = theOfficeInstallationDirectories::get(xCtx);
+            mxOfficeInstDirs = theOfficeInstallationDirectories::get(mxContext);
         }
     }
 }
@@ -2846,8 +2841,7 @@ void SfxURLRelocator_Impl::implExpandURL( ::rtl::OUString& io_url )
     {
         if ( !mxMacroExpander.is() )
         {
-            ::comphelper::ComponentContext aContext( mxFactory );
-            mxMacroExpander.set( theMacroExpander::get(aContext.getUNOContext()), UNO_QUERY_THROW );
+            mxMacroExpander.set( theMacroExpander::get(mxContext), UNO_QUERY_THROW );
         }
         io_url = mxMacroExpander->expandMacros( io_url );
     }

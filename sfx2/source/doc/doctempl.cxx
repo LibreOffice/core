@@ -1846,7 +1846,7 @@ sal_Bool getTextProperty_Impl( Content& rContent,
 
         if ( SfxURLRelocator_Impl::propertyCanContainOfficeDir( rPropName ) )
         {
-            SfxURLRelocator_Impl aRelocImpl( ::comphelper::getProcessServiceFactory() );
+            SfxURLRelocator_Impl aRelocImpl( ::comphelper::getProcessComponentContext() );
             aRelocImpl.makeAbsoluteURL( rPropValue );
         }
 

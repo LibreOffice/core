@@ -91,6 +91,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_odfexport,\
     unoxml/source/service/unoxml \
     uui/util/uui \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
+    xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_odfexport))

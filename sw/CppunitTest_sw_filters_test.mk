@@ -92,6 +92,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     unoxml/source/service/unoxml \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
 	xmloff/source/transform/xof \
+    xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_filters_test))

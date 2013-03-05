@@ -120,6 +120,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_spreadsheetobj,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_spreadsheetobj))

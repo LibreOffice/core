@@ -95,6 +95,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlexport,\
     unotools/util/utl \
     unoxml/source/service/unoxml \
     writerfilter/util/writerfilter \
+    xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_ooxmlexport))

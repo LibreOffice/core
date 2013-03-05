@@ -111,6 +111,7 @@ using namespace ::com::sun::star::io;
 #include <sot/stg.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/documentlockfile.hxx>
+#include <com/sun/star/document/DocumentRevisionListPersistence.hpp>
 
 #include "helper.hxx"
 #include <sfx2/request.hxx>      // SFX_ITEMSET_SET
@@ -3101,17 +3102,14 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoR
     if ( ( !_bNoReload || !pImp->m_bVersionsAlreadyLoaded ) && !pImp->aVersions.getLength() &&
          ( !pImp->m_aName.isEmpty() || !pImp->m_aLogicName.isEmpty() ) && GetStorage().is() )
     {
-        uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
-        if ( xReader.is() )
+        uno::Reference < document::XDocumentRevisionListPersistence > xReader =
+                document::DocumentRevisionListPersistence::create( comphelper::getProcessComponentContext() );
+        try
         {
-            try
-            {
-                pImp->aVersions = xReader->load( GetStorage() );
-            }
-            catch ( const uno::Exception& )
-            {
-            }
+            pImp->aVersions = xReader->load( GetStorage() );
+        }
+        catch ( const uno::Exception& )
+        {
         }
     }
 
@@ -3123,17 +3121,14 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoR
 
 uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::Reference < embed::XStorage >& xStorage )
 {
-    uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
-    if ( xReader.is() )
+    uno::Reference < document::XDocumentRevisionListPersistence > xReader =
+        document::DocumentRevisionListPersistence::create( comphelper::getProcessComponentContext() );
+    try
     {
-        try
-        {
-            return xReader->load( xStorage );
-        }
-        catch ( const uno::Exception& )
-        {
-        }
+        return xReader->load( xStorage );
+    }
+    catch ( const uno::Exception& )
+    {
     }
 
     return uno::Sequence < util::RevisionTag >();
@@ -3210,18 +3205,15 @@ sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool /*bUseXML*/ )
         if ( !pImp->aVersions.getLength() )
             return true;
 
-        uno::Reference < document::XDocumentRevisionListPersistence > xWriter( comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
-        if ( xWriter.is() )
+        uno::Reference < document::XDocumentRevisionListPersistence > xWriter =
+                 document::DocumentRevisionListPersistence::create( comphelper::getProcessComponentContext() );
+        try
         {
-            try
-            {
-                xWriter->store( GetStorage(), pImp->aVersions );
-                return true;
-            }
-            catch ( const uno::Exception& )
-            {
-            }
+            xWriter->store( GetStorage(), pImp->aVersions );
+            return true;
+        }
+        catch ( const uno::Exception& )
+        {
         }
     }
 

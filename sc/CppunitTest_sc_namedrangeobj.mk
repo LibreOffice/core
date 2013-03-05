@@ -119,6 +119,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_namedrangeobj,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_namedrangeobj))
