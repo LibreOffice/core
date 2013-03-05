@@ -51,10 +51,8 @@ endif
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
 # DBGSV_ERROR_OUT => in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
-ifneq ($(CROSS_COMPILING),YES)
 gb_CppunitTest_CPPTESTDEPS := $(call gb_Executable_get_runtime_dependencies,cppunit/cppunittester)
 gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppunit/cppunittester)
-endif
 
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 

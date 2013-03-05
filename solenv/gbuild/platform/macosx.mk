@@ -304,12 +304,7 @@ endef
 
 # CppunitTest class
 
-ifeq ($(CROSS_COMPILING),YES)
-gb_CppunitTest_CPPTESTPRECOMMAND := :
-else
 gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
-endif
-
 gb_CppunitTest_SYSPRE := libtest_
 gb_CppunitTest_EXT := .dylib
 gb_CppunitTest_LIBDIR := $(gb_Helper_OUTDIRLIBDIR)

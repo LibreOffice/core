@@ -318,11 +318,7 @@ endef
 
 # CppunitTest class
 
-ifeq ($(CROSS_COMPILING),YES)
-gb_CppunitTest_CPPTESTPRECOMMAND := :
-else
 gb_CppunitTest_CPPTESTPRECOMMAND := $(gb_Helper_set_ld_path)
-endif
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
