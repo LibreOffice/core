@@ -131,9 +131,13 @@ public class Desktop
     {
         Bitmap mBitmap;
         boolean renderedOnce;
-        boolean scalingInProgress;
+
         GestureDetector gestureDetector;
         ScaleGestureDetector scaleDetector;
+
+        boolean scalingInProgress;
+        float accumulatedScale = 1;
+        float pivotX = 0, pivotY = 0;
 
         public BitmapView()
         {
@@ -156,46 +160,33 @@ public class Desktop
                                         }
                                     });
 
-            // Is this sane? It is rather slow to ask LO to zoom
-            // continuously while the scaling gesture is in progress.
-
-            // What we used to do was while a scale gesture was in
-            // progress to just scale the bitmap view (UI elements
-            // too, which of course was a bit silly).
-
             scaleDetector =
                 new ScaleGestureDetector(Desktop.this,
                                          new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-                                             long lastGestureEventTime;
 
                                              @Override public boolean onScaleBegin(ScaleGestureDetector detector)
                                              {
                                                  scalingInProgress = true;
-                                                 lastGestureEventTime = System.currentTimeMillis();
                                                  return true;
                                              }
 
                                              @Override public boolean onScale(ScaleGestureDetector detector)
                                              {
-                                                 long now = System.currentTimeMillis();
-                                                 if (now - lastGestureEventTime < 100)
-                                                     return false;
-                                                 float scale = detector.getScaleFactor();
-                                                 if (scale > 0.95 && scale < 1.05)
-                                                     return false;
-                                                 Log.i(TAG, "onScale: " + scale);
-                                                 lastGestureEventTime = now;
-                                                 Desktop.zoom(scale, (int) detector.getFocusX(), (int) detector.getFocusY());
+                                                 accumulatedScale *= detector.getScaleFactor();;
+                                                 pivotX = detector.getFocusX();
+                                                 pivotY = detector.getFocusY();
+                                                 invalidate();
                                                  return true;
                                              }
 
                                              @Override public void onScaleEnd(ScaleGestureDetector detector)
                                              {
-                                                 float scale = detector.getScaleFactor();
-                                                 Log.i(TAG, "onScaleEnd: " + scale);
-                                                 if (!(scale > 0.95 && scale < 1.05))
-                                                     Desktop.zoom(scale, (int) detector.getFocusX(), (int) detector.getFocusY());
+                                                 accumulatedScale *= detector.getScaleFactor();
+                                                 Desktop.zoom(accumulatedScale, (int) pivotX, (int) pivotY);
+                                                 accumulatedScale = 1;
+                                                 pivotX = pivotY = 0;
                                                  scalingInProgress = false;
+                                                 invalidate();
                                              }
                                          });
         }
@@ -208,7 +199,10 @@ public class Desktop
                 setViewSize(getWidth(), getHeight());
             }
             renderVCL(mBitmap);
+            canvas.save();
+            canvas.scale(accumulatedScale, accumulatedScale, pivotX, pivotY);
             canvas.drawBitmap(mBitmap, 0, 0, null);
+            canvas.restore();
             renderedOnce = true;
 
             // re-call ourselves a bit later ...
