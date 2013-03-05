@@ -288,16 +288,16 @@ namespace dbaui
             <p>The given names and images may be empty, in this case they're filled with the correct
             values. This way they may be reused for the next call, which saves some resource manager calls.</p>
         */
-        void implAddDatasource(const String& _rDbName, Image& _rDbImage,
-                String& _rQueryName, Image& _rQueryImage,
-                String& _rTableName, Image& _rTableImage,
+        void implAddDatasource(const OUString& _rDbName, Image& _rDbImage,
+                OUString& _rQueryName, Image& _rQueryImage,
+                OUString& _rTableName, Image& _rTableImage,
                 const SharedConnection& _rxConnection
             );
 
-        void    implAddDatasource( const String& _rDataSourceName, const SharedConnection& _rxConnection );
+        void    implAddDatasource( const OUString& _rDataSourceName, const SharedConnection& _rxConnection );
 
         /// removes (and cleans up) the entry for the given data source
-        void        impl_cleanupDataSourceEntry( const String& _rDataSourceName );
+        void        impl_cleanupDataSourceEntry( const OUString& _rDataSourceName );
 
         /// clears the tree list box
         void clearTreeModel();
@@ -352,7 +352,7 @@ namespace dbaui
         sal_Bool    ensureEntryObject( SvTreeListEntry* _pEntry );
 
         // get the display text of the entry given
-        String      GetEntryText( SvTreeListEntry* _pEntry ) const;
+        OUString      GetEntryText( SvTreeListEntry* _pEntry ) const;
 
         // is called when a table or a query was selected
         DECL_LINK( OnSelectionChange, void* );
@@ -383,7 +383,7 @@ namespace dbaui
         /// inserts an entry into the tree
         SvTreeListEntry* implAppendEntry(
             SvTreeListEntry* _pParent,
-            const String& _rName,
+            const OUString& _rName,
             void* _pUserData,
             EntryType _eEntryType
         );
@@ -448,7 +448,7 @@ namespace dbaui
 #endif
 
         /// retrieves the data source URL/name for the given entry representing a data source
-        String  getDataSourceAcessor( SvTreeListEntry* _pDataSourceEntry ) const;
+        OUString  getDataSourceAcessor( SvTreeListEntry* _pDataSourceEntry ) const;
 
         /** get the signature (command/escape processing) of the query the form is based on
             <p>If the for is not based on a query or not even loaded, nothing happens and <FALSE/> is returned.</p>
@@ -470,7 +470,7 @@ namespace dbaui
             @return
                     <TRUE/> if it is the currently displayed otherwise <FALSE/>
         */
-        sal_Bool isCurrentlyDisplayedChanged(const String& _sName,SvTreeListEntry* _pContainer);
+        sal_Bool isCurrentlyDisplayedChanged(const OUString& _sName,SvTreeListEntry* _pContainer);
 
         /** called whenever the content of the browser is used for preview, as the very last action
             of the load process
