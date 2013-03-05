@@ -92,7 +92,7 @@ $(call gb_Module_get_target,%) :
 .PHONY : all build unitcheck slowcheck subsequentcheck clean check debugrun help showmodules translations
 .DEFAULT_GOAL := all
 
-all : build unitcheck
+all : build unitcheck $(if $(gb_PARTIAL_BUILD),,slowcheck)
 
 build : 
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),ALL,6)
@@ -197,7 +197,6 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
-ifeq ($(strip $(SKIP_TESTS)),)
 define gb_Module_add_check_target
 $(call gb_Module__read_targetfile,$(1),$(2),check target)
 
@@ -213,7 +212,6 @@ $(call gb_Module_get_slowcheck_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
-endif # SKIP_TESTS
 
 define gb_Module_add_subsequentcheck_target
 $(call gb_Module__read_targetfile,$(1),$(2),subsequentcheck target)

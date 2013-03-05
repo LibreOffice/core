@@ -216,10 +216,10 @@ bootstrap: compilerplugins
 # Build
 #
 build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild all slowcheck
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild
 
-build-nocheck : export SKIP_TESTS := YES
-build-nocheck : build
+build-nocheck: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build
 
 cross-toolset: bootstrap fetch
 	$(GNUMAKE) gb_Side=build -j $(PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild
@@ -325,8 +325,8 @@ else ifeq ($(OS),MACOSX)
 	@echo "To debug: gdb install/LibreOffice.app/Contents/MacOS/soffice"
 endif
 
-dev-install-nocheck : export SKIP_TESTS := YES
-dev-install-nocheck : dev-install
+dev-install-nocheck: build-nocheck
+	$(MAKE) dev-install -o build
 
 dev-update:
 ifeq ($(DISABLE_LINKOO),TRUE)
