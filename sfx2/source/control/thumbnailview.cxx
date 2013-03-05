@@ -279,7 +279,6 @@ void ThumbnailView::CalculateItemPositions ()
     // draw items
     size_t nFirstItem = mnFirstLine * mnCols;
     size_t nLastItem = nFirstItem + (mnVisLines * mnCols);
-    size_t nTotalItems = mnFirstLine*mnCols + mnVisLines*mnCols;
 
     maItemListRect.Left() = x;
     maItemListRect.Top() = y;
@@ -289,8 +288,6 @@ void ThumbnailView::CalculateItemPositions ()
     // If want also draw parts of items in the last line,
     // then we add one more line if parts of these line are
     // visible
-    if ( y+(mnVisLines*(mnItemHeight+nVItemSpace)) < aWinSize.Height() )
-        nTotalItems += mnCols;
 
     size_t nCurCount = 0;
     for ( size_t i = 0; i < nItemCount; i++ )
