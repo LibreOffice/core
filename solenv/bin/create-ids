@@ -19,7 +19,7 @@ fi
 
 # --with-outpath includes solver/$INPATH/inc
 if [ "$1" = "--with-outpath" ]; then
-    dirs="`ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|install\)\//d'` `ls -d solver/$INPATH/inc | sed -e '/^workdir\//d'`"
+    dirs="`ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|install\)\//d'` solver/$INPATH/inc"
 else
     dirs="`ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|install\)\//d'`"
 fi
