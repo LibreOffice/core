@@ -18,11 +18,7 @@
  */
 #ifndef _PORTXT_HXX
 #define _PORTXT_HXX
-#ifdef __GNUC__
-#include <sys/types.h>
-#else
-#include <new.h>    // for size_t, FIXEDMEM from tools
-#endif
+
 #include <tools/mempool.hxx>
 
 #include "porlin.hxx"

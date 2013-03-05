@@ -22,7 +22,6 @@
 #include <boost/unordered_map.hpp>
 #include <sal/config.h>
 #include <malloc.h>
-#include <new.h>
 #include <typeinfo.h>
 #include <signal.h>
 
