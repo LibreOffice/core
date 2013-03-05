@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/DispatchResultEvent.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/task/XJobExecutor.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/frame/DispatchHelper.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
-#include <com/sun/star/sdbc/DriverManager.hpp>
+#include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -602,7 +602,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TEMPLATE_ADDRESSBOKSOURCE:
         {
-            svt::AddressBookSourceDialog aDialog(GetTopWindow(), ::comphelper::getProcessServiceFactory());
+            svt::AddressBookSourceDialog aDialog(GetTopWindow(), ::comphelper::getProcessComponentContext());
             aDialog.Execute();
             bDone = true;
             break;
@@ -1428,20 +1428,16 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_ADDRESS_DATA_SOURCE:
         {
-            ::rtl::OUString sDialogServiceName( "com.sun.star.ui.dialogs.AddressBookSourcePilot"  );
             try
             {
-                Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-                Reference< com::sun::star::ui::dialogs::XExecutableDialog > xDialog;
-                if (xORB.is())
-                    xDialog = Reference< com::sun::star::ui::dialogs::XExecutableDialog >(xORB->createInstance(sDialogServiceName), UNO_QUERY);
-                if (xDialog.is())
-                    xDialog->execute();
-                else
-                    ShowServiceNotAvailableError(NULL, sDialogServiceName, sal_True);
+                Reference< uno::XComponentContext > xORB = ::comphelper::getProcessComponentContext();
+                Reference< ui::dialogs::XExecutableDialog > xDialog;
+                xDialog = ui::dialogs::AddressBookSourcePilot::createWithParent(xORB, 0);
+                xDialog->execute();
             }
-            catch(::com::sun::star::uno::Exception&)
+            catch(const ::com::sun::star::uno::Exception&)
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         break;

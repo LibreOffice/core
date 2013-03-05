@@ -34,7 +34,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -562,7 +562,7 @@ void AssignmentPersistentData::Commit()
 
     // -------------------------------------------------------------------
     AddressBookSourceDialog::AddressBookSourceDialog(Window* _pParent,
-            const Reference< XMultiServiceFactory >& _rxORB )
+            const Reference< XComponentContext >& _rxORB )
         :INIT_FIELDS()
         ,m_pImpl( new AddressBookSourceDialogData )
     {
@@ -570,7 +570,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    AddressBookSourceDialog::AddressBookSourceDialog( Window* _pParent, const Reference< XMultiServiceFactory >& _rxORB,
+    AddressBookSourceDialog::AddressBookSourceDialog( Window* _pParent, const Reference< XComponentContext >& _rxORB,
         const Reference< XDataSource >& _rxTransientDS, const ::rtl::OUString& _rDataSourceName,
         const ::rtl::OUString& _rTable, const Sequence< AliasProgrammaticPair >& _rMapping )
         :INIT_FIELDS()
@@ -791,9 +791,9 @@ void AssignmentPersistentData::Commit()
 
             try
             {
-                m_xDatabaseContext = DatabaseContext::create(comphelper::getComponentContext(m_xORB));
+                m_xDatabaseContext = DatabaseContext::create(m_xORB);
             }
-            catch(Exception&) { }
+            catch(const Exception&) { }
             if (!m_xDatabaseContext.is())
             {
                 const rtl::OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
@@ -842,10 +842,10 @@ void AssignmentPersistentData::Commit()
         try
         {
             xHandler.set(
-                InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0),
+                InteractionHandler::createWithParent(m_xORB, 0),
                 UNO_QUERY_THROW );
         }
-        catch(Exception&) { }
+        catch(const Exception&) { }
         if (!xHandler.is())
         {
             const rtl::OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
@@ -1212,21 +1212,16 @@ void AssignmentPersistentData::Commit()
     // -------------------------------------------------------------------
     IMPL_LINK_NOARG(AddressBookSourceDialog, OnAdministrateDatasources)
     {
-        // collect some initial arguments for the dialog
-        Sequence< Any > aArgs(1);
-        aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")), 0, makeAny(VCLUnoHelper::GetInterface(this)), PropertyState_DIRECT_VALUE);
-
         // create the dialog object
-        const rtl::OUString sDialogServiceName("com.sun.star.ui.dialogs.AddressBookSourcePilot");
         Reference< XExecutableDialog > xAdminDialog;
         try
         {
-            xAdminDialog = Reference< XExecutableDialog >(m_xORB->createInstanceWithArguments(sDialogServiceName, aArgs), UNO_QUERY);
+            xAdminDialog = AddressBookSourcePilot::createWithParent( m_xORB, VCLUnoHelper::GetInterface(this) );
         }
-        catch(Exception&) { }
+        catch(const Exception&) { }
         if (!xAdminDialog.is())
         {
-            ShowServiceNotAvailableError(this, sDialogServiceName, sal_True);
+            ShowServiceNotAvailableError(this, rtl::OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot"), sal_True);
             return 1L;
         }
 
@@ -1256,7 +1251,7 @@ void AssignmentPersistentData::Commit()
                 }
             }
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
             OSL_FAIL("AddressBookSourceDialog::OnAdministrateDatasources: an error occurred while executing the administration dialog!");
         }

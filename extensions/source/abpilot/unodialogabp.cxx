@@ -34,6 +34,7 @@ namespace abp
 {
 //.........................................................................
 
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -145,6 +146,18 @@ namespace abp
         Sequence< Property > aProps;
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
+    }
+
+    void SAL_CALL OABSPilotUno::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+    {
+        Reference<awt::XWindow> xParentWindow;
+        if (aArguments.getLength() == 1 && (aArguments[0] >>= xParentWindow) ) {
+            Sequence< Any > aNewArgs(1);
+            aNewArgs[0] <<= PropertyValue( ::rtl::OUString("ParentWindow"), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE );
+            OGenericUnoDialog::initialize(aNewArgs);
+        } else {
+            OGenericUnoDialog::initialize(aArguments);
+        }
     }
 
     //--------------------------------------------------------------------------

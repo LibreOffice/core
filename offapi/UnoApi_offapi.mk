@@ -357,6 +357,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	WindowStateConfiguration \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\
+	AddressBookSourcePilot \
 	FilePicker \
 	FolderPicker \
 	Wizard \

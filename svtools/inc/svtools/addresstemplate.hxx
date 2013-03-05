@@ -29,7 +29,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -70,7 +69,7 @@ namespace svt
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext >
                         m_xDatabaseContext;
         // the ORB for creating objects
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         m_xCurrentDatasourceTables;
@@ -80,7 +79,7 @@ namespace svt
 
     public:
         AddressBookSourceDialog( Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
 
         /** if you use this ctor, the dialog
             <ul><li>will not store it's data in the configuration (nor initially retrieve it from there)</li>
@@ -102,7 +101,7 @@ namespace svt
                 obtained from <arg>_rxTransientDS</arg>
         */
         AddressBookSourceDialog( Window* _pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _rxTransientDS,
             const ::rtl::OUString& _rDataSourceName,
             const ::rtl::OUString& _rTable,

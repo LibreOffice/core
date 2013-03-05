@@ -252,9 +252,9 @@ namespace svt
     Dialog* OAddressBookSourceDialogUno::createDialog(Window* _pParent)
     {
         if ( m_xDataSource.is() && !m_sTable.isEmpty() )
-            return new AddressBookSourceDialog(_pParent, m_aContext.getLegacyServiceFactory(), m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
+            return new AddressBookSourceDialog(_pParent, m_aContext.getUNOContext(), m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
         else
-            return new AddressBookSourceDialog( _pParent, m_aContext.getLegacyServiceFactory() );
+            return new AddressBookSourceDialog( _pParent, m_aContext.getUNOContext() );
     }
 
 // .......................................................................
