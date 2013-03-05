@@ -23,6 +23,7 @@
 #endif
 
 #include <boost/unordered_map.hpp>
+#include <cassert>
 #include <list>
 #include <set>
 #include <vector>
@@ -250,6 +251,8 @@ inline void TypeDescriptor_Init_Impl::callChain(
     typelib_TypeDescription ** ppRet, rtl_uString * pName )
     SAL_THROW(())
 {
+    assert(ppRet != 0);
+    assert(*ppRet == 0);
     if (pCallbacks)
     {
         CallbackSet_Impl::const_iterator aIt = pCallbacks->begin();
@@ -261,11 +264,6 @@ inline void TypeDescriptor_Init_Impl::callChain(
                 return;
             ++aIt;
         }
-    }
-    if (*ppRet)
-    {
-        typelib_typedescription_release( *ppRet );
-        *ppRet = 0;
     }
 }
 
