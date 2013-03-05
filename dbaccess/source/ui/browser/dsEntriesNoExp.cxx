@@ -54,7 +54,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvTreeListEn
 }
 
 // -----------------------------------------------------------------------------
-String SbaTableQueryBrowser::GetEntryText( SvTreeListEntry* _pEntry ) const
+OUString SbaTableQueryBrowser::GetEntryText( SvTreeListEntry* _pEntry ) const
 {
     return m_pTreeView->getListBox().GetEntryText(_pEntry);
 }
@@ -71,7 +71,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( const SvTree
     SvTreeListEntry* pQueries       = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_QUERIES);
 
 #ifdef DBG_UTIL
-    String sTest;
+    OUString sTest;
     if (pTables) sTest = m_pTreeView->getListBox().GetEntryText(pTables);
     if (pQueries) sTest = m_pTreeView->getListBox().GetEntryText(pQueries);
 #endif
