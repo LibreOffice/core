@@ -99,11 +99,11 @@ namespace sfx2
         ::utl::OConfigurationTreeRoot lcl_getModuleUIElementStatesConfig( const ::rtl::OUString& i_rModuleIdentifier,
             const ::rtl::OUString& i_rResourceURL = ::rtl::OUString() )
         {
-            const ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            const Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
             ::rtl::OUStringBuffer aPathComposer;
             try
             {
-                const Reference< XModuleManager2 > xModuleAccess( ModuleManager::create(aContext.getUNOContext()) );
+                const Reference< XModuleManager2 > xModuleAccess( ModuleManager::create(xContext) );
                 const ::comphelper::NamedValueCollection aModuleProps( xModuleAccess->getByName( i_rModuleIdentifier ) );
 
                 const ::rtl::OUString sWindowStateRef( aModuleProps.getOrDefault( "ooSetupFactoryWindowStateConfigRef", ::rtl::OUString() ) );
@@ -121,7 +121,7 @@ namespace sfx2
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
-            return ::utl::OConfigurationTreeRoot( aContext, aPathComposer.makeStringAndClear(), false );
+            return ::utl::OConfigurationTreeRoot( xContext, aPathComposer.makeStringAndClear(), false );
         }
 
         //--------------------------------------------------------------------------------------------------------------
@@ -382,8 +382,7 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     void CustomToolPanel::impl_updatePanelConfig( const bool i_bVisible ) const
     {
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-        ::utl::OConfigurationTreeRoot aConfig( aContext, m_sPanelConfigPath, true );
+        ::utl::OConfigurationTreeRoot aConfig( ::comphelper::getProcessComponentContext(), m_sPanelConfigPath, true );
 
         aConfig.setNodeValue( "Visible", makeAny( i_bVisible ) );
         aConfig.commit();

@@ -359,11 +359,9 @@ void SfxRequest_Impl::Record
             }
         }
 
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory(
-                ::comphelper::getProcessServiceFactory(),
-                com::sun::star::uno::UNO_QUERY);
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-        uno::Reference< util::XURLTransformer > xTransform( util::URLTransformer::create( ::comphelper::getComponentContext(xFactory) ) );
+        uno::Reference< util::XURLTransformer > xTransform = util::URLTransformer::create( xContext );
 
         com::sun::star::util::URL aURL;
         aURL.Complete = aCmd;

@@ -19,32 +19,34 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
-#include <com/sun/star/system/SimpleMailClientFlags.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/container/XContainerQuery.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/security/CertificateValidity.hpp>
-#include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/security/CertificateValidity.hpp>
+#include <com/sun/star/security/DocumentSignatureInformation.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/system/SimpleSystemMail.hpp>
+#include <com/sun/star/system/SimpleCommandMail.hpp>
+#include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
+#include <com/sun/star/system/SimpleMailClientFlags.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
@@ -546,7 +548,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             css::util::URL aPrepareURL;
             css::uno::Reference< css::frame::XDispatch > xPrepareDispatch;
             css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
-            css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( ::comphelper::getComponentContext(xSMGR) ) );
+            css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( xContext ) );
             if( !bSendAsPDF )
             {
                 try
@@ -768,133 +770,135 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
     SendMailResult  eResult = SEND_MAIL_ERROR;
     if ( !maAttachedDocuments.empty() )
     {
-        css::uno::Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
-        if ( xMgr.is() )
+        css::uno::Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+
+        css::uno::Reference< XSimpleMailClientSupplier >    xSimpleMailClientSupplier;
+
+        // Prefer the SimpleSystemMail service if available
+        try {
+            xSimpleMailClientSupplier = SimpleSystemMail::create( xContext );
+        }
+        catch ( const uno::Exception & )
+        {}
+
+        if ( ! xSimpleMailClientSupplier.is() )
         {
-            css::uno::Reference< XSimpleMailClientSupplier >    xSimpleMailClientSupplier;
+            try {
+                xSimpleMailClientSupplier = SimpleCommandMail::create( xContext );
+            }
+            catch ( const uno::Exception & )
+            {}
+        }
 
-            // Prefer the SimpleSystemMail service if available
-            xSimpleMailClientSupplier = css::uno::Reference< XSimpleMailClientSupplier >(
-                xMgr->createInstance( OUString( "com.sun.star.system.SimpleSystemMail" )),
-                UNO_QUERY );
+        if ( xSimpleMailClientSupplier.is() )
+        {
+            css::uno::Reference< XSimpleMailClient > xSimpleMailClient = xSimpleMailClientSupplier->querySimpleMailClient();
 
-            if ( ! xSimpleMailClientSupplier.is() )
+            if ( !xSimpleMailClient.is() )
             {
-                xSimpleMailClientSupplier = css::uno::Reference< XSimpleMailClientSupplier >(
-                    xMgr->createInstance( OUString( "com.sun.star.system.SimpleCommandMail" )),
-                    UNO_QUERY );
+                // no mail client support => message box!
+                return SEND_MAIL_ERROR;
             }
 
-            if ( xSimpleMailClientSupplier.is() )
+            // we have a simple mail client
+            css::uno::Reference< XSimpleMailMessage > xSimpleMailMessage = xSimpleMailClient->createSimpleMailMessage();
+            if ( xSimpleMailMessage.is() )
             {
-                css::uno::Reference< XSimpleMailClient > xSimpleMailClient = xSimpleMailClientSupplier->querySimpleMailClient();
-
-                if ( !xSimpleMailClient.is() )
+                sal_Int32 nSendFlags = SimpleMailClientFlags::DEFAULTS;
+                if ( maFromAddress.Len() == 0 )
                 {
-                    // no mail client support => message box!
-                    return SEND_MAIL_ERROR;
+                    // from address not set, try figure out users e-mail address
+                    CreateFromAddress_Impl( maFromAddress );
+                }
+                xSimpleMailMessage->setOriginator( maFromAddress );
+
+                size_t nToCount     = mpToList ? mpToList->size() : 0;
+                size_t nCcCount     = mpCcList ? mpCcList->size() : 0;
+                size_t nCcSeqCount  = nCcCount;
+
+                // set recipient (only one) for this simple mail server!!
+                if ( nToCount > 1 )
+                {
+                    nCcSeqCount = nToCount - 1 + nCcCount;
+                    xSimpleMailMessage->setRecipient( *mpToList->at( 0 ) );
+                    nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
+                }
+                else if ( nToCount == 1 )
+                {
+                    xSimpleMailMessage->setRecipient( *mpToList->at( 0 ) );
+                    nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
                 }
 
-                // we have a simple mail client
-                css::uno::Reference< XSimpleMailMessage > xSimpleMailMessage = xSimpleMailClient->createSimpleMailMessage();
-                if ( xSimpleMailMessage.is() )
+                // all other recipient must be handled with CC recipients!
+                if ( nCcSeqCount > 0 )
                 {
-                    sal_Int32 nSendFlags = SimpleMailClientFlags::DEFAULTS;
-                    if ( maFromAddress.Len() == 0 )
-                    {
-                        // from address not set, try figure out users e-mail address
-                        CreateFromAddress_Impl( maFromAddress );
-                    }
-                    xSimpleMailMessage->setOriginator( maFromAddress );
+                    size_t                  nIndex = 0;
+                    Sequence< OUString >    aCcRecipientSeq;
 
-                    size_t nToCount     = mpToList ? mpToList->size() : 0;
-                    size_t nCcCount     = mpCcList ? mpCcList->size() : 0;
-                    size_t nCcSeqCount  = nCcCount;
-
-                    // set recipient (only one) for this simple mail server!!
-                    if ( nToCount > 1 )
+                    aCcRecipientSeq.realloc( nCcSeqCount );
+                    if ( nCcSeqCount > nCcCount )
                     {
-                        nCcSeqCount = nToCount - 1 + nCcCount;
-                        xSimpleMailMessage->setRecipient( *mpToList->at( 0 ) );
-                        nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
-                    }
-                    else if ( nToCount == 1 )
-                    {
-                        xSimpleMailMessage->setRecipient( *mpToList->at( 0 ) );
-                        nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
-                    }
-
-                    // all other recipient must be handled with CC recipients!
-                    if ( nCcSeqCount > 0 )
-                    {
-                        size_t                  nIndex = 0;
-                        Sequence< OUString >    aCcRecipientSeq;
-
-                        aCcRecipientSeq.realloc( nCcSeqCount );
-                        if ( nCcSeqCount > nCcCount )
+                        for ( size_t i = 1; i < nToCount; ++i )
                         {
-                            for ( size_t i = 1; i < nToCount; ++i )
-                            {
-                                aCcRecipientSeq[nIndex++] = *mpToList->at(i);
-                            }
+                            aCcRecipientSeq[nIndex++] = *mpToList->at(i);
                         }
-
-                        for ( size_t i = 0; i < nCcCount; i++ )
-                        {
-                            aCcRecipientSeq[nIndex++] = *mpCcList->at(i);
-                        }
-                        xSimpleMailMessage->setCcRecipient( aCcRecipientSeq );
                     }
 
-                    size_t nBccCount = mpBccList ? mpBccList->size() : 0;
-                    if ( nBccCount > 0 )
+                    for ( size_t i = 0; i < nCcCount; i++ )
                     {
-                        Sequence< OUString > aBccRecipientSeq( nBccCount );
-                        for ( size_t i = 0; i < nBccCount; ++i )
-                        {
-                            aBccRecipientSeq[i] = *mpBccList->at(i);
-                        }
-                        xSimpleMailMessage->setBccRecipient( aBccRecipientSeq );
+                        aCcRecipientSeq[nIndex++] = *mpCcList->at(i);
                     }
-
-                    Sequence< OUString > aAttachmentSeq(&(maAttachedDocuments[0]),maAttachedDocuments.size());
-
-                    if ( xSimpleMailMessage->getSubject().isEmpty() ) {
-                        OUString baseName( maAttachedDocuments[0].copy( maAttachedDocuments[0].lastIndexOf( '/' ) + 1 ) );
-                        OUString subject( baseName );
-                        if ( maAttachedDocuments.size() > 1 )
-                            subject += OUString(", ...");
-                        xSimpleMailMessage->setSubject( subject );
-                    }
-                    xSimpleMailMessage->setAttachement( aAttachmentSeq );
-
-                    sal_Bool bSend( sal_False );
-                    try
-                    {
-                        xSimpleMailClient->sendSimpleMailMessage( xSimpleMailMessage, nSendFlags );
-                        bSend = sal_True;
-                    }
-                    catch ( IllegalArgumentException& )
-                    {
-                    }
-                    catch ( Exception& )
-                    {
-                    }
-
-                    if ( bSend == sal_False )
-                    {
-                        css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
-
-                        SolarMutexGuard aGuard;
-                        Window* pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
-
-                        ErrorBox aBox( pParentWindow, SfxResId( RID_ERRBOX_MAIL_CONFIG ));
-                        aBox.Execute();
-                        eResult = SEND_MAIL_CANCELLED;
-                    }
-                    else
-                        eResult = SEND_MAIL_OK;
+                    xSimpleMailMessage->setCcRecipient( aCcRecipientSeq );
                 }
+
+                size_t nBccCount = mpBccList ? mpBccList->size() : 0;
+                if ( nBccCount > 0 )
+                {
+                    Sequence< OUString > aBccRecipientSeq( nBccCount );
+                    for ( size_t i = 0; i < nBccCount; ++i )
+                    {
+                        aBccRecipientSeq[i] = *mpBccList->at(i);
+                    }
+                    xSimpleMailMessage->setBccRecipient( aBccRecipientSeq );
+                }
+
+                Sequence< OUString > aAttachmentSeq(&(maAttachedDocuments[0]),maAttachedDocuments.size());
+
+                if ( xSimpleMailMessage->getSubject().isEmpty() ) {
+                    OUString baseName( maAttachedDocuments[0].copy( maAttachedDocuments[0].lastIndexOf( '/' ) + 1 ) );
+                    OUString subject( baseName );
+                    if ( maAttachedDocuments.size() > 1 )
+                        subject += OUString(", ...");
+                    xSimpleMailMessage->setSubject( subject );
+                }
+                xSimpleMailMessage->setAttachement( aAttachmentSeq );
+
+                sal_Bool bSend( sal_False );
+                try
+                {
+                    xSimpleMailClient->sendSimpleMailMessage( xSimpleMailMessage, nSendFlags );
+                    bSend = sal_True;
+                }
+                catch ( IllegalArgumentException& )
+                {
+                }
+                catch ( Exception& )
+                {
+                }
+
+                if ( bSend == sal_False )
+                {
+                    css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
+
+                    SolarMutexGuard aGuard;
+                    Window* pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
+
+                    ErrorBox aBox( pParentWindow, SfxResId( RID_ERRBOX_MAIL_CONFIG ));
+                    aBox.Execute();
+                    eResult = SEND_MAIL_CANCELLED;
+                }
+                else
+                    eResult = SEND_MAIL_OK;
             }
         }
     }

@@ -1102,8 +1102,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             try
             {
-                uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                    ::comphelper::getProcessServiceFactory();
                 uno::Reference< uno::XComponentContext > xContext =
                     ::comphelper::getProcessComponentContext();
                 uno::Reference< css::system::XSystemShellExecute > xSystemShell(
