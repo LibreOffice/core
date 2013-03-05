@@ -22,7 +22,6 @@ private:
     bool m_bError;
     int  m_nb_tests;
     int  m_nb_tests_ok;
-    int  m_nb_tests_ko;
     int  m_nb_tests_skipped;
     OUString m_sCurrentTest;
     void process_directory(OUString sDirName);
@@ -65,18 +64,13 @@ Coverage::Coverage()
     : m_bError(false)
     , m_nb_tests(0)
     , m_nb_tests_ok(0)
-    , m_nb_tests_ko(0)
     , m_nb_tests_skipped(0)
 {
 }
 
 Coverage::~Coverage()
 {
-    fprintf(stderr,"basic coverage Summary : skipped:%d pass:%d failed:%d\n", m_nb_tests_skipped, m_nb_tests_ok, m_nb_tests_ko );
-    if(m_nb_tests_ko)
-    {
-        CPPUNIT_FAIL("");
-    }
+    fprintf(stderr,"basic coverage Summary : skipped:%d pass:%d\n", m_nb_tests_skipped, m_nb_tests_ok );
 }
 
 void Coverage::test_start(OUString sFileName)
@@ -87,9 +81,8 @@ void Coverage::test_start(OUString sFileName)
 
 void Coverage::test_failed()
 {
-    m_nb_tests_ko += 1;
-    fprintf(stderr,"%s,FAIL\n", rtl::OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr() );
-
+    CPPUNIT_FAIL(
+        OUStringToOString(m_sCurrentTest, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void Coverage::test_success()
