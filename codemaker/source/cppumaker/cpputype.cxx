@@ -3979,12 +3979,12 @@ sal_Bool ServiceType::dumpHxxFile(
                   << "\" ), the_context), ::com::sun::star::uno::UNO_QUERY);\n";
                 dec();
                 o << indent()
-                  << "} catch (::com::sun::star::uno::RuntimeException &) {\n";
+                  << "} catch (const ::com::sun::star::uno::RuntimeException &) {\n";
                 inc();
                 o << indent() << "throw;\n";
                 dec();
                 o << indent()
-                  << ("} catch (::com::sun::star::uno::Exception &"
+                  << ("} catch (const ::com::sun::star::uno::Exception &"
                       " the_exception) {\n");
                 inc();
                 o << indent()
@@ -4121,14 +4121,14 @@ sal_Bool ServiceType::dumpHxxFile(
                 if (!tree.getRoot()->present) {
                     dec();
                     o << indent()
-                      << ("} catch (::com::sun::star::uno::RuntimeException &)"
+                      << ("} catch (const ::com::sun::star::uno::RuntimeException &)"
                           " {\n");
                     inc();
                     o << indent() << "throw;\n";
                     dec();
                     dumpCatchClauses(o, tree.getRoot());
                     o << indent()
-                      << ("} catch (::com::sun::star::uno::Exception &"
+                      << ("} catch (const ::com::sun::star::uno::Exception &"
                           " the_exception) {\n");
                     inc();
                     o << indent()
@@ -4192,7 +4192,7 @@ void ServiceType::dumpCatchClauses(
     FileStream & out, codemaker::ExceptionTreeNode const * node)
 {
     if (node->present) {
-        out << indent() << "} catch (";
+        out << indent() << "} catch (const ";
         dumpType(out, node->name);
         out << " &) {\n";
         inc();
