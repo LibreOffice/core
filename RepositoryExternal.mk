@@ -2754,32 +2754,8 @@ endef
 
 endif # SYSTEM_UCPP
 
-# TODO what do do with gb_PYTHON_PRECOMMAND? Move here?
-ifeq ($(SYSTEM_PYTHON),YES)
+ifeq (,$(PYTHON_FOR_BUILD))
 
-define gb_ExternalExecutable__register_python
-$(call gb_ExternalExecutable_set_external,python,$(PYTHON))
-
-endef
-
-else ifeq ($(OS),MACOSX)
-
-#fixme: remove this MACOSX ifeq branch by filling in gb_PYTHON_PRECOMMAND in
-#gbuild/platform/macosx.mk correctly for mac, e.g. PYTHONPATH and PYTHONHOME
-#dirs for in-tree internal python
-define gb_ExternalExecutable__register_python
-$(call gb_ExternalExecutable_set_external,python,$(PYTHON))
-
-endef
-
-else ifeq ($(DISABLE_PYTHON),TRUE)
-
-# Build-time python
-gb_ExternalExecutable__register_python :=
-
-else # ! SYSTEM_PYTHON
-
-# internal python
 define gb_ExternalExecutable__register_python
 $(call gb_ExternalExecutable_set_internal,python)
 $(call gb_ExternalExecutable_set_precommand,python,$(gb_PYTHON_PRECOMMAND))
@@ -2792,7 +2768,14 @@ $(call gb_ExternalExecutable_add_dependencies,python,\
 
 endef
 
-endif # SYSTEM_PYTHON
+else
+
+define gb_ExternalExecutable__register_python
+$(call gb_ExternalExecutable_set_external,python,$(PYTHON_FOR_BUILD))
+
+endef
+
+endif # PYTHON_FOR_BUILD
 
 ifneq ($(SYSTEM_GENBRK),)
 
