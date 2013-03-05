@@ -14,6 +14,12 @@ $(eval $(call gb_Library_set_include,libreoffice,\
     -I$(SRCDIR)/desktop/inc \
 ))
 
+$(eval $(call gb_Library_add_libs,libreoffice,\
+	$(if $(filter $(OS),LINUX), \
+		-ldl \
+	) \
+))
+
 $(eval $(call gb_Library_use_libraries,libreoffice,\
 	$(gb_UWINAPI) \
 ))

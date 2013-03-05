@@ -8,7 +8,9 @@
  */
 
 // yuck / FIXME ...
-#include "../desktop/inc/liblibreoffice.h"
+#include "../desktop/inc/liblibreoffice.hxx"
+
+#include <assert.h>
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -44,7 +46,7 @@ void Test::test()
     rtl::Bootstrap::get( rtl::OUString( "arg-soffice" ), aArgSoffice );
     OString aInstall = OUStringToOString( aArgSoffice, RTL_TEXTENCODING_UTF8 );
     fprintf( stderr, "liblibreoffice test: '%s'\n", aInstall.getStr() );
-    lo_initialize( aInstall.getStr() );
+    assert (lo_init( aInstall.getStr() ));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

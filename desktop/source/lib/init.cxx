@@ -7,9 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <liblibreoffice_impl.hxx>
+
 #include <stdio.h>
 
-#include <liblibreoffice.h>
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
@@ -35,25 +36,14 @@ static uno::Reference<css::uno::XComponentContext> xContext;
 static uno::Reference<css::lang::XMultiServiceFactory> xSFactory;
 static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
-SAL_DLLPUBLIC_EXPORT void
-lo_error_free( LOError * )
-{
-}
-
-SAL_DLLPUBLIC_EXPORT LOError *
-lo_error_new( int, const char * )
+LODocument *
+LibLibreOffice_Impl::documentLoad( const char *docUrl )
 {
     return NULL;
 }
 
-SAL_DLLPUBLIC_EXPORT LODocument *
-lo_document_load( const char *, LOError ** )
-{
-    return NULL;
-}
-
-SAL_DLLPUBLIC_EXPORT loboolean
-lo_document_save( const char *, LOError ** )
+loboolean
+LibLibreOffice_Impl::documentSave( const char * )
 {
     return 1;
 }
@@ -92,8 +82,8 @@ initialize_uno( const rtl::OUString &aUserProfileURL )
     xSFactory = uno::Reference<lang::XMultiServiceFactory>(xFactory, uno::UNO_QUERY_THROW);
 }
 
-SAL_DLLPUBLIC_EXPORT loboolean
-lo_initialize( const char *app_path )
+loboolean
+LibLibreOffice_Impl::initialize( const char *app_path )
 {
     static bool bInitialized = false;
     if( bInitialized )
@@ -132,7 +122,11 @@ extern "C" {
 
 LibLibreOffice *liblibreoffice_hook(void)
 {
-    return new LibLibreOffice();
+    return new LibLibreOffice_Impl();
+}
+
+LibLibreOffice_Impl::~LibLibreOffice_Impl ()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,8 +9,12 @@
 
 #ifdef LINUX
 
+#include <stdio.h>
+#include <string.h>
+
+#include <osl/module.h>
 #include <sal/types.h>
-#include <liblibreoffice.h>
+#include <liblibreoffice.hxx>
 
 #include <dlfcn.h>
 #ifdef AIX
@@ -23,11 +27,11 @@ extern "C" {
     typedef LibLibreOffice *(HookFunction)(void);
 };
 
-extern LibLibreOffice *lo_init( const char *install_path )
+SAL_DLLPUBLIC_EXPORT LibLibreOffice *lo_init( const char *install_path )
 {
     if( !install_path )
         return NULL;
-    char *impl_lib = malloc( strlen (install_path) + sizeof( TARGET_LIB ) + 2 );
+    char *imp_lib = (char *) malloc( strlen (install_path) + sizeof( TARGET_LIB ) + 2 );
     strcpy( imp_lib, install_path );
     strcat( imp_lib, "/" );
     strcat( imp_lib, TARGET_LIB );
@@ -39,7 +43,7 @@ extern LibLibreOffice *lo_init( const char *install_path )
     }
     free( imp_lib );
 
-    HookFunction *pSym = dlsym( dlhandle, "liblibreoffice_hook" );
+    HookFunction *pSym = (HookFunction *) dlsym( dlhandle, "liblibreoffice_hook" );
     if( !pSym ) {
         fprintf( stderr, "failed to find hook in library '%s'\n", imp_lib );
         return NULL;
