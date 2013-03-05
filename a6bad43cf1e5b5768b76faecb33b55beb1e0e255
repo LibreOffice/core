@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+mA\u003d",
+        "filename": "vcl/README",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-03-05T11:56:22Z",
+      "side": 1,
+      "message": "The \u003c\u003c\u003c, \u003d\u003d\u003d and \u003e\u003e\u003e lines are conflict markers, you shouldn\u0027t leave them in your commit...",
+      "revId": "a6bad43cf1e5b5768b76faecb33b55beb1e0e255",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
