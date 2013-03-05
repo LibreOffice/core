@@ -13,11 +13,14 @@
 
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -39,6 +42,19 @@ static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 LODocument *
 LibLibreOffice_Impl::documentLoad( const char *docUrl )
 {
+    OUString sUrl = OUString::createFromAscii (docUrl);
+    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
+
+    uno::Reference < css::frame::XDesktop2 > xComponentLoader =
+            css::frame::Desktop::create(xContext);
+
+    osl_getProcessWorkingDir(&sWorkingDir.pData);
+    osl::FileBase::getFileURLFromSystemPath(sUrl, sDocPathUrl);
+    osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
+
+    uno::Reference < css::lang::XComponent > xComponent = xComponentLoader->loadComponentFromURL(
+            sAbsoluteDocUrl, OUString("_blank"), 0,
+            uno::Sequence < css::beans::PropertyValue >());
     return NULL;
 }
 
@@ -133,4 +149,3 @@ LibLibreOffice_Impl::~LibLibreOffice_Impl ()
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
