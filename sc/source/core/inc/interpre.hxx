@@ -44,7 +44,9 @@
 // This header must be included before including any Boost
 // math function.
 //
+#ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error
+#endif
 
 class ScDocument;
 class SbxVariable;
