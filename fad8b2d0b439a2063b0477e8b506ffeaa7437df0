@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+ks\u003d",
+        "filename": "dbaccess/source/ui/browser/unodatbr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T12:19:43Z",
+      "side": 1,
+      "message": "This is wrong, do not cast an object\u0027s type to another to access functionality if they are not of a related inheritance hierarchy. Instead, this should be\n\n return OUString( pData-\u003esAccessor.Len() ? pData-\u003esAccessor : GetEntryText( _pDataSourceEntry ));\n\nSorry for not having spotted this earlier.",
+      "revId": "fad8b2d0b439a2063b0477e8b506ffeaa7437df0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
