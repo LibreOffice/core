@@ -36,7 +36,7 @@
 #include <svl/stritem.hxx>
 #include <tools/debug.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 
 #include <vector>

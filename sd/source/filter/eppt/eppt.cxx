@@ -55,7 +55,7 @@
 #include <sot/storinfo.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/wmf.hxx>
+#include <vcl/wmf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <editeng/flditem.hxx>

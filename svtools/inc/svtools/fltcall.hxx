@@ -32,7 +32,7 @@
 #include <vcl/field.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 
 class FilterConfigItem;
 class SvStream;

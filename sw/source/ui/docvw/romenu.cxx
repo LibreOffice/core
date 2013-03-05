@@ -36,7 +36,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/inetimg.hxx>
 #include <svtools/transfer.hxx>

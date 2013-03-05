@@ -32,8 +32,8 @@
 #endif
 
 #include <tools/stream.hxx>
-#include <svtools/filter.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

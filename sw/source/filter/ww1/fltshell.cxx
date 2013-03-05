@@ -30,7 +30,7 @@
 #include <ctype.h>
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>

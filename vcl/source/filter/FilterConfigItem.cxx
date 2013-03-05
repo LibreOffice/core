@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>

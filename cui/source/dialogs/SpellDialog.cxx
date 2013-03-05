@@ -39,7 +39,7 @@
 #include <svl/undo.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svtools/textdata.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/splwrap.hxx>
 #include <linguistic/lngprops.hxx>

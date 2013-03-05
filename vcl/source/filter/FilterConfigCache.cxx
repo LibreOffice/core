@@ -27,17 +27,21 @@
  ************************************************************************/
 
 #include "FilterConfigCache.hxx"
-#include <svtools/filter.hxx>
+
+#include <vcl/graphicfilter.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
 using namespace ::com::sun::star::lang          ;   // XMultiServiceFactory
 using namespace ::com::sun::star::container     ;   // XNameAccess
 using namespace ::com::sun::star::uno           ;   // Reference
 using namespace ::com::sun::star::beans         ;   // PropertyValue
+using namespace ::com::sun::star::configuration ;
 using ::rtl::OUString;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
@@ -68,7 +72,7 @@ sal_Int32 FilterConfigCache::nIndUserData = -1;
 sal_Int32 FilterConfigCache::nIndFileFormatVersion = -1;
 sal_Int32 FilterConfigCache::nIndTemplateName = -1;
 
-sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
+sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const rtl::OUString& rUserDataEntry )
 {
     bIsPixelFormat = bIsInternalFilter = sal_False;
     sFilterName = String( rUserDataEntry );

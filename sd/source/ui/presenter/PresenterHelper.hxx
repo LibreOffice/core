@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 

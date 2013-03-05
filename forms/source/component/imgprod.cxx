@@ -33,7 +33,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
 #include "svtools/imageresourceaccess.hxx"

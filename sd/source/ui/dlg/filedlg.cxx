@@ -49,7 +49,7 @@
 #include "filedlg.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 
 
 //-----------------------------------------------------------------------------

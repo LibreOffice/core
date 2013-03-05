@@ -26,8 +26,13 @@
  *
  ************************************************************************/
 
+#include <officecfg/Office/Common.hxx>
+
 #include <svsys.h>
+#include "comphelper/processfactory.hxx"
+#include <rtl/bootstrap.hxx>
 #include "tools/debug.hxx"
+#include <vcl/graphicfilter.hxx>
 
 #include "i18npool/mslangid.hxx"
 
@@ -38,7 +43,6 @@
 #include "vcl/configsettings.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/unohelp.hxx"
-#include "vcl/bitmapex.hxx"
 
 #include "unotools/fontcfg.hxx"
 #include "unotools/localedatawrapper.hxx"
@@ -46,7 +50,7 @@
 #include "unotools/confignode.hxx"
 #include "unotools/syslocaleoptions.hxx"
 
-using ::rtl::OUString;
+using namespace ::com::sun::star;
 
 #include "svdata.hxx"
 #include "impimagetree.hxx"
@@ -206,7 +210,10 @@ sal_Bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 
 // =======================================================================
 
-ImplStyleData::ImplStyleData()
+ImplStyleData::ImplStyleData() :
+    maPersonaHeaderFooter(),
+    maPersonaHeaderBitmap(),
+    maPersonaFooterBitmap()
 {
     mnRefCount                  = 1;
     mnScrollBarSize             = 16;
@@ -302,7 +309,10 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maFieldFont( rData.maFieldFont ),
     maIconFont( rData.maIconFont ),
     maGroupFont( rData.maGroupFont ),
-    maWorkspaceGradient( rData.maWorkspaceGradient )
+    maWorkspaceGradient( rData.maWorkspaceGradient ),
+    maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
+    maPersonaHeaderBitmap( rData.maPersonaHeaderBitmap ),
+    maPersonaFooterBitmap( rData.maPersonaFooterBitmap )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
@@ -674,6 +684,60 @@ sal_Bool StyleSettings::GetUseImagesInMenus() const
         return GetPreferredUseImagesInMenus();
 
     return (sal_Bool)nStyle;
+}
+
+// -----------------------------------------------------------------------
+
+static BitmapEx readBitmapEx( const rtl::OUString& rPath )
+{
+    rtl::OUString aPath( rPath );
+    rtl::Bootstrap::expandMacros( aPath );
+
+    // import the image
+    Graphic aGraphic;
+    if ( GraphicFilter::LoadGraphic( aPath, String(), aGraphic ) != GRFILTER_OK )
+        return BitmapEx();
+
+    return aGraphic.GetBitmapEx();
+}
+
+enum WhichPersona { PERSONA_HEADER, PERSONA_FOOTER };
+
+/** Update the setting of the Persona header / footer in ImplStyleData */
+static void setupPersonaHeaderFooter( WhichPersona eWhich, rtl::OUString& /*rHeaderFooter*/, BitmapEx& rHeaderFooterBitmap )
+{
+    rtl::OUString aName;
+    switch ( eWhich ) {
+        case PERSONA_HEADER: aName = "header.jpg"; break;
+        case PERSONA_FOOTER: aName = "footer.jpg"; break;
+    }
+
+    if ( !aName.isEmpty() )
+    {
+        // try the gallery first, then edition, and the program path if
+        // everything else fails
+        rtl::OUString gallery = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+        rtl::Bootstrap::expandMacros( gallery );
+        gallery += "/user/gallery/personas/";
+
+        if ( rHeaderFooterBitmap.IsEmpty() )
+            rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/edition/" + aName );
+
+        if ( rHeaderFooterBitmap.IsEmpty() )
+            rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/program/" + aName );
+    }
+}
+
+const BitmapEx StyleSettings::GetPersonaHeader() const
+{
+    setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->maPersonaHeaderBitmap );
+    return mpData->maPersonaHeaderBitmap;
+}
+
+const BitmapEx StyleSettings::GetPersonaFooter() const
+{
+    setupPersonaHeaderFooter( PERSONA_FOOTER, mpData->maPersonaHeaderFooter, mpData->maPersonaFooterBitmap );
+    return mpData->maPersonaFooterBitmap;
 }
 
 // -----------------------------------------------------------------------
@@ -1508,11 +1572,11 @@ bool AllSettings::GetLayoutRTL() const
         nUIMirroring = 0; // ask configuration only once
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString("org.openoffice.Office.Common/I18N/CTL") );    // note: case sensisitive !
+            rtl::OUString("org.openoffice.Office.Common/I18N/CTL") );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
             sal_Bool bTmp = sal_Bool();
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString("UIMirroring") );
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( rtl::OUString("UIMirroring") );
             if( aValue >>= bTmp )
             {
                 // found true or false; if it was nil, nothing is changed

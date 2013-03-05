@@ -36,7 +36,7 @@
 #include <shells.hrc>
 #include <caption.hxx>
 #include <svl/svstdarr.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svx/htmlmode.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>

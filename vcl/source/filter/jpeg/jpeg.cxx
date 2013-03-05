@@ -33,15 +33,15 @@ extern "C"
 {
     #include "stdio.h"
     #include "jpeg.h"
-    #include "jpeglib.h"
-    #include "jerror.h"
+    #include <jpeglib.h>
+    #include <jerror.h>
 }
 
 #define _JPEGPRIVATE
 #include <vcl/bmpacc.hxx>
 #include "jpeg.hxx"
-#include <svtools/FilterConfigItem.hxx>
-#include <svtools/filter.hxx>
+#include <vcl/FilterConfigItem.hxx>
+#include <vcl/graphicfilter.hxx>
 
 // -----------
 // - Defines -

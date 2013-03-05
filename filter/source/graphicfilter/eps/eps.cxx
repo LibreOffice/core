@@ -44,7 +44,7 @@
 #include <unotools/configmgr.hxx>
 #include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
-#include <svtools/FilterConfigItem.hxx>
+#include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/rendergraphicrasterizer.hxx>
 #include "strings.hrc"
