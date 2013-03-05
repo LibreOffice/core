@@ -41,9 +41,9 @@ protected:
                           sal_uInt16 nAspect = ASPECT_CONTENT );
     virtual void    FillClass( SvGlobalName * pClassName,
                                sal_uInt32 * pFormat,
-                               String * pAppName,
-                               String * pFullTypeName,
-                               String * pShortTypeName,
+                               OUString * pAppName,
+                               OUString * pFullTypeName,
+                               OUString * pShortTypeName,
                                sal_Int32 nVersion,
                                sal_Bool bTemplate = false ) const;
 

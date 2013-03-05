@@ -204,7 +204,7 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
             DBG_ASSERT( pLE, "Can not find entry in array" );
             Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
             DBG_ASSERT( pBE, "The data in the entry not found!" );
-            String aName( GetEntryText( pLE ) );
+            OUString aName( GetEntryText( pLE ) );
 
             switch ( pBE->GetType() )
             {
@@ -221,8 +221,8 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
                 // extract the module name from the string like "Sheet1 (Example1)"
                 if( bDocumentObjects )
                 {
-                    sal_uInt16 nIndex = 0;
-                    aName = aName.GetToken( 0, ' ', nIndex );
+                    sal_Int32 nIndex = 0;
+                    aName = aName.getToken( 0, ' ', nIndex );
                 }
                 pVar = static_cast<StarBASIC*>(pVar)->FindModule( aName );
                 break;
@@ -261,10 +261,10 @@ EntryDescriptor TreeListBox::GetEntryDescriptor( SvTreeListEntry* pEntry )
 {
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
     LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
-    String aLibName;
-    String aLibSubName;
-    String aName;
-    String aMethodName;
+    OUString aLibName;
+    OUString aLibSubName;
+    OUString aName;
+    OUString aMethodName;
     EntryType eType = OBJ_TYPE_UNKNOWN;
 
     if ( !pEntry )
@@ -380,9 +380,9 @@ bool TreeListBox::IsValidEntry( SvTreeListEntry* pEntry )
     EntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
     LibraryLocation eLocation( aDesc.GetLocation() );
-    String aLibName( aDesc.GetLibName() );
-    String aName( aDesc.GetName() );
-    String aMethodName( aDesc.GetMethodName() );
+    OUString aLibName( aDesc.GetLibName() );
+    OUString aName( aDesc.GetName() );
+    OUString aMethodName( aDesc.GetMethodName() );
     EntryType eType( aDesc.GetType() );
 
     switch ( eType )
