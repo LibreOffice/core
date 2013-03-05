@@ -153,7 +153,7 @@ endef
 
 ifeq ($(gb_FULLDEPS),$(true))
 
-$(call gb_UnoApiTarget_get_dep_target,%) : $(call gb_Package_get_target,solenv_concat-deps)
+$(call gb_UnoApiTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_dependencies,concat-deps)
 	$(call gb_UnoApiTarget__command_dep,$@,$*,$(UNOAPI_IDLFILES))
 
 endif
