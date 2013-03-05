@@ -67,7 +67,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
             ucpp \
     ) \
     uiex \
-    ulfconv \
     ulfex \
     $(call gb_Helper_optional,ODK,unoapploader) \
     xpdfimport \

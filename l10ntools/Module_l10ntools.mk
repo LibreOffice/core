@@ -29,7 +29,6 @@ $(eval $(call gb_Module_Module,l10ntools))
 $(eval $(call gb_Module_add_targets,l10ntools,\
     Executable_helpex \
     Executable_idxdict \
-    Executable_ulfconv \
     Executable_ulfex \
     Executable_cfgex \
     Executable_uiex \
