@@ -1,0 +1,310 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+ho\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "description",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hk\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "important, as",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hg\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "know -\u003e remember",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hc\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "If EditorCtrl is ReadOnly, editing is forbidden!",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hY\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "..., editing is forbidden!",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hU\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "re-enable edit mode",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hQ\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "field",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hM\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "reset",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hI\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "number serially",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hE\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1079,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "set -\u003e relocate",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+hA\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "relocate",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+g8\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "relocate",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+g4\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "cannot -\u003e must not",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+g0\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "you accidently changed the indentation\n\nnu,ber -\u003e number",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+gw\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "at least one cell is full behind PastePosition -\u003e go right to the end",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+gs\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "Delete possible existing primary keys",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+go\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1789,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "handle-columns",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+gk\u003d",
+        "filename": "dbaccess/source/ui/tabledesign/TEditControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1826,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T17:58:23Z",
+      "side": 1,
+      "message": "if there is no field name assigned",
+      "revId": "06512facd45d42941b01ec37f74109f6bde043ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
