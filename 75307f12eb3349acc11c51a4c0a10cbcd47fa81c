@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3//+ns\u003d",
+        "filename": "connectivity/source/drivers/file/FTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 1,
+      "message": "this comment can go, too",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+vU\u003d",
         "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
         "patchSetId": 2
@@ -240,6 +257,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3//+o0\u003d",
+        "filename": "sal/inc/sal/log-areas.dox",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 1,
+      "message": "this one can go up into the section @dbaccess",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+tI\u003d",
         "filename": "sfx2/source/control/bindings.cxx",
         "patchSetId": 2
@@ -257,6 +291,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3//+ow\u003d",
+        "filename": "sfx2/source/control/bindings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 1,
+      "message": "Eike, because sfx2 is not defined as a log area.",
+      "parentUuid": "AAAAV3//+tI\u003d",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+tE\u003d",
         "filename": "sfx2/source/control/bindings.cxx",
         "patchSetId": 2
@@ -268,6 +320,24 @@
       "writtenOn": "2013-03-05T00:16:41Z",
       "side": 1,
       "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+os\u003d",
+        "filename": "sfx2/source/control/bindings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "AAAAV3//+tE\u003d",
       "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -353,6 +423,24 @@
       "writtenOn": "2013-03-05T00:16:41Z",
       "side": 1,
       "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+oo\u003d",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 1,
+      "message": "maybe sfx2 should be added to @section sfx2:\n\n@li @c sfx2",
+      "parentUuid": "AAAAV3//+sw\u003d",
       "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -455,6 +543,23 @@
       "writtenOn": "2013-03-05T00:16:41Z",
       "side": 1,
       "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+oc\u003d",
+        "filename": "slideshow/source/engine/OGLTrans/generic/OGLTrans_TransitionerImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 1,
+      "message": "With this on non-UNX platforms loplugin will show an indentation error, because of the if above.",
       "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

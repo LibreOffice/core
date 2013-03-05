@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAV3//+ng\u003d",
+        "filename": "basegfx/source/polygon/b2dpolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "mutex",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+nk\u003d",
+        "filename": "basegfx/source/polygon/b3dpolypolygontools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "mutex",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+u0\u003d",
         "filename": "basic/source/runtime/iosys.cxx",
         "patchSetId": 2
@@ -138,6 +172,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3//+no\u003d",
+        "filename": "chart2/source/controller/main/ChartDropTargetHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "would leave a comment, that aStrings[1] is the DocName",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+uQ\u003d",
         "filename": "connectivity/source/commontools/dbtools2.cxx",
         "patchSetId": 2
@@ -189,6 +240,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3//+nw\u003d",
+        "filename": "connectivity/source/parse/sqlnode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "mutex",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+rc\u003d",
         "filename": "drawinglayer/source/geometry/viewinformation2d.cxx",
         "patchSetId": 2
@@ -206,6 +274,159 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3//+n0\u003d",
+        "filename": "drawinglayer/source/geometry/viewinformation3d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "mutex, as all mutex below",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+oA\u003d",
+        "filename": "drawinglayer/source/primitive3d/polygontubeprimitive3d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "ditto",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+n8\u003d",
+        "filename": "drawinglayer/source/primitive3d/polygontubeprimitive3d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "ditto",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+n4\u003d",
+        "filename": "drawinglayer/source/primitive3d/polygontubeprimitive3d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "ditto",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+oI\u003d",
+        "filename": "drawinglayer/source/primitive3d/sdrextrudeprimitive3d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "Mutex..",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+oE\u003d",
+        "filename": "drawinglayer/source/primitive3d/sdrextrudeprimitive3d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "ditto",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+oQ\u003d",
+        "filename": "drawinglayer/source/primitive3d/sdrlatheprimitive3d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "Mutex, would leave this untouched.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+oM\u003d",
+        "filename": "drawinglayer/source/primitive3d/sdrlatheprimitive3d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "ditto",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+oU\u003d",
+        "filename": "filter/source/graphicfilter/icgm/class2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "Absolutely sure? Maybe an error. See case 0x06.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+t8\u003d",
         "filename": "filter/source/placeware/exporter.cxx",
         "patchSetId": 2
@@ -217,6 +438,24 @@
       "writtenOn": "2013-03-05T00:16:41Z",
       "side": 0,
       "message": "It\u0027s debug-only code, plese leave it in.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+qU\u003d",
+        "filename": "filter/source/placeware/exporter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "Eike, this is the not-debug case. aURL is not used in this case so in my opinion it can go.",
+      "parentUuid": "AAAAV3//+t8\u003d",
       "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -285,6 +524,23 @@
       "writtenOn": "2013-03-05T00:16:41Z",
       "side": 0,
       "message": "... this HCDBG debug code doesn\u0027t know the variable. Instead, I suggest to remove the foo variable and then change this line to\n\n HCDBG(std::cerr \u003c\u003c \"hid pushback\" \u003c\u003c (anchor.empty() ? hid : hid + \"#\" + anchor) \u003c\u003c std::endl);",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+oY\u003d",
+        "filename": "l10ntools/source/xrmmerge.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "parameter pOutput is now unused.",
       "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -393,6 +649,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAV3//+og\u003d",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "This needs some investigation, I\u0027m not sure about it. I\u0027ve stumbled upon it some time earlier...",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAV3//+sE\u003d",
         "filename": "svx/source/gallery2/galobj.cxx",
         "patchSetId": 2
@@ -421,6 +694,23 @@
       "writtenOn": "2013-03-05T00:16:41Z",
       "side": 0,
       "message": "... change this line to\n\n if ( aPrivateInd.EqualsAscii( \"private\" ) \u0026\u0026",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+ok\u003d",
+        "filename": "svx/source/sdr/primitive2d/sdrprimitivetools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T10:37:22Z",
+      "side": 0,
+      "message": "I would leave the mutex untouched.",
       "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
