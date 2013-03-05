@@ -47,3 +47,7 @@ How the platform abstraction works
 		  SalFrames, SalVirtualDevices, SalPrinters,
 		  Timers, the SolarMutexe, Drag&Drop and other
 		  objects, as well as the primary event loop wrapper.
+
+Note: references to "SV" in the code are in relation to StarView, which is a
+portable C++ class library for GUIs, with very old roots, that was developed
+by StarDivision.
