@@ -40,7 +40,7 @@ service CoordinateSystem
      */
     interface XCoordinateSystem;
 
-    /** a coordinate system can contain several chart types, which than do contain the data series.
+    /** a coordinate system can contain several chart types, which then do contain the data series.
     */
     interface com::sun::star::chart2::XChartTypeContainer;
 
