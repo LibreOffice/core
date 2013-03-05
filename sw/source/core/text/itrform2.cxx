@@ -1597,6 +1597,24 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
         }
     }
 
+    // In case of compat mode, it's possible that a tab portion is wider after
+    // formatting than before. If this is the case, we also have to make sure
+    // the SwLineLayout is wider as well.
+    if (GetInfo().GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVER_MARGIN))
+    {
+        sal_uInt16 nSum = 0;
+        SwLinePortion* pPor = pCurr->GetFirstPortion();
+
+        while (pPor)
+        {
+            nSum += pPor->Width();
+            pPor = pPor->GetPortion();
+        }
+
+        if (nSum > pCurr->Width())
+            pCurr->Width(nSum);
+    }
+
     // calculate optimal repaint rectangle
     if ( bOptimizeRepaint )
     {
