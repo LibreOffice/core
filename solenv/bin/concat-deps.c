@@ -774,21 +774,10 @@ static void emit_single_boost_header(void)
     fprintf(stdout, "%s" BOOST_TARGET " ", work_dir);
 }
 
-static void emit_unpacked_target(char const*const token, char const*const end)
+static void emit_unpacked_target(const char* token, const char* end)
 {
-    /* is there some obvious way to printf N characters that i'm missing? */
-    size_t size = end - token + 1;
-    char* tmp=(char *)malloc(size*sizeof(char));
-    #ifdef _MSC_VER
-    // MSVC _snprintf doesn't null terminate strings
-    _snprintf(tmp, size, "%s", token);
-    tmp[size-1]='\0';
-    #else
-    snprintf(tmp, size, "%s", token);
-    #endif
-    fputs(tmp, stdout);
+    fwrite(token, 1, end-token, stdout);
     fputs(".done ", stdout);
-    free(tmp);
 }
 
 /* prefix paths to absolute */
