@@ -58,9 +58,9 @@ include $(BUILDDIR)/config_$(gb_Side).mk
 
 ifeq ($(GMAKE_OPTIONS),)
 ifeq ($(verbose)$(VERBOSE),)
-export GMAKE_OPTIONS:=-rs
+export GMAKE_OPTIONS:=-rs$(MAKEFLAGS)
 else
-export GMAKE_OPTIONS:=-r
+export GMAKE_OPTIONS:=-r$(MAKEFLAGS)
 endif
 endif
 
