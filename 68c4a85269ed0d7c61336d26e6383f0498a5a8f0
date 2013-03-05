@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+rE\u003d",
+        "filename": "vcl/source/control/ilstbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T09:04:26Z",
+      "side": 1,
+      "message": "decrements",
+      "revId": "68c4a85269ed0d7c61336d26e6383f0498a5a8f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+rA\u003d",
+        "filename": "vcl/source/control/ilstbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T09:04:26Z",
+      "side": 1,
+      "message": "be shown",
+      "revId": "68c4a85269ed0d7c61336d26e6383f0498a5a8f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+qo\u003d",
+        "filename": "vcl/source/control/ilstbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2435,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-05T09:04:26Z",
+      "side": 1,
+      "message": "maybe we do need one now",
+      "revId": "68c4a85269ed0d7c61336d26e6383f0498a5a8f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
