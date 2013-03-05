@@ -1,0 +1,565 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+uw\u003d",
+        "filename": "basic/source/runtime/iosys.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "So here we can\u0027t remove and ignore the result. Actually convertLineEnd() expects a const OString\u0026 so nothing will be done to rStr here.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+vc\u003d",
+        "filename": "basic/source/sbx/sbxvalue.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "I\u0027d prefer if the if had block braces {} instead of the switch being glued directly to the if. Enables a developer to jump the block in the editor. So here one \n\n {",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+vY\u003d",
+        "filename": "basic/source/sbx/sbxvalue.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "and here\n\n }\n\nthe closing brace.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+vU\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "I\u0027d prefer if the if had block braces {} instead of the switch being glued directly to the if. Enables a developer to jump the block in the editor. So here one \n\n {",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+vE\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "This alignment looks kinda weird..",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+vM\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1682,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "What\u0027s this brace sticking out?",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+vI\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "What\u0027s this brace sticking out?",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+vQ\u003d",
+        "filename": "cppcanvas/source/mtfrenderer/emfplus.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1762,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "and probably here\n\n }\n\nthe closing brace of the entire switch.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+to\u003d",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1910,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "The entire inner block one indentation level more.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tk\u003d",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3460,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "The entire inner block one indentation level more.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+vA\u003d",
+        "filename": "idl/source/prj/command.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "I\u0027d prefer if the if had block braces {} instead of the for loop being glued directly to the if. Enables a developer to jump the block in the editor. So here one \n\n {",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+u8\u003d",
+        "filename": "idl/source/prj/command.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "and probably here the\n\n }\n\nclosing brace.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tc\u003d",
+        "filename": "rsc/source/rscpp/cpp5.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "Actually the entire block from here ...",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tY\u003d",
+        "filename": "rsc/source/rscpp/cpp5.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "... up to here needs to be indented.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tI\u003d",
+        "filename": "sfx2/source/control/bindings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "Nice intention, but why introduce these changes in this patch? They are completely unrelated to the topic.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tE\u003d",
+        "filename": "sfx2/source/control/bindings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tA\u003d",
+        "filename": "sfx2/source/control/dispatch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+s8\u003d",
+        "filename": "sfx2/source/control/dispatch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1681,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+s4\u003d",
+        "filename": "sfx2/source/control/shell.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+s0\u003d",
+        "filename": "sfx2/source/control/shell.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sw\u003d",
+        "filename": "sfx2/source/dialog/dinfdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+ss\u003d",
+        "filename": "sfx2/source/dialog/filedlghelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1651,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+so\u003d",
+        "filename": "sfx2/source/dialog/filedlghelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sk\u003d",
+        "filename": "sfx2/source/dialog/filedlghelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1675,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sg\u003d",
+        "filename": "sfx2/source/dialog/filedlghelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1683,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sc\u003d",
+        "filename": "sfx2/source/doc/sfxbasemodel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3161,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sY\u003d",
+        "filename": "sfx2/source/doc/sfxbasemodel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3174,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sM\u003d",
+        "filename": "slideshow/source/engine/transitions/fanwipe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "Change unrelated to topic of the patch.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+r8\u003d",
+        "filename": "unotools/source/config/configitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "Please add one opening brace\n\n {",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+r4\u003d",
+        "filename": "unotools/source/config/configitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "and one closing brance\n\n }",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+r0\u003d",
+        "filename": "unotools/source/config/configitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "Please add one opening brace\n\n {",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+rw\u003d",
+        "filename": "unotools/source/config/configitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "and one closing brace\n\n }",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+rs\u003d",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3481,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 1,
+      "message": "Actually it is better in this case to have the single semicolon on the next line, but indented. This clarifies that the loop has no body.",
+      "revId": "75307f12eb3349acc11c51a4c0a10cbcd47fa81c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,429 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAV3//+u0\u003d",
+        "filename": "basic/source/runtime/iosys.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "This before was already a bug, the converted aStr should had been passed instead of rStr.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+us\u003d",
+        "filename": "basic/source/sbx/sbxobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "I suspect an error in the original code here, so aNameStr2 should not be removed.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+uo\u003d",
+        "filename": "basic/source/sbx/sbxobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Evaluating twice\n\n aNameStr1.getStr(), aNameStr1.getStr()\n\nlooks like an error to me, presumably that should be\n\n aNameStr1.getStr(), aNameStr2.getStr()",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+uk\u003d",
+        "filename": "basic/source/sbx/sbxobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Do not remove.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+ug\u003d",
+        "filename": "basic/source/sbx/sbxobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Also\n\n aNameStr1.getStr(), aNameStr2.getStr()",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+uc\u003d",
+        "filename": "basic/source/sbx/sbxobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Do not remove.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+uY\u003d",
+        "filename": "basic/source/sbx/sbxobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Also\n\n aNameStr1.getStr(), aNameStr2.getStr()",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+uU\u003d",
+        "filename": "basic/source/sbx/sbxobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Do not remove.\nThis is debug-only-code and might serve inspecting the names in the debugger.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+uQ\u003d",
+        "filename": "connectivity/source/commontools/dbtools2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "This is debug-only-code, please leave it in.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+uM\u003d",
+        "filename": "connectivity/source/drivers/postgresql/pq_xtable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "then also remove this old commented-out code..",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+uA\u003d",
+        "filename": "connectivity/source/drivers/postgresql/pq_xtables.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "I\u0027m unsure about this one, it could be that the original intent was to extract a new description for each column, looks like, so this instead should be\n\n description \u003d extractStringProperty( column,st.DESCRIPTION );",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+t8\u003d",
+        "filename": "filter/source/placeware/exporter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "It\u0027s debug-only code, plese leave it in.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+t4\u003d",
+        "filename": "forms/source/xforms/datatypes.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "I\u0027m not sure if removing this is correct, the original intention may have been to actually use sConverted ...",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+t0\u003d",
+        "filename": "forms/source/xforms/datatypes.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "... instead of _rValue here. But I may be wrong and code has changed over time, best to leave this decision to someone who is familiar with the code.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tw\u003d",
+        "filename": "helpcompiler/source/HelpCompiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "This can\u0027t be removed as is because otherwise ...",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+ts\u003d",
+        "filename": "helpcompiler/source/HelpCompiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "... this HCDBG debug code doesn\u0027t know the variable. Instead, I suggest to remove the foo variable and then change this line to\n\n HCDBG(std::cerr \u003c\u003c \"hid pushback\" \u003c\u003c (anchor.empty() ? hid : hid + \"#\" + anchor) \u003c\u003c std::endl);",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tg\u003d",
+        "filename": "lotuswordpro/source/filter/lwpoleobject.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "The call can\u0027t be removed, it reads data from the stream and advances the stream pointer!",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tU\u003d",
+        "filename": "sal/inc/sal/log-areas.dox",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Do not remove this, it is used in jvmfwk/plugins/sunmajor/pluginlib/diagnostics.h for JFW_ENSURE()",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tQ\u003d",
+        "filename": "sfx2/source/appl/appuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2052,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Do not remove the entire statement, SeekGroup() has side effects.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+tM\u003d",
+        "filename": "sfx2/source/appl/appuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Do not remove the entire statement, SeekGroup() has side effects.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sU\u003d",
+        "filename": "sfx2/source/view/sfxbasecontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Do not remove the entire statement, SeekGroup() has side effects.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sQ\u003d",
+        "filename": "sfx2/source/view/sfxbasecontroller.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Do not remove the entire statement, SeekGroup() has side effects.",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sE\u003d",
+        "filename": "svx/source/gallery2/galobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "Better leave this here and ...",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+sA\u003d",
+        "filename": "svx/source/gallery2/galobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "... change this line to\n\n if ( aPrivateInd.EqualsAscii( \"private\" ) \u0026\u0026",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAV3//+ro\u003d",
+        "filename": "vcl/unx/gtk/fpicker/SalGtkFolderPicker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-05T00:16:41Z",
+      "side": 0,
+      "message": "If this line is removed the rDescription parameter name (and only the name) needs to be commented out because otherwise in an --enable-werror build the build breaks with \"unused variable\".",
+      "revId": "70e8c341af0c6c6f2568a75326b6ee1d3df8145a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
