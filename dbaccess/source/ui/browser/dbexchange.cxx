@@ -61,13 +61,13 @@ namespace dbaui
 
     // -----------------------------------------------------------------------------
     ODataClipboard::ODataClipboard(
-                    const ::rtl::OUString&  _rDatasource,
+                    const OUString&  _rDatasource,
                     const sal_Int32         _nCommandType,
-                    const ::rtl::OUString&  _rCommand,
+                    const OUString&  _rCommand,
                     const Reference< XConnection >& _rxConnection,
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XComponentContext >& _rxORB)
-                    :ODataAccessObjectTransferable( _rDatasource,::rtl::OUString(), _nCommandType, _rCommand, _rxConnection )
+                    :ODataAccessObjectTransferable( _rDatasource,OUString(), _nCommandType, _rCommand, _rxConnection )
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {
@@ -82,12 +82,12 @@ namespace dbaui
 
     // -----------------------------------------------------------------------------
     ODataClipboard::ODataClipboard(
-                    const ::rtl::OUString&  _rDatasource,
+                    const OUString&  _rDatasource,
                     const sal_Int32         _nCommandType,
-                    const ::rtl::OUString&  _rCommand,
+                    const OUString&  _rCommand,
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XComponentContext >& _rxORB)
-        :ODataAccessObjectTransferable( _rDatasource, ::rtl::OUString(),_nCommandType, _rCommand)
+        :ODataAccessObjectTransferable( _rDatasource, OUString(),_nCommandType, _rCommand)
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {

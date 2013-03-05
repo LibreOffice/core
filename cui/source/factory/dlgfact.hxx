@@ -164,7 +164,7 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual editeng::HangulHanjaConversion::ConversionDirection    GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const;
     virtual void    SetCurrentString(
                     const String& _rNewString,
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions,
+                    const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument = true
                 );
     virtual String  GetCurrentString( ) const ;
@@ -515,7 +515,7 @@ class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
 {
     DECL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl, InsertObjectDialog_Impl)
     virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
     virtual sal_Bool IsCreateNew();
 };
 
@@ -623,10 +623,10 @@ public:
                                             const SfxItemSet& rAttr,
                                             SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
                                             SvxDistributeVertical eVer = SvxDistributeVerticalNone);
-    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, const rtl::OUString& rCommmand,
+    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, const OUString& rCommmand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
             const SvObjectServerList* pList = 0 );
-    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, const rtl::OUString& rCommmand,
+    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, const OUString& rCommmand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent );
    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, sal_Bool bHTML, sfx2::SvBaseLink* p=0  );
@@ -714,7 +714,7 @@ public:
                                             sal_uInt32 nResId);
     virtual AbstractFmSearchDialog*         CreateFmSearchDialog(Window* pParent, //add for FmSearchDialog
                                                         const OUString& strInitialText,
-                                                        const ::std::vector< String >& _rContexts,
+                                                        const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier);
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,  //add for GraphicFilterEmboss
@@ -777,7 +777,7 @@ public:
     virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( Window* pParent ) ;
 
     virtual VclAbstractDialog*          CreateOptionsDialog(
-        Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext );
+        Window* pParent, const OUString& rExtensionId, const rtl::OUString& rApplicationContext );
 
     virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId );
 
