@@ -138,6 +138,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
 
     sal_uInt16  mnImportFlags;
     sal_uInt16  mnErrorFlags;
+    std::set< OUString > embeddedFontUrlsKnown;
 
 protected:
 
@@ -448,6 +449,12 @@ public:
         @see <member>mbIsGraphicLoadOnDemandSupported</member>
      */
     bool isGraphicLoadOnDemandSupported() const;
+
+    /**
+        Returns true if the embedded font document URL has already been processed.
+        Otherwise returns false and consequent calls with the same URL will return true.
+    */
+    bool embeddedFontAlreadyProcessed( const OUString& url );
 
     virtual void NotifyEmbeddedFontRead() {};
 };

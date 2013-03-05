@@ -275,13 +275,11 @@ void XMLFontAutoStylePool::exportXML()
         if( tryToEmbedFonts )
         {
             std::vector< OUString > fileUrls;
-            static const char* const styles[] = { "", "b", "i", "bi" };
             static const FontWeight weight[] = { WEIGHT_NORMAL, WEIGHT_BOLD, WEIGHT_NORMAL, WEIGHT_BOLD };
             static const FontItalic italic[] = { ITALIC_NONE, ITALIC_NONE, ITALIC_NORMAL, ITALIC_NORMAL };
-            assert( SAL_N_ELEMENTS( styles ) == SAL_N_ELEMENTS( italic ));
-            assert( SAL_N_ELEMENTS( styles ) == SAL_N_ELEMENTS( weight ));
+            assert( SAL_N_ELEMENTS( weight ) == SAL_N_ELEMENTS( italic ));
             for( unsigned int j = 0;
-                 j < SAL_N_ELEMENTS( styles );
+                 j < SAL_N_ELEMENTS( weight );
                  ++j )
             {
                 OUString fileUrl = EmbeddedFontsHelper::fontFileUrl( pEntry->GetFamilyName(), pEntry->GetFamily(),
@@ -290,7 +288,7 @@ void XMLFontAutoStylePool::exportXML()
                     continue;
                 if( !fontFilesMap.count( fileUrl ))
                 {
-                    OUString docUrl = embedFontFile( fileUrl, styles[ j ] );
+                    OUString docUrl = embedFontFile( fileUrl );
                     if( !docUrl.isEmpty())
                         fontFilesMap[ fileUrl ] = docUrl;
                     else
@@ -319,7 +317,7 @@ void XMLFontAutoStylePool::exportXML()
     }
 }
 
-OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl, const char* style )
+OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl )
 {
     try
     {
@@ -333,7 +331,7 @@ OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl, const cha
         OUString name;
         do
         {
-            name = "font" + OUString::number( ++index ) + OUString::createFromAscii( style ) + ".ttf";
+            name = "font" + OUString::number( ++index ) + ".ttf";
         } while( storage->hasByName( name ) );
         uno::Reference< io::XOutputStream > outputStream;
         outputStream.set( storage->openStreamElement( name, ::embed::ElementModes::WRITE ), UNO_QUERY_THROW );

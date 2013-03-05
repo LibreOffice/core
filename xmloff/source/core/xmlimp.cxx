@@ -1902,4 +1902,12 @@ SvXMLImport::AddRDFa(uno::Reference<rdf::XMetadatable> i_xObject,
         i_rAbout, i_rProperty, i_rContent, i_rDatatype);
 }
 
+bool SvXMLImport::embeddedFontAlreadyProcessed( const OUString& url )
+{
+    if( embeddedFontUrlsKnown.count( url ) != 0 )
+        return true;
+    embeddedFontUrlsKnown.insert( url );
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

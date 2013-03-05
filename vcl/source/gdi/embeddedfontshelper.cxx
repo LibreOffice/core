@@ -49,14 +49,18 @@ void EmbeddedFontsHelper::clearTemporaryFontFiles()
     clearDir( path + "fromsystem/" );
 }
 
-OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, const char* fontStyle )
+OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, const char* extra )
 {
     OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
     path += "/user/temp/embeddedfonts/fromdocs/";
     osl::Directory::createPath( path );
     OUString filename = fontName;
-    filename += OStringToOUString( fontStyle, RTL_TEXTENCODING_ASCII_US );
+    static int uniqueCounter = 0;
+    if( strcmp( extra, "?" ) == 0 )
+        filename += OUString::number( uniqueCounter++ );
+    else
+        filename += OStringToOUString( extra, RTL_TEXTENCODING_ASCII_US );
     filename += ".ttf"; // TODO is it always ttf?
     return path + filename;
 }

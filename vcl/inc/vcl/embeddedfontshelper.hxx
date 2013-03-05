@@ -33,9 +33,9 @@ public:
       Use activateTemporaryFont() to actually enable usage of the font.
 
       @param fontName name of the font (e.g. 'Times New Roman')
-      @param fontStyle font style, "" for regular, "bi" for bold italic, etc.
+      @param extra additional text to use for name (e.g. to distinguish regular from bold, italic,...), "?" for unique
     */
-    static OUString fileUrlForTemporaryFont( const OUString& fontName, const char* fontStyle );
+    static OUString fileUrlForTemporaryFont( const OUString& fontName, const char* extra );
 
     /**
       Adds the given font to the list of known fonts. The font is used only until application

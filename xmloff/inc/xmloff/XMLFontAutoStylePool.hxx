@@ -39,7 +39,7 @@ class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public UniRefBase
     XMLFontAutoStylePoolNames_Impl m_aNames;
     bool tryToEmbedFonts;
 
-    OUString embedFontFile( const OUString& fontUrl, const char* style );
+    OUString embedFontFile( const OUString& fontUrl );
 
 protected:
 

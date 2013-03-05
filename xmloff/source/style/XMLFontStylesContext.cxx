@@ -238,18 +238,12 @@ void XMLFontStyleContextFontFaceUri::SetAttribute( sal_uInt16 nPrefixKey, const 
 
 void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
 {
+    if( GetImport().embeddedFontAlreadyProcessed( url ))
+    {
+        GetImport().NotifyEmbeddedFontRead();
+        return;
+    }
     OUString fontName = font.familyName();
-    const char* style = "";
-    // OOXML needs to know what kind of style the font is (regular, italic, bold, bold-italic),
-    // and the EmbeddedFontsHelper class is modelled after it. But ODF doesn't (need to) include
-    // this information, so try to guess from the name (LO encodes the style), otherwise
-    // go with regular and hope it works.
-    if( url.endsWithIgnoreAsciiCase( "bi.ttf" ))
-        style = "bi";
-    else if( url.endsWithIgnoreAsciiCase( "b.ttf" ))
-        style = "b";
-    else if( url.endsWithIgnoreAsciiCase( "i.ttf" ))
-        style = "i";
     // If there's any giveMeStreamForThisURL(), then it's well-hidden for me to find it.
     if( GetImport().IsPackageURL( url ))
     {
@@ -258,15 +252,12 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
         if( url.indexOf( '/' ) > -1 ) // TODO what if more levels?
             storage.set( storage->openStorageElement( url.copy( 0, url.indexOf( '/' )),
                 ::embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
-        OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, style );
+        OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, "?" );
         osl::File file( fileUrl );
         switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
         {
             case osl::File::E_None:
                 break; // ok
-            case osl::File::E_EXIST:
-                GetImport().NotifyEmbeddedFontRead();
-                return; // Assume it's already been added correctly.
             default:
                 SAL_WARN( "xmloff", "Cannot open file for temporary font" );
                 return;
