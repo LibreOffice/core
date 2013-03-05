@@ -17,10 +17,10 @@ if [ -z "$INPATH" ] ; then
     exit 1
 fi
 
-# --with-outpath includes projects/$INPATH/inc (also solver/$INPATH/inc)
+# --with-outpath includes solver/$INPATH/inc
 if [ "$1" = "--with-outpath" ]; then
-    dirs="`ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|install\)\//d'` `ls -d */$INPATH/inc */$INPATH/misc/build | sed -e '/^workdir\//d'`"
+    dirs="`ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|install\)\//d'` `ls -d solver/$INPATH/inc | sed -e '/^workdir\//d'`"
 else
-    dirs="`ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|install\)\//d'` `ls -d */$INPATH/misc/build | sed -e '/^\(solver\|workdir\)\//d'`"
+    dirs="`ls -d */* | sed -e '/\(\/\(common\|unxlng\|unxsol\|unxmac\|wntmsc\|Jamfile\|cscope\.\|tags\|ID\)\)\|^\(clone\|solver\|workdir\|install\)\//d'`"
 fi
 mkid --lang-map=`dirname $0`/id-lang.map --include='C C++ asm perl java make' --statistics $dirs
