@@ -249,7 +249,7 @@ namespace utl
         /** creates a configuration tree for the given path in the given mode
         */
         OConfigurationTreeRoot(
-            const ::comphelper::ComponentContext& i_rContext,
+            const css::uno::Reference<css::uno::XComponentContext> & i_rContext,
             const ::rtl::OUString& i_rNodePath,
             const bool i_bUpdatable
         );

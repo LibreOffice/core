@@ -482,11 +482,11 @@ namespace utl
     namespace
     {
         //--------------------------------------------------------------------
-        Reference< XMultiServiceFactory > lcl_getConfigProvider( const ::comphelper::ComponentContext& i_rContext )
+        Reference< XMultiServiceFactory > lcl_getConfigProvider( const Reference<XComponentContext> & i_rContext )
         {
             try
             {
-                Reference< XMultiServiceFactory > xProvider = theDefaultProvider::get( i_rContext.getUNOContext() );
+                Reference< XMultiServiceFactory > xProvider = theDefaultProvider::get( i_rContext );
                 return xProvider;
             }
             catch ( const Exception& )
@@ -534,8 +534,8 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot::OConfigurationTreeRoot( const ::comphelper::ComponentContext& i_rContext, const ::rtl::OUString& i_rNodePath, const bool i_bUpdatable )
-        :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext.getLegacyServiceFactory() ),
+    OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference<XComponentContext> & i_rContext, const ::rtl::OUString& i_rNodePath, const bool i_bUpdatable )
+        :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext ),
             i_rNodePath, i_bUpdatable, -1, false ).get() )
         ,m_xCommitter()
     {
