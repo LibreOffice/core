@@ -94,6 +94,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,CURL,$(CURL_TARBALL)) \
 		$(call fetch_Optional,EPM,$(EPM_TARBALL)) \
 		$(call fetch_Optional,EXPAT,$(EXPAT_TARBALL)) \
+		$(call fetch_Optional,MARIADB,$(MARIADB_TARBALL)) \
 		$(call fetch_Optional,MORE_FONTS,$(FONT_DEJAVU_TARBALL)) \
 		$(call fetch_Optional,MORE_FONTS,$(FONT_GENTIUM_TARBALL)) \
 		$(call fetch_Optional,MORE_FONTS,$(FONT_LIBERATION_NARROW_TARBALL)) \

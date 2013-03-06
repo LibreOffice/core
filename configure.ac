@@ -1300,20 +1300,10 @@ AC_ARG_WITH(system-apache-commons,
 
 AC_ARG_WITH(system-mariadb,
     AS_HELP_STRING([--with-system-mariadb],
-        [Use MariaDB libraries already on system, for building the MySQL Connector/LibreOffice
+        [Use MariaDB libraries already on system, for building the MariaDB Connector/LibreOffice
          extension. If the mariadb_config executable is not in PATH, use MARIADBCONFIG to
          point to it.]),,
     [with_system_mariadb="$with_system_libs"])
-
-AC_ARG_WITH(libmariadb-path,
-    AS_HELP_STRING([--with-libmariadb-path],
-        [Use Connector/C (libmariadb) installation for building the MariaDB/MySQL
-         Connector/LibreOffice extension.])
-    [
-                          Usage:     --with-libmariadb-path=<absolute path to
-                                                  your Connector/C installation>
-    ],
-,)
 
 AC_ARG_WITH(system-mysql-cppconn,
     AS_HELP_STRING([--with-system-mysql-cppconn],
@@ -7544,7 +7534,7 @@ if test "x$enable_ext_mariadb_connector" = "xyes" -a "x$enable_extension_integra
     ENABLE_MARIADBC=YES
     MARIADBC_MAJOR=1
     MARIADBC_MINOR=0
-    MARIADBC_MICRO=1
+    MARIADBC_MICRO=0
     BUILD_TYPE="$BUILD_TYPE MARIADBC"
 else
     AC_MSG_RESULT([no])
@@ -7560,14 +7550,14 @@ if test "$ENABLE_MARIADBC" = "YES"; then
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_MARIADBC"
 
     dnl ===================================================================
-    dnl Check for system MySQL
+    dnl Check for system MariaDB
     dnl ===================================================================
-    AC_MSG_CHECKING([for MySQL prerequisites])
+    AC_MSG_CHECKING([which MariaDB to use])
     if test "$with_system_mariadb" = "yes"; then
-        AC_MSG_RESULT([external MySQL])
+        AC_MSG_RESULT([external])
         SYSTEM_MARIADB=YES
         AC_PATH_PROG( MARIADBCONFIG, mariadb_config)
-        AC_MSG_CHECKING([MySQL version])
+        AC_MSG_CHECKING([MariaDB version])
         MARIADB_VERSION=`$MARIADBCONFIG --version`
         MARIADB_MAJOR=`$MARIADBCONFIG --version | cut -d"." -f1`
         if test "$MARIADB_MAJOR" -ge "5"; then
@@ -7575,39 +7565,21 @@ if test "$ENABLE_MARIADBC" = "YES"; then
         else
             AC_MSG_ERROR([too old, use 5.0.x or 5.1.x])
         fi
-        AC_MSG_CHECKING([for MySQL Client library])
-        MARIADB_INC=`$MARIADBCONFIG --include`
-        MARIADB_LIB=`$MARIADBCONFIG --libs`
-        MARIADB_DEFINES=`$MARIADBCONFIG --cflags | $SED -e s,$MARIADB_INC,,`
-        AC_MSG_RESULT([includes $MARIADB_INC, libraries $MARIADB_LIB])
+        AC_MSG_CHECKING([for MariaDB Client library])
+        MARIADB_CFLAGS=`$MARIADBCONFIG --cflags`
+        MARIADB_LIBS=`$MARIADBCONFIG --libs`
+        AC_MSG_RESULT([includes $MARIADB_CFLAGS, libraries $MARIADB_LIBS])
     else
+        AC_MSG_RESULT([internal])
         SYSTEM_MARIADB=NO
-        if test -n "$with_libmariadb_path"; then
-            AC_MSG_RESULT([external Connector/C (libmariadb)])
-            LIBMARIADB=libmariadb.so
-            if test "$_os" = "Darwin"; then
-                LIBMARIADB=libmariadb.dylib
-            elif test "$_os" = "WINNT"; then
-                LIBMARIADB=libmariadb.dll
-            fi
-            AC_MSG_CHECKING([for $LIBMARIADB])
-            if test -e "$with_libmariadb_path/lib/$LIBMARIADB"; then
-                AC_MSG_RESULT([found.])
-                PathFormat "$with_libmariadb_path"
-                LIBMARIADB_PATH="$formatted_path"
-            else
-                AC_MSG_ERROR([not found. Please specify proper path in --with-libmariadb-path.])
-            fi
-        else
-            AC_MSG_ERROR([not given. Please specify either --with-system-mysql or --with-libmariadb-path])
-        fi
+        MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb/include"
+        MARIADB_LIBS="-L${OUTDIR}/lib -lmariadblib"
+        BUILD_TYPE="$BUILD_TYPE MARIADB"
     fi
+
     AC_SUBST(SYSTEM_MARIADB)
-    AC_SUBST(MARIADB_INC)
-    AC_SUBST(MARIADB_LIB)
-    AC_SUBST(MARIADB_DEFINES)
-    AC_SUBST(LIBMARIADB)
-    AC_SUBST(LIBMARIADB_PATH)
+    AC_SUBST(MARIADB_CFLAGS)
+    AC_SUBST(MARIADB_LIBS)
 
     AC_LANG_PUSH([C++])
     dnl ===================================================================

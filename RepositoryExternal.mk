@@ -38,6 +38,39 @@
 
 # External headers
 
+ifeq ($(SYSTEM_MARIADB),YES)
+
+define gb_LinkTarget__use_mariadb
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(MARIADB_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(MARIADB_LIBS))
+
+endef
+gb_ExternalProject__use_mariadb :=
+
+else # !SYSTEM_MARIADB
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	mariadblib \
+))
+
+define gb_LinkTarget__use_mariadb
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	mariadblib \
+)
+
+endef
+define gb_ExternalProject__use_mariadb
+$(call gb_ExternalProject_use_package,$(1),libmariadb_inc)
+$(call gb_ExternalProject_use_static_libraries,$(1),mariadblib)
+
+endef
+
+endif # SYSTEM_MARIADB
+
+
 ifeq ($(SYSTEM_MESA_HEADERS),YES)
 
 gb_LinkTarget__use_mesa_headers :=
@@ -192,11 +225,11 @@ $(call gb_LinkTarget_add_defs,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(MARIADB_LIB) \
+	$(MARIADB_LIBS) \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(MARIADB_INC) \
+	$(MARIADB_CFLAGS) \
 	$$(INCLUDE) \
 )
 endef
@@ -206,7 +239,6 @@ else
 define gb_LinkTarget__use_mysql
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(LIBMARIADB_PATH)/mariadbclient/include \
 	$$(INCLUDE) \
 )
 

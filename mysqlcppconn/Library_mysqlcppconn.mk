@@ -19,6 +19,7 @@ $(eval $(call gb_Library_use_packages,mysqlcppconn,\
 $(eval $(call gb_Library_use_externals,mysqlcppconn, \
 	mysql \
 	boost_headers \
+	mariadb \
 ))
 
 ifneq ($(OS)$(COM),WNTMSC)
@@ -45,6 +46,11 @@ $(eval $(call gb_Library_add_defs,mysqlcppconn,\
 	-DCPPDBC_WIN32 \
 	-D_CRT_SECURE_NO_WARNINGS \
 	-D_SCL_SECURE_NO_WARNINGS ) \
+))
+
+$(eval $(call gb_Library_set_include,mysqlcppconn,\
+	$$(INCLUDE) \
+	$(MARIADB_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,mysqlcppconn,\
