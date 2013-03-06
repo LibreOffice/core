@@ -25,6 +25,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	icu/icu4c-solarisgcc.patch \
 	icu/icu4c-mkdir.patch \
 	icu/icu4c-buffer-overflow.patch \
+	icu/icu4c.9737.CVE-2013-0900_changesets_32865_32908.patch \
+	icu/icu4c-CVE-2013-0900_umutex.patch \
 	icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch \
 ))
 
