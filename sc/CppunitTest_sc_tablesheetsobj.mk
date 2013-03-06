@@ -28,15 +28,15 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_spreadsheetsobj))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_tablesheetsobj))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_spreadsheetsobj, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_tablesheetsobj, \
     sc/qa/extras/sctablesheetsobj \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,sc_spreadsheetsobj,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,sc_tablesheetsobj,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_libraries,sc_spreadsheetsobj, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_tablesheetsobj, \
     avmedia \
     basegfx \
     comphelper \
@@ -74,20 +74,20 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_spreadsheetsobj, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_spreadsheetsobj,\
+$(eval $(call gb_CppunitTest_set_include,sc_tablesheetsobj,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_spreadsheetsobj,\
+$(eval $(call gb_CppunitTest_use_api,sc_tablesheetsobj,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sc_spreadsheetsobj))
+$(eval $(call gb_CppunitTest_use_ure,sc_tablesheetsobj))
 
-$(eval $(call gb_CppunitTest_use_components,sc_spreadsheetsobj,\
+$(eval $(call gb_CppunitTest_use_components,sc_tablesheetsobj,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -123,10 +123,10 @@ $(eval $(call gb_CppunitTest_use_components,sc_spreadsheetsobj,\
     xmloff/util/xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_spreadsheetsobj))
+$(eval $(call gb_CppunitTest_use_configuration,sc_tablesheetsobj))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sc_spreadsheetsobj))
+$(eval $(call gb_CppunitTest_use_filter_configuration,sc_tablesheetsobj))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_spreadsheetsobj))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_tablesheetsobj))
 
 # vim: set noet sw=4 ts=4:
