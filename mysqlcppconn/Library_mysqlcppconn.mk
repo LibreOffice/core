@@ -21,6 +21,14 @@ $(eval $(call gb_Library_use_externals,mysqlcppconn, \
 	boost_headers \
 ))
 
+ifneq ($(OS)$(COM),WNTMSC)
+
+$(eval $(call gb_Library_add_libs,mysqlcppconn,\
+	$(if $(filter-out MACOSX,$(OS)),-ldl) \
+))
+
+endif
+
 $(eval $(call gb_Library_set_warnings_not_errors,mysqlcppconn))
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,mysqlcppconn,cpp))

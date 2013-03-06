@@ -608,9 +608,9 @@ AC_ARG_ENABLE(dynamic-loading,
         [Disable any use of dynamic loading of code. Work in progress, use only if you are hacking on it.])
 )
 
-AC_ARG_ENABLE(ext-mysql-connector,
-    AS_HELP_STRING([--enable-ext-mysql-connector],
-        [Enable the build of the MySQL Connector extension.])
+AC_ARG_ENABLE(ext-mariadb-connector,
+    AS_HELP_STRING([--enable-ext-mariadb-connector],
+        [Enable the build of the MariaDB/MySQL Connector extension.])
 )
 
 AC_ARG_ENABLE(ext-presenter-minimizer,
@@ -1298,19 +1298,19 @@ AC_ARG_WITH(system-apache-commons,
         [Use Apache commons libraries already on system.]),,
     [with_system_apache_commons="$with_system_jars"])
 
-AC_ARG_WITH(system-mysql,
-    AS_HELP_STRING([--with-system-mysql],
-        [Use MySQL libraries already on system, for building the MySQL Connector/LibreOffice
-         extension. If the mysql_config executable is not in PATH, use MYSQLCONFIG to
+AC_ARG_WITH(system-mariadb,
+    AS_HELP_STRING([--with-system-mariadb],
+        [Use MariaDB libraries already on system, for building the MySQL Connector/LibreOffice
+         extension. If the mariadb_config executable is not in PATH, use MARIADBCONFIG to
          point to it.]),,
-    [with_system_mysql="$with_system_libs"])
+    [with_system_mariadb="$with_system_libs"])
 
-AC_ARG_WITH(libmysql-path,
-    AS_HELP_STRING([--with-libmysql-path],
-        [Use Connector/C (libmysql) installation for building the MySQL
+AC_ARG_WITH(libmariadb-path,
+    AS_HELP_STRING([--with-libmariadb-path],
+        [Use Connector/C (libmariadb) installation for building the MariaDB/MySQL
          Connector/LibreOffice extension.])
     [
-                          Usage:     --with-libmysql-path=<absolute path to
+                          Usage:     --with-libmariadb-path=<absolute path to
                                                   your Connector/C installation>
     ],
 ,)
@@ -7556,76 +7556,76 @@ AC_SUBST([MINGW_PYTHON_DLL])
 AC_SUBST([MINGW_READLINE_DLL])
 AC_SUBST([MINGW_TERMCAP_DLL])
 
-AC_MSG_CHECKING([whether to build the MySQL Connector extension])
-if test "x$enable_ext_mysql_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
+AC_MSG_CHECKING([whether to build the MariaDB/MySQL Connector extension])
+if test "x$enable_ext_mariadb_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     AC_MSG_RESULT([yes])
-    ENABLE_MYSQLC=YES
-    MYSQLC_MAJOR=1
-    MYSQLC_MINOR=0
-    MYSQLC_MICRO=1
-    BUILD_TYPE="$BUILD_TYPE MYSQLC"
+    ENABLE_MARIADBC=YES
+    MARIADBC_MAJOR=1
+    MARIADBC_MINOR=0
+    MARIADBC_MICRO=1
+    BUILD_TYPE="$BUILD_TYPE MARIADBC"
 else
     AC_MSG_RESULT([no])
-    ENABLE_MYSQLC=NO
+    ENABLE_MARIADBC=NO
 fi
-AC_SUBST(ENABLE_MYSQLC)
-AC_SUBST(MYSQLC_MAJOR)
-AC_SUBST(MYSQLC_MINOR)
-AC_SUBST(MYSQLC_MICRO)
+AC_SUBST(ENABLE_MARIADBC)
+AC_SUBST(MARIADBC_MAJOR)
+AC_SUBST(MARIADBC_MINOR)
+AC_SUBST(MARIADBC_MICRO)
 
-if test "$ENABLE_MYSQLC" = "YES"; then
+if test "$ENABLE_MARIADBC" = "YES"; then
 
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_MYSQLC"
+    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_MARIADBC"
 
     dnl ===================================================================
     dnl Check for system MySQL
     dnl ===================================================================
     AC_MSG_CHECKING([for MySQL prerequisites])
-    if test "$with_system_mysql" = "yes"; then
+    if test "$with_system_mariadb" = "yes"; then
         AC_MSG_RESULT([external MySQL])
-        SYSTEM_MYSQL=YES
-        AC_PATH_PROG( MYSQLCONFIG, mysql_config)
+        SYSTEM_MARIADB=YES
+        AC_PATH_PROG( MARIADBCONFIG, mariadb_config)
         AC_MSG_CHECKING([MySQL version])
-        MYSQL_VERSION=`$MYSQLCONFIG --version`
-        MYSQL_MAJOR=`$MYSQLCONFIG --version | cut -d"." -f1`
-        if test "$MYSQL_MAJOR" -ge "5"; then
+        MARIADB_VERSION=`$MARIADBCONFIG --version`
+        MARIADB_MAJOR=`$MARIADBCONFIG --version | cut -d"." -f1`
+        if test "$MARIADB_MAJOR" -ge "5"; then
             AC_MSG_RESULT([OK])
         else
             AC_MSG_ERROR([too old, use 5.0.x or 5.1.x])
         fi
         AC_MSG_CHECKING([for MySQL Client library])
-        MYSQL_INC=`$MYSQLCONFIG --include`
-        MYSQL_LIB=`$MYSQLCONFIG --libs`
-        MYSQL_DEFINES=`$MYSQLCONFIG --cflags | $SED -e s,$MYSQL_INC,,`
-        AC_MSG_RESULT([includes $MYSQL_INC, libraries $MYSQL_LIB])
+        MARIADB_INC=`$MARIADBCONFIG --include`
+        MARIADB_LIB=`$MARIADBCONFIG --libs`
+        MARIADB_DEFINES=`$MARIADBCONFIG --cflags | $SED -e s,$MARIADB_INC,,`
+        AC_MSG_RESULT([includes $MARIADB_INC, libraries $MARIADB_LIB])
     else
-        SYSTEM_MYSQL=NO
-        if test -n "$with_libmysql_path"; then
-            AC_MSG_RESULT([external Connector/C (libmysql)])
-            LIBMYSQL=libmysql.so
+        SYSTEM_MARIADB=NO
+        if test -n "$with_libmariadb_path"; then
+            AC_MSG_RESULT([external Connector/C (libmariadb)])
+            LIBMARIADB=libmariadb.so
             if test "$_os" = "Darwin"; then
-                LIBMYSQL=libmysql.dylib
+                LIBMARIADB=libmariadb.dylib
             elif test "$_os" = "WINNT"; then
-                LIBMYSQL=libmysql.dll
+                LIBMARIADB=libmariadb.dll
             fi
-            AC_MSG_CHECKING([for $LIBMYSQL])
-            if test -e "$with_libmysql_path/lib/$LIBMYSQL"; then
+            AC_MSG_CHECKING([for $LIBMARIADB])
+            if test -e "$with_libmariadb_path/lib/$LIBMARIADB"; then
                 AC_MSG_RESULT([found.])
-                PathFormat "$with_libmysql_path"
-                LIBMYSQL_PATH="$formatted_path"
+                PathFormat "$with_libmariadb_path"
+                LIBMARIADB_PATH="$formatted_path"
             else
-                AC_MSG_ERROR([not found. Please specify proper path in --with-libmysql-path.])
+                AC_MSG_ERROR([not found. Please specify proper path in --with-libmariadb-path.])
             fi
         else
-            AC_MSG_ERROR([not given. Please specify either --with-system-mysql or --with-libmysql-path])
+            AC_MSG_ERROR([not given. Please specify either --with-system-mysql or --with-libmariadb-path])
         fi
     fi
-    AC_SUBST(SYSTEM_MYSQL)
-    AC_SUBST(MYSQL_INC)
-    AC_SUBST(MYSQL_LIB)
-    AC_SUBST(MYSQL_DEFINES)
-    AC_SUBST([LIBMYSQL])
-    AC_SUBST(LIBMYSQL_PATH)
+    AC_SUBST(SYSTEM_MARIADB)
+    AC_SUBST(MARIADB_INC)
+    AC_SUBST(MARIADB_LIB)
+    AC_SUBST(MARIADB_DEFINES)
+    AC_SUBST(LIBMARIADB)
+    AC_SUBST(LIBMARIADB_PATH)
 
     AC_LANG_PUSH([C++])
     dnl ===================================================================

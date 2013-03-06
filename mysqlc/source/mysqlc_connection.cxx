@@ -99,7 +99,7 @@ void SAL_CALL OConnection::release()
 }
 /* }}} */
 
-#ifndef SYSTEM_MYSQL
+#ifndef SYSTEM_MARIADB
     extern "C" { void SAL_CALL thisModule() {} }
 #endif
 
@@ -194,7 +194,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
                 connProps["socket"] = pipe_str;
             }
 
-#ifndef SYSTEM_MYSQL
+#ifndef SYSTEM_MARIADB
             ::rtl::OUString sMySQLClientLib( MYSQL_LIB  );
 
             ::rtl::OUString moduleBase;

@@ -101,4 +101,17 @@
  
  #include <stack>
  #include "mysql_util.h"
+--- misc/mysql-connector-c++-1.1.0/driver/mysql_prepared_statement.cpp	2013-03-06 10:29:26.890721534 +0100
++++ misc/build/mysql-connector-c++-1.1.0/driver/mysql_prepared_statement.cpp	2013-03-06 10:32:02.979904080 +0100
+@@ -46,6 +46,10 @@
+ 
+ #include "mysql_debug.h"
+ 
++#ifndef CR_INVALID_BUFFER_USE
++#define CR_INVALID_BUFFER_USE	2035
++#endif
++
+ 
+ namespace sql
+ {
 

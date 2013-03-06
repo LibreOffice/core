@@ -24,9 +24,9 @@ $(eval $(call gb_Extension_add_library,mysql-connector-ooo,mysqlcppconn))
 endif
 
 # HACK: comes from Library_mysql.mk
-ifeq ($(SYSTEM_MYSQL),NO)
+ifeq ($(SYSTEM_MARIADB),NO)
 $(eval $(call gb_Extension_add_files,mysql-connector-ooo,,\
-	$(LIBMYSQL_PATH)/lib/$(LIBMYSQL) \
+	$(LIBMARIADB_PATH)/lib/$(LIBMARIADB) \
 ))
 endif
 

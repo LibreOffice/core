@@ -183,20 +183,20 @@ $(call gb_LinkTarget_add_libs,$(1),-liconv)
 
 endef
 
-ifeq ($(SYSTEM_MYSQL),YES)
+ifeq ($(SYSTEM_MARIADB),YES)
 
 define gb_LinkTarget__use_mysql
 
 $(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_MYSQL \
+	-DSYSTEM_MARIADB \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(MYSQL_LIB) \
+	$(MARIADB_LIB) \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	$(MYSQL_INC) \
+	$(MARIADB_INC) \
 	$$(INCLUDE) \
 )
 endef
@@ -206,7 +206,7 @@ else
 define gb_LinkTarget__use_mysql
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(LIBMYSQL_PATH)/include \
+	-I$(LIBMARIADB_PATH)/mariadbclient/include \
 	$$(INCLUDE) \
 )
 

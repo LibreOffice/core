@@ -41,7 +41,7 @@ $(eval $(call gb_Library_add_defs,mysqlc,\
 	-DMYSQLC_VERSION_MAJOR=$(MYSQLC_MAJOR) \
 	-DMYSQLC_VERSION_MINOR=$(MYSQLC_MINOR) \
 	-DMYSQLC_VERSION_MICRO=$(MYSQLC_MICRO) \
-	$(if $(filter NO,$(SYSTEM_MYSQL)),-DMYSQL_LIB=\"$(LIBMYSQL)\") \
+	$(if $(filter NO,$(SYSTEM_MARIADB)),-DMYSQL_LIB=\"$(LIBMARIADB)\") \
 	$(if $(filter NO,$(SYSTEM_MYSQL_CPPCONN)),\
 	-DCPPCONN_LIB=\"$(call gb_Library_get_runtime_filename,mysqlcppconn)\") \
 ))
