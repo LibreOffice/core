@@ -35,14 +35,12 @@
 //==================================================================
 
 ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
-    : ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_PASTE ) ),
-    maBtnPasteAll    ( this, ScResId( BTN_PASTE_ALL ) ),
-    maBtnPaste       ( this, ScResId( BTN_PASTE ) ),
-    maHelpButton     ( this, ScResId( BTN_HELP ) ),
-    maBtnClose       ( this, ScResId( BTN_CLOSE ) ),
-    maFlDiv          ( this, ScResId( FL_DIV ) ),
-    maCtrl           ( this, ScResId( CTRL_TABLE ) )
+    : ModalDialog( pParent, "InsertNameDialog", "modules/scalc/ui/insertname.ui" )
 {
+    get(m_pBtnPasteAll, "pasteall");
+    get(m_pBtnPaste, "paste");
+    get(m_pBtnClose, "close");
+
     ScDocument* pDoc = pShell->GetDocument();
     std::map<rtl::OUString, ScRangeName*> aCopyMap;
     pDoc->GetRangeNameMap(aCopyMap);
@@ -55,19 +53,22 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
 
     ScViewData* pViewData = pShell->GetViewData();
     ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
-    mpTable = new ScRangeManagerTable(&maCtrl, maRangeMap, aPos);
+    SvxSimpleTableContainer *pContainer = get<SvxSimpleTableContainer>("ctrl");
+    Size aControlSize(210, 0);
+    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    pContainer->set_width_request(aControlSize.Width());
+    pContainer->set_height_request(10 * GetTextHeight());
+    mpTable = new ScRangeManagerTable(*pContainer, maRangeMap, aPos);
 
-    maBtnPaste.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl) );
-    maBtnPasteAll.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
-    maBtnClose.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
+    m_pBtnPaste->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl) );
+    m_pBtnPasteAll->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
+    m_pBtnClose->SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
 
     if (!mpTable->GetEntryCount())
     {
-        maBtnPaste.Disable();
-        maBtnPasteAll.Disable();
+        m_pBtnPaste->Disable();
+        m_pBtnPasteAll->Disable();
     }
-
-    FreeResource();
 }
 
 ScNamePasteDlg::~ScNamePasteDlg()
@@ -79,11 +80,11 @@ ScNamePasteDlg::~ScNamePasteDlg()
 
 IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
 {
-    if( pButton == &maBtnPasteAll )
+    if( pButton == m_pBtnPasteAll )
     {
         EndDialog( BTN_PASTE_LIST );
     }
-    else if( pButton == &maBtnPaste )
+    else if( pButton == m_pBtnPaste )
     {
         std::vector<ScRangeNameLine> aSelectedLines = mpTable->GetSelectedEntries();
         for (std::vector<ScRangeNameLine>::const_iterator itr = aSelectedLines.begin();
@@ -93,7 +94,7 @@ IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
         }
         EndDialog( BTN_PASTE_NAME );
     }
-    else if( pButton == &maBtnClose )
+    else if( pButton == m_pBtnClose )
     {
         EndDialog( BTN_PASTE_CLOSE );
     }

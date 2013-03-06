@@ -69,7 +69,7 @@ private:
     FixedLine       maFlDiv;
     FixedText       maFtInfo;
 
-    ScRangeManagerCtrl maNameMgrCtrl;
+    SvxSimpleTableContainer maNameMgrCtrl;
     ScRangeManagerTable* mpRangeManagerTable;
 
     const rtl::OUString maGlobalNameStr;

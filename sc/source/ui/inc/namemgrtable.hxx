@@ -26,8 +26,7 @@
  * instead of those above.
  */
 
-#include <svtools/headbar.hxx>
-#include <svtools/svtabbx.hxx>
+#include <svx/simptabl.hxx>
 #include <vcl/ctrl.hxx>
 
 #include "scresid.hxx"
@@ -46,24 +45,13 @@ struct ScRangeNameLine
     rtl::OUString aScope;
 };
 
-/** Implements the Control behind the table
- *  It controls the size of the table
- */
-class ScRangeManagerCtrl : public Control
-{
-public:
-    ScRangeManagerCtrl(Window* pParent, const ScResId& rResId):
-        Control( pParent, rResId) {}
-};
-
 //Implements the table for the manage names dialog
 //TODO: cache the lines for performance improvements
 //otherwise handling of a large set of range names might get extremely slow
 //Need some sort of a filter to handle several range names
-class SC_DLLPUBLIC ScRangeManagerTable : public SvTabListBox
+class SC_DLLPUBLIC ScRangeManagerTable : public SvxSimpleTable
 {
 private:
-    HeaderBar maHeaderBar;
     rtl::OUString maGlobalString;
 
     // should be const because we should not modify it here
@@ -79,9 +67,13 @@ private:
     void CheckForFormulaString();
     const ScRangeData* findRangeData(const ScRangeNameLine& rLine);
 
+    void setColWidths();
+
 public:
-    ScRangeManagerTable( Window* pParent, boost::ptr_map<rtl::OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
+    ScRangeManagerTable( SvxSimpleTableContainer& rParent, boost::ptr_map<rtl::OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
     virtual ~ScRangeManagerTable();
+
+    virtual void Resize();
 
     void addEntry( const ScRangeNameLine& rLine, bool bSetCurEntry = true );
     void DeleteSelectedEntries();

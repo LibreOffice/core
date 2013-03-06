@@ -125,7 +125,7 @@ void ScNameDlg::Init()
     //init UI
     maFtInfo.SetStyle(WB_VCENTER);
 
-    mpRangeManagerTable = new ScRangeManagerTable(&maNameMgrCtrl, maRangeMap, maCursorPos);
+    mpRangeManagerTable = new ScRangeManagerTable(maNameMgrCtrl, maRangeMap, maCursorPos);
     mpRangeManagerTable->SetSelectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
     mpRangeManagerTable->SetDeselectHdl( LINK( this, ScNameDlg, SelectionChangedHdl_Impl ) );
 

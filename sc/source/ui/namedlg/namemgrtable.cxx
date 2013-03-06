@@ -57,38 +57,29 @@ String createEntryString(const ScRangeNameLine& rLine)
     return aRet;
 }
 
-ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap, const ScAddress& rPos ):
-    SvTabListBox( pWindow, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
-    maHeaderBar( pWindow, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
+ScRangeManagerTable::ScRangeManagerTable( SvxSimpleTableContainer& rParent, boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap, const ScAddress& rPos ):
+    SvxSimpleTable( rParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE)),
     mrRangeMap( rRangeMap ),
     maPos( rPos )
 {
-    Size aBoxSize( pWindow->GetOutputSizePixel() );
+    static long aStaticTabs[] = {3, 0, 0, 0 };
+    SetTabs( &aStaticTabs[0], MAP_PIXEL );
 
-    maHeaderBar.SetPosSizePixel( Point(0, 0), Size( aBoxSize.Width(), 16 ) );
+    OUString aNameStr(ScGlobal::GetRscString(STR_HEADER_NAME));
+    OUString aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE));
+    OUString aScopeStr(ScGlobal::GetRscString(STR_HEADER_SCOPE));
 
-    String aNameStr(ScGlobal::GetRscString(STR_HEADER_NAME));
-    String aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE));
-    String aScopeStr(ScGlobal::GetRscString(STR_HEADER_SCOPE));
+    HeaderBar& rHeaderBar = GetTheHeaderBar();
+    rHeaderBar.InsertItem( ITEMID_NAME, aNameStr, 0, HIB_LEFT| HIB_VCENTER );
+    rHeaderBar.InsertItem( ITEMID_RANGE, aRangeStr, 0, HIB_LEFT| HIB_VCENTER );
+    rHeaderBar.InsertItem( ITEMID_SCOPE, aScopeStr, 0, HIB_LEFT| HIB_VCENTER );
+    rHeaderBar.SetEndDragHdl( LINK( this, ScRangeManagerTable, HeaderEndDragHdl ) );
 
-    long nTabSize = aBoxSize.Width()/3;
-    maHeaderBar.InsertItem( ITEMID_NAME, aNameStr, nTabSize, HIB_LEFT| HIB_VCENTER );
-    maHeaderBar.InsertItem( ITEMID_RANGE, aRangeStr, nTabSize, HIB_LEFT| HIB_VCENTER );
-    maHeaderBar.InsertItem( ITEMID_SCOPE, aScopeStr, nTabSize, HIB_LEFT| HIB_VCENTER );
-
-    static long nTabs[] = {3, 0, nTabSize, 2*nTabSize };
-    Size aHeadSize( maHeaderBar.GetSizePixel() );
-
-    //pParent->SetFocusControl( this );
-    SetPosSizePixel( Point( 0, aHeadSize.Height() ), Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
-    SetTabs( &nTabs[0], MAP_PIXEL );
-
-    maHeaderBar.SetEndDragHdl( LINK( this, ScRangeManagerTable, HeaderEndDragHdl ) );
-
+    setColWidths();
+    UpdateViewSize();
     Init();
-    Show();
-    maHeaderBar.Show();
+    ShowTable();
     SetSelectionMode(MULTIPLE_SELECTION);
     if (GetEntryCount())
     {
@@ -96,6 +87,27 @@ ScRangeManagerTable::ScRangeManagerTable( Window* pWindow, boost::ptr_map<rtl::O
         CheckForFormulaString();
     }
     SetScrolledHdl( LINK( this, ScRangeManagerTable, ScrollHdl ) );
+    void* pNull = NULL;
+    HeaderEndDragHdl(pNull);
+}
+
+void ScRangeManagerTable::Resize()
+{
+    SvxSimpleTable::Resize();
+    setColWidths();
+}
+
+void ScRangeManagerTable::setColWidths()
+{
+    HeaderBar &rHeaderBar = GetTheHeaderBar();
+    if (rHeaderBar.GetItemCount() < 3)
+        return;
+    long nTabSize = GetSizePixel().Width() / 3;
+    rHeaderBar.SetItemSize( ITEMID_NAME, nTabSize);
+    rHeaderBar.SetItemSize( ITEMID_RANGE, nTabSize);
+    rHeaderBar.SetItemSize( ITEMID_SCOPE, nTabSize);
+    static long aStaticTabs[] = {3, 0, nTabSize, 2*nTabSize };
+    SetTabs( &aStaticTabs[0], MAP_PIXEL );
     void* pNull = NULL;
     HeaderEndDragHdl(pNull);
 }
@@ -269,24 +281,25 @@ void CalculateItemSize(const long& rTableSize, long& rItemNameSize, long& rItemR
 
 IMPL_LINK_NOARG(ScRangeManagerTable, HeaderEndDragHdl)
 {
-    long aTableSize = maHeaderBar.GetSizePixel().Width();
-    long aItemNameSize = maHeaderBar.GetItemSize(ITEMID_NAME);
-    long aItemRangeSize = maHeaderBar.GetItemSize(ITEMID_RANGE);
+    HeaderBar& rHeaderBar = GetTheHeaderBar();
+
+    long nTableSize = rHeaderBar.GetSizePixel().Width();
+    long nItemNameSize = rHeaderBar.GetItemSize(ITEMID_NAME);
+    long nItemRangeSize = rHeaderBar.GetItemSize(ITEMID_RANGE);
 
     //calculate column size based on user input and minimum size
-    CalculateItemSize(aTableSize, aItemNameSize, aItemRangeSize);
-    long aItemScopeSize = aTableSize - aItemNameSize - aItemRangeSize;
+    CalculateItemSize(nTableSize, nItemNameSize, nItemRangeSize);
+    long nItemScopeSize = nTableSize - nItemNameSize - nItemRangeSize;
 
-    Size aSz;
-    aSz.Width() = aItemNameSize;
-    SetTab( ITEMID_NAME, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
-    maHeaderBar.SetItemSize(ITEMID_NAME, aItemNameSize);
-    aSz.Width() += aItemRangeSize;
-    SetTab( ITEMID_RANGE, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
-    maHeaderBar.SetItemSize(ITEMID_RANGE, aItemRangeSize);
-    aSz.Width() += aItemScopeSize;
-    SetTab( ITEMID_SCOPE, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
-    maHeaderBar.SetItemSize(ITEMID_SCOPE, aItemScopeSize);
+    Size aSz(nItemNameSize, 0);
+    rHeaderBar.SetItemSize(ITEMID_NAME, nItemNameSize);
+    rHeaderBar.SetItemSize(ITEMID_RANGE, nItemRangeSize);
+    rHeaderBar.SetItemSize(ITEMID_SCOPE, nItemScopeSize);
+
+    SetTab(0, 0, MAP_APPFONT );
+    SetTab(1, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
+    aSz.Width() += nItemRangeSize;
+    SetTab(2, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
 
     return 0;
 }
