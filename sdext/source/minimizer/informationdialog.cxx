@@ -90,8 +90,15 @@ OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString&
     return rControlName;
 }
 
-OUString InsertImage( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rURL,
-                        sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight )
+OUString InsertImage(
+    InformationDialog& rInformationDialog,
+    const OUString& rControlName,
+    const OUString& rURL,
+    sal_Int32 nPosX,
+    sal_Int32 nPosY,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight,
+    sal_Bool bScale )
 {
     OUString pNames[] = {
         TKGet( TK_Border ),
@@ -108,7 +115,7 @@ OUString InsertImage( InformationDialog& rInformationDialog, const OUString& rCo
         Any( rURL ),
         Any( nPosX ),
         Any( nPosY ),
-        Any( sal_True ),
+        Any( bScale ),
         Any( nWidth ) };
     sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
@@ -202,40 +209,6 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal )
     return aVal.makeStringAndClear();
 }
 
-OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
-{
-    OUString sURL;
-    try
-    {
-        mxTempFile = Reference< XStream >( io::TempFile::create(mxMSF), UNO_QUERY_THROW );
-        Reference< XPropertySet > xPropSet( mxTempFile, UNO_QUERY );
-        Reference< XOutputStream > xOutputStream( mxTempFile->getOutputStream() );
-        if ( xOutputStream.is() && xPropSet.is() )
-        {
-            Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create( mxMSF ) );
-            Sequence< PropertyValue > aArgs( 1 );
-            aArgs[ 0 ].Name = OUString("URL");
-            aArgs[ 0 ].Value <<= sPrivateURL;
-            Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aArgs ) );
-            if ( xGraphic.is() )
-            {
-                OUString aDestMimeType( "image/png"  );
-                Sequence< PropertyValue > aArgs2( 2 );
-                aArgs2[ 0 ].Name = TKGet( TK_MimeType );                // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
-                aArgs2[ 0 ].Value <<= aDestMimeType;
-                aArgs2[ 1 ].Name = TKGet( TK_OutputStream );
-                aArgs2[ 1 ].Value <<= xOutputStream;
-                xGraphicProvider->storeGraphic( xGraphic, aArgs2 );
-            }
-            xPropSet->getPropertyValue( OUString("Uri") ) >>= sURL;
-        }
-    }
-    catch( Exception& )
-    {
-    }
-    return sURL;
-}
-
 void InformationDialog::InitDialog()
 {
     sal_Int32 nDialogHeight = DIALOG_HEIGHT;
@@ -325,7 +298,10 @@ void InformationDialog::InitDialog()
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
-    InsertImage( *this, OUString("aboutimage"), ImpGetStandardImage( OUString("private:standardimage/query") ), 5, 5, 25, 25 );
+    InsertImage( *this,
+                 OUString( "aboutimage" ),
+                 OUString( "private:standardimage/query" ),
+                 5, 5, 25, 25, sal_False );
     InsertFixedText( *this, OUString("fixedtext"), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
     if ( !maSaveAsURL.isEmpty() )
         InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
