@@ -261,13 +261,13 @@ sal_Bool InitVCL()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    // SV bei den Tools anmelden
+    // register with tools
     InitTools();
 
-    // Main-Thread-Id merken
+    // remember Main-Thread-Id
     pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
-    // Sal initialisieren
+    // Initialize Sal
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
@@ -564,7 +564,7 @@ void DeInitVCL()
     delete pSVData->mpSalTimer;
     pSVData->mpSalTimer = NULL;
 
-    // Sal deinitialisieren
+    // Deinit Sal
     DestroySalInstance( pSVData->mpDefInst );
 
     DeInitTools();
