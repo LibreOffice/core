@@ -42,10 +42,6 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Extension)
 
 endef
 
-define gb_Extension_set_license
-$(call gb_ExtensionTarget_set_license,$(1),$(2))
-endef
-
 define gb_Extension_add_file
 $(call gb_ExtensionTarget_add_file,$(1),$(2),$(3))
 
