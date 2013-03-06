@@ -954,7 +954,7 @@ void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
         ImplGetFormatter()->GetOutputString(dVal, 0, sTemp, &m_pLastOutputColor);
         // dann den String entsprechend dem Text-Format
         {
-        OUString sTempIn(m_sCurrentTextValue);
+        OUString sTempIn(sTemp);
         OUString sTempOut;
         ImplGetFormatter()->GetOutputString(sTempIn, m_nFormatKey, sTempOut, &m_pLastOutputColor);
         sNewText = sTempOut;
