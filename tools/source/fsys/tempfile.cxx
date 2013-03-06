@@ -40,7 +40,6 @@ namespace { struct TempNameBase_Impl : public rtl::Static< ::rtl::OUString, Temp
 struct TempFile_Impl
 {
     String      aName;
-    sal_Bool    bIsDirectory;
 };
 
 extern rtl::OUString GetSystemTempDirPath_Impl();
@@ -55,33 +54,13 @@ rtl::OUString GetSystemTempDirPath_Impl()
 
 #define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
 
-OUString ConstructTempDir_Impl( const String* pParent )
+OUString ConstructTempDir_Impl()
 {
-    OUString aName;
-    if ( pParent && pParent->Len() )
-    {
-        rtl::OUString aRet;
-
-        // test for valid filename
-        {
-            ::osl::DirectoryItem aItem;
-            sal_Int32 i = aRet.getLength();
-            if ( aRet[i-1] == '/' )
-                i--;
-
-            if ( DirectoryItem::get( aRet.copy(0, i), aItem ) == FileBase::E_None )
-                aName = aRet;
-        }
-    }
-
-    if ( aName.isEmpty() )
-    {
-        // if no parent or invalid parent : use system directory
-        ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
-        if ( rTempNameBase_Impl.isEmpty() )
-            osl::FileBase::getTempDirURL( rTempNameBase_Impl );
-        aName = rTempNameBase_Impl;
-    }
+    // use system directory
+    ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
+    if ( rTempNameBase_Impl.isEmpty() )
+        rTempNameBase_Impl = GetSystemTempDirPath_Impl();
+    OUString aName = rTempNameBase_Impl;
 
     // Make sure that directory ends with a separator
     if( !aName.endsWith( "/" ) )
@@ -145,10 +124,10 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     }
 }
 
-String TempFile::CreateTempName( const String* pParent )
+String TempFile::CreateTempName()
 {
     // get correct directory
-    String aName = ConstructTempDir_Impl( pParent );
+    String aName = ConstructTempDir_Impl();
 
     // get TempFile name with default naming scheme
     CreateTempName_Impl( aName, sal_False );
@@ -156,28 +135,23 @@ String TempFile::CreateTempName( const String* pParent )
     return aName;
 }
 
-TempFile::TempFile( const String* pParent, sal_Bool bDirectory )
+TempFile::TempFile()
     : pImp( new TempFile_Impl )
     , bKillingFileEnabled( sal_False )
 {
-    pImp->bIsDirectory = bDirectory;
-
     // get correct directory
-    pImp->aName = ConstructTempDir_Impl( pParent );
+    pImp->aName = ConstructTempDir_Impl();
 
     // get TempFile with default naming scheme
-    CreateTempName_Impl( pImp->aName, sal_True, bDirectory );
+    CreateTempName_Impl( pImp->aName, sal_True );
 }
 
-TempFile::TempFile( const String& rLeadingChars, const String* pExtension,
-                    const String* pParent, sal_Bool bDirectory )
+TempFile::TempFile( const String& rLeadingChars, const String* pExtension )
     : pImp( new TempFile_Impl )
     , bKillingFileEnabled( sal_False )
 {
-    pImp->bIsDirectory = bDirectory;
-
     // get correct directory
-    String aName = ConstructTempDir_Impl( pParent );
+    String aName = ConstructTempDir_Impl();
 
     // now use special naming scheme ( name takes leading chars and an index counting up from zero
     aName += rLeadingChars;
@@ -191,32 +165,17 @@ TempFile::TempFile( const String& rLeadingChars, const String* pExtension,
             aTmpBuffer.append(".tmp");
         rtl::OUString aTmp = aTmpBuffer.makeStringAndClear();
 
-        if ( bDirectory )
+        File aFile( aTmp );
+        FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
+        if ( err == FileBase::E_None )
         {
-            FileBase::RC err = Directory::create( aTmp );
-            if ( err == FileBase::E_None )
-            {
-                pImp->aName = aTmp;
-                break;
-            }
-            else if ( err != FileBase::E_EXIST )
-                // if f.e. name contains invalid chars stop trying to create dirs
-                break;
+            pImp->aName = aTmp;
+            aFile.close();
+            break;
         }
-        else
-        {
-            File aFile( aTmp );
-            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
-            if ( err == FileBase::E_None )
-            {
-                pImp->aName = aTmp;
-                aFile.close();
-                break;
-            }
-            else if ( err != FileBase::E_EXIST )
-                // if f.e. name contains invalid chars stop trying to create dirs
-                break;
-        }
+        else if ( err != FileBase::E_EXIST )
+            // if f.e. name contains invalid chars stop trying to create dirs
+            break;
     }
 }
 
@@ -224,15 +183,7 @@ TempFile::~TempFile()
 {
     if ( bKillingFileEnabled )
     {
-        if ( pImp->bIsDirectory )
-        {
-            // at the moment no recursiv algorithm present
-            Directory::remove( pImp->aName );
-        }
-        else
-        {
-            File::remove( pImp->aName );
-        }
+        File::remove( pImp->aName );
     }
 
     delete pImp;
