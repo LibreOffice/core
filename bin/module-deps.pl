@@ -11,8 +11,11 @@ sub read_deps()
     my $invalid_tolerance = 100;
     my $line_count = 0;
     my %deps;
-    open ($p, "ENABLE_PRINT_DEPS=1 $gnumake -n -f $makefile_build all|") || die "can't launch make: $!";
-#    open ($p, "/tmp/deps") || die "can't read deps: $!";
+    if (defined $ENV{DEP_CACHE_FILE}) {
+	open ($p, $ENV{DEP_CACHE_FILE}) || die "can't read deps from cache: $!";
+    } else {
+	open ($p, "ENABLE_PRINT_DEPS=1 $gnumake -n -f $makefile_build all|") || die "can't launch make: $!";
+    }
     $|=1;
     print STDERR "reading deps ";
     while (<$p>) {
@@ -94,6 +97,7 @@ sub has_child_dep($$$)
 }
 
 # flatten deps recursively into a single hash per module
+sub build_flat_dep_hash($$);
 sub build_flat_dep_hash($$)
 {
     my ($tree, $name) = @_;
@@ -115,8 +119,11 @@ sub build_flat_dep_hash($$)
     }
     $node->{flat_deps} = \%flat_deps;
 
-#    print "node '$name' has flat-deps: '" . join(',', keys %flat_deps) . "' " .
-#	  "vs. '" . join(',', @{$node->{deps}}) . "'\n";
+    # useful debugging ...
+    if (defined $ENV{DEP_CACHE_FILE}) {
+	print "node '$name' has flat-deps: '" . join(',', keys %flat_deps) . "' " .
+	    "vs. '" . join(',', @{$node->{deps}}) . "'\n";
+    }
 }
 
 # many modules depend on vcl + sal, but vcl depends on sal
