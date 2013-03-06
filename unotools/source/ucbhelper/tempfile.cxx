@@ -22,7 +22,6 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
-#include <tools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <ucbhelper/fileidentifierconverter.hxx>
