@@ -34,8 +34,7 @@ $(eval $(call gb_Module_add_targets,solenv,\
 
 ifeq ($(CROSS_COMPILING),$(false))
 $(eval $(call gb_Module_add_targets,solenv,\
-	CustomTarget_concat-deps \
-	Package_concat-deps \
+	Executable_concat-deps \
 ))
 endif
 
