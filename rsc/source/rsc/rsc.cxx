@@ -92,8 +92,7 @@ void RscCmdLine::Init()
     nCommands       = 0;
     nByteOrder      = RSC_BIGENDIAN;
 
-    DirEntry aEntry;
-    aPath = rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US); //Immer im Aktuellen Pfad suchen
+    aPath = OString(".");
     m_aOutputFiles.clear();
     m_aOutputFiles.push_back( OutputFile() );
 }

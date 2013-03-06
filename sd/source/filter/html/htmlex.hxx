@@ -195,7 +195,7 @@ class HtmlExport
     String  CreatePageURL( sal_uInt16 nPgNum );
 
     String InsertSound( const String& rSoundFile );
-    bool CopyFile( const String& rSourceFile, const String& rDestPath );
+    bool CopyFile( const OUString& rSourceFile, const OUString& rDestFile );
     bool CopyScript( const String& rPath, const String& rSource, const String& rDest, bool bUnix = false );
 
     void InitProgress( sal_uInt16 nProgrCount );

@@ -28,8 +28,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <tools/fsys.hxx>
-
 // Include
 #include <rscdef.hxx>
 #include <rsctools.hxx>
@@ -174,13 +172,14 @@ sal_Bool Append(const rtl::OString &rOutputSrs, const rtl::OString &rTmpFile)
 *************************************************************************/
 rtl::OString OutputFile(const rtl::OString &rInput, const char * pExt)
 {
-    rtl::OUString aUniInput(rtl::OStringToOUString(rInput, RTL_TEXTENCODING_ASCII_US));
-    DirEntry aFileName(aUniInput);
+    sal_Int32 nSepInd = rInput.lastIndexOf(".");
 
-    OUString aExt = OStringToOUString( pExt, RTL_TEXTENCODING_ASCII_US );
-    aFileName.SetExtension( aExt );
+    if( nSepInd != -1 )
+    {
+        return rInput.copy(0, rInput.getLength() - nSepInd).concat(OString(pExt));
+    }
 
-    return rtl::OUStringToOString(aFileName.GetFull(), RTL_TEXTENCODING_ASCII_US);
+    return rInput.concat(OString(".")).concat(OString(pExt));
 }
 
 /*************************************************************************

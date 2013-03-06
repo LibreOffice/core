@@ -27,7 +27,6 @@
 #include <rtl/uri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
-#include <tools/fsys.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -3054,30 +3053,28 @@ String HtmlExport::InsertSound( const String& rSoundFile )
 
     String      aStr( RTL_CONSTASCII_USTRINGPARAM("<embed src=\"") );
     INetURLObject   aURL( rSoundFile );
+    String aSoundFileName = String(aURL.getName());
 
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-    aStr += String(aURL.getName());
+    aStr += aSoundFileName;
     aStr.AppendAscii( "\" hidden=\"true\" autostart=\"true\">" );
 
-    CopyFile( rSoundFile, maExportPath );
+    CopyFile( OUString(rSoundFile), OUString(maExportPath) + OUString(aSoundFileName) );
 
     return aStr;
 }
 
 // =====================================================================
 
-bool HtmlExport::CopyFile( const String& rSourceFile, const String& rDestPath )
+bool HtmlExport::CopyFile( const OUString& rSourceFile, const OUString& rDestFile )
 {
-    DirEntry aSourceEntry( rSourceFile );
-    DirEntry aDestEntry( rDestPath );
+    meEC.SetContext( STR_HTMLEXP_ERROR_COPY_FILE, rSourceFile, rDestFile );
+    osl::FileBase::RC Error = osl::File::copy( rSourceFile, rDestFile );
 
-    meEC.SetContext( STR_HTMLEXP_ERROR_COPY_FILE, aSourceEntry.GetName(), rDestPath );
-    FSysError nError = aSourceEntry.CopyTo( aDestEntry, FSYS_ACTION_COPYFILE );
-
-    if( nError != FSYS_ERR_OK )
+    if( Error != osl::FileBase::E_None )
     {
-        ErrorHandler::HandleError(nError);
+        ErrorHandler::HandleError(Error);
         return false;
     }
     else
