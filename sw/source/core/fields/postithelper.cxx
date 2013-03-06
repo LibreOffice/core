@@ -165,16 +165,11 @@ unsigned long SwPostItHelper::getPageInfo( SwRect& rPageFrm, const SwRootFrm* pR
 SwPosition SwAnnotationItem::GetAnchorPosition() const
 {
     SwTxtFld* pFld = pFmtFld->GetTxtFld();
-    if( pFld )
-    {
-        SwTxtNode* pTNd = pFld->GetpTxtNode();
-        if( pTNd )
-        {
-            SwPosition aPos( *pTNd );
-            aPos.nContent.Assign( pTNd, *pFld->GetStart() );
-            return aPos;
-        }
-    }
+    SwTxtNode* pTNd = pFld->GetpTxtNode();
+
+    SwPosition aPos( *pTNd );
+    aPos.nContent.Assign( pTNd, *pFld->GetStart() );
+    return aPos;
 }
 
 bool SwAnnotationItem::UseElement()
