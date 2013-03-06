@@ -102,7 +102,7 @@ void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
         }
     }
 
-    // keine Handdler mehr da
+    // there are no more handlers...
     if ( mpIdleList->empty() )
         maTimer.Stop();
 }
