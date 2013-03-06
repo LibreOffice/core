@@ -120,28 +120,28 @@ public:
     sal_uInt16      GetDropDownLineCount() const;
 
     void            EnableAutoSize( sal_Bool bAuto );
-    sal_Bool            IsAutoSizeEnabled() const               { return mbDDAutoSize; }
+    sal_Bool        IsAutoSizeEnabled() const               { return mbDDAutoSize; }
 
     void            EnableDDAutoWidth( sal_Bool b );
 
     virtual void    SetText( const OUString& rStr );
     virtual void    SetText( const OUString& rStr, const Selection& rNewSelection );
 
-    sal_uInt16          InsertEntry( const XubString& rStr, sal_uInt16 nPos = COMBOBOX_APPEND );
-    sal_uInt16          InsertEntry( const XubString& rStr, const Image& rImage, sal_uInt16 nPos = COMBOBOX_APPEND );
+    sal_uInt16      InsertEntry( const OUString& rStr, sal_uInt16 nPos = COMBOBOX_APPEND );
+    sal_uInt16      InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos = COMBOBOX_APPEND );
 
-    void            RemoveEntry( const XubString& rStr );
+    void            RemoveEntry( const OUString& rStr );
     void            RemoveEntry( sal_uInt16 nPos );
 
     void            Clear();
 
-    sal_uInt16          GetEntryPos( const XubString& rStr ) const;
+    sal_uInt16      GetEntryPos( const OUString& rStr ) const;
     Image           GetEntryImage( sal_uInt16 nPos ) const;
-    XubString       GetEntry( sal_uInt16 nPos ) const;
-    sal_uInt16          GetEntryCount() const;
+    OUString        GetEntry( sal_uInt16 nPos ) const;
+    sal_uInt16      GetEntryCount() const;
 
-    sal_Bool            IsTravelSelect() const;
-    sal_Bool            IsInDropDown() const;
+    sal_Bool        IsTravelSelect() const;
+    sal_Bool        IsInDropDown() const;
     void            ToggleDropDown();
 
     long            CalcWindowSizePixel( sal_uInt16 nLines ) const;
@@ -155,10 +155,10 @@ public:
     void            SetSeparatorPos( sal_uInt16 n = LISTBOX_ENTRY_NOTFOUND );
 
     void            EnableAutocomplete( sal_Bool bEnable, sal_Bool bMatchCase = sal_False );
-    sal_Bool            IsAutocompleteEnabled() const;
+    sal_Bool        IsAutocompleteEnabled() const;
 
     void            EnableMultiSelection( sal_Bool bMulti );
-    sal_Bool            IsMultiSelectionEnabled() const;
+    sal_Bool        IsMultiSelectionEnabled() const;
     void            SetMultiSelectionSeparator( sal_Unicode cSep ) { mcMultiSep = cSep; }
     sal_Unicode     GetMultiSelectionSeparator() const { return mcMultiSep; }
 
@@ -174,8 +174,8 @@ public:
     Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            SetMRUEntries( const XubString& rEntries, sal_Unicode cSep = ';' );
-    XubString       GetMRUEntries( sal_Unicode cSep = ';' ) const;
+    void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep = ';' );
+    OUString        GetMRUEntries( sal_Unicode cSep = ';' ) const;
     void            SetMaxMRUCount( sal_uInt16 n );
     sal_uInt16          GetMaxMRUCount() const;
 
