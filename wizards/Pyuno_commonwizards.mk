@@ -42,6 +42,10 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     common/Desktop.py \
     common/HelpIds.py \
     common/NumberFormatter.py \
+    common/IRenderer.py \
+    common/UCB.py \
+    common/XMLHelper.py \
+    common/XMLProvider.py \
     text/TextElement.py \
     document/__init__.py \
     document/OfficeDocument.py \
@@ -66,6 +70,9 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     ui/event/ListModelBinder.py \
     ui/event/RadioDataAware.py \
     ui/event/UnoDataAware.py \
+    ui/event/Task.py \
+    ui/event/TaskEvent.py \
+    ui/event/TaskListener.py \
 ))
 
 # vim:set noet sw=4 ts=4:
