@@ -35,7 +35,7 @@ using ::rtl::OUString;
 
 void ScRefTokenHelper::compileRangeRepresentation(
     vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
-    const sal_Unicode cSep, FormulaGrammar::Grammar eGrammar)
+    const sal_Unicode cSep, FormulaGrammar::Grammar eGrammar, bool bOnly3DRef)
 {
     const sal_Unicode cQuote = '\'';
 
@@ -80,12 +80,22 @@ void ScRefTokenHelper::compileRangeRepresentation(
         switch (pT->GetType())
         {
             case svSingleRef:
-                if (!pT->GetSingleRef().Valid())
-                    bFailure = true;
+                {
+                    const ScSingleRefData& rRef = pT->GetSingleRef();
+                    if (!rRef.Valid())
+                        bFailure = true;
+                    else if (bOnly3DRef && !rRef.IsFlag3D())
+                        bFailure = true;
+                }
                 break;
             case svDoubleRef:
-                if (!pT->GetDoubleRef().Valid())
-                    bFailure = true;
+                {
+                    const ScComplexRefData& rRef = pT->GetDoubleRef();
+                    if (!rRef.Valid())
+                        bFailure = true;
+                    else if (bOnly3DRef && !rRef.Ref1.IsFlag3D())
+                        bFailure = true;
+                }
                 break;
             case svExternalSingleRef:
                 if (!pT->GetSingleRef().ValidExternal())
