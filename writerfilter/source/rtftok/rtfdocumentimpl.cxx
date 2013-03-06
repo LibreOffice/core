@@ -3187,6 +3187,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_SHPBOTTOM:
             m_aStates.top().aShape.nBottom = TWIP_TO_MM100(nParam);
             break;
+        case RTF_SHPZ:
+            m_aStates.top().aShape.oZ.reset(nParam);
+            break;
         case RTF_FFTYPE:
             switch (nParam)
             {

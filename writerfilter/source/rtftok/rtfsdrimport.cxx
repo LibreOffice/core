@@ -298,6 +298,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     {
         xPropertySet->setPropertyValue("LineColor", aLineColor);
         xPropertySet->setPropertyValue("LineWidth", aLineWidth);
+        if (rShape.oZ)
+            resolveDhgt(xPropertySet, *rShape.oZ);
     }
 
     if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
