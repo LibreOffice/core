@@ -16,24 +16,20 @@
 namespace
 {
 
-class Coverage : public BasicTestBase
+class Coverage : public test::BootstrapFixture
 {
 private:
-    bool m_bError;
     int  m_nb_tests;
     int  m_nb_tests_ok;
     int  m_nb_tests_ko;
     int  m_nb_tests_skipped;
     OUString m_sCurrentTest;
     void process_directory(OUString sDirName);
-    void process_file(OUString sFileName);
-    void run_test(OUString sFileName, OUString sCode);
+    void run_test(OUString sFileName);
     void test_start(OUString /* sFileName */);
     void test_failed(void);
     void test_success(void);
     void print_summary() {};
-
-    DECL_LINK( CoverageErrorHdl, StarBASIC * );
 
 public:
     Coverage();
@@ -51,18 +47,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-IMPL_LINK( Coverage, CoverageErrorHdl, StarBASIC *, /*pBasic*/)
-{
-    fprintf(stderr,"%s:(%d:%d)\n",
-            rtl::OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr(),
-            StarBASIC::GetLine(), StarBASIC::GetCol1());
-    fprintf(stderr,"Basic error: %s\n", rtl::OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    m_bError = true;
-    return 0;
-}
-
 Coverage::Coverage()
-    : m_bError(false)
+    : BootstrapFixture(true, false)
     , m_nb_tests(0)
     , m_nb_tests_ok(0)
     , m_nb_tests_ko(0)
@@ -98,28 +84,18 @@ void Coverage::test_success()
     fprintf(stderr,"%s,PASS\n", rtl::OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
-void Coverage::run_test(OUString /*sFileName*/, OUString sCode)
+void Coverage::run_test(OUString sFileURL)
 {
     bool result = false;
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Coverage, CoverageErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sCode );
-    pMod->Compile();
-    if(!m_bError)
+    MacroSnippet testMacro;
+    testMacro.LoadSourceFromFile( sFileURL );
+    testMacro.Compile();
+    if( !testMacro.HasError() )
     {
-        SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("doUnitTest"),  SbxCLASS_METHOD ));
-        if(pMeth)
+        SbxVariableRef pResult = testMacro.Run();
+        if( pResult && pResult->GetInteger() == 1 )
         {
-            SbxVariableRef refTemp = pMeth;
-            // forces a broadcast
-            SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
-            if(pNew->GetInteger() == 1 )
-            {
-                result = true;
-            }
+            result = true;
         }
     }
     if(result)
@@ -130,33 +106,6 @@ void Coverage::run_test(OUString /*sFileName*/, OUString sCode)
     {
         test_failed();
     }
-}
-
-void Coverage::process_file(OUString sFileName)
-{
-    osl::File aFile(sFileName);
-
-    test_start(sFileName);
-    if(osl::FileBase::E_None == aFile.open(osl_File_OpenFlag_Read))
-    {
-        sal_uInt64 size;
-        sal_uInt64 size_read;
-        if(osl::FileBase::E_None == aFile.getSize(size))
-        {
-            void* buffer = calloc(1, size+1);
-            CPPUNIT_ASSERT(buffer);
-            if(osl::FileBase::E_None == aFile.read( buffer, size, size_read))
-            {
-                if(size == size_read)
-                {
-                    OUString sCode((sal_Char*)buffer, size, RTL_TEXTENCODING_UTF8);
-                    run_test(sFileName, sCode);
-                    return;
-                }
-            }
-        }
-    }
-    test_failed();
 }
 
 void Coverage::process_directory(OUString sDirName)
@@ -172,7 +121,7 @@ void Coverage::process_directory(OUString sDirName)
             aItem.getFileStatus(aFileStatus);
             if(aFileStatus.isRegular())
             {
-                process_file(aFileStatus.getFileURL());
+                run_test(aFileStatus.getFileURL());
             }
         }
     }
