@@ -663,7 +663,7 @@ void BluetoothServer::doRestoreDiscoverable()
 void BluetoothServer::cleanupCommunicators()
 {
     for (std::vector<Communicator *>::iterator it = mpCommunicators->begin();
-         it != mpCommunicators->end(); it++)
+         it != mpCommunicators->end(); ++it)
         (*it)->forceClose();
     // the hope is that all the threads then terminate cleanly and
     // clean themselves up.

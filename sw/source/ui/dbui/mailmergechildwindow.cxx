@@ -515,14 +515,13 @@ void  SwSendMailDialog::SendMails()
         OSL_FAIL("config item not set");
         return;
     }
-    bool bIsLoggedIn = false;
     EnterWait();
     //get a mail server connection
     uno::Reference< mail::XSmtpService > xSmtpServer =
                 SwMailMergeHelper::ConnectToSmtpServer( *m_pConfigItem,
                                             m_pImpl->xConnectedInMailService,
                                             aEmptyStr, aEmptyStr, this );
-    bIsLoggedIn = xSmtpServer.is() && xSmtpServer->isConnected();
+    bool bIsLoggedIn = xSmtpServer.is() && xSmtpServer->isConnected();
     LeaveWait();
     if(!bIsLoggedIn)
     {
