@@ -11,8 +11,8 @@ sub read_deps()
     my $invalid_tolerance = 100;
     my $line_count = 0;
     my %deps;
-#    open ($p, "ENABLE_PRINT_DEPS=1 $gnumake -n -f $makefile_build all|") || die "can't launch make: $!";
-    open ($p, "/tmp/deps") || die "can't read deps: $!";
+    open ($p, "ENABLE_PRINT_DEPS=1 $gnumake -n -f $makefile_build all|") || die "can't launch make: $!";
+#    open ($p, "/tmp/deps") || die "can't read deps: $!";
     $|=1;
     print STDERR "reading deps ";
     while (<$p>) {
@@ -86,34 +86,53 @@ sub clean_tree($)
     return \%tree;
 }
 
-sub is_existing_child($$$$);
-sub is_existing_child($$$$)
+sub has_child_dep($$$)
 {
-    my ($tree,$search,$name,$generation) = @_;
+    my ($tree,$search,$name) = @_;
+    my $node = $tree->{$name};
+    return defined $node->{flat_deps}->{$search};
+}
+
+# flatten deps recursively into a single hash per module
+sub build_flat_dep_hash($$)
+{
+    my ($tree, $name) = @_;
+    my %flat_deps;
 
     my $node = $tree->{$name};
+    return if (defined $node->{flat_deps});
 
-#    print STDERR "\tis $search a child of $name ?\n";
-
-    # cyclic check ...
-    if ($node->{generation} == $generation) {
-#	print STDERR "probable cyclic dependency graph hunting for $search in $name\n";
+    # build flat deps for children
+    for my $child (@{$node->{deps}}) {
+	build_flat_dep_hash($tree, $child)
     }
-    $node->{generation} = $generation;
 
     for my $child (@{$node->{deps}}) {
-	if ($child eq $search) {
-	    return 1;
+	$flat_deps{$child} = 1;
+	for my $dep (@{$tree->{$child}->{deps}}) {
+	    $flat_deps{$dep} = 1;
 	}
-	return 1 if (is_existing_child($tree,$search,$child, $generation));
     }
-    return 0;
+    $node->{flat_deps} = \%flat_deps;
+
+#    print "node '$name' has flat-deps: '" . join(',', keys %flat_deps) . "' " .
+#	  "vs. '" . join(',', @{$node->{deps}}) . "'\n";
+}
+
+# many modules depend on vcl + sal, but vcl depends on sal
+# so we want to strip sal out - and the same for many
+# similar instances
+sub prune_redundant_deps($)
+{
+    my $tree = shift;
+    for my $name (sort keys %{$tree}) {
+	build_flat_dep_hash($tree, $name);
+    }
 }
 
 sub dump_graphviz($)
 {
     my $tree = shift;
-    my $generation = 1;
     print "digraph LibreOffice {\n";
     for my $name (sort keys %{$tree}) {
 	my $result = $tree->{$name};
@@ -129,9 +148,8 @@ sub dump_graphviz($)
 	    # is this implied by any other child ?
 #	    print STDERR "checking if '$dep' is redundant\n";
 	    for my $other_dep (@{$result->{deps}}) {
-		$generation++;
 		next if ($other_dep eq $dep);
-		if (is_existing_child($tree,$dep,$other_dep,$generation)) {
+		if (has_child_dep($tree,$dep,$other_dep)) {
 		    $print = 0;
 #		    print STDERR "$dep is implied by $other_dep - ignoring\n";
 		}
@@ -164,5 +182,7 @@ $makefile_build = 'Makefile.gbuild' if (!defined $makefile_build);
 
 my $deps = read_deps();
 my $tree = clean_tree($deps);
+
+prune_redundant_deps($tree);
 
 dump_graphviz($tree);
