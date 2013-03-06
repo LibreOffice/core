@@ -112,6 +112,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     sot/util/sot \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
+    svx/util/svx \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
@@ -120,6 +121,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     xmloff/util/xo \
+    eventattacher/source/evtatt \
+    i18npool/source/search/i18nsearch \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_macros_test))

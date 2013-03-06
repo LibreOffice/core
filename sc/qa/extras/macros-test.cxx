@@ -115,7 +115,77 @@ void ScMacrosTest::testVba()
         {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vba.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document")),
-        }
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MiscRangeTests.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bytearraystring.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoFilter.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CalcFont.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestIntersection.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestUnion.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("range-4.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ranges-3.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestCalc_Rangetest.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TestCalc_Rangetest2.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ranges-2.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pagesetup.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Window.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("window2.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageBreaks.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Shapes.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+#if VBA_TEST_WORKING
+        {
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ranges.")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
+        },
+#endif
     };
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
@@ -135,6 +205,8 @@ void ScMacrosTest::testVba()
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+        std::cout << "about to invoke vba test in " << rtl::OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
+
         pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
         rtl::OUString aStringRes;
         aRet >>= aStringRes;
