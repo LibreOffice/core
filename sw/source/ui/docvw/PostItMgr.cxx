@@ -90,7 +90,32 @@ using namespace sw::sidebarwindows;
 bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
 {
     // sort by anchor position
-    return a->GetAnchorPosition() < b->GetAnchorPosition();
+    SwPosition aPosAnchorA = a->GetAnchorPosition();
+    SwPosition aPosAnchorB = b->GetAnchorPosition();
+
+    bool aAnchorAInFooter = false;
+    bool aAnchorBInFooter = false;
+
+    // is the anchor placed in Footnote or the Footer?
+    if( aPosAnchorA.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorA.nNode.GetNode().FindFooterStartNode() )
+        aAnchorAInFooter = true;
+    if( aPosAnchorB.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorB.nNode.GetNode().FindFooterStartNode() )
+        aAnchorBInFooter = true;
+
+    // fdo#34800
+    // if AnchorA is in footnote, and AnchorB isn't
+    // we do not want to change over the position
+    if( aAnchorAInFooter && !aAnchorBInFooter )
+        return false;
+    // if aAnchorA is not placed in a footnote, and aAnchorB is
+    // force a change over
+    else if( !aAnchorAInFooter && aAnchorBInFooter )
+        return true;
+    // If neither or both are in the footer, compare the positions.
+    // Since footnotes are in Inserts section of nodes array and footers
+    // in Autotext section, all footnotes precede any footers so no need
+    // to check that.
+    return aPosAnchorA < aPosAnchorB;
 }
 
 SwPostItMgr::SwPostItMgr(SwView* pView)
