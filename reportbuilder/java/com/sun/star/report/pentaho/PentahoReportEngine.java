@@ -18,15 +18,14 @@
 package com.sun.star.report.pentaho;
 
 import com.sun.star.report.JobDefinitionException;
-import com.sun.star.report.ReportEngine;
+import com.sun.star.report.ReportEngine2;
 import com.sun.star.report.ReportEngineMetaData;
 import com.sun.star.report.ReportJob;
 import com.sun.star.report.ReportJobDefinition;
 import com.sun.star.report.util.DefaultReportJobDefinition;
-
 import org.jfree.report.JFreeReportBoot;
 
-public class PentahoReportEngine implements ReportEngine
+public class PentahoReportEngine implements ReportEngine2
 {
 
     private final ReportEngineMetaData metaData;

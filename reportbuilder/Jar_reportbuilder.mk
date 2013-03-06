@@ -68,7 +68,7 @@ $(eval $(call gb_Jar_add_sourcefiles,sun-report-builder,\
     reportbuilder/java/com/sun/star/report/OutputRepository \
     reportbuilder/java/com/sun/star/report/ParameterMap \
     reportbuilder/java/com/sun/star/report/ReportAddIn \
-    reportbuilder/java/com/sun/star/report/ReportEngine \
+    reportbuilder/java/com/sun/star/report/ReportEngine2 \
     reportbuilder/java/com/sun/star/report/ReportEngineMetaData \
     reportbuilder/java/com/sun/star/report/ReportEngineParameterNames \
     reportbuilder/java/com/sun/star/report/ReportExecutionException \

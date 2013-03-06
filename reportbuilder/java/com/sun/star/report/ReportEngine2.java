@@ -27,7 +27,7 @@ package com.sun.star.report;
  * vs. local jobs etc).
  *
  */
-public interface ReportEngine
+public interface ReportEngine2
 {
 
     public ReportJobDefinition createJobDefinition();
