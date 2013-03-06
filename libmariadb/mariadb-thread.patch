@@ -1,0 +1,12 @@
+--- mariadb/libmysql/client_plugin.c	2013-03-06 17:06:42.548905989 +0100
++++ mariadb/libmysql/client_plugin.c	2013-03-06 17:14:29.721588964 +0100
+@@ -175,7 +175,9 @@
+     goto err2;
+   }
+ 
++#ifdef THREAD
+   safe_mutex_assert_owner(&LOCK_load_client_plugin);
++#endif
+ 
+   p->next= plugin_list[plugin->type];
+   plugin_list[plugin->type]= p;

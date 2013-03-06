@@ -17,4 +17,10 @@ $(eval $(call gb_UnpackedTarball_add_file,mariadb,include/my_config.h,libmariadb
 
 $(eval $(call gb_UnpackedTarball_add_file,mariadb,include/mysql_version.h,libmariadb/mysql_version.h))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,mariadb,1))
+
+$(eval $(call gb_UnpackedTarball_add_patches,mariadb,\
+    libmariadb/mariadb-thread.patch \
+))
+
 # vim: set noet sw=4 ts=4:

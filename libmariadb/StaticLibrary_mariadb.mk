@@ -22,10 +22,6 @@ $(eval $(call gb_StaticLibrary_set_include,mariadblib,\
 	-I$(call gb_UnpackedTarball_get_dir,mariadb)/include \
 ))
 
-$(eval $(call gb_StaticLibrary_add_defs,mariadblib,\
-	-DTHREAD \
-))
-
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadblib,\
     UnpackedTarball/mariadb/libmysql/array \
     UnpackedTarball/mariadb/libmysql/bchange \
