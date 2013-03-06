@@ -147,6 +147,7 @@ def nsinstall(argv):
         shutil.copy2(srcpath, targetpath)
       else:
         if os.path.exists(targetpath):
+          os.chmod(targetpath, 755)
           os.remove(targetpath)
         shutil.copy(srcpath, targetpath)
 
