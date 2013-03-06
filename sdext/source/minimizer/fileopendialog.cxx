@@ -55,6 +55,7 @@
 #include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -138,6 +139,13 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
 
 //  mxFilePicker->setDefaultName( );
 
+    const char filter[] = "*.";
+    // the filter title must be formed in the same it is currently done
+    // in the internal implementation: "UIName (.<extension>)"
+    rtl::OUStringBuffer aUIName;
+    // the filter must be in the form "*.<extension>"
+    rtl::OUStringBuffer aFilter;
+    rtl::OUString aExtension;
     Reference< XFilterManager > xFilterManager( mxFilePicker, UNO_QUERY_THROW );
     std::vector< FilterEntry >::iterator aIter( aFilterEntryList.begin() );
     while( aIter != aFilterEntryList.end() )
@@ -158,7 +166,18 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
                 }
                 if ( aExtensions.getLength() )
                 {
-                    xFilterManager->appendFilter( aIter->maUIName, aExtensions[ 0 ] );
+                    aExtension = aExtensions[0];
+                    // form the title: "<UIName> (.<extension)"
+                    aUIName.append( aIter->maUIName );
+                    aUIName.appendAscii( RTL_CONSTASCII_STRINGPARAM( " (." ));
+                    aUIName.append( aExtension );
+                    aUIName.append( sal_Unicode( ')' ) );
+                    // form the filter: "(*.<extension>)"
+                    aFilter.appendAscii( RTL_CONSTASCII_STRINGPARAM( filter ) );
+                    aFilter.append( aExtensions[0] );
+
+                    xFilterManager->appendFilter( aUIName.makeStringAndClear(),
+                                                  aFilter.makeStringAndClear() );
                     if ( aIter->maFlags & 0x100 )
                         xFilterManager->setCurrentFilter( aIter->maUIName );
                 }
