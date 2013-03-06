@@ -580,6 +580,8 @@ namespace
             return (VclResId(SV_BUTTONTEXT_SAVE).toString());
         else if (rType == "gtk-undo")
             return (VclResId(SV_BUTTONTEXT_UNDO).toString());
+        else if (rType == "gtk-paste")
+            return (VclResId(SV_BUTTONTEXT_PASTE).toString());
         SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
         return OUString();
     }

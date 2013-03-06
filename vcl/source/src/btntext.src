@@ -127,5 +127,10 @@ String SV_BUTTONTEXT_SAVE
 
 String SV_BUTTONTEXT_UNDO
 {
-    Text [ en-US ] = "~Undo " ;
+    Text [ en-US ] = "~Undo" ;
+};
+
+String SV_BUTTONTEXT_PASTE
+{
+    Text [ en-US ] = "~Paste" ;
 };
