@@ -337,11 +337,6 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
                 bDataReady = sal_True;
                 bWaitForData = sal_False;
             }
-            else if( sal_False )
-            {
-                // Set up Timer, to return back
-                pDownLoadData->aTimer.Start();
-            }
         }
     }
 

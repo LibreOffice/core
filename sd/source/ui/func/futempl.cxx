@@ -194,8 +194,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             // Z.Z. geht immer noch der Dialog auf, um den Namen
             // der Vorlage einzugeben.
             mpView->AreObjectsMarked();
-            if( sal_True )
-            {
                 SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
                 if(p)
                 {
@@ -204,7 +202,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 }
                 pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
                 pStyleSheet->SetParent(String(SdResId(STR_STANDARD_STYLESHEET_NAME)));
-            }
         }
         break;
 

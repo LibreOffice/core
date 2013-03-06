@@ -1466,15 +1466,6 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         }
         else
         {
-            if ( 0 )
-            {
-                // mouse touches outer border -> treated as floating mode
-                eDockAlign = SFX_ALIGN_NOALIGNMENT;
-                aDockingRect.SetSize( aFloatingSize );
-                rRect = aDockingRect;
-                return eDockAlign;
-            }
-
             // mouse touches inner border -> create new line
             if ( eDockAlign == GetAlignment() && pImp->pSplitWin &&
                  pImp->nLine == pImp->pSplitWin->GetLineCount()-1 && pImp->pSplitWin->GetWindowCount(pImp->nLine) == 1 )
