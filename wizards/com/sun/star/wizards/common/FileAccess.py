@@ -35,6 +35,8 @@ class FileAccess(object):
         #get the file identifier converter
         self.filenameConverter = xmsf.createInstance(
             "com.sun.star.ucb.FileContentProvider")
+        self.xInterface = xmsf.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
             
     @classmethod
     def deleteLastSlashfromUrl(self, _sPath):
@@ -214,6 +216,100 @@ class FileAccess(object):
             string = "/" + childURL
         return self.filenameConverter.getSystemPathFromFileURL(
             parentURL + string)
+
+    def copy(self, source, target):
+        try:
+            self.xInterface.copy(source, target)
+            return True
+        except Exception:
+            traceback.print_exc()
+        return False
+
+    def exists(self, filename, default):
+        try:
+            return self.xInterface.exists(filename)
+        except Exception:
+            traceback.print_exc()
+        return default
+
+    def isDirectory(self, filename):
+        try:
+            return self.xInterface.isFolder(filename)
+        except Exception:
+            traceback.print_exc()
+        return False
+
+    def getLastModified(self, url):
+        try:
+            return self.xInterface.getDateTimeModified(url)
+        except Exception:
+            traceback.print_exc()
+        return None
+
+    def delete(self, filename):
+        try:
+            #self.xInterface.kill(filename)
+            return True
+        except Exception:
+            traceback.print_exc()
+        return False
+
+    # lists the files in a given directory
+    # @param dir
+    # @param includeFolders
+    # @return
+    def listFiles(self, folder, includeFolders):
+        try:
+            return self.xInterface.getFolderContents(folder, includeFolders)
+        except Exception:
+            traceback.print_exc()
+        return [""]
+
+    #
+    # @param s
+    # @return
+    def mkdir(self, s):
+        try:
+            self.xInterface.createFolder(s)
+            return True
+        except Exception:
+            traceback.print_exc()
+        return False
+
+    def createNewDir(self, parentDir, name):
+        s = self.getNewFile(parentDir, name, "")
+        if (self.mkdir(s)):
+            return s
+        else:
+            return None
+
+    def getNewFile(self, parentDir, name, extension):
+        i = 0
+        url = ""
+        while (True):
+            filename = self.filename(name, extension, i)
+            url = self.getURL(parentDir, filename)
+            print ("WARNING !!! getNewFile - checking: ", url)
+            if (not self.exists(url, True)):
+                break
+            i += 1
+        return url
+
+    def getURL(self, parentPath, childPath):
+        parent = self.filenameConverter.getSystemPathFromFileURL(parentPath);
+        path = parent + "/" + childPath
+        return self.filenameConverter.getFileURLFromSystemPath(parentPath, path)
+
+    def getURL1(self, path):
+        f = "/"
+        return self.filenameConverter.getFileURLFromSystemPath(path, f)
+
+    def getSize(self, url):
+        try:
+            return self.xInterface.getSize(url)
+        except Exception:
+            traceback.print_exc()
+            return -1
 
     '''
     return the filename out of a system-dependent path
