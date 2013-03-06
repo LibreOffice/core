@@ -42,6 +42,8 @@ using std::cout;
 using std::endl;
 #endif
 
+using namespace com::sun::star;
+
 namespace filter{
     namespace config{
 
@@ -535,15 +537,15 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     // if its already clear that detected type is valid or not.
     // Its necessary to use shared code at the end, which update
     // all return parameters constistency!
-    sal_Bool bBreakDetection = sal_False;
+    bool bBreakDetection = false;
 
     // Further we must know if it matches by pattern
     // Every flat detected type by pattern wont be detected deep!
-    sal_Bool bMatchByPattern = sal_False;
+    bool bMatchByPattern = false;
 
     // And we must know if a preselection must be preferred, because
     // it matches by it's extension too.
-    sal_Bool bMatchByExtension = sal_False;
+    bool bMatchByExtension = false;
 
     // If we e.g. collect all filters of a factory (be a forced factory preselection)
     // we should preferr all filters of this factory, where the type match the given URL.
@@ -551,7 +553,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     // the URL) should be "used later" for detection and sorted at the end of our return vector
     // rFlatTypes!
     // => bPreferredPreselection = (matchByExtension || matchByURLPattern)
-    sal_Bool bPreferredPreselection = sal_False;
+    bool bPreferredPreselection = false;
 
     // validate type
     ::rtl::OUString sType(sPreSelType);
@@ -567,7 +569,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     catch(const css::container::NoSuchElementException&)
     {
         sType = ::rtl::OUString();
-        bBreakDetection = sal_True;
+        bBreakDetection = true;
     }
 
     if (!bBreakDetection)
@@ -575,7 +577,7 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
         // We cant check a preselected type for a given stream!
         // So we must believe, that it can work ...
         if ( aParsedURL.Complete == "private:stream" )
-            bBreakDetection = sal_True;
+            bBreakDetection = true;
     }
 
     if (!bBreakDetection)
@@ -599,9 +601,9 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
             ::rtl::OUString sCheckExtension(pIt->toAsciiLowerCase());
             if (sCheckExtension.equals(sExtension))
             {
-                bBreakDetection        = sal_True;
-                bMatchByExtension      = sal_True;
-                bPreferredPreselection = sal_True;
+                bBreakDetection        = true;
+                bMatchByExtension      = true;
+                bPreferredPreselection = true;
                 break;
             }
         }
@@ -615,9 +617,9 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
                 WildCard aCheck(*pIt);
                 if (aCheck.Matches(aParsedURL.Main))
                 {
-                    bBreakDetection        = sal_True;
-                    bMatchByPattern        = sal_True;
-                    bPreferredPreselection = sal_True;
+                    bBreakDetection        = true;
+                    bMatchByPattern        = true;
+                    bPreferredPreselection = true;
                     break;
                 }
             }
@@ -637,11 +639,11 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
         else
             rFlatTypes.push_back(aInfo);
 
-        return sal_True;
+        return true;
     }
 
     // not valid!
-    return sal_False;
+    return false;
 }
 
 
@@ -744,18 +746,17 @@ sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUSt
          ++pIt                          )
     {
         FlatDetectionInfo& rInfo = *pIt;
-        rInfo.bPreselectedByDocumentService = sal_True ;
+        rInfo.bPreselectedByDocumentService = true ;
         rFlatTypes.push_back(rInfo);
     }
 
-    return sal_True;
+    return true;
 }
 
 
 
-void TypeDetection::impl_getPreselection(const css::util::URL&                aParsedURL ,
-                                               ::comphelper::MediaDescriptor& rDescriptor,
-                                               FlatDetection&                 rFlatTypes )
+void TypeDetection::impl_getPreselection(
+    const util::URL& aParsedURL, comphelper::MediaDescriptor& rDescriptor, FlatDetection& rFlatTypes)
 {
     // done to be shure, that only valid results leave this function!
     rFlatTypes.clear();
