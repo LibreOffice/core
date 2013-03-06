@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -70,7 +71,6 @@
 
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/stlunosequence.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::rtl;
 namespace writerfilter {
@@ -227,9 +227,12 @@ uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles(
 
 uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
 {
-    if(!m_xBodyText.is() && m_xTextDocument.is())
+    if(!m_xBodyText.is())
     {
-        m_xBodyText = m_xTextDocument->getText();
+        if (m_xInsertTextRange.is())
+            m_xBodyText = m_xInsertTextRange->getText();
+        else if (m_xTextDocument.is())
+            m_xBodyText = m_xTextDocument->getText();
     }
     return m_xBodyText;
 }
@@ -278,8 +281,27 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         }
         else
             xCursor.set(m_aTextAppendStack.top().xCursor, uno::UNO_QUERY);
-        xCursor->goLeft( 1, true );
-        xCursor->setString(OUString());
+        uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCursor, uno::UNO_QUERY);
+        // Keep the character properties of the last but one paragraph, even if
+        // it's empty. This works for headers/footers, and maybe in other cases
+        // as well, but surely not in textboxes.
+        // fdo#58327: also do this at the end of the document: when pasting,
+        // a table before the cursor position would be deleted
+        // (but only for paste/insert, not load; otherwise it can happen that
+        // flys anchored at the disposed paragraph are deleted (fdo47036.rtf))
+        bool const bEndOfDocument(m_aTextAppendStack.size() == 1);
+        if ((m_bInHeaderFooterImport || (bEndOfDocument && !m_bIsNewDoc))
+            && xEnumerationAccess.is())
+        {
+            uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
+            uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
+            xParagraph->dispose();
+        }
+        else
+        {
+            xCursor->goLeft( 1, true );
+            xCursor->setString(OUString());
+        }
     }
     catch( const uno::Exception& )
     {
@@ -1611,11 +1633,23 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         xProps->getPropertyValue(rPropNameSupplier.GetName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
         if (nAnchorType == text::TextContentAnchorType_AT_PAGE)
             bIsGraphic = false;
-
         if (nAnchorType != text::TextContentAnchorType_AT_PAGE)
-            xProps->setPropertyValue(
-                    rPropNameSupplier.GetName( PROP_OPAQUE ),
-                    uno::makeAny( true ) );
+        {
+           if(xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_TITLE)) != rtl::OUString(""))
+            {
+                rtl::OUString zIndexValue;
+                xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_TITLE)) >>= zIndexValue;
+                sal_Bool zIndexBool = zIndexValue.match(::rtl::OUString("-"),0);
+                if(zIndexBool)
+                {
+                  xProps->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ),uno::makeAny( false ) );
+                }
+             }
+           else
+            {
+                xProps->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ),uno::makeAny( true ) );
+            }
+         }
         if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
         {
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
@@ -3688,8 +3722,7 @@ void DomainMapper_Impl::ApplySettingsTable()
                 aViewProps[2].Name = "ZoomType";
                 aViewProps[2].Value <<= sal_Int16(0);
 
-                uno::Reference<container::XIndexContainer> xBox(m_xComponentContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.IndexedPropertyValues",
-                            m_xComponentContext), uno::UNO_QUERY );
+                uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(m_xComponentContext);
                 xBox->insertByIndex(sal_Int32(0), uno::makeAny(aViewProps));
                 uno::Reference<container::XIndexAccess> xIndexAccess(xBox, uno::UNO_QUERY);
                 uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_xTextDocument, uno::UNO_QUERY);
