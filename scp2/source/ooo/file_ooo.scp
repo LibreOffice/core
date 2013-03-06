@@ -506,6 +506,12 @@ File gid_File_Wizards_Agenda
     Name = "agenda.zip";
 End
 
+File gid_File_Wizards_Web
+    Dir = gid_Dir_Wizards_Web;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "web.zip";
+End
+
 File gid_File_Pymailmerge
     Dir = gid_Brand_Dir_Program;
     ARCHIVE_TXT_FILE_BODY;
