@@ -92,8 +92,13 @@ void RscCmdLine::Init()
     nCommands       = 0;
     nByteOrder      = RSC_BIGENDIAN;
 
+    /*
     DirEntry aEntry;
     aPath = rtl::OUStringToOString(aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US); //Immer im Aktuellen Pfad suchen
+    * Replaced the above two lines with this, seems to work, not sure
+    * about it though.
+    */
+    aPath = OString();
     m_aOutputFiles.clear();
     m_aOutputFiles.push_back( OutputFile() );
 }
@@ -173,6 +178,15 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 
                     m_aReplacements.push_back( std::pair< OString, OString >( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
                         rtl::OUStringToOString(aSDir.GetFull(), RTL_TEXTENCODING_ASCII_US) ) );
+                    /*
+                     * Tried replacing the above with this, doesn't work.
+                     *
+                    OUString aSDir;
+                    osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aSPath, RTL_TEXTENCODING_ASCII_US), aSDir);
+                    m_aReplacements.push_back( std::pair< OString, OString >
+                        ( OString( (*ppStr)+4, pEqual - *ppStr - 4 ),
+                        OUStringToOString(aSDir, RTL_TEXTENCODING_ASCII_US) ) );
+                    */
                 }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
