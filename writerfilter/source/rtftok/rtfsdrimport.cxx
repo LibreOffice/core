@@ -100,6 +100,10 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     beans::PropertyValue aPropertyValue;
     awt::Rectangle aViewBox;
     std::vector<beans::PropertyValue> aPathPropVec;
+    // Default line color is black in Word, blue in Writer.
+    uno::Any aLineColor = uno::makeAny(COL_BLACK);
+    // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
+    uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
 
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
@@ -138,11 +142,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         }
         else if ( i->first == "fillBackColor" )
             ; // Ignore: complementer of fillColor
-        else if (i->first == "lineColor" && xPropertySet.is())
-        {
-            aAny <<= msfilter::util::BGRToRGB(i->second.toInt32());
-            xPropertySet->setPropertyValue("LineColor", aAny);
-        }
+        else if (i->first == "lineColor")
+            aLineColor <<= msfilter::util::BGRToRGB(i->second.toInt32());
         else if ( i->first == "lineBackColor" )
             ; // Ignore: complementer of lineColor
         else if (i->first == "txflTextFlow" && xPropertySet.is())
@@ -166,12 +167,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             aAny <<= i->second.toInt32()*100/65536;
             xPropertySet->setPropertyValue("RotateAngle", aAny);
         }
-        else if (i->first == "lineWidth" && xPropertySet.is())
-        {
-
-            aAny <<= i->second.toInt32()/360;
-            xPropertySet->setPropertyValue("LineWidth", aAny);
-        }
+        else if (i->first == "lineWidth")
+            aLineWidth <<= i->second.toInt32()/360;
         else if ( i->first == "pVerticies" )
         {
             uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
@@ -295,6 +292,14 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle shape property '" <<
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr() << "':'" <<
                     OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr() << "'");
+    }
+
+    if (xPropertySet.is())
+    {
+        xPropertySet->setPropertyValue("LineColor", aLineColor);
+        xPropertySet->setPropertyValue("LineWidth", aLineWidth);
+        if (rShape.oZ)
+            resolveDhgt(xPropertySet, *rShape.oZ);
     }
 
     if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
