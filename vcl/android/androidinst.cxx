@@ -916,12 +916,11 @@ Java_org_libreoffice_experimental_desktop_Desktop_setViewSize(JNIEnv * /* env */
     viewHeight = height;
 }
 
-// public static native void key(char c, short timestamp);
+// public static native void key(char c);
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_experimental_desktop_Desktop_key(JNIEnv * /* env */,
                                                       jobject /* clazz */,
-                                                      jchar c,
-                                                      jshort /* timestamp */)
+                                                      jchar c)
 {
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {
@@ -933,14 +932,13 @@ Java_org_libreoffice_experimental_desktop_Desktop_key(JNIEnv * /* env */,
         LOGW("No focused frame to emit event on");
 }
 
-// public static native void touch(int action, int x, int y, short timestamp);
+// public static native void touch(int action, int x, int y);
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_experimental_desktop_Desktop_touch(JNIEnv * /* env */,
                                                         jobject /* clazz */,
                                                         jint action,
                                                         jint x,
-                                                        jint y,
-                                                        jshort /* timestamp */)
+                                                        jint y)
 {
     SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {

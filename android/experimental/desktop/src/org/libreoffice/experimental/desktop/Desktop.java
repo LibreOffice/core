@@ -47,8 +47,8 @@ public class Desktop
     /* implementend by vcl */
     public static native void renderVCL(Bitmap bitmap);
     public static native void setViewSize(int width, int height);
-    public static native void key(char c, short timestamp);
-    public static native void touch(int action, int x, int y, short timestamp);
+    public static native void key(char c);
+    public static native void touch(int action, int x, int y);
     public static native void zoom(float scale, int x, int y);
 
     /**
@@ -119,11 +119,6 @@ public class Desktop
             e.printStackTrace(System.err);
             finish();
         }
-    }
-
-    static short getTimestamp()
-    {
-        return (short) (System.currentTimeMillis() % Short.MAX_VALUE);
     }
 
     class BitmapView
@@ -222,16 +217,16 @@ public class Desktop
             case KeyEvent.KEYCODE_7:
             case KeyEvent.KEYCODE_8:
             case KeyEvent.KEYCODE_9:
-                Desktop.key((char) ('0' + keyCode - KeyEvent.KEYCODE_0), Desktop.getTimestamp());
+                Desktop.key((char) ('0' + keyCode - KeyEvent.KEYCODE_0));
                 return true;
             case KeyEvent.KEYCODE_DEL:
-                Desktop.key((char) Key.BACKSPACE, Desktop.getTimestamp());
+                Desktop.key((char) Key.BACKSPACE);
                 return true;
             case KeyEvent.KEYCODE_ENTER:
-                Desktop.key((char) Key.RETURN, Desktop.getTimestamp());
+                Desktop.key((char) Key.RETURN);
                 return true;
             case KeyEvent.KEYCODE_TAB:
-                Desktop.key((char) Key.TAB, Desktop.getTimestamp());
+                Desktop.key((char) Key.TAB);
                 return true;
             default:
                 return false;
@@ -272,7 +267,7 @@ public class Desktop
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_MOVE:
-                Desktop.touch(event.getActionMasked(), (int) event.getX(), (int) event.getY(), Desktop.getTimestamp());
+                Desktop.touch(event.getActionMasked(), (int) event.getX(), (int) event.getY());
                 break;
             }
 
@@ -302,7 +297,7 @@ public class Desktop
 
         @Override public boolean commitText(CharSequence text, int newCursorPosition) {
             for (int i = 0; i < text.length(); i++) {
-                Desktop.key(text.charAt(i), Desktop.getTimestamp());
+                Desktop.key(text.charAt(i));
             }
             return true;
         }
