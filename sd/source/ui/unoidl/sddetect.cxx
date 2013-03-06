@@ -74,6 +74,27 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 
+namespace {
+
+bool isZipStorageType(const OUString& rTypeName)
+{
+    if (rTypeName == "impress8" || rTypeName == "impress8_template")
+        return true;
+
+    if (rTypeName == "draw8" || rTypeName == "draw8_template")
+        return true;
+
+    if (rTypeName == "impress_StarOffice_XML_Impress" || rTypeName == "impress_StarOffice_XML_Impress_Template")
+        return true;
+
+    if (rTypeName == "draw_StarOffice_XML_Draw" || rTypeName == "draw_StarOffice_XML_Draw_Template")
+        return true;
+
+    return false;
+}
+
+}
+
 SdFilterDetect::SdFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >&  )
 {
 }
@@ -89,7 +110,7 @@ SdFilterDetect::~SdFilterDetect()
     REFERENCE< XInteractionHandler > xInteraction;
     String aURL;
     ::rtl::OUString sTemp;
-    String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
+    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
     ::rtl::OUString aDocumentTitle; // interesting only if set in this method
@@ -195,7 +216,7 @@ SdFilterDetect::~SdFilterDetect()
         aMedium.UseInteractionHandler( sal_True );
         if ( aPreselectedFilterName.Len() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
-        else if( aTypeName.Len() )
+        else if (!aTypeName.isEmpty())
         {
             SfxFilterMatcher aMatch;
             pFilter = aMatch.GetFilter4EA( aTypeName );
@@ -208,11 +229,11 @@ SdFilterDetect::~SdFilterDetect()
             xStream = aMedium.GetInputStream();
             xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
-            sal_Bool bIsStorage = aMedium.IsStorage();
+            bool bIsZipStorage = aMedium.IsStorage();
 
             if (aMedium.GetError() == SVSTREAM_OK)
             {
-                if ( bIsStorage )
+                if (bIsZipStorage)
                 {
                     // PowerPoint needs to be detected via StreamName, all other storage based formats are our own and can
                     // be detected by the ClipboardId, so except for the PPT filter all filters must have a ClipboardId set
@@ -265,7 +286,7 @@ SdFilterDetect::~SdFilterDetect()
                                 return OUString();
 
                             packages::zip::ZipIOException aZipException;
-                            if ( ( aWrap.TargetException >>= aZipException ) && aTypeName.Len() )
+                            if ((aWrap.TargetException >>= aZipException) && !aTypeName.isEmpty())
                             {
                                 if ( xInteraction.is() )
                                 {
@@ -293,7 +314,7 @@ SdFilterDetect::~SdFilterDetect()
 
                                 if ( !bRepairAllowed )
                                 {
-                                    aTypeName.Erase();
+                                    aTypeName = OUString();
                                     pFilter = 0;
                                 }
                             }
@@ -304,11 +325,11 @@ SdFilterDetect::~SdFilterDetect()
                         }
                         catch( uno::Exception& )
                         {
-                            aTypeName.Erase();
+                            aTypeName = OUString();
                             pFilter = 0;
                         }
 
-                        if ( !pFilter && aTypeName.Len() )
+                        if (!pFilter && !aTypeName.isEmpty())
                         {
                             //TODO/LATER: using this method impress is always preferred if no flat detecion has been made
                             // this should been discussed!
@@ -321,12 +342,19 @@ SdFilterDetect::~SdFilterDetect()
                 }
                 else
                 {
-                    SvStream* pStm = aMedium.GetInStream();
-                    if ( !pStm )
+                    if (isZipStorageType(aTypeName))
+                        // This stream is a not zip archive, but a zip archive type is specified.
+                        pFilter = NULL;
+
+                    SvStream* pStm = NULL;
+                    if (pFilter)
                     {
-                        pFilter = 0;
+                        pStm = aMedium.GetInStream();
+                        if (!pStm)
+                            pFilter = NULL;
                     }
-                    else
+
+                    if (pFilter && pStm)
                     {
                         SotStorageRef aStorage = new SotStorage ( pStm, sal_False );
                         if ( !aStorage->GetError() )
@@ -472,7 +500,7 @@ SdFilterDetect::~SdFilterDetect()
     if ( pFilter )
         aTypeName = pFilter->GetTypeName();
     else
-        aTypeName.Erase();
+        aTypeName = OUString();
 
     return aTypeName;
 }
