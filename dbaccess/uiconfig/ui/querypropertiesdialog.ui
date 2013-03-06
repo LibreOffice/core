@@ -12,22 +12,19 @@
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
-            <property name="margin_top">24</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -39,12 +36,10 @@
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -56,11 +51,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -126,13 +119,12 @@
                             <child>
                               <object class="GtkRadioButton" id="distinct">
                                 <property name="label">Yes</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="group">nondistinct</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -143,11 +135,9 @@
                             <child>
                               <object class="GtkRadioButton" id="nondistinct">
                                 <property name="label">No</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">distinct</property>
@@ -178,7 +168,7 @@
                       <object class="GtkGrid" id="grid3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="column_spacing">24</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="limit-label">
                             <property name="visible">True</property>
@@ -198,7 +188,6 @@
                           <object class="dbulo-LimitBox" id="limitbox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="expand">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

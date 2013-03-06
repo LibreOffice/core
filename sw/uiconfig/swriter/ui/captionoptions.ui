@@ -17,13 +17,13 @@
   </object>
   <object class="GtkDialog" id="CaptionOptionsDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Caption options</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
@@ -31,6 +31,7 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkFrame" id="frame1">
                 <property name="visible">True</property>
@@ -43,7 +44,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="top_padding">6</property>
-                    <property name="bottom_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid2">
@@ -51,8 +51,7 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
-                        <property name="column_spacing">6</property>
-                        <property name="column_homogeneous">True</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkComboBox" id="level">
                             <property name="visible">True</property>
@@ -84,7 +83,6 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Level</property>
                             <property name="use_underline">True</property>
@@ -101,7 +99,6 @@
                           <object class="GtkLabel" id="label6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Separator</property>
                             <property name="use_underline">True</property>
@@ -147,7 +144,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="top_padding">6</property>
-                    <property name="bottom_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid1">
@@ -155,14 +151,11 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
-                        <property name="column_spacing">6</property>
-                        <property name="column_homogeneous">True</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="margin_right">12</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Character style</property>
                             <property name="use_underline">True</property>
@@ -239,7 +232,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="top_padding">6</property>
-                    <property name="bottom_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid3">
@@ -247,14 +239,11 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
-                        <property name="column_spacing">6</property>
-                        <property name="column_homogeneous">True</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="margin_right">12</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Caption order</property>
                             <property name="use_underline">True</property>
@@ -373,5 +362,13 @@
       <action-widget response="0">cancel</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="label5"/>
+      <widget name="label6"/>
+      <widget name="label4"/>
+      <widget name="label7"/>
+    </widgets>
   </object>
 </interface>
