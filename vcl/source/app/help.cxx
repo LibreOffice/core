@@ -296,7 +296,6 @@ void Help::HideTip( sal_uLong nId )
 // =======================================================================
 
 HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle ) :
-    //FloatingWindow( pParent->ImplGetFrameWindow(), WB_SYSTEMWINDOW ),
     FloatingWindow( pParent, WB_SYSTEMWINDOW|WB_TOOLTIPWIN ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
     maHelpText( rText )
 {
@@ -703,7 +702,7 @@ void ImplSetHelpWindowPos( Window* pHelpWin, sal_uInt16 nHelpWinStyle, sal_uInt1
                 aPos.Y() = devHelpArea.Bottom();
         }
 
-        // Welche Richtung?
+        // which direction?
         if ( nStyle & QUICKHELP_LEFT )
             ;
         else if ( nStyle & QUICKHELP_RIGHT )
