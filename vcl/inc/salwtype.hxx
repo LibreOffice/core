@@ -100,7 +100,6 @@ class FontSelectPattern;
 #define SALEVENT_STARTRECONVERSION      ((sal_uInt16)45)
 #define SALEVENT_EXTERNALZOOM           ((sal_uInt16)46)
 #define SALEVENT_EXTERNALSCROLL         ((sal_uInt16)47)
-#define SALEVENT_COUNT                  ((sal_uInt16)47)
 
 // MOUSELEAVE must send, when the pointer leave the client area and
 // the mouse is not captured
