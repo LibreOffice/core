@@ -494,7 +494,7 @@ namespace cppcanvas
                         }
                         } else {
                             EMFP_DEBUG (dumpWords (s, 1024));
-            }
+                        }
                         break;
                     }
                 // linear gradient
@@ -912,66 +912,66 @@ namespace cppcanvas
                     if (brush->type == 3 && !(brush->additionalFlags & 0x1))
                         return;  // we are unable to parse these brushes yet
 
-                ::basegfx::B2DHomMatrix aTextureTransformation;
-                ::basegfx::B2DHomMatrix aWorldTransformation;
-                ::basegfx::B2DHomMatrix aBaseTransformation;
-                rendering::Texture aTexture;
+                    ::basegfx::B2DHomMatrix aTextureTransformation;
+                    ::basegfx::B2DHomMatrix aWorldTransformation;
+                    ::basegfx::B2DHomMatrix aBaseTransformation;
+                    rendering::Texture aTexture;
 
-                aWorldTransformation.set (0, 0, aWorldTransform.eM11);
-                aWorldTransformation.set (0, 1, aWorldTransform.eM21);
-                aWorldTransformation.set (0, 2, aWorldTransform.eDx);
-                aWorldTransformation.set (1, 0, aWorldTransform.eM12);
-                aWorldTransformation.set (1, 1, aWorldTransform.eM22);
-                aWorldTransformation.set (1, 2, aWorldTransform.eDy);
+                    aWorldTransformation.set (0, 0, aWorldTransform.eM11);
+                    aWorldTransformation.set (0, 1, aWorldTransform.eM21);
+                    aWorldTransformation.set (0, 2, aWorldTransform.eDx);
+                    aWorldTransformation.set (1, 0, aWorldTransform.eM12);
+                    aWorldTransformation.set (1, 1, aWorldTransform.eM22);
+                    aWorldTransformation.set (1, 2, aWorldTransform.eDy);
 
-                aBaseTransformation.set (0, 0, aBaseTransform.eM11);
-                aBaseTransformation.set (0, 1, aBaseTransform.eM21);
-                aBaseTransformation.set (0, 2, aBaseTransform.eDx);
-                aBaseTransformation.set (1, 0, aBaseTransform.eM12);
-                aBaseTransformation.set (1, 1, aBaseTransform.eM22);
-                aBaseTransformation.set (1, 2, aBaseTransform.eDy);
+                    aBaseTransformation.set (0, 0, aBaseTransform.eM11);
+                    aBaseTransformation.set (0, 1, aBaseTransform.eM21);
+                    aBaseTransformation.set (0, 2, aBaseTransform.eDx);
+                    aBaseTransformation.set (1, 0, aBaseTransform.eM12);
+                    aBaseTransformation.set (1, 1, aBaseTransform.eM22);
+                    aBaseTransformation.set (1, 2, aBaseTransform.eDy);
 
-                if (brush->type == 4) {
-                    aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
-                    aTextureTransformation.translate (brush->areaX, brush->areaY);
-                } else {
-                    aTextureTransformation.translate (-0.5, -0.5);
-                    aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
-                    aTextureTransformation.translate (brush->areaX,brush->areaY);
-                }
+                    if (brush->type == 4) {
+                        aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
+                        aTextureTransformation.translate (brush->areaX, brush->areaY);
+                    } else {
+                        aTextureTransformation.translate (-0.5, -0.5);
+                        aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
+                        aTextureTransformation.translate (brush->areaX,brush->areaY);
+                    }
 
-                if (brush->hasTransformation) {
-                    ::basegfx::B2DHomMatrix aTransformation;
+                    if (brush->hasTransformation) {
+                        ::basegfx::B2DHomMatrix aTransformation;
 
-                    aTransformation.set (0, 0, brush->transformation.eM11);
-                    aTransformation.set (0, 1, brush->transformation.eM21);
-                    aTransformation.set (0, 2, brush->transformation.eDx);
-                    aTransformation.set (1, 0, brush->transformation.eM12);
-                    aTransformation.set (1, 1, brush->transformation.eM22);
-                    aTransformation.set (1, 2, brush->transformation.eDy);
+                        aTransformation.set (0, 0, brush->transformation.eM11);
+                        aTransformation.set (0, 1, brush->transformation.eM21);
+                        aTransformation.set (0, 2, brush->transformation.eDx);
+                        aTransformation.set (1, 0, brush->transformation.eM12);
+                        aTransformation.set (1, 1, brush->transformation.eM22);
+                        aTransformation.set (1, 2, brush->transformation.eDy);
 
-                    aTextureTransformation *= aTransformation;
-                }
+                        aTextureTransformation *= aTransformation;
+                    }
 
-                aTextureTransformation *= aWorldTransformation;
-                aTextureTransformation.scale (100.0*nMmX/nPixX, 100.0*nMmY/nPixY);
-                aTextureTransformation.translate (-nFrameLeft, -nFrameTop);
-                aTextureTransformation *= rState.mapModeTransform;
-                aTextureTransformation *= aBaseTransformation;
+                    aTextureTransformation *= aWorldTransformation;
+                    aTextureTransformation.scale (100.0*nMmX/nPixX, 100.0*nMmY/nPixY);
+                    aTextureTransformation.translate (-nFrameLeft, -nFrameTop);
+                    aTextureTransformation *= rState.mapModeTransform;
+                    aTextureTransformation *= aBaseTransformation;
 
-                aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
-                aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
-                aTexture.Alpha = 1.0;
+                    aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
+                    aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
+                    aTexture.Alpha = 1.0;
 
-        basegfx::ODFGradientInfo aGradInfo;
-        rtl::OUString aGradientService;
+                    basegfx::ODFGradientInfo aGradInfo;
+                    rtl::OUString aGradientService;
 
                     const uno::Sequence< double > aStartColor(
-                        ::vcl::unotools::colorToDoubleSequence( brush->solidColor,
-                                                                rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() ) );
+                            ::vcl::unotools::colorToDoubleSequence( brush->solidColor,
+                                rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() ) );
                     const uno::Sequence< double > aEndColor(
-                        ::vcl::unotools::colorToDoubleSequence( brush->secondColor,
-                                                                rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() ) );
+                            ::vcl::unotools::colorToDoubleSequence( brush->secondColor,
+                                rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() ) );
                     uno::Sequence< uno::Sequence < double > > aColors (2);
                     uno::Sequence< double > aStops (2);
 
@@ -989,11 +989,15 @@ namespace cppcanvas
 
                             for (int j = 0; j < length; j++) {
                                 if (brush->type == 4) {
-//                                     // gamma correction
-//                                     if (brush->additionalFlags & 0x80)
-//                                         aColor [j] = pow (aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i], 1/2.2);
-//                                     else
+#if 0
+                                    // gamma correction
+                                    if (brush->additionalFlags & 0x80)
+                                        aColor [j] = pow (aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i], 1/2.2);
+                                    else
+                                        aColor [j] = aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i];
+#else
                                     aColor [j] = aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i];
+#endif
                                 } else
                                     aColor [j] = aStartColor [j]*brush->blendFactors[i] + aEndColor [j]*(1 - brush->blendFactors[i]);
                             }
@@ -1008,7 +1012,7 @@ namespace cppcanvas
                         for (int i = 0; i < brush->colorblendPoints; i++) {
                             aStops[i] = brush->colorblendPositions [i];
                             aColors[(brush->type == 4) ? i : brush->colorblendPoints - 1 - i] = ::vcl::unotools::colorToDoubleSequence( brush->colorblendColors [i],
-                                                                                                                                        rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
+                                    rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
                         }
                     } else {
                         aStops[0] = 0.0;
@@ -1024,56 +1028,56 @@ namespace cppcanvas
                     }
 
                     EMFP_DEBUG (printf ("EMF+\t\tset gradient\n"));
-           basegfx::B2DRange aBoundsRectangle (0, 0, 1, 1);
+                    basegfx::B2DRange aBoundsRectangle (0, 0, 1, 1);
                     if (brush->type == 4) {
-           aGradientService = "LinearGradient";
-           basegfx::tools::createLinearODFGradientInfo( aGradInfo,
-                                    aBoundsRectangle,
-                                    aStops.getLength(),
-                                    0,
-                                    0 );
+                        aGradientService = "LinearGradient";
+                        basegfx::tools::createLinearODFGradientInfo( aGradInfo,
+                                aBoundsRectangle,
+                                aStops.getLength(),
+                                0,
+                                0 );
 
                     } else {
-            aGradientService = "EllipticalGradient";
-            basegfx::tools::createEllipticalODFGradientInfo( aGradInfo,
-                                     aBoundsRectangle,
-                                     ::basegfx::B2DVector( 0, 0 ),
-                                     aStops.getLength(),
-                                     0,
-                                     0 );
+                        aGradientService = "EllipticalGradient";
+                        basegfx::tools::createEllipticalODFGradientInfo( aGradInfo,
+                                aBoundsRectangle,
+                                ::basegfx::B2DVector( 0, 0 ),
+                                aStops.getLength(),
+                                0,
+                                0 );
                     }
 
-            uno::Reference< lang::XMultiServiceFactory > xFactory(
-            rParms.mrCanvas->getUNOCanvas()->getDevice()->getParametricPolyPolygonFactory() );
+                    uno::Reference< lang::XMultiServiceFactory > xFactory(
+                            rParms.mrCanvas->getUNOCanvas()->getDevice()->getParametricPolyPolygonFactory() );
 
-            if( xFactory.is() ) {
-            uno::Sequence<uno::Any> args( 3 );
-            beans::PropertyValue aProp;
-            aProp.Name = "Colors";
-            aProp.Value <<= aColors;
-            args[0] <<= aProp;
-            aProp.Name = "Stops";
-            aProp.Value <<= aStops;
-            args[1] <<= aProp;
-            aProp.Name = "AspectRatio";
-            aProp.Value <<= static_cast<sal_Int32>(1);
-            args[2] <<= aProp;
+                    if( xFactory.is() ) {
+                        uno::Sequence<uno::Any> args( 3 );
+                        beans::PropertyValue aProp;
+                        aProp.Name = "Colors";
+                        aProp.Value <<= aColors;
+                        args[0] <<= aProp;
+                        aProp.Name = "Stops";
+                        aProp.Value <<= aStops;
+                        args[1] <<= aProp;
+                        aProp.Name = "AspectRatio";
+                        aProp.Value <<= static_cast<sal_Int32>(1);
+                        args[2] <<= aProp;
 
-            aTexture.Gradient.set(
-                xFactory->createInstanceWithArguments( aGradientService,
-                                   args ),
-                uno::UNO_QUERY);
-            }
+                        aTexture.Gradient.set(
+                                xFactory->createInstanceWithArguments( aGradientService,
+                                    args ),
+                                uno::UNO_QUERY);
+                    }
 
-            ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
-                                    aTextureTransformation );
+                    ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
+                            aTextureTransformation );
 
-            if( aTexture.Gradient.is() )
-            pPolyAction =
-                ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon,
-                                                     rParms.mrCanvas,
-                                                     rState,
-                                                     aTexture ) );
+                    if( aTexture.Gradient.is() )
+                        pPolyAction =
+                            ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon,
+                                        rParms.mrCanvas,
+                                        rState,
+                                        aTexture ) );
                 }
             }
 
@@ -1680,88 +1684,88 @@ namespace cppcanvas
                             updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, false);
                         } else {
                             EMFP_DEBUG (printf ("EMF+\tTODO\n"));
-                }
+                        }
                         break;
                     }
-                case EmfPlusRecordTypeDrawDriverString: {
+                    case EmfPlusRecordTypeDrawDriverString: {
                         EMFP_DEBUG (printf ("EMF+ DrawDriverString, flags: 0x%04x\n", flags));
-                sal_uInt32 brushIndexOrColor;
-                sal_uInt32 optionFlags;
-                sal_uInt32 hasMatrix;
-                sal_uInt32 glyphsCount;
+                        sal_uInt32 brushIndexOrColor;
+                        sal_uInt32 optionFlags;
+                        sal_uInt32 hasMatrix;
+                        sal_uInt32 glyphsCount;
 
-                rMF >> brushIndexOrColor >> optionFlags >> hasMatrix >> glyphsCount;
+                        rMF >> brushIndexOrColor >> optionFlags >> hasMatrix >> glyphsCount;
 
-                EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
-                EMFP_DEBUG (printf ("EMF+\toption flags: 0x%08x\n", (unsigned int)optionFlags));
-                EMFP_DEBUG (printf ("EMF+\thas matrix: %u\n", (unsigned int)hasMatrix));
-                EMFP_DEBUG (printf ("EMF+\tglyphs: %u\n", (unsigned int)glyphsCount));
+                        EMFP_DEBUG (printf ("EMF+\t%s: 0x%08x\n", (flags & 0x8000) ? "color" : "brush index", (unsigned int)brushIndexOrColor));
+                        EMFP_DEBUG (printf ("EMF+\toption flags: 0x%08x\n", (unsigned int)optionFlags));
+                        EMFP_DEBUG (printf ("EMF+\thas matrix: %u\n", (unsigned int)hasMatrix));
+                        EMFP_DEBUG (printf ("EMF+\tglyphs: %u\n", (unsigned int)glyphsCount));
 
-                if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
-                float *charsPosX = new float[glyphsCount];
-                float *charsPosY = new float[glyphsCount];
+                        if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
+                            float *charsPosX = new float[glyphsCount];
+                            float *charsPosY = new float[glyphsCount];
 
-                rtl::OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
+                            rtl::OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
 
-                for( sal_uInt32 i=0; i<glyphsCount; i++) {
-                    rMF >> charsPosX[i] >> charsPosY[i];
-                    EMFP_DEBUG (printf ("EMF+\tglyphPosition[%u]: %f, %f\n", (unsigned int)i, charsPosX[i], charsPosY[i]));
-                }
+                            for( sal_uInt32 i=0; i<glyphsCount; i++) {
+                                rMF >> charsPosX[i] >> charsPosY[i];
+                                EMFP_DEBUG (printf ("EMF+\tglyphPosition[%u]: %f, %f\n", (unsigned int)i, charsPosX[i], charsPosY[i]));
+                            }
 
-                XForm transform;
-                if( hasMatrix ) {
-                    rMF >> transform;
-                    EMFP_DEBUG (printf ("EMF+\tmatrix:: %f, %f, %f, %f, %f, %f\n", transform.eM11, transform.eM12, transform.eM21, transform.eM22, transform.eDx, transform.eDy));
-                }
+                            XForm transform;
+                            if( hasMatrix ) {
+                                rMF >> transform;
+                                EMFP_DEBUG (printf ("EMF+\tmatrix:: %f, %f, %f, %f, %f, %f\n", transform.eM11, transform.eM12, transform.eM21, transform.eM22, transform.eDx, transform.eDy));
+                            }
 
-                // add the text action
-                setFont (flags & 0xff, rFactoryParms, rState);
+                            // add the text action
+                            setFont (flags & 0xff, rFactoryParms, rState);
 
-                if( flags & 0x8000 )
-                    SET_TEXT_COLOR(brushIndexOrColor);
+                            if( flags & 0x8000 )
+                                SET_TEXT_COLOR(brushIndexOrColor);
 
-                ActionSharedPtr pTextAction(
-                    TextActionFactory::createTextAction(
-                    ::vcl::unotools::pointFromB2DPoint ( Map( charsPosX[0], charsPosY[0] ) ),
-                    ::Size(),
-                    ::Color(),
-                    ::Size(),
-                    ::Color(),
-                    text,
-                    0,
-                    glyphsCount,
-                    NULL,
-                    rFactoryParms.mrVDev,
-                    rFactoryParms.mrCanvas,
-                    rState,
-                    rFactoryParms.mrParms,
-                    false ) );
+                            ActionSharedPtr pTextAction(
+                                    TextActionFactory::createTextAction(
+                                        ::vcl::unotools::pointFromB2DPoint ( Map( charsPosX[0], charsPosY[0] ) ),
+                                        ::Size(),
+                                        ::Color(),
+                                        ::Size(),
+                                        ::Color(),
+                                        text,
+                                        0,
+                                        glyphsCount,
+                                        NULL,
+                                        rFactoryParms.mrVDev,
+                                        rFactoryParms.mrCanvas,
+                                        rState,
+                                        rFactoryParms.mrParms,
+                                        false ) );
 
-                if( pTextAction )
-                {
-                    EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
+                            if( pTextAction )
+                            {
+                                EMFP_DEBUG (printf ("EMF+\t\tadd text action\n"));
 
-                    maActions.push_back(
-                    MtfAction(
-                        pTextAction,
-                        rFactoryParms.mrCurrActionIndex ) );
+                                maActions.push_back(
+                                        MtfAction(
+                                            pTextAction,
+                                            rFactoryParms.mrCurrActionIndex ) );
 
-                    rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
-                }
+                                rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
+                            }
 
-                delete[] charsPosX;
-                delete[] charsPosY;
-                } else {
-                EMFP_DEBUG (printf ("EMF+\tTODO: fonts (non-unicode glyphs chars)\n"));
-                }
+                            delete[] charsPosX;
+                            delete[] charsPosY;
+                        } else {
+                            EMFP_DEBUG (printf ("EMF+\tTODO: fonts (non-unicode glyphs chars)\n"));
+                        }
 
                         break;
-            }
+                                                            }
                     default:
                         EMFP_DEBUG (printf ("EMF+ unhandled record type: %d\n", type));
                         EMFP_DEBUG (printf ("EMF+\tTODO\n"));
                     }
-               }
+                }
 
                 rMF.Seek (next);
 
