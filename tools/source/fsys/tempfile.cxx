@@ -55,33 +55,13 @@ rtl::OUString GetSystemTempDirPath_Impl()
 
 #define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
 
-OUString ConstructTempDir_Impl( const String* pParent )
+OUString ConstructTempDir_Impl( const String* /* pParent */ )
 {
-    OUString aName;
-    if ( pParent && pParent->Len() )
-    {
-        rtl::OUString aRet;
-
-        // test for valid filename
-        {
-            ::osl::DirectoryItem aItem;
-            sal_Int32 i = aRet.getLength();
-            if ( aRet[i-1] == '/' )
-                i--;
-
-            if ( DirectoryItem::get( aRet.copy(0, i), aItem ) == FileBase::E_None )
-                aName = aRet;
-        }
-    }
-
-    if ( aName.isEmpty() )
-    {
-        // if no parent or invalid parent : use system directory
-        ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
-        if ( rTempNameBase_Impl.isEmpty() )
-            rTempNameBase_Impl = GetSystemTempDirPath_Impl();
-        aName = rTempNameBase_Impl;
-    }
+    // use system directory
+    ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
+    if ( rTempNameBase_Impl.isEmpty() )
+        rTempNameBase_Impl = GetSystemTempDirPath_Impl();
+    OUString aName = rTempNameBase_Impl;
 
     // Make sure that directory ends with a separator
     if( !aName.endsWith( "/" ) )
