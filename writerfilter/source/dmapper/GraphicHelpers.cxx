@@ -251,7 +251,8 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight )
     while( it != items.end())
     {
         // std::map is iterated sorted by key
-        if( it->first > relativeHeight )
+        // if there is an item that has the same z-order, we belong under it
+        if( it->first >= relativeHeight )
             break; // this is the first one higher, we belong right before it
         else
             ++it;
