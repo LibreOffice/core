@@ -39,6 +39,7 @@
 #include "undorangename.hxx"
 #include "tabvwsh.hxx"
 #include "tokenarray.hxx"
+#include "sc.hrc"
 
 // defines -------------------------------------------------------------------
 
