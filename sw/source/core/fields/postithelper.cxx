@@ -175,6 +175,7 @@ SwPosition SwAnnotationItem::GetAnchorPosition() const
             return aPos;
         }
     }
+    return NULL;
 }
 
 bool SwAnnotationItem::UseElement()
