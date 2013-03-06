@@ -37,6 +37,109 @@ class FileAccess(object):
             "com.sun.star.ucb.FileContentProvider")
             
     @classmethod
+    def deleteLastSlashfromUrl(self, _sPath):
+        if _sPath.endswith("/"):
+            return _sPath[:-1]
+        else:
+            return _sPath
+
+    '''
+    Further information on arguments value see in OO Developer Guide,
+    chapter 6.2.7
+    @param xMSF
+    @param sPath
+    @param xSimpleFileAccess
+    @return the respective path of the office application.
+    A probable following "/" at the end is trimmed.
+    '''
+
+    @classmethod
+    def getOfficePath(self, xMSF, sPath, xSimpleFileAccess):
+        try:
+            ResultPath = ""
+            xInterface = xMSF.createInstance("com.sun.star.util.PathSettings")
+            ResultPath = str(getattr(xInterface, sPath))
+            ResultPath = self.deleteLastSlashfromUrl(ResultPath)
+            return ResultPath
+        except Exception:
+            traceback.print_exc()
+            return ""
+
+    '''
+    Further information on arguments value see in OO Developer Guide,
+    chapter 6.2.7
+    @param xMSF
+    @param sPath
+    @param sType use "share" or "user". Set to ""
+    f not needed eg for the WorkPath;
+    In the return Officepath a possible slash at the end is cut off
+    @param sSearchDir
+    @return
+    @throws NoValidPathException
+    '''
+
+    @classmethod
+    def getOfficePath2(self, xMSF, sPath, sType, sSearchDir):
+        #This method currently only works with sPath="Template"
+        bexists = False
+        try:
+            xPathInterface = xMSF.createInstance(
+                "com.sun.star.util.PathSettings")
+            ResultPath = ""
+            ReadPaths = ()
+            xUcbInterface = xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
+            Template_writable = xPathInterface.getPropertyValue(
+                sPath + "_writable")
+            Template_internal = xPathInterface.getPropertyValue(
+                sPath + "_internal")
+            Template_user = xPathInterface.getPropertyValue(
+                sPath + "_user")
+            if not hasattr(Template_internal, '__dict__'):
+                ReadPaths = ReadPaths + Template_internal
+            if not hasattr(Template_user, '__dict__'):
+                ReadPaths = ReadPaths + Template_user
+            ReadPaths = ReadPaths + (Template_writable,)
+            if sType.lower() == "user":
+                ResultPath = Template_writable
+                bexists = True
+            else:
+                #find right path using the search sub path
+                for i in ReadPaths:
+                    tmpPath = i + sSearchDir
+                    if xUcbInterface.exists(tmpPath):
+                        ResultPath = i
+                        bexists = True
+                        break
+
+            ResultPath = self.deleteLastSlashfromUrl(ResultPath)
+        except Exception:
+            traceback.print_exc()
+            ResultPath = ""
+
+        if not bexists:
+            raise NoValidPathException (xMSF, "")
+        return ResultPath
+
+    @classmethod
+    def combinePaths(self, xMSF, _sFirstPath, _sSecondPath):
+        bexists = False
+        ReturnPath = ""
+        try:
+            xUcbInterface = xMSF.createInstance(
+                "com.sun.star.ucb.SimpleFileAccess")
+            ReturnPath = _sFirstPath + _sSecondPath
+            bexists = xUcbInterface.exists(ReturnPath)
+        except Exception:
+            traceback.print_exc()
+            return ""
+
+        if not bexists:
+            raise NoValidPathException (xMSF, "")
+
+        return ReturnPath
+
+    @classmethod
     def getFolderTitles(self, xMSF, FilterName, FolderName, resDict=None):
         #Returns and ordered dict containing the template's name and path
         
