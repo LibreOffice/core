@@ -65,7 +65,6 @@ private :
 
     com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
 
-    rtl::OUString ImpGetStandardImage( const rtl::OUString& rPrivateURL );
     void InitDialog();
 
     sal_Int64 mnSourceSize;

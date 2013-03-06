@@ -92,8 +92,15 @@ rtl::OUString InsertFixedText( InformationDialog& rInformationDialog, const rtl:
     return rControlName;
 }
 
-rtl::OUString InsertImage( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rURL,
-                        sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight )
+rtl::OUString InsertImage(
+    InformationDialog& rInformationDialog,
+    const OUString& rControlName,
+    const OUString& rURL,
+    sal_Int32 nPosX,
+    sal_Int32 nPosY,
+    sal_Int32 nWidth,
+    sal_Int32 nHeight,
+    sal_Bool bScale )
 {
     OUString pNames[] = {
         TKGet( TK_Border ),
@@ -110,7 +117,7 @@ rtl::OUString InsertImage( InformationDialog& rInformationDialog, const OUString
         Any( rURL ),
         Any( nPosX ),
         Any( nPosY ),
-        Any( sal_True ),
+        Any( bScale ),
         Any( nWidth ) };
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
@@ -202,41 +209,6 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal )
     if ( nX > 0 )
         aVal.setLength( nX + 2 );
     return aVal.makeStringAndClear();
-}
-
-OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
-{
-    rtl::OUString sURL;
-    try
-    {
-        mxTempFile = Reference< XStream >( mxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), mxMSF ), UNO_QUERY_THROW );
-        Reference< XPropertySet > xPropSet( mxTempFile, UNO_QUERY );
-        Reference< XOutputStream > xOutputStream( mxTempFile->getOutputStream() );
-        if ( xOutputStream.is() && xPropSet.is() )
-        {
-            Reference< graphic::XGraphicProvider > xGraphicProvider( mxMSF->getServiceManager()->createInstanceWithContext(
-                        OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), mxMSF ), UNO_QUERY_THROW );
-            Sequence< PropertyValue > aArgs( 1 );
-            aArgs[ 0 ].Name = OUString::createFromAscii( "URL" );
-            aArgs[ 0 ].Value <<= sPrivateURL;
-            Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aArgs ) );
-            if ( xGraphic.is() )
-            {
-                OUString aDestMimeType( RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
-                Sequence< PropertyValue > aArgs2( 2 );
-                aArgs2[ 0 ].Name = TKGet( TK_MimeType );                // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
-                aArgs2[ 0 ].Value <<= aDestMimeType;
-                aArgs2[ 1 ].Name = TKGet( TK_OutputStream );
-                aArgs2[ 1 ].Value <<= xOutputStream;
-                xGraphicProvider->storeGraphic( xGraphic, aArgs2 );
-            }
-            xPropSet->getPropertyValue( OUString::createFromAscii( "Uri" ) ) >>= sURL;
-        }
-    }
-    catch( Exception& )
-    {
-    }
-    return sURL;
 }
 
 void InformationDialog::InitDialog()
@@ -331,7 +303,10 @@ void InformationDialog::InitDialog()
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
-    InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), ImpGetStandardImage( rtl::OUString::createFromAscii( "private:standardimage/query" ) ), 5, 5, 25, 25 );
+    InsertImage( *this,
+                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "aboutimage" ) ),
+                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:standardimage/query" ) ),
+                 5, 5, 25, 25, sal_False );
     InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
     if ( maSaveAsURL.getLength() )
         InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
