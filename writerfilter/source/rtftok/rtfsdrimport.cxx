@@ -100,6 +100,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     beans::PropertyValue aPropertyValue;
     awt::Rectangle aViewBox;
     std::vector<beans::PropertyValue> aPathPropVec;
+    // Default line color is black in Word, blue in Writer.
+    uno::Any aLineColor = uno::makeAny(COL_BLACK);
 
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
@@ -138,11 +140,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         }
         else if ( i->first == "fillBackColor" )
             ; // Ignore: complementer of fillColor
-        else if (i->first == "lineColor" && xPropertySet.is())
-        {
-            aAny <<= msfilter::util::BGRToRGB(i->second.toInt32());
-            xPropertySet->setPropertyValue("LineColor", aAny);
-        }
+        else if (i->first == "lineColor")
+            aLineColor <<= msfilter::util::BGRToRGB(i->second.toInt32());
         else if ( i->first == "lineBackColor" )
             ; // Ignore: complementer of lineColor
         else if (i->first == "txflTextFlow" && xPropertySet.is())
@@ -296,6 +295,9 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr() << "':'" <<
                     OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr() << "'");
     }
+
+    if (xPropertySet.is())
+        xPropertySet->setPropertyValue("LineColor", aLineColor);
 
     if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
     {
