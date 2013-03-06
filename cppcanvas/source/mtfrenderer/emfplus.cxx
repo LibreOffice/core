@@ -1481,6 +1481,9 @@ namespace cppcanvas
                                         ReadPoint (rMF, x2, y2, flags);
                                         ReadPoint (rMF, x3, y3, flags);
 
+                                        EMFP_DEBUG (printf ("EMF+ destination points: %f,%f %f,%f %f,%f\n", x1, y1, x2, y2, x3, y3));
+                                        EMFP_DEBUG (printf ("EMF+ destination rectangle: %f,%f %fx%f\n", x1, y1, x2 - x1, y3 - y1));
+
                                         aDstPoint = Map (x1, y1);
                                         aDstSize = MapSize(x2 - x1, y3 - y1);
 
@@ -1491,6 +1494,8 @@ namespace cppcanvas
 
                                     ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
 
+                                    EMFP_DEBUG (printf ("EMF+ destination rectangle: %f,%f %fx%f\n", dx, dy, dw, dh));
+
                                     aDstPoint = Map (dx, dy);
                                     aDstSize = MapSize(dw, dh);
 
@@ -1499,12 +1504,9 @@ namespace cppcanvas
 
                                 if (bValid) {
                                     BitmapEx aBmp( image.graphic.GetBitmapEx () );
-                                    const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (basegfx::B2DPoint (sx, sy)),
-                                                               ::vcl::unotools::sizeFromB2DSize (basegfx::B2DSize(sw, sh)));
-                                    aBmp.Crop( aCropRect );
-
 
                                     Size aSize( aBmp.GetSizePixel() );
+                                    EMFP_DEBUG (printf ("EMF+ bitmap size: %ldx%ld\n", aSize.Width(), aSize.Height()));
                                     if( aSize.Width() > 0 && aSize.Height() > 0 ) {
                                         ActionSharedPtr pBmpAction (
                                             internal::BitmapActionFactory::createBitmapAction (
