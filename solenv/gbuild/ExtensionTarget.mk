@@ -158,14 +158,6 @@ $(call gb_ExtensionTarget_get_target,$(1)) : $(gb_ExtensionTarget_LICENSEFILE_DE
 
 endef
 
-define gb_ExtensionTarget_add_license
-$(call gb_ExtensionTarget_get_target,$(1)) : FILES += registration
-$(call gb_ExtensionTarget_get_target,$(1)) : LICENSE := $(2)
-$(call gb_ExtensionTarget_get_target,$(1)) : $(2)
-$(2) :| $(call gb_ExtensionTarget__get_preparation_target,$(1))
-
-endef
-
 # Use the default description file
 define gb_ExtensionTarget_use_default_description
 $(call gb_ExtensionTarget_add_file,$(1),description-en-US.txt,$(SRCDIR)/$(2)/description-en-US.txt)
