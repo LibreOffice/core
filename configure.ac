@@ -8876,9 +8876,11 @@ if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
     else
         AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway])
     fi
-    PathFormat "$DIRECTXSDK_HOME"
-    DIRECTXSDK_HOME="$formatted_path"
-    SOLARINC="$SOLARINC -I$DIRECTXSDK_HOME/include"
+    if test -n "$DIRECTXSDK_HOME"; then
+        PathFormat "$DIRECTXSDK_HOME"
+        DIRECTXSDK_HOME="$formatted_path"
+        SOLARINC="$SOLARINC -I$DIRECTXSDK_HOME/include"
+    fi
 fi
 AC_SUBST(DIRECTXSDK_HOME)
 AC_SUBST(DIRECTXSDK_LIB)
