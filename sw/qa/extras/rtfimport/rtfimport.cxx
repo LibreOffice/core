@@ -144,6 +144,7 @@ public:
     void testFdo58076_2();
     void testFdo59953();
     void testFdo59638();
+    void testFdo60722();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -260,6 +261,7 @@ void Test::run()
         {"fdo58076-2.rtf", &Test::testFdo58076_2},
         {"fdo59953.rtf", &Test::testFdo59953},
         {"fdo59638.rtf", &Test::testFdo59638},
+        {"fdo60722.rtf", &Test::testFdo60722},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1143,6 +1145,25 @@ void Test::testFdo59638()
         }
     }
     CPPUNIT_FAIL("no BulletChar property");
+}
+
+void Test::testFdo60722()
+{
+    // The problem was that the larger shape was over the smaller one, and not the other way around.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(OUString("larger"), getProperty<OUString>(xShape, "Description"));
+
+    xShape.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, "ZOrder"));
+    CPPUNIT_ASSERT_EQUAL(OUString("smaller"), getProperty<OUString>(xShape, "Description"));
+
+    // Color of the line was blue, and it had zero width.
+    xShape.set(xDraws->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), getProperty<sal_uInt32>(xShape, "LineWidth"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "LineColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
