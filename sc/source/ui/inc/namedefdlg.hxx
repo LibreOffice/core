@@ -27,7 +27,6 @@
  */
 
 #include "anyrefdg.hxx"
-#include "namedefdlg.hrc"
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>

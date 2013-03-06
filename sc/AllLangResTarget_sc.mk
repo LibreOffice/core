@@ -71,7 +71,6 @@ $(eval $(call gb_SrsTarget_add_files,sc/res,\
     sc/source/ui/src/simpref.src \
     sc/source/ui/src/solveroptions.src \
     sc/source/ui/src/namedlg.src \
-    sc/source/ui/src/namedefdlg.src \
     sc/source/ui/src/miscdlgs.src \
     sc/source/ui/src/tabopdlg.src \
     sc/source/ui/src/scstring.src \
