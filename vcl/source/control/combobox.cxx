@@ -34,11 +34,11 @@
 
 // =======================================================================
 
-static void lcl_GetSelectedEntries( ::std::set< sal_uInt16 >& rSelectedPos, const XubString& rText, sal_Unicode cTokenSep, const ImplEntryList* pEntryList )
+static void lcl_GetSelectedEntries( ::std::set< sal_uInt16 >& rSelectedPos, const OUString& rText, sal_Unicode cTokenSep, const ImplEntryList* pEntryList )
 {
-    for (xub_StrLen n = comphelper::string::getTokenCount(rText, cTokenSep); n;)
+    for (sal_Int32 n = comphelper::string::getTokenCount(rText, cTokenSep); n;)
     {
-        XubString aToken = rText.GetToken( --n, cTokenSep );
+        OUString aToken = rText.getToken( --n, cTokenSep );
         aToken = comphelper::string::strip(aToken, ' ');
         sal_uInt16 nPos = pEntryList->FindEntry( aToken );
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -324,8 +324,8 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
     if ( aSel.Len() ||
          ((eAction != AUTOCOMPLETE_TABFORWARD) && (eAction != AUTOCOMPLETE_TABBACKWARD)) )
     {
-        XubString   aFullText = pEdit->GetText();
-        XubString   aStartText = aFullText.Copy( 0, (xub_StrLen)aSel.Max() );
+        OUString    aFullText = pEdit->GetText();
+        OUString    aStartText = aFullText.copy( 0, (sal_Int32)aSel.Max() );
         sal_uInt16      nStart = mpImplLB->GetCurrentPos();
 
         if ( nStart == LISTBOX_ENTRY_NOTFOUND )
@@ -359,8 +359,8 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
 
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            XubString aText = mpImplLB->GetEntryList()->GetEntryText( nPos );
-            Selection aSelection( aText.Len(), aStartText.Len() );
+            OUString aText = mpImplLB->GetEntryList()->GetEntryText( nPos );
+            Selection aSelection( aText.getLength(), aStartText.getLength() );
             pEdit->SetText( aText, aSelection );
         }
     }
@@ -376,29 +376,31 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
     sal_Bool bCallSelect = sal_False;
     if ( mpImplLB->IsSelectionChanged() || bPopup )
     {
-        XubString aText;
+        OUString aText;
         if ( IsMultiSelectionEnabled() )
         {
             aText = mpSubEdit->GetText();
 
             // remove all entries to which there is an entry, but which is not selected
-            xub_StrLen nIndex = 0;
-            while ( nIndex != STRING_NOTFOUND )
+            sal_Int32 nIndex = 0;
+            while ( nIndex >= 0 )
             {
-                xub_StrLen  nPrevIndex = nIndex;
-                XubString   aToken = aText.GetToken( 0, mcMultiSep, nIndex );
-                xub_StrLen  nTokenLen = aToken.Len();
+                sal_Int32  nPrevIndex = nIndex;
+                OUString   aToken = aText.getToken( 0, mcMultiSep, nIndex );
+                sal_Int32  nTokenLen = aToken.getLength();
                 aToken = comphelper::string::strip(aToken, ' ');
                 sal_uInt16      nP = mpImplLB->GetEntryList()->FindEntry( aToken );
                 if ( (nP != LISTBOX_ENTRY_NOTFOUND) && (!mpImplLB->GetEntryList()->IsEntryPosSelected( nP )) )
                 {
-                    aText.Erase( nPrevIndex, nTokenLen );
+                    aText = aText.replaceAt( nPrevIndex, nTokenLen, "" );
                     nIndex = sal::static_int_cast<xub_StrLen>(nIndex - nTokenLen);
-                    if ( (nPrevIndex < aText.Len()) && (aText.GetChar( nPrevIndex ) == mcMultiSep) )
+                    sal_Int32 nSepCount=0;
+                    if ( (nPrevIndex+nSepCount < aText.getLength()) && (aText[nPrevIndex+nSepCount] == mcMultiSep) )
                     {
-                        aText.Erase( nPrevIndex, 1 );
                         nIndex--;
+                        ++nSepCount;
                     }
+                    aText.replaceAt( nPrevIndex, nSepCount, "" );
                 }
                 aText = comphelper::string::strip(aText, ' ');
             }
@@ -412,16 +414,15 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
                 sal_uInt16 nP = mpImplLB->GetEntryList()->GetSelectEntryPos( n );
                 if ( !aSelInText.count( nP ) )
                 {
-                    if ( aText.Len() && (aText.GetChar( aText.Len()-1 ) != mcMultiSep) )
-                        aText += mcMultiSep;
-                    if ( aText.Len() )
-                        aText += ' ';   // slightly loosen
+                    if ( !aText.isEmpty() && (aText[ aText.getLength()-1 ] != mcMultiSep) )
+                        aText += OUString(mcMultiSep);
+                    if ( !aText.isEmpty() )
+                        aText += " ";   // slightly loosen
                     aText += mpImplLB->GetEntryList()->GetEntryText( nP );
-                    aText += mcMultiSep;
+                    aText += OUString(mcMultiSep);
                 }
             }
-            if ( aText.Len() && (aText.GetChar( aText.Len()-1 ) == mcMultiSep) )
-                aText.Erase( aText.Len()-1, 1 );
+            aText = comphelper::string::stripEnd( aText, mcMultiSep );
         }
         else
         {
@@ -430,9 +431,9 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
 
         mpSubEdit->SetText( aText );
 
-        Selection aNewSelection( 0, aText.Len() );
+        Selection aNewSelection( 0, aText.getLength() );
         if ( IsMultiSelectionEnabled() )
-            aNewSelection.Min() = aText.Len();
+            aNewSelection.Min() = aText.getLength();
         mpSubEdit->SetSelection( aNewSelection );
 
         bCallSelect = sal_True;
@@ -907,7 +908,7 @@ void ComboBox::ImplUpdateFloatSelection()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ComboBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
+sal_uInt16 ComboBox::InsertEntry( const OUString& rStr, sal_uInt16 nPos )
 {
     sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr );
     nRealPos = sal::static_int_cast<sal_uInt16>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
@@ -917,7 +918,7 @@ sal_uInt16 ComboBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ComboBox::InsertEntry( const XubString& rStr, const Image& rImage, sal_uInt16 nPos )
+sal_uInt16 ComboBox::InsertEntry( const OUString& rStr, const Image& rImage, sal_uInt16 nPos )
 {
     sal_uInt16 nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );
     nRealPos = sal::static_int_cast<sal_uInt16>(nRealPos - mpImplLB->GetEntryList()->GetMRUCount());
@@ -927,7 +928,7 @@ sal_uInt16 ComboBox::InsertEntry( const XubString& rStr, const Image& rImage, sa
 
 // -----------------------------------------------------------------------
 
-void ComboBox::RemoveEntry( const XubString& rStr )
+void ComboBox::RemoveEntry( const OUString& rStr )
 {
     RemoveEntry( GetEntryPos( rStr ) );
 }
@@ -958,7 +959,7 @@ Image ComboBox::GetEntryImage( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ComboBox::GetEntryPos( const XubString& rStr ) const
+sal_uInt16 ComboBox::GetEntryPos( const OUString& rStr ) const
 {
     sal_uInt16 nPos = mpImplLB->GetEntryList()->FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -968,7 +969,7 @@ sal_uInt16 ComboBox::GetEntryPos( const XubString& rStr ) const
 
 // -----------------------------------------------------------------------
 
-XubString ComboBox::GetEntry( sal_uInt16 nPos ) const
+OUString ComboBox::GetEntry( sal_uInt16 nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryText( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
@@ -1319,14 +1320,14 @@ void ComboBox::SetSeparatorPos( sal_uInt16 n )
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetMRUEntries( const XubString& rEntries, sal_Unicode cSep )
+void ComboBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
 {
     mpImplLB->SetMRUEntries( rEntries, cSep );
 }
 
 // -----------------------------------------------------------------------
 
-XubString ComboBox::GetMRUEntries( sal_Unicode cSep ) const
+OUString ComboBox::GetMRUEntries( sal_Unicode cSep ) const
 {
     return mpImplLB->GetMRUEntries( cSep );
 }
