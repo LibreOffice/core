@@ -209,7 +209,7 @@ void* data = NULL;
  * this is a simplified implementation that
  * is _not_ thread safe.
  */
-struct pool* pool_create(int size_elem, int flags, int primary, int secondary)
+struct pool* pool_create(int size_elem, int primary, int secondary)
 {
 struct pool* pool;
 
@@ -482,7 +482,7 @@ struct hash* hash;
     if(hash)
     {
         hash->elems_pool = pool_create(sizeof(struct hash_elem),
-                                       0, size, size << 1);
+                                       size, size << 1);
         if(!hash->elems_pool)
         {
             hash_destroy(hash);
@@ -499,7 +499,7 @@ unsigned int hashed;
 struct hash_elem* hash_elem;
 struct hash_elem* next;
 struct hash_elem** array;
-int i;
+unsigned int i;
 
     hash->size = (old_size << 1) + 1;
     /* we really should avoid to get there... so print a message to alert of the condition */
@@ -556,6 +556,7 @@ unsigned int hashed;
 struct hash_elem* hash_elem;
 int cost = 0;
 
+    (void) cost;
     hashed = hash_compute(hash, key, key_len);
 #ifdef HASH_STAT
     hash->stored += 1;

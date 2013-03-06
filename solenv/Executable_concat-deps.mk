@@ -7,8 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,solenv_concat-deps,$(call gb_CustomTarget_get_workdir,solenv/concat-deps)))
+$(eval $(call gb_Executable_Executable,concat-deps))
 
-$(eval $(call gb_Package_add_file,solenv_concat-deps,bin/concat-deps$(gb_Executable_EXT_for_build),concat-deps$(gb_Executable_EXT_for_build)))
+$(eval $(call gb_Executable_add_cobjects,concat-deps,\
+	solenv/bin/concat-deps, $(gb_COMPILEROPTFLAGS) \
+))
 
 # vim: set noet sw=4 ts=4:

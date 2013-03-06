@@ -33,6 +33,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     bmp \
     bmpsum \
     cfgex \
+	concat-deps \
     cpp \
     cppunit/cppunittester \
     $(call gb_Helper_optional,CRASHREP,crashrep) \
