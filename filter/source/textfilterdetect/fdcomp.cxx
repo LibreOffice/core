@@ -26,47 +26,30 @@
  * instead of those above.
  */
 
-#include <stdio.h>
+#include "sal/config.h"
 
-#include <osl/mutex.hxx>
-#include <osl/thread.h>
-#include <cppuhelper/factory.hxx>
-
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include "cppuhelper/factory.hxx"
+#include "cppuhelper/implementationentry.hxx"
+#include "sal/types.h"
 
 #include "filterdetect.hxx"
 
-using namespace ::cppu;
-using namespace com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::registry;
+namespace {
 
-extern "C" {
+static cppu::ImplementationEntry const services[] = {
+    { &PlainTextFilterDetect_createInstance, &PlainTextFilterDetect_getImplementationName,
+      &PlainTextFilterDetect_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL textfd_component_getFactory(
-    const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
-{
-    void* pRet = NULL;
-    rtl::OUString implName = rtl::OUString::createFromAscii(pImplName);
-    if (pServiceManager && implName == PlainTextFilterDetect_getImplementationName())
-    {
-        uno::Reference<lang::XSingleServiceFactory> xFactory(
-            createSingleFactory(
-            reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-            implName,
-            PlainTextFilterDetect_createInstance, PlainTextFilterDetect_getSupportedServiceNames()));
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL textfd_component_getFactory(
+    char const * pImplName, void * pServiceManager, void * pRegistryKey)
+{
+    return cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, services);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

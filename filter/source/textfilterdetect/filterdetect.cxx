@@ -29,8 +29,10 @@
 #include "filterdetect.hxx"
 
 #include "tools/urlobj.hxx"
+#include "ucbhelper/content.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 
 #define WRITER_TEXT_FILTER "Text"
 #define CALC_TEXT_FILTER   "Text - txt - csv (StarCalc)"
@@ -39,31 +41,33 @@ using namespace ::com::sun::star;
 
 namespace {
 
-void setFilter(uno::Sequence<beans::PropertyValue>& rProps, sal_Int32 nPos, const rtl::OUString& rFilter)
+template<typename T>
+void setPropValue(uno::Sequence<beans::PropertyValue>& rProps, sal_Int32 nPos, const char* pName, const T& rValue)
 {
     if (nPos >= 0)
-        rProps[nPos].Value <<= rFilter;
+        rProps[nPos].Value <<= rValue;
     else
     {
         sal_Int32 n = rProps.getLength();
         rProps.realloc(n+1);
-        rProps[n].Name = "FilterName";
-        rProps[n].Value <<= rFilter;
+        rProps[n].Name = OUString::createFromAscii(pName);
+        rProps[n].Value <<= rValue;
     }
 }
 
 }
 
-PlainTextFilterDetect::PlainTextFilterDetect(const uno::Reference<lang::XMultiServiceFactory> &xMSF) :
-    mxMSF(xMSF) {}
+PlainTextFilterDetect::PlainTextFilterDetect(const uno::Reference<uno::XComponentContext>& xCxt) :
+    mxCxt(xCxt) {}
 
 PlainTextFilterDetect::~PlainTextFilterDetect() {}
 
 rtl::OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor) throw (uno::RuntimeException)
 {
-    rtl::OUString aType;
-    rtl::OUString aDocService;
-    rtl::OUString aExt;
+    OUString aType;
+    OUString aDocService;
+    OUString aExt;
+    OUString aUrl;
 
     sal_Int32 nFilter = -1;
 
@@ -77,11 +81,10 @@ rtl::OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::Proper
             lDescriptor[i].Value >>= aDocService;
         else if (lDescriptor[i].Name == "URL")
         {
-            rtl::OUString aURL;
-            lDescriptor[i].Value >>= aURL;
+            lDescriptor[i].Value >>= aUrl;
 
             // Get the file name extension.
-            INetURLObject aParser(aURL);
+            INetURLObject aParser(aUrl);
             aExt = aParser.getExtension(
                 INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
             aExt = aExt.toAsciiLowerCase();
@@ -90,28 +93,30 @@ rtl::OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::Proper
 
     if (aType == "generic_Text")
     {
-        // Generic text type.  Decide which filter to use based on the
-        // document service first, then on extension if that's not available.
+        // Generic text type.
+
+        // Decide which filter to use based on the document service first,
+        // then on extension if that's not available.
 
         if (aDocService == "com.sun.star.sheet.SpreadsheetDocument")
             // Open it in Calc.
-            setFilter(lDescriptor, nFilter, CALC_TEXT_FILTER);
+            setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
         else if (aDocService == "com.sun.star.text.TextDocument")
             // Open it in Writer.
-            setFilter(lDescriptor, nFilter, WRITER_TEXT_FILTER);
+            setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
         else if (aExt == "csv")
-            setFilter(lDescriptor, nFilter, CALC_TEXT_FILTER);
+            setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
         else if (aExt == "txt")
-            setFilter(lDescriptor, nFilter, WRITER_TEXT_FILTER);
+            setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
         else
             // No clue.  Open it in Writer by default.
-            setFilter(lDescriptor, nFilter, WRITER_TEXT_FILTER);
+            setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
 
         return aType;
     }
 
     // failed!
-    return rtl::OUString();
+    return OUString();
 }
 
 // XInitialization
@@ -142,9 +147,9 @@ uno::Sequence<rtl::OUString> PlainTextFilterDetect_getSupportedServiceNames()
 }
 
 uno::Reference<uno::XInterface> PlainTextFilterDetect_createInstance(
-    const uno::Reference<lang::XMultiServiceFactory> & rSMgr)
+    const uno::Reference<uno::XComponentContext> & rCxt)
 {
-    return (cppu::OWeakObject*) new PlainTextFilterDetect(rSMgr);
+    return (cppu::OWeakObject*) new PlainTextFilterDetect(rCxt);
 }
 
 // XServiceInfo

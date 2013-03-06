@@ -23,6 +23,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase3.hxx>
 
@@ -31,11 +32,11 @@ class PlainTextFilterDetect : public cppu::WeakImplHelper3<
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo>
 {
-    com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> mxMSF;
+    com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> mxCxt;
 
 public:
 
-    PlainTextFilterDetect (const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &xMSF);
+    PlainTextFilterDetect (const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xCxt);
     virtual ~PlainTextFilterDetect();
 
     // XExtendedFilterDetection
@@ -67,7 +68,7 @@ sal_Bool PlainTextFilterDetect_supportsService(const rtl::OUString& ServiceName)
 com::sun::star::uno::Sequence<rtl::OUString> PlainTextFilterDetect_getSupportedServiceNames();
 
 com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
-PlainTextFilterDetect_createInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& rSMgr);
+PlainTextFilterDetect_createInstance(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rCxt);
 
 #endif
 
