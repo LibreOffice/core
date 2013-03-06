@@ -48,6 +48,7 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	Pyuno_fax \
 	Pyuno_letter \
 	Pyuno_agenda \
+	Pyuno_web \
 	Pyuno_commonwizards \
 ))
 

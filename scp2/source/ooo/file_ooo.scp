@@ -387,6 +387,13 @@ File gid_File_Wizards_Agenda
     Name = "Pyuno/agenda.filelist";
 End
 
+File gid_File_Wizards_Web
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "Pyuno/web.filelist";
+End
+
 File gid_File_Pymailmerge
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
