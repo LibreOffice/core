@@ -17,6 +17,8 @@
 #
 import traceback
 
+from os import sep as FileSeparator
+
 '''
 This class delivers static convenience methods
 to use with ucb SimpleFileAccess service.
@@ -283,6 +285,13 @@ class FileAccess(object):
         else:
             return None
 
+    def getSize(self, url):
+        try:
+            return self.xInterface.getSize(url)
+        except Exception:
+            traceback.print_exc()
+            return -1
+
     def getNewFile(self, parentDir, name, extension):
         i = 0
         url = ""
@@ -304,20 +313,13 @@ class FileAccess(object):
         f = "/"
         return self.filenameConverter.getFileURLFromSystemPath(path, f)
 
-    def getSize(self, url):
-        try:
-            return self.xInterface.getSize(url)
-        except Exception:
-            traceback.print_exc()
-            return -1
-
     '''
     return the filename out of a system-dependent path
     '''
 
     @classmethod
     def getPathFilename(self, path):
-        return self.getFilename(path, File.separator)
+        return self.getFilename(path, FileSeparator)
 
     @classmethod
     def getFilename(self, path, pathSeparator = "/"):
@@ -342,3 +344,22 @@ class FileAccess(object):
         if urlFilename.startswith("/"):
             stringFileName = urlFilename[1:]
         return urlFolder + stringFolder + stringFileName
+
+    # @param filename
+    # @return the extension of the given filename.
+    @classmethod
+    def getExtension(self, filename):
+        p = filename.find(".")
+        if (p == -1):
+            return ""
+        else:
+            while (True):
+                filename = filename[(p+1):]
+                p = filename.find(".")
+                if (p == -1):
+                    break
+        return filename
+
+    @classmethod
+    def filename(self, name, ext, i):
+        return name + ("" if (i == 0) else str(i)) + ("" if (ext == "") else ("." + ext))
