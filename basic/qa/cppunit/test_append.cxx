@@ -15,10 +15,10 @@
 #include "basic/sbmeth.hxx"
 namespace
 {
-    class EnableTest : public BasicTestBase
+    class EnableTest : public test::BootstrapFixture
     {
         public:
-        EnableTest() {};
+        EnableTest() : BootstrapFixture(true, false) {};
         void testDimEnable();
         void testEnableRuntime();
         // Adds code needed to register the test suite
@@ -33,50 +33,34 @@ namespace
     };
 
 rtl::OUString sTestEnableRuntime(
-    "Function Test as Integer\n"
+    "Function doUnitTest as Integer\n"
     "Dim Enable as Integer\n"
     "Enable = 1\n"
     "Enable = Enable + 2\n"
-    "Test = Enable\n"
+    "doUnitTest = Enable\n"
     "End Function\n"
 );
 
 rtl::OUString sTestDimEnable(
-    "Sub Test\n"
+    "Sub doUnitTest\n"
     "Dim Enable as String\n"
     "End Sub\n"
 );
 
 void EnableTest::testEnableRuntime()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, EnableTest, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestEnableRuntime );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testEnableRuntime fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("Test"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testEnableRuntime no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
-    // forces a broadcast
-    SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
+    MacroSnippet myMacro(sTestEnableRuntime);
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testEnableRuntime fails with compile error",!myMacro.HasError() );
+    SbxVariableRef pNew = myMacro.Run();
     CPPUNIT_ASSERT(pNew->GetInteger() == 3 );
 }
 
 void EnableTest::testDimEnable()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, EnableTest, BasicErrorHdl ) );
-
-    ResetError();
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestDimEnable );
-    pMod->Compile();
-
-    CPPUNIT_ASSERT_MESSAGE("Dim causes compile error", !HasError() );
+    MacroSnippet myMacro(sTestDimEnable);
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("Dim causes compile error", !myMacro.HasError() );
 }
 
   // Put the test suite in the registry
