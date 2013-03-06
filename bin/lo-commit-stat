@@ -253,6 +253,32 @@ sub get_branch_name($)
     return $branch;
 }
 
+sub get_bug_list($$$)
+{
+    my ($pdata, $pbugs, $check_bugzilla) = @_;
+
+    # associate bugs with their summaries and fixers
+    foreach my $module ( keys %{$pdata}) {
+        foreach my $id ( keys %{$pdata->{$module}}) {
+            foreach my $bug (keys %{$pdata->{$module}{$id}{'bugs'}}) {
+                %{$pbugs->{$bug}} = () if (! defined %{$pbugs->{$bug}});
+                my $author = $pdata->{$module}{$id}{'author'}{'name'};
+                my $summary = $pdata->{$module}{$id}{'summary'};
+                $pbugs->{$bug}{'summary'} = $summary;
+                $pbugs->{$bug}{'author'}{$author} = 1;
+            }
+        }
+    }
+
+    # try to replace summaries with bug names from bugzilla
+    if ($check_bugzilla) {
+        print "Getting bug titles:\n";
+        foreach my $bug ( sort { $a cmp $b } keys %{$pbugs}) {
+            $pbugs->{$bug}{'summary'} = get_bug_name($bug, $pbugs->{$bug}{'summary'});
+        }
+    }
+}
+
 sub open_log_file($$$$$$)
 {
     my ($log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name, $wiki) = @_;
@@ -373,36 +399,16 @@ sub get_bug_name($$)
     return $summary;
 }
 
-sub print_bugs($$$)
+sub print_bugs($$$$)
 {
-    my ($pdata, $log, $wiki) = @_;
+    my ($pbugs, $log, $wiki) = @_;
 
-    # associate bugs with their summaries and fixers
-    my %bugs = ();
-    foreach my $module ( keys %{$pdata}) {
-        foreach my $id ( keys %{$pdata->{$module}}) {
-            foreach my $bug (keys %{$pdata->{$module}{$id}{'bugs'}}) {
-                my $author = $pdata->{$module}{$id}{'author'}{'name'};
-                my $summary = $pdata->{$module}{$id}{'summary'};
-                $bugs{$bug}{'summary'} = $summary;
-                $bugs{$bug}{'author'}{$author} = 1;
-            }
-        }
-    }
-
-    # try to replace summaries with bug names from bugzilla
-    print "Getting bug titles:\n";
-    foreach my $bug ( sort { $a cmp $b } keys %bugs) {
-        $bugs{$bug}{'summary'} = get_bug_name($bug, $bugs{$bug}{'summary'});
-    }
-
-    # print
-    foreach my $bug ( sort { $a cmp $b } keys %bugs) {
-        my $summary = $bugs{$bug}{'summary'};
+    foreach my $bug ( sort { $a cmp $b } keys %{$pbugs}) {
+        my $summary = $pbugs->{$bug}{'summary'};
 
         my $authors = "";
-        if ( %{$bugs{$bug}{'author'}} ) {
-            $authors = " [" . join (", ", keys %{$bugs{$bug}{'author'}}) . "]";
+        if ( %{$pbugs->{$bug}{'author'}} ) {
+            $authors = " [" . join (", ", keys %{$pbugs->{$bug}{'author'}}) . "]";
         }
 
         $bug =~ s/(.*)\#(.*)/* {{$1|$2}}/ if ($wiki);
@@ -410,29 +416,35 @@ sub print_bugs($$$)
     }
 }
 
-sub print_bugnumbers($$$)
+sub print_bugs_changelog($$$$)
 {
-    my ($pdata, $log, $wiki) = @_;
+    my ($pbugs, $log, $wiki) = @_;
 
-    # just collect bugs
-    my %bugs = ();
-    foreach my $module ( keys %{$pdata}) {
-        foreach my $id ( keys %{$pdata->{$module}}) {
-            foreach my $bug (keys %{$pdata->{$module}{$id}{'bugs'}}) {
-                $bugs{$bug} = 1;
-            }
+    foreach my $bug ( sort { $a cmp $b } keys %{$pbugs}) {
+        my $summary = $pbugs->{$bug}{'summary'};
+
+        my $authors = "";
+        if ( %{$pbugs->{$bug}{'author'}} ) {
+            $authors = " [" . join (", ", keys %{$pbugs->{$bug}{'author'}}) . "]";
         }
-    }
 
-    print $log join ("\n", sort { $a cmp $b } keys %bugs), "\n";
+        print $log "    + $summary ($bug)$authors\n";
+    }
+}
+
+sub print_bugnumbers($$$$)
+{
+    my ($pbugs, $log, $wiki) = @_;
+
+    print $log join ("\n", sort { $a cmp $b } keys %{$pbugs}), "\n";
 }
 
 sub generate_log($$$$$$$$)
 {
-    my ($pdata, $print_func, $log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name, $wiki) = @_;
+    my ($pused_data, $print_func, $log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name, $wiki) = @_;
 
     my $log = open_log_file($log_dir, $log_prefix, $log_suffix, $top_dir, $branch_name, $wiki);
-    & {$print_func} ($pdata, $log, $wiki);
+    & {$print_func} ($pused_data, $log, $wiki);
     close $log;
 }
 
@@ -446,30 +458,31 @@ sub usage()
           "Usage: lo-commit-stat [--help] [--no-submodules] [--module=<module>] --log-dir=<dir> --log-suffix=<string> topdir [git_arg...]\n\n" .
 
           "Options:\n" .
-          "     --help          print this help\n" .
-          "     --no-submodule  read changes just from the main repository, ignore submodules\n" .
+          "     --help           print this help\n" .
+          "     --no-submodule   read changes just from the main repository, ignore submodules\n" .
           "     --module=<module> summarize just changes from the given module, use \"core\"\n" .
-          "                     for the main module\n" .
-          "     --log-dir=<dir> directory where to put the generated log\n" .
+          "                      for the main module\n" .
+          "     --log-dir=<dir>  directory where to put the generated log\n" .
           "     --log-suffix=<string> suffix of the log file name; the result will be\n" .
-          "                     commit-log-<branch>-<log-name-suffix>.log; the branch name\n" .
-          "                     is detected automatically\n" .
-          "     --commits       generete log with all commits (default)\n" .
-          "     --bugs          generate log with bugzilla entries\n" .
-          "     --bugs-wiki     generate log with bugzilla entries, use wiki markup\n" .
-          "     --bugs-numbers  generate log with bugzilla numbers\n" .
-          "     --rev-list      use \"git rev-list\" instead of \"git log\"; useful to check\n" .
-          "                     differences between branches\n" .
-          "     --cherry        use \"git cherry\" instead of \"git log\"; detects cherry-picked\n" .
-          "                     commits between branches\n" .
-          "      topdir         directory with the libreoffice/core clone\n" .
-          "      git_arg        extra parameters passed to the git command to define\n" .
-          "                     the area of interest; The default command is \"git log\" and\n" .
-          "                     parameters might be, for example, --after=\"2010-09-27\" or\n" .
-          "                     TAG..HEAD; with the option --rev-list, useful might be, for\n" .
-          "                     example origin/master ^origin/libreoffice-3-3; with the option\n" .
-          "                     --rev-list, useful might be, for example libreoffice-3.6.3.2\n" .
-          "                     libreoffice-3.6.4.1\n";
+          "                      commit-log-<branch>-<log-name-suffix>.log; the branch name\n" .
+          "                      is detected automatically\n" .
+          "     --commits        generete log with all commits (default)\n" .
+          "     --bugs           generate log with bugzilla entries\n" .
+          "     --bugs-changelog generate log with bugzilla entries, use changelog style\n" .
+          "     --bugs-wiki      generate log with bugzilla entries, use wiki markup\n" .
+          "     --bugs-numbers   generate log with bugzilla numbers\n" .
+          "     --rev-list       use \"git rev-list\" instead of \"git log\"; useful to check\n" .
+          "                      differences between branches\n" .
+          "     --cherry         use \"git cherry\" instead of \"git log\"; detects cherry-picked\n" .
+          "                      commits between branches\n" .
+          "      topdir          directory with the libreoffice/core clone\n" .
+          "      git_arg         extra parameters passed to the git command to define\n" .
+          "                      the area of interest; The default command is \"git log\" and\n" .
+          "                      parameters might be, for example, --after=\"2010-09-27\" or\n" .
+          "                      TAG..HEAD; with the option --rev-list, useful might be, for\n" .
+          "                      example origin/master ^origin/libreoffice-3-3; with the option\n" .
+          "                      --rev-list, useful might be, for example libreoffice-3.6.3.2\n" .
+          "                      libreoffice-3.6.4.1\n";
 }
 
 
@@ -483,25 +496,18 @@ sub usage()
 my $module;
 my %generate_log = ();
 my $top_dir;
-my $log_prefix = "commit-log";
 my $log_dir;
 my $log_suffix;
 my $log;
+my $list_bugs = 0;
+my $check_bugzilla = 0;
 my $branch_name;
 my $git_command = "git log";
 my $git_cherry;
 my $git_args = "";
 my $branch_name;
 my %data;
-my $print_mode = "normal";
-
-        $log_prefix = "bugfixes";
-        $print_mode = "bugs";
-        $log_prefix = "bugfixes";
-        $print_mode = "wikibugs";
-        $log_prefix = "bugnumbers";
-        $print_mode = "bugnumbers";
-
+my %bugs = ();
 
 
 foreach my $arg (@ARGV) {
@@ -520,10 +526,19 @@ foreach my $arg (@ARGV) {
         $generate_log{"commits"} = 1;
     } elsif ($arg eq '--bugs') {
         $generate_log{"bugs"} = 1;
+        $check_bugzilla = 1;
+        $list_bugs = 1;
+    } elsif ($arg eq '--bugs-changelog') {
+        $generate_log{"bugs-changelog"} = 1;
+        $check_bugzilla = 1;
+        $list_bugs = 1;
     } elsif ($arg eq '--bugs-wiki' || $arg eq '--wikibugs') {
         $generate_log{"bugs-wiki"} = 1;
+        $check_bugzilla = 1;
+        $list_bugs = 1;
     } elsif ($arg eq '--bugs-numbers' || $arg eq '--bug-numbers') {
         $generate_log{"bugs-numbers"} = 1;
+        $list_bugs = 1;
     } elsif ($arg eq '--rev-list') {
         $git_command = "git rev-list --pretty=medium"
     } elsif ($arg eq '--cherry') {
@@ -561,8 +576,10 @@ if ($module) {
 $branch_name = get_branch_name($top_dir);
 
 load_data(\%data, $top_dir, \%module_dirname, $branch_name, $git_command, $git_cherry, $git_args);
+get_bug_list(\%data, \%bugs, $check_bugzilla) if ($list_bugs);
 
-generate_log(\%data, \&print_commits,    $log_dir, "commits",     $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"commits"});
-generate_log(\%data, \&print_bugs,       $log_dir, "bugs",        $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"bugs"});
-generate_log(\%data, \&print_bugs,       $log_dir, "bugs",        $log_suffix, $top_dir, $branch_name, 1) if (defined $generate_log{"bugs-wiki"});
-generate_log(\%data, \&print_bugnumbers, $log_dir, "bug-numbers", $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"bugs-numbers"});
+generate_log(\%data, \&print_commits,        $log_dir, "commits",        $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"commits"});
+generate_log(\%bugs, \&print_bugs,           $log_dir, "bugs",           $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"bugs"});
+generate_log(\%bugs, \&print_bugs,           $log_dir, "bugs",           $log_suffix, $top_dir, $branch_name, 1) if (defined $generate_log{"bugs-wiki"});
+generate_log(\%bugs, \&print_bugs_changelog, $log_dir, "bugs-changelog", $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"bugs-changelog"});
+generate_log(\%bugs, \&print_bugnumbers,     $log_dir, "bug-numbers",    $log_suffix, $top_dir, $branch_name, 0) if (defined $generate_log{"bugs-numbers"});
