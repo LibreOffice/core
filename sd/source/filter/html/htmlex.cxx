@@ -3069,15 +3069,12 @@ String HtmlExport::InsertSound( const String& rSoundFile )
 
 bool HtmlExport::CopyFile( const String& rSourceFile, const String& rDestPath )
 {
-    DirEntry aSourceEntry( rSourceFile );
-    DirEntry aDestEntry( rDestPath );
+    meEC.SetContext( STR_HTMLEXP_ERROR_COPY_FILE, rSourceFile, rDestPath );
+    osl::FileBase::RC Error = osl::File::copy( rSourceFile, rDestPath ); //?
 
-    meEC.SetContext( STR_HTMLEXP_ERROR_COPY_FILE, aSourceEntry.GetName(), rDestPath );
-    FSysError nError = aSourceEntry.CopyTo( aDestEntry, FSYS_ACTION_COPYFILE );
-
-    if( nError != FSYS_ERR_OK )
+    if( Error != osl::FileBase::E_None )
     {
-        ErrorHandler::HandleError(nError);
+        ErrorHandler::HandleError(Error);
         return false;
     }
     else

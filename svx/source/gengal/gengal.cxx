@@ -44,7 +44,6 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
 #include <tools/urlobj.hxx>
-#include <tools/fsys.hxx>
 
 #include <vcl/vclmain.hxx>
 #include <vcl/window.hxx>
