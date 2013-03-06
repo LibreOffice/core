@@ -224,6 +224,7 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 	-debug \
 	-nxcompat \
 	-dynamicbase \
+	-manifest
 
 # Library class
 

@@ -250,7 +250,6 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
 	$(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),-nologo,) \
-	-MANIFEST \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 
 gb_DEBUG_CFLAGS := -Zi
