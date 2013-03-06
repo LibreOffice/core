@@ -170,7 +170,6 @@ int getFlatTypeRank(const rtl::OUString& rType)
         "calc_DIF",
         "calc_dBase",
 
-
         // Non-compressed XML
         "writer_ODT_FlatXML",
         "calc_ODS_FlatXML",
@@ -227,7 +226,16 @@ struct SortByPriority : public std::binary_function<FlatDetectionInfo, FlatDetec
     }
 };
 
-struct EqualByName : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
+struct SortByType : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
+
+{
+    bool operator() (const FlatDetectionInfo& r1, const FlatDetectionInfo& r2) const
+    {
+        return r1.sType > r2.sType;
+    }
+};
+
+struct EqualByType : public std::binary_function<FlatDetectionInfo, FlatDetectionInfo, bool>
 {
     bool operator() (const FlatDetectionInfo& r1, const FlatDetectionInfo& r2) const
     {
@@ -235,10 +243,21 @@ struct EqualByName : public std::binary_function<FlatDetectionInfo, FlatDetectio
     }
 };
 
+class FindByType : std::unary_function<FlatDetectionInfo, bool>
+{
+    OUString maType;
+public:
+    FindByType(const OUString& rType) : maType(rType) {}
+    bool operator() (const FlatDetectionInfo& rInfo) const
+    {
+        return rInfo.sType == maType;
+    }
+};
+
 #if DEBUG_TYPE_DETECTION
 void printFlatDetectionList(const char* caption, const FlatDetection& types)
 {
-    cout << "-- " << caption << endl;
+    cout << "-- " << caption << " (size=" << types.size() << ")" << endl;
     FlatDetection::const_iterator it = types.begin(), itEnd = types.end();
     for (; it != itEnd; ++it)
     {
@@ -292,17 +311,39 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
     FlatDetection lFlatTypes;
     impl_getPreselection(aURL, stlDescriptor, lFlatTypes);
 
-    //*******************************************
-    // get all types, which match to the given descriptor
-    // That can be true by: extensions/url pattern/mime type etcpp.
-    m_rCache->detectFlatForURL(aURL, lFlatTypes);
+    {
+        // Get all types that match the URL alone.
+        FlatDetection aFlatByURL;
+        m_rCache->detectFlatForURL(aURL, aFlatByURL);
+        FlatDetection::const_iterator it = aFlatByURL.begin(), itEnd = aFlatByURL.end();
+        for (; it != itEnd; ++it)
+        {
+            FlatDetection::iterator itPos = std::find_if(lFlatTypes.begin(), lFlatTypes.end(), FindByType(it->sType));
+            if (itPos == lFlatTypes.end())
+                // Not in the list yet.
+                lFlatTypes.push_back(*it);
+            else
+            {
+                // Already in the list. Update the flags.
+                FlatDetectionInfo& rInfo = *itPos;
+                const FlatDetectionInfo& rThisInfo = *it;
+                if (rThisInfo.bMatchByExtension)
+                    rInfo.bMatchByExtension = true;
+                if (rThisInfo.bMatchByPattern)
+                    rInfo.bMatchByPattern = true;
+                if (rThisInfo.bPreselectedByDocumentService)
+                    rInfo.bPreselectedByDocumentService = true;
+            }
+        }
+    }
+
 
     aLock.clear();
     // <- SAFE ----------------------------------
 
     // Properly prioritize all candidate types.
     lFlatTypes.sort(SortByPriority());
-    lFlatTypes.unique(EqualByName());
+    lFlatTypes.unique(EqualByType());
 
     ::rtl::OUString sType      ;
     ::rtl::OUString sLastChance;
@@ -529,9 +570,8 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
 
 
 
-sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreSelType,
-                                                    const css::util::URL&  aParsedURL ,
-                                                          FlatDetection&   rFlatTypes )
+bool TypeDetection::impl_getPreselectionForType(
+    const OUString& sPreSelType, const util::URL& aParsedURL, FlatDetection& rFlatTypes, bool bDocService)
 {
     // Can be used to supress execution of some parts of this method
     // if its already clear that detected type is valid or not.
@@ -546,14 +586,6 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     // And we must know if a preselection must be preferred, because
     // it matches by it's extension too.
     bool bMatchByExtension = false;
-
-    // If we e.g. collect all filters of a factory (be a forced factory preselection)
-    // we should preferr all filters of this factory, where the type match the given URL.
-    // All other types (which sorrespond to filters of the same factory - but dont match
-    // the URL) should be "used later" for detection and sorted at the end of our return vector
-    // rFlatTypes!
-    // => bPreferredPreselection = (matchByExtension || matchByURLPattern)
-    bool bPreferredPreselection = false;
 
     // validate type
     ::rtl::OUString sType(sPreSelType);
@@ -603,7 +635,6 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
             {
                 bBreakDetection        = true;
                 bMatchByExtension      = true;
-                bPreferredPreselection = true;
                 break;
             }
         }
@@ -619,7 +650,6 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
                 {
                     bBreakDetection        = true;
                     bMatchByPattern        = true;
-                    bPreferredPreselection = true;
                     break;
                 }
             }
@@ -629,15 +659,16 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     // if its a valid type - set it on all return values!
     if (!sType.isEmpty())
     {
-        FlatDetectionInfo aInfo;
-        aInfo.sType              = sType;
-        aInfo.bMatchByExtension  = bMatchByExtension;
-        aInfo.bMatchByPattern    = bMatchByPattern;
-
-        if (bPreferredPreselection)
-            rFlatTypes.push_front(aInfo);
-        else
-            rFlatTypes.push_back(aInfo);
+        FlatDetection::iterator it = std::find_if(rFlatTypes.begin(), rFlatTypes.end(), FindByType(sType));
+        if (it != rFlatTypes.end())
+        {
+            if (bMatchByExtension)
+                it->bMatchByExtension = true;
+            if (bMatchByPattern)
+                it->bMatchByPattern = true;
+            if (bDocService)
+                it->bPreselectedByDocumentService = true;
+        }
 
         return true;
     }
@@ -646,59 +677,8 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     return false;
 }
 
-
-
-sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPreSelFilter,
-                                                      const css::util::URL&  aParsedURL   ,
-                                                            FlatDetection&   rFlatTypes   )
-{
-    // Can be used to supress execution of some parts of this method
-    // if its already clear that detected filter is valid or not.
-    // Its necessary to use shared code at the end, which update
-    // all return parameters constistency!
-    sal_Bool bBreakDetection = sal_False;
-
-    // validate filter
-    ::rtl::OUString sFilter(sPreSelFilter);
-    CacheItem       aFilter;
-    try
-    {
-        // SAFE -> --------------------------
-        ::osl::ResettableMutexGuard aLock(m_aLock);
-        aFilter = m_rCache->getItem(FilterCache::E_FILTER, sFilter);
-        aLock.clear();
-        // <- SAFE --------------------------
-    }
-    catch(const css::container::NoSuchElementException&)
-    {
-        sFilter = ::rtl::OUString();
-        bBreakDetection = sal_True;
-    }
-
-    if (!bBreakDetection)
-    {
-        // get its type and check if it matches the given URL
-        ::rtl::OUString sType;
-        aFilter[PROPNAME_TYPE] >>= sType;
-
-        bBreakDetection = impl_getPreselectionForType(sType, aParsedURL, rFlatTypes);
-
-        // not a valid type? -> not a valid filter!
-        if (!bBreakDetection)
-            sFilter = ::rtl::OUString();
-    }
-
-    if (!sFilter.isEmpty())
-        return sal_True;
-    else
-        return sal_False;
-}
-
-
-
-sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUString& sPreSelDocumentService,
-                                                               const css::util::URL&  aParsedURL            ,
-                                                                     FlatDetection&   rFlatTypes            )
+bool TypeDetection::impl_getPreselectionForDocumentService(
+    const OUString& sPreSelDocumentService, const util::URL& aParsedURL, FlatDetection& rFlatTypes)
 {
     // get all filters, which match to this doc service
     OUStringList lFilters;
@@ -719,7 +699,7 @@ sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUSt
         aLock.clear();
         // <- SAFE --------------------------
     }
-    catch(const css::container::NoSuchElementException&)
+    catch (const css::container::NoSuchElementException&)
     {
         lFilters.clear();
     }
@@ -729,36 +709,41 @@ sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUSt
     // But use temp. list of "preselected types" instead of incoming rFlatTypes list!
     // The reason behind: we must filter the getted results. And copying of stl entries
     // is an easier job then removing it .-)
-    FlatDetection lPreselections;
     for (OUStringList::const_iterator pFilter  = lFilters.begin();
-                                      pFilter != lFilters.end()  ;
-                                    ++pFilter                    )
+         pFilter != lFilters.end();
+         ++pFilter)
     {
-        const ::rtl::OUString sFilter = *pFilter;
-        impl_getPreselectionForFilter(sFilter, aParsedURL, lPreselections);
-    }
+        OUString aType = impl_getTypeFromFilter(*pFilter);
+        if (aType.isEmpty())
+            continue;
 
-    // We have to mark all retrieved preselection items as "preselected by document service".
-    // Further we must ignore all preselected items, which does not match the URL!
-    FlatDetection::iterator pIt;
-    for (  pIt  = lPreselections.begin();
-           pIt != lPreselections.end()  ;
-         ++pIt                          )
-    {
-        FlatDetectionInfo& rInfo = *pIt;
-        rInfo.bPreselectedByDocumentService = true ;
-        rFlatTypes.push_back(rInfo);
+        impl_getPreselectionForType(aType, aParsedURL, rFlatTypes, true);
     }
 
     return true;
 }
 
+OUString TypeDetection::impl_getTypeFromFilter(const OUString& rFilterName)
+{
+    CacheItem aFilter;
+    try
+    {
+        osl::MutexGuard aLock(m_aLock);
+        aFilter = m_rCache->getItem(FilterCache::E_FILTER, rFilterName);
+    }
+    catch (const container::NoSuchElementException&)
+    {
+        return OUString();
+    }
 
+    OUString aType;
+    aFilter[PROPNAME_TYPE] >>= aType;
+    return aType;
+}
 
 void TypeDetection::impl_getPreselection(
     const util::URL& aParsedURL, comphelper::MediaDescriptor& rDescriptor, FlatDetection& rFlatTypes)
 {
-    // done to be shure, that only valid results leave this function!
     rFlatTypes.clear();
 
     /* #i55122#
@@ -777,9 +762,37 @@ void TypeDetection::impl_getPreselection(
         So it must be pereferred. An order between type and filter selection cant be discussed .-)
     */
 
+    OUStringList aFilterNames;
+    try
+    {
+        osl::MutexGuard aLock(m_aLock);
+        m_rCache->load(FilterCache::E_CONTAINS_FILTERS);
+        aFilterNames = m_rCache->getItemNames(FilterCache::E_FILTER);
+    }
+    catch (const container::NoSuchElementException&)
+    {
+        return;
+    }
+
+    for (OUStringList::const_iterator it = aFilterNames.begin(); it != aFilterNames.end(); ++it)
+    {
+        OUString aType = impl_getTypeFromFilter(*it);
+
+        if (aType.isEmpty())
+            continue;
+
+        FlatDetectionInfo aInfo; // all flags set to false by default.
+        aInfo.sType = aType;
+        rFlatTypes.push_back(aInfo);
+    }
+
+    // Remove duplicates.
+    rFlatTypes.sort(SortByType());
+    rFlatTypes.unique(EqualByType());
+
     ::rtl::OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
     if (!sSelectedType.isEmpty())
-        impl_getPreselectionForType(sSelectedType, aParsedURL, rFlatTypes);
+        impl_getPreselectionForType(sSelectedType, aParsedURL, rFlatTypes, false);
 
     ::rtl::OUString sSelectedDoc = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(), ::rtl::OUString());
     if (!sSelectedDoc.isEmpty())

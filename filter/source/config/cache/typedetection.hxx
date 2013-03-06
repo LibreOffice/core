@@ -65,25 +65,13 @@ public:
 
 private:
 
-    //---------------------------------------
-    /** TODO document me */
-    sal_Bool impl_getPreselectionForType(const ::rtl::OUString& sPreSelType,
-                                         const css::util::URL&  aParsedURL ,
-                                               FlatDetection&   rFlatTypes );
+    bool impl_getPreselectionForType(
+        const OUString& sPreSelType, const com::sun::star::util::URL& aParsedURL, FlatDetection& rFlatTypes, bool bDocService);
 
-    //---------------------------------------
-    /** TODO document me */
-    sal_Bool impl_getPreselectionForFilter(const ::rtl::OUString& sPreSelFilter,
-                                           const css::util::URL&  aParsedURL   ,
-                                                 FlatDetection&   rFlatTypes   );
+    bool impl_getPreselectionForDocumentService(
+        const OUString& sPreSelDocumentService, const com::sun::star::util::URL& aParsedURL, FlatDetection& rFlatTypes);
 
-    //---------------------------------------
-    /** TODO document me */
-    sal_Bool impl_getPreselectionForDocumentService(const ::rtl::OUString& sPreSelDocumentService,
-                                                     const css::util::URL& aParsedURL            ,
-                                                           FlatDetection&  rFlatTypes            );
-
-    //---------------------------------------
+    OUString impl_getTypeFromFilter(const OUString& rFilterName);
 
     /** @short      check if a filter or a type was preselected inside the given
                     MediaDescriptor and validate this information.
