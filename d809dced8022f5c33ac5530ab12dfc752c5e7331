@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH///+w\u003d",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-03-06T10:09:08Z",
+      "side": 1,
+      "message": "This include is not needed.",
+      "revId": "d809dced8022f5c33ac5530ab12dfc752c5e7331",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
