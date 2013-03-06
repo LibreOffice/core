@@ -34,6 +34,7 @@
 #include "chartlis.hxx"
 #include "stlalgorithm.hxx"
 #include "tokenuno.hxx"
+#include "docsh.hxx"
 
 #include "formula/opcode.hxx"
 
@@ -1052,7 +1053,7 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     vector<ScTokenRef> aTokens;
     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     ScRefTokenHelper::compileRangeRepresentation(
-        aTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
+        aTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     return !aTokens.empty();
 }
 
@@ -1484,7 +1485,7 @@ ScChart2DataProvider::createDataSource(
     vector<ScTokenRef> aRefTokens;
     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     ScRefTokenHelper::compileRangeRepresentation(
-        aRefTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
+        aRefTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     if (aRefTokens.empty())
         // Invalid range representation.  Bail out.
         throw lang::IllegalArgumentException();
@@ -1818,7 +1819,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     vector<ScTokenRef> aTokens;
                     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
                     ScRefTokenHelper::compileRangeRepresentation(
-                        aTokens, xLabel->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar());
+                        aTokens, xLabel->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar(), true);
                     aLabel.initRangeAnalyzer(aTokens);
                     vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
                     for (; itr != itrEnd; ++itr)
@@ -1837,7 +1838,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     vector<ScTokenRef> aTokens;
                     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
                     ScRefTokenHelper::compileRangeRepresentation(
-                        aTokens, xValues->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar());
+                        aTokens, xValues->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar(), true);
                     aValues.initRangeAnalyzer(aTokens);
                     vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
                     for (; itr != itrEnd; ++itr)
@@ -2046,7 +2047,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     vector<ScTokenRef> aTokens;
     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     ScRefTokenHelper::compileRangeRepresentation(
-        aTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
+        aTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     return !aTokens.empty();
 }
 
@@ -2066,7 +2067,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     vector<ScTokenRef> aRefTokens;
     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     ScRefTokenHelper::compileRangeRepresentation(
-        aRefTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
+        aRefTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     if (aRefTokens.empty())
         return xResult;
 
@@ -2237,7 +2238,7 @@ rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const rtl::OUStr
     vector<ScTokenRef> aRefTokens;
     const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     ScRefTokenHelper::compileRangeRepresentation(
-        aRefTokens, sRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
+        aRefTokens, sRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar(), true);
     if (aRefTokens.empty())
         throw lang::IllegalArgumentException();
 
