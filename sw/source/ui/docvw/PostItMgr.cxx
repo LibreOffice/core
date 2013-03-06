@@ -90,7 +90,31 @@ using namespace sw::sidebarwindows;
 bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
 {
     // sort by anchor position
-    return a->GetAnchorPosition() < b->GetAnchorPosition();
+    SwPosition aPosAnchorA = a->GetAnchorPosition();
+    SwPosition aPosAnchorB = b->GetAnchorPosition();
+
+    bool aAnchorAInFooter = 0;
+    bool aAnchorBInFooter = 0;
+
+    // is the anchor placed in FootNote or the Footer?
+    if( aPosAnchorA.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorA.nNode.GetNode().FindFooterStartNode() )
+        aAnchorAInFooter = 1;
+    if( aPosAnchorB.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorB.nNode.GetNode().FindFooterStartNode() )
+        aAnchorBInFooter = 1;
+
+    // fdo#34800
+    // if AnchorA is in footnote, and AnchorB isn't
+    // we do not want to change over the position
+    if( aAnchorAInFooter && !aAnchorBInFooter )
+        return 0;
+    // if AnchorA is not placed in a footnote, and AnchorB is
+    // force a change over
+    else if( !aAnchorAInFooter && aAnchorBInFooter )
+        return 1;
+    // if none of both, or both are in the footer
+    // arrange them depending on the position
+    else
+        return aPosAnchorA < aPosAnchorB;
 }
 
 SwPostItMgr::SwPostItMgr(SwView* pView)
