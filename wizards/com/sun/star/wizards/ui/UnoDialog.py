@@ -262,6 +262,14 @@ class UnoDialog(object):
                 xListBox.selectItemPos((short)(SelPos - 1), True)
 
     @classmethod
+    def setEnabled(self, control, enabled):
+        control.Model.Enabled = enabled
+
+    @classmethod
+    def getModel(self, control):
+        return control.getModel()
+
+    @classmethod
     def getDisplayProperty(self, xServiceInfo):
         if xServiceInfo.supportsService(
                 "com.sun.star.awt.UnoControlFixedTextModel"):
