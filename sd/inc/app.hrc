@@ -214,7 +214,6 @@
 #define SID_LINE_ARROW_SQUARE               (SID_SD_START+177)
 #define SID_LINE_SQUARE_ARROW               (SID_SD_START+178)
 // and even more...
-
 #define ID_VAL_ENDINTENS                    (SID_SD_START+197)
 #define ID_VAL_STARTINTENS                  (SID_SD_START+198)
 #define ID_VAL_BORDER                       (SID_SD_START+199)
@@ -356,6 +355,7 @@
 #define SID_CUSTOM_ANIMATION_SCHEMES_PANEL  (SID_SD_START+333)
 #define SID_SLIDE_TRANSITIONS_PANEL         (SID_SD_START+334)
 // free
+#define SID_PHOTOALBUM                      (SID_SD_START+336)
 #define SID_REMOTE_DLG                      (SID_SD_START+337)
 #define SID_CONNECTION_DLG                  (SID_SD_START+338)
 #define SID_PRESENTATION_DLG                (SID_SD_START+339)
