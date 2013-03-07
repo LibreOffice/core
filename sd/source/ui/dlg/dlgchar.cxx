@@ -33,12 +33,9 @@
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
-|*
-\************************************************************************/
-
+/**
+ * Constructor of tab dialog: append pages to dialog
+ */
 SdCharDlg::SdCharDlg( Window* pParent, const SfxItemSet* pAttr,
                     const SfxObjectShell* pDocShell ) :
         SfxTabDialog        ( pParent, SdResId( TAB_CHAR ), pAttr ),
