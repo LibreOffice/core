@@ -400,7 +400,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
                         nIndex--;
                         ++nSepCount;
                     }
-                    aText.replaceAt( nPrevIndex, nSepCount, "" );
+                    aText = aText.replaceAt( nPrevIndex, nSepCount, "" );
                 }
                 aText = comphelper::string::strip(aText, ' ');
             }
