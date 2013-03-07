@@ -294,6 +294,10 @@ interface SlideSorterView
         ExecMethod = FuTemporary;
         StateMethod = GetMenuState;
     ]
+    SID_PHOTOALBUM
+    [
+        ExecMethod = FuTemporary ;
+    ]
 }
 
 shell SlideSorterController
