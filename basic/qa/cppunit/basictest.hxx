@@ -22,35 +22,6 @@
 #include "basic/sbuno.hxx"
 #include <osl/file.hxx>
 
-class BasicTestBase : public test::BootstrapFixture
-{
-    private:
-    bool mbError;
-    public:
-    BasicTestBase() : BootstrapFixture(true, false), mbError(false) {};
-
-
-    DECL_LINK( BasicErrorHdl, StarBASIC * );
-    bool HasError() { return mbError; }
-    void ResetError()
-    {
-        StarBASIC::SetGlobalErrorHdl( Link() );
-        mbError = false;
-    }
-    BasicDLL& basicDLL()
-    {
-        static BasicDLL maDll; // we need a dll instance for resouce manager etc.
-        return maDll;
-    }
-};
-
-IMPL_LINK( BasicTestBase, BasicErrorHdl, StarBASIC *, /*pBasic*/)
-{
-    fprintf(stderr,"Got error: \n\t%s!!!\n", rtl::OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    mbError = true;
-    return 0;
-}
-
 class MacroSnippet
 {
     private:
