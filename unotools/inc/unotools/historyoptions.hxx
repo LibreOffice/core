@@ -32,10 +32,10 @@
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
 
-#define HISTORY_PROPERTYNAME_URL            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"       ))
-#define HISTORY_PROPERTYNAME_FILTER         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Filter"    ))
-#define HISTORY_PROPERTYNAME_TITLE          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"     ))
-#define HISTORY_PROPERTYNAME_PASSWORD       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password"  ))
+#define HISTORY_PROPERTYNAME_URL            OUString("URL")
+#define HISTORY_PROPERTYNAME_FILTER         OUString("Filter")
+#define HISTORY_PROPERTYNAME_TITLE          OUString("Title")
+#define HISTORY_PROPERTYNAME_PASSWORD       OUString("Password")
 
 /*-************************************************************************************************************//**
     @descr          You can use these enum values to specify right history if you call ouer interface methods.

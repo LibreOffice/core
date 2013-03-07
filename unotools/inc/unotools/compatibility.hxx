@@ -49,21 +49,21 @@ enum CompatibilityOptions
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
-#define COMPATIBILITY_PROPERTYNAME_NAME                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
-#define COMPATIBILITY_PROPERTYNAME_MODULE                   OUString( RTL_CONSTASCII_USTRINGPARAM( "Module" ) )
-#define COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS            OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePrinterMetrics" ) )
-#define COMPATIBILITY_PROPERTYNAME_ADDSPACING               OUString( RTL_CONSTASCII_USTRINGPARAM( "AddSpacing" ) )
-#define COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES        OUString( RTL_CONSTASCII_USTRINGPARAM( "AddSpacingAtPages" ) )
-#define COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS           OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOurTabStopFormat" ) )
-#define COMPATIBILITY_PROPERTYNAME_NOEXTLEADING             OUString( RTL_CONSTASCII_USTRINGPARAM( "NoExternalLeading" ) )
-#define COMPATIBILITY_PROPERTYNAME_USELINESPACING           OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLineSpacing" ) )
-#define COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING          OUString( RTL_CONSTASCII_USTRINGPARAM( "AddTableSpacing" ) )
-#define COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING     OUString( RTL_CONSTASCII_USTRINGPARAM( "UseObjectPositioning" ) )
-#define COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING       OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOurTextWrapping" ) )
-#define COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE    OUString( RTL_CONSTASCII_USTRINGPARAM( "ConsiderWrappingStyle" ) )
-#define COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE          OUString( RTL_CONSTASCII_USTRINGPARAM( "ExpandWordSpace" ) )
+#define COMPATIBILITY_PROPERTYNAME_NAME                     OUString( "Name" )
+#define COMPATIBILITY_PROPERTYNAME_MODULE                   OUString( "Module" )
+#define COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS            OUString( "UsePrinterMetrics" )
+#define COMPATIBILITY_PROPERTYNAME_ADDSPACING               OUString( "AddSpacing" )
+#define COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES        OUString( "AddSpacingAtPages" )
+#define COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS           OUString( "UseOurTabStopFormat" )
+#define COMPATIBILITY_PROPERTYNAME_NOEXTLEADING             OUString( "NoExternalLeading" )
+#define COMPATIBILITY_PROPERTYNAME_USELINESPACING           OUString( "UseLineSpacing" )
+#define COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING          OUString( "AddTableSpacing" )
+#define COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING     OUString( "UseObjectPositioning" )
+#define COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING       OUString( "UseOurTextWrapping" )
+#define COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE    OUString( "ConsiderWrappingStyle" )
+#define COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE          OUString( "ExpandWordSpace" )
 
-#define COMPATIBILITY_DEFAULT_NAME                          OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) )
+#define COMPATIBILITY_DEFAULT_NAME                          OUString( "_default" )
 
 //_________________________________________________________________________________________________________________
 //  forward declarations

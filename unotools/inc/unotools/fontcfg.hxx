@@ -207,9 +207,9 @@ public:
     const FontNameAttr* getSubstInfo(
                                      const String& rFontName,
                                      const com::sun::star::lang::Locale& rLocale =
-                                     com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) ),
-                                                                   rtl::OUString(),
-                                                                   rtl::OUString() )
+                                     com::sun::star::lang::Locale( OUString( "en" ),
+                                                                   OUString(),
+                                                                   OUString() )
                                      ) const;
     static void getMapName( const String& rOrgName, String& rShortName, String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType );
 };
