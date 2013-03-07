@@ -2208,7 +2208,8 @@ static sal_Bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const 
 static sal_Bool ImplCutTimePortion( OUStringBuffer& _rStr, xub_StrLen _nSepPos, sal_Bool _bSkipInvalidCharacters, short* _pPortion )
 {
     OUString sPortion(_rStr.getStr(), _nSepPos );
-    _rStr = _rStr.copy( _nSepPos + 1 );
+    _rStr = _nSepPos < _rStr.getLength()
+        ? _rStr.copy( _nSepPos + 1 ) : OUStringBuffer();
 
     if ( !ImplIsValidTimePortion( _bSkipInvalidCharacters, sPortion ) )
         return sal_False;
