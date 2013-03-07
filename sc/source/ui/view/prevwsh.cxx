@@ -937,7 +937,7 @@ void ScPreviewShell::ReadUserData(const String& rData, sal_Bool /* bBrowse */)
     xub_StrLen nCount = comphelper::string::getTokenCount(rData, ';');
     if (nCount)
     {
-        xub_StrLen nIndex = 0;
+        sal_Int32 nIndex = 0;
         pPreview->SetZoom((sal_uInt16)rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
         pPreview->SetPageNo(rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
         eZoom = SVX_ZOOM_PERCENT;

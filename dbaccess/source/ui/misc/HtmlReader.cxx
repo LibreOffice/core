@@ -386,8 +386,8 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
             {
                 const String& rFace = rOption.GetString();
                 String aFontName;
-                xub_StrLen nPos = 0;
-                while( nPos != STRING_NOTFOUND )
+                sal_Int32 nPos = 0;
+                while( nPos != -1 )
                 {
                     // list fo fonts, VCL: semicolon as separator, HTML: comma
                     String aFName = rFace.GetToken( 0, ',', nPos );

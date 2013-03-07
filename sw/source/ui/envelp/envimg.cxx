@@ -55,7 +55,8 @@ SW_DLLPUBLIC String MakeSender()
 
     String sRet;
     String sSenderToken(SW_RES(STR_SENDER_TOKENS));
-    xub_StrLen nSttPos = 0, nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
+    xub_StrLen nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
+    sal_Int32 nSttPos = 0;
     bool bLastLength = true;
     for( xub_StrLen i = 0; i < nTokenCount; i++ )
     {

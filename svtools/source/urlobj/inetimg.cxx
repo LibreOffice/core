@@ -64,7 +64,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
     case SOT_FORMATSTR_ID_INET_IMAGE:
         {
             String sINetImg = read_zeroTerminated_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
-            xub_StrLen nStart = 0;
+            sal_Int32 nStart = 0;
             aImageURL = sINetImg.GetToken( 0, TOKEN_SEPARATOR, nStart );
             aTargetURL = sINetImg.GetToken( 0, TOKEN_SEPARATOR, nStart );
             aTargetFrame = sINetImg.GetToken( 0, TOKEN_SEPARATOR, nStart );

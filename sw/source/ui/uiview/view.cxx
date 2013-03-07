@@ -1162,7 +1162,7 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 
         SET_CURR_SHELL(pWrtShell);
 
-        sal_uInt16 nPos = 0;
+        sal_Int32 nPos = 0;
 
         // Nein, es ist *keine* gute Idee GetToken gleich im Point-Konstr.
         // aufzurufen, denn welcher Parameter wird zuerst ausgewertet?

@@ -595,7 +595,7 @@ void SwXMLTextBlocks::MakeBlockText( const String& rText )
     if( pTxtNode->GetTxtColl() == pDoc->GetDfltTxtFmtColl() )
         pTxtNode->ChgFmtColl( pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
-    xub_StrLen nPos = 0;
+    sal_Int32 nPos = 0;
     do
     {
         if ( nPos )
@@ -605,7 +605,7 @@ void SwXMLTextBlocks::MakeBlockText( const String& rText )
         SwIndex aIdx( pTxtNode );
         String sTemp(rText.GetToken( 0, '\015', nPos ) );
         pTxtNode->InsertText( sTemp, aIdx );
-    } while ( STRING_NOTFOUND != nPos );
+    } while ( -1 != nPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

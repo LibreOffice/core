@@ -121,13 +121,13 @@ sal_uInt32 SwXMLTextBlockExport::exportDoc(const String &rText)
         {
             SvXMLElementExport aBody (*this, XML_NAMESPACE_OFFICE, XML_BODY, sal_True, sal_True);
             {
-                xub_StrLen nPos = 0;
+                sal_Int32 nPos = 0;
                 do
                 {
                     String sTemp ( rText.GetToken( 0, '\015', nPos ) );
                      SvXMLElementExport aPara (*this, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
                     GetDocHandler()->characters(sTemp);
-                } while (STRING_NOTFOUND != nPos );
+                } while (-1 != nPos );
             }
 
         }

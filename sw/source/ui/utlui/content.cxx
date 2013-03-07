@@ -3104,7 +3104,7 @@ sal_Bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
     sal_Bool bRet = rData.GetString( SOT_FORMATSTR_ID_SONLK, sStr );
     if( bRet )
     {
-        xub_StrLen nPos = 0;
+        sal_Int32 nPos = 0;
         aUrl    = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
         aDescr  = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
         nDefDrag= (sal_uInt16)sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();

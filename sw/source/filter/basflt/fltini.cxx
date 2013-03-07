@@ -602,7 +602,7 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
 
 void SwAsciiOptions::ReadUserData( const String& rStr )
 {
-        xub_StrLen nToken = 0;
+        sal_Int32 nToken = 0;
         sal_uInt16 nCnt = 0;
         String sToken;
         do {
@@ -630,7 +630,7 @@ void SwAsciiOptions::ReadUserData( const String& rStr )
                         }
                 }
                 ++nCnt;
-        } while( STRING_NOTFOUND != nToken );
+        } while( -1 != nToken );
 }
 
 void SwAsciiOptions::WriteUserData( String& rStr )

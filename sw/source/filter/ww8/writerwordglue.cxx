@@ -453,10 +453,10 @@ namespace sw
 
         FontMapExport::FontMapExport(const String &rFamilyName)
         {
-            xub_StrLen nIndex = 0;
+            sal_Int32 nIndex = 0;
             msPrimary = GetNextFontToken(rFamilyName, nIndex);
             msSecondary = myImplHelpers::FindBestMSSubstituteFont(msPrimary);
-            if (!msSecondary.Len() && nIndex != STRING_NOTFOUND)
+            if (!msSecondary.Len() && nIndex != -1)
                 msSecondary = GetNextFontToken(rFamilyName, nIndex);
         }
 
@@ -735,14 +735,14 @@ namespace sw
             SwapQuotesInField(rParams);
 
             // Force to Japanese when finding one of 'geaE'
-            rtl::OUString sJChars( "geE" );
+            OUString sJChars( "geE" );
             bool bForceJapanese = ( STRING_NOTFOUND != rParams.SearchChar( sJChars.getStr() ) );
             if ( bForceJapanese )
             {
-                rParams.SearchAndReplaceAll( rtl::OUString( "ee" ),
-                                             rtl::OUString( "yyyy" ) );
-                rParams.SearchAndReplaceAll( rtl::OUString( "EE" ),
-                                             rtl::OUString( "YYYY" ) );
+                rParams.SearchAndReplaceAll( OUString( "ee" ),
+                                             OUString( "yyyy" ) );
+                rParams.SearchAndReplaceAll( OUString( "EE" ),
+                                             OUString( "YYYY" ) );
             }
             if (LANGUAGE_FRENCH != nDocLang)
             {

@@ -615,9 +615,9 @@ String SwFldFuncPage::TurnMacroString(const String &rMacro)
     {
         // reverse content of aName
         String sTmp, sBuf;
-        sal_uInt16 nPos = 0;
+        sal_Int32 nPos = 0;
 
-        for (sal_uInt16 i = 0; i < 4 && nPos != STRING_NOTFOUND; i++)
+        for (sal_uInt16 i = 0; i < 4 && nPos != -1; i++)
         {
             if (i == 3)
                 sTmp = rMacro.Copy(nPos);

@@ -86,7 +86,7 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
     // TODO: is it worth to improve this hash function?
     sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFontSelData.mpFontData );
 #ifdef ENABLE_GRAPHITE
-    if (rFontSelData.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+    if (rFontSelData.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
         != STRING_NOTFOUND)
     {
         rtl::OString aFeatName = rtl::OUStringToOString( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
@@ -138,9 +138,9 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
    if (rA.meLanguage != rB.meLanguage)
         return false;
    // check for features
-   if ((rA.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+   if ((rA.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
         != STRING_NOTFOUND ||
-        rB.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+        rB.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
         != STRING_NOTFOUND) && rA.maTargetName != rB.maTargetName)
         return false;
 #endif

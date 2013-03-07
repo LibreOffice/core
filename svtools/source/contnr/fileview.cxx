@@ -1599,7 +1599,7 @@ void SvtFileView::SetConfigString( const String& rCfgStr )
     HeaderBar* pBar = mpImp->mpView->GetHeaderBar();
     DBG_ASSERT( pBar, "invalid headerbar" );
 
-    sal_uInt16 nIdx = 0;
+    sal_Int32 nIdx = 0;
     mpImp->mnSortColumn = (sal_uInt16)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
     sal_Bool bUp = (sal_Bool)(sal_uInt16)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImp->mnSortColumn );
@@ -1616,7 +1616,7 @@ void SvtFileView::SetConfigString( const String& rCfgStr )
     }
     pBar->SetItemBits( mpImp->mnSortColumn, nBits );
 
-    while ( nIdx != STRING_NOTFOUND )
+    while ( nIdx != -1 )
     {
         sal_uInt16 nItemId = (sal_uInt16)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
         pBar->SetItemSize( nItemId, rCfgStr.GetToken( 0, ';', nIdx ).ToInt32() );

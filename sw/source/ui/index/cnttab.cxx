@@ -4068,7 +4068,7 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
                 if( !pToInsert )
                     pToInsert = new AutoMarkEntry;
 
-                sal_uInt16 nSttPos = 0;
+                sal_Int32 nSttPos = 0;
                 pToInsert->sSearch      = sLine.GetToken(0, ';', nSttPos );
                 pToInsert->sAlternative = sLine.GetToken(0, ';', nSttPos );
                 pToInsert->sPrimKey     = sLine.GetToken(0, ';', nSttPos );

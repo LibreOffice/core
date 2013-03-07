@@ -722,7 +722,7 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
         //#59900# Die Sortierung soll die Nummer korrekt einordnen
         //also "10" nach "9" und nicht "10" nach "1"
         const String& rTmp2 = rNew.sDlgEntry;
-        xub_StrLen nFndPos2 = 0;
+        sal_Int32 nFndPos2 = 0;
         String sNum2( rTmp2.GetToken( 0, ' ', nFndPos2 ));
         sal_Bool bIsNum2IsNumeric = rCC.isAsciiNumeric( sNum2 );
         sal_Int32 nNum2 = bIsNum2IsNumeric ? sNum2.ToInt32() : 0;
@@ -735,7 +735,7 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
             //#59900# Die Sortierung soll die Nummer korrekt einordnen
             //also "10" nach "9" und nicht "10" nach "1"
             const String& rTmp1 = maData[nM]->sDlgEntry;
-            xub_StrLen nFndPos1 = 0;
+            sal_Int32 nFndPos1 = 0;
             String sNum1( rTmp1.GetToken( 0, ' ', nFndPos1 ));
             sal_Int32 nCmp;
 

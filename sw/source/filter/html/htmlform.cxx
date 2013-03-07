@@ -826,10 +826,10 @@ static void lcl_html_setEvents(
     for( i=0; i< rUnoMacroTbl.size(); i++ )
     {
         const String& rStr(rUnoMacroTbl[i]);
-        xub_StrLen nIndex = 0;
-        if( !rStr.GetToken( 0, '-', nIndex ).Len() || STRING_NOTFOUND == nIndex )
+        sal_Int32 nIndex = 0;
+        if( !rStr.GetToken( 0, '-', nIndex ).Len() || -1 == nIndex )
             continue;
-        if( !rStr.GetToken( 0, '-', nIndex ).Len() || STRING_NOTFOUND == nIndex )
+        if( !rStr.GetToken( 0, '-', nIndex ).Len() || -1 == nIndex )
             continue;
         if( nIndex < rStr.Len() )
             nEvents++;
@@ -859,13 +859,13 @@ static void lcl_html_setEvents(
     for( i=0; i< rUnoMacroTbl.size(); ++i )
     {
         const String& rStr = rUnoMacroTbl[i];
-        xub_StrLen nIndex = 0;
+        sal_Int32 nIndex = 0;
         String sListener( rStr.GetToken( 0, '-', nIndex ) );
-        if( !sListener.Len() || STRING_NOTFOUND == nIndex )
+        if( !sListener.Len() || -1 == nIndex )
             continue;
 
         String sMethod( rStr.GetToken( 0, '-', nIndex ) );
-        if( !sMethod.Len() || STRING_NOTFOUND == nIndex )
+        if( !sMethod.Len() || -1 == nIndex )
             continue;
 
         String sCode( rStr.Copy( nIndex ) );
