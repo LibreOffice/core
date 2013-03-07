@@ -19,7 +19,7 @@
 
 
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <hintids.hxx>
@@ -114,6 +114,7 @@
 #include <langhelper.hxx>
 #include <uiitems.hxx>
 #include <wordcountdialog.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -1244,14 +1245,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         try
         {
-            uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
-            if( xDialog.is() )
-            {
-                xDialog->execute();
-            }
+            uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
+            xDialog->execute();
         }
         catch (const uno::Exception&)
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
         rReq.Ignore ();
     }

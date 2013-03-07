@@ -190,15 +190,15 @@ void SAL_CALL XMLFilterDialogComponent::release() throw ()
 
 OUString XMLFilterDialogComponent_getImplementationName() throw ( RuntimeException )
 {
-    return OUString( "XMLFilterDialogComponent" );
+    return OUString( "com.sun.star.comp.ui.XSLTFilterDialog" );
 }
 
 //-------------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL XMLFilterDialogComponent_getSupportedServiceNames()  throw ( RuntimeException )
 {
-    OUString aServiceName( "com.sun.star.comp.ui.XSLTFilterDialog" );
-    Sequence< ::rtl::OUString > aSupported( &aServiceName, 1 );
+    Sequence< OUString > aSupported(1);
+    aSupported[0] = OUString( "com.sun.star.ui.dialogs.XSLTFilterDialog" );
     return aSupported;
 }
 

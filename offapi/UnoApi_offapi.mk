@@ -366,6 +366,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dial
 	FilePicker \
 	FolderPicker \
 	Wizard \
+	XSLTFilterDialog \
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	JobManager \

@@ -39,6 +39,7 @@
 // #i73249#
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <doc.hxx>
 #include <fmturl.hxx>
@@ -62,7 +63,7 @@
 #include <IDocumentStatistics.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
 #include <helpid.h>
 #include <cmdid.h>
@@ -252,14 +253,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         {
             try
             {
-                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
-                if( xDialog.is() )
-                {
-                    xDialog->execute();
-                }
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create(::comphelper::getProcessComponentContext());
+                xDialog->execute();
             }
             catch (const uno::Exception&)
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
             rReq.Ignore ();
         }

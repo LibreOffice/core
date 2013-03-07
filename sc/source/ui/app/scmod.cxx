@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include "scitems.hxx"
@@ -57,7 +57,7 @@
 #include <svl/inethist.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/svxerr.hxx>
-
+#include <tools/diagnose_ex.h>
 
 
 #include "scmod.hxx"
@@ -550,14 +550,12 @@ void ScModule::Execute( SfxRequest& rReq )
         {
             try
             {
-                com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString("com.sun.star.comp.ui.XSLTFilterDialog")), com::sun::star::uno::UNO_QUERY);
-                if( xDialog.is() )
-                {
-                    xDialog->execute();
-                }
+                css::uno::Reference < css::ui::dialogs::XExecutableDialog > xDialog = css::ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext());
+                xDialog->execute();
             }
             catch( ::com::sun::star::uno::RuntimeException& )
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         break;
