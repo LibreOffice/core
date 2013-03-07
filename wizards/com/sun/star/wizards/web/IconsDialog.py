@@ -100,7 +100,7 @@ class IconsDialog(ImageListDialog):
         return self.getIconset1(iset).cp_Name
 
     def getIconsetNum(self, i):
-        return i / self.icons.length
+        return int(i / len(self.icons))
 
     def getIconNum(self, i):
         return i % len(self.icons)
