@@ -357,7 +357,9 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
             if (!aData.IsEmpty())
             {
                 maEmptyRows.insert_back(i, i+1, false);
-                rField.mnNumFormat = nNumFormat;
+                if (nNumFormat)
+                    // Only take non-default number format.
+                    rField.mnNumFormat = nNumFormat;
             }
         }
 
