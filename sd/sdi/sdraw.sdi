@@ -7227,3 +7227,27 @@ SfxVoidItem TaskPaneShowPanel SID_SHOW_TOOL_PANEL (
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem PhotoAlbumDialog SID_PHOTOALBUM
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
