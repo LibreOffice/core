@@ -48,12 +48,6 @@ namespace sd {
 
 #define TOKEN (sal_Unicode(';'))
 
-/*************************************************************************
-|*
-|* Dialog zum Kopieren von Objekten
-|*
-\************************************************************************/
-
 CopyDlg::CopyDlg(
     ::Window* pWindow,
     const SfxItemSet& rInAttrs,
@@ -94,7 +88,7 @@ CopyDlg::CopyDlg(
     // Set up the view data button (image and accessible name).
     maBtnSetViewData.SetAccessibleName (maBtnSetViewData.GetQuickHelpText());
 
-    // Farbtabellen
+    // color tables
     DBG_ASSERT( mpColorList.is(), "No colortable available !" );
     maLbStartColor.Fill( mpColorList );
     maLbEndColor.CopyEntries( maLbStartColor );
@@ -113,12 +107,6 @@ CopyDlg::CopyDlg(
 
     Reset();
 }
-
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
 
 CopyDlg::~CopyDlg()
 {
@@ -148,12 +136,9 @@ CopyDlg::~CopyDlg()
     rStr += OUString::valueOf( (long)maLbEndColor.GetSelectEntryColor().GetColor() );
 }
 
-/*************************************************************************
-|*
-|* Liest uebergebenen Item-Set oder wertet den INI-String aus
-|*
-\************************************************************************/
-
+/**
+ * reads provided item set or evaluate ini string
+ */
 void CopyDlg::Reset()
 {
     const SfxPoolItem* pPoolItem = NULL;
@@ -235,12 +220,9 @@ void CopyDlg::Reset()
 
 }
 
-/*************************************************************************
-|*
-|* Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
-|*
-\************************************************************************/
-
+/**
+ * fills provided item set with dialog box attributes
+ */
 void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 {
     long nMoveX = Fraction( GetCoreValue( maMtrFldMoveX, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
@@ -269,12 +251,9 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
     }
 }
 
-/*************************************************************************
-|*
-|* Enabled und selektiert Endfarben-LB
-|*
-\************************************************************************/
-
+/**
+ * enables and selects end color LB
+ */
 IMPL_LINK_NOARG(CopyDlg, SelectColorHdl)
 {
     sal_uInt16 nPos = maLbStartColor.GetSelectEntryPos();
@@ -289,10 +268,9 @@ IMPL_LINK_NOARG(CopyDlg, SelectColorHdl)
     return 0;
 }
 
-/*************************************************************************
-|* Setzt Werte der Selektion
-\************************************************************************/
-
+/**
+ * sets values of selection
+ */
 IMPL_LINK_NOARG(CopyDlg, SetViewData)
 {
     Rectangle aRect = mpView->GetAllMarkedRect();
@@ -302,7 +280,7 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData)
     SetMetricValue( maMtrFldMoveY, Fraction( aRect.GetHeight() ) /
                                     maUIScale, SFX_MAPUNIT_100TH_MM);
 
-    // Farb-Attribut setzen
+    // sets color attribute
     const SfxPoolItem*  pPoolItem = NULL;
     if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
     {
@@ -313,10 +291,9 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData)
     return 0;
 }
 
-/*************************************************************************
-|* Setzt Werte auf Standard
-\************************************************************************/
-
+/**
+ * resets values to default
+ */
 IMPL_LINK_NOARG(CopyDlg, SetDefault)
 {
     maNumFldCopies.SetValue( 1L );
@@ -330,7 +307,7 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault)
     SetMetricValue( maMtrFldWidth, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
     SetMetricValue( maMtrFldHeight, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
 
-    // Farb-Attribut setzen
+    // set color attribute
     const SfxPoolItem*  pPoolItem = NULL;
     if( SFX_ITEM_SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
     {
