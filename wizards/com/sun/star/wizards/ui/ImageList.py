@@ -16,6 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import uno
+import traceback
+from abc import abstractmethod
 
 from threading import RLock
 from .PeerConfig import PeerConfig
@@ -162,10 +164,10 @@ class ImageList(object):
             print ("DEBUG !!!! ImageList create 3.2")
             self.lblCounter = dialog.insertLabel(
                 self.name + "_lblCounter", pNames1,
-                (ImageList.LINE_HEIGHT, "", self.pos.Width + 14 + 1,
+                (ImageList.LINE_HEIGHT, "", self.pos.Width + 14 + 1,int(
                     self.pos.Height + (self.imageSize.Height + self.gap.Height) \
                         * self.rows + self.gap.Height + imageTextHeight + \
-                        ((14 - ImageList.LINE_HEIGHT) / 2),
+                        ((14 - ImageList.LINE_HEIGHT) / 2)),
                     self.step, 0, False, self.cols * \
                         (self.imageSize.Width + self.gap.Width) + \
                         self.gap.Width - 2 * 14 - 1))
@@ -190,12 +192,16 @@ class ImageList(object):
         imageName = self.name + "_image" + str(_row * self.cols + _col)
         image = dialog.insertImage(
             imageName, ImageList.IMAGE_PROPS,
-            (ImageList.NO_BORDER, ImageList.BACKGROUND_COLOR,
-                self.imageSize.Height,
-                HelpIds.getHelpIdString(self.helpURL + 1),
-                self.getImagePosX(_col), self.getImagePosY(_row),
-                self.scaleImages, self.step, self.tabIndex,
-                False, self.imageSize.Width))
+            (ImageList.NO_BORDER,
+             ImageList.BACKGROUND_COLOR,
+             self.imageSize.Height,
+             HelpIds.getHelpIdString(self.helpURL + 1),
+             self.getImagePosX(_col), self.getImagePosY(_row),
+             self.scaleImages,
+             self.step,
+             self.tabIndex,
+             False,
+             self.imageSize.Width))
         #COMMENTED
         image.addMouseListener(None)
         image.addKeyListener(None)
@@ -225,6 +231,7 @@ class ImageList(object):
             oResources = None #self.renderer.getImageUrls(self.getObjectFor(index))
             if oResources is not None:
                 if len(oResources) == 1:
+                    print ("DEBUG !!! refreshImages -- oResources[0]: ",  oResources[0])
                     item.Model.ImageURL = oResources[0]
                 elif len(oResources) == 2:
                     print ("DEBUG !!! refreshImages -- oResources: ",  oResources)
@@ -276,9 +283,10 @@ class ImageList(object):
             col = image - (row * self.cols)
 
         self.MOVE_SELECTION_VALS[0] = \
-            (self.getImagePosX(col) - self.selectionGap.Width)
+            int(self.getImagePosX(col) - self.selectionGap.Width)
         self.MOVE_SELECTION_VALS[1] = \
-            (self.getImagePosY(row) - self.selectionGap.Height)
+            int(self.getImagePosY(row) - self.selectionGap.Height)
+        print ("DEBUG !!! moveSelection - VALS: ", self.MOVE_SELECTION_VALS)
         uno.invoke(self.grbxSelectedImage.Model, "setPropertyValues",
                    ((ImageList.MOVE_SELECTION),
                     (tuple(self.MOVE_SELECTION_VALS))))
@@ -419,7 +427,14 @@ class ImageList(object):
         if i < 0:
             i = 0
 
-        setPageStart(i)
+        self.setPageStart(i)
+
+    def setPageStart(self, i):
+        if (i == self.pageStart):
+            return
+        self.pageStart = i
+        self.enableButtons()
+        self.refreshImages()
 
     def enableButtons(self):
         self.enable(
@@ -436,7 +451,7 @@ class ImageList(object):
     def getImageFromEvent(self, event):
         image = (event).Source
         controlName = image.Model.Name
-        return Integer.valueOf(controlName.substring(6 + self.name.length()))
+        return int(controlName[6 + len(self.name)])
 
     def mousePressed(self, event):
         print ("DEBUG !!! mousePressed -- Mouse pressed.")
@@ -474,7 +489,7 @@ class ImageList(object):
         oldPageStart = self.pageStart
         if self.selected != -1:
             self.pageStart = \
-                (self.selected / len(self.m_aImages)) * len(self.m_aImages)
+                int((self.selected / len(self.m_aImages)) * len(self.m_aImages))
 
         if oldPageStart != self.pageStart:
             self.enableButtons()
@@ -523,7 +538,7 @@ class ImageList(object):
 
     def setenabled(self, b):
         i = 0
-        while i < self.m_aImages.length:
+        while i < len(self.m_aImages):
             UnoDialog2.setEnabled(self.m_aImages[i], b)
             i += 1
         UnoDialog2.setEnabled(self.grbxSelectedImage, b)
