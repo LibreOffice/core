@@ -1488,6 +1488,7 @@ void WW8Export::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
     //and title hd/ft so we need to differenciate them
     IncrementHdFtIndex();
     pSepx->OutHeaderFooter( *this, true, rFirstPageFmt, nCpPos, nHeadFootFlags, WW8_HEADER_FIRST, nBreakCode );
+    IncrementHdFtIndex();
     pSepx->OutHeaderFooter( *this, false, rFirstPageFmt, nCpPos, nHeadFootFlags, WW8_FOOTER_FIRST, nBreakCode );
 }
 
