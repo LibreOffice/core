@@ -1639,48 +1639,48 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         }
         else
         {
-        uno::Reference< text::XTextRange > xShapeText( xShape, uno::UNO_QUERY_THROW);
-        // Add the shape to the text append stack
-        m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ),
-                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xShapeText->getStart() )));
+            uno::Reference< text::XTextRange > xShapeText( xShape, uno::UNO_QUERY_THROW);
+            // Add the shape to the text append stack
+            m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ),
+                        m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xShapeText->getStart() )));
 
-        // Add the shape to the anchored objects stack
-        uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
-        m_aAnchoredStack.push( xTxtContent );
+            // Add the shape to the anchored objects stack
+            uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
+            m_aAnchoredStack.push( xTxtContent );
 
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-        uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
 #ifdef DEBUG_DOMAINMAPPER
-        dmapper_logger->unoPropertySet(xProps);
+            dmapper_logger->unoPropertySet(xProps);
 #endif
-        bool bIsGraphic = xSInfo->supportsService( "com.sun.star.drawing.GraphicObjectShape" );
+            bool bIsGraphic = xSInfo->supportsService( "com.sun.star.drawing.GraphicObjectShape" );
 
-        // If there are position properties, the shape should not be inserted "as character".
-        sal_Int32 nHoriPosition = 0, nVertPosition = 0;
-        xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_HORI_ORIENT_POSITION)) >>= nHoriPosition;
-        xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT_POSITION)) >>= nVertPosition;
-        if (nHoriPosition != 0 || nVertPosition != 0)
-            bIsGraphic = false;
-        text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
-        xProps->getPropertyValue(rPropNameSupplier.GetName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
-        if (nAnchorType == text::TextContentAnchorType_AT_PAGE)
-            bIsGraphic = false;
+            // If there are position properties, the shape should not be inserted "as character".
+            sal_Int32 nHoriPosition = 0, nVertPosition = 0;
+            xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_HORI_ORIENT_POSITION)) >>= nHoriPosition;
+            xProps->getPropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT_POSITION)) >>= nVertPosition;
+            if (nHoriPosition != 0 || nVertPosition != 0)
+                bIsGraphic = false;
+            text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
+            xProps->getPropertyValue(rPropNameSupplier.GetName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
+            if (nAnchorType == text::TextContentAnchorType_AT_PAGE)
+                bIsGraphic = false;
 
-        if (nAnchorType != text::TextContentAnchorType_AT_PAGE)
-            xProps->setPropertyValue(
-                    rPropNameSupplier.GetName( PROP_OPAQUE ),
-                    uno::makeAny( true ) );
-        if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
-        {
-            uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
-            uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
-            xTextAppend->insertTextContent(xTextRange, xTextContent, sal_False);
-        }
-        else if (nAnchorType != text::TextContentAnchorType_AS_CHARACTER)
-        {
-            xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
-        }
+            if (nAnchorType != text::TextContentAnchorType_AT_PAGE)
+                xProps->setPropertyValue(
+                        rPropNameSupplier.GetName( PROP_OPAQUE ),
+                        uno::makeAny( true ) );
+            if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
+            {
+                uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
+                uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+                xTextAppend->insertTextContent(xTextRange, xTextContent, sal_False);
+            }
+            else if (nAnchorType != text::TextContentAnchorType_AS_CHARACTER)
+            {
+                xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
+            }
         }
 
         appendTableManager( );
