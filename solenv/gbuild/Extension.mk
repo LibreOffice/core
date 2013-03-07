@@ -29,8 +29,6 @@
 
 define gb_Extension_Extension
 $(call gb_ExtensionTarget_ExtensionTarget,$(1),$(2))
-$(call gb_ExtensionTarget_use_default_license,$(1))
-$(call gb_ExtensionTarget_use_default_description,$(1),$(2))
 
 $(call gb_Extension_get_target,$(1)) : $(call gb_ExtensionTarget_get_target,$(1))
 $(call gb_Extension_get_clean_target,$(1)) : $(call gb_ExtensionTarget_get_clean_target,$(1))
@@ -120,6 +118,16 @@ endef
 #     is $(2)/$(4))
 define gb_Extension_add_helptreefile
 $(call gb_ExtensionTarget_add_helptreefile,$(1),$(2),$(3),$(4),$(5))
+
+endef
+
+define gb_Extension_use_default_description
+$(call gb_ExtensionTarget_use_default_description,$(1))
+
+endef
+
+define gb_Extension_use_default_license
+$(call gb_ExtensionTarget_use_default_license,$(1))
 
 endef
 

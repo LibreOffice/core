@@ -30,6 +30,9 @@
 
 $(eval $(call gb_Extension_Extension,wiki-publisher,swext/mediawiki/src))
 
+$(eval $(call gb_Extension_use_default_description,wiki-publisher))
+$(eval $(call gb_Extension_use_default_license,wiki-publisher))
+
 ifneq ($(SYSTEM_APACHE_COMMONS),YES)
 $(eval $(call gb_Extension_add_file,wiki-publisher,commons-codec-1.3.jar,$(OUTDIR)/bin/commons-codec-1.3.jar))
 $(eval $(call gb_Extension_add_file,wiki-publisher,commons-httpclient-3.1.jar,$(OUTDIR)/bin/commons-httpclient-3.1.jar))

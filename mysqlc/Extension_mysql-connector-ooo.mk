@@ -9,6 +9,9 @@
 
 $(eval $(call gb_Extension_Extension,mysql-connector-ooo,mysqlc/source))
 
+$(eval $(call gb_Extension_use_default_description,mysql-connector-ooo))
+$(eval $(call gb_Extension_use_default_license,mysql-connector-ooo))
+
 $(eval $(call gb_Extension_add_library,mysql-connector-ooo,mysqlc))
 
 $(eval $(call gb_Extension_add_file,mysql-connector-ooo,components.rdb,$(call gb_Rdb_get_target,mysqlc)))

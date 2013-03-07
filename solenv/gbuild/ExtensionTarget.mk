@@ -160,7 +160,7 @@ endef
 
 # Use the default description file
 define gb_ExtensionTarget_use_default_description
-$(call gb_ExtensionTarget_add_file,$(1),description-en-US.txt,$(SRCDIR)/$(2)/description-en-US.txt)
+$(call gb_ExtensionTarget_add_file,$(1),description-en-US.txt,$$(LOCATION)/description-en-US.txt)
 $(call gb_ExtensionTarget_get_target,$(1)) : DESCRIPTION := $(true)
 ifneq ($(strip $(gb_WITH_LANG)),)
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),description-$(lang).txt)

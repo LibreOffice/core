@@ -27,6 +27,9 @@
 
 $(eval $(call gb_Extension_Extension,presentation-minimizer,sdext/source/minimizer))
 
+$(eval $(call gb_Extension_use_default_description,presentation-minimizer))
+$(eval $(call gb_Extension_use_default_license,presentation-minimizer))
+
 $(eval $(call gb_Extension_add_libraries,presentation-minimizer,\
     SunPresentationMinimizer \
 ))

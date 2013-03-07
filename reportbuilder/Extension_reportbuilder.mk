@@ -27,6 +27,9 @@
 
 $(eval $(call gb_Extension_Extension,report-builder,reportbuilder/util))
 
+$(eval $(call gb_Extension_use_default_description,report-builder))
+$(eval $(call gb_Extension_use_default_license,report-builder))
+
 $(eval $(call gb_Extension_add_files,report-builder,,\
 	$(call gb_Jar_get_outdir_target,reportbuilderwizard) \
 	$(call gb_Jar_get_outdir_target,sun-report-builder) \
