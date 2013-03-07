@@ -146,17 +146,15 @@ bool EmbeddedFontsHelper::sufficientFontRights( const void* data, long size, Fon
         GetTTGlobalFontInfo( font, &info );
         CloseTTFont( font );
         // http://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
-        // font embedding is allowed if either
-        //   no restriction at all (bit 1 clear)
-        //   viewing allowed (bit 1 set, bit 2 set)
-        //   editting allowed (bit 1 set, bit 3 set)
         int copyright = info.typeFlags & TYPEFLAG_COPYRIGHT_MASK;
         switch( rights )
         {
             case ViewingAllowed:
-                return ( copyright & 0x02 ) == 0 || ( copyright & 0x04 ) || ( copyright & 0x08 );
+                // Embedding not restricted completely.
+                return ( copyright & 0x02 ) != 0x02;
             case EditingAllowed:
-                return ( copyright & 0x02 ) == 0 || ( copyright & 0x08 );
+                // Font is installable or editable.
+                return copyright == 0 || ( copyright & 0x08 );
         }
     }
     return true; // no known restriction
