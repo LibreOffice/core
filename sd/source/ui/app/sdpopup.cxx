@@ -33,12 +33,9 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 
-/*************************************************************************
-|*
-|* PopupMenu zum Bearbeiten von Feldbefehlen
-|*
-\************************************************************************/
-
+/*
+ * Popup menu for editing of field command
+ */
 SdFieldPopup::SdFieldPopup( const SvxFieldData* pInField, LanguageType eLanguage ) :
         PopupMenu   (),
         pField      ( pInField )
@@ -46,21 +43,9 @@ SdFieldPopup::SdFieldPopup( const SvxFieldData* pInField, LanguageType eLanguage
     Fill( eLanguage );
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
 SdFieldPopup::~SdFieldPopup()
 {
 }
-
-/*************************************************************************
-|*
-|* Fill
-|*
-\************************************************************************/
 
 void SdFieldPopup::Fill( LanguageType eLanguage )
 {
@@ -80,8 +65,8 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        //SVXDATEFORMAT_APPDEFAULT,     // Wird nicht benutzt
-        //SVXDATEFORMAT_SYSTEM,         // Wird nicht benutzt
+        //SVXDATEFORMAT_APPDEFAULT,     // is not used
+        //SVXDATEFORMAT_SYSTEM,         // is not used
         InsertItem( nID++, String( SdResId( STR_STANDARD_SMALL ) ), nStyle );
         InsertItem( nID++, String( SdResId( STR_STANDARD_BIG ) ), nStyle );
 
@@ -112,8 +97,8 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        //SVXTIMEFORMAT_APPDEFAULT,     // Wird nicht benutzt
-        //SVXTIMEFORMAT_SYSTEM,         // Wird nicht benutzt
+        //SVXTIMEFORMAT_APPDEFAULT,     // is not used
+        //SVXTIMEFORMAT_SYSTEM,         // is not used
         InsertItem( nID++, String( SdResId( STR_STANDARD_NORMAL ) ), nStyle );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
@@ -172,13 +157,10 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
     }
 }
 
-/*************************************************************************
-|*
-|* Gibt das neue Feld zurueck, gehoert dem Caller.
-|* Liefert NULL, wenn sich nichts geaendert hat.
-|*
-\************************************************************************/
-
+/**
+ * Returns a new field, owned by caller.
+ * Returns NULL if nothing changed.
+ */
 SvxFieldData* SdFieldPopup::GetField()
 {
     SvxFieldData* pNewField = NULL;
