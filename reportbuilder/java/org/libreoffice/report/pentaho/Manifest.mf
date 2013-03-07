@@ -1,0 +1,7 @@
+RegistrationClassName: org.libreoffice.report.pentaho.SOReportJobFactory
+Class-Path: reportbuilderwizard.jar
+  flute-1.1.6.jar libserializer-1.1.6.jar libbase-1.1.6.jar
+  libfonts-1.1.6.jar libformula-1.1.7.jar liblayout-0.2.10.jar
+  libloader-1.1.6.jar librepository-1.1.6.jar libxml-1.1.7.jar
+  flow-engine-0.9.4.jar sac.jar commons-logging-1.1.1.jar
+UNO-Type-Path: 

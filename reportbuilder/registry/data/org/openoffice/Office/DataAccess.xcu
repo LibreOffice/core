@@ -27,7 +27,7 @@
                 <value>Pentaho Reporting Flow Engine</value>
             </prop>
             <prop oor:name="ServiceName" oor:type="xs:string">
-                <value>com.sun.star.report.pentaho.SOReportJobFactory</value>
+                <value>org.libreoffice.report.pentaho.SOReportJobFactory</value>
             </prop>
         </node>
     </node>
