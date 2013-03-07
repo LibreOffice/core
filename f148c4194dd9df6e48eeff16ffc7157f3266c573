@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH///00\u003d",
+        "filename": "sd/inc/sdabstdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-07T11:51:47Z",
+      "side": 1,
+      "message": "virtual VclAbstractDialog* CreateSdPhotoAlbumDialog( ::Window* pWindow) \u003d 0;",
+      "revId": "f148c4194dd9df6e48eeff16ffc7157f3266c573",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///04\u003d",
+        "filename": "sd/source/ui/dlg/PhotoAlbumDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-07T11:51:47Z",
+      "side": 1,
+      "message": "Do not include src file here. Only hrc.",
+      "revId": "f148c4194dd9df6e48eeff16ffc7157f3266c573",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///0g\u003d",
+        "filename": "sd/source/ui/dlg/PhotoAlbumDialog.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-07T11:51:47Z",
+      "side": 1,
+      "message": "For new files, use the shorter license header.\n/*\n * This file is part of the LibreOffice project.\n *\n * This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at http://mozilla.org/MPL/2.0/.\n */",
+      "revId": "f148c4194dd9df6e48eeff16ffc7157f3266c573",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///0k\u003d",
+        "filename": "sd/uiconfig/simpress/ui/printeroptions.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-07T11:51:47Z",
+      "side": 1,
+      "message": "Why did you touch this file? ;-)",
+      "revId": "f148c4194dd9df6e48eeff16ffc7157f3266c573",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
