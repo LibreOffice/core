@@ -48,8 +48,7 @@ public:
     virtual ::test::types::Data SAL_CALL getData()
         throw (::css::uno::RuntimeException)
     {
-        return ::test::types::Data(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hello")), 42);
+        return ::test::types::Data(OUString("Hello"), 42);
     }
 
 private:
@@ -69,18 +68,17 @@ namespace CppServer {
         return static_cast< ::cppu::OWeakObject * >(new Service);
     } catch (::std::bad_alloc &) {
         throw ::css::uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")),
+            OUString("std::bad_alloc"),
             ::css::uno::Reference< ::css::uno::XInterface >());
     }
 }
 
-::rtl::OUString getImplementationName() {
-    return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("test.cpp.cppserver.Component"));
+OUString getImplementationName() {
+    return OUString("test.cpp.cppserver.Component");
 }
 
-::css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() {
-    return ::css::uno::Sequence< ::rtl::OUString >();
+::css::uno::Sequence< OUString > getSupportedServiceNames() {
+    return ::css::uno::Sequence< OUString >();
 }
 
 }

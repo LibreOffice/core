@@ -47,7 +47,7 @@ public:
         throw (test::types::TestException, css::uno::RuntimeException)
     {
         throw test::types::TestException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")),
+            OUString("test"),
             static_cast< cppu::OWeakObject * >(this));
     }
 
@@ -68,19 +68,18 @@ css::uno::Reference< css::uno::XInterface > create(
         return static_cast< cppu::OWeakObject * >(new Service);
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("std::bad_alloc")),
+            OUString("std::bad_alloc"),
             css::uno::Reference< css::uno::XInterface >());
     }
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("test.cpp.cpptest.Component"));
+OUString getImplementationName() {
+    return OUString("test.cpp.cpptest.Component");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    rtl::OUString s(RTL_CONSTASCII_USTRINGPARAM("test.types.CppTest"));
-    return css::uno::Sequence< rtl::OUString >(&s, 1);
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    OUString s("test.types.CppTest");
+    return css::uno::Sequence< OUString >(&s, 1);
 }
 
 }

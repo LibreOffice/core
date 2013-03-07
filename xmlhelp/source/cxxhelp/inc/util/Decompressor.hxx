@@ -103,7 +103,7 @@ namespace xmlsearch {
             {
                 if( arrayL_ <= index_ )
                     throw  xmlsearch::excep::XmlSearchException(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ByteArrayDecompressor->getNextByte()" )) );
+                        OUString( "ByteArrayDecompressor->getNextByte()" ) );
                 return array_[index_++] & 0xFF;
             }
 
