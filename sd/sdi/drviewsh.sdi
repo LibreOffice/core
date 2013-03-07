@@ -213,6 +213,10 @@ interface ImpressEditView : DrawView
         ExecMethod = ExecuteAnnotation;
         StateMethod = GetAnnotationState;
     ]
+    SID_PHOTOALBUM
+    [
+        ExecMethod = FuTemporary ;
+    ]
 }
 
 shell DrawViewShell
