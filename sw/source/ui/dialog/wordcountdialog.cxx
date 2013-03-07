@@ -20,7 +20,7 @@
 #include <swtypes.hxx>
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
-#include <dialog.hrc>
+#include <dialog.hxx>
 #include <cmdid.h>
 #include <swmodule.hxx>
 #include <wview.hxx>

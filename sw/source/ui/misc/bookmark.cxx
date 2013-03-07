@@ -176,7 +176,7 @@ sal_uInt16 BookmarkCombo::GetSelEntryPos(sal_uInt16 nPos) const
 
     for (; nPos < nCnt; nPos++)
     {
-        String sEntry(comphelper::string::strip(GetText().getToken(nPos, cSep), ' '));
+        OUString sEntry(comphelper::string::strip(GetText().getToken(nPos, cSep), ' '));
         if (GetEntryPos(sEntry) != COMBOBOX_ENTRY_NOTFOUND)
             return nPos;
     }
@@ -211,7 +211,7 @@ sal_uInt16 BookmarkCombo::GetSelectEntryPos( sal_uInt16 nSelIndex ) const
         if (nSelIndex == nCnt)
         {
             sal_Unicode cSep = GetMultiSelectionSeparator();
-            String sEntry(comphelper::string::strip(GetText().getToken(nPos, cSep), ' '));
+            OUString sEntry(comphelper::string::strip(GetText().getToken(nPos, cSep), ' '));
             return GetEntryPos(sEntry);
         }
         nPos = GetNextSelEntryPos(nPos);

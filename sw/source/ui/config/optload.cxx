@@ -689,7 +689,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
         else
             aCategoryBox.SetText( sNone );
         if (pOpt->GetCategory().Len() &&
-            aCategoryBox.GetEntryPos(pOpt->GetCategory()) == COMBOBOX_ENTRY_NOTFOUND)
+            aCategoryBox.GetEntryPos(OUString(pOpt->GetCategory())) == COMBOBOX_ENTRY_NOTFOUND)
             aCategoryBox.InsertEntry(pOpt->GetCategory());
         if (aCategoryBox.GetText().isEmpty())
         {
