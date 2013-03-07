@@ -66,11 +66,8 @@ rtl::OString convertString(rtl::OUString const & string) {
     return s;
 }
 
-rtl::OString errorMsg(rtl::OString const & desc, rtl::OString const & type) {
-    rtl::OStringBuffer msg(128);
-    msg.append(desc);
-    msg.append(type);
-    return msg.makeStringAndClear();
+OString errorMsg(OString const & desc, OString const & type) {
+    return desc + type;
 }
 
 codemaker::UnoType::Sort decomposeAndResolve(

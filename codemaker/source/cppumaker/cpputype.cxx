@@ -403,13 +403,10 @@ OString CppuType::dumpHeaderDefine(
 
     OStringBuffer tmpBuf(length);
 
-    tmpBuf.append("INCLUDED_");
-    tmpBuf.append(m_typeName);
-    tmpBuf.append('_');
+    tmpBuf.append("INCLUDED_" + m_typeName + "_");
     if (bExtended)
     {
-        tmpBuf.append(m_name);
-        tmpBuf.append('_');
+        tmpBuf.append(m_name + "_");
     }
     tmpBuf.append(prefix);
 
@@ -1222,9 +1219,9 @@ OString CppuType::checkRealBaseType(const OString& type, sal_Bool bResolveTypeOn
     }
 
     if (bResolveTypeOnly) {
-        rtl::OStringBuffer buf;
+        OStringBuffer buf;
         for (sal_Int32 i = 0; i < rank; ++i) {
-            buf.append(RTL_CONSTASCII_STRINGPARAM("[]"));
+            buf.append("[]");
         }
         baseType = buf.makeStringAndClear() + baseType;
     }
@@ -4025,7 +4022,7 @@ sal_Bool ServiceType::dumpHxxFile(
                     if ((m_reader.getMethodParameterFlags(i, j) & RT_PARAM_REST)
                         != 0)
                     {
-                        buf.append(RTL_CONSTASCII_STRINGPARAM("[]"));
+                        buf.append("[]");
                     }
                     buf.append(
                         rtl::OUStringToOString(

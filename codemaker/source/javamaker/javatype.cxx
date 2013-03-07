@@ -63,7 +63,7 @@ void appendUnoName(
 {
     OSL_ASSERT(rank >= 0 && buffer != 0);
     for (sal_Int32 i = 0; i < rank; ++i) {
-        buffer->append(RTL_CONSTASCII_STRINGPARAM("[]"));
+        buffer->append("[]");
     }
     buffer->append(nucleus.replace('/', '.'));
     if (!arguments.empty()) {
@@ -171,20 +171,13 @@ SpecialType translateUnoTypeToDescriptor(
     }
     if (sort == codemaker::UnoType::SORT_COMPLEX) {
         //TODO: check that nucleus is a valid (Java-modified UTF-8) identifier
-        if (typeClass == RT_TYPE_INTERFACE
-            && (nucleus
-                == rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XInterface"))))
+        if (typeClass == RT_TYPE_INTERFACE && nucleus == "com/sun/star/uno/XInterface")
         {
             if (descriptor != 0) {
-                descriptor->append(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;")));
+                descriptor->append("Ljava/lang/Object;");
             }
             if (signature != 0) {
-                signature->append(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;")));
+                signature->append("Ljava/lang/Object;");
             }
             if (polymorphicUnoType != 0) {
                 polymorphicUnoType->kind = PolymorphicUnoType::KIND_NONE;
@@ -195,13 +188,10 @@ SpecialType translateUnoTypeToDescriptor(
                 dependencies->insert(nucleus);
             }
             if (descriptor != 0) {
-                descriptor->append('L');
-                descriptor->append(nucleus);
-                descriptor->append(';');
+                descriptor->append("L" + nucleus + ";");
             }
             if (signature != 0) {
-                signature->append('L');
-                signature->append(nucleus);
+                signature->append("L" + nucleus);
                 if (!arguments.empty()) {
                     signature->append('<');
                     for (std::vector< rtl::OString >::const_iterator i(
@@ -411,11 +401,9 @@ SpecialType MethodDescriptor::addParameter(
         polymorphicUnoType);
 }
 
-void MethodDescriptor::addTypeParameter(rtl::OString const & name) {
-    m_descriptorStart.append(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;"));
-    m_signatureStart.append('T');
-    m_signatureStart.append(name);
-    m_signatureStart.append(';');
+void MethodDescriptor::addTypeParameter(OString const & name) {
+    m_descriptorStart.append("Ljava/lang/Object;");
+    m_signatureStart.append("T" + name + ";");
     m_needsSignature = true;
 }
 
@@ -427,9 +415,7 @@ rtl::OString MethodDescriptor::getDescriptor() const {
 
 rtl::OString MethodDescriptor::getSignature() const {
     if (m_needsSignature) {
-        rtl::OStringBuffer buf(m_signatureStart);
-        buf.append(m_signatureEnd);
-        return buf.makeStringAndClear();
+        return m_signatureStart + m_signatureEnd;
     } else {
         return rtl::OString();
     }
@@ -756,12 +742,7 @@ void writeClassFile(
     }
     tempfile.close();
     if (!makeValidTypeFile(filename, tempname, check)) {
-        rtl::OStringBuffer msg;
-        msg.append(RTL_CONSTASCII_STRINGPARAM("Cannot create "));
-        msg.append(filename);
-        msg.append(RTL_CONSTASCII_STRINGPARAM(" from temporary file "));
-        msg.append(tempname);
-        throw CannotDumpException(msg.makeStringAndClear());
+        throw CannotDumpException("Cannot create " + filename + " from temporary file " + tempname);
     }
 }
 
@@ -1029,13 +1010,8 @@ void addField(
     SpecialType specialType;
     PolymorphicUnoType polymorphicUnoType;
     if (typeParameterIndex >= 0) {
-        descriptor = rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;"));
-        rtl::OStringBuffer buf;
-        buf.append('T');
-        buf.append(type);
-        buf.append(';');
-        signature = buf.makeStringAndClear();
+        descriptor = "Ljava/lang/Object;";
+        signature = "T" + type + ";";
         specialType = SPECIAL_TYPE_NONE; //TODO: SPECIAL_TYPE_TYPE_PARAMETER?
     } else {
         specialType = getFieldDescriptor(
@@ -1894,26 +1870,21 @@ void handleAggregatingType(
             if (reader.getReferenceFlags(i) != RT_ACCESS_INVALID
                 || reader.getReferenceSort(i) != RT_REF_TYPE_PARAMETER)
             {
-                throw CannotDumpException(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+                throw CannotDumpException("Bad type information");
                     //TODO
             }
             rtl::OString name(
                 codemaker::convertString(reader.getReferenceTypeName(i)));
-            buf.append(name);
-            buf.append(RTL_CONSTASCII_STRINGPARAM(":Ljava/lang/Object;"));
+            buf.append(name + ":Ljava/lang/Object;");
             if (!typeParameters.insert(
                     std::map< rtl::OString, sal_Int32 >::value_type(name, i)).
                 second)
             {
-                throw CannotDumpException(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+                throw CannotDumpException("Bad type information");
                     //TODO
             }
         }
-        buf.append(RTL_CONSTASCII_STRINGPARAM(">Ljava/lang/Object;"));
+        buf.append(">Ljava/lang/Object;");
         sig = buf.makeStringAndClear();
     }
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -2571,9 +2542,7 @@ void handleModule(
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
             //TODO
     }
-    rtl::OStringBuffer buf(codemaker::convertString(reader.getTypeName()));
-    buf.append('/');
-    rtl::OString prefix(buf.makeStringAndClear());
+    rtl::OString prefix(codemaker::convertString(reader.getTypeName()) + "/");
     sal_uInt16 fields = reader.getFieldCount();
     for (sal_uInt16 i = 0; i < fields; ++i) {
         rtl::OString className(
@@ -2774,15 +2743,8 @@ void addConstructor(
         // stack: ex
         code->instrDup();
         // stack: ex ex
-        rtl::OStringBuffer msg;
-        msg.append(
-            RTL_CONSTASCII_STRINGPARAM(
-                "component context fails to supply service "));
-        msg.append(unoName);
-        msg.append(RTL_CONSTASCII_STRINGPARAM(" of type "));
-        msg.append(realJavaBaseName);
-        msg.append(RTL_CONSTASCII_STRINGPARAM(": "));
-        code->loadStringConstant(msg.makeStringAndClear());
+        code->loadStringConstant("component context fails to supply service " + unoName +
+                                 " of type " + realJavaBaseName + ": ");
         // stack: ex ex "..."
         code->loadLocalReference(1);
         // stack: ex ex "..." str
@@ -2957,14 +2919,8 @@ void handleService(
             // stack: ex
             code->instrDup();
             // stack: ex ex
-            rtl::OStringBuffer msg;
-            msg.append(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "component context fails to supply service "));
-            msg.append(unoName);
-            msg.append(RTL_CONSTASCII_STRINGPARAM(" of type "));
-            msg.append(realJavaBaseName);
-            code->loadStringConstant(msg.makeStringAndClear());
+            code->loadStringConstant("component context fails to supply service " + unoName +
+                                     " of type " + realJavaBaseName);
             // stack: ex ex "..."
             code->loadLocalReference(1);
             // stack: ex ex "..." context
@@ -3152,14 +3108,8 @@ void handleSingleton(
     // stack: ex
     code->instrDup();
     // stack: ex ex
-    rtl::OStringBuffer msg;
-    msg.append(
-        RTL_CONSTASCII_STRINGPARAM(
-            "component context fails to supply singleton "));
-    msg.append(unoName);
-    msg.append(RTL_CONSTASCII_STRINGPARAM(" of type "));
-    msg.append(realJavaBaseName);
-    code->loadStringConstant(msg.makeStringAndClear());
+    code->loadStringConstant("component context fails to supply singleton " + unoName +
+                             " of type " + realJavaBaseName);
     // stack: ex ex "..."
     code->loadLocalReference(0);
     // stack: ex ex "..." context
