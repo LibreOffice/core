@@ -21,6 +21,7 @@
 #include <outfont.hxx>
 #include <salgdi.hxx>
 
+using namespace com::sun::star;
 using namespace vcl;
 
 static void clearDir( const OUString& path )
@@ -47,6 +48,46 @@ void EmbeddedFontsHelper::clearTemporaryFontFiles()
     path += "/user/temp/embeddedfonts/";
     clearDir( path + "fromdocs/" );
     clearDir( path + "fromsystem/" );
+}
+
+bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > stream, const OUString& fontName,
+    const char* extra, std::vector< unsigned char > key )
+{
+    OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, extra );
+    osl::File file( fileUrl );
+    switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
+    {
+        case osl::File::E_None:
+            break; // ok
+        case osl::File::E_EXIST:
+            return true; // Assume it's already been added correctly.
+        default:
+            SAL_WARN( "vcl.fonts", "Cannot open file for temporary font" );
+            return false;
+    }
+    size_t keyPos = 0;
+    for(;;)
+    {
+        uno::Sequence< sal_Int8 > buffer;
+        int read = stream->readBytes( buffer, 1024 );
+        for( int pos = 0;
+             pos < read && keyPos < key.size();
+             ++pos )
+            buffer[ pos ] ^= key[ keyPos++ ];
+        sal_uInt64 dummy;
+        if( read > 0 )
+            file.write( buffer.getConstArray(), read, dummy );
+        if( read < 1024 )
+            break;
+    }
+    if( file.close() != osl::File::E_None )
+    {
+        SAL_WARN( "vcl.fonts", "Writing temporary font file failed" );
+        osl::File::remove( fileUrl );
+        return false;
+    }
+    EmbeddedFontsHelper::activateFont( fontName, fileUrl );
+    return true;
 }
 
 OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, const char* extra )

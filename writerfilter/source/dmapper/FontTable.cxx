@@ -251,35 +251,12 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
 {
     if( !inputStream.is())
         return;
-    OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, style );
-    osl::File file( fileUrl );
-    switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
-    {
-        case osl::File::E_None:
-            break; // ok
-        case osl::File::E_EXIST:
-            return; // Assume it's already been added correctly.
-        default:
-            SAL_WARN( "writerfilter", "Cannot open file for temporary font" );
-            inputStream->closeInput();
-            return;
-    }
+    std::vector< unsigned char > key( 32 );
     if( !fontKey.isEmpty())
-    { // unobfuscate
-        uno::Sequence< sal_Int8 > buffer;
-        int read = inputStream->readBytes( buffer, 32 );
-        if( read < 32 )
-        {
-            SAL_WARN( "writerfilter", "Embedded font too small" );
-            inputStream->closeInput();
-            file.close();
-            osl::File::remove( fileUrl );
-            return;
-        }
+    {   // key for unobfuscating
         //  1 3 5 7 10 2  5 7 20 2  5 7 9 1 3 5
         // {62E79491-959F-41E9-B76B-6B32631DEA5C}
         static const int pos[ 16 ] = { 35, 33, 31, 29, 27, 25, 22, 20, 17, 15, 12, 10, 7, 5, 3, 1 };
-        char key[ 16 ];
         for( int i = 0;
              i < 16;
              ++i )
@@ -290,35 +267,11 @@ EmbeddedFontHandler::~EmbeddedFontHandler()
             assert(( v2 >= '0' && v2 <= '9' ) || ( v2 >= 'A' && v2 <= 'F' ));
             int val = ( v1 - ( v1 <= '9' ? '0' : 'A' - 10 )) * 16 + v2 - ( v2 <= '9' ? '0' : 'A' - 10 );
             key[ i ] = val;
+            key[ i + 16 ] = val;
         }
-        for( int i = 0;
-             i < 16;
-             ++i )
-        {
-            buffer[ i ] ^= key[ i ];
-            buffer[ i + 16 ] ^= key[ i ];
-        }
-        sal_uInt64 dummy;
-        file.write( buffer.getConstArray(), 32, dummy );
     }
-    for(;;)
-    {
-        uno::Sequence< sal_Int8 > buffer;
-        int read = inputStream->readBytes( buffer, 1024 );
-        sal_uInt64 dummy;
-        if( read > 0 )
-            file.write( buffer.getConstArray(), read, dummy );
-        if( read < 1024 )
-            break;
-    }
+    EmbeddedFontsHelper::addEmbeddedFont( inputStream, fontName, style, key );
     inputStream->closeInput();
-    if( file.close() != osl::File::E_None )
-    {
-        SAL_WARN( "writerfilter", "Writing temporary font file failed" );
-        osl::File::remove( fileUrl );
-        return;
-    }
-    EmbeddedFontsHelper::activateFont( fontName, fileUrl );
 }
 
 void EmbeddedFontHandler::lcl_attribute( Id name, Value& val )

@@ -252,38 +252,12 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
         if( url.indexOf( '/' ) > -1 ) // TODO what if more levels?
             storage.set( storage->openStorageElement( url.copy( 0, url.indexOf( '/' )),
                 ::embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
-        OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, "?" );
-        osl::File file( fileUrl );
-        switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
-        {
-            case osl::File::E_None:
-                break; // ok
-            default:
-                SAL_WARN( "xmloff", "Cannot open file for temporary font" );
-                return;
-        }
         uno::Reference< io::XInputStream > inputStream;
         inputStream.set( storage->openStreamElement( url.copy( url.indexOf( '/' ) + 1 ), ::embed::ElementModes::READ ),
             UNO_QUERY_THROW );
-        for(;;)
-        {
-            uno::Sequence< sal_Int8 > buffer;
-            int read = inputStream->readBytes( buffer, 1024 );
-            sal_uInt64 dummy;
-            if( read > 0 )
-                file.write( buffer.getConstArray(), read, dummy );
-            if( read < 1024 )
-                break;
-        }
+        if( EmbeddedFontsHelper::addEmbeddedFont( inputStream, fontName, "?" ))
+            GetImport().NotifyEmbeddedFontRead();
         inputStream->closeInput();
-        if( file.close() != osl::File::E_None )
-        {
-            SAL_WARN( "xmloff", "Writing temporary font file failed" );
-            osl::File::remove( fileUrl );
-            return;
-        }
-        EmbeddedFontsHelper::activateFont( fontName, fileUrl );
-        GetImport().NotifyEmbeddedFontRead();
     }
     else
         SAL_WARN( "xmloff", "External URL for font file not handled." );
