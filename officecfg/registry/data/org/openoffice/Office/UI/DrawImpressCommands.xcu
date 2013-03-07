@@ -60,6 +60,15 @@
           <value>1</value>
         </prop>
       </node>
+     <node oor:name=".uno:PhotoAlbumDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">Create Photo Album</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Dia" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
 
