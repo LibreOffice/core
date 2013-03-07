@@ -282,9 +282,9 @@ bool WW8ReadFieldParams::GetTokenSttFromTo(sal_uInt16* pFrom, sal_uInt16* pTo, s
 
         String sParams( GetResult() );
 
-        xub_StrLen nIndex = 0;
+        sal_Int32 nIndex = 0;
         String sStart( sParams.GetToken(0, '-', nIndex) );
-        if( STRING_NOTFOUND != nIndex )
+        if( -1 != nIndex )
         {
             nStart = static_cast<sal_uInt16>(sStart.ToInt32());
             nEnd   = static_cast<sal_uInt16>(sParams.Copy(nIndex).ToInt32());
@@ -2824,17 +2824,17 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
         String sParams( rParam.GetResult() );
         if( sParams.Len() )
         {
-            xub_StrLen nIndex = 0;
+            sal_Int32 nIndex = 0;
 
             // Delimiters between styles and style levels appears to allow both ; and ,
 
             String sTemplate( sParams.GetToken(0, ';', nIndex) );
-            if( STRING_NOTFOUND == nIndex )
+            if( -1 == nIndex )
             {
                 nIndex=0;
                 sTemplate = sParams.GetToken(0, ',', nIndex);
             }
-            if( STRING_NOTFOUND == nIndex )
+            if( -1 == nIndex )
             {
                 const SwFmt* pStyle = rReader.GetStyleWithOrgWWName(sTemplate);
                 if( pStyle )
@@ -2842,12 +2842,12 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
                 // Store Style for Level 0 into TOXBase
                 rBase.SetStyleNames( sTemplate, 0 );
             }
-            else while( STRING_NOTFOUND != nIndex )
+            else while( -1 != nIndex )
             {
-                xub_StrLen nOldIndex=nIndex;
+                sal_Int32 nOldIndex=nIndex;
                 sal_uInt16 nLevel = static_cast<sal_uInt16>(
                     sParams.GetToken(0, ';', nIndex).ToInt32());
-                if( STRING_NOTFOUND == nIndex )
+                if( -1 == nIndex )
                 {
                     nIndex = nOldIndex;
                     nLevel = static_cast<sal_uInt16>(
@@ -2873,7 +2873,7 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
                 // read next style name...
                 nOldIndex = nIndex;
                 sTemplate = sParams.GetToken(0, ';', nIndex);
-                if( STRING_NOTFOUND == nIndex )
+                if( -1 == nIndex )
                 {
                     nIndex=nOldIndex;
                     sTemplate = sParams.GetToken(0, ',', nIndex);

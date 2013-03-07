@@ -104,7 +104,7 @@ sal_Bool GetPosSizeFromString( const String& rStr, Point& rPos, Size& rSize )
     if ( comphelper::string::getTokenCount(rStr, '/') != 4 )
         return sal_False;
 
-    xub_StrLen nIdx = 0;
+    sal_Int32 nIdx = 0;
     rPos.X() = rStr.GetToken(0, '/', nIdx).ToInt32();
     rPos.Y() = rStr.GetToken(0, '/', nIdx).ToInt32();
     rSize.Width() = rStr.GetToken(0, '/', nIdx).ToInt32();

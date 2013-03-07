@@ -319,8 +319,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     {
         ImplInitFontList();
         String aConfigFont = utl::DefaultFontConfiguration::get().getUserInterfaceFont( rSettings.GetUILanguageTag().getLocale() );
-        xub_StrLen nIndex = 0;
-        while( nIndex != STRING_NOTFOUND )
+        sal_Int32 nIndex = 0;
+        while( nIndex != -1 )
         {
             String aName( aConfigFont.GetToken( 0, ';', nIndex ) );
             if ( aName.Len() && mpWindowImpl->mpFrameData->mpFontList->FindFontFamily( aName ) )

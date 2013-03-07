@@ -89,7 +89,7 @@ void SearchDialog::LoadConfig()
         {
             String sUserData( aTemp );
             DBG_ASSERT( comphelper::string::getTokenCount(sUserData, ';') == 5, "invalid config data" );
-            xub_StrLen nIdx = 0;
+            sal_Int32 nIdx = 0;
             String sSearchText = sUserData.GetToken( 0, ';', nIdx );
             m_aWholeWordsBox.Check( sUserData.GetToken( 0, ';', nIdx ).ToInt32() == 1 );
             m_aMatchCaseBox.Check( sUserData.GetToken( 0, ';', nIdx ).ToInt32() == 1 );
@@ -97,7 +97,7 @@ void SearchDialog::LoadConfig()
             m_aBackwardsBox.Check( sUserData.GetToken( 0, ';', nIdx ).ToInt32() == 1 );
 
             nIdx = 0;
-            while ( nIdx != STRING_NOTFOUND )
+            while ( nIdx != -1 )
                 m_aSearchEdit.InsertEntry( sSearchText.GetToken( 0, '\t', nIdx ) );
             m_aSearchEdit.SelectEntryPos(0);
         }

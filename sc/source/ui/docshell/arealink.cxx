@@ -278,7 +278,7 @@ sal_Bool ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     SCCOL nWidth = 0;
     SCROW nHeight = 0;
     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(aTempArea, ';');
-    xub_StrLen nStringIx = 0;
+    sal_Int32 nStringIx = 0;
     xub_StrLen nToken;
 
     for( nToken = 0; nToken < nTokenCnt; nToken++ )

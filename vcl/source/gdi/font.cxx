@@ -168,7 +168,7 @@ void Impl_Font::AskConfig()
     sal_uLong       nType = 0;
     FontWeight  eWeight = WEIGHT_DONTKNOW;
     FontWidth   eWidthType = WIDTH_DONTKNOW;
-    String      aMapName = maFamilyName;
+    OUString    aMapName = maFamilyName;
     GetEnglishSearchFontName( aMapName );
     utl::FontSubstConfiguration::getMapName( aMapName,
         aShortName, aFamilyName, eWeight, eWidthType, nType );

@@ -320,7 +320,7 @@ void ContentListBox_Impl::InitRoot()
     {
         String aRow( pEntries[i] );
         String aTitle, aURL;
-        xub_StrLen nIdx = 0;
+        sal_Int32 nIdx = 0;
         aTitle = aRow.GetToken( 0, '\t', nIdx );
         aURL = aRow.GetToken( 0, '\t', nIdx );
         sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
@@ -364,7 +364,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                 {
                     String aRow( pEntries[i] );
                     String aTitle, aURL;
-                    xub_StrLen nIdx = 0;
+                    sal_Int32 nIdx = 0;
                     aTitle = aRow.GetToken( 0, '\t', nIdx );
                     aURL = aRow.GetToken( 0, '\t', nIdx );
                     sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
@@ -1082,7 +1082,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
         {
             String aRow( pFacs[i] );
             String aTitle, aType;
-            xub_StrLen nIdx = 0;
+            sal_Int32 nIdx = 0;
             aTitle = aRow.GetToken( 0, '\t', nIdx );
             aType = aRow.GetToken( 0, '\t', nIdx );
             String* pURL = new String( aRow.GetToken( 0, '\t', nIdx ) );
@@ -1601,7 +1601,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
     {
         String aRow( pFacs[i] );
         String aTitle, aType, aURL;
-        xub_StrLen nIdx = 0;
+        sal_Int32 nIdx = 0;
         aTitle = aRow.GetToken( 0, '\t', nIdx );
         aType = aRow.GetToken( 0, '\t', nIdx );
         aURL = aRow.GetToken( 0, '\t', nIdx );
@@ -2952,7 +2952,7 @@ void SfxHelpWindow_Impl::LoadConfig()
         {
             aUserData = String( aTemp );
             DBG_ASSERT( comphelper::string::getTokenCount(aUserData, ';') == 6, "invalid user data" );
-            sal_uInt16 nIdx = 0;
+            sal_Int32 nIdx = 0;
             nIndexSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
             nTextSize = aUserData.GetToken( 0, ';', nIdx ).ToInt32();
             sal_Int32 nWidth = aUserData.GetToken( 0, ';', nIdx ).ToInt32();

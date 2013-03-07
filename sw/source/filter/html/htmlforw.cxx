@@ -1301,8 +1301,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         if( sVal.Len() )
         {
             sVal = convertLineEnd(sVal, LINEEND_LF);
-            xub_StrLen nPos = 0;
-            while ( nPos != STRING_NOTFOUND )
+            sal_Int32 nPos = 0;
+            while ( nPos != -1 )
             {
                 if( nPos )
                     rWrt.Strm() << SwHTMLWriter::sNewLine;

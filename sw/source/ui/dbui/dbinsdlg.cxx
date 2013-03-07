@@ -1770,7 +1770,7 @@ void SwInsertDBColAutoPilot::Load()
 
                 pNewData->aDBColumns.insert(pInsDBColumn);
             }
-            sal_uInt16 n = 0;
+            sal_Int32 n = 0;
             String sTmp( pNewData->sTblList );
             if( sTmp.Len() )
             {
@@ -1826,7 +1826,7 @@ void SwInsertDBColAutoPilot::Load()
 
             // now copy the user defined Numberformat strings to the
             // Shell. Then only these are available as ID
-            for( n = 0; n < aDBColumns.size() ; ++n )
+            for( n = 0; n < (sal_Int32) aDBColumns.size() ; ++n )
             {
                 SwInsDBColumn& rSet = *aDBColumns[ n ];
                 for( sal_uInt16 m = 0; m < pNewData->aDBColumns.size() ; ++m )

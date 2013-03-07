@@ -359,8 +359,8 @@ void ImplDirectFontSubstitution::AddFontSubstitute( const String& rFontName,
 
 // -----------------------------------------------------------------------
 
-ImplFontSubstEntry::ImplFontSubstEntry( const String& rFontName,
-    const String& rSubstFontName, sal_uInt16 nSubstFlags )
+ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
+    const OUString& rSubstFontName, sal_uInt16 nSubstFlags )
 :   maName( rFontName )
 ,   maReplaceName( rSubstFontName )
 ,   mnFlags( nSubstFlags )
@@ -434,11 +434,11 @@ bool ImplDirectFontSubstitution::FindFontSubstitute( String& rSubstName,
 
 // -----------------------------------------------------------------------
 
-static void ImplFontSubstitute( String& rFontName,
+static void ImplFontSubstitute( OUString& rFontName,
     sal_uInt16 nFlags, ImplDirectFontSubstitution* pDevSpecific )
 {
 #ifdef DBG_UTIL
-    String aTempName = rFontName;
+    OUString aTempName = rFontName;
     GetEnglishSearchFontName( aTempName );
     DBG_ASSERT( aTempName == rFontName, "ImplFontSubstitute() called without a searchname" );
 #endif
@@ -553,9 +553,9 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
             pOutDev->ImplInitFontList();
 
             // Search Font in the FontList
-            String      aName;
-            String      aSearchName;
-            xub_StrLen  nIndex = 0;
+            OUString      aName;
+            OUString      aSearchName;
+            sal_Int32     nIndex = 0;
             do
             {
                 aSearchName = GetNextFontToken( aSearch, nIndex );
@@ -568,7 +568,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
                         break;
                 }
             }
-            while ( nIndex != STRING_NOTFOUND );
+            while ( nIndex != -1 );
             aFont.SetName( aName );
         }
 
@@ -582,7 +582,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
                     pOutDev = (const OutputDevice *)ImplGetSVData()->mpDefaultWin;
                 if( !pOutDev )
                 {
-                    xub_StrLen nIndex = 0;
+                    sal_Int32 nIndex = 0;
                     aFont.SetName( aSearch.GetToken( 0, ';', nIndex ) );
                 }
                 else
@@ -744,14 +744,14 @@ PhysicalFontFace::PhysicalFontFace( const ImplDevFontAttributes& rDFA, int nMagi
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( !IsSymbolFont() )
-        if( 0 == GetFamilyName().CompareIgnoreCaseToAscii( "starsymbol", 10)
-        ||  0 == GetFamilyName().CompareIgnoreCaseToAscii( "opensymbol", 10) )
+        if( 0 == GetFamilyName().compareTo( "starsymbol", 10)
+        ||  0 == GetFamilyName().compareTo( "opensymbol", 10) )
             SetSymbolFlag( true );
 }
 
 // -----------------------------------------------------------------------
 
-StringCompare PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const
+sal_Int32 PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOther ) const
 {
     // compare their width, weight, italic and style name
     if( GetWidthType() < rOther.GetWidthType() )
@@ -769,15 +769,15 @@ StringCompare PhysicalFontFace::CompareIgnoreSize( const PhysicalFontFace& rOthe
     else if( GetSlant() > rOther.GetSlant() )
         return COMPARE_GREATER;
 
-    StringCompare eCompare = GetFamilyName().CompareTo( rOther.GetFamilyName() );
+    sal_Int32 eCompare = GetFamilyName().compareTo( rOther.GetFamilyName() );
     return eCompare;
 }
 
 // -----------------------------------------------------------------------
 
-StringCompare PhysicalFontFace::CompareWithSize( const PhysicalFontFace& rOther ) const
+sal_Int32 PhysicalFontFace::CompareWithSize( const PhysicalFontFace& rOther ) const
 {
-    StringCompare eCompare = CompareIgnoreSize( rOther );
+    sal_Int32 eCompare = CompareIgnoreSize( rOther );
     if( eCompare != COMPARE_EQUAL )
         return eCompare;
 
@@ -809,12 +809,12 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
 {
     int nMatch = 0;
 
-    const String& rFontName = rFSD.maTargetName;
-    if( (rFontName == GetFamilyName()) || rFontName.EqualsIgnoreCaseAscii( GetFamilyName() ) )
+    const OUString& rFontName = rFSD.maTargetName;
+    if( (rFontName == GetFamilyName()) || rFontName.compareTo( GetFamilyName() ) )
         nMatch += 240000;
 
     if( rStatus.mpTargetStyleName
-    &&  GetStyleName().EqualsIgnoreCaseAscii( rStatus.mpTargetStyleName ) )
+    &&  GetStyleName().compareTo( rStatus.mpTargetStyleName ) )
         nMatch += 120000;
 
     if( (rFSD.GetPitch() != PITCH_DONTKNOW) && (rFSD.GetPitch() == GetPitch()) )
@@ -988,7 +988,7 @@ inline void ImplFontEntry::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWe
 
 // -----------------------------------------------------------------------
 
-inline bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, String* pFontName ) const
+inline bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, OUString* pFontName ) const
 {
     if( !mpUnicodeFallbackList )
         return false;
@@ -1113,7 +1113,7 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
     PhysicalFontFace** ppHere = &mpFirst;
     for(; (pData=*ppHere) != NULL; ppHere=&pData->mpNext )
     {
-        StringCompare eComp = pNewData->CompareWithSize( *pData );
+        sal_Int32 eComp = pNewData->CompareWithSize( *pData );
         if( eComp == COMPARE_GREATER )
             continue;
         if( eComp == COMPARE_LESS )
@@ -1396,7 +1396,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
             cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
             bCached = rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName );
             // ignore entries which don't have a fallback
-            if( !bCached || (rFontSelData.maSearchName.Len() != 0) )
+            if( !bCached || (rFontSelData.maSearchName.getLength() != 0) )
                 break;
         }
 
@@ -1406,7 +1406,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
             // so update rMissingCodes with codepoints not yet resolved by this fallback
             int nRemainingLength = 0;
             sal_UCS4* pRemainingCodes = (sal_UCS4*)alloca( rMissingCodes.getLength() * sizeof(sal_UCS4) );
-            String aFontName;
+            OUString aFontName;
             while( nStrIndex < rMissingCodes.getLength() )
             {
                 cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
@@ -1424,7 +1424,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
                 // apply outdev3.cxx specific fontname normalization
                 GetEnglishSearchFontName( rFontSelData.maSearchName );
             else
-                rFontSelData.maSearchName = String();
+                rFontSelData.maSearchName = OUString();
 
             //See fdo#32665 for an example. FreeSerif that has glyphs in normal
             //font, but not in the italic or bold version
@@ -1443,7 +1443,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
                          break;
                      cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
                 }
-                if( rFontSelData.maSearchName.Len() != 0 )
+                if( rFontSelData.maSearchName.getLength() != 0 )
                 {
                     // remove cache entries that were still not resolved
                     for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
@@ -1456,7 +1456,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
         }
 
         // find the matching device font
-        if( rFontSelData.maSearchName.Len() != 0 )
+        if( rFontSelData.maSearchName.getLength() != 0 )
             pFallbackData = FindFontFamily( rFontSelData.maSearchName );
     }
 
@@ -1478,7 +1478,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
 
 void ImplDevFontList::Add( PhysicalFontFace* pNewData )
 {
-    String aSearchName = pNewData->GetFamilyName();
+    OUString aSearchName = pNewData->GetFamilyName();
     GetEnglishSearchFontName( aSearchName );
 
     DevFontList::const_iterator it = maDevFontList.find( aSearchName );
@@ -1501,7 +1501,7 @@ void ImplDevFontList::Add( PhysicalFontFace* pNewData )
 // -----------------------------------------------------------------------
 
 // find the font from the normalized font family name
-ImplDevFontListData* ImplDevFontList::ImplFindBySearchName( const String& rSearchName ) const
+ImplDevFontListData* ImplDevFontList::ImplFindBySearchName( const OUString& rSearchName ) const
 {
 #ifdef DEBUG
     String aTempName = rSearchName;
@@ -1536,12 +1536,12 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAliasName(const rtl::OUString& r
     while( it != maDevFontList.end() )
     {
         ImplDevFontListData* pData = (*it).second;
-        if( !pData->maMapNames.Len() )
+        if( !pData->maMapNames.getLength() )
             continue;
 
         // if one alias name matches we found a matching font
         rtl::OUString aTempName;
-        xub_StrLen nIndex = 0;
+        sal_Int32 nIndex = 0;
         do
         {
            aTempName = GetNextFontToken( pData->maMapNames, nIndex );
@@ -1549,7 +1549,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAliasName(const rtl::OUString& r
            if ( (aTempName == rSearchName) || (aTempName == rShortName) )
               return pData;
         }
-        while ( nIndex != STRING_NOTFOUND );
+        while ( nIndex != -1 );
      }
 
      return NULL;
@@ -1560,7 +1560,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAliasName(const rtl::OUString& r
 ImplDevFontListData* ImplDevFontList::FindFontFamily( const String& rFontName ) const
 {
     // normalize the font fomily name and
-    String aName = rFontName;
+    OUString aName = rFontName;
     GetEnglishSearchFontName( aName );
     ImplDevFontListData* pFound = ImplFindBySearchName( aName );
     return pFound;
@@ -1573,10 +1573,10 @@ ImplDevFontListData* ImplDevFontList::ImplFindByTokenNames(const rtl::OUString& 
     ImplDevFontListData* pFoundData = NULL;
 
     // use normalized font name tokens to find the font
-    for( xub_StrLen nTokenPos = 0; nTokenPos != STRING_NOTFOUND; )
+    for( sal_Int32 nTokenPos = 0; nTokenPos != -1; )
     {
-        String aSearchName = GetNextFontToken( rTokenStr, nTokenPos );
-        if( !aSearchName.Len() )
+        OUString aSearchName = GetNextFontToken( rTokenStr, nTokenPos );
+        if( !aSearchName.getLength() )
             continue;
         GetEnglishSearchFontName( aSearchName );
         pFoundData = ImplFindBySearchName( aSearchName );
@@ -1597,7 +1597,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNa
     ::std::vector< String >::const_iterator it = rFontAttr.Substitutions.begin();
     for(; it != rFontAttr.Substitutions.end(); ++it )
     {
-        String aSearchName( *it );
+        OUString aSearchName( *it );
         GetEnglishSearchFontName( aSearchName );
 
         pFoundData = ImplFindBySearchName( aSearchName );
@@ -2201,8 +2201,8 @@ size_t FontSelectPatternAttributes::hashCode() const
     size_t nHash = aFontNameHash( maSearchName );
 #ifdef ENABLE_GRAPHITE
     // check for features and generate a unique hash if necessary
-    if (maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
-        != STRING_NOTFOUND)
+    if (maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
+        != -1)
     {
         nHash = aFontNameHash( maTargetName );
     }
@@ -2301,9 +2301,9 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
 
 #ifdef ENABLE_GRAPHITE
     // check for features
-    if ((rA.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+    if ((rA.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
          != STRING_NOTFOUND ||
-         rB.maTargetName.Search(grutils::GrFeatureParser::FEAT_PREFIX)
+         rB.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
          != STRING_NOTFOUND) && rA.maTargetName != rB.maTargetName)
         return false;
 #endif
@@ -2500,8 +2500,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         nSubstFlags |= FONT_SUBSTITUTE_SCREENONLY;
 
     bool bMultiToken = false;
-    xub_StrLen nTokenPos = 0;
-    String& aSearchName = rFSD.maSearchName; // TODO: get rid of reference
+    sal_Int32 nTokenPos = 0;
+    OUString& aSearchName = rFSD.maSearchName; // TODO: get rid of reference
     for(;;)
     {
         rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
@@ -2510,11 +2510,11 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
 #ifdef ENABLE_GRAPHITE
         // Until features are properly supported, they are appended to the
         // font name, so we need to strip them off so the font is found.
-        xub_StrLen nFeat = aSearchName.Search(grutils::GrFeatureParser::FEAT_PREFIX);
+        xub_StrLen nFeat = aSearchName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX);
         String aOrigName = rFSD.maTargetName;
-        String aBaseFontName(aSearchName, 0, (nFeat != STRING_NOTFOUND)?nFeat:aSearchName.Len());
+        String aBaseFontName(aSearchName, 0, (nFeat != STRING_NOTFOUND)?nFeat:aSearchName.getLength());
         if (nFeat != STRING_NOTFOUND && STRING_NOTFOUND !=
-            aSearchName.Search(grutils::GrFeatureParser::FEAT_ID_VALUE_SEPARATOR, nFeat))
+            aSearchName.indexOf(grutils::GrFeatureParser::FEAT_ID_VALUE_SEPARATOR, nFeat))
         {
             aSearchName = aBaseFontName;
             rFSD.maTargetName = aBaseFontName;
@@ -2527,23 +2527,23 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
         if( (rFSD.GetWeight() > WEIGHT_MEDIUM)
-        &&  aSearchName.EqualsAscii( "hg", 0, 2) )
+        &&  aSearchName.equalsIgnoreAsciiCase( "hg" ) )
         {
-            String aBoldName;
-            if( aSearchName.EqualsAscii( "hggothicb", 0, 9) )
-                aBoldName = String("hggothice");
-            else if( aSearchName.EqualsAscii( "hgpgothicb", 0, 10) )
-                aBoldName = String("hgpgothice");
-            else if( aSearchName.EqualsAscii( "hgminchol", 0, 9) )
-                aBoldName = String("hgminchob");
-            else if( aSearchName.EqualsAscii( "hgpminchol", 0, 10) )
-                aBoldName = String("hgpminchob");
-            else if( aSearchName.EqualsAscii( "hgminchob" ) )
-                aBoldName = String("hgminchoe");
-            else if( aSearchName.EqualsAscii( "hgpminchob" ) )
-                aBoldName = String("hgpminchoe");
+            OUString aBoldName;
+            if( aSearchName.equalsIgnoreAsciiCase( "hggothicb" ) )
+                aBoldName = OUString("hggothice");
+            else if( aSearchName.equalsIgnoreAsciiCase( "hgpgothicb" ) )
+                aBoldName = OUString("hgpgothice");
+            else if( aSearchName.equalsIgnoreAsciiCase( "hgminchol" ) )
+                aBoldName = OUString("hgminchob");
+            else if( aSearchName.equalsIgnoreAsciiCase( "hgpminchol" ) )
+                aBoldName = OUString("hgpminchob");
+            else if( aSearchName.equalsIgnoreAsciiCase( "hgminchob" ) )
+                aBoldName = OUString("hgminchoe");
+            else if( aSearchName.equalsIgnoreAsciiCase( "hgpminchob" ) )
+                aBoldName = OUString("hgpminchoe");
 
-            if( aBoldName.Len() && ImplFindBySearchName( aBoldName ) )
+            if( aBoldName.getLength() && ImplFindBySearchName( aBoldName ) )
             {
                 // the other font is available => use it
                 aSearchName = aBoldName;
@@ -2599,7 +2599,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
             return pFoundData;
 
         // break after last font name token was checked unsuccessfully
-        if( nTokenPos == STRING_NOTFOUND)
+        if( nTokenPos == -1)
             break;
         bMultiToken = true;
     }
@@ -2609,7 +2609,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     // available when there is a matching entry in the Tools->Options->Fonts
     // dialog witho neither ALWAYS nor SCREENONLY flags set and the substitution
     // font is available
-    for( nTokenPos = 0; nTokenPos != STRING_NOTFOUND; )
+    for( nTokenPos = 0; nTokenPos != -1; )
     {
         if( bMultiToken )
         {
@@ -2618,7 +2618,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
             GetEnglishSearchFontName( aSearchName );
         }
         else
-            nTokenPos = STRING_NOTFOUND;
+            nTokenPos = -1;
         if( mpPreMatchHook )
             if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
                 GetEnglishSearchFontName( aSearchName );
@@ -2642,7 +2642,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     String      aSearchFamilyName;
     FontWeight  eSearchWeight   = rFSD.GetWeight();
     FontWidth   eSearchWidth    = rFSD.GetWidthType();
-    sal_uLong       nSearchType     = 0;
+    sal_uLong   nSearchType     = 0;
     FontSubstConfiguration::getMapName( aSearchName, aSearchShortName, aSearchFamilyName,
                                         eSearchWeight, eSearchWidth, nSearchType );
 
@@ -2672,7 +2672,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
 
     // use font fallback
     const FontNameAttr* pFontAttr = NULL;
-    if( aSearchName.Len() )
+    if( aSearchName.getLength() )
     {
         // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
@@ -2703,10 +2703,10 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     }
 
     // now try the other font name tokens
-    while( nTokenPos != STRING_NOTFOUND )
+    while( nTokenPos != -1 )
     {
         rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
-        if( !rFSD.maTargetName.Len() )
+        if( !rFSD.maTargetName.getLength() )
             continue;
 
         aSearchName = rFSD.maTargetName;
@@ -2714,7 +2714,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
 
         String      aTempShortName;
         String      aTempFamilyName;
-        sal_uLong       nTempType   = 0;
+        sal_uLong   nTempType   = 0;
         FontWeight  eTempWeight = rFSD.GetWeight();
         FontWidth   eTempWidth  = WIDTH_DONTKNOW;
         FontSubstConfiguration::getMapName( aSearchName, aTempShortName, aTempFamilyName,
@@ -3406,7 +3406,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     }
     else
     {
-        xub_StrLen nTokenPos = 0;
+        sal_Int32 nTokenPos = 0;
         SetFamilyName( GetNextFontToken( rFontSelData.GetFamilyName(), nTokenPos ) );
         SetStyleName( rFontSelData.GetStyleName() );
         mbDevice   = false;

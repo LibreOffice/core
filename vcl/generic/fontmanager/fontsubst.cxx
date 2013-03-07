@@ -160,8 +160,8 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     if( rFontSelData.IsSymbolFont() )
         return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if( 0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "starsymbol", 10)
-    ||  0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "opensymbol", 10) )
+    if( 0 == rFontSelData.maSearchName.compareTo( "starsymbol", 10)
+    ||  0 == rFontSelData.maSearchName.compareTo( "opensymbol", 10) )
         return false;
 
     //see fdo#41556 and fdo#47636
@@ -187,7 +187,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     rtl::OUString aDummy;
     const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, aDummy );
 
-    if( !aOut.maSearchName.Len() )
+    if( !aOut.maSearchName.getLength() )
         return false;
 
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
@@ -229,8 +229,8 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
     if( rFontSelData.IsSymbolFont() )
         return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if( 0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "starsymbol", 10)
-    ||  0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "opensymbol", 10) )
+    if( 0 == rFontSelData.maSearchName.compareTo( "starsymbol", 10)
+    ||  0 == rFontSelData.maSearchName.compareTo( "opensymbol", 10) )
         return false;
 
     const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, rMissingCodes );
@@ -238,7 +238,7 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
     // FC doing it would be preferable because it knows the invariables
     // e.g. FC knows the FC rule that all Arial gets replaced by LiberationSans
     // whereas we would have to check for every size or attribute
-    if( !aOut.maSearchName.Len() )
+    if( !aOut.maSearchName.getLength() )
         return false;
 
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );

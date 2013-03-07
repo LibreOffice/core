@@ -163,7 +163,7 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
           let words own font substitution kick in
         */
         rChrSet = RTL_TEXTENCODING_UNICODE;
-        xub_StrLen nIndex = 0;
+        sal_Int32 nIndex = 0;
         rFontName = ::GetNextFontToken(rFontName, nIndex);
     }
     else

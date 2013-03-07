@@ -200,7 +200,7 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
         case TYP_DBNUMSETFLD:
         case TYP_DBSETNUMBERFLD:
             {
-                xub_StrLen nPos = 0;
+                sal_Int32 nPos = 0;
                 SwDBData aData;
 
                 aData.sDataSource = rPar1.GetToken(0, DB_DELIM, nPos);

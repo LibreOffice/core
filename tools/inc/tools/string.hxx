@@ -274,7 +274,7 @@ public:
 
     void                SetToken( xub_StrLen nToken, sal_Unicode cTok, const UniString& rStr,
                                   xub_StrLen nIndex = 0 );
-    UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok, xub_StrLen& rIndex ) const;
+    UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok, sal_Int32& rIndex ) const;
     UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok = ';' ) const;
 
     const sal_Unicode*  GetBuffer() const { return mpData->maStr; }
@@ -303,7 +303,7 @@ inline UniString UniString::Copy( xub_StrLen nIndex, xub_StrLen nCount ) const
 
 inline UniString UniString::GetToken( xub_StrLen nToken, sal_Unicode cTok ) const
 {
-    xub_StrLen nTempPos = 0;
+    sal_Int32 nTempPos = 0;
     return GetToken( nToken, cTok, nTempPos );
 }
 

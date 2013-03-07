@@ -20,6 +20,7 @@
 #include <unotools/fontdefs.hxx>
 #include <unotools/fontcfg.hxx>
 #include <boost/unordered_map.hpp>
+#include <rtl/ustrbuf.hxx>
 
 struct ImplLocalizedFontName
 {
@@ -321,42 +322,42 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 
 // -----------------------------------------------------------------------
 
-void GetEnglishSearchFontName( String& rName )
+void GetEnglishSearchFontName( OUString& rName )
 {
     bool        bNeedTranslation = false;
-    xub_StrLen  nLen = rName.Len();
+    sal_Int32  nLen = rName.getLength();
 
     // Remove trailing whitespaces
-    xub_StrLen i = nLen;
-    while ( i && (rName.GetChar( i-1 ) < 32) )
+    sal_Int32 i = nLen;
+    while ( i && (rName[ i-1 ] < 32) )
         i--;
     if ( i != nLen )
-        rName.Erase( i );
+        rName.copy( 0, i );
 
     // Remove Script at the end
     // Scriptname must be the last part of the fontname and
     // looks like "fontname (scriptname)". So there can only be a
     // script name at the and of the fontname, when the last char is ')'
-    if ( (nLen >= 3) && rName.GetChar( nLen-1 ) == ')' )
+    if ( (nLen >= 3) && rName[ nLen-1 ] == ')' )
     {
         int nOpen = 1;
-        xub_StrLen nTempLen = nLen-2;
+        sal_Int32 nTempLen = nLen-2;
         while ( nTempLen )
         {
-            if ( rName.GetChar( nTempLen ) == '(' )
+            if ( rName[ nTempLen ] == '(' )
             {
                 nOpen--;
                 if ( !nOpen )
                 {
                     // Remove Space at the end
-                    if ( nTempLen && (rName.GetChar( nTempLen-1 ) == ' ') )
+                    if ( nTempLen && (rName[ nTempLen-1 ] == ' ') )
                         nTempLen--;
-                    rName.Erase( nTempLen );
+                    rName.copy( 0, nTempLen );
                     nLen = nTempLen;
                     break;
                 }
             }
-            if ( rName.GetChar( nTempLen ) == ')' )
+            if ( rName[ nTempLen ] == ')' )
                 nOpen++;
             nTempLen--;
         }
@@ -367,7 +368,7 @@ void GetEnglishSearchFontName( String& rName )
     i = 0;
     while ( i < nLen )
     {
-        sal_Unicode c = rName.GetChar( i );
+        sal_Unicode c = rName[ i ];
         if ( c > 127 )
         {
             // Translate to Lowercase-ASCII
@@ -378,8 +379,13 @@ void GetEnglishSearchFontName( String& rName )
                 // Upper to Lower
                 if ( (c >= 'A') && (c <= 'Z') )
                     c += 'a' - 'A';
-                rName.SetChar( i, c );
-            }
+                //rName[ i ] = c ;
+
+                OUStringBuffer aTmpStr( rName.getStr() ) ;
+                aTmpStr[ i ] = c ;
+                rName = aTmpStr.makeStringAndClear() ;
+
+           }
             else
             {
                 // Only Fontnames with None-Ascii-Characters must be translated
@@ -393,12 +399,21 @@ void GetEnglishSearchFontName( String& rName )
             if ( (c >= 'A') && (c <= 'Z') )
             {
                 c += 'a' - 'A';
-                rName.SetChar( i, c );
+                //rName[ i ] = c ;
+
+                OUStringBuffer aTmpStr( rName.getStr() ) ;
+                aTmpStr[ i ] = c ;
+                rName = aTmpStr.makeStringAndClear() ;
+
             }
             else if( ((c < '0') || (c > '9')) && (c != ';') ) // not 0-9 or semicolon
             {
                 // Remove white spaces and special characters
-                rName.Erase( i, 1 );
+
+                OUStringBuffer aTmpStr( rName.getStr() ) ;
+                aTmpStr.remove(i,1);
+                rName = aTmpStr.makeStringAndClear() ;
+
                 nLen--;
                 continue;
             }
@@ -423,41 +438,41 @@ void GetEnglishSearchFontName( String& rName )
 
         FontNameDictionary::const_iterator it = aDictionary.find( rName );
         if( it != aDictionary.end() )
-            rName.AssignAscii( it->second );
+            rName = OUString::createFromAscii ( it->second ) ;
     }
 }
 
 // -----------------------------------------------------------------------
 
-String GetNextFontToken( const String& rTokenStr, xub_StrLen& rIndex )
+OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
 {
     // check for valid start index
-    int nStringLen = rTokenStr.Len();
+    int nStringLen = rTokenStr.getLength();
     if( rIndex >= nStringLen )
     {
-        rIndex = STRING_NOTFOUND;
-        return String();
+        rIndex = -1;
+        return OUString();
     }
 
     // find the next token delimiter and return the token substring
-    const sal_Unicode* pStr = rTokenStr.GetBuffer() + rIndex;
-    const sal_Unicode* pEnd = rTokenStr.GetBuffer() + nStringLen;
+    const sal_Unicode* pStr = rTokenStr.getStr() + rIndex;
+    const sal_Unicode* pEnd = rTokenStr.getStr() + nStringLen;
     for(; pStr < pEnd; ++pStr )
         if( (*pStr == ';') || (*pStr == ',') )
             break;
 
-    xub_StrLen nTokenStart = rIndex;
-    xub_StrLen nTokenLen;
+    sal_Int32 nTokenStart = rIndex;
+    sal_Int32 nTokenLen;
     if( pStr < pEnd )
     {
-        rIndex = sal::static_int_cast<xub_StrLen>(pStr - rTokenStr.GetBuffer());
+        rIndex = sal::static_int_cast<sal_Int32>(pStr - rTokenStr.getStr());
         nTokenLen = rIndex - nTokenStart;
         ++rIndex; // skip over token separator
     }
     else
     {
         // no token delimiter found => handle last token
-        rIndex = STRING_NOTFOUND;
+        rIndex = -1;
         nTokenLen = STRING_LEN;
 
         // optimize if the token string consists of just one token
@@ -470,35 +485,35 @@ String GetNextFontToken( const String& rTokenStr, xub_StrLen& rIndex )
 
 // =======================================================================
 
-static bool ImplIsFontToken( const String& rName, const String& rToken )
+static bool ImplIsFontToken( const OUString& rName, const String& rToken )
 {
-    String      aTempName;
-    xub_StrLen  nIndex = 0;
+    OUString      aTempName;
+    sal_Int32  nIndex = 0;
     do
     {
         aTempName = GetNextFontToken( rName, nIndex );
         if ( rToken == aTempName )
             return true;
     }
-    while ( nIndex != STRING_NOTFOUND );
+    while ( nIndex != -1 );
 
     return false;
 }
 
 // -----------------------------------------------------------------------
 
-static void ImplAppendFontToken( String& rName, const String& rNewToken )
+static void ImplAppendFontToken( OUString& rName, const String& rNewToken )
 {
-    if ( rName.Len() )
+    if ( rName.getLength() )
     {
-        rName.Append( ';' );
-        rName.Append( rNewToken );
+        rName += ";" ;
+        rName += rNewToken ;
     }
     else
         rName = rNewToken;
 }
 
-void AddTokenFontName( String& rName, const String& rNewToken )
+void AddTokenFontName( OUString& rName, const OUString& rNewToken )
 {
     if ( !ImplIsFontToken( rName, rNewToken ) )
         ImplAppendFontToken( rName, rNewToken );
@@ -506,18 +521,18 @@ void AddTokenFontName( String& rName, const String& rNewToken )
 
 // =======================================================================
 
-String GetSubsFontName( const String& rName, sal_uLong nFlags )
+OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
 {
-    String aName;
+    OUString aName;
 
-    xub_StrLen nIndex = 0;
-    String aOrgName = GetNextFontToken( rName, nIndex );
+    sal_Int32 nIndex = 0;
+    OUString aOrgName = GetNextFontToken( rName, nIndex );
     GetEnglishSearchFontName( aOrgName );
 
     // #93662# do not try to replace StarSymbol with MS only font
     if( nFlags == (SUBSFONT_MS|SUBSFONT_ONLYONE)
-    &&  ( aOrgName.EqualsAscii( "starsymbol" )
-      ||  aOrgName.EqualsAscii( "opensymbol" ) ) )
+    &&  ( aOrgName == "starsymbol"
+      ||  aOrgName == "opensymbol" ) )
         return aName;
 
     const utl::FontNameAttr* pAttr = utl::FontSubstConfiguration::get().getSubstInfo( aOrgName );

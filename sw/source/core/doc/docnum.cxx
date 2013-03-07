@@ -598,9 +598,9 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     //  ([Number]+\.)+  (as a regular expression!)
     //  (Number follwed by a period, with 5 repetitions)
     //  i.e.: "1.1.", "1.", "1.1.1."
-    xub_StrLen nPos = 0;
+    sal_Int32 nPos = 0;
     String sNum = rName.GetToken( 0, '.', nPos );
-    if( STRING_NOTFOUND == nPos )
+    if( -1 == nPos )
         return USHRT_MAX;           // invalid number!
 
     sal_uInt16 nLevelVal[ MAXLEVEL ];       // numbers of all levels
@@ -608,7 +608,7 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     sal_uInt8 nLevel = 0;
     String sName( rName );
 
-    while( STRING_NOTFOUND != nPos )
+    while( -1 != nPos )
     {
         sal_uInt16 nVal = 0;
         sal_Unicode c;
@@ -630,7 +630,7 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         sNum = sName.GetToken( 0, '.', nPos );
         // #i4533# without this check all parts delimited by a dot are treated as outline numbers
         if(!comphelper::string::isdigitAsciiString(sNum))
-            nPos = STRING_NOTFOUND;
+            nPos = -1;
     }
     rName = sName;      // that's the follow-up text
 
@@ -643,7 +643,7 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     SwTxtNode* pNd;
     nPos = 0;
     // search in the existing outline nodes for the required outline num array
-    for( ; nPos < rOutlNds.size(); ++nPos )
+    for( ; nPos < (sal_Int32) rOutlNds.size(); ++nPos )
     {
         pNd = rOutlNds[ nPos ]->GetTxtNode();
         const int nLvl = pNd->GetAttrOutlineLevel()-1;   //<-end,zhaojianwei
@@ -679,7 +679,7 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
             }
         }
     }
-    if( nPos >= rOutlNds.size() )
+    if( nPos >= (sal_Int32) rOutlNds.size() )
         nPos = USHRT_MAX;
     return nPos;
 }
@@ -710,10 +710,10 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             //#i4533# leading numbers followed by a dot have been remove while
             //searching for the outline position
             //to compensate this they must be removed from the paragraphs text content, too
-            sal_uInt16 nPos = 0;
+            sal_Int32 nPos = 0;
             String sTempNum;
             while(sExpandedText.Len() && (sTempNum = sExpandedText.GetToken(0, '.', nPos)).Len() &&
-                    STRING_NOTFOUND != nPos &&
+                    -1 != nPos &&
                     comphelper::string::isdigitAsciiString(sTempNum))
             {
                 sExpandedText.Erase(0, nPos);

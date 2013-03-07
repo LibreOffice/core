@@ -382,10 +382,10 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
             aText = mpSubEdit->GetText();
 
             // remove all entries to which there is an entry, but which is not selected
-            xub_StrLen nIndex = 0;
-            while ( nIndex != STRING_NOTFOUND )
+            sal_Int32 nIndex = 0;
+            while ( nIndex != -1 )
             {
-                xub_StrLen  nPrevIndex = nIndex;
+                sal_Int32  nPrevIndex = nIndex;
                 XubString   aToken = aText.GetToken( 0, mcMultiSep, nIndex );
                 xub_StrLen  nTokenLen = aToken.Len();
                 aToken = comphelper::string::strip(aToken, ' ');

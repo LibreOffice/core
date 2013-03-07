@@ -520,14 +520,14 @@ void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
         Replace( nFirstChar, i-nFirstChar, rStr );
 }
 
-STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) const
+STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, sal_Int32& rIndex ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
     const STRCODE*  pStr            = mpData->maStr;
     xub_StrLen      nLen            = (xub_StrLen)mpData->mnLen;
     xub_StrLen      nTok            = 0;
-    xub_StrLen      nFirstChar      = rIndex;
+    sal_Int32      nFirstChar      = rIndex;
     xub_StrLen      i               = nFirstChar;
 
     // Determine token position and length
@@ -557,12 +557,12 @@ STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) c
         if ( i < nLen )
             rIndex = i+1;
         else
-            rIndex = STRING_NOTFOUND;
+            rIndex = -1;
         return Copy( nFirstChar, i-nFirstChar );
     }
     else
     {
-        rIndex = STRING_NOTFOUND;
+        rIndex = -1;
         return STRING();
     }
 }

@@ -78,8 +78,8 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
     String sRet;
     String aText(comphelper::string::remove(rText, '\r'));
 
-    sal_uInt16 nTokenPos = 0;
-    while( STRING_NOTFOUND != nTokenPos )
+    sal_Int32 nTokenPos = 0;
+    while( -1 != nTokenPos )
     {
         String aLine = aText.GetToken( 0, '\n', nTokenPos );
         while ( aLine.Len() )

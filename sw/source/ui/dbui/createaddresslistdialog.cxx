@@ -404,7 +404,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             {
                 //header line
                 xub_StrLen nHeaders = comphelper::string::getTokenCount(sLine, '\t');
-                xub_StrLen nIndex = 0;
+                sal_Int32 nIndex = 0;
                 for( xub_StrLen nToken = 0; nToken < nHeaders; ++nToken)
                 {
                     String sHeader = sLine.GetToken( 0, '\t', nIndex );
@@ -422,7 +422,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 ::std::vector<OUString> aNewData;
                 //analyze data line
                 xub_StrLen nDataCount = comphelper::string::getTokenCount(sLine, '\t');
-                xub_StrLen nIndex = 0;
+                sal_Int32 nIndex = 0;
                 for( xub_StrLen nToken = 0; nToken < nDataCount; ++nToken)
                 {
                     String sData = sLine.GetToken( 0, '\t', nIndex );

@@ -2471,7 +2471,7 @@ static sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
         rName.Erase(0, 30);
 
     sal_uInt16 nResId = USHRT_MAX;
-    xub_StrLen nFound = 0;
+    sal_Int32 nFound = 0;
     rTypeName = rName.GetToken( 0, '.', nFound );
     if(rTypeName.EqualsAscii("User"))
         nResId = RES_USERFLD;

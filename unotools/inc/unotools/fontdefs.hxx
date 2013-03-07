@@ -37,9 +37,9 @@ namespace utl {
 #define SUBSFONT_PS         ((sal_uLong)0x00000004)
 #define SUBSFONT_HTML       ((sal_uLong)0x00000008)
 
-UNOTOOLS_DLLPUBLIC String GetSubsFontName( const String& rName, sal_uLong nFlags );
+UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags );
 
-UNOTOOLS_DLLPUBLIC void AddTokenFontName( String& rName, const String& rNewToken );
+UNOTOOLS_DLLPUBLIC void AddTokenFontName( OUString& rName, const OUString& rNewToken );
 
 struct UNOTOOLS_DLLPUBLIC FontNameHash { int operator()(const String&) const; };
 
@@ -84,9 +84,9 @@ public:
 #define DEFAULTFONT_CTL_HEADING         ((sal_uInt16)4003)
 #define DEFAULTFONT_CTL_DISPLAY         ((sal_uInt16)4004)
 
-UNOTOOLS_DLLPUBLIC String GetNextFontToken( const String& rTokenStr, xub_StrLen& rIndex );
+UNOTOOLS_DLLPUBLIC OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex );
 
-UNOTOOLS_DLLPUBLIC void GetEnglishSearchFontName( String& rName );
+UNOTOOLS_DLLPUBLIC void GetEnglishSearchFontName( OUString& rName );
 
 #endif
 

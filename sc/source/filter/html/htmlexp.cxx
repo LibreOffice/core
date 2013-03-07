@@ -385,7 +385,7 @@ void ScHTMLExport::WriteHeader()
     {   // Fontliste, VCL: Semikolon als Separator,
         // CSS1: Komma als Separator und jeder einzelne Fontname quoted
         const String& rList = aHTMLStyle.aFontFamilyName;
-        for ( xub_StrLen j = 0, nPos = 0; j < nFonts; j++ )
+        for ( sal_Int32 j = 0, nPos = 0; j < (sal_Int32) nFonts; j++ )
         {
             rStrm << '\"';
             OUT_STR( rList.GetToken( 0, ';', nPos ) );
@@ -1109,7 +1109,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             else
             {   // Fontliste, VCL: Semikolon als Separator, HTML: Komma
                 const String& rList = rFontItem.GetFamilyName();
-                for ( xub_StrLen j = 0, nPos = 0; j < nFonts; j++ )
+                for ( sal_Int32 j = 0, nPos = 0; j < (sal_Int32)nFonts; j++ )
                 {
                     rtl::OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
                         rList.GetToken( 0, ';', nPos ), eDestEnc,

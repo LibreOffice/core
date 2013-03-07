@@ -1432,40 +1432,40 @@ static ConvertChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStar
 const ConvertChar* ConvertChar::GetRecodeData( const String& rOrgFontName, const String& rMapFontName )
 {
     const ConvertChar* pCvt = NULL;
-    String aOrgName( rOrgFontName );
+    OUString aOrgName( rOrgFontName );
     GetEnglishSearchFontName( aOrgName );
-    String aMapName( rMapFontName );
+    OUString aMapName( rMapFontName );
     GetEnglishSearchFontName( aMapName );
 
-    if( aMapName.EqualsAscii( "starsymbol" )
-     || aMapName.EqualsAscii( "opensymbol" ) )
+    if( aMapName == "starsymbol"
+     || aMapName == "opensymbol" )
     {
         int nEntries = SAL_N_ELEMENTS(aStarSymbolRecodeTable);
         for( int i = 0; i < nEntries; ++i)
         {
             RecodeTable& r = aStarSymbolRecodeTable[i];
-            if( aOrgName.EqualsAscii( r.pOrgName ) )
+            if( aOrgName.equalsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }
     }
     //It's plausible that it's better to implement this
     //as an additional encoding alongside the existing
     //adobe-symbol to unicode conversion in rtl instead
-    else if( aMapName.EqualsAscii("applesymbol") )
+    else if( aMapName == "applesymbol" )
     {
         int nEntries = SAL_N_ELEMENTS(aAppleSymbolRecodeTable);
         for( int i = 0; i < nEntries; ++i)
         {
             RecodeTable& r = aAppleSymbolRecodeTable[i];
-            if( aOrgName.EqualsAscii( r.pOrgName ) )
+            if( aOrgName.equalsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }
     }
-    else if( aMapName.EqualsAscii( "starbats" ) )
+    else if( aMapName == "starbats" )
     {
-        if( aOrgName.EqualsAscii( "starsymbol" ) )
+        if( aOrgName == "starsymbol" )
             pCvt = &aImplStarSymbolCvt;
-        else if( aOrgName.EqualsAscii( "opensymbol" ) )
+        else if( aOrgName == "opensymbol" )
             pCvt = &aImplStarSymbolCvt;
     }
 
@@ -1479,7 +1479,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter(
 {
     const ConvertChar* pCvt = NULL;
 
-    String aName = rOrgName;
+    OUString aName = rOrgName;
     GetEnglishSearchFontName( aName );
 
     if ( nFlags & FONTTOSUBSFONT_IMPORT )
@@ -1490,15 +1490,15 @@ FontToSubsFontConverter CreateFontToSubsFontConverter(
         for( int i = 0; i < nEntries; ++i )
         {
             RecodeTable& r = aStarSymbolRecodeTable[i];
-            if( aName.EqualsAscii( r.pOrgName ) )
+            if( aName.equalsAscii( r.pOrgName ) )
                 { pCvt = &r.aCvt; break; }
         }
     }
     else
     {
         // TODO: FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS
-        if( aName.EqualsAscii( "starsymbol" ) )       pCvt = &aImplStarSymbolCvt;
-        else if( aName.EqualsAscii( "opensymbol" ) )  pCvt = &aImplStarSymbolCvt;
+        if( aName == "starsymbol" )       pCvt = &aImplStarSymbolCvt;
+        else if( aName == "opensymbol" )  pCvt = &aImplStarSymbolCvt;
     }
 
     return (FontToSubsFontConverter)pCvt;

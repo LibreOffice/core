@@ -212,7 +212,7 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
     ScRangeName* pRangeNames = pDoc->GetRangeName();
     ScRangeList aRangeList;
     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rOrigName, ';');
-    xub_StrLen nStringIx = 0;
+    sal_Int32 nStringIx = 0;
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; nToken++ )
     {
         String aToken( rOrigName.GetToken( 0, ';', nStringIx ) );

@@ -54,9 +54,9 @@ public:
                         ImplDevFontListData( const String& rSearchName );
                         ~ImplDevFontListData();
 
-    const String&       GetFamilyName() const    { return maName; }
+    const OUString&     GetFamilyName() const    { return maName; }
     const String&       GetSearchName() const    { return maSearchName; }
-    const String&       GetAliasNames() const    { return maMapNames; }
+    const OUString&     GetAliasNames() const    { return maMapNames; }
     bool                IsScalable() const       { return mpFirst->IsScalable(); }
     int                 GetMinQuality() const    { return mnMinQuality; }
 
@@ -73,9 +73,9 @@ public:
 private:
 friend class ImplDevFontList; // TODO: remove soon
     PhysicalFontFace*   mpFirst;            // linked list of physical font faces
-    String              maName;             // Fontname (original font family name)
+    OUString            maName;             // Fontname (original font family name)
     String              maSearchName;       // normalized font family name
-    String              maMapNames;         // fontname aliases
+    OUString            maMapNames;         // fontname aliases
     sal_uIntPtr         mnTypeFaces;        // Typeface Flags
     sal_uIntPtr         mnMatchType;        // MATCH - Type
     String              maMatchFamilyName;  // MATCH - FamilyName
@@ -148,13 +148,13 @@ protected:
 
 struct ImplFontSubstEntry
 {
-    String                  maName;
-    String                  maReplaceName;
-    String                  maSearchName;
-    String                  maSearchReplaceName;
-    sal_uInt16                  mnFlags;
+    String                    maName;
+    String                    maReplaceName;
+    OUString                  maSearchName;
+    OUString                  maSearchReplaceName;
+    sal_uInt16                mnFlags;
 
-    ImplFontSubstEntry(  const String& rFontName, const String& rSubstFontName, sal_uInt16 nSubstFlags );
+    ImplFontSubstEntry(  const OUString& rFontName, const OUString& rSubstFontName, sal_uInt16 nSubstFlags );
 };
 
 class ImplDirectFontSubstitution

@@ -238,7 +238,7 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
             case OBJECT_CLIENT_GRF:
             case OBJECT_CLIENT_OLE:
                 {
-                    sal_uInt16 nPos = 0;
+                    sal_Int32 nPos = 0;
                     String sFile( sLNm.GetToken( 0, ::sfx2::cTokenSeperator, nPos ) );
                     String sRange( sLNm.GetToken( 0, ::sfx2::cTokenSeperator, nPos ) );
 
@@ -262,7 +262,7 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                 break;
             case OBJECT_CLIENT_DDE:
                 {
-                    sal_uInt16 nTmp = 0;
+                    sal_Int32 nTmp = 0;
                     String sCmd( sLNm );
                     String sServer( sCmd.GetToken( 0, cTokenSeperator, nTmp ) );
                     String sTopic( sCmd.GetToken( 0, cTokenSeperator, nTmp ) );

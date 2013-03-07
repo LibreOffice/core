@@ -46,8 +46,8 @@ ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& r
     SetFont( aTextFont );
 
     Size aTextSize;
-    xub_StrLen nIndex = 0;
-    while ( nIndex != STRING_NOTFOUND )
+    sal_Int32 nIndex = 0;
+    while ( nIndex != -1 )
     {
         String aLine = aMessage.GetToken( 0, CHAR_CR, nIndex );
         Size aLineSize( GetTextWidth( aLine ), GetTextHeight() );
@@ -78,9 +78,9 @@ void ScHintWindow::Paint( const Rectangle& /* rRect */ )
     DrawText( Point(HINT_MARGIN,HINT_MARGIN), aTitle );
 
     SetFont( aTextFont );
-    xub_StrLen nIndex = 0;
+    sal_Int32 nIndex = 0;
     Point aLineStart = aTextStart;
-    while ( nIndex != STRING_NOTFOUND )
+    while ( nIndex != -1 )
     {
         String aLine = aMessage.GetToken( 0, CHAR_CR, nIndex );
         DrawText( aLineStart, aLine );
