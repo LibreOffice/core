@@ -41,9 +41,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-/*************************************************************************
-|* Ctor
-\************************************************************************/
+
 SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                                   const SfxItemSet& rInAttrs,
                                   const std::vector<String> &rPageNames, SdCustomShowList* pCSList ) :
@@ -109,7 +107,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aTmfPause.SetAccessibleRelationLabeledBy( &aRbtAuto );
     aTmfPause.SetAccessibleName(aRbtAuto.GetText());
 
-    // Listbox mit Seitennamen fuellen
+    // fill Listbox with page names
     for (std::vector<String>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
         aLbDias.InsertEntry(*pIter);
 
@@ -117,7 +115,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     {
         sal_uInt16 nPosToSelect = (sal_uInt16) pCustomShowList->GetCurPos();
         SdCustomShow* pCustomShow;
-        // Listbox mit CustomShows fuellen
+        // fill Listbox with CustomShows
         for( pCustomShow = (SdCustomShow*) pCustomShowList->First();
              pCustomShow != NULL;
              pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
@@ -243,9 +241,9 @@ void SdStartPresentationDlg::InitMonitorSettings()
     }
 }
 
-/*************************************************************************
-|* Setzt die ausgewaehlten Attribute des Dialogs
-\************************************************************************/
+/**
+ * sets the selected attributes of the dialog
+ */
 void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 {
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ALL, aRbtAll.IsChecked() ) );
@@ -272,9 +270,9 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
         pCustomShowList->Seek( nPos );
 }
 
-/*************************************************************************
-|*      Handler: Enabled/Disabled Listbox "Dias"
-\************************************************************************/
+/**
+ *      Handler: Enabled/Disabled Listbox "Dias"
+ */
 IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl)
 {
     aLbDias.Enable( aRbtAtDia.IsChecked() );
@@ -283,9 +281,9 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl)
     return( 0L );
 }
 
-/*************************************************************************
-|*      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
-\************************************************************************/
+/**
+ *      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
+ */
 IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
 {
     const bool bAuto = aRbtAuto.IsChecked();
@@ -310,9 +308,9 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
     return( 0L );
 }
 
-/*************************************************************************
-|*      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
-\************************************************************************/
+/**
+ *      Handler: Enabled/Disabled Checkbox "AlwaysOnTop"
+ */
 IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl)
 {
     aCbxAutoLogo.Enable( aRbtAuto.IsChecked() && ( aTmfPause.GetTime().GetMSFromTime() > 0 ) );

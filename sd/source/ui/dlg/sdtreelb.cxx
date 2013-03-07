@@ -214,14 +214,6 @@ sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
 }
 
 
-
-
-/*************************************************************************
-|*
-|* Ctor1 SdPageObjsTLB
-|*
-\************************************************************************/
-
 SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 :   SvTreeListBox       ( pParentWin, rSdResId )
 ,   mpParent            ( pParentWin )
@@ -237,7 +229,7 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
 ,   mbShowAllPages      ( false )
 
 {
-    // Tree-ListBox mit Linien versehen
+    // add lines to Tree-ListBox
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                            WB_HASBUTTONS | // WB_HASLINESATROOT |
                            WB_HSCROLL |
@@ -251,11 +243,6 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId )
             SV_DRAGDROP_APP_MOVE  | SV_DRAGDROP_APP_COPY  | SV_DRAGDROP_APP_DROP );
 }
 
-/*************************************************************************
-|*
-|* Dtor SdPageObjsTLB
-|*
-\************************************************************************/
 
 SdPageObjsTLB::~SdPageObjsTLB()
 {
@@ -265,12 +252,6 @@ SdPageObjsTLB::~SdPageObjsTLB()
         // no document was created from mpMedium, so this object is still the owner of it
         delete mpMedium;
 }
-
-/*************************************************************************
-|*
-|* return name of object
-|*
-\************************************************************************/
 
 String SdPageObjsTLB::GetObjectName(
     const SdrObject* pObject,
@@ -298,12 +279,9 @@ String SdPageObjsTLB::GetObjectName(
     return aRet;
 }
 
-/*************************************************************************
-|*
-|* In TreeLB Eintrag selektieren
-|*
-\************************************************************************/
-
+/**
+ * select a entry in TreeLB
+ */
 sal_Bool SdPageObjsTLB::SelectEntry( const String& rName )
 {
     sal_Bool bFound = sal_False;
@@ -326,12 +304,9 @@ sal_Bool SdPageObjsTLB::SelectEntry( const String& rName )
     return( bFound );
 }
 
-/*************************************************************************
-|*
-|* Gibt zurueck, ob Children des uebergebenen Strings selektiert sind
-|*
-\************************************************************************/
-
+/**
+ * @return true if children of the specified string are selected
+ */
 sal_Bool SdPageObjsTLB::HasSelectedChildren( const String& rName )
 {
     sal_Bool bFound  = sal_False;
@@ -359,12 +334,9 @@ sal_Bool SdPageObjsTLB::HasSelectedChildren( const String& rName )
 }
 
 
-/*************************************************************************
-|*
-|* TreeLB mit Seiten und Objekten fuellen
-|*
-\************************************************************************/
-
+/**
+ * Fill TreeLB with pages and objects
+ */
 void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
                           const String& rDocName)
 {
@@ -404,7 +376,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
         nPage++;
     }
 
-    // dann alle MasterPages incl. Objekte einfuegen
+    // then insert all master pages including objects
     if( mbShowAllPages )
     {
         nPage = 0;
@@ -421,12 +393,9 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, sal_Bool bAllPages,
         SelectEntry( aSelection );
 }
 
-/*************************************************************************
-|*
-|* Es wird nur der erste Eintrag eingefuegt. Children werden OnDemand erzeugt
-|*
-\************************************************************************/
-
+/**
+ * We insert only the first entry. Children are created on demand.
+ */
 void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
                           const String& rDocName )
 {
@@ -439,7 +408,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     Image aImgDocOpen=Image( BitmapEx( SdResId( BMP_DOC_OPEN ) ) );
     Image aImgDocClosed=Image( BitmapEx( SdResId( BMP_DOC_CLOSED ) ) );
 
-    // Dokumentnamen einfuegen
+    // insert document name
     InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, NULL, sal_True, LIST_APPEND,
                  reinterpret_cast< void* >( 1 )
     );
@@ -580,15 +549,12 @@ bool SdPageObjsTLB::GetShowAllShapes (void) const
 
 
 
-/*************************************************************************
-|*
-|* Prueft, ob die Seiten (PK_STANDARD) und die darauf befindlichen Objekte
-|* des Docs und der TreeLB identisch sind.
-|* Wird ein Doc uebergeben, wird dieses zum aktuellem Doc (Wichtig bei
-|* mehreren Documenten).
-|*
-\************************************************************************/
-
+/**
+ * Checks if the pages (PK_STANDARD) of a doc and the objects on the pages
+ * are identical to the TreeLB.
+ * If a doc is provided, this will be the used doc (important by more than
+ * one document).
+ */
 sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 {
     if( pInDoc )
@@ -602,7 +568,7 @@ sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
     SvTreeListEntry* pEntry = First();
     String       aName;
 
-    // Alle Pages incl. Objekte vergleichen
+    // compare all pages including the objects
     sal_uInt16 nPage = 0;
     const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
 
@@ -647,17 +613,14 @@ sal_Bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
         }
         nPage++;
     }
-    // Wenn noch Eintraege in der Listbox vorhanden sind, wurden
-    // Objekte (mit Namen) oder Seiten geloescht
+    // If there are still entries in the listbox,
+    // then objects (with names) or pages were deleted
     return( !pEntry );
 }
 
-/*************************************************************************
-|*
-|* Selectierten String zurueckgeben
-|*
-\************************************************************************/
-
+/**
+ * @return selected string
+ */
 String SdPageObjsTLB::GetSelectEntry()
 {
     return( GetEntryText( GetCurEntry() ) );
@@ -681,12 +644,9 @@ std::vector<rtl::OUString> SdPageObjsTLB::GetSelectEntryList( const sal_uInt16 n
     return aEntries;
 }
 
-/*************************************************************************
-|*
-|* Eintraege werden erst auf Anforderung (Doppelklick) eingefuegt
-|*
-\************************************************************************/
-
+/**
+ * Entries are inserted only by request (double click)
+ */
 void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
 {
     if( !pFileEntry->HasChildren() )
@@ -756,13 +716,10 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
         SvTreeListBox::RequestingChildren( pFileEntry );
 }
 
-/*************************************************************************
-|*
-|*  Prueft, ob es sich um eine Draw-Datei handelt und oeffnet anhand des
-|*  uebergebenen Docs das BookmarkDoc
-|*
-\************************************************************************/
-
+/**
+ * Checks if it is a draw file and opens the BookmarkDoc depending of
+ * the provided Docs
+ */
 SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 {
     if (
@@ -815,12 +772,9 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
     return( mpBookmarkDoc );
 }
 
-/*************************************************************************
-|*
-|* Bookmark-Dokument schlie�en und loeschen
-|*
-\************************************************************************/
-
+/**
+ * Close and delete bookmark document
+ */
 void SdPageObjsTLB::CloseBookmarkDoc()
 {
     if (mxBookmarkDocShRef.Is())
@@ -868,17 +822,14 @@ void SdPageObjsTLB::SelectHdl()
     SvTreeListBox::SelectHdl();
 }
 
-/*************************************************************************
-|*
-|* Ueberlaedt RETURN mit der Funktionsweise von DoubleClick
-|*
-\************************************************************************/
-
+/**
+ * Overloads RETURN with the functionality of DoubleClick
+ */
 void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
 {
     if( rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
     {
-        // Auskommentierter Code aus svtools/source/contnr/svimpbox.cxx
+        // commented code from svtools/source/contnr/svimpbox.cxx
         SvTreeListEntry* pCursor = GetCurEntry();
         if( pCursor->HasChildren() || pCursor->HasChildrenOnDemand() )
         {
@@ -894,12 +845,9 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput( rKEvt );
 }
 
-/*************************************************************************
-|*
-|* StartDrag-Request
-|*
-\************************************************************************/
-
+/**
+ * StartDrag-Request
+ */
 void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
 {
     (void)nAction;
@@ -942,20 +890,17 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
         SetSelectionMode(SINGLE_SELECTION);
         Select(pEntry, sal_True);
 
-        //  Aus dem ExecuteDrag heraus kann der Navigator geloescht werden
-        //  (beim Umschalten auf einen anderen Dokument-Typ), das wuerde aber
-        //  den StarView MouseMove-Handler, der Command() aufruft, umbringen.
-        //  Deshalb Drag&Drop asynchron:
+        // We can delete the Navigator from ExecuteDrag (when switching to
+        // another document type), but that would kill the StarView MouseMove
+        // Handler which is calling Command().
+        // For this reason, Drag&Drop is asynchronous.
         Application::PostUserEvent( STATIC_LINK( this, SdPageObjsTLB, ExecDragHdl ) );
     }
 }
 
-/*************************************************************************
-|*
-|* Begin drag
-|*
-\************************************************************************/
-
+/**
+ * Begin drag
+ */
 void SdPageObjsTLB::DoDrag()
 {
     mpDropNavWin = ( mpFrame->HasChildWindow( SID_NAVIGATOR ) ) ?
@@ -1047,12 +992,6 @@ void SdPageObjsTLB::DoDrag()
     }
 }
 
-/*************************************************************************
-|*
-|* Drag finished
-|*
-\************************************************************************/
-
 void SdPageObjsTLB::OnDragFinished( sal_uInt8 )
 {
     if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
@@ -1070,12 +1009,9 @@ void SdPageObjsTLB::OnDragFinished( sal_uInt8 )
     bIsInDrag = sal_False;
 }
 
-/*************************************************************************
-|*
-|* AcceptDrop-Event
-|*
-\************************************************************************/
-
+/**
+ * AcceptDrop-Event
+ */
 sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
 {
     sal_Int8 nResult (DND_ACTION_NONE);
@@ -1116,12 +1052,9 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
     return nResult;
 }
 
-/*************************************************************************
-|*
-|* ExecuteDrop-Event
-|*
-\************************************************************************/
-
+/**
+ * ExecuteDrop-Event
+ */
 sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
@@ -1161,16 +1094,13 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-/*************************************************************************
-|*
-|* Handler fuers Dragging
-|*
-\************************************************************************/
-
+/**
+ * Handler for Dragging
+ */
 IMPL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*, EMPTYARG)
 {
-    //  als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch der
-    //  Navigator geloescht werden darf
+    // as link, then it is allowed to asynchronous, without ImpMouseMoveMsg on
+    // the stack, delete the Navigator
     pThis->DoDrag();
     return 0;
 }

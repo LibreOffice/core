@@ -36,12 +36,9 @@
 #include "dlgsnap.hxx"
 
 
-/*************************************************************************
-|*
-|* Dialog zum Einstellen des Rasters (wohl kaum ESO!)
-|*
-\************************************************************************/
-
+/**
+ * dialog to adjust grid (scarcely ESO!)
+ */
 SdSnapLineDlg::SdSnapLineDlg(
     ::Window* pWindow,
     const SfxItemSet& rInAttrs,
@@ -74,10 +71,10 @@ SdSnapLineDlg::SdSnapLineDlg(
     SetFieldUnit( aMtrFldX, eUIUnit, sal_True );
     SetFieldUnit( aMtrFldY, eUIUnit, sal_True );
 
-    // WorkArea holen
+    // get WorkArea
     Rectangle aWorkArea = pView->GetWorkArea();
 
-    // PoolUnit ermitteln
+    // determine PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
     SfxMapUnit ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
@@ -89,8 +86,8 @@ SdSnapLineDlg::SdSnapLineDlg(
     Point aRightBottom(aWorkArea.Right()-2, aWorkArea.Bottom()-2);
     pPV->LogicToPagePos(aRightBottom);
 
-    // Hier werden die Max- und MinWerte in Abhaengigkeit von der
-    // WorkArea, PoolUnit und der FieldUnit:
+    // determine max and min values depending on
+    // WorkArea, PoolUnit and FieldUnit:
     SetMetricValue( aMtrFldX, aLeftTop.X(), ePoolUnit );
 
     long nValue = static_cast<long>(aMtrFldX.GetValue());
@@ -116,7 +113,7 @@ SdSnapLineDlg::SdSnapLineDlg(
     aMtrFldY.SetMax( nValue );
     aMtrFldY.SetLast( nValue );
 
-    // Setzen der Werte
+    // set values
     nXValue = ((const SfxUInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
     nYValue = ((const SfxUInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_Y)).GetValue();
     nXValue = Fraction(nXValue) / aUIScale;
@@ -127,12 +124,9 @@ SdSnapLineDlg::SdSnapLineDlg(
     aRbPoint.Check();
 }
 
-/*************************************************************************
-|*
-|* Fuellt uebergebenes Item-Set mit Dialogbox-Attributen
-|*
-\************************************************************************/
-
+/**
+ * fills provided item sets with dialog box attributes
+ */
 IMPL_LINK( SdSnapLineDlg, ClickHdl, Button *, pBtn )
 {
     if ( pBtn == &aRbPoint )        SetInputFields(sal_True, sal_True);
@@ -143,12 +137,9 @@ IMPL_LINK( SdSnapLineDlg, ClickHdl, Button *, pBtn )
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Fuellt uebergebenes Item-Set mit Dialogbox-Attributen
-|*
-\************************************************************************/
-
+/**
+ * fills provided item sets with dialog box attributes
+ */
 void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     SnapKind eKind;
@@ -165,12 +156,6 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_Y, nYValue));
 }
 
-/*************************************************************************
-|*
-|* Gruppe mit Radiobutton verstecken
-|*
-\************************************************************************/
-
 void SdSnapLineDlg::HideRadioGroup()
 {
     aFlDir.Hide();
@@ -179,12 +164,9 @@ void SdSnapLineDlg::HideRadioGroup()
     aRbPoint.Hide();
 }
 
-/*************************************************************************
-|*
-|* X- bzw. Y-Inputfeld disablen
-|*
-\************************************************************************/
-
+/**
+ * disable X or Y input fields
+ */
 void SdSnapLineDlg::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
 {
     if ( bEnableX )

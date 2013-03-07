@@ -34,12 +34,9 @@
 #include <svx/flagsdef.hxx>
 #include <editeng/svxenum.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
-|*
-\************************************************************************/
-
+/**
+ * Constructor of tab dialog: appends pages to the dialog
+ */
 SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage ) :
         SfxTabDialog ( pParent, SdResId( TAB_PAGE ), pAttr ),
         mpDocShell          ( pDocSh )
@@ -67,12 +64,6 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
         RemoveTabPage( RID_SVXPAGE_AREA );
 }
 
-
-/*************************************************************************
-|*
-|* Seite wird erzeugt
-|*
-\************************************************************************/
 
 void SdPageDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {

@@ -32,12 +32,9 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 
-/*************************************************************************
-|*
-|*  Dialog zum Aendern der Print-Optionen
-|*
-\************************************************************************/
-
+/**
+ *  dialog to adjust print options
+ */
 SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage          ( pParent, SdResId( TP_PRINT_OPTIONS ), rInAttrs ),
 

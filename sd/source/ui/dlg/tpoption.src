@@ -24,7 +24,7 @@
 #define SCALE_TEXT \
         Text [ en-US ] = "Scale" ;                 \
 
- // Contents (Inhalte)
+ // Contents
 TabPage TP_OPTIONS_CONTENTS
 {
     HelpID = HID_SD_OPTIONS_CONTENTS ;
@@ -70,7 +70,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ en-US ] = "~Contour of each individual object" ;
     };
 };
- // MISC (Sonstiges)
+ // MISC
 TabPage TP_OPTIONS_MISC
 {
     HelpID = HID_SD_OPTIONS_MISC ;

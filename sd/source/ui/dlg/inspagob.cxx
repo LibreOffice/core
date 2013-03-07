@@ -34,12 +34,6 @@
 #include "inspagob.hrc"
 
 
-/*************************************************************************
-|*
-|*  Ctor
-|*
-\************************************************************************/
-
 SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     ::Window* pWindow,
     const SdDrawDocument* pInDoc,
@@ -62,30 +56,22 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
 
     aLbTree.SetSelectHdl( LINK( this, SdInsertPagesObjsDlg, SelectObjectHdl ) );
 
-    // Text wird eingefuegt
+    // insert text
     if( !pMedium )
         SetText( String( SdResId( STR_INSERT_TEXT ) ) );
 
     Reset();
 }
 
-/*************************************************************************
-|*
-|*  Dtor
-|*
-\************************************************************************/
 
 SdInsertPagesObjsDlg::~SdInsertPagesObjsDlg()
 {
 }
 
-/*************************************************************************
-|*
-|*  Fuellt die TreeLB in Abhaengigkeit des Mediums. Ist kein Medium
-|*  vorhanden, handelt es sich um ein Text- und kein Drawdokument
-|*
-\************************************************************************/
-
+/**
+ * Fills the TreeLB dependent on the medium. Is not medium available, then
+ * it is a text and not a draw document.
+ */
 void SdInsertPagesObjsDlg::Reset()
 {
     if( pMedium )
@@ -108,16 +94,15 @@ void SdInsertPagesObjsDlg::Reset()
 
 std::vector<rtl::OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType )
 {
-    // Bei Draw-Dokumenten muss bei der Selektion des Dokumentes NULL
-    // zurueckgegeben werden
+    // With Draw documents, we have to return NULL on selection of the document
     if( pMedium )
     {
-        // Um zu gewaehrleisten, dass die Bookmarks geoeffnet sind
-        // (Wenn gesamtes Dokument ausgewaehlt wurde)
+        // to ensure that bookmarks are opened
+        // (when the whole document is selected)
         aLbTree.GetBookmarkDoc();
 
-        // Wenn das Dokument (mit-)selektiert oder nichst selektiert ist,
-        // wird das gesamte Dokument (und nicht mehr!) eingefuegt.
+        // If the document is selected (too) or nothing is selected,
+        // the whole document is inserted (but not more!)
         if( aLbTree.GetSelectionCount() == 0 ||
             ( aLbTree.IsSelected( aLbTree.First() ) ) )
             return std::vector<rtl::OUString>();
@@ -126,34 +111,25 @@ std::vector<rtl::OUString> SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType
     return aLbTree.GetSelectEntryList( nType );
 }
 
-/*************************************************************************
-|*
-|*  Ist Verknuepfung gechecked
-|*
-\************************************************************************/
-
+/**
+ *  is link checked
+ */
 sal_Bool SdInsertPagesObjsDlg::IsLink()
 {
     return( aCbxLink.IsChecked() );
 }
 
-/*************************************************************************
-|*
-|*  Ist Verknuepfung gechecked
-|*
-\************************************************************************/
-
+/**
+ *  is link checked
+ */
 sal_Bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 {
     return( aCbxMasters.IsChecked() );
 }
 
-/*************************************************************************
-|*
-|* Enabled und selektiert Endfarben-LB
-|*
-\************************************************************************/
-
+/**
+ * Enabled and selects end-color-LB
+ */
 IMPL_LINK_NOARG(SdInsertPagesObjsDlg, SelectObjectHdl)
 {
     if( aLbTree.IsLinkableSelected() )

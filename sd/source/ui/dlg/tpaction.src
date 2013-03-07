@@ -66,8 +66,8 @@ TabPage TP_ANIMATION
         Hide = TRUE ;
     };
 
-     // Es ist schon wichtig, daﬂ Durchsuchen (search) und Suchen (seek/find) unter-
-     // schiedlich heissen, da sie eben auch eine unterschiedliche Bedeutung haben
+     // It is important that "search" and "seek/find" are clearly
+     // distinguishable since they have different meanings
     PushButton BTN_SEARCH
     {
         HelpID = "sd:PushButton:TP_ANIMATION:BTN_SEARCH";

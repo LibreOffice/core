@@ -39,12 +39,6 @@
 
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 SdPresLayoutDlg::SdPresLayoutDlg(
     ::sd::DrawDocShell* pDocShell,
     ::Window* pWindow,
@@ -70,28 +64,19 @@ SdPresLayoutDlg::SdPresLayoutDlg(
     Reset();
 }
 
-/*************************************************************************
-|*
-|*  Dtor
-|*
-*************************************************************************/
-
 SdPresLayoutDlg::~SdPresLayoutDlg()
 {
 }
 
-/*************************************************************************
-|*
-|*    Initialisierung
-|*
-*************************************************************************/
-
+/**
+ *    Initialize
+ */
 void SdPresLayoutDlg::Reset()
 {
     const SfxPoolItem *pPoolItem = NULL;
     long nName;
 
-    // MasterPage austauschen
+    // replace master page
     if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, sal_False, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_Bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
@@ -99,7 +84,7 @@ void SdPresLayoutDlg::Reset()
         maCbxMasterPage.Check( bMasterPage );
     }
 
-    // Nicht verwendete MasterPages entfernen
+    // remove not used master pages
     maCbxCheckMasters.Check(sal_False);
 
     if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, sal_True, &pPoolItem) == SFX_ITEM_SET)
@@ -115,18 +100,15 @@ void SdPresLayoutDlg::Reset()
         if (maLayoutNames[nName] == maName)
             break;
     }
-    DBG_ASSERT(nName < mnLayoutCount, "Layout nicht gefunden");
+    DBG_ASSERT(nName < mnLayoutCount, "Layout not found");
 
-    maVS.SelectItem((sal_uInt16)nName + 1);  // Inizes des ValueSets beginnen bei 1
+    maVS.SelectItem((sal_uInt16)nName + 1);  // Indices of the ValueSets start at 1
 
 }
 
-/*************************************************************************
-|*
-|*    Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
-|*
-*************************************************************************/
-
+/**
+ * Fills the provided Item-Set with dialog box attributes
+ */
 void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     short nId = maVS.GetSelectItemId();
@@ -145,7 +127,7 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
     {
         aLayoutName = maLayoutNames[ nId - 1 ];
         if( aLayoutName == maStrNone )
-            aLayoutName.Erase(); //  so wird "- keine -" codiert (s.u.)
+            aLayoutName.Erase(); // that way we encode "- nothing -" (see below)
     }
 
     rOutAttrs.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aLayoutName ) );
@@ -154,12 +136,9 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
 }
 
 
-/*************************************************************************
-|*
-|* Fuellt das ValueSet mit Bitmaps
-|*
-\************************************************************************/
-
+/**
+ * Fills ValueSet with bitmaps
+ */
 void SdPresLayoutDlg::FillValueSet()
 {
     maVS.SetStyle(maVS.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER
@@ -191,24 +170,18 @@ void SdPresLayoutDlg::FillValueSet()
 }
 
 
-/*************************************************************************
-|*
-|* Doppelklick-Handler
-|*
-\************************************************************************/
-
+/**
+ * DoubleClick handler
+ */
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl)
 {
     EndDialog(RET_OK);
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Klick-Handler fuer Laden-Button
-|*
-\************************************************************************/
-
+/**
+ * Click handler for load button
+ */
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 {
     SfxNewFileDialog* pDlg = new SfxNewFileDialog(this, SFXWB_PREVIEW);
@@ -236,7 +209,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             }
             else
             {
-                // so wird "- keine -" codiert
+                // that way we encode "- nothing -"
                 maName.Erase();
             }
         }
@@ -249,7 +222,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 
     if( !bCancel )
     {
-        // Pruefen, ob Vorlage schon vorhanden
+        // check if template already ecists
         sal_Bool bExists = sal_False;
         String aCompareStr( maName );
         if( maName.Len() == 0 )
@@ -262,17 +235,17 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             if( aCompareStr == *it )
             {
                 bExists = sal_True;
-                // Vorlage selektieren
+                // select template
                 maVS.SelectItem( aPos + 1 );
             }
         }
 
         if( !bExists )
         {
-            // Dokument laden um Preview-Bitmap zu ermitteln (wenn Vorlage ausgewaehlt)
+            // load document in order to determine preview bitmap (if template is selected)
             if( maName.Len() )
             {
-                // Dokument ermitteln, um OpenBookmarkDoc rufen zu koennen
+                // determine document in order to call OpenBookmarkDoc
                 SdDrawDocument* pDoc = mpDocSh->GetDoc();
                 SdDrawDocument* pTemplDoc  = pDoc->OpenBookmarkDoc( maName );
 
@@ -305,7 +278,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             }
             else
             {
-                // leeres Layout
+                // empty layout
                 maLayoutNames.push_back( new String( maStrNone ) );
                 maVS.InsertItem( (sal_uInt16) maLayoutNames.size(),
                         Bitmap( SdResId( BMP_FOIL_NONE ) ), maStrNone );
@@ -313,7 +286,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 
             if (!bCancel)
             {
-                // Vorlage selektieren
+                // select template
                 maVS.SelectItem( (sal_uInt16) maLayoutNames.size() );
             }
         }

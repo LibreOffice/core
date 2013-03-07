@@ -35,23 +35,16 @@
 TYPEINIT1(StyleSheetUndoAction, SdUndoAction);
 
 
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
                                            SfxStyleSheet* pTheStyleSheet,
                                            const SfxItemSet* pTheNewItemSet) :
                       SdUndoAction(pTheDoc)
 {
-    DBG_ASSERT(pTheStyleSheet, "Undo ohne StyleSheet ???");
+    DBG_ASSERT(pTheStyleSheet, "Undo without StyleSheet ???");
     pStyleSheet = pTheStyleSheet;
 
-    // ItemSets anlegen; Vorsicht, das neue koennte aus einem anderen Pool
-    // stammen, also mitsamt seinen Items clonen
+    // Create ItemSets; Attention, it is possible that the new one is from a,
+    // different pool. Therefore we clone it with its items.
     pNewSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(), pTheNewItemSet->GetRanges());
     pTheDoc->MigrateItemSet( pTheNewItemSet, pNewSet, pTheDoc );
 
@@ -61,7 +54,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     aComment = String(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
     String aName(pStyleSheet->GetName());
 
-    // Layoutnamen und Separator loeschen
+    // delete layout name and separator
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ) );
     sal_uInt16 nPos = aName.Search(aSep);
     if( nPos != STRING_NOTFOUND )
@@ -99,18 +92,12 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
         }
     }
 
-    // Platzhalter durch Vorlagennamen ersetzen
+    // replace placeholder with template name
     nPos = aComment.Search(sal_Unicode('$'));
     aComment.Erase(nPos, 1);
     aComment.Insert(aName, nPos);
 }
 
-
-/*************************************************************************
-|*
-|* Undo()
-|*
-\************************************************************************/
 
 void StyleSheetUndoAction::Undo()
 {
@@ -124,11 +111,6 @@ void StyleSheetUndoAction::Undo()
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 }
 
-/*************************************************************************
-|*
-|* Redo()
-|*
-\************************************************************************/
 
 void StyleSheetUndoAction::Redo()
 {
@@ -142,11 +124,6 @@ void StyleSheetUndoAction::Redo()
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 StyleSheetUndoAction::~StyleSheetUndoAction()
 {
@@ -154,11 +131,6 @@ StyleSheetUndoAction::~StyleSheetUndoAction()
     delete pOldSet;
 }
 
-/*************************************************************************
-|*
-|* Kommentar liefern
-|*
-\************************************************************************/
 
 rtl::OUString StyleSheetUndoAction::GetComment() const
 {

@@ -25,7 +25,7 @@ TabDialog TAB_TEMPLATE
     Size = MAP_APPFONT ( 289 , 176 ) ;
     Text [ en-US ] = "Graphics Styles" ;
     Moveable = TRUE ;
-     // Closeable = TRUE; // Dieser Dialog hat OK und/oder Cancel Button ! (KH)
+     // Closeable = TRUE; // This dialog has an OK and/or a Cancel button! (KH)
     TabControl 1
     {
         OutputSize = TRUE ;

@@ -50,12 +50,9 @@
 #include "drawdoc.hxx"
 #define IS_OUTLINE(x) (x >= PO_OUTLINE_1 && x <= PO_OUTLINE_9)
 
-/*************************************************************************
-|*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
-|*
-\************************************************************************/
-
+/**
+ * Constructor of Tab dialog: appends pages to the dialog
+ */
 SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                                 Window* pParent,
                                 SdResId DlgId,
@@ -71,7 +68,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 {
     if( IS_OUTLINE(ePO))
     {
-        // Leider sind die Itemsets unserer Stylesheets nicht discret..
+        // Unfortunately, the Itemsets of our style sheets are not discreet..
         const sal_uInt16* pPtr = pOrgSet->GetRanges();
         sal_uInt16 p1, p2;
         while( *pPtr )
@@ -79,7 +76,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
             p1 = pPtr[0];
             p2 = pPtr[1];
 
-            // erstmal das ganze discret machen
+            // first, we make it discreet
             while(pPtr[2] && (pPtr[2] - p2 == 1))
             {
                 p2 = pPtr[3];
@@ -101,8 +98,8 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
         const SfxPoolItem *pItem = NULL;
 
-        // Fals in diesem Stylesheet kein Bullet Item ist, holen wir uns
-        // das aus dem 'Outline 1' Stylesheet.
+        // If there is no bullet item in this stylesheet, we get it
+        // from 'Outline 1' style sheet.
         if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem ))
         {
             String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
@@ -114,7 +111,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                     aInputSet.Put( *pItem );
         }
 
-        // gewaehlte Ebene im Dialog vorselektieren
+        // preselect selected layer in dialog
         aInputSet.Put( SfxUInt16Item( SID_PARAM_CUR_NUM_LEVEL, 1<<GetOutlineLevel()));
 
         SetInputSet( &aInputSet );
@@ -182,8 +179,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
     }
 
-    // Titel setzen und
-    // entsprechende Seiten zum Dialog hinzufuegen
+    // set title and add corresponding pages to dialog
     OUString aTitle;
 
     switch( ePO )
@@ -223,7 +219,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     }
     SetText( aTitle );
 
-    nDlgType = 1; // Vorlagen-Dialog
+    nDlgType = 1; // template dialog
     nPageType = 0;
     nPos = 0;
 
@@ -335,7 +331,7 @@ sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const
     case PO_OUTLINE_8: return 7;
     case PO_OUTLINE_9: return 8;
     default:
-        DBG_ASSERT( sal_False, "Falscher Po! [CL]");
+        DBG_ASSERT( sal_False, "Wrong Po! [CL]");
     }
     return 0;
 }

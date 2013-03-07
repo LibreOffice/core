@@ -49,12 +49,9 @@
 #include "paragr.hxx"
 #include <svx/flagsdef.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
-|*
-\************************************************************************/
-
+/**
+ * Constructor of the Tab dialog: appends pages to the dialog
+ */
 SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                                 const SfxObjectShell* pDocShell,
                                 SfxStyleSheetBase& rStyleBase,
@@ -72,7 +69,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
 {
     FreeResource();
 
-    // Listbox fuellen und Select-Handler ueberladen
+    // fill Listbox and overload Select-Handler
 
     AddTabPage( RID_SVXPAGE_LINE);
     AddTabPage( RID_SVXPAGE_AREA);

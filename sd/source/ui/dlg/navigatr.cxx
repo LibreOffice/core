@@ -56,10 +56,9 @@ static const sal_uInt16 nShowNamedShapesFilter=1;
 static const sal_uInt16 nShowAllShapesFilter=2;
 }
 
-/*************************************************************************
-|*  SdNavigatorWin - FloatingWindow
-\************************************************************************/
-
+/**
+ * SdNavigatorWin - FloatingWindow
+ */
 SdNavigatorWin::SdNavigatorWin(
     ::Window* pParent,
     ::sd::NavigatorChildWindow* pChWinCtxt,
@@ -71,7 +70,7 @@ SdNavigatorWin::SdNavigatorWin(
 ,   maLbDocs         ( this, SdResId( LB_DOCS ) )
 ,   mpChildWinContext( pChWinCtxt )
 ,   mbDocImported   ( sal_False )
-    // Bei Aenderung des DragTypes: SelectionMode der TLB anpassen!
+    // On changes of the DragType: adjust SelectionMode of TLB!
 ,   meDragType      ( NAVIGATOR_DRAGTYPE_EMBEDDED )
 ,   mpBindings      ( pInBindings )
 ,   maImageList     ( SdResId( IL_NAVIGATR ) )
@@ -129,7 +128,7 @@ SdNavigatorWin::SdNavigatorWin(
     maMinSize.Height() -= 40;
     ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel( maMinSize );
 
-    // InitTlb; Wird ueber Slot initiiert
+    // InitTlb; is initiated over Slot
     SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
     mpBindings->GetDispatcher()->Execute(
         SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -173,7 +172,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     {
         String aDocName = pDocShell->GetMedium()->GetName();
         maTlbObjects.Clear();
-        maTlbObjects.Fill( pDoc, (sal_Bool) sal_False, aDocName ); // Nur normale Seiten
+        maTlbObjects.Fill( pDoc, (sal_Bool) sal_False, aDocName ); // only normal pages
 
         RefreshDocumentLB();
         maLbDocs.SelectEntry( aDocShName );
@@ -183,7 +182,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
         maLbDocs.SetNoSelection();
         maLbDocs.SelectEntry( aDocShName );
 
-// auskommentiert um 30246 zu fixen
+// commented in order to fix 30246
 //        if( maLbDocs.GetSelectEntryCount() == 0 )
         {
             RefreshDocumentLB();
@@ -196,14 +195,10 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
         pViewFrame->GetBindings().Invalidate(SID_NAVIGATOR_PAGENAME, sal_True, sal_True);
 }
 
-/*************************************************************************
-|*
-|* DragType wird in Abhaengigkeit davon gesetzt, ob ein Drag ueberhaupt
-|* moeglich ist. Graphiken duerfen beispielsweise unter gewissen Umstaenden
-|* nicht gedragt werden (#31038#).
-|*
-\************************************************************************/
-
+/**
+ * DragType is set on dependance if a Drag is even possible. For example,
+ * under certain circumstances, it is not allowed to drag graphics (#31038#).
+ */
 NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
 {
     NavigatorDragType   eDT = meDragType;
@@ -286,8 +281,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
     {
         case TBI_DRAGTYPE:
         {
-            // Popup-Menu wird in Abhaengigkeit davon erzeugt, ob Dokument
-            // gespeichert ist oder nicht
+            // Popup menu is created depending if the document is saved or not
             PopupMenu *pMenu = new PopupMenu;
 
             static const char* aHIDs[] =
@@ -363,8 +357,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
     {
         NavDocInfo* pInfo = GetDocInfo();
 
-        // Nur wenn es sich um das aktive Fenster handelt, wird
-        // auf die Seite gesprungen
+        // if it is the active window, we jump to the page
         if( pInfo && pInfo->IsActive() )
         {
             String aStr( maTlbObjects.GetSelectEntry() );
@@ -402,10 +395,10 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
     ::sd::DrawDocShell* pDocShell = NULL;
     NavDocInfo* pInfo = GetDocInfo();
 
-    // Handelt es sich um ein gedragtes Objekt?
+    // is it a dragged object?
     if( mbDocImported && nPos == 0 )
     {
-        // Dokument in TLB aufbauen
+        // construct document in TLB
         InsertFile( aStrLb );
     }
     else if (pInfo)
@@ -424,11 +417,11 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
             ::sd::DrawDocShell* pNCDocShell = pNonConstDoc->GetDocSh();
             String aDocName = pNCDocShell->GetMedium()->GetName();
             maTlbObjects.Clear();
-            maTlbObjects.Fill( pDoc, (sal_Bool) sal_False, aDocName ); // Nur normale Seiten
+            maTlbObjects.Fill( pDoc, (sal_Bool) sal_False, aDocName ); // only normal pages
         }
     }
 
-    // Pruefen, ob Link oder URL moeglich ist
+    // check if link or url is possible
     if( ( pInfo && !pInfo->HasName() ) || !maTlbObjects.IsLinkableSelected() || ( meDragType != NAVIGATOR_DRAGTYPE_EMBEDDED ) )
     {
         meDragType = NAVIGATOR_DRAGTYPE_EMBEDDED;
@@ -438,13 +431,10 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
     return( 0L );
 }
 
-/*************************************************************************
-|*
-|* DrageType wird gesetzt und Image wird entspr. gesetzt.
-|* Sollte Handler mit NULL gerufen werden, so wird der Default (URL) gesetzt.
-|*
-\************************************************************************/
-
+/**
+ * Set DrageType and set image accordingly to it.
+ * If the handler is called with NULL, the default (URL) is set.
+ */
 IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
 {
     sal_uInt16 nMenuId;
@@ -453,7 +443,7 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
     else
         nMenuId = NAVIGATOR_DRAGTYPE_URL;
 
-    if( nMenuId != USHRT_MAX ) // Notwendig ?
+    if( nMenuId != USHRT_MAX ) // Necessary ?
     {
         NavigatorDragType eDT = (NavigatorDragType) nMenuId;
         if( meDragType != eDT )
@@ -463,7 +453,7 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
 
             if( meDragType == NAVIGATOR_DRAGTYPE_URL )
             {
-                // Fix, um Endlosschleife zu unterbinden
+                // patch, prevents endless loop
                 if( maTlbObjects.GetSelectionCount() > 1 )
                     maTlbObjects.SelectAll( sal_False );
 
@@ -538,12 +528,12 @@ void SdNavigatorWin::Resize()
         aDiffSize.Width() = aWinSize.Width() - maSize.Width();
         aDiffSize.Height() = aWinSize.Height() - maSize.Height();
 
-        // Umgroessern der Toolbox
+        // change size of Toolbox
         Size aObjSize( maToolbox.GetOutputSizePixel() );
         aObjSize.Width() += aDiffSize.Width();
         maToolbox.SetOutputSizePixel( aObjSize );
 
-        // Umgroessern der TreeLB
+        // change size of TreeLB
         aObjSize = maTlbObjects.GetSizePixel();
         aObjSize.Width() += aDiffSize.Width();
         aObjSize.Height() = maLbDocs.GetPosPixel().Y() + aDiffSize.Height() -
@@ -552,7 +542,7 @@ void SdNavigatorWin::Resize()
 
         Point aPt( 0, aDiffSize.Height() );
 
-        // Verschieben der anderen Controls (DocumentLB)
+        // move other controls (DocumentLB)
         maLbDocs.Hide();
         aObjSize = maLbDocs.GetOutputSizePixel();
         aObjSize.Width() += aDiffSize.Width();
@@ -584,16 +574,12 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
 
     if (!aFileName.Len())
     {
-        /**********************************************************************
-        * Wieder aktuelles Dokument anzeigen
-        **********************************************************************/
+        // show actual document again
         maDropFileName = aFileName;
     }
     else
     {
-        /**********************************************************************
-        * Hineingedraggtes Dokument anzeigen
-        **********************************************************************/
+        // show dragged-in document
         const SfxFilter* pFilter = NULL;
         ErrCode nErr = 0;
 
@@ -607,16 +593,16 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
 
         if ((pFilter && !nErr) || aFileName == maDropFileName)
         {
-            // Das Medium muss ggf. mit READ/WRITE geoeffnet werden, daher wird
-            // ersteinmal nachgeschaut, ob es einen Storage enthaelt
+            // The medium may be opened with READ/WRITE. Therefore, we first
+            // check if it contains a Storage.
             SfxMedium* pMedium = new SfxMedium( aFileName,
                                                 STREAM_READ | STREAM_NOCREATE);
 
             if (pMedium->IsStorage())
             {
-                // Jetzt modusabhaengig:
+                // Now depending on mode:
                 // maTlbObjects.SetSelectionMode(MULTIPLE_SELECTION);
-                // Eigentuemeruebergabe von pMedium;
+                // handover of ownership of pMedium;
                 SdDrawDocument* pDropDoc = maTlbObjects.GetBookmarkDoc(pMedium);
 
                 if (pDropDoc)
@@ -626,7 +612,7 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
 
                     if( !maTlbObjects.IsEqualToDoc( pDropDoc ) )
                     {
-                        // Nur normale Seiten
+                        // only normal pages
                         maTlbObjects.Fill(pDropDoc, (sal_Bool) sal_False, maDropFileName);
                         RefreshDocumentLB( &maDropFileName );
                     }
@@ -673,7 +659,7 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
 
         maLbDocs.Clear();
 
-        // Liste der DocInfos loeschen
+        // delete list of DocInfos
          maDocList.clear();
 
         if( mbDocImported )
@@ -696,9 +682,9 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
                     aInfo.SetName();
                 else
                     aInfo.SetName( sal_False );
-                // z.Z. wird wieder der Name der Shell genommen (also ohne Pfad)
-                // da Koose es als Fehler ansieht, wenn er Pfad in URL-Notation
-                // angezeigt wird!
+                // at the moment, we use the name of the shell again (i.e.
+                // without path) since Koose thinks it is an error if the path
+                // is shown in url notation!
                 aStr = pDocShell->GetName();
 
                 maLbDocs.InsertEntry( aStr, LISTBOX_APPEND );
@@ -753,12 +739,9 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
     return nPos < maDocList.size() ? &(maDocList[ nPos ]) : NULL;
 }
 
-/*************************************************************************
-|*
-|* PreNotify
-|*
-\************************************************************************/
-
+/**
+ * PreNotify
+ */
 long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
 {
     const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
@@ -796,12 +779,9 @@ long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
 }
 
 
-/*************************************************************************
-|*
-|* KeyInput: ESCAPE abfangen, um Show zu beenden
-|*
-\************************************************************************/
-
+/**
+ * catch ESCAPE in order to end show
+ */
 void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
 {
     long nOK = sal_False;
@@ -853,12 +833,9 @@ void SdNavigatorWin::ApplyImageList()
 
 
 
-/*************************************************************************
-|*
-|* ControllerItem fuer Navigator
-|*
-\************************************************************************/
-
+/**
+ * ControllerItem for Navigator
+ */
 SdNavigatorControllerItem::SdNavigatorControllerItem( sal_uInt16 _nId,
                                 SdNavigatorWin* pNavWin,
                                 SfxBindings*    _pBindings) :
@@ -875,10 +852,10 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_NAVIGATOR_STATE )
     {
         const SfxUInt32Item* pStateItem = PTR_CAST( SfxUInt32Item, pItem );
-        DBG_ASSERT( pStateItem, "SfxUInt16Item erwartet");
+        DBG_ASSERT( pStateItem, "SfxUInt16Item expected");
         sal_uInt32 nState = pStateItem->GetValue();
 
-        // Stift
+        // pen
         if( nState & NAVBTN_PEN_ENABLED &&
             !pNavigatorWin->maToolbox.IsItemEnabled( TBI_PEN ) )
             pNavigatorWin->maToolbox.EnableItem( TBI_PEN );
@@ -892,7 +869,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
             pNavigatorWin->maToolbox.IsItemChecked( TBI_PEN ) )
             pNavigatorWin->maToolbox.CheckItem( TBI_PEN, sal_False );
 
-        // Nur wenn Doc in LB das Aktive ist
+        // only if doc in LB is the active
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
         if( pInfo && pInfo->IsActive() )
         {
@@ -930,7 +907,7 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
 
             if( nState & NAVTLB_UPDATE )
             {
-                // InitTlb; Wird ueber Slot initiiert
+                // InitTlb; is initiated by Slot
                 SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
                 GetBindings().GetDispatcher()->Execute(
                     SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -939,12 +916,9 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
     }
 }
 
-/*************************************************************************
-|*
-|* ControllerItem fuer Navigator, um die Seite in der TreeLB anzuzeigen
-|*
-\************************************************************************/
-
+/**
+ * ControllerItem for Navigator to show page in TreeLB
+ */
 SdPageNameControllerItem::SdPageNameControllerItem( sal_uInt16 _nId,
                                 SdNavigatorWin* pNavWin,
                                 SfxBindings*    _pBindings) :
@@ -960,19 +934,19 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
 {
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_NAVIGATOR_PAGENAME )
     {
-        // Nur wenn Doc in LB das Aktive ist
+        // only if doc in LB is the active
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
         if( pInfo && pInfo->IsActive() )
         {
             const SfxStringItem* pStateItem = PTR_CAST( SfxStringItem, pItem );
-            DBG_ASSERT( pStateItem, "SfxStringItem erwartet");
+            DBG_ASSERT( pStateItem, "SfxStringItem expected");
             String aPageName = pStateItem->GetValue();
 
             if( !pNavigatorWin->maTlbObjects.HasSelectedChildren( aPageName ) )
             {
                 if( pNavigatorWin->maTlbObjects.GetSelectionMode() == MULTIPLE_SELECTION )
                 {
-                    // Weil sonst immer dazuselektiert wird
+                    // because otherwise it is always additional select
                     pNavigatorWin->maTlbObjects.SelectAll( sal_False );
                 }
                 pNavigatorWin->maTlbObjects.SelectEntry( aPageName );

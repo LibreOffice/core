@@ -99,8 +99,8 @@ sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
     if( pOptsItem == NULL || !(aOptsItem == *pOptsItem) )
         rAttrs.Put( aOptsItem );
 
-    // Evtl. vorhandenes GridItem wird geholt, um nicht versehentlich
-    // irgendwelche Standardwerte einzustellen
+    // we get a possible existing GridItem, this ensures that we do net set
+    // some default values by accident
     return( sal_True );
 }
 
@@ -137,7 +137,7 @@ SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
 
 /*************************************************************************
 |*
-|*  TabPage zum Einstellen der Inhalte-Optionen
+|*  TabPage to adjust the content options
 |*
 \************************************************************************/
 
@@ -213,7 +213,7 @@ SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
 
 /*************************************************************************
 |*
-|*  TabPage zum Einstellen der Sonstige-Optionen
+|*  TabPage to adjust the misc options
 |*
 \************************************************************************/
 #define TABLE_COUNT 12
@@ -225,7 +225,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     aCbxQuickEdit               ( this, SdResId( CBX_QUICKEDIT ) ),
     aCbxPickThrough             ( this, SdResId( CBX_PICKTHROUGH ) ),
 
-    // Template & Layout laufen z.Z. synchron!
+    // At the moment, template & layout are not running synchronized
     aGrpProgramStart            ( this, SdResId( GRP_PROGRAMSTART ) ),
     aCbxStartWithTemplate       ( this, SdResId( CBX_START_WITH_TEMPLATE ) ),
 
@@ -263,7 +263,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     FreeResource();
     SetExchangeSupport();
 
-    // Metrik einstellen
+    // set metric
     FieldUnit eFUnit;
 
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
@@ -277,7 +277,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 
     SetFieldUnit( aMtrFldTabstop, eFUnit );
 
-    // ListBox mit Metriken f"ullen
+    // fill ListBox with metrics
     SvxStringArray aMetricArr( RID_SVXSTR_FIELDUNIT_TABLE );
     sal_uInt16 i;
 
@@ -297,7 +297,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     aMtrFldOriginalHeight.SetLast( 999999999 );
     aMtrFldOriginalHeight.SetMax( 999999999 );
 
-    // Temporaere Fields fuer Info-Texte (fuer Formatierung/Berechnung)
+    // temporary fields for info texts (for formatting/calculation)
     aMtrFldInfo1.SetUnit( eFUnit );
     aMtrFldInfo1.SetMax( 999999999 );
     aMtrFldInfo1.SetDecimalDigits( 2 );
@@ -305,9 +305,9 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     aMtrFldInfo2.SetMax( 999999999 );
     aMtrFldInfo2.SetDecimalDigits( 2 );
 
-    // PoolUnit ermitteln
+    // determine PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool?" );
+    DBG_ASSERT( pPool, "Where is the Pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // Fuellen der CB
@@ -328,11 +328,11 @@ SdTpOptionsMisc::~SdTpOptionsMisc()
 // -----------------------------------------------------------------------
 void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 {
-    // Hier muss noch einmal SaveValue gerufen werden, da sonst u.U.
-    // der Wert in anderen TabPages keine Wirkung hat
+    // We have to call SaveValue again since it can happen that the value
+    // has no effect on other TabPages
     aLbMetric.SaveValue();
-    // Metrik ggfs. aendern (da TabPage im Dialog liegt,
-    // wo die Metrik eingestellt werden kann
+    // change metric if necessary (since TabPage is in the Dialog where
+    // the metric is set)
     const SfxPoolItem* pAttr = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , sal_False,
                                     (const SfxPoolItem**)&pAttr ))
@@ -343,7 +343,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 
         if( eFUnit != aMtrFldOriginalWidth.GetUnit() )
         {
-            // Metriken einstellen
+            // set metrics
             sal_Int64 nVal = aMtrFldOriginalWidth.Denormalize( aMtrFldOriginalWidth.GetValue( FUNIT_TWIP ) );
             SetFieldUnit( aMtrFldOriginalWidth, eFUnit, sal_True );
             aMtrFldOriginalWidth.SetValue( aMtrFldOriginalWidth.Normalize( nVal ), FUNIT_TWIP );
@@ -374,7 +374,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 
 int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 {
-    // Parsercheck
+    // check parser
     sal_Int32 nX, nY;
     if( SetScale( aCbScale.GetText(), nX, nY ) )
     {
@@ -433,7 +433,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         bModified = sal_True;
     }
 
-    // Metrik
+    // metric
     const sal_uInt16 nMPos = aLbMetric.GetSelectEntryPos();
     if ( nMPos != aLbMetric.GetSavedValue() )
     {
@@ -443,7 +443,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         bModified |= sal_True;
     }
 
-    // Tabulatorabstand
+    // tabulator space
     if( aMtrFldTabstop.GetText() != aMtrFldTabstop.GetSavedValue() )
     {
         sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
@@ -495,7 +495,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aCbxCompatibility.SaveValue();
     aCbxUsePrinterMetrics.SaveValue();
 
-    // Metrik
+    // metric
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
     aLbMetric.SetNoSelection();
 
@@ -514,7 +514,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
         }
     }
 
-    // Tabulatorabstand
+    // tabulator space
     nWhich = GetWhich( SID_ATTR_DEFTABSTOP );
     if( rAttrs.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
     {
@@ -539,9 +539,9 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aFtOriginal.Hide();
     aFtEquivalent.Hide();
     aMtrFldOriginalWidth.Hide();
-    aMtrFldOriginalWidth.SetText( aInfo1 ); // leer
+    aMtrFldOriginalWidth.SetText( aInfo1 ); // empty
     aMtrFldOriginalHeight.Hide();
-    aMtrFldOriginalHeight.SetText( aInfo2 ); //leer
+    aMtrFldOriginalHeight.SetText( aInfo2 ); //empty
     aFtPageWidth.Hide();
     aFtPageHeight.Hide();
     aFiInfo1.Hide();

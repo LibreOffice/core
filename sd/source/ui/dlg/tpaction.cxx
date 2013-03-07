@@ -78,12 +78,9 @@ using namespace com::sun::star::lang;
 
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
 
-/*************************************************************************
-|*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
-|*
-\************************************************************************/
-
+/**
+ * Constructor of the Tab dialog: appends the pages to the dialog
+ */
 SdActionDlg::SdActionDlg (
     ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView ) :
         SfxNoLayoutSingleTabDialog  ( pParent, *pAttr, TP_ANIMATION_ACTION ),
@@ -91,9 +88,9 @@ SdActionDlg::SdActionDlg (
 {
     // FreeResource();
     SfxTabPage* pNewPage = SdTPAction::Create( this, rOutAttrs );
-    DBG_ASSERT( pNewPage, "Seite konnte nicht erzeugt werden");
+    DBG_ASSERT( pNewPage, "Unable to create page");
 
-    // Ehemals in PageCreated
+    // formerly in PageCreated
     ( (SdTPAction*) pNewPage )->SetView( pView );
     ( (SdTPAction*) pNewPage )->Construct();
 
@@ -105,12 +102,9 @@ SdActionDlg::SdActionDlg (
 }
 
 
-/*************************************************************************
-|*
-|*  Action-TabPage
-|*
-\************************************************************************/
-
+/**
+ *  Action-TabPage
+ */
 SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
         SfxTabPage      ( pWindow, SdResId( TP_ANIMATION ), rInAttrs ),
 
@@ -142,7 +136,7 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
     aBtnSearch.SetClickHdl( LINK( this, SdTPAction, ClickSearchHdl ) );
     aBtnSeek.SetClickHdl( LINK( this, SdTPAction, ClickSearchHdl ) );
 
-    // diese Page braucht ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
     aLbAction.SetSelectHdl( LINK( this, SdTPAction, ClickActionHdl ) );
@@ -150,7 +144,7 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
     aEdtDocument.SetLoseFocusHdl( LINK( this, SdTPAction, CheckFileHdl ) );
     aEdtMacro.SetLoseFocusHdl( LINK( this, SdTPAction, CheckFileHdl ) );
 
-    // Controls enablen
+    // enable controls
     aFtAction.Show();
     aLbAction.Show();
 
@@ -169,7 +163,7 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
 {
     mpView = pSdView;
 
-    // Holen der ColorTable und Fuellen der ListBox
+    // get ColorTable and fill ListBox
     ::sd::DrawDocShell* pDocSh = static_cast<const ::sd::View*>(mpView)->GetDocSh();
     if( pDocSh && pDocSh->GetViewShell() )
     {
@@ -180,7 +174,7 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
 
         SvxColorListItem aItem( *(const SvxColorListItem*)( pDocSh->GetItem( SID_COLOR_TABLE ) ) );
         pColList = aItem.GetColorList();
-        DBG_ASSERT( pColList.is(), "Keine Farbtabelle vorhanden!" );
+        DBG_ASSERT( pColList.is(), "No color table available!" );
     }
     else
     {
@@ -192,7 +186,7 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
 
 void SdTPAction::Construct()
 {
-    // OLE-Actionlistbox auffuellen
+    // fill OLE-Actionlistbox
     SdrOle2Obj* pOleObj = NULL;
     SdrGrafObj* pGrafObj = NULL;
     sal_Bool        bOLEAction = sal_False;
@@ -271,7 +265,7 @@ void SdTPAction::Construct()
     maCurrentActions.push_back( presentation::ClickAction_MACRO );
     maCurrentActions.push_back( presentation::ClickAction_STOPPRESENTATION );
 
-    // Action-Listbox fuellen
+    // fill Action-Listbox
     for (size_t nAction = 0, n = maCurrentActions.size(); nAction < n; nAction++)
     {
         sal_uInt16 nRId = GetClickActionSdResId( maCurrentActions[ nAction ] );
@@ -414,7 +408,7 @@ void SdTPAction::UpdateTree()
 
 void SdTPAction::OpenFileDialog()
 {
-    // Soundpreview nur fuer Interaktionen mit Sound
+    // Soundpreview only for interaction with sound
     presentation::ClickAction eCA = GetActualClickAction();
     sal_Bool bSound = ( eCA == presentation::ClickAction_SOUND );
     sal_Bool bPage = ( eCA == presentation::ClickAction_BOOKMARK );
@@ -424,7 +418,7 @@ void SdTPAction::OpenFileDialog()
 
     if( bPage )
     {
-        // Es wird in der TreeLB nach dem eingegebenen Objekt gesucht
+        // search in the TreeLB for the specified object
         aLbTree.SelectEntry( GetEditText() );
     }
     else
@@ -693,7 +687,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
 
     if( aFile != aLastFile )
     {
-        // Ueberpruefen, ob es eine gueltige Draw-Datei ist
+        // check if it is a valid draw file
         SfxMedium aMedium( aFile,
                     STREAM_READ | STREAM_NOCREATE );
 
@@ -701,10 +695,10 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
         {
             WaitObject aWait( GetParentDialog() );
 
-            // ist es eine Draw-Datei?
-            // mit READ oeffnen, sonst schreiben die Storages evtl. in die Datei!
+            // is it a draw file?
+            // open with READ, otherwise the Storages might write into the file!
             uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
-            DBG_ASSERT( xStorage.is(), "Kein Storage!" );
+            DBG_ASSERT( xStorage.is(), "No storage!" );
 
             uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
             if( xAccess.is() &&
@@ -906,7 +900,7 @@ sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
         case presentation::ClickAction_SOUND:            return STR_CLICK_ACTION_SOUND;
         case presentation::ClickAction_VERB:             return STR_CLICK_ACTION_VERB;
         case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
-        default: OSL_FAIL( "Keine StringResource fuer ClickAction vorhanden!" );
+        default: OSL_FAIL( "No StringResource for ClickAction available!" );
     }
     return( 0 );
 }

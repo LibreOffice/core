@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
-// z.Z. werden von Joe nur die u.a. Moeglichkeiten unterstuetzt
+// at the moment, Joe only supports the methods specified below
 #define ESCDIR_COUNT 5
 static sal_uInt16 aEscDirArray[] =
 {
@@ -58,12 +58,9 @@ static sal_uInt16 aEscDirArray[] =
 
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlGlueEscDir, SfxUInt16Item )
 
-/*************************************************************************
-|*
-|* Konstruktor fuer Klebepunkt-Autrittsrichtungs-Listbox
-|*
-\************************************************************************/
-
+/**
+ * Constructor for clue point escape direction Listbox
+ */
 GlueEscDirLB::GlueEscDirLB( Window* pParent, const Reference< XFrame >& rFrame ) :
         ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),
         m_xFrame( rFrame )
@@ -75,22 +72,13 @@ GlueEscDirLB::GlueEscDirLB( Window* pParent, const Reference< XFrame >& rFrame )
     Show();
 }
 
-/*************************************************************************
-|*
-|*  Dtor
-|*
-\************************************************************************/
-
 GlueEscDirLB::~GlueEscDirLB()
 {
 }
 
-/*************************************************************************
-|*
-|* Ermittelt die Austrittsrichtung und verschickt den entspr. Slot
-|*
-\************************************************************************/
-
+/**
+ * Determines the escape direction and sends the corresponding slot
+ */
 void GlueEscDirLB::Select()
 {
     sal_uInt16 nPos = GetSelectEntryPos();
@@ -109,12 +97,9 @@ void GlueEscDirLB::Select()
     }
 }
 
-/*************************************************************************
-|*
-|* Fuellen der Listbox mit Strings
-|*
-\************************************************************************/
-
+/**
+ * Fills the Listbox with strings
+ */
 void GlueEscDirLB::Fill()
 {
     InsertEntry( String( SdResId( STR_GLUE_ESCDIR_SMART ) ) );
@@ -133,24 +118,18 @@ void GlueEscDirLB::Fill()
     */
 }
 
-/*************************************************************************
-|*
-|* Konstruktor fuer Klebepunkt-Autrittsrichtungs-Toolbox-Control
-|*
-\************************************************************************/
-
+/**
+ * Constructor for glue point escape direction toolbox control
+ */
 SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
     sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-/*************************************************************************
-|*
-|* Stellt Status in der Listbox des Controllers dar
-|*
-\************************************************************************/
-
+/**
+ * Represents state in the listbox of the controller
+ */
 void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -195,12 +174,9 @@ Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
 }
 
 
-/*************************************************************************
-|*
-|* Liefert Position im Array fuer EscDir zurueck (Mapping fuer Listbox)
-|*
-\************************************************************************/
-
+/**
+ * Returns position in the array for EscDir (Mapping for Listbox)
+ */
 sal_uInt16 SdTbxCtlGlueEscDir::GetEscDirPos( sal_uInt16 nEscDir )
 {
     for( sal_uInt16 i = 0; i < ESCDIR_COUNT; i++ )

@@ -399,7 +399,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         change( pUndoGroup, mpDoc->GetMasterSdPage( 0, PK_HANDOUT ), aNewSettings );
     }
 
-    // Undo Gruppe dem Undo Manager uebergeben
+    // give the undo group to the undo manager
     mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(pUndoGroup);
 }
 
