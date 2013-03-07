@@ -43,12 +43,9 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 
-/*************************************************************************
-|*
-|* Dialog zum Bearbeiten von Feldbefehlen
-|*
-\************************************************************************/
-
+/**
+ * dialog to edit field commands
+ */
 SdModifyFieldDlg::SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) :
     ModalDialog ( pWindow, SdResId( DLG_FIELD_MODIFY ) ),
     aGrpType    ( this, SdResId( GRP_TYPE ) ),
@@ -71,13 +68,10 @@ SdModifyFieldDlg::SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInFiel
     FillControls();
 }
 
-/*************************************************************************
-|*
-|* Gibt das neue Feld zurueck, gehoert dem Caller.
-|* Liefert NULL, wenn sich nichts geaendert hat.
-|*
-\************************************************************************/
-
+/**
+ * Returns the new field, owned by caller.
+ * Returns NULL if nothing has changed.
+ */
 SvxFieldData* SdModifyFieldDlg::GetField()
 {
     SvxFieldData* pNewField = NULL;
@@ -184,8 +178,8 @@ void SdModifyFieldDlg::FillFormatList()
         const SvxDateField* pDateField = (const SvxDateField*) pField;
         SvxDateField aDateField( *pDateField );
 
-        //SVXDATEFORMAT_APPDEFAULT,     // Wird nicht benutzt
-        //SVXDATEFORMAT_SYSTEM,         // Wird nicht benutzt
+        //SVXDATEFORMAT_APPDEFAULT,     // not used
+        //SVXDATEFORMAT_SYSTEM,         // not used
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_SMALL ) ) );
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_BIG ) ) );
 
@@ -210,8 +204,8 @@ void SdModifyFieldDlg::FillFormatList()
         const SvxExtTimeField* pTimeField = (const SvxExtTimeField*) pField;
         SvxExtTimeField aTimeField( *pTimeField );
 
-        //SVXTIMEFORMAT_APPDEFAULT,     // Wird nicht benutzt
-        //SVXTIMEFORMAT_SYSTEM,         // Wird nicht benutzt
+        //SVXTIMEFORMAT_APPDEFAULT,     // not used
+        //SVXTIMEFORMAT_SYSTEM,         // not used
         aLbFormat.InsertEntry( String( SdResId( STR_STANDARD_NORMAL ) ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
