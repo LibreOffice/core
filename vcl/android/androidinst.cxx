@@ -167,7 +167,7 @@ void AndroidSalInstance::damaged(AndroidSalFrame */* frame */)
 void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
 {
     rRect = Rectangle( Point( 0, 0 ),
-                       Size( 1280, 750 ) );
+                       Size( viewWidth, viewHeight ) );
 }
 
 /*
