@@ -3079,7 +3079,7 @@ sal_Bool ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, sal_Bool bApi )
 
         sal_uInt16 nVisCount = 0;
         SCTAB nCount = pDoc->GetTableCount();
-        for (SCTAB i=0; i<nCount; i++)
+        for (SCTAB i=0; i<nCount && nVisCount<2; i++)
             if (pDoc->IsVisible(i))
                 ++nVisCount;
 
@@ -3093,7 +3093,11 @@ sal_Bool ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, sal_Bool bApi )
 
     pDoc->SetVisible( nTab, bVisible );
     if (bUndo)
-        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( &rDocShell, nTab, bVisible ) );
+    {
+        std::vector<SCTAB> undoTabs;
+        undoTabs.push_back(nTab);
+        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( &rDocShell, undoTabs, bVisible ) );
+    }
 
     //  Views updaten:
     if (!bVisible)

@@ -274,7 +274,7 @@ public:
                                         const String& rSource, sal_uLong nRefresh );
 
     void            ShowTable( const String& rName );
-    void            HideTable( SCTAB nTabNr );
+    void            HideTable( const ScMarkData& rMark );
 
     void            MakeScenario( const String& rName, const String& rComment,
                                     const Color& rColor, sal_uInt16 nFlags );

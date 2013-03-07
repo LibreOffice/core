@@ -2803,13 +2803,13 @@ void ScViewFunc::ShowTable( const String& rName )
     SCTAB nPos = 0;
     rtl::OUString aTabName;
     SCTAB nCount = pDoc->GetTableCount();
-    for (SCTAB i=0; i<nCount; i++)
+    for (SCTAB i=0; i<nCount && !bFound; i++)
     {
         pDoc->GetName( i, aTabName );
         if ( aTabName.equals(rName) )
         {
             nPos = i;
-            bFound = sal_True;
+            bFound = true;
         }
     }
 
@@ -2818,7 +2818,9 @@ void ScViewFunc::ShowTable( const String& rName )
         pDoc->SetVisible( nPos, sal_True );
         if (bUndo)
         {
-            pDocSh->GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( pDocSh, nPos, sal_True ) );
+            std::vector<SCTAB> undoTabs;
+            undoTabs.push_back(nPos);
+            pDocSh->GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( pDocSh, undoTabs, true ) );
         }
         SetTabNo( nPos, sal_True );
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
@@ -2830,31 +2832,48 @@ void ScViewFunc::ShowTable( const String& rName )
 
 //----------------------------------------------------------------------------
 
-void ScViewFunc::HideTable( SCTAB nTab )
+void ScViewFunc::HideTable( const ScMarkData& rMark )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
     sal_Bool bUndo(pDoc->IsUndoEnabled());
     SCTAB nVisible = 0;
-    SCTAB nCount = pDoc->GetTableCount();
-    for (SCTAB i=0; i<nCount; i++)
-    {
+    SCTAB nTabCount = pDoc->GetTableCount();
+
+    SCTAB nTabSelCount = rMark.GetSelectCount();
+
+    // check to make sure we won't hide all sheets. we need at least one visible at all times.
+    for ( SCTAB i=0; i < nTabCount && nVisible<nTabSelCount + 1; i++ )
         if (pDoc->IsVisible(i))
             ++nVisible;
-    }
 
-    if (nVisible > 1)
+    if (nVisible > nTabSelCount)
     {
-        pDoc->SetVisible( nTab, false );
+        SCTAB nTab;
+        ScMarkData::MarkedTabsType::const_iterator it;
+        std::vector<SCTAB> undoTabs;
+
+        ScMarkData::MarkedTabsType selectedTabs = rMark.GetSelectedTabs();
+        for (it=selectedTabs.begin(); it!=selectedTabs.end(); ++it)
+        {
+            nTab = *it;
+            if (pDoc->IsVisible( nTab ))
+            {
+                pDoc->SetVisible( nTab, false );
+                // Update views
+                pDocSh->Broadcast( ScTablesHint( SC_TAB_HIDDEN, nTab ) );
+                SetTabNo( nTab, true );
+                // Store for undo
+                if (bUndo)
+                    undoTabs.push_back(nTab);
+            }
+        }
         if (bUndo)
         {
-            pDocSh->GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( pDocSh, nTab, false ) );
+            pDocSh->GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( pDocSh, undoTabs, false ) );
         }
 
         //  Update views
-        pDocSh->Broadcast( ScTablesHint( SC_TAB_HIDDEN, nTab ) );
-
-        SetTabNo( nTab, sal_True );
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
         pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
         pDocSh->SetDocumentModified();

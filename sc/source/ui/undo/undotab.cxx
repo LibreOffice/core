@@ -1117,9 +1117,9 @@ sal_Bool ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, SCTAB nNewTab, sal_Bool bNewShow ) :
+ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, std::vector<SCTAB> newUndoTabs, sal_Bool bNewShow ) :
     ScSimpleUndo( pShell ),
-    nTab( nNewTab ),
+    undoTabs( newUndoTabs ),
     bShow( bNewShow )
 {
 }
@@ -1131,11 +1131,17 @@ ScUndoShowHideTab::~ScUndoShowHideTab()
 void ScUndoShowHideTab::DoChange( sal_Bool bShowP ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->SetVisible( nTab, bShowP );
-
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
-        pViewShell->SetTabNo(nTab,sal_True);
+
+    SCTAB nTab;
+
+    for (size_t i = 0; i < undoTabs.size(); ++i)
+    {
+        nTab = undoTabs[i];
+        pDoc->SetVisible( nTab, bShowP );
+        if (pViewShell)
+            pViewShell->SetTabNo(nTab,sal_True);
+    }
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     pDocShell->SetDocumentModified();
@@ -1166,7 +1172,7 @@ sal_Bool ScUndoShowHideTab::CanRepeat(SfxRepeatTarget& rTarget) const
 
 rtl::OUString ScUndoShowHideTab::GetComment() const
 {
-    sal_uInt16 nId = bShow ? STR_UNDO_SHOWTAB : STR_UNDO_HIDETAB;
+    sal_uInt16 nId = bShow ? STR_UNDO_SHOWTAB : STR_UNDO_HIDETABS;
     return ScGlobal::GetRscString( nId );
 }
 

@@ -381,7 +381,7 @@
 #define STR_MATRIXFRAGMENTERR       310
 
 #define STR_UNDO_SHOWTAB            311
-#define STR_UNDO_HIDETAB            312
+#define STR_UNDO_HIDETABS           312
 #define STR_UNDO_INSERTAREALINK     313
 
 #define STR_REIMPORT_AFTER_LOAD     314
