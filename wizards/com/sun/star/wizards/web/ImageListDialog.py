@@ -21,6 +21,7 @@ from ..ui.UnoDialog2 import UnoDialog2
 from ..ui.ImageList import ImageList
 from ..common.HelpIds import HelpIds
 from ..common.PropertyNames import PropertyNames
+from ..common.IRenderer import IRenderer
 
 from com.sun.star.awt import FontDescriptor
 from com.sun.star.awt.PushButtonType import OK, CANCEL, HELP, STANDARD
@@ -213,7 +214,7 @@ class ImageListDialog(UnoDialog2):
     "%TOTAL" with the respective values.
     @author rpiterman
     '''
-    class ARenderer(object):
+    class ARenderer(IRenderer):
 
         '''
         @param aTempalte a template for this renderer.
