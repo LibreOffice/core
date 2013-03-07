@@ -50,12 +50,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
-|*
-\************************************************************************/
-
+/**
+ * Constructor of tab dialog: append pages to the dialog
+ */
 OutlineBulletDlg::OutlineBulletDlg(
     ::Window* pParent,
     const SfxItemSet* pAttr,
@@ -75,7 +72,7 @@ OutlineBulletDlg::OutlineBulletDlg(
 
     sal_Bool bOutliner = sal_False;
 
-    // Sonderbehandlung wenn eine Title Objekt selektiert wurde
+    // special treatment if a title object is selected
     if( pView )
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -115,7 +112,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         if( pItem == NULL )
             pItem = (SvxNumBulletItem*) aInputSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
 
-        DBG_ASSERT( pItem, "Kein EE_PARA_NUMBULLET im Pool! [CL]" );
+        DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in Pool! [CL]" );
 
         aInputSet.Put(*pItem, EE_PARA_NUMBULLET);
     }
