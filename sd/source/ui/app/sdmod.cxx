@@ -65,12 +65,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
     SFX_STATUSBAR_REGISTRATION(SdResId(RID_DRAW_STATUSBAR));
 }
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
-
+// Ctor
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
 :   SfxModule( SfxApplication::CreateResManager("sd"), sal_False,
                   pFact1, pFact2, NULL ),
@@ -84,7 +79,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     bWaterCan(sal_False),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
-    SetName( rtl::OUString( "StarDraw" ) );  // Nicht uebersetzen!
+    SetName( rtl::OUString( "StarDraw" ) );  // Do not translate!
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
@@ -103,14 +98,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pDevice->SetReferenceDevice ( VirtualDevice::REFDEV_MODE06 );
 }
 
-
-
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
+// Dtor
 SdModule::~SdModule()
 {
     delete pSearchItem;
@@ -140,13 +128,7 @@ SdModule::~SdModule()
     delete static_cast< VirtualDevice* >( mpVirtualRefDevice );
 }
 
-
-/*************************************************************************
-|*
-|* get notifications
-|*
-\************************************************************************/
-
+/// get notifications
 void SdModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if( rHint.ISA( SfxSimpleHint ) &&
@@ -157,12 +139,7 @@ void SdModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-/*************************************************************************
-|*
-|* Optionen zurueckgeben
-|*
-\************************************************************************/
-
+/// Return options
 SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
 {
     SdOptions* pOptions = NULL;
@@ -197,14 +174,11 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     return(pOptions);
 }
 
-/*************************************************************************
-|*
-|* Optionen-Stream fuer interne Options oeffnen und zurueckgeben;
-|* falls der Stream zum Lesen geoeffnet wird, aber noch nicht
-|* angelegt wurde, wird ein 'leeres' RefObject zurueckgegeben
-|*
-\************************************************************************/
-
+/**
+ * Open and return option stream for internal options;
+ * if the stream is opened for reading but does not exist, an 'empty'
+ * RefObject is returned
+ */
 SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
                                               SdOptionStreamMode eMode )
 {
@@ -256,8 +230,8 @@ OutputDevice* SdModule::GetVirtualRefDevice (void)
 }
 
 /** This method is deprecated and only an alias to
-    <member>GetVirtualRefDevice()</member>.  The given argument is ignored.
-*/
+ *   <member>GetVirtualRefDevice()</member>.  The given argument is ignored.
+ */
 OutputDevice* SdModule::GetRefDevice (::sd::DrawDocShell& )
 {
     return GetVirtualRefDevice();
