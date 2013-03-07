@@ -113,6 +113,7 @@ public:
     void testN779642();
     void testFdo53985();
     void testFdo59638();
+    void testFdo61343();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -178,6 +179,7 @@ void Test::run()
         {"n779642.docx", &Test::testN779642},
         {"fdo53985.docx", &Test::testFdo53985},
         {"fdo59638.docx", &Test::testFdo59638},
+        {"fdo61343.docx", &Test::testFdo61343},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1119,6 +1121,15 @@ void Test::testFdo59638()
         }
     }
     CPPUNIT_FAIL("no BulletChar property");
+}
+
+void Test::testFdo61343()
+{
+    // The problem was that there were a groupshape in the doc, followed by an
+    // OLE object, and this lead to a crash.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
