@@ -654,7 +654,10 @@
 #define STR_CHG_CHILD_ORGCONTENT    524
 #define STR_CHG_EMPTY               525
 
-#define STR_COUNT                   526
+#define STR_UNDO_HIDETABS           526
+#define STR_UNDO_SHOWTABS           527
+
+#define STR_COUNT                   528
 
 #endif
 

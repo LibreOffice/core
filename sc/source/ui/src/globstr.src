@@ -1141,9 +1141,17 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Show Sheet" ;
     };
+    String STR_UNDO_SHOWTABS
+    {
+        Text [ en-US ] = "Show Sheets" ;
+    };
     String STR_UNDO_HIDETAB
     {
         Text [ en-US ] = "Hide sheet" ;
+    };
+    String STR_UNDO_HIDETABS
+    {
+        Text [ en-US ] = "Hide sheets" ;
     };
     String STR_UNDO_TAB_RTL
     {
