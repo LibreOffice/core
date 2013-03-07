@@ -18,6 +18,7 @@
 #
 
 URI_ENCODE="`dirname $0`/uri-encode"
+URI_ENCODE=`printf "%b" "$URI_ENCODE"`
 FOPTS=""
 sd_platform=`uname -s`
 
