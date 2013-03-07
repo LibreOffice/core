@@ -45,6 +45,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 
 #include <sfx2/objface.hxx>
@@ -170,6 +171,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_WEIGHT:
             case SID_ATTR_CHAR_POSTURE:
             {
+                sal_uInt16 stretchX = 100;
+                sal_uInt16 stretchY = 100;
                 SvxScriptSetItem aSetItem( nSlotId, GetPool() );
                 aSetItem.GetItemSet().Put( aAttrSet, sal_False );
 
@@ -180,12 +183,16 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     // input language should be preferred over
                     // current cursor position to detect script type
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+                    SdrOutliner *pOutliner = mpView->GetTextEditOutliner();
 
                     if (mpView->ISA(OutlineView))
                     {
                         pOLV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
                             mpViewShell->GetActiveWindow());
                     }
+
+                    if( pOutliner )
+                        pOutliner->GetGlobalCharStretching( stretchX, stretchY );
 
                     if(pOLV && !pOLV->GetSelection().HasRange())
                     {
@@ -200,9 +207,22 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
-                    aAttrSet.Put( *pI, nWhich );
+                {
+                    if( nSlotId == SID_ATTR_CHAR_FONTHEIGHT )
+                    {
+                        SvxFontHeightItem aFontItem = *(dynamic_cast<const SvxFontHeightItem *>(pI));
+                        aFontItem.SetHeight(aFontItem.GetHeight(), stretchX, aFontItem.GetPropUnit());
+                        aAttrSet.Put( aFontItem, nWhich );
+                    }
+                    else
+                    {
+                        aAttrSet.Put( *pI, nWhich );
+                    }
+                }
                 else
+                {
                     aAttrSet.InvalidateItem( nWhich );
+                }
             }
             break;
 
