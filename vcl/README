@@ -1,38 +1,47 @@
 Visual Components Library is responsible for the widgets (windowing, buttons, controls, file-pickers etc.) operating system abstraction, including basic rendering (e.g. the output device).
 
-Welcome to the Visual Class Libraries (vcl) code
-
 source/
 	+ the main cross-platform chunk of source
+
 inc/
-	+ cross-platform abstraction headers / definition
+	+ cross-platform abstraction headers
 	vcl/
-		+ external headers
+		+ public headers ("public" to the rest of LibreOffice, that is)
+
 generic/
-	+ shared helper code for backends,
-	  actually built into vcl
+	+ shared helper code for *some* of the backends, actually built into vcl.
+
 headless/
 	+ a backend renderer that draws to bitmaps
+
+android/
+	+ Android backend (work in progress, does work to some extent)
+
 aqua/
-	+ OS/X backend
+	+ OS X backend
+
 ios/
-	+ skeleton Android backend
+	+ iOS backend (work in progres, does not work, needs re-think
+	and re-write)
+
 win/
-	+ windows backend
+	+ Windows backend
+
 unx/
-	+ unix specific platform backend code and its' sub-platforms
+	+ X11 backend and its sub-platforms
+
 	plugadapt/
 		+ pluggable framework to select correct unx backend
 	gtk/
-		+ gtk2 support
+		+ GTK2 support
 	gtk3/
-		+ gtk3.2+ support
+		+ GTK3.2+ support
 	kde/
-		+ kde3 support
+		+ KDE3 support
 	kde4/
-		+ kde4 support
+		+ KDE4 support
 	generic/
-		+ raw X support
+		+ raw X11 support
 
 
 How the platform abstraction works
@@ -48,6 +57,7 @@ How the platform abstraction works
 		  Timers, the SolarMutexe, Drag&Drop and other
 		  objects, as well as the primary event loop wrapper.
 
-Note: references to "SV" in the code are in relation to StarView, which is a
-portable C++ class library for GUIs, with very old roots, that was developed
-by StarDivision.
+Note: references to "SV" in the code mean StarView, which was a
+portable C++ class library for GUIs, with very old roots, that was
+developed by StarDivision. Nowadays it is not used by anything except
+LibreOffice (and OpenOffice).
