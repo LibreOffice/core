@@ -73,31 +73,12 @@ private:
 
     OUString impl_getTypeFromFilter(const OUString& rFilterName);
 
-    /** @short      check if a filter or a type was preselected inside the given
-                    MediaDescriptor and validate this information.
-
-        @descr      Only in case the preselected filter exists and its type registration
-                    seems to be usefully, it would be used realy as valid type detection
-                    result. This method doesnt make any deep detection here. It checks only
-                    if the preselection match to the URL by an URLPattern.
-                    This information has to be added to the given rFlatTypes list too.
-                    The outside code can use it to supress a deep detection then in general.
-                    Because pattern are defined as non detectable at all!
-
-        @param      pDescriptor
-                    provides any easy-to-use stl interface to the MediaDescriptor.
-                    Note : Its content will be adapted to returned result of this method.
-                    Means: The type/filter entries of it will be actualized or removed.
-
-        @param      rFlatTypes
-                    the preselected type (or the registered type of a preselected filter)
-                    will be added here as first(!) element. Further we have to provide the
-                    information, if this type match to the given URL by its URLPattern
-                    registration.
+    /**
+     * Get all format types that we handle.
      */
-    void impl_getPreselection(const css::util::URL&                aParsedURL ,
-                                    ::comphelper::MediaDescriptor& rDescriptor,
-                                    FlatDetection&                 rFlatTypes );
+    void impl_getAllFormatTypes(
+        const com::sun::star::util::URL& aParsedURL, comphelper::MediaDescriptor& rDescriptor,
+        FlatDetection& rFlatTypes);
 
     //---------------------------------------
 

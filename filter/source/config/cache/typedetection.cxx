@@ -400,7 +400,7 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
     }
 
     FlatDetection lFlatTypes;
-    impl_getPreselection(aURL, stlDescriptor, lFlatTypes);
+    impl_getAllFormatTypes(aURL, stlDescriptor, lFlatTypes);
 
     aLock.clear();
     // <- SAFE ----------------------------------
@@ -790,7 +790,7 @@ OUString TypeDetection::impl_getTypeFromFilter(const OUString& rFilterName)
     return aType;
 }
 
-void TypeDetection::impl_getPreselection(
+void TypeDetection::impl_getAllFormatTypes(
     const util::URL& aParsedURL, comphelper::MediaDescriptor& rDescriptor, FlatDetection& rFlatTypes)
 {
     rFlatTypes.clear();
