@@ -1524,7 +1524,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
                 aSuggestedDir = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsDir" ) ), ::rtl::OUString() );
         }
 
-    aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsName" ) ), ::rtl::OUString() );
+        aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsName" ) ), ::rtl::OUString() );
         if ( aSuggestedName.isEmpty() )
             aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsName" ) ), ::rtl::OUString() );
 
