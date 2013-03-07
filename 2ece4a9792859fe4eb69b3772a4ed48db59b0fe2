@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH///3U\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000099
+      },
+      "writtenOn": "2013-03-07T08:40:09Z",
+      "side": 1,
+      "message": "public cmAuthorLst ?",
+      "revId": "2ece4a9792859fe4eb69b3772a4ed48db59b0fe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///3I\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000099
+      },
+      "writtenOn": "2013-03-07T08:40:09Z",
+      "side": 1,
+      "message": "When can probably combine this into setPoint() or something?\nIf this is not expected to be used separately, its preferable to combine this with the constructor.",
+      "revId": "2ece4a9792859fe4eb69b3772a4ed48db59b0fe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///3E\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000099
+      },
+      "writtenOn": "2013-03-07T08:40:09Z",
+      "side": 1,
+      "message": "We don\u0027t normally use underscores for method names ... something like setText() should be better?",
+      "revId": "2ece4a9792859fe4eb69b3772a4ed48db59b0fe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///3A\u003d",
+        "filename": "oox/inc/oox/ppt/comments.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000099
+      },
+      "writtenOn": "2013-03-07T08:40:09Z",
+      "side": 1,
+      "message": "There are probably date helpers - I am not remembering them, but can you see if you can reuse the date helpers rather than duplicate the functionality here?",
+      "revId": "2ece4a9792859fe4eb69b3772a4ed48db59b0fe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///28\u003d",
+        "filename": "oox/source/core/fragmenthandler2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000099
+      },
+      "writtenOn": "2013-03-07T08:40:09Z",
+      "side": 1,
+      "message": "this should normally be avoided. Can\u0027t you overload this method where you need?",
+      "revId": "2ece4a9792859fe4eb69b3772a4ed48db59b0fe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///24\u003d",
+        "filename": "oox/source/ppt/presentationfragmenthandler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000099
+      },
+      "writtenOn": "2013-03-07T08:40:09Z",
+      "side": 1,
+      "message": "No _tabs_ please.",
+      "revId": "2ece4a9792859fe4eb69b3772a4ed48db59b0fe2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
