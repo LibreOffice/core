@@ -126,8 +126,6 @@ namespace cppcanvas
                          const ::basegfx::B2DVector*                        pScaling,
                          const double*                                      pRotation )
         {
-            const ::Point aEmptyPoint;
-
             const bool bOffsetting( !rOffset.equalZero() );
             const bool bScaling( pScaling &&
                                  pScaling->getX() != 1.0 &&
