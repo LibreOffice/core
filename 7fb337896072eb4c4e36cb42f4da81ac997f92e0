@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH///2Y\u003d",
+        "filename": "sc/source/ui/inc/undotab.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-03-07T09:30:38Z",
+      "side": 1,
+      "message": "Pass by const reference here",
+      "revId": "7fb337896072eb4c4e36cb42f4da81ac997f92e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///2M\u003d",
+        "filename": "sc/source/ui/undo/undotab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-03-07T09:30:38Z",
+      "side": 1,
+      "message": "Pass as const reference.",
+      "revId": "7fb337896072eb4c4e36cb42f4da81ac997f92e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///2I\u003d",
+        "filename": "sc/source/ui/undo/undotab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-03-07T09:30:38Z",
+      "side": 1,
+      "message": "Why don\u0027t you use iterators here?\n\nSomething like \n\nfor(std::vector\u003cSCTAB\u003e::const_iterator itr \u003d undoTabs.begin(), itrEnd \u003d undoTabs.end(); itr !\u003d itrEnd; ++itr)\n{\n    pDoc-\u003eSetVisible( *itr, bShowP );\n...\n}",
+      "revId": "7fb337896072eb4c4e36cb42f4da81ac997f92e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///2A\u003d",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2846,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-03-07T09:30:38Z",
+      "side": 1,
+      "message": "using nVisible \u003c\u003d nTabSelCount seems more straight forward\n\nor as alternative an explicit check for \n\nif(nVisible \u003e nTabSelCount)\n   break;",
+      "revId": "7fb337896072eb4c4e36cb42f4da81ac997f92e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///18\u003d",
+        "filename": "sc/source/ui/view/viewfun2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2864,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2013-03-07T09:30:38Z",
+      "side": 1,
+      "message": "we might later switch to broadcasting all Hints at once to prevent updates of the UI",
+      "revId": "7fb337896072eb4c4e36cb42f4da81ac997f92e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
