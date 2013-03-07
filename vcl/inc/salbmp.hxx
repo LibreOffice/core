@@ -47,6 +47,8 @@ public:
     virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) = 0;
+    virtual bool            HasAlpha() const { return false; }
+    virtual void            SetHasAlpha( bool ) { }
     virtual void            Destroy() = 0;
     virtual Size            GetSize() const = 0;
     virtual sal_uInt16          GetBitCount() const = 0;

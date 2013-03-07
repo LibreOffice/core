@@ -42,6 +42,7 @@
 #include <unx/salbmp.h>
 #include <unx/salinst.h>
 #include <unx/x11/xlimits.hxx>
+#include "xrender_peer.hxx"
 
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/memcheck.h>
@@ -65,6 +66,7 @@ X11SalBitmap::X11SalBitmap()
     : mpDIB( NULL )
     , mpDDB( NULL )
     , mbGrey( false )
+    , mbHasAlpha( false )
 {
 }
 

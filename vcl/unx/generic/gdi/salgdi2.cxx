@@ -495,7 +495,10 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
         XChangeGC( pXDisp, aGC, nValues, &aNewVal );
     }
 
-    static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aDrawable, m_nXScreen, nDepth, *pPosAry, aGC );
+    if ( rSalBitmap.GetBitCount() == 32 && rSalBitmap.HasAlpha() )
+        drawAlphaBitmapOpt( *pPosAry, rSalBitmap, rSalBitmap, false );
+    else
+        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aDrawable, m_nXScreen, nDepth, *pPosAry, aGC );
 
     if( rSalBitmap.GetBitCount() == 1 )
         XChangeGC( pXDisp, aGC, nValues, &aOldVal );
@@ -623,10 +626,17 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
-    const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp )
+                                      const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp )
+{
+    return drawAlphaBitmapOpt( rTR, rSrcBitmap, rAlphaBmp );
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool X11SalGraphics::drawAlphaBitmapOpt( const SalTwoRect& rTR,
+                                         const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp, bool bUseAlphaBitmap )
 {
     // non 8-bit alpha not implemented yet
-    if( rAlphaBmp.GetBitCount() != 8 )
+    if( bUseAlphaBitmap && rAlphaBmp.GetBitCount() != 8 )
         return false;
 
     // horizontal mirroring not implemented yet
@@ -648,10 +658,12 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     const SalVisual& rSalVis = pSalDisp->GetVisual( m_nXScreen );
     Display* pXDisplay = pSalDisp->GetDisplay();
 
+    Picture aAlphaPic;
+    Pixmap aAlphaPM;
     // create source Picture
     int nDepth = m_pVDev ? m_pVDev->GetDepth() : rSalVis.GetDepth();
     const X11SalBitmap& rSrcX11Bmp = static_cast<const X11SalBitmap&>( rSrcBitmap );
-    ImplSalDDB* pSrcDDB = rSrcX11Bmp.ImplGetDDB( hDrawable_, m_nXScreen, nDepth, rTR );
+    ImplSalDDB* pSrcDDB = rSrcX11Bmp.ImplGetDDB( hDrawable_, m_nXScreen, bUseAlphaBitmap ? nDepth : 32, rTR );
     if( !pSrcDDB )
         return false;
 
@@ -659,7 +671,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     // we requested. E.g. mask pixmaps are always compatible with the drawable
     // TODO: find an appropriate picture format for these cases
     //       then remove the workaround below and the one for #i75531#
-    if( nDepth != pSrcDDB->ImplGetDepth() )
+    if( bUseAlphaBitmap && nDepth != pSrcDDB->ImplGetDepth() )
         return false;
 
     Pixmap aSrcPM = pSrcDDB->ImplGetPixmap();
@@ -670,81 +682,86 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     // TODO: use scoped picture
     Visual* pSrcXVisual = rSalVis.GetVisual();
     XRenderPeer& rPeer = XRenderPeer::GetInstance();
-    XRenderPictFormat* pSrcVisFmt = rPeer.FindVisualFormat( pSrcXVisual );
+    XRenderPictFormat* pSrcVisFmt = bUseAlphaBitmap ? rPeer.FindVisualFormat( pSrcXVisual ) : rPeer.FindStandardFormat( PictStandardARGB32 );
     if( !pSrcVisFmt )
         return false;
     Picture aSrcPic = rPeer.CreatePicture( aSrcPM, pSrcVisFmt, 0, NULL );
     if( !aSrcPic )
         return false;
 
-    // create alpha Picture
+    if ( bUseAlphaBitmap ) {
+        // create alpha Picture
 
-    // TODO: use SalX11Bitmap functionality and caching for the Alpha Pixmap
-    // problem is that they don't provide an 8bit Pixmap on a non-8bit display
-    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rAlphaBmp).AcquireBuffer( sal_True );
+        // TODO: use SalX11Bitmap functionality and caching for the Alpha Pixmap
+        // problem is that they don't provide an 8bit Pixmap on a non-8bit display
+        BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rAlphaBmp).AcquireBuffer( sal_True );
 
-    // an XImage needs its data top_down
-    // TODO: avoid wrongly oriented images in upper layers!
-    const int nImageSize = pAlphaBuffer->mnHeight * pAlphaBuffer->mnScanlineSize;
-    const char* pSrcBits = (char*)pAlphaBuffer->mpBits;
-    char* pAlphaBits = new char[ nImageSize ];
-    if( BMP_SCANLINE_ADJUSTMENT( pAlphaBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
-        memcpy( pAlphaBits, pSrcBits, nImageSize );
-    else
-    {
-        char* pDstBits = pAlphaBits + nImageSize;
-        const int nLineSize = pAlphaBuffer->mnScanlineSize;
-        for(; (pDstBits -= nLineSize) >= pAlphaBits; pSrcBits += nLineSize )
-            memcpy( pDstBits, pSrcBits, nLineSize );
+        // an XImage needs its data top_down
+        // TODO: avoid wrongly oriented images in upper layers!
+        const int nImageSize = pAlphaBuffer->mnHeight * pAlphaBuffer->mnScanlineSize;
+        const char* pSrcBits = (char*)pAlphaBuffer->mpBits;
+        char* pAlphaBits = new char[ nImageSize ];
+        if( BMP_SCANLINE_ADJUSTMENT( pAlphaBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
+            memcpy( pAlphaBits, pSrcBits, nImageSize );
+        else
+            {
+                char* pDstBits = pAlphaBits + nImageSize;
+                const int nLineSize = pAlphaBuffer->mnScanlineSize;
+                for(; (pDstBits -= nLineSize) >= pAlphaBits; pSrcBits += nLineSize )
+                    memcpy( pDstBits, pSrcBits, nLineSize );
+            }
+
+        // the alpha values need to be inverted for XRender
+        // TODO: make upper layers use standard alpha
+        long* pLDst = (long*)pAlphaBits;
+        for( int i = nImageSize/sizeof(long); --i >= 0; ++pLDst )
+            *pLDst = ~*pLDst;
+
+        char* pCDst = (char*)pLDst;
+        for( int i = nImageSize & (sizeof(long)-1); --i >= 0; ++pCDst )
+            *pCDst = ~*pCDst;
+
+        const XRenderPictFormat* pAlphaFormat = rPeer.GetStandardFormatA8();
+        XImage* pAlphaImg = XCreateImage( pXDisplay, pSrcXVisual, 8, ZPixmap, 0,
+                                          pAlphaBits, pAlphaBuffer->mnWidth, pAlphaBuffer->mnHeight,
+                                          pAlphaFormat->depth, pAlphaBuffer->mnScanlineSize );
+
+        aAlphaPM = limitXCreatePixmap( pXDisplay, hDrawable_,
+                                       rTR.mnDestWidth, rTR.mnDestHeight, 8 );
+
+        XGCValues aAlphaGCV;
+        aAlphaGCV.function = GXcopy;
+        GC aAlphaGC = XCreateGC( pXDisplay, aAlphaPM, GCFunction, &aAlphaGCV );
+        XPutImage( pXDisplay, aAlphaPM, aAlphaGC, pAlphaImg,
+                   rTR.mnSrcX, rTR.mnSrcY, 0, 0, rTR.mnDestWidth, rTR.mnDestHeight );
+        XFreeGC( pXDisplay, aAlphaGC );
+        XFree( pAlphaImg );
+        if( pAlphaBits != (char*)pAlphaBuffer->mpBits )
+            delete[] pAlphaBits;
+
+        const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, sal_True );
+
+        XRenderPictureAttributes aAttr;
+        aAttr.repeat = true;
+        aAlphaPic = rPeer.CreatePicture( aAlphaPM, pAlphaFormat, CPRepeat, &aAttr );
+        if( !aAlphaPic )
+            return false;
     }
-
-    // the alpha values need to be inverted for XRender
-    // TODO: make upper layers use standard alpha
-    long* pLDst = (long*)pAlphaBits;
-    for( int i = nImageSize/sizeof(long); --i >= 0; ++pLDst )
-        *pLDst = ~*pLDst;
-
-    char* pCDst = (char*)pLDst;
-    for( int i = nImageSize & (sizeof(long)-1); --i >= 0; ++pCDst )
-        *pCDst = ~*pCDst;
-
-    const XRenderPictFormat* pAlphaFormat = rPeer.GetStandardFormatA8();
-    XImage* pAlphaImg = XCreateImage( pXDisplay, pSrcXVisual, 8, ZPixmap, 0,
-        pAlphaBits, pAlphaBuffer->mnWidth, pAlphaBuffer->mnHeight,
-        pAlphaFormat->depth, pAlphaBuffer->mnScanlineSize );
-
-    Pixmap aAlphaPM = limitXCreatePixmap( pXDisplay, hDrawable_,
-        rTR.mnDestWidth, rTR.mnDestHeight, 8 );
-
-    XGCValues aAlphaGCV;
-    aAlphaGCV.function = GXcopy;
-    GC aAlphaGC = XCreateGC( pXDisplay, aAlphaPM, GCFunction, &aAlphaGCV );
-    XPutImage( pXDisplay, aAlphaPM, aAlphaGC, pAlphaImg,
-        rTR.mnSrcX, rTR.mnSrcY, 0, 0, rTR.mnDestWidth, rTR.mnDestHeight );
-    XFreeGC( pXDisplay, aAlphaGC );
-    XFree( pAlphaImg );
-    if( pAlphaBits != (char*)pAlphaBuffer->mpBits )
-        delete[] pAlphaBits;
-
-    const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, sal_True );
-
-    XRenderPictureAttributes aAttr;
-    aAttr.repeat = true;
-    Picture aAlphaPic = rPeer.CreatePicture( aAlphaPM, pAlphaFormat, CPRepeat, &aAttr );
-    if( !aAlphaPic )
-        return false;
 
     // set clipping
     if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
         rPeer.SetPictureClipRegion( aDstPic, mpClipRegion );
 
     // paint source * mask over destination picture
-    rPeer.CompositePicture( PictOpOver, aSrcPic, aAlphaPic, aDstPic,
-        rTR.mnSrcX, rTR.mnSrcY, 0, 0,
-        rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight );
+    rPeer.CompositePicture( PictOpOver, aSrcPic, bUseAlphaBitmap ? aAlphaPic : None, aDstPic,
+                            rTR.mnSrcX, rTR.mnSrcY, 0, 0,
+                            rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight );
 
-    rPeer.FreePicture( aAlphaPic );
-    XFreePixmap(pXDisplay, aAlphaPM);
+    if ( bUseAlphaBitmap )
+    {
+        rPeer.FreePicture( aAlphaPic );
+        XFreePixmap( pXDisplay, aAlphaPM);
+    }
     rPeer.FreePicture( aSrcPic );
     return true;
 }
