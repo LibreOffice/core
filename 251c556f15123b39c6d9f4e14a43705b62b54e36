@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///yU\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-07T16:53:40Z",
+      "side": 1,
+      "message": "its only the singular form of style (the s came from the German Dativ _des_ Styles)",
+      "parentUuid": "AAAAWH///zI\u003d",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH///6Y\u003d",
         "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
         "patchSetId": 1
