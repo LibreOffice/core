@@ -58,7 +58,7 @@ public:
     SfxStoringHelper();
 
     sal_Bool GUIStoreModel(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
                     const ::rtl::OUString& aSlotName,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence,
                     sal_Bool bPreselectPassword,

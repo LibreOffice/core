@@ -1324,7 +1324,7 @@ uno::Reference< ::com::sun::star::frame::XModuleManager2 > SfxStoringHelper::Get
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xModel,
+sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
                                             const ::rtl::OUString& aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             sal_Bool bPreselectPassword,
