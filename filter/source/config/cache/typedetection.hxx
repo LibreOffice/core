@@ -153,33 +153,6 @@ private:
 
     //---------------------------------------
 
-    /** @short      make a deep type detection only
-
-        @descr      It steps over all well known deep detection services
-                    and check her results. The first positive result will be
-                    used for return. Its more a "try and error" algorithm then
-                    a real type detection and will be used if a flat detection
-                    cant work realy ... e.g. if the extension of an URL is
-                    missing or wrong.
-
-        @param      rDescriptor
-                    provides any easy-to-use stl interface to the MediaDescriptor.
-                    Note : Its content will be adapted to returned result of this method.
-                    Means: The type/filter entries of it will be actualized or removed from it.
-
-        @param      rUsedDetectors
-                    It contains a list of names of all deep detection services,
-                    which was already used inside the method "impl_detectTypeFlatAndDeep()"!
-                    Such detectors must be ignored here!
-
-        @return     The internal name of a detected type.
-                    An empty value if detection failed.
-     */
-    ::rtl::OUString impl_detectTypeDeepOnly(      ::comphelper::MediaDescriptor& rDescriptor   ,
-                                            const OUStringList&                  rUsedDetectors);
-
-    //---------------------------------------
-
     /** @short      seek a might existing stream to position 0.
 
         @descr      This is an optinal action to be more robust
