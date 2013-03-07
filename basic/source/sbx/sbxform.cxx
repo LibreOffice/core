@@ -819,7 +819,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
         case '%':
             // maybe remove redundant 0s, e. g. 4.500e4 in 0.0##e-00
             ParseBack( sReturnStrg, sFormatStrg, i-1 );
-            sReturnStrg = sReturnStrg.append('%');
+            sReturnStrg.append('%');
             break;
         case 'e':
         case 'E':
