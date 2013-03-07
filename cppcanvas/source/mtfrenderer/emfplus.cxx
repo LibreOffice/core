@@ -714,7 +714,7 @@ namespace cppcanvas
             Graphic graphic;
 
 
-            void Read (SvMemoryStream &s, sal_Bool bUseWholeStream)
+            void Read (SvMemoryStream &s, sal_uInt32 dataSize, sal_Bool bUseWholeStream)
             {
                 sal_uInt32 header, unknown;
 
@@ -736,11 +736,11 @@ namespace cppcanvas
                     sal_Int32 mfType, mfSize;
 
                     s >> mfType >> mfSize;
-                    EMFP_DEBUG (printf ("EMF+\tmetafile type: %d dataSize: %d\n", mfType, mfSize));
+                    EMFP_DEBUG (printf ("EMF+\tmetafile type: %d dataSize: %d real size calculated from record dataSize: %d\n", mfType, mfSize, dataSize - 16));
 
                     GraphicFilter filter;
                     // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
-                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), bUseWholeStream ? s.remainingSize() : mfSize, STREAM_READ);
+                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), bUseWholeStream ? s.remainingSize() : dataSize - 16, STREAM_READ);
 
                     filter.ImportGraphic (graphic, String (), mfStream);
 
@@ -1090,7 +1090,7 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_Bool bUseWholeStream)
+        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, sal_Bool bUseWholeStream)
         {
             sal_uInt32 index;
 
@@ -1145,7 +1145,7 @@ namespace cppcanvas
                 {
                     EMFPImage *image;
                     aObjects [index] = image = new EMFPImage ();
-                    image->Read (rObjectStream, bUseWholeStream);
+                    image->Read (rObjectStream, dataSize, bUseWholeStream);
 
                     break;
                 }
@@ -1211,12 +1211,13 @@ namespace cppcanvas
                     if (mbMultipart) {
                         EMFP_DEBUG (printf ("EMF+ multipart record flags: %04hx\n", mMFlags));
                         mMStream.Seek (0);
-                        processObjectRecord (mMStream, mMFlags, sal_True);
+                        processObjectRecord (mMStream, mMFlags, dataSize, sal_True);
                     }
                     mbMultipart = false;
                 }
 
                 if (type != EmfPlusRecordTypeObject || !(flags & 0x8000))
+                {
                 switch (type) {
                 case EmfPlusRecordTypeHeader:
                     sal_uInt32 header, version;
@@ -1235,7 +1236,7 @@ namespace cppcanvas
                     EMFP_DEBUG (printf ("EMF+\talready used in svtools wmf/emf filter parser\n"));
                     break;
                 case EmfPlusRecordTypeObject:
-                    processObjectRecord (rMF, flags);
+                    processObjectRecord (rMF, flags, dataSize);
                     break;
                 case EmfPlusRecordTypeFillPie:
                     {
@@ -1476,6 +1477,9 @@ namespace cppcanvas
                                     ReadPoint (rMF, x2, y2, flags);
                                     ReadPoint (rMF, x3, y3, flags);
 
+                                    EMFP_DEBUG (printf ("EMF+ destination points: %f,%f %f,%f %f,%f\n", x1, y1, x2, y2, x3, y3));
+                                    EMFP_DEBUG (printf ("EMF+ destination rectangle: %f,%f %fx%f\n", x1, y1, x2 - x1, y3 - y1));
+
                                     aDstPoint = Map (x1, y1);
                                     aDstSize = MapSize(x2 - x1, y3 - y1);
 
@@ -1486,6 +1490,8 @@ namespace cppcanvas
 
                                 ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
 
+                                EMFP_DEBUG (printf ("EMF+ destination rectangle: %f,%f %fx%f\n", dx, dy, dw, dh));
+
                                 aDstPoint = Map (dx, dy);
                                 aDstSize = MapSize(dw, dh);
 
@@ -1494,12 +1500,9 @@ namespace cppcanvas
 
                             if (bValid) {
                                 BitmapEx aBmp( image.graphic.GetBitmapEx () );
-                                const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (basegfx::B2DPoint (sx, sy)),
-                                                           ::vcl::unotools::sizeFromB2DSize (basegfx::B2DSize(sw, sh)));
-                                aBmp.Crop( aCropRect );
-
 
                                 Size aSize( aBmp.GetSizePixel() );
+                                EMFP_DEBUG (printf ("EMF+ bitmap size: %ldx%ld\n", aSize.Width(), aSize.Height()));
                                 if( aSize.Width() > 0 && aSize.Height() > 0 ) {
                                     ActionSharedPtr pBmpAction (
                                         internal::BitmapActionFactory::createBitmapAction (
@@ -1759,6 +1762,7 @@ namespace cppcanvas
                 default:
                     EMFP_DEBUG (printf ("EMF+ unhandled record type: %d\n", type));
                     EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                }
                 }
 
                 rMF.Seek (next);
