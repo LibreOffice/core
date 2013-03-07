@@ -26,10 +26,10 @@
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/renderer.hxx>
 #include <tools/poly.hxx>
-#include <tools/gen.hxx>
 
 class VirtualDevice;
 class Point;
+class Size;
 class Color;
 class String;
 
