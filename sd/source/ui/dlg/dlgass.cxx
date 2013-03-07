@@ -292,7 +292,7 @@ public:
     String              maCreateStr;
     String              maOpenStr;
 
-    // Seite 1
+    // page 1
     FixedBitmap*        mpPage1FB;
     FixedLine*          mpPage1ArtFL;
     RadioButton*        mpPage1EmptyRB;
@@ -303,7 +303,7 @@ public:
     ListBox*            mpPage1OpenLB;
     PushButton*         mpPage1OpenPB;
 
-    // Seite 2
+    // page 2
     FixedBitmap*        mpPage2FB;
     FixedLine*          mpPage2LayoutFL;
     ListBox*            mpPage2RegionLB;
@@ -316,7 +316,7 @@ public:
     RadioButton*        mpPage2Medium5RB;
     RadioButton*        mpPage2Medium6RB;
 
-    // Seite 3
+    // page 3
     FixedBitmap*        mpPage3FB;
     FixedLine*          mpPage3EffectFL;
     FixedText*          mpPage3EffectFT;
@@ -332,7 +332,7 @@ public:
     TimeField*          mpPage3BreakTMF;
     CheckBox*           mpPage3LogoCB;
 
-    // Seite 4
+    // page 4
     FixedBitmap*        mpPage4FB;
     FixedLine*          mpPage4PersonalFL;
     FixedText*          mpPage4AskNameFT;
@@ -342,7 +342,7 @@ public:
     FixedText*          mpPage4AskInfoFT;
     MultiLineEdit*      mpPage4AskInfoEDT;
 
-    // Seite 5
+    // page 5
     FixedBitmap*        mpPage5FB;
     FixedText*          mpPage5PageListFT;
     SdPageListControl*  mpPage5PageListCT;
@@ -387,8 +387,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     else
         maAssistentFunc.InsertControl(1, &maStartWithFlag );
 
-    //page1 wird initialisiert und an die Assistentenfunktionalitaet
-    //uebergeben
+    // initialize page1 and give it to the assistant functionality
     maAssistentFunc.InsertControl(1, &maPreview );
     maAssistentFunc.InsertControl(1, &maPreviewFlag );
     maAssistentFunc.InsertControl(1,
@@ -457,7 +456,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage1OpenLB->SetDoubleClickHdl(rFinishLink);
     mpPage1OpenPB->SetClickHdl(LINK(this,AssistentDlgImpl,OpenButtonHdl));
 
-    // Seite 2
+    // page 2
     maAssistentFunc.InsertControl(2, &maPreview );
     maAssistentFunc.InsertControl(2, &maPreviewFlag );
     maAssistentFunc.InsertControl(2,
@@ -491,7 +490,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage2LayoutLB->SetStyle(mpPage2LayoutLB->GetStyle() | WB_SORT);
     mpPage2LayoutLB->InsertEntry(String(SdResId(STR_ISLOADING)));
 
-    // Seite 3
+    // page 3
     maAssistentFunc.InsertControl(3, &maPreview );
     maAssistentFunc.InsertControl(3, &maPreviewFlag );
     maAssistentFunc.InsertControl(3,
@@ -551,7 +550,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     pEditPage3PresTimeTMF->SetSelection( aSel1 );
     pEditPage3BreakTMF->SetSelection( aSel2 );
 
-    // Seite 4
+    // page 4
     maAssistentFunc.InsertControl(4,
         mpPage4FB = new FixedBitmap(pWindow,SdResId(FB_PAGE4)));
     maAssistentFunc.InsertControl(4,
@@ -588,7 +587,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage5PageListCT->SetSelectHdl(LINK(this,AssistentDlgImpl, PageSelectHdl));
 
 
-    // generell
+    // general
     InterpolateFixedBitmap( mpPage1FB );
     InterpolateFixedBitmap( mpPage2FB );
     InterpolateFixedBitmap( mpPage3FB );
@@ -602,7 +601,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     maPreviewFlag.SetClickHdl(LINK(this, AssistentDlgImpl, PreviewFlagHdl ));
     maPreview.SetClickHdl(LINK(this,AssistentDlgImpl, EffectPreviewHdl ));
 
-    //setzt die Ausgangsseite
+    // sets the exit page
     maAssistentFunc.GotoPage(1);
     maLastPageButton.Disable();
 
@@ -683,7 +682,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
         delete (*I);
     }
 
-    // Seite 1
+    // page 1
     delete mpPage1FB;
     delete mpPage1ArtFL;
     delete mpPage1EmptyRB;
@@ -694,7 +693,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage1OpenLB;
     delete mpPage1OpenPB;
 
-    // Seite 2
+    // page 2
     delete mpPage2FB;
     delete mpPage2LayoutFL;
     delete mpPage2RegionLB;
@@ -707,7 +706,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage2Medium5RB;
     delete mpPage2Medium6RB;
 
-    // Seite 3
+    // page 3
     delete mpPage3FB;
     delete mpPage3EffectFL;
     delete mpPage3EffectFT;
@@ -723,7 +722,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage3BreakTMF;
     delete mpPage3LogoCB;
 
-    // Seite 4
+    // page 4
     delete mpPage4FB;
     delete mpPage4PersonalFL;
     delete mpPage4AskNameFT;
@@ -733,7 +732,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete mpPage4AskInfoFT;
     delete mpPage4AskInfoEDT;
 
-    // Seite 5
+    // page 5
     delete mpPage5FB;
     delete mpPage5PageListFT;
     delete mpPage5PageListCT;
@@ -942,7 +941,7 @@ void AssistentDlgImpl::TemplateScanDone (
 
 
 // ********************************************************************
-// Status Methoden
+// state methods
 // ********************************************************************
 
 void AssistentDlgImpl::SetStartType( StartType eType )
@@ -1030,7 +1029,7 @@ String AssistentDlgImpl::GetLayoutFileName()
 
 SfxObjectShellLock AssistentDlgImpl::GetDocument()
 {
-    UpdatePreview(sal_False);   // aber komplett laden
+    UpdatePreview(sal_False);   // but load completely
     UpdatePageList();
 
     SfxObjectShell* pShell = xDocShell;
@@ -1069,9 +1068,9 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
             }
             else
             {
-                // diese Seite loeschen
-                pDoc->DeletePage( (nPgRelNum << 1) + 2 ); // Notizseite loeschen
-                pDoc->DeletePage( (nPgRelNum << 1) + 1 );   // Seite loeschen
+                // delete this page
+                pDoc->DeletePage( (nPgRelNum << 1) + 2 ); // delete not page
+                pDoc->DeletePage( (nPgRelNum << 1) + 1 ); // delete page
             }
 
             nPgAbsNum++;
@@ -1126,7 +1125,7 @@ void AssistentDlgImpl::UpdatePage()
     {
     case 1:
         {
-            // Elemente auf der ersten Seite abhaengig vom Starttype Zeigen
+            // Show elements on first page depending of start type
             SetStartType( GetStartType() );
             mpPage1TemplateRB->Enable(sal_True /*mbTemplatesReady*/);
             break;
@@ -1595,7 +1594,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
 
     if(bChangeMaster && (aLayoutFile != maDocFile))
     {
-        // Layoutvorlage laden
+        // load layout template
         SfxObjectShellLock xLayoutDocShell;
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
         SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
@@ -1616,7 +1615,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
 
         Application::SetDefDialogParent( pParent );
 
-        // die Implementierung ermitteln
+        // determine the implementation
         SfxObjectShell* pShell = xDocShell;
         DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
         SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
@@ -1841,7 +1840,7 @@ AssistentDlg::AssistentDlg(Window* pParent, sal_Bool bAutoPilot) :
     Link aFinishLink = LINK(this,AssistentDlg, FinishHdl);
     mpImpl = new AssistentDlgImpl( this, aFinishLink, bAutoPilot );
 
-    //Buttonbelegung
+    // button assigmnent
     mpImpl->maFinishButton.SetClickHdl(LINK(this,AssistentDlg,FinishHdl));
 
     FreeResource();
@@ -1877,7 +1876,7 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
         }
     }
 
-    //Ende
+    // end
     mpImpl->EndDialog(RET_OK);
     EndDialog(RET_OK);
     return 0;
