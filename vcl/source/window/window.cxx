@@ -4788,6 +4788,12 @@ void Window::Paint( const Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
+void Window::PostPaint()
+{
+}
+
+// -----------------------------------------------------------------------
+
 void Window::Draw( OutputDevice*, const Point&, const Size&, sal_uLong )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );

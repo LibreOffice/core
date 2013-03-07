@@ -590,6 +590,7 @@ public:
     virtual void        PrePaint();
     virtual void        Paint( const Rectangle& rRect );
 
+    virtual void        PostPaint();
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        Move();
     virtual void        Resize();
