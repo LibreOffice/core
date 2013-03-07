@@ -89,7 +89,7 @@ class MacroSnippet
     void LoadSourceFromFile( const OUString& sMacroFileURL )
     {
         OUString sSource;
-        printf("loadSource opening macro file %s\n", OUStringToOString( sMacroFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+        fprintf(stderr,"loadSource opening macro file %s\n", OUStringToOString( sMacroFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
         osl::File aFile(sMacroFileURL);
         if(osl::FileBase::E_None == aFile.open(osl_File_OpenFlag_Read))
@@ -119,7 +119,7 @@ class MacroSnippet
         SbxVariableRef pReturn = NULL;
         if ( !Compile() )
             return pReturn;
-        SbMethod* pMeth = mpMod ? static_cast<SbMethod*>(mpMod->Find( OUString("test"),  SbxCLASS_METHOD )) : NULL;
+        SbMethod* pMeth = mpMod ? static_cast<SbMethod*>(mpMod->Find( OUString("doUnitTest"),  SbxCLASS_METHOD )) : NULL;
         if ( pMeth )
         {
             if ( rArgs.getLength() )
@@ -179,7 +179,9 @@ class MacroSnippet
 
 IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/)
 {
-    fprintf(stderr,"Got error: \n\t%s!!!\n", OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    fprintf(stderr,"(%d:%d)\n",
+            StarBASIC::GetLine(), StarBASIC::GetCol1());
+    fprintf(stderr,"Basic error: %s\n", rtl::OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
     mbError = true;
     return 0;
 }
