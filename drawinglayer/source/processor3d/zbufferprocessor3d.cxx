@@ -56,7 +56,7 @@ namespace
             BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
             BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
 
-            if(pContent && pAlpha)
+            if (pContent && pAlpha)
             {
                 if(mnAntiAlialize)
                 {
@@ -117,10 +117,10 @@ namespace
                         }
                     }
                 }
-
-                aContent.ReleaseAccess(pContent);
-                aAlpha.ReleaseAccess(pAlpha);
             }
+
+            aAlpha.ReleaseAccess(pAlpha);
+            aContent.ReleaseAccess(pContent);
 
             aRetval = BitmapEx(aContent, aAlpha);
 
