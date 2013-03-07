@@ -215,6 +215,8 @@
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ImportFromFile"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:PhotoAlbumDialog"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:FormatMenu">
