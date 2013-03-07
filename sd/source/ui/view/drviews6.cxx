@@ -709,6 +709,15 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         }
         break;
 
+       case SID_PHOTOALBUM:
+       {
+                SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+                VclAbstractDialog* pDlg = pFact ? pFact->CreateSdPhotoAlbumDialog(GetActiveWindow()) : 0;
+                if (pDlg)
+                     pDlg->Execute();
+        }
+        break;
+
         default:
         {
             DBG_ASSERT( 0, "Slot ohne Funktion" );
