@@ -922,7 +922,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         aDialogFlags = SFXWB_EXPORT;
     }
 
-    sfx2::FileDialogHelper* pFileDlg = NULL;
+    boost::scoped_ptr<sfx2::FileDialogHelper> pFileDlg;
 
     ::rtl::OUString aDocServiceName = GetDocServiceName();
     DBG_ASSERT( !aDocServiceName.isEmpty(), "No document service for this module set!" );
@@ -941,13 +941,13 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")),
                                                         ::rtl::OUString() );
 
-            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ), rStandardDir, rBlackList );
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ), rStandardDir, rBlackList ));
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else
         {
             // This is the normal dialog
-            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList );
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList ));
         }
 
         if ( aDocServiceName == "com.sun.star.drawing.DrawingDocument" )
@@ -978,7 +978,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     else
     {
         // This is the normal dialog
-        pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList );
+        pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList ));
         pFileDlg->CreateMatcher( aDocServiceName );
     }
 
@@ -1066,7 +1066,6 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     String aStringTypeFN;
     if ( pFileDlg->Execute( pDialogParams, aStringTypeFN ) != ERRCODE_NONE )
     {
-        delete pFileDlg;
         throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
     }
 
@@ -1165,8 +1164,6 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             {}
         }
     }
-
-    delete pFileDlg;
 
     // merge in results of the dialog execution
     GetMediaDescr()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))] <<=
