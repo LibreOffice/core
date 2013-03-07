@@ -39,12 +39,9 @@
 
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxControl, TbxImageItem )
 
-/*************************************************************************
-|*
-|* Klasse fuer Toolbox
-|*
-\************************************************************************/
-
+/**
+ * Class for toolbox
+ */
 SdTbxControl::SdTbxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
@@ -59,13 +56,11 @@ SfxPopupWindowType SdTbxControl::GetPopupWindowType() const
     return( SFX_POPUPWINDOW_ONTIMEOUT );
 }
 
-/*************************************************************************
-|*
-|* Hier wird das Fenster erzeugt
-|* Lage der Toolbox mit GetToolBox() abfragbar
-|* rItemRect sind die Screen-Koordinaten
-|*
-\************************************************************************/
+/**
+ * We create the window here
+ * You can get the position of the toolbox with GetToolBox()
+ * rItemRect are screen coordinates
+ */
 
 SfxPopupWindow* SdTbxControl::CreatePopupWindow()
 {
@@ -140,8 +135,8 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
     if( eState == SFX_ITEM_AVAILABLE )
     {
         TbxImageItem* pItem = PTR_CAST( TbxImageItem, pState );
-        // Im StarDesktop kann jetzt auch ein anderes Item ankommen,
-        // das nicht ausgewertet werden darf
+        // StarDesktop can also receive another item,
+        // but it is not allowed to evaluate it
         if( pItem )
         {
             ToolBox& rTbx = GetToolBox();
@@ -160,7 +155,7 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
                                          hasBigImages()
                                        );
 
-                // !-Operator prueft, ob Image nicht vorhanden ist
+                // !-operator checks if image is not present
                 if( !!aImage )
                 {
                     rTbx.SetItemImage( GetId(), aImage );
