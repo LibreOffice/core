@@ -42,8 +42,6 @@
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, LOGTAG, __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, LOGTAG, __VA_ARGS__))
 
-static bool bHitIdle = false;
-
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
 
@@ -305,13 +303,15 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
 
     if (pBuffer && pWindow)
         ANativeWindow_unlockAndPost(pWindow);
-
-    mbQueueReDraw = false;
 }
 
 void AndroidSalInstance::damaged(AndroidSalFrame */* frame */)
 {
-    mbQueueReDraw = true;
+    // Call the Java layer to post an invalidate if necessary
+    // static public void org.libreoffice.experimental.desktop.Desktop.callbackDamaged();
+
+    if (m_nDesktopClass != 0 && m_nCallbackDamaged != 0)
+        m_pJNIEnv->CallStaticVoidMethod(m_nDesktopClass, m_nCallbackDamaged);
 }
 
 #if 0
@@ -583,8 +583,19 @@ extern "C" {
 
 AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
     : SvpSalInstance( pMutex )
-    , mbQueueReDraw( false )
 {
+    int res = (lo_get_javavm())->AttachCurrentThread(&m_pJNIEnv, NULL);
+    LOGI("AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
+
+    m_nDesktopClass = m_pJNIEnv->FindClass("org/libreoffice/experimental/desktop/Desktop");
+    if (m_nDesktopClass == 0)
+        LOGE("Could not find Desktop class");
+    else {
+        m_nCallbackDamaged = m_pJNIEnv->GetStaticMethodID(m_nDesktopClass, "callbackDamaged", "()V");
+        if (m_nCallbackDamaged == 0)
+            LOGE("Could not find the callbackDamaged method");
+    }
+
     LOGI("created Android Sal Instance thread: %d",
          (int)pthread_self());
 }
@@ -599,6 +610,8 @@ void AndroidSalInstance::Wakeup()
     LOGI("Wakeup alooper");
     LOGI("busted - no global looper");
 }
+
+#if 0
 
 void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
 {
@@ -654,6 +667,8 @@ void AndroidSalInstance::DoReleaseYield (int nTimeoutMS)
         AndroidSalInstance::getInstance()->RedrawWindows (mpApp->window);
 #endif
 }
+
+#endif
 
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
 {
@@ -847,9 +862,6 @@ Java_org_libreoffice_experimental_desktop_Desktop_renderVCL(JNIEnv *env,
                                                             jobject /* clazz */,
                                                             jobject bitmap)
 {
-    if (!bHitIdle)
-        return;
-
     AndroidBitmapInfo  info;
     void*              pixels;
     int                ret;

@@ -30,9 +30,7 @@
 #ifndef ANDROID_SALINST_H
 #define ANDROID_SALINST_H
 
-#include <EGL/egl.h>
-#include <GLES/gl.h>
-
+#include <jni.h>
 #include <android/input.h>
 #include <android/native_window.h>
 #include <headless/svpinst.hxx>
@@ -43,6 +41,17 @@ class AndroidSalInstance : public SvpSalInstance
 {
     void BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
                            const basebmp::BitmapDeviceSharedPtr& aDev);
+
+    // This JNIEnv is valid only in the thread where this
+    // AndroidSalInstance object is created, which is the "LO" thread
+    // in which soffice_main() runs
+    JNIEnv *m_pJNIEnv;
+
+    // The Desktop class
+    jclass m_nDesktopClass;
+
+    jmethodID m_nCallbackDamaged;
+
 public:
     AndroidSalInstance( SalYieldMutex *pMutex );
     virtual ~AndroidSalInstance();
@@ -66,9 +75,6 @@ public:
     SalFrame *getFocusFrame() const;
 
     void      damaged(AndroidSalFrame *frame);
-protected:
-    virtual void DoReleaseYield( int nTimeoutMS );
-    bool   mbQueueReDraw;
 };
 
 #endif // ANDROID_SALINST_H

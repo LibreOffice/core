@@ -41,10 +41,10 @@ public class Desktop
 {
     private static final String TAG = "LODesktop";
 
-    /* implementend by desktop */
-    private static native void spawnMain();
+    /* In desktop */
+    private static native void runMain();
 
-    /* implementend by vcl */
+    /* In vcl */
     public static native void renderVCL(Bitmap bitmap);
     public static native void setViewSize(int width, int height);
     public static native void key(char c);
@@ -69,6 +69,28 @@ public class Desktop
 
         Bootstrap.putenv("SAL_LOG=+WARN+INFO");
     }
+
+    // This sucks, we need to experiment and think, can an app process
+    // have several instances of this Activity active?
+    static BitmapView theView;
+
+    // This is called back from LO in the LO thread
+    static public void callbackDamaged()
+    {
+        synchronized (theView) {
+            if (!invalidatePosted)
+                theView.post(new Runnable() {
+                        @Override public void run() {
+                            synchronized (theView) {
+                                theView.invalidate();
+                                invalidatePosted = false;
+                            }
+                        }
+                    });
+            invalidatePosted = true;
+        }
+    }
+    static boolean invalidatePosted;
 
     @Override public void onCreate(Bundle savedInstanceState)
     {
@@ -111,9 +133,22 @@ public class Desktop
                 initBootstrapContext();
 
             Log.i(TAG, "onCreate - set content view");
-            setContentView(new BitmapView());
+            theView = new BitmapView();
+            setContentView(theView);
 
-            spawnMain();
+            // Start a Java thread to run soffice_main(). We don't
+            // want to start the thread from native code becauce
+            // native threads apparently have no Java class loaders in
+            // Android, or someghin. So for instance FindClass fails.
+
+            // See https://groups.google.com/group/android-ndk/msg/a0793f009e6e71f7?dmode=source
+            // .
+
+            new Thread(new Runnable() {
+                    @Override public void run() {
+                        runMain();
+                    }
+                }).start();
         }
         catch (Exception e) {
             e.printStackTrace(System.err);
@@ -199,9 +234,6 @@ public class Desktop
             canvas.drawBitmap(mBitmap, 0, 0, null);
             canvas.restore();
             renderedOnce = true;
-
-            // re-call ourselves a bit later ...
-            invalidate();
         }
 
         @Override public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -302,6 +334,7 @@ public class Desktop
             return true;
         }
     }
+
 }
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

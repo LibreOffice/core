@@ -91,27 +91,19 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 }
 
 #ifdef ANDROID
-class MainThread : public salhelper::Thread
-{
-public:
-    MainThread() : salhelper::Thread("vcl-mainloop") { launch(); }
-    virtual void execute()
-    {
-        int nRet;
-        do {
-            nRet = soffice_main();
-            LOGI("soffice_main returned %d", nRet );
-        } while (nRet == 81 || nRet == 79); // pretend to re-start.
-        exit (nRet);
-    }
-};
 
 extern "C" SAL_JNI_EXPORT void JNICALL
-Java_org_libreoffice_experimental_desktop_Desktop_spawnMain(JNIEnv* /* env */,
-                                                            jobject /* dummy */)
+Java_org_libreoffice_experimental_desktop_Desktop_runMain(JNIEnv* /* env */,
+                                                          jobject /* clazz */)
 {
-    new MainThread();
+    int nRet;
+    do {
+        nRet = soffice_main();
+        LOGI("soffice_main returned %d", nRet );
+    } while (nRet == 81 || nRet == 79); // pretend to re-start.
+
 }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
