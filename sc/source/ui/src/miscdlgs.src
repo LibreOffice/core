@@ -1399,56 +1399,6 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     Text [ en-US ] = "Create Names" ;
 };
 
-ModalDialog RID_SCDLG_NAMES_PASTE
-{
-    OutputSize = TRUE ;
-    HelpId = CMD_FID_INSERT_NAME ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 228 , 160 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE;
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 6, 140 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    PushButton BTN_PASTE
-    {
-        Pos = MAP_APPFONT ( 172 , 110 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [en-US] = "Paste";
-    };
-    PushButton BTN_PASTE_ALL
-    {
-        Pos = MAP_APPFONT ( 6 , 110 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [en-US] = "Paste All";
-    };
-    PushButton BTN_CLOSE
-    {
-        Pos = MAP_APPFONT ( 172 , 140 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        Text [en-US] = "Close";
-    };
-    Control CTRL_TABLE
-    {
-        Pos = MAP_APPFONT( 6, 6 );
-        Size = MAP_APPFONT( 210, 100 );
-        Border = TRUE;
-        DialogControl = TRUE;
-    };
-    FixedLine FL_DIV
-    {
-        Pos = MAP_APPFONT( 0, 132 );
-        Size = MAP_APPFONT( 228, 3 );
-    };
-    Text [ en-US ] = "Paste Names" ;
-};
-
 ModalDialog RID_SCDLG_CHARTCOLROW
 {
     HelpID = "sc:ModalDialog:RID_SCDLG_CHARTCOLROW";

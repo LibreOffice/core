@@ -82,12 +82,6 @@
 #define FL_SEP1         51
 #define FL_SEP2         52
 
-#define BTN_CLOSE       60
-#define BTN_PASTE       61
-#define BTN_PASTE_ALL   62
-#define CTRL_TABLE      63
-#define FL_DIV          64
-
 // Insert/Delete Sheet
 #define FT_DEST         1
 #define LB_DEST         2
