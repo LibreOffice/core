@@ -2748,7 +2748,7 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
             aStr     = OUString::number( n );
             aStr    += ImplGetLocaleDataWrapper().getTime100SecSep();
             if ( aNewTime.Get100Sec() < 10 )
-                aStr += '0';
+                aStr += "0";
             aStr += OUString::number( aNewTime.Get100Sec() );
         }
         else if ( mbDuration )
