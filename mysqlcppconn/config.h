@@ -18,7 +18,7 @@
 #include <inttypes.h>
 #endif
 
-#if !defined(HAVE_STDINT_H) && !defined(HAVE_INTTYPES_H) && !defined(_MSC_VER)
+#if !defined(HAVE_STDINT_H) && !defined(HAVE_INTTYPES_H)
 
 // if we do not have the standard C99 integer types, then define them based on the respective SAL types
 #if !defined(_SYS_TYPES_H)
