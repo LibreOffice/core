@@ -1410,6 +1410,7 @@ long ScrollBar::DoScroll( long nNewPos )
     if ( meScrollType != SCROLL_DONTKNOW )
         return 0;
 
+    SAL_INFO("vcl.scrollbar", "DoScroll(" << nNewPos << ")");
     meScrollType = SCROLL_DRAG;
     long nDelta = ImplScroll( nNewPos, sal_True );
     meScrollType = SCROLL_DONTKNOW;
