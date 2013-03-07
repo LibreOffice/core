@@ -37,7 +37,7 @@
 
 namespace codemaker { namespace cpp {
 
-rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias)
+OString scopedCppName(OString const & type, bool ns_alias)
 {
     char c('/');
     sal_Int32 nPos = type.lastIndexOf( c );
@@ -49,12 +49,11 @@ rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias)
         c = '.';
     }
 
-    rtl::OStringBuffer tmpBuf(type.getLength()*2);
+    OStringBuffer tmpBuf(type.getLength()*2);
     nPos = 0;
     do
     {
-        tmpBuf.append("::");
-        tmpBuf.append(type.getToken(0, c, nPos));
+        tmpBuf.append("::" + type.getToken(0, c, nPos));
     } while( nPos != -1 );
 
     rtl::OString s(tmpBuf.makeStringAndClear());
@@ -67,16 +66,16 @@ rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias)
 }
 
 
-rtl::OString translateUnoToCppType(
+OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    rtl::OString const & nucleus, bool shortname)
+    OString const & nucleus, bool shortname)
 {
     rtl::OStringBuffer buf;
     if (sort == codemaker::UnoType::SORT_COMPLEX) {
         if (typeClass == RT_TYPE_INTERFACE
             && nucleus == rtl::OString("com/sun/star/uno/XInterface"))
         {
-            buf.append(RTL_CONSTASCII_STRINGPARAM("::com::sun::star::uno::XInterface"));
+            buf.append("::com::sun::star::uno::XInterface");
         } else {
             //TODO: check that nucleus is a valid (UTF-8) identifier
             buf.append(nucleus);
@@ -303,10 +302,7 @@ rtl::OString translateUnoToCppIdentifier(
             || unoIdentifier == "NDEBUG"
             || (forbidden != 0 && unoIdentifier == *forbidden) )
     {
-        rtl::OStringBuffer buf(prefix);
-        buf.append('_');
-        buf.append(unoIdentifier);
-        return buf.makeStringAndClear();
+        return prefix + "_" + unoIdentifier;
     } else {
         return unoIdentifier;
     }

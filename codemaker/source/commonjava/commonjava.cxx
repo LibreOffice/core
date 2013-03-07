@@ -39,16 +39,15 @@
 
 namespace codemaker { namespace java {
 
-rtl::OString translateUnoToJavaType(
+OString translateUnoToJavaType(
     codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    rtl::OString const & nucleus, bool referenceType)
+    OString const & nucleus, bool referenceType)
 {
-    rtl::OStringBuffer buf;
+    OStringBuffer buf;
     if (sort == codemaker::UnoType::SORT_COMPLEX) {
-        if (typeClass == RT_TYPE_INTERFACE
-            && nucleus == rtl::OString("com/sun/star/uno/XInterface"))
+        if (typeClass == RT_TYPE_INTERFACE && nucleus == "com/sun/star/uno/XInterface")
         {
-            buf.append(RTL_CONSTASCII_STRINGPARAM("java/lang/Object"));
+            buf.append("java/lang/Object");
         } else {
             //TODO: check that nucleus is a valid (Java-modified UTF-8)
             // identifier
@@ -145,10 +144,7 @@ rtl::OString translateUnoToJavaIdentifier(
         || identifier == "volatile"
         || identifier == "while")
     {
-        rtl::OStringBuffer buf(prefix);
-        buf.append('_');
-        buf.append(identifier);
-        return buf.makeStringAndClear();
+        return prefix + "_" + identifier;
     } else {
         return identifier;
     }
