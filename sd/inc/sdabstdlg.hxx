@@ -213,6 +213,8 @@ public:
     virtual CreateTabPage               GetSdOptionsMiscTabPageCreatorFunc() = 0;
     virtual CreateTabPage               GetSdOptionsSnapTabPageCreatorFunc() = 0;
 
+    virtual VclAbstractDialog* CreateSdPhotoAlbumDialog( ::Window* pWindow, SdDrawDocument* pDoc) = 0;
+
 protected:
     ~SdAbstractDialogFactory() {}
 };
