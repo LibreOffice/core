@@ -40,11 +40,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Dialog zum aufbrechen von Metafiles
-|*
-\************************************************************************/
+/**
+ * dialog to split metafiles
+ */
 
 BreakDlg::BreakDlg(
     ::Window* pWindow,
@@ -68,7 +66,7 @@ BreakDlg::BreakDlg(
     mpProgress = new SfxProgress( pShell, String(SdResId(STR_BREAK_METAFILE)), nSumActionCount*3 );
 
     pProgrInfo = new SvdProgressInfo( &aLink );
-    // jede Action wird in DoImport() 3mal bearbeitet
+    // every action is editedt 3 times in DoImport()
     pProgrInfo->Init( nSumActionCount*3, nObjCount );
 
     pDrView = _pDrView;
@@ -86,7 +84,7 @@ BreakDlg::~BreakDlg()
         delete pProgrInfo;
 }
 
-// Control-Handler fuer den Abbruch Button
+// Control-Handler for cancel button
 IMPL_LINK_NOARG(BreakDlg, CancelButtonHdl)
 {
   bCancel = sal_True;
@@ -94,12 +92,12 @@ IMPL_LINK_NOARG(BreakDlg, CancelButtonHdl)
   return( 0L );
 }
 
-// Die UpDate Methode muss regelmaessig von der Arbeitsfunktion
-// ausgeuehrt werden.
-// Beim ersten aufruf wird die gesamtanzahl der actions uebergeben.
-// Jeder weitere sollte die bearbeiteten actions seit dem letzten aufruf von
-// UpDate erhalten.
-
+/**
+ * The working function has to call the UpDate method periodically.
+ * With the first call, the overall number of actions is provided.
+ * Every following call should contain the finished actions since the
+ * last call of UpDate.
+ */
 IMPL_LINK( BreakDlg, UpDate, void*, nInit )
 {
     String aEmptyStr;
@@ -107,7 +105,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     if(pProgrInfo == NULL)
       return 1L;
 
-    // Statuszeile updaten oder Fehlermeldung?
+    // update status bar or show a error message?
     if(nInit == (void*)1L)
     {
         ErrorBox aErrBox( this, WB_OK, String( SdResId( STR_BREAK_FAIL ) ) );
@@ -119,13 +117,13 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
             mpProgress->SetState( pProgrInfo->GetSumCurAction() );
     }
 
-    // Welches Oject wird gerade angezeigt?
+    // which object is shown at the moment?
     OUString info = OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetCurObj() ) )
             + "/"
             + OUString::valueOf( static_cast<sal_Int32>( pProgrInfo->GetObjCount() ) );
     aFiObjInfo.SetText(info);
 
-    // Wieviele Actions sind schon aufgebrochen?
+    // how many actions are started?
     if(pProgrInfo->GetActionCount() == 0)
     {
         aFiActInfo.SetText( aEmptyStr );
@@ -138,7 +136,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
         aFiActInfo.SetText(info);
     }
 
-    // Und erst eingefuegt????
+    // and inserted????
     if(pProgrInfo->GetInsertCount() == 0)
     {
         aFiInsInfo.SetText( aEmptyStr );
@@ -155,8 +153,10 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     return( bCancel?0L:1L );
 }
 
-// Oeffnet den Modalen Dialog und startet einen Timer der die Arbeitsfunktion
-// nach oeffnen des Dialogs ausfuehrt
+/**
+ * open a modal dialog and start a timer which calls the working function after
+ * the opening of the dialog
+ */
 short BreakDlg::Execute()
 {
   aTimer.SetTimeout( 10 );
@@ -166,7 +166,9 @@ short BreakDlg::Execute()
   return SfxModalDialog::Execute();
 }
 
-// Linkmethode welche die Arbeitsfunktion startet
+/**
+ * link-method which starts the working function
+ */
 IMPL_LINK_NOARG(BreakDlg, InitialUpdate)
 {
     pDrView->DoImportMarkedMtf(pProgrInfo);
