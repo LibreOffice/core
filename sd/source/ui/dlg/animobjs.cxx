@@ -49,10 +49,9 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-/*************************************************************************
-|*  SdDisplay - Control
-\************************************************************************/
-
+/**
+ *  SdDisplay - Control
+ */
 SdDisplay::SdDisplay( Window* pWin, SdResId Id ) :
         Control( pWin, Id ),
         aScale( 1, 1 )
@@ -123,10 +122,9 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-/*************************************************************************
-|*  AnimationWindow - FloatingWindow
-\************************************************************************/
-
+/**
+ *  AnimationWindow - FloatingWindow
+ */
 AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
                 SfxChildWindow *pCW, Window* pParent, const SdResId& rSdResId ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent, rSdResId ),
@@ -168,14 +166,14 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
     //undo SfxDockingWindow HelpId clear hack
     reverseUniqueHelpIdHack(*this);
 
-    // neues Dokument mit Seite erzeugen
+    // create new document with page
     pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
     SdPage* pPage = (SdPage*) pMyDoc->AllocPage(sal_False);
     pMyDoc->InsertPage(pPage);
 
     pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pBindings );
 
-    // Solange noch nicht in der Resource
+    // as long as not in the resource
     aTimeField.SetFormat( TIMEF_SEC_CS );
 
     aBtnFirst.SetClickHdl( LINK( this, AnimationWindow, ClickFirstHdl ) );
@@ -204,7 +202,7 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 
     ResetAttrs();
 
-    // der Animator ist leer; es kann keine Animationsgruppe erstellt werden
+    // the animator is empty; no animation group can be created
     aBtnCreateGroup.Disable();
 
     aBtnGetOneObject.SetAccessibleRelationMemberOf( &aGrpBitmap );
@@ -227,7 +225,7 @@ AnimationWindow::~AnimationWindow()
     m_FrameList.clear();
     m_nCurrentFrame = EMPTY_FRAMELIST;
 
-    // die Clones loeschen
+    // delete the clones
     delete pMyDoc;
 }
 
@@ -260,12 +258,12 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     size_t const nCount = m_FrameList.size();
     sal_Bool bReverse = p == &aBtnReverse;
 
-    // Kann spaeter schwer ermittelt werden
+    // it is difficult to find it later on
     sal_Bool bRbtGroupEnabled = aRbtGroup.IsEnabled();
     sal_Bool bBtnGetAllObjectsEnabled = aBtnGetAllObjects.IsEnabled();
     sal_Bool bBtnGetOneObjectEnabled = aBtnGetOneObject.IsEnabled();
 
-    // Gesamtzeit ermitteln
+    // calculate overall time
     Time aTime( 0 );
     long nFullTime;
     if( aRbtBitmap.IsChecked() )
@@ -282,14 +280,14 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
         aTime.MakeTimeFromMS( nFullTime );
     }
 
-    // StatusBarManager ab 1 Sekunde
+    // StatusBarManager from 1 second
     SfxProgress* pProgress = NULL;
     if( nFullTime >= 1000 )
     {
         bDisableCtrls = sal_True;
         aBtnStop.Enable();
         aBtnStop.Update();
-        rtl::OUString aStr("Animator:"); // Hier sollte man sich noch etwas gescheites ausdenken!
+        rtl::OUString aStr("Animator:"); // here we should think about something smart
         pProgress = new SfxProgress( NULL, aStr, nFullTime );
     }
 
@@ -349,7 +347,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
         }
     }
 
-    // Um die Controls wieder zu enablen
+    // to re-enable the controls
     bMovie = sal_False;
     if (nCount > 0)
     {
@@ -413,7 +411,7 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
 {
     bAllObjects = pBtn == &aBtnGetAllObjects;
 
-    // Code jetzt in AddObj()
+    // Code now in AddObj()
     SfxBoolItem aItem( SID_ANIMATOR_ADD, sal_True );
 
     GetBindings().GetDispatcher()->Execute(
@@ -435,12 +433,12 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
         m_FrameList.erase(m_FrameList.begin() + m_nCurrentFrame);
 
         pObject = pPage->GetObj(m_nCurrentFrame);
-        // Durch Uebernahme der AnimatedGIFs muessen nicht unbedingt
-        // Objekte vorhanden sein.
+        // Through acquisition of the AnimatedGIFs, objects does not need to
+        // exist.
         if( pObject )
         {
             pObject = pPage->RemoveObject(m_nCurrentFrame);
-            DBG_ASSERT(pObject, "Clone beim Loeschen nicht gefunden");
+            DBG_ASSERT(pObject, "Clone not found during deletion");
             SdrObject::Free( pObject );
             pPage->RecalcObjOrdNums();
         }
@@ -451,7 +449,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
             m_nCurrentFrame = EMPTY_FRAMELIST;
         }
     }
-    else // Alles loeschen
+    else // delete everything
     {
         WarningBox aWarnBox( this, WB_YES_NO, String( SdResId( STR_ASK_DELETE_ALL_PICTURES ) ) );
         short nReturn = aWarnBox.Execute();
@@ -468,7 +466,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
                 if( pObject )
                 {
                     pObject = pPage->RemoveObject( i );
-                    DBG_ASSERT(pObject, "Clone beim Loeschen nicht gefunden");
+                    DBG_ASSERT(pObject, "Clone not found during deletion");
                     SdrObject::Free( pObject );
                     //pPage->RecalcObjOrdNums();
                 }
@@ -480,16 +478,16 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
         }
     }
 
-    // kann noch eine Animationsgruppe erstellt werden?
+    // can we create a animation group
     if (m_FrameList.empty())
     {
         aBtnCreateGroup.Disable();
-        // Falls vorher durch Uebernahme von AnimatedGIFs disabled:
+        // if previous disabled by acquisition of AnimatedGIFs:
         //aRbtBitmap.Enable();
         aRbtGroup.Enable();
     }
 
-    // Zoom fuer DisplayWin berechnen und setzen
+    // calculate and set zoom for DisplayWin
     Fraction aFrac( GetScale() );
     aCtlDisplay.SetScale( aFrac );
 
@@ -502,7 +500,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 
 IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
 {
-    // Code jetzt in CreatePresObj()
+    // Code now in CreatePresObj()
     SfxBoolItem aItem( SID_ANIMATOR_CREATE, sal_True );
 
     GetBindings().GetDispatcher()->Execute(
@@ -590,7 +588,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     {
         aNumFldBitmap.SetValue(m_nCurrentFrame + 1);
 
-        // Wenn mind. 1 Objekt in der Liste ist
+        // if there is at least 1 object in the list
         aBtnFirst.Enable();
         aBtnReverse.Enable();
         aBtnPlay.Enable();
@@ -603,7 +601,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     }
     else
     {
-        // Wenn kein Objekt in der Liste ist
+        // if no object is in the list
         aBtnFirst.Enable( sal_False );
         aBtnReverse.Enable( sal_False );
         aBtnPlay.Enable( sal_False );
@@ -630,7 +628,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     }
     else
     {
-        // 'Gruppenobjekt' nur dann enablen, wenn es kein Animated GIF ist
+        // enable 'group object' only if it is not a Animated GIF
         if (m_FrameList.empty())
         {
             aRbtGroup.Enable();
@@ -712,13 +710,13 @@ void AnimationWindow::Resize()
     if ( !IsFloatingMode() ||
          !GetFloatingWindow()->IsRollUp() )
     {
-        Size aWinSize( GetOutputSizePixel() ); // vorher rSize im Resizing()
+        Size aWinSize( GetOutputSizePixel() ); // former rSize in Resizing()
 
         Size aDiffSize;
         aDiffSize.Width() = aWinSize.Width() - aSize.Width();
         aDiffSize.Height() = aWinSize.Height() - aSize.Height();
 
-        // Umgroessern des Display-Controls
+        // resize display controls
         aDisplaySize.Width() += aDiffSize.Width();
         aDisplaySize.Height() += aDiffSize.Height();
         aCtlDisplay.SetOutputSizePixel( aDisplaySize );
@@ -726,7 +724,7 @@ void AnimationWindow::Resize()
         Point aPt;
         aPt.Y() = aDiffSize.Height();
 
-        // Verschieben der anderen Controls
+        // move other controls
         aBtnFirst.Hide();
         aBtnReverse.Hide();
         aBtnStop.Hide();
@@ -772,7 +770,7 @@ void AnimationWindow::Resize()
         aGrpBitmap.SetPosPixel( aGrpBitmap.GetPosPixel() + aPt );
         aGrpAnimation.SetPosPixel( aGrpAnimation.GetPosPixel() + aPt );
 
-        // Zoom fuer DisplayWin berechnen und setzen
+        // calculate and set zoom for DisplayWin
         Fraction aFrac( GetScale() );
         aCtlDisplay.SetScale( aFrac );
 
@@ -837,12 +835,11 @@ void AnimationWindow::FillInfo( SfxChildWinInfo& rInfo ) const
 
 void AnimationWindow::AddObj (::sd::View& rView )
 {
-    // Texteingabemodus beenden, damit Bitmap mit
-    // Objekt identisch ist.
+    // finish text entry mode to ensure that bitmap is identical with object
     if( rView.IsTextEdit() )
         rView.SdrEndTextEdit();
 
-    // Objekt(e) clonen und den/die Clone(s) in die Liste stellen
+    // clone object(s) and insert the clone(s) into the list
     const SdrMarkList& rMarkList   = rView.GetMarkedObjectList();
     sal_uLong              nMarkCount  = rMarkList.GetMarkCount();
     SdPage*            pPage       = pMyDoc->GetSdPage(0, PK_STANDARD);
@@ -850,9 +847,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
     if (nMarkCount > 0)
     {
-        // Wenn es sich um EIN Animationsobjekt oder ein Gruppenobjekt
-        // handelt, das 'einzeln uebernommen' wurde,
-        // werden die einzelnen Objekte eingefuegt
+        // If it is ONE animation object or one group object, which was
+        // 'individually taken', we insert the objects separately
         sal_Bool bAnimObj = sal_False;
         if( nMarkCount == 1 )
         {
@@ -888,7 +884,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         {
                             long nLoopCount = aAnimation.GetLoopCount();
 
-                            if( !nLoopCount ) // unendlich
+                            if( !nLoopCount ) // endless
                                 aLbLoopCount.SelectEntryPos( aLbLoopCount.GetEntryCount() - 1);
                             else
                                 aLbLoopCount.SelectEntry(rtl::OUString::valueOf( nLoopCount ) );
@@ -903,7 +899,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         // increment => next one inserted after this one
                         ++m_nCurrentFrame;
                     }
-                    // Nachdem ein animated GIF uebernommen wurde, kann auch nur ein solches erstellt werden
+                    // if a animated GIF is taken, only such one can be created
                     aRbtBitmap.Check();
                     aRbtGroup.Enable( sal_False );
                     bAnimObj = sal_True;
@@ -911,7 +907,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
             }
             else if( bAllObjects || ( pAnimInfo && pAnimInfo->mbIsMovie ) )
             {
-                // Mehrere Objekte
+                // several objects
                 SdrObjList* pObjList = ((SdrObjGroup*)pObject)->GetSubList();
 
                 for( sal_uInt16 nObject = 0; nObject < pObjList->GetObjCount(); nObject++ )
@@ -937,7 +933,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 bAnimObj = sal_True;
             }
         }
-        // Auch ein einzelnes animiertes Objekt
+        // also one single animated object
         if( !bAnimObj && !( bAllObjects && nMarkCount > 1 ) )
         {
             BitmapEx *const pBitmapEx =
@@ -950,7 +946,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     ::std::make_pair(pBitmapEx, pTime));
         }
 
-        // ein einzelnes Objekt
+        // one single object
         if( nMarkCount == 1 && !bAnimObj )
         {
             SdrMark*    pMark   = rMarkList.GetMark(0);
@@ -958,10 +954,10 @@ void AnimationWindow::AddObj (::sd::View& rView )
             SdrObject*  pClone  = pObject->Clone();
             pPage->InsertObject(pClone, m_nCurrentFrame + 1);
         }
-        // mehrere Objekte: die Clones zu einer Gruppe zusammenfassen
+        // several objects: group the clones
         else if (nMarkCount > 1)
         {
-            // Objekte einzeln uebernehmen
+            // take objects seperately
             if( bAllObjects )
             {
                 for( sal_uLong nObject= 0; nObject < nMarkCount; nObject++ )
@@ -984,7 +980,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                     pPage->InsertObject(pObject->Clone(), m_nCurrentFrame);
                 }
-                bAnimObj = sal_True; // damit nicht nochmal weitergeschaltet wird
+                bAnimObj = sal_True; // that we don't change again
             }
             else
             {
@@ -1003,14 +999,14 @@ void AnimationWindow::AddObj (::sd::View& rView )
             ++m_nCurrentFrame;
         }
 
-        // wenn vorher nichts im Animator war und jetzt was da ist, kann eine
-        // Animationsgruppe erstellt werden
+        // if there was nothing in the animator before but now is something
+        // there, we can create a animation group
         if (nCloneCount == 0 && !m_FrameList.empty())
         {
             aBtnCreateGroup.Enable();
         }
 
-        // Zoom fuer DisplayWin berechnen und setzen
+        // calculate and set zoom for DisplayWin
         Fraction aFrac( GetScale() );
         aCtlDisplay.SetScale( aFrac );
 
@@ -1023,9 +1019,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
 void AnimationWindow::CreateAnimObj (::sd::View& rView )
 {
     ::Window* pOutWin = static_cast< ::Window*>(rView.GetFirstOutputDevice()); // GetWin( 0 );
-    DBG_ASSERT( pOutWin, "Window ist nicht vorhanden!" );
+    DBG_ASSERT( pOutWin, "Window does not exist!" );
 
-    // die Fentermitte ermitteln
+    // find window center
     const MapMode       aMap100( MAP_100TH_MM );
     Size                aMaxSizeLog;
     Size                aMaxSizePix;
@@ -1035,7 +1031,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     const size_t nCount = m_FrameList.size();
     BitmapAdjustment    eBA = (BitmapAdjustment) aLbAdjustment.GetSelectEntryPos();
 
-    // Groesste Bitmap ermitteln
+    // find biggest bitmap
     for (size_t i = 0; i < nCount; ++i)
     {
         const BitmapEx& rBmpEx = *m_FrameList[i].first;
@@ -1059,7 +1055,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
     if( aRbtBitmap.IsChecked() )
     {
-        // Bitmapgruppe erzeugen (Animated GIF)
+        // create bitmap group (Animated GIF)
         Animation   aAnimation;
         Point       aPt;
 
@@ -1071,7 +1067,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
             BitmapEx const*const pBitmapEx = m_FrameList[i].first;
 
-            // Offset fuer die gewuenschte Ausrichtung bestimmen
+            // calculate offset for the specified direction
             const Size aBitmapSize( pBitmapEx->GetSizePixel() );
 
             switch( eBA )
@@ -1117,12 +1113,12 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
             }
 
-            // LoopCount (Anzahl der Durchlaeufe) ermitteln
+            // find LoopCount (number of passes)
             AnimationBitmap aAnimBmp;
             long            nLoopCount = 0L;
             sal_uInt16          nPos = aLbLoopCount.GetSelectEntryPos();
 
-            if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != aLbLoopCount.GetEntryCount() - 1 ) // unendlich
+            if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != aLbLoopCount.GetEntryCount() - 1 ) // endless
                 nLoopCount = (long) aLbLoopCount.GetSelectEntry().ToInt32();
 
             aAnimBmp.aBmpEx = *pBitmapEx;
@@ -1145,7 +1141,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     }
     else
     {
-        // Offset fuer die gewuenschte Ausrichtung bestimmen
+        // calculate offset for the specified direction
         Size aOffset;
         SdrObject * pClone = NULL;
         SdPage* pPage = pMyDoc->GetSdPage(0, PK_STANDARD);
@@ -1197,34 +1193,34 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
                 break;
 
             }
-            // SetSnapRect ist fuer Ellipsen leider nicht implementiert !!!
+            // Unfortunately, SetSnapRect is not implemented for ellipses !!!
             Point aMovePt( aWindowCenter + Point( aOffset.Width(), aOffset.Height() ) - aRect.TopLeft() );
             Size aMoveSize( aMovePt.X(), aMovePt.Y() );
             pClone->NbcMove( aMoveSize );
         }
 
-        // Animationsgruppe erzeugen
+        // create animation group
         SdrObjGroup* pGroup   = new SdrObjGroup;
         SdrObjList*  pObjList = pGroup->GetSubList();
 
         for (size_t i = 0; i < nCount; i++)
         {
-            // der Clone verbleibt im Animator; in die Gruppe kommt ein Clone
-            // des Clones
+            // the clone remains in the animatior; we insert a clone of the
+            // clone into the group
             pClone = pPage->GetObj(i);
             SdrObject* pCloneOfClone = pClone->Clone();
             //SdrObject* pCloneOfClone = pPage->GetObj(i)->Clone();
             pObjList->InsertObject(pCloneOfClone, LIST_APPEND);
         }
 
-        // bis jetzt liegt die linke obere Ecke der Gruppe in der Fenstermitte;
-        // jetzt noch um die Haelfte der Groesse nach oben und links korrigieren
+        // until now the top left corner of the group is in the window center;
+        // correct the position by half of the size of the group
         aTemp = aMaxSizeLog;
         aTemp.Height() = - aTemp.Height() / 2;
         aTemp.Width()  = - aTemp.Width() / 2;
         pGroup->NbcMove(aTemp);
 
-        // Animationsinformation erzeugen
+        // create animation information
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pGroup,true);
         pInfo->meEffect = presentation::AnimationEffect_NONE;
         pInfo->meSpeed = presentation::AnimationSpeed_MEDIUM;
@@ -1248,12 +1244,9 @@ void AnimationWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-/*************************************************************************
-|*
-|* ControllerItem fuer Animator
-|*
-\************************************************************************/
-
+/**
+ * ControllerItem for Animator
+ */
 AnimationControllerItem::AnimationControllerItem(
     sal_uInt16 _nId,
     AnimationWindow* pAnimWin,
@@ -1271,7 +1264,7 @@ void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
     if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_ANIMATOR_STATE )
     {
         const SfxUInt16Item* pStateItem = PTR_CAST( SfxUInt16Item, pItem );
-        DBG_ASSERT( pStateItem, "SfxUInt16Item erwartet");
+        DBG_ASSERT( pStateItem, "SfxUInt16Item expected");
         sal_uInt16 nState = pStateItem->GetValue();
 
         pAnimationWin->aBtnGetOneObject.Enable( nState & 1 );
