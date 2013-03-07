@@ -54,18 +54,18 @@ namespace
 // tests the new behaviour, we should be able to
 // directly modify the value of the nested 'HorizontalLine' struct
 rtl::OUString sTestSource1(
-    "Function simpleNestStructAccess() as Integer\n"
+    "Function doUnitTest() as Integer\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "b0.HorizontalLine.OuterLineWidth = 9\n"
-    "simpleNestStructAccess = b0.HorizontalLine.OuterLineWidth\n"
+    "doUnitTest = b0.HorizontalLine.OuterLineWidth\n"
     "End Function\n"
 );
 
 rtl::OUString sTestSource1Alt(
-    "Function simpleNestStructAccess() as Object\n"
+    "Function doUnitTest() as Object\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "b0.HorizontalLine.OuterLineWidth = 9\n"
-    "simpleNestStructAccess = b0\n"
+    "doUnitTest = b0\n"
     "End Function\n"
 );
 
@@ -76,22 +76,22 @@ rtl::OUString sTestSource1Alt(
 // c) modifying the new instance
 // d) setting b0.HorizontalLine with the value of the new instance
 rtl::OUString sTestSource2(
-    "Function simpleRegressionTestOld()\n"
+    "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
     "b0.HorizontalLine = l\n"
-    "simpleRegressionTestOld = b0.HorizontalLine.OuterLineWidth\n"
+    "doUnitTest = b0.HorizontalLine.OuterLineWidth\n"
 "End Function\n"
 );
 
 rtl::OUString sTestSource2Alt(
-    "Function simpleRegressionTestOld()\n"
+    "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
     "b0.HorizontalLine = l\n"
-    "simpleRegressionTestOld = b0\n"
+    "doUnitTest = b0\n"
 "End Function\n"
 );
 // it should be legal to assign a variant to a struct ( and copy by val )
@@ -100,18 +100,18 @@ rtl::OUString sTestSource2Alt(
 // OuterLineWidth of 4 & 9 respectively and we should be returning
 // 13 the sum of the two ( hopefully unique values if we haven't copied by reference )
 rtl::OUString sTestSource3(
-    "Function testUnfixedVarAssign()\n"
+    "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
     "b0.HorizontalLine = l\n"
     "l.OuterLineWidth = 4\n"
-    "testUnfixedVarAssign = b0.HorizontalLine.OuterLineWidth + l.OuterLineWidth\n"
+    "doUnitTest = b0.HorizontalLine.OuterLineWidth + l.OuterLineWidth\n"
 "End Function\n"
 );
 
 rtl::OUString sTestSource3Alt(
-    "Function testUnfixedVarAssign()\n"
+    "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
@@ -120,25 +120,25 @@ rtl::OUString sTestSource3Alt(
     "Dim result(1)\n"
     "result(0) = b0\n"
     "result(1) = l\n"
-    "testUnfixedVarAssign = result\n"
+    "doUnitTest = result\n"
 "End Function\n"
 );
 
 // nearly the same as above but this time for a fixed type
 // variable
 rtl::OUString sTestSource4(
-    "Function testFixedVarAssign()\n"
+    "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
     "b0.HorizontalLine = l\n"
     "l.OuterLineWidth = 4\n"
-    "testFixedVarAssign = b0.HorizontalLine.OuterLineWidth + l.OuterLineWidth\n"
+    "doUnitTest = b0.HorizontalLine.OuterLineWidth + l.OuterLineWidth\n"
 "End Function\n"
 );
 
 rtl::OUString sTestSource4Alt(
-    "Function testFixedVarAssign()\n"
+    "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
     "l.OuterLineWidth = 9\n"
@@ -147,7 +147,7 @@ rtl::OUString sTestSource4Alt(
     "Dim result(1)\n"
     "result(0) = b0\n"
     "result(1) = l\n"
-    "testFixedVarAssign = result\n"
+    "doUnitTest = result\n"
 "End Function\n"
 );
 
@@ -157,49 +157,31 @@ rtl::OUString sTestSource4Alt(
 // We need to additionally check the actual uno struct to see if the
 // changes made are *really* reflected in the object
 rtl::OUString sTestSource5(
-    "Function testUnoAccess() as Object\n"
+    "Function doUnitTest() as Object\n"
     "Dim aWinDesc as new \"com.sun.star.awt.WindowDescriptor\"\n"
     "Dim aRect as new \"com.sun.star.awt.Rectangle\"\n"
     "aRect.X = 200\n"
     "aWinDesc.Bounds = aRect\n"
-    "testUnoAccess = aWinDesc\n"
+    "doUnitTest = aWinDesc\n"
 "End Function\n"
 );
 
 
 void Nested_Struct::testAssign1()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Nested_Struct, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestSource1 );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testAssign1 fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("simpleNestStructAccess"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testAssign1 no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
-    // forces a broadcast
-    SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
+    MacroSnippet myMacro( sTestSource1 );
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testAssign1 fails with compile error",!myMacro.HasError() );
+    SbxVariableRef pNew = myMacro.Run();
     CPPUNIT_ASSERT(pNew->GetInteger() == 9 );
 }
 
 void Nested_Struct::testAssign1Alt()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Nested_Struct, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestSource1Alt );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testAssign1Alt fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("simpleNestStructAccess"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testAssign1Alt no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
-    // forces a broadcast
-    SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
+    MacroSnippet myMacro( sTestSource1Alt );
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testAssign1Alt fails with compile error",!myMacro.HasError() );
+    SbxVariableRef pNew = myMacro.Run();
     uno::Any aRet = sbxToUnoValue( pNew );
     table::TableBorder aBorder;
     aRet >>= aBorder;
@@ -210,37 +192,19 @@ void Nested_Struct::testAssign1Alt()
 
 void Nested_Struct::testOldAssign()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Nested_Struct, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestSource2 );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testOldAssign fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("simpleRegressionTestOld"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testOldAssign no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
-    // forces a broadcast
-    SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
+    MacroSnippet myMacro( sTestSource2 );
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testOldAssign fails with compile error",!myMacro.HasError() );
+    SbxVariableRef pNew = myMacro.Run();
     CPPUNIT_ASSERT(pNew->GetInteger() == 9 );
 }
 
 void Nested_Struct::testOldAssignAlt()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Nested_Struct, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestSource2Alt );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testOldAssign fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("simpleRegressionTestOld"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testOldAssign no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
-    // forces a broadcast
-    SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
+    MacroSnippet myMacro( sTestSource2Alt );
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testOldAssign fails with compile error",!myMacro.HasError() );
+    SbxVariableRef pNew = myMacro.Run();
     uno::Any aRet = sbxToUnoValue( pNew );
     table::TableBorder aBorder;
     aRet >>= aBorder;
@@ -251,37 +215,20 @@ void Nested_Struct::testOldAssignAlt()
 
 void Nested_Struct::testUnfixedVarAssign()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Nested_Struct, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestSource3 );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testUnfixedVarAssign fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("testUnfixedVarAssign"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testUnfixedVarAssign no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
+    MacroSnippet myMacro( sTestSource3 );
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testUnfixedVarAssign fails with compile error",!myMacro.HasError() );
     // forces a broadcast
-    SbxVariableRef pNew = new SbxMethod( *((SbxMethod*)pMeth));
+    SbxVariableRef pNew = myMacro.Run();
     CPPUNIT_ASSERT(pNew->GetInteger() == 13 );
 }
 
 void Nested_Struct::testUnfixedVarAssignAlt()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Nested_Struct, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestSource3Alt );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testUnfixedVarAssignAlt fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("testUnfixedVarAssign"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testUnfixedVarAssignAlt no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
-    // forces a broadcast
-    SbxVariableRef pNew = new SbxMethod( *((SbxMethod*)pMeth));
+    MacroSnippet myMacro( sTestSource3Alt );
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testUnfixedVarAssignAlt fails with compile error",!myMacro.HasError() );
+    SbxVariableRef pNew = myMacro.Run();
     uno::Any aRet = sbxToUnoValue( pNew );
 
     uno::Sequence< uno::Any > aResult;
@@ -305,37 +252,19 @@ void Nested_Struct::testUnfixedVarAssignAlt()
 
 void Nested_Struct::testFixedVarAssign()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Nested_Struct, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestSource4 );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testFixedVarAssign fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("testFixedVarAssign"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testFixedVarAssign no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
-    // forces a broadcast
-    SbxVariableRef pNew = new SbxMethod( *((SbxMethod*)pMeth));
+    MacroSnippet myMacro( sTestSource4 );
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testFixedVarAssign fails with compile error",!myMacro.HasError() );
+    SbxVariableRef pNew = myMacro.Run();
     CPPUNIT_ASSERT(pNew->GetInteger() == 13 );
 }
 
 void Nested_Struct::testFixedVarAssignAlt()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Nested_Struct, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestSource4Alt );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testFixedVarAssignAlt fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("testFixedVarAssign"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testFixedVarAssignAlt no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
-    // forces a broadcast
-    SbxVariableRef pNew = new SbxMethod( *((SbxMethod*)pMeth));
+    MacroSnippet myMacro( sTestSource4Alt );
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testFixedVarAssignAlt fails with compile error",!myMacro.HasError() );
+    SbxVariableRef pNew = myMacro.Run();
     uno::Any aRet = sbxToUnoValue( pNew );
 
     uno::Sequence< uno::Any > aResult;
@@ -359,19 +288,10 @@ void Nested_Struct::testFixedVarAssignAlt()
 
 void Nested_Struct::testUnoAccess()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Nested_Struct, BasicErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestSource5 );
-    pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testUnoAccess fails with compile error",!HasError() );
-    SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("testUnoAccess"),  SbxCLASS_METHOD ));
-    CPPUNIT_ASSERT_MESSAGE("testUnoAccess no method found", pMeth );
-    SbxVariableRef refTemp = pMeth;
-    // forces a broadcast
-    SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
+    MacroSnippet myMacro( sTestSource5 );
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("testUnoAccess fails with compile error",!myMacro.HasError() );
+    SbxVariableRef pNew = myMacro.Run();
     uno::Any aRet = sbxToUnoValue( pNew );
     awt::WindowDescriptor aWinDesc;
     aRet >>= aWinDesc;

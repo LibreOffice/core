@@ -16,7 +16,7 @@
 namespace
 {
 
-class Coverage : public BasicTestBase
+class Coverage : public test::BootstrapFixture
 {
 private:
     bool m_bError;
@@ -31,8 +31,6 @@ private:
     void test_failed(void);
     void test_success(void);
     void print_summary() {};
-
-    DECL_LINK( CoverageErrorHdl, StarBASIC * );
 
 public:
     Coverage();
@@ -50,18 +48,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-IMPL_LINK( Coverage, CoverageErrorHdl, StarBASIC *, /*pBasic*/)
-{
-    fprintf(stderr,"%s:(%d:%d)\n",
-            rtl::OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr(),
-            StarBASIC::GetLine(), StarBASIC::GetCol1());
-    fprintf(stderr,"Basic error: %s\n", rtl::OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    m_bError = true;
-    return 0;
-}
-
 Coverage::Coverage()
-    : m_bError(false)
+    : BootstrapFixture(true, false)
+    , m_bError(false)
     , m_nb_tests(0)
     , m_nb_tests_ok(0)
     , m_nb_tests_skipped(0)
@@ -94,25 +83,14 @@ void Coverage::test_success()
 void Coverage::run_test(OUString /*sFileName*/, OUString sCode)
 {
     bool result = false;
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
-    StarBASICRef pBasic = new StarBASIC();
-    ResetError();
-    StarBASIC::SetGlobalErrorHdl( LINK( this, Coverage, CoverageErrorHdl ) );
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sCode );
-    pMod->Compile();
-    if(!m_bError)
+    MacroSnippet testMacro( sCode );
+    testMacro.Compile();
+    if( !testMacro.HasError() )
     {
-        SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("doUnitTest"),  SbxCLASS_METHOD ));
-        if(pMeth)
+        SbxVariableRef pResult = testMacro.Run();
+        if( pResult && pResult->GetInteger() == 1 )
         {
-            SbxVariableRef refTemp = pMeth;
-            // forces a broadcast
-            SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
-            if(pNew->GetInteger() == 1 )
-            {
-                result = true;
-            }
+            result = true;
         }
     }
     if(result)
