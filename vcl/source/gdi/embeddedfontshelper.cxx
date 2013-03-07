@@ -69,15 +69,22 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
     for(;;)
     {
         uno::Sequence< sal_Int8 > buffer;
-        int read = stream->readBytes( buffer, 1024 );
-        for( int pos = 0;
+        sal_uInt64 read = stream->readBytes( buffer, 1024 );
+        for( sal_uInt64 pos = 0;
              pos < read && keyPos < key.size();
              ++pos )
             buffer[ pos ] ^= key[ keyPos++ ];
-        sal_uInt64 dummy;
         if( read > 0 )
-            file.write( buffer.getConstArray(), read, dummy );
-        if( read < 1024 )
+        {
+            sal_uInt64 writtenTotal = 0;
+            while( writtenTotal < read )
+            {
+                sal_uInt64 written;
+                file.write( buffer.getConstArray(), read, written );
+                writtenTotal += written;
+            }
+        }
+        if( read <= 0 )
             break;
     }
     if( file.close() != osl::File::E_None )
