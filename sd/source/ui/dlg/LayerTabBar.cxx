@@ -47,12 +47,9 @@ namespace sd {
 #define SWITCH_TIMEOUT  20
 
 
-/*************************************************************************
-|*
-|* Standard-Konstruktor
-|*
-\************************************************************************/
-
+/**
+ * default constructor
+ */
 LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, Window* pParent)
     : TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_SIZEABLE ) ),
     DropTargetHelper( this ),
@@ -75,12 +72,6 @@ LayerTabBar::LayerTabBar (
 {
     EnableEditMode();
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 LayerTabBar::~LayerTabBar()
 {
@@ -110,7 +101,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else if (rMEvt.IsShift())
         {
-            // Toggle zw. Layer sichtbar / unsichtbar
+            // Toggle between layer visible / hidden
             String aName(GetPageText(aLayerId));
             SdrPageView* pPV = pDrViewSh->GetView()->GetSdrPageView();
             sal_Bool bVisible = pPV->IsLayerVisible(aName);
@@ -135,11 +126,9 @@ void LayerTabBar::DoubleClick()
 }
 
 
-/*************************************************************************
-|*
-|* AcceptDrop-Event
-|*
-\************************************************************************/
+/**
+ * AcceptDrop-Event
+ */
 
 sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
 {
@@ -163,12 +152,9 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-/*************************************************************************
-|*
-|* ExecuteDrop-Event
-|*
-\************************************************************************/
-
+/**
+ * ExecuteDrop-Event
+ */
 sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
@@ -205,7 +191,7 @@ long LayerTabBar::StartRenaming()
          aLayerName == aMeasureLinesLayer ||
          aLayerName == aBackgroundLayer   || aLayerName == aBackgroundObjLayer )
     {
-        // Diese Namen duerfen nicht veraendert werden
+        // It is not allowed to change this names
         bOK = sal_False;
     }
     else
@@ -225,7 +211,7 @@ long LayerTabBar::AllowRenaming()
 {
     sal_Bool bOK = sal_True;
 
-    // Ueberpruefung auf schon vorhandene Namen
+    // Check if names already exists
     ::sd::View* pView = pDrViewSh->GetView();
     SdDrawDocument& rDoc = pView->GetDoc();
     String aLayerName = pView->GetActiveLayer();
@@ -235,7 +221,7 @@ long LayerTabBar::AllowRenaming()
     if ( aNewName.Len() == 0 ||
         (rLayerAdmin.GetLayer( aNewName, sal_False ) && aLayerName != aNewName) )
     {
-        // Name ist schon vorhanden
+        // Name already exists
         WarningBox aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), WinBits( WB_OK ),
                                 String(SdResId( STR_WARN_NAME_DUPLICATE ) ) );
         aWarningBox.Execute();
@@ -254,7 +240,7 @@ long LayerTabBar::AllowRenaming()
              aNewName == aMeasureLinesLayer ||
              aNewName == aBackgroundLayer   || aNewName == aBackgroundObjLayer )
         {
-            // Diese Namen duerfen nicht vergeben werden
+            // It is not allowed to use his names
             bOK = sal_False;
         }
     }
@@ -301,9 +287,8 @@ void LayerTabBar::EndRenaming()
                 pManager->AddUndoAction( pAction );
             }
 
-            // Zuerst View benachrichtigen, da innerhalb von SetName() schon
-            // ResetActualLayer() gerufen wird und an der View der Layer dann
-            // schon bekannt sein muss.
+            // First notify View since SetName() calls ResetActualLayer() and
+            // the View then already has to know the Layer
             pView->SetActiveLayer(aNewName);
             pLayer->SetName(aNewName);
             rDoc.SetChanged(sal_True);
