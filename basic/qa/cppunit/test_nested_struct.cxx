@@ -19,10 +19,10 @@
 namespace
 {
     using namespace com::sun::star;
-    class Nested_Struct : public BasicTestBase
+    class Nested_Struct : public test::BootstrapFixture
     {
         public:
-        Nested_Struct() {};
+        Nested_Struct(): BootstrapFixture(true, false) {};
         void testAssign1();
         void testAssign1Alt(); // result is uno-ised and tested
         void testOldAssign();
