@@ -479,10 +479,10 @@ public:
     // getKernPairs method of PrinterGfx
     const std::list< KernPair >& getKernPairs( fontID nFontID, bool bVertical = false ) const;
 
-    // evaluates copyright flags for TrueType fonts
+    // evaluates copyright flags for TrueType fonts for printing/viewing
     // type1 fonts do not have such a feature, so return for them is true
     // returns true for builtin fonts (surprise!)
-    bool isFontDownloadingAllowed( fontID nFont ) const;
+    bool isFontDownloadingAllowedForPrinting( fontID nFont ) const;
 
     // helper for type 1 fonts
     std::list< rtl::OString > getAdobeNameFromUnicode( sal_Unicode aChar ) const;

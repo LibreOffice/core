@@ -2431,7 +2431,7 @@ const ::std::list< KernPair >& PrintFontManager::getKernPairs( fontID nFontID, b
 
 // -------------------------------------------------------------------------
 
-bool PrintFontManager::isFontDownloadingAllowed( fontID nFont ) const
+bool PrintFontManager::isFontDownloadingAllowedForPrinting( fontID nFont ) const
 {
     static const char* pEnable = getenv( "PSPRINT_ENABLE_TTF_COPYRIGHTAWARENESS" );
     bool bRet = true;
@@ -2458,10 +2458,10 @@ bool PrintFontManager::isFontDownloadingAllowed( fontID nFont ) const
 
             unsigned int nCopyrightFlags = pTTFontFile->m_nTypeFlags & TYPEFLAG_COPYRIGHT_MASK;
 
-            // font embedding is allowed if either
-            //   no restriction at all (bit 1 clear)
-            //   printing allowed (bit 1 set, bit 2 set )
-            bRet = ! ( nCopyrightFlags & 0x02 ) || ( nCopyrightFlags & 0x04 );
+            // http://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
+            // Font embedding is allowed if not restricted completely (only bit 1 set).
+            // Preview&Print (bit 2), Editable (bit 3) or Installable (==0) fonts are ok.
+            bRet = ( nCopyrightFlags & 0x02 ) != 0x02;
         }
     }
     return bRet;

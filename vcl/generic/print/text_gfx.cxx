@@ -169,7 +169,7 @@ void PrinterGfx::DrawGlyphs(
     if( nLen <= 0 )
         return;
 
-    if ( !mrFontMgr.isFontDownloadingAllowed( mnFontID ) )
+    if ( !mrFontMgr.isFontDownloadingAllowedForPrinting( mnFontID ) )
     {
         LicenseWarning(rPoint, pUnicodes, nLen, pDeltaArray);
         return;
@@ -569,7 +569,7 @@ PrinterGfx::drawText(
         PSUploadPS1Font (mnFontID);
 
     if (   eType == fonttype::TrueType
-        && !mrFontMgr.isFontDownloadingAllowed(mnFontID))
+        && !mrFontMgr.isFontDownloadingAllowedForPrinting(mnFontID))
     {
         LicenseWarning(rPoint, pStr, nLen, pDeltaArray);
         return;
