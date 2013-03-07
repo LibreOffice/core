@@ -50,6 +50,7 @@ public class Desktop
     public static native void key(char c);
     public static native void touch(int action, int x, int y);
     public static native void zoom(float scale, int x, int y);
+    public static native void scroll(int x, int y);
 
     /**
      * This class contains the state that is initialized once and never changes
@@ -165,7 +166,8 @@ public class Desktop
         GestureDetector gestureDetector;
         ScaleGestureDetector scaleDetector;
 
-        boolean scalingInProgress;
+        boolean scrollInProgress, scalingInProgress;
+        float translateX = 0, translateY = 0;
         float accumulatedScale = 1;
         float pivotX = 0, pivotY = 0;
 
@@ -179,14 +181,18 @@ public class Desktop
                                     new GestureDetector.SimpleOnGestureListener() {
                                         @Override public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
                                         {
-                                            Log.i(TAG, "onFling: events:" + e1 + ", " + e2 + ", velocity: (" + velocityX + ", " + velocityY + ")");
+                                            Log.i(TAG, "onFling: (" + velocityX + ", " + velocityY + ")");
                                             return false;
                                         }
 
-                                        @Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+                                        @Override public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
                                         {
-                                            Log.i(TAG, "onScroll: events:" + e1 + ", " + e2 + ", velocity: (" + velocityX + ", " + velocityY + ")");
-                                            return false;
+                                            Log.i(TAG, "onScroll: (" + distanceX + ", " + distanceY + ")");
+                                            translateX += -distanceX;
+                                            translateY += -distanceY;
+                                            scrollInProgress = true;
+                                            invalidate();
+                                            return true;
                                         }
                                     });
 
@@ -202,7 +208,7 @@ public class Desktop
 
                                              @Override public boolean onScale(ScaleGestureDetector detector)
                                              {
-                                                 accumulatedScale *= detector.getScaleFactor();;
+                                                 accumulatedScale *= detector.getScaleFactor();
                                                  pivotX = detector.getFocusX();
                                                  pivotY = detector.getFocusY();
                                                  invalidate();
@@ -229,10 +235,19 @@ public class Desktop
                 setViewSize(getWidth(), getHeight());
             }
             renderVCL(mBitmap);
-            canvas.save();
-            canvas.scale(accumulatedScale, accumulatedScale, pivotX, pivotY);
-            canvas.drawBitmap(mBitmap, 0, 0, null);
-            canvas.restore();
+            if (scrollInProgress) {
+                canvas.save();
+                canvas.translate(translateX, translateY);
+                canvas.drawBitmap(mBitmap, 0, 0, null);
+                canvas.restore();
+            } else if (scalingInProgress) {
+                canvas.save();
+                canvas.scale(accumulatedScale, accumulatedScale, pivotX, pivotY);
+                canvas.drawBitmap(mBitmap, 0, 0, null);
+                canvas.restore();
+            } else {
+                canvas.drawBitmap(mBitmap, 0, 0, null);
+            }
             renderedOnce = true;
         }
 
@@ -269,6 +284,19 @@ public class Desktop
         {
             if (gestureDetector.onTouchEvent(event))
                 return true;
+
+            // There is no callback in SimpleOnGestureListener for end
+            // of scroll. Is this a good way to detect it? Assume that
+            // as long as the scrolling gesture is in progress, the
+            // Gesturedetector.onTouchEvent() will keep returning
+            // true, so if scrollInProgress is true and we get here,
+            // the scroll must have ended.
+
+            if (scrollInProgress) {
+                Desktop.scroll((int) translateX, (int) translateY);
+                translateX = translateY = 0;
+                scrollInProgress = false;
+            }
 
             // If a scaling gesture is in progress no other touch
             // processing should be done.

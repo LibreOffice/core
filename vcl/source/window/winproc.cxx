@@ -2606,10 +2606,39 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             // Pass on the scale as a percentage of current zoom factor
             aSalWheelMouseEvent.mnDelta = (long) (pZoomEvent->GetScale() * 100);
 
+            // Other SalWheelMouseEvent fields ignored when the
+            // scaleDirectly parameter to ImplHandleWheelEvent() is
+            // true.
             nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent, true );
             }
             break;
         case SALEVENT_EXTERNALSCROLL:
+            {
+            ScrollEvent* pScrollEvent = (ScrollEvent*) pEvent;
+            SalWheelMouseEvent aSalWheelMouseEvent;
+
+            aSalWheelMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalWheelMouseEvent.mnX = 0; // ???
+            aSalWheelMouseEvent.mnY = 0;
+
+            aSalWheelMouseEvent.mbDeltaIsPixel = sal_False;
+
+            // First scroll vertically, then horizontally
+            aSalWheelMouseEvent.mnDelta = (long) pScrollEvent->GetYOffset();
+            if (aSalWheelMouseEvent.mnDelta != 0)
+            {
+                aSalWheelMouseEvent.mnCode = 0;
+                aSalWheelMouseEvent.mbHorz = sal_False;
+                nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
+            }
+            aSalWheelMouseEvent.mnDelta = (long) pScrollEvent->GetXOffset();
+            if (aSalWheelMouseEvent.mnDelta != 0)
+            {
+                aSalWheelMouseEvent.mnCode = 0;
+                aSalWheelMouseEvent.mbHorz = sal_True;
+                nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
+            }
+            }
             break;
 #ifdef DBG_UTIL
         default:

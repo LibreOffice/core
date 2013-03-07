@@ -554,4 +554,21 @@ Java_org_libreoffice_experimental_desktop_Desktop_zoom(JNIEnv * /* env */,
         LOGW("No focused frame to emit event on");
 }
 
+// public static native void scroll(int x, int y);
+extern "C" SAL_JNI_EXPORT void JNICALL
+Java_org_libreoffice_experimental_desktop_Desktop_scroll(JNIEnv * /* env */,
+                                                         jobject /* clazz */,
+                                                         jint x,
+                                                         jint y)
+{
+    SalFrame *pFocus = AndroidSalInstance::getInstance()->getFocusFrame();
+    if (pFocus) {
+        SAL_INFO( "vcl.androidinst", "scroll: " << "(" << x << "," << y << ")" );
+        ScrollEvent aEvent( x, y );
+        Application::PostScrollEvent(VCLEVENT_WINDOW_SCROLL, pFocus->GetWindow(), &aEvent);
+    }
+    else
+        LOGW("No focused frame to emit event on");
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

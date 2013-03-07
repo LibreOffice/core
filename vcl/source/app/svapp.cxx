@@ -912,6 +912,31 @@ sal_uLong Application::PostZoomEvent( sal_uLong nEvent, Window *pWin, ZoomEvent*
     return nEventId;
 }
 
+sal_uLong Application::PostScrollEvent( sal_uLong nEvent, Window *pWin, ScrollEvent* pScrollEvent )
+{
+    const SolarMutexGuard aGuard;
+    sal_uLong               nEventId = 0;
+
+    if( pWin && pScrollEvent )
+    {
+        ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, *pScrollEvent );
+
+        PostUserEvent( nEventId,
+                       STATIC_LINK( NULL, Application, PostEventHandler ),
+                       pPostEventData );
+
+        if( nEventId )
+        {
+            pPostEventData->mnEventId = nEventId;
+            aPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
+        }
+        else
+            delete pPostEventData;
+    }
+
+    return nEventId;
+}
+
 // -----------------------------------------------------------------------------
 
 IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
