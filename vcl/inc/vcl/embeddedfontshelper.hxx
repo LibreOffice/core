@@ -25,11 +25,18 @@
 class VCL_DLLPUBLIC EmbeddedFontsHelper
 {
 public:
+    /// Specification of what kind of operation is allowed when embedding a font
+    enum FontRights
+    {
+        ViewingAllowed, ///< Font may be embedded for viewing the document (but not editing)
+        EditingAllowed ///< Font may be embedded for editing document (implies viewing)
+    };
+
     /**
       Returns URL for a font file for the given font, or empty if it does not exist.
     */
     static OUString fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
-        FontWeight weight, FontPitch pitch, rtl_TextEncoding encoding );
+        FontWeight weight, FontPitch pitch, rtl_TextEncoding encoding, FontRights rights );
 
     /**
       Reads a font from the input stream, saves it to a temporary font file and activates the font.
@@ -60,6 +67,15 @@ public:
       @param fileUrl URL of the font file
     */
     static void activateFont( const OUString& fontName, const OUString& fileUrl );
+
+    /**
+      Returns if the restrictions specified in the font (if present) allow embedding
+      the font for a particular purpose.
+      @param data font data
+      @param size size of the font data
+      @param rights type of operation to be allowed for the font
+    */
+    static bool sufficientFontRights( const void* data, long size, FontRights rights );
 
     /**
       Removes all temporary fonts in the path used by fileUrlForTemporaryFont().

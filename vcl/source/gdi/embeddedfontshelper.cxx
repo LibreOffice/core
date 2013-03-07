@@ -66,6 +66,8 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
             return false;
     }
     size_t keyPos = 0;
+    std::vector< char > fontData;
+    fontData.reserve( 1000000 );
     for(;;)
     {
         uno::Sequence< sal_Int8 > buffer;
@@ -84,12 +86,22 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
                 writtenTotal += written;
             }
         }
+        fontData.insert( fontData.end(), buffer.getConstArray(), buffer.getConstArray() + read );
         if( read <= 0 )
             break;
     }
     if( file.close() != osl::File::E_None )
     {
         SAL_WARN( "vcl.fonts", "Writing temporary font file failed" );
+        osl::File::remove( fileUrl );
+        return false;
+    }
+    if( !sufficientFontRights( &fontData.front(), fontData.size(), EditingAllowed ))
+    {
+        // It would be actually better to open the document in read-only mode in this case,
+        // warn the user about this, and provide a button to drop the font(s) in order
+        // to switch to editing.
+        SAL_INFO( "vcl.fonts", "Ignoring embedded font that is not usable for editing" );
         osl::File::remove( fileUrl );
         return false;
     }
@@ -125,7 +137,7 @@ void EmbeddedFontsHelper::activateFont( const OUString& fontName, const OUString
 // to have a different meaning (guessing from code, IsSubsettable() might
 // possibly mean it's ttf, while IsEmbeddable() might mean it's type1).
 // So just try to open the data as ttf and see.
-static bool isEmbeddingAllowed( const void* data, long size )
+bool EmbeddedFontsHelper::sufficientFontRights( const void* data, long size, FontRights rights )
 {
     TrueTypeFont* font;
     if( OpenTTFontBuffer( data, size, 0 /*TODO*/, &font ) == SF_OK )
@@ -136,16 +148,22 @@ static bool isEmbeddingAllowed( const void* data, long size )
         // http://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
         // font embedding is allowed if either
         //   no restriction at all (bit 1 clear)
+        //   viewing allowed (bit 1 set, bit 2 set)
         //   editting allowed (bit 1 set, bit 3 set)
-        // (preview&print is considered insufficent, as it would force the document to be read-only)
         int copyright = info.typeFlags & TYPEFLAG_COPYRIGHT_MASK;
-        return ( copyright & 0x02 ) == 0 || ( copyright & 0x08 );
+        switch( rights )
+        {
+            case ViewingAllowed:
+                return ( copyright & 0x02 ) == 0 || ( copyright & 0x04 ) || ( copyright & 0x08 );
+            case EditingAllowed:
+                return ( copyright & 0x02 ) == 0 || ( copyright & 0x08 );
+        }
     }
     return true; // no known restriction
 }
 
 OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamily family, FontItalic italic,
-    FontWeight weight, FontPitch pitch, rtl_TextEncoding )
+    FontWeight weight, FontPitch pitch, rtl_TextEncoding, FontRights rights )
 {
     OUString path = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( path );
@@ -207,7 +225,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
         long size;
         if( const void* data = graphics->GetEmbedFontData( selected, unicodes, widths, info, &size ))
         {
-            if( isEmbeddingAllowed( data, size ))
+            if( sufficientFontRights( data, size, rights ))
             {
                 osl::File file( url );
                 if( file.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) == osl::File::E_None )

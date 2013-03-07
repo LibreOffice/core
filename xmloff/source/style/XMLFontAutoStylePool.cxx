@@ -282,8 +282,11 @@ void XMLFontAutoStylePool::exportXML()
                  j < SAL_N_ELEMENTS( weight );
                  ++j )
             {
+                // Embed font if at least viewing is allowed (in which case the opening app must check
+                // the font license rights too and open either read-only or not use the font for editing).
                 OUString fileUrl = EmbeddedFontsHelper::fontFileUrl( pEntry->GetFamilyName(), pEntry->GetFamily(),
-                    italic[ j ], weight[ j ], pEntry->GetPitch(), pEntry->GetEncoding());
+                    italic[ j ], weight[ j ], pEntry->GetPitch(), pEntry->GetEncoding(),
+                    EmbeddedFontsHelper::ViewingAllowed );
                 if( fileUrl.isEmpty())
                     continue;
                 if( !fontFilesMap.count( fileUrl ))
