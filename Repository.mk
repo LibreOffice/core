@@ -784,7 +784,7 @@ $(eval $(call gb_Helper_register_jars,OXT, \
 	EvolutionarySolver \
 	mediawiki \
 	nlpsolver \
-	sun-report-builder \
+	lo-report-builder \
 ))
 
 # External executables

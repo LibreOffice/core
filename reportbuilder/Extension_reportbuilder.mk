@@ -29,7 +29,7 @@ $(eval $(call gb_Extension_Extension,report-builder,reportbuilder/util))
 
 $(eval $(call gb_Extension_add_files,report-builder,,\
 	$(call gb_Jar_get_outdir_target,reportbuilderwizard) \
-	$(call gb_Jar_get_outdir_target,sun-report-builder) \
+	$(call gb_Jar_get_outdir_target,lo-report-builder) \
 	$(SRCDIR)/reportbuilder/license/readme_en-US.html \
 	$(SRCDIR)/reportbuilder/license/readme_en-US.txt \
 	$(SRCDIR)/reportbuilder/util/components.rdb \
