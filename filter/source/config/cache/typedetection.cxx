@@ -399,37 +399,8 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
             return stlDescriptor[comphelper::MediaDescriptor::PROP_TYPENAME()].get<rtl::OUString>();
     }
 
-    // preselected type or document service? use it as first "flat" detected
-    // type later!
     FlatDetection lFlatTypes;
     impl_getPreselection(aURL, stlDescriptor, lFlatTypes);
-
-    {
-        // Get all types that match the URL alone.
-        FlatDetection aFlatByURL;
-        m_rCache->detectFlatForURL(aURL, aFlatByURL);
-        FlatDetection::const_iterator it = aFlatByURL.begin(), itEnd = aFlatByURL.end();
-        for (; it != itEnd; ++it)
-        {
-            FlatDetection::iterator itPos = std::find_if(lFlatTypes.begin(), lFlatTypes.end(), FindByType(it->sType));
-            if (itPos == lFlatTypes.end())
-                // Not in the list yet.
-                lFlatTypes.push_back(*it);
-            else
-            {
-                // Already in the list. Update the flags.
-                FlatDetectionInfo& rInfo = *itPos;
-                const FlatDetectionInfo& rThisInfo = *it;
-                if (rThisInfo.bMatchByExtension)
-                    rInfo.bMatchByExtension = true;
-                if (rThisInfo.bMatchByPattern)
-                    rInfo.bMatchByPattern = true;
-                if (rThisInfo.bPreselectedByDocumentService)
-                    rInfo.bPreselectedByDocumentService = true;
-            }
-        }
-    }
-
 
     aLock.clear();
     // <- SAFE ----------------------------------
@@ -839,22 +810,7 @@ void TypeDetection::impl_getPreselection(
 {
     rFlatTypes.clear();
 
-    /* #i55122#
-        Sometimes we must detect files without or with real unknown extensions.
-        If it does not work /which can happen of course .-)/, the user tried to preselect
-        the right format. But some special dialogs (e.g. "Insert->Sheet From File")
-        add it's own preselection too.
-        So we have a combination of preselected values ...
-
-        The we should preferr the most important one - set by the user.
-        And the user normaly preselects a filter or type. The preslected
-        document service cames from the dialog.
-
-        Further it doesnt matter if the user preselected a filter or a document service.
-        A filter selection is always more explicit then a document service selection.
-        So it must be pereferred. An order between type and filter selection cant be discussed .-)
-    */
-
+    // Get all filters that we have.
     OUStringList aFilterNames;
     try
     {
@@ -867,6 +823,7 @@ void TypeDetection::impl_getPreselection(
         return;
     }
 
+    // Retrieve the default type for each of these filters, and store them.
     for (OUStringList::const_iterator it = aFilterNames.begin(); it != aFilterNames.end(); ++it)
     {
         OUString aType = impl_getTypeFromFilter(*it);
@@ -879,15 +836,43 @@ void TypeDetection::impl_getPreselection(
         rFlatTypes.push_back(aInfo);
     }
 
+    {
+        // Get all types that match the URL alone.
+        FlatDetection aFlatByURL;
+        m_rCache->detectFlatForURL(aParsedURL, aFlatByURL);
+        FlatDetection::const_iterator it = aFlatByURL.begin(), itEnd = aFlatByURL.end();
+        for (; it != itEnd; ++it)
+        {
+            FlatDetection::iterator itPos = std::find_if(rFlatTypes.begin(), rFlatTypes.end(), FindByType(it->sType));
+            if (itPos == rFlatTypes.end())
+                // Not in the list yet.
+                rFlatTypes.push_back(*it);
+            else
+            {
+                // Already in the list. Update the flags.
+                FlatDetectionInfo& rInfo = *itPos;
+                const FlatDetectionInfo& rThisInfo = *it;
+                if (rThisInfo.bMatchByExtension)
+                    rInfo.bMatchByExtension = true;
+                if (rThisInfo.bMatchByPattern)
+                    rInfo.bMatchByPattern = true;
+                if (rThisInfo.bPreselectedByDocumentService)
+                    rInfo.bPreselectedByDocumentService = true;
+            }
+        }
+    }
+
     // Remove duplicates.
     rFlatTypes.sort(SortByType());
     rFlatTypes.unique(EqualByType());
 
-    ::rtl::OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
+    // Mark pre-selected type (if any) to have it prioritized.
+    OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(comphelper::MediaDescriptor::PROP_TYPENAME(), OUString());
     if (!sSelectedType.isEmpty())
         impl_getPreselectionForType(sSelectedType, aParsedURL, rFlatTypes, false);
 
-    ::rtl::OUString sSelectedDoc = rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(), ::rtl::OUString());
+    // Mark all types preferred by the current document service, to have it prioritized.
+    OUString sSelectedDoc = rDescriptor.getUnpackedValueOrDefault(comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE(), OUString());
     if (!sSelectedDoc.isEmpty())
         impl_getPreselectionForDocumentService(sSelectedDoc, aParsedURL, rFlatTypes);
 }
