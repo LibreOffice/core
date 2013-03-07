@@ -354,6 +354,8 @@ void Dialog::ImplInitDialogData()
     mbOldSaveBack           = sal_False;
     mbInClose               = sal_False;
     mbModalMode             = sal_False;
+    mpContentArea           = NULL;
+    mpActionArea            = NULL;
     mbIsCalculatingInitialLayoutSize = false;
     mnMousePositioned       = 0;
     mpDialogImpl            = new DialogImpl;
@@ -559,12 +561,22 @@ WinBits Dialog::init(Window *pParent, const ResId& rResId)
 
 VclButtonBox* Dialog::get_action_area()
 {
-    return m_pUIBuilder ? m_pUIBuilder->get<VclButtonBox>("dialog-action_area1") : NULL;
+    return mpActionArea;
+}
+
+void Dialog::set_action_area(VclButtonBox* pActionArea)
+{
+    mpActionArea = pActionArea;
 }
 
 VclBox* Dialog::get_content_area()
 {
-    return m_pUIBuilder ? m_pUIBuilder->get<VclBox>("dialog-vbox1") : NULL;
+    return mpContentArea;
+}
+
+void Dialog::set_content_area(VclBox* pContentArea)
+{
+    mpContentArea = pContentArea;
 }
 
 // -----------------------------------------------------------------------

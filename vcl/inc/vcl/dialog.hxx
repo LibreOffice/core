@@ -54,6 +54,8 @@ private:
     bool            mbIsDefferedInit;
     bool            mbIsCalculatingInitialLayoutSize;
     Timer           maLayoutTimer;
+    VclButtonBox*   mpActionArea;
+    VclBox*         mpContentArea;
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -82,6 +84,11 @@ protected:
                     Dialog( WindowType nType );
                     Dialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
+
+protected:
+    friend class VclBuilder;
+    void set_action_area(VclButtonBox *pBox);
+    void set_content_area(VclBox *pBox);
 
 public:
                     Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );

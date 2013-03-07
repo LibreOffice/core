@@ -584,6 +584,7 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
     {
         m_pBox = new VclVBox(this, false, 7);
         m_pBox->set_expand(true);
+        set_content_area(m_pBox);
     }
 
     m_pTabCtrl = m_pUIBuilder ? m_pUIBuilder->get<TabControl>("tabcontrol") : NULL;
@@ -597,7 +598,10 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
     m_pActionArea = get_action_area();
     m_bOwnsActionArea = m_pActionArea == NULL;
     if (m_bOwnsActionArea)
+    {
         m_pActionArea = new VclHButtonBox(m_pBox);
+        set_action_area(m_pActionArea);
+    }
 
     m_pOKBtn = m_pUIBuilder ? m_pUIBuilder->get<OKButton>("ok") : NULL;
     m_bOwnsOKBtn = m_pOKBtn == NULL;

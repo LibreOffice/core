@@ -1448,11 +1448,10 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
 void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 {
     Window *pCurrentChild = NULL;
-    bool bIsInternalChild = false;
 
     xmlreader::Span name;
     int nsId;
-    OString sType;
+    OString sType, sInternalChild;
 
     while (reader.nextAttribute(&nsId, &name))
     {
@@ -1463,7 +1462,8 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
         }
         else if (name.equals("internal-child"))
         {
-            bIsInternalChild = true;
+            name = reader.getAttributeValue(false);
+            sInternalChild = OString(name.begin, name.length);
         }
     }
 
@@ -1491,7 +1491,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                 {
                     //Internal-children default in glade to not having their visible bits set
                     //even though they are visible (generally anyway)
-                    if (bIsInternalChild)
+                    if (!sInternalChild.isEmpty())
                         pCurrentChild->Show();
 
                     //Select the first page if its a notebook
@@ -1511,6 +1511,16 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                         {
                             if (VclFrame *pFrameParent = dynamic_cast<VclFrame*>(pParent))
                                 pFrameParent->designate_label(pCurrentChild);
+                        }
+                        if (sInternalChild.equals("vbox"))
+                        {
+                            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pParent))
+                                pBoxParent->set_content_area(static_cast<VclBox*>(pCurrentChild));
+                        }
+                        else if (sInternalChild.equals("action_area"))
+                        {
+                            if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pParent))
+                                pBoxParent->set_action_area(static_cast<VclButtonBox*>(pCurrentChild));
                         }
 
                         //To-Do make reorder a virtual in Window, move this foo
