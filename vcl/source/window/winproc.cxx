@@ -2621,12 +2621,30 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             aSalWheelMouseEvent.mnX = 0; // ???
             aSalWheelMouseEvent.mnY = 0;
 
-            aSalWheelMouseEvent.mbDeltaIsPixel = sal_False;
+            // Note that it seems that the delta-is-pixels thing is
+            // not actually implemented. The field is just passed on
+            // but its value never tested and has no effect?
+            aSalWheelMouseEvent.mbDeltaIsPixel = sal_True;
 
             // First scroll vertically, then horizontally
             aSalWheelMouseEvent.mnDelta = (long) pScrollEvent->GetYOffset();
+
+            // No way to figure out correct amount of "lines" to
+            // scroll, and for touch devices (for which this
+            // SALEVENBT_EXTERNALSCROLL was introduced) we don't even
+            // display the scroll bars. This means that the scroll
+            // bars (which still exist as objects, all the scrolling
+            // action goes through them) apparently use some dummy
+            // default values for range, line size and page size
+            // anyway, not related to actual contents of scrolled
+            // window. This all is very broken. I really wish the
+            // delta-is-pixels feature (which would be exactly what
+            // one wants for touch devices) would work.
+            aSalWheelMouseEvent.mnScrollLines = aSalWheelMouseEvent.mnDelta;
+
             if (aSalWheelMouseEvent.mnDelta != 0)
             {
+                aSalWheelMouseEvent.mnNotchDelta = (aSalWheelMouseEvent.mnDelta < 0) ? -1 : 1;
                 aSalWheelMouseEvent.mnCode = 0;
                 aSalWheelMouseEvent.mbHorz = sal_False;
                 nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
@@ -2634,6 +2652,7 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             aSalWheelMouseEvent.mnDelta = (long) pScrollEvent->GetXOffset();
             if (aSalWheelMouseEvent.mnDelta != 0)
             {
+                aSalWheelMouseEvent.mnNotchDelta = (aSalWheelMouseEvent.mnDelta < 0) ? -1 : 1;
                 aSalWheelMouseEvent.mnCode = 0;
                 aSalWheelMouseEvent.mbHorz = sal_True;
                 nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
