@@ -10,6 +10,7 @@
 $(eval $(call gb_UI_UI,desktop))
 
 $(eval $(call gb_UI_add_uifiles,desktop,\
+    desktop/uiconfig/ui/cmdlinehelp \
     desktop/uiconfig/ui/extensionmanager \
 ))
 

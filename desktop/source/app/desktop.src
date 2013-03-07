@@ -141,48 +141,6 @@ String STR_TITLE_USERDATALOCKED
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
-ModalDialog DLG_CMDLINEHELP
-{
-    HelpID = "desktop:ModalDialog:DLG_CMDLINEHELP";
-    Text [ en-US ] = "Help Message...";
-    Size = MAP_APPFONT(250, 365);
-    Border = True;
-    SVLook = True;
-    Moveable = True;
-
-    FixedText TXT_DLG_CMDLINEHELP_HEADER
-    {
-        Size = MAP_APPFONT(240, 50);
-        Pos = MAP_APPFONT(5, 5);
-        Text = "HEADER";
-    };
-    FixedText TXT_DLG_CMDLINEHELP_LEFT
-    {
-        Size = MAP_APPFONT(50, 150);
-        Pos = MAP_APPFONT(5, 50);
-        Text = "LEFT";
-    };
-    FixedText TXT_DLG_CMDLINEHELP_RIGHT
-    {
-        Size = MAP_APPFONT(190, 150);
-        Pos = MAP_APPFONT(60, 50);
-        Text = "RIGHT";
-    };
-    FixedText TXT_DLG_CMDLINEHELP_BOTTOM
-    {
-        Size = MAP_APPFONT(240, 145);
-        Pos = MAP_APPFONT(5, 200);
-        Text = "BOTTOM";
-    };
-    OKButton BTN_DLG_CMDLINEHELP_OK
-    {
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Pos = MAP_APPFONT(95, 345);
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-};
-
 ErrorBox EBX_ERR_PRINTDISABLED
 {
     Buttons = WB_OK ;

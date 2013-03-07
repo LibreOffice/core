@@ -167,10 +167,10 @@ namespace desktop
         CmdlineHelpDialog aDlg;
         String head = aHelpMessage_version;
         head.Append(aHelpMessage_head);
-        aDlg.m_ftHead.SetText(head);
-        aDlg.m_ftLeft.SetText(aHelpMessage_left);
-        aDlg.m_ftRight.SetText(aHelpMessage_right);
-        aDlg.m_ftBottom.SetText(aHelpMessage_bottom);
+        aDlg.m_pftHead->SetText(head);
+        aDlg.m_pftLeft->SetText(aHelpMessage_left);
+        aDlg.m_pftRight->SetText(aHelpMessage_right);
+        aDlg.m_pftBottom->SetText(aHelpMessage_bottom);
         aDlg.Execute();
 #endif
     }
@@ -184,21 +184,19 @@ namespace desktop
 #else
         // Just re-use the help dialog for now.
         CmdlineHelpDialog aDlg;
-        aDlg.m_ftHead.SetText(aVersionMsg);
+        aDlg.m_pftHead->SetText(aVersionMsg);
         aDlg.Execute();
 #endif
     }
 
 #ifndef UNX
     CmdlineHelpDialog::CmdlineHelpDialog (void)
-    : ModalDialog( NULL, DesktopResId( DLG_CMDLINEHELP ) )
-    , m_ftHead( this, DesktopResId( TXT_DLG_CMDLINEHELP_HEADER ) )
-    , m_ftLeft( this, DesktopResId( TXT_DLG_CMDLINEHELP_LEFT ) )
-    , m_ftRight( this, DesktopResId( TXT_DLG_CMDLINEHELP_RIGHT ) )
-    , m_ftBottom( this, DesktopResId( TXT_DLG_CMDLINEHELP_BOTTOM ) )
-    , m_btOk( this, DesktopResId( BTN_DLG_CMDLINEHELP_OK ) )
+    : ModalDialog( NULL, "CmdLineHelp", "desktop/ui/cmdlinehelp.ui" )
     {
-        FreeResource();
+        get(m_pftHead, "header");
+        get(m_pftLeft, "left");
+        get(m_pftRight, "right");
+        get(m_pftBottom, "bottom");
     }
 #endif
 }
