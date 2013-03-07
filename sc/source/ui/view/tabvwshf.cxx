@@ -84,49 +84,27 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( ! bVisible )            // ausblenden
                 {
-                    ScMarkData& rMark = pViewData->GetMarkData();
-                    SCTAB nTabSelCount = rMark.GetSelectCount();
-                    sal_uInt16 nVis = 0;
-                    for ( SCTAB i=0; i < nTabCount && nVis<2; i++ )
-                        if (pDoc->IsVisible(i))
-                            ++nVis;
-                    if ( nVis<2 || !pDoc->IsDocEditable() || nTabSelCount > 1 )
-                        break;
-
-                    SCTAB nHideTab;
-                    if (pDoc->GetTable( aName, nHideTab ))
-                        HideTable( nHideTab );
+                    if ( pDoc->IsDocEditable() )
+                    {
+                        ScMarkData& rMark = pViewData->GetMarkData();
+                        HideTable( rMark );
+                    }
                 }
                 else                        // einblenden
                 {
-                    ShowTable( aName );
+                    std::vector<String> rNames;
+                    rNames.push_back(aName);
+                    ShowTable( rNames );
                 }
             }
             break;
 
         case FID_TABLE_HIDE:
             {
-                ScMarkData& rMark = pViewData->GetMarkData();
-                SCTAB nTabSelCount = rMark.GetSelectCount();
-                sal_uInt16 nVis = 0;
-
-                // check to make sure we won't hide all sheets. we need at least one visible at all times.
-                for ( SCTAB i=0; i < nTabCount && nVis<nTabSelCount + 1; i++ )
-                    if (pDoc->IsVisible(i))
-                        ++nVis;
-                if ( nVis<=nTabSelCount || !pDoc->IsDocEditable() )
-                    break;
-
-                SCTAB nHideTab;
-                ScMarkData::MarkedTabsType::const_iterator it;
-
-                ScMarkData::MarkedTabsType selectedTabs = rMark.GetSelectedTabs();
-
-                for (it=selectedTabs.begin(); it!=selectedTabs.end(); ++it)
+                if ( pDoc->IsDocEditable() )
                 {
-                    nHideTab = *it;
-                    if (pDoc->IsVisible( nHideTab ))
-                        HideTable( nHideTab );
+                    ScMarkData& rMark = pViewData->GetMarkData();
+                    HideTable( rMark );
                 }
             }
             break;
@@ -134,14 +112,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         case FID_TABLE_SHOW:
             {
                 String aName;
+                std::vector<String> rNames;
                 if ( pReqArgs )
                 {
                     const SfxPoolItem* pItem;
                     if( pReqArgs->HasItem( FID_TABLE_SHOW, &pItem ) )
                     {
                         aName = ((const SfxStringItem*)pItem)->GetValue();
-
-                        ShowTable( aName );
+                        rNames.push_back(aName);
+                        ShowTable( rNames );
 
                         if( ! rReq.IsAPI() )
                             rReq.Done();
@@ -173,9 +152,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         for (sal_uInt16 nPos=0; nPos<nCount; nPos++)
                         {
                             aName = pDlg->GetSelectEntry(nPos);
-                            ShowTable( aName );
+                            rReq.AppendItem( SfxStringItem( FID_TABLE_SHOW, aName ) );
+                            rNames.push_back(aName);
                         }
-                        rReq.AppendItem( SfxStringItem( FID_TABLE_SHOW, aName ) );
+                        ShowTable( rNames );
                         rReq.Done();
                     }
                     delete pDlg;

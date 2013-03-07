@@ -333,7 +333,8 @@ public:
                     TYPEINFO();
                     ScUndoShowHideTab(
                             ScDocShell* pShell,
-                            SCTAB nNewTab, sal_Bool bNewShow );
+                            const std::vector<SCTAB>& newUndoTabs,
+                            sal_Bool bNewShow );
     virtual         ~ScUndoShowHideTab();
 
     virtual void    Undo();
@@ -344,8 +345,8 @@ public:
     virtual rtl::OUString GetComment() const;
 
 private:
-    SCTAB   nTab;
-    sal_Bool    bShow;
+    std::vector<SCTAB>  undoTabs;
+    sal_Bool            bShow;
 
     void DoChange( sal_Bool bShow ) const;
 };
