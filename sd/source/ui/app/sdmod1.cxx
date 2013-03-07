@@ -95,12 +95,6 @@ private:
 } //end of anonymous namespace
 
 
-/*************************************************************************
-|*
-|* Execute
-|*
-\************************************************************************/
-
 void SdModule::Execute(SfxRequest& rReq)
 {
     const SfxItemSet* pSet = rReq.GetArgs();
@@ -116,13 +110,13 @@ void SdModule::Execute(SfxRequest& rReq)
 
         case SID_AUTOSPELL_CHECK:
         {
-            // automatische Rechtschreibpruefung
+            // automatic spell checker
             const SfxPoolItem* pItem;
             if( pSet && SFX_ITEM_SET == pSet->GetItemState(
                         SID_AUTOSPELL_CHECK, sal_False, &pItem ) )
             {
                 sal_Bool bOnlineSpelling = ( (const SfxBoolItem*) pItem )->GetValue();
-                // am Dokument sichern:
+                // save at document:
                 ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if( pDocSh )
                 {
@@ -141,7 +135,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue();
                 switch( eUnit )
                 {
-                    case FUNIT_MM:      // nur die Einheiten, die auch im Dialog stehen
+                    case FUNIT_MM:      // only the units which are also in the dialog
                     case FUNIT_CM:
                     case FUNIT_INCH:
                     case FUNIT_PICA:
@@ -181,7 +175,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 )
               )
             {
-                // am Dokument sichern:
+                // save at the document:
                 ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if ( pDocSh )
                 {
@@ -264,8 +258,6 @@ void SdModule::Execute(SfxRequest& rReq)
 }
 
 
-
-
 void SdModule::OutlineToImpress (SfxRequest& rRequest)
 {
     const SfxItemSet* pSet = rRequest.GetArgs();
@@ -297,7 +289,7 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
 
                 if (pViewSh)
                 {
-                    // AutoLayouts muessen fertig sein
+                    // AutoLayouts have to be finished
                     pDoc->StopWorkStartupDelay();
 
                     SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
@@ -330,19 +322,11 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
 }
 
 
-
-
-/*************************************************************************
-|*
-|* GetState
-|*
-\************************************************************************/
-
 static bool bOnce = false;
 
 void SdModule::GetState(SfxItemSet& rItemSet)
 {
-    // Autopilot waehrend der Praesentation disablen
+    // disable Autopilot during presentation
     if (rItemSet.GetItemState(SID_SD_AUTOPILOT) != SFX_ITEM_UNKNOWN)
     {
         if (!SvtModuleOptions().IsImpress())
@@ -378,7 +362,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         }
     }
 
-    // der Status von SID_OPENDOC wird von der Basisklasse bestimmt
+    // state of SID_OPENDOC is determined by the base class
     if (rItemSet.GetItemState(SID_OPENDOC) != SFX_ITEM_UNKNOWN)
     {
         const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENDOC, SFX_APP()->GetInterface());
@@ -386,7 +370,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
             rItemSet.Put(*pItem);
     }
 
-    // der Status von SID_OPENHYPERLINK wird von der Basisklasse bestimmt
+    // state of SID_OPENHYPERLINK is determined by the base class
     if (rItemSet.GetItemState(SID_OPENHYPERLINK) != SFX_ITEM_UNKNOWN)
     {
         const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENHYPERLINK, SFX_APP()->GetInterface());
@@ -803,20 +787,20 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
 
             if( pPrinter && pPrinter->IsValid())
             {
-                // Der Printer gibt leider kein exaktes
-                // Format (z.B. A4) zurueck
+                // Unfortunately, the printer does not provide an exact format
+                // like A4
                 Size aSize(pPrinter->GetPaperSize());
                 Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, sal_True);
 
                 if (ePaper != PAPER_USER)
                 {
-                    // Korrekte Size holen
+                    // get correct size
                     aSize = SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM);
                 }
 
                 if (aSize.Height() > aSize.Width())
                 {
-                     // Stets Querformat
+                     // always landscape
                      aNewSize.Width()  = aSize.Height();
                      aNewSize.Height() = aSize.Width();
                 }
