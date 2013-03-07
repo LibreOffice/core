@@ -107,22 +107,6 @@
 #define HAVE_PERROR 1
 #define HAVE_POLL 1
 #define HAVE_PREAD 1
-/* #undef HAVE_PTHREAD_ATTR_CREATE */
-/* #undef HAVE_PTHREAD_ATTR_GETSTACKSIZE */
-/* #undef HAVE_PTHREAD_ATTR_SETPRIO */
-#define HAVE_PTHREAD_ATTR_SETSCHEDPARAM 1
-#define HAVE_PTHREAD_ATTR_SETSCOPE 1
-/* #undef HAVE_PTHREAD_ATTR_SETSTACKSIZE */
-/* #undef HAVE_PTHREAD_CONDATTR_CREATE */
-/* #undef HAVE_PTHREAD_INIT */
-/* #undef HAVE_PTHREAD_KEY_DELETE */
-/* #undef HAVE_PTHREAD_KILL */
-/* #undef HAVE_PTHREAD_RWLOCK_RDLOCK */
-/* #undef HAVE_PTHREAD_SETPRIO_NP */
-#define HAVE_PTHREAD_SETSCHEDPARAM 1
-/* #undef HAVE_PTHREAD_SIGMASK */
-/* #undef HAVE_PTHREAD_THREADMASK */
-/* #undef HAVE_PTHREAD_YIELD_NP */
 #define HAVE_READDIR_R 1
 #define HAVE_READLINK 1
 #define HAVE_REALPATH 1
@@ -177,10 +161,3 @@
 
 #define RETSIGTYPE void
 #define RETQSORTTYPE void
-
-/*
- * various other defines
- */
-/* #undef HAVE_THREADS */
-#define SHAREDIR "share"
-#define DEFAULT_CHARSET_HOME "/usr/local"
