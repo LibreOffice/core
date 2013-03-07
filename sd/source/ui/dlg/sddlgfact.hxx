@@ -244,8 +244,8 @@ class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
   virtual void Apply( TabPage* pPage );
   virtual void Cancel( TabPage* pPage );
 };
-
 //------------------------------------------------------------------------
+
 //AbstractDialogFactory_Impl implementations
 class SdAbstractDialogFactory_Impl : public SdAbstractDialogFactory
 {
@@ -277,6 +277,8 @@ public:
     virtual AbstractSdVectorizeDlg*     CreateSdVectorizeDlg( ::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell );
     virtual AbstractSdPublishingDlg*    CreateSdPublishingDlg( ::Window* pWindow, DocumentType eDocType);
 
+    virtual VclAbstractDialog* CreateSdPhotoAlbumDialog( ::Window* pWindow, SdDrawDocument* pDoc);
+
       virtual VclAbstractDialog*          CreateMasterLayoutDialog( ::Window* pParent,
                                                                   SdDrawDocument* pDoc,
                                                                   SdPage* ); // add for MasterLayoutDialog
@@ -291,6 +293,7 @@ public:
     virtual CreateTabPage               GetSdPrintOptionsTabPageCreatorFunc();
     virtual CreateTabPage               GetSdOptionsMiscTabPageCreatorFunc();
     virtual CreateTabPage               GetSdOptionsSnapTabPageCreatorFunc();
+
 };
 
 #endif

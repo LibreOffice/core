@@ -51,6 +51,7 @@
 #include "pubdlg.hxx"
 #include "masterlayoutdlg.hxx"
 #include "headerfooterdlg.hxx"
+#include "PhotoAlbumDialog.hxx"
 
 IMPL_ABSTDLG_BASE(SdVclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
@@ -578,5 +579,9 @@ AbstractHeaderFooterDialog* SdAbstractDialogFactory_Impl::CreateHeaderFooterDial
     return new AbstractHeaderFooterDialog_Impl( new ::sd::HeaderFooterDialog( (::sd::ViewShell*)pViewShell, pParent, pDoc, pCurrentPage ));
 }
 
+VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog( ::Window* pWindow, SdDrawDocument* pDoc )
+{
+     return new SdVclAbstractDialog_Impl( new ::sd::SdPhotoAlbumDialog( pWindow, pDoc ) );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
