@@ -426,6 +426,8 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
         if (lFlatTypes.size()>0)
             sType = impl_detectTypeFlatAndDeep(stlDescriptor, lFlatTypes, bAllowDeep, lUsedDetectors, sLastChance);
 
+#if 0 // In theory we should no longer need to do deep-only detection, but let's see if it works fine in real life...
+
         //*******************************************
         // if no flat detected (nor preselected!) type could be
         // verified and no error occurred during creation of
@@ -440,6 +442,7 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
             stlDescriptor[comphelper::MediaDescriptor::PROP_DEEPDETECTION()] <<= sal_True;
             sType = impl_detectTypeDeepOnly(stlDescriptor, lUsedDetectors);
         }
+#endif
 
         //*******************************************
         // flat detection failed
