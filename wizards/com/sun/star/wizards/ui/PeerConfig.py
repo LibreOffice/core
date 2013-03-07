@@ -15,6 +15,8 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
+import traceback
+
 from .event.CommonListener import WindowListenerProcAdapter
 
 '''
@@ -53,14 +55,14 @@ class PeerConfig(object):
                 xVclWindowPeer = i.xControl.Peer
                 xVclWindowPeer.setProperty(i.propnames, i.propvalues)
 
-            for i in self.aImageUrlTasks:
+            for aImageUrlTask in self.aImageUrlTasks:
                 if isinstance(aImageUrlTask.oResource, int):
-                    sImageUrl = oUnoDialog.getWizardImageUrl(aImageUrlTask.oResource, aImageUrlTask.oHCResource)
+                    sImageUrl = self.oUnoDialog.getWizardImageUrl(aImageUrlTask.oResource, aImageUrlTask.oHCResource)
                 elif isinstance(aImageUrlTask.oResource, str):
                     sImageUrl = self.oUnoDialog.getImageUrl(aImageUrlTask.oResource, aImageUrlTask.oHCResource)
                 print ("DEBUG !!! PeerConfig.windowShow -- sImageUrl: ", sImageUrl)
                 if sImageUrl != "":
-                    Helper.setUnoPropertyValue(aImageUrlTask.oModel, PropertyNames.PROPERTY_IMAGEURL, sImageUrl)
+                    aImageUrlTask.oModel.ImageURL = sImageUrl
 
         except Exception:
             traceback.print_exc()
