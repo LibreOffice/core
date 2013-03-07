@@ -22,7 +22,7 @@
   <display-name>
     <name lang="en-US">Report Builder</name>
   </display-name>
-  <version value="1.2.3"/>
+  <version value="1.2.4"/>
   <identifier value="com.sun.reportdesigner"/>
   <dependencies>
     <OpenOffice.org-minimal-version value="3.2" d:name="OpenOffice.org 3.2"/>

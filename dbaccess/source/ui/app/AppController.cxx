@@ -746,7 +746,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                         aReturn.bEnabled = xEnumAccess.is();
                         if ( aReturn.bEnabled )
                         {
-                            static OUString s_sReportDesign("com.sun.star.report.pentaho.SOReportJobFactory");
+                            static OUString s_sReportDesign("org.libreoffice.report.pentaho.SOReportJobFactory");
                             Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
                             aReturn.bEnabled = xEnumDrivers.is() && xEnumDrivers->hasMoreElements();
                         }
