@@ -747,7 +747,7 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
     {
         rScTokArr.Clear();
         xub_StrLen nTokenCnt = comphelper::string::getTokenCount(aString, cStringSep);
-        xub_StrLen nStringIx = 0;
+        sal_Int32 nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
             String aToken( aString.GetToken( 0, cStringSep, nStringIx ) );

@@ -1170,8 +1170,8 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
     sal_Bool bContainsKeyword = sal_False;
     if( rName.Len() )
     {
-        xub_StrLen nStrPos = 0;
-        while( nStrPos != STRING_NOTFOUND )
+        sal_Int32 nStrPos = 0;
+        while( nStrPos != -1 )
         {
             String aName = rName.GetToken( 0, ';', nStrPos );
             aName = comphelper::string::strip(aName, ' ');

@@ -350,7 +350,7 @@ void OfaImpBrwString::Paint(
         aFont.SetWeight( WEIGHT_BOLD );
 
         sal_Bool bFett = sal_True;
-        sal_uInt16 nPos = 0;
+        sal_Int32 nPos = 0;
         do {
             String sTxt( pUserData->pString->GetToken( 0, 1, nPos ));
 
@@ -359,14 +359,14 @@ void OfaImpBrwString::Paint(
 
             rDev.DrawText( aNewPos, sTxt );
 
-            if( STRING_NOTFOUND != nPos )
+            if( -1 != nPos )
                 aNewPos.X() += rDev.GetTextWidth( sTxt );
 
             if( bFett )
                 rDev.SetFont( aOldFont );
 
             bFett = !bFett;
-        } while( STRING_NOTFOUND != nPos );
+        } while( -1 != nPos );
     }
 }
 

@@ -1555,8 +1555,8 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
                 {
                     const String& rFace = rOption.GetString();
                     String aFontName;
-                    xub_StrLen nPos = 0;
-                    while( nPos != STRING_NOTFOUND )
+                    sal_Int32 nPos = 0;
+                    while( nPos != -1 )
                     {
                         // Fontliste, VCL: Semikolon als Separator, HTML: Komma
                         String aFName = rFace.GetToken( 0, ',', nPos );
@@ -3068,8 +3068,8 @@ void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
             {
                 const String& rFace = itr->GetString();
                 String aFontName;
-                xub_StrLen nPos = 0;
-                while( nPos != STRING_NOTFOUND )
+                sal_Int32 nPos = 0;
+                while( nPos != -1 )
                 {
                     // font list separator: VCL = ';' HTML = ','
                     String aFName = comphelper::string::strip(rFace.GetToken(0, ',', nPos), ' ');

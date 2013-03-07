@@ -3771,8 +3771,8 @@ void SwHTMLParser::NewFontAttr( int nToken )
         }
 
         sal_Bool bFound = sal_False;
-        xub_StrLen nStrPos = 0;
-        while( nStrPos!=STRING_NOTFOUND )
+        sal_Int32 nStrPos = 0;
+        while( nStrPos!= -1 )
         {
             String aFName = aFace.GetToken( 0, ',', nStrPos );
             aFName = comphelper::string::strip(aFName, ' ');

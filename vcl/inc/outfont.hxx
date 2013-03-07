@@ -54,17 +54,17 @@ namespace com { namespace sun { namespace star { namespace lang { struct Locale;
 class ImplFontAttributes
 {
 public: // TODO: create matching interface class
-    const String&   GetFamilyName() const   { return maName; }
-    const String&   GetStyleName() const    { return maStyleName; }
+    const OUString& GetFamilyName() const   { return maName; }
+    const OUString& GetStyleName() const    { return maStyleName; }
     FontWeight      GetWeight() const       { return meWeight; }
     FontItalic      GetSlant() const        { return meItalic; }
     FontFamily      GetFamilyType() const   { return meFamily; }
     FontPitch       GetPitch() const        { return mePitch; }
     FontWidth       GetWidthType() const    { return meWidthType; }
     bool            IsSymbolFont() const    { return mbSymbolFlag; }
-    void            SetFamilyName(const String sFamilyName)    { maName = sFamilyName; }
-    void            SetStyleName( const String sStyleName)           { maStyleName = sStyleName; }
-    void            SetFamilyType(const FontFamily eFontFamily)    { meFamily = eFontFamily; }
+    void            SetFamilyName(const OUString sFamilyName)    { maName = sFamilyName; }
+    void            SetStyleName( const OUString sStyleName)     { maStyleName = sStyleName; }
+    void            SetFamilyType(const FontFamily eFontFamily)  { meFamily = eFontFamily; }
     void            SetPitch(const FontPitch ePitch )          { mePitch = ePitch; }
     void            SetItalic(const FontItalic eItalic )       { meItalic = eItalic; }
     void            SetWeight(const FontWeight eWeight )       { meWeight = eWeight; }
@@ -77,8 +77,8 @@ public: // TODO: create matching interface class
     }
 
 private:
-    String          maName;         // Font Family Name
-    String          maStyleName;    // Font Style Name
+    OUString        maName;         // Font Family Name
+    OUString        maStyleName;    // Font Style Name
     FontWeight      meWeight;       // Weight Type
     FontItalic      meItalic;       // Slant Type
     FontFamily      meFamily;       // Family Type
@@ -138,8 +138,8 @@ public:
     PhysicalFontFace*       CreateAlias() const         { return Clone(); }
 
     bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
-    StringCompare           CompareWithSize( const PhysicalFontFace& ) const;
-    StringCompare           CompareIgnoreSize( const PhysicalFontFace& ) const;
+    sal_Int32           CompareWithSize( const PhysicalFontFace& ) const;
+    sal_Int32           CompareIgnoreSize( const PhysicalFontFace& ) const;
     virtual                 ~PhysicalFontFace() {}
     virtual PhysicalFontFace* Clone() const = 0;
 
@@ -172,8 +172,8 @@ public:
     }
 
 public:
-    String              maTargetName;       // name of the font name token that is chosen
-    String              maSearchName;       // name of the font that matches best
+    OUString            maTargetName;       // name of the font name token that is chosen
+    OUString            maSearchName;       // name of the font that matches best
     int                 mnWidth;            // width of font in pixel units
     int                 mnHeight;           // height of font in pixel units
     float               mfExactHeight;      // requested height (in pixels with subpixel details)
@@ -234,7 +234,7 @@ public:
     // find the device font
     ImplDevFontListData*    FindFontFamily( const String& rFontName ) const;
     ImplDevFontListData*    ImplFindByFont( FontSelectPattern&, bool bPrinter, ImplDirectFontSubstitution* ) const;
-    ImplDevFontListData*    ImplFindBySearchName( const String& ) const;
+    ImplDevFontListData*    ImplFindBySearchName( const OUString& ) const;
 
     // suggest fonts for glyph fallback
     ImplDevFontListData*    GetGlyphFallbackFont( FontSelectPattern&,
@@ -362,7 +362,7 @@ public: // TODO: make data members private
     bool                mbInit;             // true if maMetric member is valid
 
     void                AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const String& rFontName );
-    bool                GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, String* pFontName ) const;
+    bool                GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, OUString* pFontName ) const;
     void                IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const String& rFontName );
 
 private:

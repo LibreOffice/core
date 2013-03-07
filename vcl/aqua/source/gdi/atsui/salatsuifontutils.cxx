@@ -296,16 +296,16 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             continue;
 
         // convert to unicode name
-        UniString aUtf16Name;
+        OUString aUtf16Name;
         if( eEncoding == RTL_TEXTENCODING_UNICODE ) // we are just interested in UTF16 encoded names
-            aUtf16Name = rtl::OUString( (const sal_Unicode*)&aNameBuffer[0], nNameLength/2 );
+            aUtf16Name = OUString( (const sal_Unicode*)&aNameBuffer[0], nNameLength/2 );
         else if( eEncoding == RTL_TEXTENCODING_UCS4 )
-            aUtf16Name = UniString(); // TODO
+            aUtf16Name = OUString(); // TODO
         else // assume the non-unicode encoded names are byte encoded
-            aUtf16Name = UniString( &aNameBuffer[0], nNameLength, eEncoding );
++            aUtf16Name = OUString( &aNameBuffer[0], nNameLength, eEncoding );
 
         // ignore empty strings
-        if( aUtf16Name.Len() <= 0 )
+        if( aUtf16Name.getLength() <= 0 )
             continue;
 
         // handle the name depending on its namecode
@@ -313,7 +313,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         {
             case kFontFamilyName:
                 // ignore font names starting with '.'
-                if( aUtf16Name.GetChar(0) == '.' )
+                if( aUtf16Name[0] == '.' )
                     nNameValue = 0;
                 else if( rDFA.GetFamilyName().Len() )
                 {

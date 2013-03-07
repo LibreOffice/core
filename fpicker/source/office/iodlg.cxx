@@ -1467,8 +1467,8 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 
         if ( _bMultiExt )
         {
-            sal_uInt16 nIdx = 0;
-            while ( !pFoundFilter && nIdx != STRING_NOTFOUND )
+            sal_Int32 nIdx = 0;
+            while ( !pFoundFilter && nIdx != -1 )
             {
                 aSingleType = rType.GetToken( 0, FILEDIALOG_DEF_EXTSEP, nIdx );
 #ifdef UNX
@@ -3305,7 +3305,8 @@ void SvtFileDialog::appendDefaultExtension(String& _rFileName,
     if ( ! aType.EqualsAscii(FILEDIALOG_FILTER_ALL) )
     {
         sal_uInt16 nWildCard = comphelper::string::getTokenCount(aType, FILEDIALOG_DEF_EXTSEP);
-        sal_uInt16 nIndex, nPos = 0;
+        sal_uInt16 nIndex;
+        sal_Int32 nPos = 0;
 
         for ( nIndex = 0; nIndex < nWildCard; nIndex++ )
         {

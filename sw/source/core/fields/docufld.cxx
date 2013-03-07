@@ -1339,13 +1339,13 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
 {
     if(nSubType == TYP_CONDTXTFLD)
     {
-        sal_uInt16 nPos = 0;
+        sal_Int32 nPos = 0;
         aTRUETxt = rStr.GetToken(0, '|', nPos);
 
-        if(nPos != STRING_NOTFOUND)
+        if(nPos != -1)
         {
             aFALSETxt = rStr.GetToken(0, '|', nPos);
-            if(nPos != STRING_NOTFOUND)
+            if(nPos != -1)
             {
                 aContent = rStr.GetToken(0, '|', nPos);
                 bValid = sal_True;
@@ -1507,7 +1507,7 @@ void SwHiddenTxtField::SetPar2(const rtl::OUString& rStr)
     if (nSubType == TYP_CONDTXTFLD)
     {
         sal_Int32 nPos = rStr.indexOf('|');
-        if (nPos == STRING_NOTFOUND)
+        if (nPos == -1)
             aTRUETxt = rStr;
         else
         {

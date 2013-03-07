@@ -1080,7 +1080,8 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
     if ( m_sOldPath.Len() == 0 )
         m_sOldPath = _rPath;
     m_aPathList.Clear();
-    xub_StrLen i, nIdx = 0;
+    xub_StrLen i;
+    sal_Int32 nIdx = 0;
     xub_StrLen nCount = comphelper::string::getTokenCount(_rPath, CLASSPATH_DELIMITER);
     for ( i = 0; i < nCount; ++i )
     {

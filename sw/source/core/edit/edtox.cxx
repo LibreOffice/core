@@ -382,7 +382,7 @@ void SwEditShell::ApplyAutoMark()
             {
                 String sLine(rtl::OStringToOUString(aRdLine, eChrSet));
 
-                xub_StrLen nTokenPos = 0;
+                sal_Int32 nTokenPos = 0;
                 String sToSelect( sLine.GetToken(0, ';', nTokenPos ) );
                 if( sToSelect.Len() )
                 {

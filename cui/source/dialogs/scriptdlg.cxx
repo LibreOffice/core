@@ -1232,8 +1232,8 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     if( aStoredEntry.Len() <= 0 )
         return;
     SvTreeListEntry* pEntry = 0;
-    sal_uInt16 nIndex = 0;
-    while ( nIndex != STRING_NOTFOUND )
+    sal_Int32 nIndex = 0;
+    while ( nIndex != -1 )
     {
         String aTmp( aStoredEntry.GetToken( 0, ';', nIndex ) );
         SvTreeListEntry* pTmpEntry = m_pScriptsBox->FirstChild( pEntry );

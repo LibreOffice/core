@@ -1558,7 +1558,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         Excel uses the NUL character as string list separator. */
                     mxString1.reset( new XclExpString( EXC_STR_8BITLENGTH ) );
                     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(aString, '\n');
-                    xub_StrLen nStringIx = 0;
+                    sal_Int32 nStringIx = 0;
                     for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
                     {
                         String aToken( aString.GetToken( 0, '\n', nStringIx ) );
@@ -1798,7 +1798,7 @@ XclExpWebQuery::XclExpWebQuery(
     // comma separated list of HTML table names or indexes
     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rSource, ';');
     String aNewTables, aAppendTable;
-    xub_StrLen nStringIx = 0;
+    sal_Int32 nStringIx = 0;
     bool bExitLoop = false;
     for( xub_StrLen nToken = 0; (nToken < nTokenCnt) && !bExitLoop; ++nToken )
     {

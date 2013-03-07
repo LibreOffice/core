@@ -614,7 +614,7 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
         refLink->SetVisible( pIDLA->IsVisibleLinks() );
         if( rFltName.EqualsAscii( "DDE" ))
         {
-            sal_uInt16 nTmp = 0;
+            sal_Int32 nTmp = 0;
             String sApp, sTopic, sItem;
             sApp = rGrfName.GetToken( 0, sfx2::cTokenSeperator, nTmp );
             sTopic = rGrfName.GetToken( 0, sfx2::cTokenSeperator, nTmp );

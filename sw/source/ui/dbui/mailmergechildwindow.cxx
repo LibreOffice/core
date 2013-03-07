@@ -589,7 +589,7 @@ void  SwSendMailDialog::IterateMails()
         {
             String sTokens( pCurrentMailDescriptor->sCC );
             sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');
-            xub_StrLen nPos = 0;
+            sal_Int32 nPos = 0;
             for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
             {
                 String sTmp = sTokens.GetToken( 0, ';', nPos);
@@ -601,7 +601,7 @@ void  SwSendMailDialog::IterateMails()
         {
             String sTokens( pCurrentMailDescriptor->sBCC );
             sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');
-            xub_StrLen nPos = 0;
+            sal_Int32 nPos = 0;
             for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
             {
                 String sTmp = sTokens.GetToken( 0, ';', nPos);

@@ -254,7 +254,7 @@ void lclGetFormulaFromStringList( String& rFmlaStr, const String& rStringList, s
 {
     rFmlaStr.Erase();
     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rStringList, '\n');
-    for( xub_StrLen nToken = 0, nStringIx = 0; nToken < nTokenCnt; ++nToken )
+    for( sal_Int32 nToken = 0, nStringIx = 0; nToken < (sal_Int32) nTokenCnt; ++nToken )
     {
         String aToken( rStringList.GetToken( 0, '\n', nStringIx ) );
         ScGlobal::AddQuotes( aToken, '"' );

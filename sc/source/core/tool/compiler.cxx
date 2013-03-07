@@ -3395,7 +3395,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
             if ( nRefs > 2 )
             {   // duplicated or too many ':'? B:2::C10 => B2:C10
                 bColons = true;
-                xub_StrLen nIndex = 0;
+                sal_Int32 nIndex = 0;
                 String aTmp1( aSymbol.GetToken( 0, ':', nIndex ) );
                 xub_StrLen nLen1 = aTmp1.Len();
                 String aSym, aTmp2;

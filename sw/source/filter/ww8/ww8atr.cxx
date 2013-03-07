@@ -2194,8 +2194,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         const String& rStyles = pTOX->GetStyleNames( n );
                         if( rStyles.Len() )
                         {
-                            xub_StrLen nPos = 0;
-                            String sLvl = rtl::OUString(',');
+                            sal_Int32 nPos = 0;
+                            String sLvl = OUString(',');
                             sLvl += OUString::number( n + 1 );
                             do {
                                 String sStyle( rStyles.GetToken( 0,
@@ -2210,7 +2210,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                         ( sTOption += sStyle ) += sLvl;
                                     }
                                 }
-                            } while( STRING_NOTFOUND != nPos );
+                            } while( -1 != nPos );
                         }
                     }
 
@@ -2382,7 +2382,7 @@ void WW8Export::WritePostItBegin( ww::bytes* pOut )
 
 String FieldString(ww::eField eIndex)
 {
-    String sRet(rtl::OUString("  "));
+    String sRet(OUString("  "));
     if (const char *pField = ww::GetEnglishFieldName(eIndex))
         sRet.InsertAscii(pField, 1);
     return sRet;
@@ -2653,7 +2653,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
                 case DI_CUSTOM:
                     eFld = ww::eDOCPROPERTY;
                     {
-                        rtl::OUString sQuotes('\"');
+                        OUString sQuotes('\"');
                         const SwDocInfoField * pDocInfoField =
                         dynamic_cast<const SwDocInfoField *> (pFld);
 

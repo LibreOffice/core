@@ -602,7 +602,7 @@ static DdeTopic* FindTopic( const String & rLinkName, sal_uInt16* pItemStt )
         return 0;
 
     String sNm( rLinkName );
-    sal_uInt16 nTokenPos = 0;
+    sal_Int32 nTokenPos = 0;
     rtl::OUString sService( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
 
     DdeServices& rSvc = DdeService::GetServices();
