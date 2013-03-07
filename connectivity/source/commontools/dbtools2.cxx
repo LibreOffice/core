@@ -1007,10 +1007,10 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
             }
         }
         else
-            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
+            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.libreoffice.report.pentaho.SOReportJobFactory"));
     }
     else
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.libreoffice.report.pentaho.SOReportJobFactory"));
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------

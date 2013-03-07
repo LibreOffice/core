@@ -1023,7 +1023,7 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
         xServiceFactory.set(xFactory,uno::UNO_QUERY);
         Window* pParent = VCLUnoHelper::GetWindow( _xInspectorWindow );
 
-        uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOFunctionManager")),_xContext),uno::UNO_QUERY);
+        uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.libreoffice.report.pentaho.SOFunctionManager")),_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )
         {
             ::boost::shared_ptr< formula::IFunctionManager > pFormulaManager(new FunctionManager(xMgr) );
