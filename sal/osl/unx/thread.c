@@ -30,6 +30,7 @@
 #include <sal/macros.h>
 #ifdef ANDROID
 #include <jni.h>
+#include <android/log.h>
 #include <osl/detail/android-bootstrap.h>
 #endif
 
@@ -242,20 +243,16 @@ static void* osl_thread_start_Impl (void* pData)
     if (!terminate)
     {
 #ifdef ANDROID
-        {
-            JNIEnv* env = 0;
-            int res = (*lo_get_javavm())->AttachCurrentThread(lo_get_javavm(), &env, NULL); // res == 0
-            fprintf (stderr, "new sal thread started and attached %d!\n", res);
-        }
+        JNIEnv* env = 0;
+        int res = (*lo_get_javavm())->AttachCurrentThread(lo_get_javavm(), &env, NULL);
+        __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "New sal thread started and attached res=%d", res);
 #endif
         /* call worker function */
         pImpl->m_WorkerFunction(pImpl->m_pData);
 
 #ifdef ANDROID
-        {
-            int res = (*lo_get_javavm())->DetachCurrentThread(lo_get_javavm());
-            fprintf (stderr, "detached finished sal thread %d!\n", res);
-        }
+        res = (*lo_get_javavm())->DetachCurrentThread(lo_get_javavm());
+        __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "Detached finished sal thread res=%d", res);
 #endif
     }
 
