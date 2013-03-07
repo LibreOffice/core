@@ -25,23 +25,23 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Configuration_Configuration,sun-report-builder,nodeliver))
+$(eval $(call gb_Configuration_Configuration,lo-report-builder,nodeliver))
 
-$(eval $(call gb_Configuration_use_configuration,sun-report-builder,registry))
+$(eval $(call gb_Configuration_use_configuration,lo-report-builder,registry))
 
-$(eval $(call gb_Configuration_add_schemas,sun-report-builder,reportbuilder/registry/schema,\
+$(eval $(call gb_Configuration_add_schemas,lo-report-builder,reportbuilder/registry/schema,\
 	org/openoffice/Office/ReportDesign.xcs \
 	org/openoffice/Office/UI/DbReportWindowState.xcs \
 	org/openoffice/Office/UI/ReportCommands.xcs \
 ))
 
-$(eval $(call gb_Configuration_add_datas,sun-report-builder,reportbuilder/registry/data,\
+$(eval $(call gb_Configuration_add_datas,lo-report-builder,reportbuilder/registry/data,\
 	org/openoffice/Office/Paths.xcu \
 	org/openoffice/Office/ReportDesign.xcu \
 	org/openoffice/Office/UI/Controller.xcu \
 ))
 
-$(eval $(call gb_Configuration_add_localized_datas,sun-report-builder,reportbuilder/registry/data,\
+$(eval $(call gb_Configuration_add_localized_datas,lo-report-builder,reportbuilder/registry/data,\
 	org/openoffice/Office/Accelerators.xcu \
 	org/openoffice/Office/DataAccess.xcu \
 	org/openoffice/Office/Embedding.xcu \
