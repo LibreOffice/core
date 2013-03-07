@@ -59,6 +59,8 @@ PATCH_FILES=\
     icu4c-solarisgcc.patch \
     icu4c-mkdir.patch \
     icu4c-buffer-overflow.patch \
+	icu4c.9737.CVE-2013-0900_changesets_32865_32908.patch \
+	icu4c-CVE-2013-0900_umutex.patch \
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
