@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///zI\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "what do you mean with the \u0027style\u0027 part?",
+      "parentUuid": "AAAAWH///6c\u003d",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH///6Y\u003d",
         "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-03-07T00:07:17Z",
       "side": 1,
       "message": "length",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///zE\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///6Y\u003d",
       "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///zA\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///6U\u003d",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH///6Q\u003d",
         "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2013-03-07T00:07:17Z",
       "side": 1,
       "message": "ditto",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///y8\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///6Q\u003d",
       "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///y4\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///6M\u003d",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH///6I\u003d",
         "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2013-03-07T00:07:17Z",
       "side": 1,
       "message": "getting set",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///y0\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///6I\u003d",
       "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///yw\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///6A\u003d",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH///58\u003d",
         "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2013-03-07T00:07:17Z",
       "side": 1,
       "message": "produce Itemset, which inherits PgDesk-Attr-Set:",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///ys\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///58\u003d",
       "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///yo\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///54\u003d",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH///5w\u003d",
         "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
         "patchSetId": 1
@@ -172,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///yk\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///5w\u003d",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH///5s\u003d",
         "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
         "patchSetId": 1
@@ -183,6 +363,24 @@
       "writtenOn": "2013-03-07T00:07:17Z",
       "side": 1,
       "message": "for",
+      "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///yg\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8sty.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2067,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2013-03-07T16:45:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAWH///5s\u003d",
       "revId": "251c556f15123b39c6d9f4e14a43705b62b54e36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
