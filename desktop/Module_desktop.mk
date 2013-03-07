@@ -131,4 +131,15 @@ $(eval $(call gb_Module_add_targets,desktop,\
 
 endif
 
+ifneq (,$(filter Extension_test-passive,$(MAKECMDGOALS)))
+$(eval $(call gb_Module_add_targets,desktop, \
+    Extension_test-passive \
+    Jar_passive_java \
+    Library_passive_native \
+    Pyuno_passive_python \
+    Rdb_passive_generic \
+    Rdb_passive_platform \
+))
+endif
+
 # vim: set ts=4 sw=4 et:
