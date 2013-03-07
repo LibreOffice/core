@@ -83,6 +83,7 @@ private:
     BitmapBuffer*   mpDIB;
     ImplSalDDB*     mpDDB;
     bool            mbGrey;
+    bool            mbHasAlpha;
 
 public:
 
@@ -157,6 +158,8 @@ public:
     virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly );
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
     virtual bool                GetSystemData( BitmapSystemData& rData );
+    virtual bool                HasAlpha() const { return mbHasAlpha; }
+    virtual void                SetHasAlpha( bool bHasAlpha ) { mbHasAlpha = bHasAlpha; }
 };
 
 // --------------
