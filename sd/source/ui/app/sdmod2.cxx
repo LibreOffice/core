@@ -142,12 +142,9 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
     return pPage;
 }
 
-/*************************************************************************
-|*
-|* Link fuer CalcFieldValue des Outliners
-|*
-\************************************************************************/
-
+/**
+ * Link for CalcFieldValue of Outliners
+ */
 IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 {
     if (pInfo)
@@ -296,7 +293,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         {
             switch ( pURLField->GetFormat() )
             {
-                case SVXURLFORMAT_APPDEFAULT: //!!! einstellbar an App???
+                case SVXURLFORMAT_APPDEFAULT: //!!! adjustable at App???
                 case SVXURLFORMAT_REPR:
                     pInfo->SetRepresentation( pURLField->GetRepresentation() );
                     break;
@@ -383,19 +380,16 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 }
 
 
-
-/*************************************************************************
-|*
-|* virt. Methoden fuer Optionendialog
-|*
-\************************************************************************/
+/**
+ * virtual methods for option dialog
+ */
 SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
 {
     ::sd::FrameView* pFrameView = NULL;
     ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
     SdDrawDocument* pDoc = NULL;
 
-    // Hier wird der DocType vom Optionsdialog gesetzt (nicht Dokument!)
+    // Here we set the DocType of the option dialog (not document!)
     DocumentType eDocType = DOCUMENT_TYPE_IMPRESS;
     if( nSlot == SID_SD_GRAPHIC_OPTIONS )
         eDocType = DOCUMENT_TYPE_DRAW;
@@ -404,8 +398,8 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     {
         pDoc = pDocSh->GetDoc();
 
-        // Wenn der Optionsdialog zum Dokumenttyp identisch ist,
-        // kann auch die FrameView mit uebergeben werden:
+        // If the option dialog is identical to the document type,
+        // we can pass the FrameView too:
         if( pDoc && eDocType == pDoc->GetDocumentType() )
             pFrameView = pDocSh->GetFrameView();
 
@@ -416,7 +410,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
 
     SdOptions* pOptions = GetSdOptions(eDocType);
 
-    // Pool hat standardmaessig MapUnit Twips (Baeh!)
+    // Pool has by default MapUnit Twips (Awgh!)
     SfxItemPool& rPool = GetPool();
     rPool.SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
 
@@ -496,7 +490,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     }
     else
     {
-        // Optionen aus Configdatei holen
+        // Get options from configuration file
         pOptions->GetScale( nX, nY );
     }
 
@@ -523,7 +517,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 
     ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
     SdDrawDocument* pDoc = NULL;
-    // Hier wird der DocType vom Optionsdialog gesetzt (nicht Dokument!)
+    // Here we set the DocType of the option dialog (not document!)
     DocumentType eDocType = DOCUMENT_TYPE_IMPRESS;
     if( nSlot == SID_SD_GRAPHIC_OPTIONS )
         eDocType = DOCUMENT_TYPE_DRAW;
@@ -539,7 +533,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
             pViewShell->WriteFrameViewData();
     }
     SdOptions* pOptions = GetSdOptions(eDocType);
-    // Raster
+    // Grid
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS ,
                             sal_False, (const SfxPoolItem**) &pItem ))
     {
@@ -572,7 +566,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         bNewDefTab = sal_True;
     }
 
-    // Massstab
+    // Scale
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_X, sal_False, &pItem ) )
     {
         sal_Int32 nX = ( (SfxInt32Item*) pItem )->GetValue();
@@ -591,7 +585,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         }
     }
 
-    // Contents (Inhalte)
+    // Contents
     const SdOptionsContentsItem* pContentsItem = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_CONTENTS,
                             sal_False, (const SfxPoolItem**) &pContentsItem ))
@@ -599,7 +593,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         pContentsItem->SetOptions( pOptions );
     }
 
-    // Misc (Sonstiges)
+    // Misc
     const SdOptionsMiscItem* pMiscItem = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_MISC,
                             sal_False, (const SfxPoolItem**) &pMiscItem ))
@@ -608,7 +602,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         bMiscOptions = sal_True;
     }
 
-    // Fangen/Einrasten
+    // Snap
     const SdOptionsSnapItem* pSnapItem = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SNAP,
                             sal_False, (const SfxPoolItem**) &pSnapItem ))
@@ -622,14 +616,14 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
                     ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
                     0 );
 
-    // Drucken
+    // Print
     const SdOptionsPrintItem* pPrintItem = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_PRINT,
                             sal_False, (const SfxPoolItem**) &pPrintItem ))
     {
         pPrintItem->SetOptions( pOptions );
 
-        // PrintOptionsSet setzen
+        // set PrintOptionsSet
         SdOptionsPrintItem aPrintItem( ATTR_OPTIONS_PRINT, pOptions );
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
         sal_uInt16      nFlags = 0;
@@ -645,7 +639,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         bNewPrintOptions = sal_True;
     }
 
-    // Nur, wenn auch der Dokumenttyp uebereinstimmt...
+    // Only if also the document type matches...
     if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
     {
         if( bNewPrintOptions )
@@ -653,7 +647,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
             pDocSh->GetPrinter(sal_True)->SetOptions( aPrintSet );
         }
 
-        // Am Model den DefTab setzen
+        // set DefTab at Model
         if( bNewDefTab )
         {
             SdDrawDocument* pDocument = pDocSh->GetDoc();
@@ -698,7 +692,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 
     pOptions->StoreConfig();
 
-    // Nur, wenn auch der Dokumenttyp uebereinstimmt...
+    // Only if also the document type matches...
     if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
     {
         FieldUnit eUIUnit = (FieldUnit) pOptions->GetMetric();
