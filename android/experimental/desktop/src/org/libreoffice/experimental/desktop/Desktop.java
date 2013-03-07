@@ -282,8 +282,10 @@ public class Desktop
 
         @Override public boolean onTouchEvent(MotionEvent event)
         {
-            if (gestureDetector.onTouchEvent(event))
+            if (event.getPointerCount() == 1 &&
+                gestureDetector.onTouchEvent(event)) {
                 return true;
+            }
 
             // There is no callback in SimpleOnGestureListener for end
             // of scroll. Is this a good way to detect it? Assume that
@@ -296,17 +298,14 @@ public class Desktop
                 Desktop.scroll((int) translateX, (int) translateY);
                 translateX = translateY = 0;
                 scrollInProgress = false;
-            }
-
-            // If a scaling gesture is in progress no other touch
-            // processing should be done.
-            if (scaleDetector.onTouchEvent(event) && scalingInProgress)
+                invalidate();
+            } else if (event.getPointerCount() == 2 &&
+                       scaleDetector.onTouchEvent(event) &&
+                       scalingInProgress) {
+                // If a scaling gesture is in progress no other touch
+                // processing should be done.
                 return true;
-
-            if (!renderedOnce)
-                return super.onTouchEvent(event);
-
-            super.onTouchEvent(event);
+            }
 
             // Just temporary hack. We should not show the keyboard
             // unconditionally on a ACTION_UP event here. The LO level
@@ -323,12 +322,14 @@ public class Desktop
                 imm.showSoftInput(this, InputMethodManager.SHOW_FORCED);
             }
 
-            switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_MOVE:
-                Desktop.touch(event.getActionMasked(), (int) event.getX(), (int) event.getY());
-                break;
+            if (event.getPointerCount() == 1) {
+                switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_MOVE:
+                    Desktop.touch(event.getActionMasked(), (int) event.getX(), (int) event.getY());
+                    break;
+                }
             }
 
             return true;
