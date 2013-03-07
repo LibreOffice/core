@@ -112,7 +112,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
         {
             Reference< XPropertySetInfo > xPropSetInfo(
                 rPropSet->getPropertySetInfo() );
-            OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("Class"));
+            OUString aPropName("Class");
             if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( aPropName ) )
             {
                 Any aAny = rPropSet->getPropertyValue( aPropName );

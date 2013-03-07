@@ -1159,7 +1159,7 @@ void XMLDocumentTransformerContext_Impl::StartElement(
 
             pMutableAttrList = new XMLMutableAttributeList( xAttrList );
             xAttrList = pMutableAttrList;
-            OUString sMime(RTL_CONSTASCII_USTRINGPARAM("application/vnd.oasis.opendocument.") );
+            OUString sMime("application/vnd.oasis.opendocument.");
             sMime += rValue;
             pMutableAttrList->SetValueByIndex( i, sMime );
             OUString aNewAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, ::xmloff::token::GetXMLToken( XML_MIMETYPE ) ) );
@@ -1461,7 +1461,7 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
             if( rPropSet.is() )
             {
                 const sal_Char sRedlineProtectionKey[] = "RedlineProtectionKey";
-                OUString aPropName(RTL_CONSTASCII_USTRINGPARAM(sRedlineProtectionKey));
+                OUString aPropName(sRedlineProtectionKey);
                 Reference< XPropertySetInfo > xPropSetInfo(
                             rPropSet->getPropertySetInfo() );
                 if( xPropSetInfo.is() &&
@@ -2077,8 +2077,7 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL
 
 OUString SAL_CALL OOo2OasisTransformer_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.OOo2OasisTransformer" ) );
+    return OUString( "com.sun.star.comp.OOo2OasisTransformer" );
 }
 
 Sequence< OUString > SAL_CALL OOo2OasisTransformer_getSupportedServiceNames() throw()
@@ -2098,7 +2097,7 @@ Reference< XInterface > SAL_CALL OOo2OasisTransformer_createInstance(
 #define OOO_IMPORTER( className, implName, subServiceName )             \
 OUString SAL_CALL className##_getImplementationName() throw()           \
 {                                                                       \
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( implName ) );         \
+    return OUString( implName );         \
 }                                                                       \
                                                                         \
 Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw()\

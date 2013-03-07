@@ -1553,7 +1553,7 @@ void XMLConfigItemTContext_Impl::EndElement()
         if( rPropSet.is() )
         {
             const sal_Char sRedlineProtectionKey[] = "RedlineProtectionKey";
-            OUString aPropName(RTL_CONSTASCII_USTRINGPARAM(sRedlineProtectionKey));
+            OUString aPropName(sRedlineProtectionKey);
             Reference< XPropertySetInfo > xPropSetInfo(
                         rPropSet->getPropertySetInfo() );
             if( xPropSetInfo.is() &&
@@ -1614,7 +1614,7 @@ void XMLTrackedChangesOASISTContext_Impl::StartElement(
     if( rPropSet.is() )
     {
         const sal_Char sRedlineProtectionKey[] = "RedlineProtectionKey";
-        OUString aPropName(RTL_CONSTASCII_USTRINGPARAM(sRedlineProtectionKey));
+        OUString aPropName(sRedlineProtectionKey);
         Reference< XPropertySetInfo > xPropSetInfo(
                     rPropSet->getPropertySetInfo() );
         if( xPropSetInfo.is() &&
@@ -2045,8 +2045,7 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
 
 OUString SAL_CALL Oasis2OOoTransformer_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Oasis2OOoTransformer" ) );
+    return OUString( "com.sun.star.comp.Oasis2OOoTransformer" );
 }
 
 Sequence< OUString > SAL_CALL Oasis2OOoTransformer_getSupportedServiceNames()
