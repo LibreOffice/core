@@ -371,7 +371,7 @@ void SpellDialog::UpdateBoxes_Impl()
     }
 
     if (bOldShowExplain != (bool) m_pExplainLink->IsVisible() || bOldShowGrammar != (bool) m_pCheckGrammarCB->IsVisible())
-        setInitialLayoutSize();
+        setOptimalLayoutSize();
 }
 // -----------------------------------------------------------------------
 

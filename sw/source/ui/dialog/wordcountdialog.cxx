@@ -71,7 +71,7 @@ void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& 
     if (bToggleCJK)
     {
         showCJK(bShowCJK);
-        setInitialLayoutSize(); //force resize of dialog
+        setOptimalLayoutSize(); //force resize of dialog
     }
 }
 

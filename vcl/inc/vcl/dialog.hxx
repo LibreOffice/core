@@ -52,6 +52,7 @@ private:
     sal_Bool            mbInClose;
     sal_Bool            mbModalMode;
     bool            mbIsDefferedInit;
+    bool            mbIsCalculatingInitialLayoutSize;
     Timer           maLayoutTimer;
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
@@ -94,7 +95,8 @@ public:
     virtual Size    GetOptimalSize() const;
     virtual void    Resize();
     bool            isLayoutEnabled() const;
-    void            setInitialLayoutSize();
+    void            setOptimalLayoutSize();
+    bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
     virtual void queue_layout();
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
     VclButtonBox* get_action_area();

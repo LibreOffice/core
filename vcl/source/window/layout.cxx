@@ -1368,7 +1368,7 @@ IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
         queue_resize();
         Dialog* pResizeDialog = m_bResizeTopLevel ? GetParentDialog() : NULL;
         if (pResizeDialog)
-            pResizeDialog->setInitialLayoutSize();
+            pResizeDialog->setOptimalLayoutSize();
     }
     return 0;
 }
@@ -1643,6 +1643,12 @@ bool isLayoutEnabled(const Window *pWindow)
     //Child is a container => we're layout enabled
     const Window *pChild = pWindow ? pWindow->GetWindow(WINDOW_FIRSTCHILD) : NULL;
     return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(WINDOW_NEXT);
+}
+
+bool isInitialLayout(const Window *pWindow)
+{
+    Dialog *pParentDialog = pWindow ? pWindow->GetParentDialog() : NULL;
+    return pParentDialog && pParentDialog->isCalculatingInitialLayoutSize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,6 +25,7 @@
 
 #include <osl/file.hxx>
 #include <vcl/help.hxx>
+#include <vcl/layout.hxx>
 
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
@@ -334,9 +335,12 @@ public:
     virtual void Resize()
     {
         SvxSimpleTable::Resize();
-        const long nControlWidth = GetSizePixel().Width();
-        long aTabLocs[] = { 3, 0, 35*nControlWidth/100, 70*nControlWidth/100 };
-        SvxSimpleTable::SetTabs(aTabLocs, MAP_PIXEL);
+        if (isInitialLayout(this))
+        {
+            const long nControlWidth = GetSizePixel().Width();
+            long aTabLocs[] = { 3, 0, 35*nControlWidth/100, 70*nControlWidth/100 };
+            SvxSimpleTable::SetTabs(aTabLocs, MAP_PIXEL);
+        }
     }
 };
 

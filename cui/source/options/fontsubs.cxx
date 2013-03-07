@@ -410,7 +410,8 @@ void SvxFontSubstCheckListBox::setColSizes()
 void SvxFontSubstCheckListBox::Resize()
 {
     SvxSimpleTable::Resize();
-    setColSizes();
+    if (isInitialLayout(this))
+        setColSizes();
 }
 
 void SvxFontSubstCheckListBox::SetTabs()

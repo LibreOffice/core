@@ -94,7 +94,8 @@ ScRangeManagerTable::ScRangeManagerTable( SvxSimpleTableContainer& rParent, boos
 void ScRangeManagerTable::Resize()
 {
     SvxSimpleTable::Resize();
-    setColWidths();
+    if (isInitialLayout(this))
+        setColWidths();
 }
 
 void ScRangeManagerTable::setColWidths()

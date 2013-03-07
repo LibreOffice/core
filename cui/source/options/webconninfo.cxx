@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include "svtools/treelistentry.hxx"
+#include <vcl/layout.hxx>
 
 using namespace ::com::sun::star;
 
@@ -78,7 +79,8 @@ void PasswordTable::Resort( bool bForced )
 void PasswordTable::Resize()
 {
     SvxSimpleTable::Resize();
-    setColWidths();
+    if (isInitialLayout(this))
+        setColWidths();
 }
 
 void PasswordTable::setColWidths()

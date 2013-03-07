@@ -354,6 +354,7 @@ void Dialog::ImplInitDialogData()
     mbOldSaveBack           = sal_False;
     mbInClose               = sal_False;
     mbModalMode             = sal_False;
+    mbIsCalculatingInitialLayoutSize = false;
     mnMousePositioned       = 0;
     mpDialogImpl            = new DialogImpl;
 
@@ -655,7 +656,7 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
     return Size(w, h);
 }
 
-void Dialog::setInitialLayoutSize()
+void Dialog::setOptimalLayoutSize()
 {
     maLayoutTimer.Stop();
 
@@ -696,7 +697,11 @@ void Dialog::StateChanged( StateChangedType nType )
     if ( nType == STATE_CHANGE_INITSHOW )
     {
         if (isLayoutEnabled())
-            setInitialLayoutSize();
+        {
+            mbIsCalculatingInitialLayoutSize = true;
+            setOptimalLayoutSize();
+            mbIsCalculatingInitialLayoutSize = false;
+        }
 
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );

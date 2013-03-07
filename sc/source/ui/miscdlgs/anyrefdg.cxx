@@ -401,7 +401,7 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             Dialog* pResizeDialog = pRefEdit->GetParentDialog();
             pResizeDialog->set_border_width(m_nOldBorderWidth);
             pResizeDialog->get_action_area()->Show();
-            pResizeDialog->setInitialLayoutSize();
+            pResizeDialog->setOptimalLayoutSize();
         }
 
         pRefEdit = NULL;
@@ -573,7 +573,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             m_nOldBorderWidth = pResizeDialog->get_border_width();
             pResizeDialog->set_border_width(0);
             pResizeDialog->get_action_area()->Hide();
-            pResizeDialog->setInitialLayoutSize();
+            pResizeDialog->setOptimalLayoutSize();
         }
     }
 }
