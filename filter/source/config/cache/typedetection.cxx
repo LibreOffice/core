@@ -127,11 +127,23 @@ int getFlatTypeRank(const rtl::OUString& rType)
     // List formats from more complex to less complex.
     // TODO: Add more.
     static const char* ranks[] = {
-        // Compressed XML
+
+        // Compressed XML (ODF XML zip formats)
         "writer8_template",
         "writer8",
         "calc8_template",
         "calc8",
+        "impress8_template",
+        "impress8",
+        "draw8_template",
+        "draw8",
+        "chart8",
+        "math8",
+        "writerglobal8",
+        "writerweb8_writer_template",
+        "StarBase",
+
+        // Compressed XML (OOXML)
         "writer_OOXML_Text_Template",
         "writer_OOXML",
         "writer_MS_Word_2007_Template",
@@ -140,6 +152,28 @@ int getFlatTypeRank(const rtl::OUString& rType)
         "Office Open XML Spreadsheet",
         "MS Excel 2007 XML Template",
         "MS Excel 2007 XML",
+        "MS PowerPoint 2007 XML Template",
+        "MS PowerPoint 2007 XML AutoPlay",
+        "MS PowerPoint 2007 XML",
+
+        // Compressed XML (Uniform/Unified Office Format)
+        "Unified_Office_Format_text",
+        "Unified_Office_Format_spreadsheet",
+        "Unified_Office_Format_presentation",
+
+        // Compressed XML (StarOffice XML zip formats)
+        "calc_StarOffice_XML_Calc",
+        "calc_StarOffice_XML_Calc_Template",
+        "chart_StarOffice_XML_Chart",
+        "draw_StarOffice_XML_Draw",
+        "draw_StarOffice_XML_Draw_Template",
+        "impress_StarOffice_XML_Impress",
+        "impress_StarOffice_XML_Impress_Template",
+        "math_StarOffice_XML_Math",
+        "writer_StarOffice_XML_Writer",
+        "writer_StarOffice_XML_Writer_Template",
+        "writer_globaldocument_StarOffice_XML_Writer_GlobalDocument",
+        "writer_web_StarOffice_XML_Writer_Web_Template",
 
         // Compressed text
         "pdf_Portable_Document_Format",
@@ -164,24 +198,83 @@ int getFlatTypeRank(const rtl::OUString& rType)
         "calc_MS_Excel_40_VorlageTemplate",
         "calc_MS_Excel_40",
         "calc_Pocket_Excel_File",
+        "impress_MS_PowerPoint_97_Vorlage",
+        "impress_MS_PowerPoint_97_AutoPlay",
+        "impress_MS_PowerPoint_97",
         "calc_Lotus",
         "calc_QPro",
         "calc_SYLK",
         "calc_DIF",
         "calc_dBase",
 
+        // Binary (raster and vector image files)
+        "emf_MS_Windows_Metafile",
+        "wmf_MS_Windows_Metafile",
+        "met_OS2_Metafile",
+        "svm_StarView_Metafile",
+        "sgv_StarDraw_20",
+        "tif_Tag_Image_File",
+        "tga_Truevision_TARGA",
+        "sgf_StarOffice_Writer_SGF",
+        "ras_Sun_Rasterfile",
+        "psd_Adobe_Photoshop",
+        "png_Portable_Network_Graphic",
+        "jpg_JPEG",
+        "gif_Graphics_Interchange",
+        "bmp_MS_Windows",
+        "pcx_Zsoft_Paintbrush",
+        "pct_Mac_Pict",
+        "pcd_Photo_CD_Base",
+        "pcd_Photo_CD_Base4",
+        "pcd_Photo_CD_Base16",
+        "impress_CGM_Computer_Graphics_Metafile", // There is binary and ascii variants ?
+        "draw_WordPerfect_Graphics",
+        "draw_Visio_Document",
+        "draw_Publisher_Document",
+        "draw_Corel_Presentation_Exchange",
+        "draw_CorelDraw_Document",
+        "writer_LotusWordPro_Document",
+        "writer_MIZI_Hwp_97", // Hanword (Hancom Office)
+
         // Non-compressed XML
         "writer_ODT_FlatXML",
         "calc_ODS_FlatXML",
+        "impress_ODP_FlatXML",
+        "draw_ODG_FlatXML",
         "calc_MS_Excel_2003_XML",
         "writer_MS_Word_2003_XML",
         "writer_DocBook_File",
         "XHTML_File",
+        "svg_Scalable_Vector_Graphics",
+        "math_MathML_XML_Math",
 
         // Non-compressed text
+        "dxf_AutoCAD_Interchange",
+        "eps_Encapsulated_PostScript",
+        "pbm_Portable_Bitmap",   // There is 'raw' and 'ascii' variants.
+        "ppm_Portable_Pixelmap", // There is 'raw' and 'ascii' variants.
+        "pgm_Portable_Graymap",  // There is 'raw' and 'ascii' variants.
+        "xpm_XPM",
+        "xbm_X_Consortium",
         "writer_Rich_Text_Format",
+        "writer_web_HTML_help",
         "generic_HTML",
-        "generic_Text"
+
+        "generic_Text", // Plain text (catch all)
+
+        // Anything ranked lower than generic_Text will never be used during
+        // type detection (since generic_Text catches all).
+
+        // Export only
+        "writer_layout_dump_xml",
+        "pwp_PlaceWare",
+        "graphic_SWF",
+        "graphic_HTML",
+
+        // Internal use only
+        "StarBaseReportChart",
+        "StarBaseReport",
+        "math_MathType_3x", // MathType equation embedded in Word doc.
     };
 
     size_t n = SAL_N_ELEMENTS(ranks);
@@ -832,7 +925,7 @@ void TypeDetection::impl_getPreselection(
                                      ++pFlatIt                      )
     {
         const FlatDetectionInfo& aFlatTypeInfo = *pFlatIt;
-              ::rtl::OUString    sFlatType     = aFlatTypeInfo.sType;
+        OUString sFlatType = aFlatTypeInfo.sType;
 
         if (!impl_validateAndSetTypeOnDescriptor(rDescriptor, sFlatType))
             continue;
