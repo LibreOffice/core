@@ -1626,6 +1626,19 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
     try
     {
+        uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
+        if (xSInfo->supportsService("com.sun.star.drawing.GroupShape"))
+        {
+            // A GroupShape doesn't implement text::XTextRange, but appending
+            // an empty reference to the stacks still makes sense, because this
+            // way bToRemove can be set, and we won't end up with duplicated
+            // shapes for OLE objects.
+            m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
+            uno::Reference<text::XTextContent> xTxtContent(xShape, uno::UNO_QUERY);
+            m_aAnchoredStack.push(xTxtContent);
+        }
+        else
+        {
         uno::Reference< text::XTextRange > xShapeText( xShape, uno::UNO_QUERY_THROW);
         // Add the shape to the text append stack
         m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ),
@@ -1641,7 +1654,6 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 #ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->unoPropertySet(xProps);
 #endif
-        uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
         bool bIsGraphic = xSInfo->supportsService( "com.sun.star.drawing.GraphicObjectShape" );
 
         // If there are position properties, the shape should not be inserted "as character".
@@ -1668,6 +1680,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         else if (nAnchorType != text::TextContentAnchorType_AS_CHARACTER)
         {
             xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
+        }
         }
 
         appendTableManager( );
