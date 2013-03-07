@@ -1197,6 +1197,12 @@ sal_Bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 
 // -----------------------------------------------------------------------
 
+// Not that when called for COMMAND_WHEEL above, despite its name,
+// pVScrl isn't necessarily the vertical scroll bar. Depending on
+// whether the scroll is horizontal or vertical, it is either the
+// horizontal or vertical scroll bar. nY is correspondingly either
+// the horizontal or vertical scroll amount.
+
 void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
                                ScrollBar* pVScrl, long nY )
 {
