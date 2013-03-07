@@ -55,7 +55,7 @@ ModalDialog DLG_ASS
         Text [ en-US ] = "~Do not show this wizard again" ;
     };
 
-    // Seite 1
+    // page 1
 
     FixedBitmap FB_PAGE1
     {
@@ -137,7 +137,7 @@ ModalDialog DLG_ASS
         AutoHScroll = TRUE;
     };
 
-    // Seite 2
+    // page 2
     FixedBitmap FB_PAGE2
     {
         OutputSize = TRUE ;
@@ -240,7 +240,7 @@ ModalDialog DLG_ASS
         Text [ en-US ] = "W~idescreen" ;
     };
 
-    // Seite 3
+    // page 3
     FixedBitmap FB_PAGE3
     {
         OutputSize = TRUE ;
@@ -401,7 +401,7 @@ ModalDialog DLG_ASS
         Text [ en-US ] = "Sh~ow logo";
     };
 
-    // Seite 4
+    // page 4
     FixedBitmap FB_PAGE4
     {
         OutputSize = TRUE ;
@@ -472,7 +472,7 @@ ModalDialog DLG_ASS
         VSCROLL = TRUE ;
     };
 
-    // Seite 5
+    // page 5
     FixedBitmap FB_PAGE5
     {
         OutputSize = TRUE ;
@@ -510,7 +510,7 @@ ModalDialog DLG_ASS
         Text [ en-US ] = "C~reate summary";
     };
 
-    // generell
+    // general
     HelpButton BUT_HELP
     {
         OutputSize = TRUE ;
