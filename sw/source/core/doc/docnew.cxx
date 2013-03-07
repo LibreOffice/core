@@ -23,7 +23,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
+#include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -119,19 +119,14 @@ const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 {
     if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
     {
-        uno::Reference< lang::XMultiServiceFactory >  xMgr( comphelper::getProcessServiceFactory() );
-        if (xMgr.is())
+        uno::Reference< uno::XComponentContext >  xContext( comphelper::getProcessComponentContext() );
+        try
         {
-            try
-            {
-                OUString aServiceName("com.sun.star.linguistic2.ProofreadingIterator");
-                m_xGCIterator = uno::Reference< linguistic2::XProofreadingIterator >
-                    ( xMgr->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
-            }
-            catch (uno::Exception &)
-            {
-                OSL_FAIL( "No GCIterator" );
-            }
+            m_xGCIterator = linguistic2::ProofreadingIterator::create( xContext );
+        }
+        catch (const uno::Exception &)
+        {
+            OSL_FAIL( "No GCIterator" );
         }
     }
 

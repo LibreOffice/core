@@ -37,7 +37,7 @@ module com { module sun { module star { module linguistic2 {
     @since OOo 3.0.1
  */
 
-service ProofreadingIterator : XProofreadingIterator {};
+service ProofreadingIterator : XProofreadingIterator;
 
 
 }; }; }; };

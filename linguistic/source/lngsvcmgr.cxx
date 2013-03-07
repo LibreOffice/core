@@ -26,6 +26,7 @@
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
+#include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 
 #include <tools/solar.h>
 #include <unotools/lingucfg.hxx>
@@ -1010,12 +1011,9 @@ void LngSvcMgr::GetGrammarCheckerDsp_Impl( sal_Bool bSetSvcList  )
         uno::Reference< linguistic2::XProofreadingIterator > xGCI;
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xMgr(
-                    comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-            xGCI = uno::Reference< linguistic2::XProofreadingIterator >(
-                    xMgr->createInstance( SN_GRAMMARCHECKINGITERATOR ), uno::UNO_QUERY_THROW );
+            xGCI = linguistic2::ProofreadingIterator::create( comphelper::getProcessComponentContext() );
         }
-        catch (uno::Exception &)
+        catch (const uno::Exception &)
         {
         }
         DBG_ASSERT( xGCI.is(), "instantiating grammar checking iterator failed" );

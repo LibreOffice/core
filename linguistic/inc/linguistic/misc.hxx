@@ -53,7 +53,6 @@ class LocaleDataWrapper;
 
 
 #define SN_GRAMMARCHECKER           "com.sun.star.linguistic2.Proofreader"
-#define SN_GRAMMARCHECKINGITERATOR  "com.sun.star.linguistic2.ProofreadingIterator"
 #define SN_SPELLCHECKER             "com.sun.star.linguistic2.SpellChecker"
 #define SN_HYPHENATOR               "com.sun.star.linguistic2.Hyphenator"
 #define SN_THESAURUS                "com.sun.star.linguistic2.Thesaurus"
