@@ -203,9 +203,9 @@ bool ImplImageTree::loadImage(
     if (found || !loadMissing)
         return found;
 
-    OSL_TRACE(
-        "ImplImageTree::loadImage exception couldn't load \"%s\", fetching default image",
-        rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
+    SAL_INFO("vcl", "ImplImageTree::loadImage exception couldn't load \""
+        << name << "\", fetching default image");
+
     return loadDefaultImage(style, bitmap);
 }
 
@@ -261,9 +261,7 @@ bool ImplImageTree::doLoadImage(
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (const css::uno::Exception & e) {
-        OSL_TRACE(
-            "ImplImageTree::loadImage exception \"%s\"",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("vcl", "ImplImageTree::doLoadImage exception " << e.Message);
     }
     if (m_cacheIcons && found) {
         m_iconCache[name.intern()] = std::make_pair(localized, bitmap);
@@ -407,10 +405,8 @@ bool ImplImageTree::find(
             } catch (css::uno::RuntimeException &) {
                 throw;
             } catch (const css::uno::Exception & e) {
-                OSL_TRACE(
-                    "ImplImageTree::find exception \"%s\"",
-                    rtl::OUStringToOString(
-                        e.Message, RTL_TEXTENCODING_UTF8).getStr());
+                SAL_INFO("vcl", "ImplImageTree::find exception "
+                    << e.Message << " for " << i->first);
                 i = m_paths.erase(i);
                 continue;
             }
