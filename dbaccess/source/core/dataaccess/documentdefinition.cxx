@@ -1627,7 +1627,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
             {
                 sDocumentService = GetDocumentServiceFromMediaType( getContentType(), m_aContext, aClassID );
                 // check if we are not a form and
-                // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
+                // the org.libreoffice.report.pentaho.SOReportJobFactory is not present.
                 if ( !m_bForm && !(sDocumentService == "com.sun.star.text.TextDocument"))
                 {
                     // we seem to be a "new style" report, check if report extension is present.

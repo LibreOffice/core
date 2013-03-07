@@ -786,7 +786,7 @@ $(eval $(call gb_Helper_register_jars,OXT, \
 	mediawiki \
 	nlpsolver \
 	passive_java \
-	sun-report-builder \
+	report-builder \
 ))
 
 # External executables

@@ -1,2 +1,2 @@
-RegistrationClassName: com.sun.star.report.pentaho.SOReportJobFactory
+RegistrationClassName: org.libreoffice.report.pentaho.SOReportJobFactory
 UNO-Type-Path: 

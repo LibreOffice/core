@@ -390,7 +390,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
     {
         //! Check if the new Report Builder Extension is available
         XContentEnumerationAccess a = com.sun.star.uno.UnoRuntime.queryInterface(XContentEnumerationAccess.class, xMSF);
-        com.sun.star.container.XEnumeration e = a.createContentEnumeration("com.sun.star.report.pentaho.SOReportJobFactory");
+        com.sun.star.container.XEnumeration e = a.createContentEnumeration("org.libreoffice.report.pentaho.SOReportJobFactory");
         if (e == null)
         {
             return false;
