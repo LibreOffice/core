@@ -52,14 +52,14 @@ SdPagesField::SdPagesField( Window* pParent,
     String aStr( SdResId( STR_SLIDE_PLURAL ) );
     SetCustomUnitText( aStr );
 
-    // Groesse setzen
+    // set size
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "XXX" ) );
     Size aSize( GetTextWidth( aStr )+20, GetTextHeight()+6 );
 
 
     SetSizePixel( aSize );
 
-    // Parameter des MetricFields setzen
+    // set parameter of MetricFields
     SetUnit( FUNIT_CUSTOM );
     SetMin( 1 );
     SetFirst( 1 );
@@ -108,12 +108,6 @@ void SdPagesField::Modify()
                                  ".uno:PagesPerRow",
                                  aArgs );
 }
-
-/*************************************************************************
-|*
-|* SdTbxCtlDiaPages
-|*
-\************************************************************************/
 
 SdTbxCtlDiaPages::SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
