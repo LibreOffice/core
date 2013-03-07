@@ -553,8 +553,11 @@ void MasterPagesSelector::Execute (SfxRequest& rRequest)
         case SID_TP_EDIT_MASTER:
         {
             using namespace ::com::sun::star;
-            uno::Reference<drawing::XDrawPage> xSelectedMaster (
-                GetSelectedMasterPage()->getUnoPage(), uno::UNO_QUERY);
+            uno::Reference<drawing::XDrawPage> xSelectedMaster;
+            SdPage* pMasterPage = GetSelectedMasterPage();
+            assert(pMasterPage); //rhbz#902884
+            if (pMasterPage)
+                xSelectedMaster = uno::Reference<drawing::XDrawPage>(pMasterPage->getUnoPage(), uno::UNO_QUERY);
             SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
             if (pViewFrame != NULL && xSelectedMaster.is())
             {
