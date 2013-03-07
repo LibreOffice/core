@@ -24,6 +24,7 @@ from .WebWizardConst import *
 from ..common.SystemDialog import SystemDialog
 from ..common.FileAccess import FileAccess
 from ..common.Configuration import Configuration
+from ..ui.ImageList import ImageList
 
 from com.sun.star.awt import Size
 
@@ -48,7 +49,7 @@ class BackgroundsDialog(ImageListDialog):
         #COMMENTED
         #self.il.setListModel(Model(set_))
         self.il.imageSize = Size (40, 40)
-        #self.il.setRenderer(BGRenderer (0))
+        self.il.renderer = self.BGRenderer(0)
         self.build()
 
     '''
@@ -106,10 +107,10 @@ class BackgroundsDialog(ImageListDialog):
     @author rpiterman
     '''
 
-    class BGRenderer(object):
+    class BGRenderer(ImageList.IImageRenderer):
+        cut = 0
 
         def __init__(self, cut_):
-            ImageListDialog.ImageListDialog_body()
             self.cut = cut_
 
         def getImageUrls(self, listItem):
@@ -117,15 +118,10 @@ class BackgroundsDialog(ImageListDialog):
             if (listItem is not None):
                 sRetUrls.append(listItem)
                 return sRetUrls
-
             return None
 
-        def render(self, _object):
-            if _object is None:
-                return ""
-            else:
-                return FileAccess.getPathFilename(
-                    self.fileAccess.getPath(_object, None))
+        def render(self, obj):
+            return "" if (obj is None) else FileAccess.getPathFilename(self.fileAccess.getPath(obj, None))
 
     '''
     This is a list model for the image list of the
