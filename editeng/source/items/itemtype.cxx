@@ -149,13 +149,13 @@ XubString GetColorString( const Color& rCol )
         COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN, COL_LIGHTCYAN,
         COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE };
 
-    while ( nColor < sizeof(aColAry)/sizeof(ColorData) &&
+    while ( nColor < SAL_N_ELEMENTS(aColAry) &&
             aColAry[nColor] != nColData )
     {
         nColor += 1;
     }
 
-    if ( nColor < sizeof(aColAry)/sizeof(ColorData) )
+    if ( nColor < SAL_N_ELEMENTS(aColAry) )
         sStr = EE_RESSTR( RID_SVXITEMS_COLOR_BEGIN + nColor + 1 );
 
     if ( sStr.isEmpty() )
