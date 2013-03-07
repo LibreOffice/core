@@ -804,7 +804,7 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
             Reference< XPropertySet > xModelProps( _rXForms->getByName( *pModelName ), UNO_QUERY_THROW );
 
             Sequence< PropertyValue > aModelSettings( 1 );
-            aModelSettings[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) );
+            aModelSettings[0].Name = OUString( "ExternalData" );
             aModelSettings[0].Value = xModelProps->getPropertyValue( aModelSettings[0].Name );
 
             xModelSettings->insertByName( *pModelName, makeAny( aModelSettings ) );
@@ -813,7 +813,7 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
         if ( xModelSettings->hasElements() )
         {
             _out_rSettings.realloc( 1 );
-            _out_rSettings[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XFormModels" ) );
+            _out_rSettings[0].Name = OUString( "XFormModels" );
             _out_rSettings[0].Value <<= xModelSettings;
         }
     }

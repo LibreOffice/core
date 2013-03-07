@@ -108,11 +108,11 @@ void XFormsInstanceContext::EndElement()
 {
     Sequence<PropertyValue> aSequence( 3 );
     PropertyValue* pSequence = aSequence.getArray();
-    pSequence[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Instance") );
+    pSequence[0].Name = OUString( "Instance" );
     pSequence[0].Value <<= mxInstance;
-    pSequence[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ID") );
+    pSequence[1].Name = OUString( "ID" );
     pSequence[1].Value <<= msId;
-    pSequence[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("URL") );
+    pSequence[2].Name = OUString( "URL" );
     pSequence[2].Value <<= msURL;
 
     mxModel->getInstances()->insert( makeAny( aSequence ) );

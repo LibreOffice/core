@@ -244,31 +244,31 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
     switch( nToken )
     {
     case XML_LENGTH:
-        sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("Length"));
+        sPropertyName = "Length";
         pConvert = &xforms_int32;
         break;
     case XML_MINLENGTH:
-        sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("MinLength"));
+        sPropertyName = "MinLength";
         pConvert = &xforms_int32;
         break;
     case XML_MAXLENGTH:
-        sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("MaxLength"));
+        sPropertyName = "MaxLength";
         pConvert = &xforms_int32;
         break;
     case XML_TOTALDIGITS:
-        sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("TotalDigits"));
+        sPropertyName = "TotalDigits";
         pConvert = &xforms_int32;
         break;
     case XML_FRACTIONDIGITS:
-        sPropertyName =OUString(RTL_CONSTASCII_USTRINGPARAM("FractionDigits"));
+        sPropertyName = "FractionDigits";
         pConvert = &xforms_int32;
         break;
     case XML_PATTERN:
-        sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern"));
+        sPropertyName = "Pattern";
         pConvert = &xforms_string;
         break;
     case XML_WHITESPACE:
-        sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("WhiteSpace"));
+        sPropertyName = "WhiteSpace";
         pConvert = &xforms_whitespace;
         break;
     case XML_MININCLUSIVE:
@@ -285,16 +285,16 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             switch( nToken )
             {
             case XML_MININCLUSIVE:
-                sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("MinInclusive"));
+                sPropertyName = "MinInclusive";
                 break;
             case XML_MINEXCLUSIVE:
-                sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("MinExclusive"));
+                sPropertyName = "MinExclusive";
                 break;
             case XML_MAXINCLUSIVE:
-                sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("MaxInclusive"));
+                sPropertyName = "MaxInclusive";
                 break;
             case XML_MAXEXCLUSIVE:
-                sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("MaxExclusive"));
+                sPropertyName = "MaxExclusive";
                 break;
             }
 
@@ -306,25 +306,25 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             case com::sun::star::xsd::DataTypeClass::DECIMAL:
             case com::sun::star::xsd::DataTypeClass::DOUBLE:
             case com::sun::star::xsd::DataTypeClass::FLOAT:
-                sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("Double"));
+                sPropertyName += "Double";
                 pConvert = &xforms_double;
                 break;
             case com::sun::star::xsd::DataTypeClass::DATETIME:
-                sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("DateTime"));
+                sPropertyName += "DateTime";
                 pConvert = &xforms_dateTime;
                 break;
             case com::sun::star::xsd::DataTypeClass::DATE:
-                sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("Date"));
+                sPropertyName += "Date";
                 pConvert = &xforms_date;
                 break;
             case com::sun::star::xsd::DataTypeClass::TIME:
-                sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("Time"));
+                sPropertyName += "Time";
                 pConvert = &xforms_time;
                 break;
             case com::sun::star::xsd::DataTypeClass::gYear:
             case com::sun::star::xsd::DataTypeClass::gDay:
             case com::sun::star::xsd::DataTypeClass::gMonth:
-                sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("Int"));
+                sPropertyName += "Int";
                 pConvert = &xforms_int16;
                 break;
 
