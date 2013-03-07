@@ -19,6 +19,7 @@
 from .ImageListDialog import ImageListDialog
 from .WWHID import HID_IS
 from ..common.FileAccess import FileAccess
+from ..ui.ImageList import ImageList
 
 from com.sun.star.awt import Size
 
@@ -31,7 +32,7 @@ It also implements the ImageList.ImageRenderer interface, to handle
 its own objects.
 '''
 
-class IconsDialog(ImageListDialog):
+class IconsDialog(ImageListDialog, ImageList.IImageRenderer):
 
     def __init__(self, xmsf, set_, resources):
         super(IconsDialog, self).__init__(xmsf, HID_IS,
