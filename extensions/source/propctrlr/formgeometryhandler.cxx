@@ -633,7 +633,7 @@ namespace pcr
                     continue;
 
                 sal_Int32 nHeightOrWidth( 0 );
-                OSL_VERIFY( xRowOrColumn->getPropertyValue( _bRows ? PROPERTY_HEIGHT : PROPERTY_WIDTH ) >>= nHeightOrWidth );
+                OSL_VERIFY( xRowOrColumn->getPropertyValue( _bRows ? OUString(PROPERTY_HEIGHT) : OUString(PROPERTY_WIDTH) ) >>= nHeightOrWidth );
 
                 if ( nAccumulated + nHeightOrWidth > rRelativePos )
                     break;

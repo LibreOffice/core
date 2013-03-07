@@ -168,7 +168,7 @@ namespace pcr
 
         Reference< XPropertySet > xConverter(
             createDocumentDependentInstance(
-                _bIsRange ? SERVICE_RANGEADDRESS_CONVERSION : SERVICE_ADDRESS_CONVERSION,
+                _bIsRange ? OUString(SERVICE_RANGEADDRESS_CONVERSION) : OUString(SERVICE_ADDRESS_CONVERSION),
                 ::rtl::OUString(),
                 Any()
             ),
@@ -213,7 +213,7 @@ namespace pcr
     Reference< XValueBinding > CellBindingHelper::createCellBindingFromAddress( const CellAddress& _rAddress, bool _bSupportIntegerExchange ) const
     {
         Reference< XValueBinding > xBinding( createDocumentDependentInstance(
-            _bSupportIntegerExchange ? SERVICE_SHEET_CELL_INT_BINDING : SERVICE_SHEET_CELL_BINDING,
+            _bSupportIntegerExchange ? OUString(SERVICE_SHEET_CELL_INT_BINDING) : OUString(SERVICE_SHEET_CELL_BINDING),
             PROPERTY_BOUND_CELL,
             makeAny( _rAddress )
         ), UNO_QUERY );

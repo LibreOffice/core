@@ -20,15 +20,13 @@
 #ifndef _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 #define _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 
-#include "stringdefine.hxx"
-
 //............................................................................
 namespace pcr
 {
 //............................................................................
 
     // properties
-    PCR_CONSTASCII_STRING( PROPERTY_TABBINGMODEL,           "TabbingModel" );
+    #define PROPERTY_TABBINGMODEL           "TabbingModel"
 
 //............................................................................
 } // namespace pcr

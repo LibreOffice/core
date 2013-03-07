@@ -20,278 +20,276 @@
 #ifndef _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
 #define _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
 
-#include "stringdefine.hxx"
-
 //............................................................................
 namespace pcr
 {
 //............................................................................
 
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULTCONTROL,         "DefaultControl" );
-    PCR_CONSTASCII_STRING( PROPERTY_INTROSPECTEDOBJECT,     "IntrospectedObject" );
-    PCR_CONSTASCII_STRING( PROPERTY_CURRENTPAGE,            "CurrentPage" );
-    PCR_CONSTASCII_STRING( PROPERTY_CONTROLCONTEXT,         "ControlContext" );
+    #define PROPERTY_DEFAULTCONTROL          "DefaultControl"
+    #define PROPERTY_INTROSPECTEDOBJECT      "IntrospectedObject"
+    #define PROPERTY_CURRENTPAGE             "CurrentPage"
+    #define PROPERTY_CONTROLCONTEXT          "ControlContext"
 
     // properties
-    PCR_CONSTASCII_STRING( PROPERTY_CLASSID,                "ClassId" );
-    PCR_CONSTASCII_STRING( PROPERTY_CONTROLLABEL,           "LabelControl");
-    PCR_CONSTASCII_STRING( PROPERTY_LABEL,                  "Label");
-    PCR_CONSTASCII_STRING( PROPERTY_TABINDEX,               "TabIndex");
-    PCR_CONSTASCII_STRING( PROPERTY_WHEEL_BEHAVIOR,         "MouseWheelBehavior");
-    PCR_CONSTASCII_STRING( PROPERTY_TAG,                    "Tag");
-    PCR_CONSTASCII_STRING( PROPERTY_NAME,                   "Name");
-    PCR_CONSTASCII_STRING( PROPERTY_GROUP_NAME,             "GroupName");
-    PCR_CONSTASCII_STRING( PROPERTY_VALUE,                  "Value");
-    PCR_CONSTASCII_STRING( PROPERTY_TEXT,                   "Text");
-    PCR_CONSTASCII_STRING( PROPERTY_NAVIGATION,             "NavigationBarMode");
-    PCR_CONSTASCII_STRING( PROPERTY_CYCLE,                  "Cycle");
-    PCR_CONSTASCII_STRING( PROPERTY_CONTROLSOURCE,          "DataField");
-    PCR_CONSTASCII_STRING( PROPERTY_INPUT_REQUIRED,         "InputRequired");
-    PCR_CONSTASCII_STRING( PROPERTY_ENABLED,                "Enabled");
-    PCR_CONSTASCII_STRING( PROPERTY_ENABLE_VISIBLE,         "EnableVisible" );
-    PCR_CONSTASCII_STRING( PROPERTY_READONLY,               "ReadOnly");
-    PCR_CONSTASCII_STRING( PROPERTY_ISREADONLY,             "IsReadOnly");
-    PCR_CONSTASCII_STRING( PROPERTY_FILTER,                 "Filter");
-    PCR_CONSTASCII_STRING( PROPERTY_WIDTH,                  "Width");
-    PCR_CONSTASCII_STRING( PROPERTY_MULTILINE,              "MultiLine");
-    PCR_CONSTASCII_STRING( PROPERTY_WORDBREAK,              "WordBreak");
-    PCR_CONSTASCII_STRING( PROPERTY_TARGET_URL,             "TargetURL");
-    PCR_CONSTASCII_STRING( PROPERTY_TARGET_FRAME,           "TargetFrame");
-    PCR_CONSTASCII_STRING( PROPERTY_MAXTEXTLEN,             "MaxTextLen");
-    PCR_CONSTASCII_STRING( PROPERTY_EDITMASK,               "EditMask");
-    PCR_CONSTASCII_STRING( PROPERTY_SPIN,                   "Spin");
-    PCR_CONSTASCII_STRING( PROPERTY_TRISTATE,               "TriState");
-    PCR_CONSTASCII_STRING( PROPERTY_HIDDEN_VALUE,           "HiddenValue");
-    PCR_CONSTASCII_STRING( PROPERTY_BUTTONTYPE,             "ButtonType");
-    PCR_CONSTASCII_STRING( PROPERTY_XFORMS_BUTTONTYPE,      "XFormsButtonType");
-    PCR_CONSTASCII_STRING( PROPERTY_STRINGITEMLIST,         "StringItemList");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_TEXT,           "DefaultText");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_STATE,          "DefaultState");
-    PCR_CONSTASCII_STRING( PROPERTY_FORMATKEY,              "FormatKey");
-    PCR_CONSTASCII_STRING( PROPERTY_FORMATSSUPPLIER,        "FormatsSupplier");
-    PCR_CONSTASCII_STRING( PROPERTY_SUBMIT_ACTION,          "SubmitAction");
-    PCR_CONSTASCII_STRING( PROPERTY_SUBMIT_TARGET,          "SubmitTarget");
-    PCR_CONSTASCII_STRING( PROPERTY_SUBMIT_METHOD,          "SubmitMethod");
-    PCR_CONSTASCII_STRING( PROPERTY_SUBMIT_ENCODING,        "SubmitEncoding");
-    PCR_CONSTASCII_STRING( PROPERTY_IMAGE_URL,              "ImageURL");
-    PCR_CONSTASCII_STRING( PROPERTY_EMPTY_IS_NULL,          "ConvertEmptyToNull");
-    PCR_CONSTASCII_STRING( PROPERTY_LISTSOURCETYPE,         "ListSourceType");
-    PCR_CONSTASCII_STRING( PROPERTY_LISTSOURCE,             "ListSource");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_SELECT_SEQ,     "DefaultSelection");
-    PCR_CONSTASCII_STRING( PROPERTY_MULTISELECTION,         "MultiSelection");
-    PCR_CONSTASCII_STRING( PROPERTY_ALIGN,                  "Align");
-    PCR_CONSTASCII_STRING( PROPERTY_VERTICAL_ALIGN,         "VerticalAlign");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_DATE,           "DefaultDate");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_TIME,           "DefaultTime");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_VALUE,          "DefaultValue");
-    PCR_CONSTASCII_STRING( PROPERTY_DECIMAL_ACCURACY,       "DecimalAccuracy");
-    PCR_CONSTASCII_STRING( PROPERTY_REFVALUE,               "RefValue");
-    PCR_CONSTASCII_STRING( PROPERTY_UNCHECKEDREFVALUE,      "SecondaryRefValue");
-    PCR_CONSTASCII_STRING( PROPERTY_VALUEMIN,               "ValueMin");
-    PCR_CONSTASCII_STRING( PROPERTY_VALUEMAX,               "ValueMax");
-    PCR_CONSTASCII_STRING( PROPERTY_STRICTFORMAT,           "StrictFormat");
-    PCR_CONSTASCII_STRING( PROPERTY_ALLOWADDITIONS,         "AllowInserts");
-    PCR_CONSTASCII_STRING( PROPERTY_ALLOWEDITS,             "AllowUpdates");
-    PCR_CONSTASCII_STRING( PROPERTY_ALLOWDELETIONS,         "AllowDeletes");
-    PCR_CONSTASCII_STRING( PROPERTY_MASTERFIELDS,           "MasterFields");
-    PCR_CONSTASCII_STRING( PROPERTY_LITERALMASK,            "LiteralMask");
-    PCR_CONSTASCII_STRING( PROPERTY_VALUESTEP,              "ValueStep");
-    PCR_CONSTASCII_STRING( PROPERTY_SHOWTHOUSANDSEP,        "ShowThousandsSeparator");
-    PCR_CONSTASCII_STRING( PROPERTY_CURRENCYSYMBOL,         "CurrencySymbol");
-    PCR_CONSTASCII_STRING( PROPERTY_DATEFORMAT,             "DateFormat");
-    PCR_CONSTASCII_STRING( PROPERTY_DATEMIN,                "DateMin");
-    PCR_CONSTASCII_STRING( PROPERTY_DATEMAX,                "DateMax");
-    PCR_CONSTASCII_STRING( PROPERTY_TIMEFORMAT,             "TimeFormat");
-    PCR_CONSTASCII_STRING( PROPERTY_TIMEMIN,                "TimeMin");
-    PCR_CONSTASCII_STRING( PROPERTY_TIMEMAX,                "TimeMax");
-    PCR_CONSTASCII_STRING( PROPERTY_LINECOUNT,              "LineCount");
-    PCR_CONSTASCII_STRING( PROPERTY_BOUNDCOLUMN,            "BoundColumn");
-    PCR_CONSTASCII_STRING( PROPERTY_BACKGROUNDCOLOR,        "BackgroundColor");
-    PCR_CONSTASCII_STRING( PROPERTY_FILLCOLOR,              "FillColor");
-    PCR_CONSTASCII_STRING( PROPERTY_TEXTCOLOR,              "TextColor");
-    PCR_CONSTASCII_STRING( PROPERTY_LINECOLOR,              "LineColor");
-    PCR_CONSTASCII_STRING( PROPERTY_BORDER,                 "Border");
-    PCR_CONSTASCII_STRING( PROPERTY_ICONSIZE,               "IconSize");
-    PCR_CONSTASCII_STRING( PROPERTY_DROPDOWN,               "Dropdown");
-    PCR_CONSTASCII_STRING( PROPERTY_HSCROLL,                "HScroll");
-    PCR_CONSTASCII_STRING( PROPERTY_VSCROLL,                "VScroll");
-    PCR_CONSTASCII_STRING( PROPERTY_SHOW_SCROLLBARS,        "ShowScrollbars");
-    PCR_CONSTASCII_STRING( PROPERTY_TABSTOP,                "Tabstop");
-    PCR_CONSTASCII_STRING( PROPERTY_AUTOCOMPLETE,           "Autocomplete");
-    PCR_CONSTASCII_STRING( PROPERTY_PRINTABLE,              "Printable");
-    PCR_CONSTASCII_STRING( PROPERTY_ECHO_CHAR,              "EchoChar");
-    PCR_CONSTASCII_STRING( PROPERTY_ROWHEIGHT,              "RowHeight");
-    PCR_CONSTASCII_STRING( PROPERTY_HELPTEXT,               "HelpText");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT,                   "FontDescriptor");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_NAME,              "FontName");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_STYLENAME,         "FontStyleName");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_FAMILY,            "FontFamily");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_CHARSET,           "FontCharset");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_HEIGHT,            "FontHeight");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_WEIGHT,            "FontWeight");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_SLANT,             "FontSlant");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_UNDERLINE,         "FontUnderline");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_STRIKEOUT,         "FontStrikeout");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_RELIEF,            "FontRelief");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT_EMPHASIS_MARK,     "FontEmphasisMark");
-    PCR_CONSTASCII_STRING( PROPERTY_TEXTLINECOLOR,          "TextLineColor");
-    PCR_CONSTASCII_STRING( PROPERTY_HELPURL,                "HelpURL");
-    PCR_CONSTASCII_STRING( PROPERTY_RECORDMARKER,           "HasRecordMarker");
-    PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_DEFAULT,      "EffectiveDefault");
-    PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_MIN,          "EffectiveMin");
-    PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_MAX,          "EffectiveMax");
-    PCR_CONSTASCII_STRING( PROPERTY_FILTERPROPOSAL,         "UseFilterValueProposal");
-    PCR_CONSTASCII_STRING( PROPERTY_CURRSYM_POSITION,       "PrependCurrencySymbol");
-    PCR_CONSTASCII_STRING( PROPERTY_COMMAND,                "Command");
-    PCR_CONSTASCII_STRING( PROPERTY_COMMANDTYPE,            "CommandType");
-    PCR_CONSTASCII_STRING( PROPERTY_INSERTONLY,             "IgnoreResult");
-    PCR_CONSTASCII_STRING( PROPERTY_ESCAPE_PROCESSING,      "EscapeProcessing");
-    PCR_CONSTASCII_STRING( PROPERTY_TITLE,                  "Title");
-    PCR_CONSTASCII_STRING( PROPERTY_SORT,                   "Order");
-    PCR_CONSTASCII_STRING( PROPERTY_DATASOURCE,             "DataSourceName");
-    PCR_CONSTASCII_STRING( PROPERTY_DETAILFIELDS,           "DetailFields");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULTBUTTON,          "DefaultButton");
-    PCR_CONSTASCII_STRING( PROPERTY_LISTINDEX,              "ListIndex");
-    PCR_CONSTASCII_STRING( PROPERTY_HEIGHT,                 "Height");
-    PCR_CONSTASCII_STRING( PROPERTY_HASNAVIGATION,          "HasNavigationBar");
-    PCR_CONSTASCII_STRING( PROPERTY_POSITIONX,              "PositionX");
-    PCR_CONSTASCII_STRING( PROPERTY_POSITIONY,              "PositionY");
-    PCR_CONSTASCII_STRING( PROPERTY_STEP,                   "Step");
-    PCR_CONSTASCII_STRING( PROPERTY_WORDLINEMODE,           "FontWordLineMode");
-    PCR_CONSTASCII_STRING( PROPERTY_PROGRESSVALUE,          "ProgressValue");
-    PCR_CONSTASCII_STRING( PROPERTY_PROGRESSVALUE_MIN,      "ProgressValueMin");
-    PCR_CONSTASCII_STRING( PROPERTY_PROGRESSVALUE_MAX,      "ProgressValueMax");
-    PCR_CONSTASCII_STRING( PROPERTY_SCROLLVALUE,            "ScrollValue");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_SCROLLVALUE,    "DefaultScrollValue");
-    PCR_CONSTASCII_STRING( PROPERTY_SCROLLVALUE_MIN,        "ScrollValueMin");
-    PCR_CONSTASCII_STRING( PROPERTY_SCROLLVALUE_MAX,        "ScrollValueMax");
-    PCR_CONSTASCII_STRING( PROPERTY_SCROLL_WIDTH,        "ScrollWidth");
-    PCR_CONSTASCII_STRING( PROPERTY_SCROLL_HEIGHT,        "ScrollHeight");
-    PCR_CONSTASCII_STRING( PROPERTY_SCROLL_TOP,        "ScrollTop");
-    PCR_CONSTASCII_STRING( PROPERTY_SCROLL_LEFT,        "ScrollLeft");
-    PCR_CONSTASCII_STRING( PROPERTY_LINEINCREMENT,          "LineIncrement");
-    PCR_CONSTASCII_STRING( PROPERTY_BLOCKINCREMENT,         "BlockIncrement");
-    PCR_CONSTASCII_STRING( PROPERTY_VISIBLESIZE,            "VisibleSize");
-    PCR_CONSTASCII_STRING( PROPERTY_ORIENTATION,            "Orientation");
-    PCR_CONSTASCII_STRING( PROPERTY_IMAGEPOSITION,          "ImagePosition");
-    PCR_CONSTASCII_STRING( PROPERTY_ACTIVE_CONNECTION,      "ActiveConnection");
-    PCR_CONSTASCII_STRING( PROPERTY_ACTIVECOMMAND,          "ActiveCommand");
-    PCR_CONSTASCII_STRING( PROPERTY_DATE,                   "Date");
-    PCR_CONSTASCII_STRING( PROPERTY_STATE,                  "State");
-    PCR_CONSTASCII_STRING( PROPERTY_TIME,                   "Time");
-    PCR_CONSTASCII_STRING( PROPERTY_SCALEIMAGE,             "ScaleImage");
-    PCR_CONSTASCII_STRING( PROPERTY_SCALE_MODE,             "ScaleMode");
-    PCR_CONSTASCII_STRING( PROPERTY_PUSHBUTTONTYPE,         "PushButtonType");
-    PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_VALUE,        "EffectiveValue");
-    PCR_CONSTASCII_STRING( PROPERTY_SELECTEDITEMS,          "SelectedItems");
-    PCR_CONSTASCII_STRING( PROPERTY_REPEAT,                 "Repeat");
-    PCR_CONSTASCII_STRING( PROPERTY_REPEAT_DELAY,           "RepeatDelay");
-    PCR_CONSTASCII_STRING( PROPERTY_SYMBOLCOLOR,            "SymbolColor");
-    PCR_CONSTASCII_STRING( PROPERTY_SPINVALUE,              "SpinValue");
-    PCR_CONSTASCII_STRING( PROPERTY_SPINVALUE_MIN,          "SpinValueMin");
-    PCR_CONSTASCII_STRING( PROPERTY_SPINVALUE_MAX,          "SpinValueMax");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_SPINVALUE,      "DefaultSpinValue");
-    PCR_CONSTASCII_STRING( PROPERTY_SPININCREMENT,          "SpinIncrement");
-    PCR_CONSTASCII_STRING( PROPERTY_SHOW_POSITION,          "ShowPosition" );
-    PCR_CONSTASCII_STRING( PROPERTY_SHOW_NAVIGATION,        "ShowNavigation" );
-    PCR_CONSTASCII_STRING( PROPERTY_SHOW_RECORDACTIONS,     "ShowRecordActions" );
-    PCR_CONSTASCII_STRING( PROPERTY_SHOW_FILTERSORT,        "ShowFilterSort" );
-    PCR_CONSTASCII_STRING( PROPERTY_LINEEND_FORMAT,         "LineEndFormat");
-    PCR_CONSTASCII_STRING( PROPERTY_DECORATION,             "Decoration" );
-    PCR_CONSTASCII_STRING( PROPERTY_NOLABEL,                "NoLabel" );
+    #define PROPERTY_CLASSID                 "ClassId"
+    #define PROPERTY_CONTROLLABEL            "LabelControl"
+    #define PROPERTY_LABEL                   "Label"
+    #define PROPERTY_TABINDEX                "TabIndex"
+    #define PROPERTY_WHEEL_BEHAVIOR          "MouseWheelBehavior"
+    #define PROPERTY_TAG                     "Tag"
+    #define PROPERTY_NAME                    "Name"
+    #define PROPERTY_GROUP_NAME              "GroupName"
+    #define PROPERTY_VALUE                   "Value"
+    #define PROPERTY_TEXT                    "Text"
+    #define PROPERTY_NAVIGATION              "NavigationBarMode"
+    #define PROPERTY_CYCLE                   "Cycle"
+    #define PROPERTY_CONTROLSOURCE           "DataField"
+    #define PROPERTY_INPUT_REQUIRED          "InputRequired"
+    #define PROPERTY_ENABLED                 "Enabled"
+    #define PROPERTY_ENABLE_VISIBLE          "EnableVisible"
+    #define PROPERTY_READONLY                "ReadOnly"
+    #define PROPERTY_ISREADONLY              "IsReadOnly"
+    #define PROPERTY_FILTER                  "Filter"
+    #define PROPERTY_WIDTH                   "Width"
+    #define PROPERTY_MULTILINE               "MultiLine"
+    #define PROPERTY_WORDBREAK               "WordBreak"
+    #define PROPERTY_TARGET_URL              "TargetURL"
+    #define PROPERTY_TARGET_FRAME            "TargetFrame"
+    #define PROPERTY_MAXTEXTLEN              "MaxTextLen"
+    #define PROPERTY_EDITMASK                "EditMask"
+    #define PROPERTY_SPIN                    "Spin"
+    #define PROPERTY_TRISTATE                "TriState"
+    #define PROPERTY_HIDDEN_VALUE            "HiddenValue"
+    #define PROPERTY_BUTTONTYPE             "ButtonType"
+    #define PROPERTY_XFORMS_BUTTONTYPE      "XFormsButtonType"
+    #define PROPERTY_STRINGITEMLIST         "StringItemList"
+    #define PROPERTY_DEFAULT_TEXT           "DefaultText"
+    #define PROPERTY_DEFAULT_STATE          "DefaultState"
+    #define PROPERTY_FORMATKEY              "FormatKey"
+    #define PROPERTY_FORMATSSUPPLIER        "FormatsSupplier"
+    #define PROPERTY_SUBMIT_ACTION          "SubmitAction"
+    #define PROPERTY_SUBMIT_TARGET          "SubmitTarget"
+    #define PROPERTY_SUBMIT_METHOD          "SubmitMethod"
+    #define PROPERTY_SUBMIT_ENCODING        "SubmitEncoding"
+    #define PROPERTY_IMAGE_URL              "ImageURL"
+    #define PROPERTY_EMPTY_IS_NULL          "ConvertEmptyToNull"
+    #define PROPERTY_LISTSOURCETYPE         "ListSourceType"
+    #define PROPERTY_LISTSOURCE             "ListSource"
+    #define PROPERTY_DEFAULT_SELECT_SEQ     "DefaultSelection"
+    #define PROPERTY_MULTISELECTION         "MultiSelection"
+    #define PROPERTY_ALIGN                  "Align"
+    #define PROPERTY_VERTICAL_ALIGN         "VerticalAlign"
+    #define PROPERTY_DEFAULT_DATE           "DefaultDate"
+    #define PROPERTY_DEFAULT_TIME           "DefaultTime"
+    #define PROPERTY_DEFAULT_VALUE          "DefaultValue"
+    #define PROPERTY_DECIMAL_ACCURACY       "DecimalAccuracy"
+    #define PROPERTY_REFVALUE               "RefValue"
+    #define PROPERTY_UNCHECKEDREFVALUE      "SecondaryRefValue"
+    #define PROPERTY_VALUEMIN               "ValueMin"
+    #define PROPERTY_VALUEMAX               "ValueMax"
+    #define PROPERTY_STRICTFORMAT           "StrictFormat"
+    #define PROPERTY_ALLOWADDITIONS         "AllowInserts"
+    #define PROPERTY_ALLOWEDITS             "AllowUpdates"
+    #define PROPERTY_ALLOWDELETIONS         "AllowDeletes"
+    #define PROPERTY_MASTERFIELDS           "MasterFields"
+    #define PROPERTY_LITERALMASK            "LiteralMask"
+    #define PROPERTY_VALUESTEP              "ValueStep"
+    #define PROPERTY_SHOWTHOUSANDSEP        "ShowThousandsSeparator"
+    #define PROPERTY_CURRENCYSYMBOL         "CurrencySymbol"
+    #define PROPERTY_DATEFORMAT             "DateFormat"
+    #define PROPERTY_DATEMIN                "DateMin"
+    #define PROPERTY_DATEMAX                "DateMax"
+    #define PROPERTY_TIMEFORMAT             "TimeFormat"
+    #define PROPERTY_TIMEMIN                "TimeMin"
+    #define PROPERTY_TIMEMAX                "TimeMax"
+    #define PROPERTY_LINECOUNT              "LineCount"
+    #define PROPERTY_BOUNDCOLUMN            "BoundColumn"
+    #define PROPERTY_BACKGROUNDCOLOR        "BackgroundColor"
+    #define PROPERTY_FILLCOLOR              "FillColor"
+    #define PROPERTY_TEXTCOLOR              "TextColor"
+    #define PROPERTY_LINECOLOR              "LineColor"
+    #define PROPERTY_BORDER                 "Border"
+    #define PROPERTY_ICONSIZE               "IconSize"
+    #define PROPERTY_DROPDOWN               "Dropdown"
+    #define PROPERTY_HSCROLL                "HScroll"
+    #define PROPERTY_VSCROLL                "VScroll"
+    #define PROPERTY_SHOW_SCROLLBARS        "ShowScrollbars"
+    #define PROPERTY_TABSTOP                "Tabstop"
+    #define PROPERTY_AUTOCOMPLETE           "Autocomplete"
+    #define PROPERTY_PRINTABLE              "Printable"
+    #define PROPERTY_ECHO_CHAR              "EchoChar"
+    #define PROPERTY_ROWHEIGHT              "RowHeight"
+    #define PROPERTY_HELPTEXT               "HelpText"
+    #define PROPERTY_FONT                   "FontDescriptor"
+    #define PROPERTY_FONT_NAME              "FontName"
+    #define PROPERTY_FONT_STYLENAME         "FontStyleName"
+    #define PROPERTY_FONT_FAMILY            "FontFamily"
+    #define PROPERTY_FONT_CHARSET           "FontCharset"
+    #define PROPERTY_FONT_HEIGHT            "FontHeight"
+    #define PROPERTY_FONT_WEIGHT            "FontWeight"
+    #define PROPERTY_FONT_SLANT             "FontSlant"
+    #define PROPERTY_FONT_UNDERLINE         "FontUnderline"
+    #define PROPERTY_FONT_STRIKEOUT         "FontStrikeout"
+    #define PROPERTY_FONT_RELIEF            "FontRelief"
+    #define PROPERTY_FONT_EMPHASIS_MARK     "FontEmphasisMark"
+    #define PROPERTY_TEXTLINECOLOR          "TextLineColor"
+    #define PROPERTY_HELPURL                "HelpURL"
+    #define PROPERTY_RECORDMARKER           "HasRecordMarker"
+    #define PROPERTY_EFFECTIVE_DEFAULT      "EffectiveDefault"
+    #define PROPERTY_EFFECTIVE_MIN          "EffectiveMin"
+    #define PROPERTY_EFFECTIVE_MAX          "EffectiveMax"
+    #define PROPERTY_FILTERPROPOSAL         "UseFilterValueProposal"
+    #define PROPERTY_CURRSYM_POSITION       "PrependCurrencySymbol"
+    #define PROPERTY_COMMAND                "Command"
+    #define PROPERTY_COMMANDTYPE            "CommandType"
+    #define PROPERTY_INSERTONLY             "IgnoreResult"
+    #define PROPERTY_ESCAPE_PROCESSING      "EscapeProcessing"
+    #define PROPERTY_TITLE                  "Title"
+    #define PROPERTY_SORT                   "Order"
+    #define PROPERTY_DATASOURCE             "DataSourceName"
+    #define PROPERTY_DETAILFIELDS           "DetailFields"
+    #define PROPERTY_DEFAULTBUTTON          "DefaultButton"
+    #define PROPERTY_LISTINDEX              "ListIndex"
+    #define PROPERTY_HEIGHT                 "Height"
+    #define PROPERTY_HASNAVIGATION          "HasNavigationBar"
+    #define PROPERTY_POSITIONX              "PositionX"
+    #define PROPERTY_POSITIONY              "PositionY"
+    #define PROPERTY_STEP                   "Step"
+    #define PROPERTY_WORDLINEMODE           "FontWordLineMode"
+    #define PROPERTY_PROGRESSVALUE          "ProgressValue"
+    #define PROPERTY_PROGRESSVALUE_MIN      "ProgressValueMin"
+    #define PROPERTY_PROGRESSVALUE_MAX      "ProgressValueMax"
+    #define PROPERTY_SCROLLVALUE            "ScrollValue"
+    #define PROPERTY_DEFAULT_SCROLLVALUE    "DefaultScrollValue"
+    #define PROPERTY_SCROLLVALUE_MIN        "ScrollValueMin"
+    #define PROPERTY_SCROLLVALUE_MAX        "ScrollValueMax"
+    #define PROPERTY_SCROLL_WIDTH        "ScrollWidth"
+    #define PROPERTY_SCROLL_HEIGHT        "ScrollHeight"
+    #define PROPERTY_SCROLL_TOP        "ScrollTop"
+    #define PROPERTY_SCROLL_LEFT        "ScrollLeft"
+    #define PROPERTY_LINEINCREMENT          "LineIncrement"
+    #define PROPERTY_BLOCKINCREMENT         "BlockIncrement"
+    #define PROPERTY_VISIBLESIZE            "VisibleSize"
+    #define PROPERTY_ORIENTATION            "Orientation"
+    #define PROPERTY_IMAGEPOSITION          "ImagePosition"
+    #define PROPERTY_ACTIVE_CONNECTION      "ActiveConnection"
+    #define PROPERTY_ACTIVECOMMAND          "ActiveCommand"
+    #define PROPERTY_DATE                   "Date"
+    #define PROPERTY_STATE                  "State"
+    #define PROPERTY_TIME                   "Time"
+    #define PROPERTY_SCALEIMAGE             "ScaleImage"
+    #define PROPERTY_SCALE_MODE             "ScaleMode"
+    #define PROPERTY_PUSHBUTTONTYPE         "PushButtonType"
+    #define PROPERTY_EFFECTIVE_VALUE        "EffectiveValue"
+    #define PROPERTY_SELECTEDITEMS          "SelectedItems"
+    #define PROPERTY_REPEAT                 "Repeat"
+    #define PROPERTY_REPEAT_DELAY           "RepeatDelay"
+    #define PROPERTY_SYMBOLCOLOR            "SymbolColor"
+    #define PROPERTY_SPINVALUE              "SpinValue"
+    #define PROPERTY_SPINVALUE_MIN          "SpinValueMin"
+    #define PROPERTY_SPINVALUE_MAX          "SpinValueMax"
+    #define PROPERTY_DEFAULT_SPINVALUE      "DefaultSpinValue"
+    #define PROPERTY_SPININCREMENT          "SpinIncrement"
+    #define PROPERTY_SHOW_POSITION          "ShowPosition"
+    #define PROPERTY_SHOW_NAVIGATION        "ShowNavigation"
+    #define PROPERTY_SHOW_RECORDACTIONS     "ShowRecordActions"
+    #define PROPERTY_SHOW_FILTERSORT        "ShowFilterSort"
+    #define PROPERTY_LINEEND_FORMAT         "LineEndFormat"
+    #define PROPERTY_DECORATION             "Decoration"
+    #define PROPERTY_NOLABEL                "NoLabel"
 
-    PCR_CONSTASCII_STRING( PROPERTY_SELECTION_TYPE,         "SelectionType");
-    PCR_CONSTASCII_STRING( PROPERTY_ROOT_DISPLAYED,         "RootDisplayed");
-    PCR_CONSTASCII_STRING( PROPERTY_SHOWS_HANDLES,          "ShowsHandles");
-    PCR_CONSTASCII_STRING( PROPERTY_SHOWS_ROOT_HANDLES,     "ShowsRootHandles");
-    PCR_CONSTASCII_STRING( PROPERTY_EDITABLE,               "Editable");
-    PCR_CONSTASCII_STRING( PROPERTY_INVOKES_STOP_NOT_EDITING, "InvokesStopNodeEditing");
+    #define PROPERTY_SELECTION_TYPE         "SelectionType"
+    #define PROPERTY_ROOT_DISPLAYED         "RootDisplayed"
+    #define PROPERTY_SHOWS_HANDLES          "ShowsHandles"
+    #define PROPERTY_SHOWS_ROOT_HANDLES     "ShowsRootHandles"
+    #define PROPERTY_EDITABLE               "Editable"
+    #define PROPERTY_INVOKES_STOP_NOT_EDITING "InvokesStopNodeEditing"
 
-    PCR_CONSTASCII_STRING( PROPERTY_HARDLINEBREAKS,         "HardLineBreaks");
+    #define PROPERTY_HARDLINEBREAKS         "HardLineBreaks"
 
-    PCR_CONSTASCII_STRING( PROPERTY_TOGGLE,                 "Toggle" );
-    PCR_CONSTASCII_STRING( PROPERTY_FOCUSONCLICK,           "FocusOnClick" );
-    PCR_CONSTASCII_STRING( PROPERTY_HIDEINACTIVESELECTION,  "HideInactiveSelection" );
-    PCR_CONSTASCII_STRING( PROPERTY_VISUALEFFECT,           "VisualEffect" );
-    PCR_CONSTASCII_STRING( PROPERTY_BORDERCOLOR,            "BorderColor" );
+    #define PROPERTY_TOGGLE                 "Toggle"
+    #define PROPERTY_FOCUSONCLICK           "FocusOnClick"
+    #define PROPERTY_HIDEINACTIVESELECTION  "HideInactiveSelection"
+    #define PROPERTY_VISUALEFFECT           "VisualEffect"
+    #define PROPERTY_BORDERCOLOR            "BorderColor"
 
-    PCR_CONSTASCII_STRING( PROPERTY_ADDRESS,                "Address");
-    PCR_CONSTASCII_STRING( PROPERTY_REFERENCE_SHEET,        "ReferenceSheet");
-    PCR_CONSTASCII_STRING( PROPERTY_UI_REPRESENTATION,      "UserInterfaceRepresentation");
+    #define PROPERTY_ADDRESS                "Address"
+    #define PROPERTY_REFERENCE_SHEET        "ReferenceSheet"
+    #define PROPERTY_UI_REPRESENTATION      "UserInterfaceRepresentation"
 
-    PCR_CONSTASCII_STRING( PROPERTY_XML_DATA_MODEL,         "XMLDataModel" );
-    PCR_CONSTASCII_STRING( PROPERTY_BINDING_NAME,           "BindingName" );
-    PCR_CONSTASCII_STRING( PROPERTY_BIND_EXPRESSION,        "BindingExpression" );
-    PCR_CONSTASCII_STRING( PROPERTY_LIST_BINDING,           "ListBinding" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_REQUIRED,           "RequiredExpression" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_RELEVANT,           "RelevantExpression" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_READONLY,           "ReadonlyExpression" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_CONSTRAINT,         "ConstraintExpression" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_CALCULATION,        "CalculateExpression" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_DATA_TYPE,          "Type" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_WHITESPACES,        "WhiteSpace" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_PATTERN,            "Pattern" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_LENGTH,             "Length" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_LENGTH,         "MinLength" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_LENGTH,         "MaxLength" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_TOTAL_DIGITS,       "TotalDigits" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_FRACTION_DIGITS,    "FractionDigits" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_INT,  "MaxInclusiveInt" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_INT,  "MaxExclusiveInt" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_INT,  "MinInclusiveInt" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_INT,  "MinExclusiveInt" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE, "MaxInclusiveDouble" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE, "MaxExclusiveDouble" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE, "MinInclusiveDouble" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE, "MinExclusiveDouble" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_DATE, "MaxInclusiveDate" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_DATE, "MaxExclusiveDate" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_DATE, "MinInclusiveDate" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_DATE, "MinExclusiveDate" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_TIME, "MaxInclusiveTime" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_TIME, "MaxExclusiveTime" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_TIME, "MinInclusiveTime" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_TIME, "MinExclusiveTime" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME, "MaxInclusiveDateTime" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME, "MaxExclusiveDateTime" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME, "MinInclusiveDateTime" );
-    PCR_CONSTASCII_STRING( PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME, "MinExclusiveDateTime" );
-    PCR_CONSTASCII_STRING( PROPERTY_SUBMISSION_ID,          "SubmissionID" );
-    PCR_CONSTASCII_STRING( PROPERTY_BINDING_ID,             "BindingID" );
-    PCR_CONSTASCII_STRING( PROPERTY_ID,                     "ID" );
-    PCR_CONSTASCII_STRING( PROPERTY_WRITING_MODE,           "WritingMode" );
-    PCR_CONSTASCII_STRING( PROPERTY_TEXT_ANCHOR_TYPE,       "TextAnchorType" );
-    PCR_CONSTASCII_STRING( PROPERTY_SHEET_ANCHOR_TYPE,      "SheetAnchorType" );
-    PCR_CONSTASCII_STRING( PROPERTY_ANCHOR_TYPE,            "AnchorType" );
-    PCR_CONSTASCII_STRING( PROPERTY_ANCHOR,                 "Anchor" );
-    PCR_CONSTASCII_STRING( PROPERTY_IS_VISIBLE,             "IsVisible" );
+    #define PROPERTY_XML_DATA_MODEL         "XMLDataModel"
+    #define PROPERTY_BINDING_NAME           "BindingName"
+    #define PROPERTY_BIND_EXPRESSION        "BindingExpression"
+    #define PROPERTY_LIST_BINDING           "ListBinding"
+    #define PROPERTY_XSD_REQUIRED           "RequiredExpression"
+    #define PROPERTY_XSD_RELEVANT           "RelevantExpression"
+    #define PROPERTY_XSD_READONLY           "ReadonlyExpression"
+    #define PROPERTY_XSD_CONSTRAINT         "ConstraintExpression"
+    #define PROPERTY_XSD_CALCULATION        "CalculateExpression"
+    #define PROPERTY_XSD_DATA_TYPE          "Type"
+    #define PROPERTY_XSD_WHITESPACES        "WhiteSpace"
+    #define PROPERTY_XSD_PATTERN            "Pattern"
+    #define PROPERTY_XSD_LENGTH             "Length"
+    #define PROPERTY_XSD_MIN_LENGTH         "MinLength"
+    #define PROPERTY_XSD_MAX_LENGTH         "MaxLength"
+    #define PROPERTY_XSD_TOTAL_DIGITS       "TotalDigits"
+    #define PROPERTY_XSD_FRACTION_DIGITS    "FractionDigits"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_INT  "MaxInclusiveInt"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_INT  "MaxExclusiveInt"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_INT  "MinInclusiveInt"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_INT  "MinExclusiveInt"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE "MaxInclusiveDouble"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE "MaxExclusiveDouble"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE "MinInclusiveDouble"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE "MinExclusiveDouble"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_DATE "MaxInclusiveDate"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_DATE "MaxExclusiveDate"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_DATE "MinInclusiveDate"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_DATE "MinExclusiveDate"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_TIME "MaxInclusiveTime"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_TIME "MaxExclusiveTime"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_TIME "MinInclusiveTime"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_TIME "MinExclusiveTime"
+    #define PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME "MaxInclusiveDateTime"
+    #define PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME "MaxExclusiveDateTime"
+    #define PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME "MinInclusiveDateTime"
+    #define PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME "MinExclusiveDateTime"
+    #define PROPERTY_SUBMISSION_ID          "SubmissionID"
+    #define PROPERTY_BINDING_ID             "BindingID"
+    #define PROPERTY_ID                     "ID"
+    #define PROPERTY_WRITING_MODE           "WritingMode"
+    #define PROPERTY_TEXT_ANCHOR_TYPE       "TextAnchorType"
+    #define PROPERTY_SHEET_ANCHOR_TYPE      "SheetAnchorType"
+    #define PROPERTY_ANCHOR_TYPE            "AnchorType"
+    #define PROPERTY_ANCHOR                 "Anchor"
+    #define PROPERTY_IS_VISIBLE             "IsVisible"
 
-    PCR_CONSTASCII_STRING( PROPERTY_MODEL,                  "Model" );
+    #define PROPERTY_MODEL                  "Model"
 
-    PCR_CONSTASCII_STRING( PROPERTY_CELL_EXCHANGE_TYPE,     "ExchangeSelectionIndex");
-    PCR_CONSTASCII_STRING( PROPERTY_BOUND_CELL,             "BoundCell");
-    PCR_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,        "CellRange");
-    PCR_CONSTASCII_STRING( PROPERTY_AUTOLINEBREAK,          "AutomaticLineBreak");
-    PCR_CONSTASCII_STRING( PROPERTY_TEXTTYPE,               "TextType");
-    PCR_CONSTASCII_STRING( PROPERTY_RICHTEXT,               "RichText");
-    PCR_CONSTASCII_STRING( PROPERTY_ROWSET,                 "RowSet");
+    #define PROPERTY_CELL_EXCHANGE_TYPE     "ExchangeSelectionIndex"
+    #define PROPERTY_BOUND_CELL             "BoundCell"
+    #define PROPERTY_LIST_CELL_RANGE        "CellRange"
+    #define PROPERTY_AUTOLINEBREAK          "AutomaticLineBreak"
+    #define PROPERTY_TEXTTYPE               "TextType"
+    #define PROPERTY_RICHTEXT               "RichText"
+    #define PROPERTY_ROWSET                 "RowSet"
 
     // services
-    PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox" );
-    PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FIXEDTEXT,     "com.sun.star.form.component.FixedText" );
-    PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FORMATTEDFIELD,"com.sun.star.form.component.FormattedField" );
+    #define SERVICE_COMPONENT_GROUPBOX      "com.sun.star.form.component.GroupBox"
+    #define SERVICE_COMPONENT_FIXEDTEXT     "com.sun.star.form.component.FixedText"
+    #define SERVICE_COMPONENT_FORMATTEDFIELD "com.sun.star.form.component.FormattedField"
 
-    PCR_CONSTASCII_STRING( SERVICE_TEXT_DOCUMENT,           "com.sun.star.text.TextDocument" );
-    PCR_CONSTASCII_STRING( SERVICE_WEB_DOCUMENT,            "com.sun.star.text.WebDocument" );
-    PCR_CONSTASCII_STRING( SERVICE_SPREADSHEET_DOCUMENT,    "com.sun.star.sheet.SpreadsheetDocument" );
-    PCR_CONSTASCII_STRING( SERVICE_DRAWING_DOCUMENT,        "com.sun.star.drawing.DrawingDocument" );
-    PCR_CONSTASCII_STRING( SERVICE_PRESENTATION_DOCUMENT,   "com.sun.star.presentation.PresentationDocument" );
+    #define SERVICE_TEXT_DOCUMENT           "com.sun.star.text.TextDocument"
+    #define SERVICE_WEB_DOCUMENT            "com.sun.star.text.WebDocument"
+    #define SERVICE_SPREADSHEET_DOCUMENT    "com.sun.star.sheet.SpreadsheetDocument"
+    #define SERVICE_DRAWING_DOCUMENT        "com.sun.star.drawing.DrawingDocument"
+    #define SERVICE_PRESENTATION_DOCUMENT   "com.sun.star.presentation.PresentationDocument"
 
-    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_BINDING,      "com.sun.star.table.CellValueBinding" );
-    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_INT_BINDING,  "com.sun.star.table.ListPositionCellBinding" );
-    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELLRANGE_LISTSOURCE, "com.sun.star.table.CellRangeListSource" );
-    PCR_CONSTASCII_STRING( SERVICE_ADDRESS_CONVERSION,      "com.sun.star.table.CellAddressConversion" );
-    PCR_CONSTASCII_STRING( SERVICE_RANGEADDRESS_CONVERSION, "com.sun.star.table.CellRangeAddressConversion" );
+    #define SERVICE_SHEET_CELL_BINDING      "com.sun.star.table.CellValueBinding"
+    #define SERVICE_SHEET_CELL_INT_BINDING  "com.sun.star.table.ListPositionCellBinding"
+    #define SERVICE_SHEET_CELLRANGE_LISTSOURCE "com.sun.star.table.CellRangeListSource"
+    #define SERVICE_ADDRESS_CONVERSION      "com.sun.star.table.CellAddressConversion"
+    #define SERVICE_RANGEADDRESS_CONVERSION "com.sun.star.table.CellRangeAddressConversion"
 
 //............................................................................
 } // namespace pcr
