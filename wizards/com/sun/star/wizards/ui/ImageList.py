@@ -23,6 +23,7 @@ from threading import RLock
 from .PeerConfig import PeerConfig
 from ..common.PropertyNames import PropertyNames
 from ..common.HelpIds import HelpIds
+from ..common.IRenderer import IRenderer
 
 from com.sun.star.awt import Size
 
@@ -76,6 +77,7 @@ class ImageList(object):
         self.selected = -1
         self.pageStart = 0
         self.helpURL = 0
+        self.renderer = None
         self.counterRenderer = self.SimpleCounterRenderer()
         self.MOVE_SELECTION_VALS = list(range(3))
 
@@ -227,8 +229,7 @@ class ImageList(object):
 
         focusable = True
         for index, item in enumerate(self.m_aImages):
-            #COMMENTED
-            oResources = None #self.renderer.getImageUrls(self.getObjectFor(index))
+            oResources = self.renderer.getImageUrls(self.getObjectFor(index))
             if oResources is not None:
                 if len(oResources) == 1:
                     print ("DEBUG !!! refreshImages -- oResources[0]: ",  oResources[0])
@@ -464,7 +465,16 @@ class ImageList(object):
     def getSelectedObjects(self):
         return[self.listModel.getElementAt(self.selected)]
 
-    class SimpleCounterRenderer:
+    class IImageRenderer(IRenderer):
+
+         # @param listItem
+         # @return two resource ids for an image referenced in the imaglist resourcefile of the
+         # wizards project; The second one of them is designed to be used for High Contrast Mode.
+        @abstractmethod
+        def getImageUrls(self, listItem):
+            pass
+
+    class SimpleCounterRenderer(IRenderer):
 
         def render(self, counter):
             return \
