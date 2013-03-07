@@ -39,7 +39,7 @@ SdPageListControl::SdPageListControl(
     const ResId& rResId )
     : SvTreeListBox(pParent, rResId)
 {
-    // Tree-ListBox mit Linien versehen
+    // add lines to tree listbox
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  WB_HASLINESATROOT |
                             WB_HSCROLL |
@@ -86,7 +86,7 @@ SvTreeListEntry* SdPageListControl::InsertPage( const String& rPageName )
 
     pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
                                        0, m_pCheckButton));
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // otherwise boom!
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rPageName ) );
 
     GetModel()->Insert( pEntry );
@@ -98,7 +98,7 @@ void SdPageListControl::InsertTitle( SvTreeListEntry* pParent, const String& rTi
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->AddItem( new SvLBoxString( pEntry, 0, String() ) );
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // otherwise boom!
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rTitle ) );
     GetModel()->Insert( pEntry,pParent );
 }
@@ -120,7 +120,7 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
             SdrTextObj* pTO = (SdrTextObj*)pPage->GetPresObj(PRESOBJ_TEXT);
             if(!pTO)
             {
-                // Ermittelt das SdrTextObject mit dem Layout Text dieser Seite
+                // determines the SdrTextObject with the layout text of this page
                 const sal_uLong nObjectCount = pPage->GetObjCount();
                 for (sal_uLong nObject = 0; nObject < nObjectCount; nObject++)
                 {
