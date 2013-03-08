@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -22,3 +23,5 @@
 #define RID_TK_ICON_THROBBER_START       1000
 
 #endif          // _TOOLKIT_AWT_XTHROBBER_HRC_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

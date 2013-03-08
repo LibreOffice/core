@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -43,3 +44,5 @@
 #define CB_MERGE_STYLE  37
 #define PB_LOAD_FILE    38
 #define STR_LOAD_TEMPLATE 39
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

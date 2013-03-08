@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -24,3 +25,5 @@
 #define STR_SAR_WRAP_BACKWARD       SID_SD_STRING_START+25
 #define STR_SAR_WRAP_FORWARD_DRAW   SID_SD_STRING_START+26
 #define STR_SAR_WRAP_BACKWARD_DRAW  SID_SD_STRING_START+27
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

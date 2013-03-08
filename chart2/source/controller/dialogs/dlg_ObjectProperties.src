@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -28,3 +29,5 @@ TabDialog DLG_OBJECT_PROPERTIES
         Pos = MAP_APPFONT ( 3 , 3 ) ;
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

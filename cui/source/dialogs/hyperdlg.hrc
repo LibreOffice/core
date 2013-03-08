@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -78,3 +79,5 @@
 #define COL_OLD     54
 #define COL_2       63
 #define COL_DIFF    (COL_2 - COL_OLD)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -128,3 +129,5 @@
 #define LB_HATCHBCKGRDCOLOR     22
 
 #define STR_LB_HATCHINGSTYLE 5031
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

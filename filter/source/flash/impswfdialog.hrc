@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -37,3 +38,5 @@
 #define BOOL_EXPORT_SOUND 5
 #define BOOL_EXPORT_OLE_AS_JPEG 6
 #define BOOL_EXPORT_MULTIPLE_FILES 7
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

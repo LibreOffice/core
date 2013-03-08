@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -182,3 +183,5 @@
 #define HHE_ROW_a3                  (HHE_ROW_a1+RSC_CD_PUSHBUTTON_HEIGHT+2)
 
 #endif // SVX_HANGUL_HANJA_DLG_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

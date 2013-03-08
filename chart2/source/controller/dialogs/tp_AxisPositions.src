@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -296,3 +297,5 @@ TabPage TP_AXIS_POSITIONS
         Text [ en-US ] = "Mor~e...";
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

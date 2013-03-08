@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -798,3 +799,5 @@ Bitmap BMP_PRESENTERSCREEN_BUTTON_PLUS_DISABLED
 {
     File = "presenterscreen-ButtonPlusDisabled.png";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

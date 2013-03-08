@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -33,3 +34,5 @@
 
 #define ST_SELECT_PROTECTED_CELLS          50
 #define ST_SELECT_UNPROTECTED_CELLS        51
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

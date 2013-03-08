@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -123,3 +124,5 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     DEFBUTTON = WB_DEF_NO ;
     Message [ en-US ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

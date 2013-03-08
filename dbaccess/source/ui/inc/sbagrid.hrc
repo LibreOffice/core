@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -66,3 +67,5 @@
 #define SBA_DEF_FLTHIDE             (SBA_WHICHID_START + 152) // SfxBoolItem
 
 #endif // DBACCESS_SBA_GRID_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

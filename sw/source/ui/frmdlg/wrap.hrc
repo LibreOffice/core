@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -52,3 +53,5 @@
 #define IMG_KON_RIGHT       (IMG_BEGIN +  8)
 #define IMG_KON_PARALLEL    (IMG_BEGIN +  9)
 #define IMG_KON_IDEAL       (IMG_BEGIN + 10)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

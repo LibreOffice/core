@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -81,3 +82,5 @@ String STR_ERROR_JVMCREATIONFAILED
 {
     Text[ en-US ] = "JRE is Defective" ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

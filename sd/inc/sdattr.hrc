@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -166,3 +167,5 @@
 #define ATTR_PARANUMBERING_END          ATTR_NUMBER_NEWSTART_AT
 
 #endif // _SDATTR_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

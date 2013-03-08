@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -25,3 +26,5 @@
 #define RID_TLB_MACROS          ( RID_BASICIDE_START + 72 )
 
 #endif // BASCTL_OBJDLG_HRR
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

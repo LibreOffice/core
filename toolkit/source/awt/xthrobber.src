@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -91,3 +92,5 @@ Image RID_TK_ICON_THROBBER_START + 11
     ImageBitmap = Bitmap{ file = "spinner03-grey_12.png"; };
     STD_MASK_COLOR
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

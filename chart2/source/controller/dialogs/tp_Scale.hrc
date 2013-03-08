@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -51,3 +52,4 @@
 #define LB_HELP_TIME_UNIT   3
 #define LB_TIME_RESOLUTION  4
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

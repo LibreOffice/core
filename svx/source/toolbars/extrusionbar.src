@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -72,3 +73,5 @@ String RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR
 {
     Text [ en-US ] = "Change Extrusion Color";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

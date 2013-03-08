@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -574,3 +575,5 @@ String STR_INVALID_TABLE_NAME_LENGTH
 {
     Text [ en-US ] = "Please change the table name. It is too long.";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

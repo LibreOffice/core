@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -65,3 +66,4 @@ String RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES {
     "Click \'OK\' to replace the installed extension.\n"
     "Click \'Cancel\' to stop the installation.";
 };
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

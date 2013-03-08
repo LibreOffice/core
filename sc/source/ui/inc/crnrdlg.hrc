@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -34,3 +35,5 @@
 #define ED_DATA         17
 #define RB_DATA         18
 #define FT_DATA_LABEL   19
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

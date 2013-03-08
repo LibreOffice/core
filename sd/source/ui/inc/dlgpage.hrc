@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -16,3 +17,5 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #define TAB_PAGE    20625
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -231,3 +232,5 @@ ModalDialog DLG_NEW_FILE
     44;
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

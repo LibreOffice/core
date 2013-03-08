@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -377,3 +378,5 @@ ImageList IMGLST_GROUPSORT_DLG_SC
     prefix = "sc";
     DEF_IL_GROUPSORT ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

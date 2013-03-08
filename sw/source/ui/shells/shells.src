@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -244,3 +245,5 @@ String STR_SWBG_FOOTER
 
 // #i68101# no longer needed:
 // String STR_NAME_SHAPE_LABEL {// String STR_NAME_SHAPE_DIALOG { Text [ de ] = "Objekt benennen" ; Text [ en-US ] = "Name Object"; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

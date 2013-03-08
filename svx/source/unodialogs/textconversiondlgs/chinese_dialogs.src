@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -192,3 +193,5 @@ ModalDialog DLG_CHINESEDICTIONARY
 
     BUTTONS_OK_CANCEL_HELP_ABREAST( FULL_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT, ROW_8 )
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

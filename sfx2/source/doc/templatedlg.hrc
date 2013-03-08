@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright 2012 LibreOffice contributors.
  *
@@ -74,3 +75,5 @@
 
 #define IMG_ACTION_SORT             304
 #define IMG_ACTION_REFRESH          305
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

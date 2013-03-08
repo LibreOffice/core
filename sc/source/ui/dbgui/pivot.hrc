@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -65,3 +66,5 @@
 #define PIVOTSTR_DEV2           9
 #define PIVOTSTR_VAR            10
 #define PIVOTSTR_VAR2           11
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

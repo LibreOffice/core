@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -618,3 +619,5 @@ The application menu bar resource has become obsolete. You can now find the menu
 <project>/basicide/menubar/menubar.xml.
 
 */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

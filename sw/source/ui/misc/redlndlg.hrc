@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -23,3 +24,5 @@
 #define MN_SORT_DATE        5
 #define MN_SORT_COMMENT     6
 #define MN_SORT_POSITION    7
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

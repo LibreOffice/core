@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright 2012 LibreOffice contributors.
  *
@@ -27,3 +28,5 @@ FixedText FT_NAME
     Pos = MAP_APPFONT( 52, 3 );
     Size = MAP_APPFONT( 238, 12 );
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

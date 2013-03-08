@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -156,3 +157,5 @@ QueryBox RID_QUERYBOX_INSTALL_FOR_ALL
 
 #define LIC_DLG_WIDTH COL5_X+RSC_CD_PUSHBUTTON_WIDTH+RSC_SP_DLG_INNERBORDER_RIGHT
 #define BODYWIDTH LIC_DLG_WIDTH-RSC_SP_DLG_INNERBORDER_LEFT-RSC_SP_DLG_INNERBORDER_RIGHT
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

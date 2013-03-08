@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -62,3 +63,5 @@ String STR_QUERY_REL_COULD_NOT_CREATE
 {
     Text [ en-US ] = "The database could not create the relation. Maybe foreign keys for this kind of table aren't supported.\nPlease check your documentation of the database.";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

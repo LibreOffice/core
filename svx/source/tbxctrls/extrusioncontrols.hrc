@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -84,3 +85,5 @@
 #define BTN_OK                  3
 #define BTN_CANCEL              4
 #define BTN_HELP                5
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

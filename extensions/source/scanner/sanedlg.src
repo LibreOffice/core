@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -278,3 +279,5 @@ String RID_SANE_NOSANELIB_TXT
 {
     Text [ en-US ] = "The SANE interface could not be initialized. Scanning is not possible." ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

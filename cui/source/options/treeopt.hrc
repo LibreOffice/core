@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -54,3 +55,5 @@
 #define ROW_4                   (ROW_3+RSC_CD_FIXEDLINE_HEIGHT)
 #define ROW_5                   (ROW_4+RSC_CD_PUSHBUTTON_HEIGHT)
 #define ROW_6                   (ROW_5+RSC_SP_DLG_INNERBORDER_BOTTOM)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

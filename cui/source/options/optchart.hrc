@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -27,3 +28,5 @@
 #define PB_RESET_TO_DEFAULT     5
 #define PB_ADD_CHART_COLOR              6
 #define PB_REMOVE_CHART_COLOR           7
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

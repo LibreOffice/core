@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -54,3 +55,5 @@ BUTTONS_OK_CANCEL_HELP( xRightPos, 6, 0, 17 )
 BUTTONS_OK_CANCEL_HELP( xRightPos, yTopPos, (BUTTONGROUP_BUTTONWIDTH+3), 0 )
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

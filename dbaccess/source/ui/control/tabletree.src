@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -76,3 +77,5 @@ String STR_ALL_TABLES_AND_VIEWS
 {
     Text [ en-US ] = "All tables and views";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

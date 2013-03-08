@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -61,3 +62,5 @@
 #define STR_JDBC_LOG_MESSAGE_BASE       STR_LOG_MESSAGE_BASE + 500
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

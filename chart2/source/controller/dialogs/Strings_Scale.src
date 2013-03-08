@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -41,3 +42,5 @@ String STR_INVALID_TIME_UNIT
 {
     Text [ en-US ] = "The major and minor interval need to be greater or equal to the resolution. Check your input." ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

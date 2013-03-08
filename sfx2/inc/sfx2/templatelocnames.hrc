@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -49,3 +50,5 @@
 #define STR_TEMPLATE_NAME8      (TEMPL_LOC_OFFSET + 58)
 #define STR_TEMPLATE_NAME9      (TEMPL_LOC_OFFSET + 59)
 #define STR_TEMPLATE_NAME10     (TEMPL_LOC_OFFSET + 60)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

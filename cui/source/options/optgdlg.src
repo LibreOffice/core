@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -258,3 +259,5 @@ InfoBox RID_SVX_MSGBOX_LANGUAGE_RESTART
 {
     Message [ en-US ] = "The language setting of the user interface has been updated and will take effect the next time you start %PRODUCTNAME %PRODUCTVERSION";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
