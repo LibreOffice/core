@@ -608,7 +608,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     putenv(strdup(osJavaHome.getStr()));
 #endif
 
-    typedef jint JNICALL JNI_InitArgs_Type(void *);
     typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);
     rtl::OUString sSymbolCreateJava(
             RTL_CONSTASCII_USTRINGPARAM("JNI_CreateJavaVM"));
