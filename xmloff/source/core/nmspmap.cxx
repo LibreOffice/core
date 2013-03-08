@@ -463,7 +463,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeW3URI( ::rtl::OUString& rName )
 
     sal_Bool bSuccess = sal_False;
     const OUString sURIPrefix = GetXMLToken( XML_URI_W3_PREFIX );
-    if( rName == sURIPrefix )
+    if( rName.compareTo( sURIPrefix, sURIPrefix.getLength() ) == 0 )
     {
         const OUString sURISuffix = GetXMLToken( XML_URI_XFORMS_SUFFIX );
         sal_Int32 nCompareFrom = rName.getLength() - sURISuffix.getLength();
@@ -508,7 +508,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
     sal_Int32 nNameLen = rName.getLength();
     // :urn:oasis:names:tc.*
     const OUString& rOasisURN = GetXMLToken( XML_URN_OASIS_NAMES_TC );
-    if( rName != rOasisURN )
+    if( 0 != rName.compareTo( rOasisURN, rOasisURN.getLength() ) )
         return sal_False;
 
     // :urn:oasis:names:tc:.*
@@ -526,7 +526,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
     nPos = nTCIdEnd + 1;
     OUString sTmp( rName.copy( nPos ) );
     const OUString& rXMLNS = GetXMLToken( XML_XMLNS );
-    if( sTmp != rXMLNS )
+    if( 0!= sTmp.compareTo( rXMLNS, rXMLNS.getLength() ) )
         return sal_False;
 
     // :urn:oasis:names:tc:[^:]:xmlns:.*

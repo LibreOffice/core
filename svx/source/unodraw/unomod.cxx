@@ -172,7 +172,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
 {
     const OUString aDrawingPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.") );
 
-    if( rServiceSpecifier == aDrawingPrefix )
+    if( rServiceSpecifier.compareTo( aDrawingPrefix, aDrawingPrefix.getLength() ) == 0 )
     {
         sal_uInt32 nType = UHashMap::getId( rServiceSpecifier );
         if( nType != UHASHMAP_NOTFOUND )

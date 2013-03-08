@@ -157,7 +157,7 @@ OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::co
             xStorageProperties->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
             if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII || sMediaType == MIMETYPE_VND_SUN_XML_BASE_ASCII )
             {
-                if ( bStreamFromDescr && (sURL != "private:stream") )
+                if ( bStreamFromDescr && sURL.compareTo( OUString( "private:stream" ), 14 ) != COMPARE_EQUAL )
                 {
                     // After fixing of the i88522 issue ( use the new file locking for database files ) the stream from the type detection can be used further
                     // for now the file should be reopened to have read/write access

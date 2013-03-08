@@ -550,7 +550,7 @@ sal_Bool BibliographyLoader::hasByName(const rtl::OUString& rName) throw ( Runti
             do
             {
                 rtl::OUString sCurrentId = xIdColumn->getString();
-                if (!xIdColumn->wasNull() && (rName == sCurrentId))
+                if (!xIdColumn->wasNull() && (rName.compareTo(sCurrentId) == COMPARE_EQUAL))
                 {
                     bRet = sal_True;
                     break;

@@ -79,7 +79,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
         for ( sal_Int16 i=0; i< xAttribs->getLength(); i++ )
         {
             OUString aName = xAttribs->getNameByIndex( i );
-            if ( aName == m_aXMLAttributeNamespace )
+            if ( aName.compareTo( m_aXMLAttributeNamespace, m_aXMLAttributeNamespace.getLength() ) == 0 )
                 aXMLNamespaces.addNamespace( aName, xAttribs->getValueByIndex( i ));
             else
                 aAttributeIndexes.push_back( i );

@@ -217,7 +217,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
             if (evt.NewValue >>= aUrl)
             {
                 ::rtl::OUString aBad (RTL_CONSTASCII_USTRINGPARAM ("private:"));
-                if (aUrl != aBad)
+                if (!(aUrl.compareTo (aBad, aBad.getLength()) == 0))
                 {
                     // URL changed (Redirection).
                     m_xLockBytes->SetRealURL_Impl( aUrl );

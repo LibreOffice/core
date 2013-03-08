@@ -1257,7 +1257,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 // the package URL based graphics are handled in different way currently
                 // TODO/LATER: actually this is the correct place to handle them
                 ::rtl::OUString aGraphicProtocol( RTL_CONSTASCII_USTRINGPARAM( sGraphicObjectProtocol ) );
-                if( aGrfUrl ==  aGraphicProtocol )
+                if( aGrfUrl.compareTo( aGraphicProtocol, aGraphicProtocol.getLength() ) == 0 )
                 {
                     rtl::OString sId(rtl::OUStringToOString(
                         aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1),
