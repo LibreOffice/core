@@ -826,6 +826,7 @@
                 <it>.*/autocorr/.*</it>
                 <it>.*/basic/.*</it>
                 <it>.*/config/.*\.so[bcdegh]</it>
+                <it>.*/config/javasettings.*\.xml</it>
                 <it>.*/config/soffice.cfg/modules/.*/menubar/.*\.xml</it>
                 <it>.*/config/soffice.cfg/modules/.*/statusbar/.*\.xml</it>
                 <it>.*/config/soffice.cfg/modules/.*/toolbar/.*\.xml</it>
@@ -843,6 +844,7 @@
                 <it>/org.openoffice.Office.Events</it>
                 <it>/org.openoffice.Office.ExtendedColorScheme</it>
                 <it>/org.openoffice.Office.Histories</it>
+                <it>/org.openoffice.Office.Jobs</it>
                 <it>/org.openoffice.Office.Paths</it>
                 <it>/org.openoffice.Office.Recovery</it>
                 <it>/org.openoffice.Office.Common/Accessibility</it>
