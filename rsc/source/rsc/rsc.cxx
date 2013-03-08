@@ -345,7 +345,7 @@ OString RscCmdLine::substitutePaths( const OString& rIn )
     // search for longest replacement match
     for( std::list< std::pair< OString, OString > >::const_iterator repl = m_aReplacements.begin(); repl != m_aReplacements.end(); ++repl )
     {
-        if( rIn.compareTo( repl->second, repl->second.getLength() ) == 0 ) // path matches
+        if( rIn.startsWith( repl->second ) ) // path matches
         {
             if( last_match == m_aReplacements.end() || last_match->second.getLength() < repl->second.getLength() )
                 last_match = repl;
