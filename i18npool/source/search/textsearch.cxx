@@ -124,14 +124,12 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     sSrchStr = aSrchPara.searchString;
 
     // use transliteration here
-    if ( xTranslit.is() &&
-     aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
+    if ( xTranslit.is() && aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
         sSrchStr = xTranslit->transliterateString2String(
-                aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
+            aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
-    if ( xTranslit2.is() &&
-     aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
-    sSrchStr2 = xTranslit2->transliterateString2String(
+    if ( xTranslit2.is() && aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
+        sSrchStr2 = xTranslit2->transliterateString2String(
             aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
     // When start or end of search string is a complex script type, we need to
@@ -204,22 +202,32 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             newStartPos = FindPosInSeq_Impl( offset, startPos );
 
         if( endPos < searchStr.getLength() )
-        newEndPos = FindPosInSeq_Impl( offset, endPos );
+            newEndPos = FindPosInSeq_Impl( offset, endPos );
         else
             newEndPos = in_str.getLength();
 
         sres = (this->*fnForward)( in_str, newStartPos, newEndPos );
 
-        for ( int k = 0; k < sres.startOffset.getLength(); k++ )
+        // Map offsets back to untransliterated string.
+        const sal_Int32 nOffsets = offset.getLength();
+        if (nOffsets)
         {
-            if (sres.startOffset[k])
-          sres.startOffset[k] = offset[sres.startOffset[k]];
-            // JP 20.6.2001: end is ever exclusive and then don't return
-            //               the position of the next character - return the
-            //               next position behind the last found character!
-            //               "a b c" find "b" must return 2,3 and not 2,4!!!
-            if (sres.endOffset[k])
-          sres.endOffset[k] = offset[sres.endOffset[k]-1] + 1;
+            // For regex nGroups is the number of groups+1 with group 0 being
+            // the entire match.
+            const sal_Int32 nGroups = sres.startOffset.getLength();
+            for ( sal_Int32 k = 0; k < nGroups; k++ )
+            {
+                const sal_Int32 nStart = sres.startOffset[k];
+                if (nStart > 0)
+                    sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
+                // JP 20.6.2001: end is ever exclusive and then don't return
+                //               the position of the next character - return the
+                //               next position behind the last found character!
+                //               "a b c" find "b" must return 2,3 and not 2,4!!!
+                const sal_Int32 nStop = sres.endOffset[k];
+                if (nStop > 0)
+                    sres.endOffset[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
+            }
         }
     }
     else
@@ -291,24 +299,34 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         // JP 20.6.2001: also the start and end positions must be corrected!
         if( startPos < searchStr.getLength() )
             newStartPos = FindPosInSeq_Impl( offset, startPos );
-    else
-        newStartPos = in_str.getLength();
+        else
+            newStartPos = in_str.getLength();
 
         if( endPos )
-        newEndPos = FindPosInSeq_Impl( offset, endPos );
+            newEndPos = FindPosInSeq_Impl( offset, endPos );
 
         sres = (this->*fnBackward)( in_str, newStartPos, newEndPos );
 
-        for ( int k = 0; k < sres.startOffset.getLength(); k++ )
+        // Map offsets back to untransliterated string.
+        const sal_Int32 nOffsets = offset.getLength();
+        if (nOffsets)
         {
-            if (sres.startOffset[k])
-          sres.startOffset[k] = offset[sres.startOffset[k] - 1] + 1;
-            // JP 20.6.2001: end is ever exclusive and then don't return
-            //               the position of the next character - return the
-            //               next position behind the last found character!
-            //               "a b c" find "b" must return 2,3 and not 2,4!!!
-            if (sres.endOffset[k])
-          sres.endOffset[k] = offset[sres.endOffset[k]];
+            // For regex nGroups is the number of groups+1 with group 0 being
+            // the entire match.
+            const sal_Int32 nGroups = sres.startOffset.getLength();
+            for ( sal_Int32 k = 0; k < nGroups; k++ )
+            {
+                const sal_Int32 nStart = sres.startOffset[k];
+                if (nStart > 0)
+                    sres.startOffset[k] = offset[(nStart <= nOffsets ? nStart : nOffsets) - 1] + 1;
+                // JP 20.6.2001: end is ever exclusive and then don't return
+                //               the position of the next character - return the
+                //               next position behind the last found character!
+                //               "a b c" find "b" must return 2,3 and not 2,4!!!
+                const sal_Int32 nStop = sres.endOffset[k];
+                if (nStop > 0)
+                    sres.endOffset[k] = (nStop < nOffsets ? offset[nStop] : (offset[nOffsets - 1] + 1));
+            }
         }
     }
     else
@@ -734,6 +752,11 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
         int nEndOfs = pRegexMatcher->end( nIcuErr);
         if( nStartOfs < nEndOfs)
             break;
+        // If the zero-length match is behind the string, do not match it again
+        // and again until startPos reaches there. A match behind the string is
+        // a "$" anchor.
+        if (nStartOfs == endPos)
+            break;
         // try at next position if there was a zero-length match
         if( ++startPos >= endPos)
             return aRet;
@@ -779,17 +802,35 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     // find the last match
     int nLastPos = 0;
     int nFoundEnd = 0;
+    int nGoodPos = 0, nGoodEnd = 0;
+    bool bFirst = true;
     do {
         nLastPos = pRegexMatcher->start( nIcuErr);
         nFoundEnd = pRegexMatcher->end( nIcuErr);
+        if (nLastPos < nFoundEnd)
+        {
+            // remember last non-zero-length match
+            nGoodPos = nLastPos;
+            nGoodEnd = nFoundEnd;
+        }
         if( nFoundEnd >= startPos)
             break;
+        bFirst = false;
         if( nFoundEnd == nLastPos)
             ++nFoundEnd;
     } while( pRegexMatcher->find( nFoundEnd, nIcuErr));
 
+    // Ignore all zero-length matches except "$" anchor on first match.
+    if (nGoodPos == nGoodEnd)
+    {
+        if (bFirst && nLastPos == startPos)
+            nGoodPos = nLastPos;
+        else
+            return aRet;
+    }
+
     // find last match again to get its details
-    pRegexMatcher->find( nLastPos, nIcuErr);
+    pRegexMatcher->find( nGoodPos, nIcuErr);
 
     // fill in the details of the last match
     const int nGroupCount = pRegexMatcher->groupCount();
