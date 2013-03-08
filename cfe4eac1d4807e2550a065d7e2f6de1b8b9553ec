@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH///nc\u003d",
+        "filename": "sw/source/ui/inc/swruler.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-03-08T14:57:06Z",
+      "side": 1,
+      "message": "Oh a whitespace error here ;)",
+      "revId": "cfe4eac1d4807e2550a065d7e2f6de1b8b9553ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///m8\u003d",
+        "filename": "sw/source/ui/misc/swruler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-03-08T14:57:06Z",
+      "side": 1,
+      "message": "See how STR_GLOSSARY is defined. You can then add the strings this way:\n  * the identifier definition in sw/source/ui/inc/misc.hrc\n  * and the string defintion in sw/source/ui/misc/swruler.src\nOf course don\u0027t forget the add the .src file to the sw/AllLangResTarget_sw.mk file",
+      "revId": "cfe4eac1d4807e2550a065d7e2f6de1b8b9553ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///nY\u003d",
+        "filename": "sw/source/ui/misc/swruler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-03-08T14:57:06Z",
+      "side": 1,
+      "message": "whitespace error here again",
+      "revId": "cfe4eac1d4807e2550a065d7e2f6de1b8b9553ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
