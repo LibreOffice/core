@@ -83,7 +83,7 @@ oslModule SAL_CALL osl_loadAsciiModule(const sal_Char *pszModuleName, sal_Int32 
 
 #if OSL_DEBUG_LEVEL > 1
         if (pLib == 0)
-            OSL_TRACE("Error osl_loadModule: %s\n", dlerror());
+            OSL_TRACE("error: osl_loadModule failed with %s\n", dlerror());
 #endif /* OSL_DEBUG_LEVEL */
 
         return ((oslModule)(pLib));
@@ -120,7 +120,7 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 #if OSL_DEBUG_LEVEL > 1
         if (nRet != 0)
         {
-            fprintf(stderr, "Error osl_unloadModule: %s\n", dlerror());
+            fprintf(stderr, "error: osl_unloadModule failed with %s\n", dlerror());
         }
 #else
         (void) nRet;
@@ -154,7 +154,7 @@ osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
         fcnAddr = dlsym(Module, pSymbol);
 
         if (!fcnAddr)
-            OSL_TRACE("Error osl_getAsciiFunctionSymbol: %s\n", dlerror());
+            OSL_TRACE("error: osl_getAsciiFunctionSymbol failed with %s\n", dlerror());
     }
 #endif
 
@@ -234,3 +234,4 @@ sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress(oslGenericFunction addr, r
 {
     return osl_getModuleURLFromAddress((void*)addr, ppLibraryUrl);
 }
+
