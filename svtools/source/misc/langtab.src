@@ -205,7 +205,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Latin" ; LANGUAGE_LATIN ; > ;
         < "Esperanto" ; LANGUAGE_USER_ESPERANTO ; > ;
         < "Kinyarwanda (Rwanda)" ; LANGUAGE_USER_KINYARWANDA ; > ;
-        < "Maori (New Zealand)" ; LANGUAGE_MAORI_NEW_ZEALAND ; > ;
+        < "Maori" ; LANGUAGE_MAORI_NEW_ZEALAND ; > ;
         < "Galician" ; LANGUAGE_GALICIAN ; > ;
         < "Dhivehi" ; LANGUAGE_DHIVEHI ; > ;
         < "Northern Sotho" ; LANGUAGE_SEPEDI ; > ;
