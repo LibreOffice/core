@@ -143,4 +143,12 @@ bool EApiInit()
     return false;
 }
 
+ESourceRegistry *get_e_source_registry()
+{
+    static ESourceRegistry *theInstance;
+    if (!theInstance)
+        theInstance = e_source_registry_new_sync(NULL, NULL);
+    return theInstance;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
