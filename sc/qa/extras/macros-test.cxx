@@ -116,7 +116,6 @@ void ScMacrosTest::testVba()
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vba.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document")),
         },
-#if VBAIMPORTFIXED// currently master seems to fail to import vba for these docs
         {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MiscRangeTests.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
@@ -191,7 +190,6 @@ void ScMacrosTest::testVba()
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ranges.")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"))
         },
-#endif
 #endif
     };
 
