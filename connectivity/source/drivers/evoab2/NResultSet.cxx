@@ -411,7 +411,7 @@ public:
             return NULL;
 
         ESource *pSource = e_source_registry_ref_source(get_e_source_registry(), id);
-        EBookClient *pBook = pSource ? e_book_client_new (pSource, NULL) : NULL;
+        EBookClient *pBook = pSource ? createClient (pSource) : NULL;
         if (pBook && !e_client_open_sync (pBook, TRUE, NULL, NULL))
         {
             g_object_unref (G_OBJECT (pBook));
@@ -478,6 +478,21 @@ public:
 
         m_pContacts = g_slist_sort_with_data( m_pContacts, &CompareContacts,
             const_cast< gpointer >( static_cast< gconstpointer >( &_rCompData ) ) );
+    }
+
+protected:
+    virtual EBookClient * createClient( ESource *pSource )
+    {
+        return e_book_client_new (pSource, NULL);
+    }
+};
+
+class OEvoabVersion38Helper : public OEvoabVersion36Helper
+{
+protected:
+    virtual EBookClient * createClient( ESource *pSource )
+    {
+        return e_book_client_connect_direct_sync (get_e_source_registry (), pSource, NULL, NULL);
     }
 };
 
@@ -614,7 +629,9 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     ,m_nIndex(-1)
     ,m_nLength(0)
 {
-    if (eds_check_version(3, 6, 0) == NULL)
+    if (eds_check_version( 3, 7, 6 ) == NULL)
+        m_pVersionHelper  = new OEvoabVersion38Helper;
+    else if (eds_check_version( 3, 6, 0 ) == NULL)
         m_pVersionHelper  = new OEvoabVersion36Helper;
     else
         m_pVersionHelper  = new OEvoabVersion35Helper;
