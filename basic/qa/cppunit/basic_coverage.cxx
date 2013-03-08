@@ -19,7 +19,6 @@ namespace
 class Coverage : public test::BootstrapFixture
 {
 private:
-    bool m_bError;
     int  m_nb_tests;
     int  m_nb_tests_ok;
     int  m_nb_tests_skipped;
@@ -50,7 +49,6 @@ public:
 
 Coverage::Coverage()
     : BootstrapFixture(true, false)
-    , m_bError(false)
     , m_nb_tests(0)
     , m_nb_tests_ok(0)
     , m_nb_tests_skipped(0)
