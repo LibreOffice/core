@@ -46,5 +46,7 @@ class CGLayout(ConfigGroup):
         return [ResId, ResId + 1]
 
     def getTemplates(self, xmsf):
-        self.createTemplates(xmsf)
-        return self.templates
+        # COMMENT - TODO
+        #self.createTemplates(xmsf)
+        #return self.templates
+        return {}

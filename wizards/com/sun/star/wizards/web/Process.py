@@ -345,8 +345,7 @@ class Process(ProcessErrors):
     @classmethod
     def generate1(self, xmsf, layout, doc, fileAccess, targetPath, task):
         # a map that contains xsl templates. the keys are the xsl file names.
-        #templates = layout.getTemplates(xmsf)
-        templates = {}
+        templates = layout.getTemplates(xmsf)
 
         task.advance1(True, TASK_GENERATE_XSL)
 
