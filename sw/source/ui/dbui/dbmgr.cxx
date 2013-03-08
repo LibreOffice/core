@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
+#include <com/sun/star/sdb/TextConnectionSettings.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -2278,7 +2279,6 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
 #endif
         try
         {
-            Reference<XMultiServiceFactory> xMgr( ::comphelper::getProcessServiceFactory() );
             Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
             Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
             Reference<XSingleServiceFactory> xFact( xDBContext, UNO_QUERY);
@@ -2322,7 +2322,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
 
                 if( bTextConnection )
                 {
-                    uno::Reference < ui::dialogs::XExecutableDialog > xSettingsDlg(xMgr->createInstance( "com.sun.star.sdb.TextConnectionSettings" ), uno::UNO_QUERY);
+                    uno::Reference < ui::dialogs::XExecutableDialog > xSettingsDlg = sdb::TextConnectionSettings::create(xContext);
                     if( xSettingsDlg->execute() )
                     {
                         uno::Any aSettings = xDataProperties->getPropertyValue( "Settings" );

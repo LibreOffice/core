@@ -292,6 +292,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
     OrderDialog \
 	ReportDesign \
 	TableDefinition \
+	TextConnectionSettings \
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb/application,\
 	CopyTableWizard \
