@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="upper">20</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="NumberingFormatPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -310,6 +306,7 @@
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="vscrollbar_policy">always</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="categorylb">
@@ -359,12 +356,14 @@
               <object class="GtkAlignment" id="alignment4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="top_padding">6</property>
                 <child>
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
@@ -386,6 +385,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">start</property>
+                        <property name="hexpand">True</property>
                         <property name="model">liststore2</property>
                       </object>
                       <packing>
@@ -516,6 +516,11 @@
         <property name="height">1</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">20</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>

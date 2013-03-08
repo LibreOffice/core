@@ -235,6 +235,9 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(Window* pParent,
     get(m_pFtFormat, "formatft");
     get(m_pLbCurrency, "currencylb");
     get(m_pLbFormat, "formatlb");
+    long nWidth = approximate_char_width() * 26;
+    m_pLbFormat->set_width_request(nWidth);
+    m_pLbCurrency->set_width_request(nWidth);
     get(m_pFtLanguage, "languageft");
     get(m_pLbLanguage, "languagelb");
     get(m_pCbSourceFormat, "sourceformat");
