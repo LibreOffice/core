@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -569,3 +570,5 @@ String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
 {
     Text [ en-US ] = "The library could not be removed from memory." ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

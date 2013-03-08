@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -372,3 +373,5 @@ FixedText ADDFIELD_HELP_FIELD
     WordBreak = TRUE;
     Text [ en-US ] = "Highlight the fields to insert into the selected section of the template, then click Insert or press Enter.";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

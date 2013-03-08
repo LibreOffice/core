@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -168,3 +169,5 @@
 #define FM_PROP_DESCRIPTION                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Description" ) )
 
 #endif // _SVX_FMPROP_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

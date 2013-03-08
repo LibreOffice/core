@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -245,3 +246,5 @@
 #define SV_ICON_ID_PRINTERADMIN               501
 
 #endif  // _SV_SVIDS_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

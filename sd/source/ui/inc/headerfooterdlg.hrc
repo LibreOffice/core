@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -44,3 +45,5 @@
 #define CT_PREVIEW                      26
 #define STR_PAGE_NUMBER                 27
 #define STR_INCLUDE_ON_PAGE             28
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

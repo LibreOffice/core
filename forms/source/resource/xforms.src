@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -183,3 +184,5 @@ String RID_STR_XFORMS_BINDING_UI_NAME
 {
     Text [ en-US ] = "Binding" ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

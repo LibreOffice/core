@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -802,3 +803,5 @@ WarningBox MSG_DISABLE_READLINE_QUESTION
     DEFBUTTON = WB_DEF_YES ;
     Message [ en-US ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

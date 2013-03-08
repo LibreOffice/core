@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -104,3 +105,5 @@ Resource 1005
     Image 11 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-11.png"; }; };
     Image 12 { ImageBitmap = Bitmap{ file = "hicontrast/shared/spinner-64-12.png"; }; };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

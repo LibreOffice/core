@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -140,3 +141,5 @@ Image SV_PRINT_NOCOLLATE_IMG
 {
     ImageBitmap = Bitmap { File = "ncollate.png" ; };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

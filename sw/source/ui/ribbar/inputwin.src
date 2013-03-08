@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -287,3 +288,5 @@ String STR_TBL_FORMULA
         HelpID = HID_TBX_FORMULA_APPLY ; \
         Text [ en-US ] = "Apply" ; \
     };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -52,3 +53,5 @@
 #define CHART_LB_FUNCTION_STD_DEV       1
 #define CHART_LB_FUNCTION_VARIANCE      2
 #define CHART_LB_FUNCTION_ERROR_MARGIN  3
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

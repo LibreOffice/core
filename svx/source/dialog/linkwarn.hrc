@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -48,3 +49,5 @@
 #define DIALOG_HEIGHT       (AW_ROW_4+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_DLG_INNERBORDER_BOTTOM)
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

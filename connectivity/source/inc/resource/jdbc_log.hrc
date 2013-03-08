@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -79,3 +80,5 @@
 #define STR_LOG_SETTING_SYSTEM_PROPERTY     ( STR_JDBC_LOG_MESSAGE_BASE + 56 )
 
 #endif // CONNECTIVITY_RESOURCE_JDBC_LOG_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

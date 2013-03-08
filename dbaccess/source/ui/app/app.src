@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -454,3 +455,5 @@ String RID_STR_UNSUPPORTED_OBJECT_TYPE
 {
     Text [ en-US ] = "Unsupported object type found ($type$).";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

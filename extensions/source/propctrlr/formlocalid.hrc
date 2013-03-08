@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -26,3 +27,5 @@
 #define IMG_MINUS       2
 
 #endif // _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

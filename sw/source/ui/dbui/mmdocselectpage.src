@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -94,3 +95,5 @@ TabPage DLG_MM_DOCSELECT_PAGE
         Border = TRUE;
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

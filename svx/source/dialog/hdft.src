@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -24,3 +25,5 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     DefButton = WB_DEF_NO ;
     Message [ en-US ] = "Removing headers or footers deletes the contents.\nDo you want to delete this text?" ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -300,3 +301,5 @@ String STR_PPI
     Text [ x-comment ] = "PPI is pixel per inch, %1 is a number" ;
     Text [ en-US ] = "(%1 PPI)" ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -228,3 +229,5 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message [ en-US ] = "Do you want to change the '%1' dictionary language?" ;
 };
  // ********************************************************************** EOF
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

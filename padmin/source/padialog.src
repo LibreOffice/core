@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -854,3 +855,5 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text [ en-US ] = "A spec~ific driver, to adapt the format to another printer";
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

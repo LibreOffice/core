@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright 2012 LibreOffice contributors.
  *
@@ -23,3 +24,5 @@ ModalDialog DLG_TEMPLATE_INFORMATION
         Text [ en-US ] = "Close";
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

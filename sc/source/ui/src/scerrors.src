@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -170,3 +171,5 @@ Resource RID_ERRHDLSC
         Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

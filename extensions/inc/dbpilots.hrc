@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -33,3 +34,5 @@
 #define HID_GRIDWIZARD_FINISH                           "EXTENSIONS_HID_GRIDWIZARD_FINISH"
 
 #endif // EXTENSIONS_DBPILOT_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

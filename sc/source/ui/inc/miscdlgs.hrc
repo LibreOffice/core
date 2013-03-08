@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -170,3 +171,5 @@
 // Tab Bg Color
 #define TAB_BG_COLOR_CT_BORDER 1
 #define TAB_BG_COLOR_SET_BGDCOLOR 2
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

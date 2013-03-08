@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -43,3 +44,5 @@
 #define FT_CHG_CHANGE       25
 #define FT_CHG_DELETE       26
 #define FT_CHG_INSERT       27
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

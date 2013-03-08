@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -34,3 +35,5 @@
 #define STR_INVALIDVAR          2
 #define STR_INVALIDFORM         3
 #define STR_NOFORMULA           4
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

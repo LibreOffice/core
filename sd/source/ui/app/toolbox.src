@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -40,3 +41,5 @@ String RID_DRAW_TABLE_TOOLBOX
     TEXT [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -55,3 +56,5 @@
 #define TBI_SHADOW_SIZE         19
 #define TBI_DISTANCE            20
 #define TBI_TEXTSTART           21
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

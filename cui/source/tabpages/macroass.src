@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -102,3 +103,5 @@ TabPage RID_SVXPAGE_EVENTASSIGN
         Text [ en-US ] = "Macros" ;
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

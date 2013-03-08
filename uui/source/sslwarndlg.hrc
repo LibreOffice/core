@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -49,3 +50,5 @@
 #define DLG_CTLBTN_CERT_PUSHBUTTON_WIDTH RSC_CD_PUSHBUTTON_WIDTH + 25
 #define DLG_CTLBTN_CERT_START_X    DLG_TEXT_START_X
 #endif //UUI_SSLWARN_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

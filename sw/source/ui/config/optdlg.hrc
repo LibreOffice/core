@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -172,3 +173,5 @@
 #define CB_RSID						146
 #define CB_IGNORE					147
 #define NF_LEN						148
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

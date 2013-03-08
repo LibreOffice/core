@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -258,3 +259,5 @@ ModalDialog DLG_SPLINE_PROPERTIES
     };
     BUTTONS_OK_CANCEL_HELP( POS_X_SPLINES_1, POS_Y_SPLINES_5, 53, 0 )
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

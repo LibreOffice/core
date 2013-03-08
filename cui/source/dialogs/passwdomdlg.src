@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -198,3 +199,5 @@ ModalDialog RID_DLG_PASSWORD_TO_OPEN_MODIFY
         Text = "Set the password by entering the same password in both boxes." ;
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

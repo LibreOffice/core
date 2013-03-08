@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -97,3 +98,5 @@
 #define RID_NO_SUCH_DATA_SOURCE                 ( RID_CORE_STRINGS_START + 67 )
 
 #endif // _DBA_CORE_RESOURCE_HRC_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

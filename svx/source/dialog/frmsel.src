@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -55,3 +56,4 @@ Resource RID_SVXSTR_BORDER_CONTROL
     Bitmap BMP_FRMSEL_ARROWS { File = "frmsel.bmp"; };
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

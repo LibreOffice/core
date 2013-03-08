@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -107,3 +108,5 @@
 #define SAL_RESID_ICON_DEFAULT                      1
 
 #endif // _SV_SALIDS_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

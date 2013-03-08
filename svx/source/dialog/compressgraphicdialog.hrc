@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -19,3 +20,5 @@
 #define STR_IMAGE_ORIGINAL_SIZE 256
 #define STR_IMAGE_VIEW_SIZE 257
 #define STR_IMAGE_CAPACITY 258
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

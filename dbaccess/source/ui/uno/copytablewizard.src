@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -72,3 +73,5 @@ String STR_CTW_ERROR_INVALID_INTERACTIONHANDLER
 {
     Text [ en-US ] = "The given interaction handler is invalid.";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

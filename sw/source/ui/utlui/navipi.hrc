@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -67,3 +68,5 @@
 #define ST_POSTIT_SHOW              (ST_GLOBAL_CONTEXT_FIRST +35)
 #define ST_POSTIT_HIDE              (ST_GLOBAL_CONTEXT_FIRST +36)
 #define ST_POSTIT_DELETE            (ST_GLOBAL_CONTEXT_FIRST +37)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

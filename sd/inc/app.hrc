@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -454,3 +455,5 @@
 #define SID_TABLE_TOOLBOX                   (SID_SD_START+443)
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

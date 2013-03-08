@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -132,3 +133,5 @@
 #define FL_MAT_SPECULAR             123
 #define FT_MAT_FAVORITES            124
 #define LB_MAT_FAVORITES            125
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

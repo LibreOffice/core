@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -37,3 +38,5 @@
 #define RID_STR_TEXT_FORMAT                 ( RID_PROPCONTROLLER_START +  5 )
 
 #endif // EXTENSIONS_PROPRESID_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

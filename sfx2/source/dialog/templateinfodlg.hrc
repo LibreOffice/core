@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright 2012 LibreOffice contributors.
  *
@@ -9,3 +10,5 @@
 #define DLG_TEMPLATE_INFORMATION        400
 
 #define BTN_TEMPLATE_INFO_CLOSE         11
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

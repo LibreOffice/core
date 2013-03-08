@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -48,3 +49,5 @@
 #define  DLG_EDIT_IDXMARK_CJK   (RC_INDEX_BEGIN + 21)
 #define  DLG_INSIDXMARK_CJK     (RC_INDEX_BEGIN + 22)
 #endif  // _INDEX_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

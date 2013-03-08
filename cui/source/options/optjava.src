@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -189,3 +190,4 @@ WarningBox RID_SVX_MSGBOX_OPTIONS_RESTART
     Message [ en-US ] = "You have to restart %PRODUCTNAME so the new or modified values can take effect.\nPlease restart %PRODUCTNAME now." ;
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

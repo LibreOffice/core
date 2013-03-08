@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -659,3 +660,5 @@ String STR_ERR_USE_CONNECT_TO
 {
     Text [ en-US ] = "Please choose 'Connect to an existing database' to connect to an existing database instead.";
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

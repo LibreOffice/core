@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -21,3 +22,5 @@
 #define CHART_WIZARD_PAGEWIDTH  250
 #define CHART_WIZARD_PAGEHEIGHT 140
 //width 198 height 150
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
