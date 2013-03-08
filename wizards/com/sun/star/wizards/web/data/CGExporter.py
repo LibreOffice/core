@@ -15,7 +15,7 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from ...common.ConfigSet import ConfigSet
+from ..WebConfigSet import WebConfigSet
 from ...common.ConfigGroup import ConfigGroup
 from .CGArgument import CGArgument
 
@@ -33,7 +33,7 @@ class CGExporter(ConfigGroup):
     cp_Binary = bool()
     cp_PageType = int()
     targetTypeName = ""
-    cp_Arguments = ConfigSet(CGArgument())
+    cp_Arguments = WebConfigSet(CGArgument)
 
     def supports(self, mime):
         return CGExporter.cp_SupportedMimeTypes == "" or \

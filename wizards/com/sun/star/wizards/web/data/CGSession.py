@@ -18,7 +18,7 @@
 import uno
 
 from ...common.ConfigGroup import ConfigGroup
-from ...common.ConfigSet import ConfigSet
+from ..WebConfigSet import WebConfigSet
 from ...common.XMLHelper import XMLHelper
 from .CGContent import CGContent
 from .CGDesign import CGDesign
@@ -36,7 +36,7 @@ class CGSession(ConfigGroup):
     cp_Content = CGContent()
     cp_Design = CGDesign()
     cp_GeneralInfo = CGGeneralInfo()
-    cp_Publishing = ConfigSet(CGPublish())
+    cp_Publishing = WebConfigSet(CGPublish)
     valid = False
 
     def createDOM(self, parent):
@@ -62,7 +62,7 @@ class CGSession(ConfigGroup):
         return self.root.cp_Layouts.getElement(self.cp_Design.cp_Layout)
 
     def getStyle(self):
-        return self.root.cp_Styles.getElementAt(self.cp_Design.cp_Style)
+        return self.root.cp_Styles.getElement(self.cp_Design.cp_Style)
 
     def createDOM1(self):
         doc = Document()

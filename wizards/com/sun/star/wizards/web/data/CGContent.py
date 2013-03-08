@@ -16,7 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from ...common.ConfigGroup import ConfigGroup
-from ...common.ConfigSet import ConfigSet
+from ..WebConfigSet import WebConfigSet
 from ...common.XMLHelper import XMLHelper
 from .CGDocument import CGDocument
 
@@ -27,8 +27,8 @@ class CGContent(ConfigGroup):
     cp_Name = str()
     cp_Description = str()
     #COMMENTED
-    #cp_Contents = ConfigSet(CGContent)
-    cp_Documents = ConfigSet(CGDocument())
+    #cp_Contents = WebConfigSet(CGContent)
+    cp_Documents = WebConfigSet(CGDocument())
 
     def createDOM(self, parent):
         myElement = XMLHelper.addElement(

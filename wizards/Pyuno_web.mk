@@ -54,6 +54,7 @@ $(eval $(call gb_Pyuno_add_files,web,\
 	WebWizardDialogResources.py \
 	TypeDetection.py \
 	ExtensionVerifier.py\
+	WebConfigSet.py\
 	__init__.py \
 	data/CGArgument.py \
 	data/CGContent.py \
