@@ -3444,10 +3444,39 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
     return aColor;
 }
 
+void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
+{
+    DffRecordHeader aRecHd;
+    rStream >> aRecHd;
+    if( aRecHd.nRecType == DFF_msofbtClientTextbox || aRecHd.nRecType == 0x1022 )
+    {
+        while( rStream.GetError() == 0 && rStream.Tell() < aRecHd.GetRecEndFilePos() )
+        {
+            DffRecordHeader aHd;
+            rStream >> aHd;
+            switch( aHd.nRecType )
+            {
+                case DFF_PST_TextBytesAtom:
+                case DFF_PST_TextCharsAtom:
+                    {
+                        bool bUniCode = ( aHd.nRecType == DFF_PST_TextCharsAtom );
+                        sal_uInt32 nBytes = aHd.nRecLen;
+                        String aStr = MSDFFReadZString( rStream, nBytes, bUniCode );
+                        ReadObjText( aStr, pObj );
+                    }
+                    break;
+                default:
+                    break;
+            }
+            aHd.SeekToEndOfRecord( rStream );
+        }
+    }
+}
+
 // sj: I just want to set a string for a text object that may contain multiple
 // paragraphs. If I now take a look at the follwing code I get the impression that
 // our outliner is too complicate to be used properly,
-void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj ) const
+void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
 {
     SdrTextObj* pText = PTR_CAST( SdrTextObj, pObj );
     if ( pText )

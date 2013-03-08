@@ -67,6 +67,7 @@ struct SvxMSDffShapeOrder;
 class SvxMSDffManager;
 class SfxItemSet;
 class SdrObject;
+class SdrTextObj;
 struct DffObjData;
 
 class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
@@ -503,7 +504,7 @@ protected :
 
     // Fontwork objects use a new implementation of ReadObjText because the old
     // one does not properly import multiple paragraphs.
-    void ReadObjText( const OUString& rText, SdrObject* pObj ) const;
+    static void ReadObjText( const OUString& rText, SdrObject* pObj );
 
 // the following method needs to be overridden for the import of OLE objects
     virtual sal_Bool GetOLEStorageName( long nOLEId,
@@ -600,6 +601,7 @@ public:
     void    SetSvxMSDffSettings( sal_uInt32 nSettings ) { nSvxMSDffSettings = nSettings; };
 
     static sal_Bool     MakeContentStream( SotStorage * pStor, const GDIMetaFile & );
+    static void         ReadObjText( SvStream& rStream, SdrObject* pObj );
     static sal_Bool     ConvertToOle2( SvStream& rStm,
                                        sal_uInt32 nLen,
                                        const GDIMetaFile*,
