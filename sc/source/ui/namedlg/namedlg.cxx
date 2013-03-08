@@ -56,7 +56,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     //
     maEdName         ( this, ScResId( ED_NAME2 ) ),
     maEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
-    aRbAssign       ( this, ScResId( RB_ASSIGN ), &maEdAssign, this ),
+    aRbAssign       ( this, ScResId( RB_ASSIGN ), &maEdAssign, &maEdName, this ),
     maLbScope( this, ScResId(LB_SCOPE) ),
     //
     maBtnMore        ( this, ScResId( BTN_MORE ) ),

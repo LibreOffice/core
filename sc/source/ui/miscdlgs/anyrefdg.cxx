@@ -479,30 +479,21 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
                 pRefBtn->SetParent(m_pWindow);
         }
 
-        OUString sLabel;
-        if (Window *pLabel = pRefEdit->GetLabelWidgetForShrinkMode())
-        {
-            sLabel = pLabel->GetText();
-        }
-        else
-        {
-            //find last widget before the edit widget to use as title bar contents
-            for (Window* pChild = firstLogicalChildOfParent(m_pWindow); pChild; pChild = nextLogicalChildOfParent(m_pWindow, pChild))
-            {
-                Window *pWin = pChild->GetWindow(WINDOW_CLIENT);
-                if (pWin == (Window*)pRefEdit || pWin == (Window*)pRefBtn)
-                    break;
-                if (pWin->GetType() == WINDOW_EDIT || pWin->GetType() == WINDOW_FIXEDTEXT)
-                    sLabel = pWin->GetText();
-            }
-        }
-
+        // Fenstertitel anpassen
         sOldDialogText = m_pWindow->GetText();
-        String sNewDialogText = sOldDialogText;
-        if (!sLabel.isEmpty())
+        if (pRefBtn)
         {
-            sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-            sNewDialogText += sLabel;
+            if (Window *pLabel = pRefBtn->GetLabelWidgetForShrinkMode())
+            {
+                OUString sLabel = pLabel->GetText();
+                if (!sLabel.isEmpty())
+                {
+                    String sNewDialogText = sOldDialogText;
+                    sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
+                    sNewDialogText += sLabel;
+                    m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
+                }
+            }
         }
 
         Dialog* pResizeDialog = NULL;
@@ -582,9 +573,6 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         // set button image
         if( pRefBtn )
             pRefBtn->SetEndImage();
-
-        // Fenstertitel anpassen
-        m_pWindow->SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
 
         if (!pAccel.get())
         {

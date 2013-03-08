@@ -68,8 +68,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     get(m_pEdName, "edit");
     get(m_pEdRange, "range");
     get(m_pRbRange, "refbutton");
-    m_pRbRange->SetReferences(this, m_pEdRange);
-    m_pEdRange->SetLabelWidgetForShrinkMode(m_pEdName);
+    m_pRbRange->SetReferences(this, m_pEdRange, m_pEdName);
     get(m_pLbScope, "scope");
     get(m_pBtnRowHeader, "rowheader");
     get(m_pBtnColHeader, "colheader");

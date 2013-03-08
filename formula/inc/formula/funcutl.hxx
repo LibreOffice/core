@@ -62,9 +62,7 @@ public:
     void                StartUpdateData();
 
     void                SetRefDialog( IControlReferenceHandler* pDlg );
-    inline IControlReferenceHandler* GetRefDialog() { return pAnyRefDlg; }
-    Window*             GetLabelWidgetForShrinkMode() { return m_pLabelWidget; }
-    void                SetLabelWidgetForShrinkMode(Window *pLabel) { m_pLabelWidget = pLabel; }
+    IControlReferenceHandler* GetRefDialog() { return pAnyRefDlg; }
 };
 
 
@@ -79,6 +77,7 @@ private:
     OUString            aExpandQuickHelp;
     IControlReferenceHandler*      pAnyRefDlg;     // parent dialog
     RefEdit*            pRefEdit;       // zugeordnetes Edit-Control
+    Window*             pLabelWidget;
 
 protected:
     virtual void        Click();
@@ -89,13 +88,17 @@ protected:
 public:
                         RefButton(Window* _pParent, const ResId& rResId);
                         RefButton(Window* _pParent, WinBits nStyle = 0);
-                        RefButton(Window* _pParent, const ResId& rResId, RefEdit* pEdit ,IControlReferenceHandler* pDlg);
+                        RefButton(Window* _pParent, const ResId& rResId,
+                                  RefEdit* pEdit, Window* pShrinkModeLabel,
+                                  IControlReferenceHandler* pDlg);
 
-    void                SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
+    void                SetReferences( IControlReferenceHandler* pDlg,
+                                       RefEdit* pEdit, Window* pShrinkModeLabel );
 
     void                SetStartImage();
     void                SetEndImage();
-    inline void         DoRef() { Click(); }
+    void                DoRef() { Click(); }
+    Window*             GetLabelWidgetForShrinkMode() { return pLabelWidget; }
 };
 
 } // formula

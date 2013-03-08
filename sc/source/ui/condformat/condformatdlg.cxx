@@ -377,7 +377,7 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
     maFtRange( this, ScResId( FT_RANGE ) ),
     maEdRange( this, this, ScResId( ED_RANGE ) ),
-    maRbRange( this, ScResId( RB_RANGE ), &maEdRange, this ),
+    maRbRange( this, ScResId( RB_RANGE ), &maEdRange, &maFtRange, this ),
     maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos, eType ),
     maPos(rPos),
     mpDoc(pDoc),

@@ -57,7 +57,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aFtFilterArea   ( this, ScResId( FT_CRITERIA_AREA ) ),
         aLbFilterArea   ( this, ScResId( LB_CRITERIA_AREA ) ),
         aEdFilterArea   ( this, this, ScResId( ED_CRITERIA_AREA ) ),
-        aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
+        aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, &aFtFilterArea, this ),
         //
         aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
         aBtnCase        ( this, ScResId( BTN_CASE ) ),
@@ -67,7 +67,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aBtnCopyResult  ( this, ScResId( BTN_COPY_RESULT ) ),
         aLbCopyArea     ( this, ScResId( LB_COPY_AREA ) ),
         aEdCopyArea     ( this, this, ScResId( ED_COPY_AREA ) ),
-        aRbCopyArea     ( this, ScResId( RB_COPY_AREA ), &aEdCopyArea, this ),
+        aRbCopyArea     ( this, ScResId( RB_COPY_AREA ), &aEdCopyArea, NULL, this ),
         aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ),
         aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ),
         aFtDbArea       ( this, ScResId( FT_DBAREA ) ),

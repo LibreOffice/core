@@ -80,7 +80,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maFtMappedCellTitle(this, ScResId(FT_MAPPED_CELL_TITLE)),
     maLbTree(this, ScResId(LB_SOURCE_TREE)),
     maRefEdit(this, this, ScResId(ED_MAPPED_CELL)),
-    maRefBtn(this, ScResId(BTN_MAPPED_CELL), &maRefEdit, this),
+    maRefBtn(this, ScResId(BTN_MAPPED_CELL), &maRefEdit, NULL, this),
     maBtnOk(this, ScResId(BTN_OK)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maImgFileOpen(ScResId(IMG_FILE_OPEN)),

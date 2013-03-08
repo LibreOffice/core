@@ -266,7 +266,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aBtnForward     ( pParent, ModuleRes( BTN_FORWARD ) ),
     aBtnEnd         ( pParent, ModuleRes( BTN_END ) ),
     aEdRef          ( pParent, _pDlg, ModuleRes( ED_REF) ),
-    aRefBtn         ( pParent, ModuleRes( RB_REF),&aEdRef,_pDlg ),
+    aRefBtn         ( pParent, ModuleRes( RB_REF),&aEdRef,&aFtEditName,_pDlg ),
     aFtFormResult   ( pParent, ModuleRes( FT_FORMULA_RESULT)),
     aWndFormResult  ( pParent, ModuleRes( WND_FORMULA_RESULT)),
     pTheRefEdit     (NULL),

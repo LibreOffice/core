@@ -112,11 +112,6 @@ void            ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdi
         Window *pNewParent = pValidationDlg->get_refinput_shrink_parent();
         if( pEdit == m_pRefEdit )
         {
-            if( Window *pPreWnd = pEdit==&maEdMax?&maFtMax:(pEdit==&maEdMin?&maFtMin:NULL) )
-            {
-                m_pRefEdit->SetLabelWidgetForShrinkMode(pPreWnd);
-            }
-
             maRefEditPos = m_pRefEdit->GetPosPixel();
             maRefEditSize = m_pRefEdit->GetSizePixel();
             m_pRefEdit->SetParent(pNewParent);
@@ -485,6 +480,7 @@ ScValidationDlg * ScTPValidationValue::GetValidationDlg()
 void ScTPValidationValue::SetupRefDlg()
 {
     if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+    {
         if( pValidationDlg->SetupRefDlg() )
         {
             pValidationDlg->SetHandler( this );
@@ -493,19 +489,34 @@ void ScTPValidationValue::SetupRefDlg()
             pValidationDlg->SetRefInputStartPreHdl( (ScRefHandlerHelper::PINPUTSTARTDLTYPE)( &ScTPValidationValue::RefInputStartPreHdl ) );
             pValidationDlg->SetRefInputDonePostHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::RefInputDonePostHdl ) );
 
-            if ( maEdMax.IsVisible() ) { m_pRefEdit = &maEdMax; }
-            else if ( maEdMin.IsVisible() ) {  m_pRefEdit = &maEdMin; }
+            Window *pLabel = NULL;
 
-            if( m_pRefEdit && !m_pRefEdit->HasFocus() ) m_pRefEdit->GrabFocus();
+            if ( maEdMax.IsVisible() )
+            {
+                m_pRefEdit = &maEdMax;
+                pLabel = &maFtMax;
+            }
+            else if ( maEdMin.IsVisible() )
+            {
+                m_pRefEdit = &maEdMin;
+                pLabel = &maFtMin;
+            }
 
-            if( m_pRefEdit ) m_pRefEdit->SetRefDialog( pValidationDlg );
-            m_btnRef.SetReferences( pValidationDlg, m_pRefEdit );
+            if( m_pRefEdit && !m_pRefEdit->HasFocus() )
+                m_pRefEdit->GrabFocus();
+
+            if( m_pRefEdit )
+                m_pRefEdit->SetRefDialog( pValidationDlg );
+
+            m_btnRef.SetReferences( pValidationDlg, m_pRefEdit, pLabel );
         }
+    }
 }
 
 void ScTPValidationValue::RemoveRefDlg()
 {
     if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+    {
         if( pValidationDlg->RemoveRefDlg() )
         {
             pValidationDlg->SetHandler( NULL );
@@ -514,15 +525,17 @@ void ScTPValidationValue::RemoveRefDlg()
             pValidationDlg->SetRefInputStartPreHdl( NULL );
             pValidationDlg->SetRefInputDonePostHdl( NULL );
 
-            if( m_pRefEdit ) m_pRefEdit->SetRefDialog( NULL );
+            if( m_pRefEdit )
+                m_pRefEdit->SetRefDialog( NULL );
             m_pRefEdit = NULL;
 
-            m_btnRef.SetReferences( NULL, NULL );
+            m_btnRef.SetReferences( NULL, NULL, NULL );
 
 #if ! defined( WNT ) && !defined( _MSC_VER )
             TidyListBoxes();
 #endif
         }
+    }
 }
 
 void ScTPValidationValue::TidyListBoxes()

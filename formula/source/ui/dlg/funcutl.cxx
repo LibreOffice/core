@@ -847,19 +847,17 @@ void EditBox::UpdateOldSel()
 
 #define SC_ENABLE_TIME 100
 
-RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId ) :
-    Edit( _pParent, rResId ),
-    pAnyRefDlg( pParent ),
-    m_pLabelWidget(NULL)
+RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId )
+    : Edit( _pParent, rResId )
+    , pAnyRefDlg( pParent )
 {
     aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
     aTimer.SetTimeout( SC_ENABLE_TIME );
 }
 
-RefEdit::RefEdit( Window* _pParent, WinBits nStyle ) :
-    Edit( _pParent, nStyle ),
-    pAnyRefDlg( NULL ),
-    m_pLabelWidget(NULL)
+RefEdit::RefEdit( Window* _pParent, WinBits nStyle )
+    : Edit( _pParent, nStyle )
+    , pAnyRefDlg( NULL )
 {
     aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
     aTimer.SetTimeout( SC_ENABLE_TIME );
@@ -969,7 +967,8 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId) :
     aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
     aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( NULL ),
-    pRefEdit( NULL )
+    pRefEdit( NULL ),
+    pLabelWidget( NULL )
 {
     SetStartImage();
 }
@@ -981,7 +980,8 @@ RefButton::RefButton( Window* _pParent, WinBits nStyle ) :
     aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
     aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( NULL ),
-    pRefEdit( NULL )
+    pRefEdit( NULL ),
+    pLabelWidget( NULL )
 {
     SetStartImage();
 }
@@ -991,14 +991,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRefButton(Window *pParent, 
     return new RefButton(pParent, 0);
 }
 
-RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, IControlReferenceHandler* _pDlg ) :
+RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, Window* pShrinkModeLabel, IControlReferenceHandler* _pDlg ) :
     ImageButton( _pParent, rResId ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
     aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
     aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
     aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( _pDlg ),
-    pRefEdit( pEdit )
+    pRefEdit( pEdit ),
+    pLabelWidget( pShrinkModeLabel )
 {
     SetStartImage();
 }
@@ -1015,10 +1016,11 @@ void RefButton::SetEndImage()
     SetQuickHelpText( aExpandQuickHelp );
 }
 
-void RefButton::SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit )
+void RefButton::SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit, Window* pShrinkModeLabel )
 {
     pAnyRefDlg = pDlg;
     pRefEdit = pEdit;
+    pLabelWidget = pShrinkModeLabel;
 }
 
 //----------------------------------------------------------------------------

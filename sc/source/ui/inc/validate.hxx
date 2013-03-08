@@ -227,7 +227,11 @@ private:
     {
         void Click();
     public:
-        ScRefButtonEx( Window* pParent, const ResId& rResId, formula::RefEdit* pEdit = NULL, ScRefHandler *pRefHdlr = NULL ): ::formula::RefButton( pParent, rResId, pEdit, pRefHdlr ){}
+        ScRefButtonEx( Window* pParent, const ResId& rResId, formula::RefEdit* pEdit = NULL,
+            Window* pShrinkLabel = NULL, ScRefHandler *pRefHdlr = NULL )
+            : ::formula::RefButton( pParent, rResId, pEdit, pShrinkLabel, pRefHdlr )
+        {
+        }
     }m_btnRef;
     friend class ScRefButtonEx;
     void            SetReferenceHdl( const ScRange& , ScDocument* );
