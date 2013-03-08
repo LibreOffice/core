@@ -37,6 +37,8 @@ $(eval $(call gb_Module_add_targets,basic,\
 $(eval $(call gb_Module_add_check_targets,basic,\
      CppunitTest_basic_scanner \
      CppunitTest_basic_enable \
+     CppunitTest_basic_coverage \
+     CppunitTest_basic_vba \
 ))
 
 endif
