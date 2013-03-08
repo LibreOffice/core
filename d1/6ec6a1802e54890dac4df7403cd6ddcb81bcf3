@@ -1,0 +1,9 @@
+Code-Review+2: Stephan Bergmann <sbergman@redhat.com>
+Verified+1: Stephan Bergmann <sbergman@redhat.com>
+Code-Review-1: Tor Lillqvist <tml@iki.fi>
+Code-Review+1: Jørgen Nystad <jorgenys@gmail.com>
+Submitted-by: Stephan Bergmann <sbergman@redhat.com>
+Submitted-at: Fri, 08 Mar 2013 11:57:15 +0000
+Reviewed-on: https://gerrit.libreoffice.org/2523
+Project: core
+Branch: refs/heads/master
