@@ -1086,14 +1086,6 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
     return xResultSet;
 }
 
-ESourceRegistry *get_e_source_registry()
-{
-    static ESourceRegistry *theInstance;
-    if (!theInstance)
-        theInstance = e_source_registry_new_sync(NULL, NULL);
-    return theInstance;
-}
-
 // -------------------------------------------------------------------------
 bool isSourceBackend(ESource *pSource, const char *backendname)
 {
