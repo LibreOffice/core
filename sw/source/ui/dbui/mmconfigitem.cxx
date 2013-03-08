@@ -902,30 +902,27 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
         try
         {
             Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            if( xMgr.is() )
+
+            Reference<XRowSet> xRowSet( xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY );
+            Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
+            xRowProperties->setPropertyValue("DataSourceName", makeAny(m_pImpl->aDBData.sDataSource));
+            xRowProperties->setPropertyValue("Command", makeAny(m_pImpl->aDBData.sCommand));
+            xRowProperties->setPropertyValue("CommandType", makeAny(m_pImpl->aDBData.nCommandType));
+            xRowProperties->setPropertyValue("FetchSize", makeAny((sal_Int32)10));
+            xRowProperties->setPropertyValue("ActiveConnection", makeAny(m_pImpl->xConnection.getTyped()));
+            try
             {
-                Reference<XRowSet> xRowSet(
-                        xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
-                Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
-                xRowProperties->setPropertyValue("DataSourceName", makeAny(m_pImpl->aDBData.sDataSource));
-                xRowProperties->setPropertyValue("Command", makeAny(m_pImpl->aDBData.sCommand));
-                xRowProperties->setPropertyValue("CommandType", makeAny(m_pImpl->aDBData.nCommandType));
-                xRowProperties->setPropertyValue("FetchSize", makeAny((sal_Int32)10));
-                xRowProperties->setPropertyValue("ActiveConnection", makeAny(m_pImpl->xConnection.getTyped()));
-                try
-                {
-                    xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->sFilter.isEmpty()));
-                    xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->sFilter));
-                }
-                catch (const Exception&)
-                {
-                    OSL_FAIL("exception caught in xResultSet->SetFilter()");
-                }
-                xRowSet->execute();
-                m_pImpl->xResultSet = xRowSet.get();
-                m_pImpl->xResultSet->first();
-                m_pImpl->nResultSetCursorPos = 1;
+                xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->sFilter.isEmpty()));
+                xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->sFilter));
             }
+            catch (const Exception&)
+            {
+                OSL_FAIL("exception caught in xResultSet->SetFilter()");
+            }
+            xRowSet->execute();
+            m_pImpl->xResultSet = xRowSet.get();
+            m_pImpl->xResultSet->first();
+            m_pImpl->nResultSetCursorPos = 1;
         }
         catch (const Exception&)
         {

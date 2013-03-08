@@ -49,11 +49,11 @@ void SwVisitingCardPage::InitFrameControl()
     pExampleFrame = new SwOneExampleFrame( aExampleWIN,
                                     EX_SHOW_BUSINESS_CARDS, &aLink );
 
-    uno::Reference< lang::XMultiServiceFactory >  xMgr =
-                                            getProcessServiceFactory();
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+
     //now the AutoText ListBoxes have to be filled
 
-    m_xAutoText = text::AutoTextContainer::create( comphelper::getComponentContext(xMgr) );
+    m_xAutoText = text::AutoTextContainer::create( xContext );
 
     uno::Sequence<OUString> aNames = m_xAutoText->getElementNames();
     const OUString* pGroups = aNames.getConstArray();

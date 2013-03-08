@@ -97,77 +97,75 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         Window* pDialogParentWindow )
 {
     uno::Reference< mail::XSmtpService > xSmtpServer;
-    uno::Reference< lang::XMultiServiceFactory> rMgr = ::comphelper::getProcessServiceFactory();
-    if (rMgr.is())
-        try
-        {
-            uno::Reference< mail::XMailServiceProvider > xMailServiceProvider(
-                mail::MailServiceProvider::create(
-                    comphelper::getComponentContext(rMgr)));
-            xSmtpServer = uno::Reference< mail::XSmtpService > (
-                            xMailServiceProvider->create(
-                            mail::MailServiceType_SMTP
-                            ), uno::UNO_QUERY);
-
-            uno::Reference< mail::XConnectionListener> xConnectionListener(new SwConnectionListener());
-
-            if(rConfigItem.IsAuthentication() && rConfigItem.IsSMTPAfterPOP())
-            {
-                uno::Reference< mail::XMailService > xInMailService =
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    try
+    {
+        uno::Reference< mail::XMailServiceProvider > xMailServiceProvider(
+            mail::MailServiceProvider::create( xContext ) );
+        xSmtpServer = uno::Reference< mail::XSmtpService > (
                         xMailServiceProvider->create(
-                        rConfigItem.IsInServerPOP() ?
-                            mail::MailServiceType_POP3 : mail::MailServiceType_IMAP);
-                //authenticate at the POP or IMAP server first
-                String sPasswd = rConfigItem.GetInServerPassword();
-        if(rInMailServerPassword.Len())
-            sPasswd = rInMailServerPassword;
-        uno::Reference<mail::XAuthenticator> xAuthenticator =
-                    new SwAuthenticator(
-                        rConfigItem.GetInServerUserName(),
-                        sPasswd,
-                        pDialogParentWindow);
+                        mail::MailServiceType_SMTP
+                        ), uno::UNO_QUERY);
 
-                xInMailService->addConnectionListener(xConnectionListener);
-                //check connection
-                uno::Reference< uno::XCurrentContext> xConnectionContext =
-                        new SwConnectionContext(
-                            rConfigItem.GetInServerName(),
-                            rConfigItem.GetInServerPort(),
-                            ::rtl::OUString("Insecure"));
-                xInMailService->connect(xConnectionContext, xAuthenticator);
-                rxInMailService = xInMailService;
-            }
-            uno::Reference< mail::XAuthenticator> xAuthenticator;
-            if(rConfigItem.IsAuthentication() &&
-                    !rConfigItem.IsSMTPAfterPOP() &&
-                    !rConfigItem.GetMailUserName().isEmpty())
-            {
-                String sPasswd = rConfigItem.GetMailPassword();
-                if(rOutMailServerPassword.Len())
-                    sPasswd = rOutMailServerPassword;
-                xAuthenticator =
-                    new SwAuthenticator(rConfigItem.GetMailUserName(),
-                            sPasswd,
-                            pDialogParentWindow);
-            }
-            else
-                xAuthenticator =  new SwAuthenticator();
-            //just to check if the server exists
-            xSmtpServer->getSupportedConnectionTypes();
+        uno::Reference< mail::XConnectionListener> xConnectionListener(new SwConnectionListener());
+
+        if(rConfigItem.IsAuthentication() && rConfigItem.IsSMTPAfterPOP())
+        {
+            uno::Reference< mail::XMailService > xInMailService =
+                    xMailServiceProvider->create(
+                    rConfigItem.IsInServerPOP() ?
+                        mail::MailServiceType_POP3 : mail::MailServiceType_IMAP);
+            //authenticate at the POP or IMAP server first
+            String sPasswd = rConfigItem.GetInServerPassword();
+            if(rInMailServerPassword.Len())
+                sPasswd = rInMailServerPassword;
+            uno::Reference<mail::XAuthenticator> xAuthenticator =
+                new SwAuthenticator(
+                    rConfigItem.GetInServerUserName(),
+                    sPasswd,
+                    pDialogParentWindow);
+
+            xInMailService->addConnectionListener(xConnectionListener);
             //check connection
-
             uno::Reference< uno::XCurrentContext> xConnectionContext =
                     new SwConnectionContext(
-                        rConfigItem.GetMailServer(),
-                        rConfigItem.GetMailPort(),
-                        rConfigItem.IsSecureConnection() ? OUString("Ssl") : OUString("Insecure") );
-            xSmtpServer->connect(xConnectionContext, xAuthenticator);
-            rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
+                        rConfigItem.GetInServerName(),
+                        rConfigItem.GetInServerPort(),
+                        ::rtl::OUString("Insecure"));
+            xInMailService->connect(xConnectionContext, xAuthenticator);
+            rxInMailService = xInMailService;
         }
-        catch (const uno::Exception&)
+        uno::Reference< mail::XAuthenticator> xAuthenticator;
+        if(rConfigItem.IsAuthentication() &&
+                !rConfigItem.IsSMTPAfterPOP() &&
+                !rConfigItem.GetMailUserName().isEmpty())
         {
-            OSL_FAIL("exception caught");
+            String sPasswd = rConfigItem.GetMailPassword();
+            if(rOutMailServerPassword.Len())
+                sPasswd = rOutMailServerPassword;
+            xAuthenticator =
+                new SwAuthenticator(rConfigItem.GetMailUserName(),
+                        sPasswd,
+                        pDialogParentWindow);
         }
+        else
+            xAuthenticator =  new SwAuthenticator();
+        //just to check if the server exists
+        xSmtpServer->getSupportedConnectionTypes();
+        //check connection
+
+        uno::Reference< uno::XCurrentContext> xConnectionContext =
+                new SwConnectionContext(
+                    rConfigItem.GetMailServer(),
+                    rConfigItem.GetMailPort(),
+                    rConfigItem.IsSecureConnection() ? OUString("Ssl") : OUString("Insecure") );
+        xSmtpServer->connect(xConnectionContext, xAuthenticator);
+        rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
+    }
+    catch (const uno::Exception&)
+    {
+        OSL_FAIL("exception caught");
+    }
     return xSmtpServer;
 }
 
