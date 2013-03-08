@@ -658,8 +658,8 @@ bool X11SalGraphics::drawAlphaBitmapOpt( const SalTwoRect& rTR,
     const SalVisual& rSalVis = pSalDisp->GetVisual( m_nXScreen );
     Display* pXDisplay = pSalDisp->GetDisplay();
 
-    Picture aAlphaPic;
-    Pixmap aAlphaPM;
+    Picture aAlphaPic = 0;
+    Pixmap aAlphaPM = 0;
     // create source Picture
     int nDepth = m_pVDev ? m_pVDev->GetDepth() : rSalVis.GetDepth();
     const X11SalBitmap& rSrcX11Bmp = static_cast<const X11SalBitmap&>( rSrcBitmap );
@@ -759,8 +759,10 @@ bool X11SalGraphics::drawAlphaBitmapOpt( const SalTwoRect& rTR,
 
     if ( bUseAlphaBitmap )
     {
-        rPeer.FreePicture( aAlphaPic );
-        XFreePixmap( pXDisplay, aAlphaPM);
+        if ( aAlphaPic )
+            rPeer.FreePicture( aAlphaPic );
+        if ( aAlphaPM )
+            XFreePixmap( pXDisplay, aAlphaPM );
     }
     rPeer.FreePicture( aSrcPic );
     return true;
