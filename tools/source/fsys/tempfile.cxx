@@ -79,7 +79,7 @@ OUString ConstructTempDir_Impl( const String* pParent )
         // if no parent or invalid parent : use system directory
         ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
         if ( rTempNameBase_Impl.isEmpty() )
-            rTempNameBase_Impl = GetSystemTempDirPath_Impl();
+            osl::FileBase::getTempDirURL( rTempNameBase_Impl );
         aName = rTempNameBase_Impl;
     }
 
