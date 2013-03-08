@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	python3/python-3.3.0-ssl.patch.1 \
 	python3/python-3.3.0-implicit-int.patch.1 \
 	python3/python-3.3.0-ffi-clang.patch.1 \
+	python3/python-3.3.0-gcc-4.8.patch.1 \
 ))
 
 ifneq ($(OS),WNT)
