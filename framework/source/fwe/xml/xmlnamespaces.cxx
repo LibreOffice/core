@@ -27,7 +27,7 @@ namespace framework
 {
 
 XMLNamespaces::XMLNamespaces()
-    : m_aXMLAttributeNamespace( RTL_CONSTASCII_USTRINGPARAM( "xmlns" ))
+    : m_aXMLAttributeNamespace( "xmlns" )
 {
 }
 
@@ -41,10 +41,10 @@ XMLNamespaces::~XMLNamespaces()
 {
 }
 
-void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUString& aValue ) throw( SAXException )
+void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue ) throw( SAXException )
 {
     NamespaceMap::iterator p;
-    ::rtl::OUString aNamespaceName( aName );
+    OUString aNamespaceName( aName );
     sal_Int32 nXMLNamespaceLength = m_aXMLAttributeNamespace.getLength();
 
     // delete preceding "xmlns"
@@ -52,7 +52,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     {
         if ( aNamespaceName.getLength() == nXMLNamespaceLength )
         {
-            aNamespaceName = ::rtl::OUString();
+            aNamespaceName = OUString();
         }
         else if ( aNamespaceName.getLength() >= nXMLNamespaceLength+2 )
         {
@@ -61,7 +61,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
         else
         {
             // a xml namespace without name is not allowed (e.g. "xmlns:" )
-            ::rtl::OUString aErrorMessage( RTL_CONSTASCII_USTRINGPARAM( "A xml namespace without name is not allowed!" ));
+            OUString aErrorMessage( "A xml namespace without name is not allowed!" );
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
     }
@@ -70,7 +70,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     {
         // namespace should be reseted - as xml draft states this is only allowed
         // for the default namespace - check and throw exception if check fails
-        ::rtl::OUString aErrorMessage( RTL_CONSTASCII_USTRINGPARAM( "Clearing xml namespace only allowed for default namespace!" ));
+        OUString aErrorMessage( "Clearing xml namespace only allowed for default namespace!" );
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
     else
@@ -94,7 +94,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     }
 }
 
-::rtl::OUString XMLNamespaces::applyNSToAttributeName( const ::rtl::OUString& aName ) const throw( SAXException )
+OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const throw( SAXException )
 {
     // xml draft: there is no default namespace for attributes!
 
@@ -103,15 +103,15 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     {
         if ( aName.getLength() > index+1 )
         {
-            ::rtl::OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) );
-            aAttributeName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("^"));
+            OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) );
+            aAttributeName += OUString("^");
             aAttributeName += aName.copy( index+1 );
             return aAttributeName;
         }
         else
         {
             // attribute with namespace but without name "namespace:" is not allowed!!
-            ::rtl::OUString aErrorMessage( RTL_CONSTASCII_USTRINGPARAM( "Attribute has no name only preceding namespace!" ));
+            OUString aErrorMessage( "Attribute has no name only preceding namespace!" );
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
     }
@@ -119,13 +119,13 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     return aName;
 }
 
-::rtl::OUString XMLNamespaces::applyNSToElementName( const ::rtl::OUString& aName ) const   throw( SAXException )
+OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const   throw( SAXException )
 {
     // xml draft: element names can have a default namespace
 
     int         index = aName.indexOf( ':' );
-    ::rtl::OUString aNamespace;
-    ::rtl::OUString aElementName = aName;
+    OUString aNamespace;
+    OUString aElementName = aName;
 
     if ( index > 0 )
         aNamespace = getNamespaceValue( aName.copy( 0, index ) );
@@ -135,7 +135,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     if ( !aNamespace.isEmpty() )
     {
         aElementName = aNamespace;
-        aElementName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("^"));
+        aElementName += OUString("^");
     }
     else
         return aName;
@@ -147,7 +147,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
         else
         {
             // attribute with namespace but without a name is not allowed (e.g. "cfg:" )
-            ::rtl::OUString aErrorMessage( RTL_CONSTASCII_USTRINGPARAM( "Attribute has no name only preceding namespace!" ));
+            OUString aErrorMessage( "Attribute has no name only preceding namespace!" );
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
     }
@@ -157,7 +157,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     return aElementName;
 }
 
-::rtl::OUString XMLNamespaces::getNamespaceValue( const ::rtl::OUString& aNamespace ) const throw( SAXException )
+OUString XMLNamespaces::getNamespaceValue( const OUString& aNamespace ) const throw( SAXException )
 {
     if ( aNamespace.isEmpty() )
         return m_aDefaultNamespace;
@@ -170,7 +170,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
         else
         {
             // namespace not defined => throw exception!
-            ::rtl::OUString aErrorMessage( RTL_CONSTASCII_USTRINGPARAM( "XML namespace used but not defined!" ));
+            OUString aErrorMessage( "XML namespace used but not defined!" );
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
     }

@@ -94,7 +94,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
         Reference< XPropertySet > xPropSet( rSourceContainer, UNO_QUERY );
         if ( xPropSet.is() )
         {
-            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= m_aUIName;
+            xPropSet->getPropertyValue( OUString( "UIName" )) >>= m_aUIName;
         }
     }
     catch ( const Exception& )
@@ -205,7 +205,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     if ( sal_Int32( m_aItemVector.size()) > Index )
         return makeAny( m_aItemVector[Index] );
     else
-        throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
 // XIndexContainer
@@ -225,10 +225,10 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
             m_aItemVector.insert( aIter, aSeq );
         }
         else
-            throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
+            throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
     }
     else
-        throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( WRONG_TYPE_EXCEPTION )),
+        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
                                         (OWeakObject *)this, 2 );
 }
 
@@ -243,7 +243,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
         m_aItemVector.erase( aIter );
     }
     else
-        throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
 void SAL_CALL RootItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
@@ -256,10 +256,10 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
         if ( sal_Int32( m_aItemVector.size()) > Index )
             m_aItemVector[Index] = aSeq;
         else
-            throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
+            throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
     }
     else
-        throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( WRONG_TYPE_EXCEPTION )),
+        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
                                         (OWeakObject *)this, 2 );
 }
 
@@ -386,8 +386,8 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > RootItemC
 
     const com::sun::star::beans::Property pProperties[] =
     {
-        com::sun::star::beans::Property( rtl::OUString(PROPNAME_UINAME), PROPHANDLE_UINAME ,
-                                         ::getCppuType((const rtl::OUString*)NULL),
+        com::sun::star::beans::Property( OUString(PROPNAME_UINAME), PROPHANDLE_UINAME ,
+                                         ::getCppuType((const OUString*)NULL),
                                          com::sun::star::beans::PropertyAttribute::TRANSIENT )
     };
     // Use it to initialize sequence!

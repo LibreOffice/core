@@ -81,7 +81,7 @@ MenuBarFactory::~MenuBarFactory()
 
 // XUIElementFactory
 Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
-    const ::rtl::OUString& ResourceURL,
+    const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
@@ -94,7 +94,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     CreateUIElement(ResourceURL,Args,"MenuOnly","private:resource/menubar/",xMenuBar,xModuleManager, comphelper::getComponentContext(m_xServiceManager));
     return xMenuBar;
 }
-void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
+void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
                                      , const Sequence< PropertyValue >& Args
                                      ,const char* _pExtraMode
                                      ,const char* _pAsciiName
@@ -105,7 +105,7 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
     Reference< XUIConfigurationManager > xCfgMgr;
     Reference< XUIConfigurationManager > xConfigSource;
     Reference< XFrame >                  xFrame;
-    rtl::OUString                        aResourceURL( ResourceURL );
+    OUString                        aResourceURL( ResourceURL );
     sal_Bool                             bPersistent( sal_True );
     sal_Bool                             bExtraMode( sal_False );
 
@@ -122,7 +122,7 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
         else if ( _pExtraMode && Args[n].Name.equalsAscii( _pExtraMode ))
             Args[n].Value >>= bExtraMode;
     }
-    if ( aResourceURL.indexOf( rtl::OUString::createFromAscii(_pAsciiName)) != 0 )
+    if ( aResourceURL.indexOf( OUString::createFromAscii(_pAsciiName)) != 0 )
         throw IllegalArgumentException();
 
     // Identify frame and determine document based ui configuration manager/module ui configuration manager
@@ -147,7 +147,7 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
 
         if ( !bHasSettings )
         {
-            rtl::OUString aModuleIdentifier = _xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ));
+            OUString aModuleIdentifier = _xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ));
             if ( !aModuleIdentifier.isEmpty() )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =
@@ -160,21 +160,21 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
 
     PropertyValue aPropValue;
     Sequence< Any > aPropSeq( _pExtraMode ? 5 : 4);
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+    aPropValue.Name = OUString( "Frame" );
     aPropValue.Value <<= xFrame;
     aPropSeq[0] <<= aPropValue;
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
+    aPropValue.Name = OUString( "ConfigurationSource" );
     aPropValue.Value <<= xCfgMgr;
     aPropSeq[1] <<= aPropValue;
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
+    aPropValue.Name = OUString( "ResourceURL" );
     aPropValue.Value <<= aResourceURL;
     aPropSeq[2] <<= aPropValue;
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
+    aPropValue.Name = OUString( "Persistent" );
     aPropValue.Value <<= bPersistent;
     aPropSeq[3] <<= aPropValue;
     if ( _pExtraMode )
     {
-        aPropValue.Name = rtl::OUString::createFromAscii(_pExtraMode);
+        aPropValue.Name = OUString::createFromAscii(_pExtraMode);
         aPropValue.Value <<= bExtraMode;
         aPropSeq[4] <<= aPropValue;
     }

@@ -48,7 +48,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   SimpleTextStatusbarController       
 DEFINE_INIT_SERVICE                     (   SimpleTextStatusbarController, {} )
 
 SimpleTextStatusbarController::SimpleTextStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 )
+    svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), OUString(), 0 )
 {
 }
 
@@ -76,13 +76,13 @@ void SAL_CALL SimpleTextStatusbarController::release() throw ()
 void SAL_CALL SimpleTextStatusbarController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
 throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    const rtl::OUString aPropValueName( RTL_CONSTASCII_USTRINGPARAM( "Value" ));
+    const OUString aPropValueName( "Value" );
 
     SolarMutexGuard aSolarMutexGuard;
 
     svt::StatusbarController::initialize( aArguments );
 
-    rtl::OUString        aValue;
+    OUString        aValue;
     beans::PropertyValue aPropValue;
 
     // Check arguments for optional "Value" property. We need it

@@ -102,7 +102,7 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com:
         else
         {
             throw IllegalArgumentException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( WRONG_TYPE_EXCEPTION )),
+                OUString( WRONG_TYPE_EXCEPTION ),
                 (OWeakObject *)this, 2 );
         }
     }
@@ -140,7 +140,7 @@ void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const ::com
         else
         {
             throw IllegalArgumentException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( WRONG_TYPE_EXCEPTION )),
+                OUString( WRONG_TYPE_EXCEPTION ),
                 (OWeakObject *)this, 2 );
         }
     }

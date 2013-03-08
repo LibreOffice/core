@@ -35,7 +35,7 @@
 _________________________________________________________________________________________________________________*/
 
 #define DECLARE_ASCII( SASCIIVALUE )                                                                            \
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SASCIIVALUE ) )
+    OUString( SASCIIVALUE )
 
 /*_________________________________________________________________________________________________________________
     U2B( SUNICODEVALUE )
@@ -45,7 +45,7 @@ ________________________________________________________________________________
 _________________________________________________________________________________________________________________*/
 
 #define U2B( SUNICODEVALUE )                                                                                    \
-    ::rtl::OUStringToOString( SUNICODEVALUE, RTL_TEXTENCODING_UTF8 )
+    OUStringToOString( SUNICODEVALUE, RTL_TEXTENCODING_UTF8 )
 
 #endif  //  #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 

@@ -59,9 +59,9 @@ namespace framework
 {
 
 // global function needed by both implementations
-rtl::OUString getHashKeyFromStrings( const rtl::OUString& aType, const rtl::OUString& aName, const rtl::OUString& aModuleName )
+OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, const OUString& aModuleName )
 {
-    rtl::OUStringBuffer aKey( aType );
+    OUStringBuffer aKey( aType );
     aKey.appendAscii( "^" );
     aKey.append( aName );
     aKey.appendAscii( "^" );
@@ -75,12 +75,12 @@ rtl::OUString getHashKeyFromStrings( const rtl::OUString& aType, const rtl::OUSt
 //*****************************************************************************************************************
 
 
-ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, const ::rtl::OUString& _sRoot ) :
+ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, const OUString& _sRoot ) :
     ThreadHelpBase(),
-    m_aPropType( RTL_CONSTASCII_USTRINGPARAM( "Type" )),
-    m_aPropName( RTL_CONSTASCII_USTRINGPARAM( "Name" )),
-    m_aPropModule( RTL_CONSTASCII_USTRINGPARAM( "Module" )),
-    m_aPropFactory( RTL_CONSTASCII_USTRINGPARAM( "FactoryImplementation" )),
+    m_aPropType( "Type" ),
+    m_aPropName( "Name" ),
+    m_aPropModule( "Module" ),
+    m_aPropFactory( "FactoryImplementation" ),
     m_sRoot(_sRoot),
     m_bConfigAccessInitialized( sal_False )
 {
@@ -98,7 +98,7 @@ ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
         xContainer->removeContainerListener(m_xConfigListener);
 }
 
-rtl::OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( const rtl::OUString& rType, const rtl::OUString& rName, const rtl::OUString& rModule ) const
+OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::getFactorySpecifierFromTypeNameModule" );
     // SAFE
@@ -110,7 +110,7 @@ rtl::OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNam
         return pIter->second;
     else
     {
-        pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, rName, rtl::OUString() ));
+        pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, rName, OUString() ));
         if ( pIter != m_aFactoryManagerMap.end() )
             return pIter->second;
         else
@@ -119,28 +119,28 @@ rtl::OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNam
             sal_Int32 nIndex = rName.indexOf( '_' );
             if ( nIndex > 0 )
             {
-                rtl::OUString aName = rName.copy( 0, nIndex+1 );
-                pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, aName, rtl::OUString() ));
+                OUString aName = rName.copy( 0, nIndex+1 );
+                pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, aName, OUString() ));
                 if ( pIter != m_aFactoryManagerMap.end() )
                     return pIter->second;
             }
 
-            pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, rtl::OUString(), rtl::OUString() ));
+            pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, OUString(), OUString() ));
             if ( pIter != m_aFactoryManagerMap.end() )
                 return pIter->second;
         }
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
-void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( const rtl::OUString& rType, const rtl::OUString& rName, const rtl::OUString& rModule, const rtl::OUString& rServiceSpecifier )
+void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule, const OUString& rServiceSpecifier )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::addFactorySpecifierToTypeNameModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
-    rtl::OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
+    OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
 
     FactoryManagerMap::const_iterator pIter = m_aFactoryManagerMap.find( aHashKey );
 
@@ -151,13 +151,13 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( co
 }
 
 
-void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( const rtl::OUString& rType, const rtl::OUString& rName, const rtl::OUString& rModule )
+void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::removeFactorySpecifierFromTypeNameModule" );
     // SAFE
     ResetableGuard aLock( m_aLock );
 
-    rtl::OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
+    OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
 
     FactoryManagerMap::const_iterator pIter = m_aFactoryManagerMap.find( aHashKey );
 
@@ -179,7 +179,7 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
     FactoryManagerMap::const_iterator pIter = m_aFactoryManagerMap.begin();
     while ( pIter != m_aFactoryManagerMap.end() )
     {
-        rtl::OUString aFactory = pIter->first;
+        OUString aFactory = pIter->first;
         if ( !aFactory.isEmpty() )
         {
             sal_Int32                 nToken = 0;
@@ -214,10 +214,10 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
 void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::elementInserted" );
-    rtl::OUString   aType;
-    rtl::OUString   aName;
-    rtl::OUString   aModule;
-    rtl::OUString   aService;
+    OUString   aType;
+    OUString   aName;
+    OUString   aModule;
+    OUString   aService;
 
     // SAFE
     ResetableGuard aLock( m_aLock );
@@ -226,7 +226,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const Contain
     {
         // Create hash key from type, name and module as they are together a primary key to
         // the UNO service that implements a user interface factory.
-        rtl::OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
+        OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
         m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, aService ));
     }
 }
@@ -234,10 +234,10 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const Contain
 void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::elementRemoved " );
-    rtl::OUString   aType;
-    rtl::OUString   aName;
-    rtl::OUString   aModule;
-    rtl::OUString   aService;
+    OUString   aType;
+    OUString   aName;
+    OUString   aModule;
+    OUString   aService;
 
     // SAFE
     ResetableGuard aLock( m_aLock );
@@ -246,7 +246,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const Contain
     {
         // Create hash key from command and model as they are together a primary key to
         // the UNO service that implements the popup menu controller.
-        rtl::OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
+        OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
         m_aFactoryManagerMap.erase( aHashKey );
     }
 }
@@ -254,10 +254,10 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const Contain
 void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::elementReplaced" );
-    rtl::OUString   aType;
-    rtl::OUString   aName;
-    rtl::OUString   aModule;
-    rtl::OUString   aService;
+    OUString   aType;
+    OUString   aName;
+    OUString   aModule;
+    OUString   aService;
 
     // SAFE
     ResetableGuard aLock( m_aLock );
@@ -266,7 +266,7 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const Contain
     {
         // Create hash key from command and model as they are together a primary key to
         // the UNO service that implements the popup menu controller.
-        rtl::OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
+        OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
         m_aFactoryManagerMap.erase( aHashKey );
         m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, aService ));
     }
@@ -293,7 +293,7 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
         Sequence< Any > aArgs( 1 );
         PropertyValue   aPropValue;
 
-        aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+        aPropValue.Name  = OUString( "nodepath" );
         aPropValue.Value <<= m_sRoot;
         aArgs[0] <<= aPropValue;
 
@@ -310,13 +310,13 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
 
     if ( m_xConfigAccess.is() )
     {
-        Sequence< rtl::OUString >   aUIElementFactories = m_xConfigAccess->getElementNames();
+        Sequence< OUString >   aUIElementFactories = m_xConfigAccess->getElementNames();
 
-        rtl::OUString             aType;
-        rtl::OUString             aName;
-        rtl::OUString             aModule;
-        rtl::OUString             aService;
-        rtl::OUString             aHashKey;
+        OUString             aType;
+        OUString             aName;
+        OUString             aModule;
+        OUString             aService;
+        OUString             aHashKey;
         Reference< XPropertySet > xPropertySet;
         for ( sal_Int32 i = 0; i < aUIElementFactories.getLength(); i++ )
         {
@@ -340,7 +340,7 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
     }
 }
 
-sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aElement, rtl::OUString& rType, rtl::OUString& rName, rtl::OUString& rModule, rtl::OUString& rServiceSpecifier ) const
+sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aElement, OUString& rType, OUString& rName, OUString& rModule, OUString& rServiceSpecifier ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::impl_getElementProps" );
     Reference< XPropertySet > xPropertySet;
@@ -385,7 +385,7 @@ UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentCon
     m_xContext(rxContext)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::UIElementFactoryManager" );
-    m_pConfigAccess = new ConfigurationAccess_FactoryManager( rxContext, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories" )) );
+    m_pConfigAccess = new ConfigurationAccess_FactoryManager( rxContext, OUString( "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories" ) );
     m_pConfigAccess->acquire();
     m_xModuleManager = ModuleManager::create( rxContext );
 }
@@ -400,7 +400,7 @@ UIElementFactoryManager::~UIElementFactoryManager()
 
 // XUIElementFactory
 Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
-    const ::rtl::OUString& ResourceURL,
+    const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
@@ -414,9 +414,9 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
         m_pConfigAccess->readConfigurationData();
     }
 
-    const rtl::OUString aPropFrame( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+    const OUString aPropFrame( "Frame" );
 
-    rtl::OUString   aModuleId;
+    OUString   aModuleId;
     PropertyValue   aPropValue;
     Reference< XFrame > xFrame;
 
@@ -466,7 +466,7 @@ throw ( RuntimeException )
     return m_pConfigAccess->getFactoriesDescription();
 }
 
-Reference< XUIElementFactory > SAL_CALL UIElementFactoryManager::getFactory( const ::rtl::OUString& aResourceURL, const ::rtl::OUString& aModuleId )
+Reference< XUIElementFactory > SAL_CALL UIElementFactoryManager::getFactory( const OUString& aResourceURL, const OUString& aModuleId )
 throw ( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::getFactory" );
@@ -478,14 +478,14 @@ throw ( RuntimeException )
         m_pConfigAccess->readConfigurationData();
     }
 
-    rtl::OUString aType;
-    rtl::OUString aName;
+    OUString aType;
+    OUString aName;
 
     WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
 
     Reference< XComponentContext > xContext( m_xContext );
 
-    rtl::OUString aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
+    OUString aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
 
     aLock.unlock();
     if ( !aServiceSpecifier.isEmpty() )
@@ -494,7 +494,7 @@ throw ( RuntimeException )
         return Reference< XUIElementFactory >();
 }
 
-void SAL_CALL UIElementFactoryManager::registerFactory( const ::rtl::OUString& aType, const ::rtl::OUString& aName, const ::rtl::OUString& aModuleId, const ::rtl::OUString& aFactoryImplementationName )
+void SAL_CALL UIElementFactoryManager::registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId, const OUString& aFactoryImplementationName )
 throw ( ElementExistException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::registerFactory" );
@@ -511,7 +511,7 @@ throw ( ElementExistException, RuntimeException )
     // SAFE
 }
 
-void SAL_CALL UIElementFactoryManager::deregisterFactory( const ::rtl::OUString& aType, const ::rtl::OUString& aName, const ::rtl::OUString& aModuleId )
+void SAL_CALL UIElementFactoryManager::deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId )
 throw ( NoSuchElementException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::deregisterFactory" );

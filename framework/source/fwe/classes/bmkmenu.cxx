@@ -50,10 +50,10 @@ namespace framework
 
 void GetMenuEntry(
     Sequence< PropertyValue >&  aDynamicMenuEntry,
-    ::rtl::OUString&            rTitle,
-    ::rtl::OUString&            rURL,
-    ::rtl::OUString&            rFrame,
-    ::rtl::OUString&            rImageId );
+    OUString&            rTitle,
+    OUString&            rURL,
+    OUString&            rFrame,
+    OUString&            rImageId );
 
 class BmkMenu_Impl
 {
@@ -123,10 +123,10 @@ void BmkMenu::Initialize()
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     sal_Bool bShowMenuImages = rSettings.GetUseImagesInMenus();
 
-    ::rtl::OUString aTitle;
-    ::rtl::OUString aURL;
-    ::rtl::OUString aTargetFrame;
-    ::rtl::OUString aImageId;
+    OUString aTitle;
+    OUString aURL;
+    OUString aTargetFrame;
+    OUString aImageId;
 
     sal_uInt32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; ++i )
@@ -136,7 +136,7 @@ void BmkMenu::Initialize()
         if ( aTitle.isEmpty() && aURL.isEmpty() )
             continue;
 
-        if ( aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:separator" )))
+        if ( aURL == OUString( "private:separator" ))
             InsertSeparator();
         else
         {
@@ -183,10 +183,10 @@ sal_uInt16 BmkMenu::CreateMenuId()
 void GetMenuEntry
 (
     Sequence< PropertyValue >& aDynamicMenuEntry,
-    ::rtl::OUString& rTitle,
-    ::rtl::OUString& rURL,
-    ::rtl::OUString& rFrame,
-    ::rtl::OUString& rImageId
+    OUString& rTitle,
+    OUString& rURL,
+    OUString& rFrame,
+    OUString& rImageId
 )
 {
     for ( int i = 0; i < aDynamicMenuEntry.getLength(); i++ )

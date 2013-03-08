@@ -71,7 +71,7 @@ class StringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XSt
         virtual ~StringLength() {}
 
         // XStringWidth
-        sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
+        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
             throw (::com::sun::star::uno::RuntimeException)
         {
             return aString.getLength();
@@ -130,7 +130,7 @@ MenuManager::MenuManager(
 
     sal_uInt16 nItemCount = pMenu->GetItemCount();
     m_aMenuItemHandlerVector.reserve(nItemCount);
-    ::rtl::OUString aItemCommand;
+    OUString aItemCommand;
     for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
         sal_uInt16 nItemId = FillItemCommand(aItemCommand,pMenu, i );
@@ -168,12 +168,12 @@ MenuManager::MenuManager(
                         pPopupMenu->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
 
                         // Set item command for popup menu to enable it for GetImageFromURL
-                        const static ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                        const static OUString aSlotString( "slot:" );
                         aItemCommand = aSlotString;
-                        aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
+                        aItemCommand += OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
                         pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
 
-                        AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
+                        AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
                         // Set image for the addon popup menu item
                         if ( bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
                         {
@@ -195,7 +195,7 @@ MenuManager::MenuManager(
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
-                AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
+                AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
                     Image aImage = GetImageFromURL( rFrame, aItemCommand, false );
@@ -209,7 +209,7 @@ MenuManager::MenuManager(
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
-                AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
+                AddMenu(pSubMenu,OUString(),nItemId,sal_True,sal_False);
 
 
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
@@ -227,7 +227,7 @@ MenuManager::MenuManager(
                     {
                         // Add-Ons uses a images from different places
                         Image           aImage;
-                        rtl::OUString   aImageId;
+                        OUString   aImageId;
 
                         MenuConfiguration::Attributes* pMenuAttributes =
                             (MenuConfiguration::Attributes*)pMenu->GetUserValue( nItemId );
@@ -316,7 +316,7 @@ MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( sal_uInt16 nItemI
 void SAL_CALL MenuManager::statusChanged( const FEATURSTATEEVENT& Event )
 throw ( RuntimeException )
 {
-    ::rtl::OUString aFeatureURL = Event.FeatureURL.Complete;
+    OUString aFeatureURL = Event.FeatureURL.Complete;
     MenuItemHandler* pStatusChangedMenu = NULL;
 
     {
@@ -363,7 +363,7 @@ throw ( RuntimeException )
 
             REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
             REFERENCE< XDISPATCH > xMenuItemDispatch = xDispatchProvider->queryDispatch(
-                                                            aTargetURL, ::rtl::OUString(), 0 );
+                                                            aTargetURL, OUString(), 0 );
 
             if ( xMenuItemDispatch.is() )
             {
@@ -499,7 +499,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
 
         REFERENCE< XDISPATCH > xMenuItemDispatch;
 
-        static const ::rtl::OUString s_sDefault(RTL_CONSTASCII_USTRINGPARAM("_default"));
+        static const OUString s_sDefault("_default");
         // query for dispatcher
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = aNewPickVector.begin(); p != aNewPickVector.end(); ++p )
@@ -561,27 +561,27 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
             {
                 char menuShortCut[5] = "~n: ";
 
-                ::rtl::OUString aMenuShortCut;
+                OUString aMenuShortCut;
                 if ( i <= 9 )
                 {
                     if ( i == 9 )
-                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1~0: " ));
+                        aMenuShortCut = OUString( "1~0: " );
                     else
                     {
                         menuShortCut[1] = (char)( '1' + i );
-                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( menuShortCut ));
+                        aMenuShortCut = OUString( RTL_CONSTASCII_USTRINGPARAM( menuShortCut ) );
                     }
                 }
                 else
                 {
-                    aMenuShortCut = rtl::OUString::valueOf((sal_Int32)( i + 1 ));
-                    aMenuShortCut += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": " ));
+                    aMenuShortCut = OUString::valueOf((sal_Int32)( i + 1 ));
+                    aMenuShortCut += OUString( ": " );
                 }
 
                 // Abbreviate URL
-                rtl::OUString   aURLString( aNewPickVector.at( i )->aMenuItemURL );
-                rtl::OUString   aTipHelpText;
-                rtl::OUString   aMenuTitle;
+                OUString   aURLString( aNewPickVector.at( i )->aMenuItemURL );
+                OUString   aTipHelpText;
+                OUString   aMenuTitle;
                 INetURLObject   aURL( aURLString );
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
@@ -590,8 +590,8 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                     // path and abbreviate it with a special function:
                     String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-                    ::rtl::OUString aSystemPath( aFileSystemPath );
-                    ::rtl::OUString aCompactedSystemPath;
+                    OUString aSystemPath( aFileSystemPath );
+                    OUString aCompactedSystemPath;
 
                     aTipHelpText = aSystemPath;
                     oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
@@ -609,7 +609,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                     aTipHelpText = aURLString;
                 }
 
-                ::rtl::OUString aTitle( aMenuShortCut + aMenuTitle );
+                OUString aTitle( aMenuShortCut + aMenuTitle );
 
                 MenuItemHandler* pMenuItemHandler = aNewPickVector.at( i );
                 pMenu->InsertItem( pMenuItemHandler->nItemId, aTitle );
@@ -623,7 +623,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
 void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext,framework::IMutex& _rMutex )
 {
     // update window list
-    ::std::vector< ::rtl::OUString > aNewWindowListVector;
+    ::std::vector< OUString > aNewWindowListVector;
 
     Reference< XDesktop2 > xDesktop = Desktop::create( xContext );
 
@@ -694,25 +694,25 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
     Any a;
     aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
 
-    aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
+    aArgsList[0].Name = OUString( "FileName" );
     a <<= pMenuItemHandler->aMenuItemURL;
     aArgsList[0].Value = a;
 
-    aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-    a <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ));
+    aArgsList[1].Name = OUString( "Referer" );
+    a <<= OUString( SFX_REFERER_USER );
     aArgsList[1].Value = a;
 
-    ::rtl::OUString aFilter( pMenuItemHandler->aFilter );
+    OUString aFilter( pMenuItemHandler->aFilter );
 
     sal_Int32 nPos = aFilter.indexOf( '|' );
     if ( nPos >= 0 )
     {
-        ::rtl::OUString aFilterOptions;
+        OUString aFilterOptions;
 
         if ( nPos < ( aFilter.getLength() - 1 ) )
             aFilterOptions = aFilter.copy( nPos+1 );
 
-        aArgsList[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
+        aArgsList[2].Name = OUString( "FilterOptions" );
         a <<= aFilterOptions;
         aArgsList[2].Value = a;
 
@@ -720,7 +720,7 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
         aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
     }
 
-    aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+    aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = OUString( "FilterName" );
     a <<= aFilter;
     aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = a;
 }
@@ -751,7 +751,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 
         m_bActive = sal_True;
 
-        ::rtl::OUString aCommand( m_aMenuItemCommand );
+        OUString aCommand( m_aMenuItemCommand );
         if (m_aMenuItemCommand.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(UNO_COMMAND)))
         {
             // Remove protocol part from command so we can use an easier comparision method
@@ -795,12 +795,12 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                         if ( pMenuItemHandler->nItemId < START_ITEMID_WINDOWLIST ||
                              pMenuItemHandler->nItemId > END_ITEMID_WINDOWLIST )
                         {
-                            ::rtl::OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
+                            OUString aItemCommand = pMenu->GetItemCommand( pMenuItemHandler->nItemId );
                             if ( aItemCommand.isEmpty() )
                             {
-                                const static ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                                const static OUString aSlotString( "slot:" );
                                 aItemCommand = aSlotString;
-                                aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)pMenuItemHandler->nItemId );
+                                aItemCommand += OUString::valueOf( (sal_Int32)pMenuItemHandler->nItemId );
                                 pMenu->SetItemCommand( pMenuItemHandler->nItemId, aItemCommand );
                             }
 
@@ -812,7 +812,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                             if ( m_bIsBookmarkMenu )
                                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, pMenuItemHandler->aTargetFrame, 0 );
                             else
-                                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                                xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
                             if ( xMenuItemDispatch.is() )
                             {
@@ -899,8 +899,8 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                     {
                         // bookmark menu item selected
                         aArgs.realloc( 1 );
-                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-                        aArgs[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ));
+                        aArgs[0].Name = OUString( "Referer" );
+                        aArgs[0].Value <<= OUString( SFX_REFERER_USER );
                     }
 
                     xDispatch = pMenuItemHandler->xMenuItemDispatch;
@@ -926,7 +926,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext
     return m_xContext;
 }
 
-void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren)
+void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren)
 {
     MenuManager* pSubMenuManager = new MenuManager( m_xContext, m_xFrame, _pPopupMenu, _bDelete, _bDeleteChildren );
 
@@ -941,16 +941,16 @@ void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCo
     m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
 }
 
-sal_uInt16 MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const
+sal_uInt16 MenuManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const
 {
     sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
 
     _rItemCommand = _pMenu->GetItemCommand( nItemId );
     if ( _rItemCommand.isEmpty() )
     {
-        const static ::rtl::OUString aSlotString( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+        const static OUString aSlotString( "slot:" );
         _rItemCommand = aSlotString;
-        _rItemCommand += ::rtl::OUString::valueOf( (sal_Int32)nItemId );
+        _rItemCommand += OUString::valueOf( (sal_Int32)nItemId );
         _pMenu->SetItemCommand( nItemId, _rItemCommand );
     }
     return nItemId;
@@ -975,7 +975,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,sal_
             if ( bTmpShowMenuImages )
             {
                 sal_Bool        bImageSet = sal_False;
-                ::rtl::OUString aImageId;
+                OUString aImageId;
 
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                     (::framework::MenuConfiguration::Attributes*)_pMenu->GetUserValue( nId );
@@ -995,7 +995,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,sal_
 
                 if ( !bImageSet )
                 {
-                    rtl::OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
+                    OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
                     Image aImage = GetImageFromURL( _xFrame, aMenuItemCommand, false );
                     if ( !aImage )
                         aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, false );

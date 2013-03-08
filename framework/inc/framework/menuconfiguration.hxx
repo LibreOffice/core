@@ -34,8 +34,8 @@
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
-#define BOOKMARK_NEWMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
-#define BOOKMARK_WIZARDMENU     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_wizard" ))
+#define BOOKMARK_NEWMENU        OUString( "private:menu_bookmark_new" )
+#define BOOKMARK_WIZARDMENU     OUString( "private:menu_bookmark_wizard" )
 
 // Prepare for inclusion by framework and sfx
 // Please consider that there is a corresponding define also in sfxsids.hrc!! (SID_SFX_START)/(SID_ADDONS)
@@ -60,11 +60,11 @@ class FWE_DLLPUBLIC MenuConfiguration
         struct Attributes
         {
             Attributes() {}
-            Attributes( const ::rtl::OUString& aFrame, const ::rtl::OUString& aImageIdStr ) :
+            Attributes( const OUString& aFrame, const OUString& aImageIdStr ) :
                 aTargetFrame( aFrame ), aImageId( aImageIdStr ) {}
 
-            ::rtl::OUString aTargetFrame;
-            ::rtl::OUString aImageId;
+            OUString aTargetFrame;
+            OUString aImageId;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > xDispatchProvider;
                         sal_Int16 nStyle;
         };
@@ -81,7 +81,7 @@ class FWE_DLLPUBLIC MenuConfiguration
 
         PopupMenu* CreateBookmarkMenu(
                 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                const ::rtl::OUString& aURL )
+                const OUString& aURL )
             throw ( ::com::sun::star::lang::WrappedTargetException );
 
         ToolBox* CreateToolBoxFromConfiguration(

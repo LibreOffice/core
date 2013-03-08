@@ -78,7 +78,7 @@ static const sal_uInt16 TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPA
 
 AddonsToolBarManager::AddonsToolBarManager( const Reference< XMultiServiceFactory >& rServiceManager,
                                 const Reference< XFrame >& rFrame,
-                                const rtl::OUString& rResourceName,
+                                const OUString& rResourceName,
                                 ToolBar* pToolBar ) :
     ToolBarManager( rServiceManager, rFrame, rResourceName, pToolBar )
 {
@@ -97,7 +97,7 @@ AddonsToolBarManager::~AddonsToolBarManager()
 {
 }
 
-static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, const ::rtl::OUString& aContextList )
+static sal_Bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
 {
     if ( aContextList.isEmpty() )
         return sal_True;
@@ -112,8 +112,8 @@ static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, cons
 }
 
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
-                            const rtl::OUString& aImageId,
-                            const rtl::OUString& aURL,
+                            const OUString& aImageId,
+                            const OUString& aURL,
                             sal_Bool bBigImage
 )
 {
@@ -181,8 +181,8 @@ void AddonsToolBarManager::RefreshImages()
 
         if ( nId > 0 )
         {
-            ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
-            ::rtl::OUString aImageId;
+            OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
+            OUString aImageId;
             AddonsParams* pRuntimeItemData = (AddonsParams*)m_pToolBar->GetItemData( nId );
             if ( pRuntimeItemData )
                 aImageId  = pRuntimeItemData->aImageId;
@@ -212,7 +212,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     m_pToolBar->Clear();
     m_aControllerMap.clear();
 
-    ::rtl::OUString aModuleIdentifier;
+    OUString aModuleIdentifier;
     try
     {
         Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
@@ -231,12 +231,12 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
     for ( sal_uInt32 n = 0; n < (sal_uInt32)rAddonToolbar.getLength(); n++ )
     {
-        rtl::OUString   aURL;
-        rtl::OUString   aTitle;
-        rtl::OUString   aImageId;
-        rtl::OUString   aContext;
-        rtl::OUString   aTarget;
-        rtl::OUString   aControlType;
+        OUString   aURL;
+        OUString   aTitle;
+        OUString   aImageId;
+        OUString   aContext;
+        OUString   aTarget;
+        OUString   aControlType;
         sal_uInt16      nWidth( 0 );
 
         const Sequence< PropertyValue >& rSeq = rAddonToolbar[n];
@@ -290,19 +290,19 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                         Sequence< Any > aArgs(5);
                         PropertyValue   aPropValue;
 
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+                        aPropValue.Name     = OUString( "ModuleName" );
                         aPropValue.Value    <<= m_aModuleIdentifier;
                         aArgs[0] <<= aPropValue;
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                        aPropValue.Name     = OUString( "Frame" );
                         aPropValue.Value    <<= m_xFrame;
                         aArgs[1] <<= aPropValue;
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                        aPropValue.Name     = OUString( "ServiceManager" );
                         aPropValue.Value    <<= m_xServiceManager;
                         aArgs[2] <<= aPropValue;
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+                        aPropValue.Name     = OUString( "ParentWindow" );
                         aPropValue.Value    <<= xToolbarWindow;
                         aArgs[3] <<= aPropValue;
-                        aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ItemId" ));
+                        aPropValue.Name     = OUString( "ItemId" );
                         aPropValue.Value    = makeAny( sal_Int32( nId ));
                         aArgs[4] <<= aPropValue;
 
@@ -334,13 +334,13 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 {
                     PropertyValue aPropValue;
                     Sequence< Any > aArgs( 3 );
-                    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                    aPropValue.Name = OUString( "Frame" );
                     aPropValue.Value <<= m_xFrame;
                     aArgs[0] <<= aPropValue;
-                    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
+                    aPropValue.Name = OUString( "CommandURL" );
                     aPropValue.Value <<= aURL;
                     aArgs[1] <<= aPropValue;
-                    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                    aPropValue.Name = OUString( "ServiceManager" );
                     aPropValue.Value <<= m_xServiceManager;
                     aArgs[2] <<= aPropValue;
                     try

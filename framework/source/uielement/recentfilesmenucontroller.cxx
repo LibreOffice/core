@@ -68,7 +68,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
         virtual ~RecentFilesStringLength() {}
 
         // XStringWidth
-        sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
+        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
             throw (::com::sun::star::uno::RuntimeException)
         {
             return aString.getLength();
@@ -113,7 +113,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         int nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
 
         // New vnd.sun.star.popup: command URL to support direct dispatches
-        const rtl::OUString aCmdPrefix( "vnd.sun.star.popup:RecentFileList?entry=" );
+        const OUString aCmdPrefix( "vnd.sun.star.popup:RecentFileList?entry=" );
 
         m_aRecentFilesItems.clear();
         if (( nPickListMenuItems > 0 ) && !m_bDisabled )
@@ -147,28 +147,28 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             for ( sal_uInt32 i = 0; i < nCount; i++ )
             {
 
-                ::rtl::OUString aMenuShortCut;
+                OUString aMenuShortCut;
                 if ( i <= 9 )
                 {
                     if ( i == 9 )
-                        aMenuShortCut = rtl::OUString( "1~0: " );
+                        aMenuShortCut = OUString( "1~0: " );
                     else
                     {
                         char menuShortCut[5] = "~n: ";
                         menuShortCut[1] = (char)( '1' + i );
-                        aMenuShortCut = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(menuShortCut) );
+                        aMenuShortCut = OUString( RTL_CONSTASCII_USTRINGPARAM( menuShortCut ));
                     }
                 }
                 else
                 {
-                    aMenuShortCut = rtl::OUString::valueOf((sal_Int32)( i + 1 ));
-                    aMenuShortCut += rtl::OUString( ": " );
+                    aMenuShortCut = OUString::valueOf((sal_Int32)( i + 1 ));
+                    aMenuShortCut += OUString( ": " );
                 }
 
                 // Abbreviate URL
-                rtl::OUString   aURLString( aCmdPrefix + rtl::OUString::valueOf( sal_Int32( i )));
-                rtl::OUString   aTipHelpText;
-                rtl::OUString   aMenuTitle;
+                OUString   aURLString( aCmdPrefix + OUString::valueOf( sal_Int32( i )));
+                OUString   aTipHelpText;
+                OUString   aMenuTitle;
                 INetURLObject   aURL( m_aRecentFilesItems[i].aURL );
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
@@ -177,8 +177,8 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     // path and abbreviate it with a special function:
                     String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-                    ::rtl::OUString aSystemPath( aFileSystemPath );
-                    ::rtl::OUString aCompactedSystemPath;
+                    OUString aSystemPath( aFileSystemPath );
+                    OUString aCompactedSystemPath;
 
                     aTipHelpText = aSystemPath;
                     oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
@@ -196,7 +196,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     aTipHelpText = aURLString;
                 }
 
-                ::rtl::OUString aTitle( aMenuShortCut + aMenuTitle );
+                OUString aTitle( aMenuShortCut + aMenuTitle );
 
                 pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aTitle );
                 pVCLPopupMenu->SetTipHelpText( sal_uInt16( i+1 ), aTipHelpText );
@@ -239,11 +239,11 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
         sal_Int32 nSize = 2;
         aArgsList.realloc(nSize);
-        aArgsList[0].Name = ::rtl::OUString( "Referer" );
-        aArgsList[0].Value = makeAny( ::rtl::OUString(SFX_REFERER_USER ));
+        aArgsList[0].Name = OUString( "Referer" );
+        aArgsList[0].Value = makeAny( OUString(SFX_REFERER_USER ));
 
         // documents in the picklist will never be opened as templates
-        aArgsList[1].Name = ::rtl::OUString( "AsTemplate" );
+        aArgsList[1].Name = OUString( "AsTemplate" );
         aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
 
         if (!m_aModuleName.isEmpty())
@@ -254,7 +254,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
             aArgsList[nSize-1].Value <<= m_aModuleName;
         }
 
-        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString("_default"), 0 );
+        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString("_default"), 0 );
     }
 
     if ( xDispatch.is() )
@@ -353,7 +353,7 @@ void SAL_CALL RecentFilesMenuController::updatePopupMenu() throw (RuntimeExcepti
 // XDispatchProvider
 Reference< XDispatch > SAL_CALL RecentFilesMenuController::queryDispatch(
     const URL& aURL,
-    const ::rtl::OUString& /*sTarget*/,
+    const OUString& /*sTarget*/,
     sal_Int32 /*nFlags*/ )
 throw( RuntimeException )
 {
@@ -383,13 +383,13 @@ throw( RuntimeException )
         sal_Int32 nQueryPart = aURL.Complete.indexOf( '?', m_aBaseURL.getLength() );
         if ( nQueryPart > 0 )
         {
-            const rtl::OUString aEntryArgStr( "entry=" );
+            const OUString aEntryArgStr( "entry=" );
             sal_Int32 nEntryArg = aURL.Complete.indexOf( aEntryArgStr, nQueryPart );
             sal_Int32 nEntryPos = nEntryArg + aEntryArgStr.getLength();
             if (( nEntryArg > 0 ) && ( nEntryPos < aURL.Complete.getLength() ))
             {
                 sal_Int32 nAddArgs = aURL.Complete.indexOf( '&', nEntryPos );
-                rtl::OUString aEntryArg;
+                OUString aEntryArg;
 
                 if ( nAddArgs < 0 )
                     aEntryArg = aURL.Complete.copy( nEntryPos );

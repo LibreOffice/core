@@ -126,7 +126,7 @@ EditToolbarController::EditToolbarController(
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
     sal_Int32                                nWidth,
-    const ::rtl::OUString&                          aCommand ) :
+    const OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
     ,   m_pEditControl( 0 )
 {
@@ -166,12 +166,12 @@ throw ( RuntimeException )
 Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
-    ::rtl::OUString aSelectedText = m_pEditControl->GetText();
+    OUString aSelectedText = m_pEditControl->GetText();
 
     // Add key modifier to argument list
-    aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+    aArgs[0].Name = OUString( "KeyModifier" );
     aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
+    aArgs[1].Name = OUString( "Text" );
     aArgs[1].Value <<= aSelectedText;
     return aArgs;
 }
@@ -225,7 +225,7 @@ void EditToolbarController::executeControlCommand( const ::com::sun::star::frame
         {
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
             {
-                rtl::OUString aText;
+                OUString aText;
                 rControlCommand.Arguments[i].Value >>= aText;
                 m_pEditControl->SetText( aText );
 
