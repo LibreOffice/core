@@ -95,10 +95,10 @@ static ApiMap aNewApiMap[] =
 };
 #undef SYM_MAP
 
-static bool
-tryLink( oslModule &aModule, const char *pName, ApiMap *pMap, guint nEntries )
+template<size_t N> static bool
+tryLink( oslModule &aModule, const char *pName, const ApiMap (&pMap)[N])
 {
-    for (guint i = 0; i < nEntries; ++i)
+    for (guint i = 0; i < N; ++i)
     {
         SymbolFunc aMethod = (SymbolFunc)osl_getFunctionSymbol
             (aModule, OUString::createFromAscii ( pMap[ i ].sym_name ).pData);
@@ -124,14 +124,14 @@ bool EApiInit()
                                   SAL_LOADMODULE_DEFAULT );
         if( aModule)
         {
-            if (tryLink( aModule, eBookLibNames[ j ], aCommonApiMap, G_N_ELEMENTS(aCommonApiMap)))
+            if (tryLink( aModule, eBookLibNames[ j ], aCommonApiMap))
             {
                 if (eds_check_version(3, 6, 0) == NULL)
                 {
-                    if (tryLink( aModule, eBookLibNames[ j ], aNewApiMap, G_N_ELEMENTS(aNewApiMap)))
+                    if (tryLink( aModule, eBookLibNames[ j ], aNewApiMap))
                         return true;
                 }
-                else if (tryLink( aModule, eBookLibNames[ j ], aOldApiMap, G_N_ELEMENTS(aOldApiMap)))
+                else if (tryLink( aModule, eBookLibNames[ j ], aOldApiMap))
                 {
                     return true;
                 }
