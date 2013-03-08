@@ -25,6 +25,16 @@
 #   in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 #   instead of those above.
 
+ifeq ($(CROSS_COMPILING),YES)
+gb_Module_add_targets_for_build :=
+endif
+
+ifeq ($(gb_Side),build)
+gb_Module_add_check_target :=
+gb_Module_add_slowcheck_target :=
+gb_Module_add_subsequentcheck_target :=
+endif
+
 ifneq ($(strip $(MAKECMDGOALS)),)
 # speed up depending on the target
 gb_SpeedUpTargets_LEVEL_3 := debugrun help translations

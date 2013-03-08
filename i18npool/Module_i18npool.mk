@@ -49,15 +49,13 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 	Package_inc \
 ))
 
-ifneq ($(CROSS_COMPILING),YES)
-$(eval $(call gb_Module_add_targets,i18npool,\
+$(eval $(call gb_Module_add_targets_for_build,i18npool,\
 	Executable_gencoll_rule \
 	Executable_genconv_dict \
 	Executable_gendict \
 	Executable_genindex_data \
 	Executable_saxparser \
 ))
-endif
 
 $(eval $(call gb_Module_add_check_targets,i18npool,\
 	CppunitTest_i18npool_test_breakiterator \

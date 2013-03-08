@@ -27,17 +27,18 @@
 $(eval $(call gb_Module_Module,registry))
 
 $(eval $(call gb_Module_add_targets,registry,\
-    Library_reg \
-    ZipPackage_registry_odk_headers \
+	Library_reg \
+	ZipPackage_registry_odk_headers \
 ))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+# if not cross-compiling or we need this for ODK
+ifneq (,$(if $(CROSS_COMPILING),,T)$(filter ODK,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,registry,\
-    StaticLibrary_registry_helper \
-    Executable_regmerge \
-    Executable_regview \
-    Executable_regcompare \
+	Executable_regcompare \
+	Executable_regmerge \
+	Executable_regview \
+	StaticLibrary_registry_helper \
 ))
 
 endif

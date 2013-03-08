@@ -9,12 +9,10 @@
 
 $(eval $(call gb_Module_Module,soltools))
 
-ifneq ($(CROSS_COMPILING),YES)
-$(eval $(call gb_Module_add_targets,soltools,\
+$(eval $(call gb_Module_add_targets_for_build,soltools,\
     Executable_cpp \
     Executable_makedepend \
 ))
-endif # CROSS_COMPILING
 
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Module_add_targets,soltools,\

@@ -37,7 +37,7 @@ $(dir $(call gb_Executable_get_runtime_target,%)).dir :
 $(dir $(call gb_Executable_get_runtime_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_Executable_get_runtime_target,%) : $(call gb_Executable_get_target,%)
+$(call gb_Executable_get_runtime_target,%) : $(call gb_Executable_get_target_for_build,%)
 	touch $@
 
 .PHONY : $(call gb_Executable_get_clean_target,%)

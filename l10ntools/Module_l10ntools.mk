@@ -26,7 +26,7 @@
 
 $(eval $(call gb_Module_Module,l10ntools))
 
-$(eval $(call gb_Module_add_targets,l10ntools,\
+$(eval $(call gb_Module_add_targets_for_build,l10ntools,\
     Executable_helpex \
     Executable_idxdict \
     Executable_ulfex \
@@ -39,6 +39,9 @@ $(eval $(call gb_Module_add_targets,l10ntools,\
     Executable_treex \
     Executable_stringex \
     StaticLibrary_transex \
+))
+
+$(eval $(call gb_Module_add_targets,l10ntools,\
     Package_ulfconv \
 ))
 

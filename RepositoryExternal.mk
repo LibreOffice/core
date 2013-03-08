@@ -2721,6 +2721,7 @@ endef
 # FIXME: the library target should be for build too
 define gb_Executable__register_saxparser
 $(call gb_Executable_add_runtime_dependencies,saxparser,\
+	$(call gb_ComponentTarget_get_outdir_target,sax/source/expatwrap/expwrap) \
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \

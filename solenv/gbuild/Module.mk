@@ -94,6 +94,11 @@ $(call gb_Module_get_target,%) :
 
 all : build $(if $(CROSS_COMPILING),,unitcheck $(if $(gb_PARTIAL_BUILD),,slowcheck))
 
+build-tools : $(gb_BUILD_TOOLS)
+	$(call gb_Output_announce,loaded tools: $(gb_BUILD_TOOLS),$(true),ALL,6)
+	$(call gb_Output_announce_title,build-tools done.)
+	$(call gb_Output_announce_bell)
+
 build : 
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog $(WORKDIR)/bootstrap,$^),$(notdir $(module))),$(true),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
@@ -240,6 +245,8 @@ define gb_Module_add_targets
 $(foreach target,$(2),$(call gb_Module_add_target,$(1),$(target)))
 
 endef
+
+gb_Module_add_targets_for_build = $(call gb_Module_add_targets,$(1),$(2))
 
 define gb_Module_add_check_targets
 $(foreach target,$(2),$(call gb_Module_add_check_target,$(1),$(target)))

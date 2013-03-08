@@ -27,11 +27,9 @@
 
 $(eval $(call gb_Module_Module,solenv))
 
-ifeq ($(CROSS_COMPILING),$(false))
-$(eval $(call gb_Module_add_targets,solenv,\
+$(eval $(call gb_Module_add_targets_for_build,solenv,\
 	Executable_concat-deps \
 ))
-endif
 
 ifneq ($(OS),WNT)
 ifneq ($(OS),IOS)

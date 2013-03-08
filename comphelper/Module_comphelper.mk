@@ -20,15 +20,13 @@
 $(eval $(call gb_Module_Module,comphelper))
 
 $(eval $(call gb_Module_add_targets,comphelper,\
-    Package_inc \
     Library_comphelper \
+    Package_inc \
 ))
 
-ifneq ($(OOO_JUNIT_JAR),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,comphelper,\
     JunitTest_comphelper_complex \
 ))
-endif
 
 $(eval $(call gb_Module_add_check_targets,comphelper,\
     CppunitTest_comphelper_test \

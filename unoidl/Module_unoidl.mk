@@ -14,10 +14,8 @@ $(eval $(call gb_Module_add_targets,unoidl, \
     Package_inc \
 ))
 
-ifneq ($(CROSS_COMPILING),YES)
-$(eval $(call gb_Module_add_targets,unoidl, \
+$(eval $(call gb_Module_add_targets_for_build,unoidl, \
     Executable_reg2unoidl \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:

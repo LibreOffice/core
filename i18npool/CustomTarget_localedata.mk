@@ -30,23 +30,29 @@ $(eval $(call gb_CustomTarget_CustomTarget,i18npool/localedata))
 
 i18npool_LDDIR := $(call gb_CustomTarget_get_workdir,i18npool/localedata)
 
-$(call gb_CustomTarget_get_target,i18npool/localedata) : \
-	$(patsubst %.xml,$(i18npool_LDDIR)/localedata_%.cxx, \
-		$(notdir $(wildcard $(SRCDIR)/i18npool/source/localedata/data/*.xml)))
+i18npool_LD_NAMES := $(basename $(notdir $(wildcard $(SRCDIR)/i18npool/source/localedata/data/*.xml)))
 
-$(i18npool_LDDIR)/localedata_%.cxx : \
-		$(SRCDIR)/i18npool/source/localedata/data/%.xml \
+$(call gb_CustomTarget_get_target,i18npool/localedata) : \
+	$(foreach name,$(i18npool_LD_NAMES),$(i18npool_LDDIR)/localedata_$(name).cxx)
+
+define i18npool_LD_RULE
+$(i18npool_LDDIR)/localedata_$(1).cxx : \
+		$(SRCDIR)/i18npool/source/localedata/data/$(1).xml \
 		$(i18npool_LDDIR)/saxparser.rdb \
 		$(call gb_Executable_get_runtime_dependencies,saxparser)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SAX,1)
-	$(call gb_Helper_abbreviate_dirs, \
-		$(call gb_Helper_execute,saxparser) $* $< $@.tmp \
+	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),SAX,1)
+	$$(call gb_Helper_abbreviate_dirs, \
+		$(call gb_Helper_execute,saxparser) $(1) $$< $$@.tmp \
 			$(call gb_Helper_make_url,$(i18npool_LDDIR)/saxparser.rdb) \
 			-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR) \
 			-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(i18npool_LDDIR)/saxparser.rdb)) \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null 2>&1) && \
-		sed 's/\(^.*get[^;]*$$\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
-		rm $@.tmp)
+		sed 's/\(^.*get[^;]*$$$$\)/SAL_DLLPUBLIC_EXPORT \1/' $$@.tmp > $$@ && \
+		rm $$@.tmp)
+
+endef
+
+$(foreach name,$(i18npool_LD_NAMES),$(eval $(call i18npool_LD_RULE,$(name))))
 
 $(i18npool_LDDIR)/saxparser.rdb : $(i18npool_LDDIR)/saxparser.input \
 		$(SOLARENV)/bin/packcomponents.xslt \

@@ -32,8 +32,8 @@ $(eval $(call gb_Module_add_targets,rsc,\
 	Package_inc \
 ))
 
-$(if $(filter DESKTOP,$(BUILD_TYPE)),$(eval $(call gb_Module_add_targets,rsc,\
+$(eval $(call gb_Module_add_targets_for_build,rsc,\
 	Executable_rsc \
-)))
+))
 
 # vim: set noet sw=4 ts=4:

@@ -19,8 +19,8 @@
 
 $(eval $(call gb_Module_Module,idl))
 
-ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-$(eval $(call gb_Module_add_targets,idl,Executable_svidl))
-endif
+$(eval $(call gb_Module_add_targets_for_build,idl,\
+	Executable_svidl \
+))
 
 # vim: set noet sw=4 ts=4:
