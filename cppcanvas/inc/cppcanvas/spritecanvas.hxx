@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <basegfx/vector/b2dsize.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
 
@@ -48,7 +49,7 @@ namespace cppcanvas
 
     /** SpriteCanvas interface
      */
-    class SpriteCanvas : public virtual BitmapCanvas
+    class SpriteCanvas : public virtual BitmapCanvas, private boost::noncopyable
     {
     public:
         virtual bool                    updateScreen( bool bUpdateAll ) const = 0;
