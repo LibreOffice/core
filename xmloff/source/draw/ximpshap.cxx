@@ -2670,7 +2670,7 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
                 {
                     const OUString  sURL( "vnd.sun.star.EmbeddedObject:" );
 
-                    if ( aPersistName.compareTo( sURL, sURL.getLength() ) == 0 )
+                    if ( aPersistName == sURL )
                         aPersistName = aPersistName.copy( sURL.getLength() );
 
                     xProps->setPropertyValue( OUString(  "PersistName"  ),

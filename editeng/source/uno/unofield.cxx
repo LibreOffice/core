@@ -886,8 +886,8 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rt
     // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
     const OUString aTextFieldPrexit2( "com.sun.star.text.TextField." );
 
-    if( (ServiceSpecifier.compareTo( aTextFieldPrexit, aTextFieldPrexit.getLength() ) == 0) ||
-        (ServiceSpecifier.compareTo( aTextFieldPrexit2, aTextFieldPrexit2.getLength() ) == 0) )
+    if( (ServiceSpecifier == aTextFieldPrexit) ||
+        (ServiceSpecifier == aTextFieldPrexit2) )
     {
         OUString aFieldType( ServiceSpecifier.copy( aTextFieldPrexit.getLength() ) );
 

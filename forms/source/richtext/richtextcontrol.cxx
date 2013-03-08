@@ -694,7 +694,7 @@ namespace frm
 
         // is it an UNO slot?
         ::rtl::OUString sUnoProtocolPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) );
-        if ( 0 == _rURL.Complete.compareTo( sUnoProtocolPrefix, sUnoProtocolPrefix.getLength() ) )
+        if ( _rURL.Complete == sUnoProtocolPrefix )
         {
             ::rtl::OUString sUnoSlotName = _rURL.Complete.copy( sUnoProtocolPrefix.getLength() );
             SfxSlotId nSlotId = lcl_getSlotFromUnoName( SfxSlotPool::GetSlotPool( NULL ), sUnoSlotName );

@@ -860,7 +860,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         if (nKeyStart != -1)
             aKeyText = rName.copy( nKeyStart + 1 );
         DBG_ASSERT( !aKeyText.isEmpty(), "unexpected key (lang::Locale) string" );
-        if (0 == rName.compareTo( aSpellCheckerList, aSpellCheckerList.getLength() ))
+        if (rName == aSpellCheckerList)
         {
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailSpellSvcs);
@@ -885,7 +885,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 pSpellDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
             }
         }
-        else if (0 == rName.compareTo( aGrammarCheckerList, aGrammarCheckerList.getLength() ))
+        else if (rName == aGrammarCheckerList)
         {
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailGrammarSvcs);
@@ -913,7 +913,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 }
             }
         }
-        else if (0 == rName.compareTo( aHyphenatorList, aHyphenatorList.getLength() ))
+        else if (rName == aHyphenatorList)
         {
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailHyphSvcs);
@@ -938,7 +938,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
                 pHyphDsp->SetServiceList( LanguageTag(nLang).getLocale(), aSvcImplNames );
             }
         }
-        else if (0 == rName.compareTo( aThesaurusList, aThesaurusList.getLength() ))
+        else if (rName == aThesaurusList)
         {
             // delete old cached data, needs to be acquired new on demand
             clearSvcInfoArray(pAvailThesSvcs);
