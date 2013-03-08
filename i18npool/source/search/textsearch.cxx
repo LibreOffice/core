@@ -208,16 +208,26 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
 
         sres = (this->*fnForward)( in_str, newStartPos, newEndPos );
 
-        for ( int k = 0; k < sres.startOffset.getLength(); k++ )
+        // Map offsets back to untransliterated string.
+        const sal_Int32 nOffsets = offset.getLength();
+        if (nOffsets)
         {
-            if (sres.startOffset[k])
-                sres.startOffset[k] = offset[sres.startOffset[k]];
-            // JP 20.6.2001: end is ever exclusive and then don't return
-            //               the position of the next character - return the
-            //               next position behind the last found character!
-            //               "a b c" find "b" must return 2,3 and not 2,4!!!
-            if (sres.endOffset[k])
-                sres.endOffset[k] = offset[sres.endOffset[k]-1] + 1;
+            // For regex nGroups is the number of groups+1 with group 0 being
+            // the entire match.
+            const sal_Int32 nGroups = sres.startOffset.getLength();
+            for ( sal_Int32 k = 0; k < nGroups; k++ )
+            {
+                const sal_Int32 nStart = sres.startOffset[k];
+                if (nStart > 0)
+                    sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
+                // JP 20.6.2001: end is ever exclusive and then don't return
+                //               the position of the next character - return the
+                //               next position behind the last found character!
+                //               "a b c" find "b" must return 2,3 and not 2,4!!!
+                const sal_Int32 nStop = sres.endOffset[k];
+                if (nStop > 0)
+                    sres.endOffset[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
+            }
         }
     }
     else
@@ -297,16 +307,26 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
 
         sres = (this->*fnBackward)( in_str, newStartPos, newEndPos );
 
-        for ( int k = 0; k < sres.startOffset.getLength(); k++ )
+        // Map offsets back to untransliterated string.
+        const sal_Int32 nOffsets = offset.getLength();
+        if (nOffsets)
         {
-            if (sres.startOffset[k])
-                sres.startOffset[k] = offset[sres.startOffset[k] - 1] + 1;
-            // JP 20.6.2001: end is ever exclusive and then don't return
-            //               the position of the next character - return the
-            //               next position behind the last found character!
-            //               "a b c" find "b" must return 2,3 and not 2,4!!!
-            if (sres.endOffset[k])
-                sres.endOffset[k] = offset[sres.endOffset[k]];
+            // For regex nGroups is the number of groups+1 with group 0 being
+            // the entire match.
+            const sal_Int32 nGroups = sres.startOffset.getLength();
+            for ( sal_Int32 k = 0; k < nGroups; k++ )
+            {
+                const sal_Int32 nStart = sres.startOffset[k];
+                if (nStart > 0)
+                    sres.startOffset[k] = offset[(nStart <= nOffsets ? nStart : nOffsets) - 1] + 1;
+                // JP 20.6.2001: end is ever exclusive and then don't return
+                //               the position of the next character - return the
+                //               next position behind the last found character!
+                //               "a b c" find "b" must return 2,3 and not 2,4!!!
+                const sal_Int32 nStop = sres.endOffset[k];
+                if (nStop > 0)
+                    sres.endOffset[k] = (nStop < nOffsets ? offset[nStop] : (offset[nOffsets - 1] + 1));
+            }
         }
     }
     else
