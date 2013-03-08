@@ -52,7 +52,7 @@
 #include <svx/extrusioncolorcontrol.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <svx/modctrl.hxx>
-#include <com/sun/star/scanner/XScannerManager2.hpp>
+#include <com/sun/star/scanner/ScannerManager.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <comphelper/processfactory.hxx>
@@ -209,17 +209,7 @@ SwModule::GetScannerManager()
 {
     if (!m_xScannerManager.is())
     {
-        uno::Reference< lang::XMultiServiceFactory > xMgr (
-            comphelper::getProcessServiceFactory() );
-        if( xMgr.is() )
-        {
-            m_xScannerManager =
-                uno::Reference< scanner::XScannerManager2 >(
-                    xMgr->createInstance(
-                        rtl::OUString(
-                            "com.sun.star.scanner.ScannerManager") ),
-                    uno::UNO_QUERY );
-        }
+        m_xScannerManager = scanner::ScannerManager::create( comphelper::getProcessComponentContext() );
     }
     return m_xScannerManager;
 }

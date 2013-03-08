@@ -19,6 +19,7 @@
 
 
 #include "DrawViewShell.hxx"
+#include <com/sun/star/scanner/ScannerManager.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVX_SIZEITEM
@@ -81,7 +82,7 @@ sal_Bool DrawViewShell::mbPipette = sal_False;
 // - ScannerEventListener -
 // ------------------------
 
-class ScannerEventListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+class ScannerEventListener : public ::cppu::WeakImplHelper1< lang::XEventListener >
 {
 private:
 
@@ -93,7 +94,7 @@ public:
                             ~ScannerEventListener();
 
     // XEventListener
-    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& rEventObject ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException);
 
     void                    ParentDestroyed() { mpParent = NULL; }
 };
@@ -106,7 +107,7 @@ ScannerEventListener::~ScannerEventListener()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::EventObject& rEventObject ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException)
 {
     if( mpParent )
         mpParent->ScannerEvent( rEventObject );
@@ -356,21 +357,13 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     mnLockCount = 0UL;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    if( xMgr.is() )
-    {
-        mxScannerManager = ::com::sun::star::uno::Reference< ::com::sun::star::scanner::XScannerManager2 >(
-                           xMgr->createInstance( "com.sun.star.scanner.ScannerManager" ),
-                           ::com::sun::star::uno::UNO_QUERY );
+    mxScannerManager = scanner::ScannerManager::create( xContext );
 
-        if( mxScannerManager.is() )
-        {
-            mxScannerListener = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >(
-                                static_cast< ::cppu::OWeakObject* >( new ScannerEventListener( this ) ),
-                                ::com::sun::star::uno::UNO_QUERY );
-        }
-    }
+    mxScannerListener = uno::Reference< lang::XEventListener >(
+                        static_cast< ::cppu::OWeakObject* >( new ScannerEventListener( this ) ),
+                        uno::UNO_QUERY );
 
     mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );
     mpViewOverlayManager.reset( new ViewOverlayManager( GetViewShellBase() ) );
