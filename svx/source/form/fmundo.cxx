@@ -115,7 +115,7 @@ private:
 
         try
         {
-            ::comphelper::ComponentContext const aContext( ::comphelper::getProcessServiceFactory() );
+            ::comphelper::ComponentContext const aContext( ::comphelper::getProcessComponentContext() );
             Reference< XScriptListener > const xScriptListener( aContext.createComponent( "ooo.vba.EventListener" ), UNO_QUERY_THROW );
             Reference< XPropertySet > const xListenerProps( xScriptListener, UNO_QUERY_THROW );
             // SfxObjectShellRef is good here since the model controls the lifetime of the shell

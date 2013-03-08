@@ -93,7 +93,7 @@ FmFormView::FmFormView( FmFormModel* pModel, OutputDevice* pOut )
 void FmFormView::Init()
 {
     pFormShell = NULL;
-    pImpl = new FmXFormView(::comphelper::getProcessServiceFactory(),this);
+    pImpl = new FmXFormView(::comphelper::getProcessComponentContext(),this);
     pImpl->acquire();
 
     //////////////////////////////////////////////////////////////////////
@@ -594,7 +594,7 @@ void FmFormView::createControlLabelPair( OutputDevice* _pOutDev, sal_Int32 _nXOf
     SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl )
 {
     FmXFormView::createControlLabelPair(
-        ::comphelper::getProcessServiceFactory(),
+        ::comphelper::getProcessComponentContext(),
         *_pOutDev, _nXOffsetMM, _nYOffsetMM,
         _rxField, _rxNumberFormats,
         _nControlObjectID, _rFieldPostfix, _nInventor, _nLabelObjectID,
