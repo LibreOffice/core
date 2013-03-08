@@ -247,8 +247,7 @@ Type PropertyConversion::xmlTypeToUnoType( const ::rtl::OUString& _rType )
 {
     Type aUnoType( ::getVoidCppuType() );
 
-    DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Type, MapString2Type );
-    static MapString2Type s_aTypeNameMap;
+    static std::map< OUString, css::uno::Type > s_aTypeNameMap;
     if ( s_aTypeNameMap.empty() )
     {
         s_aTypeNameMap[ token::GetXMLToken( token::XML_BOOLEAN ) ] = ::getBooleanCppuType();
@@ -257,7 +256,7 @@ Type PropertyConversion::xmlTypeToUnoType( const ::rtl::OUString& _rType )
         s_aTypeNameMap[ token::GetXMLToken( token::XML_VOID )    ] = ::getVoidCppuType();
     }
 
-    const ConstMapString2TypeIterator aTypePos = s_aTypeNameMap.find( _rType );
+    const std::map< OUString, css::uno::Type >::iterator aTypePos = s_aTypeNameMap.find( _rType );
     OSL_ENSURE( s_aTypeNameMap.end() != aTypePos, "PropertyConversion::xmlTypeToUnoType: invalid property name!" );
     if ( s_aTypeNameMap.end() != aTypePos )
         aUnoType = aTypePos->second;
