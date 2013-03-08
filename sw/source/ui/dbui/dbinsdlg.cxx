@@ -1215,7 +1215,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             // for adding as fields -> insert a "NextField" after
             // every data set
             SwDBFormatData aDBFormatData;
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             aDBFormatData.xFormatter = Reference<util::XNumberFormatter>(util::NumberFormatter::create(xContext), UNO_QUERY_THROW) ;
 

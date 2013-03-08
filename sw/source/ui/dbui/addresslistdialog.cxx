@@ -276,7 +276,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
 {
     SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if(pSelect && xMgr.is())
+    if(pSelect)
     {
         String sCommand = m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
         if ( !sCommand.Len() )
