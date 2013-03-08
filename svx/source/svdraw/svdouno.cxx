@@ -485,11 +485,11 @@ void SdrUnoObj::CreateUnoControlModel(const String& rModelName)
     aUnoControlModelTypeName = rModelName;
 
     uno::Reference< awt::XControlModel >   xModel;
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    if (aUnoControlModelTypeName.Len() && xFactory.is() )
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    if (aUnoControlModelTypeName.Len() )
     {
-        xModel = uno::Reference< awt::XControlModel >(xFactory->createInstance(
-            aUnoControlModelTypeName), uno::UNO_QUERY);
+        xModel = uno::Reference< awt::XControlModel >(xContext->getServiceManager()->createInstanceWithContext(
+            aUnoControlModelTypeName, xContext), uno::UNO_QUERY);
 
         if (xModel.is())
             SetChanged();

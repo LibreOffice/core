@@ -132,7 +132,6 @@ using namespace nsHdFtFlags;
 #include <oox/ole/olestorage.hxx>
 
 using ::comphelper::MediaDescriptor;
-using ::comphelper::getProcessServiceFactory;
 
 class BasicProjImportHelper
 {

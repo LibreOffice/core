@@ -18,7 +18,7 @@
  */
 #include <swthreadjoiner.hxx>
 #include <finalthreadmanager.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/JobManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
@@ -42,11 +42,7 @@ uno::Reference< util::XJobManager >& SwThreadJoiner::GetThreadJoiner()
 
     if ( !mpThreadJoiner.is() )
     {
-        mpThreadJoiner =
-            uno::Reference< util::XJobManager >(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                    OUString("com.sun.star.util.JobManager") ),
-                uno::UNO_QUERY );
+        mpThreadJoiner = util::JobManager::create( comphelper::getProcessComponentContext() );
     }
 
     return mpThreadJoiner;

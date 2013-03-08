@@ -66,7 +66,7 @@ private:
         const sal_Char* pStreamName,        /// the stream name
         /// service factory for pServiceName
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+            ::com::sun::star::uno::XComponentContext> & rFactory,
         const sal_Char* pServiceName,       /// service name of the component
         /// the argument (XInitialization)
         const ::com::sun::star::uno::Sequence<
@@ -83,7 +83,7 @@ private:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent> & xComponent,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+            ::com::sun::star::uno::XComponentContext> & rFactory,
         const sal_Char* pServiceName,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Any> & rArguments,

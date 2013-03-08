@@ -415,19 +415,19 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
     if ( !aEngine.Len() )
         aEngine = String( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) );
 
-    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
     Reference< XShape > aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
     if ( aXShape.is() )
     {
-        if ( aEngine.Len() && xFactory.is() )
+        if ( aEngine.Len() )
         {
             Sequence< Any > aArgument( 1 );
             Sequence< PropertyValue > aPropValues( 1 );
             aPropValues[ 0 ].Name = rtl::OUString("CustomShape");
             aPropValues[ 0 ].Value <<= aXShape;
             aArgument[ 0 ] <<= aPropValues;
-            Reference< XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
+            Reference< XInterface > xInterface( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aEngine, aArgument, xContext ) );
             if ( xInterface.is() )
                 mxCustomShapeEngine = Reference< XCustomShapeEngine >( xInterface, UNO_QUERY );
         }

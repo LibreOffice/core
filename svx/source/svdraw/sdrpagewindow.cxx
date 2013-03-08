@@ -78,22 +78,19 @@ using namespace ::com::sun::star;
         {
             // Printer and VirtualDevice, or rather: no OutDev
             uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            if( xFactory.is() )
-            {
-                const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString("com.sun.star.awt.UnoControlContainer")), uno::UNO_QUERY);
-                uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(rtl::OUString("com.sun.star.awt.UnoControlContainerModel")), uno::UNO_QUERY);
-                uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
-                if (xControl.is())
-                    xControl->setModel(xModel);
+            const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString("com.sun.star.awt.UnoControlContainer")), uno::UNO_QUERY);
+            uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(rtl::OUString("com.sun.star.awt.UnoControlContainerModel")), uno::UNO_QUERY);
+            uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
+            if (xControl.is())
+                xControl->setModel(xModel);
 
-                OutputDevice& rOutDev = rPaintWindow.GetOutputDevice();
-                Point aPosPix = rOutDev.GetMapMode().GetOrigin();
-                Size aSizePix = rOutDev.GetOutputSizePixel();
+            OutputDevice& rOutDev = rPaintWindow.GetOutputDevice();
+            Point aPosPix = rOutDev.GetMapMode().GetOrigin();
+            Size aSizePix = rOutDev.GetOutputSizePixel();
 
-                uno::Reference< awt::XWindow > xContComp(mxControlContainer, uno::UNO_QUERY);
-                if( xContComp.is() )
-                    xContComp->setPosSize(aPosPix.X(), aPosPix.Y(), aSizePix.Width(), aSizePix.Height(), awt::PosSize::POSSIZE);
-            }
+            uno::Reference< awt::XWindow > xContComp(mxControlContainer, uno::UNO_QUERY);
+            if( xContComp.is() )
+                xContComp->setPosSize(aPosPix.X(), aPosPix.Y(), aSizePix.Width(), aSizePix.Height(), awt::PosSize::POSSIZE);
         }
 
         FmFormView* pViewAsFormView = dynamic_cast< FmFormView* >( &rView );

@@ -78,12 +78,8 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
                                 const rtl::OUString& aDocHierarchicalName )
 {
     // Get service factory
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
-    OSL_ENSURE( xServiceFactory.is(),
-            "SwXMLWriter::Write: got no service manager" );
-    if( !xServiceFactory.is() )
-        return ERR_SWG_WRITE_ERROR;
+    uno::Reference< uno::XComponentContext > xContext =
+            comphelper::getProcessComponentContext();
 
     // Get data sink ...
     uno::Reference< io::XOutputStream > xOut;
@@ -345,7 +341,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( !bOrganizerMode && !bBlock && bStoreMeta )
     {
         if( !WriteThroughComponent(
-                xModelComp, "meta.xml", xServiceFactory,
+                xModelComp, "meta.xml", xContext,
                 (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaExporter"
                         : "com.sun.star.comp.Writer.XMLMetaExporter"),
                 aEmptyArgs, aProps ) )
@@ -361,7 +357,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         if( !bBlock )
         {
             if( !WriteThroughComponent(
-                xModelComp, "settings.xml", xServiceFactory,
+                xModelComp, "settings.xml", xContext,
                 (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsExporter"
                         : "com.sun.star.comp.Writer.XMLSettingsExporter"),
                 aEmptyArgs, aProps ) )
@@ -377,7 +373,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     }
 
     if( !WriteThroughComponent(
-            xModelComp, "styles.xml", xServiceFactory,
+            xModelComp, "styles.xml", xContext,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesExporter"
                     : "com.sun.star.comp.Writer.XMLStylesExporter"),
             aFilterArgs, aProps ) )
@@ -391,7 +387,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( !bOrganizerMode && !bErr )
     {
         if( !WriteThroughComponent(
-                xModelComp, "content.xml", xServiceFactory,
+                xModelComp, "content.xml", xContext,
                 (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentExporter"
                         : "com.sun.star.comp.Writer.XMLContentExporter"),
                 aFilterArgs, aProps ) )
@@ -501,7 +497,7 @@ sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
 bool SwXMLWriter::WriteThroughComponent(
     const uno::Reference<XComponent> & xComponent,
     const sal_Char* pStreamName,
-    const uno::Reference<lang::XMultiServiceFactory> & rFactory,
+    const uno::Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pServiceName,
     const Sequence<Any> & rArguments,
     const Sequence<beans::PropertyValue> & rMediaDesc )
@@ -555,7 +551,7 @@ bool SwXMLWriter::WriteThroughComponent(
 
         // write the stuff
         bRet = WriteThroughComponent(
-            xOutputStream, xComponent, rFactory,
+            xOutputStream, xComponent, rxContext,
             pServiceName, rArguments, rMediaDesc );
     }
     catch ( uno::Exception& )
@@ -569,7 +565,7 @@ bool SwXMLWriter::WriteThroughComponent(
 bool SwXMLWriter::WriteThroughComponent(
     const uno::Reference<io::XOutputStream> & xOutputStream,
     const uno::Reference<XComponent> & xComponent,
-    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference<XComponentContext> & rxContext,
     const sal_Char* pServiceName,
     const Sequence<Any> & rArguments,
     const Sequence<PropertyValue> & rMediaDesc )
@@ -582,7 +578,7 @@ bool SwXMLWriter::WriteThroughComponent(
                                 "SwXMLWriter::WriteThroughComponent" );
 
     // get component
-    uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(comphelper::getComponentContext(rFactory));
+    uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(rxContext);
     RTL_LOGFILE_CONTEXT_TRACE( aFilterLog, "SAX-Writer created" );
 
     // connect XML writer to output stream
@@ -597,8 +593,8 @@ bool SwXMLWriter::WriteThroughComponent(
 
     // get filter component
     uno::Reference< document::XExporter > xExporter(
-        rFactory->createInstanceWithArguments(
-            OUString::createFromAscii(pServiceName), aArgs), UNO_QUERY);
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            OUString::createFromAscii(pServiceName), aArgs, rxContext), UNO_QUERY);
     OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if( !xExporter.is() )

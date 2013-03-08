@@ -68,13 +68,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
             pModel->setUnoModel( Reference< XInterface >::query( xSourceDoc ) );
         }
 
-        uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
         uno::Reference< uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-        if( !xServiceFactory.is() )
-        {
-            OSL_FAIL( "got no service manager" );
-            bDocRet = sal_False;
-        }
 
         if( bDocRet )
         {
@@ -104,7 +98,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutp
                 if( xObjectResolver.is() )
                     aArgs[2] <<= xObjectResolver;
 
-                uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pExportService ), aArgs ), uno::UNO_QUERY );
+                uno::Reference< document::XFilter > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pExportService ), aArgs, xContext ), uno::UNO_QUERY );
                 if( !xFilter.is() )
                 {
                     OSL_FAIL( "com.sun.star.comp.Draw.XMLExporter service missing" );
@@ -177,31 +171,23 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
     try
     {
         // Get service factory
-        Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
         Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-        DBG_ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
 
-        if( !xServiceFactory.is() )
-            nRet = 1;
+        if ( xTargetModel.is() )
+            xTargetModel->lockControllers();
 
-        if( 0 == nRet )
+        // -------------------------------------
+
+        pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
+        xGraphicResolver = pGraphicHelper;
+
+        ::comphelper::IEmbeddedHelper *pPersist = pModel->GetPersist();
+        if( pPersist )
         {
-            if ( xTargetModel.is() )
-                xTargetModel->lockControllers();
-
-            // -------------------------------------
-
-            pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
-            xGraphicResolver = pGraphicHelper;
-
-            ::comphelper::IEmbeddedHelper *pPersist = pModel->GetPersist();
-            if( pPersist )
-            {
-                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                            *pPersist,
-                                            EMBEDDEDOBJECTHELPER_MODE_READ );
-                xObjectResolver = pObjectHelper;
-            }
+            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                        *pPersist,
+                                        EMBEDDEDOBJECTHELPER_MODE_READ );
+            xObjectResolver = pObjectHelper;
         }
 
         // -------------------------------------
@@ -224,7 +210,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
             *pArgs++ <<= xObjectResolver;
 
             // get filter
-            Reference< xml::sax::XDocumentHandler > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pImportService ), aFilterArgs), UNO_QUERY );
+            Reference< xml::sax::XDocumentHandler > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pImportService ), aFilterArgs, xContext), UNO_QUERY );
             DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
 
             nRet = 1;
