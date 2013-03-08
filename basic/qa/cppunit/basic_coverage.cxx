@@ -24,8 +24,7 @@ private:
     int  m_nb_tests_skipped;
     OUString m_sCurrentTest;
     void process_directory(OUString sDirName);
-    void process_file(OUString sFileName);
-    void run_test(OUString sFileName, OUString sCode);
+    void run_test(OUString sFileName);
     void test_start(OUString /* sFileName */);
     void test_failed(void);
     void test_success(void);
@@ -78,10 +77,11 @@ void Coverage::test_success()
     fprintf(stderr,"%s,PASS\n", rtl::OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
-void Coverage::run_test(OUString /*sFileName*/, OUString sCode)
+void Coverage::run_test(OUString sFileURL)
 {
     bool result = false;
-    MacroSnippet testMacro( sCode );
+    MacroSnippet testMacro;
+    testMacro.LoadSourceFromFile( sFileURL );
     testMacro.Compile();
     if( !testMacro.HasError() )
     {
@@ -101,33 +101,6 @@ void Coverage::run_test(OUString /*sFileName*/, OUString sCode)
     }
 }
 
-void Coverage::process_file(OUString sFileName)
-{
-    osl::File aFile(sFileName);
-
-    test_start(sFileName);
-    if(osl::FileBase::E_None == aFile.open(osl_File_OpenFlag_Read))
-    {
-        sal_uInt64 size;
-        sal_uInt64 size_read;
-        if(osl::FileBase::E_None == aFile.getSize(size))
-        {
-            void* buffer = calloc(1, size+1);
-            CPPUNIT_ASSERT(buffer);
-            if(osl::FileBase::E_None == aFile.read( buffer, size, size_read))
-            {
-                if(size == size_read)
-                {
-                    OUString sCode((sal_Char*)buffer, size, RTL_TEXTENCODING_UTF8);
-                    run_test(sFileName, sCode);
-                    return;
-                }
-            }
-        }
-    }
-    test_failed();
-}
-
 void Coverage::process_directory(OUString sDirName)
 {
     osl::Directory aDir(sDirName);
@@ -141,7 +114,7 @@ void Coverage::process_directory(OUString sDirName)
             aItem.getFileStatus(aFileStatus);
             if(aFileStatus.isRegular())
             {
-                process_file(aFileStatus.getFileURL());
+                run_test(aFileStatus.getFileURL());
             }
         }
     }
