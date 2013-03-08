@@ -3308,7 +3308,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
         }
     }
 
-    XubString aTxt(GetTxt().copy(nIdx, nLen));
+    XubString aTxt(nLen > GetTxt().getLength() ? GetTxt().copy(nIdx) : GetTxt().copy(nIdx, nLen));
 
     xub_StrLen nTxtStt = nIdx, nIdxEnd = nIdx + aTxt.Len();
     for( sal_uInt16 n = 0; n < aRedlArr.size(); n += 2 )
