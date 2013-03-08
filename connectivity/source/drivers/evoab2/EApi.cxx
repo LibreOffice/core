@@ -63,7 +63,7 @@ static ApiMap aCommonApiMap[] =
     SYM_MAP( e_book_query_field_exists )
 };
 
-//< 3-6 api
+//< 3.6 api
 static ApiMap aOldApiMap[] =
 {
     SYM_MAP( e_book_get_addressbooks ),
@@ -76,7 +76,7 @@ static ApiMap aOldApiMap[] =
     SYM_MAP( e_source_group_peek_sources )
 };
 
-//>= 3-6 api
+//>= 3.6 api
 static ApiMap aNewApiMap[] =
 {
     SYM_MAP( e_source_registry_list_sources ),
@@ -87,12 +87,24 @@ static ApiMap aNewApiMap[] =
     SYM_MAP( e_source_get_display_name ),
     SYM_MAP( e_source_get_uid ),
     SYM_MAP( e_source_registry_ref_source),
-    SYM_MAP( e_book_client_new ),
     SYM_MAP( e_client_open_sync ),
     SYM_MAP( e_client_get_source ),
     SYM_MAP( e_book_client_get_contacts_sync ),
     SYM_MAP( e_client_util_free_object_slist )
 };
+
+//== indirect read access (3.6 only)
+static ApiMap aClientApiMap36[] =
+{
+    SYM_MAP( e_book_client_new )
+};
+
+//>= direct read access API (>= 3.8)
+static ApiMap aClientApiMap38[] =
+{
+    SYM_MAP( e_book_client_connect_direct_sync )
+};
+
 #undef SYM_MAP
 
 template<size_t N> static bool
@@ -122,22 +134,33 @@ bool EApiInit()
         aModule = osl_loadModule( rtl::OUString::createFromAscii
                                   ( eBookLibNames[ j ] ).pData,
                                   SAL_LOADMODULE_DEFAULT );
-        if( aModule)
+
+        if( aModule == NULL)
+            continue;
+
+        if (tryLink( aModule, eBookLibNames[ j ], aCommonApiMap))
         {
-            if (tryLink( aModule, eBookLibNames[ j ], aCommonApiMap))
+            if (eds_check_version( 3, 6, 0 ) != NULL)
             {
-                if (eds_check_version(3, 6, 0) == NULL)
+                if (tryLink( aModule, eBookLibNames[ j ], aOldApiMap))
+                    return true;
+            }
+            else if (tryLink( aModule, eBookLibNames[ j ], aNewApiMap))
+            {
+                if (eds_check_version( 3, 7, 6 ) != NULL)
                 {
-                    if (tryLink( aModule, eBookLibNames[ j ], aNewApiMap))
+                    if (tryLink( aModule, eBookLibNames[ j ], aClientApiMap36))
                         return true;
                 }
-                else if (tryLink( aModule, eBookLibNames[ j ], aOldApiMap))
+                else
                 {
-                    return true;
+                    if (tryLink( aModule, eBookLibNames[ j ], aClientApiMap38))
+                        return true;
                 }
             }
-            osl_unloadModule( aModule );
         }
+
+        osl_unloadModule( aModule );
     }
     fprintf( stderr, "Can find no compliant libebook client libraries\n" );
     return false;
