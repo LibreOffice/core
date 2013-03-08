@@ -60,7 +60,6 @@ public:
     SalFrame* CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
 
     // mainloop pieces
-    virtual void Wakeup();
     virtual bool AnyInput( sal_uInt16 nType );
 
     // incoming android event handlers:

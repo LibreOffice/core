@@ -237,12 +237,6 @@ AndroidSalInstance::~AndroidSalInstance()
     LOGI("destroyed Android Sal Instance");
 }
 
-void AndroidSalInstance::Wakeup()
-{
-    LOGI("Wakeup alooper");
-    LOGI("busted - no global looper");
-}
-
 bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
 {
     if( (nType & VCL_INPUT_TIMER) != 0 )
