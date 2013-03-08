@@ -23,6 +23,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <map>
+#include <utility>
 
 //........................................................................
 namespace dbaui
@@ -126,8 +127,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     static AuthenticationMode getAuthenticationMode( const ::rtl::OUString& _sURL )
     {
-        DECLARE_STL_USTRINGACCESS_MAP( FeatureSupport, Supported);
-        static Supported s_aSupport;
+        static std::map< OUString, FeatureSupport > s_aSupport;
         if ( s_aSupport.empty() )
         {
             ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessComponentContext());
@@ -147,7 +147,7 @@ namespace dbaui
                     else if ( sAuth == "Password" )
                         aInit = AuthPwd;
                 }
-                s_aSupport.insert(Supported::value_type(*pIter,aInit));
+                s_aSupport.insert(std::make_pair(*pIter,aInit));
             }
         }
         OSL_ENSURE(s_aSupport.find(_sURL) != s_aSupport.end(),"Illegal URL!");

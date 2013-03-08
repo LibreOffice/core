@@ -43,6 +43,7 @@
 
 #include <algorithm>
 #include <set>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -472,8 +473,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
 
     if( getPeer().is() )
     {
-        DECLARE_STL_VECTOR( PropertyValue, PropertyValueVector);
-        PropertyValueVector     aPeerPropertiesToSet;
+        std::vector< PropertyValue > aPeerPropertiesToSet;
         sal_Int32               nIndependentPos = 0;
         bool                    bResourceResolverSet( false );
             // position where to insert the independent properties into aPeerPropertiesToSet,
@@ -652,8 +652,8 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
         // usually don't have an own mutex but use the SolarMutex instead.
         // To prevent deadlocks resulting from this, we do this without our own mutex locked
-        PropertyValueVectorIterator aEnd = aPeerPropertiesToSet.end();
-        for (   PropertyValueVectorIterator aLoop = aPeerPropertiesToSet.begin();
+        std::vector< PropertyValue >::iterator aEnd = aPeerPropertiesToSet.end();
+        for (   std::vector< PropertyValue >::iterator aLoop = aPeerPropertiesToSet.begin();
                 aLoop != aEnd;
                 ++aLoop
             )

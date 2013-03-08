@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <map>
+#include <utility>
+
 #include <string.h>
 #include "RowSet.hxx"
 #include "dbastrings.hrc"
@@ -1836,8 +1841,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     sal_Int32 nCount = xMetaData->getColumnCount();
                     m_aDataColumns.reserve(nCount+1);
                     aColumns->get().reserve(nCount+1);
-                    DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
-                    StringMap aColumnMap;
+                    std::map< OUString, int > aColumnMap;
                     for (sal_Int32 i = 0 ; i < nCount; ++i)
                     {
                         // retrieve the name of the column
@@ -1861,7 +1865,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                             aDescription,
                                                                             OUString(),
                                                                             m_aCurrentRow);
-                        aColumnMap.insert(StringMap::value_type(sName,0));
+                        aColumnMap.insert(std::make_pair(sName,0));
                         aColumns->get().push_back(pColumn);
                         pColumn->setName(sName);
                         aNames.push_back(sName);

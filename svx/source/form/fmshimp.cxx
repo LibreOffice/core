@@ -81,7 +81,6 @@
 #include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include <connectivity/dbtools.hxx>
 #include <osl/mutex.hxx>
@@ -100,6 +99,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <map>
 #include <vector>
 
 // wird fuer Invalidate verwendet -> mitpflegen
@@ -3309,11 +3309,9 @@ void FmXFormShell::CreateExternalView()
             sal_Int16 nAddedColumns = 0;
 
             // for radio buttons we need some special structures
-            DECLARE_STL_USTRINGACCESS_MAP(Sequence< ::rtl::OUString>, MapUString2UstringSeq);
-            DECLARE_STL_ITERATORS(MapUString2UstringSeq);
-            DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString, FmMapUString2UString);
-            DECLARE_STL_USTRINGACCESS_MAP(sal_Int16, FmMapUString2Int16);
-            DECLARE_STL_ITERATORS(FmMapUString2Int16);
+            typedef std::map< OUString, Sequence< ::rtl::OUString> > MapUString2UstringSeq;
+            typedef std::map< OUString, OUString > FmMapUString2UString;
+            typedef std::map< OUString, sal_Int16 > FmMapUString2Int16;
 
             MapUString2UstringSeq   aRadioValueLists;
             MapUString2UstringSeq   aRadioListSources;
@@ -3480,7 +3478,7 @@ void FmXFormShell::CreateExternalView()
             // properties describing the "direct" column properties
             const sal_Int16 nListBoxDescription = 6;
             Sequence< PropertyValue> aListBoxDescription(nListBoxDescription);
-            for (   ConstFmMapUString2UStringIterator aCtrlSource = aRadioControlSources.begin();
+            for (   FmMapUString2UString::const_iterator aCtrlSource = aRadioControlSources.begin();
                     aCtrlSource != aRadioControlSources.end();
                     ++aCtrlSource, ++nOffset
                 )
