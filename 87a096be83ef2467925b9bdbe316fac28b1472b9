@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH///q8\u003d",
+        "filename": "autodoc/source/parser_i/tokens/tkpstam2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000322
+      },
+      "writtenOn": "2013-03-08T10:03:08Z",
+      "side": 1,
+      "message": "I think you reverted to patch 1...\nIt should be memset( pNewStati+nNrofStati, 0, ...)",
+      "revId": "87a096be83ef2467925b9bdbe316fac28b1472b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
