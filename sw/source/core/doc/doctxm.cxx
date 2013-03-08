@@ -1559,6 +1559,32 @@ static String lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, 
     return sRet;
 }
 
+/*--------------------------------------------------------------------
+  Description: Generate String with newlines changed to spaces,
+  consecutive spaces changed to a single space, and trailing space removed.
+ --------------------------------------------------------------------*/
+String lcl_RemoveLineBreaks( String sRet )
+{
+    xub_StrLen nOffset = 0;
+    sRet.SearchAndReplaceAll('\n', ' ');
+    for (xub_StrLen i = 1; i < sRet.Len(); i++)
+    {
+        if ( sRet.GetChar(i - 1) == ' ' && sRet.GetChar(i) == ' ' )
+        {
+            nOffset += 1;
+        }
+        else
+        {
+            sRet.SetChar(i - nOffset, sRet.GetChar(i));
+        }
+    }
+    if (sRet.GetChar(sRet.Len() - 1) == ' ')
+    {
+        nOffset += 1;
+    }
+    return sRet.Copy(0, sRet.Len() - nOffset);
+}
+
 // Add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
 // which page description is used, no appropriate one is found.
 void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
@@ -1607,6 +1633,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                 {
                     SwIndex aIdx( pTOXNd, rTxt.Len() );
                     rBase.FillText( *pTOXNd, aIdx );
+                    rTxt = lcl_RemoveLineBreaks(rTxt);
                 }
                 break;
 
@@ -1617,6 +1644,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
 
                     SwIndex aIdx( pTOXNd, rTxt.Len() );
                     rBase.FillText( *pTOXNd, aIdx );
+                    rTxt = lcl_RemoveLineBreaks(rTxt);
                 }
                 break;
 
