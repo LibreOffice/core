@@ -198,9 +198,9 @@ inline sal_Bool Color::IsRGBEqual( const Color& rColor ) const
 
 inline sal_uInt8 Color::GetLuminance() const
 {
-    return( (sal_uInt8) ( ( COLORDATA_BLUE( mnColor ) * 28UL +
+    return( (sal_uInt8) ( ( COLORDATA_BLUE( mnColor ) * 29UL +
                         COLORDATA_GREEN( mnColor ) * 151UL +
-                        COLORDATA_RED( mnColor ) * 77UL ) >> 8UL ) );
+                        COLORDATA_RED( mnColor ) * 76UL ) >> 8UL ) );
 }
 
 inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
