@@ -412,18 +412,10 @@ SfxObjectShell* ScModelObj::GetEmbeddedObject() const
     return pDocShell;
 }
 
-void ScModelObj::UpdateAllRowHeights(const ScMarkData* pTabMark, bool bCalcOutputFactor)
+void ScModelObj::UpdateAllRowHeights()
 {
     if (pDocShell)
-    {
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-        if (bCalcOutputFactor)
-            pDocShell->CalcOutputFactor();
-#else
-        (void)bCalcOutputFactor;
-#endif
-        pDocShell->UpdateAllRowHeights(pTabMark);
-    }
+        pDocShell->UpdateAllRowHeights(NULL);
 }
 
 void ScModelObj::BeforeXMLLoading()
