@@ -3679,7 +3679,8 @@ void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pE
                 nContextBmpWidthMax = nMaxWidth;
                 SetTabs();
             }
-            queue_resize();
+            if (get_width_request() == -1)
+                queue_resize();
         }
         break;
 
