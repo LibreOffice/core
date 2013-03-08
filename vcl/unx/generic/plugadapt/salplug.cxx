@@ -46,7 +46,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
     // SAL_USE_VCLPLUGIN=gtk3 (would ideally depend on experimental mode, but
     // reading the experimental mode setting requires the UNO service manager
     // which has not yet been instantiated):
-    if (!bForce && rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk3")))
+    if (!bForce && rModuleBase == "gtk3")
     {
         return NULL;
     }
@@ -207,7 +207,7 @@ static SalInstance* check_headless_plugin()
         osl_getCommandArg( i, &aParam.pData );
         if( aParam == "-headless" || aParam == "--headless" )
         {
-            return tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "svp" ) ) );
+            return tryInstance("svp");
         }
     }
     return NULL;
