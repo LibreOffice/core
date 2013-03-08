@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <set>
 
 #include "indexdialog.hxx"
 #include "dbu_dlg.hrc"
@@ -714,8 +717,7 @@ DBG_NAME(DbaIndexDialog)
         }
 
         // no double fields
-        DECLARE_STL_STDKEY_SET( String, StringBag );
-        StringBag aExistentFields;
+        std::set< String > aExistentFields;
         for (   ConstIndexFieldsIterator aFieldCheck = _rPos->aFields.begin();
                 aFieldCheck != _rPos->aFields.end();
                 ++aFieldCheck

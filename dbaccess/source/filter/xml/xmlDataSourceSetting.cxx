@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <map>
+
 #include "xmlDataSourceSetting.hxx"
 #include "xmlDataSource.hxx"
 #include <sax/tools/converter.hxx>
@@ -68,8 +72,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
             case XML_TOK_DATA_SOURCE_SETTING_TYPE:
                 {
                     // needs to be translated into a ::com::sun::star::uno::Type
-                    DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Type, MapString2Type );
-                    static MapString2Type s_aTypeNameMap;
+                    static std::map< OUString, css::uno::Type > s_aTypeNameMap;
                     if (!s_aTypeNameMap.size())
                     {
                         s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
@@ -81,7 +84,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                         s_aTypeNameMap[GetXMLToken( XML_VOID)]      = ::getVoidCppuType();
                     }
 
-                    const ConstMapString2TypeIterator aTypePos = s_aTypeNameMap.find(sValue);
+                    const std::map< OUString, css::uno::Type >::const_iterator aTypePos = s_aTypeNameMap.find(sValue);
                     OSL_ENSURE(s_aTypeNameMap.end() != aTypePos, "OXMLDataSourceSetting::OXMLDataSourceSetting: invalid type!");
                     if (s_aTypeNameMap.end() != aTypePos)
                         m_aPropType = aTypePos->second;

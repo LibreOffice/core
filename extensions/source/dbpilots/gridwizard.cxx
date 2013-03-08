@@ -17,10 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include <vector>
+
 #include "gridwizard.hxx"
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <comphelper/stl_types.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/awt/MouseWheelBehavior.hpp>
@@ -107,10 +110,9 @@ namespace dbp
         static const ::rtl::OUString s_sEmptyString;
 
         // collect "descriptors" for the to-be-created (grid)columns
-        DECLARE_STL_VECTOR( ::rtl::OUString, OUStringArray );
-        OUStringArray aColumnServiceNames;  // service names to be used with the XGridColumnFactory
-        OUStringArray aColumnLabelPostfixes;    // postfixes to append to the column labels
-        OUStringArray aFormFieldNames;      // data field names
+        std::vector< OUString > aColumnServiceNames;  // service names to be used with the XGridColumnFactory
+        std::vector< OUString > aColumnLabelPostfixes;    // postfixes to append to the column labels
+        std::vector< OUString > aFormFieldNames;      // data field names
 
         aColumnServiceNames.reserve(getSettings().aSelectedFields.getLength());
         aColumnLabelPostfixes.reserve(getSettings().aSelectedFields.getLength());
@@ -185,10 +187,10 @@ namespace dbp
         {
             Reference< XNameAccess > xExistenceChecker(xColumnContainer.get());
 
-            ConstOUStringArrayIterator pColumnServiceName = aColumnServiceNames.begin();
-            ConstOUStringArrayIterator pColumnLabelPostfix = aColumnLabelPostfixes.begin();
-            ConstOUStringArrayIterator pFormFieldName = aFormFieldNames.begin();
-            ConstOUStringArrayIterator pColumnServiceNameEnd = aColumnServiceNames.end();
+            std::vector< OUString >::const_iterator pColumnServiceName = aColumnServiceNames.begin();
+            std::vector< OUString >::const_iterator pColumnLabelPostfix = aColumnLabelPostfixes.begin();
+            std::vector< OUString >::const_iterator pFormFieldName = aFormFieldNames.begin();
+            std::vector< OUString >::const_iterator pColumnServiceNameEnd = aColumnServiceNames.end();
 
             for (;pColumnServiceName < pColumnServiceNameEnd; ++pColumnServiceName, ++pColumnLabelPostfix, ++pFormFieldName)
             {
