@@ -342,38 +342,6 @@
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="labelLeftMargin">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Left:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinMargLeft:0.00cm</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="labelRightMargin">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Right:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">spinMargRight:0.00cm</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="labelTopMargin">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -457,6 +425,88 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">3</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="labelRightMargin">
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Right:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinMargRight:0.00cm</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="labelOuter">
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">O_uter:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinMargRight:0.00cm</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="labelLeftMargin">
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Left:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinMargLeft:0.00cm</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="labelInner">
+                            <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">I_nner:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinMargLeft:0.00cm</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
@@ -731,49 +781,11 @@
       </packing>
     </child>
     <child>
-      <object class="GtkGrid" id="grid1">
-        <property name="visible">True</property>
+      <object class="GtkLabel" id="labelMsg">
         <property name="can_focus">False</property>
-        <child>
-          <object class="GtkLabel" id="labelInner">
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">I_nner:</property>
-            <property name="use_underline">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labelOuter">
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">O_uter:</property>
-            <property name="use_underline">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="labelMsg">
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">The margin settings are out of print range.
+        <property name="label" translatable="yes">The margin settings are out of print range.
 
 Do you still want to apply these settings?</property>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
-          </packing>
-        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -946,16 +958,5 @@ Do you still want to apply these settings?</property>
   </object>
   <object class="GtkSizeGroup" id="sizegroup6">
     <property name="ignore_hidden">True</property>
-    <widgets>
-      <widget name="labelFormat"/>
-      <widget name="labelWidth"/>
-      <widget name="labelHeight"/>
-      <widget name="labelOrientation"/>
-      <widget name="labelTextFlow"/>
-      <widget name="labelLeftMargin"/>
-      <widget name="labelRightMargin"/>
-      <widget name="labelTopMargin"/>
-      <widget name="labelBottomMargin"/>
-    </widgets>
   </object>
 </interface>

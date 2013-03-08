@@ -120,14 +120,9 @@ class SvxPageDescPage : public SfxTabPage
 
     String              sStandardRegister;
 
-    FixedText*           m_pInsideText;
-    FixedText*           m_pOutsideText;
+    FixedText*           m_pInsideLbl;
+    FixedText*           m_pOutsideLbl;
     FixedText*           m_pPrintRangeQueryText;
-
-    OUString            aInsideText;
-    OUString            aOutsideText;
-    OUString            aLeftText;
-    OUString            aRightText;
 
     long                nFirstLeftMargin;
     long                nFirstRightMargin;
