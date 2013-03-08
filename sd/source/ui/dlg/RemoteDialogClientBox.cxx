@@ -201,8 +201,6 @@ void ClientBox::DeleteRemoved()
 
     if ( ! m_vRemovedEntries.empty() )
     {
-        typedef std::vector< TClientBoxEntry >::iterator ITER;
-
         m_vRemovedEntries.clear();
     }
 
