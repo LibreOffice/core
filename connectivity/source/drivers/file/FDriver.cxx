@@ -118,7 +118,7 @@ sal_Bool SAL_CALL OFileDriver::acceptsURL( const ::rtl::OUString& url )
                 throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::acceptsURL" );
-    return (!url.compareTo(::rtl::OUString("sdbc:file:"),10));
+    return url.startsWith("sdbc:file:");
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)

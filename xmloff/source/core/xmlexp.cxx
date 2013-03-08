@@ -1854,8 +1854,7 @@ sal_Int32 SvXMLExport::dataStyleForceSystemLanguage(sal_Int32 nFormat) const
 OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectURL )
 {
     OUString sRet( rGraphicObjectURL );
-    if( 0 == rGraphicObjectURL.compareTo( msGraphicObjectProtocol,
-                                          msGraphicObjectProtocol.getLength() ) &&
+    if( rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
         mxGraphicResolver.is() )
     {
         if( (getExportFlags() & EXPORT_EMBEDDED) == 0 )
@@ -1874,8 +1873,7 @@ sal_Bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphic
     sal_Bool bRet = sal_False;
 
     if( (getExportFlags() & EXPORT_EMBEDDED) != 0 &&
-        0 == rGraphicObjectURL.compareTo( msGraphicObjectProtocol,
-                                          msGraphicObjectProtocol.getLength() ) &&
+        rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
         mxGraphicResolver.is() )
     {
         Reference< XBinaryStreamResolver > xStmResolver( mxGraphicResolver, UNO_QUERY );
@@ -1898,10 +1896,8 @@ sal_Bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphic
 OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 {
     OUString sRet;
-    if( (0 == rEmbeddedObjectURL.compareTo( msEmbeddedObjectProtocol,
-                msEmbeddedObjectProtocol.getLength() ) ||
-         0 == rEmbeddedObjectURL.compareTo( msGraphicObjectProtocol,
-                msGraphicObjectProtocol.getLength() ) ) &&
+    if( (rEmbeddedObjectURL.startsWith( msEmbeddedObjectProtocol ) ||
+         rEmbeddedObjectURL.startsWith( msGraphicObjectProtocol ) ) &&
         mxEmbeddedResolver.is() )
     {
         sRet =
@@ -1916,10 +1912,8 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
 sal_Bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL )
 {
     sal_Bool bRet = sal_False;
-    if( (0 == rEmbeddedObjectURL.compareTo( msEmbeddedObjectProtocol,
-                msEmbeddedObjectProtocol.getLength() ) ||
-         0 == rEmbeddedObjectURL.compareTo( msGraphicObjectProtocol,
-                msGraphicObjectProtocol.getLength() ) ) &&
+    if( (rEmbeddedObjectURL.startsWith( msEmbeddedObjectProtocol ) ||
+         rEmbeddedObjectURL.startsWith( msGraphicObjectProtocol ) ) &&
         mxEmbeddedResolver.is() )
     {
         Reference < XNameAccess > xNA( mxEmbeddedResolver, UNO_QUERY );

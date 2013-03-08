@@ -118,7 +118,7 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const ::rtl::OUString& ur
 sal_Bool SAL_CALL ODBCDriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    return (!url.compareTo(::rtl::OUString("sdbc:odbc:"),10));
+    return url.startsWith("sdbc:odbc:");
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)

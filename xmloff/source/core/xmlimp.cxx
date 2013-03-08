@@ -639,7 +639,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
             }
         }
         else if( ( rAttrName.getLength() >= 5 ) &&
-            ( rAttrName.compareTo( GetXMLToken(XML_XMLNS), 5 ) == 0 ) &&
+            ( rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
             ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
         {
             if( !pRewindMap )

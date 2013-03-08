@@ -2867,10 +2867,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                         nSpaceIndex = aCommand.indexOf(' ');
                         if(nSpaceIndex > 0)
                             aCommand = aCommand.copy(nSpaceIndex).trim();
-                        if (aCommand.compareTo("\\s", 2) == 0)
+                        if (aCommand.startsWith("\\s"))
                         {
                             aCommand = aCommand.copy(2);
-                            if (aCommand.compareTo("\\do", 3) == 0)
+                            if (aCommand.startsWith("\\do"))
                             {
                                 aCommand = aCommand.copy(3);
                                 sal_Int32 nStartIndex = aCommand.indexOf('(');

@@ -71,7 +71,7 @@ KbdListBox::PreNotify( NotifyEvent& rNEvt )
                 aEntry = comphelper::string::stripStart(aEntry, ' ').toAsciiUpperCase();
                 OUString aCompare = OUString(cCharCode).toAsciiUpperCase();
 
-                if ( aEntry.compareTo( aCompare, 1 ) == 0 )
+                if ( aEntry.startsWith( aCompare ) )
                 {
                     SelectEntryPos ( (i + nCurrentPos) % nEntries );
                     break;

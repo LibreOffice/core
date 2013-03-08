@@ -242,7 +242,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         if( ( rAttrName.getLength() >= 5 ) &&
-            ( rAttrName.compareTo( GetXMLToken(XML_XMLNS), 5 ) == 0 ) &&
+            ( rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
             ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
         {
             if( !pRewindMap )
@@ -1340,8 +1340,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOOo( ::rtl::OUString& rURI,
             break;
         case '.':
             // a rel path
-            if( 0 == rURI.compareTo( m_aExtPathPrefix,
-                                     m_aExtPathPrefix.getLength() ) )
+            if( rURI.startsWith( m_aExtPathPrefix ) )
             {
                 // an external URI; remove '../'
                 rURI = rURI.copy( m_aExtPathPrefix.getLength() );

@@ -1001,7 +1001,7 @@ OUString SwXFieldMaster::LocalizeFormula(
     {
         OUString sSource = bQuery ? sTypeName : sProgName;
         OUString sDest = bQuery ? sProgName : sTypeName;
-        if(!rFormula.compareTo(sSource, sSource.getLength()))
+        if(rFormula.startsWith(sSource))
         {
             OUString sTmpFormula = sDest;
             sTmpFormula += rFormula.copy(sSource.getLength());

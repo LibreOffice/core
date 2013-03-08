@@ -66,7 +66,7 @@ sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::A
     sal_Bool bRet = sal_False;
     sal_Int32 nLen = rStrImpValue.getLength();
     if( nLen > 6 &&
-        0 == rStrImpValue.compareTo( GetXMLToken(XML_RECT), 4 ) &&
+        rStrImpValue.startsWith( GetXMLToken(XML_RECT)) &&
         rStrImpValue[4] == '(' &&
         rStrImpValue[nLen-1] == ')' )
     {

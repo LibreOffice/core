@@ -141,7 +141,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:ado:")),9));
+    return url.startsWith("sdbc:ado:");
 }
 // -----------------------------------------------------------------------------
 void ODriver::impl_checkURL_throw(const ::rtl::OUString& _sUrl)
