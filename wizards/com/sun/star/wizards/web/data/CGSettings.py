@@ -21,9 +21,9 @@ from datetime import date as dateTimeObject
 
 from ...common.FileAccess import FileAccess
 from ...common.ConfigGroup import ConfigGroup
-from ...common.ConfigSet import ConfigSet
 from ...common.NumberFormatter import NumberFormatter
 from ...common.Properties import Properties
+from ..WebConfigSet import WebConfigSet
 from .CGExporter import CGExporter
 from .CGLayout import CGLayout
 from .CGStyle import CGStyle
@@ -45,14 +45,14 @@ class CGSettings(ConfigGroup):
     RESOURCE_SIZE_TEMPLATE = 4
 
     cp_WorkDir = str()
-    cp_Exporters = ConfigSet(CGExporter())
-    cp_Layouts = ConfigSet(CGLayout())
-    cp_Styles = ConfigSet(CGStyle())
-    cp_IconSets = ConfigSet(CGIconSet())
-    cp_BackgroundImages = ConfigSet(CGImage())
-    cp_SavedSessions = ConfigSet(CGSessionName())
-    cp_Filters = ConfigSet(CGFilter())
-    savedSessions = ConfigSet(CGSessionName())
+    cp_Exporters = WebConfigSet(CGExporter)
+    cp_Layouts = WebConfigSet(CGLayout)
+    cp_Styles = WebConfigSet(CGStyle)
+    cp_IconSets = WebConfigSet(CGIconSet)
+    cp_BackgroundImages = WebConfigSet(CGImage)
+    cp_SavedSessions = WebConfigSet(CGSessionName)
+    cp_Filters = WebConfigSet(CGFilter)
+    savedSessions = WebConfigSet(CGSessionName)
     cp_DefaultSession = CGSession()
     cp_LastSavedSession = str()
     fileAccess = None
