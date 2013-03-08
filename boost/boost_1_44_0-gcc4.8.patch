@@ -1,0 +1,24 @@
+--- misc/boost_1_44_0/boost/bind/arg.hpp
++++ misc/build/boost_1_44_0/boost/bind/arg.hpp
+@@ -35,6 +35,8 @@
+     {
+         // static assert I == is_placeholder<T>::value
+         typedef char T_must_be_placeholder[ I == is_placeholder<T>::value? 1: -1 ];
++        T_must_be_placeholder dummy; (void) dummy;
++            // silence -Werror=unused-local-typedefs (GCC 4.8)
+     }
+ };
+ 
+--- misc/boost_1_44_0/boost/concept/detail/general.hpp
++++ misc/build/boost_1_44_0/boost/concept/detail/general.hpp
+@@ -68,7 +68,9 @@
+ #  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )             \
+     typedef ::boost::concepts::detail::instantiate<          \
+     &::boost::concepts::requirement_<ModelFnPtr>::failed>    \
+-      BOOST_PP_CAT(boost_concept_check,__LINE__)
++      BOOST_PP_CAT(boost_concept_check,__LINE__); \
++    BOOST_PP_CAT(boost_concept_check,__LINE__) BOOST_PP_CAT(boost_concept_check_dummy,__LINE__)()
++        // silence -Werror=unused-local-typedefs (GCC 4.8)
+ 
+ }}
+ 
