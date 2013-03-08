@@ -579,24 +579,20 @@ void TypeInfo::generatePolymorphicUnoTypeCode(
 }
 
 void writeClassFile(
-    JavaOptions /*TODO const*/ & options, rtl::OString const & type,
+    JavaOptions /*TODO const*/ & options, OString const & type,
     ClassFile const & classFile)
 {
-    rtl::OString path;
-    if (options.isValid(rtl::OString(RTL_CONSTASCII_STRINGPARAM("-O")))) {
-        path = options.getOption(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("-O")));
+    OString path;
+    if (options.isValid("-O")) {
+        path = options.getOption("-O");
     }
-    rtl::OString filename(
-        createFileNameFromType(
-            path, type, rtl::OString(RTL_CONSTASCII_STRINGPARAM(".class"))));
+    OString filename(createFileNameFromType(path, type, ".class"));
     bool check = false;
     if (fileExists(filename)) {
-        if (options.isValid(rtl::OString(RTL_CONSTASCII_STRINGPARAM("-G")))) {
+        if (options.isValid("-G")) {
             return;
         }
-        check = options.isValid(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("-Gc")));
+        check = options.isValid("-Gc");
     }
     FileStream tempfile;
     tempfile.createTempFile(getTempDir(filename));
@@ -635,11 +631,8 @@ void addTypeInfo(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
                 | ClassFile::ACC_FINAL),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("UNOTYPEINFO")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;")),
-            0, rtl::OString());
+            "UNOTYPEINFO", "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;",
+            0, "");
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< ClassFile::Code > code(classFile->newCode());
         SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -664,9 +657,8 @@ void addTypeInfo(
         classFile->addMethod(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<clinit>")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("()V")), code.get(),
-            std::vector< rtl::OString >(), rtl::OString());
+            "<clinit>", "()V", code.get(),
+            std::vector< rtl::OString >(), "");
     }
 }
 
@@ -693,9 +685,7 @@ void handleEnumType(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
-            className,
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Enum")),
-            rtl::OString()));
+            className, "com/sun/star/uno/Enum", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     rtl::OString classDescriptor("L" + className + ";");
     for (sal_uInt16 i = 0; i < fields; ++i) {
@@ -717,9 +707,8 @@ void handleEnumType(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
                 | ClassFile::ACC_FINAL),
-            fieldName + "_value",
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("I")),
-            cf->addIntegerInfo(fieldValue.m_value.aLong), rtl::OString());
+            fieldName + "_value", "I",
+            cf->addIntegerInfo(fieldValue.m_value.aLong), "");
     }
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
@@ -731,9 +720,8 @@ void handleEnumType(
     code->setMaxStackAndLocals(2, 2);
     cf->addMethod(
         ClassFile::ACC_PRIVATE,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(I)V")), code.get(),
-        std::vector< rtl::OString >(), rtl::OString());
+        "<init>", "(I)V", code.get(),
+        std::vector< OString >(), "");
     code.reset(cf->newCode());
     code->instrGetstatic(
         className,
@@ -743,9 +731,8 @@ void handleEnumType(
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("getDefault")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("()")) + classDescriptor,
-        code.get(), std::vector< rtl::OString >(), rtl::OString());
+        "getDefault", "()" + classDescriptor,
+        code.get(), std::vector< OString >(), "");
     code.reset(cf->newCode());
     code->loadLocalInteger(0);
     std::map< sal_Int32, rtl::OString > map;
@@ -827,9 +814,8 @@ void handleEnumType(
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("fromInt")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(I)")) + classDescriptor,
-        code.get(), std::vector< rtl::OString >(), rtl::OString());
+        "fromInt", "(I)" + classDescriptor,
+        code.get(), std::vector< rtl::OString >(), "");
     code.reset(cf->newCode());
     for (sal_uInt16 i = 0; i < fields; ++i) {
         code->instrNew(className);
@@ -846,9 +832,8 @@ void handleEnumType(
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<clinit>")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("()V")), code.get(),
-        std::vector< rtl::OString >(), rtl::OString());
+        "<clinit>", "()V", code.get(),
+        std::vector< rtl::OString >(), "");
     writeClassFile(options, className, *cf.get());
 }
 
@@ -1116,11 +1101,7 @@ sal_uInt16 addLoadLocal(
                     code->instrNew("java/lang/Long");
                     code->instrDup();
                     code->loadLocalLong(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Long")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(J)V")));
+                    code->instrInvokespecial("java/lang/Long", "<init>", "(J)V");
                     stack = 4;
                 } else {
                     code->loadLocalLong(*index);
@@ -1133,31 +1114,14 @@ sal_uInt16 addLoadLocal(
                 if (any) {
                     code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
-                    code->instrGetstatic(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("UNSIGNED_HYPER")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Lcom/sun/star/uno/Type;")));
+                    code->instrGetstatic("com/sun/star/uno/Type", "UNSIGNED_HYPER"
+                                        ,"Lcom/sun/star/uno/Type;");
                     code->instrNew("java/lang/Long");
                     code->instrDup();
                     code->loadLocalLong(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Long")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(J)V")));
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                                "V")));
+                    code->instrInvokespecial("java/lang/Long", "<init>", "(J)V");
+                    code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
+                                            ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                     stack = 7;
                 } else {
                     code->loadLocalLong(*index);
@@ -1199,11 +1163,7 @@ sal_uInt16 addLoadLocal(
                     code->instrNew("java/lang/Character");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Character")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(C)V")));
+                    code->instrInvokespecial("java/lang/Character", "<init>", "(C)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1236,18 +1196,8 @@ sal_uInt16 addLoadLocal(
                         code->instrDup();
                         code->loadStringConstant(
                             createUnoName(manager, nucleus, rank, args));
-                        code->instrGetstatic(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/TypeClass")),
-                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("STRUCT")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "Lcom/sun/star/uno/TypeClass;")));
-                        dependencies->insert(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/TypeClass")));
+                        code->instrGetstatic("com/sun/star/uno/TypeClass", "STRUCT", "Lcom/sun/star/uno/TypeClass;");
+                        dependencies->insert("com/sun/star/uno/TypeClass");
                         code->instrInvokespecial("com/sun/star/uno/Type", "<init>"
                                                 ,"(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
                         code->loadLocalReference(*index);
@@ -1353,13 +1303,8 @@ sal_uInt16 addLoadLocal(
                     createUnoName(manager, nucleus, rank, args));
                 code->instrInvokespecial("com/sun/star/uno/Type", "<init>", "(Ljava/lang/String;)V");
                 code->loadLocalReference(*index);
-                code->instrInvokespecial(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM(
-                            "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V")));
+                code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
+                                        ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                 stack = 5;
             } else {
                 code->loadLocalReference(*index);
@@ -1369,10 +1314,7 @@ sal_uInt16 addLoadLocal(
         }
     }
     if (*index > SAL_MAX_UINT16 - size) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Too many local variables for Java class file format")));
+        throw CannotDumpException("Too many local variables for Java class file format");
     }
     *index = *index + size;
     return stack;
@@ -1390,21 +1332,16 @@ void addBaseArguments(
         || codemaker::convertString(reader.getTypeName()) != type
         || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
     {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     sal_uInt16 superTypes = reader.getSuperTypeCount();
     sal_uInt16 fields = reader.getFieldCount();
     sal_uInt16 firstField = 0;
-    if (type
-        == rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Exception")))
+    if (type  == "com/sun/star/uno/Exception")
     {
         if (typeClass != RT_TYPE_EXCEPTION || superTypes != 0 || fields != 2) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         firstField = 1;
     } else {
@@ -1413,9 +1350,7 @@ void addBaseArguments(
             (typeClass == RT_TYPE_EXCEPTION && superTypes != 1)
            )
         {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         if (superTypes == 1) {
             addBaseArguments(
@@ -1427,9 +1362,7 @@ void addBaseArguments(
         if (reader.getFieldFlags(i) != RT_ACCESS_READWRITE
             || reader.getFieldValue(i).m_type != RT_TYPE_NONE)
         {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         rtl::OString fieldType(
             codemaker::convertString(reader.getFieldTypeName(i)));
@@ -1451,7 +1384,7 @@ sal_uInt16 addDirectArgument(
     rtl::OString desc;
     if (typeParameter) {
         methodDescriptor->addTypeParameter(fieldType);
-        desc = rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;"));
+        desc = "Ljava/lang/Object;";
     } else {
         methodDescriptor->addParameter(fieldType, false, true, 0);
         getFieldDescriptor(manager, dependencies, fieldType, &desc, 0, 0);
@@ -1470,8 +1403,7 @@ void handleAggregatingType(
     OSL_ASSERT(dependencies != 0);
     if (reader.getMethodCount() != 0)
     {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     RTTypeClass typeClass = reader.getTypeClass();
@@ -1482,35 +1414,24 @@ void handleAggregatingType(
     sal_uInt16 references = reader.getReferenceCount();
     bool runtimeException = false;
     rtl::OString superClass;
-    if (className
-        == rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Exception")))
+    if (className == "com/sun/star/uno/Exception")
     {
         if (typeClass != RT_TYPE_EXCEPTION || superTypes != 0 || fields != 2
             || references != 0)
         {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         firstField = 1;
-        superClass = rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("java/lang/Exception"));
-    } else if (className
-               == rtl::OString(
-                   RTL_CONSTASCII_STRINGPARAM(
-                       "com/sun/star/uno/RuntimeException")))
+        superClass = "java/lang/Exception";
+    } else if (className == "com/sun/star/uno/RuntimeException")
     {
         if (typeClass != RT_TYPE_EXCEPTION || superTypes != 1 || fields != 0
             || references != 0)
         {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         superTypes = 0;
-        superClass = rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("java/lang/RuntimeException"));
+        superClass = "java/lang/RuntimeException";
         runtimeException = true;
     } else {
         if (
@@ -1524,13 +1445,10 @@ void handleAggregatingType(
              (typeClass == RT_TYPE_EXCEPTION && superTypes != 1)
            )
         {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         if (superTypes == 0) {
-            superClass = rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("java/lang/Object"));
+            superClass = "java/lang/Object";
         } else {
             superClass = codemaker::convertString(reader.getSuperTypeName(0));
             dependencies->insert(superClass);
@@ -1577,9 +1495,7 @@ void handleAggregatingType(
             || ((flags & RT_ACCESS_PARAMETERIZED_TYPE) != 0 && references == 0)
             || reader.getFieldValue(i).m_type != RT_TYPE_NONE)
         {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         rtl::OString type(
             codemaker::convertString(reader.getFieldTypeName(i)));
@@ -1590,9 +1506,7 @@ void handleAggregatingType(
             std::map< rtl::OString, sal_Int32 >::iterator it(
                 typeParameters.find(type));
             if (it == typeParameters.end()) {
-                throw CannotDumpException(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+                throw CannotDumpException("Bad type information");
                     //TODO
             }
             typeParameterIndex = it->second;
@@ -1604,9 +1518,7 @@ void handleAggregatingType(
     if (runtimeException) {
         addField(
             manager, dependencies, cf.get(), &typeInfo, -1,
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XInterface")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Context")), 0);
+                "com/sun/star/uno/XInterface", "Context", 0);
     }
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
@@ -1625,29 +1537,21 @@ void handleAggregatingType(
                 dependencies, code.get()));
     }
     if (runtimeException) {
-        stack = std::max(
-            stack,
-            addFieldInit(
-                manager, className,
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Context")), false,
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XInterface")),
+        stack = std::max(stack,
+            addFieldInit(manager, className, "Context", false, "com/sun/star/uno/XInterface",
                 dependencies, code.get()));
     }
     code->instrReturn();
     code->setMaxStackAndLocals(stack + 1, 1);
     cf->addMethod(
         ClassFile::ACC_PUBLIC,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("()V")), code.get(),
-        std::vector< rtl::OString >(), rtl::OString());
+        "<init>", "()V", code.get(),
+        std::vector< rtl::OString >(), "");
     if (typeClass == RT_TYPE_EXCEPTION) {
         code.reset(cf->newCode());
         code->loadLocalReference(0);
         code->loadLocalReference(1);
-        code->instrInvokespecial(
-            superClass, rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("(Ljava/lang/String;)V")));
+        code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/String;)V");
         stack = 0;
         for (sal_uInt16 i = firstField; i < fields; ++i) {
             stack = std::max(
@@ -1663,31 +1567,20 @@ void handleAggregatingType(
         if (runtimeException) {
             stack = std::max(
                 stack,
-                addFieldInit(
-                    manager, className,
-                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("Context")), false,
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM(
-                            "com/sun/star/uno/XInterface")),
+                addFieldInit(manager, className, "Context", false, "com/sun/star/uno/XInterface",
                     dependencies, code.get()));
         }
         code->instrReturn();
         code->setMaxStackAndLocals(stack + 2, 2);
-        cf->addMethod(
-            ClassFile::ACC_PUBLIC,
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("(Ljava/lang/String;)V")),
-            code.get(), std::vector< rtl::OString >(), rtl::OString());
+        cf->addMethod(ClassFile::ACC_PUBLIC, "<init>", "(Ljava/lang/String;)V",
+            code.get(), std::vector< rtl::OString >(), "");
     }
-    MethodDescriptor desc(
-        manager, dependencies, rtl::OString(RTL_CONSTASCII_STRINGPARAM("void")),
-        0, 0);
+    MethodDescriptor desc(manager, dependencies, "void", 0, 0);
     code.reset(cf->newCode());
     code->loadLocalReference(0);
     sal_uInt16 index = 1;
     if (typeClass == RT_TYPE_EXCEPTION) {
-        desc.addParameter(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("string")), false, true, 0);
+        desc.addParameter("string", false, true, 0);
         code->loadLocalReference(index++);
     }
     if (superTypes != 0) {
@@ -1695,9 +1588,7 @@ void handleAggregatingType(
             manager, dependencies, &desc, code.get(), typeClass, superClass,
             &index);
     }
-    code->instrInvokespecial(
-        superClass, rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-        desc.getDescriptor());
+    code->instrInvokespecial(superClass, "<init>", desc.getDescriptor());
     sal_uInt16 maxSize = index;
     for (sal_uInt16 i = firstField; i < fields; ++i) {
         maxSize = std::max(
@@ -1711,18 +1602,12 @@ void handleAggregatingType(
     if (runtimeException) {
         maxSize = std::max(
             maxSize,
-            addDirectArgument(
-                manager, dependencies, &desc, code.get(), &index, className,
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Context")), false,
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/uno/XInterface"))));
+            addDirectArgument( manager, dependencies, &desc, code.get(), &index, className,
+                "Context", false, "com/sun/star/uno/XInterface"));
     }
     code->instrReturn();
     code->setMaxStackAndLocals(maxSize, index);
-    cf->addMethod(
-        ClassFile::ACC_PUBLIC,
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
+    cf->addMethod(ClassFile::ACC_PUBLIC, "<init>",
         desc.getDescriptor(), code.get(), std::vector< rtl::OString >(),
         desc.getSignature());
     addTypeInfo(className, typeInfo, dependencies, cf.get());
@@ -1758,19 +1643,14 @@ void handleInterfaceType(
     sal_uInt16 superTypes = reader.getSuperTypeCount();
     sal_uInt16 fields = reader.getFieldCount();
     sal_uInt16 methods = reader.getMethodCount();
-    if (className
-        == rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XInterface")))
+    if (className == "com/sun/star/uno/XInterface")
     {
         if (superTypes != 0 || fields != 0 || methods != 3) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         methods = 0;
     } else if (superTypes == 0) {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -1779,9 +1659,7 @@ void handleInterfaceType(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_INTERFACE
                 | ClassFile::ACC_ABSTRACT),
-            className,
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
-            rtl::OString()));
+            className, "java/lang/Object", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     for (sal_uInt16 i = 0; i < superTypes; ++i) {
         rtl::OString t(codemaker::convertString(reader.getSuperTypeName(i)));
@@ -1791,13 +1669,9 @@ void handleInterfaceType(
     // As a special case, let com.sun.star.lang.XEventListener extend
     // java.util.EventListener ("A tagging interface that all event listener
     // interfaces must extend"):
-    if (className ==
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/lang/XEventListener")))
+    if (className == "com/sun/star/lang/XEventListener")
     {
-        cf->addInterface(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("java/util/EventListener")));
+        cf->addInterface("java/util/EventListener");
     }
     std::vector< TypeInfo > typeInfo;
     sal_Int32 index = 0;
@@ -1813,9 +1687,7 @@ void handleInterfaceType(
                 != 0)
             || reader.getFieldValue(i).m_type != RT_TYPE_NONE)
         {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         //TODO: exploit the fact that attribute getter/setter methods preceed
         // real methods
@@ -1835,10 +1707,7 @@ void handleInterfaceType(
                         : (setter != SAL_MAX_UINT16
                            || (flags & RT_ACCESS_READONLY) != 0)))
                 {
-                    throw CannotDumpException(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Bad type information"))); //TODO
+                    throw CannotDumpException("Bad type information"); //TODO
                 }
                 OSL_ASSERT(j != SAL_MAX_UINT16);
                 (mflags == RT_MODE_ATTRIBUTE_GET ? getter : setter) = j;
@@ -1860,12 +1729,10 @@ void handleInterfaceType(
         cf->addMethod(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("get")) + attrName,
-            gdesc.getDescriptor(), 0, exc, gdesc.getSignature());
+            "get" + attrName, gdesc.getDescriptor(), 0, exc, gdesc.getSignature());
         if ((flags & RT_ACCESS_READONLY) == 0) {
             MethodDescriptor sdesc(
-                manager, dependencies,
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("void")), 0, 0);
+                manager, dependencies, "void", 0, 0);
             sdesc.addParameter(fieldType, false, true, 0);
             std::vector< rtl::OString > exc2;
             if (setter != SAL_MAX_UINT16) {
@@ -1875,8 +1742,7 @@ void handleInterfaceType(
             cf->addMethod(
                 static_cast< ClassFile::AccessFlags >(
                     ClassFile::ACC_PUBLIC | ClassFile::ACC_ABSTRACT),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("set")) + attrName,
-                sdesc.getDescriptor(), 0, exc2, sdesc.getSignature());
+                "set" + attrName, sdesc.getDescriptor(), 0, exc2, sdesc.getSignature());
         }
         typeInfo.push_back(
             TypeInfo(
@@ -1933,10 +1799,7 @@ void handleInterfaceType(
                         break;
 
                     default:
-                        throw CannotDumpException(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "Bad type information"))); //TODO
+                        throw CannotDumpException("Bad type information"); //TODO
                     }
                     PolymorphicUnoType polymorphicUnoType;
                     SpecialType specialType = desc.addParameter(
@@ -1984,9 +1847,7 @@ void handleInterfaceType(
                 }
             }
         default:
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
     }
     addTypeInfo(className, typeInfo, dependencies, cf.get());
@@ -2002,8 +1863,7 @@ void handleTypedef(
     if (reader.getSuperTypeCount() != 1 || reader.getFieldCount() != 0
         || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
     {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     RTTypeClass typeClass;
@@ -2018,9 +1878,7 @@ void handleTypedef(
         switch (typeClass) {
         case RT_TYPE_STRUCT:
             if (!args.empty()) {
-                throw CannotDumpException(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+                throw CannotDumpException("Bad type information");
                     //TODO
             }
         case RT_TYPE_ENUM:
@@ -2046,8 +1904,7 @@ void addConstant(
     if (flags != RT_ACCESS_CONST
         && (!publishable || flags != (RT_ACCESS_CONST | RT_ACCESS_PUBLISHED)))
     {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     RTConstValue fieldValue(reader.getFieldValue(index));
@@ -2063,27 +1920,21 @@ void addConstant(
     {
     case codemaker::UnoType::SORT_BOOLEAN:
         if (fieldValue.m_type != RT_TYPE_BOOL) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aBool);
         break;
 
     case codemaker::UnoType::SORT_BYTE:
         if (fieldValue.m_type != RT_TYPE_BYTE) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aByte);
         break;
 
     case codemaker::UnoType::SORT_SHORT:
         if (fieldValue.m_type != RT_TYPE_INT16) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aShort);
         break;
@@ -2091,27 +1942,21 @@ void addConstant(
     case codemaker::UnoType::SORT_UNSIGNED_SHORT:
     case codemaker::UnoType::SORT_CHAR:
         if (fieldValue.m_type != RT_TYPE_UINT16) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aUShort);
         break;
 
     case codemaker::UnoType::SORT_LONG:
         if (fieldValue.m_type != RT_TYPE_INT32) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aLong);
         break;
 
     case codemaker::UnoType::SORT_UNSIGNED_LONG:
         if (fieldValue.m_type != RT_TYPE_UINT32) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addIntegerInfo(
             static_cast< sal_Int32 >(fieldValue.m_value.aULong));
@@ -2119,18 +1964,14 @@ void addConstant(
 
     case codemaker::UnoType::SORT_HYPER:
         if (fieldValue.m_type != RT_TYPE_INT64) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addLongInfo(fieldValue.m_value.aHyper);
         break;
 
     case codemaker::UnoType::SORT_UNSIGNED_HYPER:
         if (fieldValue.m_type != RT_TYPE_UINT64) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addLongInfo(
             static_cast< sal_Int64 >(fieldValue.m_value.aUHyper));
@@ -2138,25 +1979,20 @@ void addConstant(
 
     case codemaker::UnoType::SORT_FLOAT:
         if (fieldValue.m_type != RT_TYPE_FLOAT) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addFloatInfo(fieldValue.m_value.aFloat);
         break;
 
     case codemaker::UnoType::SORT_DOUBLE:
         if (fieldValue.m_type != RT_TYPE_DOUBLE) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         valueIndex = classFile->addDoubleInfo(fieldValue.m_value.aDouble);
         break;
 
     default:
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     rtl::OString desc;
@@ -2181,8 +2017,7 @@ void handleConstantGroup(
     if (reader.getSuperTypeCount() != 0 || reader.getMethodCount() != 0
         || reader.getReferenceCount() != 0)
     {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     rtl::OString className(codemaker::convertString(reader.getTypeName()));
@@ -2192,9 +2027,7 @@ void handleConstantGroup(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_INTERFACE
                 | ClassFile::ACC_ABSTRACT),
-            className,
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
-            rtl::OString()));
+            className, "java/lang/Object", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     sal_uInt16 fields = reader.getFieldCount();
     for (sal_uInt16 i = 0; i < fields; ++i) {
@@ -2211,8 +2044,7 @@ void handleModule(
     if (reader.getSuperTypeCount() != 0 || reader.getMethodCount() != 0
         || reader.getReferenceCount() != 0)
     {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     rtl::OString prefix(codemaker::convertString(reader.getTypeName()) + "/");
@@ -2226,9 +2058,7 @@ void handleModule(
                 static_cast< ClassFile::AccessFlags >(
                     ClassFile::ACC_PUBLIC | ClassFile::ACC_INTERFACE
                     | ClassFile::ACC_ABSTRACT),
-                className,
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
-                rtl::OString()));
+                className, "java/lang/Object", ""));
         SAL_WNODEPRECATED_DECLARATIONS_POP
         addConstant(manager, reader, true, i, dependencies, cf.get());
         writeClassFile(options, className, *cf.get());
@@ -2262,23 +2092,14 @@ void addConstructor(
 {
     OSL_ASSERT(dependencies != 0 && classFile != 0);
     MethodDescriptor desc(manager, dependencies, returnType, 0, 0);
-    desc.addParameter(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")),
-        false, false, 0);
+    desc.addParameter("com/sun/star/uno/XComponentContext", false, false, 0);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(classFile->newCode());
     SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
     // stack: context
-    code->instrInvokeinterface(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("getServiceManager")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "()Lcom/sun/star/lang/XMultiComponentFactory;")),
-        1);
+    code->instrInvokeinterface("com/sun/star/uno/XComponentContext", "getServiceManager"
+                              ,"()Lcom/sun/star/lang/XMultiComponentFactory;", 1);
     // stack: factory
     code->loadStringConstant(unoName);
     // stack: factory serviceName
@@ -2294,18 +2115,9 @@ void addConstructor(
         code->loadLocalReference(0);
         // stack: factory serviceName context
         tryStart = code->getPosition();
-        code->instrInvokeinterface(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/lang/XMultiComponentFactory")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "createInstanceWithContext")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Ljava/lang/String;Lcom/sun/star/uno/XComponentContext;)"
-                    "Ljava/lang/Object;")),
-            3);
+        code->instrInvokeinterface("com/sun/star/lang/XMultiComponentFactory", "createInstanceWithContext"
+                                  ,"(Ljava/lang/String;Lcom/sun/star/uno/XComponentContext;)"
+                                  "Ljava/lang/Object;", 3);
         tryEnd = code->getPosition();
         // stack: instance
         stack = 3;
@@ -2314,11 +2126,9 @@ void addConstructor(
         if (parameters == 1
             && (reader.getMethodParameterFlags(methodIndex, 0)
                 == (RT_PARAM_IN | RT_PARAM_REST))
-            && (reader.getMethodParameterTypeName(methodIndex, 0)
-                == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("any"))))
+            && (reader.getMethodParameterTypeName(methodIndex, 0) == "any"))
         {
-            desc.addParameter(
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("any")), true, true, 0);
+            desc.addParameter("any", true, true, 0);
             code->loadLocalReference(localIndex++);
             // stack: factory serviceName args
             stack = 4;
@@ -2327,8 +2137,7 @@ void addConstructor(
         } else {
             code->loadIntegerConstant(parameters);
             // stack: factory serviceName N
-            code->instrAnewarray(
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")));
+            code->instrAnewarray("java/lang/Object");
             // stack: factory serviceName args
             stack = 0;
             for (sal_uInt16 i = 0; i < parameters; ++i) {
@@ -2341,14 +2150,9 @@ void addConstructor(
                      && flags != (RT_PARAM_IN | RT_PARAM_REST))
                     || ((flags & RT_PARAM_REST) != 0
                         && (parameters != 1
-                            || (paramType
-                                != rtl::OString(
-                                    RTL_CONSTASCII_STRINGPARAM("any"))))))
+                            || (paramType != "any"))))
                 {
-                    throw CannotDumpException(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Bad type information"))); //TODO
+                    throw CannotDumpException("Bad type information"); //TODO
                 }
                 desc.addParameter(paramType, false, true, 0);
                 code->instrDup();
@@ -2369,18 +2173,10 @@ void addConstructor(
         code->loadLocalReference(0);
         // stack: factory serviceName args context
         tryStart = code->getPosition();
-        code->instrInvokeinterface(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/lang/XMultiComponentFactory")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "createInstanceWithArgumentsAndContext")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Ljava/lang/String;[Ljava/lang/Object;"
-                    "Lcom/sun/star/uno/XComponentContext;)Ljava/lang/Object;")),
-            4);
+        code->instrInvokeinterface("com/sun/star/lang/XMultiComponentFactory"
+                                  ,"createInstanceWithArgumentsAndContext"
+                                  ,"(Ljava/lang/String;[Ljava/lang/Object;"
+                                  "Lcom/sun/star/uno/XComponentContext;)Ljava/lang/Object;", 4);
         tryEnd = code->getPosition();
         // stack: instance
         createExceptionsAttribute(
@@ -2388,12 +2184,9 @@ void addConstructor(
     }
     code->loadLocalReference(0);
     // stack: instance context
-    code->instrInvokestatic(
-        className, rtl::OString(RTL_CONSTASCII_STRINGPARAM("$castInstance")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
-                "Ljava/lang/Object;")));
+    code->instrInvokestatic(className, "$castInstance"
+                           ,"(Ljava/lang/Object;Lcom/sun/star/uno/XComponentContext;)"
+                            "Ljava/lang/Object;");
     // stack: instance
     code->instrCheckcast(returnType);
     // stack: instance
@@ -2401,10 +2194,7 @@ void addConstructor(
     if (!tree.getRoot()->present) {
         ClassFile::Code::Position pos1 = code->getPosition();
         // stack: e
-        code->instrInvokevirtual(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Throwable")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("toString")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("()Ljava/lang/String;")));
+        code->instrInvokevirtual("java/lang/Throwable", "toString", "()Ljava/lang/String;");
         // stack: str
         localIndex = std::max< sal_uInt16 >(localIndex, 2);
         code->storeLocalReference(1);
@@ -2418,35 +2208,19 @@ void addConstructor(
         // stack: ex ex "..."
         code->loadLocalReference(1);
         // stack: ex ex "..." str
-        code->instrInvokevirtual(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/String")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("concat")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Ljava/lang/String;)Ljava/lang/String;")));
+        code->instrInvokevirtual("java/lang/String", "concat", "(Ljava/lang/String;)Ljava/lang/String;");
         // stack: ex ex "..."
         code->loadLocalReference(0);
         // stack: ex ex "..." context
-        code->instrInvokespecial(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/DeploymentException")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "(Ljava/lang/String;Ljava/lang/Object;)V")));
+        code->instrInvokespecial("com/sun/star/uno/DeploymentException", "<init>"
+                                ,"(Ljava/lang/String;Ljava/lang/Object;)V");
         // stack: ex
         ClassFile::Code::Position pos2 = code->getPosition();
         code->instrAthrow();
         addExceptionHandlers(
             tree.getRoot(), tryStart, tryEnd, pos2, code.get());
-        code->addException(
-            tryStart, tryEnd, pos1,
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Exception")));
-        dependencies->insert(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Exception")));
+        code->addException(tryStart, tryEnd, pos1, "com/sun/star/uno/Exception");
+        dependencies->insert("com/sun/star/uno/Exception");
         stack = std::max< sal_uInt16 >(stack, 4);
     }
     code->setMaxStackAndLocals(stack, localIndex);
@@ -2467,8 +2241,7 @@ void handleService(
         : (superTypes != 1 || reader.getFieldCount() != 0
            || reader.getReferenceCount() != 0))
     {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     if (superTypes == 0) {
@@ -2476,8 +2249,7 @@ void handleService(
     }
     rtl::OString unoName(codemaker::convertString(reader.getTypeName()));
     rtl::OString className(
-        translateUnoTypeToJavaFullyQualifiedName(
-            unoName, rtl::OString(RTL_CONSTASCII_STRINGPARAM("service"))));
+        translateUnoTypeToJavaFullyQualifiedName(unoName, "service"));
     unoName = unoName.replace('/', '.');
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
@@ -2485,30 +2257,17 @@ void handleService(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
-            className,
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
-            rtl::OString()));
+            className, "java/lang/Object", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     if (methods > 0) {
         rtl::OString base(codemaker::convertString(
                               reader.getSuperTypeName(0)));
         rtl::OString realJavaBaseName(base.replace('/', '.'));
         dependencies->insert(base);
-        dependencies->insert(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/lang/XMultiComponentFactory")));
-        dependencies->insert(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/DeploymentException")));
-        dependencies->insert(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")));
-        dependencies->insert(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/XComponentContext")));
+        dependencies->insert("com/sun/star/lang/XMultiComponentFactory");
+        dependencies->insert("com/sun/star/uno/DeploymentException");
+        dependencies->insert("com/sun/star/uno/TypeClass");
+        dependencies->insert("com/sun/star/uno/XComponentContext");
         for (sal_uInt16 i = 0; i < methods; ++i) {
             rtl::OString name(codemaker::convertString(
                                   reader.getMethodName(i)));
@@ -2519,16 +2278,13 @@ void handleService(
                     && (methods != 1 || reader.getMethodParameterCount(i) != 0
                         || reader.getMethodExceptionCount(i) != 0)))
             {
-                throw CannotDumpException(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+                throw CannotDumpException("Bad type information");
                     //TODO
             }
             if (defaultCtor) {
-                name = rtl::OString(RTL_CONSTASCII_STRINGPARAM("create"));
+                name = "create";
             } else {
-                name = codemaker::java::translateUnoToJavaIdentifier(
-                    name, rtl::OString(RTL_CONSTASCII_STRINGPARAM("method")));
+                name = codemaker::java::translateUnoToJavaIdentifier(name, "method");
             }
             addConstructor(
                 manager, realJavaBaseName, unoName, className, reader, i, name,
@@ -2545,32 +2301,16 @@ void handleService(
             // stack: type type
             code->loadStringConstant(realJavaBaseName);
             // stack: type type "..."
-            code->instrGetstatic(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("INTERFACE")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "Lcom/sun/star/uno/TypeClass;")));
+            code->instrGetstatic("com/sun/star/uno/TypeClass", "INTERFACE", "Lcom/sun/star/uno/TypeClass;");
             // stack: type type "..." INTERFACE
-            code->instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V")));
+            code->instrInvokespecial("com/sun/star/uno/Type", "<init>"
+                                    ,"(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
             // stack: type
             code->loadLocalReference(0);
             // stack: type instance
-            code->instrInvokestatic(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/UnoRuntime")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("queryInterface")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                        "Ljava/lang/Object;")));
+            code->instrInvokestatic("com/sun/star/uno/UnoRuntime", "queryInterface"
+                                   ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
+                                    "Ljava/lang/Object;");
             // stack: instance
             code->instrDup();
             // stack: instance instance
@@ -2589,14 +2329,8 @@ void handleService(
             // stack: ex ex "..."
             code->loadLocalReference(1);
             // stack: ex ex "..." context
-            code->instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/uno/DeploymentException")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/String;Ljava/lang/Object;)V")));
+            code->instrInvokespecial("com/sun/star/uno/DeploymentException", "<init>"
+                                    ,"(Ljava/lang/String;Ljava/lang/Object;)V");
             // stack: ex
             code->instrAthrow();
             code->setMaxStackAndLocals(4, 2);
@@ -2604,12 +2338,9 @@ void handleService(
                 static_cast< ClassFile::AccessFlags >(
                     ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC
                     | ClassFile::ACC_SYNTHETIC),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("$castInstance")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/Object;Lcom/sun/star/uno/"
-                        "XComponentContext;)Ljava/lang/Object;")),
-                code.get(), std::vector< rtl::OString >(), rtl::OString());
+                "$castInstance", "(Ljava/lang/Object;Lcom/sun/star/uno/"
+                                 "XComponentContext;)Ljava/lang/Object;",
+                code.get(), std::vector< rtl::OString >(), "");
         }
     }
     writeClassFile(options, className, *cf.get());
@@ -2623,8 +2354,7 @@ void handleSingleton(
     if (reader.getSuperTypeCount() != 1 || reader.getFieldCount() != 0
         || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
     {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     rtl::OString base(codemaker::convertString(reader.getSuperTypeName(0)));
@@ -2637,92 +2367,55 @@ void handleSingleton(
         return;
 
     default:
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     dependencies->insert(base);
-    rtl::OString unoName(codemaker::convertString(reader.getTypeName()));
-    rtl::OString className(
-        translateUnoTypeToJavaFullyQualifiedName(
-            unoName, rtl::OString(RTL_CONSTASCII_STRINGPARAM("singleton"))));
+    OString unoName(codemaker::convertString(reader.getTypeName()));
+    OString className(translateUnoTypeToJavaFullyQualifiedName(unoName, "singleton"));
     unoName = unoName.replace('/', '.');
-    dependencies->insert(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "com/sun/star/uno/DeploymentException")));
-    dependencies->insert(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")));
-    dependencies->insert(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")));
+    dependencies->insert("com/sun/star/uno/DeploymentException");
+    dependencies->insert("com/sun/star/uno/TypeClass");
+    dependencies->insert("com/sun/star/uno/XComponentContext");
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile > cf(
         new ClassFile(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_FINAL
                 | ClassFile::ACC_SUPER),
-            className,
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
-            rtl::OString()));
+            className, "java/lang/Object", ""));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     MethodDescriptor desc(manager, dependencies, base, 0, 0);
-    desc.addParameter(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")),
-        false, false, 0);
+    desc.addParameter("com/sun/star/uno/XComponentContext", false, false, 0);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
     SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
     // stack: context
-    code->loadStringConstant(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("/singletons/")) + unoName);
+    code->loadStringConstant("/singletons/" + unoName);
     // stack: context "..."
-    code->instrInvokeinterface(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XComponentContext")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("getValueByName")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "(Ljava/lang/String;)Ljava/lang/Object;")),
-        2);
+    code->instrInvokeinterface("com/sun/star/uno/XComponentContext", "getValueByName"
+                              ,"(Ljava/lang/String;)Ljava/lang/Object;", 2);
     // stack: value
     code->instrDup();
     // stack: value value
-    code->instrInstanceof(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")));
+    code->instrInstanceof("com/sun/star/uno/Any");
     // stack: value 0/1
     ClassFile::Code::Branch branch1 = code->instrIfeq();
     // stack: value
-    code->instrCheckcast(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")));
+    code->instrCheckcast("com/sun/star/uno/Any");
     // stack: value
     code->instrDup();
     // stack: value value
-    code->instrInvokevirtual(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("getType")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("()Lcom/sun/star/uno/Type;")));
+    code->instrInvokevirtual("com/sun/star/uno/Any", "getType", "()Lcom/sun/star/uno/Type;");
     // stack: value type
-    code->instrInvokevirtual(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("getTypeClass")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("()Lcom/sun/star/uno/TypeClass;")));
+    code->instrInvokevirtual("com/sun/star/uno/Type", "getTypeClass", "()Lcom/sun/star/uno/TypeClass;");
     // stack: value typeClass
-    code->instrGetstatic(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("INTERFACE")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/TypeClass;")));
+    code->instrGetstatic("com/sun/star/uno/TypeClass", "INTERFACE", "Lcom/sun/star/uno/TypeClass;");
     // stack: value typeClass INTERFACE
     ClassFile::Code::Branch branch2 = code->instrIfAcmpne();
     // stack: value
-    code->instrInvokevirtual(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("getObject")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("()Ljava/lang/Object;")));
+    code->instrInvokevirtual("com/sun/star/uno/Any", "getObject", "()Ljava/lang/Object;");
     // stack: value
     code->branchHere(branch1);
     code->instrNew("com/sun/star/uno/Type");
@@ -2731,28 +2424,15 @@ void handleSingleton(
     // stack: value type type
     code->loadStringConstant(realJavaBaseName);
     // stack: value type type "..."
-    code->instrGetstatic(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("INTERFACE")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/TypeClass;")));
+    code->instrGetstatic("com/sun/star/uno/TypeClass", "INTERFACE", "Lcom/sun/star/uno/TypeClass;");
     // stack: value type type "..." INTERFACE
-    code->instrInvokespecial(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V")));
+    code->instrInvokespecial("com/sun/star/uno/Type", "<init>", "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
     // stack: value type
     code->instrSwap();
     // stack: type value
-    code->instrInvokestatic(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/UnoRuntime")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("queryInterface")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                "Ljava/lang/Object;")));
+    code->instrInvokestatic("com/sun/star/uno/UnoRuntime", "queryInterface"
+                           ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
+                            "Ljava/lang/Object;");
     // stack: instance
     code->instrDup();
     // stack: instance instance
@@ -2774,20 +2454,15 @@ void handleSingleton(
     // stack: ex ex "..."
     code->loadLocalReference(0);
     // stack: ex ex "..." context
-    code->instrInvokespecial(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/DeploymentException")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "(Ljava/lang/String;Ljava/lang/Object;)V")));
+    code->instrInvokespecial("com/sun/star/uno/DeploymentException", "<init>"
+                            ,"(Ljava/lang/String;Ljava/lang/Object;)V");
     // stack: ex
     code->instrAthrow();
     code->setMaxStackAndLocals(5, 1);
     cf->addMethod(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("get")), desc.getDescriptor(),
+        "get", desc.getDescriptor(),
         code.get(), std::vector< rtl::OString >(), desc.getSignature());
     writeClassFile(options, className, *cf.get());
 }
@@ -2856,7 +2531,7 @@ bool produceType(
     Dependencies deps;
     handler(manager, *options, reader, &deps);
     generated.add(type);
-    if (!options->isValid(rtl::OString(RTL_CONSTASCII_STRINGPARAM("-nD")))) {
+    if (!options->isValid("-nD")) {
         for (Dependencies::iterator i(deps.begin()); i != deps.end(); ++i) {
             if (!produceType(*i, manager, generated, options)) {
                 return false;
@@ -2928,7 +2603,7 @@ bool produceType(
     Dependencies deps;
     handler(manager, *options, reader, &deps);
     generated.add(typeName);
-    if (!options->isValid(rtl::OString(RTL_CONSTASCII_STRINGPARAM("-nD")))) {
+    if (!options->isValid("-nD")) {
         for (Dependencies::iterator i(deps.begin()); i != deps.end(); ++i) {
             if (!produceType(*i, manager, generated, options)) {
                 return false;
