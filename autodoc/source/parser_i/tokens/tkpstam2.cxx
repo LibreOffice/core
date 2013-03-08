@@ -117,16 +117,10 @@ void
 StateMachin2::ResizeStati()
 {
     intt nNewSize = nStatiSpace + C_nStatuslistResizeValue;
-    intt i = 0;
     StatusList pNewStati = new StmStatu2*[nNewSize];
 
-    for ( ; i < nNrofStati; i++)
-    {
-        pNewStati[i] = pStati[i];
-    }
-    memset( pNewStati+i,
-            0,
-            (nNewSize-i) * sizeof(StmStatu2*) );
+    memcpy( pNewStati, pStati, nNrofStati * sizeof(StmStatu2*) );
+    memset( pNewStati+nNrofStati, 0, (nNewSize-nNrofStati) * sizeof(StmStatu2*) );
 
     delete [] pStati;
     pStati = pNewStati;
