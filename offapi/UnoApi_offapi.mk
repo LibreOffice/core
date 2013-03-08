@@ -151,6 +151,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/ru
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	AutoRecovery \
+	Bibliography \
 	Desktop \
 	DispatchHelper \
 	DispatchRecorder \

@@ -24,10 +24,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
-#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/frame/Bibliography.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/IndexEntrySupplier.hpp>
+#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/SearchFlags.hpp>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
@@ -1349,8 +1350,8 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
     {
         if(!bBibAccessInitialized)
         {
-             uno::Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
-            xBibAccess = uno::Reference< container::XNameAccess > (xMSF->createInstance( "com.sun.star.frame.Bibliography"), uno::UNO_QUERY );
+            uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
+            xBibAccess = frame::Bibliography::create( xContext );
             uno::Reference< beans::XPropertySet >  xPropSet(xBibAccess, uno::UNO_QUERY);
             OUString uPropName("BibliographyDataFieldNames");
             if(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName(uPropName))
