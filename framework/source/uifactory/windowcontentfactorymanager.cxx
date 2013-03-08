@@ -66,7 +66,7 @@ WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< 
     ThreadHelpBase( &Application::GetSolarMutex() ),
     m_bConfigRead( sal_False )
 {
-    m_pConfigAccess = new ConfigurationAccess_FactoryManager( rxContext, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories" )) );
+    m_pConfigAccess = new ConfigurationAccess_FactoryManager( rxContext, OUString( "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories" ) );
     m_pConfigAccess->acquire();
     m_xModuleManager = frame::ModuleManager::create( rxContext );
 }
@@ -79,7 +79,7 @@ WindowContentFactoryManager::~WindowContentFactoryManager()
     m_pConfigAccess->release();
 }
 
-void WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( const rtl::OUString& aResourceURL, rtl::OUString& aType, rtl::OUString& aName )
+void WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUString& aType, OUString& aName )
 {
     const sal_Int32 RESOURCEURL_PREFIX_SIZE = 17;
     const char      RESOURCEURL_PREFIX[] = "private:resource/";
@@ -87,12 +87,12 @@ void WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( const rtl::OU
     if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
-        rtl::OUString aTmpStr( aResourceURL.copy( RESOURCEURL_PREFIX_SIZE ));
+        OUString aTmpStr( aResourceURL.copy( RESOURCEURL_PREFIX_SIZE ));
         sal_Int32 nToken = 0;
         sal_Int32 nPart  = 0;
         do
         {
-            ::rtl::OUString sToken = aTmpStr.getToken( 0, '/', nToken);
+            OUString sToken = aTmpStr.getToken( 0, '/', nToken);
             if ( !sToken.isEmpty() )
             {
                 if ( nPart == 0 )
@@ -123,7 +123,7 @@ throw (uno::Exception, uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xWindow;
     uno::Reference< frame::XFrame >   xFrame;
-    ::rtl::OUString                   aResourceURL;
+    OUString                   aResourceURL;
 
     for (sal_Int32 i=0; i < Arguments.getLength(); i++ )
     {
@@ -146,9 +146,9 @@ throw (uno::Exception, uno::RuntimeException)
     // UNSAFE
 
     // Determine the module identifier
-    ::rtl::OUString aType;
-    ::rtl::OUString aName;
-    ::rtl::OUString aModuleId;
+    OUString aType;
+    OUString aName;
+    OUString aModuleId;
     try
     {
         if ( xFrame.is() && xModuleManager.is() )
@@ -163,7 +163,7 @@ throw (uno::Exception, uno::RuntimeException)
          !aName.isEmpty() &&
          !aModuleId.isEmpty() )
     {
-        ::rtl::OUString                   aImplementationName;
+        OUString                   aImplementationName;
         uno::Reference< uno::XInterface > xHolder( static_cast<cppu::OWeakObject*>(this), uno::UNO_QUERY );
 
         // Detetmine the implementation name of the window content factory dependent on the

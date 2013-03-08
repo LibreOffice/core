@@ -173,7 +173,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     if ( sal_Int32( m_aItemVector.size()) > Index )
         return makeAny( m_aItemVector[Index] );
     else
-        throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
 // XIndexContainer
@@ -193,10 +193,10 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
             m_aItemVector.insert( aIter, aSeq );
         }
         else
-            throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
+            throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
     }
     else
-        throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( WRONG_TYPE_EXCEPTION )),
+        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
                                         (OWeakObject *)this, 2 );
 }
 
@@ -211,7 +211,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
         m_aItemVector.erase( aIter );
     }
     else
-        throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
 void SAL_CALL ItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
@@ -224,10 +224,10 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
         if ( sal_Int32( m_aItemVector.size()) > Index )
             m_aItemVector[Index] = aSeq;
         else
-            throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
+            throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
     }
     else
-        throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( WRONG_TYPE_EXCEPTION )),
+        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
                                         (OWeakObject *)this, 2 );
 }
 

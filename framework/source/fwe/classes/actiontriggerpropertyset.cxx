@@ -99,13 +99,13 @@ void SAL_CALL ActionTriggerPropertySet::release() throw ()
 
 
 // XServiceInfo
-::rtl::OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
+OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
 throw ( RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_ACTIONTRIGGER ));
+    return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGER );
 }
 
-sal_Bool SAL_CALL ActionTriggerPropertySet::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL ActionTriggerPropertySet::supportsService( const OUString& ServiceName )
 throw ( RuntimeException )
 {
     if ( ServiceName.equalsAscii( SERVICENAME_ACTIONTRIGGER ))
@@ -114,11 +114,11 @@ throw ( RuntimeException )
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ActionTriggerPropertySet::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL ActionTriggerPropertySet::getSupportedServiceNames()
 throw ( RuntimeException )
 {
-    Sequence< ::rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGER ));
+    Sequence< OUString > seqServiceNames( 1 );
+    seqServiceNames[0] = OUString( SERVICENAME_ACTIONTRIGGER );
     return seqServiceNames;
 }
 
@@ -343,11 +343,11 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
 {
     const Property pActionTriggerPropertys[] =
     {
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL"    )), HANDLE_COMMANDURL   , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpURL"       )), HANDLE_HELPURL      , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Image"        )), HANDLE_IMAGE     , ::getCppuType((Reference<XBitmap>*)0)     , PropertyAttribute::TRANSIENT  ),
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SubContainer"  )), HANDLE_SUBCONTAINER , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
-        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text"          )), HANDLE_TEXT         , ::getCppuType((Reference<XInterface>*)0)  , PropertyAttribute::TRANSIENT  )
+        Property( OUString( "CommandURL"    ), HANDLE_COMMANDURL   , ::getCppuType((OUString*)0)                , PropertyAttribute::TRANSIENT  ),
+        Property( OUString( "HelpURL"       ), HANDLE_HELPURL      , ::getCppuType((OUString*)0)                , PropertyAttribute::TRANSIENT  ),
+        Property( OUString( "Image"         ), HANDLE_IMAGE     , ::getCppuType((Reference<XBitmap>*)0)     , PropertyAttribute::TRANSIENT  ),
+        Property( OUString( "SubContainer"  ), HANDLE_SUBCONTAINER , ::getCppuType((OUString*)0)                , PropertyAttribute::TRANSIENT  ),
+        Property( OUString( "Text"          ), HANDLE_TEXT         , ::getCppuType((Reference<XInterface>*)0)  , PropertyAttribute::TRANSIENT  )
     };
 
     // Use it to initialize sequence!
@@ -362,7 +362,7 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
 //  private method
 //******************************************************************************************************************************
 sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
-    const   ::rtl::OUString&    sCurrentValue   ,
+    const   OUString&    sCurrentValue   ,
     const   Any&        aNewValue       ,
     Any&        aOldValue       ,
     Any&        aConvertedValue )
@@ -372,7 +372,7 @@ throw( IllegalArgumentException )
     sal_Bool bReturn = sal_False;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
-    ::rtl::OUString sValue ;
+    OUString sValue ;
     convertPropertyValue( sValue, aNewValue );
 
     // If value change ...

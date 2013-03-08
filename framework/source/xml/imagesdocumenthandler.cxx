@@ -111,13 +111,13 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
     m_aImageList.pImageList         = NULL;
     m_aImageList.pExternalImageList = NULL;
 
-    m_nHashMaskModeBitmap   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_BITMAP )).hashCode();
-    m_nHashMaskModeColor    = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_COLOR )).hashCode();
+    m_nHashMaskModeBitmap   = OUString( ATTRIBUTE_MASKMODE_BITMAP ).hashCode();
+    m_nHashMaskModeColor    = OUString( ATTRIBUTE_MASKMODE_COLOR ).hashCode();
 
     // create hash map to speed up lookup
     for ( int i = 0; i < (int)IMG_XML_ENTRY_COUNT; i++ )
     {
-        ::rtl::OUStringBuffer temp( 20 );
+        OUStringBuffer temp( 20 );
 
         if ( ImagesEntries[i].nNamespace == IMG_NS_IMAGE )
             temp.appendAscii( XMLNS_IMAGE );
@@ -158,14 +158,14 @@ throw(  SAXException, RuntimeException )
     if (( m_bImageContainerStartFound && !m_bImageContainerEndFound ) ||
         ( !m_bImageContainerStartFound && m_bImageContainerEndFound )    )
     {
-        ::rtl::OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No matching start or end element 'image:imagecontainer' found!" ));
+        OUString aErrorMessage = getErrorLineString();
+        aErrorMessage += OUString( "No matching start or end element 'image:imagecontainer' found!" );
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
 
 void SAL_CALL OReadImagesDocumentHandler::startElement(
-    const ::rtl::OUString& aName, const Reference< XAttributeList > &xAttribs )
+    const OUString& aName, const Reference< XAttributeList > &xAttribs )
 throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -180,8 +180,8 @@ throw(  SAXException, RuntimeException )
                 // image:imagecontainer element (container element for all further image elements)
                 if ( m_bImageContainerStartFound )
                 {
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:imagecontainer' cannot be embeded into 'image:imagecontainer'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'image:imagecontainer' cannot be embeded into 'image:imagecontainer'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -193,15 +193,15 @@ throw(  SAXException, RuntimeException )
             {
                 if ( !m_bImageContainerStartFound )
                 {
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:images' must be embeded into element 'image:imagecontainer'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'image:images' must be embeded into element 'image:imagecontainer'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
                 if ( m_bImagesStartFound )
                 {
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:images' cannot be embeded into 'image:images'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'image:images' cannot be embeded into 'image:images'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -226,7 +226,7 @@ throw(  SAXException, RuntimeException )
 
                             case IMG_ATTRIBUTE_MASKCOLOR:
                             {
-                                ::rtl::OUString aColor = xAttribs->getValueByIndex( n );
+                                OUString aColor = xAttribs->getValueByIndex( n );
 
                                 if ( !aColor.isEmpty() )
                                 {
@@ -259,8 +259,8 @@ throw(  SAXException, RuntimeException )
                                     delete m_pImages;
                                     m_pImages = NULL;
 
-                                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Attribute image:maskmode must be 'maskcolor' or 'maskbitmap'!" ));
+                                    OUString aErrorMessage = getErrorLineString();
+                                    aErrorMessage += OUString( "Attribute image:maskmode must be 'maskcolor' or 'maskbitmap'!" );
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -289,8 +289,8 @@ throw(  SAXException, RuntimeException )
                     delete m_pImages;
                     m_pImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute xlink:href must have a value!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Required attribute xlink:href must have a value!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
             }
@@ -304,8 +304,8 @@ throw(  SAXException, RuntimeException )
                     delete m_pImages;
                     m_pImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:entry' must be embeded into element 'image:images'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'image:entry' must be embeded into element 'image:images'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -351,8 +351,8 @@ throw(  SAXException, RuntimeException )
                     delete m_pImages;
                     m_pImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute 'image:bitmap-index' must have a value >= 0!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Required attribute 'image:bitmap-index' must have a value >= 0!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -363,8 +363,8 @@ throw(  SAXException, RuntimeException )
                     delete m_pImages;
                     m_pImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute 'image:command' must have a value!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Required attribute 'image:command' must have a value!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -381,8 +381,8 @@ throw(  SAXException, RuntimeException )
                     delete m_pImages;
                     m_pImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalimages' must be embeded into element 'image:imagecontainer'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'image:externalimages' must be embeded into element 'image:imagecontainer'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -392,8 +392,8 @@ throw(  SAXException, RuntimeException )
                     delete m_pImages;
                     m_pImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalimages' cannot be embeded into 'image:externalimages'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'image:externalimages' cannot be embeded into 'image:externalimages'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -412,8 +412,8 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
                     m_pExternalImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalentry' must be embeded into 'image:externalimages'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'image:externalentry' must be embeded into 'image:externalimages'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -424,8 +424,8 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
                     m_pExternalImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'image:externalentry' cannot be embeded into 'image:externalentry'!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Element 'image:externalentry' cannot be embeded into 'image:externalentry'!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -468,8 +468,8 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
                     m_pExternalImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute 'image:command' must have a value!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Required attribute 'image:command' must have a value!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -482,8 +482,8 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
                     m_pExternalImages = NULL;
 
-                    ::rtl::OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute 'xlink:href' must have a value!" ));
+                    OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += OUString( "Required attribute 'xlink:href' must have a value!" );
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -500,7 +500,7 @@ throw(  SAXException, RuntimeException )
     }
 }
 
-void SAL_CALL OReadImagesDocumentHandler::endElement(const ::rtl::OUString& aName)
+void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
 throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -559,18 +559,18 @@ throw(  SAXException, RuntimeException )
     }
 }
 
-void SAL_CALL OReadImagesDocumentHandler::characters(const ::rtl::OUString&)
+void SAL_CALL OReadImagesDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
-void SAL_CALL OReadImagesDocumentHandler::ignorableWhitespace(const ::rtl::OUString&)
+void SAL_CALL OReadImagesDocumentHandler::ignorableWhitespace(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadImagesDocumentHandler::processingInstruction(
-    const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
+    const OUString& /*aTarget*/, const OUString& /*aData*/ )
 throw(  SAXException, RuntimeException )
 {
 }
@@ -584,7 +584,7 @@ throw(  SAXException, RuntimeException )
     m_xLocator = xLocator;
 }
 
-::rtl::OUString OReadImagesDocumentHandler::getErrorLineString()
+OUString OReadImagesDocumentHandler::getErrorLineString()
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -593,10 +593,10 @@ throw(  SAXException, RuntimeException )
     if ( m_xLocator.is() )
     {
         snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
-        return ::rtl::OUString::createFromAscii( buffer );
+        return OUString::createFromAscii( buffer );
     }
     else
-        return ::rtl::OUString();
+        return OUString();
 }
 
 
@@ -613,11 +613,11 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList            = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType        = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
-    m_aXMLImageNS           = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_IMAGE_PREFIX ));
-    m_aXMLXlinkNS           = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
-    m_aAttributeXlinkType   = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XLINK_TYPE ));
-    m_aAttributeValueSimple = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XLINK_TYPE_VALUE ));
+    m_aAttributeType        = OUString( ATTRIBUTE_TYPE_CDATA );
+    m_aXMLImageNS           = OUString( XMLNS_IMAGE_PREFIX );
+    m_aXMLXlinkNS           = OUString( XMLNS_XLINK_PREFIX );
+    m_aAttributeXlinkType   = OUString( ATTRIBUTE_XLINK_TYPE );
+    m_aAttributeValueSimple = OUString( ATTRIBUTE_XLINK_TYPE_VALUE );
 }
 
 OWriteImagesDocumentHandler::~OWriteImagesDocumentHandler()
@@ -635,23 +635,23 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMAGES_DOCTYPE )) );
-        m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+        xExtendedDocHandler->unknown( OUString( IMAGES_DOCTYPE ) );
+        m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_IMAGE )),
+    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_IMAGE),
                          m_aAttributeType,
-                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_IMAGE )) );
+                         OUString( XMLNS_IMAGE ) );
 
-    pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
+    pList->AddAttribute( OUString( ATTRIBUTE_XMLNS_XLINK ),
                          m_aAttributeType,
-                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK )) );
+                         OUString( XMLNS_XLINK ) );
 
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_IMAGESCONTAINER )), pList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_IMAGESCONTAINER ), pList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     if ( m_aImageListsItems.pImageList )
     {
@@ -669,9 +669,9 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
         WriteExternalImageList( m_aImageListsItems.pExternalImageList );
     }
 
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_IMAGESCONTAINER )) );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_IMAGESCONTAINER ) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
 
@@ -690,53 +690,53 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
                          m_aAttributeType,
                          m_aAttributeValueSimple );
 
-    pList->AddAttribute( m_aXMLXlinkNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HREF )),
+    pList->AddAttribute( m_aXMLXlinkNS + OUString( ATTRIBUTE_HREF ),
                          m_aAttributeType,
                          pImageList->aURL );
 
     if ( pImageList->nMaskMode == ImageMaskMode_Bitmap )
     {
-        pList->AddAttribute( m_aXMLImageNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_MASKMODE ),
                              m_aAttributeType,
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_BITMAP )) );
+                             OUString( ATTRIBUTE_MASKMODE_BITMAP ) );
 
-        pList->AddAttribute( m_aXMLImageNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKURL )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_MASKURL ),
                              m_aAttributeType,
                              pImageList->aMaskURL );
 
         if ( pImageList->aHighContrastMaskURL.Len() > 0 )
         {
-            pList->AddAttribute( m_aXMLImageNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HIGHCONTRASTMASKURL )),
+            pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_HIGHCONTRASTMASKURL ),
                                  m_aAttributeType,
                                  pImageList->aHighContrastMaskURL );
         }
     }
     else
     {
-        ::rtl::OUStringBuffer   aColorStrBuffer( 8 );
+        OUStringBuffer   aColorStrBuffer( 8 );
         sal_Int64       nValue = pImageList->aMaskColor.GetRGBColor();
 
         aColorStrBuffer.appendAscii( "#" );
-        aColorStrBuffer.append( ::rtl::OUString::valueOf( nValue, 16 ));
+        aColorStrBuffer.append( OUString::valueOf( nValue, 16 ));
 
-        pList->AddAttribute( m_aXMLImageNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKCOLOR )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_MASKCOLOR ),
                              m_aAttributeType,
                              aColorStrBuffer.makeStringAndClear() );
 
-        pList->AddAttribute( m_aXMLImageNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_MASKMODE ),
                              m_aAttributeType,
-                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_COLOR )) );
+                             OUString( ATTRIBUTE_MASKMODE_COLOR ) );
     }
 
     if ( pImageList->aHighContrastURL.Len() > 0 )
     {
-        pList->AddAttribute( m_aXMLImageNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HIGHCONTRASTURL )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_HIGHCONTRASTURL ),
                              m_aAttributeType,
                              pImageList->aHighContrastURL );
     }
 
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_IMAGES )), xList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_IMAGES ), xList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     ImageItemListDescriptor* pImageItemList = pImageList->pImageItemList;
     if ( pImageItemList )
@@ -745,8 +745,8 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
             WriteImage( &(*pImageItemList)[i] );
     }
 
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_IMAGES )) );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_IMAGES ) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 
 void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage ) throw
@@ -755,26 +755,26 @@ void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage 
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->AddAttribute( m_aXMLImageNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BITMAPINDEX )),
+    pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_BITMAPINDEX ),
                          m_aAttributeType,
-                         ::rtl::OUString::valueOf( (sal_Int32)pImage->nIndex ) );
+                         OUString::valueOf( (sal_Int32)pImage->nIndex ) );
 
-    pList->AddAttribute( m_aXMLImageNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_COMMAND )),
+    pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_COMMAND ),
                          m_aAttributeType,
                          pImage->aCommandURL );
 
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_ENTRY )), xList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_ENTRY ), xList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_ENTRY )) );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_ENTRY ) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 
 void OWriteImagesDocumentHandler::WriteExternalImageList( const ExternalImageItemListDescriptor* pExternalImageList ) throw
 ( SAXException, RuntimeException )
 {
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EXTERNALIMAGES )), m_xEmptyList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_EXTERNALIMAGES ), m_xEmptyList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     for ( sal_uInt16 i = 0; i < pExternalImageList->size(); i++ )
     {
@@ -782,9 +782,9 @@ void OWriteImagesDocumentHandler::WriteExternalImageList( const ExternalImageIte
         WriteExternalImage( pItem );
     }
 
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EXTERNALIMAGES )) );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_EXTERNALIMAGES ) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 
 void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDescriptor* pExternalImage ) throw
@@ -800,23 +800,23 @@ void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDes
 
     if ( pExternalImage->aURL.Len() > 0 )
     {
-        pList->AddAttribute( m_aXMLXlinkNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HREF )),
+        pList->AddAttribute( m_aXMLXlinkNS + OUString( ATTRIBUTE_HREF ),
                              m_aAttributeType,
                              pExternalImage->aURL );
     }
 
     if ( pExternalImage->aCommandURL.Len() > 0 )
     {
-        pList->AddAttribute( m_aXMLImageNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_COMMAND )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_COMMAND ),
                              m_aAttributeType,
                              pExternalImage->aCommandURL );
     }
 
-    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EXTERNALENTRY )), xList );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_NS_EXTERNALENTRY ), xList );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EXTERNALENTRY )) );
-    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_EXTERNALENTRY ) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 }
 
 } // namespace framework

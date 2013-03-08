@@ -198,7 +198,7 @@ static FixedVariable aFixedVarTable[] =
 //      Implementation helper classes
 //_________________________________________________________________________________________________________________
 
-OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystemFromString( const rtl::OUString& aOSString )
+OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystemFromString( const OUString& aOSString )
 {
     for ( int i = 0; i < OS_COUNT; i++ )
     {
@@ -209,7 +209,7 @@ OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystemFromString( cons
     return OS_UNKNOWN;
 }
 
-EnvironmentType SubstitutePathVariables_Impl::GetEnvTypeFromString( const rtl::OUString& aEnvTypeString )
+EnvironmentType SubstitutePathVariables_Impl::GetEnvTypeFromString( const OUString& aEnvTypeString )
 {
     for ( int i = 0; i < ET_COUNT; i++ )
     {
@@ -221,22 +221,22 @@ EnvironmentType SubstitutePathVariables_Impl::GetEnvTypeFromString( const rtl::O
 }
 
 SubstitutePathVariables_Impl::SubstitutePathVariables_Impl( const Link& aNotifyLink ) :
-    utl::ConfigItem( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Substitution" ))),
+    utl::ConfigItem( OUString( "Office.Substitution" )),
     m_bYPDomainRetrieved( false ),
     m_bDNSDomainRetrieved( false ),
     m_bNTDomainRetrieved( false ),
     m_bHostRetrieved( false ),
     m_bOSRetrieved( false ),
     m_aListenerNotify( aNotifyLink ),
-    m_aSharePointsNodeName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SharePoints" ))),
-    m_aDirPropertyName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Directory" ))),
-    m_aEnvPropertyName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Environment" ))),
-    m_aLevelSep( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" )))
+    m_aSharePointsNodeName( OUString( "SharePoints" )),
+    m_aDirPropertyName( OUString( "/Directory" )),
+    m_aEnvPropertyName( OUString( "/Environment" )),
+    m_aLevelSep( OUString(  "/" ))
 {
     // Enable notification mechanism
     // We need it to get information about changes outside these class on our configuration branch
-    Sequence< rtl::OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SharePoints" ));
+    Sequence< OUString > aNotifySeq( 1 );
+    aNotifySeq[0] = OUString( "SharePoints" );
     EnableNotification( aNotifySeq, sal_True );
 }
 
@@ -246,7 +246,7 @@ SubstitutePathVariables_Impl::~SubstitutePathVariables_Impl()
 
 void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSubstVarMap )
 {
-    Sequence< rtl::OUString > aSharePointNames;
+    Sequence< OUString > aSharePointNames;
     ReadSharePointsFromConfiguration( aSharePointNames );
 
     if ( aSharePointNames.getLength() > 0 )
@@ -256,8 +256,8 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
         // Read SharePoints container from configuration
         while ( nSharePoints < aSharePointNames.getLength() )
         {
-            rtl::OUString aSharePointNodeName( m_aSharePointsNodeName );
-            aSharePointNodeName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            OUString aSharePointNodeName( m_aSharePointsNodeName );
+            aSharePointNodeName += OUString("/");
             aSharePointNodeName += aSharePointNames[ nSharePoints ];
 
             SubstituteRuleVector aRuleSet;
@@ -280,7 +280,7 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
     }
 }
 
-void SubstitutePathVariables_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& /*aPropertyNames*/ )
+void SubstitutePathVariables_Impl::Notify( const com::sun::star::uno::Sequence< OUString >& /*aPropertyNames*/ )
 {
     // NOT implemented yet!
 }
@@ -315,7 +315,7 @@ OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystem()
     return m_eOSType;
 }
 
-const rtl::OUString& SubstitutePathVariables_Impl::GetYPDomainName()
+const OUString& SubstitutePathVariables_Impl::GetYPDomainName()
 {
     if ( !m_bYPDomainRetrieved )
     {
@@ -326,15 +326,15 @@ const rtl::OUString& SubstitutePathVariables_Impl::GetYPDomainName()
     return m_aYPDomain;
 }
 
-const rtl::OUString& SubstitutePathVariables_Impl::GetDNSDomainName()
+const OUString& SubstitutePathVariables_Impl::GetDNSDomainName()
 {
     if ( !m_bDNSDomainRetrieved )
     {
-        rtl::OUString   aTemp;
+        OUString   aTemp;
         osl::SocketAddr aSockAddr;
         oslSocketResult aResult;
 
-        rtl::OUString aHostName = GetHostName();
+        OUString aHostName = GetHostName();
         osl::SocketAddr::resolveHostname( aHostName, aSockAddr );
         aTemp = aSockAddr.getHostname( &aResult );
 
@@ -343,7 +343,7 @@ const rtl::OUString& SubstitutePathVariables_Impl::GetDNSDomainName()
         if ( nIndex >= 0 && aTemp.getLength() > nIndex+1 )
             m_aDNSDomain = aTemp.copy( nIndex+1 ).toAsciiLowerCase();
         else
-            m_aDNSDomain = rtl::OUString();
+            m_aDNSDomain = OUString();
 
         m_bDNSDomainRetrieved = sal_True;
     }
@@ -351,7 +351,7 @@ const rtl::OUString& SubstitutePathVariables_Impl::GetDNSDomainName()
     return m_aDNSDomain;
 }
 
-const rtl::OUString& SubstitutePathVariables_Impl::GetNTDomainName()
+const OUString& SubstitutePathVariables_Impl::GetNTDomainName()
 {
     if ( !m_bNTDomainRetrieved )
     {
@@ -362,7 +362,7 @@ const rtl::OUString& SubstitutePathVariables_Impl::GetNTDomainName()
     return m_aNTDomain;
 }
 
-const rtl::OUString& SubstitutePathVariables_Impl::GetHostName()
+const OUString& SubstitutePathVariables_Impl::GetHostName()
 {
     if (!m_bHostRetrieved)
     {
@@ -394,8 +394,8 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
                 {
                     case ET_HOST:
                     {
-                        rtl::OUString aHost = GetHostName();
-                        rtl::OUString aHostStr;
+                        OUString aHost = GetHostName();
+                        OUString aHostStr;
                         aRule.aEnvValue >>= aHostStr;
                         aHostStr = aHostStr.toAsciiLowerCase();
 
@@ -415,8 +415,8 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
                     case ET_DNSDOMAIN:
                     case ET_NTDOMAIN:
                     {
-                        rtl::OUString   aDomain;
-                        rtl::OUString   aDomainStr;
+                        OUString   aDomain;
+                        OUString   aDomainStr;
                         aRule.aEnvValue >>= aDomainStr;
                         aDomainStr = aDomainStr.toAsciiLowerCase();
 
@@ -474,33 +474,33 @@ bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector& aR
     return bResult;
 }
 
-void SubstitutePathVariables_Impl::ReadSharePointsFromConfiguration( Sequence< rtl::OUString >& aSharePointsSeq )
+void SubstitutePathVariables_Impl::ReadSharePointsFromConfiguration( Sequence< OUString >& aSharePointsSeq )
 {
     //returns all the names of all share point nodes
     aSharePointsSeq = GetNodeNames( m_aSharePointsNodeName );
 }
 
 void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
-        const rtl::OUString& aSharePointName,
-        const rtl::OUString& aSharePointNodeName,
+        const OUString& aSharePointName,
+        const OUString& aSharePointNodeName,
         SubstituteRuleVector& rRuleSet )
 {
-    Sequence< rtl::OUString > aSharePointMappingsNodeNames = GetNodeNames( aSharePointNodeName, utl::CONFIG_NAME_LOCAL_PATH );
+    Sequence< OUString > aSharePointMappingsNodeNames = GetNodeNames( aSharePointNodeName, utl::CONFIG_NAME_LOCAL_PATH );
 
     sal_Int32 nSharePointMapping = 0;
     while ( nSharePointMapping < aSharePointMappingsNodeNames.getLength() )
     {
-        rtl::OUString aSharePointMapping( aSharePointNodeName );
+        OUString aSharePointMapping( aSharePointNodeName );
         aSharePointMapping += m_aLevelSep;
         aSharePointMapping += aSharePointMappingsNodeNames[ nSharePointMapping ];
 
         // Read SharePointMapping
-        rtl::OUString aDirValue;
-        rtl::OUString aDirProperty( aSharePointMapping );
+        OUString aDirValue;
+        OUString aDirProperty( aSharePointMapping );
         aDirProperty += m_aDirPropertyName;
 
         // Read only the directory property
-        Sequence< rtl::OUString > aDirPropertySeq( 1 );
+        Sequence< OUString > aDirPropertySeq( 1 );
         aDirPropertySeq[0] = aDirProperty;
 
         Sequence< Any > aValueSeq = GetProperties( aDirPropertySeq );
@@ -508,24 +508,24 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
             aValueSeq[0] >>= aDirValue;
 
         // Read the environment setting
-        rtl::OUString aEnvUsed;
-        rtl::OUString aEnvProperty( aSharePointMapping );
+        OUString aEnvUsed;
+        OUString aEnvProperty( aSharePointMapping );
         aEnvProperty += m_aEnvPropertyName;
-        Sequence< rtl::OUString > aEnvironmentVariable = GetNodeNames( aEnvProperty );
+        Sequence< OUString > aEnvironmentVariable = GetNodeNames( aEnvProperty );
 
         // Filter the property which has a value set
-        Sequence< rtl::OUString > aEnvUsedPropertySeq( aEnvironmentVariable.getLength() );
+        Sequence< OUString > aEnvUsedPropertySeq( aEnvironmentVariable.getLength() );
 
-        rtl::OUString aEnvUsePropNameTemplate( aEnvProperty );
+        OUString aEnvUsePropNameTemplate( aEnvProperty );
         aEnvUsePropNameTemplate += m_aLevelSep;
 
         for ( sal_Int32 nProperty = 0; nProperty < aEnvironmentVariable.getLength(); nProperty++ )
-            aEnvUsedPropertySeq[nProperty] = rtl::OUString( aEnvUsePropNameTemplate + aEnvironmentVariable[nProperty] );
+            aEnvUsedPropertySeq[nProperty] = OUString( aEnvUsePropNameTemplate + aEnvironmentVariable[nProperty] );
 
         Sequence< Any > aEnvUsedValueSeq;
         aEnvUsedValueSeq = GetProperties( aEnvUsedPropertySeq );
 
-        rtl::OUString aEnvUsedValue;
+        OUString aEnvUsedValue;
         for ( sal_Int32 nIndex = 0; nIndex < aEnvironmentVariable.getLength(); nIndex++ )
         {
             if ( aEnvUsedValueSeq[nIndex] >>= aEnvUsedValue )
@@ -582,7 +582,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XMultiService
     for ( i = 0; i < PREDEFVAR_COUNT; i++ )
     {
         // Store variable name into struct of predefined/fixed variables
-        m_aPreDefVars.m_FixedVarNames[i] = rtl::OUString::createFromAscii( aFixedVarTable[i].pVarName );
+        m_aPreDefVars.m_FixedVarNames[i] = OUString::createFromAscii( aFixedVarTable[i].pVarName );
 
         // Create hash map entry
         m_aPreDefVarMap.insert( VarNameToIndexMap::value_type(
@@ -611,7 +611,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XMultiService
     for ( pIter = m_aSubstVarMap.begin(); pIter != m_aSubstVarMap.end(); ++pIter )
     {
         ReSubstUserVarOrder aUserOrderVar;
-        rtl::OUStringBuffer aStrBuffer( pIter->second.aSubstVariable.getLength() );
+        OUStringBuffer aStrBuffer( pIter->second.aSubstVariable.getLength() );
         aStrBuffer.append( m_aVarStart );
         aStrBuffer.append( pIter->second.aSubstVariable );
         aStrBuffer.append( m_aVarEnd );
@@ -627,7 +627,7 @@ SubstitutePathVariables::~SubstitutePathVariables()
 }
 
 // XStringSubstitution
-rtl::OUString SAL_CALL SubstitutePathVariables::substituteVariables( const ::rtl::OUString& aText, sal_Bool bSubstRequired )
+OUString SAL_CALL SubstitutePathVariables::substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
 throw ( NoSuchElementException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::substituteVariables" );
@@ -635,7 +635,7 @@ throw ( NoSuchElementException, RuntimeException )
     return impl_substituteVariable( aText, bSubstRequired );
 }
 
-rtl::OUString SAL_CALL SubstitutePathVariables::reSubstituteVariables( const ::rtl::OUString& aText )
+OUString SAL_CALL SubstitutePathVariables::reSubstituteVariables( const OUString& aText )
 throw ( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::reSubstituteVariables" );
@@ -643,7 +643,7 @@ throw ( RuntimeException )
     return impl_reSubstituteVariables( aText );
 }
 
-rtl::OUString SAL_CALL SubstitutePathVariables::getSubstituteVariableValue( const ::rtl::OUString& aVariable )
+OUString SAL_CALL SubstitutePathVariables::getSubstituteVariableValue( const OUString& aVariable )
 throw ( NoSuchElementException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::getSubstituteVariableValue" );
@@ -663,11 +663,11 @@ IMPL_LINK_NOARG(SubstitutePathVariables, implts_ConfigurationNotify)
     return 0;
 }
 
-rtl::OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const rtl::OUString& aOSLCompliantURL ) const
+OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const OUString& aOSLCompliantURL ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::ConvertOSLtoUCBURL" );
-    rtl::OUString aResult;
-    rtl::OUString   aTemp;
+    OUString aResult;
+    OUString   aTemp;
 
     osl::FileBase::getSystemPathFromFileURL( aOSLCompliantURL, aTemp );
     utl::LocalFileHelper::ConvertPhysicalNameToURL( aTemp, aResult );
@@ -679,18 +679,18 @@ rtl::OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const rtl::OUString& 
         return aResult;
 }
 
-rtl::OUString SubstitutePathVariables::GetWorkPath() const
+OUString SubstitutePathVariables::GetWorkPath() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkPath" );
-        rtl::OUString aWorkPath;
+        OUString aWorkPath;
 
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
                             comphelper::getComponentContext(m_xServiceManager),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paths/Work")),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritePath")),
+                            OUString("org.openoffice.Office.Paths"),
+                            OUString("Paths/Work"),
+                            OUString("WritePath"),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
     }
     catch(const RuntimeException &)
@@ -704,18 +704,18 @@ rtl::OUString SubstitutePathVariables::GetWorkPath() const
     return aWorkPath;
 }
 
-rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
+OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkVariableValue" );
-    ::rtl::OUString aWorkPath;
+    OUString aWorkPath;
 
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
                             comphelper::getComponentContext(m_xServiceManager),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths")),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Variables")),
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Work")),
+                            OUString("org.openoffice.Office.Paths"),
+                            OUString("Variables"),
+                            OUString("Work"),
                             ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
     }
     catch(const RuntimeException &)
@@ -732,35 +732,35 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
     return ConvertOSLtoUCBURL( aWorkPath );
 }
 
-rtl::OUString SubstitutePathVariables::GetHomeVariableValue() const
+OUString SubstitutePathVariables::GetHomeVariableValue() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetHomeVariableValue" );
     osl::Security   aSecurity;
-    rtl::OUString   aHomePath;
+    OUString   aHomePath;
 
     aSecurity.getHomeDir( aHomePath );
     return ConvertOSLtoUCBURL( aHomePath );
 }
 
-rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
+OUString SubstitutePathVariables::GetPathVariableValue() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetPathVariableValue" );
 
-    rtl::OUString aRetStr;
+    OUString aRetStr;
     const char*   pEnv = getenv( "PATH" );
 
     if ( pEnv )
     {
         const int PATH_EXTEND_FACTOR = 120;
-        rtl::OUString       aTmp;
-        rtl::OUString       aPathList( pEnv, strlen( pEnv ), osl_getThreadTextEncoding() );
-        rtl::OUStringBuffer aPathStrBuffer( aPathList.getLength() * PATH_EXTEND_FACTOR / 100 );
+        OUString       aTmp;
+        OUString       aPathList( pEnv, strlen( pEnv ), osl_getThreadTextEncoding() );
+        OUStringBuffer aPathStrBuffer( aPathList.getLength() * PATH_EXTEND_FACTOR / 100 );
 
         bool      bAppendSep = false;
         sal_Int32 nToken = 0;
         do
         {
-            ::rtl::OUString sToken = aPathList.getToken(0, SAL_PATHSEPARATOR, nToken);
+            OUString sToken = aPathList.getToken(0, SAL_PATHSEPARATOR, nToken);
             if (!sToken.isEmpty())
             {
                 osl::FileBase::getFileURLFromSystemPath( sToken, aTmp );
@@ -778,18 +778,18 @@ rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
     return aRetStr;
 }
 
-rtl::OUString SubstitutePathVariables::impl_substituteVariable( const ::rtl::OUString& rText, bool bSubstRequired )
+OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText, bool bSubstRequired )
 throw ( NoSuchElementException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::impl_substituteVariable" );
     // This is maximal recursive depth supported!
     const sal_Int32 nMaxRecursiveDepth = 8;
 
-    rtl::OUString   aWorkText = rText;
-    rtl::OUString   aResult;
+    OUString   aWorkText = rText;
+    OUString   aResult;
 
     // Use vector with strings to detect endless recursions!
-    std::vector< rtl::OUString > aEndlessRecursiveDetector;
+    std::vector< OUString > aEndlessRecursiveDetector;
 
     // Search for first occure of "$(...".
     sal_Int32   nDepth = 0;
@@ -817,9 +817,9 @@ throw ( NoSuchElementException, RuntimeException )
         {
             // YES; Get the next variable for replace.
             sal_Int32     nReplaceLength  = 0;
-            rtl::OUString aReplacement;
-            rtl::OUString aSubString      = aWorkText.copy( nPosition, nLength );
-            rtl::OUString aSubVarString;
+            OUString aReplacement;
+            OUString aSubString      = aWorkText.copy( nPosition, nLength );
+            OUString aSubVarString;
 
             // Path variables are not case sensitive!
             aSubVarString = aSubString.toAsciiLowerCase();
@@ -856,7 +856,7 @@ throw ( NoSuchElementException, RuntimeException )
             else
             {
                 // Extract the variable name and try to find in the user defined variable set
-                rtl::OUString aVarName = aSubString.copy( 2, nLength-3 );
+                OUString aVarName = aSubString.copy( 2, nLength-3 );
                 SubstituteVariables::const_iterator pIter = m_aSubstVarMap.find( aVarName );
                 if ( pIter != m_aSubstVarMap.end() )
                 {
@@ -956,7 +956,7 @@ throw ( NoSuchElementException, RuntimeException )
             // recursion depth reached!
             if ( bSubstRequired )
             {
-                rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM( "Endless recursion detected. Cannot substitute variables!" ));
+                OUString aMsg( "Endless recursion detected. Cannot substitute variables!" );
                 throw NoSuchElementException( aMsg, (cppu::OWeakObject *)this );
             }
             else
@@ -967,7 +967,7 @@ throw ( NoSuchElementException, RuntimeException )
             // variable in text but unknown!
             if ( bSubstRequired )
             {
-                rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM( "Unknown variable found!" ));
+                OUString aMsg( "Unknown variable found!" );
                 throw NoSuchElementException( aMsg, (cppu::OWeakObject *)this );
             }
             else
@@ -978,10 +978,10 @@ throw ( NoSuchElementException, RuntimeException )
     return aResult;
 }
 
-rtl::OUString SubstitutePathVariables::impl_reSubstituteVariables( const ::rtl::OUString& rURL )
+OUString SubstitutePathVariables::impl_reSubstituteVariables( const OUString& rURL )
 throw ( RuntimeException )
 {
-    rtl::OUString aURL;
+    OUString aURL;
 
     INetURLObject aUrl( rURL );
     if ( !aUrl.HasError() )
@@ -989,7 +989,7 @@ throw ( RuntimeException )
     else
     {
         // Convert a system path to a UCB compliant URL before resubstitution
-        rtl::OUString aTemp;
+        OUString aTemp;
         if ( osl::FileBase::getFileURLFromSystemPath( rURL, aTemp ) == osl::FileBase::E_None )
         {
             aTemp = ConvertOSLtoUCBURL( aTemp );
@@ -1021,7 +1021,7 @@ throw ( RuntimeException )
         ReSubstFixedVarOrderVector::const_iterator pIterFixed;
         for ( pIterFixed = m_aReSubstFixedVarOrder.begin(); pIterFixed != m_aReSubstFixedVarOrder.end(); ++pIterFixed )
         {
-            rtl::OUString aValue = m_aPreDefVars.m_FixedVar[ (sal_Int32)pIterFixed->eVariable ];
+            OUString aValue = m_aPreDefVars.m_FixedVar[ (sal_Int32)pIterFixed->eVariable ];
             sal_Int32 nPos = aURL.indexOf( aValue );
             if ( nPos >= 0 )
             {
@@ -1046,7 +1046,7 @@ throw ( RuntimeException )
 
                 if ( bMatch )
                 {
-                    rtl::OUStringBuffer aStrBuffer( aURL.getLength() );
+                    OUStringBuffer aStrBuffer( aURL.getLength() );
                     aStrBuffer.append( aURL.copy( 0, nPos ) );
                     aStrBuffer.append( m_aPreDefVars.m_FixedVarNames[ (sal_Int32)pIterFixed->eVariable ] ); // Get the variable name for struct var name array!
                     aStrBuffer.append( aURL.copy( nPos + aValue.getLength(), ( aURL.getLength() - ( nPos + aValue.getLength() )) ));
@@ -1061,11 +1061,11 @@ throw ( RuntimeException )
         ReSubstUserVarOrderVector::const_iterator pIterUser;
         for ( pIterUser = m_aReSubstUserVarOrder.begin(); pIterUser != m_aReSubstUserVarOrder.end(); ++pIterUser )
         {
-            rtl::OUString aVarValue = pIterUser->aVarName;
+            OUString aVarValue = pIterUser->aVarName;
             sal_Int32 nPos = aURL.indexOf( aVarValue );
             if ( nPos >= 0 )
             {
-                rtl::OUStringBuffer aStrBuffer( aURL.getLength() );
+                OUStringBuffer aStrBuffer( aURL.getLength() );
                 aStrBuffer.append( aURL.copy( 0, nPos ) );
                 aStrBuffer.append( m_aVarStart );
                 aStrBuffer.append( aVarValue );
@@ -1086,17 +1086,17 @@ throw ( RuntimeException )
 }
 
 // This method support both request schemes "$("<varname>")" or "<varname>".
-::rtl::OUString SubstitutePathVariables::impl_getSubstituteVariableValue( const ::rtl::OUString& rVariable )
+OUString SubstitutePathVariables::impl_getSubstituteVariableValue( const OUString& rVariable )
 throw ( NoSuchElementException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::impl_getSubstituteVariableValue" );
-    rtl::OUString aVariable;
+    OUString aVariable;
 
     sal_Int32 nPos = rVariable.indexOf( m_aVarStart );
     if ( nPos == -1 )
     {
         // Prepare variable name before hash map access
-        rtl::OUStringBuffer aStrBuffer( rVariable.getLength() + m_aVarStart.getLength() + m_aVarEnd.getLength() );
+        OUStringBuffer aStrBuffer( rVariable.getLength() + m_aVarStart.getLength() + m_aVarEnd.getLength() );
         aStrBuffer.append( m_aVarStart );
         aStrBuffer.append( rVariable );
         aStrBuffer.append( m_aVarEnd );
@@ -1144,8 +1144,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::SetPredefinedPathVariables" );
 
-    aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = rtl::OUString(
-    RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR"));
+    aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = OUString("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 
@@ -1153,7 +1152,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     // Get inspath and userpath from bootstrap mechanism in every case as file URL
     ::utl::Bootstrap::PathStatus aState;
-    ::rtl::OUString              sVal  ;
+    OUString              sVal  ;
 
     aState = utl::Bootstrap::locateUserData( sVal );
     //There can be the valid case that there is no user installation.
@@ -1181,7 +1180,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Set $(prog), $(progpath), $(progurl)
     INetURLObject aProgObj(
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] );
-    if ( !aProgObj.HasError() && aProgObj.insertName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("program")) ) )
+    if ( !aProgObj.HasError() && aProgObj.insertName( OUString("program") ) )
     {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ] = aProgObj.GetMainURL(INetURLObject::NO_DECODE);
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGURL ]  = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ];
@@ -1190,7 +1189,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     // Detect the language type of the current office
     aPreDefPathVariables.m_eLanguageType = LANGUAGE_ENGLISH_US;
-    rtl::OUString aLocaleStr( utl::ConfigManager::getLocale() );
+    OUString aLocaleStr( utl::ConfigManager::getLocale() );
     aPreDefPathVariables.m_eLanguageType = LanguageTag( aLocaleStr ).getLanguageType();
     // We used to have an else branch here with a LOG_ERROR, but that
     // always fired in some unit tests when this code was built with
@@ -1200,13 +1199,13 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     // Set $(lang)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANG ] = ConvertOSLtoUCBURL(
-    rtl::OUString::createFromAscii( ResMgr::GetLang( aPreDefPathVariables.m_eLanguageType, 0 ) ));
+    OUString::createFromAscii( ResMgr::GetLang( aPreDefPathVariables.m_eLanguageType, 0 ) ));
 
     // Set $(vlang)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_VLANG ] = aLocaleStr;
 
     // Set $(langid)
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANGID ] = rtl::OUString::valueOf( (sal_Int32)aPreDefPathVariables.m_eLanguageType );
+    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANGID ] = OUString::valueOf( (sal_Int32)aPreDefPathVariables.m_eLanguageType );
 
     // Set the other pre defined path variables
     // Set $(work)

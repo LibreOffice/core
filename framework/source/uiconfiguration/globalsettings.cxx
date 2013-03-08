@@ -89,11 +89,11 @@ class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
 
         sal_Bool                                                                            m_bDisposed   : 1,
                                                                                             m_bConfigRead : 1;
-        rtl::OUString                                                                       m_aConfigSettingsAccess;
-        rtl::OUString                                                                       m_aNodeRefStates;
-        rtl::OUString                                                                       m_aPropStatesEnabled;
-        rtl::OUString                                                                       m_aPropLocked;
-        rtl::OUString                                                                       m_aPropDocked;
+        OUString                                                                       m_aConfigSettingsAccess;
+        OUString                                                                       m_aNodeRefStates;
+        OUString                                                                       m_aPropStatesEnabled;
+        OUString                                                                       m_aPropLocked;
+        OUString                                                                       m_aPropDocked;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>         m_xContext;
 };
@@ -112,11 +112,11 @@ GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::un
     ThreadHelpBase(),
     m_bDisposed( sal_False ),
     m_bConfigRead( sal_False ),
-    m_aConfigSettingsAccess( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_ROOT_ACCESS )),
-    m_aNodeRefStates( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_NODEREF_STATES )),
-    m_aPropStatesEnabled( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_PROPERTY_STATESENABLED )),
-    m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_PROPERTY_LOCKED )),
-    m_aPropDocked( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_PROPERTY_DOCKED )),
+    m_aConfigSettingsAccess( GLOBALSETTINGS_ROOT_ACCESS ),
+    m_aNodeRefStates( GLOBALSETTINGS_NODEREF_STATES ),
+    m_aPropStatesEnabled( GLOBALSETTINGS_PROPERTY_STATESENABLED ),
+    m_aPropLocked( GLOBALSETTINGS_PROPERTY_LOCKED ),
+    m_aPropDocked( GLOBALSETTINGS_PROPERTY_DOCKED ),
     m_xContext( rxContext )
 {
 }
@@ -252,10 +252,10 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
             css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
                  css::configuration::theDefaultProvider::get( m_xContext );
 
-            aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
-            aPropValue.Value = css::uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_ROOT_ACCESS )));
+            aPropValue.Name  = OUString( "nodepath" );
+            aPropValue.Value = css::uno::makeAny( OUString( GLOBALSETTINGS_ROOT_ACCESS ));
             aArgs[0] = css::uno::makeAny( aPropValue );
-            aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ));
+            aPropValue.Name = OUString( "lazywrite" );
             aPropValue.Value = css::uno::makeAny( sal_True );
             aArgs[1] = css::uno::makeAny( aPropValue );
 

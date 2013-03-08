@@ -47,8 +47,8 @@
 #include <fwkdllapi.h>
 
 
-#define CFGPROP_USERPATHS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserPaths"))
-#define CFGPROP_WRITEPATH rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritePath"))
+#define CFGPROP_USERPATHS OUString("UserPaths")
+#define CFGPROP_WRITEPATH OUString("WritePath")
 
 /*
     0 : old style              "Template"              string using ";" as seperator
@@ -57,9 +57,9 @@
     3 : write path             "Template_write"        string
  */
 
-#define POSTFIX_INTERNAL_PATHS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_internal"))
-#define POSTFIX_USER_PATHS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_user"))
-#define POSTFIX_WRITE_PATH rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_writable"))
+#define POSTFIX_INTERNAL_PATHS OUString("_internal")
+#define POSTFIX_USER_PATHS OUString("_user")
+#define POSTFIX_WRITE_PATH OUString("_writable")
 
 const sal_Int32 IDGROUP_OLDSTYLE        = 0;
 const sal_Int32 IDGROUP_INTERNAL_PATHS = 1;
@@ -162,10 +162,10 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
     {
         const css::util::ElementChange& aChange = aEvent.Changes[i];
 
-        ::rtl::OUString sChanged;
+        OUString sChanged;
         aChange.Accessor >>= sChanged;
 
-        ::rtl::OUString sPath = ::utl::extractFirstFromConfigurationPath(sChanged);
+        OUString sPath = ::utl::extractFirstFromConfigurationPath(sChanged);
         if (!sPath.isEmpty())
         {
             PathSettings::EChangeOp eOp = impl_updatePath(sPath, sal_True);
@@ -204,12 +204,12 @@ void PathSettings::impl_readAll()
     {
         // TODO think about me
         css::uno::Reference< css::container::XNameAccess > xCfg    = fa_getCfgNew();
-        css::uno::Sequence< ::rtl::OUString >              lPaths = xCfg->getElementNames();
+        css::uno::Sequence< OUString >              lPaths = xCfg->getElementNames();
 
         sal_Int32 c = lPaths.getLength();
         for (sal_Int32 i = 0; i < c; ++i)
         {
-            const ::rtl::OUString& sPath = lPaths[i];
+            const OUString& sPath = lPaths[i];
             impl_updatePath(sPath, sal_False);
         }
     }
@@ -222,7 +222,7 @@ void PathSettings::impl_readAll()
 
 //-----------------------------------------------------------------------------
 // NO substitution here ! It's done outside ...
-OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
+OUStringList PathSettings::impl_readOldFormat(const OUString& sPath)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_readOldFormat" );
     css::uno::Reference< css::container::XNameAccess > xCfg( fa_getCfgOld() );
@@ -232,8 +232,8 @@ OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
     {
         css::uno::Any aVal( xCfg->getByName(sPath) );
 
-        ::rtl::OUString                       sStringVal;
-        css::uno::Sequence< ::rtl::OUString > lStringListVal;
+        OUString                       sStringVal;
+        css::uno::Sequence< OUString > lStringListVal;
 
         if (aVal >>= sStringVal)
         {
@@ -250,10 +250,10 @@ OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
 
 //-----------------------------------------------------------------------------
 // NO substitution here ! It's done outside ...
-PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& sPath)
+PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
 {
-    const ::rtl::OUString CFGPROP_INTERNALPATHS(RTL_CONSTASCII_USTRINGPARAM("InternalPaths"));
-    const ::rtl::OUString CFGPROP_ISSINGLEPATH(RTL_CONSTASCII_USTRINGPARAM("IsSinglePath"));
+    const OUString CFGPROP_INTERNALPATHS("InternalPaths");
+    const OUString CFGPROP_ISSINGLEPATH("IsSinglePath");
 
     css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgNew();
 
@@ -351,7 +351,7 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
            pIt != lOld.end()  ;
          ++pIt                )
     {
-        const ::rtl::OUString& sOld = *pIt;
+        const OUString& sOld = *pIt;
 
         if (rPath.bIsSinglePath)
         {
@@ -372,7 +372,7 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
 }
 
 //-----------------------------------------------------------------------------
-PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPath          ,
+PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath          ,
                                                             sal_Bool         bNotifyListener)
 {
     // SAFE ->
@@ -479,12 +479,12 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const ::rtl::OUString& sPa
 }
 
 //-----------------------------------------------------------------------------
-css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const ::rtl::OUString& sPath)
+css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUString& sPath)
 {
-    ::rtl::OUString sOldStyleProp = sPath;
-    ::rtl::OUString sInternalProp = sPath+POSTFIX_INTERNAL_PATHS;
-    ::rtl::OUString sUserProp     = sPath+POSTFIX_USER_PATHS;
-    ::rtl::OUString sWriteProp    = sPath+POSTFIX_WRITE_PATH;
+    OUString sOldStyleProp = sPath;
+    OUString sInternalProp = sPath+POSTFIX_INTERNAL_PATHS;
+    OUString sUserProp     = sPath+POSTFIX_USER_PATHS;
+    OUString sWriteProp    = sPath+POSTFIX_WRITE_PATH;
 
     // Attention: The default set of IDs is fix and must follow these schema.
     // Otherwhise the outside code ant work for new added properties.
@@ -524,7 +524,7 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const ::rt
 
 //-----------------------------------------------------------------------------
 void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/     ,
-                                           const ::rtl::OUString&        sPath   ,
+                                           const OUString&        sPath   ,
                                            const PathSettings::PathInfo* pPathOld,
                                            const PathSettings::PathInfo* pPathNew)
 {
@@ -553,12 +553,12 @@ void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/
                  {
                     if (pPathOld)
                     {
-                        ::rtl::OUString sVal = impl_convertPath2OldStyle(*pPathOld);
+                        OUString sVal = impl_convertPath2OldStyle(*pPathOld);
                         lOldVals[0] <<= sVal;
                     }
                     if (pPathNew)
                     {
-                        ::rtl::OUString sVal = impl_convertPath2OldStyle(*pPathNew);
+                        OUString sVal = impl_convertPath2OldStyle(*pPathNew);
                         lNewVals[0] <<= sVal;
                     }
                  }
@@ -611,8 +611,8 @@ void PathSettings::impl_subst(      OUStringList&                               
            pIt != lVals.end()  ;
          ++pIt                 )
     {
-        const ::rtl::OUString& sOld = *pIt;
-              ::rtl::OUString  sNew ;
+        const OUString& sOld = *pIt;
+              OUString  sNew ;
         if (bReSubst)
             sNew = xSubst->reSubstituteVariables(sOld);
         else
@@ -637,7 +637,7 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath) const
+OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath) const
 {
     OUStringList::const_iterator pIt;
     OUStringList                 lTemp;
@@ -659,7 +659,7 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
     if (!rPath.sWritePath.isEmpty())
         lTemp.push_back(rPath.sWritePath);
 
-    ::rtl::OUStringBuffer sPathVal(256);
+    OUStringBuffer sPathVal(256);
     for (  pIt  = lTemp.begin();
            pIt != lTemp.end()  ;
                                )
@@ -674,13 +674,13 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
 }
 
 //-----------------------------------------------------------------------------
-OUStringList PathSettings::impl_convertOldStyle2Path(const ::rtl::OUString& sOldStylePath) const
+OUStringList PathSettings::impl_convertOldStyle2Path(const OUString& sOldStylePath) const
 {
     OUStringList lList;
     sal_Int32    nToken = 0;
     do
     {
-        ::rtl::OUString sToken = sOldStylePath.getToken(0, ';', nToken);
+        OUString sToken = sOldStylePath.getToken(0, ';', nToken);
         if (!sToken.isEmpty())
             lList.push_back(sToken);
     }
@@ -698,7 +698,7 @@ void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
            pIt != rPath.lInternalPaths.end()  ;
          ++pIt                                 )
     {
-        const ::rtl::OUString& rItem = *pIt;
+        const OUString& rItem = *pIt;
         OUStringList::iterator pItem = lList.find(rItem);
         if (pItem != lList.end())
             lList.erase(pItem);
@@ -707,7 +707,7 @@ void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
            pIt != rPath.lUserPaths.end()  ;
          ++pIt                             )
     {
-        const ::rtl::OUString& rItem = *pIt;
+        const OUString& rItem = *pIt;
         OUStringList::iterator pItem = lList.find(rItem);
         if (pItem != lList.end())
             lList.erase(pItem);
@@ -739,7 +739,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName;
         pProp->Handle     = i;
-        pProp->Type       = ::getCppuType((::rtl::OUString*)0);
+        pProp->Type       = ::getCppuType((OUString*)0);
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
         if (rPath.bIsReadonly)
             pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
@@ -748,7 +748,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_INTERNAL_PATHS;
         pProp->Handle     = i;
-        pProp->Type       = ::getCppuType((css::uno::Sequence< ::rtl::OUString >*)0);
+        pProp->Type       = ::getCppuType((css::uno::Sequence< OUString >*)0);
         pProp->Attributes = css::beans::PropertyAttribute::BOUND   |
                             css::beans::PropertyAttribute::READONLY;
         ++i;
@@ -756,7 +756,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_USER_PATHS;
         pProp->Handle     = i;
-        pProp->Type       = ::getCppuType((css::uno::Sequence< ::rtl::OUString >*)0);
+        pProp->Type       = ::getCppuType((css::uno::Sequence< OUString >*)0);
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
         if (rPath.bIsReadonly)
             pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
@@ -765,7 +765,7 @@ void PathSettings::impl_rebuildPropertyDescriptor()
         pProp             = &(m_lPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_WRITE_PATH;
         pProp->Handle     = i;
-        pProp->Type       = ::getCppuType((::rtl::OUString*)0);
+        pProp->Type       = ::getCppuType((OUString*)0);
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
         if (rPath.bIsReadonly)
             pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
@@ -792,7 +792,7 @@ css::uno::Any PathSettings::impl_getPathValue(sal_Int32 nID) const
     {
         case IDGROUP_OLDSTYLE :
              {
-                ::rtl::OUString sVal = impl_convertPath2OldStyle(*pPath);
+                OUString sVal = impl_convertPath2OldStyle(*pPath);
                 aVal <<= sVal;
              }
              break;
@@ -835,7 +835,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
     {
         case IDGROUP_OLDSTYLE :
              {
-                ::rtl::OUString sVal;
+                OUString sVal;
                 aVal >>= sVal;
                 OUStringList lList = impl_convertOldStyle2Path(sVal);
                 impl_subst(lList, fa_getSubstitution(), sal_False);
@@ -849,7 +849,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                     if ( !lList.empty() )
                         aChangePath.sWritePath = *(lList.begin());
                     else
-                        aChangePath.sWritePath = ::rtl::OUString();
+                        aChangePath.sWritePath = OUString();
                 }
                 else
                 {
@@ -868,7 +868,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
              {
                 if (aChangePath.bIsSinglePath)
                 {
-                    ::rtl::OUStringBuffer sMsg(256);
+                    OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
                     sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths cant be set.");
@@ -888,7 +888,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
              {
                 if (aChangePath.bIsSinglePath)
                 {
-                    ::rtl::OUStringBuffer sMsg(256);
+                    OUStringBuffer sMsg(256);
                     sMsg.appendAscii("The path '"    );
                     sMsg.append     (aChangePath.sPathName);
                     sMsg.appendAscii("' is defined as SINGLE_PATH. It's sub set of internal paths cant be set.");
@@ -906,7 +906,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
 
         case IDGROUP_WRITE_PATH :
              {
-                ::rtl::OUString sVal;
+                OUString sVal;
                 aVal >>= sVal;
                 if (! impl_isValidPath(sVal))
                     throw css::lang::IllegalArgumentException();
@@ -934,7 +934,7 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
            pIt != lPath.end()  ;
          ++pIt                 )
     {
-        const ::rtl::OUString& rVal = *pIt;
+        const OUString& rVal = *pIt;
         if (! impl_isValidPath(rVal))
             return sal_False;
     }
@@ -943,7 +943,7 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
+sal_Bool PathSettings::impl_isValidPath(const OUString& sPath) const
 {
     // allow empty path to reset a path.
 // idea by LLA to support empty paths
@@ -956,7 +956,7 @@ sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OUString impl_extractBaseFromPropName(const ::rtl::OUString& sPropName)
+OUString impl_extractBaseFromPropName(const OUString& sPropName)
 {
     sal_Int32 i = sPropName.indexOf(POSTFIX_INTERNAL_PATHS);
     if (i > -1)
@@ -981,7 +981,7 @@ PathSettings::PathInfo* PathSettings::impl_getPathAccess(sal_Int32 nHandle)
         return 0;
 
     const css::beans::Property&            rProp = m_lPropDesc[nHandle];
-          ::rtl::OUString                  sProp = impl_extractBaseFromPropName(rProp.Name);
+          OUString                  sProp = impl_extractBaseFromPropName(rProp.Name);
           PathSettings::PathHash::iterator rPath = m_lPaths.find(sProp);
 
     if (rPath != m_lPaths.end())
@@ -1001,7 +1001,7 @@ const PathSettings::PathInfo* PathSettings::impl_getPathAccessConst(sal_Int32 nH
         return 0;
 
     const css::beans::Property&                  rProp = m_lPropDesc[nHandle];
-          ::rtl::OUString                        sProp = impl_extractBaseFromPropName(rProp.Name);
+          OUString                        sProp = impl_extractBaseFromPropName(rProp.Name);
           PathSettings::PathHash::const_iterator rPath = m_lPaths.find(sProp);
 
     if (rPath != m_lPaths.end())
@@ -1088,7 +1088,7 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
 //-----------------------------------------------------------------------------
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 {
-    const ::rtl::OUString CFG_NODE_OLD(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Path/Current"));
+    const OUString CFG_NODE_OLD("org.openoffice.Office.Common/Path/Current");
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
@@ -1118,7 +1118,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 //-----------------------------------------------------------------------------
 css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
 {
-    const ::rtl::OUString CFG_NODE_NEW(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Paths/Paths"));
+    const OUString CFG_NODE_NEW("org.openoffice.Office.Paths/Paths");
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);

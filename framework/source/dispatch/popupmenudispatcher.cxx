@@ -108,31 +108,31 @@ DEFINE_XTYPEPROVIDER_7  (   PopupMenuDispatcher ,
                             XFrameActionListener
                         )
 
-::rtl::OUString SAL_CALL PopupMenuDispatcher::getImplementationName() throw( css::uno::RuntimeException )
+OUString SAL_CALL PopupMenuDispatcher::getImplementationName() throw( css::uno::RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
 
-sal_Bool SAL_CALL PopupMenuDispatcher::supportsService( const ::rtl::OUString& sServiceName )
+sal_Bool SAL_CALL PopupMenuDispatcher::supportsService( const OUString& sServiceName )
   throw( css::uno::RuntimeException )
 {
     return ::comphelper::findValue(getSupportedServiceNames(), sServiceName, sal_True).getLength() != 0;
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL PopupMenuDispatcher::getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL PopupMenuDispatcher::getSupportedServiceNames()
   throw( css::uno::RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
-css::uno::Sequence< ::rtl::OUString > PopupMenuDispatcher::impl_getStaticSupportedServiceNames()
+css::uno::Sequence< OUString > PopupMenuDispatcher::impl_getStaticSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > seqServiceNames( 1 );
+    css::uno::Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = SERVICENAME_PROTOCOLHANDLER;
     return seqServiceNames;
 }
 
-::rtl::OUString PopupMenuDispatcher::impl_getStaticImplementationName()
+OUString PopupMenuDispatcher::impl_getStaticImplementationName()
 {
     return IMPLEMENTATIONNAME_POPUPMENUDISPATCHER;
 }
@@ -210,7 +210,7 @@ throw( css::uno::Exception, css::uno::RuntimeException)
 css::uno::Reference< css::frame::XDispatch >
 SAL_CALL PopupMenuDispatcher::queryDispatch(
     const css::util::URL&  rURL    ,
-    const ::rtl::OUString& sTarget ,
+    const OUString& sTarget ,
     sal_Int32              nFlags  )
 throw( css::uno::RuntimeException )
 {
@@ -235,8 +235,8 @@ throw( css::uno::RuntimeException )
                 // Just use the main part of the URL for popup menu controllers
                 sal_Int32     nQueryPart( 0 );
                 sal_Int32     nSchemePart( 0 );
-                rtl::OUString aBaseURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.popup:" ));
-                rtl::OUString aURL( rURL.Complete );
+                OUString aBaseURL( "vnd.sun.star.popup:" );
+                OUString aURL( rURL.Complete );
 
                 nSchemePart = aURL.indexOf( ':' );
                 if (( nSchemePart > 0 ) &&
@@ -399,7 +399,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
                     if ( xLayoutManager.is() )
                     {
                         css::uno::Reference< css::ui::XUIElement > xMenuBar;
-                        rtl::OUString aMenuBar( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
+                        OUString aMenuBar( "private:resource/menubar/menubar" );
                         xMenuBar = xLayoutManager->getElement( aMenuBar );
 
                         m_xPopupCtrlQuery = css::uno::Reference< css::container::XNameAccess >(

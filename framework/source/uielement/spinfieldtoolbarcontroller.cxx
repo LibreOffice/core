@@ -180,7 +180,7 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
     sal_Int32                                nWidth,
-    const ::rtl::OUString&                          aCommand ) :
+    const OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
     ,   m_bFloat( false )
     ,   m_bMaxSet( false )
@@ -227,12 +227,12 @@ throw ( RuntimeException )
 Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
-    ::rtl::OUString aSpinfieldText = m_pSpinfieldControl->GetText();
+    OUString aSpinfieldText = m_pSpinfieldControl->GetText();
 
     // Add key modifier to argument list
-    aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+    aArgs[0].Name = OUString( "KeyModifier" );
     aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value" ));
+    aArgs[1].Name = OUString( "Value" );
     if ( m_bFloat )
         aArgs[1].Value <<= aSpinfieldText.toDouble();
     else
@@ -250,7 +250,7 @@ void SpinfieldToolbarController::Up()
 
     m_nValue = nValue;
 
-    rtl::OUString aText = impl_formatOutputString( m_nValue );
+    OUString aText = impl_formatOutputString( m_nValue );
     m_pSpinfieldControl->SetText( aText );
     execute( 0 );
 }
@@ -263,7 +263,7 @@ void SpinfieldToolbarController::Down()
 
     m_nValue = nValue;
 
-    rtl::OUString aText = impl_formatOutputString( m_nValue );
+    OUString aText = impl_formatOutputString( m_nValue );
     m_pSpinfieldControl->SetText( aText );
     execute( 0 );
 }
@@ -274,7 +274,7 @@ void SpinfieldToolbarController::First()
     {
         m_nValue = m_nMin;
 
-        rtl::OUString aText = impl_formatOutputString( m_nValue );
+        OUString aText = impl_formatOutputString( m_nValue );
         m_pSpinfieldControl->SetText( aText );
         execute( 0 );
     }
@@ -286,7 +286,7 @@ void SpinfieldToolbarController::Last()
     {
         m_nValue = m_nMax;
 
-        rtl::OUString aText = impl_formatOutputString( m_nValue );
+        OUString aText = impl_formatOutputString( m_nValue );
         m_pSpinfieldControl->SetText( aText );
         execute( 0 );
     }
@@ -341,10 +341,10 @@ long SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
 
 void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
-    rtl::OUString aValue;
-    rtl::OUString aMax;
-    rtl::OUString aMin;
-    rtl::OUString aStep;
+    OUString aValue;
+    OUString aMax;
+    OUString aMin;
+    OUString aStep;
     bool          bFloatValue( false );
 
     if ( rControlCommand.Command.equalsAsciiL( "SetStep", 7 ))
@@ -357,8 +357,8 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
                 double      fValue;
                 bool        bFloat( false );
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
-                    aStep = bFloat ? ::rtl::OUString::valueOf( fValue ) :
-                                     ::rtl::OUString::valueOf( nValue );
+                    aStep = bFloat ? OUString::valueOf( fValue ) :
+                                     OUString::valueOf( nValue );
                 break;
             }
         }
@@ -375,7 +375,7 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
 
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
                 {
-                    aValue = bFloat ? ::rtl::OUString::valueOf( fValue ) : ::rtl::OUString::valueOf( nValue );
+                    aValue = bFloat ? OUString::valueOf( fValue ) : OUString::valueOf( nValue );
                     bFloatValue = bFloat;
                 }
                 break;
@@ -390,23 +390,23 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
             double      fValue;
             bool        bFloat( false );
 
-            rtl::OUString aName = rControlCommand.Arguments[i].Name;
+            OUString aName = rControlCommand.Arguments[i].Name;
             if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
             {
                 if ( aName.equalsAsciiL( "Value", 5 ))
                 {
-                    aValue = bFloat ? ::rtl::OUString::valueOf( fValue ) : ::rtl::OUString::valueOf( nValue );
+                    aValue = bFloat ? OUString::valueOf( fValue ) : OUString::valueOf( nValue );
                     bFloatValue = bFloat;
                 }
                 else if ( aName.equalsAsciiL( "Step", 4 ))
-                    aStep = bFloat ? ::rtl::OUString::valueOf( fValue ) :
-                                     ::rtl::OUString::valueOf( nValue );
+                    aStep = bFloat ? OUString::valueOf( fValue ) :
+                                     OUString::valueOf( nValue );
                 else if ( aName.equalsAsciiL( "LowerLimit", 10 ))
-                    aMin = bFloat ? ::rtl::OUString::valueOf( fValue ) :
-                                    ::rtl::OUString::valueOf( nValue );
+                    aMin = bFloat ? OUString::valueOf( fValue ) :
+                                    OUString::valueOf( nValue );
                 else if ( aName.equalsAsciiL( "UpperLimit", 10 ))
-                    aMax = bFloat ? ::rtl::OUString::valueOf( fValue ) :
-                                    ::rtl::OUString::valueOf( nValue );
+                    aMax = bFloat ? OUString::valueOf( fValue ) :
+                                    OUString::valueOf( nValue );
             }
             else if ( aName.equalsAsciiL( "OutputFormat", 12 ))
                 rControlCommand.Arguments[i].Value >>= m_aOutFormat;
@@ -422,8 +422,8 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
                 double      fValue;
                 bool        bFloat( false );
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
-                    aMin = bFloat ? ::rtl::OUString::valueOf( fValue ) :
-                                    ::rtl::OUString::valueOf( nValue );
+                    aMin = bFloat ? OUString::valueOf( fValue ) :
+                                    OUString::valueOf( nValue );
                 break;
             }
         }
@@ -438,8 +438,8 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
                 double      fValue;
                 bool        bFloat( false );
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
-                    aMax = bFloat ? ::rtl::OUString::valueOf( fValue ) :
-                                    ::rtl::OUString::valueOf( nValue );
+                    aMax = bFloat ? OUString::valueOf( fValue ) :
+                                    OUString::valueOf( nValue );
                 break;
             }
         }
@@ -462,7 +462,7 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
         m_bFloat = bFloatValue;
         m_nValue = aValue.toDouble();
 
-        rtl::OUString aOutString = impl_formatOutputString( m_nValue );
+        OUString aOutString = impl_formatOutputString( m_nValue );
         m_pSpinfieldControl->SetText( aOutString );
         notifyTextChanged( aOutString );
     }
@@ -503,14 +503,14 @@ bool SpinfieldToolbarController::impl_getValue(
     return bValueValid;
 }
 
-rtl::OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
+OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
 {
     if ( m_aOutFormat.isEmpty() )
     {
         if ( m_bFloat )
-            return rtl::OUString::valueOf( fValue );
+            return OUString::valueOf( fValue );
         else
-            return rtl::OUString::valueOf( sal_Int32( fValue ));
+            return OUString::valueOf( sal_Int32( fValue ));
     }
     else
     {
@@ -524,7 +524,7 @@ rtl::OUString SpinfieldToolbarController::impl_formatOutputString( double fValue
             snwprintf( reinterpret_cast<wchar_t *>(aBuffer), 128, reinterpret_cast<const wchar_t *>(m_aOutFormat.getStr()), sal_Int32( fValue ));
 
         sal_Int32 nSize = rtl_ustr_getLength( aBuffer );
-        return rtl::OUString( aBuffer, nSize );
+        return OUString( aBuffer, nSize );
 #else
         // Currently we have no support for a format string using sal_Unicode. wchar_t
         // is 32 bit on Unix platform!

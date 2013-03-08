@@ -107,15 +107,15 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 {
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
-    css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_PARENTFRAME)                  , css::uno::Reference< css::frame::XFrame >());
-    ::rtl::OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_FRAMENAME)                    , ::rtl::OUString()                          );
-    sal_Bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_MAKEVISIBLE)                  , sal_False                                  );
-    sal_Bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_CREATETOPWINDOW)              , sal_True                                   );
+    css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_PARENTFRAME)                  , css::uno::Reference< css::frame::XFrame >());
+    OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_FRAMENAME)                    , OUString()                          );
+    sal_Bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_MAKEVISIBLE)                  , sal_False                                  );
+    sal_Bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CREATETOPWINDOW)              , sal_True                                   );
     // only possize=[0,0,0,0] triggers default handling of vcl !
-    css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_POSSIZE)                      , css::awt::Rectangle(0, 0, 0, 0)            );
-    css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_CONTAINERWINDOW)              , css::uno::Reference< css::awt::XWindow >() );
-    sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , sal_False                                  );
-    sal_Bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , sal_True                                   );
+    css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_POSSIZE)                      , css::awt::Rectangle(0, 0, 0, 0)            );
+    css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CONTAINERWINDOW)              , css::uno::Reference< css::awt::XWindow >() );
+    sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , sal_False                                  );
+    sal_Bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , sal_True                                   );
 
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
@@ -125,7 +125,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 
     // We use FrameName property to set it as API name of the new created frame later.
     // But those frame names must be different from the set of special target names as e.g. _blank, _self etcpp !
-    ::rtl::OUString sRightName = impl_filterNames(sFrameName);
+    OUString sRightName = impl_filterNames(sFrameName);
 
     // if no external frame window was given ... create a new one.
     if ( ! xContainerWindow.is())
@@ -229,7 +229,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     if (bTopWindow)
     {
         aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
-        aDescriptor.WindowServiceName   =   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("window"));
+        aDescriptor.WindowServiceName   =   OUString("window");
         aDescriptor.ParentIndex         =   -1                                              ;
         aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()  ;
         aDescriptor.Bounds              =   aPosSize                                        ;
@@ -242,7 +242,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     else
     {
         aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
-        aDescriptor.WindowServiceName   =   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dockingwindow"));
+        aDescriptor.WindowServiceName   =   OUString("dockingwindow");
         aDescriptor.ParentIndex         =   1                                               ;
         aDescriptor.Parent              =   xParentWindowPeer                               ;
         aDescriptor.Bounds              =   aPosSize                                        ;
@@ -253,7 +253,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
     css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
     if ( ! xWindow.is())
-        throw css::uno::Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TaskCreator service was not able to create suitable frame window.")),
+        throw css::uno::Exception(OUString("TaskCreator service was not able to create suitable frame window."),
                                   static_cast< ::cppu::OWeakObject* >(this));
     if (bTopWindow)
         xPeer->setBackground(::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
@@ -266,7 +266,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
 //-----------------------------------------------
 css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame    ,
                                                                                   const css::uno::Reference< css::awt::XWindow >&  xContainerWindow,
-                                                                                  const ::rtl::OUString&                           sName           )
+                                                                                  const OUString&                           sName           )
 {
     // SAFE  ->
     ReadGuard aReadLock( m_aLock );
@@ -357,9 +357,9 @@ void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Referen
 }
 
 //-----------------------------------------------
-::rtl::OUString TaskCreatorService::impl_filterNames( const ::rtl::OUString& sName )
+OUString TaskCreatorService::impl_filterNames( const OUString& sName )
 {
-    ::rtl::OUString sFiltered;
+    OUString sFiltered;
     if (TargetHelper::isValidNameForFrame(sName))
         sFiltered = sName;
     return sFiltered;

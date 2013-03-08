@@ -47,7 +47,7 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
 }
 
 
-RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier ) :
+RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const OUString* pMenuIdentifier ) :
     PropertySetContainer()
     ,   m_bContainerCreated( sal_False )
     ,   m_bContainerChanged( sal_False )
@@ -92,7 +92,7 @@ void SAL_CALL RootActionTriggerContainer::release() throw ()
 }
 
 // XMultiServiceFactory
-Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( const ::rtl::OUString& aServiceSpecifier )
+Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
 throw ( Exception,  RuntimeException )
 {
     if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGER ))
@@ -102,23 +102,23 @@ throw ( Exception,  RuntimeException )
     else if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGERSEPARATOR ))
         return (OWeakObject *)( new ActionTriggerSeparatorPropertySet());
     else
-        throw com::sun::star::uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unknown service specifier!" )), (OWeakObject *)this );
+        throw com::sun::star::uno::RuntimeException( OUString( "Unknown service specifier!" ), (OWeakObject *)this );
 }
 
-Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
+Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
 throw ( Exception, RuntimeException )
 {
     return createInstance( ServiceSpecifier );
 }
 
-Sequence< ::rtl::OUString > SAL_CALL RootActionTriggerContainer::getAvailableServiceNames()
+Sequence< OUString > SAL_CALL RootActionTriggerContainer::getAvailableServiceNames()
 throw ( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aSeq( 3 );
+    Sequence< OUString > aSeq( 3 );
 
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGER ));
-    aSeq[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERCONTAINER ));
-    aSeq[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERSEPARATOR ));
+    aSeq[0] = OUString( SERVICENAME_ACTIONTRIGGER );
+    aSeq[1] = OUString( SERVICENAME_ACTIONTRIGGERCONTAINER );
+    aSeq[2] = OUString( SERVICENAME_ACTIONTRIGGERSEPARATOR );
 
     return aSeq;
 }
@@ -222,13 +222,13 @@ throw (::com::sun::star::uno::RuntimeException)
 
 
 // XServiceInfo
-::rtl::OUString SAL_CALL RootActionTriggerContainer::getImplementationName()
+OUString SAL_CALL RootActionTriggerContainer::getImplementationName()
 throw ( RuntimeException )
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER ));
+    return OUString( IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER );
 }
 
-sal_Bool SAL_CALL RootActionTriggerContainer::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& ServiceName )
 throw ( RuntimeException )
 {
     if ( ServiceName.equalsAscii( SERVICENAME_ACTIONTRIGGERCONTAINER ))
@@ -237,12 +237,12 @@ throw ( RuntimeException )
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNames()
 throw ( RuntimeException )
 {
-    Sequence< ::rtl::OUString > seqServiceNames( 1 );
+    Sequence< OUString > seqServiceNames( 1 );
 
-    seqServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERCONTAINER ));
+    seqServiceNames[0] = OUString( SERVICENAME_ACTIONTRIGGERCONTAINER );
     return seqServiceNames;
 }
 
@@ -327,15 +327,15 @@ void RootActionTriggerContainer::FillContainer()
         m_pMenu );
     m_bInContainerCreation = sal_False;
 }
-::rtl::OUString RootActionTriggerContainer::getName() throw ( RuntimeException )
+OUString RootActionTriggerContainer::getName() throw ( RuntimeException )
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     if( m_pMenuIdentifier )
         sRet = *m_pMenuIdentifier;
     return sRet;
 }
 
-void RootActionTriggerContainer::setName( const ::rtl::OUString& ) throw ( RuntimeException)
+void RootActionTriggerContainer::setName( const OUString& ) throw ( RuntimeException)
 {
     throw RuntimeException();
 }

@@ -111,7 +111,7 @@ DEFINE_XTYPEPROVIDER_5                  (   StatusBarManager                    
 StatusBarManager::StatusBarManager(
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
     const uno::Reference< frame::XFrame >& rFrame,
-    const rtl::OUString& rResourceName,
+    const OUString& rResourceName,
     StatusBar* pStatusBar ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
@@ -316,7 +316,7 @@ void StatusBarManager::RemoveControllers()
     }
 }
 
-rtl::OUString StatusBarManager::RetrieveLabelFromCommand( const rtl::OUString& aCmdURL )
+OUString StatusBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
 {
     return framework::RetrieveLabelFromCommand(aCmdURL, comphelper::getComponentContext(m_xServiceManager), m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Name");
 }
@@ -335,7 +335,7 @@ void StatusBarManager::CreateControllers()
         if ( nId == 0 )
             continue;
 
-        rtl::OUString                            aCommandURL( m_pStatusBar->GetItemCommand( nId ));
+        OUString                            aCommandURL( m_pStatusBar->GetItemCommand( nId ));
         sal_Bool                                 bInit( sal_True );
         uno::Reference< frame::XStatusListener > xController;
 
@@ -349,19 +349,19 @@ void StatusBarManager::CreateControllers()
                 uno::Sequence< uno::Any > aSeq( 5 );
                 beans::PropertyValue aPropValue;
 
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
+                aPropValue.Name     = OUString( "ModuleName" );
                 aPropValue.Value    = uno::makeAny( m_aModuleIdentifier );
                 aSeq[0] = uno::makeAny( aPropValue );
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                aPropValue.Name     = OUString( "Frame" );
                 aPropValue.Value    = uno::makeAny( m_xFrame );
                 aSeq[1] = uno::makeAny( aPropValue );
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                aPropValue.Name     = OUString( "ServiceManager" );
                 aPropValue.Value    = uno::makeAny( m_xServiceManager );
                 aSeq[2] = uno::makeAny( aPropValue );
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+                aPropValue.Name     = OUString( "ParentWindow" );
                 aPropValue.Value    = uno::makeAny( xStatusbarWindow );
                 aSeq[3] = uno::makeAny( aPropValue );
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+                aPropValue.Name     = OUString( "Identifier" );
                 aPropValue.Value    = uno::makeAny( nId );
                 aSeq[4] = uno::makeAny( aPropValue );
 
@@ -394,19 +394,19 @@ void StatusBarManager::CreateControllers()
             {
                 beans::PropertyValue aPropValue;
                 uno::Sequence< uno::Any > aArgs( 5 );
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                aPropValue.Name     = OUString( "Frame" );
                 aPropValue.Value    = uno::makeAny( m_xFrame );
                 aArgs[0] = uno::makeAny( aPropValue );
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
+                aPropValue.Name     = OUString( "CommandURL" );
                 aPropValue.Value    = uno::makeAny( aCommandURL );
                 aArgs[1] = uno::makeAny( aPropValue );
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                aPropValue.Name     = OUString( "ServiceManager" );
                 aPropValue.Value    = uno::makeAny( m_xServiceManager );
                 aArgs[2] = uno::makeAny( aPropValue );
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+                aPropValue.Name     = OUString( "ParentWindow" );
                 aPropValue.Value    = uno::makeAny( xStatusbarWindow );
                 aArgs[3] = uno::makeAny( aPropValue );
-                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+                aPropValue.Name     = OUString( "Identifier" );
                 aPropValue.Value    = uno::makeAny( nId );
                 aArgs[4] = uno::makeAny( aPropValue );
                 xInit->initialize( aArgs );
@@ -449,8 +449,8 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::FillStatusBar" );
         uno::Sequence< beans::PropertyValue >   aProp;
-        rtl::OUString                           aCommandURL;
-        rtl::OUString                           aHelpURL;
+        OUString                           aCommandURL;
+        OUString                           aHelpURL;
         sal_Int16                               nOffset( 0 );
         sal_Int16                               nStyle( 0 );
         sal_Int16                               nWidth( 0 );
@@ -490,7 +490,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
 
                 if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    rtl::OUString aString( RetrieveLabelFromCommand( aCommandURL ));
+                    OUString aString( RetrieveLabelFromCommand( aCommandURL ));
                     sal_uInt16        nItemBits( impl_convertItemStyleToItemBits( nStyle ));
 
                     m_pStatusBar->InsertItem( nId, nWidth, nItemBits, nOffset );
@@ -532,7 +532,7 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xFrame, css::uno::UNO_QUERY );
         if ( xPropSet.is() )
-            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xLayoutManager;
+            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
             aGuard.unlock();

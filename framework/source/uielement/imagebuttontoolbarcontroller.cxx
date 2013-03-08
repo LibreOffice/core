@@ -81,14 +81,14 @@ uno::Reference< util::XMacroExpander > GetMacroExpander()
     return xMacroExpander;
 }
 
-static void SubstituteVariables( ::rtl::OUString& aURL )
+static void SubstituteVariables( OUString& aURL )
 {
     if ( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 )
     {
         uno::Reference< util::XMacroExpander > xMacroExpander = GetMacroExpander();
 
         // cut protocol
-        rtl::OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+        OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
         // decode uric class chars
         aMacro = ::rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
         // expand macro string
@@ -103,7 +103,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
-    const ::rtl::OUString&                          aCommand ) :
+    const OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
 {
     sal_Bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
@@ -142,7 +142,7 @@ void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star
         {
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "URL", 3 ))
             {
-                rtl::OUString aURL;
+                OUString aURL;
                 rControlCommand.Arguments[i].Value >>= aURL;
 
                 SubstituteVariables( aURL );
@@ -156,9 +156,9 @@ void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star
 
                     // send notification
                     uno::Sequence< beans::NamedValue > aInfo( 1 );
-                    aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ));
+                    aInfo[0].Name  = OUString( "URL" );
                     aInfo[0].Value <<= aURL;
-                    addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImageChanged" )),
+                    addNotifyInfo( OUString( "ImageChanged" ),
                                 getDispatchFromCommand( m_aCommandURL ),
                                 aInfo );
                     break;
@@ -168,7 +168,7 @@ void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star
     }
 }
 
-sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, const ::rtl::OUString& aImageURL, Image& aImage )
+sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, const OUString& aImageURL, Image& aImage )
 {
     SvStream* pStream = utl::UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == 0 ))

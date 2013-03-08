@@ -127,7 +127,7 @@ DropdownToolbarController::DropdownToolbarController(
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
     sal_Int32                                nWidth,
-    const ::rtl::OUString&                          aCommand ) :
+    const OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
     ,   m_pListBoxControl( 0 )
 {
@@ -169,12 +169,12 @@ throw ( RuntimeException )
 Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
-    ::rtl::OUString aSelectedText = m_pListBoxControl->GetSelectEntry();
+    OUString aSelectedText = m_pListBoxControl->GetSelectEntry();
 
     // Add key modifier to argument list
-    aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+    aArgs[0].Name = OUString( "KeyModifier" );
     aArgs[0].Value <<= KeyModifier;
-    aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
+    aArgs[1].Name = OUString( "Text" );
     aArgs[1].Value <<= aSelectedText;
     return aArgs;
 }
@@ -221,7 +221,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
         {
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "List", 4 ))
             {
-                Sequence< ::rtl::OUString > aList;
+                Sequence< OUString > aList;
                 m_pListBoxControl->Clear();
 
                 rControlCommand.Arguments[i].Value >>= aList;
@@ -232,9 +232,9 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
 
                 // send notification
                 uno::Sequence< beans::NamedValue > aInfo( 1 );
-                aInfo[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ));
+                aInfo[0].Name  = OUString( "List" );
                 aInfo[0].Value <<= aList;
-                addNotifyInfo( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListChanged" )),
+                addNotifyInfo( OUString( "ListChanged" ),
                                getDispatchFromCommand( m_aCommandURL ),
                                aInfo );
 
@@ -245,7 +245,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
     else if ( rControlCommand.Command.equalsAsciiL( "AddEntry", 8 ))
     {
         sal_uInt16      nPos( LISTBOX_APPEND );
-        rtl::OUString   aText;
+        OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
@@ -259,7 +259,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
     else if ( rControlCommand.Command.equalsAsciiL( "InsertEntry", 11 ))
     {
         sal_uInt16      nPos( LISTBOX_APPEND );
-        rtl::OUString   aText;
+        OUString   aText;
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Pos", 3 ))
@@ -300,7 +300,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
         {
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Text", 4 ))
             {
-                rtl::OUString aText;
+                OUString aText;
                 if ( rControlCommand.Arguments[i].Value >>= aText )
                     m_pListBoxControl->RemoveEntry( aText );
                 break;

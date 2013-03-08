@@ -78,7 +78,7 @@ namespace framework
                             );
         virtual             ~UndoActionWrapper();
 
-        virtual rtl::OUString GetComment() const;
+        virtual OUString GetComment() const;
         virtual void        Undo();
         virtual void        Redo();
         virtual sal_Bool    CanRepeat(SfxRepeatTarget&) const;
@@ -111,9 +111,9 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    rtl::OUString UndoActionWrapper::GetComment() const
+    OUString UndoActionWrapper::GetComment() const
     {
-        rtl::OUString sComment;
+        OUString sComment;
         try
         {
             sComment = m_xUndoAction->getTitle();
@@ -180,7 +180,7 @@ namespace framework
         void cancel( const Reference< XInterface >& i_context )
         {
             m_caughtException <<= RuntimeException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Concurrency error: an ealier operation on the stack failed." ) ),
+                OUString( "Concurrency error: an ealier operation on the stack failed." ),
                 i_context
             );
             m_finishCondition.set();
@@ -271,7 +271,7 @@ namespace framework
         // public operations
         void disposing();
 
-        void enterUndoContext( const ::rtl::OUString& i_title, const bool i_hidden, IMutexGuard& i_instanceLock );
+        void enterUndoContext( const OUString& i_title, const bool i_hidden, IMutexGuard& i_instanceLock );
         void leaveUndoContext( IMutexGuard& i_instanceLock );
         void addUndoAction( const Reference< XUndoAction >& i_action, IMutexGuard& i_instanceLock );
         void undo( IMutexGuard& i_instanceLock );
@@ -304,15 +304,15 @@ namespace framework
         }
 
         UndoManagerEvent
-            buildEvent( ::rtl::OUString const& i_title ) const;
+            buildEvent( OUString const& i_title ) const;
 
         void impl_notifyModified();
-        void notify(    ::rtl::OUString const& i_title,
+        void notify(    OUString const& i_title,
                         void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& )
                     );
         void notify( void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& ) )
         {
-            notify( ::rtl::OUString(), i_notificationMethod );
+            notify( OUString(), i_notificationMethod );
         }
 
         void notify( void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const EventObject& ) );
@@ -322,7 +322,7 @@ namespace framework
         void impl_processRequest( ::boost::function0< void > const& i_request, IMutexGuard& i_instanceLock );
 
         /// impl-versions of the XUndoManager API.
-        void impl_enterUndoContext( const ::rtl::OUString& i_title, const bool i_hidden );
+        void impl_enterUndoContext( const OUString& i_title, const bool i_hidden );
         void impl_leaveUndoContext();
         void impl_addUndoAction( const Reference< XUndoAction >& i_action );
         void impl_doUndoRedo( IMutexGuard& i_externalLock, const bool i_undo );
@@ -347,7 +347,7 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    UndoManagerEvent UndoManagerHelper_Impl::buildEvent( ::rtl::OUString const& i_title ) const
+    UndoManagerEvent UndoManagerHelper_Impl::buildEvent( OUString const& i_title ) const
     {
         UndoManagerEvent aEvent;
         aEvent.Source = getXUndoManager();
@@ -364,7 +364,7 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::notify( ::rtl::OUString const& i_title,
+    void UndoManagerHelper_Impl::notify( OUString const& i_title,
         void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& ) )
     {
         const UndoManagerEvent aEvent( buildEvent( i_title ) );
@@ -391,7 +391,7 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::enterUndoContext( const ::rtl::OUString& i_title, const bool i_hidden, IMutexGuard& i_instanceLock )
+    void UndoManagerHelper_Impl::enterUndoContext( const OUString& i_title, const bool i_hidden, IMutexGuard& i_instanceLock )
     {
         impl_processRequest(
             ::boost::bind(
@@ -421,7 +421,7 @@ namespace framework
     {
         if ( !i_action.is() )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal undo action object" ) ),
+                OUString( "illegal undo action object" ),
                 getXUndoManager(),
                 1
             );
@@ -566,7 +566,7 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::impl_enterUndoContext( const ::rtl::OUString& i_title, const bool i_hidden )
+    void UndoManagerHelper_Impl::impl_enterUndoContext( const OUString& i_title, const bool i_hidden )
     {
         // SYNCHRONIZED --->
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -578,13 +578,13 @@ namespace framework
 
         if ( i_hidden && ( rUndoManager.GetUndoActionCount( IUndoManager::CurrentLevel ) == 0 ) )
             throw EmptyUndoStackException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "can't enter a hidden context without a previous Undo action" ) ),
+                OUString( "can't enter a hidden context without a previous Undo action" ),
                 m_rUndoManagerImplementation.getThis()
             );
 
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
-            rUndoManager.EnterListAction( i_title, ::rtl::OUString() );
+            rUndoManager.EnterListAction( i_title, OUString() );
         }
 
         m_aContextVisibilities.push( i_hidden );
@@ -610,7 +610,7 @@ namespace framework
 
         if ( !rUndoManager.IsInListAction() )
             throw InvalidStateException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no active undo context" ) ),
+                OUString( "no active undo context" ),
                 getXUndoManager()
             );
 
@@ -632,7 +632,7 @@ namespace framework
         // prepare notification
         void ( SAL_CALL XUndoManagerListener::*notificationMethod )( const UndoManagerEvent& ) = NULL;
 
-        UndoManagerEvent aContextEvent( buildEvent( ::rtl::OUString() ) );
+        UndoManagerEvent aContextEvent( buildEvent( OUString() ) );
         const EventObject aClearedEvent( getXUndoManager() );
         if ( nContextElements == 0 )
         {
@@ -669,13 +669,13 @@ namespace framework
 
         IUndoManager& rUndoManager = getUndoManager();
         if ( rUndoManager.IsInListAction() )
-            throw UndoContextNotClosedException( ::rtl::OUString(), getXUndoManager() );
+            throw UndoContextNotClosedException( OUString(), getXUndoManager() );
 
         const size_t nElements  =   i_undo
                                 ?   rUndoManager.GetUndoActionCount( IUndoManager::TopLevel )
                                 :   rUndoManager.GetRedoActionCount( IUndoManager::TopLevel );
         if ( nElements == 0 )
-            throw EmptyUndoStackException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stack is empty" )), getXUndoManager() );
+            throw EmptyUndoStackException( OUString( "stack is empty" ), getXUndoManager() );
 
         aGuard.clear();
         // <--- SYNCHRONIZED
@@ -693,7 +693,7 @@ namespace framework
         {
             // not allowed to leave
             const Any aError( ::cppu::getCaughtException() );
-            throw UndoFailedException( ::rtl::OUString(), getXUndoManager(), aError );
+            throw UndoFailedException( OUString(), getXUndoManager(), aError );
         }
 
         // note that in opposite to all of the other methods, we do *not* have our mutex locked when calling
@@ -743,7 +743,7 @@ namespace framework
 
         IUndoManager& rUndoManager = getUndoManager();
         if ( rUndoManager.IsInListAction() )
-            throw UndoContextNotClosedException( ::rtl::OUString(), getXUndoManager() );
+            throw UndoContextNotClosedException( OUString(), getXUndoManager() );
 
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
@@ -766,7 +766,7 @@ namespace framework
 
         IUndoManager& rUndoManager = getUndoManager();
         if ( rUndoManager.IsInListAction() )
-            throw UndoContextNotClosedException( ::rtl::OUString(), getXUndoManager() );
+            throw UndoContextNotClosedException( OUString(), getXUndoManager() );
 
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
@@ -944,7 +944,7 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper::enterUndoContext( const ::rtl::OUString& i_title, IMutexGuard& i_instanceLock )
+    void UndoManagerHelper::enterUndoContext( const OUString& i_title, IMutexGuard& i_instanceLock )
     {
         m_pImpl->enterUndoContext( i_title, false, i_instanceLock );
     }
@@ -952,7 +952,7 @@ namespace framework
     //------------------------------------------------------------------------------------------------------------------
     void UndoManagerHelper::enterHiddenUndoContext( IMutexGuard& i_instanceLock )
     {
-        m_pImpl->enterUndoContext( ::rtl::OUString(), true, i_instanceLock );
+        m_pImpl->enterUndoContext( OUString(), true, i_instanceLock );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1035,7 +1035,7 @@ namespace framework
     namespace
     {
         //..............................................................................................................
-        ::rtl::OUString lcl_getCurrentActionTitle( UndoManagerHelper_Impl& i_impl, const bool i_undo )
+        OUString lcl_getCurrentActionTitle( UndoManagerHelper_Impl& i_impl, const bool i_undo )
         {
             // SYNCHRONIZED --->
             ::osl::MutexGuard aGuard( i_impl.getMutex() );
@@ -1046,8 +1046,8 @@ namespace framework
                                     :   rUndoManager.GetRedoActionCount( IUndoManager::TopLevel );
             if ( nActionCount == 0 )
                 throw EmptyUndoStackException(
-                    i_undo ? ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no action on the undo stack" ) )
-                           : ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no action on the redo stack" ) ),
+                    i_undo ? OUString( "no action on the undo stack" )
+                           : OUString( "no action on the redo stack" ),
                     i_impl.getXUndoManager()
                 );
             return  i_undo
@@ -1057,7 +1057,7 @@ namespace framework
         }
 
         //..............................................................................................................
-        Sequence< ::rtl::OUString > lcl_getAllActionTitles( UndoManagerHelper_Impl& i_impl, const bool i_undo )
+        Sequence< OUString > lcl_getAllActionTitles( UndoManagerHelper_Impl& i_impl, const bool i_undo )
         {
             // SYNCHRONIZED --->
             ::osl::MutexGuard aGuard( i_impl.getMutex() );
@@ -1067,7 +1067,7 @@ namespace framework
                                 ?   rUndoManager.GetUndoActionCount( IUndoManager::TopLevel )
                                 :   rUndoManager.GetRedoActionCount( IUndoManager::TopLevel );
 
-            Sequence< ::rtl::OUString > aTitles( nCount );
+            Sequence< OUString > aTitles( nCount );
             for ( size_t i=0; i<nCount; ++i )
             {
                 aTitles[i] =    i_undo
@@ -1080,25 +1080,25 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString UndoManagerHelper::getCurrentUndoActionTitle() const
+    OUString UndoManagerHelper::getCurrentUndoActionTitle() const
     {
         return lcl_getCurrentActionTitle( *m_pImpl, true );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString UndoManagerHelper::getCurrentRedoActionTitle() const
+    OUString UndoManagerHelper::getCurrentRedoActionTitle() const
     {
         return lcl_getCurrentActionTitle( *m_pImpl, false );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > UndoManagerHelper::getAllUndoActionTitles() const
+    Sequence< OUString > UndoManagerHelper::getAllUndoActionTitles() const
     {
         return lcl_getAllActionTitles( *m_pImpl, true );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > UndoManagerHelper::getAllRedoActionTitles() const
+    Sequence< OUString > UndoManagerHelper::getAllRedoActionTitles() const
     {
         return lcl_getAllActionTitles( *m_pImpl, false );
     }

@@ -71,7 +71,7 @@ AddonsToolBoxFactory::~AddonsToolBoxFactory()
 {
 }
 
-static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, const rtl::OUString& aContextList )
+static sal_Bool IsCorrectContext( const OUString& rModuleIdentifier, const OUString& aContextList )
 {
     if ( aContextList.isEmpty() )
         return sal_True;
@@ -89,7 +89,7 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
     const Sequence< Sequence< PropertyValue > >& rPropSeqSeq,
     const Reference< XFrame >& rFrame )
 {
-    ::rtl::OUString aModuleIdentifier;
+    OUString aModuleIdentifier;
     try
     {
         aModuleIdentifier = m_xModuleManager->identify( rFrame );
@@ -115,14 +115,14 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
         {
             if ( rPropSeq[j].Name.equalsAsciiL( "Context", 7 ))
             {
-                ::rtl::OUString aContextList;
+                OUString aContextList;
                 if ( rPropSeq[j].Value >>= aContextList )
                     bIsCorrectContext = IsCorrectContext( aModuleIdentifier, aContextList );
                 nPropChecked++;
             }
             else if ( rPropSeq[j].Name.equalsAsciiL( "URL", 3 ))
             {
-                ::rtl::OUString aURL;
+                OUString aURL;
                 rPropSeq[j].Value >>= aURL;
                 bIsButton = !aURL.equalsAsciiL( "private:separator", 17 );
                 nPropChecked++;
@@ -141,7 +141,7 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
 
 // XUIElementFactory
 Reference< XUIElement > SAL_CALL AddonsToolBoxFactory::createUIElement(
-    const ::rtl::OUString& ResourceURL,
+    const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException,
         ::com::sun::star::lang::IllegalArgumentException,
@@ -152,7 +152,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
     Sequence< Sequence< PropertyValue > >   aConfigData;
     Reference< XFrame >                     xFrame;
-    rtl::OUString                           aResourceURL( ResourceURL );
+    OUString                           aResourceURL( ResourceURL );
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
@@ -175,13 +175,13 @@ throw ( ::com::sun::star::container::NoSuchElementException,
     {
         PropertyValue aPropValue;
         Sequence< Any > aPropSeq( 3 );
-        aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+        aPropValue.Name = OUString( "Frame" );
         aPropValue.Value <<= xFrame;
         aPropSeq[0] <<= aPropValue;
-        aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationData" ));
+        aPropValue.Name = OUString( "ConfigurationData" );
         aPropValue.Value <<= aConfigData;
         aPropSeq[1] <<= aPropValue;
-        aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
+        aPropValue.Name = OUString( "ResourceURL" );
         aPropValue.Value <<= aResourceURL;
         aPropSeq[2] <<= aPropValue;
 
