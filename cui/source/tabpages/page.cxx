@@ -223,8 +223,8 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     get(m_pAdaptBox,"checkAdaptBox");
     // Strings stored in UI
-    get(m_pInsideText,"labelInner");
-    get(m_pOutsideText,"labelOuter");
+    get(m_pInsideLbl,"labelInner");
+    get(m_pOutsideLbl,"labelOuter");
     get(m_pPrintRangeQueryText,"labelMsg");
 
     bBorderModified = sal_False;
@@ -370,11 +370,6 @@ SvxPageDescPage::~SvxPageDescPage()
 
 void SvxPageDescPage::Init_Impl()
 {
-    aLeftText = m_pLeftMarginLbl->GetText();
-    aRightText = m_pRightMarginLbl->GetText();
-    aInsideText = m_pInsideText->GetText();
-    aOutsideText = m_pOutsideText->GetText();
-
         // adjust the handler
     m_pLayoutBox->SetSelectHdl( LINK( this, SvxPageDescPage, LayoutHdl_Impl ) );
     m_pPaperSizeBox->SetDropDownLineCount(10);
@@ -900,19 +895,17 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl)
 
     if ( nPos == SVX_PAGE_MIRROR )
     {
-        if ( m_pLeftMarginLbl->GetText() != aInsideText )
-               m_pLeftMarginLbl->SetText( aInsideText );
-
-        if ( m_pRightMarginLbl->GetText() != aOutsideText )
-            m_pRightMarginLbl->SetText( aOutsideText );
+        m_pLeftMarginLbl->Hide();
+        m_pRightMarginLbl->Hide();
+        m_pInsideLbl->Show();
+        m_pOutsideLbl->Show();
     }
     else
     {
-        if ( m_pLeftMarginLbl->GetText() != aLeftText )
-            m_pLeftMarginLbl->SetText( aLeftText );
-
-        if ( m_pRightMarginLbl->GetText() != aRightText )
-            m_pRightMarginLbl->SetText( aRightText );
+        m_pLeftMarginLbl->Show();
+        m_pRightMarginLbl->Show();
+        m_pInsideLbl->Hide();
+        m_pOutsideLbl->Hide();
     }
     UpdateExample_Impl( true );
     return 0;
