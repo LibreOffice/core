@@ -62,10 +62,6 @@ rtl::OString convertString(rtl::OUString const & string) {
     return s;
 }
 
-OString errorMsg(OString const & desc, OString const & type) {
-    return desc + type;
-}
-
 codemaker::UnoType::Sort decomposeAndResolve(
     TypeManager const & manager, rtl::OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
@@ -78,7 +74,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
         sal_Int32 n = 0;
         *name = codemaker::UnoType::decompose(t, &n, arguments);
         if (n > SAL_MAX_INT32 - *rank) {
-            throw CannotDumpException(errorMsg("Bad type information: ", type));
+            throw CannotDumpException("Bad type information: " + type);
             //TODO
         }
         *rank += n;
@@ -90,7 +86,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
         switch (sort) {
         case codemaker::UnoType::SORT_VOID:
             if (!allowVoid) {
-                throw CannotDumpException( errorMsg("Bad type information: ", type));
+                throw CannotDumpException("Bad type information: " + type);
                 //TODO
             }
         default:
@@ -113,7 +109,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                         || (static_cast< sal_uInt16 >(arguments->size())
                             != reader.getReferenceCount())))
                 {
-                    throw CannotDumpException(errorMsg("Bad type information: ", type));
+                    throw CannotDumpException("Bad type information: " + type);
                     //TODO
                 }
                 return sort;
@@ -124,7 +120,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
             case RT_TYPE_SINGLETON:
             case RT_TYPE_CONSTANTS:
                 if (!allowExtraEntities) {
-                    throw CannotDumpException(errorMsg("Bad type information: ", type));
+                    throw CannotDumpException("Bad type information: " + type);
                     //TODO
                 }
                 checkNoTypeArguments(*arguments);
@@ -146,7 +142,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                     }
                 }
             default:
-                throw CannotDumpException(errorMsg("Bad type information: ", type));
+                throw CannotDumpException("Bad type information: " + type);
                 //TODO
             }
         }
