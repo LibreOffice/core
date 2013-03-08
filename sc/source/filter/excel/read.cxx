@@ -857,9 +857,6 @@ FltError ImportExcel8::Read( void )
                         eAkt = EXC_STATE_END;
                 }
 
-                // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-                // a lamer approach to do the above from dr:
-
                 // import only 256 sheets
                 if( nScTab > GetScMaxPos().Tab() )
                 {
