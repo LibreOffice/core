@@ -157,11 +157,30 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
 
 void AndroidSalInstance::damaged(AndroidSalFrame */* frame */)
 {
+    static bool beenHere = false;
+    static jclass nDesktopClass = 0;
+    static jmethodID nCallbackDamaged = 0;
+
+    // Check if we are running in the experimental Desktop app
+    if (!beenHere) {
+        nDesktopClass = m_pJNIEnv->FindClass("org/libreoffice/experimental/desktop/Desktop");
+        if (nDesktopClass == 0) {
+            LOGI("Could not find Desktop class (this is normal if this isn't the \"desktop\" app)");
+            // We don't want the exception to kill the app
+            m_pJNIEnv->ExceptionClear();
+        } else {
+            nCallbackDamaged = m_pJNIEnv->GetStaticMethodID(nDesktopClass, "callbackDamaged", "()V");
+            if (nCallbackDamaged == 0)
+                LOGE("Could not find the callbackDamaged method");
+        }
+        beenHere = true;
+    }
+
     // Call the Java layer to post an invalidate if necessary
     // static public void org.libreoffice.experimental.desktop.Desktop.callbackDamaged();
 
-    if (m_nDesktopClass != 0 && m_nCallbackDamaged != 0)
-        m_pJNIEnv->CallStaticVoidMethod(m_nDesktopClass, m_nCallbackDamaged);
+    if (nDesktopClass != 0 && nCallbackDamaged != 0)
+        m_pJNIEnv->CallStaticVoidMethod(nDesktopClass, nCallbackDamaged);
 }
 
 void AndroidSalInstance::GetWorkArea( Rectangle& rRect )
@@ -208,15 +227,6 @@ AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
 {
     int res = (lo_get_javavm())->AttachCurrentThread(&m_pJNIEnv, NULL);
     LOGI("AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
-
-    m_nDesktopClass = m_pJNIEnv->FindClass("org/libreoffice/experimental/desktop/Desktop");
-    if (m_nDesktopClass == 0)
-        LOGE("Could not find Desktop class");
-    else {
-        m_nCallbackDamaged = m_pJNIEnv->GetStaticMethodID(m_nDesktopClass, "callbackDamaged", "()V");
-        if (m_nCallbackDamaged == 0)
-            LOGE("Could not find the callbackDamaged method");
-    }
 
     LOGI("created Android Sal Instance thread: %d",
          (int)pthread_self());

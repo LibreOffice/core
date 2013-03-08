@@ -47,11 +47,6 @@ class AndroidSalInstance : public SvpSalInstance
     // in which soffice_main() runs
     JNIEnv *m_pJNIEnv;
 
-    // The Desktop class
-    jclass m_nDesktopClass;
-
-    jmethodID m_nCallbackDamaged;
-
 public:
     AndroidSalInstance( SalYieldMutex *pMutex );
     virtual ~AndroidSalInstance();
