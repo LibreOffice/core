@@ -455,11 +455,11 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
             rtl::OUString aTitle;
             rtl::OUStringBuffer aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr).toString());
 
-            if( 0 == e.Message.compareTo(::rtl::OUString("ClassNotFound"), 13) )
+            if( e.Message.startsWith("ClassNotFound") )
             {
                 aTitle = ResId(SV_ACCESSERROR_MISSING_BRIDGE, *pResMgr).toString();
             }
-            else if( 0 == e.Message.compareTo(::rtl::OUString("NoSuchMethod"), 12) )
+            else if( e.Message.startsWith("NoSuchMethod") )
             {
                 aTitle = ResId(SV_ACCESSERROR_WRONG_VERSION, *pResMgr).toString();
             }

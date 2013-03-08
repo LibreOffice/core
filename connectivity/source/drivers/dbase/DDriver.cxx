@@ -70,7 +70,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 // --------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url ) throw(SQLException, RuntimeException)
 {
-    return !url.compareTo(::rtl::OUString("sdbc:dbase:"),11);
+    return url.startsWith("sdbc:dbase:");
 }
 // -----------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)

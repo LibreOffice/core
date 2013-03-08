@@ -152,7 +152,7 @@ void MyApp::Main()
 
         osl_getCommandArg( n, &aArg.pData );
 
-        if( aArg.compareTo( OUString("-r"), 2 ) == 0 )
+        if( aArg.startsWith( "-r" ) )
         {
             if ( n + 1 < nmax )
                 osl_getCommandArg( ++n, &aRegistry.pData );

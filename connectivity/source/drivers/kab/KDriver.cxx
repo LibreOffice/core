@@ -408,7 +408,7 @@ sal_Bool SAL_CALL KabDriver::acceptsURL( const ::rtl::OUString& url )
         return sal_False;
 
     // here we have to look whether we support this URL format
-    return (!url.compareTo(::rtl::OUString("sdbc:address:kab:"), 16));
+    return url.startsWith("sdbc:address:kab:");
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const ::rtl::OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)

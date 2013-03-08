@@ -4739,7 +4739,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	if (!aStr.getLength())
 	{
 		aStr = yytname[YYTRANSLATE(nTokenID)];
-		if(!aStr.compareTo("SQL_TOKEN_",10))
+		if(aStr.startsWith("SQL_TOKEN_"))
 			aStr = aStr.copy(10);
 	}
 	return aStr;

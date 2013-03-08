@@ -264,27 +264,27 @@ class QueryAnalyzer
             {
                 sParam = sNewQuery.getToken( 0, SEPERATOR_QUERYPARAM, nToken );
                 // "default_first"
-                if( sParam.compareTo( QUERYPARAM_DEFAULT_FIRST, QUERYPARAM_DEFAULT_FIRST.getLength() ) == 0 )
+                if( sParam.startsWith( QUERYPARAM_DEFAULT_FIRST ) )
                 {
                     m_bDefaultFirst = sal_True;
                 }
                 // "use_order"
-                else if( sParam.compareTo( QUERYPARAM_USE_ORDER, QUERYPARAM_USE_ORDER.getLength() ) == 0 )
+                else if( sParam.startsWith( QUERYPARAM_USE_ORDER ) )
                 {
                     m_bUseOrder = sal_True;
                 }
                 // "descending"
-                else if( sParam.compareTo( QUERYPARAM_DESCENDING, QUERYPARAM_DESCENDING.getLength() ) == 0 )
+                else if( sParam.startsWith( QUERYPARAM_DESCENDING ) )
                 {
                     m_bDescending = sal_True;
                 }
                 // "case_sensitive"
-                else if( sParam.compareTo( QUERYPARAM_CASE_SENSITIVE, QUERYPARAM_CASE_SENSITIVE.getLength() ) == 0 )
+                else if( sParam.startsWith( QUERYPARAM_CASE_SENSITIVE ) )
                 {
                     m_bCaseSensitive = sal_True;
                 }
                 // "iflags=<mask>"
-                else if( sParam.compareTo( QUERYPARAM_IFLAGS, QUERYPARAM_IFLAGS.getLength() ) == 0 )
+                else if( sParam.startsWith( QUERYPARAM_IFLAGS ) )
                 {
                     sal_Int32       nSubToken  = 0;
                     sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
@@ -294,7 +294,7 @@ class QueryAnalyzer
                     }
                 }
                 // "eflags=<mask>"
-                else if( sParam.compareTo( QUERYPARAM_EFLAGS, QUERYPARAM_EFLAGS.getLength() ) == 0 )
+                else if( sParam.startsWith( QUERYPARAM_EFLAGS ) )
                 {
                     sal_Int32       nSubToken  = 0;
                     sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
@@ -304,17 +304,16 @@ class QueryAnalyzer
                     }
                 }
                 // "sort_prop=<[name,uiname]>"
-                else if( sParam.compareTo( QUERYPARAM_SORT_PROP, QUERYPARAM_SORT_PROP.getLength() ) == 0 )
+                else if( sParam.startsWith( QUERYPARAM_SORT_PROP ) )
                 {
                     sal_Int32       nSubToken  = 0;
                     sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
                     if( nSubToken > 0 )
                     {
                         OUString sParamValue = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
-                        if( sParamValue.compareTo( QUERYPARAMVALUE_SORT_PROP_NAME, QUERYPARAMVALUE_SORT_PROP_NAME.getLength() ) == 0 )
+                        if( sParamValue.startsWith( QUERYPARAMVALUE_SORT_PROP_NAME ) )
                             m_eSortProp = E_NAME;
-                        else
-                        if( sParamValue.compareTo( QUERYPARAMVALUE_SORT_PROP_UINAME, QUERYPARAMVALUE_SORT_PROP_UINAME.getLength() ) == 0 )
+                        else if( sParamValue.startsWith( QUERYPARAMVALUE_SORT_PROP_UINAME ) )
                             m_eSortProp = E_UINAME;
                     }
                 }

@@ -229,7 +229,7 @@ DBG_NAME(DirectSQLDialog)
             m_aOutput.SetText(rtl::OUString());
             if (xStatement.is())
             {
-                if (::rtl::OUString(_rStatement).toAsciiUpperCase().compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT")),6)==0 && m_pShowOutput->IsChecked())
+                if (OUString(_rStatement).toAsciiUpperCase().startsWith("SELECT") && m_pShowOutput->IsChecked())
                 {
                     // execute it as a query
                     xResultSet = xStatement->executeQuery(_rStatement);

@@ -163,7 +163,7 @@ IMPL_LINK( SvpElementContainer, processRequest, void*, pSocket )
     while( read( nFile, &c, 1 ) && c != '\n' )
         aBuf.append( sal_Char(c) );
     rtl::OString aCommand( aBuf.makeStringAndClear() );
-    if( aCommand.compareTo( "list", 4 ) == 0 )
+    if( aCommand.startsWith( "list" ) )
     {
         boost::unordered_map< rtl::OString, std::list<SvpElement*>, rtl::OStringHash > aMap;
         for( std::list< SvpElement* >::const_iterator it = m_aElements.begin();
@@ -186,7 +186,7 @@ IMPL_LINK( SvpElementContainer, processRequest, void*, pSocket )
             }
         }
     }
-    else if( aCommand.compareTo( "get", 3 ) == 0 )
+    else if( aCommand.startsWith( "get" ) )
     {
         sal_IntPtr aId = aCommand.copy( 3 ).toInt64( 16 );
         SvpElement* pElement = reinterpret_cast<SvpElement*>(aId);
@@ -212,7 +212,7 @@ IMPL_LINK( SvpElementContainer, processRequest, void*, pSocket )
             }
         }
     }
-    else if( aCommand.compareTo( "quit", 4 ) == 0 )
+    else if( aCommand.startsWith( "quit" ) )
     {
         Application::Quit();
         close( m_nSocket );

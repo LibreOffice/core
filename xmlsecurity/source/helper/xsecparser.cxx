@@ -106,7 +106,7 @@ void SAL_CALL XSecParser::startElement(
             rtl::OUString ouUri = xAttribs->getValueByName(rtl::OUString(RTL_ASCII_USTRINGPARAM(ATTR_URI)));
             DBG_ASSERT( ouUri != NULL, "URI == NULL" );
 
-            if (0 == ouUri.compareTo(rtl::OUString(RTL_ASCII_USTRINGPARAM(CHAR_FRAGMENT)),1))
+            if (ouUri.startsWith(CHAR_FRAGMENT))
             {
                 /*
                 * remove the first character '#' from the attribute value

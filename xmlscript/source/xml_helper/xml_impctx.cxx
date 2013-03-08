@@ -563,7 +563,7 @@ void DocumentHandlerImpl::startElement(
         pQNames[ nPos ] = xAttribs->getNameByIndex( nPos );
         OUString const & rQAttributeName = pQNames[ nPos ];
 
-        if (rQAttributeName.compareTo( m_sXMLNS, 5 ) == 0)
+        if (rQAttributeName.startsWith( m_sXMLNS ))
         {
             if (rQAttributeName.getLength() == 5) // set default namespace
             {

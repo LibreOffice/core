@@ -185,7 +185,7 @@ void MyWin::parseList( const rtl::OString& rList )
         if( ! aLine.getLength() || *aLine.getStr() == '#' )
             continue;
 
-        if( aLine.compareTo( "ElementType: ", 13 ) == 0 )
+        if( aLine.startsWith( "ElementType: " ) )
             aElementType = rtl::OStringToOUString( aLine.copy( 13 ), RTL_TEXTENCODING_ASCII_US );
         else
         {

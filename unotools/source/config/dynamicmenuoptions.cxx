@@ -197,7 +197,7 @@ class SvtDynMenu
                                                      pItem!=lUserEntries.end()  ;
                                                      ++pItem                    )
             {
-                if( pItem->sName.compareTo( PATHPREFIX_USER, 1 ) == 0 )
+                if( pItem->sName.startsWith( PATHPREFIX_USER ) )
                 {
                     OUString  sNr      = pItem->sName.copy( 1, pItem->sName.getLength()-1 );
                     sal_Int32 nCheckNr = sNr.toInt32();
