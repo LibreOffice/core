@@ -1322,8 +1322,10 @@ public:
     */
     OUStringBuffer copy( sal_Int32 beginIndex ) const SAL_THROW(())
     {
+        assert(beginIndex >= 0 && beginIndex <= getLength());
         return copy( beginIndex, getLength() - beginIndex );
     }
+
     /**
       Returns a new string buffer that is a substring of this string.
 
@@ -1339,6 +1341,8 @@ public:
     */
     OUStringBuffer copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
+        assert(beginIndex >= 0 && beginIndex <= getLength());
+        assert(count >= 0 && count <= getLength() - beginIndex);
         rtl_uString *pNew = 0;
         rtl_uStringbuffer_newFromStr_WithLength( &pNew, getStr() + beginIndex, count );
         return OUStringBuffer( pNew, count + 16 );
