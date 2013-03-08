@@ -73,10 +73,8 @@ void appendStream(
 }
 
 void write(FileStream & file, void const * buffer, sal_uInt64 size) {
-    if (!file.write(buffer, size)) {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Error writing file")));
-    }
+    if (!file.write(buffer, size))
+        throw CannotDumpException("Error writing file");
 }
 
 void writeU2(FileStream & file, sal_uInt16 data) {
@@ -237,10 +235,7 @@ void ClassFile::Code::instrLookupswitch(
     // <match--offset pairs...>:
     std::list< std::pair< sal_Int32, Code * > >::size_type size = blocks.size();
     if (size > SAL_MAX_INT32) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Lookup-switch too large for Java class file format")));
+        throw CannotDumpException("Lookup-switch too large for Java class file format");
     }
     Position pos1 = m_code.size();
     appendU1(m_code, 0xAB);
@@ -420,10 +415,7 @@ void ClassFile::Code::addException(
 {
     OSL_ASSERT(start < end && end <= m_code.size() && handler <= m_code.size());
     if (m_exceptionTableLength == SAL_MAX_UINT16) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Too many exception handlers for Java class file format")));
+        throw CannotDumpException("Too many exception handlers for Java class file format");
     }
     ++m_exceptionTableLength;
     appendU2(m_exceptionTable, static_cast< sal_uInt16 >(start));
@@ -567,10 +559,7 @@ sal_uInt16 ClassFile::addDoubleInfo(double value) {
 
 void ClassFile::addInterface(rtl::OString const & interface) {
     if (m_interfacesCount == SAL_MAX_UINT16) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Too many interfaces for Java class file format")));
+        throw CannotDumpException("Too many interfaces for Java class file format");
     }
     ++m_interfacesCount;
     appendU2(m_interfaces, addClassInfo(interface));
@@ -582,10 +571,7 @@ void ClassFile::addField(
     rtl::OString const & signature)
 {
     if (m_fieldsCount == SAL_MAX_UINT16) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Too many fields for Java class file format")));
+        throw CannotDumpException("Too many fields for Java class file format");
     }
     ++m_fieldsCount;
     appendU2(m_fields, static_cast< sal_uInt16 >(accessFlags));
@@ -613,10 +599,7 @@ void ClassFile::addMethod(
     rtl::OString const & signature)
 {
     if (m_methodsCount == SAL_MAX_UINT16) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Too many methods for Java class file format")));
+        throw CannotDumpException("Too many methods for Java class file format");
     }
     ++m_methodsCount;
     appendU2(m_methods, static_cast< sal_uInt16 >(accessFlags));
@@ -624,11 +607,7 @@ void ClassFile::addMethod(
     appendU2(m_methods, addUtf8Info(descriptor));
     std::vector< rtl::OString >::size_type excs = exceptions.size();
     if (excs > SAL_MAX_UINT16) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Too many exception specifications for Java class file"
-                    " format")));
+        throw CannotDumpException("Too many exception specifications for Java class file format");
     }
     appendU2(
         m_methods,
@@ -643,10 +622,7 @@ void ClassFile::addMethod(
                 > (SAL_MAX_UINT32 - (2 + 2 + 4 + 2 + 2)
                    - static_cast< sal_uInt32 >(codeSize))))
         {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "Code block is too big for Java class file format")));
+            throw CannotDumpException("Code block is too big for Java class file format");
         }
         appendU2(
             m_methods,
@@ -703,11 +679,7 @@ void ClassFile::write(FileStream & file) const {
 sal_uInt16 ClassFile::nextConstantPoolIndex(sal_uInt16 width) {
     OSL_ASSERT(width == 1 || width == 2);
     if (m_constantPoolCount > SAL_MAX_UINT16 - width) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Too many constant pool items for Java class file"
-                    " format")));
+        throw CannotDumpException("Too many constant pool items for Java class file format");
     }
     sal_uInt16 index = m_constantPoolCount;
     m_constantPoolCount = m_constantPoolCount + width;
@@ -720,10 +692,7 @@ sal_uInt16 ClassFile::addUtf8Info(rtl::OString const & value) {
         return i->second;
     }
     if (value.getLength() > SAL_MAX_UINT16) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "UTF-8 string too long for Java class file format")));
+        throw CannotDumpException("UTF-8 string too long for Java class file format");
     }
     sal_uInt16 index = nextConstantPoolIndex(1);
     appendU1(m_constantPool, 1);

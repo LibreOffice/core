@@ -153,10 +153,7 @@ SpecialType translateUnoTypeToDescriptor(
 {
     OSL_ASSERT(rank >= 0 && (signature == 0) == (needsSignature == 0));
     if (rank > 0xFF - (array ? 1 : 0)) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Too many array dimensions for Java class file format")));
+        throw CannotDumpException("Too many array dimensions for Java class file format");
     }
     if (array) {
         ++rank;
@@ -223,60 +220,21 @@ SpecialType translateUnoTypeToDescriptor(
     } else {
         static rtl::OString const
             simpleTypeDescriptors[codemaker::UnoType::SORT_ANY + 1][2] = {
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("V")),
-                  rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Void;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("Z")),
-                  rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Boolean;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("B")),
-                  rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Byte;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("S")),
-                  rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Short;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("S")),
-                  rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Short;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("I")),
-                  rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Integer;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("I")),
-                  rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Integer;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("J")),
-                  rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Long;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("J")),
-                  rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Long;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("F")),
-                  rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Float;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("D")),
-                  rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Double;"))
-                },
-                { rtl::OString(RTL_CONSTASCII_STRINGPARAM("C")),
-                  rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Character;"))
-                },
-                { rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Ljava/lang/String;")),
-                  rtl::OString(RTL_CONSTASCII_STRINGPARAM("Ljava/lang/String;"))
-                },
-                { rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Type;")),
-                  rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Type;"))
-                },
-                { rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;")),
-                  rtl::OString(
-                      RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;"))
-                } };
+                { "V", "Ljava/lang/Void;" },
+                { "Z", "Ljava/lang/Boolean;" },
+                { "B", "Ljava/lang/Byte;" },
+                { "S", "Ljava/lang/Short;" },
+                { "S", "Ljava/lang/Short;" },
+                { "I", "Ljava/lang/Integer;" },
+                { "I", "Ljava/lang/Integer;" },
+                { "J", "Ljava/lang/Long;" },
+                { "J", "Ljava/lang/Long;" },
+                { "F", "Ljava/lang/Float;" },
+                { "D", "Ljava/lang/Double;" },
+                { "C", "Ljava/lang/Character;" },
+                { "Ljava/lang/String;", "Ljava/lang/String;" },
+                { "Lcom/sun/star/uno/Type;", "Lcom/sun/star/uno/Type;" },
+                { "Ljava/lang/Object;", "Ljava/lang/Object;" } };
         rtl::OString const & s
             = simpleTypeDescriptors[sort][rank == 0 && classType];
         if (descriptor != 0) {
@@ -520,10 +478,7 @@ sal_uInt16 TypeInfo::generateCode(
     OSL_ASSERT(dependencies != 0);
     switch (m_kind) {
     case KIND_MEMBER:
-        code.instrNew(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/lib/uno/typeinfo/MemberTypeInfo")));
+        code.instrNew("com/sun/star/lib/uno/typeinfo/MemberTypeInfo");
         code.instrDup();
         code.loadStringConstant(m_name);
         code.loadIntegerConstant(m_index);
@@ -531,105 +486,57 @@ sal_uInt16 TypeInfo::generateCode(
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
             code.loadIntegerConstant(m_typeParameterIndex);
-            code.instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/lib/uno/typeinfo/MemberTypeInfo")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V")));
+            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MemberTypeInfo"
+                                   ,"<init>", "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V");
             return 8;
         } else if (m_typeParameterIndex >= 0) {
             code.instrAconstNull();
             code.loadIntegerConstant(m_typeParameterIndex);
-            code.instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/lib/uno/typeinfo/MemberTypeInfo")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V")));
+            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MemberTypeInfo"
+                                   ,"<init>", "(Ljava/lang/String;IILcom/sun/star/uno/Type;I)V");
             return 6;
         } else {
-            code.instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/lib/uno/typeinfo/MemberTypeInfo")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("(Ljava/lang/String;II)V")));
+            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MemberTypeInfo"
+                                   ,"<init>", "(Ljava/lang/String;II)V");
             return 4;
         }
 
     case KIND_ATTRIBUTE:
-        code.instrNew(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/lib/uno/typeinfo/AttributeTypeInfo")));
+        code.instrNew("com/sun/star/lib/uno/typeinfo/AttributeTypeInfo");
         code.instrDup();
         code.loadStringConstant(m_name);
         code.loadIntegerConstant(m_index);
         code.loadIntegerConstant(m_flags);
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
-            code.instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/lib/uno/typeinfo/AttributeTypeInfo")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V")));
+            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/AttributeTypeInfo"
+                                   ,"<init>", "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V");
             return 8;
         } else {
-            code.instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/lib/uno/typeinfo/AttributeTypeInfo")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("(Ljava/lang/String;II)V")));
+            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/AttributeTypeInfo"
+                                   ,"<init>", "(Ljava/lang/String;II)V");
             return 4;
         }
 
     case KIND_METHOD:
-        code.instrNew(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/lib/uno/typeinfo/MethodTypeInfo")));
+        code.instrNew("com/sun/star/lib/uno/typeinfo/MethodTypeInfo");
         code.instrDup();
         code.loadStringConstant(m_name);
         code.loadIntegerConstant(m_index);
         code.loadIntegerConstant(m_flags);
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
-            code.instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/lib/uno/typeinfo/MethodTypeInfo")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V")));
+            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MethodTypeInfo"
+                                   ,"<init>", "(Ljava/lang/String;IILcom/sun/star/uno/Type;)V");
             return 8;
         } else {
-            code.instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/lib/uno/typeinfo/MethodTypeInfo")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("(Ljava/lang/String;II)V")));
+            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/MethodTypeInfo"
+                                   ,"<init>", "(Ljava/lang/String;II)V");
             return 4;
         }
 
     case KIND_PARAMETER:
-        code.instrNew(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/lib/uno/typeinfo/ParameterTypeInfo")));
+        code.instrNew("com/sun/star/lib/uno/typeinfo/ParameterTypeInfo");
         code.instrDup();
         code.loadStringConstant(m_name);
         code.loadStringConstant(m_methodName);
@@ -637,25 +544,13 @@ sal_uInt16 TypeInfo::generateCode(
         code.loadIntegerConstant(m_flags);
         if (m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE) {
             generatePolymorphicUnoTypeCode(code, dependencies);
-            code.instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/lib/uno/typeinfo/ParameterTypeInfo")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/String;Ljava/lang/String;II"
-                        "Lcom/sun/star/uno/Type;)V")));
+            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/ParameterTypeInfo"
+                                    ,"<init>", "(Ljava/lang/String;Ljava/lang/String;II"
+                                               "Lcom/sun/star/uno/Type;)V");
             return 9;
         } else {
-            code.instrInvokespecial(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/lib/uno/typeinfo/ParameterTypeInfo")),
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "(Ljava/lang/String;Ljava/lang/String;II)V")));
+            code.instrInvokespecial("com/sun/star/lib/uno/typeinfo/ParameterTypeInfo"
+                                   ,"<init>", "(Ljava/lang/String;Ljava/lang/String;II)V");
             return 5;
         }
 
@@ -671,33 +566,16 @@ void TypeInfo::generatePolymorphicUnoTypeCode(
     OSL_ASSERT(
         dependencies != 0
         && m_polymorphicUnoType.kind != PolymorphicUnoType::KIND_NONE);
-    code.instrNew(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")));
+    code.instrNew("com/sun/star/uno/Type");
     code.instrDup();
     code.loadStringConstant(m_polymorphicUnoType.name);
     if (m_polymorphicUnoType.kind == PolymorphicUnoType::KIND_STRUCT) {
-        code.instrGetstatic(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("STRUCT")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/TypeClass;")));
+        code.instrGetstatic("com/sun/star/uno/TypeClass", "STRUCT", "Lcom/sun/star/uno/TypeClass;");
     } else {
-        code.instrGetstatic(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("SEQUENCE")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/TypeClass;")));
+        code.instrGetstatic("com/sun/star/uno/TypeClass", "SEQUENCE", "Lcom/sun/star/uno/TypeClass;");
     }
-    dependencies->insert(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/TypeClass")));
-    code.instrInvokespecial(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V")));
+    dependencies->insert("com/sun/star/uno/TypeClass");
+    code.instrInvokespecial("com/sun/star/uno/Type", "<init>", "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
 }
 
 void writeClassFile(
@@ -723,10 +601,7 @@ void writeClassFile(
     FileStream tempfile;
     tempfile.createTempFile(getTempDir(filename));
     if (!tempfile.isValid()) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM("Cannot create temporary file for "))
-            + filename);
+        throw CannotDumpException("Cannot create temporary file for " + filename);
     }
     rtl::OString tempname(tempfile.getName());
     try {
@@ -753,10 +628,7 @@ void addTypeInfo(
     OSL_ASSERT(dependencies != 0 && classFile != 0);
     std::vector< TypeInfo >::size_type typeInfos = typeInfo.size();
     if (typeInfos > SAL_MAX_INT32) {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "UNOTYPEINFO array too big for Java class file format")));
+        throw CannotDumpException("UNOTYPEINFO array too big for Java class file format");
     }
     if (typeInfos != 0) {
         classFile->addField(
@@ -772,10 +644,7 @@ void addTypeInfo(
         std::auto_ptr< ClassFile::Code > code(classFile->newCode());
         SAL_WNODEPRECATED_DECLARATIONS_POP
         code->loadIntegerConstant(static_cast< sal_Int32 >(typeInfos));
-        code->instrAnewarray(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/lib/uno/typeinfo/TypeInfo")));
+        code->instrAnewarray("com/sun/star/lib/uno/typeinfo/TypeInfo");
         sal_Int32 index = 0;
         sal_uInt16 stack = 0;
         for (std::vector< TypeInfo >::const_iterator i(typeInfo.begin());
@@ -786,17 +655,10 @@ void addTypeInfo(
             stack = std::max(stack, i->generateCode(*code, dependencies));
             code->instrAastore();
         }
-        code->instrPutstatic(
-            className, rtl::OString(RTL_CONSTASCII_STRINGPARAM("UNOTYPEINFO")),
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;")));
+        code->instrPutstatic(className, "UNOTYPEINFO", "[Lcom/sun/star/lib/uno/typeinfo/TypeInfo;");
         code->instrReturn();
         if (stack > SAL_MAX_UINT16 - 4) {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "Stack too big for Java class file format")));
+            throw CannotDumpException("Stack too big for Java class file format");
         }
         code->setMaxStackAndLocals(static_cast< sal_uInt16 >(stack + 4), 0);
         classFile->addMethod(
@@ -821,8 +683,7 @@ void handleEnumType(
     if (fields == 0 || reader.getSuperTypeCount() != 0
         || reader.getMethodCount() != 0 || reader.getReferenceCount() != 0)
     {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
     rtl::OString className(codemaker::convertString(reader.getTypeName()));
@@ -843,9 +704,7 @@ void handleEnumType(
             || reader.getFieldFlags(i) != RT_ACCESS_CONST
             || reader.getFieldTypeName(i).getLength() != 0)
         {
-            throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+            throw CannotDumpException("Bad type information"); //TODO
         }
         rtl::OString fieldName(
             codemaker::convertString(reader.getFieldName(i)));
@@ -858,7 +717,7 @@ void handleEnumType(
             static_cast< ClassFile::AccessFlags >(
                 ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC
                 | ClassFile::ACC_FINAL),
-            fieldName + rtl::OString(RTL_CONSTASCII_STRINGPARAM("_value")),
+            fieldName + "_value",
             rtl::OString(RTL_CONSTASCII_STRINGPARAM("I")),
             cf->addIntegerInfo(fieldValue.m_value.aLong), rtl::OString());
     }
@@ -867,10 +726,7 @@ void handleEnumType(
     SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
     code->loadLocalInteger(1);
-    code->instrInvokespecial(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Enum")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(I)V")));
+    code->instrInvokespecial("com/sun/star/uno/Enum", "<init>", "(I)V");
     code->instrReturn();
     code->setMaxStackAndLocals(2, 2);
     cf->addMethod(
@@ -979,9 +835,7 @@ void handleEnumType(
         code->instrNew(className);
         code->instrDup();
         code->loadIntegerConstant(reader.getFieldValue(i).m_value.aLong);
-        code->instrInvokespecial(
-            className, rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("(I)V")));
+        code->instrInvokespecial(className, "<init>", "(I)V");
         code->instrPutstatic(
             className,
             codemaker::convertString(reader.getFieldName(i)),
@@ -1046,38 +900,19 @@ sal_uInt16 addFieldInit(
             case codemaker::UnoType::SORT_STRING:
                 code->loadLocalReference(0);
                 code->loadStringConstant(rtl::OString());
-                code->instrPutfield(
-                    className, fieldName,
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Ljava/lang/String;")));
+                code->instrPutfield(className, fieldName, "Ljava/lang/String;");
                 return 2;
 
             case codemaker::UnoType::SORT_TYPE:
                 code->loadLocalReference(0);
-                code->instrGetstatic(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
-                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("VOID")),
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Type;")));
-                code->instrPutfield(
-                    className, fieldName,
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Type;")));
+                code->instrGetstatic("com/sun/star/uno/Type", "VOID", "Lcom/sun/star/uno/Type;");
+                code->instrPutfield(className, fieldName, "Lcom/sun/star/uno/Type;");
                 return 2;
 
             case codemaker::UnoType::SORT_ANY:
                 code->loadLocalReference(0);
-                code->instrGetstatic(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("VOID")),
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Any;")));
-                code->instrPutfield(
-                    className, fieldName,
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;")));
+                code->instrGetstatic("com/sun/star/uno/Any", "VOID", "Lcom/sun/star/uno/Any;");
+                code->instrPutfield(className, fieldName, "Ljava/lang/Object;");
                 return 2;
 
             case codemaker::UnoType::SORT_COMPLEX:
@@ -1087,10 +922,7 @@ sal_uInt16 addFieldInit(
                         code->loadLocalReference(0);
                         typereg::Reader reader(manager.getTypeReader(nucleus));
                         if (reader.getFieldCount() == 0) {
-                            throw CannotDumpException(
-                                rtl::OString(
-                                    RTL_CONSTASCII_STRINGPARAM(
-                                        "Bad type information"))); //TODO
+                            throw CannotDumpException("Bad type information"); //TODO
                         }
                         rtl::OStringBuffer descBuf;
                         translateUnoTypeToDescriptor(
@@ -1111,10 +943,7 @@ sal_uInt16 addFieldInit(
                         code->loadLocalReference(0);
                         code->instrNew(nucleus);
                         code->instrDup();
-                        code->instrInvokespecial(
-                            nucleus,
-                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("()V")));
+                        code->instrInvokespecial(nucleus, "<init>", "()V");
                         rtl::OStringBuffer desc;
                         translateUnoTypeToDescriptor(
                             manager, sort, typeClass, nucleus, 0,
@@ -1190,16 +1019,10 @@ sal_uInt16 addLoadLocal(
             switch (sort) {
             case codemaker::UnoType::SORT_BOOLEAN:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Boolean")));
+                    code->instrNew("java/lang/Boolean");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Boolean")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(Z)V")));
+                    code->instrInvokespecial("java/lang/Boolean", "<init>", "(Z)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1210,16 +1033,10 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_BYTE:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Byte")));
+                    code->instrNew("java/lang/Byte");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Byte")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(B)V")));
+                    code->instrInvokespecial("java/lang/Byte", "<init>", "(B)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1230,16 +1047,10 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_SHORT:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Short")));
+                    code->instrNew("java/lang/Short");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Short")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(S)V")));
+                    code->instrInvokespecial("java/lang/Short", "<init>", "(S)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1250,38 +1061,15 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_UNSIGNED_SHORT:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Any")));
+                    code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
-                    code->instrGetstatic(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("UNSIGNED_SHORT")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Lcom/sun/star/uno/Type;")));
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Short")));
+                    code->instrGetstatic("com/sun/star/uno/Type", "UNSIGNED_SHORT", "Lcom/sun/star/uno/Type;");
+                    code->instrNew("java/lang/Short");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Short")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(S)V")));
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                                "V")));
+                    code->instrInvokespecial("java/lang/Short", "<init>", "(S)V");
+                    code->instrInvokespecial("com/sun/star/uno/Any", "<init>",
+                                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                     stack = 6;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1292,16 +1080,10 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_LONG:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Integer")));
+                    code->instrNew("java/lang/Integer");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Integer")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(I)V")));
+                    code->instrInvokespecial("java/lang/Integer", "<init>", "(I)V");
                     stack = 3;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1312,38 +1094,15 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_UNSIGNED_LONG:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Any")));
+                    code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
-                    code->instrGetstatic(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Type")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("UNSIGNED_LONG")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Lcom/sun/star/uno/Type;")));
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Integer")));
+                    code->instrGetstatic("com/sun/star/uno/Type", "UNSIGNED_LONG", "Lcom/sun/star/uno/Type;");
+                    code->instrNew("java/lang/Integer");
                     code->instrDup();
                     code->loadLocalInteger(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Integer")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(I)V")));
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)"
-                                "V")));
+                    code->instrInvokespecial("java/lang/Integer", "<init>", "(I)V");
+                    code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
+                                            ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                     stack = 6;
                 } else {
                     code->loadLocalInteger(*index);
@@ -1354,9 +1113,7 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_HYPER:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Long")));
+                    code->instrNew("java/lang/Long");
                     code->instrDup();
                     code->loadLocalLong(*index);
                     code->instrInvokespecial(
@@ -1374,10 +1131,7 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_UNSIGNED_HYPER:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com/sun/star/uno/Any")));
+                    code->instrNew("com/sun/star/uno/Any");
                     code->instrDup();
                     code->instrGetstatic(
                         rtl::OString(
@@ -1388,9 +1142,7 @@ sal_uInt16 addLoadLocal(
                         rtl::OString(
                             RTL_CONSTASCII_STRINGPARAM(
                                 "Lcom/sun/star/uno/Type;")));
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Long")));
+                    code->instrNew("java/lang/Long");
                     code->instrDup();
                     code->loadLocalLong(*index);
                     code->instrInvokespecial(
@@ -1416,16 +1168,10 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_FLOAT:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Float")));
+                    code->instrNew("java/lang/Float");
                     code->instrDup();
                     code->loadLocalFloat(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Float")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(F)V")));
+                    code->instrInvokespecial("java/lang/Float", "<init>", "(F)V");
                     stack = 3;
                 } else {
                     code->loadLocalFloat(*index);
@@ -1436,16 +1182,10 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_DOUBLE:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Double")));
+                    code->instrNew("java/lang/Double");
                     code->instrDup();
                     code->loadLocalDouble(*index);
-                    code->instrInvokespecial(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Double")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                        rtl::OString(RTL_CONSTASCII_STRINGPARAM("(D)V")));
+                    code->instrInvokespecial("java/lang/Double", "<init>", "(D)V");
                     stack = 4;
                 } else {
                     code->loadLocalDouble(*index);
@@ -1456,9 +1196,7 @@ sal_uInt16 addLoadLocal(
 
             case codemaker::UnoType::SORT_CHAR:
                 if (any) {
-                    code->instrNew(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("java/lang/Character")));
+                    code->instrNew("java/lang/Character");
                     code->instrDup();
                     code->loadLocalInteger(*index);
                     code->instrInvokespecial(
@@ -1492,15 +1230,9 @@ sal_uInt16 addLoadLocal(
 
                 case RT_TYPE_STRUCT:
                     if (any) {
-                        code->instrNew(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Any")));
+                        code->instrNew("com/sun/star/uno/Any");
                         code->instrDup();
-                        code->instrNew(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Type")));
+                        code->instrNew("com/sun/star/uno/Type");
                         code->instrDup();
                         code->loadStringConstant(
                             createUnoName(manager, nucleus, rank, args));
@@ -1516,25 +1248,11 @@ sal_uInt16 addLoadLocal(
                             rtl::OString(
                                 RTL_CONSTASCII_STRINGPARAM(
                                     "com/sun/star/uno/TypeClass")));
-                        code->instrInvokespecial(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Type")),
-                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "(Ljava/lang/String;"
-                                    "Lcom/sun/star/uno/TypeClass;)V")));
+                        code->instrInvokespecial("com/sun/star/uno/Type", "<init>"
+                                                ,"(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
                         code->loadLocalReference(*index);
-                        code->instrInvokespecial(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Any")),
-                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "(Lcom/sun/star/uno/Type;"
-                                    "Ljava/lang/Object;)V")));
+                        code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
+                                                ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                         stack = 6;
                     } else {
                         code->loadLocalReference(*index);
@@ -1544,55 +1262,21 @@ sal_uInt16 addLoadLocal(
                     break;
 
                 case RT_TYPE_INTERFACE:
-                    if (any
-                        && (nucleus
-                            != rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/XInterface"))))
+                    if (any && nucleus != "com/sun/star/uno/XInterface")
                     {
-                        code->instrNew(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Any")));
+                        code->instrNew("com/sun/star/uno/Any");
                         code->instrDup();
-                        code->instrNew(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Type")));
+                        code->instrNew("com/sun/star/uno/Type");
                         code->instrDup();
                         code->loadStringConstant(nucleus.replace('/', '.'));
-                        code->instrGetstatic(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/TypeClass")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM("INTERFACE")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "Lcom/sun/star/uno/TypeClass;")));
-                        dependencies->insert(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/TypeClass")));
-                        code->instrInvokespecial(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Type")),
-                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "(Ljava/lang/String;"
-                                    "Lcom/sun/star/uno/TypeClass;)V")));
+                        code->instrGetstatic("com/sun/star/uno/TypeClass", "INTERFACE"
+                                           , "Lcom/sun/star/uno/TypeClass;");
+                        dependencies->insert("com/sun/star/uno/TypeClass");
+                        code->instrInvokespecial("com/sun/star/uno/Type", "<init>"
+                                                ,"(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V");
                         code->loadLocalReference(*index);
-                        code->instrInvokespecial(
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "com/sun/star/uno/Any")),
-                            rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                            rtl::OString(
-                                RTL_CONSTASCII_STRINGPARAM(
-                                    "(Lcom/sun/star/uno/Type;"
-                                    "Ljava/lang/Object;)V")));
+                        code->instrInvokespecial("com/sun/star/uno/Any", "<init>"
+                                                ,"(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V");
                         stack = 6;
                     } else {
                         code->loadLocalReference(*index);
@@ -1661,22 +1345,13 @@ sal_uInt16 addLoadLocal(
                 }
             }
             if (wrap) {
-                code->instrNew(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Any")));
+                code->instrNew("com/sun/star/uno/Any");
                 code->instrDup();
-                code->instrNew(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")));
+                code->instrNew("com/sun/star/uno/Type");
                 code->instrDup();
                 code->loadStringConstant(
                     createUnoName(manager, nucleus, rank, args));
-                code->instrInvokespecial(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
-                    rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("(Ljava/lang/String;)V")));
+                code->instrInvokespecial("com/sun/star/uno/Type", "<init>", "(Ljava/lang/String;)V");
                 code->loadLocalReference(*index);
                 code->instrInvokespecial(
                     rtl::OString(
@@ -1937,9 +1612,7 @@ void handleAggregatingType(
     std::auto_ptr< ClassFile::Code > code(cf->newCode());
     SAL_WNODEPRECATED_DECLARATIONS_POP
     code->loadLocalReference(0);
-    code->instrInvokespecial(
-        superClass, rtl::OString(RTL_CONSTASCII_STRINGPARAM("<init>")),
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("()V")));
+    code->instrInvokespecial(superClass, "<init>", "()V");
     sal_uInt16 stack = 0;
     for (sal_uInt16 i = firstField; i < fields; ++i) {
         stack = std::max(
@@ -2736,10 +2409,7 @@ void addConstructor(
         localIndex = std::max< sal_uInt16 >(localIndex, 2);
         code->storeLocalReference(1);
         // stack: -
-        code->instrNew(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "com/sun/star/uno/DeploymentException")));
+        code->instrNew("com/sun/star/uno/DeploymentException");
         // stack: ex
         code->instrDup();
         // stack: ex ex
@@ -2869,9 +2539,7 @@ void handleService(
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             std::auto_ptr< ClassFile::Code > code(cf->newCode());
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            code->instrNew(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")));
+            code->instrNew("com/sun/star/uno/Type");
             // stack: type
             code->instrDup();
             // stack: type type
@@ -2912,10 +2580,7 @@ void handleService(
             code->branchHere(branch);
             code->instrPop();
             // stack: -
-            code->instrNew(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "com/sun/star/uno/DeploymentException")));
+            code->instrNew("com/sun/star/uno/DeploymentException");
             // stack: ex
             code->instrDup();
             // stack: ex ex
@@ -3060,8 +2725,7 @@ void handleSingleton(
         rtl::OString(RTL_CONSTASCII_STRINGPARAM("()Ljava/lang/Object;")));
     // stack: value
     code->branchHere(branch1);
-    code->instrNew(
-        rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")));
+    code->instrNew("com/sun/star/uno/Type");
     // stack: value type
     code->instrDup();
     // stack: value type type
@@ -3101,10 +2765,7 @@ void handleSingleton(
     code->branchHere(branch3);
     code->instrPop();
     // stack: -
-    code->instrNew(
-        rtl::OString(
-            RTL_CONSTASCII_STRINGPARAM(
-                "com/sun/star/uno/DeploymentException")));
+    code->instrNew("com/sun/star/uno/DeploymentException");
     // stack: ex
     code->instrDup();
     // stack: ex ex
