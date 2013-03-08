@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWH///nI\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-03-08T14:51:35Z",
+      "side": 1,
+      "message": "\"What happens if the string has no numbers?\": i1 \u003d\u003d rStr.getLength()",
+      "parentUuid": "AAAAWH///po\u003d",
+      "revId": "30af4cc9f9b308152e10d79787b2871dede7ccad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWH///pk\u003d",
         "filename": "vcl/source/control/field2.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-03-08T12:26:38Z",
       "side": 1,
       "message": "Later on, if i1 is the very last character, then the second parameter will be greater than the last character, and the second copy parameter will be 0.",
+      "revId": "30af4cc9f9b308152e10d79787b2871dede7ccad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///nE\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-03-08T14:51:35Z",
+      "side": 1,
+      "message": "If i1 \u003d\u003d rStr.getLength(), then also i2 \u003d\u003d rStr.getLength(), so rStr.copy(i1,i2-i1) returns the empty string, for which toInt32 returns 0 \"if this string represents no number\", so ImplCutNumberFromString keeps returning 0 in that case, just like the old version",
+      "parentUuid": "AAAAWH///pk\u003d",
       "revId": "30af4cc9f9b308152e10d79787b2871dede7ccad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
