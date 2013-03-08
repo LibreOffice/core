@@ -91,7 +91,7 @@ SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
     if ( m_xDocumentScripts.is() )
     {   // document supports embedding scripts/macros
         OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
-        aBasic += OUString( ":Basic" );
+        aBasic += ":Basic";
 
         if ( m_aLanguage == aBasic && nPrefix == XML_NAMESPACE_OOO && IsXMLToken( rLocalName, XML_LIBRARIES ) )
             pContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );

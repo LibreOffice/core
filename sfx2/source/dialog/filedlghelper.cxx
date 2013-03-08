@@ -497,7 +497,7 @@ void FileDialogHelper_Impl::updateExportButton()
         OUString sLabel = maButtonLabel;
         // filter with options -> append ellipses on export button label
         if ( CheckFilterOptionsCapability( getCurentSfxFilter() ) )
-            sLabel += OUString( "..."  );
+            sLabel += "...";
 
         if ( sOldLabel != sLabel )
         {

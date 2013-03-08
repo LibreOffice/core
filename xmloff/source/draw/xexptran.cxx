@@ -410,14 +410,14 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
         {
             case IMP_SDXMLEXP_TRANSOBJ2D_ROTATE :
             {
-                aNewString += OUString( "rotate (" );
+                aNewString += "rotate (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DRotate*)pObj)->mfRotate);
                 aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SCALE      :
             {
-                aNewString += OUString( "scale (" );
+                aNewString += "scale (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DScale*)pObj)->maScale.getX());
                 aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DScale*)pObj)->maScale.getY());
@@ -426,7 +426,7 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_TRANSLATE  :
             {
-                aNewString += OUString( "translate (" );
+                aNewString += "translate (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DTranslate*)pObj)->maTranslate.getX(), true);
                 aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DTranslate*)pObj)->maTranslate.getY(), true);
@@ -435,21 +435,21 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWX      :
             {
-                aNewString += OUString( "skewX (" );
+                aNewString += "skewX (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DSkewX*)pObj)->mfSkewX);
                 aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWY      :
             {
-                aNewString += OUString( "skewY (" );
+                aNewString += "skewY (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DSkewY*)pObj)->mfSkewY);
                 aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_MATRIX :
             {
-                aNewString += OUString( "matrix (" );
+                aNewString += "matrix (";
 
                 // a
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix.get(0, 0));
@@ -849,28 +849,28 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
         {
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_X   :
             {
-                aNewString += OUString( "rotatex (" );
+                aNewString += "rotatex (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateX*)pObj)->mfRotateX);
                 aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Y   :
             {
-                aNewString += OUString( "rotatey (" );
+                aNewString += "rotatey (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateY*)pObj)->mfRotateY);
                 aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Z   :
             {
-                aNewString += OUString( "rotatez (" );
+                aNewString += "rotatez (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateZ*)pObj)->mfRotateZ);
                 aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_SCALE      :
             {
-                aNewString += OUString( "scale (" );
+                aNewString += "scale (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.getX());
                 aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.getY());
@@ -881,7 +881,7 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_TRANSLATE  :
             {
-                aNewString += OUString( "translate (" );
+                aNewString += "translate (";
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.getX(), true);
                 aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.getY(), true);
@@ -892,7 +892,7 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_MATRIX :
             {
-                aNewString += OUString( "matrix (" );
+                aNewString += "matrix (";
 
                 // a
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(0, 0));

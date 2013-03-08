@@ -657,7 +657,7 @@ SbError Dll::getProc(OUString const & name, ProcData * proc) {
 OUString fullDllName(OUString const & name) {
     OUString full(name);
     if (full.indexOf('.') == -1) {
-        full += OUString(".DLL");
+        full += ".DLL";
     }
     return full;
 }

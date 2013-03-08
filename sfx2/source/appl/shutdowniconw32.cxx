@@ -829,7 +829,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
         aOfficepath = aOfficepath.copy(0, i);
 
     OUString quickstartExe(aOfficepath);
-    quickstartExe += OUString( "\\quickstart.exe"  );
+    quickstartExe += "\\quickstart.exe";
 
     return FileExistsW( reinterpret_cast<LPCWSTR>(quickstartExe.getStr()) );
 }
@@ -845,7 +845,7 @@ void ShutdownIcon::EnableAutostartW32( const rtl::OUString &aShortcut )
         aOfficepath = aOfficepath.copy(0, i);
 
     OUString quickstartExe(aOfficepath);
-    quickstartExe += OUString( "\\quickstart.exe"  );
+    quickstartExe += "\\quickstart.exe";
 
     CreateShortcut( quickstartExe, aOfficepath, aShortcut, OUString(), OUString() );
 }

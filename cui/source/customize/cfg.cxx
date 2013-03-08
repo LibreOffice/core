@@ -3111,7 +3111,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     // default toolbar to select is standardbar unless a different one
     // has been passed in
     m_aURLToSelect = OUString(ITEM_TOOLBAR_URL );
-    m_aURLToSelect += OUString("standardbar" );
+    m_aURLToSelect += "standardbar";
 
     const SfxPoolItem* pItem =
         rSet.GetItem( rSet.GetPool()->GetWhich( SID_CONFIG ) );
@@ -3662,7 +3662,7 @@ void SvxToolbarConfigPage::Init()
 
         // in future select the default toolbar: Standard
         m_aURLToSelect = OUString(ITEM_TOOLBAR_URL );
-        m_aURLToSelect += OUString("standardbar" );
+        m_aURLToSelect += "standardbar";
     }
 
     aTopLevelListBox.SelectEntryPos(nPos, sal_True);

@@ -1291,8 +1291,7 @@ void SfxLibraryContainer::implScanExtensions( void )
         {
             aIndexFileURL += "/";
         }
-        aIndexFileURL += maInfoFileName;
-        aIndexFileURL += OUString(".xlb");
+        aIndexFileURL += maInfoFileName + ".xlb";
 
         // Create link
         const bool bReadOnly = false;

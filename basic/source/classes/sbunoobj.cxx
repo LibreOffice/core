@@ -1670,7 +1670,7 @@ OUString getDbgObjectName( SbUnoObject* pUnoObj )
 {
     OUString aName = getDbgObjectNameImpl( pUnoObj );
     if( aName.isEmpty() )
-        aName += OUString("Unknown");
+        aName += "Unknown";
 
     OUStringBuffer aRet;
     if( aName.getLength() > 20 )
@@ -5146,7 +5146,7 @@ OUString SbUnoStructRefObject::getDbgObjectName()
     OUString aName = GetClassName();
     if( aName.isEmpty() )
     {
-        aName += OUString("Unknown");
+        aName += "Unknown";
     }
     OUStringBuffer aRet;
     if( aName.getLength() > 20 )

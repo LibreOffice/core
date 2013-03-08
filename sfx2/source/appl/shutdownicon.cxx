@@ -524,7 +524,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 {
                     OUString    aBaseDirURL = sFiles[0];
                     if ( !aBaseDirURL.isEmpty() && aBaseDirURL[aBaseDirURL.getLength()-1] != '/' )
-                        aBaseDirURL += OUString("/");
+                        aBaseDirURL += "/";
 
                     int iFiles;
                     for ( iFiles = 1; iFiles < nFiles; iFiles++ )
@@ -786,9 +786,9 @@ static OUString getAutostartDir( bool bCreate = false )
         OUString aHomeURL;
         osl::Security().getHomeDir( aHomeURL );
         ::osl::File::getSystemPathFromFileURL( aHomeURL, aShortcut );
-        aShortcut += OUString( "/.config"  );
+        aShortcut += "/.config";
     }
-    aShortcut += OUString( "/autostart"  );
+    aShortcut += "/autostart";
     if (bCreate)
     {
         OUString aShortcutUrl;
@@ -813,14 +813,14 @@ rtl::OUString ShutdownIcon::getShortcutName()
         aShortcutName = SFX2_RESSTR(STR_QUICKSTART_LNKNAME);
     }
 #ifdef WNT
-    aShortcutName += OUString( ".lnk"  );
+    aShortcutName += ".lnk";
 
     OUString aShortcut(GetAutostartFolderNameW32());
-    aShortcut += OUString( "\\"  );
+    aShortcut += "\\";
     aShortcut += aShortcutName;
 #else // UNX
     OUString aShortcut = getAutostartDir();
-    aShortcut += OUString( "/qstart.desktop"  );
+    aShortcut += "/qstart.desktop";
 #endif // UNX
     return aShortcut;
 #endif // ENABLE_QUICKSTART_APPLET

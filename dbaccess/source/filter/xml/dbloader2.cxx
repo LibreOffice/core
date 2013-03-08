@@ -624,11 +624,9 @@ extern "C" void SAL_CALL writeDBLoaderInfo2(void* pRegistryKey)
     OUString aImpl("/");
     aImpl += ::dbaxml::DBContentLoader::getImplementationName_Static();
 
-    OUString aImpltwo = aImpl;
-    aImpltwo += OUString("/UNO/Loader");
+    OUString aImpltwo = aImpl + "/UNO/Loader";
     Reference< XRegistryKey> xNewKey = xKey->createKey( aImpltwo );
-    aImpltwo = aImpl;
-    aImpltwo += OUString("/Loader");
+    aImpltwo = aImpl + "/Loader";
     Reference< XRegistryKey >  xLoaderKey = xKey->createKey( aImpltwo );
     xNewKey = xLoaderKey->createKey( OUString("Pattern") );
     xNewKey->setAsciiValue( OUString("private:factory/sdatabase") );

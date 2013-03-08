@@ -393,9 +393,9 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
             OUString aSql("DROP ");
 
             if ( bIsView ) // here we have a view
-                aSql += OUString("VIEW ");
+                aSql += "VIEW ";
             else
-                aSql += OUString("TABLE ");
+                aSql += "TABLE ";
             aSql += sComposedName;
             Reference<XConnection> xCon = m_xConnection;
             OSL_ENSURE(xCon.is(),"Connection is null!");
