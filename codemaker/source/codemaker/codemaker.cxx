@@ -41,8 +41,7 @@ namespace {
 
 void checkNoTypeArguments(std::vector< rtl::OString > const & arguments) {
     if (!arguments.empty()) {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
+        throw CannotDumpException("Bad type information");
             //TODO
     }
 }
@@ -58,10 +57,7 @@ rtl::OString convertString(rtl::OUString const & string) {
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
              | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
-        throw CannotDumpException(
-            rtl::OString(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "Failure converting string from UTF-16 to UTF-8")));
+        throw CannotDumpException("Failure converting string from UTF-16 to UTF-8");
     }
     return s;
 }
@@ -82,10 +78,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
         sal_Int32 n = 0;
         *name = codemaker::UnoType::decompose(t, &n, arguments);
         if (n > SAL_MAX_INT32 - *rank) {
-            throw CannotDumpException(
-                errorMsg(rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                    type));
+            throw CannotDumpException(errorMsg("Bad type information: ", type));
             //TODO
         }
         *rank += n;
@@ -97,10 +90,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
         switch (sort) {
         case codemaker::UnoType::SORT_VOID:
             if (!allowVoid) {
-                throw CannotDumpException(
-                    errorMsg(rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                        type));
+                throw CannotDumpException( errorMsg("Bad type information: ", type));
                 //TODO
             }
         default:
@@ -123,10 +113,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                         || (static_cast< sal_uInt16 >(arguments->size())
                             != reader.getReferenceCount())))
                 {
-                    throw CannotDumpException(
-                        errorMsg(rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                            type));
+                    throw CannotDumpException(errorMsg("Bad type information: ", type));
                     //TODO
                 }
                 return sort;
@@ -137,10 +124,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
             case RT_TYPE_SINGLETON:
             case RT_TYPE_CONSTANTS:
                 if (!allowExtraEntities) {
-                    throw CannotDumpException(
-                        errorMsg(rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                            type));
+                    throw CannotDumpException(errorMsg("Bad type information: ", type));
                     //TODO
                 }
                 checkNoTypeArguments(*arguments);
@@ -162,10 +146,7 @@ codemaker::UnoType::Sort decomposeAndResolve(
                     }
                 }
             default:
-                throw CannotDumpException(
-                    errorMsg(rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
-                        type));
+                throw CannotDumpException(errorMsg("Bad type information: ", type));
                 //TODO
             }
         }

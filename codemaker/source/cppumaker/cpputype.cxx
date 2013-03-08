@@ -170,8 +170,7 @@ CppuType::~CppuType()
 void CppuType::addGetCppuTypeIncludes(codemaker::cppumaker::Includes & includes)
     const
 {
-    if (m_typeName.equals("com/sun/star/uno/XInterface")
-        || m_typeName.equals("com/sun/star/uno/Exception"))
+    if (m_typeName == "com/sun/star/uno/XInterface" || m_typeName == "com/sun/star/uno/Exception")
     {
         includes.addType();
         includes.addCppuUnotypeHxx();
@@ -514,10 +513,8 @@ void CppuType::dumpHFileContent(
         out << "\n";
     }
     dumpDeclaration(out);
-    if (!(m_typeName.equalsL(
-              RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/XInterface")) ||
-          m_typeName.equalsL(
-              RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Exception")) ||
+    if (!(m_typeName == "com/sun/star/uno/XInterface" ||
+          m_typeName == "com/sun/star/uno/Exception" ||
           isPolymorphic()))
     {
         out << "\n" << indent()
