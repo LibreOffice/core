@@ -2518,7 +2518,6 @@ sal_uLong SwTableBox::IsValidNumTxtNd( sal_Bool bCheckAttr ) const
             if( bCheckAttr )
             {
                 const SwpHints* pHts = pTextNode->GetpSwpHints();
-                const String& rTxt = pTextNode->GetTxt();
                 // do some tests if there's only text in the node!
                 // Flys/fields/...
                 if( pHts )
@@ -2527,9 +2526,7 @@ sal_uLong SwTableBox::IsValidNumTxtNd( sal_Bool bCheckAttr ) const
                     for( sal_uInt16 n = 0; n < pHts->Count(); ++n )
                     {
                         const SwTxtAttr* pAttr = (*pHts)[ n ];
-                        if( RES_TXTATR_NOEND_BEGIN <= pAttr->Which() ||
-                            *pAttr->GetStart() ||
-                            *pAttr->GetAnyEnd() < rTxt.Len() )
+                        if( RES_TXTATR_NOEND_BEGIN <= pAttr->Which() )
                         {
                             if ((*pAttr->GetStart() == nNextSetField) &&
                                 (pAttr->Which() == RES_TXTATR_FIELD))
