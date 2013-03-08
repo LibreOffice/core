@@ -967,24 +967,27 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
             fRes = (double) ScGlobal::GetCaseCollator()->compareString(
                 *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
     }
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+
     if (nStringQuery && pOptions)
     {
         const ScQueryEntry& rEntry = pOptions->aQueryEntry;
-        if (!rEntry.bQueryByString && rEntry.pStr->Len() &&
-                (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
+        const ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
+        if (!rItems.empty())
         {
-            // As in ScTable::ValidQuery() match a numeric string for a
-            // number query that originated from a string, e.g. in SUMIF
-            // and COUNTIF. Transliteration is not needed here.
-            bool bEqual = rComp.pVal[nStringQuery-1]->Equals( *rEntry.pStr);
-            // match => fRes=0, else fRes=1
-            fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
+            const ScQueryEntry::Item& rItem = rItems[0];
+            if (rItem.meType != ScQueryEntry::ByString && !rItem.maString.isEmpty() &&
+                (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
+            {
+                // As in ScTable::ValidQuery() match a numeric string for a
+                // number query that originated from a string, e.g. in SUMIF
+                // and COUNTIF. Transliteration is not needed here.
+                bool bEqual = rComp.pVal[nStringQuery-1]->Equals(rItem.maString);
+                // match => fRes=0, else fRes=1
+                fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
+            }
         }
     }
-#else
-    (void)nStringQuery;
-#endif
+
     return fRes;
 }
 
