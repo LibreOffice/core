@@ -50,7 +50,10 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
  , m_pBindings(_pBindings)
  , pAccel( NULL )
  , nRefTab(0)
+ , mnOldEditWidthReq( -1 )
  , mpOldEditParent( NULL )
+ , mbOldDlgLayoutEnabled( false )
+ , mbOldEditParentLayoutEnabled( false )
  , bHighLightRef( false )
  , bAccInserted( false )
 {
@@ -358,9 +361,8 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             bAccInserted = false;
         }
 
-        bool bLayoutEnabled = isLayoutEnabled(m_pWindow);
         //get rid of all this junk when we can
-        if (!bLayoutEnabled)
+        if (!mbOldDlgLayoutEnabled)
         {
             m_pWindow->SetOutputSizePixel(aOldDialogSize);
 
@@ -370,13 +372,21 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             // Fenster wieder gross
             m_pWindow->SetOutputSizePixel(aOldDialogSize);
 
+            // set button parent
+            if( pRefBtn )
+            {
+                pRefBtn->SetParent(m_pWindow);
+            }
+        }
+
+        if (!mbOldEditParentLayoutEnabled)
+        {
             // pEditCell an alte Position
             pRefEdit->SetPosSizePixel(aOldEditPos, aOldEditSize);
 
             // set button position
             if( pRefBtn )
             {
-                pRefBtn->SetParent(m_pWindow);
                 pRefBtn->SetPosPixel( aOldButtonPos );
             }
         }
@@ -396,11 +406,13 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
         }
         m_aHiddenWidgets.clear();
 
-        if (bLayoutEnabled)
+        if (mbOldDlgLayoutEnabled)
         {
+            pRefEdit->set_width_request(mnOldEditWidthReq);
             Dialog* pResizeDialog = pRefEdit->GetParentDialog();
             pResizeDialog->set_border_width(m_nOldBorderWidth);
-            pResizeDialog->get_action_area()->Show();
+            if (Window *pActionArea = pResizeDialog->get_action_area())
+                pActionArea->Show();
             pResizeDialog->setOptimalLayoutSize();
         }
 
@@ -442,44 +454,60 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         pRefEdit = pEdit;
         pRefBtn  = pButton;
 
-        // Neuen Fenstertitel basteln
-        String sNewDialogText;
-        sOldDialogText = m_pWindow->GetText();
-        sNewDialogText  = sOldDialogText;
-        sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
+        mbOldDlgLayoutEnabled = isLayoutEnabled(m_pWindow);
+        aOldEditSize = pRefEdit->GetSizePixel();
+        mnOldEditWidthReq = pRefEdit->get_width_request();
+        mpOldEditParent = pRefEdit->GetParent();
+        mbOldEditParentLayoutEnabled = isContainerWindow(mpOldEditParent);
 
-        bool bLayoutEnabled = isLayoutEnabled(m_pWindow);
-        //get rid of all the !bLayoutEnabled junk when we can
-        //after the last user of this is widget-layout-ified
-        if (!bLayoutEnabled)
+        //get rid of all the !mbOldDlgLayoutEnabled and
+        //mbOldEditParentLayoutEnabled junk when we can after the last user of
+        //this is widget-layout-ified
+        if (!mbOldEditParentLayoutEnabled)
         {
-            mpOldEditParent = pRefEdit->GetParent();
-
             // Alte Daten merken
             aOldDialogSize = m_pWindow->GetOutputSizePixel();
             aOldEditPos = pRefEdit->GetPosPixel();
-            aOldEditSize = pRefEdit->GetSizePixel();
             if (pRefBtn)
                 aOldButtonPos = pRefBtn->GetPosPixel();
+        }
 
+        if (!mbOldDlgLayoutEnabled)
+        {
             pRefEdit->SetParent(m_pWindow);
             if(pRefBtn)
                 pRefBtn->SetParent(m_pWindow);
         }
 
-        //collect up edit window contents to use for the title bar
-        for (Window* pChild = firstLogicalChildOfParent(m_pWindow); pChild; pChild = nextLogicalChildOfParent(m_pWindow, pChild))
+        OUString sLabel;
+        if (Window *pLabel = pRefEdit->GetLabelWidgetForShrinkMode())
         {
-            Window *pWin = pChild->GetWindow(WINDOW_CLIENT);
-            if (pWin == (Window*)pRefEdit || pWin == (Window*)pRefBtn)
-                continue; // do nothing
-            if (pChild->IsVisible() && pWin->GetType() == WINDOW_EDIT)
-                sNewDialogText += pWin->GetText();
+            sLabel = pLabel->GetText();
+        }
+        else
+        {
+            //find last widget before the edit widget to use as title bar contents
+            for (Window* pChild = firstLogicalChildOfParent(m_pWindow); pChild; pChild = nextLogicalChildOfParent(m_pWindow, pChild))
+            {
+                Window *pWin = pChild->GetWindow(WINDOW_CLIENT);
+                if (pWin == (Window*)pRefEdit || pWin == (Window*)pRefBtn)
+                    break;
+                if (pWin->GetType() == WINDOW_EDIT || pWin->GetType() == WINDOW_FIXEDTEXT)
+                    sLabel = pWin->GetText();
+            }
+        }
+
+        sOldDialogText = m_pWindow->GetText();
+        String sNewDialogText = sOldDialogText;
+        if (!sLabel.isEmpty())
+        {
+            sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
+            sNewDialogText += sLabel;
         }
 
         Dialog* pResizeDialog = NULL;
 
-        if (!bLayoutEnabled)
+        if (!mbOldDlgLayoutEnabled)
         {
             for (Window* pChild = m_pWindow->GetWindow(WINDOW_FIRSTCHILD); pChild;
                 pChild = pChild->GetWindow(WINDOW_NEXT))
@@ -522,7 +550,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             hideUnless(pContentArea, m_aVisibleWidgets, m_aHiddenWidgets);
         }
 
-        if (!bLayoutEnabled)
+        if (!mbOldDlgLayoutEnabled)
         {
             // Edit-Feld verschieben und anpassen
             Size aNewDlgSize(aOldDialogSize.Width(), aOldEditSize.Height());
@@ -568,11 +596,13 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         Application::InsertAccel( pAccel.get() );
         bAccInserted = true;
 
-        if (bLayoutEnabled)
+        if (mbOldDlgLayoutEnabled)
         {
+            pRefEdit->set_width_request(aOldEditSize.Width());
             m_nOldBorderWidth = pResizeDialog->get_border_width();
             pResizeDialog->set_border_width(0);
-            pResizeDialog->get_action_area()->Hide();
+            if (Window *pActionArea = pResizeDialog->get_action_area())
+                pActionArea->Hide();
             pResizeDialog->setOptimalLayoutSize();
         }
     }

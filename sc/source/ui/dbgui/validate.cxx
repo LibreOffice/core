@@ -75,6 +75,8 @@ ScValidationDlg::ScValidationDlg( Window*           pParent,
     AddTabPage( TP_VALIDATION_INPUTHELP, ScTPValidationHelp::Create,  0 );
     AddTabPage( TP_VALIDATION_ERROR,     ScTPValidationError::Create, 0 );
     FreeResource();
+    //temp hack until converted to .ui
+    mpHBox = new VclHBox(get_content_area());
 }
 
 void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pDoc )
@@ -107,43 +109,43 @@ void            ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdi
 {
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
+        Window *pNewParent = pValidationDlg->get_refinput_shrink_parent();
         if( pEdit == m_pRefEdit )
         {
             if( Window *pPreWnd = pEdit==&maEdMax?&maFtMax:(pEdit==&maEdMin?&maFtMin:NULL) )
             {
-                pPreWnd->SetParent( pValidationDlg );
-                pPreWnd->Hide();
+                m_pRefEdit->SetLabelWidgetForShrinkMode(pPreWnd);
             }
 
-            m_pRefEdit->SetParent( pValidationDlg );
+            maRefEditPos = m_pRefEdit->GetPosPixel();
+            maRefEditSize = m_pRefEdit->GetSizePixel();
+            m_pRefEdit->SetParent(pNewParent);
         }
 
-        if( pButton == &m_btnRef )m_btnRef.SetParent( pValidationDlg );
-    }
-}
-
-void            ScTPValidationValue::RefInputDonePreHdl()
-{
-
-    if( m_pRefEdit && m_pRefEdit->GetParent()!= this )
-    {
-        if( Window *pPreWnd = m_pRefEdit==&maEdMax?&maFtMax:(m_pRefEdit==&maEdMin?&maFtMin:NULL) )
+        if( pButton == &m_btnRef )
         {
-            pPreWnd->SetParent( this );
-            pPreWnd->Show();
+            maBtnRefPos = m_btnRef.GetPosPixel();
+            maBtnRefSize = m_btnRef.GetSizePixel();
+            m_btnRef.SetParent(pNewParent);
         }
-
-        m_pRefEdit->SetParent( this );
-
-        m_btnRef.SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
+        pNewParent->Show();
     }
-
-    if( m_btnRef.GetParent()!=this ) m_btnRef.SetParent( this );
 }
 
 void            ScTPValidationValue::RefInputDonePostHdl()
 {
+    if( m_pRefEdit && m_pRefEdit->GetParent()!= this )
+    {
+        m_pRefEdit->SetParent( this );
+        m_pRefEdit->SetPosSizePixel( maRefEditPos, maRefEditSize );
 
+        m_btnRef.SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
+        m_btnRef.SetPosSizePixel( maBtnRefPos, maBtnRefSize );
+    }
+
+    if( m_btnRef.GetParent()!=this ) m_btnRef.SetParent( this );
+    if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
+        pValidationDlg->get_refinput_shrink_parent()->Hide();
 
     if( m_pRefEdit && !m_pRefEdit->HasFocus() )
         m_pRefEdit->GrabFocus();
@@ -164,6 +166,7 @@ ScValidationDlg::~ScValidationDlg()
 {
     if( m_bOwnRefHdlr )
         RemoveRefDlg( false );
+    delete mpHBox;
 }
 
 
@@ -488,7 +491,6 @@ void ScTPValidationValue::SetupRefDlg()
             pValidationDlg->SetSetRefHdl( (ScRefHandlerHelper::PFUNCSETREFHDLTYPE)( &ScTPValidationValue::SetReferenceHdl ) );
             pValidationDlg->SetSetActHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::SetActiveHdl ) );
             pValidationDlg->SetRefInputStartPreHdl( (ScRefHandlerHelper::PINPUTSTARTDLTYPE)( &ScTPValidationValue::RefInputStartPreHdl ) );
-            pValidationDlg->SetRefInputDonePreHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::RefInputDonePreHdl ) );
             pValidationDlg->SetRefInputDonePostHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::RefInputDonePostHdl ) );
 
             if ( maEdMax.IsVisible() ) { m_pRefEdit = &maEdMax; }
@@ -510,7 +512,6 @@ void ScTPValidationValue::RemoveRefDlg()
             pValidationDlg->SetSetRefHdl( NULL );
             pValidationDlg->SetSetActHdl( NULL );
             pValidationDlg->SetRefInputStartPreHdl( NULL );
-            pValidationDlg->SetRefInputDonePreHdl( NULL );
             pValidationDlg->SetRefInputDonePostHdl( NULL );
 
             if( m_pRefEdit ) m_pRefEdit->SetRefDialog( NULL );

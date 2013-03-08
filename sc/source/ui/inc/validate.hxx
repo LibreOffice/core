@@ -23,6 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
 
@@ -87,6 +88,7 @@ class ScValidationDlg :public ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false
     bool    m_bOwnRefHdlr:1;
 
     ScTabViewShell *m_pTabVwSh;
+    VclHBox* mpHBox;
     bool    m_bRefInputting:1;
     bool    EnterRefStatus();
     bool    LeaveRefStatus();
@@ -126,6 +128,7 @@ public:
     }
 
     bool IsRefInputting(){  return m_bRefInputting; }
+    Window*             get_refinput_shrink_parent() { return mpHBox; }
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL )
     {
@@ -211,6 +214,11 @@ private:
     String                      maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
+    Point                       maRefEditPos;
+    Point                       maBtnRefPos;
+    Size                        maRefEditSize;
+    Size                        maBtnRefSize;
+
     DECL_LINK(EditSetFocusHdl, void *);
     DECL_LINK( KillFocusHdl, Window *);
     void    OnClick( Button *pBtn );
@@ -225,7 +233,6 @@ private:
     void            SetReferenceHdl( const ScRange& , ScDocument* );
     void            SetActiveHdl();
     void            RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton );
-    void            RefInputDonePreHdl();
     void            RefInputDonePostHdl();
     ScValidationDlg * GetValidationDlg();
 

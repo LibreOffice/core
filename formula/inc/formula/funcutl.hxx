@@ -63,6 +63,8 @@ public:
 
     void                SetRefDialog( IControlReferenceHandler* pDlg );
     inline IControlReferenceHandler* GetRefDialog() { return pAnyRefDlg; }
+    Window*             GetLabelWidgetForShrinkMode() { return m_pLabelWidget; }
+    void                SetLabelWidgetForShrinkMode(Window *pLabel) { m_pLabelWidget = pLabel; }
 };
 
 

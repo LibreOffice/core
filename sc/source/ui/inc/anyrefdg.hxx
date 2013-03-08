@@ -61,8 +61,11 @@ class ScFormulaReferenceHelper
     Size                aOldDialogSize;         // Original size of the dialog window
     Point               aOldEditPos;            // Original position of the input field
     Size                aOldEditSize;           // Original size of the input field
+    long                mnOldEditWidthReq;
     Point               aOldButtonPos;          // Original position of the button
     Window*             mpOldEditParent;        // Original parent of the edit field and the button
+    bool                mbOldDlgLayoutEnabled;  // Original layout state of parent dialog
+    bool                mbOldEditParentLayoutEnabled;  // Original layout state of edit widget parent
 
     bool                bEnableColorRef;
     bool                bHighLightRef;
