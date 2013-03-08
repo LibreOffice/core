@@ -55,26 +55,6 @@ LimitBox::~LimitBox()
 {
 }
 
-long LimitBox::Notify( NotifyEvent& rNEvt )
-{
-    long nHandled = 0;
-
-    switch ( rNEvt.GetType() )
-    {
-        case EVENT_KEYINPUT:
-        {
-            const sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
-            if( nCode == KEY_RETURN )
-            {
-                GrabFocusToDocument();
-                nHandled = 1;
-            }
-            break;
-        }
-    }
-    return nHandled ? nHandled : NumericBox::Notify( rNEvt );
-}
-
 OUString LimitBox::CreateFieldText( sal_Int64 nValue ) const
 {
     if( nValue == ALL_INT )

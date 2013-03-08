@@ -26,8 +26,6 @@ class LimitBox: public NumericBox
         LimitBox( Window* pParent, WinBits nStyle );
         virtual ~LimitBox();
 
-        virtual long        Notify( NotifyEvent& rNEvt );
-
         virtual OUString    CreateFieldText( sal_Int64 nValue ) const;
 
         virtual void        Reformat();

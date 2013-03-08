@@ -51,6 +51,7 @@ LimitBoxImpl::~LimitBoxImpl()
 
 long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
 {
+    long nHandled = 0;
     switch ( rNEvt.GetType() )
     {
         case EVENT_LOSEFOCUS:
@@ -61,8 +62,26 @@ long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
             m_pControl->dispatchCommand( aArgs );
             break;
         }
+        case EVENT_KEYINPUT:
+        {
+            const sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+            switch ( nCode )
+            {
+                case KEY_ESCAPE:
+                {
+                    Undo();
+                }
+                case KEY_RETURN:
+                {
+                    GrabFocusToDocument();
+                    nHandled = 1;
+                    break;
+                }
+            }
+            break;
+        }
     }
-    return LimitBox::Notify( rNEvt );
+    return nHandled ? nHandled : LimitBox::Notify( rNEvt );
 }
 
 
