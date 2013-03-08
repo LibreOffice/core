@@ -1,3 +1,45 @@
+--- misc/boost_1_44_0/boost/algorithm/string/detail/finder.hpp
++++ misc/build/boost_1_44_0/boost/algorithm/string/detail/finder.hpp
+@@ -142,7 +142,6 @@
+                     ForwardIteratorT End,
+                     std::forward_iterator_tag ) const
+                 {
+-                    typedef ForwardIteratorT input_iterator_type;
+                     typedef iterator_range<ForwardIteratorT> result_type;
+ 
+                     first_finder_type first_finder(
+@@ -263,7 +262,6 @@
+                     ForwardIteratorT End,
+                     unsigned int N) const
+                 {
+-                    typedef ForwardIteratorT input_iterator_type;
+                     typedef iterator_range<ForwardIteratorT> result_type;
+ 
+                     // Sanity check
+@@ -298,7 +296,6 @@
+                     ForwardIteratorT End,
+                     unsigned int N) const
+                 {
+-                    typedef ForwardIteratorT input_iterator_type;
+                     typedef iterator_range<ForwardIteratorT> result_type;
+ 
+                     // Sanity check
+@@ -362,7 +359,6 @@
+                 unsigned int N,
+                 std::random_access_iterator_tag )
+             {
+-                typedef ForwardIteratorT input_iterator_type;
+                 typedef iterator_range<ForwardIteratorT> result_type;
+ 
+                 if ( (End<=Begin) || ( static_cast<unsigned int>(End-Begin) < N ) )
+@@ -436,7 +432,6 @@
+                 unsigned int N,
+                 std::random_access_iterator_tag )
+             {
+-                typedef ForwardIteratorT input_iterator_type;
+                 typedef iterator_range<ForwardIteratorT> result_type;
+ 
+                 if ( (End<=Begin) || ( static_cast<unsigned int>(End-Begin) < N ) )
 --- misc/boost_1_44_0/boost/bind/arg.hpp
 +++ misc/build/boost_1_44_0/boost/bind/arg.hpp
 @@ -35,6 +35,8 @@
@@ -22,3 +64,163 @@
  
  }}
  
+--- misc/boost_1_44_0/boost/date_time/date_parsing.hpp
++++ misc/build/boost_1_44_0/boost/date_time/date_parsing.hpp
+@@ -113,7 +113,6 @@
+         spec_str = "mdy";
+       }
+ 
+-      typedef typename date_type::year_type year_type;
+       typedef typename date_type::month_type month_type;
+       unsigned pos = 0;
+       unsigned short year(0), month(0), day(0);
+@@ -159,7 +158,7 @@
+     parse_undelimited_date(const std::string& s) {
+       int offsets[] = {4,2,2};
+       int pos = 0;
+-      typedef typename date_type::year_type year_type;
++      //typedef typename date_type::year_type year_type;
+       //typename date_type::ymd_type ymd((year_type::min)(),1,1);
+       unsigned short y = 0, m = 0, d = 0;
+ 
+--- misc/boost_1_44_0/boost/date_time/local_time/local_time_io.hpp
++++ misc/build/boost_1_44_0/boost/date_time/local_time/local_time_io.hpp
+@@ -36,7 +36,6 @@
+     boost::io::ios_flags_saver iflags(os);
+     typedef local_date_time time_type;//::utc_time_type typename 
+     typedef date_time::time_facet<time_type, CharT> custom_time_facet;
+-    typedef std::time_put<CharT> std_time_facet;
+     std::ostreambuf_iterator<CharT> oitr(os);
+ 
+     if(std::has_facet<custom_time_facet>(os.getloc())) {
+@@ -123,7 +122,6 @@
+              const boost::local_time::local_time_period& p) {
+     boost::io::ios_flags_saver iflags(os);
+     typedef boost::date_time::time_facet<local_date_time, CharT> custom_facet;
+-    typedef std::time_put<CharT> std_time_facet;
+     std::ostreambuf_iterator<CharT> oitr(os);
+     if (std::has_facet<custom_facet>(os.getloc())) {
+       std::use_facet<custom_facet>(os.getloc()).put(oitr, os, os.fill(), p);
+--- misc/boost_1_44_0/boost/date_time/posix_time/posix_time_io.hpp
++++ misc/build/boost_1_44_0/boost/date_time/posix_time/posix_time_io.hpp
+@@ -47,7 +47,6 @@
+              const ptime& p) {
+     boost::io::ios_flags_saver iflags(os);
+     typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
+-    typedef std::time_put<CharT>                  std_ptime_facet;
+     std::ostreambuf_iterator<CharT> oitr(os);
+     if (std::has_facet<custom_ptime_facet>(os.getloc()))
+       std::use_facet<custom_ptime_facet>(os.getloc()).put(oitr, os, os.fill(), p);
+@@ -114,7 +113,6 @@
+              const boost::posix_time::time_period& p) {
+     boost::io::ios_flags_saver iflags(os);
+     typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
+-    typedef std::time_put<CharT>                  std_time_facet;
+     std::ostreambuf_iterator<CharT> oitr(os);
+     if (std::has_facet<custom_ptime_facet>(os.getloc())) {
+       std::use_facet<custom_ptime_facet>(os.getloc()).put(oitr, os, os.fill(), p);
+@@ -180,7 +178,6 @@
+   {
+     boost::io::ios_flags_saver iflags(os);
+     typedef boost::date_time::time_facet<ptime, CharT> custom_ptime_facet;
+-    typedef std::time_put<CharT>                  std_ptime_facet;
+     std::ostreambuf_iterator<CharT> oitr(os);
+     if (std::has_facet<custom_ptime_facet>(os.getloc()))
+       std::use_facet<custom_ptime_facet>(os.getloc()).put(oitr, os, os.fill(), td);
+--- misc/boost_1_44_0/boost/date_time/string_convert.hpp
++++ misc/build/boost_1_44_0/boost/date_time/string_convert.hpp
+@@ -21,7 +21,6 @@
+   inline
+   std::basic_string<OutputT> convert_string_type(const std::basic_string<InputT>& inp_str)
+   {
+-    typedef std::basic_string<InputT> input_type;
+     typedef std::basic_string<OutputT> output_type;
+     output_type result;
+     result.insert(result.begin(), inp_str.begin(), inp_str.end());
+--- misc/boost_1_44_0/boost/date_time/strings_from_facet.hpp
++++ misc/build/boost_1_44_0/boost/date_time/strings_from_facet.hpp
+@@ -35,7 +35,6 @@
+ {
+   typedef std::basic_string<charT> string_type;
+   typedef std::vector<string_type> collection_type;
+-  typedef std::basic_ostringstream<charT> ostream_type;
+   typedef std::ostreambuf_iterator<charT> ostream_iter_type;
+   typedef std::basic_ostringstream<charT> stringstream_type;
+   typedef std::time_put<charT>           time_put_facet_type;
+@@ -85,7 +84,6 @@
+ {
+   typedef std::basic_string<charT> string_type;
+   typedef std::vector<string_type> collection_type;
+-  typedef std::basic_ostringstream<charT> ostream_type;
+   typedef std::ostreambuf_iterator<charT> ostream_iter_type;
+   typedef std::basic_ostringstream<charT> stringstream_type;
+   typedef std::time_put<charT>           time_put_facet_type;
+--- misc/boost_1_44_0/boost/multi_array/concept_checks.hpp
++++ misc/build/boost_1_44_0/boost/multi_array/concept_checks.hpp
+@@ -39,8 +39,6 @@
+ 
+     template <typename Array, typename IdxGen, typename Call_Type>
+     static void call(Array& a, const IdxGen& idgen, Call_Type c) {
+-      typedef typename Array::index_range index_range_;
+-      typedef typename Array::index index_;
+       idgen_helper<N-1>::call(a,idgen[c],c);
+     }
+   };
+@@ -50,8 +48,6 @@
+ 
+     template <typename Array, typename IdxGen, typename Call_Type>
+     static void call(Array& a, const IdxGen& idgen, Call_Type) {
+-      typedef typename Array::index_range index_range_;
+-      typedef typename Array::index index_;
+       a[ idgen ];
+     }
+   };
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp
+@@ -307,7 +307,6 @@
+ #if !defined(BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE)
+         typedef impl::grammar_helper_base<GrammarT> helper_base_t;
+         typedef grammar_helper_list<GrammarT> helper_list_t;
+-        typedef typename helper_list_t::vector_t::reverse_iterator iterator_t;
+ 
+         helper_list_t&  helpers =
+ # if !defined(__GNUC__) || (__GNUC__ > 2)
+@@ -318,6 +317,7 @@
+ 
+ # if (defined(BOOST_MSVC) && (BOOST_MSVC < 1300)) \
+     || defined(BOOST_INTEL_CXX_VERSION)
++        typedef typename helper_list_t::vector_t::reverse_iterator iterator_t;
+         for (iterator_t i = helpers.rbegin(); i != helpers.rend(); ++i)
+             (*i)->undefine(self);
+ # else
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/primitives/primitives.hpp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/primitives/primitives.hpp
+@@ -47,7 +47,6 @@
+         typename parser_result<self_t, ScannerT>::type
+         parse(ScannerT const& scan) const
+         {
+-            typedef typename parser_result<self_t, ScannerT>::type result_t;
+             typedef typename ScannerT::value_t value_t;
+             typedef typename ScannerT::iterator_t iterator_t;
+ 
+--- misc/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp
+@@ -140,7 +140,6 @@
+         parse(ScannerT const& scan) const
+         {
+             typedef typename parser_result<ParserT, ScannerT>::type result_t;
+-            typedef typename ScannerT::iterator_t iterator_t;
+ 
+             result_t hit = this->subject().parse(scan);
+             if (!hit)
+--- misc/boost_1_44_0/boost/spirit/home/classic/utility/functor_parser.hpp
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/functor_parser.hpp
+@@ -49,8 +49,6 @@
+         typename parser_result<self_t, ScannerT>::type
+         parse(ScannerT const& scan) const
+         {
+-            typedef typename parser_result<self_t, ScannerT>::type result_t;
+-            typedef typename ScannerT::value_t      value_t;
+             typedef typename ScannerT::iterator_t   iterator_t;
+ 
+             iterator_t const s(scan.first);
