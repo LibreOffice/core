@@ -175,11 +175,10 @@ int ImplSVMain()
     // be some events in the AWT EventQueue, which need the SolarMutex which
     // - on the other hand - is destroyed in DeInitVCL(). So empty the queue
     // here ..
-    uno::Reference< lang::XComponent > xComponent(pSVData->mxAccessBridge, uno::UNO_QUERY);
-    if( xComponent.is() )
+    if( pSVData->mxAccessBridge.is() )
     {
       sal_uLong nCount = Application::ReleaseSolarMutex();
-      xComponent->dispose();
+      pSVData->mxAccessBridge->dispose();
       Application::AcquireSolarMutex(nCount);
       pSVData->mxAccessBridge.clear();
     }

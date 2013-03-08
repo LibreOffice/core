@@ -45,7 +45,7 @@
 #include "salsys.hxx"
 #include "svids.hrc"
 
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/accessibility/AccessBridge.hpp"
 #include "com/sun/star/awt/XExtendedToolkit.hpp"
 #include "com/sun/star/java/JavaNotConfiguredException.hpp"
 #include "com/sun/star/java/JavaVMCreationFailureException.hpp"
@@ -303,8 +303,6 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
 
     try
     {
-        bool bSuccess = true;
-
         // No error messages when env var is set ..
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( pEnv && *pEnv )
@@ -315,45 +313,34 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         ImplSVData* pSVData = ImplGetSVData();
         if( ! pSVData->mxAccessBridge.is() )
         {
-            css::uno::Reference< XMultiServiceFactory > xFactory(comphelper::getProcessServiceFactory());
+            css::uno::Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
 
-            if( xFactory.is() )
+            css::uno::Reference< XExtendedToolkit > xToolkit =
+                css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
+
+            // Disable default java error messages on startup, because they were probably unreadable
+            // for a disabled user. Use native message boxes which are accessible without java support.
+            // No need to do this when activated by Tools-Options dialog ..
+            if( bAllowCancel )
             {
-                css::uno::Reference< XExtendedToolkit > xToolkit =
-                    css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
+                // customize the java-not-available-interaction-handler entry within the
+                // current context when called at startup.
+                com::sun::star::uno::ContextLayer layer(
+                    new AccessBridgeCurrentContext( com::sun::star::uno::getCurrentContext() ) );
 
-                Sequence< Any > arguments(1);
-                arguments[0] = makeAny(xToolkit);
-
-                // Disable default java error messages on startup, because they were probably unreadable
-                // for a disabled user. Use native message boxes which are accessible without java support.
-                // No need to do this when activated by Tools-Options dialog ..
-                if( bAllowCancel )
-                {
-                    // customize the java-not-available-interaction-handler entry within the
-                    // current context when called at startup.
-                    com::sun::star::uno::ContextLayer layer(
-                        new AccessBridgeCurrentContext( com::sun::star::uno::getCurrentContext() ) );
-
-                    pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString("com.sun.star.accessibility.AccessBridge"),
-                            arguments
-                        );
-                }
-                else
-                {
-                    pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString("com.sun.star.accessibility.AccessBridge"),
-                            arguments
-                        );
-                }
-
-                if( !pSVData->mxAccessBridge.is() )
-                    bSuccess = false;
+                pSVData->mxAccessBridge
+                    = css::accessibility::AccessBridge::createWithToolkit(
+                        xContext, xToolkit);
+            }
+            else
+            {
+                pSVData->mxAccessBridge
+                    = css::accessibility::AccessBridge::createWithToolkit(
+                        xContext, xToolkit);
             }
         }
 
-        return bSuccess;
+        return true;
     }
     catch (const ::com::sun::star::java::JavaNotConfiguredException&)
     {

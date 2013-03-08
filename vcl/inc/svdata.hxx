@@ -41,6 +41,7 @@
 
 #include "xconnection.hxx"
 
+#include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 
 #include <boost/unordered_map.hpp>
@@ -339,7 +340,7 @@ struct ImplSVData
     oslThreadIdentifier                     mnMainThreadId;
     rtl::Reference< vcl::DisplayConnection >            mxDisplayConnection;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxAccessBridge;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxAccessBridge;
     ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
     boost::unordered_map< int, rtl::OUString >*     mpPaperNames;
