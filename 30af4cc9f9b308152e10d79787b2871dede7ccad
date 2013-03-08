@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWH///po\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-08T12:26:38Z",
+      "side": 1,
+      "message": "What happens if the string has no numbers? i1 will become the very last character.",
+      "revId": "30af4cc9f9b308152e10d79787b2871dede7ccad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWH///pk\u003d",
+        "filename": "vcl/source/control/field2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-08T12:26:38Z",
+      "side": 1,
+      "message": "Later on, if i1 is the very last character, then the second parameter will be greater than the last character, and the second copy parameter will be 0.",
+      "revId": "30af4cc9f9b308152e10d79787b2871dede7ccad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
