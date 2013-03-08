@@ -179,7 +179,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 if (tmpName == "*")
                 {
                     // produce this type and his scope.
-                    if (typeName.equals("*"))
+                    if (typeName == "*")
                     {
                         tmpName = "/";
                     } else

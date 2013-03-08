@@ -56,35 +56,35 @@ sal_Int32 TypeManager::release()
 
 sal_Bool TypeManager::isBaseType(const ::rtl::OString& name)
 {
-    if ( name.equals(OString("short")) )
+    if ( name == "short" )
         return sal_True;
-    if ( name.equals(OString("unsigned short")) )
+    if ( name == "unsigned short" )
         return sal_True;
-    if ( name.equals(OString("long")) )
+    if ( name == "long" )
         return sal_True;
-    if ( name.equals(OString("unsigned long")) )
+    if ( name == "unsigned long" )
         return sal_True;
-    if ( name.equals(OString("hyper")) )
+    if ( name == "hyper" )
         return sal_True;
-    if ( name.equals(OString("unsigned hyper")) )
+    if ( name == "unsigned hyper" )
         return sal_True;
-    if ( name.equals(OString("string")) )
+    if ( name == "string" )
         return sal_True;
-    if ( name.equals(OString("boolean")) )
+    if ( name == "boolean" )
         return sal_True;
-    if ( name.equals(OString("char")) )
+    if ( name == "char" )
         return sal_True;
-    if ( name.equals(OString("byte")) )
+    if ( name == "byte" )
         return sal_True;
-    if ( name.equals(OString("any")) )
+    if ( name == "any" )
         return sal_True;
-    if ( name.equals(OString("type")) )
+    if ( name == "type" )
         return sal_True;
-    if ( name.equals(OString("float")) )
+    if ( name == "float" )
         return sal_True;
-    if ( name.equals(OString("double")) )
+    if ( name == "double" )
         return sal_True;
-    if ( name.equals(OString("void")) )
+    if ( name == "void" )
         return sal_True;
 
     return sal_False;
@@ -355,10 +355,10 @@ RegistryKeyList RegistryTypeManager::getTypeKeys(const ::rtl::OString& name_) co
 {
     RegistryKeyList keyList= RegistryKeyList();
     OString tmpName;
-    if ( name_.equals("/") || name_.equals(m_pImpl->m_base) ) {
+    if ( name_ == "/" || name_ == m_pImpl->m_base ) {
         tmpName = m_pImpl->m_base;
     } else {
-        if ( m_pImpl->m_base.equals("/") )
+        if ( m_pImpl->m_base == "/" )
             tmpName = name_;
         else
             tmpName = m_pImpl->m_base + "/" + name_;

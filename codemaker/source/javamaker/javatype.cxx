@@ -2474,9 +2474,7 @@ bool produceType(
     codemaker::GeneratedTypeSet & generated, JavaOptions * options)
 {
     OSL_ASSERT(options != 0);
-    if (type.equals("/")
-        || type.equals(manager.getBase())
-        || generated.contains(type))
+    if (type == "/" || type == manager.getBase() || generated.contains(type))
     {
         return true;
     }
@@ -2548,9 +2546,7 @@ bool produceType(
     ::rtl::OString typeName = manager.getTypeName(rTypeKey);
 
     OSL_ASSERT(options != 0);
-    if (typeName.equals("/")
-        || typeName.equals(manager.getBase())
-        || generated.contains(typeName))
+    if (typeName == "/" || typeName == manager.getBase() || generated.contains(typeName))
     {
         return true;
     }

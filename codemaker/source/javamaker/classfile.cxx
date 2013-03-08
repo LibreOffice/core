@@ -475,9 +475,7 @@ ClassFile::ClassFile(
     m_superClass = addClassInfo(superClass);
     if (!signature.isEmpty()) {
         ++m_attributesCount;
-        appendU2(
-            m_attributes,
-            addUtf8Info(rtl::OString(RTL_CONSTASCII_STRINGPARAM("Signature"))));
+        appendU2(m_attributes, addUtf8Info("Signature"));
         appendU4(m_attributes, 2);
         appendU2(m_attributes, addUtf8Info(signature));
     }
@@ -582,10 +580,7 @@ void ClassFile::addField(
         ((constantValueIndex == 0 ? 0 : 1)
          + (signature.isEmpty() ? 0 : 1)));
     if (constantValueIndex != 0) {
-        appendU2(
-            m_fields,
-            addUtf8Info(
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("ConstantValue"))));
+        appendU2(m_fields, addUtf8Info("ConstantValue"));
         appendU4(m_fields, 2);
         appendU2(m_fields, constantValueIndex);
     }
@@ -624,9 +619,7 @@ void ClassFile::addMethod(
         {
             throw CannotDumpException("Code block is too big for Java class file format");
         }
-        appendU2(
-            m_methods,
-            addUtf8Info(rtl::OString(RTL_CONSTASCII_STRINGPARAM("Code"))));
+        appendU2(m_methods, addUtf8Info("Code"));
         appendU4(
             m_methods,
             (2 + 2 + 4 + static_cast< sal_uInt32 >(codeSize) + 2
@@ -640,10 +633,7 @@ void ClassFile::addMethod(
         appendU2(m_methods, 0);
     }
     if (!exceptions.empty()) {
-        appendU2(
-            m_methods,
-            addUtf8Info(
-                rtl::OString(RTL_CONSTASCII_STRINGPARAM("Exceptions"))));
+        appendU2(m_methods, addUtf8Info("Exceptions"));
         appendU4(
             m_methods,
             static_cast< sal_uInt32 >(2 + 2 * static_cast< sal_uInt32 >(excs)));
@@ -848,9 +838,7 @@ void ClassFile::appendSignatureAttribute(
     std::vector< unsigned char > & stream, rtl::OString const & signature)
 {
     if (!signature.isEmpty()) {
-        appendU2(
-            stream,
-            addUtf8Info(rtl::OString(RTL_CONSTASCII_STRINGPARAM("Signature"))));
+        appendU2(stream, addUtf8Info("Signature"));
         appendU4(stream, 2);
         appendU2(stream, addUtf8Info(signature));
     }

@@ -136,7 +136,7 @@ bool isBootstrapType(rtl::OString const & name) {
         "com/sun/star/util/XMacroExpander"
     }; // cf. cppuhelper/unotypes/Makefile UNOTYPES (plus missing dependencies)
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(names); ++i) {
-        if (name.equals(names[i])) {
+        if (name == names[i]) {
             return true;
         }
     }
@@ -315,7 +315,7 @@ sal_Bool CppuType::dumpFile(CppuOptions* pOptions,
 
     OString sTmpExt(".tml");
     sal_Bool bHdl = sal_True;    ;
-    if (sExtension.equals(".hpp")) {
+    if (sExtension == ".hpp") {
         sTmpExt = ".tmp";
         bHdl = sal_False;
     }
@@ -389,7 +389,7 @@ void CppuType::dumpDependedTypes(
 OString CppuType::dumpHeaderDefine(
     FileStream& o, char const * prefix, sal_Bool bExtended)
 {
-    if (m_typeName.equals("/"))
+    if (m_typeName == "/")
     {
         bExtended = sal_False;
         m_typeName = "global";
@@ -535,7 +535,7 @@ void CppuType::dumpHFileContent(
 }
 
 void CppuType::dumpGetCppuType(FileStream & out) {
-    if (m_typeName.equals("com/sun/star/uno/XInterface")) {
+    if (m_typeName == "com/sun/star/uno/XInterface") {
         out << indent()
             << ("inline ::com::sun::star::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
@@ -547,7 +547,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
                 " >::get();\n");
         dec();
         out << indent() << "}\n";
-    } else if (m_typeName.equals("com/sun/star/uno/Exception")) {
+    } else if (m_typeName == "com/sun/star/uno/Exception") {
         out << indent()
             << ("inline ::com::sun::star::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
@@ -604,7 +604,7 @@ void CppuType::dumpNormalGetCppuType(FileStream& o)
     sal_Bool bIsBaseException = sal_False;
     if (!superType.isEmpty())
     {
-        if ( superType.equals("com/sun/star/uno/Exception") )
+        if ( superType == "com/sun/star/uno/Exception" )
         {
             bIsBaseException = sal_True;
         } else
@@ -953,35 +953,35 @@ OString CppuType::getTypeClass(const OString& type, sal_Bool bCStyle)
             return bCStyle ? "typelib_TypeClass_SERVICE" : "::com::sun::star::uno::TypeClass_SERVICE";
         case RT_TYPE_INVALID:
             {
-                if (type.equals("long"))
+                if (type == "long")
                     return bCStyle ? "typelib_TypeClass_LONG" : "::com::sun::star::uno::TypeClass_LONG";
-                if (type.equals("short"))
+                if (type == "short")
                     return bCStyle ? "typelib_TypeClass_SHORT" : "::com::sun::star::uno::TypeClass_SHORT";
-                if (type.equals("hyper"))
+                if (type == "hyper")
                     return bCStyle ? "typelib_TypeClass_HYPER" : "::com::sun::star::uno::TypeClass_HYPER";
-                if (type.equals("string"))
+                if (type == "string")
                     return bCStyle ? "typelib_TypeClass_STRING" : "::com::sun::star::uno::TypeClass_STRING";
-                if (type.equals("boolean"))
+                if (type == "boolean")
                     return bCStyle ? "typelib_TypeClass_BOOLEAN" : "::com::sun::star::uno::TypeClass_BOOLEAN";
-                if (type.equals("char"))
+                if (type == "char")
                     return bCStyle ? "typelib_TypeClass_CHAR" : "::com::sun::star::uno::TypeClass_CHAR";
-                if (type.equals("byte"))
+                if (type == "byte")
                     return bCStyle ? "typelib_TypeClass_BYTE" : "::com::sun::star::uno::TypeClass_BYTE";
-                if (type.equals("any"))
+                if (type == "any")
                     return bCStyle ? "typelib_TypeClass_ANY" : "::com::sun::star::uno::TypeClass_ANY";
-                if (type.equals("type"))
+                if (type == "type")
                     return bCStyle ? "typelib_TypeClass_TYPE" : "::com::sun::star::uno::TypeClass_TYPE";
-                if (type.equals("float"))
+                if (type == "float")
                     return bCStyle ? "typelib_TypeClass_FLOAT" : "::com::sun::star::uno::TypeClass_FLOAT";
-                if (type.equals("double"))
+                if (type == "double")
                     return bCStyle ? "typelib_TypeClass_DOUBLE" : "::com::sun::star::uno::TypeClass_DOUBLE";
-                if (type.equals("void"))
+                if (type == "void")
                     return bCStyle ? "typelib_TypeClass_VOID" : "::com::sun::star::uno::TypeClass_VOID";
-                if (type.equals("unsigned long"))
+                if (type == "unsigned long")
                     return bCStyle ? "typelib_TypeClass_UNSIGNED_LONG" : "::com::sun::star::uno::TypeClass_UNSIGNED_LONG";
-                if (type.equals("unsigned short"))
+                if (type == "unsigned short")
                     return bCStyle ? "typelib_TypeClass_UNSIGNED_SHORT" : "::com::sun::star::uno::TypeClass_UNSIGNED_SHORT";
-                if (type.equals("unsigned hyper"))
+                if (type == "unsigned hyper")
                     return bCStyle ? "typelib_TypeClass_UNSIGNED_HYPER" : "::com::sun::star::uno::TypeClass_UNSIGNED_HYPER";
             }
             break;
@@ -1521,7 +1521,7 @@ void InterfaceType::dumpMethods(FileStream& o)
             m_reader.getMethodReturnTypeName(i), RTL_TEXTENCODING_UTF8);
         paramCount = m_reader.getMethodParameterCount(i);
 
-        if ( methodName.equals("acquire") || methodName.equals("release") )
+        if ( methodName == "acquire" || methodName == "release"  )
         {
             bWithRunTimeExcp = sal_False;
         }
@@ -2051,7 +2051,7 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
                 sal_True);
             paramCount = m_reader.getMethodParameterCount(i);
 
-            if ( methodName.equals("acquire") || methodName.equals("release") )
+            if ( methodName == "acquire" || methodName == "release" )
             {
                 bWithRuntimeException = sal_False;
             }
@@ -2454,7 +2454,7 @@ bool ModuleType::dumpFiles(
     CppuOptions * options, rtl::OString const & outPath)
 {
     rtl::OString tmpName(m_typeName);
-    if (tmpName.equals("/")) {
+    if (tmpName == "/") {
         tmpName = "global";
     } else {
         tmpName += "/" + m_typeName.copy(m_typeName.lastIndexOf('/') + 1);
@@ -2937,8 +2937,8 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out)
     inc();
     if (isPolymorphic()) {
         out << indent() << "::rtl::OUStringBuffer the_buffer;\n" << indent()
-            << "the_buffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(\""
-            << m_typeName.replace('/', '.') << "<\"));\n";
+            << "the_buffer.append(\""
+            << m_typeName.replace('/', '.') << "<\");\n";
         sal_uInt16 n = m_reader.getReferenceCount();
         for (sal_uInt16 i = 0; i < n; ++i) {
             out << indent()
@@ -3321,7 +3321,7 @@ void ExceptionType::dumpDeclaration(FileStream& o)
         dumpType(o, fieldType);
         o << " " << fieldName;
         if (i == 0 && !superType.isEmpty() &&
-            !fieldType.equals("double") && !fieldType.equals("hyper") && !fieldType.equals("unsigned hyper"))
+            !(fieldType == "double") && !(fieldType == "hyper") && !(fieldType == "unsigned hyper"))
         {
             o << " CPPU_GCC3_ALIGN( " << scopedCppName(superType) << " )";
         }
@@ -4289,7 +4289,7 @@ bool produceType(const OString& typeName,
                  CppuOptions* pOptions)
     throw( CannotDumpException )
 {
-    if (typeName.equals("/") || typeName.equals(typeMgr.getBase()) ||
+    if (typeName == "/" || typeName == typeMgr.getBase() ||
         TypeManager::isBaseType(typeName) || generated.contains(typeName))
     {
         return true;
@@ -4425,7 +4425,7 @@ bool produceType(RegistryKey& rTypeKey, bool bIsExtraType,
 {
     OString typeName = typeMgr.getTypeName(rTypeKey);
 
-    if (typeName.equals("/") ||typeName.equals(typeMgr.getBase()) ||
+    if (typeName == "/" ||typeName == typeMgr.getBase() ||
         TypeManager::isBaseType(typeName) || generated.contains(typeName))
     {
         return true;
