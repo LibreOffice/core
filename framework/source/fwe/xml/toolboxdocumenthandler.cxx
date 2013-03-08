@@ -210,7 +210,7 @@ throw(  SAXException, RuntimeException )
         ( !m_bToolBarStartFound && m_bToolBarEndFound )     )
     {
         OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += OUString( "No matching start or end element 'toolbar' found!" );
+        aErrorMessage += "No matching start or end element 'toolbar' found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -231,7 +231,7 @@ throw(  SAXException, RuntimeException )
                 if ( m_bToolBarStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'toolbar:toolbar' cannot be embeded into 'toolbar:toolbar'!" );
+                    aErrorMessage += "Element 'toolbar:toolbar' cannot be embeded into 'toolbar:toolbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
                         else
@@ -280,7 +280,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bToolBarStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'toolbar:toolbaritem' must be embeded into element 'toolbar:toolbar'!" );
+                    aErrorMessage += "Element 'toolbar:toolbaritem' must be embeded into element 'toolbar:toolbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -290,7 +290,7 @@ throw(  SAXException, RuntimeException )
                      m_bToolBarItemStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element toolbar:toolbaritem is not a container!" );
+                    aErrorMessage += "Element toolbar:toolbaritem is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -346,7 +346,7 @@ throw(  SAXException, RuntimeException )
                                 else
                                 {
                                     OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += OUString( "Attribute toolbar:visible must have value 'true' or 'false'!" );
+                                    aErrorMessage += "Attribute toolbar:visible must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -408,7 +408,7 @@ throw(  SAXException, RuntimeException )
                 if ( !bAttributeURL )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Required attribute toolbar:url must have a value!" );
+                    aErrorMessage += "Required attribute toolbar:url must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -461,7 +461,7 @@ throw(  SAXException, RuntimeException )
                      m_bToolBarItemStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element toolbar:toolbarspace is not a container!" );
+                    aErrorMessage += "Element toolbar:toolbarspace is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -486,7 +486,7 @@ throw(  SAXException, RuntimeException )
                      m_bToolBarItemStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element toolbar:toolbarbreak is not a container!" );
+                    aErrorMessage += "Element toolbar:toolbarbreak is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -511,7 +511,7 @@ throw(  SAXException, RuntimeException )
                      m_bToolBarItemStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element toolbar:toolbarseparator is not a container!" );
+                    aErrorMessage += "Element toolbar:toolbarseparator is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -549,7 +549,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bToolBarStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "End element 'toolbar' found, but no start element 'toolbar'" );
+                    aErrorMessage += "End element 'toolbar' found, but no start element 'toolbar'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -562,7 +562,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bToolBarItemStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "End element 'toolbar:toolbaritem' found, but no start element 'toolbar:toolbaritem'" );
+                    aErrorMessage += "End element 'toolbar:toolbaritem' found, but no start element 'toolbar:toolbaritem'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -575,7 +575,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bToolBarBreakStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "End element 'toolbar:toolbarbreak' found, but no start element 'toolbar:toolbarbreak'" );
+                    aErrorMessage += "End element 'toolbar:toolbarbreak' found, but no start element 'toolbar:toolbarbreak'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -588,7 +588,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bToolBarSpaceStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "End element 'toolbar:toolbarspace' found, but no start element 'toolbar:toolbarspace'" );
+                    aErrorMessage += "End element 'toolbar:toolbarspace' found, but no start element 'toolbar:toolbarspace'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -601,7 +601,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bToolBarSeparatorStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "End element 'toolbar:toolbarseparator' found, but no start element 'toolbar:toolbarseparator'" );
+                    aErrorMessage += "End element 'toolbar:toolbarseparator' found, but no start element 'toolbar:toolbarseparator'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

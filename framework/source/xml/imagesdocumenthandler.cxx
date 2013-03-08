@@ -159,7 +159,7 @@ throw(  SAXException, RuntimeException )
         ( !m_bImageContainerStartFound && m_bImageContainerEndFound )    )
     {
         OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += OUString( "No matching start or end element 'image:imagecontainer' found!" );
+        aErrorMessage += "No matching start or end element 'image:imagecontainer' found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -181,7 +181,7 @@ throw(  SAXException, RuntimeException )
                 if ( m_bImageContainerStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'image:imagecontainer' cannot be embeded into 'image:imagecontainer'!" );
+                    aErrorMessage += "Element 'image:imagecontainer' cannot be embeded into 'image:imagecontainer'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -194,14 +194,14 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bImageContainerStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'image:images' must be embeded into element 'image:imagecontainer'!" );
+                    aErrorMessage += "Element 'image:images' must be embeded into element 'image:imagecontainer'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
                 if ( m_bImagesStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'image:images' cannot be embeded into 'image:images'!" );
+                    aErrorMessage += "Element 'image:images' cannot be embeded into 'image:images'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -260,7 +260,7 @@ throw(  SAXException, RuntimeException )
                                     m_pImages = NULL;
 
                                     OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += OUString( "Attribute image:maskmode must be 'maskcolor' or 'maskbitmap'!" );
+                                    aErrorMessage += "Attribute image:maskmode must be 'maskcolor' or 'maskbitmap'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -290,7 +290,7 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Required attribute xlink:href must have a value!" );
+                    aErrorMessage += "Required attribute xlink:href must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
             }
@@ -305,7 +305,7 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'image:entry' must be embeded into element 'image:images'!" );
+                    aErrorMessage += "Element 'image:entry' must be embeded into element 'image:images'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -352,7 +352,7 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Required attribute 'image:bitmap-index' must have a value >= 0!" );
+                    aErrorMessage += "Required attribute 'image:bitmap-index' must have a value >= 0!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -364,7 +364,7 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Required attribute 'image:command' must have a value!" );
+                    aErrorMessage += "Required attribute 'image:command' must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -382,7 +382,7 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'image:externalimages' must be embeded into element 'image:imagecontainer'!" );
+                    aErrorMessage += "Element 'image:externalimages' must be embeded into element 'image:imagecontainer'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -393,7 +393,7 @@ throw(  SAXException, RuntimeException )
                     m_pImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'image:externalimages' cannot be embeded into 'image:externalimages'!" );
+                    aErrorMessage += "Element 'image:externalimages' cannot be embeded into 'image:externalimages'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -413,7 +413,7 @@ throw(  SAXException, RuntimeException )
                     m_pExternalImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'image:externalentry' must be embeded into 'image:externalimages'!" );
+                    aErrorMessage += "Element 'image:externalentry' must be embeded into 'image:externalimages'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -425,7 +425,7 @@ throw(  SAXException, RuntimeException )
                     m_pExternalImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'image:externalentry' cannot be embeded into 'image:externalentry'!" );
+                    aErrorMessage += "Element 'image:externalentry' cannot be embeded into 'image:externalentry'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -469,7 +469,7 @@ throw(  SAXException, RuntimeException )
                     m_pExternalImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Required attribute 'image:command' must have a value!" );
+                    aErrorMessage += "Required attribute 'image:command' must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -483,7 +483,7 @@ throw(  SAXException, RuntimeException )
                     m_pExternalImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Required attribute 'xlink:href' must have a value!" );
+                    aErrorMessage += "Required attribute 'xlink:href' must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

@@ -198,7 +198,7 @@ throw(  SAXException, RuntimeException )
         ( !m_bStatusBarStartFound && m_bStatusBarEndFound )     )
     {
         OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += OUString( "No matching start or end element 'statusbar' found!" );
+        aErrorMessage += "No matching start or end element 'statusbar' found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -219,7 +219,7 @@ throw(  SAXException, RuntimeException )
                 if ( m_bStatusBarStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'statusbar:statusbar' cannot be embeded into 'statusbar:statusbar'!" );
+                    aErrorMessage += "Element 'statusbar:statusbar' cannot be embeded into 'statusbar:statusbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -232,14 +232,14 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bStatusBarStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element 'statusbar:statusbaritem' must be embeded into element 'statusbar:statusbar'!" );
+                    aErrorMessage += "Element 'statusbar:statusbaritem' must be embeded into element 'statusbar:statusbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
                 if ( m_bStatusBarItemStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Element statusbar:statusbaritem is not a container!" );
+                    aErrorMessage += "Element statusbar:statusbaritem is not a container!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -284,7 +284,7 @@ throw(  SAXException, RuntimeException )
                                 else
                                 {
                                     OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += OUString( "Attribute statusbar:align must have one value of 'left','right' or 'center'!" );
+                                    aErrorMessage += "Attribute statusbar:align must have one value of 'left','right' or 'center'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -309,7 +309,7 @@ throw(  SAXException, RuntimeException )
                                 else
                                 {
                                     OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += OUString( "Attribute statusbar:autosize must have value 'true' or 'false'!" );
+                                    aErrorMessage += "Attribute statusbar:autosize must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -324,7 +324,7 @@ throw(  SAXException, RuntimeException )
                                 else
                                 {
                                     OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += OUString( "Attribute statusbar:autosize must have value 'true' or 'false'!" );
+                                    aErrorMessage += "Attribute statusbar:autosize must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -339,7 +339,7 @@ throw(  SAXException, RuntimeException )
                                 else
                                 {
                                     OUString aErrorMessage = getErrorLineString();
-                                    aErrorMessage += OUString( "Attribute statusbar:ownerdraw must have value 'true' or 'false'!" );
+                                    aErrorMessage += "Attribute statusbar:ownerdraw must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
                             }
@@ -372,7 +372,7 @@ throw(  SAXException, RuntimeException )
                 if ( !bCommandURL )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "Required attribute statusbar:url must have a value!" );
+                    aErrorMessage += "Required attribute statusbar:url must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
                         else
@@ -418,7 +418,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bStatusBarStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "End element 'statusbar' found, but no start element 'statusbar'" );
+                    aErrorMessage += "End element 'statusbar' found, but no start element 'statusbar'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -431,7 +431,7 @@ throw(  SAXException, RuntimeException )
                 if ( !m_bStatusBarItemStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( "End element 'statusbar:statusbaritem' found, but no start element 'statusbar:statusbaritem'" );
+                    aErrorMessage += "End element 'statusbar:statusbaritem' found, but no start element 'statusbar:statusbaritem'";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

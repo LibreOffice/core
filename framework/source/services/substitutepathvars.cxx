@@ -257,7 +257,7 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
         while ( nSharePoints < aSharePointNames.getLength() )
         {
             OUString aSharePointNodeName( m_aSharePointsNodeName );
-            aSharePointNodeName += OUString("/");
+            aSharePointNodeName += "/";
             aSharePointNodeName += aSharePointNames[ nSharePoints ];
 
             SubstituteRuleVector aRuleSet;

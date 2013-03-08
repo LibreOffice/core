@@ -569,13 +569,13 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                     else
                     {
                         menuShortCut[1] = (char)( '1' + i );
-                        aMenuShortCut = OUString( RTL_CONSTASCII_USTRINGPARAM( menuShortCut ) );
+                        aMenuShortCut = OUString::createFromAscii( menuShortCut );
                     }
                 }
                 else
                 {
                     aMenuShortCut = OUString::valueOf((sal_Int32)( i + 1 ));
-                    aMenuShortCut += OUString( ": " );
+                    aMenuShortCut += ": ";
                 }
 
                 // Abbreviate URL
