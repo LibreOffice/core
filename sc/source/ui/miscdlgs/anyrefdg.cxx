@@ -365,6 +365,11 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
 
         // Fenster wieder gross
         m_pWindow->SetOutputSizePixel(aOldDialogSize);
+        if (aOldMinDialogSize.Height())
+        {
+            SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_pWindow);
+            pSysWin->SetMinOutputSizePixel(aOldMinDialogSize);
+        }
 
         // pEditCell an alte Position
         pRefEdit->SetPosSizePixel(aOldEditPos, aOldEditSize);
@@ -408,6 +413,9 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
 
         // Alte Daten merken
         aOldDialogSize = m_pWindow->GetOutputSizePixel();
+        SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_pWindow);
+        if (pSysWin)
+            aOldMinDialogSize = pSysWin->GetMinOutputSizePixel();
         aOldEditPos = pRefEdit->GetPosPixel();
         aOldEditSize = pRefEdit->GetSizePixel();
         if (pRefBtn)
@@ -465,6 +473,8 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         }
 
         // Fenster verkleinern
+        if (aOldMinDialogSize.Height() && pSysWin)
+            pSysWin->SetMinOutputSizePixel(Size()); //unset min size
         m_pWindow->SetOutputSizePixel(aNewDlgSize);
 
         // Fenstertitel anpassen

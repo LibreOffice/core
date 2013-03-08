@@ -122,9 +122,8 @@ void            ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdi
     }
 }
 
-void            ScTPValidationValue::RefInputDonePreHdl()
+void            ScTPValidationValue::RefInputDonePostHdl()
 {
-
     if( m_pRefEdit && m_pRefEdit->GetParent()!= this )
     {
         if( Window *pPreWnd = m_pRefEdit==&maEdMax?&maFtMax:(m_pRefEdit==&maEdMin?&maFtMin:NULL) )
@@ -139,11 +138,6 @@ void            ScTPValidationValue::RefInputDonePreHdl()
     }
 
     if( m_btnRef.GetParent()!=this ) m_btnRef.SetParent( this );
-}
-
-void            ScTPValidationValue::RefInputDonePostHdl()
-{
-
 
     if( m_pRefEdit && !m_pRefEdit->HasFocus() )
         m_pRefEdit->GrabFocus();
@@ -488,7 +482,6 @@ void ScTPValidationValue::SetupRefDlg()
             pValidationDlg->SetSetRefHdl( (ScRefHandlerHelper::PFUNCSETREFHDLTYPE)( &ScTPValidationValue::SetReferenceHdl ) );
             pValidationDlg->SetSetActHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::SetActiveHdl ) );
             pValidationDlg->SetRefInputStartPreHdl( (ScRefHandlerHelper::PINPUTSTARTDLTYPE)( &ScTPValidationValue::RefInputStartPreHdl ) );
-            pValidationDlg->SetRefInputDonePreHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::RefInputDonePreHdl ) );
             pValidationDlg->SetRefInputDonePostHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::RefInputDonePostHdl ) );
 
             if ( maEdMax.IsVisible() ) { m_pRefEdit = &maEdMax; }
@@ -510,7 +503,6 @@ void ScTPValidationValue::RemoveRefDlg()
             pValidationDlg->SetSetRefHdl( NULL );
             pValidationDlg->SetSetActHdl( NULL );
             pValidationDlg->SetRefInputStartPreHdl( NULL );
-            pValidationDlg->SetRefInputDonePreHdl( NULL );
             pValidationDlg->SetRefInputDonePostHdl( NULL );
 
             if( m_pRefEdit ) m_pRefEdit->SetRefDialog( NULL );

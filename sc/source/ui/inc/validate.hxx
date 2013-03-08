@@ -225,7 +225,6 @@ private:
     void            SetReferenceHdl( const ScRange& , ScDocument* );
     void            SetActiveHdl();
     void            RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton );
-    void            RefInputDonePreHdl();
     void            RefInputDonePostHdl();
     ScValidationDlg * GetValidationDlg();
 
