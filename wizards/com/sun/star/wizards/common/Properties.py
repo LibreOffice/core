@@ -45,9 +45,11 @@ class Properties(dict):
 
     @classmethod
     def getProperties(self, _map):
+        print ("DEBUG !!! Properties.getProperties (class method).")
         pv = []
         for k,v in _map.items():
             pv.append(self.createProperty(k, v))
+        print ("DEBUG !!! Properties.getProperties (class method) pv: ", pv)
         return pv
 
     @classmethod
@@ -58,3 +60,7 @@ class Properties(dict):
         if handle is not None:
             pv.Handle = handle
         return pv
+
+    def getProperties1(self):
+        print ("DEBUG !!! Properties.getProperties (instance method).")
+        return self.getProperties(self)
