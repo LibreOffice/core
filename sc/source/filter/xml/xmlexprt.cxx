@@ -2533,13 +2533,16 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape
             // collect note caption objects from all layers (internal or hidden)
             if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, static_cast< SCTAB >( nCurrentTable ) ) )
             {
-                pSharedData->AddNoteObj( xShape, pCaptData->maStart );
+                if(pDoc->GetNotes(nCurrentTable)->findByAddress(pCaptData->maStart))
+                {
+                    pSharedData->AddNoteObj( xShape, pCaptData->maStart );
 
-                // #i60851# When the file is saved while editing a new note,
-                // the cell is still empty -> last column/row must be updated
-                OSL_ENSURE( pCaptData->maStart.Tab() == nCurrentTable, "invalid table in object data" );
-                pSharedData->SetLastColumn( nCurrentTable, pCaptData->maStart.Col() );
-                pSharedData->SetLastRow( nCurrentTable, pCaptData->maStart.Row() );
+                    // #i60851# When the file is saved while editing a new note,
+                    // the cell is still empty -> last column/row must be updated
+                    OSL_ENSURE( pCaptData->maStart.Tab() == nCurrentTable, "invalid table in object data" );
+                    pSharedData->SetLastColumn( nCurrentTable, pCaptData->maStart.Col() );
+                    pSharedData->SetLastRow( nCurrentTable, pCaptData->maStart.Row() );
+                }
             }
             // other objects from internal layer only (detective)
             else if( pObject->GetLayer() == SC_LAYER_INTERN )
