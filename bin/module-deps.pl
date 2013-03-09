@@ -1,44 +1,62 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 use strict;
+use warnings;
+use Getopt::Long qw(GetOptions VersionMessage);
+use Pod::Usage;
 
 my $gnumake;
 my $makefile_build;
+my $verbose = 0;
+my $from_file;
+my $to_file;
+my $graph_file;
+
+sub logit($)
+{
+    print STDERR shift if ($verbose);
+}
 
 sub read_deps()
 {
     my $p;
+    my $to;
     my $invalid_tolerance = 100;
     my $line_count = 0;
     my %deps;
-    if (defined $ENV{DEP_CACHE_FILE}) {
-	open ($p, $ENV{DEP_CACHE_FILE}) || die "can't read deps from cache: $!";
+    if (defined $to_file)
+    {
+        open($to, ">$to_file") or die "can not open file for writing $to_file";
+    }
+    if (defined $from_file) {
+        open ($p, $from_file) || die "can't read deps from cache file: $!";
     } else {
-	open ($p, "ENABLE_PRINT_DEPS=1 $gnumake -n -f $makefile_build all|") || die "can't launch make: $!";
+        open ($p, "ENABLE_PRINT_DEPS=1 $gnumake -n -f $makefile_build all|") || die "can't launch make: $!";
     }
     $|=1;
     print STDERR "reading deps ";
     while (<$p>) {
-	my $line = $_;
-	$line_count++;
-	print STDERR '.' if ($line_count % 10 == 0);
-#	print STDERR $line;
-	chomp ($line);
+        my $line = $_;
+        $line_count++;
+        print STDERR '.' if ($line_count % 10 == 0);
+        logit($line);
+        print $to $line if defined $to_file;
+        chomp ($line);
         if ($line =~ m/^LibraryDep:\s+(\S+) links against (.*)$/) {
 #        if ($line =~ m/^LibraryDep:\s+(\S+)\s+links against/) {
-	    $deps{$1} = ' ' if (!defined $deps{$1});
-	    $deps{$1} = $deps{$1} . ' ' . $2;
+            $deps{$1} = ' ' if (!defined $deps{$1});
+            $deps{$1} = $deps{$1} . ' ' . $2;
         } elsif ($line =~ m/^LibraryDep:\s+links against/) {
 #           these need fixing, we call gb_LinkTarget__use_$...
 #           and get less than normal data back to gb_LinkTarget_use_libraries
-#	    print STDERR "ignoring unhelpful external dep\n";
-	} elsif ($invalid_tolerance < 0) {
-#	    print "read all dependencies to: '$line'\n";
-	    last;
-	} else {
-#	    print "no match '$line'\n";
-	    $invalid_tolerance--;
-	}
+#           print STDERR "ignoring unhelpful external dep\n";
+        } elsif ($invalid_tolerance < 0) {
+#           print "read all dependencies to: '$line'\n";
+            last;
+        } else {
+#           print "no match '$line'\n";
+            $invalid_tolerance--;
+        }
     }
     close ($p);
     print STDERR " done\n";
@@ -60,31 +78,31 @@ sub clean_tree($)
     my $deps = shift;
     my %tree;
     for my $name (sort keys %{$deps}) {
-	my $need_str = $deps->{$name};
-	$need_str =~ s/^\s+//g;
-	$need_str =~ s/\s+$//g;
-	my @needs = split /\s+/, $need_str;
-	$name =~ m/^([^_]+)_(\S+)$/ || die "invalid target name: '$name'";
-	my $type = $1;
-	my $target = clean_name ($2);
-	$type eq 'Executable' || $type eq 'Library' ||
-	    $type eq 'CppunitTest' || die "Unknown type '$type'";
+        my $need_str = $deps->{$name};
+        $need_str =~ s/^\s+//g;
+        $need_str =~ s/\s+$//g;
+        my @needs = split /\s+/, $need_str;
+        $name =~ m/^([^_]+)_(\S+)$/ || die "invalid target name: '$name'";
+        my $type = $1;
+        my $target = clean_name ($2);
+        $type eq 'Executable' || $type eq 'Library' ||
+            $type eq 'CppunitTest' || die "Unknown type '$type'";
 
-	my %result;
-	$result{type} = $type;
-	$result{target} = $target;
-	$result{generation} = 0;
-	my @clean_needs;
-	for my $need (@needs) {
-	    push @clean_needs, clean_name($need);
-	}
-	$result{deps} = \@clean_needs;
-	if (defined $tree{$target}) {
-	    print STDERR "warning -duplicate target: '$target'\n";
-	}
-	$tree{$target} = \%result;
+        my %result;
+        $result{type} = $type;
+        $result{target} = $target;
+        $result{generation} = 0;
+        my @clean_needs;
+        for my $need (@needs) {
+            push @clean_needs, clean_name($need);
+        }
+        $result{deps} = \@clean_needs;
+        if (defined $tree{$target}) {
+            print STDERR "warning -duplicate target: '$target'\n";
+        }
+        $tree{$target} = \%result;
 
-#	print "$target ($type): " . join (',', @clean_needs) . "\n";
+        logit("$target ($type): " . join (',', @clean_needs) . "\n");
     }
     return \%tree;
 }
@@ -108,21 +126,21 @@ sub build_flat_dep_hash($$)
 
     # build flat deps for children
     for my $child (@{$node->{deps}}) {
-	build_flat_dep_hash($tree, $child)
+        build_flat_dep_hash($tree, $child)
     }
 
     for my $child (@{$node->{deps}}) {
-	$flat_deps{$child} = 1;
-	for my $dep (@{$tree->{$child}->{deps}}) {
-	    $flat_deps{$dep} = 1;
-	}
+        $flat_deps{$child} = 1;
+        for my $dep (@{$tree->{$child}->{deps}}) {
+            $flat_deps{$dep} = 1;
+        }
     }
     $node->{flat_deps} = \%flat_deps;
 
     # useful debugging ...
     if (defined $ENV{DEP_CACHE_FILE}) {
-	print "node '$name' has flat-deps: '" . join(',', keys %flat_deps) . "' " .
-	    "vs. '" . join(',', @{$node->{deps}}) . "'\n";
+        logit("node '$name' has flat-deps: '" . join(',', keys %flat_deps) . "' " .
+            "vs. '" . join(',', @{$node->{deps}}) . "'\n");
     }
 }
 
@@ -133,63 +151,235 @@ sub prune_redundant_deps($)
 {
     my $tree = shift;
     for my $name (sort keys %{$tree}) {
-	build_flat_dep_hash($tree, $name);
+        build_flat_dep_hash($tree, $name);
     }
+}
+
+sub create_lib_module_map()
+{
+    my %l2m;
+    for (glob("*/Library_*.mk"))
+    {
+        /(.*)\/Library_(.*)\.mk/;
+        # add module -> module
+        $l2m{$1} = $1;
+        # add lib -> module
+        $l2m{$2} = $1;
+    }
+    return \%l2m;
 }
 
 sub dump_graphviz($)
 {
     my $tree = shift;
-    print "digraph LibreOffice {\n";
-    for my $name (sort keys %{$tree}) {
-	my $result = $tree->{$name};
-	if ($result->{type} eq 'CppunitTest' ||
-	    ($result->{type} eq 'Executable' && $result->{target} ne 'soffice_bin')) {
-	    next; # de-bloat the tree
-	}
-
-#	print STDERR "minimising deps for $result->{target}\n";
-	my @newdeps;
-	for my $dep (@{$result->{deps}}) {
-	    my $print = 1;
-	    # is this implied by any other child ?
-#	    print STDERR "checking if '$dep' is redundant\n";
-	    for my $other_dep (@{$result->{deps}}) {
-		next if ($other_dep eq $dep);
-		if (has_child_dep($tree,$dep,$other_dep)) {
-		    $print = 0;
-#		    print STDERR "$dep is implied by $other_dep - ignoring\n";
-		}
-	    }
-	    print "$name -> $dep;\n" if ($print);
-	    push @newdeps, $dep;
-	}
-	# re-write the shrunk set to accelerate things
-	$result->{deps} = \@newdeps;
+    my $to;
+    if (defined($graph_file)) {
+        open ($to, ">$graph_file");
     }
-    print "}\n";
+    else
+    {
+        $to = \*STDOUT;
+    }
+    my $l2m = create_lib_module_map();
+    my %unknown_libs;
+    my %digraph;
+
+    print $to <<END;
+digraph LibreOffice {
+node [shape="Mrecord", color="#BBBBBB"]
+node  [fontname=Verdana, color="#BBBBBB", fontsize=10, height=0.02, width=0.02]
+edge  [color="#31CEF0", len=0.4]
+edge  [fontname=Arial, fontsize=10, fontcolor="#31CEF0"]
+END
+
+   for my $name (sort keys %{$tree}) {
+        my $result = $tree->{$name};
+        if ($result->{type} eq 'CppunitTest' ||
+            ($result->{type} eq 'Executable' &&
+             $result->{target} ne 'soffice_bin')) {
+            next; # de-bloat the tree
+        }
+
+        logit("minimising deps for $result->{target}\n");
+        my @newdeps;
+        for my $dep (@{$result->{deps}}) {
+            my $print = 1;
+            # is this implied by any other child ?
+            logit("checking if '$dep' is redundant\n");
+            for my $other_dep (@{$result->{deps}}) {
+                next if ($other_dep eq $dep);
+                if (has_child_dep($tree,$dep,$other_dep)) {
+                    $print = 0;
+                    logit("$dep is implied by $other_dep - ignoring\n");
+                }
+            }
+            if (!grep {/$name/} keys $l2m)
+            {
+                $unknown_libs{$name} = 1;
+            }
+            else
+            {
+                if ($print)
+                {
+                    $name = $l2m->{$name};
+                    $dep = $l2m->{$dep};
+                    # two libraries from the same module depend on
+                    # each other: hide it
+                    if ($name eq $dep)
+                    {
+                        $print = 0;
+                    }
+                    # making digraph unique
+                    if (exists($digraph{$name}))
+                    {
+                        my @deps = @{$digraph{$name}};
+                        # have seen already that edge?
+                        if (grep {/$dep/} @deps)
+                        {
+                            # hide then
+                            $print = 0;
+                        }
+                        else
+                        {
+                            push @deps, $dep;
+                            $digraph{$name} = \@deps;
+                        }
+                    }
+                    else
+                    {
+                        my @deps;
+                        push @deps, $dep;
+                        $digraph{$name} = \@deps;
+                    }
+                }
+            }
+            print $to "$name -> $dep;\n" if ($print);
+            push @newdeps, $dep;
+        }
+        # re-write the shrunk set to accelerate things
+        $result->{deps} = \@newdeps;
+    }
+    print $to "}\n";
+
+    logit("warn: no module for lib found: [" .
+          join(",", (sort (keys(%unknown_libs)))) . "]\n");
+
 }
 
-my $graphviz = 1;
-
-while (my $arg = shift @ARGV) {
-    if ($arg eq '--graph' || $arg eq '-g') {
-	$graphviz = 1;
-    } elsif (!defined $gnumake) {
-	$gnumake = $arg;
-    } elsif (!defined $makefile_build) {
-	$makefile_build = $arg;
-    } else {
-	die "un-needed argument '$arg'";
-    }
+sub parse_options()
+{
+    my %h = (
+        'verbose|v' => \$verbose,
+        'help|h' => \my $help,
+        'man|m' => \my $man,
+        'version|r' => sub {
+            VersionMessage(-msg => "You are using: 1.0 of ");
+        },
+        'write-dep-file|w=s' => \$to_file,
+        'read-dep-file|f=s' => \$from_file,
+        'graph-file|o=s' => \$graph_file);
+    GetOptions(%h) or pod2usage(2);
+    pod2usage(1) if $help;
+    pod2usage(-exitstatus => 0, -verbose => 2) if $man;
+    ($gnumake, $makefile_build) = @ARGV if $#ARGV == 1;
+    $gnumake = 'make' if (!defined $gnumake);
+    $makefile_build = 'Makefile.gbuild' if (!defined $makefile_build);
 }
 
-$gnumake = 'make' if (!defined $gnumake);
-$makefile_build = 'Makefile.gbuild' if (!defined $makefile_build);
+sub main()
+{
+    parse_options();
+    my $deps = read_deps();
+    my $tree = clean_tree($deps);
+    prune_redundant_deps($tree);
+    dump_graphviz($tree);
+}
 
-my $deps = read_deps();
-my $tree = clean_tree($deps);
+main()
 
-prune_redundant_deps($tree);
+ __END__
 
-dump_graphviz($tree);
+=head1 NAME
+
+module-deps - Generate module dependencies for LibreOffice build system
+
+=head1 SYNOPSIS
+
+module_deps [options] [gnumake] [makefile]
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--help>
+
+=item B<-h>
+
+Print a brief help message and exits.
+
+=item B<--man>
+
+=item B<-m>
+
+Prints the manual page and exits.
+
+=item B<--version>
+
+=item B<-v>
+
+Prints the version and exits.
+
+=item B<--read-dep-file file>
+
+=item B<-f>
+
+Read dependency from file.
+
+=item B<--write-dep-file file>
+
+=item B<-w>
+
+Write dependency to file.
+
+=item B<--graph-file file>
+
+=item B<-o>
+
+Write output to graph file
+
+=back
+
+=head1 DESCRIPTION
+
+B<This program> parses the output of LibreOffice make process
+(or cached input file) and generates the digraph build dependency,
+that must be piped to B<graphviz> program (typically B<dot>).
+
+B<Hacking on it>:
+
+The typical (optimized) B<workflow> includes 3 steps:
+
+=over 3
+
+=item 1
+Create cache dependency file: module_deps --write-dep-file lo.dep
+
+=item 2
+Use cache dependency file: module_deps --read-dep-file lo.dep -o lo.graphviz
+
+=item 3
+Pipe the output to graphviz: cat lo.graphviz | dot -Tpng -o lo.png
+
+=back
+
+=head1 AUTHORS
+
+=over 2
+
+=item Michael Meeks
+
+=item David Ostrovsky
+
+=back
+
+=cut
