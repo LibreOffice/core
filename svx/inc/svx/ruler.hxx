@@ -148,7 +148,6 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     long GetLeftIndent() const;
     long GetRightIndent() const;
     long GetLogicRightIndent() const;
-    long GetPageWidth() const;
 
     inline long GetLeftFrameMargin() const;
     long GetRightFrameMargin() const;
@@ -184,14 +183,13 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     sal_uInt16 GetNextVisible(sal_uInt16 nColumn);
     sal_uInt16 GetPrevVisible(sal_uInt16 nColumn);
 
-    void Update();
-
 enum UpdateType {
     MOVE_ALL,
     MOVE_LEFT,
     MOVE_RIGHT
     };
     void UpdateParaContents_Impl(long lDiff, UpdateType = MOVE_ALL);
+
 protected:
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    Click();
@@ -202,6 +200,8 @@ protected:
     virtual void    MouseMove( const MouseEvent& rMEvt );
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual void    Update();
 
     // calculation of boundary values for object borders
     // values refer to the page
@@ -215,6 +215,7 @@ protected:
     sal_uInt16 GetActRightColumn (
         sal_Bool bForceDontConsiderHidden = sal_False, sal_uInt16 nAct=USHRT_MAX ) const;
     long CalcPropMaxRight(sal_uInt16 nCol=USHRT_MAX) const;
+    long GetPageWidth() const;
 
 public:
 #define     SVXRULER_SUPPORT_TABS                       0x0001
