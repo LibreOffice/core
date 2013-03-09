@@ -14,11 +14,6 @@
 #define ALL_STRING ModuleRes(STR_QUERY_LIMIT_ALL).toString()
 #define ALL_INT -1
 
-
-////////////////
-///LimitBox
-////////////////
-
 namespace global{
 
 /// Default values
