@@ -1085,7 +1085,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     if( m_nState & Deleted )
         return;
 
-    if( aTransferInfo.SourceURL.compareToAscii( "file:",5 ) != 0 )
+    if( !aTransferInfo.SourceURL.startsWith( "file:" ) )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
                                   TASKHANDLING_TRANSFER_INVALIDSCHEME );

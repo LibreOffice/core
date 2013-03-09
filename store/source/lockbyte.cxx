@@ -227,7 +227,7 @@ struct FileHandle
             // Not system path. Assume file url.
             rtl_uString_assign (&(aFileUrl.pData), pFilename);
         }
-        if (aFileUrl.compareToAscii("file://", 7) != 0)
+        if (!aFileUrl.startsWith("file://"))
         {
             // Not file url. Assume relative path.
             rtl::OUString aCwdUrl;

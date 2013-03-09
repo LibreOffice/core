@@ -2926,7 +2926,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 
     sal_Bool bSaved = sal_False;
     if ( !bSaveTo && m_pData->m_pObjectShell && !sURL.isEmpty()
-      && sURL.compareToAscii( "private:stream", 14 ) != COMPARE_EQUAL
+      && !sURL.startsWith( "private:stream" )
       && ::utl::UCBContentHelper::EqualURLs( getLocation(), sURL ) )
     {
         // this is the same file URL as the current document location, try to use storeOwn if possible

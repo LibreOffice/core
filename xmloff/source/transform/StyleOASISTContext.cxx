@@ -871,7 +871,7 @@ void XMLStyleOASISTContext::StartElement(
                 --nAttrCount;
                 break;
             case XML_ATACTION_DECODE_STYLE_NAME:
-                m_bControlStyle = 0 == rAttrValue.compareToAscii( "ctrl", 4 );
+                m_bControlStyle = rAttrValue.startsWith( "ctrl" );
             case XML_ATACTION_DECODE_STYLE_NAME_REF:
                 {
                     OUString aAttrValue( rAttrValue );

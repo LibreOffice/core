@@ -283,7 +283,7 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
 {
     rtl::OString sGtkURL;
     rtl_TextEncoding aSystemEnc = osl_getThreadTextEncoding();
-    if ((aSystemEnc == RTL_TEXTENCODING_UTF8) || (rFileUrl.compareToAscii( "file://", 7 ) !=  0))
+    if ((aSystemEnc == RTL_TEXTENCODING_UTF8) || !rFileUrl.startsWith( "file://" ))
         sGtkURL = rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8);
     else
     {

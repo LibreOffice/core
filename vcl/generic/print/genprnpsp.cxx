@@ -86,7 +86,7 @@ static rtl::OUString getPdfDir( const PrinterInfo& rInfo )
     while( nIndex != -1 )
     {
         rtl::OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( ! aToken.compareToAscii( "pdf=", 4 ) )
+        if( aToken.startsWith( "pdf=" ) )
         {
             sal_Int32 nPos = 0;
             aDir = aToken.getToken( 1, '=', nPos );
@@ -924,7 +924,7 @@ sal_Bool PspSalPrinter::StartJob(
     while( nIndex != -1 )
     {
         OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( ! aToken.compareToAscii( "fax", 3 ) )
+        if( aToken.startsWith( "fax" ) )
         {
             m_bFax = true;
             m_aTmpFile = getTmpName();
@@ -936,11 +936,11 @@ sal_Bool PspSalPrinter::StartJob(
                 m_aFaxNr = it->second;
 
             sal_Int32 nPos = 0;
-            m_bSwallowFaxNo = ! aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? true : false;
+            m_bSwallowFaxNo = aToken.getToken( 1, '=', nPos ).startsWith( "swallow" ) ? true : false;
 
             break;
         }
-        if( ! aToken.compareToAscii( "pdf=", 4 ) )
+        if( aToken.startsWith( "pdf=" ) )
         {
             m_bPdf = true;
             m_aTmpFile = getTmpName();
@@ -1170,7 +1170,7 @@ sal_Bool PspSalPrinter::StartJob( const rtl::OUString* i_pFileName, const rtl::O
                 else
                     osl_createTempFile( NULL, NULL, &aPDFUrl.pData );
                 // normalize to file URL
-                if( aPDFUrl.compareToAscii( "file:", 5 ) != 0 )
+                if( !aPDFUrl.startsWith( "file:" ) )
                 {
                     // this is not a file URL, but it should
                     // form it into a osl friendly file URL

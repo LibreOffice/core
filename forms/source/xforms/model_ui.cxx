@@ -858,7 +858,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
     {
         OUString sLine = xTextInputStream->readLine();
         if( !sLine.isEmpty()
-            && sLine.compareToAscii( "<?xml", 5 ) != 0 )
+            && !sLine.startsWith( "<?xml" ) )
         {
             aBuffer.append( sLine );
             aBuffer.append( sal_Unicode('\n') );
