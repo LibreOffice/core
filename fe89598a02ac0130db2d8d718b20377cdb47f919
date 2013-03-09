@@ -1,0 +1,412 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWX////A\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "can be optimized if we consider that the TxtAttrs are sorted by start position. But then we\u0027d have to save 2 indices.",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX////I\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "first Attr character",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX////E\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "Attr with end",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+8\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "last Attr character + 1",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+4\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "which can call HasItem() for other items at the attribute\u0027s start position. Only attributes with end can be queried.",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+k\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2430,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "Bug 74245 can be removed because that bug tracking system isn\u0027t available anymore (more general: bug xxxxx with x being a digit)",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+0\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2491,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "attribute bound to a character",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+w\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2504,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "get rectangle (bounding box?) of Fly and paragraph",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+o\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2510,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "let PaM point to content of Fly-frame format",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+s\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2571,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "no range, hence no valid node",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+g\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2609,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "was deleted above in aSaveData()",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+c\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8num.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "is it an outline?",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+Y\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "of references",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+U\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "fields\n(also in the next lines)",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+Q\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "should Style be written?",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+M\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "texts",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+I\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "is being",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+E\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "z.T. -\u003e partly",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///+A\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "positions",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///98\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "for",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///94\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1221,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "for",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///90\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1412,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "help -\u003e helper ?",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///9w\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "observed -\u003e considered",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///9s\u003d",
+        "filename": "sw/source/filter/ww8/wrtww8gr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-09T20:32:03Z",
+      "side": 1,
+      "message": "Windows can\u0027t handle",
+      "revId": "fe89598a02ac0130db2d8d718b20377cdb47f919",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
