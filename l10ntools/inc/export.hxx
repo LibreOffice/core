@@ -27,7 +27,7 @@
 
 #ifndef L10NTOOLS_DIRECTORY_HXX
 #define L10NTOOLS_DIRECTORY_HXX
-#include <l10ntools/directory.hxx>
+#include "directory.hxx"
 #endif
 
 #include <osl/file.hxx>

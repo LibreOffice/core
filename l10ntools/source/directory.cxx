@@ -23,7 +23,7 @@
 #include <windows.h>
 #endif
 
-#include <l10ntools/directory.hxx>
+#include "directory.hxx"
 #include <rtl/ustring.hxx>
 #include <iostream>
 #include <vector>

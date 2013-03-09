@@ -18,7 +18,7 @@
  */
 
 
-#include <l10ntools/file.hxx>
+#include "file.hxx"
 
 namespace transex
 {

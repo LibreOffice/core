@@ -32,7 +32,7 @@
 
 #ifndef L10NTOOLS_FILE_HXX
 #define L10NTOOLS_FILE_HXX
-#include <l10ntools/file.hxx>
+#include "file.hxx"
 #endif
 
 namespace transex{
