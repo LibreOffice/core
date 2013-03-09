@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWX///9A\u003d",
+        "filename": "sfx2/source/dialog/dialog.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2013-03-09T22:17:54Z",
+      "side": 1,
+      "message": "Could you also list the styles that are in use?\nMaybe the message could sound like:\n\n\"The following Styles are currently in use. If you delete them, the relevant paragraphs will get the parent Styles assigned.\n\nUsed Styles: My Style 1, My Style 12\"\n\nI wouldn\u0027t mention that it cannot be undone. This is a bug and so we should create a bug report for that.",
+      "revId": "e9edc35ad800751b3bd29f307a2a41d4c72764b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///9E\u003d",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2013-03-09T22:17:54Z",
+      "side": 1,
+      "message": "Can this check be done before the for loop? And just return, if aBox.Execute() !\u003d RET_YES",
+      "revId": "e9edc35ad800751b3bd29f307a2a41d4c72764b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
