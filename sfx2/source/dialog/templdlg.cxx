@@ -1970,77 +1970,68 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
 {
     if ( IsInitialized() && HasSelectedStyle() )
     {
-        sal_uLong SelectionCount = 0;
-        sal_Bool bChecked = 0;
+        bool aApprove = 0;      // use to skip the dialog
+        bool bUsedStyle = 0;     // one of the selected styles are used in the document?
         String aRet;
 
-        SelectionCount = aFmtLb.GetSelectionCount();
         std::vector<SvTreeListEntry*> aList;
-
         SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
+        const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
 
         while (pEntry)
         {
             aList.push_back( pEntry );
+            // check the style is used or not
+            if (pTreeBox)
+                aRet = pTreeBox->GetEntryText( pEntry );
+            else
+                aRet = aFmtLb.GetEntryText( pEntry );
+
+            const String aTemplName( aRet );
+            SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
+
+            if ( !bUsedStyle && pStyle->IsUsed() )  // pStyle is in use in the document?
+                bUsedStyle = 1;
+
             pEntry = aFmtLb.NextSelected( pEntry );
-            SelectionCount++;
         }
 
         std::vector<SvTreeListEntry*>::const_iterator it = aList.begin(), itEnd = aList.end();
 
         for (; it != itEnd; ++it)
         {
+            // we only want to show the dialog once and if we want to delete a style in use (UX-advice)
+            if ( bUsedStyle && !aApprove )
+            {
+                String aMsg = SfxResId(STR_DELETE_STYLE_USED).toString();
+                #if defined UNX
+                QueryBox aBox( SFX_APP()->GetTopWindow(), WB_YES_NO | WB_DEF_NO, aMsg );
+                #else
+                QueryBox aBox( GetWindow(), WB_YES_NO | WB_DEF_NO , aMsg );
+                #endif
+                aApprove = aBox.Execute() == RET_YES;
+                if ( aApprove == 0 )
+                    break;
+            }
+            else
+                aApprove = 1;
+
             if (pTreeBox)
                 aRet = pTreeBox->GetEntryText( *it );
             else
                 aRet = aFmtLb.GetEntryText( *it );
+
             const String aTemplName( aRet );
+            PrepareDeleteAction();
+            bDontUpdate = sal_True; // To prevent the Treelistbox to shut down while deleting
+            Execute_Impl( SID_STYLE_DELETE, aTemplName,
+                          String(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
 
-            const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
-
-            SfxStyleSheetBase* pStyle = pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
-
-            bool bUsedStyle = pStyle->IsUsed();
-            bool approve;
-
-            if ( bChecked == 0 )
+            if ( pTreeBox )
             {
-                String aMsg;
-                if ( bUsedStyle )
-                    aMsg = SfxResId(STR_DELETE_STYLE_USED).toString();
-                aMsg += SfxResId(STR_DELETE_STYLE).toString();
-                aMsg.SearchAndReplaceAscii( "$1", aTemplName );
-    #if defined UNX
-                QueryBox aBox( SFX_APP()->GetTopWindow(), WB_YES_NO | WB_DEF_NO, aMsg );
-    #else
-                QueryBox aBox( GetWindow(), WB_YES_NO | WB_DEF_NO , aMsg );
-    #endif
-                if (SelectionCount > 1) //show only when there are multiple styles selected/to be deleted
-                    aBox.SetDefaultCheckBoxText();
-                approve = aBox.Execute() == RET_YES;
-                bChecked = aBox.GetCheckBoxState();
-                if ( approve == 0 && bChecked == 1)
-                    break;
+                pTreeBox->RemoveParentKeepChildren( *it );
+                bDontUpdate = sal_False;
             }
-            else //if checkbox was selected previous time, don't ask again
-                approve = 1;
-
-            if ( approve )
-            {
-                PrepareDeleteAction();
-
-                bDontUpdate = sal_True; // To prevent the Treelistbox to shut down while deleting
-
-                Execute_Impl( SID_STYLE_DELETE, aTemplName,
-                              String(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
-
-                if ( pTreeBox )
-                {
-                    pTreeBox->RemoveParentKeepChildren( *it );
-                    bDontUpdate = sal_False;
-                }
-            }
-            --SelectionCount;
         }
         bDontUpdate = sal_False; //if everything is deleted set bDontUpdate back to false
         UpdateStyles_Impl(UPDATE_FAMILY_LIST); //and force-update the list
