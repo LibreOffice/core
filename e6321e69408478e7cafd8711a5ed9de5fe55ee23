@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWX///9M\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8num.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-09T22:05:07Z",
+      "side": 1,
+      "message": "spit :)",
+      "revId": "e6321e69408478e7cafd8711a5ed9de5fe55ee23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
