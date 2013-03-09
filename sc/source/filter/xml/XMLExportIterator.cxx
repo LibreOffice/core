@@ -861,33 +861,21 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
     table::CellAddress  aAddress( nCurrentTable, MAXCOL + 1, MAXROW + 1 );
 
     UpdateAddress( aAddress );
-    if( (maNoteExportListItr != maNoteExportList.end()) && IsNoteBeforeNextCell(maNoteExportListItr->nCol, maNoteExportListItr->nRow, aAddress) )
-    {
-        //we have a note before the new cell
-        aAddress.Column = maNoteExportListItr->nCol;
-        aAddress.Row = maNoteExportListItr->nRow;
-        ++maNoteExportListItr;
-    }
-    else
-    {
-        if(maNoteExportListItr != maNoteExportList.end() && maNoteExportListItr->nCol == aAddress.Column && maNoteExportListItr->nRow == aAddress.Row)
-            ++maNoteExportListItr;
 
-        if( pShapes )
-            pShapes->UpdateAddress( aAddress );
-        if( pNoteShapes )
-            pNoteShapes->UpdateAddress( aAddress );
-        if( pEmptyDatabaseRanges )
-            pEmptyDatabaseRanges->UpdateAddress( aAddress );
-        if( pMergedRanges )
-            pMergedRanges->UpdateAddress( aAddress );
-        if( pAreaLinks )
-            pAreaLinks->UpdateAddress( aAddress );
-        if( pDetectiveObj )
-            pDetectiveObj->UpdateAddress( aAddress );
-        if( pDetectiveOp )
-            pDetectiveOp->UpdateAddress( aAddress );
-    }
+    if( pShapes )
+        pShapes->UpdateAddress( aAddress );
+    if( pNoteShapes )
+        pNoteShapes->UpdateAddress( aAddress );
+    if( pEmptyDatabaseRanges )
+        pEmptyDatabaseRanges->UpdateAddress( aAddress );
+    if( pMergedRanges )
+        pMergedRanges->UpdateAddress( aAddress );
+    if( pAreaLinks )
+        pAreaLinks->UpdateAddress( aAddress );
+    if( pDetectiveObj )
+        pDetectiveObj->UpdateAddress( aAddress );
+    if( pDetectiveOp )
+        pDetectiveOp->UpdateAddress( aAddress );
 
     bool bFoundCell((aAddress.Column <= MAXCOL) && (aAddress.Row <= MAXROW));
     if( bFoundCell )
