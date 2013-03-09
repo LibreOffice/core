@@ -70,9 +70,6 @@ void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol
     rInsTblOpts.mnInsMode = nInsMode;
 }
 
-// CTOR / DTOR -----------------------------------------------------------
-
-
 SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog(rView.GetWindow(), "InsertTableDialog", "modules/swriter/ui/inserttable.ui")
     , pShell(&rView.GetWrtShell())
