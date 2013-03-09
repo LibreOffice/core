@@ -75,7 +75,7 @@ $(eval $(call gb_Library_add_exception_objects,cppuhelper,\
 	cppuhelper/source/shlib \
 	cppuhelper/source/supportsservice \
 	cppuhelper/source/tdmgr \
-	cppuhelper/source/typedescriptionprovider \
+	cppuhelper/source/typemanager \
 	cppuhelper/source/typeprovider \
 	cppuhelper/source/unourl \
 	cppuhelper/source/weak \

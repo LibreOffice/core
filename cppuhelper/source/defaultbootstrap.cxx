@@ -32,8 +32,6 @@
 #include <cassert>
 #include <vector>
 
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
-#include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
@@ -47,7 +45,7 @@
 #include "macro_expander.hxx"
 #include "paths.hxx"
 #include "servicemanager.hxx"
-#include "typedescriptionprovider.hxx"
+#include "typemanager.hxx"
 
 namespace {
 
@@ -78,6 +76,9 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
     rtl::Reference< cppuhelper::ServiceManager > smgr(
         new cppuhelper::ServiceManager(
             getBootstrapVariable(bs, "UNO_SERVICES")));
+    rtl::Reference< cppuhelper::TypeManager > tmgr(
+        new cppuhelper::TypeManager(
+            getBootstrapVariable(bs, "UNO_TYPES")));
     cppu::ContextEntry_Init entry;
     std::vector< cppu::ContextEntry_Init > context_values;
     context_values.push_back(
@@ -86,6 +87,13 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
             css::uno::makeAny(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(smgr.get()))),
+            false));
+    context_values.push_back(
+        cppu::ContextEntry_Init(
+            "/singletons/com.sun.star.reflection.theTypeDescriptionManager",
+            css::uno::makeAny(
+                css::uno::Reference< css::uno::XInterface >(
+                    static_cast< cppu::OWeakObject * >(tmgr.get()))),
             false));
     context_values.push_back( //TODO: from services.rdb?
         cppu::ContextEntry_Init(
@@ -110,18 +118,7 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
             &context_values[0], context_values.size(),
             css::uno::Reference< css::uno::XComponentContext >()));
     smgr->setContext(context);
-    css::uno::Reference< css::container::XHierarchicalNameAccess > tdmgr(
-        context->getValueByName(
-            "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
-        css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::container::XSet >(
-        tdmgr, css::uno::UNO_QUERY_THROW)->
-        insert(
-            css::uno::makeAny(
-                cppuhelper::createTypeDescriptionProviders(
-                    getBootstrapVariable(bs, "UNO_TYPES"), smgr.get(),
-                    context)));
-    cppu::installTypeDescriptionManager(tdmgr);
+    cppu::installTypeDescriptionManager(tmgr.get());
     return context;
 }
 

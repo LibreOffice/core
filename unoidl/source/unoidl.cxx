@@ -11,6 +11,7 @@
 
 #include <vector>
 
+#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "unoidl/legacyprovider.hxx"
@@ -74,11 +75,13 @@ rtl::Reference< Provider > loadProvider(
 
 void Manager::addProvider(rtl::Reference< Provider > const & provider) {
     assert(provider.is());
+    osl::MutexGuard g(mutex_);
     providers_.push_back(provider);
 }
 
 rtl::Reference< Entity > Manager::findEntity(rtl::OUString const & name) const {
-    //TODO: add caching
+    //TODO: caching? (here or in cppuhelper::TypeManager?)
+    osl::MutexGuard g(mutex_);
     for (std::vector< rtl::Reference< Provider > >::const_iterator i(
              providers_.begin());
          i != providers_.end(); ++i)

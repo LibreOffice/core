@@ -35,7 +35,6 @@
 #include "svl/inettype.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/registry/XSimpleRegistry.hpp"
 #include "com/sun/star/registry/XImplementationRegistration.hpp"
@@ -184,7 +183,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         BackendImpl * getMyBackend() const;
 
         const bool m_jarFile;
-        Reference<container::XHierarchicalNameAccess> m_xTDprov;
 
         virtual void SAL_CALL disposing();
 
@@ -401,7 +399,6 @@ void BackendImpl::ComponentPackageImpl::disposing()
 //______________________________________________________________________________
 void BackendImpl::TypelibraryPackageImpl::disposing()
 {
-    m_xTDprov.clear();
     Package::disposing();
 }
 
@@ -1533,37 +1530,12 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
         }
         else // RDB:
         {
-            Reference<XComponentContext> const & xContext =
-                that->getComponentContext();
-            if (! m_xTDprov.is())
-            {
-                m_xTDprov.set( that->getObject( url ), UNO_QUERY );
-                if (! m_xTDprov.is())
-                {
-                    const Reference<registry::XSimpleRegistry> xReg(
-                        xContext->getServiceManager()
-                        ->createInstanceWithContext("com.sun.star.registry.SimpleRegistry",
-                            xContext ), UNO_QUERY_THROW );
-                    xReg->open( expandUnoRcUrl(url),
-                                true /* read-only */, false /* ! create */ );
-                    const Any arg(xReg);
-                    Reference<container::XHierarchicalNameAccess> xTDprov(
-                        xContext->getServiceManager()
-                        ->createInstanceWithArgumentsAndContext(
-                            "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider",
-                            Sequence<Any>( &arg, 1 ), xContext ), UNO_QUERY );
-                    OSL_ASSERT( xTDprov.is() );
-                    if (xTDprov.is())
-                        m_xTDprov.set( that->insertObject( url, xTDprov ),
-                                       UNO_QUERY_THROW );
-                }
-            }
-            if (m_xTDprov.is()) {
-                Reference<container::XSet> xSet(
-                    xContext->getValueByName( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ),
-                    UNO_QUERY_THROW );
-                xSet->insert( Any(m_xTDprov) );
-            }
+            css::uno::Reference< css::container::XSet >(
+                that->getComponentContext()->getValueByName(
+                    "/singletons"
+                    "/com.sun.star.reflection.theTypeDescriptionManager"),
+                css::uno::UNO_QUERY_THROW)->insert(
+                    css::uno::makeAny(expandUnoRcUrl(url)));
         }
 
         that->addToUnoRc( m_jarFile ? RCITEM_JAR_TYPELIB : RCITEM_RDB_TYPELIB,
@@ -1575,18 +1547,13 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
             m_jarFile ? RCITEM_JAR_TYPELIB : RCITEM_RDB_TYPELIB, url, xCmdEnv );
 
         // revoking types at runtime, possible, sensible?
-        if (!m_xTDprov.is())
-            m_xTDprov.set( that->getObject( url ), UNO_QUERY );
-        if (m_xTDprov.is()) {
-            // remove live:
-            const Reference<container::XSet> xSet(
+        if (!m_jarFile) {
+            css::uno::Reference< css::container::XSet >(
                 that->getComponentContext()->getValueByName(
-                    "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ),
-                UNO_QUERY_THROW );
-            xSet->remove( Any(m_xTDprov) );
-
-            that->releaseObject( url );
-            m_xTDprov.clear();
+                    "/singletons"
+                    "/com.sun.star.reflection.theTypeDescriptionManager"),
+                css::uno::UNO_QUERY_THROW)->remove(
+                    css::uno::makeAny(expandUnoRcUrl(url)));
         }
     }
 }
