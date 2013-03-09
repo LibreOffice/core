@@ -315,13 +315,13 @@ xub_StrLen SwWW8AttrIter::SearchNext( xub_StrLen nStartPos )
         for( i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            nPos = *pHt->GetStart();    // gibt erstes Attr-Zeichen
+            nPos = *pHt->GetStart();    // give first Attr characters
             if( nPos >= nStartPos && nPos <= nMinPos )
                 nMinPos = nPos;
 
-            if( pHt->GetEnd() )         // Attr mit Ende
+            if( pHt->GetEnd() )         // Attr to end
             {
-                nPos = *pHt->GetEnd();      // gibt letztes Attr-Zeichen + 1
+                nPos = *pHt->GetEnd();      // give last Attr character + 1
                 if( nPos >= nStartPos && nPos <= nMinPos )
                     nMinPos = nPos;
             }
@@ -482,7 +482,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
 
         m_rExport.ExportPoolItemsToCHP( aExportItems, GetScript() );
 
-        // HasTextItem nur in dem obigen Bereich erlaubt
+        // HasTextItem only allowed in the above range
         m_rExport.m_aCurrentCharPropStarts.pop();
         m_rExport.pOutFmtNode = pOldMod;
     }
@@ -580,12 +580,11 @@ bool SwWW8AttrIter::RequiresImplicitBookmark()
     return false;
 }
 
-// HasItem ist fuer die Zusammenfassung des Doppel-Attributes Underline
-// und WordLineMode als TextItems. OutAttr() ruft die Ausgabefunktion,
-// die dann ueber HasItem() nach anderen Items an der
-// Attribut-Anfangposition fragen kann.
-// Es koennen nur Attribute mit Ende abgefragt werden.
-// Es wird mit bDeep gesucht
+//HasItem is for the summary of the double attributes: Underline and WordlineMode as TextItems.
+// OutAttr () calls the output function, which can then can call HasItem () for other items at the
+// beginning of the selected position.
+// It can only be retrieved by the end attributes.
+// It searches with bDeep
 const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
 {
     const SfxPoolItem* pRet = 0;
@@ -599,15 +598,15 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const SfxPoolItem* pItem = &pHt->GetAttr();
             const xub_StrLen* pAtrEnd = 0;
-            if( 0 != ( pAtrEnd = pHt->GetEnd() ) &&     // nur Attr mit Ende
-                nWhich == pItem->Which() &&             //
+            if( 0 != ( pAtrEnd = pHt->GetEnd() ) &&     // only Attr with an end
+                nWhich == pItem->Which() &&
                 nTmpSwPos >= *pHt->GetStart() && nTmpSwPos < *pAtrEnd )
             {
-                pRet = pItem;       // gefunden
+                pRet = pItem;       // found it
                 break;
             }
             else if (nTmpSwPos < *pHt->GetStart())
-                break;              // dann kommt da nichts mehr
+                break;              // nothing more to come
         }
     }
     return pRet;
@@ -856,7 +855,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     sal_uLong nDataStt = m_rWW8Export.pDataStrm->Tell();
     m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() );
 
-//  WinWord 2000 doesn't write this - so its a temp solution by W97 ?
+    // WinWord 2000 doesn't write this - so its a temp solution by W97 ?
     m_rWW8Export.WriteChar( 0x01 );
 
     static sal_uInt8 aArr1[] = {
@@ -974,7 +973,6 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
         // an write some data to the data stream, but dont ask
         // what the data mean, except for the URL.
         // The First piece is the WW8_PIC structure.
-        //
         static sal_uInt8 MAGIC_B[] = {
             0xE0,0xC9,0xEA,0x79,0xF9,0xBA,0xCE,0x11,
             0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
@@ -1177,7 +1175,7 @@ int SwWW8AttrIter::OutAttrWithRange(xub_StrLen nPos)
                     break;
             }
         }
-        m_rExport.m_aCurrentCharPropStarts.pop(); // HasTextItem nur in dem obigen Bereich erlaubt
+        m_rExport.m_aCurrentCharPropStarts.pop(); // HasTextItem only allowed in the above range
     }
     return nRet;
 }
@@ -1811,8 +1809,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             nNextAttr = nEnd;
 
         aAttrIter.OutFlys( nAktPos );
-        //Append bookmarks in this range after flys, exclusive of final
-        //position of this range
+        // Append bookmarks in this range after flys, exclusive of final
+        // position of this range
         AppendBookmarks( rNode, nAktPos, nNextAttr - nAktPos );
         bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
         nOpenAttrWithRange += aAttrIter.OutAttrWithRange(nAktPos);
@@ -2376,9 +2374,8 @@ void WW8AttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeIn
         ++aIt;
     }
 }
-//---------------------------------------------------------------------------
-//       Tabellen
-//---------------------------------------------------------------------------
+
+// Tables
 
 void WW8AttributeOutput::EmptyParagraph()
 {
@@ -2431,8 +2428,8 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
     if ( !rNd.IsSectionNode() && !IsInTable() ) //No sections in table
     {
         // Bug 74245 - if the first Node inside the section has an own
-        //              PageDesc or PageBreak attribut, then dont write
-        //              here the section break
+        // PageDesc or PageBreak attribut, then dont write
+        // here the section break
         sal_uLong nRstLnNum = 0;
         const SfxItemSet* pSet;
         if ( rNd.IsTableNode() )
@@ -2456,7 +2453,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
             const SwSectionFmt& rFmt = *rSection.GetFmt();
             ReplaceCr( msword::PageBreak ); // Indikator fuer Page/Section-Break
 
-            //Get the page in use at the top of this section
+            // Get the page in use at the top of this section
             SwNodeIndex aIdxTmp(rSectionNode, 1);
             const SwPageDesc *pCurrent =
                 SwPageDesc::GetPageDescOfNode(aIdxTmp.GetNode());
@@ -2476,10 +2473,7 @@ void WW8Export::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* 
     pSepx->AppendSep(Fc2Cp(Strm().Tell()), pPageDesc, pFmt, nLnNum);
 }
 
-
-//---------------------------------------------------------------------------
-//       Flys
-//---------------------------------------------------------------------------
+// Flys
 
 void WW8Export::OutWW6FlyFrmsInCntnt( const SwTxtNode& rNd )
 {
@@ -2494,7 +2488,7 @@ void WW8Export::OutWW6FlyFrmsInCntnt( const SwTxtNode& rNd )
             const SwTxtAttr* pAttr = (*pTxtAttrs)[ n ];
             if( RES_TXTATR_FLYCNT == pAttr->Which() )
             {
-                // zeichengebundenes Attribut
+                // character attribute bound
                 const SwFmtFlyCnt& rFlyCntnt = pAttr->GetFlyCnt();
                 const SwFlyFrmFmt& rFlyFrmFmt = *(SwFlyFrmFmt*)rFlyCntnt.GetFrmFmt();
                 const SwNodeIndex* pNodeIndex = rFlyFrmFmt.GetCntnt().GetCntntIdx();
@@ -2507,21 +2501,21 @@ void WW8Export::OutWW6FlyFrmsInCntnt( const SwTxtNode& rNd )
                     if( (nStt < nEnd) && !pDoc->GetNodes()[ nStt ]->IsNoTxtNode() )
                     {
                         Point aOffset;
-                        // Rechtecke des Flys und des Absatzes besorgen
+                        // right corner of the Flys and the paragraph obtain
                         SwRect aParentRect(rNd.FindLayoutRect(false, &aOffset)),
                                aFlyRect(rFlyFrmFmt.FindLayoutRect(false, &aOffset ) );
 
                         aOffset = aFlyRect.Pos() - aParentRect.Pos();
 
-                        // PaM umsetzen: auf Inhalt des Fly-Frameformats
+                        // PaM conversion: content on the fly-frame format
                         SaveData( nStt, nEnd );
 
-                        // wird in OutputFormat() ausgewertet
+                        // is analysed in OutputFormat()
                         pFlyOffset = &aOffset;
                         eNewAnchorType = rFlyFrmFmt.GetAnchor().GetAnchorId();
                         sw::Frame aFrm(rFlyFrmFmt, SwPosition(rNd));
                         mpParentFrame = &aFrm;
-                        // Ok, rausschreiben:
+                        // Ok, write it out:
                         WriteText();
 
                         RestoreData();
@@ -2574,7 +2568,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
         sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
         sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
 
-        if( nStt >= nEnd )      // kein Bereich, also kein gueltiger Node
+        if( nStt >= nEnd )      // no range, also no valid node
             return;
 
         if ( !m_rWW8Export.IsInTable() && rFmt.IsInline() )
@@ -2610,10 +2604,9 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
                  !m_rWW8Export.pDoc->GetNodes()[ nStt ]->IsNoTxtNode()
                )
             {
-                // Beachten: Flag  bOutTable  wieder setzen,
-                //           denn wir geben ja ganz normalen Content der
-                //           Tabelenzelle aus und keinen Rahmen
-                //           (Flag wurde oben in  aSaveData()  geloescht)
+                // note: set Flag  bOutTable again,
+                // because we deliver the normal content of the table cell, and no border
+                // ( Flag will be deleted in aSaveData() )
                 m_rWW8Export.bOutTable = true;
                 const String& rName = rFrmFmt.GetName();
                 m_rWW8Export.StartCommentOutput(rName);
