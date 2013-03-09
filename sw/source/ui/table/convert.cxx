@@ -147,7 +147,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     }
     else
     {
-        //Einfuege-Optionen verstecken
+        //hide insert options
         mpOptions->Hide();
     }
     mpKeepColumn->SaveValue();
