@@ -282,7 +282,6 @@ void handleCommand(
                         << "'s output is invalid:\n"
                         << sLine.replaceAll("\t","\\t").getStr()
                         << endl;
-                    throw false; //TODO
                 }
             }
             getline(in, s);
