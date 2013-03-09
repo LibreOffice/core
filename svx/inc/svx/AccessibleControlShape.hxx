@@ -139,7 +139,7 @@ protected:
     sal_Bool ensureControlModelAccess( ) SAL_THROW(( ));
 
     /// ensures that we're listening for the given property if(and only if!) necessary
-    sal_Bool ensureListeningState( const sal_Bool _bCurrentlyListening, const sal_Bool _bNeedNewListening,
+    bool ensureListeningState( const bool _bCurrentlyListening, const bool _bNeedNewListening,
                 const ::rtl::OUString& _rPropertyName );
 
     /// starts multiplexing the state changes of our aggregate context
@@ -184,11 +184,11 @@ private:
     ::comphelper::OWrappedAccessibleChildrenManager*
                     m_pChildManager;
 
-    sal_Bool        m_bListeningForName     : 1;    // are we currently listening for changes of the "Name" property?
-    sal_Bool        m_bListeningForDesc     : 1;    // are we currently listening for changes of the "HelpText" property?
-    sal_Bool        m_bMultiplexingStates   : 1;    // are we currently multiplexing state changes of the native context?
-    sal_Bool        m_bDisposeNativeContext : 1;    // do we need to dispose mxNativeContextComponent?
-    sal_Bool        m_bWaitingForControl    : 1;    // if we are created before our control exists, we need to wait for it to appear ...
+    bool        m_bListeningForName     : 1;    // are we currently listening for changes of the "Name" property?
+    bool        m_bListeningForDesc     : 1;    // are we currently listening for changes of the "HelpText" property?
+    bool        m_bMultiplexingStates   : 1;    // are we currently multiplexing state changes of the native context?
+    bool        m_bDisposeNativeContext : 1;    // do we need to dispose mxNativeContextComponent?
+    bool        m_bWaitingForControl    : 1;    // if we are created before our control exists, we need to wait for it to appear ...
 
 private:
     /** Don't use the default constructor.  Use the public constructor that

@@ -85,7 +85,7 @@ namespace
     //................................................................
     // determines whether or not a state which belongs to the inner context needs to be forwarded to the "composed"
     // context
-    sal_Bool    isComposedState( const sal_Int16 _nState )
+    bool    isComposedState( const sal_Int16 _nState )
     {
         return  (   ( AccessibleStateType::INVALID != _nState )
                 &&  ( AccessibleStateType::DEFUNC != _nState )
@@ -101,7 +101,7 @@ namespace
     //................................................................
     /** determines whether the given control is in alive mode
     */
-    inline  sal_Bool    isAliveMode( const Reference< XControl >& _rxControl )
+    inline  bool    isAliveMode( const Reference< XControl >& _rxControl )
     {
         OSL_PRECOND( _rxControl.is(), "AccessibleControlShape::isAliveMode: invalid control" );
         return _rxControl.is() && !_rxControl->isDesignMode();
@@ -117,11 +117,11 @@ AccessibleControlShape::AccessibleControlShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
     :      AccessibleShape (rShapeInfo, rShapeTreeInfo)
-    ,   m_bListeningForName( sal_False )
-    ,   m_bListeningForDesc( sal_False )
-    ,   m_bMultiplexingStates( sal_False )
-    ,   m_bDisposeNativeContext( sal_False )
-    ,   m_bWaitingForControl( sal_False )
+    ,   m_bListeningForName( false )
+    ,   m_bListeningForDesc( false )
+    ,   m_bMultiplexingStates( false )
+    ,   m_bDisposeNativeContext( false )
+    ,   m_bWaitingForControl( false )
 {
     m_pChildManager = new OWrappedAccessibleChildrenManager( getProcessComponentContext() );
     m_pChildManager->acquire();
@@ -225,7 +225,7 @@ void AccessibleControlShape::Init()
                 if ( xControlContainer.is() )
                 {
                     xControlContainer->addContainerListener( this );
-                    m_bWaitingForControl = sal_True;
+                    m_bWaitingForControl = true;
                 }
             }
             else
@@ -278,7 +278,7 @@ void AccessibleControlShape::Init()
                     }
                     osl_atomic_decrement( &m_refCount );
 
-                    m_bDisposeNativeContext = sal_True;
+                    m_bDisposeNativeContext = true;
 
                     // Finally, we need to add ourself as mode listener to the control. In case the mode switches,
                     // we need to dispose ourself.
@@ -367,7 +367,7 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
                 aDG.AddProperty ( "ControlBorder", DescriptionGenerator::INTEGER, "");
             }
             // ensure that we are listening to the Name property
-            m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, sal_True, lcl_getDescPropertyName() );
+            m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, true, lcl_getDescPropertyName() );
         }
         break;
 
@@ -522,8 +522,8 @@ void SAL_CALL AccessibleControlShape::disposing (const EventObject& _rSource) th
 }
 
 //--------------------------------------------------------------------
-sal_Bool AccessibleControlShape::ensureListeningState(
-        const sal_Bool _bCurrentlyListening, const sal_Bool _bNeedNewListening,
+bool AccessibleControlShape::ensureListeningState(
+        const bool _bCurrentlyListening, const bool _bNeedNewListening,
         const ::rtl::OUString& _rPropertyName )
 {
     if ( ( _bCurrentlyListening == _bNeedNewListening ) || !ensureControlModelAccess() )
@@ -636,7 +636,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
     }
 
     // now that somebody first asked us for our name, ensure that we are listening to name changes on the model
-    m_bListeningForName = ensureListeningState( m_bListeningForName, sal_True, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );
+    m_bListeningForName = ensureListeningState( m_bListeningForName, true, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );
 
     return sName;
 }
@@ -645,8 +645,8 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
 void SAL_CALL AccessibleControlShape::disposing (void)
 {
     // ensure we're not listening
-    m_bListeningForName = ensureListeningState( m_bListeningForName, sal_False, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );
-    m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, sal_False, lcl_getDescPropertyName() );
+    m_bListeningForName = ensureListeningState( m_bListeningForName, false, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );
+    m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, false, lcl_getDescPropertyName() );
 
     if ( m_bMultiplexingStates )
         stopStateMultiplexing( );
@@ -666,7 +666,7 @@ void SAL_CALL AccessibleControlShape::disposing (void)
         Reference< XContainer > xContainer = lcl_getControlContainer( maShapeTreeInfo.GetWindow(), maShapeTreeInfo.GetSdrView() );
         if ( xContainer.is() )
         {
-            m_bWaitingForControl = sal_False;
+            m_bWaitingForControl = false;
             xContainer->removeContainerListener( this );
         }
     }
@@ -685,7 +685,7 @@ void SAL_CALL AccessibleControlShape::disposing (void)
         // do _not_ clear m_xControlContextProxy! This has to be done in the dtor for correct ref-count handling
 
         // no need to dispose the proxy/inner context anymore
-        m_bDisposeNativeContext = sal_False;
+        m_bDisposeNativeContext = false;
     }
 
     m_xUnoControl.clear();
@@ -735,7 +735,7 @@ void AccessibleControlShape::startStateMultiplexing()
     if ( xBroadcaster.is() )
     {
         xBroadcaster->addAccessibleEventListener( this );
-        m_bMultiplexingStates = sal_True;
+        m_bMultiplexingStates = true;
     }
 }
 
@@ -751,7 +751,7 @@ void AccessibleControlShape::stopStateMultiplexing()
     if ( xBroadcaster.is() )
     {
         xBroadcaster->removeAccessibleEventListener( this );
-        m_bMultiplexingStates = sal_False;
+        m_bMultiplexingStates = false;
     }
 }
 
@@ -878,7 +878,7 @@ void SAL_CALL AccessibleControlShape::elementInserted( const ::com::sun::star::c
         if ( xContainer.is() )
         {
             xContainer->removeContainerListener( this );
-            m_bWaitingForControl = sal_False;
+            m_bWaitingForControl = false;
         }
 
         // second, we need to replace ourself with a new version, which now can be based on the

@@ -263,7 +263,7 @@ Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
             pStateSetHelper->AddState(AccessibleStateType::SENSITIVE);
         }
 
-        sal_Bool bIsParent = meBorder == FRAMEBORDER_NONE;
+        bool bIsParent = meBorder == FRAMEBORDER_NONE;
         if(mpFrameSel->HasFocus() &&
             (bIsParent || mpFrameSel->IsBorderSelected(meBorder)))
         {

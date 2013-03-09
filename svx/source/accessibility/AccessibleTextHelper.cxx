@@ -232,7 +232,7 @@ namespace accessibility
         AccessibleTextEventQueue maEventQueue;
 
         // spin lock to prevent notify in notify (guarded by solar mutex)
-        sal_Bool mbInNotify;
+        bool mbInNotify;
 
         // whether the object or it's children has the focus set (guarded by solar mutex)
         sal_Bool mbGroupHasFocus;
@@ -262,7 +262,7 @@ namespace accessibility
         mnLastVisibleChild( -2 ),
         mnStartIndex( 0 ),
         maEventOpenFrames( 0 ),
-        mbInNotify( sal_False ),
+        mbInNotify( false ),
         mbGroupHasFocus( sal_False ),
         mbThisHasFocus( sal_False ),
         maOffset(0,0),
@@ -1422,7 +1422,7 @@ namespace accessibility
         if( mbInNotify )
             return;
 
-        mbInNotify = sal_True;
+        mbInNotify = true;
 
         // determine hint type
         const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
@@ -1535,10 +1535,10 @@ namespace accessibility
 #ifdef DBG_UTIL
             OSL_TRACE("AccessibleTextHelper_Impl::Notify: Unhandled exception.");
 #endif
-            mbInNotify = sal_False;
+            mbInNotify = false;
         }
 
-        mbInNotify = sal_False;
+        mbInNotify = false;
     }
 
     void AccessibleTextHelper_Impl::Dispose()

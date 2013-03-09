@@ -66,7 +66,7 @@ namespace
 }
 
 
-static const ChildIndexToPointData* IndexToPoint( long nIndex, sal_Bool bAngleControl )
+static const ChildIndexToPointData* IndexToPoint( long nIndex, bool bAngleControl )
 {
     DBG_ASSERT( nIndex < ( bAngleControl? 8 : 9 ) && nIndex >= 0, "-IndexToPoint(): invalid child index! You have been warned..." );
 
@@ -101,7 +101,7 @@ static const ChildIndexToPointData* IndexToPoint( long nIndex, sal_Bool bAngleCo
 }
 
 
-static long PointToIndex( RECT_POINT ePoint, sal_Bool bAngleControl )
+static long PointToIndex( RECT_POINT ePoint, bool bAngleControl )
 {
     long    nRet( (long) ePoint );
     if( bAngleControl )
@@ -301,7 +301,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 
             // set actual state
             if( mnSelectedChild == nIndex )
-                pChild->setStateChecked( sal_True );
+                pChild->setStateChecked( true );
         }
     }
 
@@ -633,7 +633,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
             {   // deselect old selected child if one is selected
                 pChild = mpChildren[ mnSelectedChild ];
                 if( pChild )
-                    pChild->setStateChecked( sal_False );
+                    pChild->setStateChecked( false );
             }
 
             // select new child
@@ -643,7 +643,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
             {
                 pChild = mpChildren[ nNew ];
                 if( pChild )
-                    pChild->setStateChecked( sal_True );
+                    pChild->setStateChecked( true );
             }
         }
         else
@@ -759,7 +759,7 @@ SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     mrParentWindow( rParentWindow ),
     mnClientId( 0 ),
     mnIndexInParent( nIndexInParent ),
-    mbIsChecked( sal_False )
+    mbIsChecked( false )
 {
     DBG_CTOR( SvxRectCtlChildAccessibleContext, NULL );
 }
@@ -1128,7 +1128,7 @@ Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBox( void ) throw( Runtim
     return *mpBoundingBox;
 }
 
-void SvxRectCtlChildAccessibleContext::setStateChecked( sal_Bool bChecked )
+void SvxRectCtlChildAccessibleContext::setStateChecked( bool bChecked )
 {
     if( mbIsChecked != bChecked )
     {

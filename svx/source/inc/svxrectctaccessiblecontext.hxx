@@ -264,10 +264,10 @@ protected:
     virtual void SAL_CALL disposing();
 
     /// @returns true if it's disposed or in disposing
-    inline sal_Bool IsAlive( void ) const;
+    inline bool IsAlive( void ) const;
 
     /// @returns true if it's not disposed and no in disposing
-    inline sal_Bool IsNotAlive( void ) const;
+    inline bool IsNotAlive( void ) const;
 
     /// throws the exception DisposedException if it's not alive
     void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
@@ -299,15 +299,15 @@ private:
     long                                mnSelectedChild;
 
     /// mode of control (true -> 8 points, false -> 9 points)
-    sal_Bool                            mbAngleMode;
+    bool                            mbAngleMode;
 };
 
-inline sal_Bool SvxRectCtlAccessibleContext::IsAlive( void ) const
+inline bool SvxRectCtlAccessibleContext::IsAlive( void ) const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-inline sal_Bool SvxRectCtlAccessibleContext::IsNotAlive( void ) const
+inline bool SvxRectCtlAccessibleContext::IsNotAlive( void ) const
 {
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }
@@ -467,7 +467,7 @@ public:
     //===== internal ==========================================================
 
     /// Sets the checked status
-    void setStateChecked( sal_Bool bChecked );
+    void setStateChecked( bool bChecked );
 
 protected:
     virtual Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
@@ -479,10 +479,10 @@ protected:
     virtual void SAL_CALL disposing();
 
     /// @returns true if it's disposed or in disposing
-    inline sal_Bool IsAlive( void ) const;
+    inline bool IsAlive( void ) const;
 
     /// @returns true if it's not disposed and no in disposing
-    inline sal_Bool IsNotAlive( void ) const;
+    inline bool IsNotAlive( void ) const;
 
     /// throws the exception DisposedException if it's not alive
     void ThrowExceptionIfNotAlive( void ) throw( ::com::sun::star::lang::DisposedException );
@@ -520,15 +520,15 @@ private:
     long                                mnIndexInParent;
 
     /// Indicates, if object is checked
-    sal_Bool                            mbIsChecked;
+    bool                            mbIsChecked;
 };
 
-inline sal_Bool SvxRectCtlChildAccessibleContext::IsAlive( void ) const
+inline bool SvxRectCtlChildAccessibleContext::IsAlive( void ) const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
-inline sal_Bool SvxRectCtlChildAccessibleContext::IsNotAlive( void ) const
+inline bool SvxRectCtlChildAccessibleContext::IsNotAlive( void ) const
 {
     return rBHelper.bDisposed || rBHelper.bInDispose;
 }
