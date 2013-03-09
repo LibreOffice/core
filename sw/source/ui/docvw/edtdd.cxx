@@ -52,36 +52,36 @@ bool bExecuteDrag = false;
 
 void SwEditWin::StartDDTimer()
 {
-    aTimer.SetTimeoutHdl(LINK(this, SwEditWin, DDHandler));
-    aTimer.SetTimeout(480);
-    aTimer.Start();
+    m_aTimer.SetTimeoutHdl(LINK(this, SwEditWin, DDHandler));
+    m_aTimer.SetTimeout(480);
+    m_aTimer.Start();
     bDDTimerStarted = true;
 }
 
 
 void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 {
-    aTimer.Stop();
+    m_aTimer.Stop();
     bDDTimerStarted = false;
     if(!pSh->IsSelFrmMode())
         pSh->SetCursor(&rPt, false);
-    aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
+    m_aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
 }
 
 void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 {
-    SwWrtShell &rSh = rView.GetWrtShell();
+    SwWrtShell &rSh = m_rView.GetWrtShell();
     if( rSh.GetDrawView() )
     {
         CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, sal_True );
         if( rSh.GetDrawView()->Command( aDragEvent, this ) )
         {
-            rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+            m_rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
             return; // Event evaluated by SdrView
         }
     }
 
-    if ( !pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction())
+    if ( !m_pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction())
     {
         sal_Bool bStart = sal_False, bDelSelect = sal_False;
         SdrObject *pObj = NULL;
@@ -97,7 +97,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 
             bStart = sal_True;
         }
-        else if( !bFrmDrag && rView.GetDocShell()->IsReadOnly() &&
+        else if( !bFrmDrag && m_rView.GetDocShell()->IsReadOnly() &&
                 OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
         {
             rSh.LockPaint();
@@ -114,15 +114,15 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
                         sal_False );
         }
 
-        if ( bStart && !bIsInDrag )
+        if ( bStart && !m_bIsInDrag )
         {
-            bMBPressed = sal_False;
+            m_bMBPressed = sal_False;
             ReleaseMouse();
             bFrmDrag = false;
             bExecuteDrag = true;
-            SwEditWin::nDDStartPosY = aDocPos.Y();
-            SwEditWin::nDDStartPosX = aDocPos.X();
-            aMovePos = aDocPos;
+            SwEditWin::m_nDDStartPosY = aDocPos.Y();
+            SwEditWin::m_nDDStartPosX = aDocPos.X();
+            m_aMovePos = aDocPos;
             StartExecuteDrag();
             if( bDelSelect )
             {
@@ -135,38 +135,38 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 
 void SwEditWin::StartExecuteDrag()
 {
-    if( !bExecuteDrag || bIsInDrag )
+    if( !bExecuteDrag || m_bIsInDrag )
         return;
 
-    bIsInDrag = sal_True;
+    m_bIsInDrag = sal_True;
 
-    SwTransferable* pTransfer = new SwTransferable( rView.GetWrtShell() );
+    SwTransferable* pTransfer = new SwTransferable( m_rView.GetWrtShell() );
     uno::Reference<
         datatransfer::XTransferable > xRef( pTransfer );
 
-    pTransfer->StartDrag( this, aMovePos );
+    pTransfer->StartDrag( this, m_aMovePos );
 }
 
 void SwEditWin::DragFinished()
 {
     DropCleanup();
-    aTimer.SetTimeoutHdl( LINK(this,SwEditWin, TimerHandler) );
-    bIsInDrag = sal_False;
+    m_aTimer.SetTimeoutHdl( LINK(this,SwEditWin, TimerHandler) );
+    m_bIsInDrag = sal_False;
 }
 
 
 void SwEditWin::DropCleanup()
 {
-    SwWrtShell &rSh =  rView.GetWrtShell();
+    SwWrtShell &rSh =  m_rView.GetWrtShell();
 
     // reset statuses
     bNoInterrupt = false;
-    if ( bOldIdleSet )
+    if ( m_bOldIdleSet )
     {
-        ((SwViewOption*)rSh.GetViewOptions())->SetIdle( bOldIdle );
-        bOldIdleSet = sal_False;
+        ((SwViewOption*)rSh.GetViewOptions())->SetIdle( m_bOldIdle );
+        m_bOldIdleSet = sal_False;
     }
-    if ( pUserMarker )
+    if ( m_pUserMarker )
         CleanupDropUserMarker();
     else
         rSh.UnSetVisCrsr();
@@ -175,11 +175,11 @@ void SwEditWin::DropCleanup()
 
 void SwEditWin::CleanupDropUserMarker()
 {
-    if ( pUserMarker )
+    if ( m_pUserMarker )
     {
-        delete pUserMarker;
-        pUserMarker = 0;
-        pUserMarkerObj = 0;
+        delete m_pUserMarker;
+        m_pUserMarker = 0;
+        m_pUserMarkerObj = 0;
     }
 }
 
@@ -198,7 +198,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     sal_Int8 nRet = DND_ACTION_NONE;
 
     //A Drop to an open OutlinerView doesn't concern us (also see QueryDrop)
-    SwWrtShell &rSh = rView.GetWrtShell();
+    SwWrtShell &rSh = m_rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rEvt.maPosPixel ));
     SdrObject *pObj = 0;
     OutlinerView* pOLV;
@@ -251,7 +251,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
 {
-    SwWrtShell &rSh = rView.GetWrtShell();
+    SwWrtShell &rSh = m_rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rPixPnt ) );
     if( rSh.ChgCurrPam( aDocPt ) || rSh.IsOverReadOnlyPos( aDocPt ) )
         return 0;
@@ -332,10 +332,10 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         return rEvt.mnAction;
     }
 
-    if( rView.GetDocShell()->IsReadOnly() )
+    if( m_rView.GetDocShell()->IsReadOnly() )
         return DND_ACTION_NONE;
 
-    SwWrtShell &rSh = rView.GetWrtShell();
+    SwWrtShell &rSh = m_rView.GetWrtShell();
 
     Point aPixPt( rEvt.maPosPixel );
 
@@ -353,10 +353,10 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         sal_uLong current_tick = Time::GetSystemTicks();
         if((current_tick-last_tick) > 500) {
             last_tick = current_tick;
-            if(!bOldIdleSet) {
-                bOldIdle = rSh.GetViewOptions()->IsIdle();
+            if(!m_bOldIdleSet) {
+                m_bOldIdle = rSh.GetViewOptions()->IsIdle();
                 ((SwViewOption *)rSh.GetViewOptions())->SetIdle(sal_False);
-                bOldIdleSet = sal_True;
+                m_bOldIdleSet = sal_True;
             }
             CleanupDropUserMarker();
             if(aPixPt.X() > aWin.Right()) aPixPt.X() += nMargin;
@@ -369,9 +369,9 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         }
     }
 
-    if(bOldIdleSet) {
-        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( bOldIdle );
-        bOldIdleSet = sal_False;
+    if(m_bOldIdleSet) {
+        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( m_bOldIdle );
+        m_bOldIdleSet = sal_False;
     }
 
     SdrObject *pObj = NULL;
@@ -461,14 +461,14 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         {
             rSh.UnSetVisCrsr();
 
-            if ( pUserMarkerObj != pObj )
+            if ( m_pUserMarkerObj != pObj )
             {
                 CleanupDropUserMarker();
-                pUserMarkerObj = pObj;
+                m_pUserMarkerObj = pObj;
 
-                if(pUserMarkerObj)
+                if(m_pUserMarkerObj)
                 {
-                    pUserMarker = new SdrDropMarkerOverlay( *rSh.GetDrawView(), *pUserMarkerObj );
+                    m_pUserMarker = new SdrDropMarkerOverlay( *rSh.GetDrawView(), *m_pUserMarkerObj );
                 }
             }
         }
@@ -484,13 +484,13 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 IMPL_LINK_NOARG(SwEditWin, DDHandler)
 {
     bDDTimerStarted = false;
-    aTimer.Stop();
-    aTimer.SetTimeout(240);
-    bMBPressed = sal_False;
+    m_aTimer.Stop();
+    m_aTimer.SetTimeout(240);
+    m_bMBPressed = sal_False;
     ReleaseMouse();
     bFrmDrag = false;
 
-    if ( rView.GetViewFrame() )
+    if ( m_rView.GetViewFrame() )
     {
         bExecuteDrag = true;
         StartExecuteDrag();

@@ -69,13 +69,13 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                                 sal_uInt16 nVirtNum,
                                 const String& rPg );
 
-    static  QuickHelpData* pQuickHlpData;
+    static  QuickHelpData* m_pQuickHlpData;
 
-    static  long    nDDStartPosX, nDDStartPosY;
+    static  long    m_nDDStartPosX, m_nDDStartPosY;
 
-    static  Color   aTextColor;     // text color; for the watering can
-    static  bool    bTransparentBackColor; // transparent background
-    static  Color   aTextBackColor; // text background; for the watering can
+    static  Color   m_aTextColor;     // text color; for the watering can
+    static  bool    m_bTransparentBackColor; // transparent background
+    static  Color   m_aTextBackColor; // text background; for the watering can
 
     /*
      * timer and handler for scrolling on when the mousepointer
@@ -83,62 +83,62 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
      * The selection is increased towards the mouse position
      * regularly.
      */
-    AutoTimer       aTimer;
+    AutoTimer       m_aTimer;
     // timer for overlapping KeyInputs (e.g. for tables)
-    Timer           aKeyInputTimer;
+    Timer           m_aKeyInputTimer;
     // timer for ANY-KeyInut question without a following KeyInputEvent
-    Timer           aKeyInputFlushTimer;
+    Timer           m_aKeyInputFlushTimer;
 
-    String          aInBuffer;
-    LanguageType    eBufferLanguage;
-    Point           aStartPos;
-    Point           aMovePos;
-    Point           aRszMvHdlPt;
-    Timer           aTemplateTimer;
+    String          m_aInBuffer;
+    LanguageType    m_eBufferLanguage;
+    Point           m_aStartPos;
+    Point           m_aMovePos;
+    Point           m_aRszMvHdlPt;
+    Timer           m_aTemplateTimer;
 
     // type/object where the mouse pointer is
-    SwCallMouseEvent aSaveCallEvent;
+    SwCallMouseEvent m_aSaveCallEvent;
 
-    SwApplyTemplate     *pApplyTempl;
-    SwAnchorMarker      *pAnchorMarker; // for relocating the anchor
+    SwApplyTemplate     *m_pApplyTempl;
+    SwAnchorMarker      *m_pAnchorMarker; // for relocating the anchor
 
-    SdrDropMarkerOverlay    *pUserMarker;
-    SdrObject               *pUserMarkerObj;
-    SwShadowCursor          *pShadCrsr;
-    Point                   *pRowColumnSelectionStart; // save position where table row/column selection has been started
+    SdrDropMarkerOverlay    *m_pUserMarker;
+    SdrObject               *m_pUserMarkerObj;
+    SwShadowCursor          *m_pShadCrsr;
+    Point                   *m_pRowColumnSelectionStart; // save position where table row/column selection has been started
 
-    SwView         &rView;
+    SwView         &m_rView;
 
-    int             aActHitType;    // current mouse pointer
+    int             m_aActHitType;    // current mouse pointer
 
     sal_uLong           m_nDropFormat;   // format from the last QueryDrop
     sal_uInt16          m_nDropAction;   // action from the last QueryDrop
     sal_uInt16          m_nDropDestination;  // destination from the last QueryDrop
 
-    sal_uInt16          eBezierMode;
-    sal_uInt16          nInsFrmColCount; // column number for interactive frame
-    SdrObjKind      eDrawMode;
-    sal_Bool        bMBPressed      : 1,
-                    bInsDraw        : 1,
-                    bInsFrm         : 1,
-                    bIsInMove       : 1,
-                    bIsInDrag       : 1, // don't execute StartExecuteDrag twice
-                    bOldIdle        : 1, // to stop to idle
-                    bOldIdleSet     : 1, // during QeueryDrop
-                    bTblInsDelMode  : 1, //
-                    bTblIsInsMode   : 1, //
-                    bChainMode      : 1, // connect frames
-                    bWasShdwCrsr    : 1, // ShadowCrsr was on in MouseButtonDown
-                    bLockInput      : 1, // lock while calc panel is active
-                    bIsRowDrag      : 1, //selection of rows is used, in combination with pRowColumnSelectionStart
+    sal_uInt16          m_eBezierMode;
+    sal_uInt16          m_nInsFrmColCount; // column number for interactive frame
+    SdrObjKind      m_eDrawMode;
+    sal_Bool        m_bMBPressed      : 1,
+                    m_bInsDraw        : 1,
+                    m_bInsFrm         : 1,
+                    m_bIsInMove       : 1,
+                    m_bIsInDrag       : 1, // don't execute StartExecuteDrag twice
+                    m_bOldIdle        : 1, // to stop to idle
+                    m_bOldIdleSet     : 1, // during QeueryDrop
+                    m_bTblInsDelMode  : 1, //
+                    m_bTblIsInsMode   : 1, //
+                    m_bChainMode      : 1, // connect frames
+                    m_bWasShdwCrsr    : 1, // ShadowCrsr was on in MouseButtonDown
+                    m_bLockInput      : 1, // lock while calc panel is active
+                    m_bIsRowDrag      : 1, //selection of rows is used, in combination with m_pRowColumnSelectionStart
                     /** #i42732# display status of font size/name depending on either the input language or the
                         selection position depending on what has changed lately
                      */
-                    bUseInputLanguage: 1,
-                    bObjectSelect   : 1;
+                    m_bUseInputLanguage: 1,
+                    m_bObjectSelect   : 1;
 
-    sal_uInt16          nKS_NUMDOWN_Count; // #i23725#
-    sal_uInt16          nKS_NUMINDENTINC_Count;
+    sal_uInt16          m_nKS_NUMDOWN_Count; // #i23725#
+    sal_uInt16          m_nKS_NUMINDENTINC_Count;
 
     SwFrameControlsManager m_aFrameControlsManager;
 
@@ -222,60 +222,60 @@ public:
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);
 
     sal_Bool            IsDrawSelMode();
-    sal_Bool            IsDrawAction()                  { return (bInsDraw); }
-    void            SetDrawAction(sal_Bool bFlag)       { bInsDraw = bFlag; }
+    sal_Bool            IsDrawAction()                  { return (m_bInsDraw); }
+    void            SetDrawAction(sal_Bool bFlag)       { m_bInsDraw = bFlag; }
 
-    void            SetObjectSelect( sal_Bool bVal )    { bObjectSelect = bVal; }
-    sal_Bool            IsObjectSelect() const          { return bObjectSelect; }
+    void            SetObjectSelect( sal_Bool bVal )    { m_bObjectSelect = bVal; }
+    sal_Bool            IsObjectSelect() const          { return m_bObjectSelect; }
 
-    inline SdrObjKind   GetSdrDrawMode(/*sal_Bool bBuf = sal_False*/) const { return eDrawMode; }
-    inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { eDrawMode = eSdrObjectKind; SetObjectSelect( sal_False ); }
+    inline SdrObjKind   GetSdrDrawMode(/*sal_Bool bBuf = sal_False*/) const { return m_eDrawMode; }
+    inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { m_eDrawMode = eSdrObjectKind; SetObjectSelect( sal_False ); }
     void                StdDrawMode( SdrObjKind eSdrObjectKind, sal_Bool bObjSelect );
 
-    sal_Bool            IsFrmAction()                   { return (bInsFrm); }
-    inline sal_uInt16   GetBezierMode()                 { return eBezierMode; }
-    void            SetBezierMode(sal_uInt16 eBezMode)  { eBezierMode = eBezMode; }
+    sal_Bool            IsFrmAction()                   { return (m_bInsFrm); }
+    inline sal_uInt16   GetBezierMode()                 { return m_eBezierMode; }
+    void            SetBezierMode(sal_uInt16 eBezMode)  { m_eBezierMode = eBezMode; }
     void            EnterDrawTextMode(const Point& aDocPos); // turn on DrawTextEditMode
     void            InsFrm(sal_uInt16 nCols);
     void            StopInsFrm();
-    sal_uInt16          GetFrmColCount() const {return nInsFrmColCount;} // column number for interactive frame
+    sal_uInt16          GetFrmColCount() const {return m_nInsFrmColCount;} // column number for interactive frame
 
 
     void            SetChainMode( sal_Bool bOn );
-    sal_Bool            IsChainMode() const             { return bChainMode; }
+    sal_Bool            IsChainMode() const             { return m_bChainMode; }
 
     void            FlushInBuffer();
     sal_Bool            IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const;
 
     void             SetApplyTemplate(const SwApplyTemplate &);
-    SwApplyTemplate* GetApplyTemplate() const { return pApplyTempl; }
+    SwApplyTemplate* GetApplyTemplate() const { return m_pApplyTempl; }
 
     void            StartExecuteDrag();
     void            DragFinished();
     sal_uInt16          GetDropAction() const { return m_nDropAction; }
     sal_uLong           GetDropFormat() const { return m_nDropFormat; }
 
-    Color           GetTextColor() { return aTextColor; }
+    Color           GetTextColor() { return m_aTextColor; }
 
-    void            SetTextColor(const Color& rCol ) { aTextColor = rCol; }
+    void            SetTextColor(const Color& rCol ) { m_aTextColor = rCol; }
 
     Color           GetTextBackColor()
-                                            { return aTextBackColor; }
+                                            { return m_aTextBackColor; }
     void            SetTextBackColor(const Color& rCol )
-                                            { aTextBackColor = rCol; }
+                                            { m_aTextBackColor = rCol; }
     void            SetTextBackColorTransparent(bool bSet)
-                                    { bTransparentBackColor = bSet; }
+                                    { m_bTransparentBackColor = bSet; }
     bool            IsTextBackColorTransparent()
-                                    { return bTransparentBackColor; }
-    void            LockKeyInput(sal_Bool bSet){bLockInput = bSet;}
+                                    { return m_bTransparentBackColor; }
+    void            LockKeyInput(sal_Bool bSet){m_bLockInput = bSet;}
 
-    const SwView &GetView() const { return rView; }
-          SwView &GetView()       { return rView; }
+    const SwView &GetView() const { return m_rView; }
+          SwView &GetView()       { return m_rView; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    static inline long GetDDStartPosX() { return nDDStartPosX; }
-    static inline long GetDDStartPosY() { return nDDStartPosY; }
+    static inline long GetDDStartPosX() { return m_nDDStartPosX; }
+    static inline long GetDDStartPosY() { return m_nDDStartPosY; }
 
     static void _InitStaticData();
     static void _FinitStaticData();
@@ -291,7 +291,7 @@ public:
         language or the selection position depending on what has changed lately
      */
     void        SetUseInputLanguage( sal_Bool bNew );
-    sal_Bool    IsUseInputLanguage() const { return bUseInputLanguage; }
+    sal_Bool    IsUseInputLanguage() const { return m_bUseInputLanguage; }
 
     SwFrameControlsManager& GetFrameControlsManager() { return m_aFrameControlsManager; }
 

@@ -99,7 +99,7 @@ static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, sal_Bool b
 
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
-    SwWrtShell &rSh = rView.GetWrtShell();
+    SwWrtShell &rSh = m_rView.GetWrtShell();
     bool bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
     if(bQuickBalloon && rSh.GetViewOptions()->IsPreventTips())
         return;
@@ -211,7 +211,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     }
                 }
                 // #i80029#
-                sal_Bool bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+                sal_Bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
                     SvtSecurityOptions aSecOpts;
@@ -503,13 +503,13 @@ void  SwEditWin::Paint(const Rectangle& rRect)
     if(!pWrtShell)
         return;
     bool bPaintShadowCrsr = false;
-    if( pShadCrsr )
+    if( m_pShadCrsr )
     {
-        Rectangle aRect( pShadCrsr->GetRect());
+        Rectangle aRect( m_pShadCrsr->GetRect());
         // fully resides inside?
         if( rRect.IsInside( aRect ) )
             // dann aufheben
-            delete pShadCrsr, pShadCrsr = 0;
+            delete m_pShadCrsr, m_pShadCrsr = 0;
         else if( rRect.IsOver( aRect ))
         {
             // resides somewhat above, then everything is clipped outside
@@ -526,7 +526,7 @@ void  SwEditWin::Paint(const Rectangle& rRect)
         pWrtShell->Paint( rRect );
 
     if( bPaintShadowCrsr )
-        pShadCrsr->Paint();
+        m_pShadCrsr->Paint();
 }
 
 

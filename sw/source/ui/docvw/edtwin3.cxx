@@ -113,7 +113,7 @@ void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
  --------------------------------------------------------------------*/
 sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVerticalMode)
 {
-    SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
+    SvxRuler& rRuler = bVerticalMode ?  m_rView.GetVLineal() : m_rView.GetHLineal();
     return (!rRuler.StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
             !rRuler.StartDocDrag( rMEvt, RULER_TYPE_MARGIN1) &&
             !rRuler.StartDocDrag( rMEvt, RULER_TYPE_MARGIN2));
@@ -125,7 +125,7 @@ sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVertical
 sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
                                  const bool bVerticalMode )
 {
-    SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
+    SvxRuler& rRuler = bVerticalMode ?  m_rView.GetVLineal() : m_rView.GetHLineal();
     return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
 
