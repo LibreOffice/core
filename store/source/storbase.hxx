@@ -20,6 +20,9 @@
 #ifndef _STORE_STORBASE_HXX_
 #define _STORE_STORBASE_HXX_
 
+#include "sal/config.h"
+
+#include "boost/static_assert.hpp"
 #include "sal/types.h"
 
 #include "rtl/alloc.h"
@@ -48,22 +51,6 @@
 #define STORE_IMPL_CONCAT(x, y) STORE_IMPL_CONCAT2(x,y)
 #define STORE_IMPL_CONCAT2(x, y) x##y
 #endif
-
-#ifndef STORE_STATIC_ASSERT /* Compile time assertion */
-namespace store
-{
-    template< bool x > struct STATIC_ASSERTION_FAILURE;
-    template<> struct STATIC_ASSERTION_FAILURE< true > { enum { value = 1 }; };
-
-    template< int x > struct static_assert_test{};
-} // namespace store
-
-#define STORE_STATIC_ASSERT(pred) \
-typedef \
-store::static_assert_test< sizeof( store::STATIC_ASSERTION_FAILURE< (bool)(pred) > ) > \
-STORE_IMPL_CONCAT(static_assert_typedef_, __LINE__)
-
-#endif  /* !STORE_STATIC_ASSERT */
 
 namespace store
 {
@@ -437,7 +424,7 @@ struct PageData
      */
     static const size_t     theSize     = sizeof(G) + sizeof(D) + 2 * sizeof(L);
     static const sal_uInt16 thePageSize = theSize;
-    STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
+    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
 
     /** location.
      */

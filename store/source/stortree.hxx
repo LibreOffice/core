@@ -20,6 +20,9 @@
 #ifndef _STORE_STORTREE_HXX
 #define _STORE_STORTREE_HXX
 
+#include "sal/config.h"
+
+#include "boost/static_assert.hpp"
 #include "sal/types.h"
 
 #include "store/types.h"
@@ -120,7 +123,7 @@ struct OStoreBTreeNodeData : public store::OStorePageData
      */
     static const size_t     theSize     = sizeof(G);
     static const sal_uInt16 thePageSize = base::theSize + self::theSize;
-    STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
+    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
 
     /** capacity.
     */

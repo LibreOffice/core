@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include "boost/static_assert.hpp"
 
 #include "storbios.hxx"
 
@@ -182,7 +185,7 @@ struct SuperBlockPage
      */
     static const size_t     theSize     = 2 * SuperBlock::theSize;
     static const sal_uInt16 thePageSize = theSize;
-    STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
+    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
 
     /** Allocation.
      */
