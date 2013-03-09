@@ -254,9 +254,8 @@ public:
             const SwFmt& rFmt, sal_uLong& rCpPos, sal_uInt8 nHFFlags, sal_uInt8 nFlag,  sal_uInt8 nBreakCode);
 };
 
-//--------------------------------------------------------------------------
-// class WW8_WrPct zum Aufbau der Piece-Table
-//--------------------------------------------------------------------------
+
+// class WW8_WrPct to construct the piece table
 class WW8_WrPct
 {
     boost::ptr_vector<WW8_WrPc > aPcts;
@@ -324,11 +323,11 @@ public:
 class DrawObj
 {
 public:
-    WW8_CP mnCp;                // CP-Pos der Verweise
-    sal_uInt32 mnShapeId;           // ShapeId for the SwFrmFmts
+    WW8_CP mnCp;                // CP-Pos of references
+    sal_uInt32 mnShapeId;       // ShapeId for the SwFrmFmts
     sw::Frame maCntnt;          // the frame itself
     Point maParentPos;          // Points
-    sal_Int32 mnThick;              // Border Thicknesses
+    sal_Int32 mnThick;          // Border Thicknesses
     short mnDirection;          // If BiDi or not
     unsigned int mnHdFtIndex;   // 0 for main text, +1 for each subsequent
                                 // msword hd/ft
@@ -484,18 +483,18 @@ public:
     WW8_WrPlcAnnotations* pAtn;
     WW8_WrPlcTxtBoxes *pTxtBxs, *pHFTxtBxs;
 
-    const sw::Frame *mpParentFrame; //If set we are exporting content inside
-                                    //a frame, e.g. a graphic node
+    const sw::Frame *mpParentFrame; // If set we are exporting content inside
+                                    // a frame, e.g. a graphic node
 
     Point* pFlyOffset;              // zur Justierung eines im Writer als
     RndStdIds eNewAnchorType;       // Zeichen gebundenen Flys, der im WW
                                     // Absatzgebunden wird.
 
-    WW8_WrPlcFld* pFldMain;         // Felder im Haupttext
-    WW8_WrPlcFld* pFldHdFt;         // Felder in Header/Footer
-    WW8_WrPlcFld* pFldFtn;          // Felder in FootNotes
-    WW8_WrPlcFld* pFldEdn;          // Felder in EndNotes
-    WW8_WrPlcFld* pFldAtn;          // Felder in Annotations
+    WW8_WrPlcFld* pFldMain;         // fields in MainText
+    WW8_WrPlcFld* pFldHdFt;         // fields in Header/Footer
+    WW8_WrPlcFld* pFldFtn;          // fields in FootNotes
+    WW8_WrPlcFld* pFldEdn;          // fields in EndNotes
+    WW8_WrPlcFld* pFldAtn;          // fields in Annotations
     WW8_WrPlcFld* pFldTxtBxs;       // fields in textboxes
     WW8_WrPlcFld* pFldHFTxtBxs;     // fields in header/footer textboxes
     WW8_WrMagicTable *pMagicTable;  // keeps track of table cell positions, and
@@ -503,7 +502,7 @@ public:
                                     // which is required to make word display
                                     // graphics inside tables
     SwWW8WrGrf* pGrf;
-    const SwAttrSet* pStyAttr;      // StyleAttr fuer Tabulatoren
+    const SwAttrSet* pStyAttr;      // StyleAttr for Tabs
     const SwModify* pOutFmtNode;    // write Format or Node
     const SwFmt *pCurrentStyle;     // iff bStyDef=true, then this store the current style
 
@@ -516,15 +515,15 @@ public:
 
     sal_uInt8 nTxtTyp;
 
-    sal_uInt8 bStyDef : 1;           // wird Style geschrieben ?
-    sal_uInt8 bBreakBefore : 1;      // Breaks werden 2mal ausgegeben
-    sal_uInt8 bOutKF : 1;            // Kopf/Fusstexte werden ausgegeben
-    sal_uInt8 bOutFlyFrmAttrs : 1;   // Rahmen-Attr von Flys werden ausgegeben
+    sal_uInt8 bStyDef : 1;           // should Style be written?
+    sal_uInt8 bBreakBefore : 1;      // Breaks are being written 2 times
+    sal_uInt8 bOutKF : 1;            // Header/Footer texts are being written
+    sal_uInt8 bOutFlyFrmAttrs : 1;   // Frame-attr of Flys are being written
     sal_uInt8 bOutPageDescs : 1;     ///< PageDescs (section properties) are being written
     sal_uInt8 bOutFirstPage : 1;     // write Attrset of FirstPageDesc
-    sal_uInt8 bOutTable : 1;         // Tabelle wird ausgegeben
-                                //    ( wird zB bei Flys in Tabelle zurueckgesetzt )
-    sal_uInt8 bOutGrf : 1;           // Grafik wird ausgegeben
+    sal_uInt8 bOutTable : 1;         // table is being written
+                                     // ( wird zB bei Flys in Tabelle zurueckgesetzt )
+    sal_uInt8 bOutGrf : 1;           // graphics are being written
     sal_uInt8 bInWriteEscher : 1;    // in write textboxes
     sal_uInt8 bStartTOX : 1;         // true: a TOX is startet
     sal_uInt8 bInWriteTOX : 1;       // true: all content are in a TOX
@@ -1016,7 +1015,7 @@ public:
 
     WW8_CP Fc2Cp( sal_uLong nFc ) const          { return pPiece->Fc2Cp( nFc ); }
 
-            // einige z.T. static halb-interne Funktions-Deklarationen
+            // some partly static semi-internal function declarations
 
     void OutSprmBytes( sal_uInt8* pBytes, sal_uInt16 nSiz )
                                 { pO->insert( pO->end(), pBytes, pBytes+nSiz ); }
@@ -1125,16 +1124,16 @@ private:
     WW8Export& operator=(const WW8Export&);
 };
 
-class WW8_WrPlcSubDoc   // Doppel-Plc fuer Foot-/Endnotes und Postits
+class WW8_WrPlcSubDoc   // double Plc for Footnotes/Endnotes and Postits
 {
 private:
-    //No copying
+    // No copying
     WW8_WrPlcSubDoc(const WW8_WrPlcSubDoc&);
     WW8_WrPlcSubDoc& operator=(const WW8_WrPlcSubDoc&);
 protected:
     std::vector<WW8_CP> aCps;
-    std::vector<const void*> aCntnt;                // PTRARR von SwFmtFtn/PostIts/..
-    WW8_WrPlc0* pTxtPos;            // Pos der einzelnen Texte
+    std::vector<const void*> aCntnt;                // PTRARR of SwFmtFtn/PostIts/..
+    WW8_WrPlc0* pTxtPos;            // positions of the individual texts
 
     WW8_WrPlcSubDoc();
     virtual ~WW8_WrPlcSubDoc();
@@ -1146,13 +1145,13 @@ protected:
     virtual const std::vector<sal_uInt32>* GetShapeIdArr() const;
 };
 
-// Doppel-Plc fuer Footnotes/Endnotes
+// double Plc for Footnotes/Endnotes
 class WW8_WrPlcFtnEdn : public WW8_WrPlcSubDoc
 {
 private:
     sal_uInt8 nTyp;
 
-    //No copying
+    // No copying
     WW8_WrPlcFtnEdn(const WW8_WrPlcFtnEdn&);
     WW8_WrPlcFtnEdn& operator=(WW8_WrPlcFtnEdn &);
 public:
@@ -1174,7 +1173,7 @@ struct WW8_Annotation
     WW8_Annotation(const SwRedlineData* pRedline);
 };
 
-class WW8_WrPlcAnnotations : public WW8_WrPlcSubDoc  // Doppel-Plc fuer PostIts
+class WW8_WrPlcAnnotations : public WW8_WrPlcSubDoc  // double Plc for Postits
 {
 private:
     //No copying
@@ -1192,8 +1191,8 @@ public:
     void WritePlc( WW8Export& rWrt ) const;
 };
 
-class WW8_WrPlcTxtBoxes : public WW8_WrPlcSubDoc // Doppel-Plc fuer Textboxen
-{                        // Rahmen/DrawTextboxes!
+class WW8_WrPlcTxtBoxes : public WW8_WrPlcSubDoc // double Plc for Textboxes
+{                        // Frame/DrawTextboxes!
 private:
     sal_uInt8 nTyp;
     std::vector<sal_uInt32> aShapeIds;        // VARARR of ShapeIds for the SwFrmFmts
@@ -1217,17 +1216,17 @@ public:
     }
 };
 
-// Plc fuer Chpx und Papx ( incl PN-Plc )
+// Plc for Chpx and Papx ( incl PN-Plc )
 typedef boost::ptr_vector<WW8_WrFkp> WW8_WrFkpPtrs;
 
-class WW8_WrPlcPn                   // Plc fuer Page Numbers
+class WW8_WrPlcPn                   // Plc for Page Numbers
 {
 private:
     WW8Export& rWrt;
     WW8_WrFkpPtrs aFkps;            // PTRARR
     sal_uInt16 nFkpStartPage;
     ePLCFT ePlc;
-    bool bWrtWW8;                   // Fuer Writererkennung
+    bool bWrtWW8;                   // for writer detection
     sal_uInt16 nMark;
 
     //No copying
@@ -1242,12 +1241,12 @@ public:
     sal_uInt8 *CopyLastSprms(sal_uInt8 &rLen);
 };
 
-// class WW8_WrPlc1 ist erstmal nur fuer Felder
+// class WW8_WrPlc1 is only used for fields
 class WW8_WrPlc1
 {
 private:
     std::vector<WW8_CP> aPos;
-    sal_uInt8* pData;                // Inhalte ( Strukturen )
+    sal_uInt8* pData;                // content ( structures )
     sal_uLong nDataLen;
     sal_uInt16 nStructSiz;
 
@@ -1265,7 +1264,7 @@ public:
     void Finish( sal_uLong nLastCp, sal_uLong nStartCp );
 };
 
-// class WW8_WrPlcFld ist fuer Felder
+// class WW8_WrPlcFld is for fields
 class WW8_WrPlcFld : public WW8_WrPlc1
 {
 private:
@@ -1299,10 +1298,10 @@ public:
 class GraphicDetails
 {
 public:
-    sw::Frame maFly;            // Umgebende FlyFrms dazu
-    sal_uLong mnPos;                // FilePos der Grafiken
-    sal_uInt16 mnWid;               // Breite der Grafiken
-    sal_uInt16 mnHei;               // Hoehe der Grafiken
+    sw::Frame maFly;                // surrounding FlyFrms
+    sal_uLong mnPos;                // FilePos of the graphics
+    sal_uInt16 mnWid;               // Width of the graphics
+    sal_uInt16 mnHei;               // Height of the graphics
 
     GraphicDetails(const sw::Frame &rFly, sal_uInt16 nWid, sal_uInt16 nHei)
         : maFly(rFly), mnPos(0), mnWid(nWid), mnHei(nHei)
@@ -1318,7 +1317,7 @@ public:
     }
 };
 
-// class SwWW8WrGrf sammelt Grafiken und gibt sie aus
+// class SwWW8WrGrf collects graphics and issues them
 class SwWW8WrGrf
 {
 private:
@@ -1410,9 +1409,8 @@ public:
     rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
 };
 
-// Die Klasse SwWW8AttrIter ist eine Hilfe zum Aufbauen der Fkp.chpx.
-// Dabei werden nur Zeichen-Attribute beachtet; Absatz-Attribute brauchen
-// diese Behandlung nicht.
+// class SwWW8AttrIter is a helper for constructing the Fkp.chpx.
+// Only character attributes are considered; paragraph attributes do not need this treatment.
 // Die Absatz- und Textattribute des Writers kommen rein, und es wird
 // mit Where() die naechste Position geliefert, an der sich die Attribute
 // aendern. IsTxtAtr() sagt, ob sich an der mit Where() gelieferten Position
@@ -1523,7 +1521,7 @@ public:
 };
 
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
-//A bit of a bag on the side for now
+// A bit of a bag on the side for now
 String FieldString(ww::eField eIndex);
 String BookmarkToWord(const String &rBookmark);
 
