@@ -84,6 +84,9 @@
     <glade-widget-class title="Text Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Bookmark Combo" name="swuilo-BookmarkCombo"
+                        generic-name="BookmarkComboBox" parent="GtkTreeView"
+                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Category Edit" name="swuilo-FEdit"
                         generic-name="CategoryEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
