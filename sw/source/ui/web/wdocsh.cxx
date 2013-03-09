@@ -30,7 +30,7 @@
 #include "swtypes.hxx"
 
 #include "shellio.hxx"
-// nur wegen des Itemtypes
+// just because of the itemtypes
 #include "wdocsh.hxx"
 #include "web.hrc"
 

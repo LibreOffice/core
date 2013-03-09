@@ -36,8 +36,7 @@
 
 #include <unomid.h>
 
-
-// STATIC DATA -----------------------------------------------------------
+// STATIC DATA
 #define SwWebTextShell
 #define Paragraph
 #define HyphenZone

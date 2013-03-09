@@ -47,7 +47,7 @@
 #include <barcfg.hxx>
 #include <doc.hxx>
 
-// EIGENTLICH nicht moeglich !!
+// TECHNICALLY not possible !!
 #include <beziersh.hxx>
 #include <drawsh.hxx>
 #include <drwtxtsh.hxx>
@@ -104,15 +104,15 @@ SwWebView::~SwWebView()
 
 void SwWebView::SelectShell()
 {
-    // Entscheidung, ob UpdateTable gerufen werden muss
+    // Decision whether UpdateTable must be called
     bool bUpdateTable = false;
     const SwFrmFmt* pCurTableFmt = GetWrtShell().GetTableFmt();
     if(pCurTableFmt && pCurTableFmt != GetLastTblFrmFmt())
     {
-        bUpdateTable = true; // kann erst spaeter ausgefuehrt werden
+        bUpdateTable = true; // can only be executed later
     }
     SetLastTblFrmFmt(pCurTableFmt);
-    //SEL_TBL und SEL_TBL_CELLS koennen verodert sein!
+    //SEL_TBL and SEL_TBL_CELLS can be ored!
     int nNewSelectionType = (GetWrtShell().GetSelectionType()
                                 & ~nsSelectionType::SEL_TBL_CELLS);
 
@@ -122,7 +122,7 @@ void SwWebView::SelectShell()
         GetViewFrame()->GetBindings().InvalidateAll( sal_False );
         if ( _nSelectionType & nsSelectionType::SEL_OLE ||
              _nSelectionType & nsSelectionType::SEL_GRF )
-            //Fuer Grafiken und OLE kann sich natuerlich das Verb aendern!
+            //The verb may of course change for graphics and OLE!
             ImpSetVerb( nNewSelectionType );
     }
     else
@@ -132,9 +132,9 @@ void SwWebView::SelectShell()
 
         if( GetCurShell() )
         {
-            rDispatcher.Flush();        // alle gecachten Shells wirklich loeschen
+            rDispatcher.Flush();        // really delete all cached shells
 
-            //Zur alten Selektion merken welche Toolbar sichtbar war
+            //Additonal to the old selection remember which toolbar was visible.
             sal_Int32 nId = rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT );
             if ( nId )
                 pBarCfg->SetTopToolbar( _nSelectionType, nId );
@@ -269,10 +269,10 @@ void SwWebView::SelectShell()
             GetEditWin().SetInputContext( aCntxt );
         }
 
-        //Zur neuen Selektion die Toolbar aktivieren, die auch beim letzten Mal
-        //aktiviert war
-        //Vorher muss ein Flush() sein, betrifft aber lt. MBA nicht das UI und ist
-        //kein Performance-Problem
+        //Additional to the selection enable the toolbar, which was
+        //activated last time
+        //Before must be a Flush(), but concerns according to MBA not the
+        //user interface and is not a performance issue.
         // TODO/LATER: maybe now the Flush() command is superfluous?!
         rDispatcher.Flush();
 
@@ -288,11 +288,11 @@ void SwWebView::SelectShell()
     }
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
 
-    //Guenstiger Zeitpunkt fuer die Kommunikation mit OLE-Objekten?
+    //Opportune time for the communication with OLE objects?
     if ( GetDocShell()->GetDoc()->IsOLEPrtNotifyPending() )
         GetDocShell()->GetDoc()->PrtOLENotify( sal_False );
 
-    //jetzt das Tabellen-Update
+    //now the table update
     if(bUpdateTable)
         GetWrtShell().UpdateTable();
 }
