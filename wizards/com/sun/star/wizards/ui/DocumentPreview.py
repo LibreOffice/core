@@ -16,7 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from wizards.common.Properties import Properties
+from ..common.Properties import Properties
 
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt import Rectangle
@@ -49,6 +49,7 @@ class DocumentPreview(object):
             else:
                 self.loadArgs = propNames
                 self.xFrame.activate()
+                print ("DEBUG !!! setDocument -- URL: ", url_)
                 self.xComponent = self.xFrame.loadComponentFromURL(url_, "_self", 0, tuple(self.loadArgs))
                 return self.xComponent
         else:
@@ -56,7 +57,7 @@ class DocumentPreview(object):
             ps = Properties()
             for index,item in enumerate(propNames):
                 ps[item] = propValues[index]
-            return self.setDocument(self.url, ps.getProperties(ps))
+            return self.setDocument(self.url, ps.getProperties1())
 
     def reload(self, xmsf):
         self.closeFrame()
