@@ -292,8 +292,8 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         }
         // prepare to show
         // display license dialog
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr("fwe", aLocale);
-        boost::scoped_ptr<LicenseDialog> pDialog(new LicenseDialog(aLicensePath, pResMgr));
+        boost::scoped_ptr<ResMgr> pResMgr(ResMgr::SearchCreateResMgr("fwe", aLocale));
+        boost::scoped_ptr<LicenseDialog> pDialog(new LicenseDialog(aLicensePath, pResMgr.get()));
         sal_Bool bAgreed = (pDialog->Execute() == 1);
 
         if (bAgreed) {
