@@ -140,8 +140,6 @@ void  SwFormatTablePage::Init()
     m_pRelWidthCB->SetClickHdl(LINK( this, SwFormatTablePage, RelWidthClickHdl ));
 }
 
-/*------------------------------------------------------------------------*/
-
 IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
 {
     OSL_ENSURE(pTblData, "table data not available?");
@@ -157,7 +155,7 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
         m_aWidthMF.SetRefValue(pTblData->GetSpace());
         m_aLeftMF.SetRefValue(pTblData->GetSpace());
         m_aRightMF.SetRefValue(pTblData->GetSpace());
-        m_aLeftMF.SetMetricFieldMin(0); // wird vom Percentfield ueberschrieben
+        m_aLeftMF.SetMetricFieldMin(0); // will be overwritten by the Percentfield
         m_aRightMF.SetMetricFieldMin(0); //                 -""-
         m_aLeftMF.SetMetricFieldMax(99); //
         m_aRightMF.SetMetricFieldMax(99); //
@@ -165,7 +163,7 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
         m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(nRight ), FUNIT_TWIP );
     }
     else
-        ModifyHdl(m_aLeftMF.get());    // Werte wieder korrigieren
+        ModifyHdl(m_aLeftMF.get());    // correct values again
 
     if(m_pFreeBtn->IsChecked())
     {
@@ -234,8 +232,8 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
 
     if(bFull && bRestore)
     {
-        // nachdem auf autom. geschaltet wurde, wurde die Breite gemerkt,
-        // um sie beim Zurueckschalten restaurieren zu koennen
+        // After being switched on automatically, the width was pinned
+        // in order to restore the width while switching back to.
         bFull = sal_False;
         m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(nSaveWidth ), FUNIT_TWIP );
     }
@@ -244,7 +242,6 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
     return 0;
 }
 
-/*----------------------------------------------------------------------*/
 void SwFormatTablePage::RightModify()
 {
     if(m_pFreeBtn->IsChecked())
@@ -286,13 +283,13 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
         if( nCurWidth < MINLAY )
             nCurWidth = MINLAY;
         nDiff = nRight + nLeft + nCurWidth - pTblData->GetSpace() ;
-        //rechtsbuendig nur linken Rand veraendern
+        //only change the left boundary right aligned
         if(m_pRightBtn->IsChecked())
             nLeft -= nDiff;
-        //linksbuendig nur rechten Rand veraendern
+        //only change the right boundary left aligned
         else if(m_pLeftBtn->IsChecked())
             nRight -= nDiff;
-        //linker Rand und Breite erlaubt - erst rechts - dann links
+        //left boundary and width allowed - first right - then left
         else if(m_pFromLeftBtn->IsChecked())
         {
             if( nRight >= nDiff )
@@ -312,7 +309,7 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
 
             }
         }
-        //zentriert beide Seiten gleichmaessig veraendern
+        //change both sides centered equally
         else if(m_pCenterBtn->IsChecked())
         {
             if((nLeft != nRight))
@@ -327,7 +324,7 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
                     nRight -= nDiff/2;
             }
         }
-        //freie Ausrichtung: beide Raender verkleinern
+        //free alignment: decrease both boundaries
         else if(m_pFreeBtn->IsChecked())
         {
             nLeft -= nDiff/2;
@@ -359,8 +356,7 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
         }
         else
         {
-            //hier wird bei Aenderung an der linken Seite zuerst der
-            //rechte Rand veraendert, dann die Breite
+            //Here upon changes the right boundary will be changed, then the width.
             nDiff = nRight + nLeft + nCurWidth - pTblData->GetSpace() ;
 
             nRight -= nDiff;
@@ -384,7 +380,7 @@ SfxTabPage*  SwFormatTablePage::Create( Window* pParent,
 
 sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
-    // Testen, ob eins der Control noch den Focus hat
+    // Test if one of the controls still has the focus.
     if (m_aWidthMF.HasFocus())
         ModifyHdl(m_aWidthMF.get());
     else if (m_aLeftMF.HasFocus())
@@ -550,7 +546,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 
     }
 
-    //Raender
+    //Margins
     if(SFX_ITEM_SET == rSet.GetItemState( RES_UL_SPACE, sal_False,&pItem ))
     {
         m_pTopMF->SetValue(m_pTopMF->Normalize(
@@ -609,7 +605,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     // os: VCL sorgt nicht dafuer, dass das aktive Control im
     // dialog bei OK den focus verliert
     m_pNameED->GrabFocus();
-    // Test des Tabellennamens auf Leerzeichen
+    // Test of the tablename for spaces
     String sTblName = m_pNameED->GetText();
     if(sTblName.Search(' ') != STRING_NOTFOUND)
     {
@@ -719,9 +715,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     }
     return sal_True;
 }
-/*------------------------------------------------------------------------
-    Beschreibung: Seite Spaltenkonfiguration
-------------------------------------------------------------------------*/
+//Description: Page column configuration
 SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableColumnPage",
         "modules/swriter/ui/tablecolumnpage.ui", rSet)
@@ -761,9 +755,7 @@ SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
         && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON));
 
 };
-/*------------------------------------------------------------------------
-    Beschreibung: Seite Spaltenkonfiguration
-------------------------------------------------------------------------*/
+//Description: Page column configuration
  SwTableColumnPage::~SwTableColumnPage()
 {
 };
@@ -851,7 +843,7 @@ void  SwTableColumnPage::Init(sal_Bool bWeb)
 
 IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
 {
-    //Anzeigefenster verschieben
+    //move display window
     if(pBox == (CheckBox *)m_pDownBtn)
     {
         if(aValueTbl[0] > 0)
@@ -1034,8 +1026,8 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     else if(bModifyTable && !bProp)
     {
-//      Differenz wird ueber die Tabellenbreite ausgeglichen,
-//      andere Spalten bleiben unveraendert
+//      Difference is balanced by the width of the table,
+//      other columns remain unchanged.
         OSL_ENSURE(nDiff <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         SwTwips nActSpace = pTblData->GetSpace() - nTableWidth;
         if(nDiff > nActSpace)
@@ -1050,8 +1042,8 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     else if(bModifyTable & bProp)
     {
-//      Alle Spalten werden proportional mitveraendert, die Tabellenbreite wird
-//      entsprechend angepasst
+//      All columns will changed proportionally with,
+//      the table width is adjusted accordingly.
         OSL_ENSURE(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         long nAdd = nDiff;
         if(nDiff * nNoOfVisibleCols > pTblData->GetSpace() - nTableWidth)
@@ -1477,7 +1469,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     bool bFlowAllowed = !bHtmlMode || rHtmlOpt.IsPrintLayoutExtension();
     if(bFlowAllowed)
     {
-        // Einfuegen der vorhandenen Seitenvorlagen in die Listbox
+        // Inserting of the existing page templates in the list box.
         const sal_uInt16 nCount = pShell->GetPageDescCnt();
         sal_uInt16 i;
 

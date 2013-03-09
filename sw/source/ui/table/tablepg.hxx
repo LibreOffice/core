@@ -89,9 +89,8 @@ public:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 };
 
-/*-------------------------------------------------------
- TabPage Format/Table/Columns
---------------------------------------------------------- */
+// TabPage Format/Table/Columns
+
 #define MET_FIELDS 6 //Number of the used MetricFields
 
 class SwTableColumnPage : public SfxTabPage
