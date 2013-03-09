@@ -1146,6 +1146,8 @@ Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
             aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
     }
 
+    aSz.Width() += ImplGetExtraOffset() * 2;
+
     aSz = CalcWindowSize( aSz );
     return aSz;
 }
