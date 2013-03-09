@@ -5969,6 +5969,10 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& 
 
 SwRect SwPageFrm::GetBoundRect() const
 {
+    if(!getRootFrm()) {
+        return SwRect( Point(0, 0), Size(0, 0) );
+    }
+
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
     SwRect aPageRect( Frm() );
     SwRect aResult;

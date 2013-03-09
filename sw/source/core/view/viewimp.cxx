@@ -191,6 +191,13 @@ void SwViewImp::SetFirstVisPage()
         const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
 
         SwPageFrm *pPage = (SwPageFrm*)pSh->GetLayout()->Lower();
+        if (!pPage)
+        {
+            pFirstVisPage = 0;
+            bFirstPageInvalid = sal_True;
+            return;
+        }
+
         SwRect aPageRect = pPage->GetBoundRect();
         while ( pPage && !aPageRect.IsOver( pSh->VisArea() ) )
         {

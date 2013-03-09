@@ -874,7 +874,10 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
 
 inline void SetLastPage( SwPageFrm *pPage )
 {
-    ((SwRootFrm*)pPage->GetUpper())->pLastPage = pPage;
+    if (pPage != 0)
+    {
+        ((SwRootFrm*)pPage->GetUpper())->pLastPage = pPage;
+    }
 }
 
 /*************************************************************************
@@ -2083,6 +2086,12 @@ static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
 // Calculate how the pages have to be positioned
 void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
 {
+    // if all pages ae hidden
+    if (!Lower())
+    {
+        return;
+    }
+
     // #i91432#
     // No calculation of page positions, if only an empty page is present.
     // This situation occurs when <SwRootFrm> instance is in construction
@@ -2413,6 +2422,11 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
 bool SwRootFrm::IsLeftToRightViewLayout() const
 {
+    // all is hidden
+    if (!Lower())
+    {
+        return false;
+    }
     // Layout direction determined by layout direction of the first page.
     // #i88036#
     // Only ask a non-empty page frame for its layout direction
