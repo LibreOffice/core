@@ -537,7 +537,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibility
 // auxillary input handling functions
 namespace {
 
-bool getinput_putcall(bs::types::PutCall& pc, const STRING& str) {
+bool getinput_putcall(bs::types::PutCall& pc, const OUString& str) {
     if(str.compareToAscii("c",1)==0) {
         pc=bs::types::Call;
     } else if(str.compareToAscii("p",1)==0) {
@@ -549,7 +549,7 @@ bool getinput_putcall(bs::types::PutCall& pc, const STRING& str) {
 }
 
 bool getinput_putcall(bs::types::PutCall& pc, const ANY& anyval) {
-    STRING str;
+    OUString str;
     if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_STRING) {
         anyval >>= str;
     } else if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_VOID) {
@@ -571,7 +571,7 @@ bool getinput_strike(double& strike, const ANY& anyval) {
     return true;
 }
 
-bool getinput_inout(bs::types::BarrierKIO& kio, const STRING& str) {
+bool getinput_inout(bs::types::BarrierKIO& kio, const OUString& str) {
     if(str.compareToAscii("i",1)==0) {
         kio=bs::types::KnockIn;
     } else if(str.compareToAscii("o",1)==0) {
@@ -582,7 +582,7 @@ bool getinput_inout(bs::types::BarrierKIO& kio, const STRING& str) {
     return true;
 }
 
-bool getinput_barrier(bs::types::BarrierActive& cont, const STRING& str) {
+bool getinput_barrier(bs::types::BarrierActive& cont, const OUString& str) {
     if(str.compareToAscii("c",1)==0) {
         cont=bs::types::Continuous;
     } else if(str.compareToAscii("e",1)==0) {
@@ -593,7 +593,7 @@ bool getinput_barrier(bs::types::BarrierActive& cont, const STRING& str) {
     return true;
 }
 
-bool getinput_fordom(bs::types::ForDom& fd, const STRING& str) {
+bool getinput_fordom(bs::types::ForDom& fd, const OUString& str) {
     if(str.compareToAscii("f",1)==0) {
         fd=bs::types::Foreign;
     } else if(str.compareToAscii("d",1)==0) {
@@ -605,7 +605,7 @@ bool getinput_fordom(bs::types::ForDom& fd, const STRING& str) {
 }
 
 bool getinput_greek(bs::types::Greeks& greek, const ANY& anyval) {
-    STRING str;
+    OUString str;
     if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_STRING) {
         anyval >>= str;
     } else if(anyval.getValueTypeClass() == ::com::sun::star::uno::TypeClass_VOID) {
@@ -646,8 +646,8 @@ bool getinput_greek(bs::types::Greeks& greek, const ANY& anyval) {
 double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
-            const STRING& put_call, const STRING& in_out,
-            const STRING& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE
+            const OUString& put_call, const OUString& in_out,
+            const OUString& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE
 {
     bs::types::PutCall pc;
     bs::types::BarrierKIO kio;
@@ -672,8 +672,8 @@ double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
 double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
-            const STRING& for_dom, const STRING& in_out,
-            const STRING& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE
+            const OUString& for_dom, const OUString& in_out,
+            const OUString& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE
 {
     bs::types::ForDom fd;
     bs::types::BarrierKIO kio;

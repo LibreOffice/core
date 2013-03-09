@@ -44,7 +44,6 @@
 #include <tools/resary.hxx>
 
 #define ANY                 ::com::sun::star::uno::Any
-#define STRING              ::rtl::OUString
 #define THROWDEF_RTE_IAE    throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IllegalArgumentException)
 #define THROW_IAE           throw ::com::sun::star::lang::IllegalArgumentException()
 #define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else THROW_IAE
@@ -392,14 +391,14 @@ public:
     virtual double SAL_CALL getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
-            const STRING& put_call, const STRING& in_out,
-            const STRING& continuous, const ANY& greek ) THROWDEF_RTE_IAE;
+            const OUString& put_call, const OUString& in_out,
+            const OUString& continuous, const ANY& greek ) THROWDEF_RTE_IAE;
 
    virtual double SAL_CALL getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
-            const STRING& for_dom, const STRING& in_out,
-            const STRING& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE;
+            const OUString& for_dom, const OUString& in_out,
+            const OUString& barriercont, const ANY& greekstr ) THROWDEF_RTE_IAE;
 
    virtual double SAL_CALL getOptProbHit( double spot, double vol,
             double mu, double T,

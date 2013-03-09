@@ -562,7 +562,7 @@ double GetGcd( double f1, double f2 )
 }
 
 
-double ConvertToDec( const STRING& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE
+double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE
 {
     if ( nBase < 2 || nBase > 36 )
         THROW_IAE;
@@ -628,7 +628,7 @@ static inline sal_Char GetMaxChar( sal_uInt16 nBase )
 }
 
 
-STRING ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
+OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
     sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) THROWDEF_RTE_IAE
 {
     fNum = ::rtl::math::approxFloor( fNum );
@@ -643,7 +643,7 @@ STRING ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
     if( bNeg )
         nNum = sal_Int64( pow( double( nBase ), double( nMaxPlaces ) ) ) + nNum;
 
-    STRING          aRet( STRING::valueOf( nNum, nBase ).toAsciiUpperCase() );
+    OUString          aRet( OUString::valueOf( nNum, nBase ).toAsciiUpperCase() );
 
 
     if( bUsePlaces )
@@ -659,7 +659,7 @@ STRING ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
             sal_Char*   p = new sal_Char[ nLeft + 1 ];
             memset( p, bNeg? GetMaxChar( nBase ) : '0', nLeft );
             p[ nLeft ] = 0x00;
-            STRING  aTmp( p, nLeft, RTL_TEXTENCODING_MS_1252 );
+            OUString  aTmp( p, nLeft, RTL_TEXTENCODING_MS_1252 );
             aTmp += aRet;
             aRet = aTmp;
 
@@ -874,7 +874,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
 }
 
 
-STRING GetString( double f, sal_Bool bLeadingSign, sal_uInt16 nMaxDig )
+OUString GetString( double f, sal_Bool bLeadingSign, sal_uInt16 nMaxDig )
 {
     const int       nBuff = 256;
     sal_Char        aBuff[ nBuff + 1 ];
@@ -885,7 +885,7 @@ STRING GetString( double f, sal_Bool bLeadingSign, sal_uInt16 nMaxDig )
                     if ( nLen < 0 || nLen > nBuff )
                         nLen = strlen( aBuff );
 
-    STRING          aRet( aBuff, nLen, RTL_TEXTENCODING_MS_1252 );
+    OUString          aRet( aBuff, nLen, RTL_TEXTENCODING_MS_1252 );
 
     return aRet;
 }
@@ -1352,7 +1352,7 @@ void MyList::Insert( void* p, sal_uInt32 n )
 
 StringList::~StringList()
 {
-    for( STRING* p = ( STRING* ) First() ; p ; p = ( STRING* ) Next() )
+    for( OUString* p = ( OUString* ) First() ; p ; p = ( OUString* ) Next() )
         delete p;
 }
 
@@ -1695,7 +1695,7 @@ sal_Bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::Runtim
 
 //-----------------------------------------------------------------------------
 
-Complex::Complex( const STRING& rStr ) THROWDEF_RTE_IAE
+Complex::Complex( const OUString& rStr ) THROWDEF_RTE_IAE
 {
     if( !ParseString( rStr, *this ) )
         THROW_IAE;
@@ -1707,7 +1707,7 @@ inline sal_Bool Complex::IsImagUnit( sal_Unicode c )
     return c == 'i' || c == 'j';
 }
 
-sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
+sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
 {
     rCompl.c = '\0';    // do not force a symbol, if only real part present
 
@@ -1776,7 +1776,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 }
 
 
-STRING Complex::GetString() const THROWDEF_RTE_IAE
+OUString Complex::GetString() const THROWDEF_RTE_IAE
 {
     CHK_FINITE(r);
     CHK_FINITE(i);
@@ -2116,7 +2116,7 @@ ComplexList::~ComplexList()
 }
 
 
-void ComplexList::Append( const SEQSEQ( STRING )& r, ComplListAppendHandl eAH ) THROWDEF_RTE_IAE
+void ComplexList::Append( const SEQSEQ( OUString )& r, ComplListAppendHandl eAH ) THROWDEF_RTE_IAE
 {
     sal_Int32   n1, n2;
     sal_Int32   nE1 = r.getLength();
@@ -2126,12 +2126,12 @@ void ComplexList::Append( const SEQSEQ( STRING )& r, ComplListAppendHandl eAH ) 
 
     for( n1 = 0 ; n1 < nE1 ; n1++ )
     {
-        const SEQ( STRING )&    rList = r[ n1 ];
+        const SEQ( OUString )&    rList = r[ n1 ];
         nE2 = rList.getLength();
 
         for( n2 = 0 ; n2 < nE2 ; n2++ )
         {
-            const STRING&   rStr = rList[ n2 ];
+            const OUString&   rStr = rList[ n2 ];
 
             if( !rStr.isEmpty() )
                 Append( new Complex( rStr ) );
@@ -2158,10 +2158,10 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH 
             case uno::TypeClass_VOID:       break;
             case uno::TypeClass_STRING:
                 {
-                const STRING*       pStr = ( const STRING* ) r.getValue();
+                const OUString*       pStr = ( const OUString* ) r.getValue();
 
                 if( !pStr->isEmpty() )
-                    Append( new Complex( *( STRING* ) r.getValue() ) );
+                    Append( new Complex( *( OUString* ) r.getValue() ) );
                 else if( bEmpty0 )
                     Append( new Complex( 0.0 ) );
                 else if( bErrOnEmpty )
@@ -2206,16 +2206,16 @@ ConvertData::~ConvertData()
 }
 
 
-sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
+sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
 {
-    STRING aStr = rRef;
+    OUString aStr = rRef;
     sal_Int32 nLen = rRef.getLength();
     sal_Int32 nIndex = rRef.lastIndexOf( '^' );
     if( nIndex > 0 && nIndex  == ( nLen - 2 ) )
     {
         const sal_Unicode*  p = aStr.getStr();
-        aStr = STRING( p, nLen - 2 );
-        aStr += STRING( p[ nLen - 1 ] );
+        aStr = OUString( p, nLen - 2 );
+        aStr += OUString( p[ nLen - 1 ] );
     }
     if( aName.equals( aStr ) )
         return 0;
@@ -2584,7 +2584,7 @@ ConvertDataList::~ConvertDataList()
 }
 
 
-double ConvertDataList::Convert( double fVal, const STRING& rFrom, const STRING& rTo ) THROWDEF_RTE_IAE
+double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo ) THROWDEF_RTE_IAE
 {
     ConvertData*    pFrom = NULL;
     ConvertData*    pTo = NULL;

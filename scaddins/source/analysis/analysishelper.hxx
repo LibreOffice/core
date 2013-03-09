@@ -97,14 +97,14 @@ inline void         AlignDate( sal_uInt16& rDay, sal_uInt16 nMonth, sal_uInt16 n
 
 double              BinomialCoefficient( double n, double k );
 double              GetGcd( double f1, double f2 );
-double              ConvertToDec( const STRING& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
-STRING              ConvertFromDec(
+double              ConvertToDec( const OUString& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
+OUString              ConvertFromDec(
                         double fNum, double fMin, double fMax, sal_uInt16 nBase,
                         sal_Int32 nPlaces, sal_Int32 nMaxPlaces, sal_Bool bUsePlaces ) THROWDEF_RTE_IAE;
 double              Erf( double fX );
 double              Erfc( double fX );
 sal_Bool            ParseDouble( const sal_Unicode*& rpDoubleAsString, double& rReturn );
-STRING              GetString( double fNumber, sal_Bool bLeadingSign = sal_False, sal_uInt16 nMaxNumOfDigits = 15 );
+OUString              GetString( double fNumber, sal_Bool bLeadingSign = sal_False, sal_uInt16 nMaxNumOfDigits = 15 );
 inline double       Exp10( sal_Int16 nPower );      // 10 ^ nPower
 
 double              GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
@@ -189,13 +189,13 @@ class StringList : protected MyList
 public:
     virtual                 ~StringList();
 
-    inline const STRING*    First( void );
-    inline const STRING*    Next( void );
-    inline const STRING*    Get( sal_uInt32 nIndex ) const;
+    inline const OUString*    First( void );
+    inline const OUString*    Next( void );
+    inline const OUString*    Get( sal_uInt32 nIndex ) const;
 
     using MyList::Append;
-    inline void             Append( STRING* pNew );
-    inline void             Append( const STRING& rNew );
+    inline void             Append( OUString* pNew );
+    inline void             Append( const OUString& rNew );
 
     using MyList::Count;
 };
@@ -454,11 +454,11 @@ class Complex
 
 public:
     inline                  Complex( double fReal, double fImag = 0.0, sal_Unicode cC = '\0' );
-                            Complex( const STRING& rComplexAsString ) THROWDEF_RTE_IAE;
+                            Complex( const OUString& rComplexAsString ) THROWDEF_RTE_IAE;
 
     inline static sal_Bool  IsImagUnit( sal_Unicode c );
-    static sal_Bool         ParseString( const STRING& rComplexAsString, Complex& rReturn );
-    STRING                  GetString() const THROWDEF_RTE_IAE;
+    static sal_Bool         ParseString( const OUString& rComplexAsString, Complex& rReturn );
+    OUString                  GetString() const THROWDEF_RTE_IAE;
 
     inline double           Real( void ) const;
     inline double           Imag( void ) const;
@@ -516,7 +516,7 @@ public:
 
     using MyList::Append;
     inline void             Append( Complex* pNew );
-    void                    Append( const SEQSEQ( STRING )& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
+    void                    Append( const SEQSEQ( OUString )& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
     void                    Append( const SEQ( ANY )& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
 };
 
@@ -543,7 +543,7 @@ class ConvertData
 protected:
     friend class ConvertDataList;
     double                  fConst;
-    STRING                  aName;
+    OUString                  aName;
     ConvertDataClass        eClass;
     sal_Bool                bPrefixSupport;
 public:
@@ -555,7 +555,7 @@ public:
 
     virtual                 ~ConvertData();
 
-    sal_Int16               GetMatchingLevel( const STRING& rRef ) const;
+    sal_Int16               GetMatchingLevel( const OUString& rRef ) const;
                                     // 0.0 = no equality
                                     // 1.0 = matches exact
                                     // rest = matches without an assumed prefix of one character
@@ -611,7 +611,7 @@ public:
                             ConvertDataList( void );
     virtual                 ~ConvertDataList();
 
-    double                  Convert( double fVal, const STRING& rFrom, const STRING& rTo ) THROWDEF_RTE_IAE;
+    double                  Convert( double fVal, const OUString& rFrom, const OUString& rTo ) THROWDEF_RTE_IAE;
 };
 
 
@@ -705,33 +705,33 @@ inline sal_uInt32 MyList::Count( void ) const
 
 
 
-inline const STRING* StringList::First( void )
+inline const OUString* StringList::First( void )
 {
-    return ( const STRING* ) MyList::First();
+    return ( const OUString* ) MyList::First();
 }
 
 
-inline const STRING* StringList::Next( void )
+inline const OUString* StringList::Next( void )
 {
-    return ( const STRING* ) MyList::Next();
+    return ( const OUString* ) MyList::Next();
 }
 
 
-inline const STRING* StringList::Get( sal_uInt32 n ) const
+inline const OUString* StringList::Get( sal_uInt32 n ) const
 {
-    return ( const STRING* ) MyList::GetObject( n );
+    return ( const OUString* ) MyList::GetObject( n );
 }
 
 
-inline void StringList::Append( STRING* p )
+inline void StringList::Append( OUString* p )
 {
     MyList::Append( p );
 }
 
 
-inline void StringList::Append( const STRING& r )
+inline void StringList::Append( const OUString& r )
 {
-    MyList::Append( new STRING( r ) );
+    MyList::Append( new OUString( r ) );
 }
 
 

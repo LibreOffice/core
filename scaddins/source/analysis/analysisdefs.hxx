@@ -28,9 +28,8 @@
 #define SEQofLocName        SEQ( ::com::sun::star::sheet::LocalizedName )
 #define ANY                 ::com::sun::star::uno::Any
 #define SEQ_ANY             SEQ(ANY)
-#define STRING              ::rtl::OUString
-#define STRFROMASCII(s)     STRING::createFromAscii( s )
-#define STRFROMANSI(s)      STRING( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
+#define STRFROMASCII(s)     OUString::createFromAscii( s )
+#define STRFROMANSI(s)      OUString( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
 #define THROWDEF_RTE        throw(::com::sun::star::uno::RuntimeException)
 #define THROW_RTE           throw ::com::sun::star::uno::RuntimeException()
 #define THROWDEF_RTE_IAE    throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IllegalArgumentException)

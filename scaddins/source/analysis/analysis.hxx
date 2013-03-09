@@ -62,8 +62,8 @@ private:
     ScaAnyConverter             aAnyConv;
 
     ResMgr&                     GetResMgr( void ) THROWDEF_RTE;
-    STRING                      GetDisplFuncStr( sal_uInt16 nFuncNum ) THROWDEF_RTE;
-    STRING                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE;
+    OUString                      GetDisplFuncStr( sal_uInt16 nFuncNum ) THROWDEF_RTE;
+    OUString                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) THROWDEF_RTE;
     void                        InitDefLocales( void );
     inline const ::com::sun::star::lang::Locale& GetLocale( sal_uInt32 nInd );
     void                        InitData( void );
@@ -81,32 +81,32 @@ public:
 
     double                      FactDouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;
 
-    static STRING               getImplementationName_Static();
-    static SEQ( STRING )        getSupportedServiceNames_Static();
+    static OUString               getImplementationName_Static();
+    static SEQ( OUString )        getSupportedServiceNames_Static();
 
                                 // XAddIn
-    virtual STRING SAL_CALL     getProgrammaticFuntionName( const STRING& aDisplayName ) THROWDEF_RTE;
-    virtual STRING SAL_CALL     getDisplayFunctionName( const STRING& aProgrammaticName ) THROWDEF_RTE;
-    virtual STRING SAL_CALL     getFunctionDescription( const STRING& aProgrammaticName ) THROWDEF_RTE;
-    virtual STRING SAL_CALL     getDisplayArgumentName( const STRING& aProgrammaticFunctionName, sal_Int32 nArgument ) THROWDEF_RTE;
-    virtual STRING SAL_CALL     getArgumentDescription( const STRING& aProgrammaticFunctionName, sal_Int32 nArgument ) THROWDEF_RTE;
-    virtual STRING SAL_CALL     getProgrammaticCategoryName( const STRING& aProgrammaticFunctionName ) THROWDEF_RTE;
-    virtual STRING SAL_CALL     getDisplayCategoryName( const STRING& aProgrammaticFunctionName ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getProgrammaticFuntionName( const OUString& aDisplayName ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getDisplayFunctionName( const OUString& aProgrammaticName ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getFunctionDescription( const OUString& aProgrammaticName ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getDisplayArgumentName( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getArgumentDescription( const OUString& aProgrammaticFunctionName, sal_Int32 nArgument ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getProgrammaticCategoryName( const OUString& aProgrammaticFunctionName ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) THROWDEF_RTE;
 
                                 // XCompatibilityNames
-    virtual SEQofLocName SAL_CALL getCompatibilityNames( const STRING& aProgrammaticName ) THROWDEF_RTE;
+    virtual SEQofLocName SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) THROWDEF_RTE;
 
                                 // XLocalizable
     virtual void SAL_CALL       setLocale( const ::com::sun::star::lang::Locale& eLocale ) THROWDEF_RTE;
     virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) THROWDEF_RTE;
 
                                 // XServiceName
-    virtual STRING SAL_CALL     getServiceName(  ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getServiceName(  ) THROWDEF_RTE;
 
                                 // XServiceInfo
-    virtual STRING SAL_CALL     getImplementationName(  ) THROWDEF_RTE;
-    virtual sal_Bool SAL_CALL   supportsService( const STRING& ServiceName ) THROWDEF_RTE;
-    virtual SEQ( STRING ) SAL_CALL  getSupportedServiceNames(  ) THROWDEF_RTE;
+    virtual OUString SAL_CALL     getImplementationName(  ) THROWDEF_RTE;
+    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) THROWDEF_RTE;
+    virtual SEQ( OUString ) SAL_CALL  getSupportedServiceNames(  ) THROWDEF_RTE;
 
     //  methods from own interfaces start here
 
@@ -140,21 +140,21 @@ public:
     virtual double SAL_CALL     getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE;
     virtual double SAL_CALL     getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE;
 
-    virtual STRING SAL_CALL     getBin2Oct( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getBin2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getBin2Hex( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getBin2Oct( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getBin2Dec( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getBin2Hex( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getOct2Bin( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getOct2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getOct2Hex( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getOct2Bin( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getOct2Dec( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getOct2Hex( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getDec2Bin( constREFXPS& xOpt, sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getDec2Oct( constREFXPS& xOpt, sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getDec2Hex( constREFXPS& xOpt, double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getDec2Bin( constREFXPS& xOpt, sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getDec2Oct( constREFXPS& xOpt, sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getDec2Hex( constREFXPS& xOpt, double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getHex2Bin( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getHex2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getHex2Oct( constREFXPS& xOpt, const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getHex2Bin( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getHex2Dec( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getHex2Oct( constREFXPS& xOpt, const OUString& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
     virtual sal_Int32 SAL_CALL  getDelta( constREFXPS& xOpt, double fNum1, const ANY& rNum2 ) THROWDEF_RTE_IAE;
 
@@ -165,35 +165,35 @@ public:
 
     virtual double SAL_CALL     getFactdouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;
 
-    virtual double SAL_CALL     getImabs( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getImaginary( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImpower( const STRING& aNum, double fPower ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getImargument( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImcos( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImdiv( const STRING& aDivident, const STRING& aDivisor ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImexp( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImconjugate( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImln( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImlog10( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImlog2( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImproduct( constREFXPS& xOpt, const SEQSEQ( STRING )& aNum1, const SEQ_ANY& aNumList ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getImreal( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImsin( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImsub( const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImsum( constREFXPS& xOpt, const SEQSEQ( STRING )& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getImabs( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getImaginary( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImpower( const OUString& aNum, double fPower ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getImargument( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImcos( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImdiv( const OUString& aDivident, const OUString& aDivisor ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImexp( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImconjugate( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImln( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImlog10( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImlog2( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImproduct( constREFXPS& xOpt, const SEQSEQ( OUString )& aNum1, const SEQ_ANY& aNumList ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getImreal( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImsin( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImsub( const OUString& aNum1, const OUString& aNum2 ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImsum( constREFXPS& xOpt, const SEQSEQ( OUString )& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImtan( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImsec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImcsc( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImcot( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImsinh( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImcosh( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImsech( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImcsch( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getComplex( double fReal, double fImaginary, const ANY& rSuffix ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImsqrt( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImtan( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImsec( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImcsc( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImcot( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImsinh( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImcosh( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImsech( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getImcsch( const OUString& aNum ) THROWDEF_RTE_IAE;
+    virtual OUString SAL_CALL     getComplex( double fReal, double fImaginary, const ANY& rSuffix ) THROWDEF_RTE_IAE;
 
-    virtual double SAL_CALL     getConvert( double fVal, const STRING& aFromUnit, const STRING& aToUnit ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getConvert( double fVal, const OUString& aFromUnit, const OUString& aToUnit ) THROWDEF_RTE_IAE;
 
     virtual double SAL_CALL     getAmordegrc( constREFXPS&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getAmorlinc( constREFXPS&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const ANY& rOptBase ) THROWDEF_RTE_IAE;
