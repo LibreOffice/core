@@ -193,7 +193,7 @@ uno::Reference< awt::XWindow > SAL_CALL LimitBoxController::createItemWindow(
     {
         SolarMutexGuard aSolarMutexGuard;
         m_pLimitBox = new LimitBoxImpl(pParent, this);
-        m_pLimitBox->SetSizePixel(m_pLimitBox->GetOptimalSize());
+        m_pLimitBox->SetSizePixel(m_pLimitBox->CalcSize(6,1));
         xItemWindow = VCLUnoHelper::GetInterface( m_pLimitBox );
     }
 

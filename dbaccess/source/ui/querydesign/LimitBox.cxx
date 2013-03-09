@@ -42,7 +42,9 @@ LimitBox::LimitBox( Window* pParent, WinBits nStyle )
     SetShowTrailingZeros( sal_False );
     SetDecimalDigits( 0 );
     SetMin( -1 );
-    SetMax( 9999 );
+
+    ///Use the maximum value of Int32
+    SetMax( 2147483647 );
     LoadDefaultLimits();
 
     Size aSize(
@@ -100,8 +102,7 @@ void LimitBox::ReformatAll()
 
 Size LimitBox::GetOptimalSize() const
 {
-    Size aSize = NumericBox::GetOptimalSize();
-    return Size( aSize.Width() + 20, aSize.Height());
+    return CalcSize(10,1);
 }
 
 ///Initialize entries

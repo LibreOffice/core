@@ -168,7 +168,7 @@
                       <object class="GtkGrid" id="grid3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="column_spacing">12</property>
+                        <property name="column_spacing">24</property>
                         <child>
                           <object class="GtkLabel" id="limit-label">
                             <property name="visible">True</property>
