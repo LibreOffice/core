@@ -10,13 +10,13 @@
   </object>
   <object class="GtkDialog" id="ConvertTextTableDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Convert Table to Text</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -78,6 +78,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkFrame" id="frame1">
                 <property name="visible">True</property>
@@ -90,6 +91,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
+                    <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid1">
@@ -97,9 +99,8 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
-                        <property name="margin_bottom">10</property>
-                        <property name="row_spacing">18</property>
-                        <property name="column_spacing">10</property>
+                        <property name="row_spacing">12</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkEntry" id="othered">
                             <property name="visible">True</property>
@@ -249,13 +250,14 @@
                   <object class="GtkAlignment" id="alignment2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkGrid" id="grid3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">5</property>
-                        <property name="column_spacing">5</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="headingcb">
                             <property name="label" translatable="yes">Heading</property>
@@ -278,7 +280,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="margin_left">25</property>
+                            <property name="margin_left">12</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
@@ -328,7 +330,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="margin_left">50</property>
+                            <property name="margin_left">24</property>
+                            <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="label3">
                                 <property name="visible">True</property>
@@ -401,7 +404,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel" id="2">
+                  <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Options</property>

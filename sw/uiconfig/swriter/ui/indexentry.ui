@@ -8,22 +8,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="halign">start</property>
-    <property name="stock">gtk-index</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-go-back</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-go-forward</property>
-  </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -36,13 +20,13 @@
   </object>
   <object class="GtkDialog" id="IndexEntryDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Insert Index Entry</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -51,13 +35,11 @@
             <child>
               <object class="GtkButton" id="insert">
                 <property name="label" translatable="yes">Insert</property>
-                <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
-                <property name="use_action_appearance">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -68,13 +50,11 @@
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
-                <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -86,11 +66,9 @@
             <child>
               <object class="GtkButton" id="close">
                 <property name="label">gtk-close</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -102,11 +80,9 @@
             <child>
               <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -118,11 +94,9 @@
             <child>
               <object class="GtkButton" id="delete">
                 <property name="label">gtk-delete</property>
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -142,13 +116,11 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="previous">
-                    <property name="use_action_appearance">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="image">image2</property>
                   </object>
                   <packing>
@@ -160,13 +132,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="next">
-                    <property name="use_action_appearance">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="image">image3</property>
                   </object>
                   <packing>
@@ -178,13 +148,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="first">
-                    <property name="use_action_appearance">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="image">image4</property>
                   </object>
                   <packing>
@@ -196,13 +164,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="last">
-                    <property name="use_action_appearance">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="image">image5</property>
                   </object>
                   <packing>
@@ -238,6 +204,7 @@
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkGrid" id="grid1">
@@ -250,9 +217,11 @@
                       <object class="GtkLabel" id="typeft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin_right">6</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Index</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">typecb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -276,12 +245,10 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="new">
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes">New User-defined Index</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="image">image1</property>
                       </object>
                       <packing>
@@ -295,9 +262,11 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin_right">6</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Entry</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">entryed</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -324,9 +293,11 @@
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin_right">6</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">1st key</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">key1cb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -340,9 +311,11 @@
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin_right">6</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">2nd key</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">key2cb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -355,9 +328,11 @@
                       <object class="GtkLabel" id="levelft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin_right">6</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Level</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">levelnf</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -384,11 +359,9 @@
                     <child>
                       <object class="GtkCheckButton" id="mainentrycb">
                         <property name="label" translatable="yes">Main entry</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -402,11 +375,9 @@
                     <child>
                       <object class="GtkCheckButton" id="applytoallcb">
                         <property name="label" translatable="yes">Apply to all similar texts</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -420,12 +391,10 @@
                     <child>
                       <object class="GtkCheckButton" id="searchcasesensitivecb">
                         <property name="label" translatable="yes">Match case</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
                         <property name="margin_left">12</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -439,12 +408,10 @@
                     <child>
                       <object class="GtkCheckButton" id="searchcasewordonlycb">
                         <property name="label" translatable="yes">Whole words only</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
                         <property name="margin_left">12</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -459,8 +426,12 @@
                       <object class="GtkLabel" id="phonetic0ft">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin_left">12</property>
+                        <property name="margin_right">6</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Phonetic reading</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">phonetic0ed</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -473,8 +444,12 @@
                       <object class="GtkLabel" id="phonetic1ft">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin_left">12</property>
+                        <property name="margin_right">6</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Phonetic reading</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">phonetic1ed</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -487,8 +462,12 @@
                       <object class="GtkLabel" id="phonetic2ft">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="margin_right">12</property>
+                        <property name="margin_left">12</property>
+                        <property name="margin_right">6</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Phonetic reading</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">phonetic2ed</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -647,5 +626,21 @@
       <action-widget response="0">help</action-widget>
       <action-widget response="0">delete</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="halign">start</property>
+    <property name="stock">gtk-index</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-go-back</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-go-forward</property>
   </object>
 </interface>
