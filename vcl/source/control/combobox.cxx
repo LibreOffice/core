@@ -1131,7 +1131,7 @@ Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
     // width
     if ( nColumns )
-        aSz.Width() = nColumns * GetTextWidth(rtl::OUString(static_cast<sal_Unicode>('X')));
+        aSz.Width() = nColumns * approximate_char_width();
     else
         aSz.Width() = aMinSz.Width();
 
