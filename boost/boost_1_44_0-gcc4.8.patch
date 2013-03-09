@@ -59,8 +59,8 @@
      &::boost::concepts::requirement_<ModelFnPtr>::failed>    \
 -      BOOST_PP_CAT(boost_concept_check,__LINE__)
 +      BOOST_PP_CAT(boost_concept_check,__LINE__); \
-+    BOOST_PP_CAT(boost_concept_check,__LINE__) BOOST_PP_CAT(boost_concept_check_dummy,__LINE__)()
-+        // silence -Werror=unused-local-typedefs (GCC 4.8)
++    BOOST_PP_CAT(boost_concept_check,__LINE__) BOOST_PP_CAT(boost_concept_check_dummy,__LINE__)(...)
++        // silence -Werror=unused-local-typedefs (GCC 4.8) (and resulting Clang -Werror,-Wvexing-parse)
  
  }}
  
