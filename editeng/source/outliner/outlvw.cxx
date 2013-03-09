@@ -919,7 +919,9 @@ void OutlinerView::ToggleBullets()
     // to sal_uInt16 without check, if the count is 0.
     sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
     pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
-    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
+
+    sal_uInt16 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
+    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nEndPara, 0 ) );
 
     pOwner->pEditEngine->SetUpdateMode( bUpdate );
 
@@ -951,9 +953,10 @@ void OutlinerView::EnableBullets()
     // It is not a good idea to substract 1 from a count and cast the result
     // to sal_uInt16 without check, if the count is 0.
     sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
-
     pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
-    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
+
+    sal_uInt16 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
+    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nEndPara, 0 ) );
 
     pOwner->pEditEngine->SetUpdateMode( bUpdate );
 
