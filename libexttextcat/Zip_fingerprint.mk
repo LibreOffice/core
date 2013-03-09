@@ -31,7 +31,7 @@ $(eval $(call gb_Zip_use_unpacked,fingerprint,exttextcat))
 
 $(eval $(call gb_Zip_add_files,fingerprint,\
 	fpdb.conf \
-	LM/*.lm \
+	$(WORKDIR)/UnpackedTarball/exttextcat/langclass/LM/*.lm \
 ))
 
 $(eval $(call gb_Zip_add_commandoptions,fingerprint,-j))
