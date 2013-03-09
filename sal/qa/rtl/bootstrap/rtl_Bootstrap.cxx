@@ -177,7 +177,7 @@ namespace rtl_Bootstrap
                 rtl::OUString suGetname;
                 aBootstrap.getIniName( suGetname );
                 printUString( suGetname );
-                CPPUNIT_ASSERT_MESSAGE("ctor error without initial file.", suGetname.getLength() != 0 );
+                CPPUNIT_ASSERT_MESSAGE("ctor error without initial file.", !suGetname.isEmpty() );
             }
 
         CPPUNIT_TEST_SUITE(ctor);
@@ -238,7 +238,7 @@ namespace rtl_Bootstrap
                 rtl::OUString suValuename ("INHERITED_VALUE");
                 aBootstrap.getFrom( suValuename, suGetname );
                 printUString( suGetname );
-                CPPUNIT_ASSERT_MESSAGE("get the value of a variable in ini file.", suGetname.getLength() != 0 );
+                CPPUNIT_ASSERT_MESSAGE("get the value of a variable in ini file.", !suGetname.isEmpty());
             }
 
         //use defaut value
@@ -440,7 +440,7 @@ namespace rtl_Bootstrap
                 rtl::OUString suValuename("INHERITED_VALUE");
                 Bootstrap::get( suValuename, suGetname  );
                 printUString( suGetname );
-                CPPUNIT_ASSERT_MESSAGE("setIniFilename and get value of the argument.", suGetname.getLength() != 0 );
+                CPPUNIT_ASSERT_MESSAGE("setIniFilename and get value of the argument.", !suGetname.isEmpty());
             }
 
         CPPUNIT_TEST_SUITE(setIniFilename);

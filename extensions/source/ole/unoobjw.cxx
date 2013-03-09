@@ -1375,7 +1375,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                             {
                                 exactName = m_xExactName->getExactName( info.name);
                                 // invoke again
-                                if( exactName.getLength() != 0)
+                                if( !exactName.isEmpty() )
                                 {
                                     if( SUCCEEDED( ret= doInvoke( pdispparams, pvarResult,
                                                                   pexcepinfo, puArgErr, exactName, params)))
@@ -1400,7 +1400,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                             {
                                 exactName = m_xExactName->getExactName( info.name);
                                 // invoke again
-                                if( exactName.getLength() != 0)
+                                if( !exactName.isEmpty() )
                                 {
                                     if( SUCCEEDED( ret= doSetProperty( pdispparams, pvarResult,
                                                                        pexcepinfo, puArgErr, exactName, params)))
@@ -1424,7 +1424,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                             {
                                 exactName = m_xExactName->getExactName( info.name);
                                 // invoke again
-                                if( exactName.getLength() != 0)
+                                if( !exactName.isEmpty() )
                                 {
                                     if( SUCCEEDED( ret= doGetProperty( pdispparams, pvarResult,
                                                                        pexcepinfo, exactName)))
@@ -1452,7 +1452,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                             {
                                 exactName = m_xExactName->getExactName( info.name);
                                 // invoke again
-                                if( exactName.getLength() != 0)
+                                if( !exactName.isEmpty() )
                                 {
                                     if( SUCCEEDED( ret= doInvoke( pdispparams, pvarResult,
                                                                   pexcepinfo, puArgErr, exactName, params)))
@@ -1471,7 +1471,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                                 && ret == DISP_E_MEMBERNOTFOUND)
                             {
                                 // try to get the exact name
-                                if( exactName.getLength() != 0)
+                                if( !exactName.isEmpty() )
                                 {
                                     if( SUCCEEDED( ret= doSetProperty( pdispparams, pvarResult,
                                                                        pexcepinfo, puArgErr, exactName, params)))
@@ -1496,7 +1496,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                             {
                                 exactName = m_xExactName->getExactName( info.name);
                                 // invoke again
-                                if( exactName.getLength() != 0)
+                                if( !exactName.isEmpty() )
                                 {
                                     if( SUCCEEDED( ret= doInvoke( pdispparams, pvarResult,
                                                                   pexcepinfo, puArgErr, exactName, params)))
@@ -1514,7 +1514,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*
                                                             pexcepinfo, info.name))
                                 && ret == DISP_E_MEMBERNOTFOUND)
                             {
-                                if( exactName.getLength() != 0)
+                                if( !exactName.isEmpty() )
                                 {
                                     if( SUCCEEDED( ret= doSetProperty( pdispparams, pvarResult,
                                                                        pexcepinfo, puArgErr, exactName, params)))

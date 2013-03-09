@@ -96,7 +96,7 @@ sal_Bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno:
 
         if( nFirst <= nLast )
         {
-            if( sValue.getLength() != 0 )
+            if( !sValue.isEmpty() )
                 sValue.append(';');
 
             sValue.append(rStrImpValue.copy( nFirst, nLast-nFirst+1));
@@ -107,7 +107,7 @@ sal_Bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno:
     }
     while( -1 != nPos );
 
-    if (sValue.getLength())
+    if (!sValue.isEmpty())
     {
         rValue <<= sValue.makeStringAndClear();
         bRet = sal_True;

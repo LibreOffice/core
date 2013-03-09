@@ -2152,7 +2152,7 @@ void ConvertPathTest(rtl::OUString& strPath)
     // getFileURLFromSystemPath
     //--------------------------------------------------
 
-    if ( strNormPath.getLength() != 0 )
+    if ( !strNormPath.isEmpty() )
     {
         rc=FileBase::getFileURLFromSystemPath( strNormPath, strFileURL );
 
@@ -2172,7 +2172,7 @@ void ConvertPathTest(rtl::OUString& strPath)
     // getNormalizedPathFromFileURL
     //--------------------------------------------------
 
-    if ( strFileURL.getLength() != 0 )
+    if ( !strFileURL.isEmpty() )
     {
         rc=FileBase::getSystemPathFromFileURL( strFileURL, strNormPathFromFileURL );
 
@@ -2193,7 +2193,7 @@ void ConvertPathTest(rtl::OUString& strPath)
     // getSystemPathFromFileURL
     //--------------------------------------------------
 
-    if ( strNormPath.getLength() != 0 )
+    if ( !strNormPath.isEmpty() )
     {
         rc=FileBase::getSystemPathFromFileURL( strNormPath, strSystemPath );
 
@@ -2331,7 +2331,7 @@ void SearchPathTest(void)
     // searchFileURL (with a normalized path)
     //--------------------------------------------------
 
-    if ( strNormPath.getLength() != 0 )
+    if ( !strNormPath.isEmpty() )
     {
         printf( "\nSearch-Normalized-Path (with a normalized path) : ");
         printFileName ( strNormPath );
@@ -2355,7 +2355,7 @@ void SearchPathTest(void)
     // searchFileURL (with a File-URL)
     //--------------------------------------------------
 
-    if ( strFileURL.getLength() != 0 )
+    if ( !strFileURL.isEmpty() )
     {
         printf( "\nSearch-Normalized-Path (with a FileURL) : ");
         printFileName( strFileURL );
@@ -2379,7 +2379,7 @@ void SearchPathTest(void)
     // searchFileURL (with a systempath)
     //--------------------------------------------------
 
-    if ( strSystemPath.getLength() != 0 )
+    if ( !strSystemPath.isEmpty() )
     {
         printf( "\nSearch-Normalized-Path (with a SystemPath) : ");
         printFileName( strSystemPath );

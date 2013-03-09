@@ -180,7 +180,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
         if (::comphelper::hasProperty(FM_PROP_HELPTEXT, xSet))
             aHelpText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_HELPTEXT)).getStr();
 
-        if (!aHelpText.getLength() && ::comphelper::hasProperty(FM_PROP_TARGET_URL, xSet))
+        if (aHelpText.isEmpty() && ::comphelper::hasProperty(FM_PROP_TARGET_URL, xSet))
         {
             OUString aText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_TARGET_URL));
             INetURLObject aUrl(aText);
@@ -200,7 +200,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                 }
         }
     }
-    if ( aHelpText.getLength() != 0 )
+    if ( !aHelpText.isEmpty() )
     {
         // Hilfe anzeigen
         Rectangle aItemRect = pObj->GetCurrentBoundRect();

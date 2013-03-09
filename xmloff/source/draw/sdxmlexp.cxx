@@ -2164,13 +2164,13 @@ void SdXMLExport::exportPresentationSettings()
                     if( !xPageName.is() )
                         continue;
 
-                    if( sTmp.getLength() != 0 )
+                    if( !sTmp.isEmpty() )
                         sTmp.append( sal_Unicode( ',' ) );
                     sTmp.append( xPageName->getName() );
 
                 }
 
-                if( sTmp.getLength() )
+                if( !sTmp.isEmpty() )
                     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PAGES, sTmp.makeStringAndClear() );
 
                 SvXMLElementExport aShows(*this, XML_NAMESPACE_PRESENTATION, XML_SHOW, sal_True, sal_True);
@@ -2685,7 +2685,7 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
                 OUString sId( getInterfaceToIdentifierMapper().registerReference( Reference< XInterface >( xNavOrder->getByIndex( nIndex ), UNO_QUERY ) ) );
                 if( !sId.isEmpty() )
                 {
-                    if( sNavOrder.getLength() != 0 )
+                    if( !sNavOrder.isEmpty() )
                         sNavOrder.append( (sal_Unicode)' ' );
                     sNavOrder.append( sId );
                 }
