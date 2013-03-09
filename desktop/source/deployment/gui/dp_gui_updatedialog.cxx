@@ -1296,7 +1296,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
         }
     }
 
-    if ( b.getLength() == 0 )
+    if ( b.isEmpty() )
         b.append( m_noDescription );
 
     showDescription( b.makeStringAndClear(), bInserted );

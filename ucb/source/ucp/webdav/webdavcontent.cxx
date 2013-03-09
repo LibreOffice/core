@@ -2225,7 +2225,7 @@ void Content::insert(
 
     // Check, if all required properties are present.
 
-    if ( aEscapedTitle.getLength() == 0 )
+    if ( aEscapedTitle.isEmpty() )
     {
         OSL_ENSURE( sal_False, "Content::insert - Title missing!" );
 

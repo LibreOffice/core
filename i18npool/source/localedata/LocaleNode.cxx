@@ -1072,7 +1072,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         cDateSep = cChar;
                     if (!cDateSep2)
                         cDateSep2 = cChar;
-                    if (cDateSep != cDateSep2 && aPatternBuf2.getLength() == 0)
+                    if (cDateSep != cDateSep2 && aPatternBuf2.isEmpty())
                         aPatternBuf2 = aPatternBuf;
                     if (cChar == cDateSep || cChar == cDateSep2)
                         aPatternBuf.append( OUString( &cDateSep, 1));   // always the defined separator

@@ -2271,7 +2271,7 @@ void handleService(
         for (sal_uInt16 i = 0; i < methods; ++i) {
             rtl::OString name(codemaker::convertString(
                                   reader.getMethodName(i)));
-            bool defaultCtor = name.getLength() == 0;
+            bool defaultCtor = name.isEmpty();
             if (reader.getMethodFlags(i) != RT_MODE_TWOWAY
                 || (reader.getMethodReturnTypeName(i) != "void")
                 || (defaultCtor

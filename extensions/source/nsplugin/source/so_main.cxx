@@ -313,7 +313,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
         aPluginPipeName = ::rtl::OUString::valueOf( aPath.hashCode() );
 
         // accept string
-        OSL_ASSERT( buf.getLength() == 0 );
+        OSL_ASSERT( buf.isEmpty() );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "--accept=pipe,name=" ) );
         buf.append( aPluginPipeName );    //user installation path as pipe name
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ";urp;" ) );
@@ -332,7 +332,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
             bridge::UnoUrlResolver::create( xLocalContext ) );
 
         // connection string
-        OSL_ASSERT( buf.getLength() == 0 );
+        OSL_ASSERT( buf.isEmpty() );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno:pipe,name=" ) );
         buf.append( aPluginPipeName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(

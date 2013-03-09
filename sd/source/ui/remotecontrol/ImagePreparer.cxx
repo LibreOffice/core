@@ -179,7 +179,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
 
     OString aNotes = prepareNotes( aSlideNumber );
 
-    if ( aNotes.getLength() == 0 )
+    if ( aNotes.isEmpty() )
         return;
 
 //     OUStringBuffer aStrBuffer;

@@ -46,7 +46,7 @@ rtl::OString DXFReadLine(SvStream& rIStm)
         sal_uInt16 nLen = (sal_uInt16)rIStm.Read( buf, sizeof(buf)-1 );
         if( !nLen )
         {
-            if( aBuf.getLength() == 0 )
+            if( aBuf.isEmpty() )
                 return rtl::OString();
             else
                 break;

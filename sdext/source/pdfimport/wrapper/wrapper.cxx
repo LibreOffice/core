@@ -868,7 +868,7 @@ void Parser::parseLine( const ::rtl::OString& rLine )
 
 oslFileError readLine( oslFileHandle pFile, ::rtl::OStringBuffer& line )
 {
-    OSL_PRECOND( line.getLength() == 0, "line buf not empty" );
+    OSL_PRECOND( line.isEmpty(), "line buf not empty" );
 
     // TODO(P3): read larger chunks
     sal_Char aChar('\n');

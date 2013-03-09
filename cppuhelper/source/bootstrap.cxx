@@ -143,7 +143,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         OUString sPipeName( buf.makeStringAndClear() );
 
         // accept string
-        OSL_ASSERT( buf.getLength() == 0 );
+        OSL_ASSERT( buf.isEmpty() );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "--accept=pipe,name=" ) );
         buf.append( sPipeName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ";urp;" ) );
@@ -199,7 +199,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             bridge::UnoUrlResolver::create( xLocalContext ) );
 
         // connection string
-        OSL_ASSERT( buf.getLength() == 0 );
+        OSL_ASSERT( buf.isEmpty() );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "uno:pipe,name=" ) );
         buf.append( sPipeName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(

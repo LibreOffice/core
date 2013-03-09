@@ -551,7 +551,7 @@ sal_Bool SvStream::ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead )
         sal_uInt16 nLen = (sal_uInt16)Read( buf, sizeof(buf)-1 );
         if ( !nLen )
         {
-            if ( aBuf.getLength() == 0 )
+            if ( aBuf.isEmpty() )
             {
                 // Exit on first block-read error
                 bIsEof = sal_True;

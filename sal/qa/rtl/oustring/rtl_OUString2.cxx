@@ -914,7 +914,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE( "Token should be a 'a'", suToken == "a" );
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);
+            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.isEmpty());
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE( "Token should be a 'b'", suToken == "b" );
@@ -937,7 +937,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE( "Token should be 'ever'", suToken == "ever" );
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);
+            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.isEmpty());
 
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
@@ -949,7 +949,7 @@ public:
             "token should be 'ab'", ab.getToken(0, '-', n) == ab);
         CPPUNIT_ASSERT_MESSAGE("n should be -1", n == -1);
         CPPUNIT_ASSERT_MESSAGE(
-            "token should be empty", ab.getToken(0, '-', n).getLength() == 0);
+            "token should be empty", ab.getToken(0, '-', n).isEmpty());
     }
 
     CPPUNIT_TEST_SUITE(getToken);

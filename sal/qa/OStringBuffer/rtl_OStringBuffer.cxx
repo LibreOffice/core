@@ -52,7 +52,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer containing no characters",
-                aStrBuf.getLength() == 0 &&
+                aStrBuf.isEmpty() &&
                 *pStr == '\0' && aStrBuf.getCapacity() == 16
             );
         }
@@ -90,10 +90,10 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer containing no characters and contain assigned capacity",
-                aStrBuf1.getLength() == 0 &&
+                aStrBuf1.isEmpty() &&
                 *pStr1 == '\0' &&
                 aStrBuf1.getCapacity() == kTestStr2Len &&
-                aStrBuf2.getLength() == 0 &&
+                aStrBuf2.isEmpty() &&
                 *pStr2 == '\0' &&
                 aStrBuf2.getCapacity() == 0
             );
@@ -111,7 +111,7 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer containing no characters and contain assigned capacity",
-                aStrBuf3.getLength() == 0 &&
+                aStrBuf3.isEmpty() &&
                 *pStr == '\0' &&
                 aStrBuf3.getCapacity() == kNonSInt32Max
             );

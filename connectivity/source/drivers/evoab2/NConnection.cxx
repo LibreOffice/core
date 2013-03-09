@@ -43,7 +43,7 @@ using namespace ::com::sun::star::lang;
 ::rtl::OUString implGetExceptionMsg( Exception& e, const ::rtl::OUString& aExceptionType_ )
 {
      ::rtl::OUString aExceptionType = aExceptionType_;
-     if( aExceptionType.getLength() == 0 )
+     if( aExceptionType.isEmpty() )
          aExceptionType =  ::rtl::OUString("Unknown") ;
 
      ::rtl::OUString aTypeLine( "\nType: "  );

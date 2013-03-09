@@ -273,7 +273,7 @@ namespace connectivity
                                 rtl::OString sVersionString;
                                 while ( pStream->ReadLine(sLine) )
                                 {
-                                    if ( sLine.getLength() == 0 )
+                                    if ( sLine.isEmpty() )
                                         continue;
                                     const rtl::OString sIniKey = comphelper::string::getToken(sLine, 0, '=');
                                     const rtl::OString sValue = comphelper::string::getToken(sLine, 1, '=');

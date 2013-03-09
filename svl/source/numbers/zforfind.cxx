@@ -435,7 +435,7 @@ bool ImpSvNumberInputScan::StringContainsImpl( const OUString& rWhat,
 bool ImpSvNumberInputScan::StringPtrContainsImpl( const OUString& rWhat,
                                                   const sal_Unicode* pString, sal_Int32 nPos )
 {
-    if ( rWhat.getLength() == 0 )
+    if ( rWhat.isEmpty() )
     {
         return false;
     }

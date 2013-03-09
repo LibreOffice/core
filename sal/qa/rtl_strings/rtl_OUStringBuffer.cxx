@@ -63,13 +63,13 @@ static sal_Bool test_rtl_OUStringBuffer_ctor_001( hTestResult hRtlTestResult )
     ::rtl::OUStringBuffer aUStrBuf;
 
     bool b1 =
-        aUStrBuf.getLength() == 0 &&
+        aUStrBuf.isEmpty() &&
         ! *(aUStrBuf.getStr()) && aUStrBuf.getCapacity() == 16;
 
     ::rtl::OUStringBuffer aUStrBuf2(0);
 
     bool b2 =
-        aUStrBuf2.getLength() == 0 &&
+        aUStrBuf2.isEmpty() &&
         ! *(aUStrBuf2.getStr()) && aUStrBuf2.getCapacity() == /* LLA: !!! */ 0;
 
     return
@@ -116,15 +116,15 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_ctor_003(
 
 
     bool b1 =
-        aUStrBuf1.getLength() == 0 &&
+        aUStrBuf1.isEmpty() &&
         ! *(aUStrBuf1.getStr()) && aUStrBuf1.getCapacity() == kTestStr2Len ;
 
     bool b2 =
-        aUStrBuf2.getLength() == 0 &&
+        aUStrBuf2.isEmpty() &&
             ! *(aUStrBuf2.getStr()) && aUStrBuf2.getCapacity() == /* LLA: ??? 16 */ 0;
 
     bool b3 =
-        aUStrBuf3.getLength() == 0 &&
+        aUStrBuf3.isEmpty() &&
         ! *(aUStrBuf3.getStr()) && aUStrBuf3.getCapacity() == kNonSInt32Max;
 
     return

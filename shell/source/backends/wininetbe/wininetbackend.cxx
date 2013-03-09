@@ -90,7 +90,7 @@ namespace // private
                 if( aType.equals( nextToken.getToken( 0, EQUAL_SIGN, i ) ) )
                     return ReadProxyEntry(nextToken, i);
             }
-            else if( aType.getLength() == 0)
+            else if( aType.isEmpty())
                 return ReadProxyEntry(nextToken, i);
 
         } while ( nIndex >= 0 );

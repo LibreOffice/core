@@ -425,7 +425,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", sToken.equals("a") == sal_True);
 
             /* rtl::OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be empty", sToken.getLength() == 0);
+            CPPUNIT_ASSERT_MESSAGE("Token should be empty", sToken.isEmpty());
 
             /* rtl::OString */ sToken = sTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", sToken.equals("b") == sal_True);
@@ -448,7 +448,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE("Token should be 'ever'", sToken.equals("ever") == sal_True);
 
             /* rtl::OString */ sToken = sTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be empty", sToken.getLength() == 0);
+            CPPUNIT_ASSERT_MESSAGE("Token should be empty", sToken.isEmpty());
 
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }

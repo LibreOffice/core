@@ -387,7 +387,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                         PluginDescription & rDescr = pDescriptions[nStart+nTok];
                         OString aMIMEToken( aMIME.getToken( 0, '|', nIndex ) );
                         OString aExtToken2( aExt.getToken( 0, '|', nIndex2 ) );
-                        if( aMIMEToken.getLength() == 0 || aExtToken2.getLength() == 0 )
+                        if( aMIMEToken.isEmpty() || aExtToken2.isEmpty() )
                             continue;
 
                         rDescr.Mimetype = OUString(

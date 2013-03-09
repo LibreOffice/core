@@ -97,10 +97,10 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
         aPrevPassword = rtl::OUString(pThis->m_pPrevPassword, strlen(pThis->m_pPrevPassword), RTL_TEXTENCODING_UTF8);
 
     //The damn dialog is stupidly broken, so do like webdav, i.e. "#102871#"
-    if ( aUserName.getLength() == 0 )
+    if ( aUserName.isEmpty() )
         aUserName = aPrevUsername;
 
-    if ( aPassword.getLength() == 0 )
+    if ( aPassword.isEmpty() )
         aPassword = aPrevPassword;
 
     ucbhelper::SimpleAuthenticationRequest::EntityType eDomain =

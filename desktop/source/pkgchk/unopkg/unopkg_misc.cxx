@@ -401,7 +401,7 @@ Reference<XComponentContext> connectToOffice(
     if (verbose)
         dp_misc::writeConsole("OK.  Connecting...");
 
-    OSL_ASSERT( buf.getLength() == 0 );
+    OSL_ASSERT( buf.isEmpty() );
     buf.appendAscii( "uno:pipe,name=" );
     buf.append( pipeId );
     buf.appendAscii( ";urp;StarOffice.ComponentContext" );

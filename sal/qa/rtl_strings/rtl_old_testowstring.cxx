@@ -167,7 +167,7 @@ void oldtests::test_OUString()
 //YD will fail copy assert on indexes, because ':' returns -1
     s7 = OUString("Hallo jetzt komm ich");
     s8 = s7.copy(0, s7.indexOf((sal_Unicode)':'));
-    TEST_ENSURE( s8.getLength() == 0, "test_OWString error 55");
+    TEST_ENSURE( s8.isEmpty(), "test_OWString error 55");
     TEST_ENSURE( s8.compareTo(OUString()) == 0, "test_OWString error 56");
 #endif
 
