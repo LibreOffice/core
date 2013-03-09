@@ -64,7 +64,7 @@ sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8
 
     nNumId = GetId( *pMyNumRule );
 
-    //Map the old list to our new list
+    // Map the old list to our new list
     aRuleDuplicates[GetId( *pRule )] = nNumId;
 
     return nNumId;
@@ -94,7 +94,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
 
         if ( !bOutlineRuleAdded )
         {
-            // jetzt noch die OutlineRule einfuegen
+            // still need to paste the OutlineRule
             SwNumRule* pR = (SwNumRule*)pDoc->GetOutlineNumRule();
             pUsedNumTbl->push_back( pR );
         }
@@ -102,7 +102,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
     SwNumRule* p = (SwNumRule*)&rNumRule;
     sal_uInt16 nRet = pUsedNumTbl->GetPos(p);
 
-    //Is this list now duplicated into a new list which we should use
+    // Is this list now duplicated into a new list which we should use
     // #i77812# - perform 'deep' search in duplication map
     ::std::map<sal_uInt16,sal_uInt16>::const_iterator aResult = aRuleDuplicates.end();
     do {
@@ -116,8 +116,8 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
     return nRet;
 }
 
-//GetFirstLineOffset should problem never appear unadorned apart from
-//here in the ww export filter
+// GetFirstLineOffset should problem never appear unadorned apart from
+// here in the ww export filter
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt)
 {
     OSL_ENSURE( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
@@ -158,7 +158,7 @@ void WW8AttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &r
     SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, nId );
     SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, nId );
 
-    // mit keinen Styles verbunden
+    // not associated with a Style
     for ( int i = 0; i < WW8ListManager::nMaxLevel; ++i )
         SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, 0xFFF );
 
@@ -594,7 +594,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
 {
     ByteToSVBT8(11, rAnlv.nfc);
 
-    sal_uInt8 nb = 0;                                // Zahlentyp
+    sal_uInt8 nb = 0;                                // type of number
     switch (rFmt.GetNumAdjust())
     {
         case SVX_ADJUST_RIGHT:
@@ -793,7 +793,7 @@ void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
     sal_uInt8 aSprmAnld[54];
 
     memcpy( aSprmAnld, aSprmAnldDefault, sizeof( aSprmAnld ) );
-    WW8_ANLD* pA = (WW8_ANLD*)(aSprmAnld + 2);  // handlicher Pointer
+    WW8_ANLD* pA = (WW8_ANLD*)(aSprmAnld + 2);  // handy pointer
 
     sal_uInt8* pChars = (sal_uInt8*)(pA->rgchAnld);
     sal_uInt16 nCharLen = 31;
@@ -803,12 +803,12 @@ void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
     else
         BuildAnlvBase( pA->eAnlv, pChars, nCharLen, rRul, rFmt, nSwLevel );
 
-    // ... und raus damit
+    // ... spit it out
     OutSprmBytes( (sal_uInt8*)&aSprmAnld, sizeof( aSprmAnld ) );
 }
 
 
-// Return: ist es eine Gliederung ?
+// Return: is it an outline?
 bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
 {
     int nLevel = pNd->GetActualListLevel();

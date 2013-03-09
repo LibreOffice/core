@@ -86,10 +86,8 @@ bool DocxExportFilter::exportDocument()
     return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// UNO stuff so that the filter is registered
-//////////////////////////////////////////////////////////////////////////
 
+// UNO stuff so that the filter is registered
 #define IMPL_NAME "com.sun.star.comp.Writer.DocxExport"
 
 OUString DocxExport_getImplementationName()
