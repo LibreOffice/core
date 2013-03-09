@@ -59,19 +59,19 @@ OUString getOfficePath( enum whichOfficePath ePath )
         aBootstrap.getFrom( "UserInstallation", aUserPath );
         OUString aUPath = aUserPath;
 
-        if( ! aConfigPath.compareToAscii( "file://", 7 ) )
+        if( aConfigPath.startsWith( "file://" ) )
         {
             OUString aSysPath;
             if( osl_getSystemPathFromFileURL( aConfigPath.pData, &aSysPath.pData ) == osl_File_E_None )
                 aConfigPath = aSysPath;
         }
-        if( ! aInstallationRootPath.compareToAscii( "file://", 7 ) )
+        if( aInstallationRootPath.startsWith( "file://" ) )
         {
             OUString aSysPath;
             if( osl_getSystemPathFromFileURL( aInstallationRootPath.pData, &aSysPath.pData ) == osl_File_E_None )
                 aInstallationRootPath = aSysPath;
         }
-        if( ! aUserPath.compareToAscii( "file://", 7 ) )
+        if( aUserPath.startsWith( "file://" ) )
         {
             OUString aSysPath;
             if( osl_getSystemPathFromFileURL( aUserPath.pData, &aSysPath.pData ) == osl_File_E_None )

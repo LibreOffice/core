@@ -1801,7 +1801,7 @@ void SfxMedium::Transfer_Impl()
 
         // in case an output stream is provided from outside and the URL is correct
         // commit to the stream
-        if (pImp->m_aLogicName.compareToAscii("private:stream", 14) == 0)
+        if (pImp->m_aLogicName.startsWith("private:stream"))
         {
             // TODO/LATER: support storing to SID_STREAM
                SFX_ITEMSET_ARG( pImp->m_pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, false);
@@ -2505,7 +2505,7 @@ void SfxMedium::Init_Impl()
     SFX_ITEMSET_ARG( pImp->m_pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, false);
     if( pOutStreamItem
      && ( !( pOutStreamItem->GetValue() >>= rOutStream )
-          || (pImp->m_aLogicName.compareToAscii("private:stream", 14) != 0)) )
+          || !pImp->m_aLogicName.startsWith("private:stream")) )
     {
         pImp->m_pSet->ClearItem( SID_OUTPUTSTREAM );
         OSL_FAIL( "Unexpected Output stream parameter!\n" );
@@ -2768,7 +2768,7 @@ void SfxMedium::SetIsRemote_Impl()
             pImp->m_bRemote = true;
         break;
         default:
-            pImp->m_bRemote = GetName().compareToAscii("private:msgid", 13) == 0;
+            pImp->m_bRemote = GetName().startsWith("private:msgid");
             break;
     }
 

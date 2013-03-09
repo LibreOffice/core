@@ -1737,7 +1737,7 @@ SfxObjectShell* SfxMacroLoader::GetObjectShell_Impl()
     sal_Int32                            /*nSearchFlags*/    ) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatcher;
-    if(aURL.Complete.compareToAscii("macro:",6)==0)
+    if(aURL.Complete.startsWith("macro:"))
         xDispatcher = this;
     return xDispatcher;
 }

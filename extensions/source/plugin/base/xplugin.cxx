@@ -456,7 +456,7 @@ void XPlugin_Impl::modelChanged()
     provideNewStream( m_aDescription.Mimetype,
                       uno::Reference< XActiveDataSource >(),
                       aURL,
-                      0, 0, (sal_Bool)(aURL.compareToAscii( "file:", 5 ) == 0) );
+                      0, 0, aURL.startsWith("file:") );
     m_nProvidingState = PROVIDING_NONE;
 }
 
@@ -786,7 +786,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         if( isfile && stype == NP_ASFILEONLY )
         {
             rtl::OString aFileName;
-            if( url.compareToAscii( "file:", 5 ) == 0 )
+            if( url.startsWith("file:") )
             {
                 OUString aSysName;
                 osl_getSystemPathFromFileURL( url.pData, &aSysName.pData );

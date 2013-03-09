@@ -219,7 +219,7 @@ void SvXMLEmbeddedObjectHelper::splitObjectURL(::rtl::OUString aURLNoPar,
             //eliminate './' at start
             sal_Int32 nStart = 0;
             sal_Int32 nCount = aURLNoPar.getLength();
-            if( 0 == aURLNoPar.compareToAscii( "./", 2 ) )
+            if( aURLNoPar.startsWith( "./" ) )
             {
                 nStart = 2;
                 nCount -= 2;

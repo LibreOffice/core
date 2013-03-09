@@ -411,7 +411,7 @@ void PrinterInfoManager::initialize()
                 // set parser, merge settings
                 // don't do this for CUPS printers as this is done
                 // by the CUPS system itself
-                if( aPrinter.m_aInfo.m_aDriverName.compareToAscii( "CUPS:", 5 ) != 0 )
+                if( !aPrinter.m_aInfo.m_aDriverName.startsWith( "CUPS:" ) )
                 {
                     aPrinter.m_aInfo.m_pParser          = PPDParser::getParser( aPrinter.m_aInfo.m_aDriverName );
                     aPrinter.m_aInfo.m_aContext.setParser( aPrinter.m_aInfo.m_pParser );
@@ -791,7 +791,7 @@ bool PrinterInfoManager::writePrinterConfig()
             aValue.append(static_cast<sal_Int32>(it->second.m_aInfo.m_nBottomMarginAdjust));
             pConfig->WriteKey("MarginAdjust", aValue.makeStringAndClear());
 
-            if( it->second.m_aInfo.m_aDriverName.compareToAscii( "CUPS:", 5 ) != 0 )
+            if( ! it->second.m_aInfo.m_aDriverName.startsWith( "CUPS:" ) )
             {
                 // write PPDContext (not for CUPS)
                 for( int i = 0; i < it->second.m_aInfo.m_aContext.countValuesModified(); i++ )

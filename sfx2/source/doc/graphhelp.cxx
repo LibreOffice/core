@@ -500,7 +500,7 @@ sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const ::r
     {
         nResult = BMP_128X128_MATH_DOC;
     }
-    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "swriter" ) ) || aFactoryShortName.compareToAscii( "swriter/", 8 ) == 0 )
+    else if ( aFactoryShortName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "swriter" ) ) || aFactoryShortName.startsWith("swriter/") )
     {
         nResult = BMP_128X128_WRITER_DOC;
     }

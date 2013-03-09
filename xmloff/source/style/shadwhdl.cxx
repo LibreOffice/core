@@ -64,7 +64,7 @@ sal_Bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
             bRet = sal_True;
             break;
         }
-        else if( !bColorFound && aToken.compareToAscii( "#", 1 ) == 0 )
+        else if( !bColorFound && aToken.startsWith("#") )
         {
             sal_Int32 nColor(0);
             bRet = ::sax::Converter::convertColor( nColor, aToken );

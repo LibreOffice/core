@@ -653,7 +653,7 @@ bool SelectionManager::convertData(
                 bSuccess = true;
             }
         }
-        else if( aFlavor.MimeType.compareToAscii( "text/plain", 10 ) == 0 )
+        else if( aFlavor.MimeType.startsWith("text/plain") )
         {
             rtl_TextEncoding aEncoding = RTL_TEXTENCODING_DONTKNOW;
             bool bCompoundText = false;
@@ -842,7 +842,7 @@ void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, 
     bool bHaveText = false;
     for( int i = 0; i < nFlavors; i++ )
     {
-        if( pFlavors[i].MimeType.compareToAscii( "text/plain", 10 ) == 0)
+        if( pFlavors[i].MimeType.startsWith("text/plain"))
             bHaveText = true;
         else
             convertTypeToNative( pFlavors[i].MimeType, targetselection, nFormat, rOutTypeList );

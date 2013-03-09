@@ -106,7 +106,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
-    if ( aDSN.compareToAscii("access:",7) == 0 )
+    if ( aDSN.startsWith("access:") )
         aDSN = aDSN.copy(7);
 
     sal_Int32 nTimeout = 20;

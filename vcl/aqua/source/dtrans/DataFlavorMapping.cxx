@@ -660,7 +660,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
 
   for (sal_uInt32 i = 0; i < nFlavors; i++)
   {
-      if( flavors[i].MimeType.compareToAscii( "image/bmp", 9 ) == 0 )
+      if( flavors[i].MimeType.startsWith("image/bmp") )
       {
           [array addObject: NSTIFFPboardType];
           [array addObject: NSPICTPboardType];

@@ -276,15 +276,15 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
     while( nIndex != -1 )
     {
         OUString aToken( m_pParent->m_aJobData.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( ! aToken.compareToAscii( "fax", 3 ) )
+        if( aToken.startsWith( "fax" ) )
         {
             m_bWasFax = true;
             m_aFaxSwallowBox.Show( sal_True );
             sal_Int32 nPos = 0;
-            m_aFaxSwallowBox.Check( ! aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? sal_True : sal_False );
+            m_aFaxSwallowBox.Check( aToken.getToken( 1, '=', nPos ).startsWith( "swallow" ) ? sal_True : sal_False );
             m_aConfigureBox.SelectEntryPos( m_nFaxEntry );
         }
-        else if( ! aToken.compareToAscii( "pdf=", 4 ) )
+        else if( aToken.startsWith( "pdf=" ) )
         {
             m_bWasPdf = true;
             sal_Int32 nPos = 0;
@@ -331,8 +331,8 @@ void RTSCommandPage::save()
     while( nIndex != -1 )
     {
         OUString aToken( m_pParent->m_aJobData.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( aToken.compareToAscii( "fax", 3 ) &&
-            aToken.compareToAscii( "pdf", 3 ) &&
+        if( !aToken.startsWith( "fax" ) &&
+            !aToken.startsWith( "pdf" ) &&
             aToken.compareToAscii( "external_dialog" )
           )
         {
@@ -343,15 +343,15 @@ void RTSCommandPage::save()
                 aFeatures += String( aToken );
             }
         }
-        else if( ! aToken.compareToAscii( "pdf=", 4 ) )
+        else if( aToken.startsWith( "pdf=" ) )
         {
             sal_Int32 nPos = 0;
             aOldPdfPath = aToken.getToken( 1, '=', nPos );
         }
-        else if( ! aToken.compareToAscii( "fax=", 4 ) )
+        else if( aToken.startsWith( "fax=" ) )
         {
             sal_Int32 nPos = 0;
-            bOldFaxSwallow = aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? false : true;
+            bOldFaxSwallow = aToken.getToken( 1, '=', nPos ).startsWith( "swallow" );
         }
     }
     ::std::list< String >* pList = &m_aPrinterCommands;

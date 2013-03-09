@@ -259,7 +259,7 @@ public:
 
     /** determines whether the database document has an embedded data storage
     */
-    inline bool isEmbeddedDatabase() const { return ( m_sConnectURL.compareToAscii( "sdbc:embedded:", 14 ) == 0 ); }
+    inline bool isEmbeddedDatabase() const { return ( m_sConnectURL.startsWith("sdbc:embedded:") ); }
 
     /** stores the embedded storage ("database")
 
