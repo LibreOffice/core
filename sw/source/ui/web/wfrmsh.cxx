@@ -20,8 +20,7 @@
 #include "hintids.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <svl/srchitem.hxx> //***
-
+#include <svl/srchitem.hxx>
 #include "swtypes.hxx"
 #include "cmdid.h"
 #include "view.hxx"
@@ -32,7 +31,7 @@
 #include "web.hrc"
 
 
-// STATIC DATA -----------------------------------------------------------
+// STATIC DATA
 #define SwWebFrameShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
