@@ -857,24 +857,6 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
     }
 }
 
-void ThumbnailView::deselectItem(const sal_uInt16 nItemId)
-{
-    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
-    {
-        if (mItemList[i]->mnId == nItemId)
-        {
-            mItemList[i]->setSelection(false);
-
-            maItemStateHdl.Call(mItemList[i]);
-
-            if (IsReallyVisible() && IsUpdateMode())
-                mItemList[i]->Paint(mpProcessor,mpItemAttrs);
-
-            break;
-        }
-    }
-}
-
 void ThumbnailView::deselectItems()
 {
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)

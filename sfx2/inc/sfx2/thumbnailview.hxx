@@ -207,8 +207,6 @@ public:
     bool IsItemSelected( sal_uInt16 nItemId ) const
         { return nItemId == mnSelItemId; }
 
-    void deselectItem (const sal_uInt16 nItemId);
-
     /**
      *
      * @brief deselect all current selected items.

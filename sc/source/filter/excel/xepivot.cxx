@@ -777,15 +777,6 @@ XclExpPCField* XclExpPivotCache::GetFieldAcc( sal_uInt16 nFieldIdx )
     return maFieldList.GetRecord( nFieldIdx ).get();
 }
 
-XclExpPCField* XclExpPivotCache::GetFieldAcc( const rtl::OUString& rFieldName )
-{
-    XclExpPCField* pField = 0;
-    for( size_t nPos = 0, nSize = maFieldList.GetSize(); !pField && (nPos < nSize); ++nPos )
-        if( maFieldList.GetRecord( nPos )->GetFieldName() == rFieldName )
-            pField = maFieldList.GetRecord( nPos ).get();
-    return pField;
-}
-
 void XclExpPivotCache::AddFields( const ScDPObject& rDPObj )
 {
     AddStdFields( rDPObj );

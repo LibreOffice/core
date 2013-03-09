@@ -10,8 +10,6 @@ ScDocument::GetEditText(ScAddress const&) const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 TextEngine::GetLeftMargin() const
-ThumbnailView::deselectItem(unsigned short)
-XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
 apitest::XCellRangesQuery::testQueryFormulaCells()
 apitest::XDataPilotDescriptor::testGetHiddenFields()
 apitest::XDataPilotFieldGrouping::testCreateDateGroup()
