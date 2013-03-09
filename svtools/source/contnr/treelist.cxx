@@ -1268,6 +1268,9 @@ void SvListView::ModelIsRemoving( SvTreeListEntry* )
 
 void SvListView::ModelHasRemoved( SvTreeListEntry* )
 {
+    //WARNING WARNING WARNING
+    //The supplied pointer should have been deleted
+    //before this call. Be careful not to use it!!!
     DBG_CHKTHIS(SvListView,0);
 }
 
