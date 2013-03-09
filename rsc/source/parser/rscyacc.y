@@ -178,14 +178,17 @@ sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
             else
                 S.Push( pHeader->pClass->Create( NULL, RSCINST() ) );
 
-            ObjNode * pNode = new ObjNode( aName1, S.Top().pData,
-                                           pFI->GetFileIndex() );
             pTC->pEH->StdOut( ".", RscVerbosityVerbose );
 
             if( !aName1.IsId() )
                 pTC->pEH->Error( ERR_IDEXPECTED, pHeader->pClass, aName1 );
-            else if( !pHeader->pClass->PutObjNode( pNode ) )
-                pTC->pEH->Error( ERR_DOUBLEID, pHeader->pClass, aName1 );
+            else
+            {
+                ObjNode * pNode = new ObjNode( aName1, S.Top().pData,
+                                               pFI->GetFileIndex() );
+                if( !pHeader->pClass->PutObjNode( pNode ) )
+                    pTC->pEH->Error( ERR_DOUBLEID, pHeader->pClass, aName1 );
+            }
         }
         else
         {
