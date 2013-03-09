@@ -15,7 +15,6 @@
 #include <cassert>
 #include <vector>
 
-#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -624,7 +623,6 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~Manager() throw ();
 
-    mutable osl::Mutex mutex_;
     std::vector< rtl::Reference< Provider > > providers_;
 };
 

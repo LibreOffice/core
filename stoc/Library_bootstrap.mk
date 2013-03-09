@@ -85,6 +85,9 @@ $(eval $(call gb_Library_add_exception_objects,bootstrap,\
     stoc/source/security/permissions \
     stoc/source/servicemanager/servicemanager \
     stoc/source/simpleregistry/simpleregistry \
+    stoc/source/tdmanager/tdmgr \
+    stoc/source/tdmanager/tdmgr_check \
+    stoc/source/tdmanager/tdmgr_tdenumeration \
 ))
 
 # vim:set noet sw=4 ts=4:
