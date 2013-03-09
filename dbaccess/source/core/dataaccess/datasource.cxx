@@ -669,7 +669,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
         Sequence< PropertyValue > aUserPwd(nAdditionalArgs);
         sal_Int32 nArgPos = 0;
-        if (sUser.getLength())
+        if (!sUser.isEmpty())
         {
             aUserPwd[ nArgPos ].Name = "user";
             aUserPwd[ nArgPos ].Value <<= sUser;

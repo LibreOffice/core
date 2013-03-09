@@ -70,7 +70,7 @@ static OString toUNOname( const OString & rRTTIname )
     {
         if( *pRTTI == ':' || ! *pRTTI )
         {
-            if( aRet.getLength() )
+            if( !aRet.isEmpty() )
                 aRet += ".";
             aRet += rRTTIname.copy( pLast - pOrg, pRTTI - pLast );
             while( *pRTTI == ':' )
@@ -104,7 +104,7 @@ static OString toRTTIname( const OString & rUNOname )
 
 static OString toRTTImangledname( const OString & rRTTIname )
 {
-    if( ! rRTTIname.getLength() )
+    if( rRTTIname.isEmpty() )
         return OString();
 
     OStringBuffer aRet( rRTTIname.getLength()*2 );

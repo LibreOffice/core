@@ -72,7 +72,7 @@ namespace
     void lcl_fillKeyCondition(const ::rtl::OUString& i_sTableName,const ::rtl::OUString& i_sQuotedColumnName,const ORowSetValue& i_aValue,TSQLStatements& io_aKeyConditions)
     {
         ::rtl::OUStringBuffer& rKeyCondition = io_aKeyConditions[i_sTableName];
-        if ( rKeyCondition.getLength() )
+        if ( !rKeyCondition.isEmpty() )
             rKeyCondition.append(" AND ");
         rKeyCondition.append(i_sQuotedColumnName);
         if ( i_aValue.isNull() )
@@ -216,7 +216,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
                 (_rInsertRow->get())[aJoinIter->second] = (_rInsertRow->get())[aIter->second.nPosition];
             }
             ::rtl::OUStringBuffer& rPart = aSql[aIter->second.sTableName];
-            if ( rPart.getLength() )
+            if ( !rPart.isEmpty() )
                 rPart.append(", ");
             rPart.append(sQuotedColumnName + s_sPara);
         }
@@ -245,7 +245,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             ::rtl::OUStringBuffer sSql(s_sUPDATE + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
                                        s_sSET + aSqlIter->second.toString());
             ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
-            if ( rCondition.getLength() )
+            if ( !rCondition.isEmpty() )
                 sSql.append(" WHERE " + rCondition.toString() );
 
             executeUpdate(_rInsertRow ,_rOrginalRow,sSql.makeStringAndClear(),aSqlIter->first);
@@ -284,11 +284,11 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
                 (_rInsertRow->get())[aJoinIter->second] = (_rInsertRow->get())[aIter->second.nPosition];
             }
             ::rtl::OUStringBuffer& rPart = aSql[aIter->second.sTableName];
-            if ( rPart.getLength() )
+            if ( !rPart.isEmpty() )
                 rPart.append(", ");
             rPart.append(sQuotedColumnName);
             ::rtl::OUStringBuffer& rParam = aParameter[aIter->second.sTableName];
-            if ( rParam.getLength() )
+            if ( !rParam.isEmpty() )
                 rParam.append(", ");
             rParam.append("?");
         }
@@ -313,7 +313,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
                                  s_sVALUES + aParameter[aSqlIter->first].toString() + " )");
 
             ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
-            if ( rCondition.getLength() )
+            if ( !rCondition.isEmpty() )
             {
                 ::rtl::OUString sQuery("SELECT " + aSqlIter->second.toString() + " FROM " + sComposedTableName +
                                        " WHERE " + rCondition.toString());
@@ -376,7 +376,7 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
     for(;aSqlIter != aSqlEnd ; ++aSqlIter)
     {
         ::rtl::OUStringBuffer& rCondition = aSqlIter->second;
-        if ( rCondition.getLength() )
+        if ( !rCondition.isEmpty() )
         {
             ::rtl::OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
@@ -621,7 +621,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
             lcl_fillKeyCondition(aColIter->second.sTableName,sQuotedColumnName,io_aRow[aColIter->second.nPosition],aKeyConditions);
         }
         ::rtl::OUStringBuffer& rPart = aSql[aColIter->second.sTableName];
-        if ( rPart.getLength() )
+        if ( !rPart.isEmpty() )
             rPart.append(", ");
         rPart.append(sQuotedColumnName);
     }
@@ -633,7 +633,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
         if ( aSqlIter->second.getLength() )
         {
             ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
-            if ( rCondition.getLength() )
+            if ( !rCondition.isEmpty() )
             {
                 ::rtl::OUString sCatalog,sSchema,sTable;
                 ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);

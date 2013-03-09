@@ -920,7 +920,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
             aRecordset.MoveNext();
         }
         aRecordset.Close();
-        if ( aRet.getLength() )
+        if ( !aRet.isEmpty() )
             return aRet.copy(0,aRet.lastIndexOf(','));
     }
     return ::rtl::OUString();

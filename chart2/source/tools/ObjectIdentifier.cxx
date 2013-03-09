@@ -82,14 +82,14 @@ OUString lcl_createClassificationStringForType( ObjectType eObjectType
     }
     if( !rDragMethodServiceName.isEmpty() )
     {
-        if( aRet.getLength() )
+        if( !aRet.isEmpty() )
             aRet.appendAscii(":");
         aRet.append( m_aDragMethodEquals );
         aRet.append( rDragMethodServiceName );
 
         if( !rDragParameterString.isEmpty() )
         {
-            if( aRet.getLength() )
+            if( !aRet.isEmpty() )
                 aRet.appendAscii(":");
             aRet.append( m_aDragParameterEquals );
             aRet.append( rDragParameterString );

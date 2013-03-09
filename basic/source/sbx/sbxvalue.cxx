@@ -1469,7 +1469,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         {
             OUString aVal = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(r,
                 RTL_TEXTENCODING_ASCII_US);
-            if( aVal.getLength() )
+            if( !aVal.isEmpty() )
                     aData.pOUString = new OUString( aVal );
                 else
                     aData.pOUString = NULL; // JSM 1995-09-22

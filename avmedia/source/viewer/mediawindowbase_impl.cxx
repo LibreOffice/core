@@ -107,7 +107,7 @@ void MediaWindowBaseImpl::setURL( const OUString& rURL,
         mxPlayer.clear();
         mTempFileURL = OUString();
 
-        if (rTempURL.getLength())
+        if (!rTempURL.isEmpty())
         {
             maFileURL = rURL;
             mTempFileURL = rTempURL;
@@ -123,7 +123,7 @@ void MediaWindowBaseImpl::setURL( const OUString& rURL,
         }
 
         mxPlayer = createPlayer(
-                (mTempFileURL.getLength()) ? mTempFileURL : maFileURL );
+                (!mTempFileURL.isEmpty()) ? mTempFileURL : maFileURL );
         onURLChanged();
     }
 }

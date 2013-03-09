@@ -51,7 +51,7 @@ BSTR PromptNew(long hWnd);
 ::rtl::OUString getAdoDatalink(long hWnd,::rtl::OUString& oldLink)
 {
     ::rtl::OUString dataLink;
-    if (oldLink.getLength())
+    if (!oldLink.isEmpty())
     {
         dataLink=reinterpret_cast<sal_Unicode *>(PromptEdit(hWnd,(BSTR)oldLink.getStr()));
     }

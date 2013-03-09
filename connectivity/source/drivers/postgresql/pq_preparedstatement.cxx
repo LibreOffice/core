@@ -697,7 +697,7 @@ void PreparedStatement::setObjectWithInfo(
         {
             x >>= myString;
         }
-        if( myString.getLength() )
+        if( !myString.isEmpty() )
         {
 //              printf( "setObjectWithInfo %s\n", OUStringToOString(myString,RTL_TEXTENCODING_ASCII_US).getStr());
             setString( parameterIndex, myString );

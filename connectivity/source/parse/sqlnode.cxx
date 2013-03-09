@@ -359,7 +359,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUStringBuffer& rString,
     // special handling for parameters
     case parameter:
     {
-        if(rString.getLength())
+        if(!rString.isEmpty())
             rString.appendAscii(" ");
         if (nCount == 1)    // ?
             m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam );
@@ -608,7 +608,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUStringBuffer
                 // parse the sub-select to SDBC level, too
                 ::rtl::OUStringBuffer sSubSelect;
                 pSubQueryNode->impl_parseNodeToString_throw( sSubSelect, rParam );
-                if ( sSubSelect.getLength() )
+                if ( !sSubSelect.isEmpty() )
                     sCommand = sSubSelect.makeStringAndClear();
             }
         }
@@ -1709,7 +1709,7 @@ sal_Bool OSQLParseNode::addDateValue(::rtl::OUStringBuffer& rString, const SQLPa
                  }
             }
 
-            if (rString.getLength())
+            if (!rString.isEmpty())
                 rString.appendAscii(" ");
             rString.append(suQuote);
             const ::rtl::OUString sTokenValue = pODBCNode->m_aChildren[1]->getTokenValue();
@@ -2400,19 +2400,19 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
     {
         case SQL_NODE_KEYWORD:
         {
-            if (rString.getLength())
+            if (!rString.isEmpty())
                 rString.appendAscii(" ");
 
             const ::rtl::OString sT = OSQLParser::TokenIDToStr(m_nNodeID, rParam.bInternational ? &rParam.m_rContext :  NULL);
             rString.append(::rtl::OStringToOUString(sT,RTL_TEXTENCODING_UTF8));
         }   break;
         case SQL_NODE_STRING:
-            if (rString.getLength())
+            if (!rString.isEmpty())
                 rString.appendAscii(" ");
             rString.append(SetQuotation(m_aNodeValue,::rtl::OUString("\'"),::rtl::OUString("\'\'")));
             break;
         case SQL_NODE_NAME:
-            if (rString.getLength() > 0)
+            if (!rString.isEmpty())
             {
                 switch(rString[rString.getLength()-1])
                 {
@@ -2441,7 +2441,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
                 rString.append(m_aNodeValue);
             break;
         case SQL_NODE_ACCESS_DATE:
-            if (rString.getLength())
+            if (!rString.isEmpty())
                 rString.appendAscii(" ");
             rString.appendAscii("#");
             rString.append(m_aNodeValue);
@@ -2455,7 +2455,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
                 if (rParam.bInternational && rParam.bPredicate && rParam.cDecSep != '.')
                     aTmp = aTmp.replace('.', rParam.cDecSep);
 
-                if (rString.getLength())
+                if (!rString.isEmpty())
                     rString.appendAscii(" ");
                 rString.append(aTmp);
 
@@ -2468,7 +2468,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
             }
             // fall through
         default:
-            if (rString.getLength() > 0 && m_aNodeValue.toChar() != '.' && m_aNodeValue.toChar() != ':' )
+            if (!rString.isEmpty() && m_aNodeValue.toChar() != '.' && m_aNodeValue.toChar() != ':' )
             {
                 switch( rString[rString.getLength() - 1] )
                 {

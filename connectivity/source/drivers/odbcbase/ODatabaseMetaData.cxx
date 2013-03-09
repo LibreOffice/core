@@ -1333,7 +1333,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
         aValue.appendAscii("UCASE,");
 
 
-    if ( aValue.getLength() )
+    if ( !aValue.isEmpty() )
         aValue.setLength(aValue.getLength()-1);
 
     return aValue.makeStringAndClear();
@@ -1388,7 +1388,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
     if(nValue & SQL_FN_TD_YEAR)
         aValue.appendAscii("YEAR,");
 
-    if ( aValue.getLength() )
+    if ( !aValue.isEmpty() )
         aValue.setLength(aValue.getLength()-1);
 
     return aValue.makeStringAndClear();
@@ -1407,7 +1407,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
     if(nValue & SQL_FN_SYS_USERNAME)
         aValue.appendAscii("USERNAME,");
 
-    if ( aValue.getLength() )
+    if ( !aValue.isEmpty() )
         aValue.setLength(aValue.getLength()-1);
 
     return aValue.makeStringAndClear();
@@ -1468,7 +1468,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
     if(nValue & SQL_FN_NUM_TRUNCATE)
         aValue.appendAscii("TRUNCATE,");
 
-    if ( aValue.getLength() )
+    if ( !aValue.isEmpty() )
         aValue.setLength(aValue.getLength()-1);
 
     return aValue.makeStringAndClear();

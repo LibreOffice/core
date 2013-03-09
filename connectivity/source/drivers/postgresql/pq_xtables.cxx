@@ -234,7 +234,7 @@ static void appendColumnList(
                 {
                     buf.append( type );
                 }
-                if( defaultValue.getLength() )
+                if( !defaultValue.isEmpty() )
                 {
                     bufferQuoteConstant( buf, defaultValue, settings );
                 }
@@ -300,7 +300,7 @@ void Tables::appendByDescriptor(
 
     // description ....
     OUString description = extractStringProperty( descriptor, st.DESCRIPTION );
-    if( description.getLength() )
+    if( !description.isEmpty() )
     {
         buf = OUStringBuffer( 128 );
         buf.append( "COMMENT ON TABLE" );
@@ -322,7 +322,7 @@ void Tables::appendByDescriptor(
             {
                 Reference< XPropertySet > column( xEnum->nextElement(), UNO_QUERY );
                 description = extractStringProperty( column,st.DESCRIPTION );
-                if( description.getLength() )
+                if( !description.isEmpty() )
                 {
                     buf = OUStringBuffer( 128 );
                     buf.append( "COMMENT ON COLUMN " );

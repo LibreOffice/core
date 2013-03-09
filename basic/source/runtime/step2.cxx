@@ -299,7 +299,7 @@ SbxBase* SbiRuntime::FindElementExtern( const OUString& rName )
     // in the RunInit yet
 
     SbxVariable* pElem = NULL;
-    if( !pMod || !rName.getLength() )
+    if( !pMod || rName.isEmpty() )
     {
         return NULL;
     }
@@ -406,7 +406,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                             {
                                 SbxVariable* pVar = refArgv->Get( i );
                                 const OUString& rName = refArgv->GetAlias( i );
-                                if( rName.getLength() )
+                                if( !rName.isEmpty() )
                                 {
                                     pNames[i] = rName;
                                 }
@@ -463,7 +463,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                 {
                     SbxVariable* pVar = refArgv->Get( i );
                     const OUString& rName = refArgv->GetAlias( i );
-                    if( rName.getLength() )
+                    if( !rName.isEmpty() )
                     {
                         // nCurPar is set to the found parameter
                         sal_uInt16 j = 1;

@@ -515,7 +515,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     , nPointIndex, fValue, false /*bAsPercentage*/ ) );
                 if( !aNumber.isEmpty() )
                 {
-                    if(aText.getLength())
+                    if(!aText.isEmpty())
                         aText.append(aSeparator);
                     aText.append(aNumber);
                     ++nLineCountForSymbolsize;
@@ -534,7 +534,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     , nPointIndex, fValue, true /*bAsPercentage*/ ) );
                 if( !aPercentage.isEmpty() )
                 {
-                    if(aText.getLength())
+                    if(!aText.isEmpty())
                         aText.append(aSeparator);
                     aText.append(aPercentage);
                     ++nLineCountForSymbolsize;
@@ -1144,7 +1144,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
         else
             aScreenPosition2D = aDefaultPos;
 
-        if( aFormula.getLength())
+        if( !aFormula.isEmpty())
         {
             // set fill and line properties on creation
             tNameSequence aNames;

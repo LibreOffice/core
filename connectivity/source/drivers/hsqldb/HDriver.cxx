@@ -161,7 +161,7 @@ namespace connectivity
                 ::rtl::OUString sPermittedMethod;
                 OSL_VERIFY( aConfig.getNodeValue( *pNodeNames ) >>= sPermittedMethod );
 
-                if ( aPermittedMethods.getLength() )
+                if ( !aPermittedMethods.isEmpty() )
                     aPermittedMethods.append( (sal_Unicode)';' );
                 aPermittedMethods.append( sPermittedMethod );
             }

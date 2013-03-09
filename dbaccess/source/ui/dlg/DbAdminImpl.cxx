@@ -258,7 +258,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             OUString sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
             OUString sTemp = sName;
             sName = ::dbaui::getStrippedDatabaseName(NULL,sTemp);
-            if ( sName.getLength() )
+            if ( !sName.isEmpty() )
                 sLoginRequest = sLoginRequest.replaceAll("$name$", sName);
             else
             {
@@ -313,7 +313,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
                 m_pItemSetHelper->getWriteOutputSet()->Put(SfxStringItem(DSID_PASSWORD, sPassword));
         }
 
-        if (sPassword.getLength())
+        if (!sPassword.isEmpty())
             aReturn.push_back(
                 PropertyValue(  OUString("password"), 0,
                                 makeAny(OUString(sPassword)), PropertyState_DIRECT_VALUE));
@@ -514,7 +514,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                     // Huh? Anybody there?
                     // OJ: It is needed when the connection properties are changed. There the URL is used for every type.
 
-                if ( sDatabaseName.getLength() )
+                if ( !sDatabaseName.isEmpty() )
                 {
                     sNewUrl += OUString::createFromAscii("/") + sDatabaseName;
                 }
@@ -529,9 +529,9 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 {
                     sNewUrl = "@" + lcl_createHostWithPort(pHostName,pPortNumber);
                     OUString sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : OUString();
-                    if ( !sDatabaseName.getLength() && pUrlItem )
+                    if ( sDatabaseName.isEmpty() && pUrlItem )
                         sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
-                    if ( sDatabaseName.getLength() )
+                    if ( !sDatabaseName.isEmpty() )
                     {
                         sNewUrl += OUString::createFromAscii(":") + sDatabaseName;
                     }
@@ -1080,7 +1080,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
             break;
     }
 
-    if ( sUrlPart.getLength() )
+    if ( !sUrlPart.isEmpty() )
     {
         if ( eTy == ::dbaccess::DST_MYSQL_NATIVE )
         {
@@ -1094,7 +1094,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
         }
     }
 
-    if ( sNewHostName.getLength() )
+    if ( !sNewHostName.isEmpty() )
         _rDest.Put(SfxStringItem(DSID_CONN_HOSTNAME, sNewHostName));
 
     if ( nPortNumber != -1 && nPortNumberId != 0 )

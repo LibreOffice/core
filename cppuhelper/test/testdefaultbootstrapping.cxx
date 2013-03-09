@@ -49,7 +49,7 @@ SAL_IMPLEMENT_MAIN()
             OUString arg;
 
             rtl_getAppCommandArg(i, &arg.pData);
-            if (arg.getLength())
+            if (!arg.isEmpty())
             {
                 Reference<XInterface> xInterface = smgr->createInstance(arg);
                 OString tmp = OUStringToOString(arg, RTL_TEXTENCODING_ASCII_US);

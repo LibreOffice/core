@@ -296,7 +296,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     ::std::list< sal_Int32> aOrgValues;
     fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
     aSql[aSql.getLength() - 1] = ' ';
-    if ( aCondition.getLength() )
+    if ( !aCondition.isEmpty() )
     {
         aCondition.setLength(aCondition.getLength()-5);
 

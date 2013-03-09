@@ -634,18 +634,18 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     else
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_VALUE_CHANGED ), SQL_GENERAL_ERROR, m_xConnection );
 
-    if(sKeyCondition.getLength() || sIndexCondition.getLength())
+    if(!sKeyCondition.isEmpty() || !sIndexCondition.isEmpty())
     {
         aSql.append(" WHERE ");
-        if(sKeyCondition.getLength() && sIndexCondition.getLength())
+        if(!sKeyCondition.isEmpty() && !sIndexCondition.isEmpty())
         {
             aSql.append(sKeyCondition.makeStringAndClear() + sIndexCondition.makeStringAndClear());
         }
-        else if(sKeyCondition.getLength())
+        else if(!sKeyCondition.isEmpty())
         {
             aSql.append(sKeyCondition.makeStringAndClear());
         }
-        else if(sIndexCondition.getLength())
+        else if(!sIndexCondition.isEmpty())
         {
             aSql.append(sIndexCondition.makeStringAndClear());
         }

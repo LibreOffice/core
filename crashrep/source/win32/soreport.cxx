@@ -162,7 +162,7 @@ static BOOL GetCrashDataPath( LPTSTR szBuffer )
     ::rtl::OUString ustrValue(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
     ::rtl::Bootstrap::expandMacros( ustrValue );
 
-    if ( ustrValue.getLength() )
+    if ( !ustrValue.isEmpty() )
     {
         ustrValue += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
 

@@ -4680,9 +4680,9 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	if (SQLyyparse() != 0)
 	{
 		// only set the error message, if it's not already set
-		if (!m_sErrorMessage.getLength())
+		if (m_sErrorMessage.isEmpty())
 			m_sErrorMessage = s_pScanner->getErrorMessage();
-		if (!m_sErrorMessage.getLength())
+		if (m_sErrorMessage.isEmpty())
 			m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_GENERAL);
 
 		rErrorMessage = m_sErrorMessage;
@@ -4736,7 +4736,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 		    aStr = pContext->getIntlKeywordAscii(eKeyCode);
 	}
 
-	if (!aStr.getLength())
+	if (aStr.isEmpty())
 	{
 		aStr = yytname[YYTRANSLATE(nTokenID)];
 		if(aStr.startsWith("SQL_TOKEN_"))
@@ -4875,7 +4875,7 @@ void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
 // -------------------------------------------------------------------------
 void OSQLParser::error(const sal_Char *fmt)
 {
-	if(!m_sErrorMessage.getLength())
+	if(m_sErrorMessage.isEmpty())
 	{
 		::rtl::OUString sStr(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
 		::rtl::OUString sSQL_TOKEN("SQL_TOKEN_");
@@ -4900,7 +4900,7 @@ void OSQLParser::error(const sal_Char *fmt)
 			m_sErrorMessage = sStr;
 
 		::rtl::OUString aError = s_pScanner->getErrorMessage();
-		if(aError.getLength())
+		if(!aError.isEmpty())
 		{
 			m_sErrorMessage += ::rtl::OUString(", ");
 			m_sErrorMessage += aError;

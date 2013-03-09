@@ -638,7 +638,7 @@ DBG_NAME(OMySQLIntroPageSetup)
             if ( !pDrvItem->GetValue().getLength() )
             {
                 OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
-                if ( sDefaultJdbcDriverName.getLength() )
+                if ( !sDefaultJdbcDriverName.isEmpty() )
                 {
                     m_aETDriverClass.SetText(sDefaultJdbcDriverName);
                     m_aETDriverClass.SetModifyFlag();

@@ -340,7 +340,7 @@ namespace
         }
     }
 
-    if ( aSql.getLength() )
+    if ( !aSql.isEmpty() )
     {
         if ( aSql[aSql.getLength() - 1] == ',' )
             aSql[aSql.getLength() - 1] = ')';

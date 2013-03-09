@@ -109,7 +109,7 @@ namespace basegfx
                     }
                 }
 
-                if(sNumberString.getLength())
+                if(!sNumberString.isEmpty())
                 {
                     rtl_math_ConversionStatus eStatus;
                     o_fRetval = ::rtl::math::stringToDouble( sNumberString.makeStringAndClear(),

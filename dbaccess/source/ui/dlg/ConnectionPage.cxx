@@ -240,7 +240,7 @@ namespace dbaui
             if ( !pJdbcDrvItem->GetValue().getLength() )
             {
                 OUString sDefaultJdbcDriverName = m_pCollection->getJavaDriverClass(m_eType);
-                if ( sDefaultJdbcDriverName.getLength() )
+                if ( !sDefaultJdbcDriverName.isEmpty() )
                 {
                     m_aJavaDriver.SetText(sDefaultJdbcDriverName);
                     m_aJavaDriver.SetModifyFlag();

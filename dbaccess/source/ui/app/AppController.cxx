@@ -924,12 +924,12 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
 
                     m_aTypeCollection.extractHostNamePort( sURL, sDatabaseName, sHostName, nPortNumber );
 
-                    if ( !sDatabaseName.getLength() )
+                    if ( sDatabaseName.isEmpty() )
                         sDatabaseName = m_aTypeCollection.cutPrefix( sURL );
                     if ( m_aTypeCollection.isFileSystemBased(sURL) )
                     {
                         sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
-                        if ( sDatabaseName.getLength() )
+                        if ( !sDatabaseName.isEmpty() )
                         {
                             ::svt::OFileNotation aFileNotation(sDatabaseName);
                             // set this decoded URL as text
@@ -937,7 +937,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                         }
                     }
 
-                    if ( sDatabaseName.getLength() == 0 )
+                    if ( sDatabaseName.isEmpty() )
                         sDatabaseName = m_aTypeCollection.getTypeDisplayName( sURL );
 
                     aReturn.sTitle = sDatabaseName;
@@ -1729,7 +1729,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
 
             xLayoutManager->lock();
             xLayoutManager->destroyElement( sDestroyToolbar );
-            if ( sToolbar.getLength() )
+            if ( !sToolbar.isEmpty() )
             {
                 xLayoutManager->createElement( sToolbar );
                 xLayoutManager->requestElement( sToolbar );

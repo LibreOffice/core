@@ -388,7 +388,7 @@ namespace dbtools
                         ++aComponent
                     )
                 {
-                    if ( sAdditionalFilter.getLength() )
+                    if ( !sAdditionalFilter.isEmpty() )
                         sAdditionalFilter.append(s_sAnd);
 
                     sAdditionalFilter.appendAscii("( ",((sal_Int32)(sizeof("( ")-1)));
