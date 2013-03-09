@@ -752,6 +752,11 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
         int nEndOfs = pRegexMatcher->end( nIcuErr);
         if( nStartOfs < nEndOfs)
             break;
+        // If the zero-length match is behind the string, do not match it again
+        // and again until startPos reaches there. A match behind the string is
+        // a "$" anchor.
+        if (nStartOfs == endPos)
+            break;
         // try at next position if there was a zero-length match
         if( ++startPos >= endPos)
             return aRet;
