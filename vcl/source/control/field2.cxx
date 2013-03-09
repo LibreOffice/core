@@ -335,7 +335,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
 
 // -----------------------------------------------------------------------
 
-static void ImplPatternMaxPos( const OUString rStr, const OString& rEditMask,
+static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
                                sal_uInt16 nFormatFlags, sal_Bool bSameMask,
                                sal_uInt16 nCursorPos, sal_Int32& rPos )
 {
@@ -448,7 +448,7 @@ static xub_StrLen ImplPatternLeftPos(const rtl::OString& rEditMask, xub_StrLen n
 
 // -----------------------------------------------------------------------
 
-static xub_StrLen ImplPatternRightPos( const XubString& rStr, const rtl::OString& rEditMask,
+static xub_StrLen ImplPatternRightPos( const OUString& rStr, const rtl::OString& rEditMask,
                                        sal_uInt16 nFormatFlags, sal_Bool bSameMask,
                                        sal_Int32 nCursorPos )
 {
