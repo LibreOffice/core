@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include "vcl/svapp.hxx"
 #include "PresenterNotesView.hxx"
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"
@@ -431,80 +431,90 @@ void PresenterNotesView::Layout (void)
 {
     if ( ! mxParentWindow.is())
         return;
-
     awt::Rectangle aWindowBox (mxParentWindow->getPosSize());
     geometry::RealRectangle2D aNewTextBoundingBox (0,0,aWindowBox.Width, aWindowBox.Height);
-
     // Size the tool bar and the horizontal separator above it.
     if (mxToolBarWindow.is())
-    {
-        const geometry::RealSize2D aToolBarSize (mpToolBar->GetMinimalSize());
-        const sal_Int32 nToolBarHeight = sal_Int32(aToolBarSize.Height + 0.5);
-        mxToolBarWindow->setPosSize(0, aWindowBox.Height - nToolBarHeight,
-            sal_Int32(aToolBarSize.Width + 0.5), nToolBarHeight,
-            awt::PosSize::POSSIZE);
-        aNewTextBoundingBox.Y2 -= nToolBarHeight;
-
-        mnSeparatorYLocation = aWindowBox.Height - nToolBarHeight - gnSpaceBelowSeparator;
-        aNewTextBoundingBox.Y2 = mnSeparatorYLocation - gnSpaceAboveSeparator;
-
-        // Place the close button.
-        if (mpCloseButton.get() != NULL)
-            mpCloseButton->SetCenter(geometry::RealPoint2D(
-                (aWindowBox.Width +  aToolBarSize.Width) / 2,
-                aWindowBox.Height - aToolBarSize.Height/2));
-    }
-
+        {
+            const geometry::RealSize2D aToolBarSize (mpToolBar->GetMinimalSize());
+            const sal_Int32 nToolBarHeight = sal_Int32(aToolBarSize.Height + 0.5);
+            mxToolBarWindow->setPosSize(0, aWindowBox.Height - nToolBarHeight,
+                                        sal_Int32(aToolBarSize.Width + 0.5), nToolBarHeight,
+                                        awt::PosSize::POSSIZE);
+            aNewTextBoundingBox.Y2 -= nToolBarHeight;
+            mnSeparatorYLocation = aWindowBox.Height - nToolBarHeight - gnSpaceBelowSeparator;
+            aNewTextBoundingBox.Y2 = mnSeparatorYLocation - gnSpaceAboveSeparator;
+            // Place the close button.
+            if (mpCloseButton.get() != NULL)
+                mpCloseButton->SetCenter(geometry::RealPoint2D(
+                                                               (aWindowBox.Width +  aToolBarSize.Width) / 2,
+                                                               aWindowBox.Height - aToolBarSize.Height/2));
+        }
     // Check whether the vertical scroll bar is necessary.
     if (mpScrollBar.get() != NULL)
-    {
-        bool bShowVerticalScrollbar (false);
-        try
         {
-            const double nTextBoxHeight (aNewTextBoundingBox.Y2 - aNewTextBoundingBox.Y1);
-            const double nHeight (mpTextView->GetTotalTextHeight());
-            if (nHeight > nTextBoxHeight)
-            {
-                bShowVerticalScrollbar = true;
-                aNewTextBoundingBox.X2 -= mpScrollBar->GetSize();
-            }
-            mpScrollBar->SetTotalSize(nHeight);
+            bool bShowVerticalScrollbar (false);
+            try
+                {
+                    const double nTextBoxHeight (aNewTextBoundingBox.Y2 - aNewTextBoundingBox.Y1);
+                    const double nHeight (mpTextView->GetTotalTextHeight());
+                    if (nHeight > nTextBoxHeight)
+                        {
+                            bShowVerticalScrollbar = true;
+                            if(!Application::GetSettings().GetLayoutRTL())
+                                aNewTextBoundingBox.X2 -= mpScrollBar->GetSize();
+                            else
+                                aNewTextBoundingBox.X1 += mpScrollBar->GetSize();
+                        }
+                    mpScrollBar->SetTotalSize(nHeight);
+                }
+            catch(beans::UnknownPropertyException&)
+                {
+                    OSL_ASSERT(false);
+                }
+            if(Application::GetSettings().GetLayoutRTL())
+                {
+                    mpScrollBar->SetVisible(bShowVerticalScrollbar);
+                    mpScrollBar->SetPosSize(
+                                            geometry::RealRectangle2D(
+                                                                      aNewTextBoundingBox.X1 - mpScrollBar->GetSize(),
+                                                                      aNewTextBoundingBox.Y1,
+                                                                      aNewTextBoundingBox.X1,
+                                                                      aNewTextBoundingBox.Y2));
+                    if( ! bShowVerticalScrollbar)
+                        mpScrollBar->SetThumbPosition(0, false);
+                    UpdateScrollBar();
+                }
+            else
+                {
+                    mpScrollBar->SetVisible(bShowVerticalScrollbar);
+                    mpScrollBar->SetPosSize(
+                                            geometry::RealRectangle2D(
+                                                                      aWindowBox.Width - mpScrollBar->GetSize(),
+                                                                      aNewTextBoundingBox.Y1,
+                                                                      aNewTextBoundingBox.X2 + mpScrollBar->GetSize(),
+                                                                      aNewTextBoundingBox.Y2));
+                    if( ! bShowVerticalScrollbar)
+                        mpScrollBar->SetThumbPosition(0, false);
+                    UpdateScrollBar();
+                }
         }
-        catch(beans::UnknownPropertyException&)
-        {
-            OSL_ASSERT(false);
-        }
-
-        mpScrollBar->SetVisible(bShowVerticalScrollbar);
-        mpScrollBar->SetPosSize(
-            geometry::RealRectangle2D(
-                aNewTextBoundingBox.X2,
-                aNewTextBoundingBox.X1,
-                aNewTextBoundingBox.X2 + mpScrollBar->GetSize(),
-                aNewTextBoundingBox.Y2));
-        if ( ! bShowVerticalScrollbar)
-            mpScrollBar->SetThumbPosition(0, false);
-
-        UpdateScrollBar();
-    }
-
     // Has the text area has changed it position or size?
     if (aNewTextBoundingBox.X1 != maTextBoundingBox.X1
         || aNewTextBoundingBox.Y1 != maTextBoundingBox.Y1
         || aNewTextBoundingBox.X2 != maTextBoundingBox.X2
         || aNewTextBoundingBox.Y2 != maTextBoundingBox.Y2)
-    {
-        maTextBoundingBox = aNewTextBoundingBox;
-
-        mpTextView->SetLocation(
-            geometry::RealPoint2D(
-                aNewTextBoundingBox.X1,
-                aNewTextBoundingBox.Y1));
-        mpTextView->SetSize(
-            geometry::RealSize2D(
-                aNewTextBoundingBox.X2 - aNewTextBoundingBox.X1,
-                aNewTextBoundingBox.Y2 - aNewTextBoundingBox.Y1));
-    }
+        {
+            maTextBoundingBox = aNewTextBoundingBox;
+            mpTextView->SetLocation(
+                                    geometry::RealPoint2D(
+                                                          aNewTextBoundingBox.X1,
+                                                          aNewTextBoundingBox.Y1));
+            mpTextView->SetSize(
+                                geometry::RealSize2D(
+                                                     aNewTextBoundingBox.X2 - aNewTextBoundingBox.X1,
+                                                     aNewTextBoundingBox.Y2 - aNewTextBoundingBox.Y1));
+        }
 }
 
 void PresenterNotesView::Paint (const awt::Rectangle& rUpdateBox)

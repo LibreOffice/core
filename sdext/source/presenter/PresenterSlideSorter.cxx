@@ -754,31 +754,47 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
     Reference<container::XIndexAccess> xSlides (mxSlideShowController, UNO_QUERY_THROW);
     if (xSlides.is())
         bIsScrollBarNeeded = mpLayout->IsScrollBarNeeded(xSlides->getCount());
-
     if (mpVerticalScrollBar.get() != NULL)
-    {
-        if (bIsScrollBarNeeded)
         {
-            // Place vertical scroll bar at right border.
-            mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
-                rUpperBox.X2 - mpVerticalScrollBar->GetSize(),
-                rUpperBox.Y1,
-                rUpperBox.X2,
-                rUpperBox.Y2));
-            mpVerticalScrollBar->SetVisible(true);
-
-            // Reduce area covered by the scroll bar from the available
-            // space.
-            return geometry::RealRectangle2D(
-                rUpperBox.X1,
-                rUpperBox.Y1,
-                rUpperBox.X2 - mpVerticalScrollBar->GetSize() - gnHorizontalGap,
-                rUpperBox.Y2);
+            if (bIsScrollBarNeeded)
+                {
+                    if(Application::GetSettings().GetLayoutRTL())
+                        {
+                            mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
+                                                                                      rUpperBox.X1,
+                                                                                      rUpperBox.Y1,
+                                                                                      rUpperBox.X1 +  mpVerticalScrollBar->GetSize(),
+                                                                                      rUpperBox.Y2));
+                            mpVerticalScrollBar->SetVisible(true);
+                            // Reduce area covered by the scroll bar from the available
+                            // space.
+                            return geometry::RealRectangle2D(
+                                                             rUpperBox.X1 + gnHorizontalGap + mpVerticalScrollBar->GetSize(),
+                                                             rUpperBox.Y1,
+                                                             rUpperBox.X2,
+                                                             rUpperBox.Y2);
+                        }
+                    else
+                        {
+                            // if its not RTL place vertical scroll bar at right border.
+                            mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
+                                                                                      rUpperBox.X2 - mpVerticalScrollBar->GetSize(),
+                                                                                      rUpperBox.Y1,
+                                                                                      rUpperBox.X2,
+                                                                                      rUpperBox.Y2));
+                            mpVerticalScrollBar->SetVisible(true);
+                            // Reduce area covered by the scroll bar from the available
+                            // space.
+                            return geometry::RealRectangle2D(
+                                                             rUpperBox.X1,
+                                                             rUpperBox.Y1,
+                                                             rUpperBox.X2 - mpVerticalScrollBar->GetSize() - gnHorizontalGap,
+                                                             rUpperBox.Y2);
+                        }
+                }
+            else
+                mpVerticalScrollBar->SetVisible(false);
         }
-        else
-            mpVerticalScrollBar->SetVisible(false);
-    }
-
     return rUpperBox;
 }
 
@@ -882,10 +898,11 @@ void PresenterSlideSorter::PaintPreview (
     }
 
     Reference<rendering::XBitmap> xPreview (GetPreview(nSlideIndex));
+    bool isRTL = Application::GetSettings().GetLayoutRTL();
 
     const geometry::RealPoint2D aTopLeft (
-        mpLayout->GetWindowPosition(
-            mpLayout->GetPoint(nSlideIndex, -1, -1)));
+                                          mpLayout->GetWindowPosition(
+                                                                      mpLayout->GetPoint(nSlideIndex, isRTL?1:-1, -1)));
 
     // Create clip rectangle as intersection of the current update area and
     // the bounding box of all previews.
@@ -1214,17 +1231,35 @@ bool PresenterSlideSorter::Layout::IsScrollBarNeeded (const sal_Int32 nSlideCoun
 geometry::RealPoint2D PresenterSlideSorter::Layout::GetLocalPosition(
     const geometry::RealPoint2D& rWindowPoint) const
 {
-    return css::geometry::RealPoint2D(
-        rWindowPoint.X - maBoundingBox.X1 + mnHorizontalOffset,
-        rWindowPoint.Y - maBoundingBox.Y1 + mnVerticalOffset);
+    if(Application::GetSettings().GetLayoutRTL())
+        {
+            return css::geometry::RealPoint2D(
+                                              -rWindowPoint.X  + maBoundingBox.X2 + mnHorizontalOffset,
+                                              rWindowPoint.Y - maBoundingBox.Y1 + mnVerticalOffset);
+        }
+    else
+        {
+            return css::geometry::RealPoint2D(
+                                              rWindowPoint.X - maBoundingBox.X1 + mnHorizontalOffset,
+                                              rWindowPoint.Y - maBoundingBox.Y1 + mnVerticalOffset);
+        }
 }
 
 geometry::RealPoint2D PresenterSlideSorter::Layout::GetWindowPosition(
     const geometry::RealPoint2D& rLocalPoint) const
 {
-    return css::geometry::RealPoint2D(
-        rLocalPoint.X - mnHorizontalOffset + maBoundingBox.X1,
-        rLocalPoint.Y - mnVerticalOffset + maBoundingBox.Y1);
+    if(Application::GetSettings().GetLayoutRTL())
+        {
+            return css::geometry::RealPoint2D(
+                                              -rLocalPoint.X + mnHorizontalOffset + maBoundingBox.X2,
+                                              rLocalPoint.Y - mnVerticalOffset + maBoundingBox.Y1);
+        }
+    else
+        {
+            return css::geometry::RealPoint2D(
+                                              rLocalPoint.X - mnHorizontalOffset + maBoundingBox.X1,
+                                              rLocalPoint.Y - mnVerticalOffset + maBoundingBox.Y1);
+        }
 }
 
 sal_Int32 PresenterSlideSorter::Layout::GetColumn (
@@ -1311,13 +1346,14 @@ geometry::RealPoint2D PresenterSlideSorter::Layout::GetPoint (
 
 awt::Rectangle PresenterSlideSorter::Layout::GetBoundingBox (const sal_Int32 nSlideIndex) const
 {
-    const geometry::RealPoint2D aWindowPosition(GetWindowPosition(GetPoint(nSlideIndex, -1, -1)));
+    bool isRTL = Application::GetSettings().GetLayoutRTL();
+    const geometry::RealPoint2D aWindowPosition(GetWindowPosition(GetPoint(nSlideIndex, isRTL?1:-1, -1)));
     return PresenterGeometryHelper::ConvertRectangle(
-        geometry::RealRectangle2D(
-            aWindowPosition.X,
-            aWindowPosition.Y,
-            aWindowPosition.X + maPreviewSize.Width,
-            aWindowPosition.Y + maPreviewSize.Height));
+                                                     geometry::RealRectangle2D(
+                                                                               aWindowPosition.X,
+                                                                               aWindowPosition.Y,
+                                                                               aWindowPosition.X + maPreviewSize.Width,
+                                                                               aWindowPosition.Y + maPreviewSize.Height));
 }
 
 void PresenterSlideSorter::Layout::ForAllVisibleSlides (const ::boost::function<void(sal_Int32)>& rAction)
