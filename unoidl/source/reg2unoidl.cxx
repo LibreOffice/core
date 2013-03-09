@@ -248,7 +248,7 @@ void writeKind(
 
 struct Item {
     explicit Item(rtl::Reference< unoidl::Entity > const & theEntity):
-        entity(theEntity)
+        entity(theEntity),nameOffset(0),dataOffset(0)
     {}
 
     rtl::Reference< unoidl::Entity > entity;
@@ -258,7 +258,7 @@ struct Item {
 
 struct ConstItem {
     explicit ConstItem(unoidl::ConstantValue const & theConstant):
-        constant(theConstant)
+        constant(theConstant),nameOffset(0),dataOffset(0)
     {}
 
     unoidl::ConstantValue constant;
