@@ -139,6 +139,7 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     , bOnlyDirectories( pBoxP->bOnlyDirectories )
     , bNoSelection( pBoxP->bNoSelection )
     , stopped_(false)
+    , commandId_(0)
 {
     aLink.CreateMutex();
 
