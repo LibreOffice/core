@@ -47,7 +47,11 @@
 #define STRRES_NUMTYPES             (RC_MISC_BEGIN + 63)
 #define STR_MY_AUTOTEXT             (RC_MISC_BEGIN + 64)
 
-#define MISC_ACT_END                STRRES_NUMTYPES
+#define STR_COMMENTS_LABEL          (RC_MISC_BEGIN + 65)
+#define STR_SHOW_COMMENTS           (RC_MISC_BEGIN + 66)
+#define STR_HIDE_COMMENTS           (RC_MISC_BEGIN + 67)
+
+#define MISC_ACT_END                STR_HIDE_COMMENTS
 
 #if MISC_ACT_END > RC_MISC_END
 #error Resource-Id Ueberlauf in #file, #line

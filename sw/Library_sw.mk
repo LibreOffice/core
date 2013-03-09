@@ -602,6 +602,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/misc/glshell \
     sw/source/ui/misc/numberingtypelistbox \
     sw/source/ui/misc/redlndlg \
+    sw/source/ui/misc/swruler \
     sw/source/ui/ribbar/conarc \
     sw/source/ui/ribbar/concustomshape \
     sw/source/ui/ribbar/conform \

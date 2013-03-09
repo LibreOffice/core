@@ -96,6 +96,7 @@
 #include "formatclipboard.hxx"
 #include <PostItMgr.hxx>
 #include <annotsh.hxx>
+#include <swruler.hxx>
 
 #include <fldbas.hxx>
 
@@ -715,14 +716,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pHScrollbar(0),
     pVScrollbar(0),
     pScrollFill(new ScrollBarBox( &_pFrame->GetWindow(), _pFrame->GetFrame().GetParentFrame() ? 0 : WB_SIZEABLE )),
-    pHRuler( new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
-                    SVXRULER_SUPPORT_TABS |
-                    SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
-                    SVXRULER_SUPPORT_BORDERS |
-                    SVXRULER_SUPPORT_NEGATIVE_MARGINS|
-                    SVXRULER_SUPPORT_REDUCED_METRIC,
-                    GetViewFrame()->GetBindings(),
-                    WB_STDRULER | WB_EXTRAFIELD | WB_BORDER)),
     pVRuler(new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
                             SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL|
                                 SVXRULER_SUPPORT_BORDERS | SVXRULER_SUPPORT_REDUCED_METRIC,
@@ -875,6 +868,15 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         }
     }
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create WrtShell" );
+
+    pHRuler = new SwCommentRuler(pWrtShell, &GetViewFrame()->GetWindow(), pEditWin,
+                SVXRULER_SUPPORT_TABS |
+                SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
+                SVXRULER_SUPPORT_BORDERS |
+                SVXRULER_SUPPORT_NEGATIVE_MARGINS|
+                SVXRULER_SUPPORT_REDUCED_METRIC,
+                GetViewFrame()->GetBindings(),
+                WB_STDRULER | WB_EXTRAFIELD | WB_BORDER);
 
     // assure that modified state of document
     // isn't reset, if document is already modified.
