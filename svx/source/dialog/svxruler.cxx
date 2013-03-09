@@ -1340,10 +1340,11 @@ void SvxRuler::Update()
 }
 
 
-inline long SvxRuler::GetPageWidth() const
+long SvxRuler::GetPageWidth() const
 {
+    if ( !pPagePosItem )
+        return 0;
     return bHorz ? pPagePosItem->GetWidth() : pPagePosItem->GetHeight();
-
 }
 
 
