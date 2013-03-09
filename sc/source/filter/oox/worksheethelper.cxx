@@ -1219,20 +1219,23 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
     // row height: convert points to row height in 1/100 mm
     double fHeight = (rModel.mfHeight >= 0.0) ? rModel.mfHeight : fDefHeight;
     sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, UNIT_POINT );
+    SCROW nStartRow = rRowRange.mnFirst;
+    SCROW nEndRow = rRowRange.mnLast;
+    SCTAB nTab = getSheetIndex();
     if( nHeight > 0 )
     {
         /* always import the row height, ensures better layout */
-        PropertySet aPropSet( getRows( rRowRange ) );
-        aPropSet.setProperty( PROP_Height, nHeight );
+        ScDocument& rDoc = getScDocument();
+        rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, (sal_uInt16)sc::HMMToTwips(nHeight) );
+        if(rModel.mbCustomHeight)
+            rDoc.SetManualHeight( nStartRow, nEndRow, nTab, true );
     }
 
     // hidden rows: TODO: #108683# hide rows later?
     if( rModel.mbHidden )
     {
-        PropertySet aPropSet( getRows( rRowRange ) );
-        // #i116460# Use VisibleFlag instead of IsVisible: directly set the flag,
-        // without drawing layer update etc. (only possible before shapes are inserted)
-        aPropSet.setProperty( PROP_VisibleFlag, false );
+        ScDocument& rDoc = getScDocument();
+        rDoc.SetRowHidden( nStartRow, nEndRow, nTab, true );
     }
 
     // outline settings for this row range
