@@ -619,16 +619,6 @@ namespace
         strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
         return pBuff;
     }
-
-    static OString lcl_ReplaceAttribute(
-        const OString& rSource, const OString& rOld, const OString& rNew )
-    {
-        const sal_Int32 nFirstIndex =
-            rSource.indexOf( rOld ) + rOld.getLength()+2;
-        const sal_Int32 nCount =
-            rSource.indexOf( "\n", nFirstIndex ) - nFirstIndex;
-        return rSource.replaceFirst( rSource.copy(nFirstIndex, nCount), rNew );
-    }
 }
 
 //Template Constructor
@@ -650,32 +640,6 @@ PoHeader::PoHeader( const OString& rExtSrc )
         "Content-Transfer-Encoding: 8bit\n"
         "X-Generator: LibreOffice\n"
         "X-Accelerator-Marker: ~\n"));
-    m_bIsInitialized = true;
-}
-
-
-//Constructor for old headers to renew po files
-PoHeader::PoHeader(  std::ifstream& rOldPo )
-    : m_pGenPo( new GenPoEntry() )
-    , m_bIsInitialized( false )
-{
-    assert( rOldPo.is_open() );
-    m_pGenPo->readFromFile( rOldPo );
-
-    const OString sExtractCom = m_pGenPo->getExtractCom();
-    m_pGenPo->setExtractCom(
-        sExtractCom.copy( 0, sExtractCom.getLength() - 3 ) );
-
-    OString sMsgStr = m_pGenPo->getMsgStr();
-    sMsgStr =
-        lcl_ReplaceAttribute( sMsgStr, "Report-Msgid-Bugs-To",
-            "https://bugs.freedesktop.org/enter_bug.cgi?product="
-            "LibreOffice&bug_status=UNCONFIRMED&component=UI" );
-    sMsgStr =
-        lcl_ReplaceAttribute( sMsgStr, "X-Generator", "LibreOffice" );
-    sMsgStr =
-        lcl_ReplaceAttribute( sMsgStr, "X-Accelerator-Marker", "~" );
-    m_pGenPo->setMsgStr( sMsgStr );
     m_bIsInitialized = true;
 }
 

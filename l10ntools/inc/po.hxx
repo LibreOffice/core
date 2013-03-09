@@ -90,7 +90,6 @@ public:
     friend class PoIfstream;
 
                     PoHeader( const OString& rExtSrc );
-                    PoHeader( std::ifstream& rOldPo );
                     ~PoHeader();
 };
 
