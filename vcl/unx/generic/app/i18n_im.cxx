@@ -169,10 +169,10 @@ SetSystemLocale( const char* p_inlocale )
 static void
 SetSystemEnvironment( const rtl::OUString& rLocale )
 {
-    rtl::OUString LC_ALL_Var(RTL_CONSTASCII_USTRINGPARAM("LC_ALL"));
+    OUString LC_ALL_Var("LC_ALL");
     osl_setEnvironment(LC_ALL_Var.pData, rLocale.pData);
 
-    rtl::OUString LANG_Var(RTL_CONSTASCII_USTRINGPARAM("LANG"));
+    OUString LANG_Var("LANG");
     osl_setEnvironment(LANG_Var.pData, rLocale.pData);
 }
 #endif
@@ -229,13 +229,13 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
             osl_setThreadTextEncoding (RTL_TEXTENCODING_ISO_8859_1);
             locale = SetSystemLocale( "en_US" );
             #ifdef SOLARIS
-            SetSystemEnvironment( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en_US")) );
+            SetSystemEnvironment( "en_US" );
             #endif
             if (! IsXWindowCompatibleLocale(locale))
             {
                 locale = SetSystemLocale( "C" );
                 #ifdef SOLARIS
-                SetSystemEnvironment( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("C")) );
+                SetSystemEnvironment( "C" );
                 #endif
                 if (! IsXWindowCompatibleLocale(locale))
                     mbUseable = False;
@@ -366,7 +366,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
 
         if ((maMethod == (XIM)NULL) && (getenv("XMODIFIERS") != NULL))
         {
-                rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("XMODIFIERS"));
+                OUString envVar("XMODIFIERS");
                 osl_clearEnvironment(envVar.pData);
                 XSetLocaleModifiers("");
                 maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
