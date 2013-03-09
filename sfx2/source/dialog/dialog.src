@@ -56,13 +56,13 @@ InfoBox MSG_POOL_STYLE_NAME
 {
     Message [ en-US ] = "Name already exists as a default Style.\nPlease choose another name." ;
 };
-String STR_DELETE_STYLE
-{
-    Text [ en-US ] = "Do you really want to delete Style $1?" ;
-};
 String STR_DELETE_STYLE_USED
 {
-    Text [ en-US ] = "You are deleting an applied Style!\n" ;
+    Text [ en-US ] = "One or more of the selected styles is in use in this document.\nIf you delete these styles, text will revert to the parent style.\n" ;
+};
+String STR_DELETE_STYLE
+{
+    Text [ en-US ] = "Styles in use: " ;
 };
 Menu MN_CONTEXT_TEMPLDLG
 {
