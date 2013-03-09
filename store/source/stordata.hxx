@@ -20,6 +20,9 @@
 #ifndef _STORE_STORDATA_HXX_
 #define _STORE_STORDATA_HXX_
 
+#include "sal/config.h"
+
+#include "boost/static_assert.hpp"
 #include "sal/types.h"
 #include "sal/macros.h"
 
@@ -55,7 +58,7 @@ struct OStoreDataPageData : public store::OStorePageData
     */
     static const size_t     theSize     = 0;
     static const sal_uInt16 thePageSize = base::theSize + self::theSize;
-    STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
+    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
 
     /** capacity.
     */
@@ -145,7 +148,7 @@ struct OStoreIndirectionPageData : public store::OStorePageData
      */
     static const size_t     theSize     = sizeof(G);
     static const sal_uInt16 thePageSize = base::theSize + self::theSize;
-    STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
+    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
 
     /** capacity.
     */
@@ -570,7 +573,7 @@ struct OStoreDirectoryPageData : public store::OStorePageData
      */
     static const size_t     theSize     = NameBlock::theSize + DataBlock::theSize;
     static const sal_uInt16 thePageSize = base::theSize + self::theSize;
-    STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
+    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
 
     /** capacity.
     */
