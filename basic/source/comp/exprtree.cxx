@@ -304,6 +304,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         if( pConst )
         {
             delete pPar;
+            delete pvMoreParLcl;
             if( pConst->GetType() == SbxSTRING )
             {
                 return new SbiExprNode( pParser, pConst->GetString() );
