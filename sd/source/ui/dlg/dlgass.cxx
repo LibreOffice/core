@@ -1556,9 +1556,9 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
 
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
 
-        SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
         if(IsOwnFormat(aDocFile))
         {
+            SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
             pSet->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
             if(bDocPreview)
                 pSet->Put( SfxBoolItem( SID_PREVIEW, sal_True ) );
@@ -1597,13 +1597,13 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         // load layout template
         SfxObjectShellLock xLayoutDocShell;
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
-        SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
 
         ::Window *pParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( mpWindow );
 
         if(IsOwnFormat(aLayoutFile))
         {
+            SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
             pSet->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
             pSet->Put( SfxBoolItem( SID_PREVIEW, sal_True ) );
 
