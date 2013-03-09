@@ -110,7 +110,7 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
 
         if( pItem )
         {
-            SdrMarkList* pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
+            boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
 
             if( 1 == pMarkList->GetMarkCount() )
             {
@@ -121,8 +121,6 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
                     static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).executeMediaItem(
                         static_cast< const ::avmedia::MediaItem& >( *pItem ) );
                 }
-
-                delete pMarkList;
             }
         }
     }
