@@ -572,6 +572,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl)
                               SFX_CALLMODE_ASYNCHRON |
                               SFX_CALLMODE_RECORD);
     }
+    delete pState;
     return 0;
 }
 
