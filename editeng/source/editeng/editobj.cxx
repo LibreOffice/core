@@ -767,36 +767,6 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
     return bChanged;
 }
 
-bool EditTextObjectImpl::RemoveParaAttribs( sal_uInt16 _nWhich )
-{
-    bool bChanged = false;
-
-    for (size_t nPara = aContents.size(); nPara; )
-    {
-        ContentInfo& rC = aContents[--nPara];
-
-        if ( !_nWhich )
-        {
-            if (rC.GetParaAttribs().Count())
-                bChanged = true;
-            rC.GetParaAttribs().ClearItem();
-        }
-        else
-        {
-            if (rC.GetParaAttribs().GetItemState(_nWhich) == SFX_ITEM_ON)
-            {
-                rC.GetParaAttribs().ClearItem(_nWhich);
-                bChanged = true;
-            }
-        }
-    }
-
-    if ( bChanged )
-        ClearPortionInfo();
-
-    return bChanged;
-}
-
 void EditTextObjectImpl::GetStyleSheet(size_t nPara, String& rName, SfxStyleFamily& rFamily) const
 {
     if (nPara >= aContents.size())

@@ -218,7 +218,6 @@ public:
     void GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     bool RemoveCharAttribs( sal_uInt16 nWhich = 0 );
-    bool RemoveParaAttribs( sal_uInt16 nWhich = 0 );
 
     bool IsFieldObject() const;
     const SvxFieldItem* GetField() const;

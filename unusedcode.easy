@@ -1,5 +1,4 @@
 Application::PostZoomEvent(unsigned long, Window*, ZoomEvent*)
-EditTextObjectImpl::RemoveParaAttribs(unsigned short)
 EditTextObjectImpl::SetParaAttribs(unsigned long, SfxItemSet const&)
 FontSelectPatternAttributes::FontSelectPatternAttributes(PhysicalFontFace const&, Size const&, float, int, bool)
 LanguageTag::reset(_rtl_Locale const&)
