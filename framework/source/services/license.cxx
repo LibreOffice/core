@@ -49,6 +49,8 @@
 #include <tools/datetime.hxx>
 #include <osl/time.h>
 
+#include <boost/scoped_ptr.hpp>
+
 namespace framework{
 using namespace utl;
 using namespace ::osl                           ;
@@ -219,13 +221,10 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             return aRet;
         }
         // determine the filename of the license to show
-        ::rtl::OUString  aLangString;
-        ::com::sun::star::lang::Locale aLocale;
         AllSettings aSettings(Application::GetSettings());
-        aLocale = aSettings.GetUILanguageTag().getLocale();
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr("fwe", aLocale);
+        ::com::sun::star::lang::Locale aLocale = aSettings.GetUILanguageTag().getLocale();
 
-        aLangString = aLocale.Language;
+        OUString aLangString = aLocale.Language;
         if ( !aLocale.Country.isEmpty() )
         {
             aLangString += ::rtl::OUString("-");
@@ -293,9 +292,9 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         }
         // prepare to show
         // display license dialog
-        LicenseDialog* pDialog = new LicenseDialog(aLicensePath, pResMgr);
+        ResMgr* pResMgr = ResMgr::SearchCreateResMgr("fwe", aLocale);
+        boost::scoped_ptr<LicenseDialog> pDialog(new LicenseDialog(aLicensePath, pResMgr));
         sal_Bool bAgreed = (pDialog->Execute() == 1);
-        delete pDialog;
 
         if (bAgreed) {
 
