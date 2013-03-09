@@ -43,10 +43,4 @@ $(eval $(call gb_Module_add_targets,l10ntools,\
     Package_ulfconv \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Module_add_targets,l10ntools,\
-    Jar_FCFGMerge \
-))
-endif
-
 # vim:set noet sw=4 ts=4:

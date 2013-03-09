@@ -1,1 +1,0 @@
-Main-Class: com.sun.star.filter.config.tools.merge.FCFGMerge

@@ -21,16 +21,11 @@
 # most of the rules here use some weird merge program, and this is sort of
 # semi-integrated with the stuff from Configuration.mk; not exactly pretty...
 
-ifeq ($(SOLAR_JAVA),)
 filter_MERGE_TARGET := $(call gb_ExternalExecutable_get_dependencies,python) \
 	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
 filter_MERGE := $(call gb_ExternalExecutable_get_command,python) \
 	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
-else # SOLAR_JAVA
-filter_MERGE_TARGET := $(OUTDIR_FOR_BUILD)/bin/FCFGMerge.jar
-filter_MERGE := $(JAVAINTERPRETER) $(JAVAIFLAGS) -jar $(filter_MERGE_TARGET)
-endif
-filter_MERGE_CONFIG_TARGET := $(OUTDIR_FOR_BUILD)/inc/l10ntools/FCFGMerge.cfg
+filter_MERGE_CONFIG_TARGET := $(SRCDIR)/filter/source/config/tools/merge/FCFGMerge.cfg
 
 ### filter configuration rules: generic stuff #######################
 

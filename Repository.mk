@@ -746,7 +746,6 @@ $(eval $(call gb_Helper_register_jars,URE, \
 
 $(eval $(call gb_Helper_register_jars,OOO, \
 	ConnectivityTools \
-	FCFGMerge \
 	HelloWorld \
 	Highlight \
 	MemoryUsage \
