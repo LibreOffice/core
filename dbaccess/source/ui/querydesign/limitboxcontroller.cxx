@@ -77,6 +77,11 @@ long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
                     nHandled = 1;
                     break;
                 }
+                case KEY_TAB:
+                {
+                    Select();
+                    break;
+                }
             }
             break;
         }
