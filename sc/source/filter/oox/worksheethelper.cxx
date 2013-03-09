@@ -1169,19 +1169,30 @@ void WorksheetGlobals::convertColumns()
 void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
         const ValueRange& rColRange, const ColumnModel& rModel )
 {
-    PropertySet aPropSet( getColumns( rColRange ) );
-
     // column width: convert 'number of characters' to column width in 1/100 mm
     sal_Int32 nWidth = getUnitConverter().scaleToMm100( rModel.mfWidth, UNIT_DIGIT );
     // macro sheets have double width
     if( meSheetType == SHEETTYPE_MACROSHEET )
         nWidth *= 2;
+
+    SCTAB nTab = getSheetIndex();
+    ScDocument& rDoc = getScDocument();
+    SCCOL nStartCol = rColRange.mnFirst;
+    SCCOL nEndCol = rColRange.mnLast;
+
     if( nWidth > 0 )
-        aPropSet.setProperty( PROP_Width, nWidth );
+    {
+        for( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
+        {
+            rDoc.SetColWidthOnly( nStartCol, nTab, (sal_uInt16)sc::HMMToTwips( nWidth ) );
+        }
+    }
 
     // hidden columns: TODO: #108683# hide columns later?
     if( rModel.mbHidden )
-        aPropSet.setProperty( PROP_IsVisible, false );
+    {
+        rDoc.SetColHidden( nStartCol, nEndCol, nTab, true );
+    }
 
     // outline settings for this column range
     convertOutlines( orColLevels, rColRange.mnFirst, rModel.mnLevel, rModel.mbCollapsed, false );
