@@ -418,12 +418,12 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     while (nIndex >= 0)
     {
         const ::rtl::OUString sToken (sServerCertificateSubject.getToken(0, ',', nIndex));
-        if (sToken.compareToAscii("CN=", 3) == 0)
+        if (sToken.startsWith("CN="))
         {
             sServerCertificateSubject = sToken.copy(3);
             break;
         }
-        else if (sToken.compareToAscii(" CN=", 4) == 0)
+        else if (sToken.startsWith(" CN="))
         {
             sServerCertificateSubject = sToken.copy(4);
             break;

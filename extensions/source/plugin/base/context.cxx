@@ -142,7 +142,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         plugin->provideNewStream( ::rtl::OUString(),
                                   Reference< XActiveDataSource >(),
                                   aUrl,
-                                  0, 0, (sal_Bool)(aUrl.compareToAscii( "file:", 5 ) == 0) );
+                                  0, 0, aUrl.startsWith("file:") );
         return;
     }
 

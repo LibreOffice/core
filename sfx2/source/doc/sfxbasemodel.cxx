@@ -1617,7 +1617,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
             // If this is an embedded object that has no URL based location it should be stored to own storage.
             // An embedded object can have a location based on URL in case it is a link, then it should be
             // stored in normal way.
-            if ( !hasLocation() || getLocation().compareToAscii( "private:", 8 ) == 0 )
+            if ( !hasLocation() || getLocation().startsWith("private:") )
             {
                 // actually in this very rare case only UI parameters have sence
                 // TODO/LATER: should be done later, after integration of sb19

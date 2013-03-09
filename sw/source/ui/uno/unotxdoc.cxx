@@ -1646,7 +1646,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
     }
     else
     {
-        if( rServiceName.compareToAscii( "com.sun.star.", 13 ) == 0 )
+        if( rServiceName.startsWith("com.sun.star.") )
         {
             sal_Int32 nIndex = COM_SUN_STAR__DRAWING_LENGTH;
             OUString sCategory = rServiceName.getToken( 0, '.', nIndex );

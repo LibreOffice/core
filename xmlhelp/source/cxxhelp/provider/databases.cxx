@@ -466,31 +466,31 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
                     {
                         current = rtl::OUString( lineBuffer,pos );
 
-                        if( current.compareToAscii( "Title",5 ) == 0 )
+                        if( current.startsWith("Title") )
                         {
                             title = current.copy( current.indexOf(sal_Unicode( '=' ) ) + 1 );
                         }
-                        else if( current.compareToAscii( "Start",5 ) == 0 )
+                        else if( current.startsWith("Start") )
                         {
                             startid = current.copy( current.indexOf('=') + 1 );
                         }
-                        else if( current.compareToAscii( "Language",8 ) == 0 )
+                        else if( current.startsWith("Language") )
                         {
                             lang_ = current.copy( current.indexOf('=') + 1 );
                         }
-                        else if( current.compareToAscii( "Program",7 ) == 0 )
+                        else if( current.startsWith("Program") )
                         {
                             program = current.copy( current.indexOf('=') + 1 );
                         }
-                        else if( current.compareToAscii( "Heading",7 ) == 0 )
+                        else if( current.startsWith("Heading") )
                         {
                             heading = current.copy( current.indexOf('=') + 1 );
                         }
-                        else if( current.compareToAscii( "FullText",8 ) == 0 )
+                        else if( current.startsWith("FullText") )
                         {
                             fulltext = current.copy( current.indexOf('=') + 1 );
                         }
-                        else if( current.compareToAscii( "Order",5 ) == 0 )
+                        else if( current.startsWith("Order") )
                         {
                             order = current.copy( current.indexOf('=') + 1 );
                         }

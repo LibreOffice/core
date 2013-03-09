@@ -60,7 +60,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
     Reference< XInterface > xIface;
     Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
 
-    if( sType.compareToAscii( "datetime", 8 ) == 0)
+    if( sType.startsWith("datetime"))
     {
         OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
         OString p( s.pData->buffer + 8 );

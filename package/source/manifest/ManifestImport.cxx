@@ -408,7 +408,7 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
             ::rtl::OUString aAttrName = xAttribs->getNameByIndex( nInd );
             ::rtl::OUString aAttrValue = xAttribs->getValueByIndex( nInd );
             if ( aAttrName.getLength() >= 5
-              && aAttrName.compareToAscii( "xmlns", 5 ) == 0
+              && aAttrName.startsWith("xmlns")
               && ( aAttrName.getLength() == 5 || aAttrName.getStr()[5] == ( sal_Unicode )':' ) )
             {
                 // this is a namespace declaration

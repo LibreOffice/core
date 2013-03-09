@@ -519,7 +519,7 @@ bool URLParameter::scheme()
 {
     // Correct extension help links as sometimes the
     // module is missing resulting in a misformed URL
-    if( m_aExpr.compareToAscii( "vnd.sun.star.help:///", 21 ) == 0 )
+    if( m_aExpr.startsWith("vnd.sun.star.help:///") )
     {
         sal_Int32 nLen = m_aExpr.getLength();
         rtl::OUString aLastStr =

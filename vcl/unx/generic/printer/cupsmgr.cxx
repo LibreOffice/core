@@ -438,7 +438,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     const PPDParser* pNewParser = NULL;
     OUString aPrinter;
 
-    if( rPrinter.compareToAscii( "CUPS:", 5 ) == 0 )
+    if( rPrinter.startsWith("CUPS:") )
         aPrinter = rPrinter.copy( 5 );
     else
         aPrinter = rPrinter;
@@ -561,7 +561,7 @@ void CUPSManager::setupJobContextData( JobData& rData )
     if( p_it->second.m_aInfo.m_aContext.getParser() == NULL )
     {
         OUString aPrinter;
-        if( p_it->second.m_aInfo.m_aDriverName.compareToAscii( "CUPS:", 5 ) == 0 )
+        if( p_it->second.m_aInfo.m_aDriverName.startsWith("CUPS:") )
             aPrinter = p_it->second.m_aInfo.m_aDriverName.copy( 5 );
         else
             aPrinter = p_it->second.m_aInfo.m_aDriverName;
@@ -772,7 +772,7 @@ bool CUPSManager::addPrinter( const OUString& rName, const OUString& rDriver )
 {
     // don't touch the CUPS printers
     if( m_aCUPSDestMap.find( rName ) != m_aCUPSDestMap.end() ||
-        rDriver.compareToAscii( "CUPS:", 5 ) == 0
+        rDriver.startsWith("CUPS:")
         )
         return false;
     return PrinterInfoManager::addPrinter( rName, rDriver );
