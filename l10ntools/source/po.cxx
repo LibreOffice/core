@@ -264,16 +264,16 @@ namespace
         boost::crc_32_type aCRC32;
         aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
         sal_uInt32 nCRC = aCRC32.checksum();
-        //Use all readable ASCII character exclude xml special tags: ",',&,<,>
+        ///Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
         static const OString sSymbols =
-            "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-        char sKeyId[5];
-        for( short nKeyInd = 0; nKeyInd < 4; ++nKeyInd )
+            "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+        char sKeyId[6];
+        for( short nKeyInd = 0; nKeyInd < 5; ++nKeyInd )
         {
-            sKeyId[nKeyInd] = sSymbols[(nCRC & 255) % 89];
-            nCRC >>= 8;
+            sKeyId[nKeyInd] = sSymbols[(nCRC & 63) % sSymbols.getLength()];
+            nCRC >>= 6;
         }
-        sKeyId[4] = '\0';
+        sKeyId[5] = '\0';
         return OString(sKeyId);
     }
 
