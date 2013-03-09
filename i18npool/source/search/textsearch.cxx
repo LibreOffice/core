@@ -797,17 +797,35 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     // find the last match
     int nLastPos = 0;
     int nFoundEnd = 0;
+    int nGoodPos = 0, nGoodEnd = 0;
+    bool bFirst = true;
     do {
         nLastPos = pRegexMatcher->start( nIcuErr);
         nFoundEnd = pRegexMatcher->end( nIcuErr);
+        if (nLastPos < nFoundEnd)
+        {
+            // remember last non-zero-length match
+            nGoodPos = nLastPos;
+            nGoodEnd = nFoundEnd;
+        }
         if( nFoundEnd >= startPos)
             break;
+        bFirst = false;
         if( nFoundEnd == nLastPos)
             ++nFoundEnd;
     } while( pRegexMatcher->find( nFoundEnd, nIcuErr));
 
+    // Ignore all zero-length matches except "$" anchor on first match.
+    if (nGoodPos == nGoodEnd)
+    {
+        if (bFirst && nLastPos == startPos)
+            nGoodPos = nLastPos;
+        else
+            return aRet;
+    }
+
     // find last match again to get its details
-    pRegexMatcher->find( nLastPos, nIcuErr);
+    pRegexMatcher->find( nGoodPos, nIcuErr);
 
     // fill in the details of the last match
     const int nGroupCount = pRegexMatcher->groupCount();

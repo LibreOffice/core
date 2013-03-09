@@ -450,8 +450,9 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     }
 
     xub_StrLen nStringEnd = nEnd;
-    while ( (bSrchForward && nStart < nStringEnd) ||
-            (! bSrchForward && nStart > nStringEnd) )
+    bool bZeroMatch = false;    // zero-length match, i.e. only $ anchor as regex
+    while ( ((bSrchForward && nStart < nStringEnd) ||
+            (! bSrchForward && nStart > nStringEnd)) && !bZeroMatch )
     {
         // SearchAlgorithms_APPROXIMATE works on a per word base so we have to
         // provide the text searcher with the correct locale, because it uses
@@ -479,7 +480,8 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         }
 
         if( nSearchScript == nCurrScript &&
-            (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnd, 0 ))
+                (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnd, 0 ) &&
+                !(bZeroMatch = (nStart == nEnd)))
         {
             // set section correctly
             *GetPoint() = *pPam->GetPoint();
@@ -522,11 +524,14 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
 
     if ( bFound )
         return true;
-    else if( ( bChkEmptyPara && !nStart && !nTxtLen ) || bChkParaEnd )
+    else if( ( bChkEmptyPara && !nStart && !nTxtLen ) || (bChkParaEnd && bZeroMatch && nEnd == nTxtLen))
     {
         *GetPoint() = *pPam->GetPoint();
         GetPoint()->nContent = bChkParaEnd ? nTxtLen : 0;
         SetMark();
+        /* FIXME: this condition does not work for !bSrchForward backward
+         * search, it probably never did. (pSttNd != &rNdIdx.GetNode())
+         * is never true in this case. */
         if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
             Move( fnMoveForward, fnGoCntnt ) &&
             (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
