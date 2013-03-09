@@ -110,8 +110,8 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
     rTabCols.SetLeft(nLeft);
     if(bSingleLine)
     {
-        // die unsichtbaren Trenner werden aus den alten TabCols genommen
-        // die sichtbaren kommen aus pTColumns
+        // The invisible separators are taken from the old TabCols,
+        // the visible coming from pTColumns.
         TColumn*    pOldTColumns = new TColumn[nAllCols + 1];
         SwTwips nStart = 0,
                 nEnd;
@@ -150,7 +150,7 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
                     break;
             }
             bFirst = false;
-            // sie muessen sortiert eingefuegt werden
+            // They have to be inserted sorted.
             bOld = nOld < nNew;
             nPos = sal_uInt16(bOld ? nOld : nNew);
             rTabCols[i] = nPos + nLeft;
@@ -172,7 +172,7 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
         }
     }
 
-// Rundungsfehler abfangen
+// intercept rounding errors
     if(Abs((long)nOldLeft - (long)rTabCols.GetLeft()) < 3)
         rTabCols.SetLeft(nOldLeft);
 

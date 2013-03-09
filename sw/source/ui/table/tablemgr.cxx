@@ -46,10 +46,7 @@
 
 using namespace ::com::sun::star;
 
-/*------------------------------------------------------------------------
- Beschreibung:  Zeilenhoehe einstellen (Dialog)
-------------------------------------------------------------------------*/
-
+// Adjust line height (dialogue)
 
 void SwTableFUNC::ColWidthDlg( Window *pParent )
 {
@@ -63,9 +60,7 @@ void SwTableFUNC::ColWidthDlg( Window *pParent )
     delete pDlg;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Breite ermitteln
- --------------------------------------------------------------------*/
+// Determine the width
 
 
 SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
@@ -106,8 +101,8 @@ SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
 
     if ( GetColCount() > 0 )
     {
-        // Die max. Breite ergibt sich aus der eigenen Breite und
-        // der Breite der Nachbarzellen um je MINLAY verringert
+        // The maximum width arises from the own width and
+        // the width each of the neighbor cells reduced by MINLAY.
         SwTwips nMax =  nNum == 0 ?
             GetColWidth(1) - MINLAY :
                 nNum == GetColCount() ?
@@ -124,8 +119,8 @@ SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
 
 void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
 {
-    // aktuelle Breite setzen
-    // alle folgenden Verschieben
+    // set current width
+    // move all of the following
     sal_Bool bCurrentOnly = sal_False;
 
     if ( aCols.Count() > 0 )
@@ -176,7 +171,7 @@ SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, sal_Bool bCopyFmt)
       pSh(pShell),
       bCopy(bCopyFmt)
 {
-        // gfs. das Format fuer die Bearbeitung kopieren
+        // if applicable copy the format for edit
     if( pFmt && bCopy )
         pFmt = new SwFrmFmt( *pFmt );
 }
@@ -191,8 +186,8 @@ SwTableFUNC::~SwTableFUNC()
 
 void SwTableFUNC::UpdateChart()
 {
-    //Update der Felder in der Tabelle vom User ausgeloesst, alle
-    //Charts zu der Tabelle werden auf den neuesten Stand gebracht.
+    //Update of the fields triggered by the user, all Charts of
+    //the table will be brought up to date
     SwFrmFmt *pFmt2 = pSh->GetTableFmt();
     if ( pFmt2 && pSh->HasOLEObj( pFmt2->GetName() ) )
     {
@@ -266,8 +261,8 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
             pSh->SetCheckForOLEInCaption( sal_True );
         }
         pSh->CalcAndSetScale( aEmbObjRef );
-        //#50270# Error brauchen wir nicht handeln, das erledigt das
-        //DoVerb in der SfxViewShell
+        //#50270# We don't need to handle errors,
+        //this does the DoVerb in the SfxViewShell.
         ErrCode nErr = pClient->DoVerb( SVVERB_SHOW );
         (void) nErr;
     }
