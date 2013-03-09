@@ -952,7 +952,7 @@ public:
     SvxCellVerJustify       GetVerJustification( sal_uInt16 nPara ) const;
 
     void                SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
-    inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY );
+    inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const;
 
     void                SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount )    { nBigTextObjectStart = nStartAtPortionCount; }
     sal_uInt16          GetBigTextObjectStart() const                               { return nBigTextObjectStart; }
@@ -1083,7 +1083,7 @@ inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode )
     return GetParaPortions()[ nPos ];
 }
 
-inline void ImpEditEngine::GetCharStretching( sal_uInt16& rX, sal_uInt16& rY )
+inline void ImpEditEngine::GetCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const
 {
     rX = nStretchX;
     rY = nStretchY;

@@ -872,7 +872,7 @@ Font Outliner::ImpCalcBulletFont( sal_uInt16 nPara ) const
 
     // Use original scale...
     sal_uInt16 nStretchX, nStretchY;
-    const_cast<Outliner*>(this)->GetGlobalCharStretching(nStretchX, nStretchY);
+    GetGlobalCharStretching(nStretchX, nStretchY);
 
     sal_uInt16 nScale = pFmt->GetBulletRelSize() * nStretchY / 100;
     sal_uLong nScaledLineHeight = aStdFont.GetSize().Height();

@@ -591,7 +591,7 @@ void Outliner::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
     pEditEngine->SetGlobalCharStretching( nX, nY );
 }
 
-void Outliner::GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY )
+void Outliner::GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const
 {
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->GetGlobalCharStretching( rX, rY );

@@ -372,7 +372,7 @@ public:
     void            QuickMarkToBeRepainted( sal_uInt16 nPara );
 
     void            SetGlobalCharStretching( sal_uInt16 nX = 100, sal_uInt16 nY = 100 );
-    void            GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY );
+    void            GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const;
 
     void            SetEditTextObjectPool( SfxItemPool* pPool );
     SfxItemPool*    GetEditTextObjectPool() const;

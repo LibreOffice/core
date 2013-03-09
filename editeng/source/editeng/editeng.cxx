@@ -2359,7 +2359,7 @@ void EditEngine::SetGlobalCharStretching( sal_uInt16 nX, sal_uInt16 nY )
     pImpEditEngine->SetCharStretching( nX, nY );
 }
 
-void EditEngine::GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY )
+void EditEngine::GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->GetCharStretching( rX, rY );
