@@ -4646,7 +4646,7 @@ we check in the following sequence:
 // getting the needed URL information from the current document path
             if( eTargetProtocol == INET_PROT_NOT_VALID )
             {
-                if( rLink.m_aURL.getLength() > 4 && rLink.m_aURL.compareToAscii( "\\\\\\\\", 4 ) == 0)
+                if( rLink.m_aURL.getLength() > 4 && rLink.m_aURL.startsWith("\\\\\\\\"))
                 {
                     bIsUNCPath = sal_True;
                 }

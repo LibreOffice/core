@@ -45,7 +45,7 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
     while( nIndex != -1 )
     {
         OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( ! aToken.compareToAscii( "pdf=", 4 ) )
+        if( aToken.startsWith( "pdf=" ) )
         {
             sal_Int32 nPos = 0;
             aDir = aToken.getToken( 1, '=', nPos );

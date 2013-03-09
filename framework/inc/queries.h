@@ -345,8 +345,8 @@ class QueryAnalyzer
         static sal_Bool isQuery( const OUString& sQuery )
         {
             return(
-                    ( sQuery.compareToAscii( "_query_"      , 7  ) == 0 ) ||    // new style
-                    ( sQuery.compareToAscii( "_filterquery_", 13 ) == 0 )       // old style!
+                    sQuery.startsWith("_query_") ||    // new style
+                    sQuery.startsWith("_filterquery_")       // old style!
                   );
         }
 

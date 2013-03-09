@@ -386,7 +386,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
         // check for hybrid PDF
         oslFileHandle aFile = NULL;
         if( bSuccess &&
-            ( aURL.isEmpty() || aURL.compareToAscii( "file:", 5 ) != 0 )
+            ( aURL.isEmpty() || !aURL.startsWith( "file:" ) )
         )
         {
             sal_uInt64 nWritten = 0;

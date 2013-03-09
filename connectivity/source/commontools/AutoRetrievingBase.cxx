@@ -27,7 +27,7 @@ namespace connectivity
         OSL_ENSURE( m_bAutoRetrievingEnabled,"Illegal call here. isAutoRetrievingEnabled is false!");
         sStmt = sStmt.toAsciiUpperCase();
         ::rtl::OUString sStatement;
-        if ( sStmt.compareToAscii("INSERT",6) == 0 )
+        if ( sStmt.startsWith("INSERT") )
         {
             sStatement = m_sGeneratedValueStatement;
             static const ::rtl::OUString sColumn(RTL_CONSTASCII_USTRINGPARAM("$column"));

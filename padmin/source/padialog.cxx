@@ -701,9 +701,9 @@ void PADialog::UpdateDevice()
             {
                 if( aToken.compareToAscii( "autoqueue" ) == 0 )
                     bAutoQueue = true;
-                else if( aToken.compareToAscii( "pdf=", 4 ) == 0 )
+                else if( aToken.startsWith("pdf=") )
                     bPdf = true;
-                else if( aToken.compareToAscii( "fax", 3 ) == 0 )
+                else if( aToken.startsWith("fax") )
                     bFax = true;
             }
         }

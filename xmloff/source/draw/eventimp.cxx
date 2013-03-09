@@ -415,7 +415,7 @@ void SdXMLEventContext::EndElement()
                 // so check here if its realy a bookmark or maybe a document
                 if( meClickAction == ClickAction_BOOKMARK )
                 {
-                    if( msBookmark.compareToAscii( "#", 1 ) != 0 )
+                    if( !msBookmark.startsWith( "#" ) )
                         meClickAction = ClickAction_DOCUMENT;
                 }
 

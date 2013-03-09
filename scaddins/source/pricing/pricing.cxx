@@ -538,9 +538,9 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibility
 namespace {
 
 bool getinput_putcall(bs::types::PutCall& pc, const OUString& str) {
-    if(str.compareToAscii("c",1)==0) {
+    if(str.startsWith("c")) {
         pc=bs::types::Call;
-    } else if(str.compareToAscii("p",1)==0) {
+    } else if(str.startsWith("p")) {
         pc=bs::types::Put;
     } else {
         return false;
@@ -572,9 +572,9 @@ bool getinput_strike(double& strike, const ANY& anyval) {
 }
 
 bool getinput_inout(bs::types::BarrierKIO& kio, const OUString& str) {
-    if(str.compareToAscii("i",1)==0) {
+    if(str.startsWith("i")) {
         kio=bs::types::KnockIn;
-    } else if(str.compareToAscii("o",1)==0) {
+    } else if(str.startsWith("o")) {
         kio=bs::types::KnockOut;
     } else {
         return false;
@@ -583,9 +583,9 @@ bool getinput_inout(bs::types::BarrierKIO& kio, const OUString& str) {
 }
 
 bool getinput_barrier(bs::types::BarrierActive& cont, const OUString& str) {
-    if(str.compareToAscii("c",1)==0) {
+    if(str.startsWith("c")) {
         cont=bs::types::Continuous;
-    } else if(str.compareToAscii("e",1)==0) {
+    } else if(str.startsWith("e")) {
         cont=bs::types::Maturity;
     } else {
         return false;
@@ -594,9 +594,9 @@ bool getinput_barrier(bs::types::BarrierActive& cont, const OUString& str) {
 }
 
 bool getinput_fordom(bs::types::ForDom& fd, const OUString& str) {
-    if(str.compareToAscii("f",1)==0) {
+    if(str.startsWith("f")) {
         fd=bs::types::Foreign;
-    } else if(str.compareToAscii("d",1)==0) {
+    } else if(str.startsWith("d")) {
         fd=bs::types::Domestic;
     } else {
         return false;

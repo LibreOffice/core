@@ -223,7 +223,7 @@ Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPlugi
     pImpl->provideNewStream( pImpl->getDescription().Mimetype,
                              Reference< com::sun::star::io::XActiveDataSource >(),
                              url,
-                             0, 0, (sal_Bool)(url.compareToAscii( "file:", 5  ) == 0) );
+                             0, 0, url.startsWith("file:") );
 
     if( ! pImpl->getPluginComm() )
     {

@@ -770,7 +770,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
     if ( pAny ) {
         *pAny >>= sShapeType;
-        bOOXMLShape = ( sShapeType.compareToAscii( "ooxml-", 6 ) == 0 );
+        bOOXMLShape = ( sShapeType.startsWith("ooxml-") );
         OSL_TRACE("shape type: %s %d", OUStringToOString( sShapeType, RTL_TEXTENCODING_ASCII_US ).getStr(), bOOXMLShape);
     }
     eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );

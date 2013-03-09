@@ -202,7 +202,7 @@ void SAL_CALL ConfigHandler::startElement(const OUString& aName, const Reference
 
 sal_Int32 toInt( const OUString& rText )
 {
-    if( rText.compareToAscii("0x",2) == 0)
+    if( rText.startsWith("0x"))
     {
         sal_Int32 nValue = 0;
         const sal_Unicode *p = rText;
