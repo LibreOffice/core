@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
+#include "vcl/svapp.hxx"
 #include "PresenterNotesView.hxx"
 #include "PresenterButton.hxx"
 #include "PresenterCanvasHelper.hxx"
@@ -468,7 +468,10 @@ void PresenterNotesView::Layout (void)
             if (nHeight > nTextBoxHeight)
             {
                 bShowVerticalScrollbar = true;
+                if(!Application::GetSettings().GetLayoutRTL())
                 aNewTextBoundingBox.X2 -= mpScrollBar->GetSize();
+                else
+                aNewTextBoundingBox.X1 += mpScrollBar->GetSize();
             }
             mpScrollBar->SetTotalSize(nHeight);
         }
@@ -477,19 +480,33 @@ void PresenterNotesView::Layout (void)
             OSL_ASSERT(false);
         }
 
-        mpScrollBar->SetVisible(bShowVerticalScrollbar);
-        mpScrollBar->SetPosSize(
-            geometry::RealRectangle2D(
-                aNewTextBoundingBox.X2,
-                aNewTextBoundingBox.X1,
-                aNewTextBoundingBox.X2 + mpScrollBar->GetSize(),
-                aNewTextBoundingBox.Y2));
-        if ( ! bShowVerticalScrollbar)
-            mpScrollBar->SetThumbPosition(0, false);
-
-        UpdateScrollBar();
+        if(Application::GetSettings().GetLayoutRTL())
+            {
+                mpScrollBar->SetVisible(bShowVerticalScrollbar);
+                mpScrollBar->SetPosSize(
+                                        geometry::RealRectangle2D(
+                                                                  aNewTextBoundingBox.X1 - mpScrollBar->GetSize(),
+                                                                  aNewTextBoundingBox.Y1,
+                                                                  aNewTextBoundingBox.X1,
+                                                                  aNewTextBoundingBox.Y2));
+                if( ! bShowVerticalScrollbar)
+                    mpScrollBar->SetThumbPosition(0, false);
+                UpdateScrollBar();
+            }
+        else
+            {
+                mpScrollBar->SetVisible(bShowVerticalScrollbar);
+                mpScrollBar->SetPosSize(
+                                        geometry::RealRectangle2D(
+                                                                  aWindowBox.Width - mpScrollBar->GetSize(),
+                                                                  aNewTextBoundingBox.Y1,
+                                                                  aNewTextBoundingBox.X2 + mpScrollBar->GetSize(),
+                                                                  aNewTextBoundingBox.Y2));
+                if( ! bShowVerticalScrollbar)
+                    mpScrollBar->SetThumbPosition(0, false);
+                UpdateScrollBar();
+            }
     }
-
     // Has the text area has changed it position or size?
     if (aNewTextBoundingBox.X1 != maTextBoundingBox.X1
         || aNewTextBoundingBox.Y1 != maTextBoundingBox.Y1
