@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include "boost/static_assert.hpp"
 
 #include "storcach.hxx"
 
@@ -256,7 +259,7 @@ class PageCache_Impl :
     /** Representation.
      */
     static size_t const theTableSize = 32;
-    STORE_STATIC_ASSERT(STORE_IMPL_ISP2(theTableSize));
+    BOOST_STATIC_ASSERT(STORE_IMPL_ISP2(theTableSize));
 
     Entry **     m_hash_table;
     Entry *      m_hash_table_0[theTableSize];
@@ -330,7 +333,7 @@ PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
       m_nMissed      (0)
 {
     static size_t const theSize = SAL_N_ELEMENTS(m_hash_table_0);
-    STORE_STATIC_ASSERT(theSize == theTableSize);
+    BOOST_STATIC_ASSERT(theSize == theTableSize);
     memset(m_hash_table_0, 0, sizeof(m_hash_table_0));
 }
 

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/config.h"
+
+#include "boost/static_assert.hpp"
 #include "osl/diagnose.h"
 #include "rtl/alloc.h"
 #include "rtl/ref.hxx"
@@ -156,7 +159,7 @@ struct PageData
      */
     static const size_t     theSize     = sizeof(G) + sizeof(D) + 2 * sizeof(L);
     static const sal_uInt16 thePageSize = theSize;
-    STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
+    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
 
     /** type.
      */
