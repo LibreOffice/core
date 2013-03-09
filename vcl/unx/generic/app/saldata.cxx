@@ -435,7 +435,7 @@ void SalXLib::Init()
                  * the clipboard build another connection
                  * to the xserver using $DISPLAY
                  */
-                rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+                OUString envVar("DISPLAY");
                 osl_setEnvironment(envVar.pData, aParam.pData);
             }
             break;

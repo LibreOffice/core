@@ -192,7 +192,7 @@ void X11SalInstance::DestroyFrame( SalFrame* pFrame )
     delete pFrame;
 }
 
-static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
+static void getServerDirectories( std::list< OString >& o_rFontPaths )
 {
 #ifdef LINUX
     /*
@@ -201,7 +201,7 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
     static const char* pCommands[] = {
         "/usr/sbin/chkfontpath 2>/dev/null", "chkfontpath 2>/dev/null"
     };
-    ::std::list< rtl::OString > aLines;
+    ::std::list< OString > aLines;
 
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(pCommands); i++ )
     {
@@ -225,7 +225,7 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
         }
     }
 
-    for( ::std::list< rtl::OString >::iterator it = aLines.begin(); it != aLines.end(); ++it )
+    for( ::std::list< OString >::iterator it = aLines.begin(); it != aLines.end(); ++it )
     {
         if( ! access( it->getStr(), F_OK ) )
         {
@@ -242,7 +242,7 @@ static void getServerDirectories( std::list< rtl::OString >& o_rFontPaths )
 
 
 
-void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
+void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
 {
     Display *pDisplay = GetGenericData()->GetSalDisplay()->GetDisplay();
 
@@ -301,7 +301,7 @@ void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
         // TODO: replace environment variables
         while( aStream.IsOpen() && ! aStream.IsEof() )
         {
-            rtl::OString aLine;
+            OString aLine;
             aStream.ReadLine( aLine );
             psp::normPath( aLine );
             // try to avoid bad fonts in some cases
@@ -316,11 +316,11 @@ void X11SalInstance::FillFontPathList( std::list< rtl::OString >& o_rFontPaths )
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
-void X11SalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType)
+void X11SalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType)
 {
-    const rtl::OUString SYM_ADD_TO_RECENTLY_USED_FILE_LIST(RTL_CONSTASCII_USTRINGPARAM("add_to_recently_used_file_list"));
-    const rtl::OUString LIB_RECENT_FILE(RTL_CONSTASCII_USTRINGPARAM("librecentfile.so"));
-    typedef void (*PFUNC_ADD_TO_RECENTLY_USED_LIST)(const rtl::OUString&, const rtl::OUString&);
+    const OUString SYM_ADD_TO_RECENTLY_USED_FILE_LIST("add_to_recently_used_file_list");
+    const OUString LIB_RECENT_FILE("librecentfile.so");
+    typedef void (*PFUNC_ADD_TO_RECENTLY_USED_LIST)(const OUString&, const OUString&);
 
     PFUNC_ADD_TO_RECENTLY_USED_LIST add_to_recently_used_file_list = 0;
 

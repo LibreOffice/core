@@ -189,12 +189,12 @@ static void BuildSmPropertyList()
         pSmProps[ 2 ].vals      = new SmPropValue[3];
         pSmProps[ 2 ].vals[0].length    = aExec.getLength()+1;
         pSmProps[ 2 ].vals[0].value = strdup( aExec.getStr() );
-        rtl::OStringBuffer aRestartOption;
-        aRestartOption.append(RTL_CONSTASCII_STRINGPARAM("--session="));
+        OStringBuffer aRestartOption;
+        aRestartOption.append("--session=");
         aRestartOption.append(SessionManagerClient::getSessionID());
         pSmProps[ 2 ].vals[1].length    = aRestartOption.getLength()+1;
         pSmProps[ 2 ].vals[1].value = strdup(aRestartOption.getStr());
-        rtl::OString aRestartOptionNoLogo(RTL_CONSTASCII_STRINGPARAM("--nologo"));
+        OString aRestartOptionNoLogo("--nologo");
         pSmProps[ 2 ].vals[2].length    = aRestartOptionNoLogo.getLength()+1;
         pSmProps[ 2 ].vals[2].value = strdup(aRestartOptionNoLogo.getStr());
 
@@ -204,7 +204,7 @@ static void BuildSmPropertyList()
         if( aSec )
         {
             osl_getUserName( aSec, &aUserName.pData );
-            aUser = rtl::OUStringToOString( aUserName, osl_getThreadTextEncoding() );
+            aUser = OUStringToOString( aUserName, osl_getThreadTextEncoding() );
             osl_freeSecurityHandle( aSec );
         }
 
@@ -451,7 +451,7 @@ void SessionManagerClient::open(SalSession * pSession)
                 SAL_INFO("vcl.sm", "SmcOpenConnection failed: " << aErrBuf);
             else
                 SAL_INFO("vcl.sm", "SmcOpenConnection succeeded, client ID is " << pClientID );
-            m_aClientID = rtl::OString(pClientID);
+            m_aClientID = OString(pClientID);
             free( pClientID );
             pClientID = NULL;
         }
