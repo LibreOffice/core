@@ -837,25 +837,6 @@ void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
         pDetectiveOp->SkipTable(nSkip);
 }
 
-namespace {
-
-bool IsNoteBeforeNextCell(const SCCOL nCol, const SCROW nRow, const table::CellAddress& rAddress)
-{
-    if(nRow < rAddress.Row)
-        return true;
-    else if(nRow > rAddress.Row)
-        return false;
-    else
-    {
-        if(nCol < rAddress.Column)
-            return true;
-        else
-            return false;
-    }
-}
-
-}
-
 bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
 {
     table::CellAddress  aAddress( nCurrentTable, MAXCOL + 1, MAXROW + 1 );
