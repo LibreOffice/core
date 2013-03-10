@@ -217,7 +217,7 @@ End
 
 /* ** MySQL Connector ** */
 
-#ifdef WITH_EXTENSION_MYSQLC
+#ifdef WITH_EXTENSION_MARIADBC
 
 File gid_File_Oxt_MySQLConnector
     TXT_FILE_BODY;

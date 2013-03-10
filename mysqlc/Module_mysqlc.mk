@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,mysqlc))
 
-ifeq ($(ENABLE_MYSQLC),YES)
+ifeq ($(ENABLE_MARIADBC),YES)
 
 $(eval $(call gb_Module_add_targets,mysqlc,\
 	Configuration_mysql \

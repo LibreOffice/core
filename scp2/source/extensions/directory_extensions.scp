@@ -189,7 +189,7 @@ End
 
 /* ** MySQL Connector ** */
 
-#ifdef WITH_EXTENSION_MYSQLC
+#ifdef WITH_EXTENSION_MARIADBC
 
 Directory gid_Brand_Dir_Share_Extensions_MySQLConnector
 	ParentID = gid_Brand_Dir_Share_Extensions;
