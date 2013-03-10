@@ -83,8 +83,10 @@
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/awt/grid/XGridColumnListener.hpp>
 #include <com/sun/star/awt/grid/XSortableGridData.hpp>
+#include <com/sun/star/awt/tree/DefaultTreeDataModel.hpp>
 #include <com/sun/star/awt/tree/XMutableTreeNode.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -158,9 +160,6 @@
 #include <com/sun/star/i18n/Weekdays.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
-#include <com/sun/star/io/XActiveDataControl.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XPersist.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -208,9 +207,11 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/ucb/SortedDynamicResultSetFactory.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <com/sun/star/ucb/XCommandProcessor2.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
@@ -221,7 +222,9 @@
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/WizardButton.hpp>
 #include <com/sun/star/ui/dialogs/WizardTravelType.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -250,6 +253,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -337,7 +341,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <svl/cntwall.hxx>
 #include <svl/eitem.hxx>
 #include <svl/inettype.hxx>
 #include <svl/itempool.hxx>
@@ -428,10 +431,10 @@
 #include <vcl/fixed.hxx>
 #include <vcl/fixedhyper.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/font.hxx>
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>

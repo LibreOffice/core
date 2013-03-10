@@ -507,7 +507,6 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svtools/filechangedchecker.hxx>
-#include <svtools/fltcall.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
@@ -566,6 +565,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/cvtsvm.hxx>
+#include <vcl/fltcall.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/gradient.hxx>

@@ -343,6 +343,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <set>
 #include <sfx2/QuerySaveDocument.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>

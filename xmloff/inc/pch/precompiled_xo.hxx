@@ -435,9 +435,11 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
+#include <com/sun/star/xforms/Model.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
@@ -509,6 +511,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <sax/tools/converter.hxx>
