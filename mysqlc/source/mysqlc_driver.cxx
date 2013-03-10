@@ -277,7 +277,7 @@ sal_Int32 SAL_CALL MysqlCDriver::getMajorVersion()
     throw(RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::getMajorVersion");
-    return MYSQLC_VERSION_MAJOR;
+    return MARIADBC_VERSION_MAJOR;
 }
 /* }}} */
 
@@ -287,7 +287,7 @@ sal_Int32 SAL_CALL MysqlCDriver::getMinorVersion()
     throw(RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::getMinorVersion");
-    return MYSQLC_VERSION_MINOR;
+    return MARIADBC_VERSION_MINOR;
 }
 /* }}} */
 

@@ -39,9 +39,9 @@ $(eval $(call gb_Library_use_libraries,mysqlc,\
 $(eval $(call gb_Library_add_defs,mysqlc,\
 	-DCPPDBC_EXPORTS \
 	-DCPPCON_LIB_BUILD \
-	-DMYSQLC_VERSION_MAJOR=$(MYSQLC_MAJOR) \
-	-DMYSQLC_VERSION_MINOR=$(MYSQLC_MINOR) \
-	-DMYSQLC_VERSION_MICRO=$(MYSQLC_MICRO) \
+	-DMARIADBC_VERSION_MAJOR=$(MARIADBC_MAJOR) \
+	-DMARIADBC_VERSION_MINOR=$(MARIADBC_MINOR) \
+	-DMARIADBC_VERSION_MICRO=$(MARIADBC_MICRO) \
 	$(if $(filter NO,$(SYSTEM_MYSQL_CPPCONN)),\
 	-DCPPCONN_LIB=\"$(call gb_Library_get_runtime_filename,mysqlcppconn)\") \
 ))

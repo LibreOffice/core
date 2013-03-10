@@ -1176,7 +1176,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion()
     throw(RuntimeException)
 {
     OSL_TRACE("ODatabaseMetaData::getDriverMajorVersion");
-    return MYSQLC_VERSION_MAJOR;
+    return MARIADBC_VERSION_MAJOR;
 }
 /* }}} */
 
@@ -1210,7 +1210,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion()
     throw(RuntimeException)
 {
     OSL_TRACE("ODatabaseMetaData::getDriverMinorVersion");
-    return MYSQLC_VERSION_MINOR;
+    return MARIADBC_VERSION_MINOR;
 }
 /* }}} */
 
