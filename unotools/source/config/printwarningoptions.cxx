@@ -36,13 +36,13 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print"))
+#define ROOTNODE_START                  OUString("Office.Common/Print")
 
-#define PROPERTYNAME_PAPERSIZE          OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/PaperSize"))
-#define PROPERTYNAME_PAPERORIENTATION   OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/PaperOrientation"))
-#define PROPERTYNAME_NOTFOUND           OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/NotFound"))
-#define PROPERTYNAME_TRANSPARENCY       OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/Transparency"))
-#define PROPERTYNAME_PRINTINGMODIFIESDOCUMENT  OUString(RTL_CONSTASCII_USTRINGPARAM("PrintingModifiesDocument"))
+#define PROPERTYNAME_PAPERSIZE          OUString("Warning/PaperSize")
+#define PROPERTYNAME_PAPERORIENTATION   OUString("Warning/PaperOrientation")
+#define PROPERTYNAME_NOTFOUND           OUString("Warning/NotFound")
+#define PROPERTYNAME_TRANSPARENCY       OUString("Warning/Transparency")
+#define PROPERTYNAME_PRINTINGMODIFIESDOCUMENT  OUString("PrintingModifiesDocument")
 
 #define PROPERTYHANDLE_PAPERSIZE        0
 #define PROPERTYHANDLE_PAPERORIENTATION 1

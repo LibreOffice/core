@@ -106,14 +106,14 @@ public:
 };
 
 
-#define ROOTNODE_SYSLOCALE              OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/L10N"))
+#define ROOTNODE_SYSLOCALE              OUString("Setup/L10N")
 
-#define PROPERTYNAME_LOCALE             OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupSystemLocale"))
-#define PROPERTYNAME_UILOCALE           OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale"))
-#define PROPERTYNAME_CURRENCY           OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupCurrency"))
-#define PROPERTYNAME_DECIMALSEPARATOR   OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalSeparatorAsLocale"))
-#define PROPERTYNAME_DATEPATTERNS       OUString(RTL_CONSTASCII_USTRINGPARAM("DateAcceptancePatterns"))
-#define PROPERTYNAME_IGNORELANGCHANGE   OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreLanguageChange"))
+#define PROPERTYNAME_LOCALE             OUString("ooSetupSystemLocale")
+#define PROPERTYNAME_UILOCALE           OUString("ooLocale")
+#define PROPERTYNAME_CURRENCY           OUString("ooSetupCurrency")
+#define PROPERTYNAME_DECIMALSEPARATOR   OUString("DecimalSeparatorAsLocale")
+#define PROPERTYNAME_DATEPATTERNS       OUString("DateAcceptancePatterns")
+#define PROPERTYNAME_IGNORELANGCHANGE   OUString("IgnoreLanguageChange")
 
 #define PROPERTYHANDLE_LOCALE           0
 #define PROPERTYHANDLE_UILOCALE         1

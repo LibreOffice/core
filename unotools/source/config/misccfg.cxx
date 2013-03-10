@@ -72,7 +72,7 @@ public:
 };
 
 SfxMiscCfg::SfxMiscCfg() :
-    ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common")) ),
+    ConfigItem(OUString("Office.Common") ),
     bPaperSize(sal_False),
     bPaperOrientation (sal_False),
     bNotFound (sal_False),
@@ -119,10 +119,10 @@ const Sequence<OUString> SfxMiscCfg::GetPropertyNames()
 {
     const OUString pProperties[] =
     {
-        OUString(RTL_CONSTASCII_USTRINGPARAM("Print/Warning/PaperSize")),
-        OUString(RTL_CONSTASCII_USTRINGPARAM("Print/Warning/PaperOrientation")),
-        OUString(RTL_CONSTASCII_USTRINGPARAM("Print/Warning/NotFound")),
-        OUString(RTL_CONSTASCII_USTRINGPARAM("DateFormat/TwoDigitYear"))
+        OUString("Print/Warning/PaperSize"),
+        OUString("Print/Warning/PaperOrientation"),
+        OUString("Print/Warning/NotFound"),
+        OUString("DateFormat/TwoDigitYear")
     };
     const Sequence< OUString > seqPropertyNames( pProperties, 4 );
     return seqPropertyNames;

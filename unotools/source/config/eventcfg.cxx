@@ -40,10 +40,10 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star;
 
-#define ROOTNODE_EVENTS OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Events/ApplicationEvents" ))
-#define PATHDELIMITER OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
-#define SETNODE_BINDINGS OUString(RTL_CONSTASCII_USTRINGPARAM("Bindings" ))
-#define PROPERTYNAME_BINDINGURL OUString(RTL_CONSTASCII_USTRINGPARAM("BindingURL"))
+#define ROOTNODE_EVENTS OUString("Office.Events/ApplicationEvents")
+#define PATHDELIMITER OUString("/")
+#define SETNODE_BINDINGS OUString("Bindings")
+#define PROPERTYNAME_BINDINGURL OUString("BindingURL")
 
 const char* pEventAsciiNames[] =
 {
@@ -81,34 +81,34 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     :   ConfigItem( ROOTNODE_EVENTS, CONFIG_MODE_IMMEDIATE_UPDATE )
 {
     // the supported event names
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_STARTAPP] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEAPP] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_DOCCREATED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CREATEDOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_LOADFINISHED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_OPENDOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PREPARECLOSEDOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEDOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOCDONE] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOCFAILED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOCDONE] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOCFAILED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOCDONE] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOCFAILED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_ACTIVATEDOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_DEACTIVATEDOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PRINTDOC] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_VIEWCREATED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PREPARECLOSEVIEW] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEVIEW] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_MODIFYCHANGED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_TITLECHANGED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_VISAREACHANGED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_MODECHANGED] ) );
-    m_supportedEvents.push_back(::rtl::OUString::createFromAscii( pEventAsciiNames[STR_EVENT_STORAGECHANGED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_STARTAPP] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEAPP] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_DOCCREATED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CREATEDOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_LOADFINISHED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_OPENDOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PREPARECLOSEDOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEDOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOCDONE] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEDOCFAILED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOCDONE] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVEASDOCFAILED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOCDONE] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_SAVETODOCFAILED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_ACTIVATEDOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_DEACTIVATEDOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PRINTDOC] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_VIEWCREATED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_PREPARECLOSEVIEW] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEVIEW] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_MODIFYCHANGED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_TITLECHANGED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_VISAREACHANGED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_MODECHANGED] ) );
+    m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_STORAGECHANGED] ) );
 
     initBindingInfo();
 
@@ -116,7 +116,7 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys! */
     Sequence< OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Events" ));
+    aNotifySeq[0] = OUString( "Events" );
     EnableNotification( aNotifySeq, sal_True );
 }
 
@@ -174,8 +174,8 @@ void GlobalEventConfig_Impl::Commit()
     ClearNodeSet( SETNODE_BINDINGS );
     Sequence< beans::PropertyValue > seqValues( 1 );
     OUString sNode;
-    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + OUString(RTL_CONSTASCII_USTRINGPARAM("BindingType['")));
-    static const OUString sPostfix(OUString(RTL_CONSTASCII_USTRINGPARAM("']")) + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
+    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + OUString("BindingType['"));
+    static const OUString sPostfix(OUString("']") + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
     //step through the list of events
     for(int i=0;it!=it_end;++it,++i)
     {
@@ -256,9 +256,9 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
 {
     Any aRet;
     Sequence< beans::PropertyValue > props(2);
-    props[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("EventType"));
-    props[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
-    props[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
+    props[0].Name = OUString("EventType");
+    props[0].Value <<= OUString("Script");
+    props[1].Name = OUString("Script");
     EventBindingHash::const_iterator it = m_eventBindingHash.find( aName );
     if( it != m_eventBindingHash.end() )
     {

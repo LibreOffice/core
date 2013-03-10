@@ -41,16 +41,16 @@ using namespace ::std                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
 
-#define ROOTNODE_INTERNAL                   OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Internal"   ))
+#define ROOTNODE_INTERNAL                   OUString("Office.Common/Internal")
 #define DEFAULT_SLOTCFG                     sal_False
 #define DEFAULT_SENDCRASHMAIL               sal_False
 #define DEFAULT_USEMAILUI                   sal_True
-#define DEFAULT_CURRENTTEMPURL              OUString(RTL_CONSTASCII_USTRINGPARAM(""))
+#define DEFAULT_CURRENTTEMPURL              OUString("")
 
-#define FIXPROPERTYNAME_SLOTCFG             OUString(RTL_CONSTASCII_USTRINGPARAM("Slot"                     ))
-#define FIXPROPERTYNAME_SENDCRASHMAIL       OUString(RTL_CONSTASCII_USTRINGPARAM("SendCrashMail"            ))
-#define FIXPROPERTYNAME_USEMAILUI           OUString(RTL_CONSTASCII_USTRINGPARAM("UseMailUI"                ))
-#define FIXPROPERTYNAME_CURRENTTEMPURL      OUString(RTL_CONSTASCII_USTRINGPARAM("CurrentTempURL"           ))
+#define FIXPROPERTYNAME_SLOTCFG             OUString("Slot")
+#define FIXPROPERTYNAME_SENDCRASHMAIL       OUString("SendCrashMail")
+#define FIXPROPERTYNAME_USEMAILUI           OUString("UseMailUI")
+#define FIXPROPERTYNAME_CURRENTTEMPURL      OUString("CurrentTempURL")
 
 #define FIXPROPERTYHANDLE_SLOTCFG           0
 #define FIXPROPERTYHANDLE_SENDCRASHMAIL     1

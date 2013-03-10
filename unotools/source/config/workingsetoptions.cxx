@@ -36,10 +36,10 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define ROOTNODE_WORKINGSET             OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/WorkingSet"))
+#define ROOTNODE_WORKINGSET             OUString("Office.Common/WorkingSet")
 #define DEFAULT_WINDOWLIST              Sequence< OUString >()
 
-#define PROPERTYNAME_WINDOWLIST         OUString(RTL_CONSTASCII_USTRINGPARAM("WindowList"       ))
+#define PROPERTYNAME_WINDOWLIST         OUString("WindowList")
 
 #define PROPERTYHANDLE_WINDOWLIST       0
 

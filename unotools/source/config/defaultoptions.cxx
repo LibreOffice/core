@@ -260,7 +260,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
                                 aTempStr = aPathOpt.SubstituteVariable( aList[ nPosition ] );
                                 aFullPath += aTempStr;
                                 if ( nPosition < nCount-1 )
-                                    aFullPath += OUString( RTL_CONSTASCII_USTRINGPARAM(";") );
+                                    aFullPath += ";";
                             }
                         }
                         else

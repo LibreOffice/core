@@ -45,13 +45,13 @@ void lcl_resolveCharEntities(OUString & aLocalString)
     do
     {
         sal_Unicode ch = 0;
-        if (aLocalString.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("&amp;"),nEscapePos))
+        if (aLocalString.match("&amp;",nEscapePos))
             ch = '&';
 
-        else if (aLocalString.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("&apos;"),nEscapePos))
+        else if (aLocalString.match("&apos;",nEscapePos))
             ch = '\'';
 
-        else if (aLocalString.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("&quot;"),nEscapePos))
+        else if (aLocalString.match("&quot;",nEscapePos))
             ch = '"';
 
         OSL_ENSURE(ch,"Configuration path contains '&' that is not part of a valid character escape");
@@ -256,7 +256,7 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     rtl::OUStringBuffer aNormalized(_sType.getLength() + _sContent.getLength() + 4); // reserve approximate size initially
 
     // prefix: type, opening bracket and quote
-    aNormalized.append( _sType ).appendAscii( RTL_CONSTASCII_STRINGPARAM("['") );
+    aNormalized.append( _sType ).append( "['" );
 
     // content: copy over each char and handle escaping
     for(const sal_Unicode* pCur = pBeginContent; pCur != pEndContent; ++pCur)
@@ -264,16 +264,16 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
         // append (escape if needed)
         switch(*pCur)
         {
-        case sal_Unicode('&') : aNormalized.appendAscii( RTL_CONSTASCII_STRINGPARAM("&amp;") ); break;
-        case sal_Unicode('\''): aNormalized.appendAscii( RTL_CONSTASCII_STRINGPARAM("&apos;") ); break;
-        case sal_Unicode('\"'): aNormalized.appendAscii( RTL_CONSTASCII_STRINGPARAM("&quot;") ); break;
+        case sal_Unicode('&') : aNormalized.append( "&amp;" ); break;
+        case sal_Unicode('\''): aNormalized.append( "&apos;" ); break;
+        case sal_Unicode('\"'): aNormalized.append( "&quot;" ); break;
 
         default: aNormalized.append( *pCur );
         }
     }
 
     // suffix: closing quote and bracket
-    aNormalized.appendAscii( RTL_CONSTASCII_STRINGPARAM("']") );
+    aNormalized.append( "']" );
 
     return aNormalized.makeStringAndClear();
 }
@@ -282,7 +282,7 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
 
 OUString wrapConfigurationElementName(OUString const& _sElementName)
 {
-    return lcl_wrapName(_sElementName, OUString(RTL_CONSTASCII_USTRINGPARAM("*")) );
+    return lcl_wrapName(_sElementName, "*" );
 }
 
 //----------------------------------------------------------------------------

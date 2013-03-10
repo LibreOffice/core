@@ -34,11 +34,11 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define ROOTNODE_FONT                       OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Font"           ))
+#define ROOTNODE_FONT                       OUString("Office.Common/Font")
 
-#define PROPERTYNAME_REPLACEMENTTABLE       OUString(RTL_CONSTASCII_USTRINGPARAM("Substitution/Replacement"     ))
-#define PROPERTYNAME_FONTHISTORY            OUString(RTL_CONSTASCII_USTRINGPARAM("View/History"                 ))
-#define PROPERTYNAME_FONTWYSIWYG            OUString(RTL_CONSTASCII_USTRINGPARAM("View/ShowFontBoxWYSIWYG"      ))
+#define PROPERTYNAME_REPLACEMENTTABLE       OUString("Substitution/Replacement")
+#define PROPERTYNAME_FONTHISTORY            OUString("View/History")
+#define PROPERTYNAME_FONTWYSIWYG            OUString("View/ShowFontBoxWYSIWYG")
 
 #define PROPERTYHANDLE_REPLACEMENTTABLE     0
 #define PROPERTYHANDLE_FONTHISTORY          1

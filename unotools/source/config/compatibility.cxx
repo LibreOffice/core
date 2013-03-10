@@ -42,9 +42,9 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define ROOTNODE_OPTIONS        OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Compatibility/" ) )
-#define PATHDELIMITER           OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) )
-#define SETNODE_ALLFILEFORMATS  OUString( RTL_CONSTASCII_USTRINGPARAM( "AllFileFormats" ) )
+#define ROOTNODE_OPTIONS        OUString( "Office.Compatibility/" )
+#define PATHDELIMITER           OUString( "/" )
+#define SETNODE_ALLFILEFORMATS  OUString( "AllFileFormats" )
 
 #define PROPERTYNAME_NAME               COMPATIBILITY_PROPERTYNAME_NAME
 #define PROPERTYNAME_MODULE             COMPATIBILITY_PROPERTYNAME_MODULE

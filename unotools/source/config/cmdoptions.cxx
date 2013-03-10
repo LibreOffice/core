@@ -39,17 +39,17 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
 
-#define ROOTNODE_CMDOPTIONS                             OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Commands/Execute"  ))
-#define PATHDELIMITER                                   OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
+#define ROOTNODE_CMDOPTIONS                             OUString("Office.Commands/Execute")
+#define PATHDELIMITER                                   OUString("/")
 
-#define SETNODE_DISABLED                                OUString(RTL_CONSTASCII_USTRINGPARAM("Disabled"                 ))
+#define SETNODE_DISABLED                                OUString("Disabled")
 
-#define PROPERTYNAME_CMD                                OUString(RTL_CONSTASCII_USTRINGPARAM("Command"                  ))
+#define PROPERTYNAME_CMD                                OUString("Command")
 
 // Method to retrieve a hash code from a string. May be we have to change it to decrease collisions in the hash map
 struct OUStringHashCode
 {
-    size_t operator()( const ::rtl::OUString& sString ) const
+    size_t operator()( const OUString& sString ) const
     {
         return sString.hashCode();
     }
@@ -235,7 +235,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     // Enable notification mechanism of ouer baseclass.
     // We need it to get information about changes outside these class on ouer used configuration keys! */
     Sequence< OUString > aNotifySeq( 1 );
-    aNotifySeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Disabled" ));
+    aNotifySeq[0] = "Disabled";
     EnableNotification( aNotifySeq, sal_True );
 }
 

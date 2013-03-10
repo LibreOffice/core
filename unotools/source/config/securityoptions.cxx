@@ -44,11 +44,11 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define ROOTNODE_SECURITY               OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Security/Scripting"))
+#define ROOTNODE_SECURITY               OUString("Office.Common/Security/Scripting")
 #define DEFAULT_SECUREURL               Sequence< OUString >()
 #define DEFAULT_TRUSTEDAUTHORS          Sequence< SvtSecurityOptions::Certificate >()
 
-// xmlsec05 depricated
+// xmlsec05 deprecated
 #define DEFAULT_STAROFFICEBASIC         eALWAYS_EXECUTE
 
 #define CSTR_SECUREURL                  "SecureURL"
@@ -66,37 +66,37 @@ using namespace ::com::sun::star::uno   ;
 #define CSTR_TRUSTEDAUTHOR_SERIALNUMBER "SerialNumber"
 #define CSTR_TRUSTEDAUTHOR_RAWDATA      "RawData"
 
-#define PROPERTYNAME_SECUREURL                  OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_SECUREURL                     ))
-#define PROPERTYNAME_DOCWARN_SAVEORSEND         OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_SAVEORSEND            ))
-#define PROPERTYNAME_DOCWARN_SIGNING            OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_SIGNING               ))
-#define PROPERTYNAME_DOCWARN_PRINT              OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_PRINT                 ))
-#define PROPERTYNAME_DOCWARN_CREATEPDF          OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_CREATEPDF             ))
-#define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_REMOVEPERSONALINFO    ))
-#define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_RECOMMENDPASSWORD     ))
-#define PROPERTYNAME_CTRLCLICK_HYPERLINK        OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_CTRLCLICK_HYPERLINK           ))
-#define PROPERTYNAME_MACRO_SECLEVEL             OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_SECLEVEL                ))
-#define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_TRUSTEDAUTHORS          ))
-#define PROPERTYNAME_MACRO_DISABLE              OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_DISABLE                 ))
-#define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME  OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_SUBJECTNAME))
-#define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_SERIALNUMBER))
-#define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_RAWDATA))
+#define PROPERTYNAME_SECUREURL                  OUString(CSTR_SECUREURL)
+#define PROPERTYNAME_DOCWARN_SAVEORSEND         OUString(CSTR_DOCWARN_SAVEORSEND)
+#define PROPERTYNAME_DOCWARN_SIGNING            OUString(CSTR_DOCWARN_SIGNING)
+#define PROPERTYNAME_DOCWARN_PRINT              OUString(CSTR_DOCWARN_PRINT)
+#define PROPERTYNAME_DOCWARN_CREATEPDF          OUString(CSTR_DOCWARN_CREATEPDF)
+#define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO OUString(CSTR_DOCWARN_REMOVEPERSONALINFO)
+#define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  OUString(CSTR_DOCWARN_RECOMMENDPASSWORD)
+#define PROPERTYNAME_CTRLCLICK_HYPERLINK        OUString(CSTR_CTRLCLICK_HYPERLINK)
+#define PROPERTYNAME_MACRO_SECLEVEL             OUString(CSTR_MACRO_SECLEVEL)
+#define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       OUString(CSTR_MACRO_TRUSTEDAUTHORS)
+#define PROPERTYNAME_MACRO_DISABLE              OUString(CSTR_MACRO_DISABLE)
+#define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME  OUString(CSTR_TRUSTEDAUTHOR_SUBJECTNAME)
+#define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER OUString(CSTR_TRUSTEDAUTHOR_SERIALNUMBER)
+#define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      OUString(CSTR_TRUSTEDAUTHOR_RAWDATA)
 
-// xmlsec05 depricated
-#define PROPERTYNAME_STAROFFICEBASIC    OUString(RTL_CONSTASCII_USTRINGPARAM("OfficeBasic"  ))
-#define PROPERTYNAME_EXECUTEPLUGINS     OUString(RTL_CONSTASCII_USTRINGPARAM("ExecutePlugins"  ))
-#define PROPERTYNAME_WARNINGENABLED     OUString(RTL_CONSTASCII_USTRINGPARAM("Warning"  ))
-#define PROPERTYNAME_CONFIRMATIONENABLED OUString(RTL_CONSTASCII_USTRINGPARAM("Confirmation"  ))
-// xmlsec05 depricated
+// xmlsec05 deprecated
+#define PROPERTYNAME_STAROFFICEBASIC    OUString("OfficeBasic")
+#define PROPERTYNAME_EXECUTEPLUGINS     OUString("ExecutePlugins")
+#define PROPERTYNAME_WARNINGENABLED     OUString("Warning")
+#define PROPERTYNAME_CONFIRMATIONENABLED OUString("Confirmation")
+// xmlsec05 deprecated
 
 
 #define PROPERTYHANDLE_SECUREURL                    0
 
-// xmlsec05 depricated
+// xmlsec05 deprecated
 #define PROPERTYHANDLE_STAROFFICEBASIC  1
 #define PROPERTYHANDLE_EXECUTEPLUGINS   2
 #define PROPERTYHANDLE_WARNINGENABLED   3
 #define PROPERTYHANDLE_CONFIRMATIONENABLED 4
-// xmlsec05 depricated
+// xmlsec05 deprecated
 
 #define PROPERTYHANDLE_DOCWARN_SAVEORSEND           5
 #define PROPERTYHANDLE_DOCWARN_SIGNING              6
@@ -236,7 +236,7 @@ private:
         sal_Bool                                    m_bRODisableMacros;
 
 
-        // xmlsec05 depricated
+        // xmlsec05 deprecated
         EBasicSecurityMode      m_eBasicMode;
         sal_Bool                m_bExecutePlugins;
         sal_Bool                m_bWarning;
@@ -281,7 +281,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     ,m_bROTrustedAuthors    ( CFG_READONLY_DEFAULT      )
     ,m_bRODisableMacros     ( sal_True                  ) // currently is not intended to be changed
 
-    // xmlsec05 depricated
+    // xmlsec05 deprecated
     ,   m_eBasicMode        ( DEFAULT_STAROFFICEBASIC )
     ,   m_bExecutePlugins   ( sal_True                )
     ,   m_bWarning          ( sal_True                )
@@ -290,7 +290,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     ,   m_bROWarning        ( CFG_READONLY_DEFAULT    )
     ,   m_bROExecutePlugins ( CFG_READONLY_DEFAULT    )
     ,   m_bROBasicMode      ( CFG_READONLY_DEFAULT    )
-    // xmlsec05 depricated
+    // xmlsec05 deprecated
 
 {
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
@@ -411,7 +411,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         break;
 
 
-        // xmlsec05 depricated
+        // xmlsec05 deprecated
         case PROPERTYHANDLE_STAROFFICEBASIC:
         {
             sal_Int32 nMode = 0;
@@ -438,7 +438,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
             m_bROConfirmation = bRO;
         }
         break;
-        // xmlsec05 depricated
+        // xmlsec05 deprecated
 
 
         #if OSL_DEBUG_LEVEL > 1
@@ -460,7 +460,7 @@ void SvtSecurityOptions_Impl::LoadAuthors( void )
 
         sal_Int32               i1;
         sal_Int32               i2;
-        OUString                aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+        OUString                aSep( "/" );
         for( i1 = 0, i2 = 0 ; i1 < c1 ; ++i1 )
         {
             lAllAuthors[ i2 ] = PROPERTYNAME_MACRO_TRUSTEDAUTHORS + aSep + lAuthors[ i1 ] + aSep + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
@@ -525,7 +525,7 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
     else if( rName.compareToAscii( CSTR_MACRO_DISABLE ) == 0 )
         nHandle = PROPERTYHANDLE_MACRO_DISABLE;
 
-    // xmlsec05 depricated
+    // xmlsec05 deprecated
     else if( rName == PROPERTYNAME_STAROFFICEBASIC )
         nHandle = PROPERTYHANDLE_STAROFFICEBASIC;
     else if( rName == PROPERTYNAME_EXECUTEPLUGINS )
@@ -534,7 +534,7 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
         nHandle = PROPERTYHANDLE_WARNINGENABLED;
     else if( rName == PROPERTYNAME_CONFIRMATIONENABLED )
         nHandle = PROPERTYHANDLE_CONFIRMATIONENABLED;
-    // xmlsec05 depricated
+    // xmlsec05 deprecated
 
     else
         nHandle = PROPERTYHANDLE_INVALID;
@@ -741,7 +741,7 @@ void SvtSecurityOptions_Impl::Commit()
             break;
 
 
-            // xmlsec05 depricated
+            // xmlsec05 deprecated
             case PROPERTYHANDLE_STAROFFICEBASIC:
             {
                 bDone = !m_bROBasicMode;
@@ -770,7 +770,7 @@ void SvtSecurityOptions_Impl::Commit()
                     lValues[ nRealCount ] <<= m_bConfirmation;
             }
             break;
-            // xmlsec05 depricated
+            // xmlsec05 deprecated
 
 
             default:
@@ -829,7 +829,7 @@ sal_Bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOptio
             break;
 
 
-        // xmlsec05 depricated
+        // xmlsec05 deprecated
         case SvtSecurityOptions::E_BASICMODE:
             bReadonly = m_bROBasicMode;
             break;
@@ -842,7 +842,7 @@ sal_Bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOptio
         case SvtSecurityOptions::E_CONFIRMATION:
             bReadonly = m_bROConfirmation;
             break;
-        // xmlsec05 depricated
+        // xmlsec05 deprecated
 
 
         default:
@@ -894,12 +894,12 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
         if( !sReferer.isEmpty() )
         {
             // Search in internal list
-            ::rtl::OUString sRef = sReferer.toAsciiLowerCase();
+            OUString sRef = sReferer.toAsciiLowerCase();
             sal_uInt32 nCount = m_seqSecureURLs.getLength();
             for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
             {
                 OUString sCheckURL = m_seqSecureURLs[nItem].toAsciiLowerCase();
-                sCheckURL += OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+                sCheckURL += "*";
                 if( WildCard( sCheckURL ).Matches( sRef ) == sal_True )
                 {
                     bState = sal_True;
@@ -1154,7 +1154,7 @@ Mutex& SvtSecurityOptions::GetInitMutex()
 
 
 
-// xmlsec05 depricated
+// xmlsec05 deprecated
 
 EBasicSecurityMode SvtSecurityOptions_Impl::GetBasicMode() const
 {

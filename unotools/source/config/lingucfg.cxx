@@ -895,7 +895,7 @@ sal_Bool SvtLinguConfig::GetElementNamesFor(
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(OUString("ServiceManager")), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
         rElementNames = xNA->getElementNames();
         bSuccess = true;
@@ -917,10 +917,10 @@ sal_Bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(OUString("ServiceManager")), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
-        if (xNA->getByName( rtl::OUString(aG_SupportedDictionaryFormats) ) >>= rFormatList)
+        if (xNA->getByName( OUString(aG_SupportedDictionaryFormats) ) >>= rFormatList)
             bSuccess = true;
         DBG_ASSERT( rFormatList.getLength(), "supported dictionary format list is empty" );
     }
@@ -953,8 +953,8 @@ static bool lcl_GetFileUrlFromOrigin(
     bool bSuccess = false;
     if (!rOrigin.isEmpty())
     {
-        rtl::OUString aURL( rOrigin );
-        if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) &&
+        OUString aURL( rOrigin );
+        if (( aURL.compareTo( EXPAND_PROTOCOL ) == 0 ) &&
             rxMacroExpander.is() )
         {
             // cut protocol
@@ -964,7 +964,7 @@ static bool lcl_GetFileUrlFromOrigin(
             // expand macro string
             aURL = rxMacroExpander->expandMacros( aMacro );
 
-            bool bIsFileUrl = aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( FILE_PROTOCOL )) == 0;
+            bool bIsFileUrl = aURL.compareTo( FILE_PROTOCOL ) == 0;
             if (bIsFileUrl)
             {
                 rFileUrl = aURL;
@@ -994,17 +994,17 @@ sal_Bool SvtLinguConfig::GetDictionaryEntry(
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(rtl::OUString(aG_Dictionaries)), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(OUString("ServiceManager")), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(OUString(aG_Dictionaries)), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
 
         // read group data...
-        uno::Sequence< rtl::OUString >  aLocations;
-        rtl::OUString                   aFormatName;
-        uno::Sequence< rtl::OUString >  aLocaleNames;
-        bSuccess =  (xNA->getByName( rtl::OUString(aG_Locations) ) >>= aLocations)  &&
-                    (xNA->getByName( rtl::OUString(aG_Format) )    >>= aFormatName) &&
-                    (xNA->getByName( rtl::OUString(aG_Locales) )   >>= aLocaleNames);
+        uno::Sequence< OUString >  aLocations;
+        OUString                   aFormatName;
+        uno::Sequence< OUString >  aLocaleNames;
+        bSuccess =  (xNA->getByName( OUString(aG_Locations) ) >>= aLocations)  &&
+                    (xNA->getByName( OUString(aG_Format) )    >>= aFormatName) &&
+                    (xNA->getByName( OUString(aG_Locales) )   >>= aLocaleNames);
         DBG_ASSERT( aLocations.getLength(), "Dictionary locations not set" );
         DBG_ASSERT( !aFormatName.isEmpty(), "Dictionary format name not set" );
         DBG_ASSERT( aLocaleNames.getLength(), "No locales set for the dictionary" );
@@ -1042,8 +1042,8 @@ uno::Sequence< rtl::OUString > SvtLinguConfig::GetDisabledDictionaries() const
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
-        xNA->getByName( rtl::OUString(aG_DisabledDictionaries) ) >>= aResult;
+        xNA.set( xNA->getByName(OUString("ServiceManager")), uno::UNO_QUERY_THROW );
+        xNA->getByName( OUString(aG_DisabledDictionaries) ) >>= aResult;
     }
     catch (uno::Exception &)
     {
@@ -1052,7 +1052,7 @@ uno::Sequence< rtl::OUString > SvtLinguConfig::GetDisabledDictionaries() const
 }
 
 std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionariesByFormat(
-    const rtl::OUString &rFormatName )
+    const OUString &rFormatName )
 {
     std::vector< SvtLinguConfigDictionaryEntry > aRes;
     if (rFormatName.isEmpty())
@@ -1115,13 +1115,13 @@ uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() cons
 
             // get configuration update access
             beans::PropertyValue aValue;
-            aValue.Name  = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
-            aValue.Value = uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic")));
+            aValue.Name  = OUString("nodepath");
+            aValue.Value = uno::makeAny(OUString("org.openoffice.Office.Linguistic"));
             uno::Sequence< uno::Any > aProps(1);
             aProps[0] <<= aValue;
             m_xMainUpdateAccess = uno::Reference< util::XChangesBatch >(
                     xConfigurationProvider->createInstanceWithArguments(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess")), aProps),
+                        OUString("com.sun.star.configuration.ConfigurationUpdateAccess"), aProps),
                         uno::UNO_QUERY_THROW );
         }
         catch (uno::Exception &)
@@ -1141,16 +1141,16 @@ rtl::OUString SvtLinguConfig::GetVendorImageUrl_Impl(
     try
     {
         uno::Reference< container::XNameAccess > xImagesNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xImagesNA.set( xImagesNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Images"))), uno::UNO_QUERY_THROW );
+        xImagesNA.set( xImagesNA->getByName(OUString("Images")), uno::UNO_QUERY_THROW );
 
-        uno::Reference< container::XNameAccess > xNA( xImagesNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceNameEntries"))), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNA( xImagesNA->getByName(OUString("ServiceNameEntries")), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rServiceImplName ), uno::UNO_QUERY_THROW );
-        uno::Any aAny(xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VendorImagesNode"))));
+        uno::Any aAny(xNA->getByName(OUString("VendorImagesNode")));
         rtl::OUString aVendorImagesNode;
         if (aAny >>= aVendorImagesNode)
         {
             xNA = xImagesNA;
-            xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VendorImages"))), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName(OUString("VendorImages")), uno::UNO_QUERY_THROW );
             xNA.set( xNA->getByName( aVendorImagesNode ), uno::UNO_QUERY_THROW );
             aAny = xNA->getByName( rImageName );
             rtl::OUString aTmp;
@@ -1220,10 +1220,10 @@ bool SvtLinguConfig::HasGrammarChecker() const
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager")) ), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GrammarCheckerList")) ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( OUString("ServiceManager") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( OUString("GrammarCheckerList") ), uno::UNO_QUERY_THROW );
 
-        uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
+        uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
         bRes = aElementNames.getLength() > 0;
     }
     catch (const uno::Exception&)

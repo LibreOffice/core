@@ -111,13 +111,12 @@ DefaultFontConfiguration::DefaultFontConfiguration()
             m_xConfigProvider = theDefaultProvider::get( xContext );
             Sequence< Any > aArgs(1);
             PropertyValue aVal;
-            aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-            aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.VCL/DefaultFonts" ) );
+            aVal.Name = OUString( "nodepath" );
+            aVal.Value <<= OUString( "/org.openoffice.VCL/DefaultFonts" );
             aArgs.getArray()[0] <<= aVal;
             m_xConfigAccess =
                 Reference< XNameAccess >(
-                    m_xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.configuration.ConfigurationAccess" )),
+                    m_xConfigProvider->createInstanceWithArguments( OUString( "com.sun.star.configuration.ConfigurationAccess" ),
                                                                     aArgs ),
                     UNO_QUERY );
             if( m_xConfigAccess.is() )
@@ -242,7 +241,7 @@ OUString DefaultFontConfiguration::getDefaultFont( const Locale& rLocale, int nT
     }
     if( aRet.isEmpty() )
     {
-        aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
+        aLocale.Language = OUString( "en" );
         aRet = tryLocale( aLocale, aType );
     }
     return aRet;
@@ -272,15 +271,13 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
     #define FALLBACKFONT_UI_SANS_CHINTRD "Andale Sans UI;Arial Unicode MS;AR PL Mingti2L Big5;AR PL KaitiM Big5;Kai;PMingLiU;MingLiU;Ming;Lucida Sans Unicode;gnu-unifont;Interface User;"
 
     // optimize font list for some locales, as long as Andale Sans UI does not support them
-    if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ar" ) ) ||
-        aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "he" ) ) ||
-        aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "iw" ) ) )
+    if( aLocale.Language == "ar" || aLocale.Language == "he" || aLocale.Language == "iw"  )
     {
-        return rtl::OUString(FALLBACKFONT_UI_SANS_ARABIC);
+        return OUString(FALLBACKFONT_UI_SANS_ARABIC);
     }
     else if ( aLocale.Language == "th" )
     {
-        return rtl::OUString(FALLBACKFONT_UI_SANS_THAI);
+        return OUString(FALLBACKFONT_UI_SANS_THAI);
     }
     else if ( aLocale.Language == "ko" )
     {
@@ -297,22 +294,22 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
 
         return aFallBackKoreanLocalized.makeStringAndClear();
     }
-    else if( aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "cs" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hu" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "pl" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ro" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "rm" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hr" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sk" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sl" ) ) ||
-             aLocale.Language.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "sb" ) ) )
+    else if( aLocale.Language == "cs" ||
+             aLocale.Language == "hu" ||
+             aLocale.Language == "pl" ||
+             aLocale.Language == "ro" ||
+             aLocale.Language == "rm" ||
+             aLocale.Language == "hr" ||
+             aLocale.Language == "sk" ||
+             aLocale.Language == "sl" ||
+             aLocale.Language == "sb")
     {
-        return rtl::OUString(FALLBACKFONT_UI_SANS_LATIN2);
+        return OUString(FALLBACKFONT_UI_SANS_LATIN2);
     }
     else if (MsLangId::isTraditionalChinese(aLocale))
-        return rtl::OUString(FALLBACKFONT_UI_SANS_CHINTRD);
+        return OUString(FALLBACKFONT_UI_SANS_CHINTRD);
     else if (MsLangId::isSimplifiedChinese(aLocale))
-        return rtl::OUString(FALLBACKFONT_UI_SANS_CHINSIM);
+        return OUString(FALLBACKFONT_UI_SANS_CHINSIM);
     else if ( aLocale.Language == "ja" )
     {
         // we need localized names for japanese fonts
@@ -379,13 +376,12 @@ FontSubstConfiguration::FontSubstConfiguration() :
             m_xConfigProvider = theDefaultProvider::get( xContext );
             Sequence< Any > aArgs(1);
             PropertyValue aVal;
-            aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-            aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.VCL/FontSubstitutions" ) );
+            aVal.Name = OUString( "nodepath" );
+            aVal.Value <<= OUString( "/org.openoffice.VCL/FontSubstitutions" );
             aArgs.getArray()[0] <<= aVal;
             m_xConfigAccess =
                 Reference< XNameAccess >(
-                    m_xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.configuration.ConfigurationAccess" )),
+                    m_xConfigProvider->createInstanceWithArguments( OUString( "com.sun.star.configuration.ConfigurationAccess" ),
                                                                     aArgs ),
                     UNO_QUERY );
             if( m_xConfigAccess.is() )
@@ -1092,13 +1088,13 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                 it->second.aSubstAttributes.reserve( nFonts );
 
                 // strings for subst retrieval, construct only once
-                OUString aSubstFontsStr     ( RTL_CONSTASCII_USTRINGPARAM( "SubstFonts" ) );
-                OUString aSubstFontsMSStr   ( RTL_CONSTASCII_USTRINGPARAM( "SubstFontsMS" ) );
-                OUString aSubstFontsPSStr   ( RTL_CONSTASCII_USTRINGPARAM( "SubstFontsPS" ) );
-                OUString aSubstFontsHTMLStr ( RTL_CONSTASCII_USTRINGPARAM( "SubstFontsHTML" ) );
-                OUString aSubstWeightStr    ( RTL_CONSTASCII_USTRINGPARAM( "FontWeight" ) );
-                OUString aSubstWidthStr     ( RTL_CONSTASCII_USTRINGPARAM( "FontWidth" ) );
-                OUString aSubstTypeStr      ( RTL_CONSTASCII_USTRINGPARAM( "FontType" ) );
+                OUString aSubstFontsStr     ( "SubstFonts" );
+                OUString aSubstFontsMSStr   ( "SubstFontsMS" );
+                OUString aSubstFontsPSStr   ( "SubstFontsPS" );
+                OUString aSubstFontsHTMLStr ( "SubstFontsHTML" );
+                OUString aSubstWeightStr    ( "FontWeight" );
+                OUString aSubstWidthStr     ( "FontWidth" );
+                OUString aSubstTypeStr      ( "FontType" );
                 for( int i = 0; i < nFonts; i++ )
                 {
                     Reference< XNameAccess > xFont;
@@ -1188,7 +1184,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
         else if( !aLocale.Country.isEmpty() )
             aLocale.Country = OUString();
         else if( aLocale.Language != "en" )
-            aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
+            aLocale.Language = OUString( "en" );
         else
             aLocale.Language = OUString();
     }

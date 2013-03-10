@@ -229,7 +229,7 @@ void SAL_CALL OReadAccelatorDocumentHandler::endDocument(void)
     if ( m_nElementDepth > 0 )
     {
         OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "A closing element is missing!" ));
+        aErrorMessage += "A closing element is missing!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -247,7 +247,7 @@ throw( SAXException, RuntimeException )
         if ( m_bAcceleratorMode )
         {
             OUString aErrorMessage = getErrorLineString();
-            aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Accelerator list used twice!" ));
+            aErrorMessage += "Accelerator list used twice!";
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
         else
@@ -259,7 +259,7 @@ throw( SAXException, RuntimeException )
         if ( !m_bAcceleratorMode )
         {
             OUString aErrorMessage = getErrorLineString();
-            aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Accelerator list element has to be used before!" ));
+            aErrorMessage += "Accelerator list element has to be used before!";
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
         else
@@ -289,7 +289,7 @@ throw( SAXException, RuntimeException )
     else
     {
         OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Unknown element found!" ));
+        aErrorMessage += "Unknown element found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -312,7 +312,7 @@ void SAL_CALL OReadAccelatorDocumentHandler::endElement( const OUString& aName )
         if ( !m_bAcceleratorMode )
         {
             OUString aErrorMessage = getErrorLineString();
-            aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Accelerator list used twice!" ));
+            aErrorMessage += "Accelerator list used twice!";
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
     }
@@ -321,14 +321,14 @@ void SAL_CALL OReadAccelatorDocumentHandler::endElement( const OUString& aName )
         if ( !m_bItemCloseExpected )
         {
             OUString aErrorMessage = getErrorLineString();
-            aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Closing accelerator item element expected!" ));
+            aErrorMessage += "Closing accelerator item element expected!";
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
     }
     else
     {
         OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Unknown closing element found!" ));
+        aErrorMessage += "Unknown closing element found!";
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
@@ -340,7 +340,7 @@ OWriteAccelatorDocumentHandler::OWriteAccelatorDocumentHandler(
     m_xWriteDocumentHandler( xDocumentHandler ),
     m_aWriteAcceleratorList( aWriteAcceleratorList )
 {
-    m_aAttributeType = OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
+    m_aAttributeType = OUString( ATTRIBUTE_TYPE_CDATA );
 }
 
 OWriteAccelatorDocumentHandler::~OWriteAccelatorDocumentHandler()
@@ -354,14 +354,14 @@ void OWriteAccelatorDocumentHandler::WriteAcceleratorDocument()
     Reference< XAttributeList > rList( (XAttributeList *)pList , UNO_QUERY );
 
     m_xWriteDocumentHandler->startDocument();
-    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_ACCELERATORLIST )), rList );
+    m_xWriteDocumentHandler->startElement( OUString( ELEMENT_ACCELERATORLIST ), rList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     std::list< SvtAcceleratorConfigItem>::const_iterator p;
     for ( p = m_aWriteAcceleratorList.begin(); p != m_aWriteAcceleratorList.end(); ++p )
         WriteAcceleratorItem( *p );
 
-    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_ACCELERATORLIST )) );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_ACCELERATORLIST ) );
     m_xWriteDocumentHandler->endDocument();
 }
 
@@ -374,26 +374,26 @@ void OWriteAccelatorDocumentHandler::WriteAcceleratorItem(
 
     // set attributes
     pAcceleratorAttributes->addAttribute(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_KEYCODE )),
+        OUString( ATTRIBUTE_KEYCODE ),
         m_aAttributeType,
         OUString::valueOf( aAcceleratorItem.nCode ));
 
     pAcceleratorAttributes->addAttribute(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MODIFIER )),
+        OUString( ATTRIBUTE_MODIFIER ),
         m_aAttributeType,
         OUString::valueOf( aAcceleratorItem.nModifier ));
 
     pAcceleratorAttributes->addAttribute(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_URL )),
+        OUString( ATTRIBUTE_URL ),
         m_aAttributeType,
         aAcceleratorItem.aCommand );
 
     // write start element
     m_xWriteDocumentHandler->startElement(
-        OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_ACCELERATORITEM )),
+        OUString( ELEMENT_ACCELERATORITEM ),
         xAcceleratorAttrList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_ACCELERATORITEM )) );
+    m_xWriteDocumentHandler->endElement( OUString( ELEMENT_ACCELERATORITEM ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

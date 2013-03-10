@@ -35,11 +35,11 @@ using namespace com::sun::star::uno;
 
 using ::rtl::OUString;
 
-#define CFG_FILENAME            OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.OptionsDialog" ) )
-#define ROOT_NODE               OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsDialogGroups" ) )
-#define PAGES_NODE              OUString( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) )
-#define OPTIONS_NODE            OUString( RTL_CONSTASCII_USTRINGPARAM( "Options" ) )
-#define PROPERTY_HIDE           OUString( RTL_CONSTASCII_USTRINGPARAM( "Hide" ) )
+#define CFG_FILENAME            OUString( "Office.OptionsDialog" )
+#define ROOT_NODE               OUString( "OptionsDialogGroups" )
+#define PAGES_NODE              OUString( "Pages" )
+#define OPTIONS_NODE            OUString( "Options" )
+#define PROPERTY_HIDE           OUString( "Hide" )
 
 static SvtOptionsDlgOptions_Impl*   pOptions = NULL;
 static sal_Int32                    nRefCount = 0;
@@ -95,7 +95,7 @@ namespace
 SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
     : ConfigItem( OUString( CFG_FILENAME ) ),
 
-    m_sPathDelimiter( RTL_CONSTASCII_USTRINGPARAM( "/" ) ),
+    m_sPathDelimiter( "/" ),
     m_aOptionNodeList( OptionNodeList() )
 
 {

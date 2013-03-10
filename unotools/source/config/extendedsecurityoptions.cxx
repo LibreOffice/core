@@ -37,12 +37,12 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define ROOTNODE_SECURITY               OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Security"))
+#define ROOTNODE_SECURITY               OUString("Office.Security")
 
-#define SECURE_EXTENSIONS_SET           OUString(RTL_CONSTASCII_USTRINGPARAM("SecureExtensions"))
-#define EXTENSION_PROPNAME              OUString(RTL_CONSTASCII_USTRINGPARAM("/Extension"))
+#define SECURE_EXTENSIONS_SET           OUString("SecureExtensions")
+#define EXTENSION_PROPNAME              OUString("/Extension")
 
-#define PROPERTYNAME_HYPERLINKS_OPEN    OUString(RTL_CONSTASCII_USTRINGPARAM("Hyperlinks/Open"))
+#define PROPERTYNAME_HYPERLINKS_OPEN    OUString("Hyperlinks/Open")
 
 #define PROPERTYHANDLE_HYPERLINKS_OPEN  0
 
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno   ;
 
 struct OUStringHashCode
 {
-    size_t operator()( const ::rtl::OUString& sString ) const
+    size_t operator()( const OUString& sString ) const
     {
         return sString.hashCode();
     }

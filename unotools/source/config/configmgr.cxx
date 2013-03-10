@@ -66,19 +66,16 @@ getConfigurationProvider() {
     return css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
 }
 
-rtl::OUString getConfigurationString(
-    rtl::OUString const & module, rtl::OUString const & path)
+OUString getConfigurationString(OUString const & module, OUString const & path)
 {
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] <<= css::beans::NamedValue(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+        OUString("nodepath"),
         css::uno::makeAny(module));
     return
         css::uno::Reference< css::container::XHierarchicalNameAccess >(
             getConfigurationProvider()->createInstanceWithArguments(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationAccess")),
+                OUString("com.sun.star.configuration.ConfigurationAccess"),
                 args),
             css::uno::UNO_QUERY_THROW)->
         getByHierarchicalName(path).get< rtl::OUString >();
@@ -90,77 +87,70 @@ struct theConfigManager:
 
 }
 
-rtl::OUString utl::ConfigManager::getAboutBoxProductVersion() {
+OUString utl::ConfigManager::getAboutBoxProductVersion() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("Product/ooSetupVersionAboutBox")));
+        OUString("/org.openoffice.Setup"),
+        OUString("Product/ooSetupVersionAboutBox"));
 }
 
-rtl::OUString utl::ConfigManager::getAboutBoxProductVersionSuffix() {
+OUString utl::ConfigManager::getAboutBoxProductVersionSuffix() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("Product/ooSetupVersionAboutBoxSuffix")));
+        OUString("/org.openoffice.Setup"),
+        OUString("Product/ooSetupVersionAboutBoxSuffix"));
 }
 
-rtl::OUString utl::ConfigManager::getDefaultCurrency() {
+OUString utl::ConfigManager::getDefaultCurrency() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooSetupCurrency")));
+        OUString("/org.openoffice.Setup"),
+        OUString("L10N/ooSetupCurrency"));
 }
 
-rtl::OUString utl::ConfigManager::getLocale() {
+OUString utl::ConfigManager::getLocale() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale")));
+        OUString("/org.openoffice.Setup"),
+        OUString("L10N/ooLocale"));
 }
 
-rtl::OUString utl::ConfigManager::getProductExtension() {
+OUString utl::ConfigManager::getProductExtension() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Product/ooSetupExtension")));
+        OUString("/org.openoffice.Setup"),
+        OUString("Product/ooSetupExtension"));
 }
 
-rtl::OUString utl::ConfigManager::getProductName() {
+OUString utl::ConfigManager::getProductName() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Product/ooName")));
+        OUString("/org.openoffice.Setup"),
+        OUString("Product/ooName"));
 }
 
-rtl::OUString utl::ConfigManager::getProductVersion() {
+OUString utl::ConfigManager::getProductVersion() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Product/ooSetupVersion")));
+        OUString("/org.openoffice.Setup"),
+        OUString("Product/ooSetupVersion"));
 }
 
-rtl::OUString utl::ConfigManager::getProductXmlFileFormat() {
+OUString utl::ConfigManager::getProductXmlFileFormat() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("Product/ooXMLFileFormatName")));
+        OUString("/org.openoffice.Setup"),
+        OUString("Product/ooXMLFileFormatName"));
 }
 
-rtl::OUString utl::ConfigManager::getProductXmlFileFormatVersion() {
+OUString utl::ConfigManager::getProductXmlFileFormatVersion() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("Product/ooXMLFileFormatVersion")));
+        OUString("/org.openoffice.Setup"),
+        OUString("Product/ooXMLFileFormatVersion"));
 }
 
-rtl::OUString utl::ConfigManager::getVendor() {
+OUString utl::ConfigManager::getVendor() {
     return getConfigurationString(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Product/ooVendor")));
+        OUString("/org.openoffice.Setup"),
+        OUString("Product/ooVendor"));
 }
 
-rtl::OUString utl::ConfigManager::getWriterCompatibilityVersionOOo_1_1() {
+OUString utl::ConfigManager::getWriterCompatibilityVersionOOo_1_1() {
     return getConfigurationString(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "/org.openoffice.Office.Compatibility")),
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("WriterCompatibilityVersion/OOo11")));
+        OUString("/org.openoffice.Office.Compatibility"),
+        OUString("WriterCompatibilityVersion/OOo11"));
 }
 
 void utl::ConfigManager::storeConfigItems() {
@@ -175,21 +165,16 @@ css::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::acquireTree(utl::ConfigItem & item) {
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] <<= css::beans::NamedValue(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+        OUString("nodepath"),
         css::uno::makeAny(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.")) +
-            item.GetSubTreeName()));
+            OUString("/org.openoffice.") + item.GetSubTreeName()));
     if ((item.GetMode() & CONFIG_MODE_ALL_LOCALES) != 0) {
         args.realloc(2);
-        args[1] <<= css::beans::NamedValue(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("locale")),
-            css::uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"))));
+        args[1] <<= css::beans::NamedValue(OUString("locale"), css::uno::makeAny(OUString("*")));
     }
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
         getConfigurationProvider()->createInstanceWithArguments(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationUpdateAccess")),
+            OUString("com.sun.star.configuration.ConfigurationUpdateAccess"),
             args),
         css::uno::UNO_QUERY_THROW);
 }

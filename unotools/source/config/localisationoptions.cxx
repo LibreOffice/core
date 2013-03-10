@@ -33,12 +33,12 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define ROOTNODE_LOCALISATION           OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View/Localisation"))
+#define ROOTNODE_LOCALISATION           OUString("Office.Common/View/Localisation")
 #define DEFAULT_AUTOMNEMONIC            sal_False
 #define DEFAULT_DIALOGSCALE             0
 
-#define PROPERTYNAME_AUTOMNEMONIC       OUString(RTL_CONSTASCII_USTRINGPARAM("AutoMnemonic" ))
-#define PROPERTYNAME_DIALOGSCALE        OUString(RTL_CONSTASCII_USTRINGPARAM("DialogScale"  ))
+#define PROPERTYNAME_AUTOMNEMONIC       OUString("AutoMnemonic")
+#define PROPERTYNAME_DIALOGSCALE        OUString("DialogScale")
 
 #define PROPERTYHANDLE_AUTOMNEMONIC     0
 #define PROPERTYHANDLE_DIALOGSCALE      1

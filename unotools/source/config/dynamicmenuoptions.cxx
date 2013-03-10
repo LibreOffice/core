@@ -39,12 +39,12 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
 
-#define ROOTNODE_MENUS                                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Menus/"     ))
-#define PATHDELIMITER                                   OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
+#define ROOTNODE_MENUS                                  OUString("Office.Common/Menus/")
+#define PATHDELIMITER                                   OUString("/")
 
-#define SETNODE_NEWMENU                                 OUString(RTL_CONSTASCII_USTRINGPARAM("New"                      ))
-#define SETNODE_WIZARDMENU                              OUString(RTL_CONSTASCII_USTRINGPARAM("Wizard"                   ))
-#define SETNODE_HELPBOOKMARKS                           OUString(RTL_CONSTASCII_USTRINGPARAM("HelpBookmarks"            ))
+#define SETNODE_NEWMENU                                 OUString("New")
+#define SETNODE_WIZARDMENU                              OUString("Wizard")
+#define SETNODE_HELPBOOKMARKS                           OUString("HelpBookmarks")
 
 #define PROPERTYNAME_URL                                DYNAMICMENU_PROPERTYNAME_URL
 #define PROPERTYNAME_TITLE                              DYNAMICMENU_PROPERTYNAME_TITLE
@@ -58,8 +58,8 @@ using namespace ::com::sun::star::beans ;
 #define OFFSET_IMAGEIDENTIFIER                          2
 #define OFFSET_TARGETNAME                               3
 
-#define PATHPREFIX_SETUP                                OUString(RTL_CONSTASCII_USTRINGPARAM("m"                        ))
-#define PATHPREFIX_USER                                 OUString(RTL_CONSTASCII_USTRINGPARAM("u"                        ))
+#define PATHPREFIX_SETUP                                OUString("m")
+#define PATHPREFIX_USER                                 OUString("u")
 
 /*-****************************************************************************************************************
     @descr  struct to hold information about one menu entry.
@@ -146,7 +146,7 @@ class SvtDynMenu
             sal_Int32                             nStep       = 0;
             Sequence< PropertyValue >             lProperties ( PROPERTYCOUNT );
             Sequence< Sequence< PropertyValue > > lResult     ( nSetupCount+nUserCount );
-            OUString                              sSeperator  ( RTL_CONSTASCII_USTRINGPARAM("private:separator") );
+            OUString                              sSeperator  ( "private:separator" );
             OUString                              sEmpty      ;
             const vector< SvtDynMenuEntry >*            pList       = &lSetupEntries;
 

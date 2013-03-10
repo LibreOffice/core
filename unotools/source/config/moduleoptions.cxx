@@ -1209,9 +1209,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::
 {
     if ( sName == "swriter" )
         return E_WRITER;
-    if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/Web"))) // sometimes they are registerd for swriter/web :-(
+    if (sName.equalsIgnoreAsciiCase("swriter/Web")) // sometimes they are registerd for swriter/web :-(
         return E_WRITERWEB;
-    if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/GlobalDocument"))) // sometimes they are registerd for swriter/globaldocument :-(
+    if (sName.equalsIgnoreAsciiCase("swriter/GlobalDocument")) // sometimes they are registerd for swriter/globaldocument :-(
         return E_WRITERGLOBAL;
     if ( sName == "scalc" )
         return E_CALC;

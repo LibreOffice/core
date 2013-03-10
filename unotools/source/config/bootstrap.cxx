@@ -72,13 +72,11 @@ namespace utl
 
     namespace
     {
-        rtl::OUString makeImplName()
+        OUString makeImplName()
         {
-            rtl::OUString uri;
-            rtl::Bootstrap::get(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")),
-                uri);
-            return uri + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/program/" BOOTSTRAP_DATA_NAME));
+            OUString uri;
+            rtl::Bootstrap::get( OUString("BRAND_BASE_DIR"), uri);
+            return uri + "/program/" + BOOTSTRAP_DATA_NAME;
         }
     }
 
@@ -426,7 +424,7 @@ Bootstrap::PathStatus implGetBootstrapFile(rtl::Bootstrap& _rData, Bootstrap::Im
 static
 Bootstrap::PathStatus implGetVersionFile(rtl::Bootstrap& _rData, Bootstrap::Impl::PathData & _rVersionFile)
 {
-    OUString const csVersionFileItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_VERSIONFILE));
+    OUString const csVersionFileItem(BOOTSTRAP_ITEM_VERSIONFILE);
 
     _rData.getFrom(csVersionFileItem,_rVersionFile.path);
 
@@ -569,7 +567,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
 
 OUString Bootstrap::getProductKey()
 {
-    OUString const csProductKeyItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_PRODUCT_KEY));
+    OUString const csProductKeyItem(BOOTSTRAP_ITEM_PRODUCT_KEY);
 
     OUString const sDefaultProductKey = getExecutableBaseName();
 
@@ -579,7 +577,7 @@ OUString Bootstrap::getProductKey()
 
 OUString Bootstrap::getProductKey(OUString const& _sDefault)
 {
-    OUString const csProductKeyItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_PRODUCT_KEY));
+    OUString const csProductKeyItem(BOOTSTRAP_ITEM_PRODUCT_KEY);
 
     return data().getBootstrapValue( csProductKeyItem, _sDefault );
 }
@@ -598,7 +596,7 @@ OUString Bootstrap::getBuildVersion(OUString const& _sDefault)
 
 OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 {
-    OUString const csBuildIdItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_BUILDID));
+    OUString const csBuildIdItem(BOOTSTRAP_ITEM_BUILDID);
 
     OUString sBuildId;
     // read buildid from version.ini (versionrc), if it doesn't exist or buildid is empty
@@ -632,7 +630,7 @@ PathStatus Bootstrap::locateUserInstallation(OUString& _rURL)
 
 PathStatus Bootstrap::locateUserData(OUString& _rURL)
 {
-    OUString const csUserDirItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_USERDIR));
+    OUString const csUserDirItem(BOOTSTRAP_ITEM_USERDIR);
 
     rtl::Bootstrap aData( data().getImplName() );
 
@@ -642,7 +640,7 @@ PathStatus Bootstrap::locateUserData(OUString& _rURL)
     }
     else
     {
-        OUString const csUserDir(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_DIRNAME_USERDIR));
+        OUString const csUserDir(BOOTSTRAP_DIRNAME_USERDIR);
         return getDerivedPath(_rURL, data().aUserInstall_ ,csUserDir, aData, csUserDirItem);
     }
 }
@@ -692,8 +690,8 @@ Bootstrap::Status Bootstrap::checkBootstrapStatus(rtl::OUString& _rDiagnosticMes
 
 bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap& _rData)
 {
-    OUString const csBaseInstallItem( RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_BASEINSTALLATION) );
-    OUString const csBaseInstallDefault( RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_DEFAULT_BASEINSTALL) );
+    OUString const csBaseInstallItem( BOOTSTRAP_ITEM_BASEINSTALLATION );
+    OUString const csBaseInstallDefault( BOOTSTRAP_DEFAULT_BASEINSTALL );
 
     _rData.getFrom(csBaseInstallItem, aBaseInstall_.path, csBaseInstallDefault);
 
@@ -707,7 +705,7 @@ bool Bootstrap::Impl::initBaseInstallationData(rtl::Bootstrap& _rData)
 
 bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap& _rData)
 {
-    OUString const csUserInstallItem( RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_USERINSTALLATION) );
+    OUString const csUserInstallItem( BOOTSTRAP_ITEM_USERINSTALLATION );
 
     if (_rData.getFrom(csUserInstallItem, aUserInstall_.path))
     {
@@ -719,12 +717,12 @@ bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap& _rData)
         aUserInstall_.status = DATA_MISSING;
 
         // .. or this - look for a single-user user directory ?
-        OUString const csUserDirItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_USERDIR));
+        OUString const csUserDirItem(BOOTSTRAP_ITEM_USERDIR);
         OUString sDummy;
         // look for $BASEINSTALLATION/user only if default UserDir setting is used
         if (! _rData.getFrom(csUserDirItem, sDummy))
         {
-            OUString const csUserDir(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_DIRNAME_USERDIR));
+            OUString const csUserDir(BOOTSTRAP_DIRNAME_USERDIR);
 
             if ( PATH_EXISTS == getDerivedPath(sDummy, aBaseInstall_, csUserDir, _rData, csUserDirItem) )
                 aUserInstall_ = aBaseInstall_;
@@ -789,11 +787,9 @@ OUString Bootstrap::Impl::getBootstrapValue(OUString const& _sName, OUString con
 sal_Bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault) const
 {
     // try to open version.ini (versionrc)
-    rtl::OUString uri;
-    rtl::Bootstrap::get(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
-    rtl::Bootstrap aData( uri +
-                          OUString(RTL_CONSTASCII_USTRINGPARAM("/program/" SAL_CONFIGFILE("version"))) );
+    OUString uri;
+    rtl::Bootstrap::get( OUString("BRAND_BASE_DIR"), uri);
+    rtl::Bootstrap aData( uri + "/program/" + SAL_CONFIGFILE("version") );
     if ( aData.getHandle() == NULL )
         // version.ini (versionrc) doesn't exist
         return sal_False;
