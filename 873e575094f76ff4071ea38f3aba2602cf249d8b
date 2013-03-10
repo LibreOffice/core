@@ -16,6 +16,24 @@
       "revId": "873e575094f76ff4071ea38f3aba2602cf249d8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWn////c\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 7317,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-03-10T20:48:13Z",
+      "side": 1,
+      "message": "Correct, system python 2 can be used by setting PYTHON PYTHON_CFLAGS PYTHON_LIBS explicitly (probably PYTHON can be omitted now)\nhttp://lists.freedesktop.org/archives/libreoffice/2012-November/041711.html",
+      "parentUuid": "AAAAWX///4c\u003d",
+      "revId": "873e575094f76ff4071ea38f3aba2602cf249d8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
