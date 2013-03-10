@@ -24,7 +24,6 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <paratr.hxx>
-#include <rtl/strbuf.hxx>
 #include <swcache.hxx>
 
 TYPEINIT1( SwFmt, SwClient );
@@ -224,9 +223,7 @@ SwFmt::~SwFmt()
         SwFmt* pParentFmt = DerivedFrom();
         if( !pParentFmt )
         {
-            OSL_FAIL(rtl::OStringBuffer(
-                    RTL_CONSTASCII_STRINGPARAM("~SwFmt: parent format missing from: ")).
-                append(rtl::OUStringToOString(GetName(), osl_getThreadTextEncoding())).getStr());
+            OSL_FAIL("~SwFmt: parent format missing from: " + GetName() );
         }
         else
         {

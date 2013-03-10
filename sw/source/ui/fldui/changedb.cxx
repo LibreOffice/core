@@ -196,14 +196,10 @@ void SwChangeDBDlg::UpdateFlds()
     {
         if( m_pUsedDBTLB->GetParent( pEntry ))
         {
-            OUStringBuffer sTmp;
-
-            sTmp.append(m_pUsedDBTLB->GetEntryText( m_pUsedDBTLB->GetParent( pEntry )));
-            sTmp.append(DB_DELIM);
-            sTmp.append(m_pUsedDBTLB->GetEntryText( pEntry ));
-            sTmp.append(DB_DELIM);
-            sTmp.append(OUString::number((int)(sal_uLong)pEntry->GetUserData()));
-            aDBNames.push_back(sTmp.makeStringAndClear());
+            OUString sTmp(m_pUsedDBTLB->GetEntryText( m_pUsedDBTLB->GetParent( pEntry )) +
+                          OUString(DB_DELIM) + m_pUsedDBTLB->GetEntryText( pEntry ) + OUString(DB_DELIM) +
+                          OUString::number((int)(sal_uLong)pEntry->GetUserData()));
+            aDBNames.push_back(sTmp);
         }
         pEntry = m_pUsedDBTLB->NextSelected(pEntry);
     }

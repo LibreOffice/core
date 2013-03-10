@@ -100,61 +100,20 @@ SwCache::~SwCache()
 {
 #ifdef DBG_UTIL
     {
-        rtl::OStringBuffer sOut(m_aName);
-
-        sOut.append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of new entries:                 ")).
-            append(static_cast<sal_Int32>(m_nAppend)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of insert on free places:       ")).
-            append(static_cast<sal_Int32>(m_nInsertFree)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of replacements:                ")).
-            append(static_cast<sal_Int32>(m_nReplace)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of successful Get's:            ")).
-            append(static_cast<sal_Int32>(m_nGetSuccess)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of failed Get's:                ")).
-            append(static_cast<sal_Int32>(m_nGetFail)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number or reordering (LRU):            ")).
-            append(static_cast<sal_Int32>(m_nToTop)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of suppressions:                ")).
-            append(static_cast<sal_Int32>(m_nDelete)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of Get's without Index:         ")).
-            append(static_cast<sal_Int32>(m_nGetSeek)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of Seek for Get without Index:  ")).
-            append(static_cast<sal_Int32>(m_nAverageSeekCnt)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of Flush calls:                 " )).
-            append(static_cast<sal_Int32>(m_nFlushCnt)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of flushed objects:             ")).
-            append(static_cast<sal_Int32>(m_nFlushedObjects)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of Cache expansions:            ")).
-            append(static_cast<sal_Int32>(m_nIncreaseMax)).
-            append('\n').
-            append(RTL_CONSTASCII_STRINGPARAM(
-                "Number of Cache reductions:            ")).
-            append(static_cast<sal_Int32>(m_nDecreaseMax)).
-            append('\n');
+        OString sOut(m_aName + "\n" +
+                    "Number of new entries:                 " + OString::number(m_nAppend) + "\n" +
+                    "Number of insert on free places:       " + OString::number(m_nInsertFree) + "\n" +
+                    "Number of replacements:                " + OString::number(m_nReplace) + "\n" +
+                    "Number of successful Get's:            " + OString::number(m_nGetSuccess) + "\n" +
+                    "Number of failed Get's:                " + OString::number(m_nGetFail) + "\n" +
+                    "Number or reordering (LRU):            " + OString::number(m_nToTop) + "\n" +
+                    "Number of suppressions:                " + OString::number(m_nDelete) + "\n" +
+                    "Number of Get's without Index:         " + OString::number(m_nGetSeek) + "\n" +
+                    "Number of Seek for Get without Index:  " + OString::number(m_nAverageSeekCnt) + "\n" +
+                    "Number of Flush calls:                 " + OString::number(m_nFlushCnt) + "\n" +
+                    "Number of flushed objects:             " + OString::number(m_nFlushedObjects) + "\n" +
+                    "Number of Cache expansions:            " + OString::number(m_nIncreaseMax) + "\n" +
+                    "Number of Cache reductions:            " + OString::number(m_nDecreaseMax) + "\n");
 
         OSL_TRACE(sOut.getStr());
     }
