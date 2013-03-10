@@ -83,8 +83,8 @@ using namespace ::com::sun::star::uno;
 
 static sal_uInt16 nLastItemId = USHRT_MAX;
 
-// filter box has maximum 12 entries visible
-#define MAX_FILTER_ENTRIES          12
+// filter box has maximum 14 entries visible
+#define MAX_FILTER_ENTRIES          14
 
 //=========================================================================
 
@@ -1235,7 +1235,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             if(pTreeBox)
                 aFilterLb.SelectEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString());
 
-            // show maximum 12 entries
+            // show maximum 14 entries
             aFilterLb.SetDropDownLineCount( MAX_FILTER_ENTRIES );
             aFilterLb.SetUpdateMode(sal_True);
         }
