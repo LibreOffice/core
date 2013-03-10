@@ -84,7 +84,7 @@ oox::drawingml::TextListStylePtr PPTShape::getSubTypeTextListStyle( const SlideP
 {
     oox::drawingml::TextListStylePtr pTextListStyle;
 
-    OSL_TRACE( "subtype style: %s", lclDebugSubType( nSubType ) );
+    SAL_INFO("oox.ppt", "subtype style: " << lclDebugSubType( nSubType ) );
 
     switch( nSubType )
     {
@@ -116,7 +116,7 @@ void PPTShape::addShape(
         const awt::Rectangle* pShapeRect,
         ::oox::drawingml::ShapeIdMap* pShapeMap )
 {
-    OSL_TRACE("add shape id: %s location: %s subtype: %d service: %s", OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr(), meShapeLocation == Master ? "master" : meShapeLocation == Slide ? "slide" : meShapeLocation == Layout ? "layout" : "other", mnSubType, OUStringToOString(msServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
+    SAL_INFO("oox.ppt","add shape id: " << msId << " location: " << ((meShapeLocation == Master) ? "master" : ((meShapeLocation == Slide) ? "slide" : ((meShapeLocation == Layout) ? "layout" : "other"))) << " subtype: " << mnSubType << " service: " << msServiceName);
     // only placeholder from layout are being inserted
     if ( mnSubType && ( meShapeLocation == Master ) )
         return;
@@ -133,7 +133,7 @@ void PPTShape::addShape(
                  sServiceName != "com.sun.star.drawing.OLE2Shape" )
             {
                 const OUString sOutlinerShapeService( "com.sun.star.presentation.OutlinerShape"  );
-                OSL_TRACE("has master: %p", rSlidePersist.getMasterPersist().get());
+                SAL_INFO("oox.ppt","has master: " << std::hex << rSlidePersist.getMasterPersist().get());
                 switch( mnSubType )
                 {
                     case XML_ctrTitle :
@@ -223,7 +223,7 @@ void PPTShape::addShape(
                 }
             }
 
-            OSL_TRACE("shape service: %s", OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8 ).getStr());
+            SAL_INFO("oox.ppt","shape service: " << sServiceName);
 
             if( mnSubType && getSubTypeIndex().has() && meShapeLocation == Layout ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getShapes()->getChildren(), true );
@@ -258,7 +258,7 @@ void PPTShape::addShape(
                     pPlaceholder.reset();
 
                 if( pPlaceholder.get()) {
-                    OSL_TRACE("found placeholder with index: %d and type: %s", getSubTypeIndex().get(), lclDebugSubType( mnSubType ));
+                    SAL_INFO("oox.ppt","found placeholder with index: " << getSubTypeIndex().get() << " and type: " << lclDebugSubType( mnSubType ));
                 }
                 if( pPlaceholder.get() ) {
                     PPTShape* pPPTPlaceholder = dynamic_cast< PPTShape* >( pPlaceholder.get() );
@@ -270,21 +270,18 @@ void PPTShape::addShape(
                         if( pPlaceholder->getMasterTextListStyle().get() )
                             pNewTextListStyle->apply( *pPlaceholder->getMasterTextListStyle() );
 
-                        // OSL_TRACE("placeholder body style");
+                        // SAL_INFO("oox.ppt","placeholder body style");
                         // pPlaceholder->getTextBody()->getTextListStyle().dump();
-                        // OSL_TRACE("master text list style");
+                        // SAL_INFO("oox.ppt","master text list style");
                         // pPlaceholder->getMasterTextListStyle()->dump();
 
                         aMasterTextListStyle = pNewTextListStyle;
-                        // OSL_TRACE("combined master text list style");
+                        // SAL_INFO("oox.ppt","combined master text list style");
                         // aMasterTextListStyle->dump();
                     }
                     if( pPPTPlaceholder->mpPlaceholder.get() ) {
-                        OSL_TRACE("placeholder has parent placeholder: %s type: %s index: %d",
-                                  OUStringToOString( pPPTPlaceholder->mpPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr(),
-                                  lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ),
-                                  pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().get() );
-                        OSL_TRACE("has textbody %d", pPPTPlaceholder->mpPlaceholder->getTextBody() != NULL );
+                        SAL_INFO("oox.ppt","placeholder has parent placeholder: " << pPPTPlaceholder->mpPlaceholder->getId() << " type: " << lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ) << " index: " << pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().get() );
+                        SAL_INFO("oox.ppt","has textbody " << (pPPTPlaceholder->mpPlaceholder->getTextBody() != NULL) );
                         TextListStylePtr pPlaceholderStyle = getSubTypeTextListStyle( rSlidePersist, pPPTPlaceholder->mpPlaceholder->getSubType() );
                         if( pPPTPlaceholder->mpPlaceholder->getTextBody() )
                             pNewTextListStyle->apply( pPPTPlaceholder->mpPlaceholder->getTextBody()->getTextListStyle() );
@@ -296,7 +293,7 @@ void PPTShape::addShape(
                 } else if( !mpPlaceholder.get() ) {
                     aMasterTextListStyle.reset();
                 }
-                OSL_TRACE("placeholder id: %s", pPlaceholder.get() ? OUStringToOString(pPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr() : "not found");
+                SAL_INFO("oox.ppt","placeholder id: " << (pPlaceholder.get() ? pPlaceholder->getId() : "not found"));
             }
 
             if ( !sServiceName.isEmpty() )

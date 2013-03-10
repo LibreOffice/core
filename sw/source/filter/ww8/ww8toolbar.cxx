@@ -44,6 +44,8 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/graph.hxx>
 #include <map>
+#include "sal/log.hxx"
+
 using namespace com::sun::star;
 
 // no. of visual data elements in a SwCTB ( fixed )
@@ -131,7 +133,7 @@ SwCTB* SwCTBWrapper::GetCustomizationData( const rtl::OUString& sTBName )
 
 bool SwCTBWrapper::Read( SvStream& rS )
 {
-    OSL_TRACE("SwCTBWrapper::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","SwCTBWrapper::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS >> reserved2 >> reserved3 >> reserved4 >> reserved5;
@@ -162,8 +164,8 @@ bool SwCTBWrapper::Read( SvStream& rS )
         // Strange error condition, shouldn't happen ( but does in at least
         // one test document ) In the case where it happens the SwTBC &
         // TBCHeader records seem blank??? ( and incorrect )
-        OSL_ENSURE( static_cast< long >(rS.Tell()) == nExpectedPos, "### Error: Expected pos not equal to actual pos after reading rtbdc");
-        OSL_TRACE("\tPos now is 0x%x should be 0x%x", rS.Tell(), nExpectedPos );
+        SAL_WARN_IF( static_cast< long >(rS.Tell()) != nExpectedPos, "sw.ww8","### Error: Expected pos not equal to actual pos after reading rtbdc");
+        SAL_INFO("sw.ww8","\tPos now is 0x" << std::hex << rS.Tell() << " should be 0x" << std::hex << nExpectedPos );
         // seek to correct position after rtbdc
         rS.Seek( nExpectedPos );
     }
@@ -271,7 +273,7 @@ Customization::~Customization()
 
 bool Customization::Read( SvStream &rS)
 {
-    OSL_TRACE("Custimization::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","Custimization::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS >> tbidForTBD >> reserved1 >> ctbds;
     if ( tbidForTBD )
@@ -386,7 +388,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     aPopupMenu[3].Value <<= xMenuContainer;
                     if ( pCust->customizationDataCTB.get() && !pCust->customizationDataCTB->ImportMenuTB( rWrapper, xMenuContainer, helper ) )
                         return false;
-                    OSL_TRACE("** there are %d menu items on the bar, inserting after that", xIndexContainer->getCount() );
+                    SAL_INFO("sw.ww8","** there are " << xIndexContainer->getCount() << " menu items on the bar, inserting after that");
                     xIndexContainer->insertByIndex( xIndexContainer->getCount(), uno::makeAny( aPopupMenu ) );
 
                     if ( bHasSettings )
@@ -461,7 +463,7 @@ sal_Int16 TBDelta::CustomizationIndex()
 
 bool TBDelta::Read(SvStream &rS)
 {
-    OSL_TRACE("TBDelta::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","TBDelta::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS >> doprfatendFlags >> ibts >> cidNext >> cid >> fc ;
     rS >> CiTBDE >> cbTBC;
@@ -508,7 +510,7 @@ bool SwCTB::IsMenuToolbar()
 
 bool SwCTB::Read( SvStream &rS)
 {
-    OSL_TRACE("SwCTB::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","SwCTB::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     if ( !name.Read( rS ) )
         return false;
@@ -588,7 +590,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
                 return false;
         }
 
-        OSL_TRACE("Name of toolbar :-/ %s", rtl::OUStringToOString( sToolBarName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("sw.ww8","Name of toolbar :-/ " << sToolBarName );
 
         helper.getCfgManager()->insertSettings( sToolBarName, xIndexAccess );
         helper.applyIcons();
@@ -603,7 +605,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
     }
     catch( const uno::Exception& e )
     {
-        OSL_TRACE("***** For some reason we have an exception %s", rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("sw.ww8","***** For some reason we have an exception " << e.Message );
         bRes = false;
     }
     return bRes;
@@ -630,7 +632,7 @@ SwTBC::~SwTBC()
 
 bool SwTBC::Read( SvStream &rS )
 {
-    OSL_TRACE("SwTBC::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","SwTBC::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     if ( !tbch.Read( rS ) )
         return false;
@@ -683,21 +685,21 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
         switch ( cmt )
         {
             case 1:
-                OSL_TRACE("cmt is cmtFci builtin command 0x%x", arg2);
+                SAL_INFO("sw.ww8","cmt is cmtFci builtin command 0x" << std::hex << arg2);
                 bBuiltin = true;
                 cmdId = arg2;
                 break;
             case 2:
-                OSL_TRACE("cmt is cmtMacro macro 0x%x", arg2);
+                SAL_INFO("sw.ww8","cmt is cmtMacro macro 0x" << std::hex << arg2);
                 break;
             case 3:
-                OSL_TRACE("cmt is cmtAllocated [???] 0x%x", arg2);
+                SAL_INFO("sw.ww8","cmt is cmtAllocated [???] 0x" << std::hex << arg2);
                 break;
             case 7:
-                OSL_TRACE("cmt is cmNill no-phing 0x%x", arg2);
+                SAL_INFO("sw.ww8","cmt is cmNill no-phing 0x" << std::hex << arg2);
                 break;
             default:
-                OSL_TRACE("illegal 0x%x", cmt);
+                SAL_INFO("sw.ww8","illegal 0x" << std::hex << cmt);
                 break;
         }
     }
@@ -724,7 +726,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
         TBCMenuSpecific* pMenu = tbcd->getMenuSpecific();
         if ( pMenu )
         {
-            OSL_TRACE("** control has a menu, name of toolbar with menu items is %s", rtl::OUStringToOString( pMenu->Name(), RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_INFO("sw.ww8","** control has a menu, name of toolbar with menu items is " << pMenu->Name() );
             // search for SwCTB with the appropriate name ( it contains the
             // menu items, although we cannot import ( or create ) a menu on
             // a custom toolbar we can import the menu items in a separate
@@ -784,7 +786,7 @@ SwTBC::GetCustomText()
 bool
 Xst::Read( SvStream& rS )
 {
-    OSL_TRACE("Xst::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","Xst::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     sString = read_uInt16_PascalString(rS);
     return true;
@@ -804,7 +806,7 @@ Tcg::Tcg() : nTcgVer( -1 )
 
 bool Tcg::Read(SvStream &rS)
 {
-    OSL_TRACE("Tcg::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","Tcg::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS >> nTcgVer;
     if ( nTcgVer != -1 )
@@ -877,7 +879,7 @@ bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
              break;
          }
          default:
-             OSL_TRACE("Unknown id 0x%x",nId);
+             SAL_INFO("sw.ww8","Unknown id 0x" << std::hex << nId);
              return false;
     }
     pSubStruct->ch = nId;
@@ -909,7 +911,7 @@ bool Tcg255::ImportCustomToolBar( SfxObjectShell& rDocSh )
 
 bool Tcg255::Read(SvStream &rS)
 {
-    OSL_TRACE("Tcg255::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","Tcg255::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     sal_uInt8 nId = 0x40;
     rS >> nId;
@@ -947,7 +949,7 @@ Tcg255SubStruct::Tcg255SubStruct( bool bReadId ) : mbReadId( bReadId ), ch(0)
 
 bool Tcg255SubStruct::Read(SvStream &rS)
 {
-    OSL_TRACE("Tcg255SubStruct::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","Tcg255SubStruct::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     if ( mbReadId )
         rS >> ch;
@@ -962,7 +964,7 @@ PlfMcd::PlfMcd(bool bReadId)
 
 bool PlfMcd::Read(SvStream &rS)
 {
-    OSL_TRACE("PffMcd::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","PffMcd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS >> iMac;
@@ -1007,7 +1009,7 @@ PlfAcd::~PlfAcd()
 
 bool PlfAcd::Read( SvStream &rS)
 {
-    OSL_TRACE("PffAcd::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","PffAcd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS >> iMac;
@@ -1050,7 +1052,7 @@ PlfKme::~PlfKme()
 
 bool PlfKme::Read(SvStream &rS)
 {
-    OSL_TRACE("PlfKme::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","PlfKme::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS >> iMac;
@@ -1086,7 +1088,7 @@ TcgSttbf::TcgSttbf( bool bReadId ) : Tcg255SubStruct( bReadId )
 
 bool TcgSttbf::Read( SvStream &rS)
 {
-    OSL_TRACE("TcgSttbf::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","TcgSttbf::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     return sttbf.Read( rS );
@@ -1114,7 +1116,7 @@ TcgSttbfCore::~TcgSttbfCore()
 
 bool TcgSttbfCore::Read( SvStream& rS )
 {
-    OSL_TRACE("TcgSttbfCore::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","TcgSttbfCore::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS >> fExtend >> cData >> cbExtra;
     if ( cData )
@@ -1159,7 +1161,7 @@ MacroNames::~MacroNames()
 
 bool MacroNames::Read( SvStream &rS)
 {
-    OSL_TRACE("MacroNames::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","MacroNames::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS >> iMac;
@@ -1196,7 +1198,7 @@ MacroName::MacroName():ibst(0)
 
 bool MacroName::Read(SvStream &rS)
 {
-    OSL_TRACE("MacroName::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","MacroName::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS >> ibst;
     return xstz.Read( rS );
@@ -1219,7 +1221,7 @@ Xstz::Xstz():chTerm(0)
 bool
 Xstz::Read(SvStream &rS)
 {
-    OSL_TRACE("Xstz::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","Xstz::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     if ( !xst.Read( rS ) )
         return false;
@@ -1254,7 +1256,7 @@ Kme::~Kme()
 bool
 Kme::Read(SvStream &rS)
 {
-    OSL_TRACE("Kme::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","Kme::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS >> reserved1 >> reserved2 >> kcm1 >> kcm2 >> kt >> param;
     return true;
@@ -1280,7 +1282,7 @@ Acd::Acd() : ibst( 0 )
 
 bool Acd::Read(SvStream &rS)
 {
-    OSL_TRACE("Acd::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","Acd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS >> ibst >> fciBasedOnABC;
     return true;
@@ -1340,7 +1342,7 @@ MCD& MCD::operator=(const MCD& rO)
 
 bool MCD::Read(SvStream &rS)
 {
-    OSL_TRACE("MCD::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8","MCD::Read() stream pos 0x" << rS.Tell() );
     nOffSet = rS.Tell();
     rS >> reserved1 >> reserved2 >> ibst >> ibstName >> reserved3;
     rS >> reserved4 >> reserved5 >> reserved6 >> reserved7;

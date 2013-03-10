@@ -19,7 +19,6 @@
 
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
-#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
@@ -98,9 +97,7 @@ namespace oox { namespace ppt {
                                                              RTL_TEXTENCODING_ASCII_US );
                         attr.type = attrConv->meAttribute;
                         maAttributes.push_back( attr );
-                        OSL_TRACE( "OOX: attrName is %s -> %s",
-                                   OUSTRING_TO_CSTR( msCurrentAttribute ),
-                                   attrConv->mpAPIName );
+                        SAL_INFO("oox.ppt", "OOX: attrName is " << OUSTRING_TO_CSTR( msCurrentAttribute ) << " -> " << attrConv->mpAPIName );
                         break;
                     }
                     attrConv++;
@@ -143,7 +140,7 @@ namespace oox { namespace ppt {
             }
             else
             {
-                OSL_TRACE( "OOX: Attribute Name outside an Attribute List" );
+                SAL_INFO("oox.ppt", "OOX: Attribute Name outside an Attribute List" );
             }
             return this;
         }

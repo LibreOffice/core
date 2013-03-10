@@ -60,12 +60,12 @@ namespace oox { namespace ppt {
                 {
                 case XML_charRg:
                     // TODO calculate the corresponding paragraph for the text range....
-                    OSL_TRACE( "OOX: TODO calculate the corresponding paragraph for the text range..." );
+                    SAL_INFO("oox.ppt", "OOX: TODO calculate the corresponding paragraph for the text range..." );
                     break;
                 case XML_pRg:
                     aParaTarget.Paragraph = static_cast< sal_Int16 >( maRange.start );
                     // TODO what to do with more than one.
-                    OSL_TRACE( "OOX: TODO what to do with more than one" );
+                    SAL_INFO("oox.ppt", "OOX: TODO what to do with more than one" );
                     break;
                 }
                 rTarget = makeAny( aParaTarget );
@@ -86,11 +86,11 @@ namespace oox { namespace ppt {
         {
         case XML_inkTgt:
             // TODO
-            OSL_TRACE( "OOX: TODO inkTgt" );
+            SAL_INFO("oox.ppt", "OOX: TODO inkTgt" );
             break;
         case XML_sldTgt:
             // TODO
-            OSL_TRACE( "OOX: TODO sldTgt" );
+            SAL_INFO("oox.ppt", "OOX: TODO sldTgt" );
             break;
         case XML_sndTgt:
             aTarget = makeAny(msValue);
@@ -99,11 +99,11 @@ namespace oox { namespace ppt {
         {
             Any rTarget;
             ::oox::drawingml::ShapePtr pShape = pSlide->getShape(msValue);
-            OSL_ENSURE( pShape, "failed to locate Shape");
+            SAL_WARN_IF( !pShape, "oox.ppt", "failed to locate Shape");
             if( pShape )
             {
                 Reference< XShape > xShape( pShape->getXShape() );
-                OSL_ENSURE( xShape.is(), "fail to get XShape from shape" );
+                SAL_WARN_IF( !xShape.is(), "oox.ppt", "fail to get XShape from shape" );
                 if( xShape.is() )
                 {
                     rTarget <<= xShape;
