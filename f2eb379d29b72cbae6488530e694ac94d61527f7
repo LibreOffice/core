@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAWX///50\u003d",
+        "filename": "svgio/source/svgreader/svgtoken.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T11:15:45Z",
+      "side": 1,
+      "message": "Yes, compareToAscii returns 0 if it starts with the string, that would be false in the if.",
+      "parentUuid": "AAAAWX///64\u003d",
+      "revId": "f2eb379d29b72cbae6488530e694ac94d61527f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAWX///60\u003d",
         "filename": "vcl/generic/fontmanager/helper.cxx",
         "patchSetId": 2
@@ -149,6 +167,24 @@
       "writtenOn": "2013-03-10T10:59:52Z",
       "side": 1,
       "message": "The old code seemed to be trying to see if aToken does NOT start with \"pdf\u003d\"",
+      "revId": "f2eb379d29b72cbae6488530e694ac94d61527f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///54\u003d",
+        "filename": "vcl/headless/svpprn.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T11:15:45Z",
+      "side": 1,
+      "message": "compareToAscii returns 0 if it starts with \"pdf\u003d\", that get\u0027s negated. So it checks if it begins with pdf\u003d, it should be ok.",
+      "parentUuid": "AAAAWX///6U\u003d",
       "revId": "f2eb379d29b72cbae6488530e694ac94d61527f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
