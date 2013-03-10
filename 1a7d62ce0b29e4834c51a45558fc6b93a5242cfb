@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWX///74\u003d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "IMHO: automatic",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///70\u003d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "right aligned: only change the left margin",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7s\u003d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "left aligned: only change the right margin",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7U\u003d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "margin",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7o\u003d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "centered: change both sides equally",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7Y\u003d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "margins",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7c\u003d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "Upon changes to the left side, the right margin will be changed at first. After that the width.",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7Q\u003d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "Test the table name for spaces",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7M\u003d",
+        "filename": "sw/source/ui/table/tabledlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "will be changed",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7I\u003d",
+        "filename": "sw/source/ui/table/tablemgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "each of the neighbor cells reduced by MINLAY",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7E\u003d",
+        "filename": "sw/source/ui/table/tablemgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "precess -\u003e handle",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///7A\u003d",
+        "filename": "sw/source/ui/table/tautofmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T10:39:37Z",
+      "side": 1,
+      "message": "\u003cKeins\u003e is now \"- none -\"\n\nhttp://opengrok.libreoffice.org/xref/core/sc/source/ui/src/scstring.src#156",
+      "revId": "1a7d62ce0b29e4834c51a45558fc6b93a5242cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
