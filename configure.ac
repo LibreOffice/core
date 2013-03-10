@@ -9523,6 +9523,7 @@ else
     AC_MSG_RESULT([yes])
     AC_CHECK_LIB([GL], [main], [:],
               [AC_MSG_ERROR(libGL not installed or functional)], [])
+    LDFLAGS="$LDFLAGS -lGL"
     AC_CHECK_LIB([GLU], [main], [:],
               [AC_MSG_ERROR(libGLU not installed or functional)], [])
     ENABLE_OPENGL=TRUE
