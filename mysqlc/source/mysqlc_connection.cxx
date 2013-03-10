@@ -195,7 +195,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
             }
 
 #ifndef SYSTEM_MARIADB
-            ::rtl::OUString sMySQLClientLib( MYSQL_LIB  );
+            ::rtl::OUString sMySQLClientLib( "libmariadb" SAL_DLLEXTENSION );
 
             ::rtl::OUString moduleBase;
             OSL_VERIFY( ::osl::Module::getUrlFromAddress( &thisModule, moduleBase ) );
