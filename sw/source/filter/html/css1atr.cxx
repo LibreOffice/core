@@ -172,16 +172,9 @@ static rtl::OString ConvToHex(sal_uInt16 nHex)
     return rtl::OString(aNToABuf, 2);
 }
 
-static rtl::OString GetCSS1Color(const Color& rColor)
+static OString GetCSS1Color(const Color& rColor)
 {
-    rtl::OStringBuffer aStr;
-    aStr.append('#');
-
-    aStr.append(ConvToHex(rColor.GetRed()));
-    aStr.append(ConvToHex(rColor.GetGreen()));
-    aStr.append(ConvToHex(rColor.GetBlue()));
-
-    return aStr.makeStringAndClear();
+    return "#" + ConvToHex(rColor.GetRed()) + ConvToHex(rColor.GetGreen()) + ConvToHex(rColor.GetBlue());
 }
 
 class SwCSS1OutMode
@@ -215,14 +208,14 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
                                      const sal_Char *pVal,
                                      const String *pSVal )
 {
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
 
     if( bFirstCSS1Rule && (nCSS1OutMode & CSS1_OUTMODE_RULE_ON)!=0 )
     {
         bFirstCSS1Rule = sal_False;
         OutNewLine();
-        sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_style).append(' ')
-            .append(OOO_STRING_SVTOOLS_HTML_O_type).append("=\"text/css\">");
+        sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_style) + " " +
+                    OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"text/css\">");
         Strm() << sOut.makeStringAndClear().getStr();
         OutNewLine();
         Strm() << '<' << OOO_STRING_SVTOOLS_HTML_comment;
@@ -238,9 +231,8 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         case CSS1_OUTMODE_SPAN_TAG1_ON:
             if( bTagOn )
             {
-                sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_span)
-                    .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_style)
-                    .append("=\"");
+                sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_span) +
+                            " " + OString(OOO_STRING_SVTOOLS_HTML_O_style) + "=\"");
             }
             else
             {
@@ -252,13 +244,12 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         case CSS1_OUTMODE_RULE_ON:
             {
                 OutNewLine();
-                sOut.append(rtl::OUStringToOString(aCSS1Selector, eDestEnc)).append(" { ");
+                sOut.append(OUStringToOString(aCSS1Selector, eDestEnc) + " { ");
             }
             break;
 
         case CSS1_OUTMODE_STYLE_OPT_ON:
-            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_style)
-                .append("=\"");
+            sOut.append(" " + OString(OOO_STRING_SVTOOLS_HTML_O_style) + "=\"");
             break;
         }
         bFirstCSS1Property = sal_False;
@@ -269,7 +260,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
     }
 
 
-    sOut.append(pProp).append(": ");
+    sOut.append(OString(pProp) + ": ");
     if( nCSS1OutMode & CSS1_OUTMODE_ENCODE )
     {
         // In STYLE-Optionen den String codieren
@@ -286,7 +277,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         if( pVal )
             sOut.append(pVal);
         else if( pSVal )
-            sOut.append(rtl::OUStringToOString(*pSVal, eDestEnc));
+            sOut.append(OUStringToOString(*pSVal, eDestEnc));
     }
 
     if (sOut.getLength())
@@ -394,7 +385,7 @@ static void AddUnitPropertyValue(rtl::OStringBuffer &rOut, long nVal,
                 {
                     nFac /= 10;
                     nBigFac = nFac;
-                    rOut.append(static_cast<sal_Int32>((nBigVal / nBigFac) % nBig10));
+                    rOut.append(OString::number((nBigVal / nBigFac) % nBig10));
                 }
             }
             bOutLongVal = false;
@@ -437,14 +428,14 @@ static void AddUnitPropertyValue(rtl::OStringBuffer &rOut, long nVal,
 
     if( bOutLongVal )
     {
-        rOut.append(static_cast<sal_Int32>(nLongVal/nFac));
+        rOut.append(OString::number(nLongVal/nFac));
         if( (nLongVal % nFac) != 0 )
         {
             rOut.append('.');
             while( nFac > 1 && (nLongVal % nFac) != 0 )
             {
                 nFac /= 10;
-                rOut.append(static_cast<sal_Int32>((nLongVal / nFac) % 10));
+                rOut.append(OString::number((nLongVal / nFac) % 10));
             }
         }
     }
@@ -471,10 +462,8 @@ void SwHTMLWriter::OutCSS1_PixelProperty( const sal_Char *pProp, long nVal,
             nVal = 1;
     }
 
-    rtl::OStringBuffer sOut;
-    sOut.append(static_cast<sal_Int32>(nVal));
-    sOut.append(sCSS1_UNIT_px);
-    OutCSS1_PropertyAscii(pProp, sOut.makeStringAndClear());
+    OString sOut(OString::number(nVal) + sCSS1_UNIT_px);
+    OutCSS1_PropertyAscii(pProp, sOut);
 }
 
 void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
@@ -880,23 +869,17 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, rtl::OString& rToke
             case RES_POOLCOLL_TABLE:
                 if( pPseudo )
                 {
-                    rToken = rtl::OStringBuffer(
-                        RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_tabledata))
-                        .append(' ')
-                        .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_parabreak))
-                        .makeStringAndClear();
+                    rToken = OString(OOO_STRING_SVTOOLS_HTML_tabledata) + " " +
+                             OString(OOO_STRING_SVTOOLS_HTML_parabreak);
                 }
                 else
-                    rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_parabreak);
+                    rToken = OOO_STRING_SVTOOLS_HTML_parabreak;
                 break;
             case RES_POOLCOLL_TABLE_HDLN:
                 if( pPseudo )
                 {
-                    rToken = rtl::OStringBuffer(
-                        RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_tableheader))
-                        .append(' ')
-                        .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_parabreak))
-                        .makeStringAndClear();
+                    rToken = OString(OOO_STRING_SVTOOLS_HTML_tableheader) + " " +
+                             OString(OOO_STRING_SVTOOLS_HTML_parabreak);
                 }
                 else
                     rToken = rtl::OString(OOO_STRING_SVTOOLS_HTML_parabreak);
@@ -2663,11 +2646,8 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
             return rWrt;
     }
 
-    rtl::OStringBuffer sHeight;
-    sHeight.append(static_cast<sal_Int32>(nHeight/20));
-    sHeight.append(sCSS1_UNIT_pt);
-    rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size,
-        sHeight.makeStringAndClear());
+    OString sHeight(OString::number(nHeight/20) + OString(sCSS1_UNIT_pt));
+    rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size, sHeight);
 
     return rWrt;
 }
@@ -2730,10 +2710,8 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
 
         // Breite als n.n pt
         nValue = (nValue + 1) / 2;  // 1/10pt
-        sOut.append(static_cast<sal_Int32>(nValue  / 10));
-        sOut.append('.');
-        sOut.append(static_cast<sal_Int32>(nValue % 10));
-        sOut.append(sCSS1_UNIT_pt);
+        sOut.append(OString::number(nValue  / 10) + "." + OString::number(nValue % 10) +
+                    OString(sCSS1_UNIT_pt));
 
         rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_letter_spacing,
             sOut.makeStringAndClear());
@@ -2914,11 +2892,8 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_line_height, (long)nHeight );
     else if( nPrcHeight )
     {
-        rtl::OStringBuffer sHeight;
-        sHeight.append(static_cast<sal_Int32>(nPrcHeight));
-        sHeight.append('%');
-        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_line_height,
-            sHeight.makeStringAndClear());
+        OString sHeight(OString(nPrcHeight) + "%");
+        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_line_height, sHeight);
     }
 
     return rWrt;
@@ -3005,10 +2980,8 @@ static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
     rHWrt.OutCSS1_PropertyAscii( sCSS1_P_float, sCSS1_PV_left );
 
     // Anzahl der Zeilen -> %-Angabe fuer Font-Hoehe!
-    rtl::OStringBuffer sOut;
-    sOut.append(static_cast<sal_Int32>(rDrop.GetLines()*100));
-    sOut.append('%');
-    rHWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size, sOut.makeStringAndClear());
+    OString sOut(OString::number(rDrop.GetLines()*100) + "%");
+    rHWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size, sOut);
 
     // Abstand zum Text = rechter Rand
     sal_uInt16 nDistance = rDrop.GetDistance();
@@ -3062,11 +3035,8 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
         sal_uInt8 nPrcWidth = rFSItem.GetWidthPercent();
         if( nPrcWidth )
         {
-            rtl::OStringBuffer sOut;
-            sOut.append(static_cast<sal_Int32>(nPrcWidth));
-            sOut.append('%');
-            rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_width,
-                sOut.makeStringAndClear());
+            OString sOut(OString::number(nPrcWidth) + "%");
+            rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_width, sOut);
         }
         else if( nMode & CSS1_FRMSIZE_PIXEL )
         {
@@ -3104,11 +3074,8 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
             sal_uInt8 nPrcHeight = rFSItem.GetHeightPercent();
             if( nPrcHeight )
             {
-                rtl::OStringBuffer sOut;
-                sOut.append(static_cast<sal_Int32>(nPrcHeight));
-                sOut.append('%');
-                rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_height,
-                    sOut.makeStringAndClear());
+                OString sOut(OString::number(nPrcHeight) + "%");
+                rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_height, sOut);
             }
             else if( nMode & CSS1_FRMSIZE_PIXEL )
             {
@@ -3546,23 +3513,22 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
 
     sal_Int32 nWidth = pLine->GetWidth();
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     if( Application::GetDefaultDevice() &&
         nWidth <= Application::GetDefaultDevice()->PixelToLogic(
                     Size( 1, 1 ), MapMode( MAP_TWIP) ).Width() )
     {
         // Wenn die Breite kleiner ist als ein Pixel, dann als 1px
         // ausgeben, damit Netscape und IE die Linie auch darstellen.
-        sOut.append(RTL_CONSTASCII_STRINGPARAM("1px"));
+        sOut.append("1px");
     }
     else
     {
         nWidth *= 5;    // 1/100pt
 
         // Breite als n.nn pt
-        sOut.append(static_cast<sal_Int32>(nWidth / 100));
-        sOut.append('.').append(static_cast<sal_Int32>((nWidth/10) % 10)).
-            append(static_cast<sal_Int32>(nWidth % 10)).append(sCSS1_UNIT_pt);
+        sOut.append(OString::number(nWidth / 100) + "." + OString::number((nWidth/10) % 10) +
+                    OString::number(nWidth % 10) + OString(sCSS1_UNIT_pt));
     }
 
     // Linien-Stil: solid oder double

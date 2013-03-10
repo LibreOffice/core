@@ -114,10 +114,9 @@ String SwWrtShell::GetDoString( DoType eDoType ) const
     default:;//prevent warning
     }
 
-    ::rtl::OUStringBuffer buf = ::rtl::OUStringBuffer( String( SvtResId( nResStr ) ) );
-    buf.append(aUndoStr);
+    OUStringBuffer buf = ::rtl::OUStringBuffer( String( SvtResId( nResStr ) ) );
 
-    return buf.makeStringAndClear();
+    return buf.makeStringAndClear() + aUndoStr;
 }
 
 sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
@@ -134,12 +133,11 @@ sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) 
     default:;//prevent warning
     }
 
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     for (size_t i = 0; i < comments.size(); ++i)
     {
         OSL_ENSURE(!comments[i].isEmpty(), "no Undo/Redo Text set");
-        buf.append(comments[i]);
-        buf.append(sal_Unicode('\n'));
+        buf.append(comments[i] + "\n");
     }
     rStrs.SetString(buf.makeStringAndClear());
     return static_cast<sal_uInt16>(comments.size());
@@ -156,8 +154,7 @@ String SwWrtShell::GetRepeatString() const
         return str;
     }
 
-    ::rtl::OUStringBuffer buf( String(SvtResId(STR_REPEAT)) );
-    buf.append(str);
+    ::rtl::OUStringBuffer buf( String(SvtResId(STR_REPEAT)) + str);
     return buf.makeStringAndClear();
 }
 
