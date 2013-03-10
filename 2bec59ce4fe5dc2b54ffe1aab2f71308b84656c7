@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWX///4A\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2013-03-10T15:47:29Z",
+      "side": 1,
+      "message": "fod -\u003e fdo",
+      "revId": "2bec59ce4fe5dc2b54ffe1aab2f71308b84656c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
