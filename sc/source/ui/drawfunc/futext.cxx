@@ -135,10 +135,6 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         if( !IsSizingOrMovingNote(rMEvt) )
         {
             StopEditMode();            // Danebengeklickt, Ende mit Edit
-            pView->UnmarkAll();
-            bStraightEnter = false;
-            ScViewData& rViewData = *pViewShell->GetViewData();
-            rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
         }
         pView->SetCreateMode();
     }
