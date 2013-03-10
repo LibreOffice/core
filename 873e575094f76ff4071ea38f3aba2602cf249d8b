@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWX///4c\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 7317,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-03-10T15:21:03Z",
+      "side": 1,
+      "message": "I have two python versions installed: 2.7 \u0026 3.2 and still it picks up an internal one. \n\nIs that correct?\nI thought we support system Python 2.7 too, not?\n\n checking for python version... 2.7\n checking for python platform... linux2\n checking for python script directory... ${prefix}/lib/python2.7/dist-packages\n checking for python extension module directory... ${exec_prefix}/lib/python2.7/dist-packages\n checking which Python to use for Pyuno...\n checking for a Python interpreter with version \u003e\u003d 3.3... none\n internal",
+      "revId": "873e575094f76ff4071ea38f3aba2602cf249d8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
