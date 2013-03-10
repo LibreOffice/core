@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWX///3w\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000054
+      },
+      "writtenOn": "2013-03-10T15:52:56Z",
+      "side": 1,
+      "message": "no space between \u0027fdo\u0027 and \u0027#\u0027, labal -\u003e label",
+      "revId": "f07cb7bbfb9772fdba5993a5a845a2b457319ec2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
