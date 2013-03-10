@@ -16,6 +16,125 @@
       "revId": "2bec59ce4fe5dc2b54ffe1aab2f71308b84656c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///4M\u003d",
+        "filename": "sw/source/core/attr/format.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T16:07:50Z",
+      "side": 1,
+      "message": "this can go, came in with 512dcc0e6e97d4af8e3e10fa22f44c7f34132024, with OStringBuffer removal this is not necessary anymore",
+      "revId": "2bec59ce4fe5dc2b54ffe1aab2f71308b84656c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///4Q\u003d",
+        "filename": "sw/source/core/attr/format.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T16:07:50Z",
+      "side": 1,
+      "message": "IMHO the conversion from OUString to OString is not necessary anymore.",
+      "revId": "2bec59ce4fe5dc2b54ffe1aab2f71308b84656c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///4I\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T16:07:50Z",
+      "side": 1,
+      "message": "if the others are OString(...) this one should probably also be one",
+      "revId": "2bec59ce4fe5dc2b54ffe1aab2f71308b84656c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///30\u003d",
+        "filename": "sw/source/ui/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3097,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T16:07:50Z",
+      "side": 1,
+      "message": "OString::number(nDocSh)",
+      "revId": "2bec59ce4fe5dc2b54ffe1aab2f71308b84656c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///3g\u003d",
+        "filename": "sw/source/ui/wrtsh/wrtundo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T16:07:50Z",
+      "side": 1,
+      "message": "could be OUString now:\n\nOUString buf(SvtResId( nResStr ).toString);",
+      "revId": "2bec59ce4fe5dc2b54ffe1aab2f71308b84656c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///3c\u003d",
+        "filename": "sw/source/ui/wrtsh/wrtundo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T16:07:50Z",
+      "side": 1,
+      "message": "could be OUString, too",
+      "revId": "2bec59ce4fe5dc2b54ffe1aab2f71308b84656c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAWX///3Y\u003d",
+        "filename": "sw/source/ui/wrtsh/wrtundo.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-10T16:07:50Z",
+      "side": 1,
+      "message": "too",
+      "revId": "2bec59ce4fe5dc2b54ffe1aab2f71308b84656c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
