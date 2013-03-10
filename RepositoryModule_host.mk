@@ -133,7 +133,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	Mesa \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
 	$(call gb_Helper_optional,MOZ,moz) \
-	$(call gb_Helper_optional,MYSQLC,mysqlc) \
+	$(call gb_Helper_optional,MARIADBC,mysqlc) \
 	$(call gb_Helper_optional,MYSQLCPPCONN,mysqlcppconn) \
 	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \
