@@ -60,12 +60,9 @@ using namespace ::com::sun::star::uno;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* SFX-Requests bearbeiten
-|*
-\************************************************************************/
-
+/**
+ * Handles SFX-Requests
+ */
 void DrawDocShell::Execute( SfxRequest& rReq )
 {
     if(mpViewShell && SlideShow::IsRunning( mpViewShell->GetViewShellBase() ))
@@ -85,7 +82,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                 const SvxSearchItem* pSearchItem =
                 (const SvxSearchItem*) &pReqArgs->Get(SID_SEARCH_ITEM);
 
-                // ein Zuweisungsoperator am SearchItem waer nicht schlecht...
+                // would be nice to have an an assign operation at SearchItem
                 SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
                 delete pAppSearchItem;
                 pAppSearchItem = (SvxSearchItem*) pSearchItem->Clone();
@@ -98,7 +95,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case FID_SEARCH_ON:
         {
-            // Keine Aktion noetig
+            // no action needed
             rReq.Done();
         }
         break;
@@ -153,7 +150,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                     const SvxSearchItem* pSearchItem =
                     (const SvxSearchItem*) &pReqArgs->Get(SID_SEARCH_ITEM);
 
-                    // ein Zuweisungsoperator am SearchItem waer nicht schlecht...
+                    // would be nice to have an an assign operation at SearchItem
                     SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
                     delete pAppSearchItem;
                     pAppSearchItem = (SvxSearchItem*)pSearchItem->Clone();
@@ -214,12 +211,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         break;
     }
 }
-
-/*************************************************************************
-|*
-|* Suchmaske fuer Organizer
-|*
-\************************************************************************/
 
 void DrawDocShell::SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const
 {

@@ -44,19 +44,14 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Zeichnen der DocShell (mittels der Hilfsklasse SdDrawViewShell)
-|*
-\************************************************************************/
-
+/**
+ * Drawing of DocShell (with the helper class SdDrawViewShell)
+ */
 void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 {
     if (nAspect == ASPECT_THUMBNAIL)
     {
-        /**********************************************************************
-        * THUMBNAIL: Hier koennte ev. einmal der Draft-Mode gesetzt werden
-        **********************************************************************/
+      // THUMBNAIL: here we may can set the draft mode
     }
 
     ClientView* pView = new ClientView(this, pOut, NULL);
@@ -134,7 +129,7 @@ Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
 
     if( ( ASPECT_THUMBNAIL == nAspect ) || ( ASPECT_DOCPRINT == nAspect ) )
     {
-        // Groesse der ersten Seite herausgeben
+        // provide size of first page
         MapMode aSrcMapMode(MAP_PIXEL);
         MapMode aDstMapMode(MAP_100TH_MM);
         Size aSize = mpDoc->GetSdPage(0, PK_STANDARD)->GetSize();
@@ -161,22 +156,10 @@ Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
     return (aVisArea);
 }
 
-/*************************************************************************
-|*
-|* ViewShell anmelden
-|*
-\************************************************************************/
-
 void DrawDocShell::Connect(ViewShell* pViewSh)
 {
     mpViewShell = pViewSh;
 }
-
-/*************************************************************************
-|*
-|* ViewShell abmelden
-|*
-\************************************************************************/
 
 void DrawDocShell::Disconnect(ViewShell* pViewSh)
 {
@@ -198,23 +181,14 @@ FrameView* DrawDocShell::GetFrameView()
     return(pFrameView);
 }
 
-/*************************************************************************
-|*
-|* Groesse der ersten Seite zurueckgeben
-|*
-\************************************************************************/
-
 Size DrawDocShell::GetFirstPageSize()
 {
     return SfxObjectShell::GetFirstPageSize();
 }
 
-/*************************************************************************
-|*
-|* Bitmap einer beliebigen Seite erzeugen
-|*
-\************************************************************************/
-
+/**
+ * Creates a bitmap of an arbitrary page
+ */
 Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel)
 {
     MapMode         aMapMode( MAP_100TH_MM );
@@ -233,7 +207,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
     aVDev.SetMapMode( aMapMode );
     aVDev.SetOutputSize( aSize );
 
-    // damit die dunklen Linien am rechten und unteren Seitenrans mitkommen
+    // that we also get the dark lines at the right and bottom page margin
     aFrac = Fraction( nMaxEdgePixel - 1, nMaxEdgePix );
     aMapMode.SetScaleX( aFrac );
     aMapMode.SetScaleY( aFrac );
@@ -245,7 +219,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 
     if ( GetFrameView() )
     {
-        // Initialisierungen der Zeichen-(Bildschirm-)Attribute
+        // initialize the drawing-(screen) attributes
         pView->SetGridCoarse( pFrameView->GetGridCoarse() );
         pView->SetGridFine( pFrameView->GetGridFine() );
         pView->SetSnapGridWidth(pFrameView->GetSnapGridWidthX(), pFrameView->GetSnapGridWidthY());
@@ -305,14 +279,11 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 }
 
 
-/*************************************************************************
-|*
-|* Pruefen, ob die Seite vorhanden ist und dann den Anwender zwingen einen
-|* noch nicht vorhandenen Namen einzugeben. Wird sal_False zurueckgegeben,
-|* wurde die Aktion vom Anwender abgebrochen.
-|*
-\************************************************************************/
-
+/**
+ * Checks if the page exists. If so, we force the user to enter a not yet used
+ * name.
+ * @return sal_False if the user cancels the action.
+ */
 sal_Bool DrawDocShell::CheckPageName (::Window* pWin, String& rName )
 {
     const String aStrForDlg( rName );

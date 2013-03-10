@@ -38,11 +38,6 @@ using namespace com::sun::star;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
 
 Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, ::Window* pWindow) :
     SfxInPlaceClient(pViewShell->GetViewShell(), pWindow, pObj->GetAspect() ),
@@ -55,24 +50,15 @@ Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, ::Window* pWindow) :
     DBG_ASSERT( GetObject().is(), "No object connected!" );
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
 Client::~Client()
 {
 }
 
 
-/*************************************************************************
-|*
-|* Wenn IP-aktiv, dann kommt diese Anforderung um Vergroesserung des
-|* sichtbaren Ausschnitts des Objektes
-|*
-\************************************************************************/
-
+/**
+ * If IP active, then we get this request to increase the visible section of the
+ * object.
+ */
 void Client::RequestNewObjectArea( Rectangle& aObjRect )
 {
     ::sd::View* pView = mpViewShell->GetView();
@@ -207,12 +193,9 @@ void Client::ViewChanged()
 }
 
 
-/*************************************************************************
-|*
-|* Objekt in den sichtbaren Breich scrollen
-|*
-\************************************************************************/
-
+/**
+ * Scroll object into visible area.
+ */
 void Client::MakeVisible()
 {
     if (mpViewShell->ISA(DrawViewShell))

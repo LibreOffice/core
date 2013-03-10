@@ -82,23 +82,20 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* SfxPrinter ggf. erzeugen und zurueckgeben
-|*
-\************************************************************************/
-
+/**
+ * Creates (if necessary) and returns a SfxPrinter
+ */
 SfxPrinter* DrawDocShell::GetPrinter(sal_Bool bCreate)
 {
     if (bCreate && !mpPrinter)
     {
-        // ItemSet mit speziellem Poolbereich anlegen
+        // create ItemSet with special pool area
         SfxItemSet* pSet = new SfxItemSet( GetPool(),
                             SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
                             0 );
-        // PrintOptionsSet setzen
+        // set PrintOptionsSet
         SdOptionsPrintItem aPrintItem( ATTR_OPTIONS_PRINT,
                             SD_MOD()->GetSdOptions(mpDoc->GetDocumentType()));
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
@@ -115,7 +112,7 @@ SfxPrinter* DrawDocShell::GetPrinter(sal_Bool bCreate)
         mpPrinter = new SfxPrinter(pSet);
         mbOwnPrinter = sal_True;
 
-        // Ausgabequalitaet setzen
+        // set output quality
         sal_uInt16 nQuality = aPrintItem.GetOptionsPrint().GetOutputQuality();
 
         sal_uLong nMode = DRAWMODE_DEFAULT;
@@ -135,12 +132,9 @@ SfxPrinter* DrawDocShell::GetPrinter(sal_Bool bCreate)
     return mpPrinter;
 }
 
-/*************************************************************************
-|*
-|* neuen SfxPrinter setzen (Eigentuemeruebergang)
-|*
-\************************************************************************/
-
+/**
+ * Set new SfxPrinter (transfer of ownership)
+ */
 void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
 {
     if ( mpViewShell )
@@ -197,10 +191,10 @@ void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
 
     //  if (mpPrinter->IsA(SfxPrinter))
     {
-        // Da kein RTTI verfuegbar, wird hart gecasted (...)
+        // Since we do not have RTTI we use a hard cast (...)
         SetPrinter((SfxPrinter*) pNewPrinter);
 
-        // Printer gehoert dem Container
+        // container owns printer
         mbOwnPrinter = sal_False;
     }
 }
@@ -244,12 +238,9 @@ void DrawDocShell::UpdateRefDevice()
     }
 }
 
-/*************************************************************************
-|*
-|* InitNew, (Dokument wird neu erzeugt): Streams oeffnen
-|*
-\************************************************************************/
-
+/**
+ * Creates new document, opens streams
+ */
 sal_Bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     sal_Bool bRet = sal_False;
@@ -270,12 +261,9 @@ sal_Bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::s
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* Load: Pools und Dokument laden
-|*
-\************************************************************************/
-
+/**
+ * loads pools and document
+ */
 sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
@@ -352,12 +340,9 @@ sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* LoadFrom: Inhalte fuer Organizer laden
-|*
-\************************************************************************/
-
+/**
+ * loads content for organizer
+ */
 sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
@@ -391,12 +376,9 @@ sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* ImportFrom: load from 3rd party format
-|*
-\************************************************************************/
-
+/**
+ * load from 3rd party format
+ */
 sal_Bool DrawDocShell::ImportFrom( SfxMedium &rMedium, bool bInsert )
 {
     const sal_Bool bRet=SfxObjectShell::ImportFrom(rMedium, bInsert);
@@ -422,12 +404,9 @@ sal_Bool DrawDocShell::ImportFrom( SfxMedium &rMedium, bool bInsert )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* ConvertFrom: aus Fremdformat laden
-|*
-\************************************************************************/
-
+/**
+ * load from a foreign format
+ */
 sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
@@ -516,12 +495,9 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* Save: Pools und Dokument in die offenen Streams schreiben
-|*
-\************************************************************************/
-
+/**
+ * Writes pools and document to the open streams
+ */
 sal_Bool DrawDocShell::Save()
 {
     mpDoc->StopWorkStartupDelay();
@@ -543,12 +519,9 @@ sal_Bool DrawDocShell::Save()
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* SaveAs: Pools und Dokument in den angegebenen Storage sichern
-|*
-\************************************************************************/
-
+/**
+ * Writes pools and document to the provided storage
+ */
 sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
 {
     mpDoc->StopWorkStartupDelay();
@@ -573,12 +546,9 @@ sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* ConvertTo: im Fremdformat speichern
-|*
-\************************************************************************/
-
+/**
+ * save to foreign format
+ */
 sal_Bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 {
     sal_Bool bRet = sal_False;
@@ -636,13 +606,10 @@ sal_Bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
     return  bRet;
 }
 
-/*************************************************************************
-|*
-|* SaveCompleted: die eigenen Streams wieder oeffnen, damit kein anderer
-|*                                sie "besetzt"
-|*
-\************************************************************************/
-
+/**
+ * Reopen own streams to ensure that nobody else can prevent use from opening
+ * them.
+ */
 sal_Bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     sal_Bool bRet = sal_False;
@@ -680,33 +647,15 @@ sal_Bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* Referenz auf Dokument
-|*
-\************************************************************************/
-
 SdDrawDocument* DrawDocShell::GetDoc()
 {
     return mpDoc;
 }
 
-/*************************************************************************
-|*
-|* Referenz auf Dokument
-|*
-\************************************************************************/
-
 SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
 {
     return( (SfxStyleSheetBasePool*) mpDoc->GetStyleSheetPool() );
 }
-
-/*************************************************************************
-|*
-|* Sprung zu Bookmark
-|*
-\************************************************************************/
 
 sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
 {
@@ -756,12 +705,12 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
         {
             String aBookmark( rBookmark );
 
-            // Ist das Bookmark eine Seite?
+            // Is the bookmark a page?
             nPageNumber = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
 
             if (nPageNumber == SDRPAGE_NOTFOUND)
             {
-                // Ist das Bookmark ein Objekt?
+                // Is the bookmark a object?
                 pObj = mpDoc->GetObj(aBookmark);
 
                 if (pObj)
@@ -790,7 +739,7 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
 
             if (eNewPageKind != pDrawViewShell->GetPageKind())
             {
-                // Arbeitsbereich wechseln
+                // change work area
                 GetFrameView()->SetPageKind(eNewPageKind);
                 ::rtl::OUString sViewURL;
                 switch (eNewPageKind)
@@ -863,7 +812,7 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
 
                 if (pObj != NULL)
                 {
-                    // Objekt einblenden und selektieren
+                    // show and select object
                     pDrawViewShell->MakeVisible(pObj->GetLogicRect(),
                         *pDrawViewShell->GetActiveWindow());
                     pDrawViewShell->GetView()->UnmarkAll();
@@ -885,12 +834,9 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
     return (bFound);
 }
 
-/*************************************************************************
-|*
-|* SaveAsOwnFormat: wenn es eine Dokumentvorlage werden soll,
-|*
-\************************************************************************/
-
+/**
+ * If it should become a document template.
+ */
 sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 {
 
@@ -898,12 +844,12 @@ sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
     if (pFilter->IsOwnTemplateFormat())
     {
-        // jetzt die StarDraw-Spezialitaeten:
-        // die Layoutvorlagen der ersten Seite werden mit dem jetzt
-        // bekannten Layoutnamen versehen, die Layoutnamen der betroffenen
-        // Masterpages und Seiten werden gesetzt;
-        // alle Textobjekte der betroffenen Standard-, Notiz- und
-        // Masterpages werden ueber die Namensaenderung informiert
+        /* now the StarDraw specialty:
+           we assign known layout names to the layout template of the first
+           page, we set the layout names of the affected masterpages and pages.
+           We inform all text objects of the affected standard, note and
+           masterpages about the name change.
+        */
 
         String aLayoutName;
 
@@ -929,11 +875,6 @@ sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
     return SfxObjectShell::SaveAsOwnFormat(rMedium);
 }
 
-/*************************************************************************
-|*
-|* FillClass
-|*
-\************************************************************************/
 
 void DrawDocShell::FillClass(SvGlobalName* pClassName,
                                         sal_uInt32*  pFormat,

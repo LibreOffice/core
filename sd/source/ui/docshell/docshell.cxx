@@ -83,11 +83,9 @@ namespace sd {
 
 GraphicFilter* GetGrfFilter();
 
-/*************************************************************************
-|*
-|* SFX-Slotmaps und -Definitionen
-|*
-\************************************************************************/
+/**
+ * slotmaps and definitions of SFX
+ */
 TYPEINIT1( DrawDocShell, SfxObjectShell );
 
 SFX_IMPL_OBJECTFACTORY(
@@ -95,12 +93,6 @@ SFX_IMPL_OBJECTFACTORY(
     SvGlobalName(SO3_SIMPRESS_CLASSID),
     SFXOBJECTSHELL_STD_NORMAL,
     "simpress" )
-
-/*************************************************************************
-|*
-|* Construct
-|*
-\************************************************************************/
 
 void DrawDocShell::Construct( bool bClipboard )
 {
@@ -121,14 +113,8 @@ void DrawDocShell::Construct( bool bClipboard )
     mpDoc->SetSdrUndoManager( mpUndoManager );
     mpDoc->SetSdrUndoFactory( new sd::UndoFactory );
     UpdateTablePointers();
-    SetStyleFamily(5);       //CL: eigentlich SFX_STYLE_FAMILY_PSEUDO
+    SetStyleFamily(5);       //CL: actually SFX_STYLE_FAMILY_PSEUDO
 }
-
-/*************************************************************************
-|*
-|* Konstruktor 1
-|*
-\************************************************************************/
 
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                sal_Bool bDataObject,
@@ -148,12 +134,6 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     Construct( eMode == SFX_CREATE_MODE_INTERNAL );
 }
 
-/*************************************************************************
-|*
-|* Konstruktor 2
-|*
-\************************************************************************/
-
 DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, sal_Bool bDataObject, DocumentType eDocumentType ) :
     SfxObjectShell( nModelCreationFlags ),
     mpDoc(NULL),
@@ -169,12 +149,6 @@ DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, sal_Bool bData
 {
     Construct( sal_False );
 }
-
-/*************************************************************************
-|*
-|* Konstruktor 3
-|*
-\************************************************************************/
 
 DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
                                sal_Bool bDataObject,
@@ -193,12 +167,6 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
 {
     Construct( eMode == SFX_CREATE_MODE_INTERNAL );
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 DrawDocShell::~DrawDocShell()
 {
@@ -224,7 +192,7 @@ DrawDocShell::~DrawDocShell()
     if( mbOwnDocument )
         delete mpDoc;
 
-    // damit der Navigator das Verschwinden des Dokuments mitbekommt
+    // that the navigator get informed about the disappearance of the document
     SfxBoolItem     aItem(SID_NAVIGATOR_INIT, sal_True);
     SfxViewFrame*   pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
 
@@ -235,12 +203,6 @@ DrawDocShell::~DrawDocShell()
         pFrame->GetDispatcher()->Execute(
             SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
 }
-
-/*************************************************************************
-|*
-|* Slot-Stati setzen
-|*
-\************************************************************************/
 
 void DrawDocShell::GetState(SfxItemSet &rSet)
 {
@@ -344,7 +306,7 @@ void DrawDocShell::InPlaceActivate( sal_Bool bActive )
 
         while (pSfxViewFrame)
         {
-            // Anzahl FrameViews ermitteln
+            // determine the number of FrameViews
             pSfxViewSh = pSfxViewFrame->GetViewShell();
             pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
 
@@ -364,7 +326,7 @@ void DrawDocShell::InPlaceActivate( sal_Bool bActive )
     {
         for( sal_uInt32 i = 0; pSfxViewFrame && (i < rViews.size()); i++ )
         {
-            // Anzahl FrameViews ermitteln
+            // determine the number of FrameViews
             pSfxViewSh = pSfxViewFrame->GetViewShell();
             pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
 
@@ -378,12 +340,6 @@ void DrawDocShell::InPlaceActivate( sal_Bool bActive )
     }
 }
 
-/*************************************************************************
-|*
-|* SFX-Aktivierung
-|*
-\************************************************************************/
-
 void DrawDocShell::Activate( sal_Bool bMDI)
 {
     if (bMDI)
@@ -393,34 +349,14 @@ void DrawDocShell::Activate( sal_Bool bMDI)
     }
 }
 
-/*************************************************************************
-|*
-|* SFX-Deaktivierung
-|*
-\************************************************************************/
-
 void DrawDocShell::Deactivate( sal_Bool )
 {
 }
-
-/*************************************************************************
-|*
-|* SFX-Undomanager zurueckgeben
-|*
-\************************************************************************/
 
 ::svl::IUndoManager* DrawDocShell::GetUndoManager()
 {
     return mpUndoManager;
 }
-
-
-
-/*************************************************************************
-|*
-|* Tabellenzeiger auffrischen
-|*
-\************************************************************************/
 
 void DrawDocShell::UpdateTablePointers()
 {
@@ -442,12 +378,9 @@ void DrawDocShell::CancelSearching()
     }
 }
 
-/*************************************************************************
-|*
-|*  den eingestellten SlotFilter anwenden
-|*
-\************************************************************************/
-
+/**
+ * apply configured slot filters
+ */
 void DrawDocShell::ApplySlotFilter() const
 {
     SfxViewShell* pTestViewShell = SfxViewShell::GetFirst();
@@ -489,12 +422,9 @@ void DrawDocShell::SetModified( sal_Bool bSet /* = sal_True */ )
     }
 }
 
-/*************************************************************************
-|*
-|* Callback fuer ExecuteSpellPopup()
-|*
-\************************************************************************/
-
+/**
+ * Callback for ExecuteSpellPopup()
+ */
 // ExecuteSpellPopup now handled by DrawDocShell. This is necessary
 // to get hands on the outliner and the text object.
 IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
