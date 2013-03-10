@@ -22,6 +22,8 @@ from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL
 from com.sun.star.i18n.KParseTokens import ANY_LETTER_OR_NUMBER, ASC_UNDERSCORE
 
+from com.sun.star.util import URL
+
 
 class Desktop(object):
 
@@ -51,9 +53,11 @@ class Desktop(object):
     @classmethod
     def getDispatcher(self, xMSF, xFrame, _stargetframe, oURL):
         try:
+            print ("DEBUG !!! getDispatcher --  oURL: ", oURL)
             oURLArray = list(range(1))
             oURLArray[0] = oURL
-            xDispatch = xFrame.queryDispatch(oURLArray[0], _stargetframe, ALL)
+            xDispatch = xFrame.queryDispatch(oURL, _stargetframe, ALL)
+            print ("DEBUG !!! getDispatcher -- xDispatch : ", xDispatch)
             return xDispatch
         except Exception:
             traceback.print_exc()
@@ -129,3 +133,18 @@ class Desktop(object):
     def getUniqueName(self, xElementContainer, sElementName):
         sIncSuffix = self.getIncrementSuffix(xElementContainer, sElementName)
         return sElementName + sIncSuffix
+
+    @classmethod
+    def getDispatchURL(self, xMSF, _sURL):
+        try:
+            print ("DEBUG !!! getDispatchURL -- s_URL: ", _sURL)
+            oTransformer = xMSF.createInstance("com.sun.star.util.URLTransformer")
+            oURL = list(range(1))
+            oURL[0] = URL()
+            oURL[0].Complete = _sURL
+            oTransformer.parseStrict(oURL[0])
+            print ("DEBUG !!! getDispatchURL --  oURL: ", oURL)
+            return oURL[0];
+        except Exception:
+            traceback.print_exc()
+        return None
