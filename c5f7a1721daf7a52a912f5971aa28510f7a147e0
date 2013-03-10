@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAWX///20\u003d",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1975,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2013-03-10T16:07:04Z",
+      "side": 1,
+      "message": "This variable is not used.",
+      "revId": "c5f7a1721daf7a52a912f5971aa28510f7a147e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
