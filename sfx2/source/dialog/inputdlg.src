@@ -36,7 +36,7 @@ ModalDialog DLG_INPUT_BOX
         Size = MAP_APPFONT(40,15);
         TabStop = TRUE;
         DefButton = TRUE;
-        Text [en-US] = "Accept";
+        Text [en-US] = "OK";
     };
 
     PushButton BTN_INPUT_CANCEL
