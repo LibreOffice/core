@@ -465,14 +465,20 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 if ( svx::ShowBorderBackgroundDlg( this, &aSet, true ) )
                 {
                     const SfxPoolItem* pItem;
-                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) )
+                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BACKGROUND, sal_False, &pItem ) ) {
                         pHFFmt->SetFmtAttr( *pItem );
+                        rView.GetDocShell()->SetModified(true);
+                    }
 
-                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BOX, sal_False, &pItem ) )
+                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BOX, sal_False, &pItem ) ) {
                         pHFFmt->SetFmtAttr( *pItem );
+                        rView.GetDocShell()->SetModified(true);
+                    }
 
-                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_SHADOW, sal_False, &pItem ) )
+                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_SHADOW, sal_False, &pItem ) ) {
                         pHFFmt->SetFmtAttr( *pItem );
+                        rView.GetDocShell()->SetModified(true);
+                    }
                 }
             }
             break;
