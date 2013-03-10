@@ -239,7 +239,7 @@ void Test::testNumberFormat()
         { NF_TEXT, NF_TEXT, 1, pText }
     };
 
-    SvNumberFormatter aFormatter(eLang);
+    SvNumberFormatter aFormatter(m_xContext, eLang);
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
     {

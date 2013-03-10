@@ -1,4 +1,3 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
 #
@@ -17,38 +16,35 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Module_Module,svl))
+$(eval $(call gb_CppunitTest_CppunitTest,svl_qa_cppunit))
 
-$(eval $(call gb_Module_add_targets,svl,\
-    AllLangResTarget_svl \
-    Library_fsstorage \
-    Library_passwordcontainer \
-    Library_svl \
-    Package_inc \
+$(eval $(call gb_CppunitTest_use_api,svl_qa_cppunit, \
+	offapi \
+	udkapi \
 ))
 
-$(eval $(call gb_Module_add_check_targets,svl,\
-	CppunitTest_svl_lngmisc \
-	CppunitTest_svl_qa_cppunit \
+$(eval $(call gb_CppunitTest_use_externals,svl_qa_cppunit, \
+	boost_headers \
 ))
-#TODO: CppunitTest_svl_urihelper depends on ucb, can only be added once svl is
-# in tail build
-#FIXME: fails on MSVC
 
-ifneq ($(OS),WNT)
-$(eval $(call gb_Module_add_subsequentcheck_targets,svl,\
-	CppunitTest_svl_urihelper \
+$(eval $(call gb_CppunitTest_add_exception_objects,svl_qa_cppunit, \
+	svl/qa/unit/svl \
 ))
-endif
 
-ifneq ($(OOO_JUNIT_JAR),)
-$(eval $(call gb_Module_add_subsequentcheck_targets,svl,\
-    JunitTest_svl_complex \
+$(eval $(call gb_CppunitTest_use_libraries,svl_qa_cppunit, \
+	comphelper \
+	cppu \
+	cppuhelper \
+	cppunit \
+	i18nisolang1 \
+	sal \
+	sot \
+	svl \
+	$(gb_STDLIBS) \
 ))
-endif
 
-#todo: dde platform dependent
-#todo: package_inc
-#todo: map file
+$(eval $(call gb_CppunitTest_set_include,svl_qa_cppunit,\
+	$$(INCLUDE) \
+))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet sw=4:
