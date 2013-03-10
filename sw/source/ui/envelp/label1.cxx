@@ -366,17 +366,11 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
 
 IMPL_LINK_NOARG(SwLabPage, FieldHdl)
 {
-    rtl::OUStringBuffer aStr;
-    aStr.append('<');
-    aStr.append(aDatabaseLB.GetSelectEntry());
-    aStr.append('.');
-    aStr.append(aTableLB.GetSelectEntry());
-    aStr.append('.');
-    aStr.append(aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? '0' : '1');
-    aStr.append('.');
-    aStr.append(aDBFieldLB.GetSelectEntry());
-    aStr.append('>');
-    aWritingEdit.ReplaceSelected(aStr.makeStringAndClear());
+    OUString aStr("<" + OUString(aDatabaseLB.GetSelectEntry()) + "." +
+                  OUString(aTableLB.GetSelectEntry()) + "." +
+                  OUString(aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? "0" : "1") + "." +
+                  aDBFieldLB.GetSelectEntry() + ">");
+    aWritingEdit.ReplaceSelected(aStr);
     Selection aSel = aWritingEdit.GetSelection();
     aWritingEdit.GrabFocus();
     aWritingEdit.SetSelection(aSel);

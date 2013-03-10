@@ -224,9 +224,8 @@ SwFmt::~SwFmt()
         SwFmt* pParentFmt = DerivedFrom();
         if( !pParentFmt )
         {
-            OSL_FAIL(rtl::OStringBuffer(
-                    RTL_CONSTASCII_STRINGPARAM("~SwFmt: parent format missing from: ")).
-                append(rtl::OUStringToOString(GetName(), osl_getThreadTextEncoding())).getStr());
+            OSL_FAIL("~SwFmt: parent format missing from: " +
+                     OUStringToOString(GetName(), osl_getThreadTextEncoding()));
         }
         else
         {
