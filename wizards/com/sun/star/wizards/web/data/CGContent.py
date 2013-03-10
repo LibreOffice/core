@@ -26,9 +26,11 @@ class CGContent(ConfigGroup):
     dirName = str()
     cp_Name = str()
     cp_Description = str()
-    #COMMENTED
-    #cp_Contents = WebConfigSet(CGContent)
-    cp_Documents = WebConfigSet(CGDocument())
+    cp_Contents = None
+    cp_Documents = WebConfigSet(CGDocument)
+
+    def __init__(self):
+        self.cp_Contents = WebConfigSet(CGContent)
 
     def createDOM(self, parent):
         myElement = XMLHelper.addElement(
