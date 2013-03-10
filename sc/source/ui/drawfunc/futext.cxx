@@ -125,6 +125,7 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
+    sal_Bool bStraightEnter = true;
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
         return (sal_True);                 // Event von der SdrView ausgewertet
@@ -132,7 +133,13 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     if ( pView->IsTextEdit() )
     {
         if( !IsSizingOrMovingNote(rMEvt) )
+        {
             StopEditMode();            // Danebengeklickt, Ende mit Edit
+            pView->UnmarkAll();
+            bStraightEnter = false;
+            ScViewData& rViewData = *pViewShell->GetViewData();
+            rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+        }
         pView->SetCreateMode();
     }
 
@@ -301,18 +308,30 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 }
                 else
                 {
-                    /**********************************************************
-                    * Objekt erzeugen
-                    **********************************************************/
-                    // Hack  to align object to nearest grid position where object
-                    // would be anchored ( if it were cell anchored )
-                    // Get grid offset for current position ( note: aPnt is
-                    // also adjusted )
-                    Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
+                    if (bStraightEnter)//Hack for that silly idea that creating text fields is inside the text routine
+                    {
+                        /**********************************************************
+                        * Objekt erzeugen
+                        **********************************************************/
+                        // Hack  to align object to nearest grid position where object
+                        // would be anchored ( if it were cell anchored )
+                        // Get grid offset for current position ( note: aPnt is
+                        // also adjusted )
+                        Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
 
-                    bool bRet = pView->BegCreateObj(aMDPos, (OutputDevice*) NULL);
-                    if ( bRet )
+                        bool bRet = pView->BegCreateObj(aMDPos, (OutputDevice*) NULL);
+                        if ( bRet )
                         pView->GetCreateObj()->SetGridOffset( aGridOff );
+                    }
+                    else if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+                    {
+                        pView->UnmarkAllObj();
+                        pView->MarkObj(pObj,pPV,false,false);
+
+                        pHdl=pView->PickHandle(aMDPos);
+                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl);
+                        return(sal_True);
+                    }
                 }
             }
         }

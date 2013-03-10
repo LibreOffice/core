@@ -53,6 +53,8 @@
 //  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
 //! fusel,fuconstr,futext - zusammenfassen!
 #define SC_MAXDRAGMOVE  3
+// Min necessary mouse motion for normal dragging
+#define SC_MINDRAGMOVE 2
 
 // -----------------------------------------------------------------------
 
@@ -381,11 +383,14 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     sal_Bool bReturn = FuDraw::MouseButtonUp(rMEvt);
     sal_Bool bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
 
+    SdrObject* pObj = NULL;
+    SdrPageView* pPV = NULL;
     if (aDragTimer.IsActive() )
     {
         aDragTimer.Stop();
     }
 
+    sal_uInt16 nDrgLog = sal_uInt16 ( pWindow->PixelToLogic(Size(SC_MINDRAGMOVE,0)).Width() );
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     bool bCopy = false;
@@ -416,7 +421,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     for ( sal_uLong i = 0; i < nMarkCount; ++i )
                     {
                         SdrMark* pMark = rSdrMarkList.GetMark( i );
-                        SdrObject* pObj = ( pMark ? pMark->GetMarkedSdrObj() : NULL );
+                        pObj = ( pMark ? pMark->GetMarkedSdrObj() : NULL );
                         if ( pObj )
                         {
                             ScChartHelper::AddRangesIfProtectedChart( aProtectedChartRangesVector, pDocument, pObj );
@@ -426,6 +431,21 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 bCopy = true;
             }
 
+            if (!rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
+                Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
+                Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
+            {
+                /*************************************************************
+                * If a user wants to click on an object in front of a marked
+                * one, he releases the mouse button immediately
+                **************************************************************/
+                if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+                {
+                    pView->UnmarkAllObj();
+                    pView->MarkObj(pObj,pPV,false,false);
+                    return (sal_True);
+                }
+            }
             pView->EndDragObj( rMEvt.IsMod1() );
             pView->ForceMarkedToAnotherPage();
 
@@ -433,7 +453,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             if (rMarkList.GetMarkCount() == 1)
             {
                   SdrMark* pMark = rMarkList.GetMark(0);
-                  SdrObject* pObj = pMark->GetMarkedSdrObj();
+                  pObj = pMark->GetMarkedSdrObj();
                   FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
                   FuText* pText = static_cast<FuText*>(pPoor);
                 pText->StopDragMode(pObj );
@@ -458,7 +478,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     bool bFound = false;
                     for( sal_uLong nIdx = 0; !bFound && (nIdx < nCount); ++nIdx )
                     {
-                        SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj();
+                        pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj();
                         bFound = ScDrawLayer::IsNoteCaption( pObj );
                         if( bFound )
                         {
@@ -494,7 +514,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrMark* pMark = rMarkList.GetMark(0);
-                SdrObject* pObj = pMark->GetMarkedSdrObj();
+                pObj = pMark->GetMarkedSdrObj();
 
                 //  aktivieren nur, wenn die Maus auch (noch) ueber dem
                 //  selektierten Objekt steht
