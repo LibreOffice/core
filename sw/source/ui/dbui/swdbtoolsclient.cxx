@@ -204,7 +204,7 @@ Reference< XDataSource > SwDbtoolsClient::getDataSource(
 sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
         const Reference< XPropertySet >& rxColumn,
         const Reference< XNumberFormatTypes >& rxTypes,
-        const Locale& rLocale
+        const lang::Locale& rLocale
             )
 {
     sal_Int32 nRet = -1;

@@ -4394,9 +4394,7 @@ if test -n "$enable_pch" && test "$enable_pch" != "no"; then
     if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
-    # GCC PCH support is reportedly a hack that's not very reliable,
-    # so support only Clang.
-    elif test "$GCC" = "yes" -a "$COM_GCC_IS_CLANG" = "TRUE"; then
+    elif test "$GCC" = "yes"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
     else

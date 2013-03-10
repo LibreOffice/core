@@ -182,12 +182,16 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
 # PrecompiledHeader class
 
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
 gb_PrecompiledHeader_get_enableflags = -include-pch $(call gb_PrecompiledHeader_get_target,$(1))
+else
+gb_PrecompiledHeader_get_enableflags = -include $(notdir $(subst .gch,,$(call gb_PrecompiledHeader_get_target,$(1)))) \
+				       -I $(dir $(call gb_PrecompiledHeader_get_target,$(1)))
+endif
 
-# Clang does not need any extra .o file for PCH
+# Clang and gcc do not need any extra .o file for PCH
 gb_PrecompiledHeader_get_objectfile =
 
 define gb_PrecompiledHeader__command
@@ -209,7 +213,12 @@ endef
 
 # NoexPrecompiledHeader class
 
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
 gb_NoexPrecompiledHeader_get_enableflags = -include-pch $(call gb_NoexPrecompiledHeader_get_target,$(1))
+else
+gb_NoexPrecompiledHeader_get_enableflags = -include $(notdir $(subst .gch,,$(call gb_NoexPrecompiledHeader_get_target,$(1)))) \
+				       -I $(dir $(call gb_NoexPrecompiledHeader_get_target,$(1)))
+endif
 
 gb_NoexPrecompiledHeader_get_objectfile =
 
@@ -229,7 +238,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(call gb_cxx_dep_copy,$(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) \
 		)
 endef
-endif
 
 # YaccTarget class
 
