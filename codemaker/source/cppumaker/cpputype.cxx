@@ -73,6 +73,7 @@ rtl::OString translateSimpleUnoType(rtl::OString const & unoType, bool cppuUnoTy
 bool isBootstrapType(rtl::OString const & name) {
     static char const * const names[] = {
         "com/sun/star/beans/PropertyAttribute",
+        "com/sun/star/beans/PropertyState",
         "com/sun/star/beans/PropertyValue",
         "com/sun/star/beans/XFastPropertySet",
         "com/sun/star/beans/XMultiPropertySet",
