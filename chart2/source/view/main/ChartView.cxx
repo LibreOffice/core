@@ -678,10 +678,10 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                     try
                     {
                         sal_Int32 n3DRelativeHeightOldValue(100);
-                        uno::Any aAny = xPropertySet->getPropertyValue( C2U("3DRelativeHeight") );
+                        uno::Any aAny = xPropertySet->getPropertyValue( "3DRelativeHeight" );
                         aAny >>= n3DRelativeHeightOldValue;
                         if (n3DRelativeHeightOldValue != n3DRelativeHeight)
-                            xPropertySet->setPropertyValue( C2U("3DRelativeHeight"), uno::makeAny(n3DRelativeHeight) );
+                            xPropertySet->setPropertyValue( "3DRelativeHeight", uno::makeAny(n3DRelativeHeight) );
                     }
                     catch(const uno::Exception& e){}
                 }

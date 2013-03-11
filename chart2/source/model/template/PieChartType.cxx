@@ -56,7 +56,7 @@ static void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     rOutProperties.push_back(
-        Property( C2U("3DRelativeHeight"),
+        Property( "3DRelativeHeight",
                   PROP_PIECHARTTYPE_3DRELATIVEHEIGHT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
