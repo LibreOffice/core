@@ -249,7 +249,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
         case SbxCLASS_PROPERTY: pArray = pProps;    break;
         case SbxCLASS_METHOD:   pArray = pMethods;  break;
         case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-        default: DBG_ASSERT( !this, "Ungueltige SBX-Klasse" ); break;
+        default: DBG_ASSERT( !this, "Invalid SBX-Class" ); break;
         }
         if( pArray )
         {
@@ -349,7 +349,7 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
     case SbxCLASS_PROPERTY: pArray = pProps;    break;
     case SbxCLASS_METHOD:   pArray = pMethods;  break;
     case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-    default: DBG_ASSERT( !this, "Ungueltige SBX-Klasse" ); break;
+    default: DBG_ASSERT( !this, "Invalid SBX-Class" ); break;
     }
     if( pArray )
     {
@@ -385,7 +385,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     case SbxCLASS_PROPERTY: pArray = pProps;    break;
     case SbxCLASS_METHOD:   pArray = pMethods;  break;
     case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-    default: DBG_ASSERT( !this, "Ungueltige SBX-Klasse" ); break;
+    default: DBG_ASSERT( !this, "Invalid SBX-Class" ); break;
     }
     if( !pArray )
     {
@@ -522,7 +522,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         case SbxCLASS_PROPERTY: pArray = pProps;    break;
         case SbxCLASS_METHOD:   pArray = pMethods;  break;
         case SbxCLASS_OBJECT:   pArray = pObjs;     break;
-        default: DBG_ASSERT( !this, "Ungueltige SBX-Klasse" ); break;
+        default: DBG_ASSERT( !this, "Invalid SBX-Class" ); break;
         }
     }
     if( pArray )
@@ -644,7 +644,7 @@ sal_Bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     }
     sal_uIntPtr nNewPos = rStrm.Tell();
     nPos += nSize;
-    DBG_ASSERT( nPos >= nNewPos, "SBX: Zu viele Daten eingelesen" );
+    DBG_ASSERT( nPos >= nNewPos, "SBX: Loaded too much data" );
     if( nPos != nNewPos )
     {
         rStrm.Seek( nPos );

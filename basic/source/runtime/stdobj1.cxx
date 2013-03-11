@@ -251,7 +251,7 @@ SbStdFont::SbStdFont() :
 
     // handle name property yourself
     p = Find( OUString("Name"), SbxCLASS_PROPERTY );
-    DBG_ASSERT( p, "Keine Name Property" );
+    DBG_ASSERT( p, "No Name Property" );
     p->SetUserData( ATTR_IMP_NAME );
 }
 
@@ -400,7 +400,7 @@ SbStdClipboard::SbStdClipboard() :
     SbxObject( OUString("Clipboard") )
 {
     SbxVariable* p = Find( OUString("Name"), SbxCLASS_PROPERTY );
-    DBG_ASSERT( p, "Keine Name Property" );
+    DBG_ASSERT( p, "No Name Property" );
     p->SetUserData( ATTR_IMP_NAME );
 
     // register methods

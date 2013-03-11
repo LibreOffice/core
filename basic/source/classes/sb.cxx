@@ -1922,7 +1922,7 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     }
     // End of the hacks!
     // Search via StarBASIC is at all times global
-    DBG_ASSERT( IsSet( SBX_GBLSEARCH ), "Basic ohne GBLSEARCH geladen" );
+    DBG_ASSERT( IsSet( SBX_GBLSEARCH ), "Basic loaded without GBLSEARCH" );
     SetFlag( SBX_GBLSEARCH );
     return sal_True;
 }

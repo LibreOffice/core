@@ -232,7 +232,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
         {
             sal_uIntPtr nNewPos = rStrm.Tell();
             nOldPos += nSize;
-            DBG_ASSERT( nOldPos >= nNewPos, "SBX: Zu viele Daten eingelesen" );
+            DBG_ASSERT( nOldPos >= nNewPos, "SBX: Too much data loaded" );
             if( nOldPos != nNewPos )
                 rStrm.Seek( nOldPos );
             if( !p->LoadCompleted() )

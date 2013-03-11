@@ -545,7 +545,7 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
     rSStream >> nId;
     rSStream >> nVer;
 
-    DBG_ASSERT( nId == LIBINFO_ID, "Keine BasicLibInfo !?" );
+    DBG_ASSERT( nId == LIBINFO_ID, "No BasicLibInfo?!" );
     if( nId == LIBINFO_ID )
     {
         // Reload?
@@ -678,7 +678,7 @@ void copyToLibraryContainer( StarBASIC* pBasic, const LibraryContainerInfo& rInf
     for ( sal_uInt16 nMod = 0 ; nMod < nModCount ; nMod++ )
     {
         SbModule* pModule = (SbModule*)pBasic->GetModules()->Get( nMod );
-        DBG_ASSERT( pModule, "Modul nicht erhalten!" );
+        DBG_ASSERT( pModule, "Module not received!" );
 
         OUString aModName = pModule->GetName();
         if( !xLib->hasByName( aModName ) )
@@ -929,7 +929,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     *xManagerStream >> nBasicStartOff;
     *xManagerStream >> nBasicEndOff;
 
-    DBG_ASSERT( !xManagerStream->GetError(), "Ungueltiger Manager-Stream!" );
+    DBG_ASSERT( !xManagerStream->GetError(), "Invalid Manager-Stream!" );
 
     xManagerStream->Seek( nBasicStartOff );
     if( !ImplLoadBasic( *xManagerStream, pLibs->GetObject(0)->GetLibRef() ) )
@@ -952,7 +952,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
         {
             OUString aLibInfo(comphelper::string::getToken(aLibs, nLib, LIB_SEP));
             // TODO: Remove == 2
-            DBG_ASSERT( ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 2 ) || ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 3 ), "Ungueltige Lib-Info!" );
+            DBG_ASSERT( ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 2 ) || ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 3 ), "Invalid Lib-Info!" );
             OUString aLibName( aLibInfo.getToken( 0, LIBINFO_SEP ) );
             OUString aLibAbsStorageName( aLibInfo.getToken( 1, LIBINFO_SEP ) );
             OUString aLibRelStorageName( aLibInfo.getToken( 2, LIBINFO_SEP ) );
@@ -1217,7 +1217,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, sal_Bool bReference ) const
     for ( sal_uInt16 nMod = 0; nMod < pLib->GetModules()->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pLib->GetModules()->Get( nMod );
-        DBG_ASSERT( pModule, "Modul nicht erhalten!" );
+        DBG_ASSERT( pModule, "Module not received!" );
         if ( !pModule->IsCompiled() && !StarBASIC::GetErrorCode() )
         {
             pLib->Compile( pModule );
@@ -1228,7 +1228,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, sal_Bool bReference ) const
     // cause modified
     if( !bModified && bReference )
     {
-        OSL_FAIL( "Per Reference eingebundene Basic-Library ist nicht compiliert!" );
+        OSL_FAIL( "Referenced basic library is not compiled!" );
         pLib->SetModified( sal_False );
     }
 }
@@ -1393,7 +1393,7 @@ StarBASIC* BasicManager::GetLib( sal_uInt16 nLib ) const
 {
     DBG_CHKTHIS( BasicManager, 0 );
     BasicLibInfo* pInf = pLibs->GetObject( nLib );
-    DBG_ASSERT( pInf, "Lib existiert nicht!" );
+    DBG_ASSERT( pInf, "Lib does not exist!" );
     if ( pInf )
     {
         return pInf->GetLib();

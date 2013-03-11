@@ -583,7 +583,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
             break;
         default:
             aData.eType = SbxNULL;
-            DBG_ASSERT( !this, "Nicht unterstuetzer Datentyp geladen" );
+            DBG_ASSERT( !this, "Loaded a non-supported data type" );
             return sal_False;
         }
         // putt value

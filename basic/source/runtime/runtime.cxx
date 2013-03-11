@@ -962,7 +962,7 @@ SbxVariableRef SbiRuntime::PopVar()
     SbxVariableRef xVar = refExprStk->Get( --nExprLvl );
 #ifdef DBG_UTIL
     if ( xVar->GetName().equalsAscii( "Cells" ) )
-        SAL_INFO("basic", "" );
+        SAL_INFO("basic", "PopVar: Name equals 'Cells'" );
 #endif
     // methods hold themselves in parameter 0
     if( xVar->IsA( TYPE(SbxMethod) ) )

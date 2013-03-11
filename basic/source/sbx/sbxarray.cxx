@@ -300,7 +300,7 @@ void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
 
 void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
 {
-    DBG_ASSERT( pData->size() <= SBX_MAXINDEX32, "SBX: Array wird zu gross" );
+    DBG_ASSERT( pData->size() <= SBX_MAXINDEX32, "SBX: Array gets too big" );
     if( pData->size() > SBX_MAXINDEX32 )
     {
             return;
@@ -329,7 +329,7 @@ void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
 
 void SbxArray::Insert( SbxVariable* pVar, sal_uInt16 nIdx )
 {
-    DBG_ASSERT( pData->size() <= 0x3FF0, "SBX: Array wird zu gross" );
+    DBG_ASSERT( pData->size() <= 0x3FF0, "SBX: Array gets too big" );
     if( pData->size() > 0x3FF0 )
     {
         return;

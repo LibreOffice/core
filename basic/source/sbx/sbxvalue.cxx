@@ -74,7 +74,7 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
                     aData.pDecimal->addRef();
                 break;
             default:
-                DBG_ASSERT( !this, "Angabe eines Pointers unzulaessig" );
+                DBG_ASSERT( !this, "Improper pointer argument" );
                 n = SbxNULL;
         }
     }
@@ -189,7 +189,7 @@ void SbxValue::Clear()
             {
                 if( aData.pObj != this )
                 {
-                    SAL_WARN("basic.sbx", "nicht bei Parent-Prop - sonst CyclicRef");
+                    SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                     SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                     sal_Bool bParentProp = pThisVar && 5345 ==
                     ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
@@ -540,7 +540,7 @@ sal_Bool SbxValue::Put( const SbxValues& rVal )
                             {
                                 OSL_FAIL( "TheRealValue" );
                             }
-                            SAL_WARN("basic.sbx", "nicht bei Parent-Prop - sonst CyclicRef");
+                            SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                             SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                             sal_Bool bParentProp = pThisVar && 5345 ==
                                     ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
@@ -773,7 +773,7 @@ SbxDataType SbxValue::GetFullType() const
 
 sal_Bool SbxValue::SetType( SbxDataType t )
 {
-    DBG_ASSERT( !( t & 0xF000 ), "Setzen von BYREF|ARRAY verboten!" );
+    DBG_ASSERT( !( t & 0xF000 ), "SetType of BYREF|ARRAY is forbidden!" );
     if( ( t == SbxEMPTY && aData.eType == SbxVOID )
      || ( aData.eType == SbxEMPTY && t == SbxVOID ) )
         return sal_True;
@@ -804,13 +804,13 @@ sal_Bool SbxValue::SetType( SbxDataType t )
                 case SbxOBJECT:
                     if( aData.pObj && aData.pObj != this )
                     {
-                        SAL_WARN("basic.sbx", "nicht bei Parent-Prop - sonst CyclicRef");
+                        SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                         SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                         sal_uInt16 nSlotId = pThisVar
                                     ? ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) )
                                     : 0;
                         DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName().equalsAscii("Parent"),
-                                    "SID_PARENTOBJECT heisst nicht 'Parent'" );
+                                    "SID_PARENTOBJECT is not named 'Parent'" );
                         sal_Bool bParentProp = 5345 == nSlotId;
                         if ( !bParentProp )
                             aData.pObj->ReleaseRef();
@@ -1550,7 +1550,8 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 memset (&aData,0,sizeof(aData));
                 ResetFlag(SBX_FIXED);
                 aData.eType = SbxNULL;
-                DBG_ASSERT( !this, "Nicht unterstuetzer Datentyp geladen" );
+                DBG_ASSERT( !this, "Loaded a non-supported data type" );
+
                 return sal_False;
         }
         return sal_True;
@@ -1651,7 +1652,7 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxWCHAR:
             break;
         default:
-            DBG_ASSERT( !this, "Speichern eines nicht unterstuetzten Datentyps" );
+            DBG_ASSERT( !this, "Saving a non-supported data type" );
             return sal_False;
     }
     return sal_True;

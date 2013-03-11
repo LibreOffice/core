@@ -50,7 +50,7 @@ BasicDLL::~BasicDLL()
 void BasicDLL::EnableBreak( bool bEnable )
 {
     BasicDLL* pThis = BASIC_DLL();
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
+    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
         pThis->bBreakEnabled = bEnable;
@@ -60,7 +60,7 @@ void BasicDLL::EnableBreak( bool bEnable )
 void BasicDLL::SetDebugMode( bool bDebugMode )
 {
     BasicDLL* pThis = BASIC_DLL();
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
+    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
         pThis->bDebugMode = bDebugMode;
@@ -75,7 +75,7 @@ void BasicDLL::BasicBreak()
     static bool bJustStopping = false;
 
     BasicDLL* pThis = BASIC_DLL();
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: Noch keine Instanz!" );
+    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
         if ( StarBASIC::IsRunning() && !bJustStopping && ( pThis->bBreakEnabled || pThis->bDebugMode ) )
