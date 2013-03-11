@@ -115,7 +115,7 @@ Sequence< OUString > OCommandDefinition::getSupportedServiceNames_static(  ) thr
 {
     Sequence< OUString > aServices(3);
     aServices.getArray()[0] = SERVICE_SDB_QUERYDEFINITION;
-    aServices.getArray()[1] = SERVICE_SDB_COMMAND_DEFINITION;
+    aServices.getArray()[1] = "com.sun.star.sdb.CommandDefinition";
     aServices.getArray()[2] = "com.sun.star.ucb.Content";
     return aServices;
 }

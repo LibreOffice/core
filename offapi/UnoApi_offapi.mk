@@ -284,6 +284,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/script/
 	VBAMacroResolver \
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
+	CommandDefinition \
 	DataAccessDescriptorFactory \
 	DatabaseContext \
 	DatabaseInteractionHandler \
