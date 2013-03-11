@@ -48,6 +48,9 @@ protected:
                         const oox::ppt::SlidePersistPtr pPersist );
 
 private:
+
+    void importSlide(sal_uInt32 nSlide, sal_Bool bFirstSlide, sal_Bool bImportNotes);
+
     std::vector< rtl::OUString > maSlideMasterVector;
     std::vector< rtl::OUString > maSlidesVector;
     std::vector< rtl::OUString > maNotesMasterVector;

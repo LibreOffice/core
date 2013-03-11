@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include "oox/helper/binarystreambase.hxx"
 #include "oox/helper/storagebase.hxx"
 #include "oox/dllapi.h"
@@ -139,6 +140,9 @@ public:
     /** Returns the status indicator (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >&
                         getStatusIndicator() const;
+
+    /** Returns the FilterData */
+    ::comphelper::SequenceAsHashMap& getFilterData() const;
 
     /** Returns the media descriptor. */
     ::comphelper::MediaDescriptor& getMediaDescriptor() const;
