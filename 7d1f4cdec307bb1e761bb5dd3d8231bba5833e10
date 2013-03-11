@@ -16,6 +16,24 @@
       "revId": "7d1f4cdec307bb1e761bb5dd3d8231bba5833e10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///1Y\u003d",
+        "filename": "unotools/source/misc/fontdefs.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-03-11T20:44:52Z",
+      "side": 1,
+      "message": "I\u0027ve fixed it.",
+      "parentUuid": "AAAAW3///2o\u003d",
+      "revId": "7d1f4cdec307bb1e761bb5dd3d8231bba5833e10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
