@@ -7532,7 +7532,7 @@ if test "x$enable_ext_mariadb_connector" = "xyes" -a "x$enable_extension_integra
     ENABLE_MARIADBC=YES
     MARIADBC_MAJOR=1
     MARIADBC_MINOR=0
-    MARIADBC_MICRO=0
+    MARIADBC_MICRO=2
     BUILD_TYPE="$BUILD_TYPE MARIADBC"
 else
     AC_MSG_RESULT([no])
