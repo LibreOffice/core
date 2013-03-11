@@ -92,8 +92,8 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                     {
                         if( hText1 )
                         {
-                            sal_uInt16 n = 0;
-                            while( STRING_NOTFOUND != n )
+                            sal_Int32 n = 0;
+                            while( -1 != n )
                             {
                                 rtl::OUString s( sTopics.GetToken( 0, '\t', n ));
                                 if( s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
@@ -120,8 +120,8 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                 if ( !hText2 || (*pService->pName == hText2 ) )
                 {
                     String sTopics( pService->Topics() );
-                    sal_uInt16 n = 0;
-                    while( STRING_NOTFOUND != n )
+                    sal_Int32 n = 0;
+                    while( -1 != n )
                     {
                         rtl::OUString s( sTopics.GetToken( 0, '\t', n ));
                         s = comphelper::string::remove(s, '\n');
