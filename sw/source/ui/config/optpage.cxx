@@ -2398,64 +2398,21 @@ IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl)
 
 #ifdef DBG_UTIL
 
-static void lcl_SetPosSize(Window& rWin, Point aPos, Size aSize)
+SwTestTabPage::SwTestTabPage(Window* pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage( pParent, "OptTestPage", "modules/swriter/ui/opttestpage.ui", rCoreSet)
+    , bAttrModified( sal_False )
 {
-    aPos = rWin.LogicToPixel(aPos, MAP_APPFONT);
-    aSize = rWin.OutputDevice::LogicToPixel(aSize, MAP_APPFONT);
-    rWin.SetPosSizePixel(aPos, aSize);
-}
+    get(m_pTest1CBox, "unused");
+    get(m_pTest2CBox, "dynamic");
+    get(m_pTest3CBox, "nocalm");
+    get(m_pTest4CBox, "wysiwygdbg");
+    get(m_pTest5CBox, "noidle");
+    get(m_pTest6CBox, "noscreenadj");
+    get(m_pTest7CBox, "winformat");
+    get(m_pTest8CBox, "noscroll");
+    get(m_pTest9CBox, "DrawingLayerNotLoading");
+    get(m_pTest10CBox, "AutoFormatByInput");
 
-SwTestTabPage::SwTestTabPage( Window* pParent,
-                                      const SfxItemSet& rCoreSet) :
-    SfxTabPage( pParent, WB_HIDE, rCoreSet),
-    aTestFL        ( this, WB_GROUP ),
-    aTest1CBox      ( this, 0 ),
-    aTest2CBox      ( this, 0 ),
-    aTest3CBox      ( this, 0 ),
-    aTest4CBox      ( this, 0 ),
-    aTest5CBox      ( this, 0 ),
-    aTest6CBox      ( this, 0 ),
-    aTest7CBox      ( this, 0 ),
-    aTest8CBox      ( this, 0 ),
-    aTest9CBox      ( this, 0 ),
-    aTest10CBox     ( this, 0 ),
-    bAttrModified( sal_False )
-{
-    lcl_SetPosSize(*this,       Point(0,0), Size(260 , 135));
-    lcl_SetPosSize(aTestFL,   Point(6,2), Size(209,8));
-    lcl_SetPosSize(aTest1CBox  ,    Point(12 , 14), Size(74 , 10));
-    lcl_SetPosSize(aTest2CBox  ,    Point(12 , 27), Size(74 , 10));
-    lcl_SetPosSize(aTest3CBox  ,    Point(12 , 40), Size(74 , 10));
-    lcl_SetPosSize(aTest4CBox  ,    Point(12 , 53), Size(74 , 10));
-    lcl_SetPosSize(aTest5CBox  ,    Point(12 , 66), Size(74 , 10));
-    lcl_SetPosSize(aTest6CBox  ,    Point(116, 14), Size(74 , 10));
-    lcl_SetPosSize(aTest7CBox  ,    Point(116, 27), Size(74 , 10));
-    lcl_SetPosSize(aTest8CBox  ,    Point(116, 40), Size(74 , 10));
-    lcl_SetPosSize(aTest9CBox  ,    Point(116, 53), Size(74 , 10));
-    lcl_SetPosSize(aTest10CBox  ,   Point(116, 66), Size(74 , 10));
-
-    aTestFL.SetText(rtl::OUString("Settings only for testpurposes"));
-    aTest1CBox.SetText(rtl::OUString("unused"));
-    aTest2CBox.SetText(rtl::OUString("dynamic"));
-    aTest3CBox.SetText(rtl::OUString("No calm"));
-    aTest4CBox.SetText(rtl::OUString("WYSIWYG debug"));
-    aTest5CBox.SetText(rtl::OUString("No idle format"));
-    aTest6CBox.SetText(rtl::OUString("No screen adj"));
-    aTest7CBox.SetText(rtl::OUString("win format"));
-    aTest8CBox.SetText(rtl::OUString("No Scroll"));
-    aTest9CBox.SetText(rtl::OUString("DrawingLayerNotLoading"));
-    aTest10CBox.SetText(rtl::OUString("AutoFormat by Input"));
-    aTestFL.Show();
-    aTest1CBox .Show();
-    aTest2CBox .Show();
-    aTest3CBox .Show();
-    aTest4CBox .Show();
-    aTest5CBox .Show();
-    aTest6CBox .Show();
-    aTest7CBox .Show();
-    aTest8CBox .Show();
-    aTest9CBox .Show();
-    aTest10CBox.Show();
     Init();
 
 }
@@ -2463,7 +2420,7 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
 SfxTabPage* SwTestTabPage::Create( Window* pParent,
                                        const SfxItemSet& rAttrSet )
 {
-    return ( new SwTestTabPage( pParent, rAttrSet ) );
+    return new SwTestTabPage(pParent, rAttrSet);
 }
 
 sal_Bool    SwTestTabPage::FillItemSet( SfxItemSet& rCoreSet )
@@ -2472,16 +2429,16 @@ sal_Bool    SwTestTabPage::FillItemSet( SfxItemSet& rCoreSet )
     if ( bAttrModified )
     {
         SwTestItem aTestItem(FN_PARAM_SWTEST);
-            aTestItem.bTest1=aTest1CBox.IsChecked();
-            aTestItem.bTest2=aTest2CBox.IsChecked();
-            aTestItem.bTest3=aTest3CBox.IsChecked();
-            aTestItem.bTest4=aTest4CBox.IsChecked();
-            aTestItem.bTest5=aTest5CBox.IsChecked();
-            aTestItem.bTest6=aTest6CBox.IsChecked();
-            aTestItem.bTest7=aTest7CBox.IsChecked();
-            aTestItem.bTest8=aTest8CBox.IsChecked();
-            aTestItem.bTest9=aTest9CBox.IsChecked();
-            aTestItem.bTest10=aTest10CBox.IsChecked();
+        aTestItem.bTest1=m_pTest1CBox->IsChecked();
+        aTestItem.bTest2=m_pTest2CBox->IsChecked();
+        aTestItem.bTest3=m_pTest3CBox->IsChecked();
+        aTestItem.bTest4=m_pTest4CBox->IsChecked();
+        aTestItem.bTest5=m_pTest5CBox->IsChecked();
+        aTestItem.bTest6=m_pTest6CBox->IsChecked();
+        aTestItem.bTest7=m_pTest7CBox->IsChecked();
+        aTestItem.bTest8=m_pTest8CBox->IsChecked();
+        aTestItem.bTest9=m_pTest9CBox->IsChecked();
+        aTestItem.bTest10=m_pTest10CBox->IsChecked();
         rCoreSet.Put(aTestItem);
     }
     return bAttrModified;
@@ -2495,16 +2452,16 @@ void SwTestTabPage::Reset( const SfxItemSet& )
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SWTEST , sal_False,
                                     (const SfxPoolItem**)&pTestAttr ))
     {
-        aTest1CBox.Check(pTestAttr->bTest1);
-        aTest2CBox.Check(pTestAttr->bTest2);
-        aTest3CBox.Check(pTestAttr->bTest3);
-        aTest4CBox.Check(pTestAttr->bTest4);
-        aTest5CBox.Check(pTestAttr->bTest5);
-        aTest6CBox.Check(pTestAttr->bTest6);
-        aTest7CBox.Check(pTestAttr->bTest7);
-        aTest8CBox.Check(pTestAttr->bTest8);
-        aTest9CBox.Check(pTestAttr->bTest9);
-        aTest10CBox.Check(pTestAttr->bTest10);
+        m_pTest1CBox->Check(pTestAttr->bTest1);
+        m_pTest2CBox->Check(pTestAttr->bTest2);
+        m_pTest3CBox->Check(pTestAttr->bTest3);
+        m_pTest4CBox->Check(pTestAttr->bTest4);
+        m_pTest5CBox->Check(pTestAttr->bTest5);
+        m_pTest6CBox->Check(pTestAttr->bTest6);
+        m_pTest7CBox->Check(pTestAttr->bTest7);
+        m_pTest8CBox->Check(pTestAttr->bTest8);
+        m_pTest9CBox->Check(pTestAttr->bTest9);
+        m_pTest10CBox->Check(pTestAttr->bTest10);
     }
 }
 
@@ -2512,16 +2469,16 @@ void SwTestTabPage::Init()
 {
     // handler
     Link aLk = LINK( this, SwTestTabPage, AutoClickHdl );
-    aTest1CBox.SetClickHdl( aLk );
-    aTest2CBox.SetClickHdl( aLk );
-    aTest3CBox.SetClickHdl( aLk );
-    aTest4CBox.SetClickHdl( aLk );
-    aTest5CBox.SetClickHdl( aLk );
-    aTest6CBox.SetClickHdl( aLk );
-    aTest7CBox.SetClickHdl( aLk );
-    aTest8CBox.SetClickHdl( aLk );
-    aTest9CBox.SetClickHdl( aLk );
-    aTest10CBox.SetClickHdl( aLk );
+    m_pTest1CBox->SetClickHdl( aLk );
+    m_pTest2CBox->SetClickHdl( aLk );
+    m_pTest3CBox->SetClickHdl( aLk );
+    m_pTest4CBox->SetClickHdl( aLk );
+    m_pTest5CBox->SetClickHdl( aLk );
+    m_pTest6CBox->SetClickHdl( aLk );
+    m_pTest7CBox->SetClickHdl( aLk );
+    m_pTest8CBox->SetClickHdl( aLk );
+    m_pTest9CBox->SetClickHdl( aLk );
+    m_pTest10CBox->SetClickHdl( aLk );
 }
 
 IMPL_LINK_NOARG_INLINE_START(SwTestTabPage, AutoClickHdl)

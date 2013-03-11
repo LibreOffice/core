@@ -442,17 +442,16 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
 private:
-    FixedLine aTestFL;
-    CheckBox aTest1CBox;
-    CheckBox aTest2CBox;
-    CheckBox aTest3CBox;
-    CheckBox aTest4CBox;
-    CheckBox aTest5CBox;
-    CheckBox aTest6CBox;
-    CheckBox aTest7CBox;
-    CheckBox aTest8CBox;
-    CheckBox aTest9CBox;
-    CheckBox aTest10CBox;
+    CheckBox* m_pTest1CBox;
+    CheckBox* m_pTest2CBox;
+    CheckBox* m_pTest3CBox;
+    CheckBox* m_pTest4CBox;
+    CheckBox* m_pTest5CBox;
+    CheckBox* m_pTest6CBox;
+    CheckBox* m_pTest7CBox;
+    CheckBox* m_pTest8CBox;
+    CheckBox* m_pTest9CBox;
+    CheckBox* m_pTest10CBox;
 
     sal_Bool        bAttrModified;
 
