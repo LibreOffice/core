@@ -25,8 +25,8 @@
 
 #ifdef DBG_UTIL
 
-#define DBG_CHECK_RANGES(NUMTYPE, pArr)                                 \
-    for ( const NUMTYPE *pRange = pArr; *pRange; pRange += 2 )          \
+#define DBG_CHECK_RANGES(sal_uInt16, pArr)                                 \
+    for ( const sal_uInt16 *pRange = pArr; *pRange; pRange += 2 )          \
     {                                                                   \
         DBG_ASSERT( pRange[0] <= pRange[1], "ranges must be sorted" );  \
         DBG_ASSERT( !pRange[2] || ( pRange[2] - pRange[1] ) > 1,        \
@@ -35,22 +35,22 @@
 
 #else
 
-#define DBG_CHECK_RANGES(NUMTYPE,pArr)
+#define DBG_CHECK_RANGES(sal_uInt16,pArr)
 
 #endif
 
 //============================================================================
-inline void Swap_Impl(const NUMTYPE *& rp1, const NUMTYPE *& rp2)
+inline void Swap_Impl(const sal_uInt16 *& rp1, const sal_uInt16 *& rp2)
 {
-    const NUMTYPE * pTemp = rp1;
+    const sal_uInt16 * pTemp = rp1;
     rp1 = rp2;
     rp2 = pTemp;
 }
 
 //========================================================================
 
-NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
-                               NUMTYPE nWh1, NUMTYPE nWh2, NUMTYPE nNull )
+sal_uInt16 InitializeRanges_Impl( sal_uInt16 *&rpRanges, va_list pArgs,
+                               sal_uInt16 nWh1, sal_uInt16 nWh2, sal_uInt16 nNull )
 
 /** <H3>Description</H3>
 
@@ -58,13 +58,13 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
     first range, 'nNull' as terminator or start of 2nd range and 'pArgs' as
     remaider.
 
-    It returns the number of NUMTYPEs which are contained in the described
-    set of NUMTYPEs.
+    It returns the number of sal_uInt16s which are contained in the described
+    set of sal_uInt16s.
 */
 
 {
-    NUMTYPE nSize = 0, nIns = 0;
-    std::vector<NUMTYPE> aNumArr;
+    sal_uInt16 nSize = 0, nIns = 0;
+    std::vector<sal_uInt16> aNumArr;
     aNumArr.push_back( nWh1 );
     aNumArr.push_back( nWh2 );
     DBG_ASSERT( nWh1 <= nWh2, "Ungueltiger Bereich" );
@@ -73,13 +73,13 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
     bool bEndOfRange = false;
     while ( 0 !=
             ( nIns =
-              sal::static_int_cast< NUMTYPE >(
-                  va_arg( pArgs, NUMTYPE_ARG ) ) ) )
+              sal::static_int_cast< sal_uInt16 >(
+                  va_arg( pArgs, int ) ) ) )
     {
         bEndOfRange = !bEndOfRange;
         if ( bEndOfRange )
         {
-            const NUMTYPE nPrev(*aNumArr.rbegin());
+            const sal_uInt16 nPrev(*aNumArr.rbegin());
             DBG_ASSERT( nPrev <= nIns, "Ungueltiger Bereich" );
             nSize += nIns - nPrev + 1;
         }
@@ -89,7 +89,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
     assert( bEndOfRange ); // odd number of Which-IDs
 
     // so, jetzt sind alle Bereiche vorhanden und
-    rpRanges = new NUMTYPE[ aNumArr.size() + 1 ];
+    rpRanges = new sal_uInt16[ aNumArr.size() + 1 ];
     std::copy( aNumArr.begin(), aNumArr.end(), rpRanges);
     *(rpRanges + aNumArr.size()) = 0;
 
@@ -98,16 +98,16 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 
 //------------------------------------------------------------------------
 
-NUMTYPE Count_Impl( const NUMTYPE *pRanges )
+sal_uInt16 Count_Impl( const sal_uInt16 *pRanges )
 
 /** <H3>Description</H3>
 
-    Determines the number of NUMTYPEs in an 0-terminated array of pairs of
-    NUMTYPEs. The terminating 0 is not included in the count.
+    Determines the number of sal_uInt16s in an 0-terminated array of pairs of
+    sal_uInt16s. The terminating 0 is not included in the count.
 */
 
 {
-    NUMTYPE nCount = 0;
+    sal_uInt16 nCount = 0;
     while ( *pRanges )
     {
         nCount += 2;
@@ -118,16 +118,16 @@ NUMTYPE Count_Impl( const NUMTYPE *pRanges )
 
 //------------------------------------------------------------------------
 
-NUMTYPE Capacity_Impl( const NUMTYPE *pRanges )
+sal_uInt16 Capacity_Impl( const sal_uInt16 *pRanges )
 
 /** <H3>Description</H3>
 
-    Determines the total number of NUMTYPEs described in an 0-terminated
-    array of pairs of NUMTYPEs, each representing an range of NUMTYPEs.
+    Determines the total number of sal_uInt16s described in an 0-terminated
+    array of pairs of sal_uInt16s, each representing an range of sal_uInt16s.
 */
 
 {
-    NUMTYPE nCount = 0;
+    sal_uInt16 nCount = 0;
 
     if ( pRanges )
     {
@@ -142,7 +142,7 @@ NUMTYPE Capacity_Impl( const NUMTYPE *pRanges )
 
 //------------------------------------------------------------------------
 
-SfxNumRanges::SfxNumRanges( const SfxNumRanges &rOrig )
+SfxUShortRanges::SfxUShortRanges( const SfxUShortRanges &rOrig )
 
 /** <H3>Description</H3>
 
@@ -152,9 +152,9 @@ SfxNumRanges::SfxNumRanges( const SfxNumRanges &rOrig )
 {
     if ( rOrig._pRanges )
     {
-        NUMTYPE nCount = Count_Impl( rOrig._pRanges ) + 1;
-        _pRanges = new NUMTYPE[nCount];
-        memcpy( _pRanges, rOrig._pRanges, sizeof(NUMTYPE) * nCount );
+        sal_uInt16 nCount = Count_Impl( rOrig._pRanges ) + 1;
+        _pRanges = new sal_uInt16[nCount];
+        memcpy( _pRanges, rOrig._pRanges, sizeof(sal_uInt16) * nCount );
     }
     else
         _pRanges = 0;
@@ -162,17 +162,17 @@ SfxNumRanges::SfxNumRanges( const SfxNumRanges &rOrig )
 
 //------------------------------------------------------------------------
 
-SfxNumRanges::SfxNumRanges( NUMTYPE nWhich1, NUMTYPE nWhich2 )
+SfxUShortRanges::SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
 /** <H3>Description</H3>
 
-    Constructs an SfxNumRanges-instance from one range of NUMTYPEs.
+    Constructs an SfxUShortRanges-instance from one range of sal_uInt16s.
 
     precondition:
         nWhich1 <= nWhich2
 */
 
-:   _pRanges( new NUMTYPE[3] )
+:   _pRanges( new sal_uInt16[3] )
 {
     _pRanges[0] = nWhich1;
     _pRanges[1] = nWhich2;
@@ -181,11 +181,11 @@ SfxNumRanges::SfxNumRanges( NUMTYPE nWhich1, NUMTYPE nWhich2 )
 
 //------------------------------------------------------------------------
 
-SfxNumRanges::SfxNumRanges( const NUMTYPE* pArr )
+SfxUShortRanges::SfxUShortRanges( const sal_uInt16* pArr )
 
 /** <H3>Description</H3>
 
-    Constcurts an SfxNumRanges-instance from an sorted ranges of NUMTYPEs,
+    Constcurts an SfxUShortRanges-instance from an sorted ranges of sal_uInt16s,
     terminates with on 0.
 
     precondition: for each n >= 0 && n < (sizeof(pArr)-1)
@@ -193,15 +193,15 @@ SfxNumRanges::SfxNumRanges( const NUMTYPE* pArr )
 */
 
 {
-    DBG_CHECK_RANGES(NUMTYPE, pArr);
-    NUMTYPE nCount = Count_Impl(pArr) + 1;
-    _pRanges = new NUMTYPE[ nCount ];
-    memcpy( _pRanges, pArr, sizeof(NUMTYPE) * nCount );
+    DBG_CHECK_RANGES(sal_uInt16, pArr);
+    sal_uInt16 nCount = Count_Impl(pArr) + 1;
+    _pRanges = new sal_uInt16[ nCount ];
+    memcpy( _pRanges, pArr, sizeof(sal_uInt16) * nCount );
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxNumRanges::operator==( const SfxNumRanges &rOther ) const
+sal_Bool SfxUShortRanges::operator==( const SfxUShortRanges &rOther ) const
 {
     // Object pointers equal?
     if ( this == &rOther )
@@ -212,12 +212,12 @@ sal_Bool SfxNumRanges::operator==( const SfxNumRanges &rOther ) const
         return sal_True;
 
     // Counts equal?
-    NUMTYPE nCount = Count();
+    sal_uInt16 nCount = Count();
     if ( nCount != rOther.Count() )
         return sal_False;
 
     // Check arrays.
-    NUMTYPE n = 0;
+    sal_uInt16 n = 0;
     while( _pRanges[ n ] != 0 )
     {
         // Elements at current position equal?
@@ -232,9 +232,9 @@ sal_Bool SfxNumRanges::operator==( const SfxNumRanges &rOther ) const
 
 //------------------------------------------------------------------------
 
-SfxNumRanges& SfxNumRanges::operator =
+SfxUShortRanges& SfxUShortRanges::operator =
 (
-    const SfxNumRanges &rRanges
+    const SfxUShortRanges &rRanges
 )
 
 /** <H3>Description</H3>
@@ -255,25 +255,25 @@ SfxNumRanges& SfxNumRanges::operator =
     else
     {
         // copy ranges
-        NUMTYPE nCount = Count_Impl( rRanges._pRanges ) + 1;
-        _pRanges = new NUMTYPE[ nCount ];
-        memcpy( _pRanges, rRanges._pRanges, sizeof(NUMTYPE) * nCount );
+        sal_uInt16 nCount = Count_Impl( rRanges._pRanges ) + 1;
+        _pRanges = new sal_uInt16[ nCount ];
+        memcpy( _pRanges, rRanges._pRanges, sizeof(sal_uInt16) * nCount );
     }
     return *this;
 }
 
 //------------------------------------------------------------------------
 
-SfxNumRanges& SfxNumRanges::operator +=
+SfxUShortRanges& SfxUShortRanges::operator +=
 (
-    const SfxNumRanges &rRanges
+    const SfxUShortRanges &rRanges
 )
 
 /** <H3>Description</H3>
 
     Merges *this with 'rRanges'.
 
-    for each NUMTYPE n:
+    for each sal_uInt16 n:
         this->Contains( n ) || rRanges.Contains( n ) => this'->Contains( n )
         !this->Contains( n ) && !rRanges.Contains( n ) => !this'->Contains( n )
 */
@@ -287,9 +287,9 @@ SfxNumRanges& SfxNumRanges::operator +=
 
     // First, run thru _pRanges and rRanges._pRanges and determine the size of
     // the new, merged ranges:
-    NUMTYPE nCount = 0;
-    const NUMTYPE * pRA = _pRanges;
-    const NUMTYPE * pRB = rRanges._pRanges;
+    sal_uInt16 nCount = 0;
+    const sal_uInt16 * pRA = _pRanges;
+    const sal_uInt16 * pRB = rRanges._pRanges;
 
     for (;;)
     {
@@ -348,10 +348,10 @@ count_rest:
     // Now, create new ranges of the correct size and, on a second run thru
     // _pRanges and rRanges._pRanges, copy the merged pairs into the new
     // ranges:
-    NUMTYPE * pNew = new NUMTYPE[nCount + 1];
+    sal_uInt16 * pNew = new sal_uInt16[nCount + 1];
     pRA = _pRanges;
     pRB = rRanges._pRanges;
-    NUMTYPE * pRN = pNew;
+    sal_uInt16 * pRN = pNew;
 
     for (;;)
     {
@@ -424,16 +424,16 @@ copy_rest:
 
 //------------------------------------------------------------------------
 
-SfxNumRanges& SfxNumRanges::operator -=
+SfxUShortRanges& SfxUShortRanges::operator -=
 (
-    const SfxNumRanges &rRanges
+    const SfxUShortRanges &rRanges
 )
 
 /** <H3>Description</H3>
 
     Removes 'rRanges' from '*this'.
 
-    for each NUMTYPE n:
+    for each sal_uInt16 n:
         this->Contains( n ) && rRanges.Contains( n ) => !this'->Contains( n )
         this->Contains( n ) && !rRanges.Contains( n ) => this'->Contains( n )
         !this->Contains( n ) => !this'->Contains( n )
@@ -446,19 +446,19 @@ SfxNumRanges& SfxNumRanges::operator -=
 
     // differentiate 'rRanges' in a temporary copy of '*this'
     // (size is computed for maximal possibly split-count plus terminating 0)
-    NUMTYPE nThisSize = Count_Impl(_pRanges);
-    NUMTYPE nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
-    NUMTYPE *pTarget = new NUMTYPE[ nTargetSize ];
-    memset( pTarget, 0, sizeof(NUMTYPE)*nTargetSize );
-    memcpy( pTarget, _pRanges, sizeof(NUMTYPE)*nThisSize );
+    sal_uInt16 nThisSize = Count_Impl(_pRanges);
+    sal_uInt16 nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
+    sal_uInt16 *pTarget = new sal_uInt16[ nTargetSize ];
+    memset( pTarget, 0, sizeof(sal_uInt16)*nTargetSize );
+    memcpy( pTarget, _pRanges, sizeof(sal_uInt16)*nThisSize );
 
-    NUMTYPE nPos1 = 0, nPos2 = 0, nTargetPos = 0;
+    sal_uInt16 nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] )
     {
-        NUMTYPE l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
-        NUMTYPE u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
-        NUMTYPE l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
-        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
+        sal_uInt16 l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
+        sal_uInt16 u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
+        sal_uInt16 l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
+        sal_uInt16 u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
 
         // boundary cases
         // * subtrahend is empty -> copy the minuend
@@ -544,7 +544,7 @@ SfxNumRanges& SfxNumRanges::operator -=
         }
 
         // we should never be here
-        OSL_FAIL( "SfxNumRanges::operator-=: internal error" );
+        OSL_FAIL( "SfxUShortRanges::operator-=: internal error" );
     } // while
 
     pTarget[ nTargetPos ] = 0;
@@ -552,11 +552,11 @@ SfxNumRanges& SfxNumRanges::operator -=
     // assign the differentiated ranges
     delete[] _pRanges;
 
-    NUMTYPE nUShorts = Count_Impl(pTarget) + 1;
+    sal_uInt16 nUShorts = Count_Impl(pTarget) + 1;
     if ( 1 != nUShorts )
     {
-        _pRanges = new NUMTYPE[ nUShorts ];
-        memcpy( _pRanges, pTarget, nUShorts * sizeof(NUMTYPE) );
+        _pRanges = new sal_uInt16[ nUShorts ];
+        memcpy( _pRanges, pTarget, nUShorts * sizeof(sal_uInt16) );
     }
     else
         _pRanges = 0;
@@ -567,16 +567,16 @@ SfxNumRanges& SfxNumRanges::operator -=
 
 //------------------------------------------------------------------------
 
-SfxNumRanges& SfxNumRanges::operator /=
+SfxUShortRanges& SfxUShortRanges::operator /=
 (
-    const SfxNumRanges &rRanges
+    const SfxUShortRanges &rRanges
 )
 
 /** <H3>Description</H3>
 
     Determines intersection of '*this' with 'rRanges'.
 
-    for each NUMTYPE n:
+    for each sal_uInt16 n:
         this->Contains( n ) && rRanges.Contains( n ) => this'->Contains( n )
         !this->Contains( n ) => !this'->Contains( n )
         !rRanges.Contains( n ) => !this'->Contains( n )
@@ -590,7 +590,7 @@ SfxNumRanges& SfxNumRanges::operator /=
     {
         delete[] _pRanges;
 
-        _pRanges = new NUMTYPE[1];
+        _pRanges = new sal_uInt16[1];
         _pRanges[0] = 0;
 
         return *this;
@@ -598,19 +598,19 @@ SfxNumRanges& SfxNumRanges::operator /=
 
     // intersect 'rRanges' in a temporary copy of '*this'
     // (size is computed for maximal possibly split-count plus terminating 0)
-    NUMTYPE nThisSize = Count_Impl(_pRanges);
-    NUMTYPE nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
-    NUMTYPE *pTarget = new NUMTYPE[ nTargetSize ];
-    memset( pTarget, 0, sizeof(NUMTYPE)*nTargetSize );
-    memcpy( pTarget, _pRanges, sizeof(NUMTYPE)*nThisSize );
+    sal_uInt16 nThisSize = Count_Impl(_pRanges);
+    sal_uInt16 nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
+    sal_uInt16 *pTarget = new sal_uInt16[ nTargetSize ];
+    memset( pTarget, 0, sizeof(sal_uInt16)*nTargetSize );
+    memcpy( pTarget, _pRanges, sizeof(sal_uInt16)*nThisSize );
 
-    NUMTYPE nPos1 = 0, nPos2 = 0, nTargetPos = 0;
+    sal_uInt16 nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] != 0 && rRanges._pRanges[ nPos2 ] != 0 )
     {
-        NUMTYPE l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
-        NUMTYPE u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
-        NUMTYPE l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
-        NUMTYPE u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
+        sal_uInt16 l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
+        sal_uInt16 u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
+        sal_uInt16 l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
+        sal_uInt16 u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
 
         if( u1 < l2 )
         {
@@ -672,11 +672,11 @@ SfxNumRanges& SfxNumRanges::operator /=
     // assign the intersected ranges
     delete[] _pRanges;
 
-    NUMTYPE nUShorts = Count_Impl(pTarget) + 1;
+    sal_uInt16 nUShorts = Count_Impl(pTarget) + 1;
     if ( 1 != nUShorts )
     {
-        _pRanges = new NUMTYPE[ nUShorts ];
-        memcpy( _pRanges, pTarget, nUShorts * sizeof(NUMTYPE) );
+        _pRanges = new sal_uInt16[ nUShorts ];
+        memcpy( _pRanges, pTarget, nUShorts * sizeof(sal_uInt16) );
     }
     else
         _pRanges = 0;
@@ -687,7 +687,7 @@ SfxNumRanges& SfxNumRanges::operator /=
 
 //------------------------------------------------------------------------
 
-NUMTYPE SfxNumRanges::Count() const
+sal_uInt16 SfxUShortRanges::Count() const
 
 /** <H3>Description</H3>
 

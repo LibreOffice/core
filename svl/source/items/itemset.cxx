@@ -43,11 +43,7 @@ DBG_NAME(SfxItemSet)
 
 //========================================================================
 
-#define NUMTYPE         sal_uInt16
-#define SfxNumRanges    SfxUShortRanges
 #include "nranges.cxx"
-#undef NUMTYPE
-#undef SfxNumRanges
 
 //========================================================================
 

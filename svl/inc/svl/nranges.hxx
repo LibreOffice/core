@@ -25,57 +25,39 @@
 
 #ifndef _SFXNRANGES_HXX
 
-#ifndef NUMTYPE
-
-#define NUMTYPE sal_uInt16
-#define SfxNumRanges SfxUShortRanges
-#include <svl/nranges.hxx>
-
-#undef NUMTYPE
-
-#define _SFXNRANGES_HXX
-
-#else
 #include <tools/solar.h>
 
 //========================================================================
 
-#define NUMTYPE_ARG int
-
-class SfxNumRanges
+class SfxUShortRanges
 {
-    NUMTYPE*                    _pRanges; // 0-terminated array of NUMTYPE-pairs
+    sal_uInt16*                 _pRanges; // 0-terminated array of sal_uInt16-pairs
 
 public:
-                                SfxNumRanges() : _pRanges( 0 ) {}
-                                SfxNumRanges( const SfxNumRanges &rOrig );
-                                SfxNumRanges( NUMTYPE nWhich1, NUMTYPE nWhich2 );
-                                SfxNumRanges( const NUMTYPE* nNumTable );
-                                ~SfxNumRanges()
+                                SfxUShortRanges() : _pRanges( 0 ) {}
+                                SfxUShortRanges( const SfxUShortRanges &rOrig );
+                                SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
+                                SfxUShortRanges( const sal_uInt16* nNumTable );
+                                ~SfxUShortRanges()
                                 { delete [] _pRanges; }
 
-    sal_Bool                        operator == ( const SfxNumRanges & ) const;
-    sal_Bool                        operator != ( const SfxNumRanges & rRanges ) const
+    sal_Bool                    operator == ( const SfxUShortRanges & ) const;
+    sal_Bool                    operator != ( const SfxUShortRanges & rRanges ) const
                                 { return !( *this == rRanges ); }
 
-    SfxNumRanges&               operator = ( const SfxNumRanges & );
+    SfxUShortRanges&            operator = ( const SfxUShortRanges & );
 
-    SfxNumRanges&               operator += ( const SfxNumRanges & );
-    SfxNumRanges&               operator -= ( const SfxNumRanges & );
-    SfxNumRanges&               operator /= ( const SfxNumRanges & );
+    SfxUShortRanges&            operator += ( const SfxUShortRanges & );
+    SfxUShortRanges&            operator -= ( const SfxUShortRanges & );
+    SfxUShortRanges&            operator /= ( const SfxUShortRanges & );
 
-    NUMTYPE                     Count() const;
-    sal_Bool                        IsEmpty() const
+    sal_uInt16                  Count() const;
+    sal_Bool                    IsEmpty() const
                                 { return !_pRanges || 0 == *_pRanges; }
 
-                                operator const NUMTYPE* () const
+                                operator const sal_uInt16* () const
                                 { return _pRanges; }
 };
-
-#undef NUMTYPE
-#undef SfxNumRanges
-
-#endif
 
 #endif
 
