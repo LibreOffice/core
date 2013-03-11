@@ -1420,6 +1420,36 @@ endef
 endif # SYSTEM_WPS
 
 
+ifeq ($(SYSTEM_MWAW),YES)
+
+define gb_LinkTarget__use_mwaw
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(MWAW_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(MWAW_LIBS))
+
+endef
+
+else # !SYSTEM_MWAW
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	mwaw-0.1 \
+))
+
+define gb_LinkTarget__use_mwaw
+$(call gb_LinkTarget_use_package,$(1),\
+	libmwaw \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	mwaw-0.1 \
+)
+
+endef
+
+endif # SYSTEM_MWAW
+
+
 ifeq ($(SYSTEM_LCMS2),YES)
 
 define gb_LinkTarget__use_lcms2

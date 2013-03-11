@@ -76,6 +76,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	$(foreach item, \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
+		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 	,$(call fetch_Download_item_special,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
