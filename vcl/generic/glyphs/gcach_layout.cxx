@@ -21,6 +21,10 @@
 #include <sallayout.hxx>
 #include <salgdi.hxx>
 
+#include <boost/static_assert.hpp>
+
+#include <i18npool/mslangid.hxx>
+
 #include <vcl/svapp.hxx>
 
 #include <sal/alloca.h>
@@ -28,6 +32,7 @@
 
 #include <layout/LayoutEngine.h>
 #include <layout/LEFontInstance.h>
+#include <layout/LELanguages.h>
 #include <layout/LEScripts.h>
 
 #include <unicode/uscript.h>
@@ -265,6 +270,7 @@ class IcuLayoutEngine : public ServerFontLayoutEngine
 private:
     IcuFontFromServerFont   maIcuFont;
 
+    LanguageCodes           meLanguageCode;
     le_int32                meScriptCode;
     le_int32                mnLayoutFlags;
     LayoutEngine*           mpIcuLE;
@@ -280,6 +286,7 @@ public:
 
 IcuLayoutEngine::IcuLayoutEngine( ServerFont& rServerFont )
 :   maIcuFont( rServerFont ),
+    meLanguageCode( nullLanguageCode ),
     meScriptCode( USCRIPT_INVALID_CODE ),
     mnLayoutFlags( 0 ),
     mpIcuLE( NULL )
@@ -307,6 +314,169 @@ static bool needPreviousCode(sal_Unicode cChar)
 static bool needNextCode(sal_Unicode cChar)
 {
     return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
+}
+
+namespace
+{
+    LanguageCodes mapLanguageTypetoICU(LanguageType eLangCode)
+    {
+        LanguageTag aLangTag(eLangCode);
+        OUString sLanguage = aLangTag.getLanguage();
+
+        if (sLanguage == "af") // Afrikaans
+            return afkLanguageCode;
+        else if (sLanguage == "ar") // Arabic
+            return araLanguageCode;
+        else if (sLanguage == "as") // Assamese
+            return asmLanguageCode;
+        else if (sLanguage == "be") // Belarussian
+            return belLanguageCode;
+        else if (sLanguage == "bn") // Bengali
+            return benLanguageCode;
+        else if (sLanguage == "bo") // Tibetan
+            return tibLanguageCode;
+        else if (sLanguage == "bu") // Bulgarian
+            return bgrLanguageCode;
+        else if (sLanguage == "ca") // Catalan
+            return catLanguageCode;
+        else if (sLanguage == "cs") // Czech
+            return csyLanguageCode;
+        else if (sLanguage == "ch") // Chechen
+            return cheLanguageCode;
+        else if (sLanguage == "co") // Coptic
+            return copLanguageCode;
+        else if (sLanguage == "cy") // Welsh
+            return welLanguageCode;
+        else if (sLanguage == "da") // Danish
+            return danLanguageCode;
+        else if (sLanguage == "de") // German
+            return deuLanguageCode;
+        else if (sLanguage == "dz") // Dzongkha
+            return dznLanguageCode;
+        else if (sLanguage == "el") // Greek
+            return ellLanguageCode;
+        else if (sLanguage == "en") // English
+            return engLanguageCode;
+        else if (sLanguage == "et") // Estonian
+            return etiLanguageCode;
+        else if (sLanguage == "eu") // Basque
+            return euqLanguageCode;
+        else if (sLanguage == "fa") // Farsi
+            return farLanguageCode;
+        else if (sLanguage == "fi") // Finnish
+            return finLanguageCode;
+        else if (sLanguage == "fr") // French
+            return fraLanguageCode;
+        else if (sLanguage == "ga") // Irish Gaelic
+            return gaeLanguageCode;
+        else if (sLanguage == "gu") // Gujarati
+            return gujLanguageCode;
+        else if (sLanguage == "ha") // Hausa
+            return hauLanguageCode;
+        else if (sLanguage == "he") // Hebrew
+            return iwrLanguageCode;
+        else if (sLanguage == "hi") // Hindi
+            return hinLanguageCode;
+        else if (sLanguage == "hr") // Croatian
+            return hrvLanguageCode;
+        else if (sLanguage == "hu") // Hungarian
+            return hunLanguageCode;
+        else if (sLanguage == "hy") // Armenian
+            return hyeLanguageCode;
+        else if (sLanguage == "id") // Indonesian
+            return indLanguageCode;
+        else if (sLanguage == "it") // Italian
+            return itaLanguageCode;
+        else if (sLanguage == "ja") // Japanese
+            return janLanguageCode;
+        else if (sLanguage == "kn") // Kannada
+            return kanLanguageCode;
+        else if (sLanguage == "ks") // Kashmiri
+            return kshLanguageCode;
+        else if (sLanguage == "kh") // Khmer
+            return khmLanguageCode;
+        else if (sLanguage == "kok") // Konkani
+            return kokLanguageCode;
+        else if (sLanguage == "ko") // Korean
+            return korLanguageCode;
+        else if (sLanguage == "ml") // Malayalam - Reformed (should there be some bcp47 tag for Traditional Malayalam)
+            return mlrLanguageCode;
+        else if (sLanguage == "mr") // Marathi
+            return marLanguageCode;
+        else if (sLanguage == "mt") // Maltese
+            return mtsLanguageCode;
+        else if (sLanguage == "mni") // Manipuri
+            return mniLanguageCode;
+        else if (sLanguage == "mn") // Mongolian
+            return mngLanguageCode;
+        else if (sLanguage == "ne") // Nepali
+            return nepLanguageCode;
+        else if (sLanguage == "or") // Oriya
+            return oriLanguageCode;
+        else if (sLanguage == "pl") // Polish
+            return plkLanguageCode;
+        else if (sLanguage == "po") // Portuguese
+            return ptgLanguageCode;
+        else if (sLanguage == "ps") // Pashto
+            return pasLanguageCode;
+        else if (sLanguage == "ro") // Romanian
+            return romLanguageCode;
+        else if (sLanguage == "ru") // Russian
+            return rusLanguageCode;
+        else if (sLanguage == "sa") // Sanskrit
+            return sanLanguageCode;
+        else if (sLanguage == "si") // Sinhalese
+            return snhLanguageCode;
+        else if (sLanguage == "sk") // Slovak
+            return skyLanguageCode;
+        else if (sLanguage == "sd") // Sindhi
+            return sndLanguageCode;
+        else if (sLanguage == "sl") // Slovenian
+            return slvLanguageCode;
+        else if (sLanguage == "es") // Spanish
+            return espLanguageCode;
+        else if (sLanguage == "sq") // Albanian
+            return sqiLanguageCode;
+        else if (sLanguage == "sr") // Serbian
+            return srbLanguageCode;
+        else if (sLanguage == "sv") // Swedish
+            return sveLanguageCode;
+        else if (sLanguage == "syr") // Syriac
+            return syrLanguageCode;
+        else if (sLanguage == "ta") // Tamil
+            return tamLanguageCode;
+        else if (sLanguage == "te") // Telugu
+            return telLanguageCode;
+        else if (sLanguage == "th") // Thai
+            return thaLanguageCode;
+        else if (sLanguage == "tu") // Turkish
+            return trkLanguageCode;
+        else if (sLanguage == "ur") // Urdu
+            return urdLanguageCode;
+        else if (sLanguage == "yi") // Yiddish
+            return jiiLanguageCode;
+        else if (sLanguage == "zh") // Chinese
+        {
+            OUString sScript = aLangTag.getScript();
+            if (sScript.isEmpty())
+            {
+                if (MsLangId::isTraditionalChinese(eLangCode))
+                    sScript = "Hant";
+                else
+                    sScript = "Hans";
+            }
+            if (sScript == "Latn")
+                return zhpLanguageCode;
+            else if (sScript == "Hans")
+                return zhsLanguageCode;
+            else if (sScript == "Hant")
+                return zhtLanguageCode;
+        }
+
+        //if there are new ones, please reexamine the mapping list for the new ones
+        BOOST_STATIC_ASSERT(languageCodeCount == 72);
+        return nullLanguageCode;
+    }
 }
 
 //See https://bugs.freedesktop.org/show_bug.cgi?id=31016
@@ -379,16 +549,20 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         if( eScriptCode < 0 )   // TODO: handle errors better
             eScriptCode = latnScriptCode;
 
+        LanguageCodes eLanguageCode = mapLanguageTypetoICU(rArgs.meLanguage);
+
         // get layout engine matching to this script and ligature/kerning combination
         // no engine change necessary if script is latin
-        if( !mpIcuLE || ((eScriptCode != meScriptCode) && (eScriptCode > USCRIPT_INHERITED)) || (mnLayoutFlags != nLayoutFlags) )
+        if ( !mpIcuLE ||
+             ((eScriptCode != meScriptCode) && (eScriptCode > USCRIPT_INHERITED)) ||
+             (mnLayoutFlags != nLayoutFlags) || (meLanguageCode != eLanguageCode) )
         {
             // TODO: cache multiple layout engines when multiple scripts are used
             delete mpIcuLE;
+            meLanguageCode = eLanguageCode;
             meScriptCode = eScriptCode;
             mnLayoutFlags = nLayoutFlags;
-            le_int32 eLangCode = 0; // TODO: get better value
-            mpIcuLE = LayoutEngine::layoutEngineFactory( &maIcuFont, eScriptCode, eLangCode, nLayoutFlags, rcIcu );
+            mpIcuLE = LayoutEngine::layoutEngineFactory( &maIcuFont, eScriptCode, eLanguageCode, nLayoutFlags, rcIcu );
             if( LE_FAILURE(rcIcu) )
             {
                 delete mpIcuLE;

@@ -87,6 +87,7 @@ class ImplLayoutArgs
 {
 public:
     // string related inputs
+    LanguageType        meLanguage;
     int                 mnFlags;
     int                 mnLength;
     int                 mnMinCharPos;
@@ -104,7 +105,7 @@ public:
 
 public:
                 ImplLayoutArgs( const sal_Unicode* pStr, int nLength,
-                    int nMinCharPos, int nEndCharPos, int nFlags );
+                    int nMinCharPos, int nEndCharPos, int nFlags, LanguageType eLanguage );
 
     void        SetLayoutWidth( long nWidth )       { mnLayoutWidth = nWidth; }
     void        SetDXArray( const sal_Int32* pDXArray )  { mpDXArray = pDXArray; }

@@ -428,8 +428,9 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
 // =======================================================================
 
 ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
-    int nMinCharPos, int nEndCharPos, int nFlags )
+    int nMinCharPos, int nEndCharPos, int nFlags, LanguageType eLanguage )
 :
+    meLanguage( eLanguage ),
     mnFlags( nFlags ),
     mnLength( nLen ),
     mnMinCharPos( nMinCharPos ),
