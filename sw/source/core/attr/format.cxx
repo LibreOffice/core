@@ -223,7 +223,9 @@ SwFmt::~SwFmt()
         SwFmt* pParentFmt = DerivedFrom();
         if( !pParentFmt )
         {
-            OSL_FAIL("~SwFmt: parent format missing from: " + OUString(GetName()) );
+            SAL_WARN(
+                "sw.core",
+                "~SwFmt: parent format missing from: " << GetName() );
         }
         else
         {
