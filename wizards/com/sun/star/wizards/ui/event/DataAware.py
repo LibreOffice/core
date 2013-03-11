@@ -91,8 +91,9 @@ class DataAware(object):
     '''
 
     def setDataObject(self, obj, updateUI):
-        if obj is not None and not isinstance(obj, type(self._field)):
-            return
+        print ("DEBUG !!! setDataObject -- obj: ", obj)
+        #if obj is not None and not isinstance(obj, type(self._field)):
+        #    return
 
         self._dataObject = obj
 
