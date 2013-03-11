@@ -26,12 +26,4 @@ ifeq ($(SYSTEM_MYSQL_CPPCONN),NO)
 $(eval $(call gb_Extension_add_library,mysql-connector-ooo,mysqlcppconn))
 endif
 
-# HACK: comes from Library_mysql.mk
-ifeq ($(SYSTEM_MARIADB),NO)
-$(eval $(call gb_Extension_add_files,mysql-connector-ooo,,\
-	$(LIBMARIADB_PATH)/lib/$(LIBMARIADB) \
-))
-endif
-
-
 # vim: set noet sw=4 ts=4:
