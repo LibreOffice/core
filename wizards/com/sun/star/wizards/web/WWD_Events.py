@@ -233,8 +233,9 @@ class WWD_Events(WWD_Startup):
             self.fillExportList(WWD_Startup.settings.getExporters(doc.appType))
 
         WWD_Startup.selectedDoc = s
-        self.mountList(doc, self.docAware)
-        self.disableDocUpDown()
+        if (doc is not None):
+            self.mountList(doc, self.docAware)
+            self.disableDocUpDown()
 
     '''
     The user clicks the "Add" button.
