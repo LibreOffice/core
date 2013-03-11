@@ -21,8 +21,6 @@
 #include "services/autorecovery.hxx"
 #include <loadenv/loadenv.hxx>
 
-#include <sfx2/sfxbasemodel.hxx> //?
-
 #include <loadenv/targethelper.hxx>
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
@@ -89,6 +87,8 @@
 #include <tools/urlobj.hxx>
 
 #include <fwkdllapi.h>
+
+#include <sfx2/objsh.hxx>
 
 //_______________________________________________
 // namespaces
@@ -583,6 +583,8 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
     // in case a new dispatch overwrites a may ba active AutoSave session
     // we must restore this session later. see below ...
     sal_Bool bWasAutoSaveActive = ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE);
+    sal_Bool bWasUserAutoSaveActive =
+        ((eJob & AutoRecovery::E_USER_AUTO_SAVE) == AutoRecovery::E_USER_AUTO_SAVE);
 
     // On the other side it make no sense to reactivate the AutoSave operation
     // if the new dispatch indicates a final decision ...
@@ -691,6 +693,11 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
        )
     {
         m_eJob |= AutoRecovery::E_AUTO_SAVE;
+
+        if (bWasUserAutoSaveActive)
+        {
+            m_eJob |= AutoRecovery::E_USER_AUTO_SAVE;
+        }
     }
 
     aWriteLock.unlock();
@@ -993,9 +1000,13 @@ void AutoRecovery::implts_readAutoSaveConfig()
         m_eTimerType  = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
 
         if (bUserEnabled)
+        {
             m_eJob |= AutoRecovery::E_USER_AUTO_SAVE;
+        }
         else
+        {
             m_eJob &= ~AutoRecovery::E_USER_AUTO_SAVE;
+        }
     }
     else
     {
@@ -2341,7 +2352,6 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     // Mark AutoSave state as "INCOMPLETE" if it failed.
     // Because the last temp file is to old and does not include all changes.
     Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY_THROW);
-    Reference< XStorable > xDocSave(rInfo.Document, css::uno::UNO_QUERY_THROW);
 
     // safe the state about "trying to save"
     // ... we need it for recovery if e.g. a crash occures inside next line!
@@ -2359,6 +2369,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
             // if userautosave is enabled, also save to the original file
             if((m_eJob & AutoRecovery::E_USER_AUTO_SAVE) == AutoRecovery::E_USER_AUTO_SAVE)
             {
+                Reference< XStorable > xDocSave(rInfo.Document, css::uno::UNO_QUERY_THROW);
                 xDocSave->store();
             }
 

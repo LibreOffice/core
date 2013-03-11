@@ -357,7 +357,6 @@ sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) cons
 #define ODFDEFAULTVERSION   15
 #define USESHA1INODF12      16
 #define USEBLOWFISHINODF12  17
-#define USERAUTOSAVE        18
 
 Sequence< OUString > GetPropertyNames()
 {
@@ -380,8 +379,7 @@ Sequence< OUString > GetPropertyNames()
         "WorkingSet",
         "ODF/DefaultVersion",
         "ODF/UseSHA1InODF12",
-        "ODF/UseBlowfishInODF12",
-        "Document/UserAutoSave"
+        "ODF/UseBlowfishInODF12"
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -499,10 +497,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case AUTOSAVE :
                                     bAutoSave = bTemp;
                                     bROAutoSave = pROStates[nProp];
-                                    break;
-                                case USERAUTOSAVE :
-                                    bUserAutoSave = bTemp;
-                                    bROUserAutoSave = pROStates[nProp];
                                     break;
                                 case PROMPT :
                                     bAutoSavePrompt = bTemp;
@@ -656,14 +650,6 @@ void SvtSaveOptions_Impl::Commit()
                 if (!bROAutoSavePrompt)
                 {
                     pValues[nRealCount] <<= bAutoSavePrompt;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case USERAUTOSAVE :
-                if (!bROUserAutoSave)
-                {
-                    pValues[nRealCount] <<= bUserAutoSave;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
