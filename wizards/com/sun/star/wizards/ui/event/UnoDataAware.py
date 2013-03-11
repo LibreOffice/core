@@ -46,7 +46,12 @@ class UnoDataAware(DataAware):
             i.Model.Enabled = bool(value)
 
     def setToUI(self, value):
-        if self.isShort:
+        if (isinstance(value, list)):
+            length = len(value)
+            print ("DEBUG !!! value is an array of length: ", length)
+            value = tuple(value)
+        elif self.isShort:
+            print ("DEBUG !!! value is sort: ", value)
             value = uno.Any("[]short", (value,))
         setattr(self.unoModel, self.unoPropName, value)
 
