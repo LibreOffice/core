@@ -17,8 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-URI_ENCODE="`dirname $0`/uri-encode"
-URI_ENCODE=`printf "%b" "$URI_ENCODE"`
+URI_ENCODE=`dirname "$0"`/uri-encode
 FOPTS=""
 sd_platform=`uname -s`
 
@@ -106,7 +105,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    ATTACH=${ATTACH:-}${ATTACH:+,}`echo "file://$2" | ${URI_ENCODE}`
+                    ATTACH=${ATTACH:-}${ATTACH:+,}`echo "file://$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 *)
@@ -240,23 +239,23 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="`echo "file://$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="`echo "file://$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 *)
@@ -282,23 +281,23 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 *)
@@ -359,7 +358,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             case $1 in
                 --attach)
                     #i95688# fix filenames containing accented chars, whatever alien
-                    ATTACH="${ATTACH:-}${ATTACH:+ }"`echo "file://$2" | ${URI_ENCODE}`
+                    ATTACH="${ATTACH:-}${ATTACH:+ }"`echo "file://$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 *)
@@ -401,23 +400,23 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 *)
