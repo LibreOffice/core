@@ -56,6 +56,7 @@ class CGSettings(ConfigGroup):
     cp_DefaultSession = CGSession()
     cp_LastSavedSession = str()
     fileAccess = None
+    xmsf = None
 
     def __init__(self, xmsf_, resources_, document):
         self.xmsf = xmsf_

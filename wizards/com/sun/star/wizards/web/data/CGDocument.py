@@ -316,3 +316,6 @@ class CGDocument(ConfigGroup):
 
             i += 1
         return -1
+
+    def toString(self):
+        return self.localFilename

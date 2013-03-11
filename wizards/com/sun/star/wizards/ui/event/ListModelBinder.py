@@ -76,7 +76,8 @@ class ListModelBinder(object):
                 if renderer is not None:
                     aux = renderer.render(index)
                 else:
-                    aux = item.cp_Name
+                    aux = item.toString()
+                print ("DEBUG !!! fillList --- aux: ", aux)
                 xlist.addItem(aux, index)
 
     @classmethod

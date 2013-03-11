@@ -35,6 +35,9 @@ class CGExporter(ConfigGroup):
     targetTypeName = ""
     cp_Arguments = WebConfigSet(CGArgument)
 
+    def toString(self):
+        return self.cp_Name
+
     def supports(self, mime):
         return CGExporter.cp_SupportedMimeTypes == "" or \
             CGExporter.cp_SupportedMimeTypes.find(mime) > -1
