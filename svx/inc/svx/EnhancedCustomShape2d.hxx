@@ -123,15 +123,15 @@ class EnhancedCustomShape2d : public SfxItemSet
         sal_Bool                    bFlipV;
         sal_Int32                   nRotateAngle;
 
-        sal_Bool                    SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
+        bool                    SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
         sal_Int32                   GetLuminanceChange( sal_uInt32 nIndex ) const;
         Color                       GetColorData( const Color& rFillColor, sal_uInt32 nIndex, double dBrightness ) const;
         void                        AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rCustomShapeSet,
                                                   sal_uInt32& nColorIndex, sal_uInt32 nColorCount);
-        sal_Bool                    GetParameter( double& rParameterReturnValue,  const com::sun::star::drawing::EnhancedCustomShapeParameter&,
-                                                  const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight ) const;
+        bool                    GetParameter( double& rParameterReturnValue,  const com::sun::star::drawing::EnhancedCustomShapeParameter&,
+                                                  const bool bReplaceGeoWidth, const bool bReplaceGeoHeight ) const;
         Point                       GetPoint( const com::sun::star::drawing::EnhancedCustomShapeParameterPair&,
-                                                    const sal_Bool bScale = sal_True, const sal_Bool bReplaceGeoSize = sal_False ) const;
+                                                    const bool bScale = true, const bool bReplaceGeoSize = false ) const;
 
         void                        CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
                                                    sal_Bool bLineGeometryNeededOnly, sal_Bool bSortFilledObjectsToBack,
@@ -181,8 +181,8 @@ class EnhancedCustomShape2d : public SfxItemSet
         SVX_DLLPUBLIC Rectangle                 GetTextRect() const;
 
         SVX_DLLPUBLIC sal_uInt32                    GetHdlCount() const;
-        SVX_DLLPUBLIC sal_Bool                  GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
-        SVX_DLLPUBLIC sal_Bool                  SetHandleControllerPosition( const sal_uInt32 nIndex, const com::sun::star::awt::Point& rPosition );
+        SVX_DLLPUBLIC bool                  GetHandlePosition( const sal_uInt32 nIndex, Point& rReturnPosition ) const;
+        SVX_DLLPUBLIC bool                  SetHandleControllerPosition( const sal_uInt32 nIndex, const com::sun::star::awt::Point& rPosition );
 
         SVX_DLLPUBLIC EnhancedCustomShape2d( SdrObject* pSdrObjCustomShape );
         SVX_DLLPUBLIC ~EnhancedCustomShape2d();
@@ -211,15 +211,15 @@ class EnhancedCustomShape2d : public SfxItemSet
 
         SVX_DLLPUBLIC static rtl::OUString      GetEquation( const sal_uInt16 nFlags, sal_Int16 nPara1, sal_Int16 nPara2, sal_Int16 nPara3 );
 
-        static void                 AppendEnhancedCustomShapeEquationParameter( rtl::OUString& rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
+        static void                 AppendEnhancedCustomShapeEquationParameter( rtl::OUString& rParameter, const sal_Int16 nPara, const bool bIsSpecialValue );
 
         static void                 SetEnhancedCustomShapeEquationParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );
         SVX_DLLPUBLIC static void                   SetEnhancedCustomShapeParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int32 nValue );
         SVX_DLLPUBLIC static void                   SetEnhancedCustomShapeHandleParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
-                                        rParameter, const sal_Int32 nPara, const sal_Bool bIsSpecialValue, sal_Bool bHorz );
-        static sal_Bool             ConvertSequenceToEnhancedCustomShape2dHandle( const com::sun::star::beans::PropertyValues& rHandleProperties,
+                                        rParameter, const sal_Int32 nPara, const bool bIsSpecialValue, bool bHorz );
+        static bool             ConvertSequenceToEnhancedCustomShape2dHandle( const com::sun::star::beans::PropertyValues& rHandleProperties,
                                         EnhancedCustomShape2d::Handle& rDestinationHandle );
         static void                 SwapStartAndEndArrow( SdrObject* pObj );
 };

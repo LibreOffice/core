@@ -1973,8 +1973,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 if ( nPositionY == 2 )
                     nPositionY = nCoordHeight / 2;
                 EnhancedCustomShapeParameterPair aPosition;
-                EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.First,  nPositionX, sal_True, sal_True  );
-                EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.Second, nPositionY, sal_True, sal_False );
+                EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.First,  nPositionX, true, true  );
+                EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.Second, nPositionY, true, false );
                 const OUString sHandlePosition( "Position" );
                 aProp.Name = sHandlePosition;
                 aProp.Value <<= aPosition;
@@ -2013,8 +2013,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     if ( ( nPositionY >= 0x256 ) || ( nPositionY <= 0x107 ) )   // position y
                         nAdjustmentsWhichNeedsToBeConverted |= ( 1 << i );
                     EnhancedCustomShapeParameterPair aPolar;
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.First,  nCenterX, ( nFlags & 0x800  ) != 0, sal_True  );
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.Second, nCenterY, ( nFlags & 0x1000 ) != 0, sal_False );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.First,  nCenterX, ( nFlags & 0x800  ) != 0, true  );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.Second, nCenterY, ( nFlags & 0x1000 ) != 0, false );
                     const OUString sHandlePolar( "Polar" );
                     aProp.Name = sHandlePolar;
                     aProp.Value <<= aPolar;
@@ -2027,8 +2027,8 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     if ( nCenterY == 2 )
                         nCenterY = nCoordHeight / 2;
                     EnhancedCustomShapeParameterPair aMap;
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.First,  nCenterX, ( nFlags & 0x800  ) != 0, sal_True  );
-                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.Second, nCenterY, ( nFlags & 0x1000 ) != 0, sal_False );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.First,  nCenterX, ( nFlags & 0x800  ) != 0, true  );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.Second, nCenterY, ( nFlags & 0x1000 ) != 0, false );
                     const OUString sHandleMap( "Map" );
                     aProp.Name = sHandleMap;
                     aProp.Value <<= aMap;
@@ -2042,7 +2042,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeXMin = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRangeXMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum,  nRangeXMin,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, true  );
                         const OUString sHandleRangeXMinimum( "RangeXMinimum" );
                         aProp.Name = sHandleRangeXMinimum;
                         aProp.Value <<= aRangeXMinimum;
@@ -2054,7 +2054,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeXMax = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRangeXMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, nRangeXMax,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, false );
                         const OUString sHandleRangeXMaximum( "RangeXMaximum" );
                         aProp.Name = sHandleRangeXMaximum;
                         aProp.Value <<= aRangeXMaximum;
@@ -2066,7 +2066,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeYMin = nCoordHeight / 2;
                         EnhancedCustomShapeParameter aRangeYMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, nRangeYMin,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, sal_True );
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, true );
                         const OUString sHandleRangeYMinimum( "RangeYMinimum" );
                         aProp.Name = sHandleRangeYMinimum;
                         aProp.Value <<= aRangeYMinimum;
@@ -2078,7 +2078,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeYMax = nCoordHeight / 2;
                         EnhancedCustomShapeParameter aRangeYMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, nRangeYMax,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, sal_False );
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, false );
                         const OUString sHandleRangeYMaximum( "RangeYMaximum" );
                         aProp.Name = sHandleRangeYMaximum;
                         aProp.Value <<= aRangeYMaximum;
@@ -2093,7 +2093,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeXMin = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRadiusRangeMinimum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, nRangeXMin,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, true  );
                         const OUString sHandleRadiusRangeMinimum( "RadiusRangeMinimum" );
                         aProp.Name = sHandleRadiusRangeMinimum;
                         aProp.Value <<= aRadiusRangeMinimum;
@@ -2105,7 +2105,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                             nRangeXMax = nCoordWidth / 2;
                         EnhancedCustomShapeParameter aRadiusRangeMaximum;
                         EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, nRangeXMax,
-                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, false );
                         const OUString sHandleRadiusRangeMaximum( "RadiusRangeMaximum" );
                         aProp.Name = sHandleRadiusRangeMaximum;
                         aProp.Value <<= aRadiusRangeMaximum;
