@@ -232,7 +232,7 @@ ImplDevFontAttributes ImplFontAttrCache::GetFontAttr( const String& rFontFileNam
 void ImplFontAttrCache::AddFontAttr( const String& rFontFileName, const ImplDevFontAttributes& rDFA )
 {
     DBG_ASSERT( rFontFileName.Len() && rDFA.GetFamilyName().Len(), "ImplFontNameCache::AddFontName - invalid data!" );
-    if ( rFontFileName.Len() && rDFA.GetFamilyName().Len() )
+    if ( rFontFileName.Len() && rDFA.GetFamilyName().getLength() )
     {
         aFontAttributes.insert( FontAttrMap::value_type( OptimizeURL( rFontFileName ), rDFA ) );
         bModified = TRUE;
@@ -875,16 +875,16 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     // #i38665# prefer Type1 versions of the standard postscript fonts
     if( aDFA.mbEmbeddable )
     {
-        if( aDFA.GetFamilyName().EqualsAscii( "AvantGarde" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Bookman" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Courier" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Helvetica" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "NewCenturySchlbk" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Palatino" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Symbol" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Times" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "ZapfChancery" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "ZapfDingbats" ) )
+        if( aDFA.GetFamilyName() == "AvantGarde"
+        ||  aDFA.GetFamilyName() == "Bookman"
+        ||  aDFA.GetFamilyName() == "Courier"
+        ||  aDFA.GetFamilyName() == "Helvetica"
+        ||  aDFA.GetFamilyName() == "NewCenturySchlbk"
+        ||  aDFA.GetFamilyName() == "Palatino"
+        ||  aDFA.GetFamilyName() == "Symbol"
+        ||  aDFA.GetFamilyName() == "Times"
+        ||  aDFA.GetFamilyName() == "ZapfChancery"
+        ||  aDFA.GetFamilyName() == "ZapfDingbats" )
             aDFA.mnQuality += 500;
     }
 
@@ -950,16 +950,16 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     // #i38665# prefer Type1 versions of the standard postscript fonts
     if( aDFA.mbEmbeddable )
     {
-        if( aDFA.GetFamilyName().EqualsAscii( "AvantGarde" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Bookman" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Courier" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Helvetica" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "NewCenturySchlbk" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Palatino" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Symbol" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "Times" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "ZapfChancery" )
-        ||  aDFA.GetFamilyName().EqualsAscii( "ZapfDingbats" ) )
+        if( aDFA.GetFamilyName() == "AvantGarde"
+        ||  aDFA.GetFamilyName() == "Bookman"
+        ||  aDFA.GetFamilyName() == "Courier"
+        ||  aDFA.GetFamilyName() == "Helvetica"
+        ||  aDFA.GetFamilyName() == "NewCenturySchlbk"
+        ||  aDFA.GetFamilyName() == "Palatino"
+        ||  aDFA.GetFamilyName() == "Symbol"
+        ||  aDFA.GetFamilyName() == "Times"
+        ||  aDFA.GetFamilyName() == "ZapfChancery"
+        ||  aDFA.GetFamilyName() == "ZapfDingbats" )
             aDFA.mnQuality += 500;
     }
 
@@ -1465,7 +1465,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     if ( pFont->mpFontData )
         aName = pFont->mpFontData->GetFamilyName();
     else
-        aName = pFont->GetFamilyName().GetToken( 0 );
+        aName = pFont->GetFamilyName().getToken( 0, ';' );
 
     UINT nNameLen = aName.getLength();
     if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
@@ -2143,14 +2143,14 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
         aDFA = mpFontAttrCache->GetFontAttr( rFontFileURL );
 
     // Retrieve font name from font resource
-    if( !aDFA.GetFamilyName().Len() )
+    if( aDFA.GetFamilyName().isEmpty() )
     {
         ImplGetFontAttrFromFile( rFontFileURL, aDFA );
-        if( mpFontAttrCache && aDFA.GetFamilyName().Len() )
+        if( mpFontAttrCache && !aDFA.GetFamilyName().isEmpty() )
             mpFontAttrCache->AddFontAttr( rFontFileURL, aDFA );
     }
 
-    if ( !aDFA.GetFamilyName().Len() )
+    if ( aDFA.GetFamilyName().isEmpty() )
         return false;
 
     // remember temp font for cleanup later
