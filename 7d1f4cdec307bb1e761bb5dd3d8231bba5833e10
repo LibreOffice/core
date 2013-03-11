@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///2o\u003d",
+        "filename": "unotools/source/misc/fontdefs.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-11T17:09:16Z",
+      "side": 1,
+      "message": "That\u0027s a different meaning: Erase() changes the string itself but copy() returns a modified string which is ignored here!",
+      "revId": "7d1f4cdec307bb1e761bb5dd3d8231bba5833e10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
