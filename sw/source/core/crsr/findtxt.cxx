@@ -524,7 +524,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
 
     if ( bFound )
         return true;
-    else if( ( bChkEmptyPara && !nStart && !nTxtLen ) || (bChkParaEnd && bZeroMatch && nEnd == nTxtLen))
+    else if( ( bChkEmptyPara && !nStart && !nTxtLen ) || bChkParaEnd)
     {
         *GetPoint() = *pPam->GetPoint();
         GetPoint()->nContent = bChkParaEnd ? nTxtLen : 0;
