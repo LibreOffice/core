@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
+#include <com/sun/star/task/InteractionRequestStringResolver.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
@@ -86,18 +86,14 @@ namespace dbaccess
 
         try
         {
-            Reference< XInteractionRequestStringResolver > xStringResolver(
-                 _rContext->getServiceManager()->createInstanceWithContext("com.sun.star.task.InteractionRequestStringResolver", _rContext),
-                 UNO_QUERY );
-            if ( xStringResolver.is() )
-            {
-                ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( _rError ) );
-                ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
-                pRequest->addContinuation( pApprove.get() );
-                Optional< ::rtl::OUString > aMessage = xStringResolver->getStringFromInformationalRequest( pRequest.get() );
-                if ( aMessage.IsPresent )
-                    sDisplayMessage = aMessage.Value;
-            }
+            Reference< XInteractionRequestStringResolver > xStringResolver = InteractionRequestStringResolver::create(_rContext);
+
+            ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( _rError ) );
+            ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
+            pRequest->addContinuation( pApprove.get() );
+            Optional< ::rtl::OUString > aMessage = xStringResolver->getStringFromInformationalRequest( pRequest.get() );
+            if ( aMessage.IsPresent )
+                sDisplayMessage = aMessage.Value;
         }
         catch( const Exception& )
         {
