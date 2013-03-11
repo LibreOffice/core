@@ -156,7 +156,6 @@
 #define HAVE_SIGSET_T 1
 #define HAVE_SIZE_T 1
 #define HAVE_UINT 1
-#define HAVE_ULONG 1
 #define SOCKET_SIZE_TYPE socklen_t
 
 #define RETSIGTYPE void
