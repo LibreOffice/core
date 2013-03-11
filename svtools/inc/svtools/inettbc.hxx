@@ -48,7 +48,7 @@ friend class SvtURLBox_Impl;
     sal_Bool                            bIsAutoCompleteEnabled : 1;
 
     SVT_DLLPRIVATE sal_Bool                         ProcessKey( const KeyCode& rCode );
-    SVT_DLLPRIVATE void                         TryAutoComplete( sal_Bool bForce );
+    SVT_DLLPRIVATE void                         TryAutoComplete();
     SVT_DLLPRIVATE void                            UpdatePicklistForSmartProtocol_Impl();
     DECL_DLLPRIVATE_LINK(                      AutoCompleteHdl_Impl, void* );
     using Window::ImplInit;

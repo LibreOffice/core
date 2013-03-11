@@ -817,13 +817,13 @@ void SvtMatchContext_Impl::doExecute()
     return;
 }
 
-void SvtURLBox::TryAutoComplete( sal_Bool bForce )
+void SvtURLBox::TryAutoComplete()
 {
     if( Application::AnyInput( VCL_INPUT_KEYBOARD ) ) return;
 
     String aCurText = GetText();
     Selection aSelection( GetSelection() );
-    if( aSelection.Max() != aCurText.Len() && !bForce )
+    if( aSelection.Max() != aCurText.Len() )
         return;
     sal_uInt16 nLen = (sal_uInt16)aSelection.Min();
     aCurText.Erase( nLen );
@@ -1127,7 +1127,7 @@ IMPL_LINK_NOARG(SvtURLBox, AutoCompleteHdl_Impl)
 {
     if ( GetSubEdit()->GetAutocompleteAction() == AUTOCOMPLETE_KEYINPUT )
     {
-        TryAutoComplete( sal_False );
+        TryAutoComplete();
         return 1L;
     }
 
