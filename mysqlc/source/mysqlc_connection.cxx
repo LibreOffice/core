@@ -99,10 +99,6 @@ void SAL_CALL OConnection::release()
 }
 /* }}} */
 
-#ifndef SYSTEM_MARIADB
-    extern "C" { void SAL_CALL thisModule() {} }
-#endif
-
 /* {{{ OConnection::construct() -I- */
 void OConnection::construct(const OUString& url, const Sequence< PropertyValue >& info)
     throw(SQLException)
@@ -194,35 +190,6 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
                 connProps["socket"] = pipe_str;
             }
 
-#ifndef SYSTEM_MARIADB
-            ::rtl::OUString sMySQLClientLib( "libmariadb" SAL_DLLEXTENSION );
-
-            ::rtl::OUString moduleBase;
-            OSL_VERIFY( ::osl::Module::getUrlFromAddress( &thisModule, moduleBase ) );
-            ::rtl::OUString sMySQLClientLibURL;
-            try
-            {
-                sMySQLClientLibURL = ::rtl::Uri::convertRelToAbs( moduleBase, sMySQLClientLib.pData );
-            }
-            catch ( const ::rtl::MalformedUriException& e )
-            {
-                (void)e; // silence compiler
-            #if OSL_DEBUG_LEVEL > 0
-                ::rtl::OString sMessage( "OConnection::construct: malformed URI: " );
-                sMessage += ::rtl::OUStringToOString( e.getMessage(), osl_getThreadTextEncoding() );
-                OSL_FAIL( sMessage.getStr() );
-            #endif
-            }
-
-            ::rtl::OUString sMySQLClientLibPath;
-            osl_getSystemPathFromFileURL( sMySQLClientLibURL.pData, &sMySQLClientLibPath.pData );
-
-            sql::SQLString mysqlLib = ::rtl::OUStringToOString( sMySQLClientLibPath, osl_getThreadTextEncoding() ).getStr();
-            connProps["clientlib"] = mysqlLib;
-
-            OSL_TRACE("clientlib=%s", mysqlLib.c_str());
-#endif
-
             OSL_TRACE("hostName=%s", host_str.c_str());
             OSL_TRACE("port=%i", int(nPort));
             OSL_TRACE("userName=%s", user_str.c_str());
@@ -243,7 +210,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     // Check if the server is 4.1 or above
     if (this->getMysqlVersion() < 40100) {
         throw SQLException(
-            ::rtl::OUString( "MySQL Connector/OO.org requires MySQL Server 4.1 or above"  ),
+            ::rtl::OUString( "MariaDB LibreOffice Connector requires MySQL Server 4.1 or above"  ),
             *this,
             ::rtl::OUString(),
             0,
