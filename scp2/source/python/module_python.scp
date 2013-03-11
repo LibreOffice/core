@@ -30,7 +30,7 @@
 #ifndef DISABLE_PYUNO
 
 Module gid_Module_Pyuno
-    MOD_NAME_DESC(MODULE_PRG_PYUNO);
+    PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
     Dirs = (gid_Dir_PythonFramework,
             gid_Dir_PythonFramework_Versions,
@@ -79,7 +79,7 @@ Module gid_Module_Pyuno
 End
 
 Module gid_Module_Script_Provider_For_Python
-    PackageInfo = "packinfo_extensions.txt";
+    PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
     Files = (
         gid_File_Py_Pythonscript,

@@ -193,21 +193,6 @@ packageversion = "%ABOUTBOXPRODUCTVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Binfilter"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-binfilter"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01,%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core04,%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core05"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-binfilter"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01" 
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-copyright = "2012 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "Legacy filters (e.g. StarOffice 5.2) for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%ABOUTBOXPRODUCTVERSION"
-End
-
-Start
 module = "gid_Module_Optional_Grfflt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-graphicfilter"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01,%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core04,%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core05"
@@ -218,21 +203,6 @@ copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
 description = "Graphic filter module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%ABOUTBOXPRODUCTVERSION"
-End
-
-Start
-module = "gid_Module_Optional_Oo_English"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-spellcheck"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-spellcheck"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-copyright = "2012 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "English spellchecker module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%ABOUTBOXPRODUCTVERSION"
 End
@@ -282,7 +252,7 @@ packageversion = "%ABOUTBOXPRODUCTVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Pyuno"
+module = "gid_Module_Pyuno"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-pyuno"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01, SUNWPython"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-pyuno"
@@ -299,10 +269,10 @@ End
 Start
 module = "gid_Module_Optional_Pyuno_LibreLogo"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-librelogo"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01, SUNWPython"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-pyuno, SUNWPython"
 packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-librelogo"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-pyuno"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-pyuno"
 copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
@@ -312,33 +282,18 @@ packageversion = "%ABOUTBOXPRODUCTVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Pymailmerge"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-emailmerge"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-pyuno"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-emailmerge"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-pyuno"
+module = "gid_Module_Script_Provider_For_Python"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-python-script-provider"
+solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core02 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core03 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core04 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core05 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core06 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION"), %BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core07 (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-python-script-provider"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01,%BASISPACKAGEPREFIX%PRODUCTVERSION-core02,%BASISPACKAGEPREFIX%PRODUCTVERSION-core03,%BASISPACKAGEPREFIX%PRODUCTVERSION-core04,%BASISPACKAGEPREFIX%PRODUCTVERSION-core05,%BASISPACKAGEPREFIX%PRODUCTVERSION-core06,%BASISPACKAGEPREFIX%PRODUCTVERSION-core07"
 copyright = "2012 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
-description = "Email mailmerge module for %PRODUCTNAME %PRODUCTVERSION"
+description = "Script provider for Python for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
-packageversion = "%ABOUTBOXPRODUCTVERSION"
-End
-
-Start
-module = "gid_Module_Optional_Headless"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-headless"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-headless"
-freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
-copyright = "2012 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "Headless display module for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%ABOUTBOXPRODUCTVERSION"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
