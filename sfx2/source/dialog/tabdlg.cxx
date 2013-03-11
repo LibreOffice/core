@@ -239,15 +239,6 @@ SfxTabPage::SfxTabPage(Window *pParent, const rtl::OString& rID, const rtl::OUSt
 }
 
 // -----------------------------------------------------------------------
-SfxTabPage:: SfxTabPage( Window *pParent, WinBits nStyle, const SfxItemSet &rAttrSet ) :
-    TabPage(pParent, nStyle),
-    pSet                ( &rAttrSet ),
-    bHasExchangeSupport ( sal_False ),
-    pTabDlg             ( NULL ),
-    pImpl               ( new TabPageImpl )
-{
-}
-// -----------------------------------------------------------------------
 
 SfxTabPage::~SfxTabPage()
 
