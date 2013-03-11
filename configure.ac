@@ -7554,6 +7554,7 @@ if test "$ENABLE_MARIADBC" = "YES"; then
     if test "$with_system_mariadb" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_MARIADB=YES
+        AC_ARG_VAR(MARIADBCONFIG, [Setting this variable will override the mariadb_config script detection])
         AC_PATH_PROG( MARIADBCONFIG, mariadb_config)
         AC_MSG_CHECKING([MariaDB version])
         MARIADB_VERSION=`$MARIADBCONFIG --version`
