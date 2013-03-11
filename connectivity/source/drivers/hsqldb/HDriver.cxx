@@ -399,7 +399,7 @@ namespace connectivity
     {
         sal_Bool bEnabled = sal_False;
         OSL_VERIFY_EQUALS( jfw_getEnabled( &bEnabled ), JFW_E_NONE, "error in jfw_getEnabled" );
-        return bEnabled  && url.startsWith("sdbc:embedded:hsqldb");
+        return bEnabled  && url.equals("sdbc:embedded:hsqldb");
     }
 
     //--------------------------------------------------------------------
