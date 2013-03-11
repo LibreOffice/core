@@ -72,6 +72,7 @@
 
 #define STR_QMSG_SEL_FOLDER_DELETE          289
 #define STR_QMSG_TEMPLATE_OVERWRITE         290
+#define STR_QMSG_SEL_TEMPLATE_DELETE        291
 
 #define IMG_ACTION_SORT             304
 #define IMG_ACTION_REFRESH          305
