@@ -3722,7 +3722,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevi
         DBG_ASSERT( bVDevValid, "VDef could not be enlarged!" );
         if ( !bVDevValid )
         {
-            Paint( pView, rRec, sal_False /* ohne VDev */ );
+            Paint( pView, rRec, 0, sal_False /* ohne VDev */ );
             return;
         }
 
