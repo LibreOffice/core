@@ -1020,6 +1020,11 @@ void SfxTemplateManagerDlg::OnTemplateProperties ()
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
+    QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE).toString());
+
+    if ( aQueryDlg.Execute() == RET_NO )
+        return;
+
     OUString aTemplateList;
 
     if (mpSearchView->IsVisible())
