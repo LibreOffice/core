@@ -132,6 +132,7 @@ struct FilterBaseImpl
 
     FilterDirection     meDirection;
     SequenceAsHashMap   maArguments;
+    SequenceAsHashMap   maFilterData;
     MediaDescriptor     maMediaDesc;
     OUString            maFileUrl;
     StorageRef          mxStorage;
@@ -202,6 +203,8 @@ void FilterBaseImpl::finalizeFilter()
 {
     try
     {
+        // writing back the FilterData to the MediaDescriptor
+        maMediaDesc["FilterData"] = makeAny(maFilterData.getAsConstPropertyValueList());
         // write the descriptor back to the document model (adds the passwords)
         mxModel->attachResource( maFileUrl, maMediaDesc.getAsConstPropertyValueList() );
         // unlock the model controllers
@@ -276,6 +279,11 @@ const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
 MediaDescriptor& FilterBase::getMediaDescriptor() const
 {
     return mxImpl->maMediaDesc;
+}
+
+SequenceAsHashMap& FilterBase::getFilterData() const
+{
+    return mxImpl->maFilterData;
 }
 
 const OUString& FilterBase::getFileUrl() const
@@ -548,6 +556,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >() );
     mxImpl->mxInteractionHandler = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), Reference< XInteractionHandler >() );
     mxImpl->mxParentShape = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "ParentShape", mxImpl->mxParentShape );
+    mxImpl->maFilterData = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "FilterData", Sequence< PropertyValue >() );
 
     // Check for ISO OOXML
     OUString sFilterName = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "FilterName", OUString() );
