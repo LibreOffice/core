@@ -19,19 +19,6 @@
 
 #ifndef _SFXRNGITEM_HXX
 
-#ifndef NUMTYPE
-
-#define NUMTYPE sal_uInt16
-#define SfxXRangeItem SfxRangeItem
-#define SfxXRangesItem SfxUShortRangesItem
-#include <svl/rngitem.hxx>
-#undef NUMTYPE
-#undef SfxXRangeItem
-#undef SfxXRangesItem
-
-#define _SFXRNGITEM_HXX
-
-#else
 #include "svl/svldllapi.h"
 #include <svl/poolitem.hxx>
 
@@ -39,16 +26,16 @@ class SvStream;
 
 // -----------------------------------------------------------------------
 
-class SVL_DLLPUBLIC SfxXRangeItem : public SfxPoolItem
+class SVL_DLLPUBLIC SfxRangeItem : public SfxPoolItem
 {
 private:
-    NUMTYPE                     nFrom;
-    NUMTYPE                     nTo;
+    sal_uInt16                  nFrom;
+    sal_uInt16                  nTo;
 public:
                                 TYPEINFO();
-                                SfxXRangeItem();
-                                SfxXRangeItem( sal_uInt16 nWID, NUMTYPE nFrom, NUMTYPE nTo );
-                                SfxXRangeItem( const SfxXRangeItem& rItem );
+                                SfxRangeItem();
+                                SfxRangeItem( sal_uInt16 nWID, sal_uInt16 nFrom, sal_uInt16 nTo );
+                                SfxRangeItem( const SfxRangeItem& rItem );
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -56,28 +43,28 @@ public:
                                     OUString &rText,
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    inline NUMTYPE&             From() { return nFrom; }
-    inline NUMTYPE              From() const { return nFrom; }
-    inline NUMTYPE&             To() { return nTo; }
-    inline NUMTYPE              To() const { return nTo; }
-    inline sal_Bool                 HasRange() const { return nTo>nFrom; }
+    inline sal_uInt16&          From() { return nFrom; }
+    inline sal_uInt16           From() const { return nFrom; }
+    inline sal_uInt16&          To() { return nTo; }
+    inline sal_uInt16           To() const { return nTo; }
+    inline sal_Bool             HasRange() const { return nTo>nFrom; }
     virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const;
     virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
 };
 
 // -----------------------------------------------------------------------
 
-class SVL_DLLPUBLIC SfxXRangesItem : public SfxPoolItem
+class SVL_DLLPUBLIC SfxUShortRangesItem : public SfxPoolItem
 {
 private:
-    NUMTYPE*                    _pRanges;
+    sal_uInt16*                 _pRanges;
 
 public:
                                 TYPEINFO();
-                                SfxXRangesItem();
-                                SfxXRangesItem( sal_uInt16 nWID, SvStream &rStream );
-                                SfxXRangesItem( const SfxXRangesItem& rItem );
-    virtual                     ~SfxXRangesItem();
+                                SfxUShortRangesItem();
+                                SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream );
+                                SfxUShortRangesItem( const SfxUShortRangesItem& rItem );
+    virtual                     ~SfxUShortRangesItem();
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -85,12 +72,11 @@ public:
                                     OUString &rText,
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    inline const NUMTYPE*       GetRanges() const { return _pRanges; }
+    inline const sal_uInt16*    GetRanges() const { return _pRanges; }
     virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const;
     virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
 };
 
-#endif
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
