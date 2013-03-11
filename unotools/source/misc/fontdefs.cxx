@@ -332,7 +332,7 @@ void GetEnglishSearchFontName( OUString& rName )
     while ( i && (rName[ i-1 ] < 32) )
         i--;
     if ( i != nLen )
-        rName.copy( 0, i );
+        rName = rName.copy( 0, i );
 
     // Remove Script at the end
     // Scriptname must be the last part of the fontname and
@@ -352,7 +352,7 @@ void GetEnglishSearchFontName( OUString& rName )
                     // Remove Space at the end
                     if ( nTempLen && (rName[ nTempLen-1 ] == ' ') )
                         nTempLen--;
-                    rName.copy( 0, nTempLen );
+                    rName = rName.copy( 0, nTempLen );
                     nLen = nTempLen;
                     break;
                 }
