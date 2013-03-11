@@ -28,8 +28,10 @@ namespace
 
         // Declares the method as a test to call
         CPPUNIT_TEST(testMiscVBAFunctions);
+// not much point even trying to run except on windows
+#if defined(WNT)
         CPPUNIT_TEST(testObjAssignWithDefaultMember);
-        //CPPUNIT_TEST(testOle);
+#endif
 
         // End of test suite definition
         CPPUNIT_TEST_SUITE_END();
@@ -50,8 +52,7 @@ bool VBATest::hasOLEEnv()
             uno::Reference<lang::XMultiComponentFactory> xSMgr = xContext->getServiceManager();
             xOLEFactory = uno::Reference<lang::XMultiServiceFactory>(
                 xSMgr->createInstanceWithContext(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.bridge.OleObjectFactory") ),
+                    "com.sun.star.bridge.OleObjectFactory",
                         xContext ), uno::UNO_QUERY );
         }
     }
@@ -100,7 +101,7 @@ void VBATest::testMiscVBAFunctions()
             fprintf(stderr, "macro returned:\n%s\n", OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn != NULL );
-        CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == rtl::OUString("OK") );
+        CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == "OK" );
     }
 }
 
@@ -115,30 +116,30 @@ void VBATest::testObjAssignWithDefaultMember()
         "ole_ObjAssignToNothing.vb",
     };
 
-    rtl::OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
+    OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
 
     uno::Sequence< uno::Any > aArgs(1);
     // path to test document
-    rtl::OUString sPath = getPathFromSrc("/basic/qa/vba_tests/data/");
-    sPath += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ADODBdata.xls") );
-    sPath = sPath.replaceAll( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) ) );
+    OUString sPath = getPathFromSrc("/basic/qa/vba_tests/data/");
+    sPath += OUString( "ADODBdata.xls" );
+    sPath = sPath.replaceAll( "/", "\\" );
 
     aArgs[ 0 ] = uno::makeAny( sPath );
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
     {
-        rtl::OUString sMacroURL( sMacroPathURL );
-        sMacroURL += rtl::OUString::createFromAscii( macroSource[ i ] );
+        OUString sMacroURL( sMacroPathURL );
+        sMacroURL += OUString::createFromAscii( macroSource[ i ] );
         MacroSnippet myMacro;
         myMacro.LoadSourceFromFile( sMacroURL );
         SbxVariableRef pReturn = myMacro.Run( aArgs );
         if ( pReturn )
         {
             fprintf(stderr, "macro result for %s\n", macroSource[ i ] );
-            fprintf(stderr, "macro returned:\n%s\n", rtl::OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+            fprintf(stderr, "macro returned:\n%s\n", OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn != NULL );
-        CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == rtl::OUString("OK") );
+        CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == "OK" );
     }
 }
 
