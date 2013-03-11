@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(SwLabPage, FieldHdl)
 {
     OUString aStr("<" + OUString(aDatabaseLB.GetSelectEntry()) + "." +
                   OUString(aTableLB.GetSelectEntry()) + "." +
-                  OUString(aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? "0" : "1") + "." +
+                  (aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? OUString("0") : OUString("1")) + "." +
                   aDBFieldLB.GetSelectEntry() + ">");
     aWritingEdit.ReplaceSelected(aStr);
     Selection aSel = aWritingEdit.GetSelection();
