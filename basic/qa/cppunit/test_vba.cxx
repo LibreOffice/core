@@ -8,7 +8,7 @@
  */
 #include "basictest.hxx"
 #include <vcl/svapp.hxx>
-
+#include <comphelper/processfactory.hxx>
 using namespace ::com::sun::star;
 
 namespace
@@ -17,15 +17,18 @@ namespace
 
     class VBATest : public test::BootstrapFixture
     {
+        bool hasOLEEnv();
         public:
         VBATest() : BootstrapFixture(true, false) {}
         ~VBATest(){}
         void testMiscVBAFunctions();
+        void testObjAssignWithDefaultMember();
         // Adds code needed to register the test suite
         CPPUNIT_TEST_SUITE(VBATest);
 
         // Declares the method as a test to call
         CPPUNIT_TEST(testMiscVBAFunctions);
+        CPPUNIT_TEST(testObjAssignWithDefaultMember);
         //CPPUNIT_TEST(testOle);
 
         // End of test suite definition
@@ -33,14 +36,44 @@ namespace
 
     };
 
+bool VBATest::hasOLEEnv()
+{
+    // test if we have the necessary runtime environment
+    // to run the OLE tests.
+    static uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
+    if ( !xOLEFactory.is() )
+    {
+        uno::Reference< uno::XComponentContext > xContext(
+            comphelper::getProcessComponentContext() );
+        if( xContext.is() )
+        {
+            uno::Reference<lang::XMultiComponentFactory> xSMgr = xContext->getServiceManager();
+            xOLEFactory = uno::Reference<lang::XMultiServiceFactory>(
+                xSMgr->createInstanceWithContext(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.bridge.OleObjectFactory") ),
+                        xContext ), uno::UNO_QUERY );
+        }
+    }
+    bool bOk = false;
+    if( xOLEFactory.is() )
+    {
+        uno::Reference< uno::XInterface > xExcel = xOLEFactory->createInstance( "Excel.Application" );
+        uno::Reference< uno::XInterface > xADODB = xOLEFactory->createInstance( "ADODB.Connection" );
+       bOk = xExcel.is() && xADODB.is();
+    }
+    return bOk;
+}
+
 void VBATest::testMiscVBAFunctions()
 {
     const char* macroSource[] = {
         "bytearraystring.vb",
-#if 1// FIXED // datevalue test seems to depend on both locale and language
-          // settings, should try and rewrite the test to deal with that
+// datevalue test seems to depend on both locale and language
+// settings, should try and rewrite the test to deal with that
+// for some reason tinderboxes don't seem to complain leaving enabled
+// for the moment
         "datevalue.vb",
-#endif
         "partition.vb",
         "strconv.vb",
         "dateserial.vb",
@@ -65,6 +98,44 @@ void VBATest::testMiscVBAFunctions()
         {
             fprintf(stderr, "macro result for %s\n", macroSource[ i ] );
             fprintf(stderr, "macro returned:\n%s\n", OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+        CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn != NULL );
+        CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == rtl::OUString("OK") );
+    }
+}
+
+void VBATest::testObjAssignWithDefaultMember()
+{
+    bool bCanRunOleTests = hasOLEEnv();
+    if ( !bCanRunOleTests )
+        return; // can't do anything, skip test
+
+    const char* macroSource[] = {
+        "ole_ObjAssignNoDflt.vb",
+        "ole_ObjAssignToNothing.vb",
+    };
+
+    rtl::OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
+
+    uno::Sequence< uno::Any > aArgs(1);
+    // path to test document
+    rtl::OUString sPath = getPathFromSrc("/basic/qa/vba_tests/data/");
+    sPath += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ADODBdata.xls") );
+    sPath = sPath.replaceAll( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) ) );
+
+    aArgs[ 0 ] = uno::makeAny( sPath );
+
+    for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
+    {
+        rtl::OUString sMacroURL( sMacroPathURL );
+        sMacroURL += rtl::OUString::createFromAscii( macroSource[ i ] );
+        MacroSnippet myMacro;
+        myMacro.LoadSourceFromFile( sMacroURL );
+        SbxVariableRef pReturn = myMacro.Run( aArgs );
+        if ( pReturn )
+        {
+            fprintf(stderr, "macro result for %s\n", macroSource[ i ] );
+            fprintf(stderr, "macro returned:\n%s\n", rtl::OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn != NULL );
         CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == rtl::OUString("OK") );

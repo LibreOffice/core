@@ -57,8 +57,16 @@ $(eval $(call gb_CppunitTest_use_api,basic_vba,\
 
 $(eval $(call gb_CppunitTest_use_ure,basic_vba))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_use_components,basic_vba,\
+    configmgr/source/configmgr \
+    i18npool/util/i18npool \
+    extensions/source/ole/oleautobridge \
+))
+else
 $(eval $(call gb_CppunitTest_use_components,basic_vba,\
     configmgr/source/configmgr \
     i18npool/util/i18npool \
 ))
+endif
 $(eval $(call gb_CppunitTest_use_configuration,basic_vba))
