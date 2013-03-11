@@ -445,13 +445,26 @@ void SbiRuntime::StepPUT()
     // could equate to Range("A1").Value = 34
     if ( bVBAEnabled )
     {
-        if ( refVar->GetType() == SbxOBJECT  )
+        // yet more hacking at this, I feel we don't quite have the correct
+        // heuristics for dealing with obj1 = obj2 ( where obj2 ( and maybe
+        // obj1 ) has default member/property ) ) It seems that default props
+        // aren't dealt with if the object is a member of some parent object
+        bool bObjAssign = false;
+        if ( refVar->GetType() == SbxEMPTY )
+            refVar->Broadcast( SBX_HINT_DATAWANTED );
+        if ( refVar->GetType() == SbxOBJECT )
         {
-            SbxVariable* pDflt = getDefaultProp( refVar );
-            if ( pDflt )
-                refVar = pDflt;
+            if  ( refVar->IsA( TYPE(SbxMethod) ) || ! refVar->GetParent() )
+            {
+                SbxVariable* pDflt = getDefaultProp( refVar );
+
+                if ( pDflt )
+                    refVar = pDflt;
+            }
+            else
+                bObjAssign = true;
         }
-        if (  refVal->GetType() == SbxOBJECT  )
+        if (  refVal->GetType() == SbxOBJECT  && !bObjAssign && ( refVal->IsA( TYPE(SbxMethod) ) || ! refVal->GetParent() ) )
         {
             SbxVariable* pDflt = getDefaultProp( refVal );
             if ( pDflt )
@@ -585,16 +598,24 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         {
             // get default properties for lhs & rhs where necessary
             // SbxVariable* defaultProp = NULL; unused variable
-            bool bLHSHasDefaultProp = false;
             // LHS try determine if a default prop exists
+            // again like in StepPUT (see there too ) we are tweaking the
+            // heursitics again for when to assign an object reference or
+            // use default memebers if they exists
+            // #FIXME we really need to get to the bottom of this mess
+            bool bObjAssign = false;
             if ( refVar->GetType() == SbxOBJECT )
             {
-                SbxVariable* pDflt = getDefaultProp( refVar );
-                if ( pDflt )
+                if ( refVar->IsA( TYPE(SbxMethod) ) || ! refVar->GetParent() )
                 {
-                    refVar = pDflt;
-                    bLHSHasDefaultProp = true;
+                    SbxVariable* pDflt = getDefaultProp( refVar );
+                    if ( pDflt )
+                    {
+                        refVar = pDflt;
+                    }
                 }
+                else
+                    bObjAssign = true;
             }
             // RHS only get a default prop is the rhs has one
             if (  refVal->GetType() == SbxOBJECT )
@@ -614,7 +635,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                     pObj = PTR_CAST(SbxObject,pObjVarObj);
                 }
                 SbxVariable* pDflt = NULL;
-                if ( pObj || bLHSHasDefaultProp )
+                if ( pObj && !bObjAssign )
                 {
                     // lhs is either a valid object || or has a defaultProp
                     pDflt = getDefaultProp( refVal );
