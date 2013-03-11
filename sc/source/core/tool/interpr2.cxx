@@ -45,9 +45,13 @@
 #include "tokenarray.hxx"
 #include "globalnames.hxx"
 
+
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
+
 #include <string.h>
 #include <math.h>
 
+using namespace com::sun::star;
 using namespace formula;
 
 #define SCdEpsilon                1.0E-7
@@ -3078,6 +3082,81 @@ void ScInterpreter::ScGetPivotData()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetPivotData" );
     sal_uInt8 nParamCount = GetByte();
 
+#if 1
+    if (!MustHaveParamCount(nParamCount, 2, 30) || (nParamCount % 2) == 1)
+    {
+        PushError(errNoRef);
+        return;
+    }
+
+    bool bOldSyntax = false;
+    if (nParamCount == 2)
+    {
+        // if the first parameter is a ref, assume old syntax
+        StackVar eFirstType = GetStackType(2);
+        if (eFirstType == svSingleRef || eFirstType == svDoubleRef)
+            bOldSyntax = true;
+    }
+
+    if (bOldSyntax)
+    {
+        // TODO: I'll handle this later.
+        PushError(errNoRef);
+        return;
+    }
+
+    // Standard syntax: separate name/value pairs
+
+    sal_uInt16 nFilterCount = nParamCount / 2 - 1;
+    uno::Sequence<sheet::DataPilotFieldFilter> aFilters(nFilterCount);
+
+    sal_uInt16 i = nFilterCount;
+    while (i-- > 0)
+    {
+        //! should allow numeric constraint values
+        aFilters[i].MatchValue = GetString();
+        aFilters[i].FieldName = GetString();
+    }
+
+    ScRange aBlock;
+    switch (GetStackType())
+    {
+        case svDoubleRef :
+            PopDoubleRef(aBlock);
+        break;
+        case svSingleRef :
+        {
+            ScAddress aAddr;
+            PopSingleRef(aAddr);
+            aBlock = aAddr;
+        }
+        break;
+        default:
+            PushError(errNoRef);
+            return;
+    }
+
+    // NOTE : MS Excel docs claim to use the 'most recent' which is not
+    // exactly the same as what we do in ScDocument::GetDPAtBlock
+    // However we do need to use GetDPABlock
+    ScDPObject* pDPObj = pDok->GetDPAtBlock(aBlock);
+    if (!pDPObj)
+    {
+        PushError(errNoRef);
+        return;
+    }
+
+    OUString aDataFieldName = GetString(); // First parameter is data field name.
+
+    double fVal = pDPObj->GetPivotData(aDataFieldName, aFilters);
+    if (rtl::math::isNan(fVal))
+    {
+        PushError(errNoRef);
+        return;
+    }
+    PushDouble(fVal);
+
+#else
     if ( MustHaveParamCount( nParamCount, 2, 30 ) )
     {
         // there must be an even number of args
@@ -3164,6 +3243,7 @@ void ScInterpreter::ScGetPivotData()
 
 failed :
     PushError( errNoRef );
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

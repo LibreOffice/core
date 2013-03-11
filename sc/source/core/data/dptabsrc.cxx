@@ -44,6 +44,7 @@
 #include "unonames.hxx"
 #include "dpitemdata.hxx"
 #include "dputil.hxx"
+#include "dpresfilter.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -66,6 +67,48 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class stack_printer
+{
+public:
+    explicit stack_printer(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~stack_printer()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime - mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime - mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
 
 // -----------------------------------------------------------------------
 
@@ -380,6 +423,7 @@ long ScDPSource::GetSourceDim(long nDim)
 uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResults()
                                                             throw(uno::RuntimeException)
 {
+    stack_printer __stack_printer__("ScDPSource::getResults");
     CreateRes_Impl();       // create pColResRoot and pRowResRoot
 
     if ( bResultOverflow )      // set in CreateRes_Impl
@@ -403,10 +447,30 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
         pRowAry[nRow] = aColSeq;
     }
 
-    long nSeqRow = 0;
-    pRowResRoot->FillDataResults( pColResRoot, aSeq, nSeqRow, pResData->GetRowStartMeasure() );
+    ScDPResultFilterContext aFilterCxt;
+    pRowResRoot->FillDataResults(
+        pColResRoot, aFilterCxt, aSeq, pResData->GetRowStartMeasure());
+
+    maResFilterSet.swap(aFilterCxt.maFilterSet); // Keep this data for GETPIVOTDATA.
+    maResFilterSet.dump();
 
     return aSeq;
+}
+
+uno::Sequence<uno::Any> ScDPSource::getFilteredResults(
+            const uno::Sequence<sheet::DataPilotFieldFilter>& aFilters )
+                throw (uno::RuntimeException)
+{
+    sal_Int32 n = aFilters.getLength();
+    std::vector<sheet::DataPilotFieldFilter> aSorted;
+    aSorted.reserve(n);
+    for (sal_Int32 i = 0; i < n; ++i)
+        aSorted.push_back(aFilters[i]);
+
+    // Sort filters by order of appearance. Row fields come before column fields.
+
+
+    return uno::Sequence<uno::Any>();
 }
 
 void SAL_CALL ScDPSource::refresh() throw(uno::RuntimeException)

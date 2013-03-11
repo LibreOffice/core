@@ -29,6 +29,33 @@
 const sal_Int32 ScDPItemData::DateFirst = -1;
 const sal_Int32 ScDPItemData::DateLast  = 10000;
 
+size_t ScDPItemData::Hash::operator() (const ScDPItemData& rVal) const
+{
+    switch (rVal.GetType())
+    {
+        case GroupValue:
+        case Value:
+        case RangeStart:
+            return (size_t)(rVal.mfValue);
+        case String:
+        case Error:
+        {
+            if (!rVal.mpString)
+                return 0;
+
+            if (rVal.mbStringInterned)
+                return reinterpret_cast<size_t>(rVal.mpString);
+
+            OUStringHash aStrHasher;
+            return aStrHasher(*rVal.mpString);
+        }
+        default:
+            ;
+    }
+
+    return 0;
+}
+
 sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
 {
     if (rA.meType != rB.meType)
@@ -337,10 +364,10 @@ OUString ScDPItemData::GetString() const
         case Error:
             return *mpString;
         case Value:
+        case RangeStart:
             return OUString::valueOf(mfValue);
         case GroupValue:
-        case RangeStart:
-            return OUString::createFromAscii("fail");
+            return OUString::valueOf(maGroupValue.mnValue);
         case Empty:
         default:
             ;

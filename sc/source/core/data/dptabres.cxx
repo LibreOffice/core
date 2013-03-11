@@ -29,6 +29,7 @@
 
 #include "document.hxx"     // for DumpState only!
 #include "stlalgorithm.hxx"
+#include "dpresfilter.hxx"
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
@@ -38,6 +39,7 @@
 #include <float.h>          //! Test !!!
 #include <algorithm>
 #include <boost/unordered_map.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
@@ -53,9 +55,51 @@ using ::std::vector;
 using ::std::pair;
 using ::com::sun::star::uno::Sequence;
 
-// -----------------------------------------------------------------------
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
 
-static sal_uInt16 nFuncStrIds[12] =     // passend zum enum ScSubTotalFunc
+namespace {
+
+class stack_printer
+{
+public:
+    explicit stack_printer(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~stack_printer()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime - mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime - mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
+namespace {
+
+sal_uInt16 nFuncStrIds[12] =     // passend zum enum ScSubTotalFunc
 {
     0,                              // SUBTOTAL_FUNC_NONE
     STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
@@ -70,35 +114,62 @@ static sal_uInt16 nFuncStrIds[12] =     // passend zum enum ScSubTotalFunc
     STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VAR
     STR_FUN_TEXT_VAR                // SUBTOTAL_FUNC_VARP
 };
-namespace {
 
-    bool lcl_SearchMember( const std::vector <ScDPResultMember *>& list, SCROW nOrder, SCROW& rIndex)
+bool lcl_SearchMember( const std::vector <ScDPResultMember *>& list, SCROW nOrder, SCROW& rIndex)
+{
+    rIndex = list.size();
+    bool bFound = false;
+    SCROW  nLo = 0;
+    SCROW nHi = list.size() - 1;
+    SCROW nIndex;
+    while (nLo <= nHi)
     {
-        rIndex = list.size();
-        bool bFound = false;
-        SCROW  nLo = 0;
-        SCROW nHi = list.size() - 1;
-        SCROW nIndex;
-        while (nLo <= nHi)
+        nIndex = (nLo + nHi) / 2;
+        if ( list[nIndex]->GetOrder() < nOrder )
+            nLo = nIndex + 1;
+        else
         {
-            nIndex = (nLo + nHi) / 2;
-            if ( list[nIndex]->GetOrder() < nOrder )
-                nLo = nIndex + 1;
-            else
+            nHi = nIndex - 1;
+            if ( list[nIndex]->GetOrder() == nOrder )
             {
-                nHi = nIndex - 1;
-                if ( list[nIndex]->GetOrder() == nOrder )
-                {
-                    bFound = true;
-                    nLo = nIndex;
-                }
+                bFound = true;
+                nLo = nIndex;
             }
         }
-        rIndex = nLo;
-        return bFound;
     }
+    rIndex = nLo;
+    return bFound;
 }
-// -----------------------------------------------------------------------
+
+class FilterStack
+{
+    std::vector<ScDPResultFilter>& mrFilters;
+public:
+    FilterStack(std::vector<ScDPResultFilter>& rFilters) : mrFilters(rFilters) {}
+
+    void pushDimName(const OUString& rName, bool bDataLayout)
+    {
+        mrFilters.push_back(ScDPResultFilter(rName, bDataLayout));
+    }
+
+    void pushDimValue(const ScDPItemData& rValue)
+    {
+        ScDPResultFilter& rFilter = mrFilters.back();
+        rFilter.maValue = rValue;
+        rFilter.mbHasValue = true;
+    }
+
+    ~FilterStack()
+    {
+        ScDPResultFilter& rFilter = mrFilters.back();
+        if (rFilter.mbHasValue)
+            rFilter.mbHasValue = false;
+        else
+            mrFilters.pop_back();
+    }
+};
+
+}
 
 //
 // function objects for sorting of the column and row members:
@@ -1497,14 +1568,26 @@ void ScDPResultMember::FillMemberResults(
     }
 }
 
-void ScDPResultMember::FillDataResults( const ScDPResultMember* pRefMember,
-                            uno::Sequence< uno::Sequence<sheet::DataResult> >& rSequence,
-                            long& rRow, long nMeasure ) const
+void ScDPResultMember::FillDataResults(
+    const ScDPResultMember* pRefMember,
+    ScDPResultFilterContext& rFilterCxt, uno::Sequence<uno::Sequence<sheet::DataResult> >& rSequence,
+    long nMeasure) const
 {
+    boost::scoped_ptr<FilterStack> pFilterStack;
+    const ScDPMember* pDPMember = GetDPMember();
+    if (pDPMember)
+    {
+        // Root result has no corresponding DP member. Only take the non-root results.
+        ScDPItemData aItem;
+        pDPMember->FillItemData(aItem);
+        pFilterStack.reset(new FilterStack(rFilterCxt.maFilters));
+        pFilterStack->pushDimValue(aItem);
+    }
+
     //  IsVisible() test is in ScDPResultDimension::FillDataResults
     //  (not on data layout dimension)
     const ScDPLevel*     pParentLevel = GetParentLevel();
-    long nStartRow = rRow;
+    long nStartRow = rFilterCxt.mnRow;
 
     long nExtraSpace = 0;
     if ( pParentLevel && pParentLevel->IsAddEmpty() )
@@ -1520,13 +1603,16 @@ void ScDPResultMember::FillDataResults( const ScDPResultMember* pRefMember,
     if (bHasChild)
     {
         if ( bTitleLine )           // in tabular layout the title is on a separate row
-            ++rRow;                 // -> fill child dimension one row below
+            ++rFilterCxt.mnRow;                 // -> fill child dimension one row below
 
-        pChildDimension->FillDataResults( pRefMember, rSequence, rRow, nMeasure );  // doesn't modify rRow
-        rRow += GetSize( nMeasure );
+        long nOldRow = rFilterCxt.mnRow;
+        pChildDimension->FillDataResults(pRefMember, rFilterCxt, rSequence, nMeasure);
+        rFilterCxt.mnRow = nOldRow; // Revert to the original row before the call.
+
+        rFilterCxt.mnRow += GetSize( nMeasure );
 
         if ( bTitleLine )           // title row is included in GetSize, so the following
-            --rRow;                 // positions are calculated with the normal values
+            --rFilterCxt.mnRow;                 // positions are calculated with the normal values
     }
 
     long nUserSubStart;
@@ -1545,15 +1631,15 @@ void ScDPResultMember::FillDataResults( const ScDPResultMember* pRefMember,
         long nSubSize = pResultData->GetCountForMeasure(nMeasure);
         if (bHasChild)
         {
-            rRow -= nSubSize * ( nUserSubCount - nUserSubStart );   // GetSize includes space for SubTotal
-            rRow -= nExtraSpace;                                    // GetSize includes the empty line
+            rFilterCxt.mnRow -= nSubSize * ( nUserSubCount - nUserSubStart );   // GetSize includes space for SubTotal
+            rFilterCxt.mnRow -= nExtraSpace;                                    // GetSize includes the empty line
         }
 
         long nMoveSubTotal = 0;
         if ( bSubTotalInTitle )
         {
-            nMoveSubTotal = rRow - nStartRow;   // force to first (title) row
-            rRow = nStartRow;
+            nMoveSubTotal = rFilterCxt.mnRow - nStartRow;   // force to first (title) row
+            rFilterCxt.mnRow = nStartRow;
         }
 
         if ( pDataRoot )
@@ -1575,24 +1661,23 @@ void ScDPResultMember::FillDataResults( const ScDPResultMember* pRefMember,
                     else if ( pResultData->GetColStartMeasure() == SC_DPMEASURE_ALL )
                         nMemberMeasure = SC_DPMEASURE_ALL;
 
-                    OSL_ENSURE( rRow < rSequence.getLength(), "bumm" );
-                    uno::Sequence<sheet::DataResult>& rSubSeq = rSequence.getArray()[rRow];
-                    long nSeqCol = 0;
+                    OSL_ENSURE( rFilterCxt.mnRow < rSequence.getLength(), "bumm" );
+                    uno::Sequence<sheet::DataResult>& rSubSeq = rSequence.getArray()[rFilterCxt.mnRow];
+                    rFilterCxt.mnCol = 0;
                     if (pRefMember->IsVisible())
-                        pDataRoot->FillDataRow(pRefMember, rSubSeq, nSeqCol, nMemberMeasure, bHasChild, aSubState);
+                        pDataRoot->FillDataRow(pRefMember, rFilterCxt, rSubSeq, nMemberMeasure, bHasChild, aSubState);
 
-                    rRow += 1;
+                    rFilterCxt.mnRow += 1;
                 }
             }
         }
         else
-            rRow += nSubSize * ( nUserSubCount - nUserSubStart );   // empty rows occur when ShowEmpty is true
+            rFilterCxt.mnRow += nSubSize * ( nUserSubCount - nUserSubStart );   // empty rows occur when ShowEmpty is true
 
         // add extra space again if subtracted from GetSize above,
         // add to own size if no children
-        rRow += nExtraSpace;
-
-        rRow += nMoveSubTotal;
+        rFilterCxt.mnRow += nExtraSpace;
+        rFilterCxt.mnRow += nMoveSubTotal;
     }
 }
 
@@ -1990,14 +2075,28 @@ const ScDPAggData* ScDPDataMember::GetConstAggData( long nMeasure, const ScDPSub
     return pAgg;
 }
 
-void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
-                                    uno::Sequence<sheet::DataResult>& rSequence,
-                                    long& rCol, long nMeasure, bool bIsSubTotalRow,
-                                    const ScDPSubTotalState& rSubState ) const
+void ScDPDataMember::FillDataRow(
+    const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
+    uno::Sequence<sheet::DataResult>& rSequence, long nMeasure, bool bIsSubTotalRow,
+    const ScDPSubTotalState& rSubState) const
 {
+    boost::scoped_ptr<FilterStack> pFilterStack;
+    if (pResultMember)
+    {
+        // Topmost data member (pResultMember=NULL) doesn't need to be handled
+        // since its immediate parent result member is linked to the same
+        // dimension member.
+        ScDPItemData aItem;
+        const ScDPMember* pDPMember = pResultMember->GetDPMember();
+        if (pDPMember)
+            pDPMember->FillItemData(aItem);
+        pFilterStack.reset(new FilterStack(rFilterCxt.maFilters));
+        pFilterStack->pushDimValue(aItem);
+    }
+
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
-    long nStartCol = rCol;
+    long nStartCol = rFilterCxt.mnCol;
 
     const ScDPDataDimension* pDataChild = GetChildDimension();
     const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
@@ -2021,14 +2120,18 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
     if ( bHasChild )
     {
         if ( bTitleLine )           // in tabular layout the title is on a separate column
-            ++rCol;                 // -> fill child dimension one column below
+            ++rFilterCxt.mnCol;                 // -> fill child dimension one column below
 
         if ( pDataChild )
-            pDataChild->FillDataRow( pRefChild, rSequence, rCol, nMeasure, bIsSubTotalRow, rSubState );
-        rCol += (sal_uInt16)pRefMember->GetSize( nMeasure );
+        {
+            long nOldCol = rFilterCxt.mnCol;
+            pDataChild->FillDataRow(pRefChild, rFilterCxt, rSequence, nMeasure, bIsSubTotalRow, rSubState);
+            rFilterCxt.mnCol = nOldCol; // Revert to the old column value before the call.
+        }
+        rFilterCxt.mnCol += (sal_uInt16)pRefMember->GetSize( nMeasure );
 
         if ( bTitleLine )           // title column is included in GetSize, so the following
-            --rCol;                 // positions are calculated with the normal values
+            --rFilterCxt.mnCol;                 // positions are calculated with the normal values
     }
 
     long nUserSubStart;
@@ -2049,15 +2152,15 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
         long nSubSize = pResultData->GetCountForMeasure(nMeasure);
         if (bHasChild)
         {
-            rCol -= nSubSize * ( nUserSubCount - nUserSubStart );   // GetSize includes space for SubTotal
-            rCol -= nExtraSpace;                                    // GetSize includes the empty line
+            rFilterCxt.mnCol -= nSubSize * ( nUserSubCount - nUserSubStart );   // GetSize includes space for SubTotal
+            rFilterCxt.mnCol -= nExtraSpace;                                    // GetSize includes the empty line
         }
 
         long nMoveSubTotal = 0;
         if ( bSubTotalInTitle )
         {
-            nMoveSubTotal = rCol - nStartCol;   // force to first (title) column
-            rCol = nStartCol;
+            nMoveSubTotal = rFilterCxt.mnCol - nStartCol;   // force to first (title) column
+            rFilterCxt.mnCol = nStartCol;
         }
 
         for (long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
@@ -2074,8 +2177,8 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
                 if ( nMeasure == SC_DPMEASURE_ALL )
                     nMemberMeasure = nSubCount;
 
-                OSL_ENSURE( rCol < rSequence.getLength(), "bumm" );
-                sheet::DataResult& rRes = rSequence.getArray()[rCol];
+                OSL_ENSURE( rFilterCxt.mnCol < rSequence.getLength(), "bumm" );
+                sheet::DataResult& rRes = rSequence.getArray()[rFilterCxt.mnCol];
 
                 if ( HasData( nMemberMeasure, aLocalSubState ) )
                 {
@@ -2094,15 +2197,15 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
                 if ( bHasChild || bIsSubTotalRow )
                     rRes.Flags |= sheet::DataResultFlags::SUBTOTAL;
 
-                rCol += 1;
+                rFilterCxt.maFilterSet.add(rFilterCxt.maFilters, rFilterCxt.mnCol, rFilterCxt.mnRow, rRes.Value);
+                rFilterCxt.mnCol += 1;
             }
         }
 
         // add extra space again if subtracted from GetSize above,
         // add to own size if no children
-        rCol += nExtraSpace;
-
-        rCol += nMoveSubTotal;
+        rFilterCxt.mnCol += nExtraSpace;
+        rFilterCxt.mnCol += nMoveSubTotal;
     }
 }
 
@@ -3022,11 +3125,13 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
     }
 }
 
-void ScDPResultDimension::FillDataResults( const ScDPResultMember* pRefMember,
-                            uno::Sequence< uno::Sequence<sheet::DataResult> >& rSequence,
-                            long nRow, long nMeasure ) const
+void ScDPResultDimension::FillDataResults(
+    const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
+    uno::Sequence< uno::Sequence<sheet::DataResult> >& rSequence, long nMeasure) const
 {
-    long nMemberRow = nRow;
+    FilterStack aFilterStack(rFilterCxt.maFilters);
+    aFilterStack.pushDimName(GetName(), bIsDataLayout);
+
     long nMemberMeasure = nMeasure;
     long nCount = maMemberArray.size();
     for (long i=0; i<nCount; i++)
@@ -3045,8 +3150,7 @@ void ScDPResultDimension::FillDataResults( const ScDPResultMember* pRefMember,
             pMember = maMemberArray[nSorted];
 
         if ( pMember->IsVisible() )
-            pMember->FillDataResults( pRefMember, rSequence, nMemberRow, nMemberMeasure );
-            // nMemberRow is modified
+            pMember->FillDataResults(pRefMember, rFilterCxt, rSequence, nMemberMeasure);
     }
 }
 
@@ -3564,18 +3668,28 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
     OSL_FAIL("ProcessData: Member not found");
 }
 
-void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
-                                    uno::Sequence<sheet::DataResult>& rSequence,
-                                    long nCol, long nMeasure, bool bIsSubTotalRow,
-                                    const ScDPSubTotalState& rSubState ) const
+void ScDPDataDimension::FillDataRow(
+    const ScDPResultDimension* pRefDim, ScDPResultFilterContext& rFilterCxt,
+    uno::Sequence<sheet::DataResult>& rSequence, long nMeasure, bool bIsSubTotalRow,
+    const ScDPSubTotalState& rSubState) const
 {
+    OUString aDimName;
+    bool bDataLayout = false;
+    if (pResultDimension)
+    {
+        aDimName = pResultDimension->GetName();
+        bDataLayout = pResultDimension->IsDataLayout();
+    }
+
+    FilterStack aFilterStack(rFilterCxt.maFilters);
+    aFilterStack.pushDimName(aDimName, bDataLayout);
+
     OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     const ScMemberSortOrder& rMemberOrder = pRefDim->GetMemberOrder();
 
     long nMemberMeasure = nMeasure;
-    long nMemberCol = nCol;
     long nCount = maMembers.size();
     for (long i=0; i<nCount; i++)
     {
@@ -3594,8 +3708,7 @@ void ScDPDataDimension::FillDataRow( const ScDPResultDimension* pRefDim,
         if ( pRefMember->IsVisible() )  //! here or in ScDPDataMember::FillDataRow ???
         {
             const ScDPDataMember* pDataMember = maMembers[(sal_uInt16)nMemberPos];
-            pDataMember->FillDataRow( pRefMember, rSequence, nMemberCol, nMemberMeasure, bIsSubTotalRow, rSubState );
-            // nMemberCol is modified
+            pDataMember->FillDataRow(pRefMember, rFilterCxt, rSequence, nMemberMeasure, bIsSubTotalRow, rSubState);
         }
     }
 }

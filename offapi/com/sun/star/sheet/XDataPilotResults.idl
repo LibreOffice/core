@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/sheet/DataResult.idl>
+#include <com/sun/star/sheet/DataPilotFieldFilter.idl>
 
 
 module com {  module sun {  module star {  module sheet {
@@ -44,6 +45,8 @@ interface XDataPilotResults: com::sun::star::uno::XInterface
      */
     sequence< sequence< DataResult > > getResults();
 
+    sequence<any> getFilteredResults(
+        [in] sequence<com::sun::star::sheet::DataPilotFieldFilter> aFilters );
 };
 
 

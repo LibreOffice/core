@@ -52,6 +52,7 @@ class ScDPResultVisibilityData;
 
 struct ScDPValue;
 class ScDPItemData;
+struct ScDPResultFilterContext;
 
 /**
  * Member names that are being processed for InitFrom/LateInitFrom (needed
@@ -403,11 +404,12 @@ public:
             com::sun::star::sheet::MemberResult>* pSequences,
         long& rPos, long nMeasure, bool bRoot, const OUString* pMemberName, const OUString* pMemberCaption );
 
-    void                FillDataResults( const ScDPResultMember* pRefMember,
-                                    com::sun::star::uno::Sequence<
-                                        com::sun::star::uno::Sequence<
-                                            com::sun::star::sheet::DataResult> >& rSequence,
-                                    long& rRow, long nMeasure ) const;
+    void FillDataResults(
+        const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
+        com::sun::star::uno::Sequence<
+            com::sun::star::uno::Sequence<
+                com::sun::star::sheet::DataResult> >& rSequence,
+        long nMeasure) const;
 
     void                UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const;
     void                UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
@@ -471,10 +473,12 @@ public:
     const ScDPAggData*  GetConstAggData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
     ScDPAggData*        GetAggData( long nMeasure, const ScDPSubTotalState& rSubState );
 
-    void                FillDataRow( const ScDPResultMember* pRefMember,
-                                    com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
-                                    long& rCol, long nMeasure, bool bIsSubTotalRow,
-                                    const ScDPSubTotalState& rSubState ) const;
+    void FillDataRow(
+        const ScDPResultMember* pRefMember,
+        ScDPResultFilterContext& rFilterCxt,
+        com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
+        long nMeasure, bool bIsSubTotalRow,
+        const ScDPSubTotalState& rSubState) const;
 
     void UpdateDataRow( const ScDPResultMember* pRefMember, long nMeasure, bool bIsSubTotalRow,
                         const ScDPSubTotalState& rSubState );
@@ -557,11 +561,13 @@ public:
                                                 com::sun::star::sheet::MemberResult>* pSequences,
                                             long nStart, long nMeasure );
 
-    void                FillDataResults( const ScDPResultMember* pRefMember,
-                                    com::sun::star::uno::Sequence<
-                                        com::sun::star::uno::Sequence<
-                                            com::sun::star::sheet::DataResult> >& rSequence,
-                                    long nRow, long nMeasure ) const;
+    void FillDataResults(
+        const ScDPResultMember* pRefMember,
+        ScDPResultFilterContext& rFilterCxt,
+        com::sun::star::uno::Sequence<
+            com::sun::star::uno::Sequence<
+                com::sun::star::sheet::DataResult> >& rSequence,
+        long nMeasure) const;
 
     void                UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const;
     void                UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
@@ -629,10 +635,11 @@ public:
     void                InitFrom( const ScDPResultDimension* pDim );        // recursive
     void                ProcessData( const ::std::vector< SCROW >& aDataMembers, const ::std::vector<ScDPValue>& aValues,
                                        const ScDPSubTotalState& rSubState );
-    void                FillDataRow( const ScDPResultDimension* pRefDim,
-                                    com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
-                                    long nCol, long nMeasure, bool bIsSubTotalRow,
-                                    const ScDPSubTotalState& rSubState ) const;
+    void FillDataRow(
+        const ScDPResultDimension* pRefDim,
+        ScDPResultFilterContext& rFilterCxt,
+        com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
+        long nMeasure, bool bIsSubTotalRow, const ScDPSubTotalState& rSubState) const;
 
     void                UpdateDataRow( const ScDPResultDimension* pRefDim, long nMeasure, bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const;

@@ -135,6 +135,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/dpobject \
 	sc/source/core/data/dpoutput \
 	sc/source/core/data/dpoutputgeometry \
+	sc/source/core/data/dpresfilter \
 	sc/source/core/data/dpsave \
 	sc/source/core/data/dpsdbtab \
 	sc/source/core/data/dpshttab \

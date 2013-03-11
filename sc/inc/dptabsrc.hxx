@@ -49,6 +49,7 @@
 
 #include "dptabdat.hxx"
 #include "dpglobal.hxx"
+#include "dpresfilter.hxx"
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
@@ -103,6 +104,7 @@ private:
     std::vector<long> maRowDims;
     std::vector<long> maDataDims;
     std::vector<long> maPageDims;
+    ScDPResultFilterSet maResFilterSet;
 
     bool                    bColumnGrand;
     bool                    bRowGrand;
@@ -198,6 +200,11 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence<
                             ::com::sun::star::sheet::DataResult > > SAL_CALL getResults(  )
                                 throw(::com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Sequence<com::sun::star::uno::Any> SAL_CALL
+        getFilteredResults(
+            const com::sun::star::uno::Sequence<com::sun::star::sheet::DataPilotFieldFilter>& aFilters )
+                throw (com::sun::star::uno::RuntimeException);
 
                             // XRefreshable
     virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);

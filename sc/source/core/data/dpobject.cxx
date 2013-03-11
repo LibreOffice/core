@@ -1278,6 +1278,57 @@ void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHead
         aPosData.PositionData >>= rData;
 }
 
+namespace {
+
+class FindByName : std::unary_function<const ScDPSaveDimension*, bool>
+{
+    OUString maName;
+public:
+    FindByName(const OUString& rName) : maName(rName) {}
+    bool operator() (const ScDPSaveDimension* pDim) const
+    {
+        const OUString* pLayoutName = pDim->GetLayoutName();
+        if (pLayoutName)
+            return *pLayoutName == maName;
+
+        return maName == pDim->GetName();
+    }
+};
+
+}
+
+double ScDPObject::GetPivotData(const OUString& rDataFieldName, const uno::Sequence<sheet::DataPilotFieldFilter>& rFilters)
+{
+    double fRet;
+    rtl::math::setNan(&fRet);
+    if (!mbEnableGetPivotData)
+        return fRet;
+
+    CreateObjects();
+
+    std::vector<const ScDPSaveDimension*> aDims;
+    pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
+    if (aDims.empty())
+        return fRet;
+
+    std::vector<const ScDPSaveDimension*>::iterator it = std::find_if(
+        aDims.begin(), aDims.end(), FindByName(rDataFieldName));
+    if (it == aDims.end())
+        return fRet;
+
+    sal_Int32 nDataIndex = std::distance(aDims.begin(), it);
+
+    uno::Reference<sheet::XDataPilotResults> xDPResults(xSource, uno::UNO_QUERY);
+    if (!xDPResults.is())
+        return fRet;
+
+    uno::Sequence<uno::Any> aRes = xDPResults->getFilteredResults(rFilters);
+
+    fRet = 54.0;
+
+    return fRet;
+}
+
 // Returns sal_True on success and stores the result in rTarget
 bool ScDPObject::GetPivotData( ScDPGetPivotDataField& rTarget,
                                const std::vector< ScDPGetPivotDataField >& rFilters )

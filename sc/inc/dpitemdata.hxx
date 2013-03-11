@@ -62,6 +62,11 @@ public:
         sal_Int32 mnValue;
     };
 
+    struct Hash
+    {
+        size_t operator() (const ScDPItemData& rVal) const;
+    };
+
 private:
 
     union {

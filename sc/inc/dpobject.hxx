@@ -179,6 +179,11 @@ public:
                                        Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
     bool                IsFilterButton( const ScAddress& rPos );
 
+    double GetPivotData(
+        const OUString& rDataFieldName,
+        const com::sun::star::uno::Sequence<
+            com::sun::star::sheet::DataPilotFieldFilter>& rFilters);
+
     bool                GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
                                       const std::vector< ScDPGetPivotDataField >& rFilters );
     bool                ParseFilters( ScDPGetPivotDataField& rTarget,
