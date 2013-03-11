@@ -7047,6 +7047,14 @@ if test $_os != iOS; then
 fi
 
 dnl ===================================================================
+dnl Check for system libmwaw
+dnl ===================================================================
+# libmwaw depends on libwpd that is LGPL, publishing empty flags
+if test $_os != iOS; then
+    libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.1])
+fi
+
+dnl ===================================================================
 dnl Check for system libvisio
 dnl ===================================================================
 # libvisio depends on libwpd and libwpg and those are LGPL, publishing empty flags

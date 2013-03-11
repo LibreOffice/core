@@ -113,6 +113,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,LIBPNG,libpng) \
 	$(call gb_Helper_optional,MSPUB,libmspub) \
+	$(call gb_Helper_optional,MWAW,libmwaw) \
 	$(call gb_Helper_optional,ORCUS,liborcus) \
 	librelogo \
 	$(call gb_Helper_optional,VISIO,libvisio) \
