@@ -11,6 +11,7 @@ my $verbose = 0;
 my $from_file;
 my $to_file;
 my $graph_file;
+my $preserve_libs = 0;
 
 sub logit($)
 {
@@ -98,7 +99,8 @@ sub clean_tree($)
         }
         $result{deps} = \@clean_needs;
         if (defined $tree{$target}) {
-            print STDERR "warning -duplicate target: '$target'\n";
+            logit("warning -duplicate target: '$target'\n");
+            delete($tree{$target});
         }
         $tree{$target} = \%result;
 
@@ -155,6 +157,8 @@ sub prune_redundant_deps($)
     }
 }
 
+# glob on libo directory
+# note: only works if you stay in main LO dir
 sub create_lib_module_map()
 {
     my %l2m;
@@ -169,21 +173,85 @@ sub create_lib_module_map()
     return \%l2m;
 }
 
+# call prune redundant_deps
+# rewrite the deps array
+sub optimize_tree($)
+{
+    my $tree = shift;
+    prune_redundant_deps($tree);
+    for my $name (sort keys %{$tree}) {
+        my $result = $tree->{$name};
+        logit("minimising deps for $result->{target}\n");
+        my @newdeps;
+        for my $dep (@{$result->{deps}}) {
+            # is this implied by any other child ?
+            logit("checking if '$dep' is redundant\n");
+            my $preserve = 1;
+            for my $other_dep (@{$result->{deps}}) {
+                next if ($other_dep eq $dep);
+                if (has_child_dep($tree,$dep,$other_dep)) {
+                    logit("$dep is implied by $other_dep - ignoring\n");
+                    $preserve = 0;
+                    last;
+                }
+            }
+            push @newdeps, $dep if ($preserve);
+        }
+        # re-write the shrunk set to accelerate things
+        $result->{deps} = \@newdeps;
+    }
+    return $tree;
+}
+
+# walking through the library based graph and creating a module based graph.
+sub collapse_lib_to_module($)
+{
+    my $tree = shift;
+    my %digraph;
+    my $l2m = create_lib_module_map();
+    my %unknown_libs;
+    for my $name (sort keys %{$tree}) {
+        my $result = $tree->{$name};
+        # sal has no dependencies, take care of it
+        # otherwise it doesn't have target key
+        if (!defined(@{$result->{deps}})) {
+            $digraph{$name}{target} = $result->{target};
+        }
+        for my $dep (@{$result->{deps}}) {
+            $unknown_libs{$name} = 1 && next if (!grep {/$name/} keys $l2m);
+            $name = $l2m->{$name};
+            $dep = $l2m->{$dep};
+            # ignore: two libraries from the same module depend on each other
+            next if ($name eq $dep);
+            if (exists($digraph{$name}))
+            {
+                my @deps = @{$digraph{$name}{deps}};
+                # only add if we haven't seen already that edge?
+                if (!grep {/$dep/} @deps)
+                {
+                    push @deps, $dep;
+                    $digraph{$name}{deps} = \@deps;
+                }
+            }
+            else
+            {
+                my @deps;
+                push @deps, $dep;
+                $digraph{$name}{deps} = \@deps;
+                $digraph{$name}{target} = $result->{target};
+            }
+        }
+    }
+    logit("warn: no module for libs were found and dropped: [" .
+          join(",", (sort (keys(%unknown_libs)))) . "]\n");
+    return optimize_tree(\%digraph);
+}
+
 sub dump_graphviz($)
 {
     my $tree = shift;
-    my $to;
-    if (defined($graph_file)) {
-        open ($to, ">$graph_file");
-    }
-    else
-    {
-        $to = \*STDOUT;
-    }
-    my $l2m = create_lib_module_map();
-    my %unknown_libs;
-    my %digraph;
-
+    my $to = \*STDOUT;
+    open($to, ">$graph_file") if defined($graph_file);
     print $to <<END;
 digraph LibreOffice {
 node [shape="Mrecord", color="#BBBBBB"]
@@ -191,79 +259,29 @@ node  [fontname=Verdana, color="#BBBBBB", fontsize=10, height=0.02, width=0.02]
 edge  [color="#31CEF0", len=0.4]
 edge  [fontname=Arial, fontsize=10, fontcolor="#31CEF0"]
 END
-
    for my $name (sort keys %{$tree}) {
+       my $result = $tree->{$name};
+       logit("minimising deps for $result->{target}\n");
+       for my $dep (@{$result->{deps}}) {
+           print $to "$name -> $dep;\n" ;
+       }
+    }
+    print $to "}\n";
+}
+
+sub filter_targets($)
+{
+    my $tree = shift;
+    for my $name (sort keys %{$tree})
+    {
         my $result = $tree->{$name};
         if ($result->{type} eq 'CppunitTest' ||
             ($result->{type} eq 'Executable' &&
-             $result->{target} ne 'soffice_bin')) {
-            next; # de-bloat the tree
+             $result->{target} ne 'soffice_bin'))
+        {
+            delete($tree->{$name});
         }
-
-        logit("minimising deps for $result->{target}\n");
-        my @newdeps;
-        for my $dep (@{$result->{deps}}) {
-            my $print = 1;
-            # is this implied by any other child ?
-            logit("checking if '$dep' is redundant\n");
-            for my $other_dep (@{$result->{deps}}) {
-                next if ($other_dep eq $dep);
-                if (has_child_dep($tree,$dep,$other_dep)) {
-                    $print = 0;
-                    logit("$dep is implied by $other_dep - ignoring\n");
-                }
-            }
-            if (!grep {/$name/} keys $l2m)
-            {
-                $unknown_libs{$name} = 1;
-            }
-            else
-            {
-                if ($print)
-                {
-                    $name = $l2m->{$name};
-                    $dep = $l2m->{$dep};
-                    # two libraries from the same module depend on
-                    # each other: hide it
-                    if ($name eq $dep)
-                    {
-                        $print = 0;
-                    }
-                    # making digraph unique
-                    if (exists($digraph{$name}))
-                    {
-                        my @deps = @{$digraph{$name}};
-                        # have seen already that edge?
-                        if (grep {/$dep/} @deps)
-                        {
-                            # hide then
-                            $print = 0;
-                        }
-                        else
-                        {
-                            push @deps, $dep;
-                            $digraph{$name} = \@deps;
-                        }
-                    }
-                    else
-                    {
-                        my @deps;
-                        push @deps, $dep;
-                        $digraph{$name} = \@deps;
-                    }
-                }
-            }
-            print $to "$name -> $dep;\n" if ($print);
-            push @newdeps, $dep;
-        }
-        # re-write the shrunk set to accelerate things
-        $result->{deps} = \@newdeps;
     }
-    print $to "}\n";
-
-    logit("warn: no module for lib found: [" .
-          join(",", (sort (keys(%unknown_libs)))) . "]\n");
-
 }
 
 sub parse_options()
@@ -275,6 +293,7 @@ sub parse_options()
         'version|r' => sub {
             VersionMessage(-msg => "You are using: 1.0 of ");
         },
+        'preserve-libs|p' => \$preserve_libs,
         'write-dep-file|w=s' => \$to_file,
         'read-dep-file|f=s' => \$from_file,
         'graph-file|o=s' => \$graph_file);
@@ -291,7 +310,9 @@ sub main()
     parse_options();
     my $deps = read_deps();
     my $tree = clean_tree($deps);
-    prune_redundant_deps($tree);
+    filter_targets($tree);
+    optimize_tree($tree);
+    $tree = collapse_lib_to_module($tree) if !$preserve_libs;
     dump_graphviz($tree);
 }
 
@@ -328,6 +349,12 @@ Prints the manual page and exits.
 =item B<-v>
 
 Prints the version and exits.
+
+=item B<--preserve-libs>
+
+=item B<-p>
+
+Don't collapse libs to modules
 
 =item B<--read-dep-file file>
 
@@ -372,7 +399,19 @@ Pipe the output to graphviz: cat lo.graphviz | dot -Tpng -o lo.png
 
 =back
 
-=head1 AUTHORS
+=head1 TODO
+
+=over 2
+
+=item 1
+Add soft (include only) dependency
+
+=item 2
+Add dependency on external modules
+
+=back
+
+=head1 AUTHOR
 
 =over 2
 
