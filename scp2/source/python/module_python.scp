@@ -79,10 +79,12 @@ Module gid_Module_Pyuno
 End
 
 Module gid_Module_Script_Provider_For_Python
+    PackageInfo = "packinfo_extensions.txt";
     ParentID = gid_Module_Root_Brand;
     Files = (
         gid_File_Py_Pythonscript,
         gid_File_Rdb_Scriptproviderforpython );
+    Default = YES;
     Styles = (HIDDEN_ROOT);
 End
 
