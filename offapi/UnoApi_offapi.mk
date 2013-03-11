@@ -297,6 +297,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb,\
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb/application,\
 	CopyTableWizard \
+	MacroMigrationWizard \
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdbc,\
 	ConnectionPool \

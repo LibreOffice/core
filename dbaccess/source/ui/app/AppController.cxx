@@ -44,6 +44,7 @@
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#include <com/sun/star/sdb/application/MacroMigrationWizard.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -3008,20 +3009,7 @@ void OApplicationController::impl_migrateScripts_nothrow()
 {
     try
     {
-        OUString sDialogService("com.sun.star.sdb.application.MacroMigrationWizard");
-        Reference<XComponentContext> aContext( getORB() );
-        Sequence< Any > aDialogArgs(1);
-        aDialogArgs[0] <<= Reference< XOfficeDatabaseDocument >( m_xModel, UNO_QUERY_THROW );
-        Reference< XExecutableDialog > xDialog(
-            aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sDialogService, aDialogArgs, aContext),
-            UNO_QUERY );
-
-        if ( !xDialog.is() )
-        {
-            ShowServiceNotAvailableError( getView(), sDialogService, true );
-            return;
-        }
-
+        Reference< XExecutableDialog > xDialog = css::sdb::application::MacroMigrationWizard::createWithDocument( getORB(), Reference< XOfficeDatabaseDocument >( m_xModel, UNO_QUERY_THROW ) );
         xDialog->execute();
     }
     catch( const Exception& )
