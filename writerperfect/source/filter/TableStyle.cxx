@@ -40,12 +40,16 @@ void TableCellStyle::write(OdfDocumentHandler *pHandler) const
     // generalize this sort of thing into the "Style" superclass
     WPXPropertyList stylePropList;
     WPXPropertyList::Iter i(mPropList);
+    /* first set padding, so that mPropList can redefine, if
+       mPropList["fo:padding"] is defined */
+    stylePropList.insert("fo:padding", "0.0382in");
     for (i.rewind(); i.next();)
     {
         if (strlen(i.key()) > 2 && strncmp(i.key(), "fo", 2) == 0)
             stylePropList.insert(i.key(), i()->clone());
+        else if (strcmp(i.key(), "style:vertical-align")==0)
+            stylePropList.insert(i.key(), i()->clone());
     }
-    stylePropList.insert("fo:padding", "0.0382in");
     pHandler->startElement("style:table-cell-properties", stylePropList);
     pHandler->endElement("style:table-cell-properties");
 
