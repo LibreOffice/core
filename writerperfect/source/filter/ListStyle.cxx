@@ -47,6 +47,8 @@ void OrderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) cons
         else
             listLevelStyleOpen.addAttribute("text:start-value", "1");
     }
+    if (mPropList["text:display-levels"])
+        listLevelStyleOpen.addAttribute("text:display-levels", mPropList["text:display-levels"]->getStr());
     listLevelStyleOpen.write(pHandler);
 
     TagOpenElement stylePropertiesOpen("style:list-level-properties");
@@ -56,6 +58,8 @@ void OrderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) cons
         stylePropertiesOpen.addAttribute("text:min-label-width", mPropList["text:min-label-width"]->getStr());
     if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-distance", mPropList["text:min-label-distance"]->getStr());
+    if (mPropList["fo:text-align"])
+        stylePropertiesOpen.addAttribute("fo:text-align", mPropList["fo:text-align"]->getStr());
     stylePropertiesOpen.write(pHandler);
 
     pHandler->endElement("style:list-level-properties");
@@ -87,6 +91,8 @@ void UnorderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) co
     }
     else
         listLevelStyleOpen.addAttribute("text:bullet-char", ".");
+    if (mPropList["text:display-levels"])
+        listLevelStyleOpen.addAttribute("text:display-levels", mPropList["text:display-levels"]->getStr());
     listLevelStyleOpen.write(pHandler);
 
     TagOpenElement stylePropertiesOpen("style:list-level-properties");
@@ -96,6 +102,8 @@ void UnorderedListLevelStyle::write(OdfDocumentHandler *pHandler, int iLevel) co
         stylePropertiesOpen.addAttribute("text:min-label-width", mPropList["text:min-label-width"]->getStr());
     if (mPropList["text:min-label-distance"] && mPropList["text:min-label-distance"]->getDouble() > 0.0)
         stylePropertiesOpen.addAttribute("text:min-label-distance", mPropList["text:min-label-distance"]->getStr());
+    if (mPropList["fo:text-align"])
+        stylePropertiesOpen.addAttribute("fo:text-align", mPropList["fo:text-align"]->getStr());
     stylePropertiesOpen.addAttribute("style:font-name", "OpenSymbol");
     stylePropertiesOpen.write(pHandler);
 

@@ -1202,12 +1202,22 @@ void OdtGenerator::openFrame(const WPXPropertyList &propList)
         frameAutomaticStylePropertiesElement->addAttribute("fo:max-height", propList["fo:max-height"]->getStr());
 
     // check if the frame has border, background attributes
-    if (propList["fo:border"])
-        frameAutomaticStylePropertiesElement->addAttribute("fo:border", propList["fo:border"]->getStr());
+    static char const *(bordersString[])=
+    {"fo:border","fo:border-top","fo:border-left","fo:border-bottom","fo:border-right"};
+    for (int b = 0; b < 5; b++)
+    {
+        if (propList[bordersString[b]])
+            frameAutomaticStylePropertiesElement->addAttribute(bordersString[b], propList[bordersString[b]]->getStr());
+    }
     if (propList["style:border-line-width"])
         frameAutomaticStylePropertiesElement->addAttribute("style:border-line-width", propList["style:border-line-width"]->getStr());
     if (propList["fo:background-color"])
         frameAutomaticStylePropertiesElement->addAttribute("fo:background-color", propList["fo:background-color"]->getStr());
+    if (propList["style:background-transparency"])
+        frameAutomaticStylePropertiesElement->addAttribute("style:background-transparency", propList["style:background-transparency"]->getStr());
+
+    if (propList["fo:clip"])
+        frameAutomaticStylePropertiesElement->addAttribute("fo:clip", propList["fo:clip"]->getStr());
 
     frameAutomaticStylePropertiesElement->addAttribute("draw:ole-draw-aspect", "1");
 
