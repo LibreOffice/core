@@ -11,7 +11,7 @@
 
 import sys, string, os.path, codecs
 
-CFGFILE             = os.environ["SOLARVER"] + "/" + os.environ["INPATH_FOR_BUILD"] + "/inc/l10ntools/FCFGMerge.cfg"
+CFGFILE             = os.environ["SRCDIR"] + "/filter/source/config/tools/merge/FCFGMerge.cfg"
 
 PROP_XMLVERSION      = "xmlversion"               # // <= global cfg file
 PROP_XMLENCODING     = "xmlencoding"              # // <= global cfg file

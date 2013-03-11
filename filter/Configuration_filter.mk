@@ -25,7 +25,6 @@ filter_MERGE_TARGET := $(call gb_ExternalExecutable_get_dependencies,python) \
 	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
 filter_MERGE := $(call gb_ExternalExecutable_get_command,python) \
 	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
-filter_MERGE_CONFIG_TARGET := $(SRCDIR)/filter/source/config/tools/merge/FCFGMerge.cfg
 
 ### filter configuration rules: generic stuff #######################
 
@@ -35,7 +34,7 @@ filter_XcuFilterTypesTarget_get_target = $(WORKDIR)/XcuFilterTypesTarget/$(1)
 filter_XcuFilterTypesTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterTypesTarget/$(1)
 
-$(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET) $(filter_MERGE_CONFIG_TARGET)
+$(call filter_XcuFilterTypesTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),XCU,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -83,7 +82,7 @@ filter_XcuFilterFiltersTarget_get_target = \
 filter_XcuFilterFiltersTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterFiltersTarget/$(1)
 
-$(call filter_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET) $(filter_MERGE_CONFIG_TARGET)
+$(call filter_XcuFilterFiltersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),XCU,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -116,7 +115,7 @@ filter_XcuFilterOthersTarget_get_target = $(WORKDIR)/XcuFilterOthersTarget/$(1)
 filter_XcuFilterOthersTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterOthersTarget/$(1)
 
-$(call filter_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET) $(filter_MERGE_CONFIG_TARGET)
+$(call filter_XcuFilterOthersTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),XCU,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -154,7 +153,7 @@ filter_XcuFilterInternalTarget_get_target = \
 filter_XcuFilterInternalTarget_get_clean_target = \
  $(WORKDIR)/Clean/XcuFilterInternalTarget/$(1)
 
-$(call filter_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET) $(filter_MERGE_CONFIG_TARGET)
+$(call filter_XcuFilterInternalTarget_get_target,%) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$*,$(true),XCU,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -200,7 +199,7 @@ filter_XCU_filter := org/openoffice/TypeDetection/Filter.xcu
 filter_XcuResTarget_get_target = \
  $(call gb_XcuResTarget_get_target,fcfg_langpack/$(1)/$(filter_XCU_filter))
 
-$(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET) $(filter_MERGE_CONFIG_TARGET)
+$(filter_XcuFilterUiTarget) : $(filter_MERGE_TARGET)
 	$(call gb_Output_announce,$(filter_XcuFilterUiTarget),$(true),XCU,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
