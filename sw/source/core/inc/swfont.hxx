@@ -746,6 +746,7 @@ inline void SwFont::SetEscapement( const short nNewEsc )
 
 inline void SwSubFont::SetLanguage( LanguageType eNewLang )
 {
+    pMagic = 0;
     if( eNewLang == LANGUAGE_SYSTEM )
         eNewLang = (LanguageType)GetAppLanguage();
     SvxFont::SetLanguage( eNewLang );
