@@ -28,8 +28,10 @@ namespace
 
         // Declares the method as a test to call
         CPPUNIT_TEST(testMiscVBAFunctions);
+// not much point even trying to run except on windows
+#if defined(WNT)
         CPPUNIT_TEST(testObjAssignWithDefaultMember);
-        //CPPUNIT_TEST(testOle);
+#endif
 
         // End of test suite definition
         CPPUNIT_TEST_SUITE_END();
