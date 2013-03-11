@@ -4101,7 +4101,8 @@ SVGMatrix.prototype.setToIdentity = function()
 
 SVGMatrix.prototype.setToRotationAroundPoint = function( nX, nY, nAngle )
 {
-    nAngle = degToRad( nAngle );
+    // convert to radians
+    nAngle = Math.PI * nAngle / 180;
     var nSin = Math.sin( nAngle );
     var nCos = Math.cos( nAngle );
 
