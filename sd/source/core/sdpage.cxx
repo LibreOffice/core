@@ -512,7 +512,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
                 aName += sal_Unicode( ' ' );
                 aName += OUString::number( nLevel );
                 SfxStyleSheet* pSheet = (SfxStyleSheet*)pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
-                DBG_ASSERT(pSheet, "Vorlage fuer Gliederungsobjekt nicht gefunden");
+                DBG_ASSERT(pSheet, "StyleSheet for outline object not found");
                 if (pSheet)
                     pSdrObj->StartListening(*pSheet);
             }
@@ -2338,7 +2338,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 {
     if ( pObj )
     {
-        DBG_ASSERT( pObj->ISA(SdrTextObj), "SetObjText: Kein SdrTextObj!" );
+        DBG_ASSERT( pObj->ISA(SdrTextObj), "SetObjText: No SdrTextObj!" );
         ::Outliner* pOutl = pOutliner;
 
         if (!pOutliner)

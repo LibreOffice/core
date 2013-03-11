@@ -65,7 +65,7 @@ void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolIt
         case SID_RULER_NULL_OFFSET:
         {
             const SfxPointItem* pItem = dynamic_cast< const SfxPointItem* >(pState);
-            DBG_ASSERT(pState ? pItem != NULL : sal_True, "SfxPointItem erwartet");
+            DBG_ASSERT(pState ? pItem != NULL : sal_True, "SfxPointItem expected");
             if ( pItem )
                 rRuler.SetNullOffset(pItem->GetValue());
         }

@@ -459,7 +459,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         pOutliner->SetPaperSize(pPage->GetSize());
 
         SvStream* pStream = pMedium->GetInStream();
-        DBG_ASSERT( pStream, "Kein InStream!" );
+        DBG_ASSERT( pStream, "No InStream!" );
         pStream->Seek( 0 );
 
         sal_uLong nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
@@ -608,7 +608,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     pOutliner->SetPaperSize(Size(0x7fffffff, 0x7fffffff));
 
     SvStream* pStream = pMedium->GetInStream();
-    DBG_ASSERT( pStream, "Kein InStream!" );
+    DBG_ASSERT( pStream, "No InStream!" );
     pStream->Seek( 0 );
 
     sal_uLong nErr = pOutliner->Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());

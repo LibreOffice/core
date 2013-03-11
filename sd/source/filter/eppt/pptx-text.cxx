@@ -843,7 +843,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 ( aPropName == "SymbolTextDistance" )
                             ||  ( aPropName == "Graphic" ) ) )
                         {
-                            OSL_FAIL( "Unbekanntes Property" );
+                            OSL_FAIL( "Unknown Property" );
                         }
 #endif
                     }

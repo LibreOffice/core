@@ -988,7 +988,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
         else
             nPos = 0xffff;
 
-        DBG_ASSERT(nPos != 0xffff, "Absatz nicht gefunden");
+        DBG_ASSERT(nPos != 0xffff, "Paragraph not found");
     }
 
     mrDoc.MovePages(nPos);

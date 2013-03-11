@@ -299,7 +299,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 
     Bitmap aPreview( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
 
-    DBG_ASSERT(!!aPreview, "Vorschau-Bitmap konnte nicht erzeugt werden");
+    DBG_ASSERT(!!aPreview, "Preview-Bitmap could not be generated");
 
     return aPreview;
 }

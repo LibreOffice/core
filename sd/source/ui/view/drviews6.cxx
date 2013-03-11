@@ -711,7 +711,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 
         default:
         {
-            DBG_ASSERT( 0, "Slot ohne Funktion" );
+            DBG_ASSERT( 0, "Slot without function" );
             Cancel();
             rReq.Ignore ();
         }

@@ -579,8 +579,8 @@ long Window::SetZoomRect (const Rectangle& rZoomRect)
         Size aWinSize = PixelToLogic(GetOutputSizePixel());
         // Paranoia!  The degenerate case of zero width or height has been
         // taken care of above.
-        DBG_ASSERT(rZoomRect.GetWidth(), "ZoomRect-Breite = 0!");
-        DBG_ASSERT(rZoomRect.GetHeight(), "ZoomRect-Hoehe = 0!");
+        DBG_ASSERT(rZoomRect.GetWidth(), "ZoomRect-Width = 0!");
+        DBG_ASSERT(rZoomRect.GetHeight(), "ZoomRect-Height = 0!");
 
         // Calculate the scale factors which will lead to the given
         // rectangle being fully visible (when translated accordingly) as

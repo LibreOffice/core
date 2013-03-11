@@ -1,4 +1,4 @@
-    /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -1542,7 +1542,7 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
 
     throwIfDisposed();
 
-    DBG_ASSERT(SvxFmDrawPage::mpPage,"SdrPage ist NULL! [CL]");
+    DBG_ASSERT(SvxFmDrawPage::mpPage,"SdrPage is NULL! [CL]");
     DBG_ASSERT(mpView, "SdrView ist NULL! [CL]");
 
     Reference< drawing::XShape > xShape;

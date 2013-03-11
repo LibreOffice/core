@@ -389,7 +389,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
                                                 GetStyleSheetPool()->
                                                 Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
-        DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
+        DBG_ASSERT(pSheet, "StyleSheet missing");
         if (pSheet)
         {
             // applying style sheet for background objects
@@ -419,7 +419,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
                                          GetStyleSheetPool()->
                                          Find(aName, SD_STYLE_FAMILY_GRAPHICS);
-            DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
+            DBG_ASSERT(pSheet, "Stylesheet missing");
             if (pSheet)
             {
                 pObj->SetStyleSheet(pSheet, sal_False);

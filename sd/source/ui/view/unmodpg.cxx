@@ -54,7 +54,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     sal_Bool bTheNewBckgrndObjsVisible)
 :   SdUndoAction(pTheDoc)
 {
-    DBG_ASSERT(pThePage, "Undo ohne Seite ???");
+    DBG_ASSERT(pThePage, "Undo without a page???");
 
     mpPage                  = pThePage;
     maNewName               = aTheNewName;

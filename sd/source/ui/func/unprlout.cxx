@@ -51,7 +51,7 @@ SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
     eNewAutoLayout = eTheNewAutoLayout;
     bSetAutoLayout = bSet;
 
-    DBG_ASSERT(pThePage, "keine Page gesetzt!");
+    DBG_ASSERT(pThePage, "No Page set!");
     pPage = pThePage;
     aComment = String(SdResId(STR_UNDO_SET_PRESLAYOUT));
 }

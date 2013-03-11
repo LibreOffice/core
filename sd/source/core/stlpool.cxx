@@ -666,7 +666,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
         if (!pSheet)
         {
             SfxStyleSheetBase* pSourceSheet = rSourcePool.Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
-            DBG_ASSERT(pSourceSheet, "CopyLayoutSheets: Quellvorlage nicht gefunden");
+            DBG_ASSERT(pSourceSheet, "CopyLayoutSheets: Style sheet missing");
             if (pSourceSheet)
             {
                 // In the case one comes with Methusalem-Docs.
@@ -1011,7 +1011,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
         {
             // Subtitle template
             SvxNumRule* pDefaultRule = ((SvxNumBulletItem*) rSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
-            DBG_ASSERT( pDefaultRule, "Wo ist mein Default? [CL]" );
+            DBG_ASSERT( pDefaultRule, "Where is my default template? [CL]" );
 
             if(pDefaultRule)
             {

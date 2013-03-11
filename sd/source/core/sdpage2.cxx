@@ -169,11 +169,11 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                     aOldFullName += OUString::number( (sal_Int32) (i <= 0 ) ? 1 : i + 1 );
 
                     pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
-                    DBG_ASSERT(pSheet, "alte Gliederungsvorlage nicht gefunden");
+                    DBG_ASSERT(pSheet, "Old outline style sheet not found");
                     aOldOutlineStyles.push_back(pSheet);
 
                     pSheet = pStShPool->Find(aFullName, SD_STYLE_FAMILY_MASTERPAGE);
-                    DBG_ASSERT(pSheet, "neue Gliederungsvorlage nicht gefunden");
+                    DBG_ASSERT(pSheet, "New outline style sheet not found");
                     aOutlineStyles.push_back(pSheet);
 
                     if (bReplaceStyleSheets && pSheet)
@@ -267,7 +267,7 @@ void SdPage::EndListenOutlineText()
     if (pOutlineTextObj)
     {
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*)pModel->GetStyleSheetPool();
-        DBG_ASSERT(pSPool, "StyleSheetPool nicht gefunden");
+        DBG_ASSERT(pSPool, "StyleSheetPool missing");
         String aTrueLayoutName(maLayoutName);
         aTrueLayoutName.Erase( aTrueLayoutName.SearchAscii( SD_LT_SEPARATOR ));
 

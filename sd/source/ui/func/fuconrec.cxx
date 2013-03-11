@@ -555,7 +555,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         SfxStyleSheet* pSheet = (SfxStyleSheet*) pPage->GetModel()->
                                      GetStyleSheetPool()->
                                      Find(aName, SD_STYLE_FAMILY_GRAPHICS);
-        DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
+        DBG_ASSERT(pSheet, "StyleSheet missing");
 
         if (pSheet)
         {

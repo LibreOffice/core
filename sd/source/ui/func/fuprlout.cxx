@@ -106,7 +106,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         }
     }
 
-    DBG_ASSERT(nSelectedPage != SDRPAGE_NOTFOUND, "keine selektierte Seite");
+    DBG_ASSERT(nSelectedPage != SDRPAGE_NOTFOUND, "no selected page");
     SdPage* pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PK_STANDARD);
     String aOldPageLayoutName(pSelectedPage->GetLayoutName());
     String aOldLayoutName(aOldPageLayoutName);

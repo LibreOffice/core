@@ -538,7 +538,7 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
     }
 
     pPseudoStyle = static_cast<SdStyleSheet*>(pPool->Find(aStyleName, SD_STYLE_FAMILY_PSEUDO));
-    DBG_ASSERT(pPseudoStyle, "PseudoStyleSheet nicht gefunden");
+    DBG_ASSERT(pPseudoStyle, "PseudoStyleSheet missing");
 
     return pPseudoStyle;
 }

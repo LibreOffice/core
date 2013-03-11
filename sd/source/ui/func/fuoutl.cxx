@@ -58,7 +58,7 @@ sal_Bool FuOutline::Command(const CommandEvent& rCEvt)
 
     OutlinerView* pOlView =
         static_cast<OutlineView*>(mpView)->GetViewByWindow(mpWindow);
-    DBG_ASSERT (pOlView, "keine OutlinerView gefunden");
+    DBG_ASSERT (pOlView, "no OutlineView found");
 
     if (pOlView)
     {

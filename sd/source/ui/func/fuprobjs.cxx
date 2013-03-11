@@ -81,7 +81,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     SfxItemSet aSet(mpDoc->GetItemPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
     pOutlineViewShell->GetStatusBarState( aSet );
     String aLayoutName = (((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());
-    DBG_ASSERT(aLayoutName.Len(), "Layout unbestimmt");
+    DBG_ASSERT(aLayoutName.Len(), "Layout not defined");
 
     sal_Bool    bUnique = sal_False;
     sal_Int16   nDepth, nTmp;
@@ -143,7 +143,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
 
         SfxStyleSheetBasePool* pStyleSheetPool = mpDocSh->GetStyleSheetPool();
         SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->Find( aStyleName, SD_STYLE_FAMILY_MASTERPAGE );
-        DBG_ASSERT(pStyleSheet, "StyleSheet nicht gefunden");
+        DBG_ASSERT(pStyleSheet, "StyleSheet missing");
 
         if( pStyleSheet )
         {

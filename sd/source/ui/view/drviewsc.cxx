@@ -919,7 +919,7 @@ sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
         if( mpSlotArray[ i ] == nSId )
             return( i );
     }
-    OSL_FAIL( "Slot im Array nicht gefunden!" );
+    OSL_FAIL( "Slot in array not found!" );
     return( USHRT_MAX );
 }
 

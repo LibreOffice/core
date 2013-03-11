@@ -640,7 +640,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         SdrPathObj* pPath       = NULL;
         if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
         {
-            DBG_ASSERT(nCount == 2, "dieser Effekt braucht genau 2 selektierte Objekte");
+            DBG_ASSERT(nCount == 2, "This effect expects two selected objects");
             SdrObject* pObject1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
             SdrObject* pObject2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
             SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
@@ -664,7 +664,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pRunningObj = pObject1;
             }
 
-            DBG_ASSERT(pPath, "keine Kurve gefunden");
+            DBG_ASSERT(pPath, "no curve found");
 
 
             // das laufende Objekt auf das Kurvenende schieben

@@ -375,7 +375,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     }
                     else
                     {
-                        OSL_FAIL("Vorlage aus aelterer anderssprachiger Version");
+                        OSL_FAIL("StyleSheet from older version with different language");
                         bOldDocInOtherLanguage = sal_True;
                     }
 

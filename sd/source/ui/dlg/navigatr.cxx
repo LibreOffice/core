@@ -716,7 +716,7 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, sal_Bool b
                 return( bImage ? TBI_EMBEDDED : STR_DRAGTYPE_EMBEDDED );
         case NAVIGATOR_DRAGTYPE_LINK:
                 return( bImage ? TBI_LINK : STR_DRAGTYPE_LINK );
-        default: OSL_FAIL( "Keine Resource fuer DragType vorhanden!" );
+        default: OSL_FAIL( "No resource for DragType available!" );
     }
     return( 0 );
 }
