@@ -52,8 +52,6 @@ Module gid_Module_Pyuno
              gid_File_Py_Pythonloader,
              gid_File_Py_Python_Core,
              gid_File_Py_Python_Bin,
-             gid_File_Py_Pythonscript,
-             gid_File_Rdb_Scriptproviderforpython,
              gid_File_Lib_Python_So,
              gid_File_Lib_Python3_So,
              gid_File_Scripts_Python,
@@ -77,6 +75,14 @@ Module gid_Module_Pyuno
                  gid_Unixlink_Python_libpython_config_dylib,
                  gid_Unixlink_Python_libpython_m_config_a,
                  gid_Unixlink_Python_libpython_m_config_dylib);
+    Styles = (HIDDEN_ROOT);
+End
+
+Module gid_Module_Script_Provider_For_Python
+    ParentID = gid_Module_Root_Brand;
+    Files = (
+        gid_File_Py_Pythonscript,
+        gid_File_Rdb_Scriptproviderforpython );
     Styles = (HIDDEN_ROOT);
 End
 
