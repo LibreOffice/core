@@ -1504,7 +1504,7 @@ void ImplDevFontList::Add( PhysicalFontFace* pNewData )
 ImplDevFontListData* ImplDevFontList::ImplFindBySearchName( const OUString& rSearchName ) const
 {
 #ifdef DEBUG
-    String aTempName = rSearchName;
+    OUString aTempName = rSearchName;
     GetEnglishSearchFontName( aTempName );
     DBG_ASSERT( aTempName == rSearchName, "ImplDevFontList::ImplFindBySearchName() called with non-normalized name" );
 #endif
