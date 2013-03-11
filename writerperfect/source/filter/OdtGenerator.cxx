@@ -61,6 +61,8 @@ struct _WriterListState
     bool mbListContinueNumbering;
     bool mbListElementParagraphOpened;
     std::stack<bool> mbListElementOpened;
+    // a map id -> last list style defined with such id
+    std::map<int, ListStyle *> mIdListStyleMap;
 };
 
 enum WriterListType { unordered, ordered };
@@ -85,7 +87,8 @@ _WriterListState::_WriterListState() :
     miLastListNumber(0),
     mbListContinueNumbering(false),
     mbListElementParagraphOpened(false),
-    mbListElementOpened()
+    mbListElementOpened(),
+    mIdListStyleMap()
 {
 }
 
@@ -101,6 +104,14 @@ public:
 
     void _openListLevel(TagOpenElement *pListLevelOpenElement);
     void _closeListLevel();
+
+    /** stores a list style: update mListStyles,
+        mWriterListStates.top().mpCurrentListStyle and the different
+        maps
+     */
+    void _storeListStyle(ListStyle *listStyle);
+    /** retrieves the list style corresponding to a given id. */
+    void _retrieveListStyle(int id);
 
     OdfEmbeddedObject _findEmbeddedObjectHandler(const WPXString &mimeType);
     OdfEmbeddedImage _findEmbeddedImageHandler(const WPXString &mimeType);
@@ -154,6 +165,8 @@ public:
 
     // list styles
     std::vector<ListStyle *> mListStyles;
+    // a map id -> last list style defined with id
+    std::map<int, ListStyle *> mIdListStyleMap;
 
     // object state
     unsigned miObjectNumber;
@@ -182,6 +195,7 @@ OdtGeneratorPrivate::OdtGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mpCurrentPageSpan(0),
     miNumPageStyles(0),
     mListStyles(),
+    mIdListStyleMap(),
     miObjectNumber(0),
     mpCurrentTableStyle(0),
     mxStreamType(streamType),
@@ -634,6 +648,47 @@ void OdtGenerator::closeSpan()
     mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("text:span"));
 }
 
+void OdtGeneratorPrivate::_storeListStyle(ListStyle *listStyle)
+{
+    if (!listStyle || listStyle == mWriterListStates.top().mpCurrentListStyle)
+    {
+        return;
+    }
+    mListStyles.push_back(listStyle);
+    mWriterListStates.top().mpCurrentListStyle = listStyle;
+    mWriterListStates.top().mIdListStyleMap[listStyle->getListID()]=listStyle;
+    mIdListStyleMap[listStyle->getListID()]=listStyle;
+}
+
+void OdtGeneratorPrivate::_retrieveListStyle(int id)
+{
+    // first look if the current style is ok
+    if (mWriterListStates.top().mpCurrentListStyle &&
+            id == mWriterListStates.top().mpCurrentListStyle->getListID())
+    {
+        return;
+    }
+
+    // use the current map
+    if (mWriterListStates.top().mIdListStyleMap.find(id) !=
+            mWriterListStates.top().mIdListStyleMap.end())
+    {
+        mWriterListStates.top().mpCurrentListStyle =
+            mWriterListStates.top().mIdListStyleMap.find(id)->second;
+        return;
+    }
+
+    // use the global map
+    if (mIdListStyleMap.find(id) != mIdListStyleMap.end())
+    {
+        mWriterListStates.top().mpCurrentListStyle =
+            mIdListStyleMap.find(id)->second;
+        return;
+    }
+
+    WRITER_DEBUG_MSG(("impossible to find a list with id=%d\n",id));
+}
+
 void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
 {
     int id = 0;
@@ -644,11 +699,12 @@ void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
     if (mpImpl->mWriterListStates.top().mpCurrentListStyle && mpImpl->mWriterListStates.top().mpCurrentListStyle->getListID() == id)
         pListStyle = mpImpl->mWriterListStates.top().mpCurrentListStyle;
 
-    // this rather appalling conditional makes sure we only start a new list (rather than continue an old
-    // one) if: (1) we have no prior list OR (2) the prior list is actually definitively different
-    // from the list that is just being defined (listIDs differ) OR (3) we can tell that the user actually
-    // is starting a new list at level 1 (and only level 1)
-    if (pListStyle == 0 || pListStyle->getListID() != id  ||
+    // this rather appalling conditional makes sure we only start a
+    // new list (rather than continue an old one) if: (1) we have no
+    // prior list or the prior list has another listId OR (2) we can
+    // tell that the user actually is starting a new list at level 1
+    // (and only level 1)
+    if (pListStyle == 0 ||
             (propList["libwpd:level"] && propList["libwpd:level"]->getInt()==1 &&
              (propList["text:start-value"] && propList["text:start-value"]->getInt() != int(mpImpl->mWriterListStates.top().miLastListNumber+1))))
     {
@@ -657,8 +713,7 @@ void OdtGenerator::defineOrderedListLevel(const WPXPropertyList &propList)
         sName.sprintf("OL%i", mpImpl->miNumListStyles);
         mpImpl->miNumListStyles++;
         pListStyle = new ListStyle(sName.cstr(), id);
-        mpImpl->mListStyles.push_back(pListStyle);
-        mpImpl->mWriterListStates.top().mpCurrentListStyle = pListStyle;
+        mpImpl->_storeListStyle(pListStyle);
         mpImpl->mWriterListStates.top().mbListContinueNumbering = false;
         mpImpl->mWriterListStates.top().miLastListNumber = 0;
     }
@@ -692,8 +747,7 @@ void OdtGenerator::defineUnorderedListLevel(const WPXPropertyList &propList)
         sName.sprintf("UL%i", mpImpl->miNumListStyles);
         mpImpl->miNumListStyles++;
         pListStyle = new ListStyle(sName.cstr(), id);
-        mpImpl->mListStyles.push_back(pListStyle);
-        mpImpl->mWriterListStates.top().mpCurrentListStyle = pListStyle;
+        mpImpl->_storeListStyle(pListStyle);
     }
 
     // See comment in OdtGenerator::defineOrderedListLevel
@@ -704,12 +758,17 @@ void OdtGenerator::defineUnorderedListLevel(const WPXPropertyList &propList)
     }
 }
 
-void OdtGenerator::openOrderedListLevel(const WPXPropertyList &)
+void OdtGenerator::openOrderedListLevel(const WPXPropertyList &propList)
 {
     if (mpImpl->mWriterListStates.top().mbListElementParagraphOpened)
     {
         mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("text:p"));
         mpImpl->mWriterListStates.top().mbListElementParagraphOpened = false;
+    }
+    if (mpImpl->mWriterListStates.top().mbListElementOpened.empty() && propList["libwpd:id"])
+    {
+        // first item of a list, be sure to use the list with given id
+        mpImpl->_retrieveListStyle(propList["libwpd:id"]->getInt());
     }
     TagOpenElement *pListLevelOpenElement = new TagOpenElement("text:list");
     mpImpl->_openListLevel(pListLevelOpenElement);
@@ -722,12 +781,17 @@ void OdtGenerator::openOrderedListLevel(const WPXPropertyList &)
     mpImpl->mpCurrentContentElements->push_back(pListLevelOpenElement);
 }
 
-void OdtGenerator::openUnorderedListLevel(const WPXPropertyList &)
+void OdtGenerator::openUnorderedListLevel(const WPXPropertyList &propList)
 {
     if (mpImpl->mWriterListStates.top().mbListElementParagraphOpened)
     {
         mpImpl->mpCurrentContentElements->push_back(new TagCloseElement("text:p"));
         mpImpl->mWriterListStates.top().mbListElementParagraphOpened = false;
+    }
+    if (mpImpl->mWriterListStates.top().mbListElementOpened.empty() && propList["libwpd:id"])
+    {
+        // first item of a list, be sure to use the list with given id
+        mpImpl->_retrieveListStyle(propList["libwpd:id"]->getInt());
     }
     TagOpenElement *pListLevelOpenElement = new TagOpenElement("text:list");
     mpImpl->_openListLevel(pListLevelOpenElement);
@@ -798,12 +862,16 @@ void OdtGenerator::openListElement(const WPXPropertyList &propList, const WPXPro
     WPXPropertyList finalPropList(propList);
 #if 0
     // this property is ignored in TextRunStyle.c++
-    finalPropList.insert("style:list-style-name", mpImpl->mWriterListStates.top().mpCurrentListStyle->getName());
+    if (mpImpl->mWriterListStates.top().mpCurrentListStyle)
+        finalPropList.insert("style:list-style-name", mpImpl->mWriterListStates.top().mpCurrentListStyle->getName());
 #endif
     finalPropList.insert("style:parent-style-name", "Standard");
     WPXString paragName = mpImpl->mParagraphManager.findOrAdd(finalPropList, tabStops);
 
-    mpImpl->mpCurrentContentElements->push_back(new TagOpenElement("text:list-item"));
+    TagOpenElement *pOpenListItem = new TagOpenElement("text:list-item");
+    if (propList["text:start-value"] && propList["text:start-value"]->getInt() > 0)
+        pOpenListItem->addAttribute("text:start-value", propList["text:start-value"]->getStr());
+    mpImpl->mpCurrentContentElements->push_back(pOpenListItem);
 
     TagOpenElement *pOpenListElementParagraph = new TagOpenElement("text:p");
     pOpenListElementParagraph->addAttribute("text:style-name", paragName);
