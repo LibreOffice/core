@@ -610,7 +610,14 @@ void SvtMatchContext_Impl::doExecute()
             {
                 INetURLObject aURLObject( aMatch );
                 String aMainURL( aURLObject.GetMainURL( INetURLObject::NO_DECODE ) );
-                if ( aMainURL.Len() )
+                // Disable autocompletion for anything but the (local) file
+                // system (for which access is hopefully fast), as the logic of
+                // how SvtMatchContext_Impl is used requires this code to run to
+                // completion before further user input is processed, and even
+                // SvtMatchContext_Impl::Stop does not guarantee a speedy
+                // return:
+                if ( aMainURL.Len()
+                     && aURLObject.GetProtocol() == INET_PROT_FILE )
                 {
                     // if text input is a directory, it must be part of the match list! Until then it is scanned
                     bool folder = false;
