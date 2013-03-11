@@ -113,7 +113,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_USERAUTOSAVE
     {
-        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_USERAUTOSAVE"; //? FIX ME
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_USERAUTOSAVE";
         Pos = MAP_APPFONT ( 21 , 74 ) ;
         Size = MAP_APPFONT ( 163 , 10 ) ;
         Text [ en-US ] = "Automatically save the document too" ;
