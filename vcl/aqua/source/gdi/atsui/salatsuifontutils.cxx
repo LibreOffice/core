@@ -315,7 +315,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
                 // ignore font names starting with '.'
                 if( aUtf16Name[0] == '.' )
                     nNameValue = 0;
-                else if( rDFA.GetFamilyName().Len() )
+                else if( !rDFA.GetFamilyName().isEmpty() )
                 {
                     // even if a family name is not the one we are looking for
                     // it is still useful as a font name alternative
@@ -349,7 +349,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         }
     }
 
-    bool bRet = (rDFA.GetFamilyName().Len() > 0);
+    bool bRet = (rDFA.GetFamilyName().getLength() > 0);
     return bRet;
 }
 
