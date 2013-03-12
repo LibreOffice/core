@@ -32,6 +32,7 @@
 #include "sdbcoretools.hxx"
 
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/tools/ConnectionTools.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
@@ -756,9 +757,7 @@ void OConnection::impl_loadConnectionTools_throw()
     Sequence< Any > aArguments( 1 );
     aArguments[0] <<= NamedValue( "Connection" , makeAny( Reference< XConnection >( this ) ) );
 
-    m_xConnectionTools.set(
-        m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.sdb.tools.ConnectionTools", aArguments, m_aContext),
-        UNO_QUERY_THROW );
+    m_xConnectionTools = css::sdb::tools::ConnectionTools::create( m_aContext );
 }
 
 Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)

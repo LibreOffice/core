@@ -303,6 +303,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb/applic
 	CopyTableWizard \
 	MacroMigrationWizard \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdb/tools,\
+	ConnectionTools \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/sdbc,\
 	ConnectionPool \
 	DriverManager \
