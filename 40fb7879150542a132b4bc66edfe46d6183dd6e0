@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///z0\u003d",
+        "filename": "padmin/source/adddlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-12T09:16:14Z",
+      "side": 1,
+      "message": "Use isEmpty() where getLength() is used to determine whether a string is empty.",
+      "revId": "40fb7879150542a132b4bc66edfe46d6183dd6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///zw\u003d",
+        "filename": "padmin/source/cmddlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-12T09:16:14Z",
+      "side": 1,
+      "message": "isEmpty()",
+      "revId": "40fb7879150542a132b4bc66edfe46d6183dd6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///zs\u003d",
+        "filename": "padmin/source/cmddlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-03-12T09:16:14Z",
+      "side": 1,
+      "message": "isEmpty()",
+      "revId": "40fb7879150542a132b4bc66edfe46d6183dd6e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
