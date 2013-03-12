@@ -89,12 +89,6 @@ TYPEINIT1( FuInsertClipboard, FuPoor );
 TYPEINIT1( FuInsertOLE, FuPoor );
 TYPEINIT1( FuInsertAVMedia, FuPoor );
 
-/*************************************************************************
-|*
-|* FuInsertGraphic::Konstruktor
-|*
-\************************************************************************/
-
 FuInsertGraphic::FuInsertGraphic (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -160,11 +154,6 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
     }
 }
 
-/*************************************************************************
-|*
-|* FuInsertClipboard::Konstruktor
-|*
-\************************************************************************/
 
 FuInsertClipboard::FuInsertClipboard (
     ViewShell* pViewSh,
@@ -238,11 +227,6 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
 }
 
 
-/*************************************************************************
-|*
-|* FuInsertOLE::Konstruktor
-|*
-\************************************************************************/
 
 FuInsertOLE::FuInsertOLE (
     ViewShell* pViewSh,
@@ -271,10 +255,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
         SdrObject* pPickObj = mpView->GetEmptyPresentationObject( ePresObjKind );
 
-        /**********************************************************************
-        * Diagramm oder StarCalc-Tabelle einfuegen
-        **********************************************************************/
-
+        // insert diagram or Calc table
         ::rtl::OUString aObjName;
         SvGlobalName aName;
         if (nSlotId == SID_INSERT_DIAGRAM)
@@ -318,7 +299,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                 if (aSize.Height() == 0 || aSize.Width() == 0)
                 {
-                    // Rechteck mit ausgewogenem Kantenverhaeltnis
+                    // rectangle with balanced edge ratio
                     aSize.Width()  = 14100;
                     aSize.Height() = 10000;
                     Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aUnit );
@@ -400,9 +381,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        /**********************************************************************
-        * Objekt einfuegen
-        **********************************************************************/
+        // insert object
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         sal_Bool bCreateNew = sal_False;
         uno::Reference < embed::XEmbeddedObject > xObj;
@@ -494,7 +473,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         }
                         else
                         {
-                            // PlugIn konnte nicht erzeugt werden
+                            // unable to create PlugIn
                             String aStrErr( SdResId( STR_ERROR_OBJNOCREATE_PLUGIN ) );
                             String aMask;
                             aMask += sal_Unicode('%');
@@ -535,7 +514,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
                     if (aSize.Height() == 0 || aSize.Width() == 0)
                     {
-                        // Rechteck mit ausgewogenem Kantenverhaeltnis
+                        // rectangle with balanced edge ratio
                         aSize.Width()  = 14100;
                         aSize.Height() = 10000;
                         Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
@@ -551,9 +530,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                 if ( mpView->AreObjectsMarked() )
                 {
-                    /**********************************************************
-                        * Ist ein leeres OLE-Objekt vorhanden?
-                        **********************************************************/
+                    // as an empty OLE object available?
                     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
                     if (rMarkList.GetMarkCount() == 1)
@@ -566,9 +543,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         {
                             if ( !( (SdrOle2Obj*) pObj)->GetObjRef().is() )
                             {
-                                /**************************************************
-                                    * Das leere OLE-Objekt bekommt ein neues IPObj
-                                    **************************************************/
+                                // the empty OLE object gets a new IPObj
                                 bInsertNewObject = sal_False;
                                 pObj->SetEmptyPresObj(sal_False);
                                 ( (SdrOle2Obj*) pObj)->SetOutlinerParaObject(NULL);
@@ -596,9 +571,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                 if (bInsertNewObject)
                 {
-                    /**************************************************************
-                        * Ein neues OLE-Objekt wird erzeugt
-                        **************************************************************/
+                    // we create a new OLE object
                     SdrPageView* pPV = mpView->GetSdrPageView();
                     Size aPageSize = pPV->GetPage()->GetSize();
 
@@ -672,11 +645,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 }
 
 
-/*************************************************************************
-|*
-|* FuInsertAVMedia::Konstruktor
-|*
-\************************************************************************/
 
 FuInsertAVMedia::FuInsertAVMedia(
     ViewShell* pViewSh,

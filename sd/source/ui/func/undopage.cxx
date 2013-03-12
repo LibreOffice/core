@@ -36,21 +36,9 @@ TYPEINIT1(SdPageLRUndoAction, SdUndoAction);
 TYPEINIT1(SdPageULUndoAction, SdUndoAction);
 
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 SdPageFormatUndoAction::~SdPageFormatUndoAction()
 {
 }
-
-/*************************************************************************
-|*
-|* Undo()
-|*
-\************************************************************************/
 
 void SdPageFormatUndoAction::Undo()
 {
@@ -114,12 +102,9 @@ void SdPageULUndoAction::Undo()
     mpPage->SetLwrBorder(mnOldLower);
 }
 
-/*************************************************************************
-|*
-|* UL-Redo()
-|*
-\************************************************************************/
-
+/**
+ * UL-Redo()
+ */
 void SdPageULUndoAction::Redo()
 {
     mpPage->SetUppBorder(mnNewUpper);

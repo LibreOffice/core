@@ -53,11 +53,6 @@ namespace sd {
 
 TYPEINIT1( FuConstruct3dObject, FuConstruct );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuConstruct3dObject::FuConstruct3dObject (
     ViewShell*  pViewSh,
@@ -86,11 +81,6 @@ void FuConstruct3dObject::DoExecute( SfxRequest& rReq )
         ToolBarManager::msDrawingObjectToolBar);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 {
@@ -129,8 +119,8 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             }
             p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
 
-            // Dies ist ein offenes Objekt, muss daher defaultmaessig
-            // doppelseitig behandelt werden
+            /* this is an open object, therefore it has to be handled double-
+               sided by default */
             p3DObj->SetMergedItem(Svx3DDoubleSidedItem(sal_True));
             break;
         }
@@ -338,7 +328,7 @@ sal_Bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
 
-            // LineStyle rausnehmen
+            // extract LineStyle
             aAttr.Put(XLineStyleItem (XLINE_NONE));
 
             pObj->SetMergedItemSet(aAttr);
@@ -348,22 +338,12 @@ sal_Bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -383,25 +363,15 @@ sal_Bool FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuConstruct3dObject::KeyInput(const KeyEvent& rKEvt)
 {
     return( FuConstruct::KeyInput(rKEvt) );
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 
 void FuConstruct3dObject::Activate()
 {
@@ -410,11 +380,6 @@ void FuConstruct3dObject::Activate()
     FuConstruct::Activate();
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuConstruct3dObject::Deactivate()
 {

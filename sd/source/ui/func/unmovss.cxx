@@ -31,19 +31,13 @@ SdMoveStyleSheetsUndoAction::SdMoveStyleSheetsUndoAction( SdDrawDocument* pTheDo
     maStyles.swap( rTheStyles );
 
     maListOfChildLists.resize( maStyles.size() );
-    // Liste mit den Listen der StyleSheet-Kinder erstellen
+    // create list with lists of style sheet children
     std::size_t i = 0;
     for(SdStyleSheetVector::iterator iter = maStyles.begin(); iter != maStyles.end(); ++iter )
     {
         maListOfChildLists[i++] = SdStyleSheetPool::CreateChildList( (*iter).get() );
     }
 }
-
-/*************************************************************************
-|*
-|* Undo()
-|*
-\************************************************************************/
 
 void SdMoveStyleSheetsUndoAction::Undo()
 {

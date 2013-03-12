@@ -73,11 +73,6 @@ namespace sd {
 
 TYPEINIT1( FuConstructCustomShape, FuConstruct );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuConstructCustomShape::FuConstructCustomShape (
         ViewShell*          pViewSh,
@@ -114,11 +109,6 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
         ToolBarManager::msDrawingObjectToolBar);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -153,22 +143,12 @@ sal_Bool FuConstructCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -190,26 +170,16 @@ sal_Bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuConstructCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 
 void FuConstructCustomShape::Activate()
 {
@@ -217,12 +187,9 @@ void FuConstructCustomShape::Activate()
     FuConstruct::Activate();
 }
 
-/*************************************************************************
-|*
-|* Attribute fuer das zu erzeugende Objekt setzen
-|*
-\************************************************************************/
-
+/**
+ * set attribute for the object to be created
+ */
 void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
 {
     sal_Bool bAttributesAppliedFromGallery = sal_False;

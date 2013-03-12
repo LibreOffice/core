@@ -46,12 +46,6 @@ namespace sd {
 TYPEINIT1( FuPresentationObjects, FuPoor );
 
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuPresentationObjects::FuPresentationObjects (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -76,8 +70,8 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     if( !pOutlineViewShell )
         return;
 
-    // ergibt die Selektion ein eindeutiges Praesentationslayout?
-    // wenn nicht, duerfen die Vorlagen nicht bearbeitet werden
+    /* does the selections end in a unique presentation layout?
+       if not, it is not allowed to edit the templates */
     SfxItemSet aSet(mpDoc->GetItemPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
     pOutlineViewShell->GetStatusBarState( aSet );
     String aLayoutName = (((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());

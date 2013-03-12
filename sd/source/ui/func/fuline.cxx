@@ -41,11 +41,6 @@ namespace sd {
 
 TYPEINIT1( FuLine, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuLine::FuLine (
     ViewShell* pViewSh,
@@ -87,7 +82,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
         }
 
-        // Attribute wurden geaendert, Listboxes in Objectbars muessen aktualisiert werden
+        // some attributes are changed, we have to update the listboxes in the objectbars
         static sal_uInt16 SidArray[] = {
                         SID_ATTR_LINE_STYLE,
                         SID_ATTR_LINE_DASH,

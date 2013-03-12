@@ -45,11 +45,6 @@ namespace sd {
 
 TYPEINIT1( FuConstruct, FuDraw );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuConstruct::FuConstruct (
     ViewShell*      pViewSh,
@@ -67,11 +62,6 @@ void FuConstruct::DoExecute( SfxRequest& rReq )
     FuDraw::DoExecute( rReq );
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -113,11 +103,6 @@ sal_Bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
@@ -143,11 +128,6 @@ sal_Bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -208,9 +188,7 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                  Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
                  Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
-            /**************************************************************
-            * Toggle zw. Selektion und Rotation
-            **************************************************************/
+            // toggle between selection and rotation
             SdrObject* pSingleObj = NULL;
             sal_uLong nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
 
@@ -244,15 +222,10 @@ sal_Bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = sal_False;
@@ -263,11 +236,6 @@ sal_Bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 
 void FuConstruct::Activate()
 {
@@ -275,11 +243,6 @@ void FuConstruct::Activate()
     FuDraw::Activate();
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuConstruct::Deactivate()
 {
@@ -287,12 +250,9 @@ void FuConstruct::Deactivate()
     mpView->SetEditMode(SDREDITMODE_EDIT);
 }
 
-/*************************************************************************
-|*
-|* StyleSheet fuer das zu erzeugende Objekt setzen
-|*
-\************************************************************************/
-
+/**
+ * set style sheet for the object to be created
+ */
 void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
 {
     sal_Bool bUseFillStyle, bUseNoFillStyle;

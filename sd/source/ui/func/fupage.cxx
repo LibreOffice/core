@@ -21,7 +21,7 @@
 
 #include <sfx2/viewfrm.hxx>
 
-// Seite einrichten Tab-Page
+// arrange Tab-Page
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
@@ -72,7 +72,7 @@ namespace sd {
 class Window;
 
 // 50 cm 28350
-// erstmal vom Writer uebernommen
+// adapted from writer
 #define MAXHEIGHT 28350
 #define MAXWIDTH  28350
 
@@ -100,12 +100,6 @@ void mergeItemSetsImpl( SfxItemSet& rTarget, const SfxItemSet& rSource )
 
     rTarget.Put(rSource);
 }
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                  SdDrawDocument* pDoc, SfxRequest& rReq )
@@ -380,11 +374,10 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                     }
                 }
             }
-
-            // Sonderbehandlung: die INVALIDS auf NULL-Pointer
-            // zurueckgesetzen (sonst landen INVALIDs oder
-            // Pointer auf die DefaultItems in der Vorlage;
-            // beides wuerde die Attribut-Vererbung unterbinden)
+            /* Special treatment: reset the INVALIDS to
+               NULL-Pointer (otherwise INVALIDs or pointer point
+               to DefaultItems in the template; both would
+               prevent the attribute inheritance) */
             pTempSet->ClearInvalidItems();
 
             if( mbMasterPage )
@@ -556,7 +549,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             bSetPageSizeAndBorder = sal_True;
     }
 
-    // Papierschacht (PaperBin)
+    // Paper Bin
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_PAPERBIN), sal_True, &pPoolItem) == SFX_ITEM_SET )
     {
         nPaperBin = ((const SvxPaperBinItem*) pPoolItem)->GetValue();
@@ -612,18 +605,12 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         mpBackgroundObjUndoAction = 0;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // Objekte koennen max. so gross wie die ViewSize werden
-    //
+    // Objects can not be bigger than ViewSize
     Size aPageSize = mpDoc->GetSdPage(0, ePageKind)->GetSize();
     Size aViewSize = Size(aPageSize.Width() * 3, aPageSize.Height() * 2);
     mpDoc->SetMaxObjSize(aViewSize);
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // ggfs. Preview den neuen Kontext mitteilen
-    //
+    // if necessary, we tell Preview the new context
     mpDrawViewShell->UpdatePreview( mpDrawViewShell->GetActualPage() );
 }
 

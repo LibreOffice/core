@@ -22,12 +22,6 @@
 
 TYPEINIT1(SdUndoGroup, SdUndoAction);
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 SdUndoGroup::~SdUndoGroup()
 {
     size_t nLast = aCtn.size();
@@ -37,12 +31,6 @@ SdUndoGroup::~SdUndoGroup()
     }
     aCtn.clear();
 }
-
-/*************************************************************************
-|*
-|* Merge
-|*
-\************************************************************************/
 
 sal_Bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
 {
@@ -62,12 +50,9 @@ sal_Bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|* Undo, umgekehrte Reihenfolge der Ausfuehrung
-|*
-\************************************************************************/
-
+/**
+ * Undo, reverse order of execution
+ */
 void SdUndoGroup::Undo()
 {
     long nLast = aCtn.size();
@@ -78,12 +63,6 @@ void SdUndoGroup::Undo()
 
 }
 
-/*************************************************************************
-|*
-|* Redo
-|*
-\************************************************************************/
-
 void SdUndoGroup::Redo()
 {
     size_t nLast = aCtn.size();
@@ -93,12 +72,6 @@ void SdUndoGroup::Redo()
     }
 
 }
-
-/*************************************************************************
-|*
-|* eine Aktion hinzufuegen
-|*
-\************************************************************************/
 
 void SdUndoGroup::AddAction(SdUndoAction* pAction)
 {

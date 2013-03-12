@@ -76,12 +76,6 @@ namespace sd {
 
 TYPEINIT1( FuSelection, FuDraw );
 
-/*************************************************************************
-|*
-|* Constructor
-|*
-\************************************************************************/
-
 FuSelection::FuSelection (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -115,12 +109,6 @@ void FuSelection::DoExecute( SfxRequest& rReq )
     SelectionHasChanged();
 }
 
-/*************************************************************************
-|*
-|* Destructor
-|*
-\************************************************************************/
-
 FuSelection::~FuSelection()
 {
     mpView->UnmarkAllPoints();
@@ -131,12 +119,6 @@ FuSelection::~FuSelection()
         mpView->SetDragMode(SDRDRAG_MOVE);
     }
 }
-
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -232,7 +214,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                // Handle oder marked object hit
+                // hit handle or marked object
                 bFirstMouseMove = sal_True;
                 aDragTimer.Start();
             }
@@ -576,12 +558,6 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
-
 sal_Bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn = FuDraw::MouseMove(rMEvt);
@@ -619,12 +595,6 @@ sal_Bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 
     return (bReturn);
 }
-
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -922,15 +892,10 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* Process keyboard input
-|*
-|* If a KeyEvent is being processed, the Return-Wert is sal_True,
-|* sal_False otherwise.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = sal_False;
@@ -960,12 +925,6 @@ sal_Bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 
 }
 
-
-/*************************************************************************
-|*
-|* Activate function
-|*
-\************************************************************************/
 
 void FuSelection::Activate()
 {
@@ -1108,23 +1067,11 @@ void FuSelection::Activate()
 
 
 
-/*************************************************************************
-|*
-|* Deactivate function
-|*
-\************************************************************************/
-
 void FuSelection::Deactivate()
 {
     FuDraw::Deactivate();
 }
 
-
-/*************************************************************************
-|*
-|* Selection was changed
-|*
-\************************************************************************/
 
 void FuSelection::SelectionHasChanged()
 {
@@ -1145,12 +1092,9 @@ void FuSelection::SelectionHasChanged()
 }
 
 
-/*************************************************************************
-|*
-|* Set current bezier edit mode
-|*
-\************************************************************************/
-
+/**
+ * Set current bezier edit mode
+ */
 void FuSelection::SetEditMode(sal_uInt16 nMode)
 {
     nEditMode = nMode;
@@ -1171,12 +1115,9 @@ void FuSelection::SetEditMode(sal_uInt16 nMode)
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }
 
-/*************************************************************************
-|*
-|* Execute animation or interaction
-|*
-\************************************************************************/
-
+/**
+ * Execute animation or interaction
+ */
 sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 {
     sal_Bool bAnimated = sal_False;

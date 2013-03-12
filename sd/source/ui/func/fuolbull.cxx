@@ -37,11 +37,6 @@ namespace sd {
 
 TYPEINIT1( FuOutlineBullet, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuOutlineBullet::FuOutlineBullet(ViewShell* pViewShell, ::sd::Window* pWindow,
                                  ::sd::View* pView, SdDrawDocument* pDoc,
@@ -63,7 +58,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        // ItemSet fuer Dialog fuellen
+        // fill ItemSet for Dialog
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
 
@@ -71,7 +66,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
                              EE_ITEMS_START, EE_ITEMS_END );
         aNewAttr.Put( aEditAttr, sal_False );
 
-        // Dialog hochfahren und ausfuehren
+        // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0;
         if( pDlg )
@@ -117,13 +112,12 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
         }
     }
 
-    // nicht direkt an pOlView, damit SdDrawView::SetAttributes
-    // Aenderungen auf der Masterpage abfangen und in eine
-    // Vorlage umleiten kann
+    /* not direct to pOlView; therefore, SdDrawView::SetAttributes can catch
+       changes to master page and redirect to a template */
     mpView->SetAttributes(*pArgs);
 
 /* #i35937#
-    // evtl. Betroffene Felder invalidieren
+    // invalidate possible affected fields
     mpViewShell->Invalidate( FN_NUM_BULLET_ON );
 */
 }

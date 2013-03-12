@@ -53,12 +53,6 @@ namespace sd {
 
 TYPEINIT1( FuThesaurus, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuThesaurus::FuThesaurus( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                   SdDrawDocument* pDoc, SfxRequest& rReq )
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)

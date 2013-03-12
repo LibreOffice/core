@@ -25,15 +25,9 @@
 TYPEINIT1(SdAnimationPrmsUndoAction, SdUndoAction);
 
 
-/*************************************************************************
-|*
-|* Undo()
-|*
-\************************************************************************/
-
 void SdAnimationPrmsUndoAction::Undo()
 {
-    // keine neu Info erzeugt: Daten restaurieren
+    // no new info created: restore data
     if (!bInfoCreated)
     {
         SdDrawDocument* pDoc   = (SdDrawDocument*)pObject->GetModel();
@@ -62,22 +56,15 @@ void SdAnimationPrmsUndoAction::Undo()
             pInfo->mbSecondPlayFull  = bOldSecondPlayFull;
         }
     }
-    // Info wurde durch Aktion erzeugt: Info loeschen
+    // info was created by action: delete info
     else
     {
         pObject->DeleteUserData(0);
     }
-    // Damit ein ModelHasChanged() ausgeloest wird, um das Effekte-Window
-    // auf Stand zu bringen (Animations-Reihenfolge)
+    // force ModelHasChanged() in order to update effect window (animation order)
     pObject->SetChanged();
     pObject->BroadcastObjectChange();
 }
-
-/*************************************************************************
-|*
-|* Redo()
-|*
-\************************************************************************/
 
 void SdAnimationPrmsUndoAction::Redo()
 {
@@ -105,17 +92,10 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->mbSecondSoundOn   = bNewSecondSoundOn;
     pInfo->mbSecondPlayFull  = bNewSecondPlayFull;
 
-    // Damit ein ModelHasChanged() ausgeloest wird, um das Effekte-Window
-    // auf Stand zu bringen (Animations-Reihenfolge)
+    // force ModelHasChanged() in order to update effect window (animation order)
     pObject->SetChanged();
     pObject->BroadcastObjectChange();
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 SdAnimationPrmsUndoAction::~SdAnimationPrmsUndoAction()
 {

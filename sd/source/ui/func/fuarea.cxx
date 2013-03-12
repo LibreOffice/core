@@ -38,11 +38,6 @@
 namespace sd {
 TYPEINIT1( FuArea, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuArea::FuArea( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* _pView, SdDrawDocument* pDoc, SfxRequest& rReq)
 : FuPoor(pViewSh, pWin, _pView, pDoc, rReq)
@@ -75,7 +70,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
         }
 
-        // Attribute wurden geaendert, Listboxes in Objectbars muessen aktualisiert werden
+        // attributes changed, update Listboxes in Objectbars
         static sal_uInt16 SidArray[] = {
                         SID_ATTR_FILL_STYLE,
                         SID_ATTR_FILL_COLOR,

@@ -50,12 +50,6 @@ static sal_uInt16 SidArraySpell[] = {
 
 TYPEINIT1( FuSearch, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuSearch::FuSearch (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -94,12 +88,6 @@ void FuSearch::DoExecute( SfxRequest& )
        pSdOutliner->PrepareSpelling();
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 FuSearch::~FuSearch()
 {
     if ( ! mpDocSh->IsInDestruction() && mpDocSh->GetViewShell()!=NULL)
@@ -112,12 +100,6 @@ FuSearch::~FuSearch()
         delete pSdOutliner;
 }
 
-
-/*************************************************************************
-|*
-|* Suchen&Ersetzen
-|*
-\************************************************************************/
 
 void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
 {

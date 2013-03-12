@@ -50,9 +50,7 @@ namespace sd {
 #define  ITEMVALUE( ItemSet, Id, Cast ) ( ( (const Cast&) (ItemSet).Get( (Id) ) ).GetValue() )
 TYPEINIT1( FuMorph, FuPoor );
 
-//////////////////////////////////////////////////////////////////////////////
-// constructor
-//
+
 FuMorph::FuMorph (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -82,17 +80,17 @@ void FuMorph::DoExecute( SfxRequest& )
 
     if(rMarkList.GetMarkCount() == 2)
     {
-        // Clones erzeugen
+        // create clones
         SdrObject*  pObj1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
         SdrObject*  pObj2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
         SdrObject*  pCloneObj1 = pObj1->Clone();
         SdrObject*  pCloneObj2 = pObj2->Clone();
 
-        // Text am Clone loeschen, da wir sonst kein richtiges PathObj bekommen
+        // delete text at clone, otherwise we do net get a correct PathObj
         pCloneObj1->SetOutlinerParaObject(NULL);
         pCloneObj2->SetOutlinerParaObject(NULL);
 
-        // Path-Objekte erzeugen
+        // create path objects
         SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(sal_False, sal_False);
         SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(sal_False, sal_False);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -124,7 +122,7 @@ void FuMorph::DoExecute( SfxRequest& )
                     aPolyPoly2.append(((SdrPathObj*)pObj)->GetPathPoly());
             }
 
-            // Morphing durchfuehren
+            // perform morphing
             if(aPolyPoly1.count() && aPolyPoly2.count())
             {
                 aPolyPoly1 = ::basegfx::tools::correctOrientations(aPolyPoly1);
@@ -241,9 +239,9 @@ void FuMorph::DoExecute( SfxRequest& )
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// make the point count of the polygons equal in adding points
-//
+/**
+ * make the point count of the polygons equal in adding points
+ */
 void FuMorph::ImpEqualizePolyPointCount(
     ::basegfx::B2DPolygon& rSmall,
     const ::basegfx::B2DPolygon& rBig
@@ -277,8 +275,7 @@ void FuMorph::ImpEqualizePolyPointCount(
     rSmall = aPoly2;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
+
 sal_uInt32 FuMorph::ImpGetNearestIndex(
     const ::basegfx::B2DPolygon& rPoly,
     const ::basegfx::B2DPoint& rPos
@@ -301,9 +298,9 @@ sal_uInt32 FuMorph::ImpGetNearestIndex(
     return nActInd;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// add to a point reduced polys until count is same
-//
+/**
+ * add to a point reduced polys until count is same
+ */
 void FuMorph::ImpAddPolys(
     ::basegfx::B2DPolyPolygon& rSmaller,
     const ::basegfx::B2DPolyPolygon& rBigger
@@ -331,9 +328,9 @@ void FuMorph::ImpAddPolys(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// create group object with morphed polygons
-//
+/**
+ * create group object with morphed polygons
+ */
 void FuMorph::ImpInsertPolygons(
     B2DPolyPolygonList_impl& rPolyPolyList3D,
     sal_Bool bAttributeFade,
@@ -412,7 +409,7 @@ void FuMorph::ImpInsertPolygons(
             const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *rPolyPolyList3D[ i ];
             SdrPathObj* pNewObj = new SdrPathObj(OBJ_POLY, rPolyPoly3D);
 
-            // Linienfarbe
+            // line color
             if ( bLineColor )
             {
                 const basegfx::BColor aLineColor(basegfx::interpolate(aStartLineCol.getBColor(), aEndLineCol.getBColor(), fFactor));
@@ -421,7 +418,7 @@ void FuMorph::ImpInsertPolygons(
             else if ( bIgnoreLine )
                 aSet.Put( XLineStyleItem( XLINE_NONE ) );
 
-            // Fuellfarbe
+            // fill color
             if ( bFillColor )
             {
                 const basegfx::BColor aFillColor(basegfx::interpolate(aStartFillCol.getBColor(), aEndFillCol.getBColor(), fFactor));
@@ -430,7 +427,7 @@ void FuMorph::ImpInsertPolygons(
             else if ( bIgnoreFill )
                 aSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-            // Linienstaerke
+            // line width
             if ( bLineWidth )
                 aSet.Put( XLineWidthItem( nStartLineWidth + (long) ( fFactor * fDelta + 0.5 ) ) );
 
@@ -449,9 +446,9 @@ void FuMorph::ImpInsertPolygons(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// create single morphed PolyPolygon
-//
+/**
+ * create single morphed PolyPolygon
+ */
 ::basegfx::B2DPolyPolygon* FuMorph::ImpCreateMorphedPolygon(
     const ::basegfx::B2DPolyPolygon& rPolyPolyStart,
     const ::basegfx::B2DPolyPolygon& rPolyPolyEnd,
@@ -482,9 +479,9 @@ void FuMorph::ImpInsertPolygons(
     return pNewPolyPolygon;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// create morphed PolyPolygons
-//
+/**
+ * create morphed PolyPolygons
+ */
 sal_Bool FuMorph::ImpMorphPolygons(
     const ::basegfx::B2DPolyPolygon& rPolyPoly1,
     const ::basegfx::B2DPolyPolygon& rPolyPoly2,

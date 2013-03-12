@@ -54,11 +54,6 @@ namespace sd {
 TYPEINIT1( FuConstructBezierPolygon, FuConstruct );
 
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuConstructBezierPolygon::FuConstructBezierPolygon (
     ViewShell* pViewSh,
@@ -93,11 +88,6 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     }
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -117,7 +107,7 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (aVEvt.eEvent == SDREVENT_BEGTEXTEDIT)
     {
-        // Texteingabe hier nicht zulassen
+        // here, we do not allow text input
         aVEvt.eEvent = SDREVENT_BEGDRAGOBJ;
         mpView->EnableExtendedMouseEventDispatcher(sal_False);
     }
@@ -128,9 +118,7 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
     {
-        /******************************************************************
-        * Klebepunkt einfuegen
-        ******************************************************************/
+        // insert clue point
         mpView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
     }
     else
@@ -150,11 +138,6 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
 {
@@ -162,11 +145,6 @@ sal_Bool FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 {
@@ -196,7 +174,7 @@ sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
             bCreated = sal_True;
         }
 
-        // Trick, um FuDraw::DoubleClick nicht auszuloesen
+        // trick to suppress FuDraw::DoubleClick
         bMBDown = sal_False;
 
     }
@@ -246,15 +224,10 @@ sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
@@ -262,11 +235,6 @@ sal_Bool FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 
 void FuConstructBezierPolygon::Activate()
 {
@@ -326,11 +294,6 @@ void FuConstructBezierPolygon::Activate()
     FuConstruct::Activate();
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuConstructBezierPolygon::Deactivate()
 {
@@ -340,11 +303,6 @@ void FuConstructBezierPolygon::Deactivate()
 }
 
 
-/*************************************************************************
-|*
-|* Selektion hat sich geaendert
-|*
-\************************************************************************/
 
 void FuConstructBezierPolygon::SelectionHasChanged()
 {
@@ -356,13 +314,9 @@ void FuConstructBezierPolygon::SelectionHasChanged()
 }
 
 
-
-/*************************************************************************
-|*
-|* Aktuellen Bezier-Editmodus setzen
-|*
-\************************************************************************/
-
+/**
+ * Set current bezier edit mode
+ */
 void FuConstructBezierPolygon::SetEditMode(sal_uInt16 nMode)
 {
     nEditMode = nMode;

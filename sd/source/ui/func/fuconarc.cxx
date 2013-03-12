@@ -47,11 +47,6 @@ namespace sd {
 
 TYPEINIT1( FuConstructArc, FuConstruct );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuConstructArc::FuConstructArc (
     ViewShell*  pViewSh,
@@ -96,7 +91,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
                                    pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                    pCenterY->GetValue () + pAxisY->GetValue () / 2);
 
-        Activate();  // Setzt aObjKind
+        Activate();  // sets aObjKind
         SdrCircObj* pNewCircle =
         new SdrCircObj((SdrObjKind) mpView->GetCurrentObjIdentifier(),
                        aNewRectangle,
@@ -108,11 +103,6 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
     }
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -140,22 +130,12 @@ sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -185,26 +165,16 @@ sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 
 void FuConstructArc::Activate()
 {
@@ -249,11 +219,6 @@ void FuConstructArc::Activate()
     FuConstruct::Activate();
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuConstructArc::Deactivate()
 {

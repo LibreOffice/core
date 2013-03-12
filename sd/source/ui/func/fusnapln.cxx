@@ -41,12 +41,6 @@ namespace sd {
 
 TYPEINIT1( FuSnapLine, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuSnapLine::FuSnapLine(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                        SdDrawDocument* pDoc, SfxRequest& rReq) :
     FuPoor(pViewSh, pWin, pView, pDoc, rReq)
@@ -161,7 +155,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
                 break;
 
             case RET_SNAP_DELETE:
-                // Fangobjekt loeschen
+                // delete snap object
                 if ( !bCreateNew )
                     pPV->DeleteHelpLine(nHelpLine);
                 /*fall-through*/

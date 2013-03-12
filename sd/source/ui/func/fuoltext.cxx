@@ -35,7 +35,7 @@
 #include "ViewShell.hxx"
 #include "OutlineViewShell.hxx"
 
-#include <stdio.h>          // Fuer SlotFilter-Listing
+#include <stdio.h>          // for SlotFilter listing
 
 namespace sd {
 
@@ -78,11 +78,6 @@ static sal_uInt16 SidArray[] = {
 
 TYPEINIT1( FuOutlineText, FuOutline );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuOutlineText::FuOutlineText(ViewShell* pViewShell, ::sd::Window* pWindow,
                              ::sd::View* pView, SdDrawDocument* pDoc,
@@ -98,11 +93,6 @@ FunctionReference FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* pWin,
     return xFunc;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -112,7 +102,7 @@ sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (bReturn)
     {
-        // Attributierung der akt. Textstelle kann jetzt anders sein
+        // Now the attributs of the current text position can be different
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
@@ -123,11 +113,6 @@ sal_Bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
 {
@@ -141,11 +126,6 @@ sal_Bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -153,7 +133,7 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (bReturn)
     {
-        // Attributierung der akt. Textstelle kann jetzt anders sein
+        // Now the attributs of the current text position can be different
         mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
     }
     else
@@ -174,13 +154,13 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
 
                 if ( rMEvt.IsMod1() )
                 {
-                    // Im neuen Frame oeffnen
+                    // open in new frame
                     pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                 &aStrItem, &aBrowseItem, &aReferer, 0L);
                 }
                 else
                 {
-                    // Im aktuellen Frame oeffnen
+                    // open in current frame
                     SfxFrameItem aFrameItem( SID_DOCFRAME, pFrame );
                     pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                 &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
@@ -195,15 +175,10 @@ sal_Bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = sal_False;
@@ -265,56 +240,36 @@ void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
 
 
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
 void FuOutlineText::Activate()
 {
     FuOutline::Activate();
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuOutlineText::Deactivate()
 {
     FuOutline::Deactivate();
 }
 
-/*************************************************************************
-|*
-|* Cut object to clipboard
-|*
-\************************************************************************/
-
+/**
+ * Cut object to clipboard
+ */
 void FuOutlineText::DoCut()
 {
     pOutlineView->GetViewByWindow(mpWindow)->Cut();
 }
 
-/*************************************************************************
-|*
-|* Copy object to clipboard
-|*
-\************************************************************************/
-
+/**
+ * Copy object to clipboard
+ */
 void FuOutlineText::DoCopy()
 {
     pOutlineView->GetViewByWindow(mpWindow)->Copy();
 }
 
-/*************************************************************************
-|*
-|* Paste object from clipboard
-|*
-\************************************************************************/
-
+/**
+ * Paste object from clipboard
+ */
 void FuOutlineText::DoPaste()
 {
     pOutlineView->GetViewByWindow(mpWindow)->PasteSpecial();

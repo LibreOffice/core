@@ -56,8 +56,7 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
         if(rSrcLevel.GetNumberingType() != com::sun::star::style::NumberingType::CHAR_SPECIAL &&
            rSrcLevel.GetNumberingType() != com::sun::star::style::NumberingType::NUMBER_NONE )
         {
-            // wenn Aufzaehlung statt Bullet gewaehlt wurde, wird der Bullet-Font
-            // dem Vorlagen-Font angeglichen
+            // if enumeration instead bullet is chosen, adjust bullet font to template font
 
             // to be implemented if module supports CJK
             long nFontID = SID_ATTR_CHAR_FONT;

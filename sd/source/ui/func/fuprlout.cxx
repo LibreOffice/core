@@ -59,12 +59,6 @@ TYPEINIT1( FuPresentationLayout, FuPoor );
 
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuPresentationLayout::FuPresentationLayout (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -84,8 +78,7 @@ FunctionReference FuPresentationLayout::Create( ViewShell* pViewSh, ::sd::Window
 
 void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 {
-    // damit nicht Objekte, die gerade editiert werden oder selektiert
-    // sind , verschwinden
+    // prevent selected objects or objects which are under editing from disappearing
     mpView->SdrEndTextEdit();
 
     if(mpView->GetSdrPageView())
@@ -95,7 +88,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     sal_Bool bError = sal_False;
 
-    // die aktive Seite ermitteln
+    // determine the active page
     sal_uInt16 nSelectedPage = SDRPAGE_NOTFOUND;
     for (sal_uInt16 nPage = 0; nPage < mpDoc->GetSdPageCount(PK_STANDARD); nPage++)
     {
@@ -112,8 +105,8 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     String aOldLayoutName(aOldPageLayoutName);
     aOldLayoutName.Erase(aOldLayoutName.SearchAscii(SD_LT_SEPARATOR));
 
-    // wenn wir auf einer Masterpage sind, gelten die Aenderungen fuer alle
-    // Seiten und Notizseiten, die das betreffende Layout benutzen
+    /* if we are on a master page, the changes apply for all pages and notes-
+       pages who are using the relevant layout */
     sal_Bool bOnMaster = sal_False;
     if( mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
@@ -125,8 +118,8 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     sal_Bool bMasterPage = bOnMaster;
     sal_Bool bCheckMasters = sal_False;
 
-    // Dialog aufrufen
-    sal_Bool   bLoad = sal_False;           // tauchen neue Masterpages auf?
+    // call dialog
+    sal_Bool   bLoad = sal_False;           // appear the new master pages?
     String aFile;
 
     SfxItemSet aSet(mpDoc->GetPool(), ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END);
@@ -184,13 +177,12 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     {
         mpDocSh->SetWaitCursor( sal_True );
 
-        // Hier werden nur Masterpages ausgewechselt, d.h. die aktuelle Seite
-        // bleibt aktuell. Damit beim Ein- und Ausfuegen der Masterpages nicht
-        // dauernd via PageOrderChangedHint die Methode ResetActualPage gerufen
-        // wird, wird jetzt blockiert.
-        // That isn't quitely right. If the masterpageview is active and you are
-        // removing a masterpage, it's possible that you are removing the
-        // current masterpage. So you have to call ResetActualPage !
+        /* Here, we only exchange masterpages, therefore the current page
+           remains the current page. To prevent calling PageOrderChangedHint
+           during insertion and extraction of the masterpages, we block. */
+        /* That isn't quitely right. If the masterpageview is active and you are
+           removing a masterpage, it's possible that you are removing the
+           current masterpage. So you have to call ResetActualPage ! */
         if( mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
             static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(sal_True);
 
@@ -211,17 +203,15 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            // MasterPage mit dem LayoutNamen aFile aus aktuellem Doc verwenden
+            // use master page with the layout name aFile from current Doc
             mpDoc->SetMasterPage(nSelectedPage, aFile, mpDoc, bMasterPage, bCheckMasters);
         }
 
-        // Blockade wieder aufheben
+        // remove blocking
         if (mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
             static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(sal_False);
 
-        /*************************************************************************
-        |* Falls dargestellte Masterpage sichtbar war, neu darstellen
-        \************************************************************************/
+        // if the master page was visible, show it again
         if (!bError && nSelectedPage != SDRPAGE_NOTFOUND)
         {
             if (bOnMaster)
@@ -239,7 +229,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                     pView->ShowSdrPage(pView->GetModel()->GetMasterPage(nPgNum));
                 }
 
-                // damit TabBar aktualisiert wird
+                // force update of TabBar
                 mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_MASTERPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             }
             else

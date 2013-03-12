@@ -31,12 +31,6 @@ namespace sd {
 
 TYPEINIT1( FuTextAttrDlg, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuTextAttrDlg::FuTextAttrDlg (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -82,7 +76,7 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
             {
                 delete( pDlg );
             }
-            return; // Abbruch
+            return; // Cancel
         }
         delete( pDlg );
     }

@@ -68,11 +68,6 @@ namespace sd {
 
 TYPEINIT1( FuConstructRectangle, FuConstruct );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuConstructRectangle::FuConstructRectangle (
     ViewShell*  pViewSh,
@@ -185,11 +180,6 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
     }
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -230,22 +220,12 @@ sal_Bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -293,26 +273,16 @@ sal_Bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuConstructRectangle::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 
 void FuConstructRectangle::Activate()
 {
@@ -328,7 +298,7 @@ void FuConstructRectangle::Activate()
         case SID_LINE_ARROW_SQUARE:
         case SID_LINE_SQUARE_ARROW:
             mpView->SetGlueVisible();
-            // keine break !
+            // no break !
         case SID_DRAW_LINE :
         case SID_DRAW_XLINE:
             aObjKind = OBJ_LINE;
@@ -415,11 +385,6 @@ void FuConstructRectangle::Activate()
     FuConstruct::Activate();
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuConstructRectangle::Deactivate()
 {
@@ -465,12 +430,9 @@ void FuConstructRectangle::Deactivate()
 }
 
 
-/*************************************************************************
-|*
-|* Attribute fuer das zu erzeugende Objekt setzen
-|*
-\************************************************************************/
-
+/**
+ * set attribute for the object to be created
+ */
 void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 {
     if (nSlotId == SID_DRAW_RECT_ROUND        ||
@@ -478,9 +440,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         nSlotId == SID_DRAW_SQUARE_ROUND      ||
         nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL)
     {
-        /**********************************************************************
-        * Abgerundete Ecken
-        **********************************************************************/
+        // round corner
         rAttr.Put(SdrEckenradiusItem(500));
     }
     else if (nSlotId == SID_CONNECTOR_LINE              ||
@@ -491,9 +451,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
              nSlotId == SID_CONNECTOR_LINE_CIRCLE_END   ||
              nSlotId == SID_CONNECTOR_LINE_CIRCLES)
     {
-        /**********************************************************************
-        * Direkt-Verbinder
-        **********************************************************************/
+        // direct connector
         rAttr.Put(SdrEdgeKindItem(SDREDGE_ONELINE));
     }
     else if (nSlotId == SID_CONNECTOR_LINES              ||
@@ -504,9 +462,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
              nSlotId == SID_CONNECTOR_LINES_CIRCLE_END   ||
              nSlotId == SID_CONNECTOR_LINES_CIRCLES)
     {
-        /**********************************************************************
-        * Linien-Verbinder
-        **********************************************************************/
+        // line connector
         rAttr.Put(SdrEdgeKindItem(SDREDGE_THREELINES));
     }
     else if (nSlotId == SID_CONNECTOR_CURVE              ||
@@ -517,16 +473,12 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
              nSlotId == SID_CONNECTOR_CURVE_CIRCLE_END   ||
              nSlotId == SID_CONNECTOR_CURVE_CIRCLES)
     {
-        /**********************************************************************
-        * Kurven-Verbinder
-        **********************************************************************/
+        // curve connector
         rAttr.Put(SdrEdgeKindItem(SDREDGE_BEZIER));
     }
     else if ( nSlotId == SID_DRAW_CAPTION || nSlotId == SID_DRAW_CAPTION_VERTICAL )
     {
-        /**********************************************************************
-        * Legendenobjekt
-        **********************************************************************/
+        // legend object
         Size aSize(pObj->GetLogicRect().GetSize());
         rAttr.Put( SdrTextMinFrameHeightItem( aSize.Height() ) );
         rAttr.Put( SdrTextMinFrameWidthItem( aSize.Width() ) );
@@ -547,9 +499,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
     }
     else if (nSlotId == SID_DRAW_MEASURELINE)
     {
-        /**********************************************************************
-        * Masslinie
-        **********************************************************************/
+        // dimension line
         SdPage* pPage = (SdPage*) mpView->GetSdrPageView()->GetPage();
         String aName(SdResId(STR_POOLSHEET_MEASURE));
         SfxStyleSheet* pSheet = (SfxStyleSheet*) pPage->GetModel()->
@@ -572,12 +522,9 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 }
 
 
-/*************************************************************************
-|*
-|* Linienanfaenge und -enden fuer das zu erzeugende Objekt setzen
-|*
-\************************************************************************/
-
+/**
+ * set line starts and ends for the object to be created
+ */
 ::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
 {
     ::basegfx::B2DPolyPolygon aRetval;
@@ -617,11 +564,9 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
           nSlotId == SID_LINE_ARROW_SQUARE     ||
           nSlotId == SID_LINE_SQUARE_ARROW )
     {
-        /**************************************************************
-        * Linienanfaenge und -enden attributieren
-        **************************************************************/
+        // set attributes of line start and ends
 
-        // Pfeilspitze
+        // arrowhead
         ::basegfx::B2DPolyPolygon aArrow( getPolygon( RID_SVXSTR_ARROW, mpDoc ) );
         if( !aArrow.count() )
         {
@@ -633,7 +578,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             aArrow.append(aNewArrow);
         }
 
-        // Kreis
+        // Circles
         ::basegfx::B2DPolyPolygon aCircle( getPolygon( RID_SVXSTR_CIRCLE, mpDoc ) );
         if( !aCircle.count() )
         {
@@ -643,7 +588,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             aCircle.append(aNewCircle);
         }
 
-        // Quadrat
+        // Square
         ::basegfx::B2DPolyPolygon aSquare( getPolygon( RID_SVXSTR_SQUARE, mpDoc ) );
         if( !aSquare.count() )
         {
@@ -664,7 +609,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
         // it was decided to change the default to 0.03 cm for all situations.
         long nWidth = 300; // (1/100th mm)
 
-        // Linienstaerke ermitteln und daraus die Linienendenstaerke berechnen
+        // determine line width and calculate with it the line end width
         if( aSet.GetItemState( XATTR_LINEWIDTH ) != SFX_ITEM_DONTCARE )
         {
             long nValue = ( ( const XLineWidthItem& ) aSet.Get( XATTR_LINEWIDTH ) ).GetValue();
@@ -680,7 +625,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             case SID_CONNECTOR_CURVE_ARROWS:
             case SID_LINE_ARROWS:
             {
-                // Verbinder mit Pfeil-Enden
+                // connector with arrow ends
                 rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
                 rAttr.Put(XLineStartWidthItem(nWidth));
                 rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
@@ -696,7 +641,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             case SID_LINE_ARROW_CIRCLE:
             case SID_LINE_ARROW_SQUARE:
             {
-                // Verbinder mit Pfeil-Anfang
+                // connector with arrow start
                 rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
                 rAttr.Put(XLineStartWidthItem(nWidth));
             }
@@ -710,7 +655,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             case SID_LINE_CIRCLE_ARROW:
             case SID_LINE_SQUARE_ARROW:
             {
-                // Verbinder mit Pfeil-Ende
+                // connector with arrow end
                 rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
                 rAttr.Put(XLineEndWidthItem(nWidth));
             }
@@ -721,7 +666,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             case SID_CONNECTOR_LINES_CIRCLES:
             case SID_CONNECTOR_CURVE_CIRCLES:
             {
-                // Verbinder mit Kreis-Enden
+                // connector with circle ends
                 rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
                 rAttr.Put(XLineStartWidthItem(nWidth));
                 rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
@@ -734,7 +679,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             case SID_CONNECTOR_LINES_CIRCLE_START:
             case SID_CONNECTOR_CURVE_CIRCLE_START:
             {
-                // Verbinder mit Kreis-Anfang
+                // connector with circle start
                 rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
                 rAttr.Put(XLineStartWidthItem(nWidth));
             }
@@ -745,19 +690,19 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
             case SID_CONNECTOR_LINES_CIRCLE_END:
             case SID_CONNECTOR_CURVE_CIRCLE_END:
             {
-                // Verbinder mit Kreis-Ende
+                // connector with circle ends
                 rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
                 rAttr.Put(XLineEndWidthItem(nWidth));
             }
             break;
         };
 
-        // Und nochmal fuer die noch fehlenden Enden
+        // and again, for the still missing ends
         switch (nSlotId)
         {
             case SID_LINE_ARROW_CIRCLE:
             {
-                // Kreis-Ende
+                // circle end
                 rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
                 rAttr.Put(XLineEndWidthItem(nWidth));
             }
@@ -765,7 +710,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
 
             case SID_LINE_CIRCLE_ARROW:
             {
-                // Kreis-Anfang
+                // circle start
                 rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
                 rAttr.Put(XLineStartWidthItem(nWidth));
             }
@@ -773,7 +718,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
 
             case SID_LINE_ARROW_SQUARE:
             {
-                // Quadrat-Ende
+                // square end
                 rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_SQUARE), aSquare));
                 rAttr.Put(XLineEndWidthItem(nWidth));
             }
@@ -781,7 +726,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
 
             case SID_LINE_SQUARE_ARROW:
             {
-                // Quadrat-Anfang
+                // square start
                 rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_SQUARE), aSquare));
                 rAttr.Put(XLineStartWidthItem(nWidth));
             }

@@ -53,11 +53,6 @@ const sal_Unicode CHAR_ZWNBSP       =   ((sal_Unicode)0x2060);
 
 TYPEINIT1( FuBullet, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuBullet::FuBullet (
     ViewShell* pViewSh,
@@ -201,7 +196,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         if( !pDlg )
             return;
 
-        // Wenn Zeichen selektiert ist kann es angezeigt werden
+        // If a character is selected, it can be shown
         // pDLg->SetFont( );
         // pDlg->SetChar( );
         sal_uInt16 nResult = pDlg->Execute();
@@ -229,7 +224,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         OutlinerView* pOV = NULL;
         ::Outliner*   pOL = NULL;
 
-        // je nach ViewShell Outliner und OutlinerView bestimmen
+        // determine depending on ViewShell Outliner and OutlinerView
         if(mpViewShell && mpViewShell->ISA(DrawViewShell))
         {
             pOV = mpView->GetTextEditOutlinerView();
@@ -245,18 +240,18 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
                 mpViewShell->GetActiveWindow());
         }
 
-        // Sonderzeichen einfuegen
+        // insert special character
         if (pOV)
         {
-            // nicht flackern
+            // prevent flicker
             pOV->HideCursor();
             pOL->SetUpdateMode(sal_False);
 
-            // alte Attributierung merken;
-            // dazu vorher selektierten Bereich loeschen, denn der muss eh weg
-            // und so gibt es immer eine eindeutige Attributierung (und da es
-            // kein DeleteSelected() an der OutlinerView gibt, wird durch
-            // Einfuegen eines Leerstrings geloescht)
+            /* remember old attributes:
+               To do that, remove selected area before (it has to go anyway).
+               With that, we get unique attributes (and since there is no
+               DeleteSelected() in OutlinerView, it is deleted by inserting an
+               empty string). */
             pOV->InsertText( aEmptyStr );
 
             SfxItemSet aOldSet( mpDoc->GetPool(), EE_CHAR_FONTINFO, EE_CHAR_FONTINFO, 0 );
@@ -267,7 +262,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
                                      aEmptyStr );
             pOV->InsertText(aChars, sal_True);
 
-            // attributieren (Font setzen)
+            // set attributes (set font)
             SfxItemSet aSet(pOL->GetEmptyItemSet());
             SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                    aFont.GetStyleName(), aFont.GetPitch(),
@@ -283,12 +278,12 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             aSel.nStartPos = aSel.nEndPos;
             pOV->SetSelection(aSel);
 
-            // nicht mit Sonderzeichenattributierung weiterschreiben
+            // do not go ahead with setting attributes of special characters
             pOV->GetOutliner()->QuickSetAttribs(aOldSet, aSel);
 
             rUndoMgr.LeaveListAction();
 
-            // ab jetzt wieder anzeigen
+            // show it again
             pOL->SetUpdateMode(sal_True);
             pOV->ShowCursor();
         }

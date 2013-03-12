@@ -29,7 +29,7 @@
 #include "drawdoc.hxx"
 #include "DrawViewShell.hxx"
 #include "ViewShell.hxx"
-#include "fuzoom.hxx" // wegen SidArrayZoom[]
+#include "fuzoom.hxx" // because of SidArrayZoom[]
 
 #include <vcl/msgbox.hxx>
 #include <svx/svdpagv.hxx>
@@ -43,12 +43,6 @@
 namespace sd {
 
 TYPEINIT1( FuScale, FuPoor );
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuScale::FuScale (
     ViewShell* pViewSh,
@@ -81,7 +75,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
         nValue = (sal_Int16) mpWindow->GetZoom();
 
-        // Zoom auf Seitengroesse ?
+        // zoom on page size?
         if( mpViewShell && mpViewShell->ISA( DrawViewShell ) &&
             static_cast<DrawViewShell*>(mpViewShell)->IsZoomOnPage() )
         {
@@ -92,7 +86,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
             pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nValue );
         }
 
-        // Bereich einschraenken
+        // limit range
         if( mpViewShell )
         {
             if( mpViewShell->ISA( DrawViewShell ) )
@@ -133,7 +127,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
                     delete pDlg;
                     delete pZoomItem;
                     rReq.Ignore ();
-                    return; // Abbruch
+                    return; // Cancel
                 }
                 default:
                 {
@@ -165,8 +159,8 @@ void FuScale::DoExecute( SfxRequest& rReq )
                 {
                     if( mpViewShell->ISA( DrawViewShell ) )
                     {
-                        // Namensverwirrung: SID_SIZE_ALL -> Zoom auf alle Objekte
-                        // --> Wird als Optimal im Programm angeboten
+                        // name confusion: SID_SIZE_ALL -> zoom onto all objects
+                        // --> the program offers it as optimal
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                     }
                 }

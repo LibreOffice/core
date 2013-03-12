@@ -38,11 +38,6 @@ namespace sd {
 TYPEINIT1( FuCustomShowDlg, FuPoor );
 
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuCustomShowDlg::FuCustomShowDlg (
     ViewShell* pViewSh,

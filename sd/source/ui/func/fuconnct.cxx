@@ -30,11 +30,6 @@ namespace sd {
 
 TYPEINIT1( FuConnectionDlg, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuConnectionDlg::FuConnectionDlg (
     ViewShell* pViewSh,

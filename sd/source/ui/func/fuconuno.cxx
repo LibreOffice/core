@@ -45,11 +45,6 @@ namespace sd {
 
 TYPEINIT1( FuConstructUnoControl, FuConstruct );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuConstructUnoControl::FuConstructUnoControl (
     ViewShell*  pViewSh,
@@ -86,11 +81,6 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
         ToolBarManager::msDrawingObjectToolBar);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 sal_Bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
@@ -106,21 +96,11 @@ sal_Bool FuConstructUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 sal_Bool FuConstructUnoControl::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 sal_Bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
     sal_Bool bReturn = sal_False;
@@ -139,25 +119,16 @@ sal_Bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuConstructUnoControl::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 void FuConstructUnoControl::Activate()
 {
     mpView->SetCurrentObj( nIdentifier, nInventor );
@@ -173,11 +144,6 @@ void FuConstructUnoControl::Activate()
     FuConstruct::Activate();
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 void FuConstructUnoControl::Deactivate()
 {
     FuConstruct::Deactivate();

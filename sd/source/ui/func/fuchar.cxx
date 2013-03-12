@@ -39,11 +39,6 @@ namespace sd {
 
 TYPEINIT1( FuChar, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuChar::FuChar (
     ViewShell* pViewSh,
@@ -97,7 +92,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
     }
     mpView->SetAttributes(*pArgs);
 
-    // invalidieren der Slots, die in der DrTxtObjBar auftauchen
+    // invalidate the Slots which are in DrTxtObjBar
     static sal_uInt16 SidArray[] = {
                     SID_ATTR_CHAR_FONT,
                     SID_ATTR_CHAR_POSTURE,

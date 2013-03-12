@@ -40,11 +40,6 @@ namespace sd {
 
 TYPEINIT1( FuEditGluePoints, FuDraw );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuEditGluePoints::FuEditGluePoints (
     ViewShell* pViewSh,
@@ -74,11 +69,6 @@ void FuEditGluePoints::DoExecute( SfxRequest& rReq )
         ToolBarManager::msGluePointsToolBar);
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FuEditGluePoints::~FuEditGluePoints()
 {
@@ -87,11 +77,6 @@ FuEditGluePoints::~FuEditGluePoints()
     mpView->SetInsGluePointMode(sal_False);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -119,9 +104,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
         if (eHit == SDRHIT_HANDLE)
         {
-            /******************************************************************
-            * Handle draggen
-            ******************************************************************/
+            // drag handle
             SdrHdl* pHdl = aVEvt.pHdl;
 
             if (mpView->IsGluePointMarked(aVEvt.pObj, aVEvt.nGlueId) && rMEvt.IsShift())
@@ -132,22 +115,18 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
             if (pHdl)
             {
-                // Handle draggen
+                // drag handle
                 mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && mpView->IsInsGluePointMode())
         {
-            /******************************************************************
-            * Klebepunkt einfuegen
-            ******************************************************************/
+            // insert clue points
             mpView->BegInsGluePoint(aMDPos);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
         {
-            /******************************************************************
-            * Klebepunkt selektieren
-            ******************************************************************/
+            // select clue points
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
@@ -155,16 +134,12 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
-            /******************************************************************
-            * Objekt verschieben
-            ******************************************************************/
+            // move object
             mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
         }
         else if (eHit == SDRHIT_GLUEPOINT)
         {
-            /******************************************************************
-            * Klebepunkt selektieren
-            ******************************************************************/
+            // select clue points
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
@@ -178,9 +153,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            /******************************************************************
-            * Objekt selektieren oder draggen
-            ******************************************************************/
+            // select or drag object
             if (!rMEvt.IsShift() && !rMEvt.IsMod2() && eHit == SDRHIT_UNMARKEDOBJECT)
             {
                mpView->UnmarkAllObj();
@@ -203,14 +176,12 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             if (bMarked &&
                 (!rMEvt.IsShift() || eHit == SDRHIT_MARKEDOBJECT))
             {
-                // Objekt verschieben
+                // move object
                 mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
             else if (mpView->AreObjectsMarked())
             {
-                /**************************************************************
-                * Klebepunkt selektieren
-                **************************************************************/
+                // select clue point
                 if (!rMEvt.IsShift())
                     mpView->UnmarkAllGluePoints();
 
@@ -218,9 +189,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                /**************************************************************
-                * Objekt selektieren
-                **************************************************************/
+                // select object
                 mpView->BegMarkObj(aMDPos);
             }
         }
@@ -231,11 +200,6 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
 {
@@ -256,11 +220,6 @@ sal_Bool FuEditGluePoints::MouseMove(const MouseEvent& rMEvt)
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -288,7 +247,7 @@ sal_Bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
 
         if (eHit == SDRHIT_NONE)
         {
-            // Klick auf der Stelle: deselektieren
+            // click on position: deselect
             mpView->UnmarkAllObj();
         }
     }
@@ -298,15 +257,10 @@ sal_Bool FuEditGluePoints::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 {
     mpView->SetActualWin( mpWindow );
@@ -316,11 +270,6 @@ sal_Bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* Command-event
-|*
-\************************************************************************/
 
 sal_Bool FuEditGluePoints::Command(const CommandEvent& rCEvt)
 {
@@ -328,11 +277,6 @@ sal_Bool FuEditGluePoints::Command(const CommandEvent& rCEvt)
     return FuPoor::Command( rCEvt );
 }
 
-/*************************************************************************
-|*
-|* Funktion aktivieren
-|*
-\************************************************************************/
 
 void FuEditGluePoints::Activate()
 {
@@ -340,11 +284,6 @@ void FuEditGluePoints::Activate()
     FuDraw::Activate();
 }
 
-/*************************************************************************
-|*
-|* Funktion deaktivieren
-|*
-\************************************************************************/
 
 void FuEditGluePoints::Deactivate()
 {
@@ -352,11 +291,6 @@ void FuEditGluePoints::Deactivate()
     FuDraw::Deactivate();
 }
 
-/*************************************************************************
-|*
-|* Request verarbeiten
-|*
-\************************************************************************/
 
 void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
 {
@@ -442,7 +376,7 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
         break;
     }
 
-    // Zum Schluss Basisklasse rufen
+    // at the end, call base class
     FuPoor::ReceiveRequest(rReq);
 }
 

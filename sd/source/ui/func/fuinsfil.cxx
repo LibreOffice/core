@@ -74,11 +74,6 @@ namespace sd {
 
 TYPEINIT1( FuInsertFile, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuInsertFile::FuInsertFile (
     ViewShell*    pViewSh,
@@ -333,8 +328,8 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     if( !pDlg )
         return sal_False;
 
-    // Ev. wird eine QueryBox geoeffnet ("Links aktualisieren?"),
-    // daher wird der Dialog der aktuelle DefModalDialogParent
+    /* Maybe a QueryBox is opened ("update links?"), therefore the dialog
+       becomes the current DefModalDialogParent */
     ::Window* pDefParent = GetpApp()->GetDefDialogParent();
     GetpApp()->SetDefDialogParent(pDlg->GetWindow());
 
@@ -346,9 +341,9 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     if( nRet == RET_OK )
     {
-        // Liste mit Seitennamen (wenn NULL, dann alle Seiten)
-        // Zuerst Seiten einfuegen
-        std::vector<rtl::OUString> aBookmarkList = pDlg->GetList( 1 ); // Seiten
+        /* list with page names (if NULL, then all pages)
+           First, insert pages */
+        std::vector<rtl::OUString> aBookmarkList = pDlg->GetList( 1 ); // pages
         sal_Bool bLink = pDlg->IsLink();
         sal_Bool bReplace = sal_False;
         SdPage* pPage = NULL;
@@ -379,16 +374,16 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
         sal_Bool  bNameOK;
         std::vector<rtl::OUString> aExchangeList;
-        std::vector<rtl::OUString> aObjectBookmarkList = pDlg->GetList( 2 ); // Objekte
+        std::vector<rtl::OUString> aObjectBookmarkList = pDlg->GetList( 2 ); // objects
 
-        // Es werden ausgewaehlte Seiten und/oder ausgewaehlte Objekte oder
-        // alles eingefuegt, wenn pBookmarkList NULL ist!
+        /* if pBookmarkList is NULL, we insert selected pages, and/or selected
+           objects or everything. */
         if( !aBookmarkList.empty() || aObjectBookmarkList.empty() )
         {
-            // Um zu gewaehrleisten, dass alle Seitennamen eindeutig sind, werden
-            // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
-            // aufgenommen
-            // bNameOK == sal_False -> Benutzer hat abgebrochen
+            /* To ensure that all page names are unique, we check the ones we
+               want to insert and insert them into a substitution list if
+               necessary.
+               bNameOK is sal_False if the user has canceled. */
             bNameOK = mpView->GetExchangeList( aExchangeList, aBookmarkList, 0 );
 
             if( bNameOK )
@@ -400,7 +395,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             aExchangeList.clear();
         }
 
-        // Um zu gewaehrleisten... (s.o.)
+        // to ensure ... (see above)
         bNameOK = mpView->GetExchangeList( aExchangeList, aObjectBookmarkList, 1 );
 
         if( bNameOK )
@@ -432,7 +427,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
     if( nRet == RET_OK )
     {
-        // gewaehltes Dateiformat: Text oder RTF oder HTML (Default ist Text)
+        // selected file format: text, RTF or HTML (default is text)
         sal_uInt16 nFormat = EE_FORMAT_TEXT;
 
         if( aFilterName.SearchAscii( "Rich") != STRING_NOTFOUND )
@@ -440,16 +435,15 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         else if( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND )
             nFormat = EE_FORMAT_HTML;
 
-        // einen eigenen Outliner erzeugen, denn:
-        // der Dokument-Outliner koennte gerade vom Gliederungsmodus
-        // benutzt werden;
-        // der Draw-Outliner der Drawing Engine koennte zwischendurch
-        // was zeichnen muessen;
-        // der globale Outliner koennte in SdPage::CreatePresObj
-        // benutzt werden
+        /* create our own outline since:
+           - it is possible that the document outliner is actually used in the
+             structuring mode
+           - the draw outliner of the drawing engine has to draw something in
+             between
+           - the global outliner could be used in SdPage::CreatePresObj */
         SdrOutliner* pOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
 
-        // Referenz-Device setzen
+        // set reference device
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
 
         SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
@@ -472,16 +466,16 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         }
         else
         {
-            // ist es eine Masterpage?
+            // is it a master page?
             if (static_cast<DrawViewShell*>(mpViewShell)->GetEditMode() == EM_MASTERPAGE &&
                 !pPage->IsMasterPage())
             {
                 pPage = (SdPage*)(&(pPage->TRG_GetMasterPage()));
             }
 
-            DBG_ASSERT(pPage, "Seite nicht gefunden");
+            DBG_ASSERT(pPage, "page not found");
 
-            // wenn gerade editiert wird, in dieses Textobjekt einfliessen lassen
+            // if editing is going on right now, let it flow into this text object
             OutlinerView* pOutlinerView = mpView->GetTextEditOutlinerView();
             if( pOutlinerView )
             {
@@ -491,7 +485,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     pObj->GetObjIdentifier() == OBJ_TITLETEXT &&
                     pOutliner->GetParagraphCount() > 1 )
                 {
-                    // In Titelobjekten darf nur ein Absatz vorhanden sein
+                    // in title objects, only one paragraph is allowed
                     while ( pOutliner->GetParagraphCount() > 1 )
                     {
                         Paragraph* pPara = pOutliner->GetParagraph( 0 );
@@ -519,15 +513,15 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     mpView->BegUndo(String(SdResId(STR_UNDO_INSERT_TEXTFRAME)));
                 pPage->InsertObject(pTO);
 
-                // koennte groesser sein als die max. erlaubte Groesse:
-                // falls noetig, die Objektgroesse begrenzen
+                /* can be bigger as the maximal allowed size:
+                   limit object size if necessary */
                 Size aSize(pOutliner->CalcTextSize());
                 Size aMaxSize = mpDoc->GetMaxObjSize();
                 aSize.Height() = Min(aSize.Height(), aMaxSize.Height());
                 aSize.Width()  = Min(aSize.Width(), aMaxSize.Width());
                 aSize = mpWindow->LogicToPixel(aSize);
 
-                // in der Mitte des Fensters absetzen
+                // put it at the center of the window
                 Size aTemp(mpWindow->GetOutputSizePixel());
                 Point aPos(aTemp.Width() / 2, aTemp.Height() / 2);
                 aPos.X() -= aSize.Width() / 2;
@@ -558,7 +552,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
 void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 {
-    // gewaehltes Dateiformat: Text oder RTF oder HTML (Default ist Text)
+    // selected file format: text, RTF or HTML (default is text)
     sal_uInt16 nFormat = EE_FORMAT_TEXT;
 
     if( aFilterName.SearchAscii( "Rich") != STRING_NOTFOUND )
@@ -573,13 +567,13 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
     Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
-    // wo soll eingefuegt werden?
+    // what should we insert?
     while( !pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
         pPara = pDocliner->GetParent(pPara);
 
     sal_uLong nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
 
-    // Layout der Vorgaengerseite uebernehmen
+    // apply layout of predecessor page
     sal_uInt16 nPage = 0;
     pPara = pDocliner->GetParagraph( pDocliner->GetAbsPos( pPara ) - 1 );
     while (pPara)
@@ -593,17 +587,16 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     aLayoutName = pPage->GetLayoutName();
     aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
 
-    // einen eigenen Outliner erzeugen, denn:
-    // der Dokument-Outliner koennte gerade vom Gliederungsmodus
-    // benutzt werden;
-    // der Draw-Outliner der Drawing Engine koennte zwischendurch
-    // was zeichnen muessen;
-    // der globale Outliner koennte in SdPage::CreatePresObj
-    // benutzt werden
+    /* create our own outline since:
+       - it is possible that the document outliner is actually used in the
+         structuring mode
+       - the draw outliner of the drawing engine has to draw something in
+         between
+       - the global outliner could be used in SdPage::CreatePresObj */
     ::Outliner* pOutliner = new ::Outliner( &mpDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT );
     pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)mpDoc->GetStyleSheetPool());
 
-    // Referenz-Device setzen
+    // set reference device
     pOutliner->SetRefDevice(SD_MOD()->GetRefDevice( *mpDocSh ));
     pOutliner->SetPaperSize(Size(0x7fffffff, 0x7fffffff));
 
@@ -623,7 +616,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     {
         sal_uLong nParaCount = pOutliner->GetParagraphCount();
 
-        // fuer Fortschrittsanzeige: Anzahl der Ebene-0-Absaetze
+        // for progress bar: number of level-0-paragraphs
         sal_uInt16 nNewPages = 0;
         pPara = pOutliner->GetParagraph( 0 );
         while (pPara)
@@ -653,7 +646,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
             sal_uLong nPos = pOutliner->GetAbsPos( pSourcePara );
             sal_Int16 nDepth = pOutliner->GetDepth( (sal_uInt16) nPos );
 
-            // den letzte Absatz nur uebernehmen, wenn er gefuellt ist
+            // only take the last paragraph if it is filled
             if (nSourcePos < nParaCount - 1 ||
                 pOutliner->GetText(pSourcePara).Len() > 0)
             {
@@ -695,7 +688,7 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 {
     OutlineView* pOlView = static_cast<OutlineView*>(mpView);
 
-    // Outliner-Inhalte ins SdDrawDocument uebertragen
+    // transfer Outliner content to SdDrawDocument
     pOlView->PrepareClose();
 
     // einlesen wie im Zeichenmodus
@@ -703,7 +696,7 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
     {
         ::Outliner* pOutliner = pOlView->GetViewByWindow(mpWindow)->GetOutliner();
 
-        // Benachrichtigungs-Links temporaer trennen
+        // cut notification links temporarily
         Link aOldParagraphInsertedHdl = pOutliner->GetParaInsertedHdl();
         pOutliner->SetParaInsertedHdl( Link(NULL, NULL));
         Link aOldParagraphRemovingHdl = pOutliner->GetParaRemovingHdl();
@@ -721,7 +714,7 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         pOutliner->Clear();
         pOlView->FillOutliner();
 
-        // Links wieder setzen
+        // set links again
         pOutliner->SetParaInsertedHdl(aOldParagraphInsertedHdl);
         pOutliner->SetParaRemovingHdl(aOldParagraphRemovingHdl);
         pOutliner->SetDepthChangedHdl(aOldDepthChangedHdl);

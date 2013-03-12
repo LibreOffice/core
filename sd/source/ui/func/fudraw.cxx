@@ -70,12 +70,9 @@ namespace sd {
 
 TYPEINIT1( FuDraw, FuPoor );
 
-/*************************************************************************
-|*
-|* Base-class for all drawmodul-specific functions
-|*
-\************************************************************************/
-
+/**
+ * Base-class for all drawmodul-specific functions
+ */
 FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                SdDrawDocument* pDoc, SfxRequest& rReq) :
     FuPoor(pViewSh, pWin, pView, pDoc, rReq),
@@ -85,22 +82,12 @@ FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
 {
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FuDraw::~FuDraw()
 {
     mpView->BrkAction();
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -226,11 +213,6 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
@@ -341,11 +323,6 @@ sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -383,14 +360,10 @@ sal_Bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|* Process keyboard-events
-|*
-|* When processing a KeyEvent the returnvalue is sal_True, otherwise sal_False.
-|*
-\************************************************************************/
-
+/**
+ * Process keyboard input
+ * @returns sal_True if a KeyEvent is being processed, sal_False otherwise
+ */
 sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 {
     sal_Bool bReturn = sal_False;
@@ -414,14 +387,11 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 }
                 else
                 {
-                    // Falls IP-Client aktiv, werden die Pointer
-                    // auf das OLE- und das alte Graphic-Object
-                    // am SdClient zurueckgesetzt, damit bei
-                    // ::SelectionHasChanged nach dem Loeschen
-                    // nicht mehr versucht wird, ein Grafik-Objekt
-                    // zu restaurieren, das gar nicht mehr existiert.
-                    // Alle anderen OLE-Objekte sind davon nicht
-                    // betroffen
+                    /* If IP-Client active, we reset the pointer to the OLE- and
+                       to the old graphic object of SdClient. With this, we
+                       avoid the restoration of an no more existing object in
+                       ::SelectionHasChanged after deletion. All other OLE
+                       objects are not affected. */
                     OSL_ASSERT (mpViewShell->GetViewShell()!=NULL);
                     Client* pIPClient = static_cast<Client*>(
                         mpViewShell->GetViewShell()->GetIPClient());
@@ -522,11 +492,6 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
     return (bReturn);
 }
 
-/*************************************************************************
-|*
-|* Aktivate function
-|*
-\************************************************************************/
 
 void FuDraw::Activate()
 {
@@ -534,11 +499,6 @@ void FuDraw::Activate()
     ForcePointer();
 }
 
-/*************************************************************************
-|*
-|* Deaktivate function
-|*
-\************************************************************************/
 
 void FuDraw::Deactivate()
 {
@@ -546,12 +506,9 @@ void FuDraw::Deactivate()
 }
 
 
-/*************************************************************************
-|*
-|* Toggle mouse-pointer
-|*
-\************************************************************************/
-
+/**
+ * Toggle mouse-pointer
+ */
 void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 {
     Point aPnt;
@@ -574,9 +531,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     {
         if (SD_MOD()->GetWaterCan() && !mpView->PickHandle(aPnt))
         {
-            /******************************************************************
-            * Giesskannenmodus
-            ******************************************************************/
+            // water can mode
             bDefPointer = sal_False;
             mpWindow->SetPointer(Pointer(POINTER_FILL));
         }
@@ -587,18 +542,14 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
         if (SD_MOD()->GetWaterCan() && !pHdl)
         {
-            /******************************************************************
-            * Giesskannenmodus
-            ******************************************************************/
+            // water can mode
             bDefPointer = sal_False;
             mpWindow->SetPointer(Pointer(POINTER_FILL));
         }
         else if (!pHdl &&
                  mpViewShell->GetViewFrame()->HasChildWindow(SvxBmpMaskChildWindow::GetChildWindowId()))
         {
-            /******************************************************************
-            * Pipettenmodus
-            ******************************************************************/
+            // pipette mode
             SvxBmpMask* pMask = (SvxBmpMask*) mpViewShell->GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId())->GetWindow();
 
             if (pMask && pMask->IsEyedropping())
@@ -661,12 +612,12 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
             if (pObj && pMEvt && !pMEvt->IsMod2() && this->ISA(FuSelection))
             {
-                // Auf Animation oder ImageMap pruefen
+                // test for animation or ImageMap
                 bDefPointer = !SetPointer(pObj, aPnt);
 
                 if (bDefPointer && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dPolyScene)))
                 {
-                    // In die Gruppe hineinschauen
+                    // take a glance into the group
                     if (mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                         bDefPointer = !SetPointer(pObj, aPnt);
                 }
@@ -681,12 +632,9 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     }
 }
 
-/*************************************************************************
-|*
-|* Set cursor for animaton or imagemap
-|*
-\************************************************************************/
-
+/**
+ * Set cursor for animaton or imagemap
+ */
 sal_Bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 {
     sal_Bool bSet = sal_False;
@@ -752,7 +700,7 @@ sal_Bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                           ( pInfo->meEffect != presentation::AnimationEffect_NONE ||
                             pInfo->meTextEffect != presentation::AnimationEffect_NONE )))))
                     {
-                        // Animations-Objekt
+                        // Animation object
                         bSet = sal_True;
                         mpWindow->SetPointer(Pointer(POINTER_REFHAND));
                     }
@@ -774,12 +722,9 @@ sal_Bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 
 
 
-/*************************************************************************
-|*
-|* Response of doubleclick
-|*
-\************************************************************************/
-
+/**
+ * Response of doubleclick
+ */
 void FuDraw::DoubleClick(const MouseEvent& rMEvt)
 {
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
@@ -836,11 +781,6 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
 
-/*************************************************************************
-|*
-|* Help-event
-|*
-\************************************************************************/
 
 sal_Bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 {
@@ -864,7 +804,7 @@ sal_Bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
             if (!bReturn && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dPolyScene)))
             {
-                // In die Gruppe hineinschauen
+                // take a glance into the group
                 SdrPageView* pPV = NULL;
 
                 Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(aPosPixel)));
@@ -885,19 +825,13 @@ sal_Bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
 
 
-/*************************************************************************
-|*
-|* Command-event
-|*
-\************************************************************************/
-
 sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
 {
     sal_Bool bSet = sal_False;
     String aHelpText;
     Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));
 
-    // URL fuer IMapObject unter Pointer ist Hilfetext
+    // URL for IMapObject underneath pointer is help text
     if ( mpDoc->GetIMapInfo(pObj) )
     {
         IMapObject* pIMapObj = mpDoc->GetHitIMapObject(pObj, aPos, *mpWindow );

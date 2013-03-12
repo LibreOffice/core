@@ -30,11 +30,6 @@ namespace sd {
 
 TYPEINIT1( FuMeasureDlg, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuMeasureDlg::FuMeasureDlg (
     ViewShell* pViewSh,

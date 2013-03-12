@@ -51,15 +51,10 @@ namespace sd {
 
 TYPEINIT1( FuObjectAnimationParameters, FuPoor );
 
-#define ATTR_MISSING    0       // Attribut nicht verfuegbar
-#define ATTR_MIXED      1       // Attribut uneindeutig (bei Mehrfachselektion)
-#define ATTR_SET        2       // Attribut eindeutig
+#define ATTR_MISSING    0       ///< Attribute missing
+#define ATTR_MIXED      1       ///< Attribute ambiguous (on multi-selection)
+#define ATTR_SET        2       ///< Attribute unique
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuObjectAnimationParameters::FuObjectAnimationParameters (
     ViewShell*   pViewSh,
@@ -127,7 +122,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     SdAnimationInfo* pInfo;
     SdrMark* pMark;
 
-    // das erste Objekt untersuchen
+    // inspect first object
     pMark = rMarkList.GetMark(0);
     pInfo = mpDoc->GetAnimationInfo(pMark->GetMarkedSdrObj());
     if( pInfo )
@@ -181,7 +176,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         nSecondPlayFullSet  = ATTR_SET;
     }
 
-    // ggfs. weitere Objekte untersuchen
+    // if necessary, inspect more objects
     for( nObject = 1; nObject < nCount; nObject++ )
     {
         pMark = rMarkList.GetMark( nObject );
@@ -289,8 +284,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         }
     }
 
-    // Genau zwei Objekte mit Pfadeffekt? Dann gilt nur die Animationsinfo
-    // am bewegten Objekt.
+    /* Exactly two objects with path effect?
+       Then, only the animation info at the moved object is valid. */
     if (nCount == 2)
     {
         SdrObject* pObject1 = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -302,18 +297,18 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         pInfo  = NULL;
 
         if (pObject1->GetObjInventor() == SdrInventor &&
-            ((eKind1 == OBJ_LINE) ||                        // 2-Punkt-Linie
+            ((eKind1 == OBJ_LINE) ||                        // 2 point line
              (eKind1 == OBJ_PLIN) ||                        // Polygon
-             (eKind1 == OBJ_PATHLINE))                &&    // Bezier-Kurve
+             (eKind1 == OBJ_PATHLINE))                &&    // Bezier curve
              (pInfo2 && pInfo2->meEffect == presentation::AnimationEffect_PATH))
         {
             pInfo = pInfo2;
         }
 
         if (pObject2->GetObjInventor() == SdrInventor &&
-            ((eKind2 == OBJ_LINE) ||                        // 2-Punkt-Linie
+            ((eKind2 == OBJ_LINE) ||                        // 2 point line
              (eKind2 == OBJ_PLIN) ||                        // Polygon
-             (eKind2 == OBJ_PATHLINE))                &&    // Bezier-Kurve
+             (eKind2 == OBJ_PATHLINE))                &&    // Bezier curve
             (pInfo1 && pInfo1->meEffect == presentation::AnimationEffect_PATH))
         {
             pInfo = pInfo1;
@@ -344,10 +339,10 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if(!pArgs)
     {
-        // ItemSet fuer Dialog fuellen
+        // fill ItemSet for dialog
         SfxItemSet aSet(mpDoc->GetPool(), ATTR_ANIMATION_START, ATTR_ACTION_END);
 
-        // das Set besetzen
+        // fill the set
         if (nAnimationSet == ATTR_SET)
             aSet.Put( SfxBoolItem( ATTR_ANIMATION_ACTIVE, bActive));
         else if (nAnimationSet == ATTR_MIXED)
@@ -469,7 +464,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             return;
     }
 
-    // Auswertung des ItemSets
+    // evaluation of the ItemSets
     if (pArgs->GetItemState(ATTR_ANIMATION_ACTIVE) == SFX_ITEM_SET)
     {
         bActive = ((SfxBoolItem&)pArgs->Get(ATTR_ANIMATION_ACTIVE)).GetValue();
@@ -605,7 +600,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     else
         nSecondPlayFullSet = ATTR_MISSING;
 
-    // Wenn irgendwelche Attribute ausgewaehlt wurden
+    // if any attribute is chosen
     if (nEffectSet         == ATTR_SET  ||
         nTextEffectSet     == ATTR_SET  ||
         nSpeedSet          == ATTR_SET  ||
@@ -623,19 +618,19 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         nSecondSoundOnSet  == ATTR_SET  ||
         nSecondPlayFullSet == ATTR_SET)
     {
-        // String fuer Undo-Group und List-Action
+        // String for undo-group and list-action
         String aComment(SdResId(STR_UNDO_ANIMATION));
 
-        // bei 'an Kurve entlang' gibt's noch eine extra UndoAction, darum
-        // hier klammern
+        // with 'following curves', we have an additional UndoAction
+        // therefore cling? here
         pUndoMgr->EnterListAction(aComment, aComment);
 
-        // Undo Gruppe erzeugen
+        // create undo group
         SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
         pUndoGroup->SetComment(aComment);
 
 
-        // fuer den Pfad-Effekt einige Dinge merken
+        // for the path effect, remember some stuff
         SdrObject*  pRunningObj = NULL;
         SdrPathObj* pPath       = NULL;
         if (eEffect == presentation::AnimationEffect_PATH && nEffectSet == ATTR_SET)
@@ -647,18 +642,18 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
 
             if (pObject1->GetObjInventor() == SdrInventor &&
-                ((eKind1 == OBJ_LINE) ||        // 2-Punkt-Linie
+                ((eKind1 == OBJ_LINE) ||        // 2 point line
                  (eKind1 == OBJ_PLIN) ||        // Polygon
-                 (eKind1 == OBJ_PATHLINE)))     // Bezier-Kurve
+                 (eKind1 == OBJ_PATHLINE)))     // Bezier curve
             {
                 pPath = (SdrPathObj*)pObject1;
                 pRunningObj = pObject2;
             }
 
             if (pObject2->GetObjInventor() == SdrInventor &&
-                ((eKind2 == OBJ_LINE) ||        // 2-Punkt-Linie
+                ((eKind2 == OBJ_LINE) ||        // 2 point line
                  (eKind2 == OBJ_PLIN) ||        // Polygon
-                 (eKind2 == OBJ_PATHLINE)))     // Bezier-Kurve
+                 (eKind2 == OBJ_PATHLINE)))     // Bezier curve
             {
                 pPath = (SdrPathObj*)pObject2;
                 pRunningObj = pObject1;
@@ -667,7 +662,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             DBG_ASSERT(pPath, "no curve found");
 
 
-            // das laufende Objekt auf das Kurvenende schieben
+            // push the running object to the end of the curve
             Rectangle aCurRect(pRunningObj->GetLogicRect());
             Point     aCurCenter(aCurRect.Center());
             const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPath->GetPathPoly();
@@ -695,7 +690,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 bCreated = sal_True;
             }
 
-            // das Pfadobjekt fuer 'an Kurve entlang'?
+            // path object for 'following curves'?
             if (eEffect == presentation::AnimationEffect_PATH && pObject == pPath)
             {
                 SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
@@ -723,7 +718,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             else
             {
 
-                // Undo-Action mit alten und neuen Groessen erzeugen
+                // create undo action with old and new sizes
                 SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction
                                                 (mpDoc, pObject, bCreated);
                 pAction->SetActive(pInfo->mbActive, bActive);
@@ -746,7 +741,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetSecondPlayFull(pInfo->mbSecondPlayFull,bSecondPlayFull);
                 pUndoGroup->AddAction(pAction);
 
-                // neue Werte am Infoblock des Objekts eintragen
+                // insert new values at info block of the object
                 if (nAnimationSet == ATTR_SET)
                     pInfo->mbActive = bActive;
 
@@ -806,7 +801,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         // Model changed
         mpDoc->SetChanged();
     }
-    // sieht man nicht, also muss an den Bindings nicht invalidiert werden
+    // not seen, therefore we do not need to invalidate at the bindings
 }
 
 } // end of namespace sd

@@ -43,11 +43,6 @@ namespace sd {
 
 TYPEINIT1( FuCopy, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuCopy::FuCopy (
     ViewShell* pViewSh,
@@ -83,7 +78,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             SfxItemSet aSet( mpViewShell->GetPool(),
                                 ATTR_COPY_START, ATTR_COPY_END, 0 );
 
-            // Farb-Attribut angeben
+            // indicate color attribute
             SfxItemSet aAttr( mpDoc->GetPool() );
             mpView->GetAttributes( aAttr );
             const SfxPoolItem*  pPoolItem = NULL;
@@ -124,7 +119,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                             delete pDlg;
                             mpView->EndUndo();
                         }
-                        return; // Abbruch
+                        return; // Cancel
                     }
                     delete( pDlg );
                 }
@@ -138,11 +133,11 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         sal_Bool                bColor = sal_False;
         const SfxPoolItem*  pPoolItem = NULL;
 
-        // Anzahl
+        // Count
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_NUMBER, sal_True, &pPoolItem ) )
             nNumber = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
 
-        // Verschiebung
+        // translation
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_X, sal_True, &pPoolItem ) )
             lSizeX = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_Y, sal_True, &pPoolItem ) )
@@ -150,13 +145,13 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_ANGLE, sal_True, &pPoolItem ) )
             lAngle = ( ( const SfxInt32Item* )pPoolItem )->GetValue();
 
-        // Verrgroesserung / Verkleinerung
+        // scale
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_WIDTH, sal_True, &pPoolItem ) )
             lWidth = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_HEIGHT, sal_True, &pPoolItem ) )
             lHeight = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
 
-        // Startfarbe / Endfarbe
+        // start/end color
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_START_COLOR, sal_True, &pPoolItem ) )
         {
             aStartColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
@@ -171,7 +166,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         else
             bColor = sal_False;
 
-        // Handles wegnehmen
+        // remove handles
         //HMHmpView->HideMarkHdl();
 
         SfxProgress*    pProgress = NULL;
@@ -192,7 +187,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         const sal_uLong         nMarkCount = aMarkList.GetMarkCount();
         SdrObject*          pObj = NULL;
 
-        // Anzahl moeglicher Kopien berechnen
+        // calculate number of possible copies
         aRect = mpView->GetAllMarkedRect();
 
         if( lWidth < 0L )
@@ -273,8 +268,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
             if( bColor )
             {
-                // Koennte man sicher noch optimieren, wuerde aber u.U.
-                // zu Rundungsfehlern fuehren
+                // probably room for optimizations, but may can lead to rounding errors
                 sal_uInt8 nRed = aStartColor.GetRed() + (sal_uInt8) ( ( (long) aEndColor.GetRed() - (long) aStartColor.GetRed() ) * (long) i / (long) nNumber  );
                 sal_uInt8 nGreen = aStartColor.GetGreen() + (sal_uInt8) ( ( (long) aEndColor.GetGreen() - (long) aStartColor.GetGreen() ) *  (long) i / (long) nNumber );
                 sal_uInt8 nBlue = aStartColor.GetBlue() + (sal_uInt8) ( ( (long) aEndColor.GetBlue() - (long) aStartColor.GetBlue() ) * (long) i / (long) nNumber );
@@ -292,7 +286,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         if ( bWaiting )
             mpDocSh->SetWaitCursor( sal_False );
 
-        // Handles zeigen
+        // show handles
         mpView->AdjustMarkHdl(); //HMH sal_True );
         //HMHpView->ShowMarkHdl();
 

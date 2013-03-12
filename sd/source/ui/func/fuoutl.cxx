@@ -28,12 +28,6 @@ namespace sd {
 
 TYPEINIT1( FuOutline, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuOutline::FuOutline (
     ViewShell* pViewShell,
     ::sd::Window* pWindow,
@@ -46,12 +40,9 @@ FuOutline::FuOutline (
 {
 }
 
-/*************************************************************************
-|*
-|* Command, weiterleiten an OutlinerView
-|*
-\************************************************************************/
-
+/**
+ * forward to OutlinerView
+ */
 sal_Bool FuOutline::Command(const CommandEvent& rCEvt)
 {
     sal_Bool bResult = sal_False;
@@ -62,7 +53,7 @@ sal_Bool FuOutline::Command(const CommandEvent& rCEvt)
 
     if (pOlView)
     {
-        pOlView->Command(rCEvt);        // liefert leider keinen Returnwert
+        pOlView->Command(rCEvt);        // unfortunately, we do not get a return value
         bResult = sal_True;
     }
     return bResult;

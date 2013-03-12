@@ -40,12 +40,6 @@ namespace sd {
 
 TYPEINIT1( FuParagraph, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuParagraph::FuParagraph (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -83,9 +77,9 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 
         aNewAttr.Put( aEditAttr );
 
-        // linker Rand als Offset
+        // left border is offset
         const long nOff = ( (SvxLRSpaceItem&)aNewAttr.Get( EE_PARA_LRSPACE ) ).GetTxtLeft();
-        // Umrechnung, da TabulatorTabPage immer von Twips ausgeht !
+        // conversion since TabulatorTabPage always uses Twips!
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aNewAttr.Put( aOff );
 
@@ -116,7 +110,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
                 {
                     delete pDlg;
                 }
-                return; // Abbruch
+                return; // Cancel
             }
             delete( pDlg );
         }
@@ -141,7 +135,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
     }
 
-    // invalidieren der Slots
+    // invalidate slots
     static sal_uInt16 SidArray[] = {
         SID_ATTR_TABSTOP,
         SID_ATTR_PARA_ADJUST_LEFT,

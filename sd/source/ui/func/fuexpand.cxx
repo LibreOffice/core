@@ -47,11 +47,6 @@ namespace sd {
 
 TYPEINIT1( FuExpandPage, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuExpandPage::FuExpandPage (
     ViewShell* pViewSh,
@@ -75,7 +70,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
     if ( mpView && mpView->IsTextEdit() )
         mpView->SdrEndTextEdit();
 
-    // Selektierte Seite finden (nur Standard-Seiten)
+    // find selected page (only standard pages)
     SdPage* pActualPage = NULL;
     sal_uInt16 i = 0;
     sal_uInt16 nCount = mpDoc->GetSdPageCount(PK_STANDARD);
@@ -115,11 +110,11 @@ void FuExpandPage::DoExecute( SfxRequest& )
             if( bUndo )
                 mpView->BegUndo(String(SdResId(STR_UNDO_EXPAND_PAGE)));
 
-            // Aktuelles Gliederungsobjekt in Outliner setzen
+            // set current structuring-object into outliner
             OutlinerParaObject* pParaObj = pActualOutline->GetOutlinerParaObject();
             pOutl->SetText(*pParaObj);
 
-            // Harte Absatz- und Zeichenattribute entfernen
+            // remove hard paragraph- and character attributes
             SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
             sal_uLong nParaCount1 = pOutl->GetParagraphCount();
 
@@ -138,7 +133,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 sal_Int16 nDepth = pOutl->GetDepth( (sal_uInt16) nParaPos );
                 if ( nDepth == 0 )
                 {
-                    // Seite mit Titel & Gliederung!
+                    // page with title & structuring!
                     SdPage* pPage = (SdPage*) mpDoc->AllocPage(sal_False);
                     pPage->SetSize(pActualPage->GetSize() );
                     pPage->SetBorder(pActualPage->GetLftBorder(),
@@ -147,20 +142,20 @@ void FuExpandPage::DoExecute( SfxRequest& )
                                      pActualPage->GetLwrBorder() );
                     pPage->SetName(String());
 
-                    // Seite hinter aktueller Seite einfuegen
+                    // insert page after current page
                     mpDoc->InsertPage(pPage, nActualPageNum + nPos);
                     nPos++;
 
                     if( bUndo )
                         mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pPage));
 
-                    // MasterPage der aktuellen Seite verwenden
+                    // use MasterPage of the current page
                     pPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pPage->SetLayoutName(pActualPage->GetLayoutName());
                     pPage->SetAutoLayout(AUTOLAYOUT_ENUM, sal_True);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
-                    // Notiz-Seite
+                    // notes-page
                     SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(sal_False);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
@@ -170,20 +165,20 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     pNotesPage->SetPageKind(PK_NOTES);
                     pNotesPage->SetName(String());
 
-                    // Seite hinter aktueller Seite einfuegen
+                    // insert page after current page
                     mpDoc->InsertPage(pNotesPage, nActualPageNum + nPos);
                     nPos++;
 
                     if( bUndo )
                         mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
-                    // MasterPage der aktuellen Seite verwenden
+                    // use MasterPage of the current page
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
                     pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), sal_True);
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
-                    // Title-Textobjekt erstellen
+                    // create title text objects
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
 
                     OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (sal_uInt16) nParaPos, 1);
@@ -214,7 +209,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                     if (nChildCount > 0)
                     {
-                        // Gliederungs-Textobjekt erstellen
+                        // create structuring text objects
                         SdrTextObj* pOutlineObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
                         pPara = pOutl->GetParagraph( ++nParaPos );
 
@@ -239,7 +234,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         pOutlineObj->SetOutlinerParaObject( pOPO );
                         pOutlineObj->SetEmptyPresObj(sal_False);
 
-                        // Harte Attribute entfernen (Flag auf sal_True)
+                        // remove hard attributes (Flag to sal_True)
                         SfxItemSet aAttr(mpDoc->GetPool());
                         aAttr.Put(XLineStyleItem(XLINE_NONE));
                         aAttr.Put(XFillStyleItem(XFILL_NONE));

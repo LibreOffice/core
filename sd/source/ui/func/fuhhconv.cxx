@@ -54,11 +54,6 @@ class ViewShell;
 
 TYPEINIT1( FuHangulHanjaConversion, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuHangulHanjaConversion::FuHangulHanjaConversion (
     ViewShell* pViewSh,
@@ -87,12 +82,6 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
 
 
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 FuHangulHanjaConversion::~FuHangulHanjaConversion()
 {
     if (pSdOutliner)
@@ -108,12 +97,9 @@ FunctionReference FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd::Win
     return xFunc;
 }
 
-/*************************************************************************
-|*
-|* Suchen&Ersetzen
-|*
-\************************************************************************/
-
+/**
+ * Search and replace
+ */
 void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_Int16 nTargetLanguage,
         const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive )
 {

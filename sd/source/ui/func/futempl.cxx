@@ -77,12 +77,6 @@ namespace sd
 
 TYPEINIT1( FuTemplate, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuTemplate::FuTemplate (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -105,7 +99,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSId = rReq.GetSlot();
 
-    // StyleSheet-Parameter holen
+    // get StyleSheet parameter
     SfxStyleSheetBasePool* pSSPool = mpDoc->GetDocSh()->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = NULL;
 
@@ -191,8 +185,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
-            // Z.Z. geht immer noch der Dialog auf, um den Namen
-            // der Vorlage einzugeben.
+            // at the moment, the dialog to enter the name of the template is still opened
             mpView->AreObjectsMarked();
                 SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_ALL );
                 if(p)
@@ -231,7 +224,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         break;
 
         case SID_STYLE_APPLY:
-            // Anwenden der Vorlage auf das Dokument
+            // apply the template to the document
             pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
 
             // do not set presentation styles, they will be set implicit
@@ -269,13 +262,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     SD_MOD()->SetWaterCan( sal_True );
                     pStyleSheet = pSSPool->Find( aStyleName, (SfxStyleFamily) nFamily);
                 }
-                // keine Praesentationsobjektvorlagen, die werden nur
-                // implizit zugewiesen
+                // no presentation object templates, they are only allowed implicitly
                 if( pStyleSheet && pStyleSheet->GetFamily() != SD_STYLE_FAMILY_PSEUDO )
                 {
                     ( (SdStyleSheetPool*) pSSPool )->SetActualStyleSheet( pStyleSheet );
 
-                    // Es wird explizit in den Selektionsmodus geschaltet
+                    // we switch explicitly into selection mode
                     mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_SELECT,
                                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 
@@ -286,7 +278,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             else
             {
                 SD_MOD()->SetWaterCan( sal_False );
-                // Werkzeugleiste muss wieder enabled werden
+                // we have to re-enable to tools-bar
                 mpViewShell->Invalidate();
             }
         }
@@ -356,8 +348,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
 
                         String aOutlineStr((SdResId(STR_PSEUDOSHEET_OUTLINE)));
-                        // die Nummer ermitteln; ein Leerzeichen zwischen
-                        // Name und Nummer beachten
+                        // determine number, mind the blank between name and number
                         String aNumStr(aName.Copy(aOutlineStr.Len() + 1));
                         sal_uInt16 nLevel = (sal_uInt16)aNumStr.ToInt32();
                         switch (nLevel)
@@ -412,10 +403,10 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             SfxItemSet aTempSet(*pOutSet);
                             ((SdStyleSheet*)pStyleSheet)->AdjustToFontHeight(aTempSet);
 
-                            // Sonderbehandlung: die INVALIDS auf NULL-Pointer
-                            // zurueckgesetzen (sonst landen INVALIDs oder
-                            // Pointer auf die DefaultItems in der Vorlage;
-                            // beides wuerde die Attribut-Vererbung unterbinden)
+                            /* Special treatment: reset the INVALIDS to
+                               NULL-Pointer (otherwise INVALIDs or pointer point
+                               to DefaultItems in the template; both would
+                               prevent the attribute inheritance) */
                             aTempSet.ClearInvalidItems();
 
                             // EE_PARA_NUMBULLET item is only valid in first outline template
@@ -596,7 +587,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         delete pStdDlg;
                         delete pPresDlg;
                     }
-                    return; // Abbruch
+                    return; // Cancel
                 }
                 delete pStdDlg;
                 delete pPresDlg;
@@ -612,11 +603,10 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 SfxItemSet aCoreSet( mpDoc->GetPool() );
                 mpView->GetAttributes( aCoreSet, sal_True );
 
-                // wenn das Objekt eine Vorlage hatte, wird diese Parent
-                // der neuen Vorlage
+                // if the object had a template, this becomes parent of the new template
                 SfxStyleSheet* pOldStyle = mpView->GetStyleSheet();
 
-                // Wenn pOldStyle == pStyleSheet -> Rekursion
+                // if pOldStyle == pStyleSheet -> recursion
                 if( pOldStyle != pStyleSheet )
                 {
                     if (pOldStyle)
@@ -627,9 +617,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     SfxItemSet* pStyleSet = &pStyleSheet->GetItemSet();
                     pStyleSet->Put(aCoreSet);
 
-                    // Vorlage anwenden (Aber nicht, wenn gerade ein Text
-                    // editiert wird, denn dazu muesste die Edit Engine
-                    // Vorlagen auf Zeichenebene beherrschen.)
+                    /* apply template (but not when somebody is editing a text.
+                       To do this, the edit engine had to be capable to use
+                       templates on a character level. */
                     if (!mpView->GetTextEditObject())
                     {
                         mpView->SetStyleSheet( (SfxStyleSheet*) pStyleSheet);

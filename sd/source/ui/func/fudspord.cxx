@@ -33,11 +33,6 @@ namespace sd {
 
 TYPEINIT1( FuDisplayOrder, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
 : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
@@ -46,11 +41,6 @@ FuDisplayOrder::FuDisplayOrder( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::Vi
 {
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FuDisplayOrder::~FuDisplayOrder()
 {
@@ -72,11 +62,6 @@ FunctionReference FuDisplayOrder::Create( ViewShell* pViewSh, ::sd::Window* pWin
     return xFunc;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 sal_Bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -86,11 +71,6 @@ sal_Bool FuDisplayOrder::MouseButtonDown(const MouseEvent& rMEvt)
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
 {
@@ -121,11 +101,6 @@ sal_Bool FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 sal_Bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -152,11 +127,6 @@ sal_Bool FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 
 void FuDisplayOrder::Activate()
 {
@@ -164,11 +134,6 @@ void FuDisplayOrder::Activate()
     mpWindow->SetPointer( Pointer( POINTER_REFHAND ) );
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuDisplayOrder::Deactivate()
 {

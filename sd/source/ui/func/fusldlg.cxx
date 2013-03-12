@@ -40,12 +40,6 @@ namespace sd {
 TYPEINIT1( FuSlideShowDlg, FuPoor );
 
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuSlideShowDlg::FuSlideShowDlg (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -87,7 +81,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
         aPageNameList[ nPage ] = aStr;
 
-        // ist dies unsere (vorhandene) erste Seite?
+        // is this our (existing) first page?
         if ( rPresPage == aStr )
             aFirstPage = rPresPage;
         else if ( pPage->IsSelected() && !aFirstPage.Len() )
@@ -229,7 +223,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
         pOptions->SetDisplay( ITEMVALUE( aDlgSet, ATTR_PRESENT_DISPLAY, SfxInt32Item ) );
 
-        // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
+        // is something has changed, we set the modified flag
         if ( bValuesChanged )
             mpDoc->SetChanged( sal_True );
     }

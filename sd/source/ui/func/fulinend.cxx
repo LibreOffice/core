@@ -40,11 +40,6 @@ namespace sd {
 
 TYPEINIT1( FuLineEnd, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuLineEnd::FuLineEnd(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                     SdDrawDocument* pDoc, SfxRequest& rReq)
@@ -81,21 +76,21 @@ void FuLineEnd::DoExecute( SfxRequest& )
             if( aInfoRec.bCanConvToPath &&
                 pObj->GetObjInventor() == SdrInventor &&
                 pObj->GetObjIdentifier() != OBJ_GRUP )
-                // bCanConvToPath ist bei Gruppenobjekten sal_True,
-                // stuerzt aber bei ConvertToPathObj() ab !
+                // bCanConvToPath is sal_True for group objects,
+                // but it crashes on ConvertToPathObj()!
             {
                 pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( sal_True, sal_False );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
-                    return; // Abbruch, zusaetzliche Sicherheit, die bei
-                            // Gruppenobjekten aber nichts bringt.
+                    return; // Cancel, additional security, but it does not help
+                            // for group objects
             }
-            else return; // Abbruch
+            else return; // Cancel
         }
 
         const ::basegfx::B2DPolyPolygon aPolyPolygon = ( (SdrPathObj*) pNewObj )->GetPathPoly();
 
-        // Loeschen des angelegten PolyObjektes
+        // Delete the created poly-object
         SdrObject::Free( pConvPolyObj );
 
         XLineEndListRef pLineEndList = mpDoc->GetLineEndList();

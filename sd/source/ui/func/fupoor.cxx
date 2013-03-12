@@ -62,11 +62,6 @@ namespace sd {
 
 TYPEINIT0( FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
 
 FuPoor::FuPoor (
     ViewShell* pViewSh,
@@ -102,11 +97,6 @@ FuPoor::FuPoor (
     aDelayToScrollTimer.SetTimeout(2000);
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FuPoor::~FuPoor()
 {
@@ -118,11 +108,6 @@ FuPoor::~FuPoor()
         delete pDialog;
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
 
 void FuPoor::Activate()
 {
@@ -132,11 +117,6 @@ void FuPoor::Activate()
     }
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuPoor::Deactivate()
 {
@@ -154,13 +134,9 @@ void FuPoor::Deactivate()
     if (mpWindow) mpWindow->ReleaseMouse ();
 }
 
-/*************************************************************************
-|*
-|* Scrollen bei Erreichen des Fensterrandes; wird von
-|* MouseMove aufgerufen
-|*
-\************************************************************************/
-
+/**
+ * scroll when approached the border of the window; is called by MouseMove
+ */
 void FuPoor::ForceScroll(const Point& aPixPos)
 {
     aScrollTimer.Stop();
@@ -189,7 +165,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
             {
                 if (bScrollable)
                 {
-                    // Scrollaktion in abgeleiteter Klasse
+                    // scroll action in derived class
                     mpViewShell->ScrollLines(dx, dy);
                     aScrollTimer.Start();
                 }
@@ -199,12 +175,9 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     }
 }
 
-/*************************************************************************
-|*
-|* Timer-Handler fuer Fensterscrolling
-|*
-\************************************************************************/
-
+/**
+ * timer handler for window scrolling
+ */
 IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
 {
     Point aPnt(mpWindow->GetPointerPosPixel());
@@ -217,15 +190,10 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
 }
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
-/*************************************************************************
-|*
-|* Tastaturereignisse bearbeiten
-|*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
-|*
-\************************************************************************/
-
+/**
+ * handle keyboard events
+ * @returns sal_True if the event was handled, sal_False otherwise
+ */
 sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16          nCode = rKEvt.GetKeyCode().GetCode();
@@ -354,7 +322,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
-                // Zoom vergroessern
+                // increase zoom
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 3 / 2);
 
                 if (mpViewShell->ISA(DrawViewShell))
@@ -370,7 +338,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
-                // Zoom verringern
+                // decrease zoom
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 2 / 3);
 
                 if (mpViewShell->ISA(DrawViewShell))
@@ -386,7 +354,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow)
             {
-                // Zoom auf Seite
+                // zoom to page
                 mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 bReturn = sal_True;
@@ -398,7 +366,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow)
             {
-                // Zoom auf selektierte Objekte
+                // zoom to selected objects
                 mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_OPTIMAL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 bReturn = sal_True;
@@ -412,7 +380,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
             if (!mpView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
-                // Naechstes ZoomRect einstellen
+                // use next ZoomRect
                 mpViewShell->SetZoomRect(pZoomList->GetNextZoomRect());
                 bReturn = sal_True;
             }
@@ -425,7 +393,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
             if (!mpView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
-                // Vorheriges ZoomRect einstellen
+                // use previous ZoomRect
                 mpViewShell->SetZoomRect(pZoomList->GetPreviousZoomRect());
                 bReturn = sal_True;
             }
@@ -438,7 +406,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 && mpViewShell->ISA(DrawViewShell)
                 && !bSlideShow)
             {
-               // Sprung zu erster Seite
+               // jump to first page
                static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(0);
                bReturn = sal_True;
             }
@@ -451,7 +419,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 && mpViewShell->ISA(DrawViewShell)
                 && !bSlideShow)
             {
-                // Sprung zu letzter Seite
+                // jump to last page
                 SdPage* pPage =
                     static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
                 static_cast<DrawViewShell*>(mpViewShell)
@@ -629,25 +597,25 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                 if (nCode == KEY_UP)
                 {
-                    // Scroll nach oben
+                    // scroll up
                     nX = 0;
                     nY =-1;
                 }
                 else if (nCode == KEY_DOWN)
                 {
-                    // Scroll nach unten
+                    // scroll down
                     nX = 0;
                     nY = 1;
                 }
                 else if (nCode == KEY_LEFT)
                 {
-                    // Scroll nach links
+                    // scroll left
                     nX =-1;
                     nY = 0;
                 }
                 else if (nCode == KEY_RIGHT)
                 {
-                    // Scroll nach rechts
+                    // scroll right
                     nX = 1;
                     nY = 0;
                 }
@@ -818,7 +786,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 }
                 else
                 {
-                    // Seite scrollen
+                    // scroll page
                     mpViewShell->ScrollLines(nX, nY);
                 }
 
@@ -936,12 +904,9 @@ void FuPoor::SelectionHasChanged()
     ((SdrHdlList&)rHdlList).ResetFocusHdl();
 }
 
-/*************************************************************************
-|*
-|* Cut object to clipboard
-|*
-\************************************************************************/
-
+/**
+ * Cut object to clipboard
+ */
 void FuPoor::DoCut()
 {
     if (mpView)
@@ -950,12 +915,9 @@ void FuPoor::DoCut()
     }
 }
 
-/*************************************************************************
-|*
-|* Copy object to clipboard
-|*
-\************************************************************************/
-
+/**
+ * Copy object to clipboard
+ */
 void FuPoor::DoCopy()
 {
     if (mpView)
@@ -964,12 +926,9 @@ void FuPoor::DoCopy()
     }
 }
 
-/*************************************************************************
-|*
-|* Paste object from clipboard
-|*
-\************************************************************************/
-
+/**
+ * Paste object from clipboard
+ */
 void FuPoor::DoPaste()
 {
     if (mpView)
@@ -978,12 +937,9 @@ void FuPoor::DoPaste()
     }
 }
 
-/*************************************************************************
-|*
-|* Timer-Handler fuer Drag&Drop
-|*
-\************************************************************************/
-
+/**
+ * Timer handler for Drag&Drop
+ */
 IMPL_LINK_NOARG(FuPoor, DragHdl)
 {
     if( mpView )
@@ -1002,23 +958,14 @@ IMPL_LINK_NOARG(FuPoor, DragHdl)
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Command-event
-|*
-\************************************************************************/
-
 sal_Bool FuPoor::Command(const CommandEvent& rCEvt)
 {
     return( mpView->Command(rCEvt,mpWindow) );
 }
 
-/*************************************************************************
-|*
-|* Timer-Handler fuer Fensterscrolling
-|*
-\************************************************************************/
-
+/**
+ * Timer handler for window scrolling
+ */
 IMPL_LINK_NOARG_INLINE_START(FuPoor, DelayHdl)
 {
     aDelayToScrollTimer.Stop ();
@@ -1033,12 +980,6 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, DelayHdl)
     return 0;
 }
 IMPL_LINK_INLINE_END( FuPoor, DelayHdl, Timer *, pTimer )
-
-/*************************************************************************
-|*
-|* Handler fuer Maustaste
-|*
-\************************************************************************/
 
 sal_Bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 {
@@ -1058,23 +999,11 @@ sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
     return sal_False;
 }
 
-/*************************************************************************
-|*
-|* Handler fuer Maustaste
-|*
-\************************************************************************/
-
 void FuPoor::StartDelayToScrollTimer ()
 {
     bDelayActive = sal_True;
     aDelayToScrollTimer.Start ();
 }
-
-/*************************************************************************
-|*
-|* Help-event
-|*
-\************************************************************************/
 
 sal_Bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
 {
@@ -1098,12 +1027,6 @@ sal_Bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
 void FuPoor::Paint(const Rectangle&, ::sd::Window* )
 {
 }
-
-/*************************************************************************
-|*
-|* Request verarbeiten
-|*
-\************************************************************************/
 
 void FuPoor::ReceiveRequest(SfxRequest& rReq)
 {

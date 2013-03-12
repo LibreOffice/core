@@ -42,12 +42,6 @@ sal_uInt16 SidArrayZoom[] = {
 
 TYPEINIT1( FuZoom, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuZoom::FuZoom(
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -59,12 +53,6 @@ FuZoom::FuZoom(
       bStartDrag(sal_False)
 {
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FuZoom::~FuZoom()
 {
@@ -84,12 +72,6 @@ FunctionReference FuZoom::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
     return xFunc;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
 sal_Bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -103,12 +85,6 @@ sal_Bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 
     return sal_True;
 }
-
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 {
@@ -155,12 +131,6 @@ sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
     return bStartDrag;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
 sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -183,7 +153,7 @@ sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 
         if ( aZoomSizePixel.Width() < (long) nTol && aZoomSizePixel.Height() < (long) nTol )
         {
-            // Klick auf der Stelle: Zoomfaktor verdoppeln
+            // click at place: double zoom factor
             Point aPos = mpWindow->PixelToLogic(aPosPix);
             Size aSize = mpWindow->PixelToLogic(mpWindow->GetOutputSizePixel());
             aSize.Width() /= 2;
@@ -208,12 +178,6 @@ sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
 void FuZoom::Activate()
 {
     aPtr = mpWindow->GetPointer();
@@ -227,12 +191,6 @@ void FuZoom::Activate()
         mpWindow->SetPointer(Pointer(POINTER_MAGNIFY));
     }
 }
-
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
 
 void FuZoom::Deactivate()
 {

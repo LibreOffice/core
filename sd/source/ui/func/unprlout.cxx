@@ -28,13 +28,6 @@
 TYPEINIT1(SdPresentationLayoutUndoAction, SdUndoAction);
 
 
-
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
                             SdDrawDocument* pTheDoc,
                             String          aTheOldLayoutName,
@@ -56,24 +49,12 @@ SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
     aComment = String(SdResId(STR_UNDO_SET_PRESLAYOUT));
 }
 
-/*************************************************************************
-|*
-|* Undo()
-|*
-\************************************************************************/
-
 void SdPresentationLayoutUndoAction::Undo()
 {
     pPage->SetPresentationLayout(aOldLayoutName, sal_True, sal_True, sal_True);
     if (bSetAutoLayout)
         pPage->SetAutoLayout(eOldAutoLayout, sal_True);
 }
-
-/*************************************************************************
-|*
-|* Redo()
-|*
-\************************************************************************/
 
 void SdPresentationLayoutUndoAction::Redo()
 {
@@ -82,21 +63,9 @@ void SdPresentationLayoutUndoAction::Redo()
         pPage->SetAutoLayout(eNewAutoLayout, sal_True);
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 SdPresentationLayoutUndoAction::~SdPresentationLayoutUndoAction()
 {
 }
-
-/*************************************************************************
-|*
-|* Kommentar liefern
-|*
-\************************************************************************/
 
 rtl::OUString SdPresentationLayoutUndoAction::GetComment() const
 {

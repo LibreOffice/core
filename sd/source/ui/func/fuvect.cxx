@@ -36,12 +36,6 @@ namespace sd
 
 TYPEINIT1( FuVectorize, FuPoor );
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuVectorize::FuVectorize (
     ViewShell* pViewSh,
     ::sd::Window* pWin,

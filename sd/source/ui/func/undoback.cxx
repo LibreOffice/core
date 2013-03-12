@@ -24,10 +24,6 @@
 #include "strings.hrc"
 #include <svl/itemset.hxx>
 
-// ---------------------------
-// - BackgroundObjUndoAction -
-// ---------------------------
-
 TYPEINIT1( SdBackgroundObjUndoAction, SdUndoAction );
 
 // -----------------------------------------------------------------------------
