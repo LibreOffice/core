@@ -210,7 +210,7 @@ enum SvxExtNumType
     SVX_NUM_PAGEDESC,       // Numbering from the page template
     SVX_NUM_BITMAP,
     SVX_NUM_CHARS_UPPER_LETTER_N, // Counts from  a-z, aa-zz, aaa-zzz
-    SVX_NUM_CHARS_LOWER_LETTER_N
+    SVX_NUM_CHARS_LOWER_LETTER_N,
     SVX_NUM_TRANSLITERATION,
     SVX_NUM_NATIVE_NUMBERING,
     SVX_NUM_FULL_WIDTH_ARABIC,
