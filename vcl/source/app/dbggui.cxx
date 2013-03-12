@@ -1078,7 +1078,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         DbgInfoDialog aInfoDialog( this );
         aDbgInfoBuf[0] = '\0';
         DbgXtorInfo( aDbgInfoBuf );
-        OUString aInfoText( aDbgInfoBuf, RTL_TEXTENCODING_UTF8 );
+        OUString aInfoText( aDbgInfoBuf, strlen(aDbgInfoBuf), RTL_TEXTENCODING_UTF8 );
         aInfoDialog.SetText( "Debug InfoReport" );
         aInfoDialog.SetInfoText( aInfoText );
         aInfoDialog.Execute();
@@ -1098,7 +1098,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
         const sal_Char** pHelpStrs = pDbgHelpText;
         while ( *pHelpStrs )
         {
-            aHelpText += *pHelpStrs;
+            aHelpText += OUString::createFromAscii(*pHelpStrs);
             pHelpStrs++;
         }
         aInfoDialog.SetText( "Debug Hilfe" );
@@ -1259,7 +1259,7 @@ void DbgDialogTest( Window* pWindow )
                     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
                     uno::Reference < i18n::XCharacterClassification > xCharClass = vcl::unohelper::CreateCharacterClassification();
                     OUString aUpperText = xCharClass->toUpper( aText, 0, aText.getLength(), rLocale );
-                    cAccel = aUpperText.GetChar( nAccelPos+1 );
+                    cAccel = aUpperText[nAccelPos+1];
                     if ( pChild->IsVisible() )
                     {
                         if ( aAccelBuf[cAccel] )
@@ -1346,7 +1346,7 @@ void DbgDialogTest( Window* pWindow )
                     if( nAccelPos != STRING_NOTFOUND )
                     {
                         aWidth = pChild->GetTextWidth( aText, 0, nAccelPos ) +
-                                 pChild->GetTextWidth( aText, nAccelPos+1, aText.Len() - nAccelPos - 1);
+                                 pChild->GetTextWidth( aText, nAccelPos+1, aText.getLength() - nAccelPos - 1);
                     }
                     else
                         aWidth = pChild->GetTextWidth( aText );
@@ -1359,7 +1359,7 @@ void DbgDialogTest( Window* pWindow )
                         }
                 }
 
-                if ( (i+1 < nChildCount) && aText.Len() )
+                if ( (i+1 < nChildCount) && !aText.isEmpty() )
                 {
                     Window* pTempChild = pGetChild->GetWindow( WINDOW_NEXT )->ImplGetWindow();
                     if ( (pTempChild->GetType() == WINDOW_EDIT) ||
@@ -1669,7 +1669,7 @@ void DbgPrintMsgBox( const char* pLine )
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=crash)" );
 #endif
 
-    SolarMessageBoxExecutor aMessageBox( OUString( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
+    SolarMessageBoxExecutor aMessageBox( OUString( aDbgOutBuf, strlen(aDbgOutBuf), RTL_TEXTENCODING_UTF8 ) );
     TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
     long nResult = aMessageBox.execute( aTimeout );
 
