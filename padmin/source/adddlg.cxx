@@ -36,7 +36,6 @@ using namespace psp;
 using namespace padmin;
 using namespace std;
 
-using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUStringHash;
 using ::rtl::OUStringToOString;
@@ -93,7 +92,7 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
         rInfo.m_aFeatures = OUString("fax");
     }
     else
-        rInfo.m_aFeatures = OUString();
+        rInfo.m_aFeatures = "";
 }
 
 //--------------------------------------------------------------------
@@ -127,7 +126,7 @@ bool APChooseDriverPage::check()
 void APChooseDriverPage::fill( PrinterInfo& rInfo )
 {
     sal_uInt16 nPos = m_aDriverBox.GetSelectEntryPos();
-    String* pDriver = (String*)m_aDriverBox.GetEntryData( nPos );
+    OUString* pDriver = (OUString*)m_aDriverBox.GetEntryData( nPos );
     rInfo.m_aDriverName = *pDriver;
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "m_aLastPrinterName = \"%s\", rInfo.m_aPrinterName = \"%s\"\n",
@@ -136,30 +135,30 @@ void APChooseDriverPage::fill( PrinterInfo& rInfo )
 #endif
     if( rInfo.m_aPrinterName.equals( m_aLastPrinterName ) )
     {
-        String aPrinter( AddPrinterDialog::uniquePrinterName( m_aDriverBox.GetEntry( nPos ) ) );
+        OUString aPrinter( AddPrinterDialog::uniquePrinterName( m_aDriverBox.GetEntry( nPos ) ) );
         rInfo.m_aPrinterName = m_aLastPrinterName = aPrinter;
     }
 }
 
-void APChooseDriverPage::updateDrivers( bool bRefresh, const rtl::OUString& rSelectDriver )
+void APChooseDriverPage::updateDrivers( bool bRefresh, const OUString& rSelectDriver )
 {
     for( int k = 0; k < m_aDriverBox.GetEntryCount(); k++ )
         delete (String*)m_aDriverBox.GetEntryData( k );
     m_aDriverBox.Clear();
 
-    std::list< rtl::OUString > aDrivers;
+    std::list< OUString > aDrivers;
     psp::PPDParser::getKnownPPDDrivers( aDrivers, bRefresh );
 
-    rtl::OUString aSelectDriver( psp::PPDParser::getPPDPrinterName( rSelectDriver ) );
+    OUString aSelectDriver( psp::PPDParser::getPPDPrinterName( rSelectDriver ) );
 
-    rtl::OUString aSelectedEntry;
-    for( std::list< rtl::OUString >::const_iterator it = aDrivers.begin(); it != aDrivers.end(); ++it )
+    OUString aSelectedEntry;
+    for( std::list< OUString >::const_iterator it = aDrivers.begin(); it != aDrivers.end(); ++it )
     {
-        rtl::OUString aDriver( psp::PPDParser::getPPDPrinterName( *it ) );
+        OUString aDriver( psp::PPDParser::getPPDPrinterName( *it ) );
         if( !aDriver.isEmpty() )
         {
             int nPos = m_aDriverBox.InsertEntry( aDriver );
-            m_aDriverBox.SetEntryData( nPos, new String( *it ) );
+            m_aDriverBox.SetEntryData( nPos, new OUString( *it ) );
             if( aDriver == aSelectDriver )
                 aSelectedEntry = aDriver;
         }
@@ -184,7 +183,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
         PPDImportDialog aDlg( this );
         if( aDlg.Execute() )
         {
-            const std::list< rtl::OUString >& rImported( aDlg.getImportedFiles() );
+            const std::list< OUString >& rImported( aDlg.getImportedFiles() );
             if( rImported.empty() )
                 updateDrivers( true );
             else
@@ -199,14 +198,14 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
         for( int i = 0; i < m_aDriverBox.GetSelectEntryCount(); i++ )
         {
             int nSelect = m_aDriverBox.GetSelectEntryPos(i);
-            String aDriver( *(String*)m_aDriverBox.GetEntryData( nSelect ) );
-            if( aDriver.Len() )
+            OUString aDriver( *(String*)m_aDriverBox.GetEntryData( nSelect ) );
+            if( aDriver.isEmpty() )
             {
                 // never delete the default driver
-                if( aDriver.EqualsIgnoreCaseAscii( "SGENPRT" ) )
+                if( aDriver.equalsIgnoreAsciiCase( "SGENPRT" ) )
                 {
-                    String aText( PaResId( RID_ERR_REMOVESGENPRT ) );
-                    aText.SearchAndReplace( rtl::OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    OUString aText( PaResId( RID_ERR_REMOVESGENPRT ) );
+                    aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
                     aErrorBox.SetText( m_aRemStr );
                     aErrorBox.Execute();
@@ -218,8 +217,8 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 OUString aPPD( aDriver );
                 if( aDefInfo.m_aDriverName == aPPD )
                 {
-                    String aText( PaResId( RID_ERR_REMOVEDEFAULTDRIVER ) );
-                    aText.SearchAndReplace( rtl::OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    OUString aText( PaResId( RID_ERR_REMOVEDEFAULTDRIVER ) );
+                    aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
                     aErrorBox.SetText( m_aRemStr );
                     aErrorBox.Execute();
@@ -238,8 +237,8 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
 
                 if( it != aPrinters.end() )
                 {
-                    String aText( PaResId( RID_QUERY_DRIVERUSED ) );
-                    aText.SearchAndReplace( rtl::OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    OUString aText( PaResId( RID_QUERY_DRIVERUSED ) );
+                    aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     QueryBox aBox( this, WB_YES_NO | WB_DEF_NO, aText );
                     aBox.SetText( m_aRemStr );
                     if( aBox.Execute() == RET_NO )
@@ -247,8 +246,8 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 }
                 else
                 {
-                    String aText( PaResId( RID_QUERY_REMOVEDRIVER ) );
-                    aText.SearchAndReplace( rtl::OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    OUString aText( PaResId( RID_QUERY_REMOVEDRIVER ) );
+                    aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     QueryBox aBox( this, WB_YES_NO | WB_DEF_NO, aText );
                     aBox.SetText( m_aRemStr );
                     if( aBox.Execute() == RET_NO )
@@ -263,10 +262,10 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                         rPIManager.removePrinter( *it );
                 }
 
-                std::list< rtl::OUString > aDirs;
+                std::list< OUString > aDirs;
                 // get only psprint's directories, not eventual system dirs
                 psp::getPrinterPathList( aDirs, NULL );
-                std::list< rtl::OUString >::iterator dir;
+                std::list< OUString >::iterator dir;
                 for( dir = aDirs.begin(); dir != aDirs.end(); ++dir )
                 {
                     ::std::list< String > aFiles;
@@ -274,8 +273,8 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                     OUStringBuffer aDir( *dir );
                     aDir.append( sal_Unicode( '/' ) );
                     aDir.appendAscii( PRINTER_PPDDIR );
-                    rtl::OUString aPPDDir( aDir.makeStringAndClear() );
-                    FindFiles( aPPDDir, aFiles, String(  "PS;PPD;PS.GZ;PPD.GZ"  ), true );
+                    OUString aPPDDir( aDir.makeStringAndClear() );
+                    FindFiles( aPPDDir, aFiles, OUString(  "PS;PPD;PS.GZ;PPD.GZ"  ), true );
                     for( file = aFiles.begin(); file != aFiles.end(); ++file )
                     {
                         String aFile( aPPDDir );
@@ -286,12 +285,12 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                         int nPos = file->SearchBackward( '.' );
                         if( file->Copy( 0, nPos ) == String( aPPD ) )
                         {
-                            rtl::OString aSysPath(rtl::OUStringToOString(aFile, aEncoding));
+                            rtl::OString aSysPath(OUStringToOString(aFile, aEncoding));
                             if (unlink(aSysPath.getStr()))
                             {
-                                String aText( PaResId( RID_ERR_REMOVEDRIVERFAILED ) );
-                                aText.SearchAndReplace( rtl::OUString( "%s1" ), m_aDriverBox.GetSelectEntry( i ) );
-                                aText.SearchAndReplace( rtl::OUString( "%s2" ), aFile );
+                                OUString aText( PaResId( RID_ERR_REMOVEDRIVERFAILED ) );
+                                aText.replaceFirst( OUString( "%s1" ), m_aDriverBox.GetSelectEntry( i ) );
+                                aText.replaceFirst( OUString( "%s2" ), aFile );
                                 ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
                                 aErrorBox.SetText( m_aRemStr );
                                 aErrorBox.Execute();
@@ -419,10 +418,10 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
 APCommandPage::~APCommandPage()
 {
     ::std::list< String > aCommands;
-    String aLastCommand( m_aCommandBox.GetText() );
+    OUString aLastCommand( m_aCommandBox.GetText() );
     for( int i = 0; i < m_aCommandBox.GetEntryCount(); i++ )
     {
-        String aCommand( m_aCommandBox.GetEntry( i ) );
+        OUString aCommand( m_aCommandBox.GetEntry( i ) );
         if( aCommand != aLastCommand )
             aCommands.push_back( aCommand );
     }
@@ -444,7 +443,7 @@ IMPL_LINK( APCommandPage, ClickBtnHdl, PushButton*, pButton )
     }
     else if( pButton == &m_aPdfDirBtn )
     {
-        String aPath( m_aPdfDirEdt.GetText() );
+        OUString aPath( m_aPdfDirEdt.GetText() );
         if( chooseDirectory( aPath ) )
             m_aPdfDirEdt.SetText( aPath );
     }
@@ -483,7 +482,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
     m_aSelectAllBtn.SetClickHdl( LINK( this, APOldPrinterPage, ClickBtnHdl ) );
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
-    String aFileName( AddPrinterDialog::getOldPrinterLocation() );
+    OUString aFileName( AddPrinterDialog::getOldPrinterLocation() );
     Config aConfig( aFileName );
 
     // read defaults
@@ -516,9 +515,9 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         const PPDParser* pParser = PPDParser::getParser(rtl::OStringToOUString(aNewDriver, aEncoding));
         if( pParser == NULL )
         {
-            String aText( PaResId( RID_TXT_DRIVERDOESNOTEXIST ) );
-            aText.SearchAndReplace( String(  "%s1"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
-            aText.SearchAndReplace( String(  "%s2"  ), rtl::OStringToOUString(aDriver, aEncoding) );
+            OUString aText( PaResId( RID_TXT_DRIVERDOESNOTEXIST ) );
+            aText.replaceFirst( OUString(  "%s1"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
+            aText.replaceFirst( OUString(  "%s2"  ), rtl::OStringToOUString(aDriver, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
@@ -529,8 +528,8 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         rtl::OString aCommand( aConfig.ReadKey( aPort ) );
         if (aCommand.isEmpty())
         {
-            String aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
-            aText.SearchAndReplace( String(  "%s"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
+            OUString aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
+            aText.replaceFirst( OUString(  "%s"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
@@ -640,8 +639,8 @@ void APOldPrinterPage::addOldPrinters()
         pInfo->m_aPrinterName = AddPrinterDialog::uniquePrinterName( pInfo->m_aPrinterName );
         if( ! rManager.addPrinter( pInfo->m_aPrinterName, pInfo->m_aDriverName ) )
         {
-            String aText( PaResId( RID_TXT_PRINTERADDFAILED ) );
-            aText.SearchAndReplace( String(  "%s"  ), pInfo->m_aPrinterName );
+            OUString aText( PaResId( RID_TXT_PRINTERADDFAILED ) );
+            aText.replaceFirst( OUString(  "%s"  ), pInfo->m_aPrinterName );
                 ErrorBox aBox( this, WB_OK | WB_DEF_OK, aText );
                 aBox.Execute();
                 continue;
@@ -887,7 +886,7 @@ void AddPrinterDialog::advance()
     else if( m_pCurrentPage == m_pFaxCommandPage )
     {
         if( ! m_pFaxNamePage )
-            m_pFaxNamePage = new APNamePage( this, String(), DeviceKind::Fax );
+            m_pFaxNamePage = new APNamePage( this, OUString(), DeviceKind::Fax );
         m_pCurrentPage = m_pFaxNamePage;
         m_aNextPB.Enable( sal_False );
         m_aFinishPB.Enable( sal_True );
@@ -916,7 +915,7 @@ void AddPrinterDialog::advance()
     else if( m_pCurrentPage == m_pPdfCommandPage )
     {
         if( ! m_pPdfNamePage )
-            m_pPdfNamePage = new APNamePage( this, String(), DeviceKind::Pdf );
+            m_pPdfNamePage = new APNamePage( this, OUString(), DeviceKind::Pdf );
         m_pCurrentPage = m_pPdfNamePage;
         m_aNextPB.Enable( sal_False );
         m_aFinishPB.Enable( sal_True );
@@ -1057,9 +1056,9 @@ IMPL_LINK( AddPrinterDialog, ClickBtnHdl, PushButton*, pButton )
     return 0;
 }
 
-String AddPrinterDialog::uniquePrinterName( const String& rBase )
+OUString AddPrinterDialog::uniquePrinterName( const OUString& rBase )
 {
-    String aResult( rBase );
+    OUString aResult( rBase );
 
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
 
@@ -1072,8 +1071,8 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
     while( aPrinters.find( aResult ) != aPrinters.end() )
     {
         aResult = rBase;
-        aResult.AppendAscii( "_" );
-        aResult += rtl::OUString::valueOf(nVersion++);
+        aResult +=  "_"  ;
+        aResult += OUString::valueOf(nVersion++);
     }
 
     return aResult;
@@ -1115,7 +1114,7 @@ String AddPrinterDialog::getOldPrinterLocation()
         }
     }
 
-    return !aFileName.isEmpty() ? rtl::OStringToOUString(aFileName, aEncoding) : rtl::OUString();
+    return !aFileName.isEmpty() ? rtl::OStringToOUString(aFileName, aEncoding) : OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

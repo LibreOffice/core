@@ -103,12 +103,11 @@ sal_Bool AreYouSure( Window*, int nRid = -1 );
 
 ResId PaResId( sal_uInt32 nId );
 
-void FindFiles( const String& rDirectory, ::std::list< String >& rResult, const String& rSuffixes, bool bRecursive = false );
-
+void FindFiles( const OUString& rDirectory, ::std::list< String >& rResult, const OUString& rSuffixes, bool bRecursive = false );
 Config& getPadminRC();
 void freePadminRC();
 
-bool chooseDirectory( String& rInOutPath );
+bool chooseDirectory( OUString& rInOutPath );
 
 } // namespace padmin
 
