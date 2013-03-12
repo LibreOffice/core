@@ -30,8 +30,6 @@
 using namespace psp;
 using namespace padmin;
 
-using ::rtl::OUString;
-
 #define PRINTER_PERSISTENCE_GROUP "KnownPrinterCommands"
 #define FAX_PERSISTENCE_GROUP "KnownFaxCommands"
 #define PDF_PERSISTENCE_GROUP "KnowPdfCommands"
@@ -62,7 +60,7 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
         bOnce = true;
         char pBuffer[1024];
         FILE* pPipe;
-        String aCommand;
+        OUString aCommand;
         rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
         pPipe = popen( "which gs 2>/dev/null", "r" );
@@ -73,15 +71,15 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
                 int nLen = strlen( pBuffer );
                 if( pBuffer[nLen-1] == '\n' ) // strip newline
                     pBuffer[--nLen] = 0;
-                aCommand = rtl::OUString(pBuffer, nLen, aEncoding);
-                if( ( ( aCommand.GetChar( 0 ) == '/' )
-                      || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
-                      || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )
+                aCommand = OUString(pBuffer, nLen, aEncoding);
+                if( ( ( aCommand[ 0 ] == '/' )
+                      || ( aCommand[ 0 ] == '.' && aCommand[ 1 ] == '/' )
+                      || ( aCommand[ 0 ] == '.' && aCommand[ 1 ] == '.' && aCommand[ 2 ] == '/' ) )
                     && nLen > 2
-                    && aCommand.GetChar( nLen-2 ) == 'g'
-                    && aCommand.GetChar( nLen-1 ) == 's' )
+                    && aCommand[ nLen-2 ] == 'g'
+                    && aCommand[ nLen-1 ] == 's' )
                 {
-                    aCommand.AppendAscii( " -q -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"(OUTFILE)\" -" );
+                    aCommand += " -q -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"(OUTFILE)\" -" ;
                     aSysCommands.push_back( aCommand );
                 }
             }
@@ -96,14 +94,14 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
                 int nLen = strlen( pBuffer );
                 if( pBuffer[nLen-1] == '\n' ) // strip newline
                     pBuffer[--nLen] = 0;
-                aCommand = rtl::OUString(pBuffer, nLen, aEncoding);
-                if( ( ( aCommand.GetChar( 0 ) == '/' )
-                      || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
-                      || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )
+                aCommand = OUString(pBuffer, nLen, aEncoding);
+                if( ( ( aCommand[ 0 ] == '/' )
+                      || ( aCommand[ 0 ] == '.' && aCommand[ 1 ] == '/' )
+                      || ( aCommand[ 0 ] == '.' && aCommand[ 1 ] == '.' && aCommand[ 2 ] == '/' ) )
                     && nLen > 7
-                    && aCommand.Copy( nLen - 8 ).EqualsAscii( "/distill" ) )
+                    && aCommand.copy( nLen - 8 ).equalsAscii( "/distill" ) )
                 {
-                    aCommand.AppendAscii( " (TMP) ; mv `echo (TMP) | sed s/\\.ps\\$/.pdf/` \"(OUTFILE)\"" );
+                    aCommand += " (TMP) ; mv `echo (TMP) | sed s/\\.ps\\$/.pdf/` \"(OUTFILE)\"" ;
                     aSysCommands.push_back( aCommand );
                 }
             }
@@ -125,8 +123,8 @@ void CommandStore::getStoredCommands( const char* pGroup, ::std::list< String >&
     ::std::list< String >::const_iterator it;
     while( nKeys-- )
     {
-        String aCommand( rConfig.ReadKey(rtl::OString::valueOf(nKeys), RTL_TEXTENCODING_UTF8 ) );
-        if( aCommand.Len() )
+        OUString aCommand( rConfig.ReadKey(rtl::OString::valueOf(nKeys), RTL_TEXTENCODING_UTF8 ) );
+        if( aCommand.isEmpty() )
         {
             for( it = rCommands.begin(); it != rCommands.end() && *it != aCommand; ++it )
                 ;
@@ -168,7 +166,7 @@ void CommandStore::setCommands(
         nWritten--;
     }
     for( nWritten = 0, it = aWriteList.begin(); it != aWriteList.end(); ++it, ++nWritten )
-        rConfig.WriteKey( rtl::OString::valueOf(nWritten), rtl::OUStringToOString(*it, RTL_TEXTENCODING_UTF8) );
+        rConfig.WriteKey( rtl::OString::valueOf(nWritten), OUStringToOString(*it, RTL_TEXTENCODING_UTF8) );
 }
 
 
@@ -321,7 +319,7 @@ void RTSCommandPage::save()
     bool bHavePdf = m_aConfigureBox.GetSelectEntryPos() == m_nPdfEntry ? true : false;
     ::std::list< String >::iterator it;
 
-    String aFeatures;
+    OUString aFeatures;
     sal_Int32 nIndex = 0;
     OUString aOldPdfPath;
     bool bOldFaxSwallow = false;
@@ -338,9 +336,9 @@ void RTSCommandPage::save()
         {
             if( !aToken.isEmpty() )
             {
-                if( aFeatures.Len() )
-                    aFeatures += ',';
-                aFeatures += String( aToken );
+                if( aFeatures.isEmpty() )
+                    aFeatures += ",";
+                aFeatures += OUString( aToken );
             }
         }
         else if( aToken.startsWith( "pdf=" ) )
@@ -357,25 +355,25 @@ void RTSCommandPage::save()
     ::std::list< String >* pList = &m_aPrinterCommands;
     if( bExternalDialog )
     {
-        if( aFeatures.Len() )
-            aFeatures += ',';
-        aFeatures.AppendAscii( "external_dialog" );
+        if( aFeatures.isEmpty() )
+            aFeatures += ",";
+        aFeatures += "external_dialog" ;
     }
     if( bHaveFax )
     {
-        if( aFeatures.Len() )
-            aFeatures += ',';
-        aFeatures.AppendAscii( "fax=" );
+        if( aFeatures.isEmpty() )
+            aFeatures += ",";
+        aFeatures += "fax=" ;
         if( bFaxSwallow )
-            aFeatures.AppendAscii( "swallow" );
+            aFeatures +=  "swallow" ;
         pList = &m_aFaxCommands;
     }
     if( bHavePdf )
     {
-        if( aFeatures.Len() )
-            aFeatures += ',';
-        aFeatures.AppendAscii( "pdf=" );
-        aFeatures.Append( m_aPdfDirectoryEdit.GetText() );
+        if( aFeatures.isEmpty() )
+            aFeatures += ",";
+        aFeatures += "pdf=" ;
+        aFeatures += m_aPdfDirectoryEdit.GetText() ;
         pList = &m_aPdfCommands;
     }
     aCommand = m_aCommandsCB.GetText();
@@ -433,7 +431,7 @@ IMPL_LINK( RTSCommandPage, ClickBtnHdl, Button*, pButton )
 {
     if( pButton == & m_aPdfDirectoryButton )
     {
-        String aPath( m_aPdfDirectoryEdit.GetText() );
+        OUString aPath( m_aPdfDirectoryEdit.GetText() );
         if( chooseDirectory( aPath ) )
             m_aPdfDirectoryEdit.SetText( aPath );
     }
