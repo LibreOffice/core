@@ -38,9 +38,6 @@
 // #define this to a non-zero value, if remembering defaults is not supported properly
 #define RTL_BOOTSTRAP_DEFAULTS_BROKEN 1
 
-// ---------------------------------------------------------------------------------------
-#define BOOTSTRAP_DATA_NAME                 SAL_CONFIGFILE("bootstrap")
-
 #define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
 #define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
 #define BOOTSTRAP_ITEM_BUILDID              "buildid"
@@ -76,7 +73,7 @@ namespace utl
         {
             OUString uri;
             rtl::Bootstrap::get( OUString("BRAND_BASE_DIR"), uri);
-            return uri + "/program/" + BOOTSTRAP_DATA_NAME;
+            return uri + "/program/" SAL_CONFIGFILE("bootstrap");
         }
     }
 
@@ -789,7 +786,7 @@ sal_Bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rVa
     // try to open version.ini (versionrc)
     OUString uri;
     rtl::Bootstrap::get( OUString("BRAND_BASE_DIR"), uri);
-    rtl::Bootstrap aData( uri + "/program/" + SAL_CONFIGFILE("version") );
+    rtl::Bootstrap aData( uri + "/program/" SAL_CONFIGFILE("version") );
     if ( aData.getHandle() == NULL )
         // version.ini (versionrc) doesn't exist
         return sal_False;
