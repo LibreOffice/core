@@ -88,7 +88,7 @@ bool QuickDiagrammingImport::importDocument() throw()
     pShape->addShape( *this,
                       pTheme.get(),
                       xParentShape,
-                      aMatrix );
+                      aMatrix, pShape->getFillProperties() );
 
     return true;
 }
