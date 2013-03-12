@@ -15,8 +15,12 @@ $(call gb_CustomTarget_get_target,android/sdremote) : $(sdremote_DIR)/done
 $(sdremote_DIR)/done:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MAK,2)
 	cd $(SRCDIR)/android/sdremote && $(MAKE) all
-	mkdir -p $(WORKDIR)/installation/bin
-	cp $(SRCDIR)/android/sdremote/bin/ImpressRemote-debug.apk $(WORKDIR)/installation/bin
+# If SRCDIR==BUILDDIR, copy to $(SRCDIR)/instsetoo_native/$(INPATH)/bin as that is where the tinderbox build script
+# still looks for the .apk, and we want fresh daily builds to be uploaded.
+	if test $(SRCDIR) = $(BUILDDIR); then \
+		mkdir -p $(SRCDIR)/instsetoo_native/$(INPATH)/bin; \
+		cp $(SRCDIR)/android/sdremote/bin/ImpressRemote-debug.apk $(SRCDIR)/instsetoo_native/$(INPATH)/bin; \
+	fi
 
 $(call gb_CustomTarget_get_clean_target,android/sdremote) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),MAK,2)
