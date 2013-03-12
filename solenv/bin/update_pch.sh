@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+# Usage: update_pch.sh [precompiled_xxx.hxx]
+
 root=`dirname $0`
 root=`cd $root/../.. && pwd`
 
@@ -19,7 +21,7 @@ fi
 for x in $headers; do
     header=$x
     echo updating `echo $header | sed -e s%$root/%%`
-    module=`echo $header | sed -e s%$root/%% -e s%/.*%%`
+    module=`readlink -f $header | sed -e s%$root/%% -e s%/.*%%`
     name=`echo $header | sed -e s/.*precompiled_// -e s/\.hxx//`
     makefile="Library_$name.mk"
 
