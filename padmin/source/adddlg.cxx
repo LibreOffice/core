@@ -526,7 +526,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         // read the command
         aConfig.SetGroup( "ports" );
         rtl::OString aCommand( aConfig.ReadKey( aPort ) );
-        if (aCommand.isEmpty())
+        if (!aCommand.isEmpty())
         {
             OUString aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
             aText.replaceFirst( OUString(  "%s"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
