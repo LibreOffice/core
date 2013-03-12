@@ -195,6 +195,7 @@ void Shape::addShape(
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
         basegfx::B2DHomMatrix& aTransformation,
+        FillProperties& rShapeOrParentShapeFillProps,
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
 {
@@ -206,7 +207,7 @@ void Shape::addShape(
         if( !sServiceName.isEmpty() )
         {
             basegfx::B2DHomMatrix aMatrix( aTransformation );
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False, sal_False, aMatrix ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, sal_False, sal_False, aMatrix, rShapeOrParentShapeFillProps ) );
 
             if( pShapeMap && !msId.isEmpty() )
             {
@@ -311,7 +312,7 @@ void Shape::addChildren(
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
     while( aIter != rMaster.maChildren.end() ) {
         (*aIter)->setMasterTextListStyle( mpMasterTextListStyle );
-        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, NULL, pShapeMap );
+        (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), NULL, pShapeMap );
     }
 }
 
@@ -323,7 +324,8 @@ Reference< XShape > Shape::createAndInsert(
         const awt::Rectangle* /* pShapeRect */,
         sal_Bool bClearText,
         sal_Bool bDoNotInsertEmptyTextBody,
-        basegfx::B2DHomMatrix& aParentTransformation )
+        basegfx::B2DHomMatrix& aParentTransformation,
+        FillProperties& rShapeOrParentShapeFillProps )
 {
     bool bIsEmbMedia = false;
     SAL_INFO("oox", OSL_THIS_FUNC << " id: " << msId);
@@ -515,7 +517,12 @@ Reference< XShape > Shape::createAndInsert(
         }
 
         aLineProperties.assignUsed( getLineProperties() );
-        aFillProperties.assignUsed( getFillProperties() );
+
+        // group fill inherits from parent
+        if ( getFillProperties().moFillType.has() && getFillProperties().moFillType.get() == XML_grpFill )
+            aFillProperties.assignUsed( rShapeOrParentShapeFillProps );
+        else
+            aFillProperties.assignUsed( getFillProperties() );
         aEffectProperties.assignUsed ( getEffectProperties() );
 
         ShapePropertyMap aShapeProps( rFilterBase.getModelObjectHelper() );
