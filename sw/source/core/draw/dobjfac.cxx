@@ -23,23 +23,16 @@
 
 SwObjectFactory aSwObjectFactory;
 
-/*************************************************************************
-|*
-|* void SwObjectFactory::MakeObject()
-|*
-\************************************************************************/
-
 IMPL_LINK( SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory )
 {
     if ( pObjFactory->nInventor == SWGInventor )
     {
-        //Kein switch, derzeit gibt es nur einen.
+        // No switch, there's only one at the moment
         OSL_ENSURE( pObjFactory->nIdentifier == SwFlyDrawObjIdentifier,
-                                        "Falscher Inventor oder identifier." );
+                                        "Wrong inventor or identifier" );
         pObjFactory->pNewObj = new SwFlyDrawObj();
     }
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
