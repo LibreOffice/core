@@ -10,6 +10,7 @@
 $(eval $(call gb_UI_UI,modules/simpress))
 
 $(eval $(call gb_UI_add_uifiles,modules/simpress,\
+	sd/uiconfig/simpress/ui/presentationdialog \
 	sd/uiconfig/simpress/ui/printeroptions \
 ))
 
