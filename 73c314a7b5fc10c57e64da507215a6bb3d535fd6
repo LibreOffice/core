@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///wI\u003d",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-12T20:24:02Z",
+      "side": 1,
+      "message": "Remove the words \"already now\"",
+      "revId": "73c314a7b5fc10c57e64da507215a6bb3d535fd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///wE\u003d",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2013-03-12T20:24:02Z",
+      "side": 1,
+      "message": "Don\u0027t subtotal rows?",
+      "revId": "73c314a7b5fc10c57e64da507215a6bb3d535fd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
