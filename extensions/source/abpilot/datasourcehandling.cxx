@@ -209,6 +209,10 @@ namespace abp
             OSL_FAIL( "ODataSourceContext::ODataSourceContext: caught an exception!" );
         }
     }
+    ODataSourceContext::~ODataSourceContext()
+    {
+        delete(m_pImpl);
+    }
 
     //---------------------------------------------------------------------
     ::rtl::OUString& ODataSourceContext::disambiguate(::rtl::OUString& _rDataSourceName)

@@ -56,6 +56,7 @@ namespace abp
         ODataSourceContext(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         );
+        ~ODataSourceContext();
 
         /// retrieves the names of all data sources
         void    getDataSourceNames( StringBag& _rNames ) const SAL_THROW (( ));
