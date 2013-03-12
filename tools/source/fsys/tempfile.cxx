@@ -59,7 +59,7 @@ OUString ConstructTempDir_Impl()
     // use system directory
     ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
     if ( rTempNameBase_Impl.isEmpty() )
-        rTempNameBase_Impl = GetSystemTempDirPath_Impl();
+        osl::FileBase::getTempDirURL( rTempNameBase_Impl );
     OUString aName = rTempNameBase_Impl;
 
     // Make sure that directory ends with a separator
