@@ -59,14 +59,16 @@ namespace dxcanvas
                        const ::com::sun::star::uno::Reference<
                                ::com::sun::star::rendering::XCanvasFont >&  rCanvasFont,
                        const ::com::sun::star::geometry::Matrix2D&          rFontMatrix,
-                       bool                                                 bAlphaSurface );
+                       bool                                                 bAlphaSurface,
+                       sal_Int8                                             nTextDirection);
 
         ::com::sun::star::geometry::RealRectangle2D queryTextBounds(
             const ::com::sun::star::rendering::StringContext&   rText,
             const ::com::sun::star::uno::Sequence< double >&    rLogicalAdvancements,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XCanvasFont >&     rCanvasFont,
-              const ::com::sun::star::geometry::Matrix2D&       rFontMatrix );
+              const ::com::sun::star::geometry::Matrix2D&       rFontMatrix,
+              sal_Int8                                          nTextDirection );
 
 #ifdef DBG_UTIL
         void test();

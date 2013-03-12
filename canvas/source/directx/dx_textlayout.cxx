@@ -119,7 +119,8 @@ namespace dxcanvas
                 maText,
                 maLogicalAdvancements,
                 mpFont.getRef(),
-                mpFont->getFontMatrix()));
+                mpFont->getFontMatrix(),
+                mnTextDirection ));
 
         return aBounds;
     }
@@ -247,7 +248,8 @@ namespace dxcanvas
             maLogicalAdvancements,
             mpFont.getRef(),
             mpFont->getFontMatrix(),
-            bAlphaSurface);
+            bAlphaSurface,
+            mnTextDirection );
 
         return true;
     }
