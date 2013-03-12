@@ -30,7 +30,6 @@
 
 #include "sdattr.hxx"
 #include "present.hxx"
-#include "present.hrc"
 #include "sdresid.hxx"
 #include "cusshow.hxx"
 #include "customshowlist.hxx"
@@ -45,71 +44,61 @@ using namespace ::com::sun::star::beans;
 SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                                   const SfxItemSet& rInAttrs,
                                   const std::vector<String> &rPageNames, SdCustomShowList* pCSList ) :
-                ModalDialog     ( pWindow, SdResId( DLG_START_PRESENTATION ) ),
-                aGrpRange               ( this, SdResId( GRP_RANGE ) ),
-                aRbtAll                 ( this, SdResId( RBT_ALL ) ),
-                aRbtAtDia               ( this, SdResId( RBT_AT_DIA ) ),
-                aRbtCustomshow          ( this, SdResId( RBT_CUSTOMSHOW ) ),
-                aLbDias                 ( this, SdResId( LB_DIAS ) ),
-                aLbCustomshow           ( this, SdResId( LB_CUSTOMSHOW ) ),
-
-                aGrpKind                ( this, SdResId( GRP_KIND ) ),
-                aRbtStandard            ( this, SdResId( RBT_STANDARD ) ),
-                aRbtWindow              ( this, SdResId( RBT_WINDOW ) ),
-                aRbtAuto                ( this, SdResId( RBT_AUTO ) ),
-                aTmfPause               ( this, SdResId( TMF_PAUSE ) ),
-                aCbxAutoLogo            ( this, SdResId( CBX_AUTOLOGO ) ),
-
-                aGrpOptions             ( this, SdResId( GRP_OPTIONS ) ),
-                aCbxManuel              ( this, SdResId( CBX_MANUEL ) ),
-                aCbxMousepointer        ( this, SdResId( CBX_MOUSEPOINTER ) ),
-                aCbxPen                 ( this, SdResId( CBX_PEN ) ),
-                aCbxNavigator           ( this, SdResId( CBX_NAVIGATOR ) ),
-                aCbxAnimationAllowed    ( this, SdResId( CBX_ANIMATION_ALLOWED ) ),
-                aCbxChangePage          ( this, SdResId( CBX_CHANGE_PAGE ) ),
-                aCbxAlwaysOnTop         ( this, SdResId( CBX_ALWAYS_ON_TOP ) ),
-
-                maGrpMonitor            ( this, SdResId( GRP_MONITOR ) ),
-                maFtMonitor             ( this, SdResId( FT_MONITOR ) ),
-                maLBMonitor             ( this, SdResId( LB_MONITOR ) ),
-
-                aBtnOK                  ( this, SdResId( BTN_OK ) ),
-                aBtnCancel              ( this, SdResId( BTN_CANCEL ) ),
-                aBtnHelp                ( this, SdResId( BTN_HELP ) ),
-
+                ModalDialog     ( pWindow, "PresentationDialog", "modules/simpress/ui/presentationdialog.ui" ),
                 pCustomShowList         ( pCSList ),
                 rOutAttrs               ( rInAttrs ),
-                mnMonitors              ( 0 ),
-
-                msExternalMonitor( SdResId(STR_EXTERNAL_MONITOR ) ),
-                msMonitor( SdResId( STR_MONITOR ) ),
-                msAllMonitors( SdResId( STR_ALL_MONITORS ) )
+                mnMonitors              ( 0 )
 {
-    FreeResource();
+    get( aRbtAll,               "allslides"             );
+    get( aRbtAtDia,             "from"                  );
+    get( aRbtCustomshow,        "customslideshow"       );
+    get( aLbDias,               "from_cb"               );
+    get( aLbCustomshow,         "customslideshow_cb"    );
+
+    get( aRbtStandard,          "default"               );
+    get( aRbtWindow,            "window"                );
+    get( aRbtAuto,              "auto"                  );
+    get( aTmfPause,             "pauseduration"         );
+    get( aCbxAutoLogo,          "showlogo"              );
+
+    get( aCbxManuel,            "manualslides"          );
+    get( aCbxMousepointer,      "pointervisible"        );
+    get( aCbxPen,               "pointeraspen"          );
+    get( aCbxNavigator,         "navigatorvisible"      );
+    get( aCbxAnimationAllowed,  "animationsallowed"     );
+    get( aCbxChangePage,        "changeslidesbyclick"   );
+    get( aCbxAlwaysOnTop,       "alwaysontop"           );
+
+    get( maFtMonitor,           "presdisplay_label"     );
+    get( maLBMonitor,           "presdisplay_cb"        );
+
+    get( msExternalMonitor,     "externalmonitor_str"   );
+    get( msMonitor,             "monitor_str"           );
+    get( msAllMonitors,         "allmonitors_str"       );
 
     Link aLink( LINK( this, SdStartPresentationDlg, ChangeRangeHdl ) );
 
-    aRbtAll.SetClickHdl( aLink );
-    aRbtAtDia.SetClickHdl( aLink );
-    aRbtCustomshow.SetClickHdl( aLink );
+    aRbtAll->SetClickHdl( aLink );
+    aRbtAtDia->SetClickHdl( aLink );
+    aRbtCustomshow->SetClickHdl( aLink );
 
     aLink = LINK( this, SdStartPresentationDlg, ClickWindowPresentationHdl );
-    aRbtStandard.SetClickHdl( aLink );
-    aRbtWindow.SetClickHdl( aLink );
-    aRbtAuto.SetClickHdl( aLink );
+    aRbtStandard->SetClickHdl( aLink );
+    aRbtWindow->SetClickHdl( aLink );
+    aRbtAuto->SetClickHdl( aLink );
 
-    aTmfPause.SetModifyHdl( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
-    aTmfPause.SetFormat( TIMEF_SEC );
+    aTmfPause->SetModifyHdl( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
+    aTmfPause->SetFormat( TIMEF_SEC );
 
-    aLbDias.SetAccessibleRelationLabeledBy( &aRbtAtDia );
-    aLbDias.SetAccessibleName(aRbtAtDia.GetText());
-    aLbCustomshow.SetAccessibleRelationLabeledBy( &aRbtCustomshow );
-    aTmfPause.SetAccessibleRelationLabeledBy( &aRbtAuto );
-    aTmfPause.SetAccessibleName(aRbtAuto.GetText());
+    aLbDias->SetAccessibleRelationLabeledBy( aRbtAtDia );
+    aLbDias->SetAccessibleName(aRbtAtDia->GetText());
+    aLbCustomshow->SetAccessibleRelationLabeledBy( aRbtCustomshow );
+    aTmfPause->SetAccessibleRelationLabeledBy( aRbtAuto );
+    aTmfPause->SetAccessibleName(aRbtAuto->GetText());
 
     // fill Listbox with page names
     for (std::vector<String>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
-        aLbDias.InsertEntry(*pIter);
+        aLbDias->InsertEntry(*pIter);
 
     if( pCustomShowList )
     {
@@ -120,48 +109,48 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
              pCustomShow != NULL;
              pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
         {
-            aLbCustomshow.InsertEntry( pCustomShow->GetName() );
+            aLbCustomshow->InsertEntry( pCustomShow->GetName() );
         }
-        aLbCustomshow.SelectEntryPos( nPosToSelect );
+        aLbCustomshow->SelectEntryPos( nPosToSelect );
         pCustomShowList->Seek( nPosToSelect );
     }
     else
-        aRbtCustomshow.Disable();
+        aRbtCustomshow->Disable();
 
     if( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_CUSTOMSHOW ) ).GetValue() && pCSList )
-        aRbtCustomshow.Check();
+        aRbtCustomshow->Check();
     else if( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ALL ) ).GetValue() )
-        aRbtAll.Check();
+        aRbtAll->Check();
     else
-        aRbtAtDia.Check();
+        aRbtAtDia->Check();
 
-    aLbDias.SelectEntry( ( ( const SfxStringItem& ) rOutAttrs.Get( ATTR_PRESENT_DIANAME ) ).GetValue() );
-    aCbxManuel.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_MANUEL ) ).GetValue() );
-    aCbxMousepointer.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_MOUSE ) ).GetValue() );
-    aCbxPen.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_PEN ) ).GetValue() );
-    aCbxNavigator.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_NAVIGATOR ) ).GetValue() );
-    aCbxAnimationAllowed.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ANIMATION_ALLOWED ) ).GetValue() );
-    aCbxChangePage.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_CHANGE_PAGE ) ).GetValue() );
-    aCbxAlwaysOnTop.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ALWAYS_ON_TOP ) ).GetValue() );
+    aLbDias->SelectEntry( ( ( const SfxStringItem& ) rOutAttrs.Get( ATTR_PRESENT_DIANAME ) ).GetValue() );
+    aCbxManuel->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_MANUEL ) ).GetValue() );
+    aCbxMousepointer->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_MOUSE ) ).GetValue() );
+    aCbxPen->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_PEN ) ).GetValue() );
+    aCbxNavigator->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_NAVIGATOR ) ).GetValue() );
+    aCbxAnimationAllowed->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ANIMATION_ALLOWED ) ).GetValue() );
+    aCbxChangePage->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_CHANGE_PAGE ) ).GetValue() );
+    aCbxAlwaysOnTop->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ALWAYS_ON_TOP ) ).GetValue() );
 
     const sal_Bool  bEndless = ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_ENDLESS ) ).GetValue();
     const sal_Bool  bWindow = !( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_FULLSCREEN ) ).GetValue();
     const long  nPause = ( ( const SfxUInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_PAUSE_TIMEOUT ) ).GetValue();
 
-    aTmfPause.SetTime( Time( 0, 0, nPause ) );
+    aTmfPause->SetTime( Time( 0, 0, nPause ) );
     // set cursor in timefield
-    Edit *pEdit = aTmfPause.GetField();
+    Edit *pEdit = aTmfPause->GetField();
     Selection aSel( pEdit->GetMaxTextLen(), pEdit->GetMaxTextLen() );
     pEdit->SetSelection( aSel );
 
-    aCbxAutoLogo.Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_SHOW_PAUSELOGO ) ).GetValue() );
+    aCbxAutoLogo->Check( ( ( const SfxBoolItem& ) rOutAttrs.Get( ATTR_PRESENT_SHOW_PAUSELOGO ) ).GetValue() );
 
     if( bWindow )
-        aRbtWindow.Check( sal_True );
+        aRbtWindow->Check( sal_True );
     else if( bEndless )
-        aRbtAuto.Check( sal_True );
+        aRbtAuto->Check( sal_True );
     else
-        aRbtStandard.Check( sal_True );
+        aRbtStandard->Check( sal_True );
 
     InitMonitorSettings();
 
@@ -175,16 +164,15 @@ void SdStartPresentationDlg::InitMonitorSettings()
 {
     try
     {
-        maGrpMonitor.Show( true );
-        maFtMonitor.Show( true );
-        maLBMonitor.Show( true );
+        maFtMonitor->Show( true );
+        maLBMonitor->Show( true );
 
         mnMonitors = Application::GetScreenCount();
 
         if( mnMonitors <= 1 )
         {
-            maFtMonitor.Enable( false );
-            maLBMonitor.Enable( false );
+            maFtMonitor->Enable( false );
+            maLBMonitor->Enable( false );
         }
         else
         {
@@ -198,14 +186,16 @@ void SdStartPresentationDlg::InitMonitorSettings()
             const String sPlaceHolder( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
-                String aName( nDisplay == nExternalIndex ? msExternalMonitor : msMonitor );
+                String aName( nDisplay == nExternalIndex ?
+                    msExternalMonitor->GetText() :
+                    msMonitor->GetText() );
                 const String aNumber( OUString::number( nDisplay + 1 ) );
                 aName.SearchAndReplace( sPlaceHolder, aNumber );
-                maLBMonitor.InsertEntry( aName );
+                maLBMonitor->InsertEntry( aName );
 
                 // Store display index together with name.
-                const sal_uInt32 nEntryIndex (maLBMonitor.GetEntryCount()-1);
-                maLBMonitor.SetEntryData(nEntryIndex, (void*)(sal_IntPtr)nDisplay);
+                const sal_uInt32 nEntryIndex (maLBMonitor->GetEntryCount()-1);
+                maLBMonitor->SetEntryData(nEntryIndex, (void*)(sal_IntPtr)nDisplay);
 
                 // Remember the index of the default selection.
                 if (nDefaultSelectedDisplay == nDisplay)
@@ -218,9 +208,9 @@ void SdStartPresentationDlg::InitMonitorSettings()
 
             if( bUnifiedDisplay )
             {
-                maLBMonitor.InsertEntry( msAllMonitors );
-                const sal_uInt32 nEntryIndex (maLBMonitor.GetEntryCount()-1);
-                maLBMonitor.SetEntryData(nEntryIndex, (void*)-1);
+                maLBMonitor->InsertEntry( msAllMonitors->GetText() );
+                const sal_uInt32 nEntryIndex (maLBMonitor->GetEntryCount()-1);
+                maLBMonitor->SetEntryData(nEntryIndex, (void*)-1);
                 if (nDefaultSelectedDisplay == -1)
                     nSelectedIndex = nEntryIndex;
             }
@@ -233,7 +223,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
                     nSelectedIndex = nDefaultExternalIndex;
             }
 
-            maLBMonitor.SelectEntryPos((sal_uInt16)nSelectedIndex);
+            maLBMonitor->SelectEntryPos((sal_uInt16)nSelectedIndex);
         }
     }
     catch( Exception& )
@@ -246,26 +236,26 @@ void SdStartPresentationDlg::InitMonitorSettings()
  */
 void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
 {
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ALL, aRbtAll.IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_CUSTOMSHOW, aRbtCustomshow.IsChecked() ) );
-    rAttr.Put( SfxStringItem ( ATTR_PRESENT_DIANAME, aLbDias.GetSelectEntry() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_MANUEL, aCbxManuel.IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_MOUSE, aCbxMousepointer.IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_PEN, aCbxPen.IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_NAVIGATOR, aCbxNavigator.IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ANIMATION_ALLOWED, aCbxAnimationAllowed.IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_CHANGE_PAGE, aCbxChangePage.IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ALWAYS_ON_TOP, aCbxAlwaysOnTop.IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_FULLSCREEN, !aRbtWindow.IsChecked() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ENDLESS, aRbtAuto.IsChecked() ) );
-    rAttr.Put( SfxUInt32Item ( ATTR_PRESENT_PAUSE_TIMEOUT, aTmfPause.GetTime().GetMSFromTime() / 1000 ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_SHOW_PAUSELOGO, aCbxAutoLogo.IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ALL, aRbtAll->IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_CUSTOMSHOW, aRbtCustomshow->IsChecked() ) );
+    rAttr.Put( SfxStringItem ( ATTR_PRESENT_DIANAME, aLbDias->GetSelectEntry() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_MANUEL, aCbxManuel->IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_MOUSE, aCbxMousepointer->IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_PEN, aCbxPen->IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_NAVIGATOR, aCbxNavigator->IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ANIMATION_ALLOWED, aCbxAnimationAllowed->IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_CHANGE_PAGE, aCbxChangePage->IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ALWAYS_ON_TOP, aCbxAlwaysOnTop->IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_FULLSCREEN, !aRbtWindow->IsChecked() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ENDLESS, aRbtAuto->IsChecked() ) );
+    rAttr.Put( SfxUInt32Item ( ATTR_PRESENT_PAUSE_TIMEOUT, aTmfPause->GetTime().GetMSFromTime() / 1000 ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_SHOW_PAUSELOGO, aCbxAutoLogo->IsChecked() ) );
 
-    sal_uInt16 nPos = maLBMonitor.GetSelectEntryPos();
+    sal_uInt16 nPos = maLBMonitor->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, (sal_Int32)(sal_IntPtr)maLBMonitor.GetEntryData(nPos)) );
+        rAttr.Put( SfxInt32Item ( ATTR_PRESENT_DISPLAY, (sal_Int32)(sal_IntPtr)maLBMonitor->GetEntryData(nPos)) );
 
-    nPos = aLbCustomshow.GetSelectEntryPos();
+    nPos = aLbCustomshow->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
         pCustomShowList->Seek( nPos );
 }
@@ -275,8 +265,8 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
  */
 IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl)
 {
-    aLbDias.Enable( aRbtAtDia.IsChecked() );
-    aLbCustomshow.Enable( aRbtCustomshow.IsChecked() );
+    aLbDias->Enable( aRbtAtDia->IsChecked() );
+    aLbCustomshow->Enable( aRbtCustomshow->IsChecked() );
 
     return( 0L );
 }
@@ -286,24 +276,24 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl)
  */
 IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
 {
-    const bool bAuto = aRbtAuto.IsChecked();
-    const bool bWindow = aRbtWindow.IsChecked();
+    const bool bAuto = aRbtAuto->IsChecked();
+    const bool bWindow = aRbtWindow->IsChecked();
 
     // aFtPause.Enable( bAuto );
-    aTmfPause.Enable( bAuto );
-    aCbxAutoLogo.Enable( bAuto && ( aTmfPause.GetTime().GetMSFromTime() > 0 ) );
+    aTmfPause->Enable( bAuto );
+    aCbxAutoLogo->Enable( bAuto && ( aTmfPause->GetTime().GetMSFromTime() > 0 ) );
 
     const bool bDisplay = !bWindow && ( mnMonitors > 1 );
-    maFtMonitor.Enable( bDisplay );
-    maLBMonitor.Enable( bDisplay );
+    maFtMonitor->Enable( bDisplay );
+    maLBMonitor->Enable( bDisplay );
 
     if( bWindow )
     {
-        aCbxAlwaysOnTop.Enable( sal_False );
-        aCbxAlwaysOnTop.Check( sal_False );
+        aCbxAlwaysOnTop->Enable( sal_False );
+        aCbxAlwaysOnTop->Check( sal_False );
     }
     else
-        aCbxAlwaysOnTop.Enable();
+        aCbxAlwaysOnTop->Enable();
 
     return( 0L );
 }
@@ -313,7 +303,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
  */
 IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl)
 {
-    aCbxAutoLogo.Enable( aRbtAuto.IsChecked() && ( aTmfPause.GetTime().GetMSFromTime() > 0 ) );
+    aCbxAutoLogo->Enable( aRbtAuto->IsChecked() && ( aTmfPause->GetTime().GetMSFromTime() > 0 ) );
     return( 0L );
 }
 

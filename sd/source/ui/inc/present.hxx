@@ -38,44 +38,36 @@ class SdStartPresentationDlg : public ModalDialog
 {
 private:
 
-    FixedLine           aGrpRange;
-    RadioButton         aRbtAll;
-    RadioButton         aRbtAtDia;
-    RadioButton         aRbtCustomshow;
-    ListBox             aLbDias;
-    ListBox             aLbCustomshow;
+    RadioButton*        aRbtAll;
+    RadioButton*        aRbtAtDia;
+    RadioButton*        aRbtCustomshow;
+    ListBox*            aLbDias;
+    ListBox*            aLbCustomshow;
 
-    FixedLine           aGrpKind;
-    RadioButton         aRbtStandard;
-    RadioButton         aRbtWindow;
-    RadioButton         aRbtAuto;
-    TimeField           aTmfPause;
-    CheckBox            aCbxAutoLogo;
+    RadioButton*        aRbtStandard;
+    RadioButton*        aRbtWindow;
+    RadioButton*        aRbtAuto;
+    TimeField*          aTmfPause;
+    CheckBox*           aCbxAutoLogo;
 
-    FixedLine           aGrpOptions;
-    CheckBox            aCbxManuel;
-    CheckBox            aCbxMousepointer;
-    CheckBox            aCbxPen;
-    CheckBox            aCbxNavigator;
-    CheckBox            aCbxAnimationAllowed;
-    CheckBox            aCbxChangePage;
-    CheckBox            aCbxAlwaysOnTop;
+    CheckBox*           aCbxManuel;
+    CheckBox*           aCbxMousepointer;
+    CheckBox*           aCbxPen;
+    CheckBox*           aCbxNavigator;
+    CheckBox*           aCbxAnimationAllowed;
+    CheckBox*           aCbxChangePage;
+    CheckBox*           aCbxAlwaysOnTop;
 
-    FixedLine           maGrpMonitor;
-    FixedText           maFtMonitor;
-    ListBox             maLBMonitor;
-
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
+    FixedText*          maFtMonitor;
+    ListBox*            maLBMonitor;
 
     SdCustomShowList*   pCustomShowList;
     const SfxItemSet&   rOutAttrs;
     sal_Int32           mnMonitors;
 
-    String              msExternalMonitor;
-    String              msMonitor;
-    String              msAllMonitors;
+    FixedText*          msExternalMonitor;
+    FixedText*          msMonitor;
+    FixedText*          msAllMonitors;
 
                         DECL_LINK( ChangeRangeHdl, void * );
                         DECL_LINK( ClickWindowPresentationHdl, void * );
