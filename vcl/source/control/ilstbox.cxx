@@ -376,9 +376,9 @@ long ImplEntryList::GetEntryHeight( sal_uInt16 nPos ) const
 
 // -----------------------------------------------------------------------
 
-XubString ImplEntryList::GetEntryText( sal_uInt16 nPos ) const
+OUString ImplEntryList::GetEntryText( sal_uInt16 nPos ) const
 {
-    XubString aEntryText;
+    OUString aEntryText;
     ImplEntryType* pImplEntry = GetEntry( nPos );
     if ( pImplEntry )
         aEntryText = pImplEntry->maStr;
@@ -457,7 +457,7 @@ sal_uInt16 ImplEntryList::GetSelectEntryCount() const
 
 // -----------------------------------------------------------------------
 
-XubString ImplEntryList::GetSelectEntry( sal_uInt16 nIndex ) const
+OUString ImplEntryList::GetSelectEntry( sal_uInt16 nIndex ) const
 {
     return GetEntryText( GetSelectEntryPos( nIndex ) );
 }
@@ -672,7 +672,7 @@ struct ImplEntryMetrics
 void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 {
     ImplEntryMetrics aMetrics;
-    aMetrics.bText = rEntry.maStr.Len() ? sal_True : sal_False;
+    aMetrics.bText = !rEntry.maStr.isEmpty() ? sal_True : sal_False;
     aMetrics.bImage = !!rEntry.maImage;
     aMetrics.nEntryWidth = 0;
     aMetrics.nEntryHeight = 0;
@@ -2268,7 +2268,7 @@ void ImplListBox::Clear()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const XubString& rStr )
+sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const OUString& rStr )
 {
     ImplEntryType* pNewEntry = new ImplEntryType( rStr );
     sal_uInt16 nNewPos = maLBWindow.InsertEntry( nPos, pNewEntry );
@@ -2288,7 +2288,7 @@ sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const Image& rImage )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const XubString& rStr, const Image& rImage )
+sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const OUString& rStr, const Image& rImage )
 {
     ImplEntryType* pNewEntry = new ImplEntryType( rStr, rImage );
     sal_uInt16 nNewPos = maLBWindow.InsertEntry( nPos, pNewEntry );
@@ -2697,14 +2697,14 @@ void ImplListBox::SetMRUEntries( const rtl::OUString& rEntries, sal_Unicode cSep
 
 rtl::OUString ImplListBox::GetMRUEntries( sal_Unicode cSep ) const
 {
-    String aEntries;
+    OUStringBuffer aEntries;
     for ( sal_uInt16 n = 0; n < GetEntryList()->GetMRUCount(); n++ )
     {
-        aEntries += GetEntryList()->GetEntryText( n );
+        aEntries.append(GetEntryList()->GetEntryText( n ));
         if( n < ( GetEntryList()->GetMRUCount() - 1 ) )
-            aEntries += cSep;
+            aEntries.append(cSep);
     }
-    return aEntries;
+    return aEntries.makeStringAndClear();
 }
 
 // =======================================================================
@@ -2920,7 +2920,7 @@ void ImplWin::DrawEntry( sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDraw
         }
     }
 
-    if( bDrawText && maString.Len() )
+    if( bDrawText && !maString.isEmpty() )
     {
         sal_uInt16 nTextStyle = TEXT_DRAW_VCENTER;
 
