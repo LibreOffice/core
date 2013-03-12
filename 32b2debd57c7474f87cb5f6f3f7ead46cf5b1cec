@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///xs\u003d",
+        "filename": "rsc/source/rsc/rsc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-12T17:03:23Z",
+      "side": 1,
+      "message": "\"Immer im Aktuellen Pfad suchen\" means \"Search always in current path\".\naPath \u003d \".\" here, it is not an empty string. I guess \naPath \u003d OString(\".\"); \nis safe to use under Unix/Windows, maybe it was different on some exotic platforms that we no longer support.",
+      "revId": "32b2debd57c7474f87cb5f6f3f7ead46cf5b1cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///xk\u003d",
+        "filename": "rsc/source/rsc/rsc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-12T17:03:23Z",
+      "side": 1,
+      "message": "We pass full paths to rsc after the -sub switch. See solenv/gbuild/AllLangResTarget.mk You do not need convert the path, just use it as is.",
+      "revId": "32b2debd57c7474f87cb5f6f3f7ead46cf5b1cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///xg\u003d",
+        "filename": "svx/source/gengal/gengal.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-12T17:03:23Z",
+      "side": 1,
+      "message": "Just delete, do not put into comment.",
+      "revId": "32b2debd57c7474f87cb5f6f3f7ead46cf5b1cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
