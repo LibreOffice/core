@@ -274,7 +274,7 @@ static sal_Bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )  // Fo
 //  ----------------------------------------------------------------------
 void ImpEditEngine::UpdateViews( EditView* pCurView )
 {
-    if ( !GetUpdateMode() || IsFormatting() || aInvalidRec.IsEmpty() )
+    if ( !GetUpdateMode() || IsFormatting() || aInvalidRect.IsEmpty() )
         return;
 
     DBG_ASSERT( IsFormatted(), "UpdateViews: Doc not formatted!" );
@@ -285,19 +285,19 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
         DBG_CHKOBJ( pView, EditView, 0 );
         pView->HideCursor();
 
-        Rectangle aClipRec( aInvalidRec );
+        Rectangle aClipRect( aInvalidRect );
         Rectangle aVisArea( pView->GetVisArea() );
-        aClipRec.Intersection( aVisArea );
+        aClipRect.Intersection( aVisArea );
 
-        if ( !aClipRec.IsEmpty() )
+        if ( !aClipRect.IsEmpty() )
         {
             // convert to window coordinates ....
-            aClipRec = pView->pImpEditView->GetWindowPos( aClipRec );
+            aClipRect = pView->pImpEditView->GetWindowPos( aClipRect );
 
             if ( pView == pCurView )
-                Paint( pView->pImpEditView, aClipRec, 0, sal_True );
+                Paint( pView->pImpEditView, aClipRect, 0, sal_True );
             else
-                pView->GetWindow()->Invalidate( aClipRec );
+                pView->GetWindow()->Invalidate( aClipRect );
         }
     }
 
@@ -307,7 +307,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
         pCurView->ShowCursor( bGotoCursor );
     }
 
-    aInvalidRec = Rectangle();
+    aInvalidRect = Rectangle();
     CallStatusHdl();
 }
 
@@ -377,7 +377,7 @@ void ImpEditEngine::FormatDoc()
     // Here already, so that not always in CreateLines...
     sal_Bool bMapChanged = ImpCheckRefMapMode();
 
-    aInvalidRec = Rectangle();  // make empty
+    aInvalidRect = Rectangle();  // make empty
     for ( sal_uInt16 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
     {
         ParaPortion* pParaPortion = GetParaPortions()[nPara];
@@ -412,23 +412,23 @@ void ImpEditEngine::FormatDoc()
                 pParaPortion->SetMustRepaint( sal_False );
             }
 
-            // InvalidRec set only once...
-            if ( aInvalidRec.IsEmpty() )
+            // InvalidRect set only once...
+            if ( aInvalidRect.IsEmpty() )
             {
                 // For Paperwidth 0 (AutoPageSize) it would otherwise be Empty()...
                 long nWidth = Max( (long)1, ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() ) );
                 Range aInvRange( GetInvalidYOffsets( pParaPortion ) );
-                aInvalidRec = Rectangle( Point( 0, nY+aInvRange.Min() ),
+                aInvalidRect = Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
             }
             else
             {
-                aInvalidRec.Bottom() = nY + pParaPortion->GetHeight();
+                aInvalidRect.Bottom() = nY + pParaPortion->GetHeight();
             }
         }
         else if ( bGrow )
         {
-            aInvalidRec.Bottom() = nY + pParaPortion->GetHeight();
+            aInvalidRect.Bottom() = nY + pParaPortion->GetHeight();
         }
         nY += pParaPortion->GetHeight();
     }
@@ -443,13 +443,13 @@ void ImpEditEngine::FormatDoc()
             aStatus.GetStatusWord() |= !IsVertical() ? EE_STAT_TEXTHEIGHTCHANGED : EE_STAT_TEXTWIDTHCHANGED;
         if ( nNewHeight < nCurTextHeight )
         {
-            aInvalidRec.Bottom() = (long)Max( nNewHeight, nCurTextHeight );
-            if ( aInvalidRec.IsEmpty() )
+            aInvalidRect.Bottom() = (long)Max( nNewHeight, nCurTextHeight );
+            if ( aInvalidRect.IsEmpty() )
             {
-                aInvalidRec.Top() = 0;
+                aInvalidRect.Top() = 0;
                 // Left and Right are not evaluated, are however set due to IsEmpty.
-                aInvalidRec.Left() = 0;
-                aInvalidRec.Right() = !IsVertical() ? aPaperSize.Width() : aPaperSize.Height();
+                aInvalidRect.Left() = 0;
+                aInvalidRect.Right() = !IsVertical() ? aPaperSize.Width() : aPaperSize.Height();
             }
         }
 
@@ -560,7 +560,7 @@ void ImpEditEngine::CheckAutoPageSize()
             aSz.Width() = aInvSize.Height();
             aSz.Height() = aInvSize.Width();
         }
-        aInvalidRec = Rectangle( Point(), aSz );
+        aInvalidRect = Rectangle( Point(), aSz );
 
 
         for (size_t nView = 0; nView < aEditViews.size(); ++nView)
@@ -2825,7 +2825,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     }
 }
 
-void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aStartPos, sal_Bool bStripOnly, short nOrientation )
+void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aStartPos, sal_Bool bStripOnly, short nOrientation )
 {
     if ( !GetUpdateMode() && !bStripOnly )
         return;
@@ -2882,8 +2882,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
         long nParaHeight = pPortion->GetHeight();
         sal_uInt16 nIndex = 0;
         if ( pPortion->IsVisible() && (
-                ( !IsVertical() && ( ( aStartPos.Y() + nParaHeight ) > aClipRec.Top() ) ) ||
-                ( IsVertical() && ( ( aStartPos.X() - nParaHeight ) < aClipRec.Right() ) ) ) )
+                ( !IsVertical() && ( ( aStartPos.Y() + nParaHeight ) > aClipRect.Top() ) ) ||
+                ( IsVertical() && ( ( aStartPos.X() - nParaHeight ) < aClipRect.Right() ) ) ) )
 
         {
             // --------------------------------------------------
@@ -2930,8 +2930,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                         aStartPos.X() -= nVertLineSpacing;
                 }
 
-                if ( ( !IsVertical() && ( aStartPos.Y() > aClipRec.Top() ) )
-                    || ( IsVertical() && aStartPos.X() < aClipRec.Right() ) )
+                if ( ( !IsVertical() && ( aStartPos.Y() > aClipRect.Top() ) )
+                    || ( IsVertical() && aStartPos.X() < aClipRect.Right() ) )
                 {
                     bPaintBullet = false;
 
@@ -2965,13 +2965,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                         if ( !IsVertical() )
                         {
                             aTmpPos.X() = aStartPos.X() + nPortionXOffset;
-                            if ( aTmpPos.X() > aClipRec.Right() )
+                            if ( aTmpPos.X() > aClipRect.Right() )
                                 break;  // No further output in line necessary
                         }
                         else
                         {
                             aTmpPos.Y() = aStartPos.Y() + nPortionXOffset;
-                            if ( aTmpPos.Y() > aClipRec.Bottom() )
+                            if ( aTmpPos.Y() > aClipRect.Bottom() )
                                 break;  // No further output in line necessary
                         }
 
@@ -3578,9 +3578,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                 }
 
                 // no more visible actions?
-                if ( !IsVertical() && ( aStartPos.Y() >= aClipRec.Bottom() ) )
+                if ( !IsVertical() && ( aStartPos.Y() >= aClipRect.Bottom() ) )
                     break;
-                else if ( IsVertical() && ( aStartPos.X() <= aClipRec.Left() ) )
+                else if ( IsVertical() && ( aStartPos.X() <= aClipRect.Left() ) )
                     break;
             }
 
@@ -3627,16 +3627,16 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
             pPDFExtOutDevData->EndStructureElement();
 
         // no more visible actions?
-        if ( !IsVertical() && ( aStartPos.Y() > aClipRec.Bottom() ) )
+        if ( !IsVertical() && ( aStartPos.Y() > aClipRect.Bottom() ) )
             break;
-        if ( IsVertical() && ( aStartPos.X() < aClipRec.Left() ) )
+        if ( IsVertical() && ( aStartPos.X() < aClipRect.Left() ) )
             break;
     }
     if ( aStatus.DoRestoreFont() )
         pOutDev->SetFont( aOldFont );
 }
 
-void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevice* pTargetDevice, sal_Bool bUseVirtDev )
+void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice, sal_Bool bUseVirtDev )
 {
     DBG_ASSERT( pView, "No View - No Paint!" );
     DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
@@ -3645,14 +3645,14 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevi
         return;
 
     // Intersection of paint area and output area.
-    Rectangle aClipRec( pView->GetOutputArea() );
-    aClipRec.Intersection( rRec );
+    Rectangle aClipRect( pView->GetOutputArea() );
+    aClipRect.Intersection( rRect );
 
     OutputDevice* pTarget = pTargetDevice ? pTargetDevice : pView->GetWindow();
 
     if ( bUseVirtDev )
     {
-        Rectangle aClipRecPixel( pTarget->LogicToPixel( aClipRec ) );
+        Rectangle aClipRecPixel( pTarget->LogicToPixel( aClipRect ) );
         if ( !IsVertical() )
         {
             // etwas mehr, falls abgerundet!
@@ -3722,32 +3722,32 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevi
         DBG_ASSERT( bVDevValid, "VDef could not be enlarged!" );
         if ( !bVDevValid )
         {
-            Paint( pView, rRec, 0, sal_False /* ohne VDev */ );
+            Paint( pView, rRect, 0, sal_False /* ohne VDev */ );
             return;
         }
 
         // PaintRect for VDev not with aligned size,
         // Otherwise, the line below must also be printed out:
-        Rectangle aTmpRec( Point( 0, 0 ), aClipRec.GetSize() );
+        Rectangle aTmpRect( Point( 0, 0 ), aClipRect.GetSize() );
 
-        aClipRec = pTarget->PixelToLogic( aClipRecPixel );
+        aClipRect = pTarget->PixelToLogic( aClipRecPixel );
         Point aStartPos;
         if ( !IsVertical() )
         {
-            aStartPos = aClipRec.TopLeft();
+            aStartPos = aClipRect.TopLeft();
             aStartPos = pView->GetDocPos( aStartPos );
             aStartPos.X() *= (-1);
             aStartPos.Y() *= (-1);
         }
         else
         {
-            aStartPos = aClipRec.TopRight();
+            aStartPos = aClipRect.TopRight();
             Point aDocPos( pView->GetDocPos( aStartPos ) );
-            aStartPos.X() = aClipRec.GetSize().Width() + aDocPos.Y();
+            aStartPos.X() = aClipRect.GetSize().Width() + aDocPos.Y();
             aStartPos.Y() = -aDocPos.X();
         }
 
-        Paint( pVDev, aTmpRec, aStartPos );
+        Paint( pVDev, aTmpRect, aStartPos );
 
         sal_Bool bClipRegion = sal_False;
         Region aOldRegion;
@@ -3765,15 +3765,15 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevi
             Point aOrigin = aOldMapMode.GetOrigin();
             Point aViewPos = pView->GetOutputArea().TopLeft();
             aOrigin.Move( aViewPos.X(), aViewPos.Y() );
-            aClipRec.Move( -aViewPos.X(), -aViewPos.Y() );
+            aClipRect.Move( -aViewPos.X(), -aViewPos.Y() );
             MapMode aNewMapMode( aOldMapMode );
             aNewMapMode.SetOrigin( aOrigin );
             pTarget->SetMapMode( aNewMapMode );
             pTarget->SetClipRegion( Region( GetTextRanger()->GetPolyPolygon() ) );
         }
 
-        pTarget->DrawOutDev( aClipRec.TopLeft(), aClipRec.GetSize(),
-                            Point(0,0), aClipRec.GetSize(), *pVDev );
+        pTarget->DrawOutDev( aClipRect.TopLeft(), aClipRect.GetSize(),
+                            Point(0,0), aClipRect.GetSize(), *pVDev );
 
         if ( GetTextRanger() )
         {
@@ -3811,17 +3811,17 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, OutputDevi
         if ( !IsVertical() && ( pView->GetOutputArea().GetWidth() > GetPaperSize().Width() ) )
         {
             long nMaxX = pView->GetOutputArea().Left() + GetPaperSize().Width();
-            if ( aClipRec.Left() > nMaxX )
+            if ( aClipRect.Left() > nMaxX )
                 return;
-            if ( aClipRec.Right() > nMaxX )
-                aClipRec.Right() = nMaxX;
+            if ( aClipRect.Right() > nMaxX )
+                aClipRect.Right() = nMaxX;
         }
 
         sal_Bool bClipRegion = pTarget->IsClipRegion();
         Region aOldRegion = pTarget->GetClipRegion();
-        pTarget->IntersectClipRegion( aClipRec );
+        pTarget->IntersectClipRegion( aClipRect );
 
-        Paint( pTarget, aClipRec, aStartPos );
+        Paint( pTarget, aClipRect, aStartPos );
 
         if ( bClipRegion )
             pTarget->SetClipRegion( aOldRegion );
@@ -3924,7 +3924,7 @@ void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, bool bShow )
         pPPortion->SetMustRepaint( sal_True );
         if ( GetUpdateMode() && !IsInUndo() && !GetTextRanger() )
         {
-            aInvalidRec = Rectangle(    Point( 0, GetParaPortions().GetYOffset( pPPortion ) ),
+            aInvalidRect = Rectangle(    Point( 0, GetParaPortions().GetYOffset( pPPortion ) ),
                                         Point( GetPaperSize().Width(), nCurTextHeight ) );
             UpdateViews( GetActiveView() );
         }
@@ -3956,11 +3956,11 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_uInt16 nNe
         ParaPortion* pUpperPortion = GetParaPortions().SafeGetObject( nFirstPortion );
         ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
 
-        aInvalidRec = Rectangle();  // make empty
-        aInvalidRec.Left() = 0;
-        aInvalidRec.Right() = aPaperSize.Width();
-        aInvalidRec.Top() = GetParaPortions().GetYOffset( pUpperPortion );
-        aInvalidRec.Bottom() = GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight();
+        aInvalidRect = Rectangle();  // make empty
+        aInvalidRect.Left() = 0;
+        aInvalidRect.Right() = aPaperSize.Width();
+        aInvalidRect.Top() = GetParaPortions().GetYOffset( pUpperPortion );
+        aInvalidRect.Bottom() = GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight();
 
         UpdateViews( pCurView );
     }
@@ -4184,7 +4184,7 @@ void ImpEditEngine::SetCharStretching( sal_uInt16 nX, sal_uInt16 nY )
     {
         FormatFullDoc();
         // (potentially) need everything redrawn
-        aInvalidRec=Rectangle(0,0,1000000,1000000);
+        aInvalidRect=Rectangle(0,0,1000000,1000000);
         UpdateViews( GetActiveView() );
     }
 }

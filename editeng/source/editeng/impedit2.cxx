@@ -639,10 +639,10 @@ void ImpEditEngine::SetText( const XubString& rText )
         // => The text remains.
         if ( !rText.Len() && GetUpdateMode() )
         {
-            Rectangle aTmpRec( pView->GetOutputArea().TopLeft(),
+            Rectangle aTmpRect( pView->GetOutputArea().TopLeft(),
                                 Size( aPaperSize.Width(), nCurTextHeight ) );
-            aTmpRec.Intersection( pView->GetOutputArea() );
-            pView->GetWindow()->Invalidate( aTmpRec );
+            aTmpRect.Intersection( pView->GetOutputArea() );
+            pView->GetWindow()->Invalidate( aTmpRect );
         }
     }
     if( !rText.Len() ) {    // otherwise it must be invalidated later, !bFormatted is enough.
@@ -1350,8 +1350,8 @@ EditPaM ImpEditEngine::CursorEndOfDoc()
 
 EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView* pView )
 {
-    Rectangle aRec = PaMtoEditCursor( rPaM );
-    Point aTopLeft = aRec.TopLeft();
+    Rectangle aRect = PaMtoEditCursor( rPaM );
+    Point aTopLeft = aRect.TopLeft();
     aTopLeft.Y() -= pView->GetVisArea().GetHeight() *9/10;
     aTopLeft.X() += nOnePixelInRef;
     if ( aTopLeft.Y() < 0 )
@@ -1363,8 +1363,8 @@ EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView* pView )
 
 EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView* pView )
 {
-    Rectangle aRec = PaMtoEditCursor( rPaM );
-    Point aBottomRight = aRec.BottomRight();
+    Rectangle aRect = PaMtoEditCursor( rPaM );
+    Point aBottomRight = aRect.BottomRight();
     aBottomRight.Y() += pView->GetVisArea().GetHeight() *9/10;
     aBottomRight.X() += nOnePixelInRef;
     long nHeight = GetTextHeight();

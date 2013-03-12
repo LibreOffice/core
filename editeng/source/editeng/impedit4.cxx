@@ -2367,11 +2367,11 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                     EditPaM aEndPaM( pNode, nPaintTo );
                     Rectangle aStartCursor( PaMtoEditCursor( aStartPaM ) );
                     Rectangle aEndCursor( PaMtoEditCursor( aEndPaM ) );
-                    DBG_ASSERT( aInvalidRec.IsEmpty(), "InvalidRect set!" );
-                    aInvalidRec.Left() = 0;
-                    aInvalidRec.Right() = GetPaperSize().Width();
-                    aInvalidRec.Top() = aStartCursor.Top();
-                    aInvalidRec.Bottom() = aEndCursor.Bottom();
+                    DBG_ASSERT( aInvalidRect.IsEmpty(), "InvalidRect set!" );
+                    aInvalidRect.Left() = 0;
+                    aInvalidRect.Right() = GetPaperSize().Width();
+                    aInvalidRect.Top() = aStartCursor.Top();
+                    aInvalidRect.Bottom() = aEndCursor.Bottom();
                     if ( pActiveView && pActiveView->HasSelection() )
                     {
                         // Then no output through VDev.
@@ -2382,14 +2382,14 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                         for (size_t nView = 0; nView < aEditViews.size(); ++nView)
                         {
                             EditView* pView = aEditViews[nView];
-                            Rectangle aClipRec( aInvalidRec );
-                            aClipRec.Intersection( pView->GetVisArea() );
-                            if ( !aClipRec.IsEmpty() )
+                            Rectangle aClipRect( aInvalidRect );
+                            aClipRect.Intersection( pView->GetVisArea() );
+                            if ( !aClipRect.IsEmpty() )
                             {
                                 // convert to window coordinates ....
-                                aClipRec.SetPos( pView->pImpEditView->GetWindowPos( aClipRec.TopLeft() ) );
+                                aClipRect.SetPos( pView->pImpEditView->GetWindowPos( aClipRect.TopLeft() ) );
                                 // If selected, then VDev ...
-                                Paint( pView->pImpEditView, aClipRec, 0, pView->HasSelection() );
+                                Paint( pView->pImpEditView, aClipRect, 0, pView->HasSelection() );
                             }
                         }
                     }
@@ -2397,7 +2397,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                     {
                         UpdateViews( pActiveView );
                     }
-                    aInvalidRec = Rectangle();
+                    aInvalidRect = Rectangle();
                 }
             }
             // After two corrected nodes give up the control ...

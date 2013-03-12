@@ -321,7 +321,7 @@ public:
 
     sal_uInt16      GetSelectedScriptType() const;
 
-    void        SetVisArea( const Rectangle& rRec );
+    void        SetVisArea( const Rectangle& rRect );
     void        SetSelection( const ESelection& );
 
     void        RemoveAttribs( sal_Bool bRemoveParaAttribs = sal_False, sal_uInt16 nWhich = 0, sal_Bool bKeepLanguages = sal_False );

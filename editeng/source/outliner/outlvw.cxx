@@ -1009,10 +1009,10 @@ void OutlinerView::InsertText( const XubString& rNew, sal_Bool bSelect )
     pEditView->InsertText( rNew, bSelect );
 }
 
-void OutlinerView::SetVisArea( const Rectangle& rRec )
+void OutlinerView::SetVisArea( const Rectangle& rRect )
 {
     DBG_CHKTHIS(OutlinerView,0);
-    pEditView->SetVisArea( rRec );
+    pEditView->SetVisArea( rRect );
 }
 
 

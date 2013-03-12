@@ -117,12 +117,12 @@ public:
 
                         // VisArea position of the Output window.
                         // A size change also affects the VisArea
-    void                SetOutputArea( const Rectangle& rRec );
+    void                SetOutputArea( const Rectangle& rRect );
     const Rectangle&    GetOutputArea() const;
 
                         // Document position.
                         // A size change also affects the VisArea
-    void                SetVisArea( const Rectangle& rRec );
+    void                SetVisArea( const Rectangle& rRect );
     const Rectangle&    GetVisArea() const;
 
     const Pointer&  GetPointer() const;

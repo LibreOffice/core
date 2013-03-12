@@ -237,7 +237,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOri
     DBG_CHKTHIS( EditEngine, 0 );
     // Create with 2 points, as with positive points it will end up with
     // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
-    Rectangle aBigRec( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
+    Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
     if( pOutDev->GetConnectMetaFile() )
         pOutDev->Push();
     Point aStartPos( rStartPos );
@@ -246,7 +246,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOri
         aStartPos.X() += GetPaperSize().Width();
         aStartPos = Rotate( aStartPos, nOrientation, rStartPos );
     }
-    pImpEditEngine->Paint( pOutDev, aBigRec, aStartPos, sal_False, nOrientation );
+    pImpEditEngine->Paint( pOutDev, aBigRect, aStartPos, sal_False, nOrientation );
     if( pOutDev->GetConnectMetaFile() )
         pOutDev->Pop();
 }
@@ -1873,13 +1873,13 @@ void EditEngine::StripPortions()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     VirtualDevice aTmpDev;
-    Rectangle aBigRec( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
+    Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
     if ( IsVertical() )
     {
-        aBigRec.Right() = 0;
-        aBigRec.Left() = -0x7FFFFFFF;
+        aBigRect.Right() = 0;
+        aBigRect.Left() = -0x7FFFFFFF;
     }
-    pImpEditEngine->Paint( &aTmpDev, aBigRec, Point(), sal_True );
+    pImpEditEngine->Paint( &aTmpDev, aBigRect, Point(), sal_True );
 }
 
 void EditEngine::GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList )
@@ -1975,10 +1975,10 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
                         pNode->DestroyWrongList();
                     if ( bWrongs )
                     {
-                        pImpEditEngine->aInvalidRec.Left() = 0;
-                        pImpEditEngine->aInvalidRec.Right() = pImpEditEngine->GetPaperSize().Width();
-                        pImpEditEngine->aInvalidRec.Top() = nY+1;
-                        pImpEditEngine->aInvalidRec.Bottom() = nY+pPortion->GetHeight()-1;
+                        pImpEditEngine->aInvalidRect.Left() = 0;
+                        pImpEditEngine->aInvalidRect.Right() = pImpEditEngine->GetPaperSize().Width();
+                        pImpEditEngine->aInvalidRect.Top() = nY+1;
+                        pImpEditEngine->aInvalidRect.Bottom() = nY+pPortion->GetHeight()-1;
                         pImpEditEngine->UpdateViews( pImpEditEngine->pActiveView );
                     }
                     nY += pPortion->GetHeight();

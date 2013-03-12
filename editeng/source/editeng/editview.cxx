@@ -320,10 +320,10 @@ Window* EditView::GetWindow() const
     return pImpEditView->pOutWin;
 }
 
-void EditView::SetVisArea( const Rectangle& rRec )
+void EditView::SetVisArea( const Rectangle& rRect )
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->SetVisDocStartPos( rRec.TopLeft() );
+    pImpEditView->SetVisDocStartPos( rRect.TopLeft() );
 }
 
 const Rectangle& EditView::GetVisArea() const
@@ -335,10 +335,10 @@ const Rectangle& EditView::GetVisArea() const
     return aRect;
 }
 
-void EditView::SetOutputArea( const Rectangle& rRec )
+void EditView::SetOutputArea( const Rectangle& rRect )
 {
     DBG_CHKTHIS( EditView, 0 );
-    pImpEditView->SetOutputArea( rRec );
+    pImpEditView->SetOutputArea( rRect );
 
     // the rest here only if it is an API call:
     pImpEditView->CalcAnchorPoint();

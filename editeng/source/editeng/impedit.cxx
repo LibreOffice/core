@@ -219,9 +219,9 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion, OutputD
             if ( nEndIndex < nStartIndex )
                 nEndIndex = nStartIndex;
 
-            Rectangle aTmpRec( pEditEngine->pImpEditEngine->GetEditCursor( pTmpPortion, nStartIndex ) );
-            Point aTopLeft( aTmpRec.TopLeft() );
-            Point aBottomRight( aTmpRec.BottomRight() );
+            Rectangle aTmpRect( pEditEngine->pImpEditEngine->GetEditCursor( pTmpPortion, nStartIndex ) );
+            Point aTopLeft( aTmpRect.TopLeft() );
+            Point aBottomRight( aTmpRect.BottomRight() );
 
             aTopLeft.Y() += nParaStart;
             aBottomRight.Y() += nParaStart;
@@ -414,12 +414,12 @@ void ImpEditView::SetSelectionMode( EESelectionMode eNewMode )
     }
 }
 
-void ImpEditView::SetOutputArea( const Rectangle& rRec )
+void ImpEditView::SetOutputArea( const Rectangle& rRect )
 {
     // should be better be aligned on pixels!
-    Rectangle aNewRec( pOutWin->LogicToPixel( rRec ) );
-    aNewRec = pOutWin->PixelToLogic( aNewRec );
-    aOutArea = aNewRec;
+    Rectangle aNewRect( pOutWin->LogicToPixel( rRect ) );
+    aNewRect = pOutWin->PixelToLogic( aNewRect );
+    aOutArea = aNewRect;
     if ( aOutArea.Right() < aOutArea.Left() )
         aOutArea.Right() = aOutArea.Left();
     if ( aOutArea.Bottom() < aOutArea.Top() )
@@ -431,10 +431,10 @@ void ImpEditView::SetOutputArea( const Rectangle& rRec )
         SetScrollDiffX( (sal_uInt16)aOutArea.GetWidth() * 2 / 10 );
 }
 
-void ImpEditView::ResetOutputArea( const Rectangle& rRec )
+void ImpEditView::ResetOutputArea( const Rectangle& rRect )
 {
     Rectangle aCurArea( aOutArea );
-    SetOutputArea( rRec );
+    SetOutputArea( rRect );
     // Invalidate surrounding areas if in update mode of the engine on sal_True
     if ( !aCurArea.IsEmpty() && pEditEngine->pImpEditEngine->GetUpdateMode() )
     {
@@ -960,14 +960,14 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
         // rectangle ...
         aVisDocStartPos = pOutWin->LogicToPixel( aVisDocStartPos );
         aVisDocStartPos = pOutWin->PixelToLogic( aVisDocStartPos );
-        Rectangle aRec( aOutArea );
-        pOutWin->Scroll( nRealDiffX, nRealDiffY, aRec, sal_True );
+        Rectangle aRect( aOutArea );
+        pOutWin->Scroll( nRealDiffX, nRealDiffY, aRect, sal_True );
         pOutWin->Update();
         pCrsr->SetPos( pCrsr->GetPos() + Point( nRealDiffX, nRealDiffY ) );
         if ( bVisCursor )
         {
-            Rectangle aCursorRec( pCrsr->GetPos(), pCrsr->GetSize() );
-            if ( aOutArea.IsInside( aCursorRec ) )
+            Rectangle aCursorRect( pCrsr->GetPos(), pCrsr->GetSize() );
+            if ( aOutArea.IsInside( aCursorRect ) )
                 pCrsr->Show();
         }
 
@@ -1484,13 +1484,13 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
         GetWindow()->SetFillColor( Color(4210752) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
 
         // Save background ...
-        Rectangle aSaveRec( GetWindow()->LogicToPixel( rRect ) );
+        Rectangle aSaveRect( GetWindow()->LogicToPixel( rRect ) );
         // prefer to save some more ...
-        aSaveRec.Right() += 1;
-        aSaveRec.Bottom() += 1;
+        aSaveRect.Right() += 1;
+        aSaveRect.Bottom() += 1;
 
 #ifdef DBG_UTIL
-        Size aNewSzPx( aSaveRec.GetSize() );
+        Size aNewSzPx( aSaveRect.GetSize() );
 #endif
         if ( !pDragAndDropInfo->pBackground )
         {
@@ -1510,11 +1510,11 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
         }
 #endif
 
-        aSaveRec = GetWindow()->PixelToLogic( aSaveRec );
+        aSaveRect = GetWindow()->PixelToLogic( aSaveRect );
 
-        pDragAndDropInfo->pBackground->DrawOutDev( Point(0,0), aSaveRec.GetSize(),
-                                    aSaveRec.TopLeft(), aSaveRec.GetSize(), *GetWindow() );
-        pDragAndDropInfo->aCurSavedCursor = aSaveRec;
+        pDragAndDropInfo->pBackground->DrawOutDev( Point(0,0), aSaveRect.GetSize(),
+                                    aSaveRect.TopLeft(), aSaveRect.GetSize(), *GetWindow() );
+        pDragAndDropInfo->aCurSavedCursor = aSaveRect;
 
         // Draw Cursor...
         GetWindow()->DrawRect( rRect );

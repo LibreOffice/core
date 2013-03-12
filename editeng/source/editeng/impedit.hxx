@@ -271,8 +271,8 @@ public:
     Point           GetWindowPos( const Point& rDocPos ) const;
     Rectangle       GetWindowPos( const Rectangle& rDocPos ) const;
 
-    void                SetOutputArea( const Rectangle& rRec );
-    void                ResetOutputArea( const Rectangle& rRec );
+    void                SetOutputArea( const Rectangle& rRect );
+    void                ResetOutputArea( const Rectangle& rRect );
     const Rectangle&    GetOutputArea() const   { return aOutArea; }
 
     sal_Bool            IsVertical() const;
@@ -450,7 +450,7 @@ private:
 
     // For Formatting / Update ....
     boost::ptr_vector<DeletedNodeInfo> aDeletedNodes;
-    Rectangle           aInvalidRec;
+    Rectangle           aInvalidRect;
     sal_uInt32          nCurTextHeight;
     sal_uInt32          nCurTextHeightNTP;  // without trailing empty paragraphs
     sal_uInt16          nOnePixelInRef;
