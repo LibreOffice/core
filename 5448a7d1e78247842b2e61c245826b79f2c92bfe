@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///yQ\u003d",
+        "filename": "padmin/source/adddlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-03-12T15:24:00Z",
+      "side": 1,
+      "message": "How comes you change that type here? GetSelectEntryPos() return value is sal_uInt16",
+      "revId": "5448a7d1e78247842b2e61c245826b79f2c92bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///yE\u003d",
+        "filename": "svx/inc/svx/checklbx.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-03-12T15:24:00Z",
+      "side": 1,
+      "message": "Why changing that type? all entries in this class are indexed using sal_uInt16.",
+      "revId": "5448a7d1e78247842b2e61c245826b79f2c92bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///yA\u003d",
+        "filename": "svx/source/dialog/checklbx.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000039
+      },
+      "writtenOn": "2013-03-12T15:24:00Z",
+      "side": 1,
+      "message": "Please keep sal_uInt16 here: this will only bring problems",
+      "revId": "5448a7d1e78247842b2e61c245826b79f2c92bfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
