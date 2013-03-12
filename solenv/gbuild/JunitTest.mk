@@ -55,12 +55,12 @@ $(call gb_JunitTest_get_target,%) :
             $(CLASSES) > $@.log 2>&1 || \
 		(cat $@.log \
 		&& echo "to rerun just this failed test without all others, run:" \
-		&& echo && echo "    make $@" && echo \
+		&& echo && echo "    make JunitTest_$*" && echo \
 		&& echo "cd into the module dir to run the tests faster" \
 		&& echo "Or to do interactive debugging, run two shells with (Linux only):" \
 		&& echo \
 		&& echo "    make debugrun" \
-		&& echo "    make gb_JunitTest_DEBUGRUN=T $@" \
+		&& echo "    make gb_JunitTest_DEBUGRUN=T JunitTest_$*" \
 		&& echo \
 		&& false)) && \
         rm -rf $(call gb_JunitTest_get_userdir,$*))
