@@ -341,7 +341,7 @@ NULL
 namespace
 {
     // -------------------------------------------------------------------
-    typedef ::std::map< XubString, DbgChannelId > UserDefinedChannels;
+    typedef ::std::map< OUString, DbgChannelId > UserDefinedChannels;
     UserDefinedChannels& ImplDbgGetUserDefinedChannels()
     {
         static UserDefinedChannels s_aChannels;
@@ -410,7 +410,7 @@ public:
     virtual sal_Bool    Close();
     virtual void    Resize();
     virtual long    PreNotify( NotifyEvent& rNEvt );
-    void            InsertLine( const XubString& rLine );
+    void            InsertLine( const OUString& rLine );
     void            Update() { WorkWindow::Update(); maLstBox.Update(); }
 
 private:
@@ -431,7 +431,7 @@ private:
 public:
                     DbgInfoDialog( Window* pParent, sal_Bool bHelpText = sal_False );
 
-    void            SetInfoText( const XubString& rStr );
+    void            SetInfoText( const OUString& rStr );
 };
 
 // -------------
@@ -509,7 +509,7 @@ DbgWindow::DbgWindow() :
         SetWindowState( aState );
     }
 
-    SetText(OUString("StarView Debug Window"));
+    SetText("StarView Debug Window");
     Show();
     Update();
 }
@@ -614,23 +614,23 @@ long DbgWindow::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
-void DbgWindow::InsertLine( const XubString& rLine )
+void DbgWindow::InsertLine( const OUString& rLine )
 {
-    XubString aStr = convertLineEnd(rLine, LINEEND_LF);
-    xub_StrLen  nPos = aStr.Search( _LF );
-    sal_Bool bFirstEntry = sal_True;
-    while ( nPos != STRING_NOTFOUND )
+    OUString   aStr = convertLineEnd(rLine, LINEEND_LF);
+    sal_Int32  nPos = aStr.indexOf( _LF );
+    sal_Bool   bFirstEntry = sal_True;
+    while ( nPos != -1 )
     {
         if ( maLstBox.GetEntryCount() >= DBGWIN_MAXLINES )
             maLstBox.RemoveEntry( 0 );
 
-        sal_uInt16 nInsertionPos = maLstBox.InsertEntry( aStr.Copy( 0, nPos ) );
+        sal_uInt16 nInsertionPos = maLstBox.InsertEntry( aStr.copy( 0, nPos ) );
         if ( bFirstEntry )
             maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 0x00000001 ) );
         bFirstEntry = sal_False;
 
-        aStr.Erase( 0, nPos+1 );
-        nPos = aStr.Search( _LF );
+        aStr.replaceAt( 0, nPos+1, "" );
+        nPos = aStr.indexOf( _LF );
     }
     if ( maLstBox.GetEntryCount() >= DBGWIN_MAXLINES )
         maLstBox.RemoveEntry( 0 );
@@ -685,7 +685,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorThis.Show();
-    maXtorThis.SetText(OUString("T~his"));
+    maXtorThis.SetText("T~his");
     if ( pData->nTestFlags & DBG_TEST_XTOR_THIS )
         maXtorThis.Check( sal_True );
     maXtorThis.SetPosSizePixel( LogicToPixel( Point( 10, 15 ), aAppMap ),
@@ -694,7 +694,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorFunc.Show();
-    maXtorFunc.SetText(OUString("~Function"));
+    maXtorFunc.SetText("~Function");
     if ( pData->nTestFlags & DBG_TEST_XTOR_FUNC )
         maXtorFunc.Check( sal_True );
     maXtorFunc.SetPosSizePixel( LogicToPixel( Point( 75, 15 ), aAppMap ),
@@ -703,7 +703,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorExit.Show();
-    maXtorExit.SetText(OUString("E~xit"));
+    maXtorExit.SetText("E~xit");
     if ( pData->nTestFlags & DBG_TEST_XTOR_EXIT )
         maXtorExit.Check( sal_True );
     maXtorExit.SetPosSizePixel( LogicToPixel( Point( 140, 15 ), aAppMap ),
@@ -712,7 +712,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorReport.Show();
-    maXtorReport.SetText(OUString("~Report"));
+    maXtorReport.SetText("~Report");
     if ( pData->nTestFlags & DBG_TEST_XTOR_REPORT )
         maXtorReport.Check( sal_True );
     maXtorReport.SetPosSizePixel( LogicToPixel( Point( 205, 15 ), aAppMap ),
@@ -721,7 +721,7 @@ DbgDialog::DbgDialog() :
 
     {
     maXtorTrace.Show();
-    maXtorTrace.SetText(OUString("~Trace"));
+    maXtorTrace.SetText("~Trace");
     if ( pData->nTestFlags & DBG_TEST_XTOR_TRACE )
         maXtorTrace.Check( sal_True );
     maXtorTrace.SetPosSizePixel( LogicToPixel( Point( 270, 15 ), aAppMap ),
@@ -730,14 +730,14 @@ DbgDialog::DbgDialog() :
 
     {
     maBox1.Show();
-    maBox1.SetText(OUString("Object Tests"));
+    maBox1.SetText("Object Tests");
     maBox1.SetPosSizePixel( LogicToPixel( Point( 5, 5 ), aAppMap ),
                             LogicToPixel( Size( 330, 30 ), aAppMap ) );
     }
 
     {
     maProf.Show();
-    maProf.SetText(OUString("~Profiling"));
+    maProf.SetText("~Profiling");
     if ( pData->nTestFlags & DBG_TEST_PROFILING )
         maProf.Check( sal_True );
     maProf.SetPosSizePixel( LogicToPixel( Point( 10, 95 ), aAppMap ),
@@ -746,7 +746,7 @@ DbgDialog::DbgDialog() :
 
     {
     maRes.Show();
-    maRes.SetText(OUString("~Resourcen"));
+    maRes.SetText("~Resourcen");
     if ( pData->nTestFlags & DBG_TEST_RESOURCE )
         maRes.Check( sal_True );
     maRes.SetPosSizePixel( LogicToPixel( Point( 75, 95 ), aAppMap ),
@@ -755,7 +755,7 @@ DbgDialog::DbgDialog() :
 
     {
     maDialog.Show();
-    maDialog.SetText(OUString("~Dialog"));
+    maDialog.SetText("~Dialog");
     if ( pData->nTestFlags & DBG_TEST_DIALOG )
         maDialog.Check( sal_True );
     maDialog.SetPosSizePixel( LogicToPixel( Point( 140, 95 ), aAppMap ),
@@ -764,7 +764,7 @@ DbgDialog::DbgDialog() :
 
     {
     maBoldAppFont.Show();
-    maBoldAppFont.SetText(OUString("~Bold AppFont"));
+    maBoldAppFont.SetText("~Bold AppFont");
     if ( pData->nTestFlags & DBG_TEST_BOLDAPPFONT )
         maBoldAppFont.Check( sal_True );
     maBoldAppFont.SetPosSizePixel( LogicToPixel( Point( 205, 95 ), aAppMap ),
@@ -774,7 +774,7 @@ DbgDialog::DbgDialog() :
 
     {
     maBox3.Show();
-    maBox3.SetText(OUString("Test Options"));
+    maBox3.SetText("Test Options");
     maBox3.SetPosSizePixel( LogicToPixel( Point( 5, 85 ), aAppMap ),
                             LogicToPixel( Size( 330, 30 ), aAppMap ) );
     }
@@ -789,7 +789,7 @@ DbgDialog::DbgDialog() :
 
     {
     maOverwrite.Show();
-    maOverwrite.SetText(OUString("Overwrite ~File"));
+    maOverwrite.SetText("Overwrite ~File");
     if ( pData->bOverwrite )
         maOverwrite.Check( sal_True );
     maOverwrite.SetPosSizePixel( LogicToPixel( Point( 205, 130 ), aAppMap ),
@@ -798,7 +798,7 @@ DbgDialog::DbgDialog() :
 
     {
     maHookOSLBox.Show();
-    maHookOSLBox.SetText(OUString("Reroute osl debug ~messages"));
+    maHookOSLBox.SetText("Reroute osl debug ~messages");
     if ( pData->bHookOSLAssert )
         maHookOSLBox.Check( sal_True );
     maHookOSLBox.SetPosSizePixel( LogicToPixel( Point( 10, 240 ), aAppMap ),
@@ -807,7 +807,7 @@ DbgDialog::DbgDialog() :
 
     {
     maInclClassText.Show();
-    maInclClassText.SetText(OUString("~Include-ObjectTest-Filter"));
+    maInclClassText.SetText("~Include-ObjectTest-Filter");
     maInclClassText.SetPosSizePixel( LogicToPixel( Point( 10, 150 ), aAppMap ),
                                      LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -822,7 +822,7 @@ DbgDialog::DbgDialog() :
 
     {
     maExclClassText.Show();
-    maExclClassText.SetText(OUString("~Exclude-ObjectTest-Filter"));
+    maExclClassText.SetText("~Exclude-ObjectTest-Filter");
     maExclClassText.SetPosSizePixel( LogicToPixel( Point( 115, 150 ), aAppMap ),
                                      LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -837,7 +837,7 @@ DbgDialog::DbgDialog() :
 
     {
     maInclText.Show();
-    maInclText.SetText(OUString("~Include-Filter"));
+    maInclText.SetText("~Include-Filter");
     maInclText.SetPosSizePixel( LogicToPixel( Point( 10, 180 ), aAppMap ),
                                 LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -852,7 +852,7 @@ DbgDialog::DbgDialog() :
 
     {
     maExclText.Show();
-    maExclText.SetText(OUString("~Exclude-Filter"));
+    maExclText.SetText("~Exclude-Filter");
     maExclText.SetPosSizePixel( LogicToPixel( Point( 115, 180 ), aAppMap ),
                                 LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -867,7 +867,7 @@ DbgDialog::DbgDialog() :
 
     {
     maTraceText.Show();
-    maTraceText.SetText(OUString("~Trace"));
+    maTraceText.SetText("~Trace");
     maTraceText.SetPosSizePixel( LogicToPixel( Point( 10, 210 ), aAppMap ),
                                  LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -890,7 +890,7 @@ DbgDialog::DbgDialog() :
 
     {
     maWarningText.Show();
-    maWarningText.SetText(OUString("~Warning"));
+    maWarningText.SetText("~Warning");
     maWarningText.SetPosSizePixel( LogicToPixel( Point( 115, 210 ), aAppMap ),
                                    LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -913,7 +913,7 @@ DbgDialog::DbgDialog() :
 
     {
     maErrorText.Show();
-    maErrorText.SetText( OUString("~Error"));
+    maErrorText.SetText("~Error");
     maErrorText.SetPosSizePixel( LogicToPixel( Point( 220, 210 ), aAppMap ),
                                  LogicToPixel( Size( 95, 9 ), aAppMap ) );
     }
@@ -942,7 +942,7 @@ DbgDialog::DbgDialog() :
 
     {
     maBox4.Show();
-    maBox4.SetText( OUString("Output") );
+    maBox4.SetText("Output");
     maBox4.SetPosSizePixel( LogicToPixel( Point( 5, 120 ), aAppMap ),
                             LogicToPixel( Size( 330, 135 ), aAppMap ) );
     }
@@ -961,7 +961,7 @@ DbgDialog::DbgDialog() :
     {
     maInfoButton.Show();
     maInfoButton.SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
-    maInfoButton.SetText( OUString("~Info...") );
+    maInfoButton.SetText("~Info...");
     maInfoButton.SetPosSizePixel( LogicToPixel( Point( 130, 260 ), aAppMap ),
                                   LogicToPixel( Size( 50, 15 ), aAppMap ) );
     }
@@ -972,7 +972,7 @@ DbgDialog::DbgDialog() :
     }
 
     {
-        SetText( OUString("VCL Debug Options") );
+    SetText("VCL Debug Options");
     SetOutputSizePixel( LogicToPixel( Size( 340, 280 ), aAppMap ) );
     }
 }
@@ -1078,8 +1078,8 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         DbgInfoDialog aInfoDialog( this );
         aDbgInfoBuf[0] = '\0';
         DbgXtorInfo( aDbgInfoBuf );
-        XubString aInfoText( aDbgInfoBuf, RTL_TEXTENCODING_UTF8 );
-        aInfoDialog.SetText( OUString("Debug InfoReport") );
+        OUString aInfoText( aDbgInfoBuf, RTL_TEXTENCODING_UTF8 );
+        aInfoDialog.SetText( "Debug InfoReport" );
         aInfoDialog.SetInfoText( aInfoText );
         aInfoDialog.Execute();
     }
@@ -1094,14 +1094,14 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
     if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
     {
         DbgInfoDialog aInfoDialog( this, sal_True );
-        XubString aHelpText;
+        OUString aHelpText;
         const sal_Char** pHelpStrs = pDbgHelpText;
         while ( *pHelpStrs )
         {
-            aHelpText.AppendAscii( *pHelpStrs );
+            aHelpText += *pHelpStrs;
             pHelpStrs++;
         }
-        aInfoDialog.SetText( OUString("Debug Hilfe") );
+        aInfoDialog.SetText( "Debug Hilfe" );
         aInfoDialog.SetInfoText( aHelpText );
         aInfoDialog.Execute();
     }
@@ -1134,51 +1134,51 @@ DbgInfoDialog::DbgInfoDialog( Window* pParent, sal_Bool bHelpText ) :
 
 // -----------------------------------------------------------------------
 
-void DbgInfoDialog::SetInfoText( const XubString& rStr )
+void DbgInfoDialog::SetInfoText( const OUString& rStr )
 {
     maListBox.SetUpdateMode( sal_False );
     maListBox.Clear();
-    XubString aStr = convertLineEnd(rStr, LINEEND_LF);
-    sal_uInt16 nStrIndex = 0;
-    sal_uInt16 nFoundIndex;
+    OUString aStr = convertLineEnd(rStr, LINEEND_LF);
+    sal_Int32 nStrIndex = 0;
+    sal_Int32 nFoundIndex;
     do
     {
-        nFoundIndex = aStr.Search( _LF, nStrIndex );
-        XubString aTextParagraph = aStr.Copy( nStrIndex, nFoundIndex-nStrIndex );
+        nFoundIndex = aStr.indexOf( _LF, nStrIndex );
+        OUString aTextParagraph = aStr.copy( nStrIndex, nFoundIndex-nStrIndex );
         if ( mbHelpText )
         {
             long    nMaxWidth = maListBox.GetOutputSizePixel().Width()-30;
-            sal_uInt16  nLastIndex = 0;
-            sal_uInt16  nIndex = aTextParagraph.Search( ' ' );
-            while ( nIndex != STRING_NOTFOUND )
+            sal_Int32  nLastIndex = 0;
+            sal_Int32  nIndex = aTextParagraph.indexOf( ' ' );
+            while ( nIndex != -1 )
             {
                 if ( maListBox.GetTextWidth( aTextParagraph, 0, nIndex ) > nMaxWidth )
                 {
                     if ( !nLastIndex )
                         nLastIndex = nIndex+1;
-                    XubString aTempStr = aTextParagraph.Copy( 0, nLastIndex );
-                    aTextParagraph.Erase( 0, nLastIndex );
+                    OUString aTempStr = aTextParagraph.copy( 0, nLastIndex );
+                    aTextParagraph = aTextParagraph.replaceAt( 0, nLastIndex, "" );
                     maListBox.InsertEntry( aTempStr );
                     nLastIndex = 0;
                 }
                 else
                     nLastIndex = nIndex+1;
-                nIndex = aTextParagraph.Search( ' ', nLastIndex );
+                nIndex = aTextParagraph.indexOf( ' ', nLastIndex );
             }
 
             if ( maListBox.GetTextWidth( aTextParagraph, 0, nIndex ) > nMaxWidth )
             {
                 if ( !nLastIndex )
                     nLastIndex = nIndex+1;
-                XubString aTempStr = aTextParagraph.Copy( 0, nLastIndex );
-                aTextParagraph.Erase( 0, nLastIndex );
+                OUString aTempStr = aTextParagraph.copy( 0, nLastIndex );
+                aTextParagraph = aTextParagraph.replaceAt( 0, nLastIndex, "" );
                 maListBox.InsertEntry( aTempStr );
             }
         }
         maListBox.InsertEntry( aTextParagraph );
         nStrIndex = nFoundIndex+1;
     }
-    while ( nFoundIndex != STRING_NOTFOUND );
+    while ( nFoundIndex != -1 );
     maListBox.SetUpdateMode( sal_True );
 }
 
@@ -1242,23 +1242,23 @@ void DbgDialogTest( Window* pWindow )
              (pChild->GetType() != WINDOW_TABPAGE) &&
              (pChild->GetType() != WINDOW_GROUPBOX) )
         {
-            XubString       aText = pChild->GetText();
-            XubString       aErrorText = aText;
-            sal_uInt16          nAccelPos = STRING_NOTFOUND;
+            OUString        aText = pChild->GetText();
+            OUString        aErrorText = aText;
+            sal_Int32       nAccelPos = -1;
             sal_Unicode     cAccel = 0;
-            if ( aErrorText.Len() > 128 )
+            if ( aErrorText.getLength() > 128 )
             {
-                aErrorText.Erase( 128 );
-                aErrorText.AppendAscii( "..." );
+                aErrorText = aErrorText.replaceAt( 128, aErrorText.getLength()-128, "" );
+                aErrorText += "...";
             }
-            if ( aText.Len() && (aText.Len() < 1024) )
+            if ( !aText.isEmpty() && (aText.getLength() < 1024) )
             {
-                nAccelPos = aText.Search( '~' );
-                if ( nAccelPos != STRING_NOTFOUND )
+                nAccelPos = aText.indexOf( '~' );
+                if ( nAccelPos != -1 )
                 {
                     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
                     uno::Reference < i18n::XCharacterClassification > xCharClass = vcl::unohelper::CreateCharacterClassification();
-                    XubString aUpperText = xCharClass->toUpper( aText, 0, aText.Len(), rLocale );
+                    OUString aUpperText = xCharClass->toUpper( aText, 0, aText.getLength(), rLocale );
                     cAccel = aUpperText.GetChar( nAccelPos+1 );
                     if ( pChild->IsVisible() )
                     {
@@ -1276,7 +1276,7 @@ void DbgDialogTest( Window* pWindow )
                  (pChild->GetType() == WINDOW_TRISTATEBOX) ||
                  (pChild->GetType() == WINDOW_PUSHBUTTON) )
             {
-                if ( aText.Len() && !aText.EqualsAscii( "..." ) )
+                if ( !aText.isEmpty() && aText != "..." )
                 {
                     const char* pClass;
                     if ( pChild->GetType() == WINDOW_RADIOBUTTON )
@@ -1563,7 +1563,7 @@ class DbgMessageBox : public ErrorBox
        ErrorBox( NULL, WB_YES_NO_CANCEL | WB_DEF_NO, rMessage ),
        m_aMessage( rMessage )
     {
-        SetText(rtl::OUString("Debug Output"));
+        SetText("Debug Output");
         AddButton(rtl::OUString("Copy"), COPY_BUTTON_ID, 0);
     }
 
@@ -1581,10 +1581,10 @@ class DbgMessageBox : public ErrorBox
 class SolarMessageBoxExecutor : public ::vcl::SolarThreadExecutor
 {
 private:
-    String  m_sDebugMessage;
+    OUString  m_sDebugMessage;
 
 public:
-    SolarMessageBoxExecutor( const String& _rDebugMessage )
+    SolarMessageBoxExecutor( const OUString& _rDebugMessage )
         :m_sDebugMessage( _rDebugMessage )
     {
     }
@@ -1669,7 +1669,7 @@ void DbgPrintMsgBox( const char* pLine )
     strcat( aDbgOutBuf, "\nAbort ? (Yes=abort / No=ignore / Cancel=crash)" );
 #endif
 
-    SolarMessageBoxExecutor aMessageBox( String( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
+    SolarMessageBoxExecutor aMessageBox( OUString( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
     TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
     long nResult = aMessageBox.execute( aTimeout );
 
@@ -1686,10 +1686,10 @@ void DbgPrintMsgBox( const char* pLine )
 class SolarWindowPrinter : public ::vcl::SolarThreadExecutor
 {
 private:
-    String  m_sDebugMessage;
+    OUString  m_sDebugMessage;
 
 public:
-    SolarWindowPrinter( const String& _rDebugMessage )
+    SolarWindowPrinter( const OUString& _rDebugMessage )
         :m_sDebugMessage( _rDebugMessage )
     {
     }
@@ -1797,7 +1797,7 @@ void DbgGUIStart()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLine pProc )
+sal_uInt16 DbgRegisterNamedUserChannel( const OUString& _rChannelUIName, DbgPrintLine pProc )
 {
     DbgChannelId nChannelId = DbgRegisterUserChannel( pProc );
     UserDefinedChannels& rChannels = ImplDbgGetUserDefinedChannels();
