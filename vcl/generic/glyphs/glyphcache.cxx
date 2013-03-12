@@ -87,7 +87,7 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
     sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>( rFontSelData.mpFontData );
 #ifdef ENABLE_GRAPHITE
     if (rFontSelData.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
-        != STRING_NOTFOUND)
+        != -1)
     {
         rtl::OString aFeatName = rtl::OUStringToOString( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
         nFontId ^= aFeatName.hashCode();
@@ -139,9 +139,9 @@ bool GlyphCache::IFSD_Equal::operator()( const FontSelectPattern& rA, const Font
         return false;
    // check for features
    if ((rA.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
-        != STRING_NOTFOUND ||
+        != -1 ||
         rB.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
-        != STRING_NOTFOUND) && rA.maTargetName != rB.maTargetName)
+        != -1) && rA.maTargetName != rB.maTargetName)
         return false;
 #endif
 

@@ -302,10 +302,10 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         else if( eEncoding == RTL_TEXTENCODING_UCS4 )
             aUtf16Name = OUString(); // TODO
         else // assume the non-unicode encoded names are byte encoded
-+            aUtf16Name = OUString( &aNameBuffer[0], nNameLength, eEncoding );
+            aUtf16Name = OUString( &aNameBuffer[0], nNameLength, eEncoding );
 
         // ignore empty strings
-        if( aUtf16Name.getLength() <= 0 )
+        if( aUtf16Name.isEmpty() )
             continue;
 
         // handle the name depending on its namecode

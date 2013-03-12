@@ -1396,7 +1396,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
             cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
             bCached = rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName );
             // ignore entries which don't have a fallback
-            if( !bCached || (rFontSelData.maSearchName.getLength() != 0) )
+            if( !bCached || !rFontSelData.maSearchName.isEmpty() )
                 break;
         }
 
@@ -1443,7 +1443,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
                          break;
                      cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
                 }
-                if( rFontSelData.maSearchName.getLength() != 0 )
+                if( !rFontSelData.maSearchName.isEmpty() )
                 {
                     // remove cache entries that were still not resolved
                     for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
@@ -1456,7 +1456,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
         }
 
         // find the matching device font
-        if( rFontSelData.maSearchName.getLength() != 0 )
+        if( !rFontSelData.maSearchName.isEmpty() )
             pFallbackData = FindFontFamily( rFontSelData.maSearchName );
     }
 
@@ -1536,11 +1536,11 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAliasName(const rtl::OUString& r
     while( it != maDevFontList.end() )
     {
         ImplDevFontListData* pData = (*it).second;
-        if( !pData->maMapNames.getLength() )
+        if( pData->maMapNames.isEmpty() )
             continue;
 
         // if one alias name matches we found a matching font
-        rtl::OUString aTempName;
+        OUString aTempName;
         sal_Int32 nIndex = 0;
         do
         {
@@ -1576,7 +1576,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByTokenNames(const rtl::OUString& 
     for( sal_Int32 nTokenPos = 0; nTokenPos != -1; )
     {
         OUString aSearchName = GetNextFontToken( rTokenStr, nTokenPos );
-        if( !aSearchName.getLength() )
+        if( aSearchName.isEmpty() )
             continue;
         GetEnglishSearchFontName( aSearchName );
         pFoundData = ImplFindBySearchName( aSearchName );
@@ -2510,10 +2510,10 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
 #ifdef ENABLE_GRAPHITE
         // Until features are properly supported, they are appended to the
         // font name, so we need to strip them off so the font is found.
-        xub_StrLen nFeat = aSearchName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX);
+        sal_Int32 nFeat = aSearchName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX);
         String aOrigName = rFSD.maTargetName;
-        String aBaseFontName(aSearchName, 0, (nFeat != STRING_NOTFOUND)?nFeat:aSearchName.getLength());
-        if (nFeat != STRING_NOTFOUND && STRING_NOTFOUND !=
+        String aBaseFontName(aSearchName, 0, (nFeat != -1)?nFeat:aSearchName.getLength());
+        if (nFeat != -1 && -1 !=
             aSearchName.indexOf(grutils::GrFeatureParser::FEAT_ID_VALUE_SEPARATOR, nFeat))
         {
             aSearchName = aBaseFontName;
@@ -2543,7 +2543,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
             else if( aSearchName.equalsIgnoreAsciiCase( "hgpminchob" ) )
                 aBoldName = OUString("hgpminchoe");
 
-            if( aBoldName.getLength() && ImplFindBySearchName( aBoldName ) )
+            if( !aBoldName.isEmpty() && ImplFindBySearchName( aBoldName ) )
             {
                 // the other font is available => use it
                 aSearchName = aBoldName;
@@ -2672,7 +2672,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
 
     // use font fallback
     const FontNameAttr* pFontAttr = NULL;
-    if( aSearchName.getLength() )
+    if( !aSearchName.isEmpty() )
     {
         // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
@@ -2706,7 +2706,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
     while( nTokenPos != -1 )
     {
         rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
-        if( !rFSD.maTargetName.getLength() )
+        if( rFSD.maTargetName.isEmpty() )
             continue;
 
         aSearchName = rFSD.maTargetName;
