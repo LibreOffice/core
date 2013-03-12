@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///yw\u003d",
+        "filename": "sw/source/ui/docvw/PostItMgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-03-12T13:56:40Z",
+      "side": 1,
+      "message": "please use \"false\" not 0 for \"bool\"",
+      "revId": "1f0646d13047853a442a3be67756c818cdc8e3c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///ys\u003d",
+        "filename": "sw/source/ui/docvw/PostItMgr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-03-12T13:56:40Z",
+      "side": 1,
+      "message": "please use \"true\" not 1 for \"bool\"",
+      "revId": "1f0646d13047853a442a3be67756c818cdc8e3c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
