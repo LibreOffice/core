@@ -50,7 +50,7 @@
 #include <sal/main.h>
 
 #include "args.h"
-#include "exithelper.h"
+#include "../../source/inc/exithelper.h"
 #include "splashx.h"
 
 #define PIPEDEFAULTPATH      "/tmp"
