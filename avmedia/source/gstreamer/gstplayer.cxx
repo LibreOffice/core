@@ -206,7 +206,10 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
         gchar* error_debug;
 
         gst_message_parse_error( message, &error, &error_debug );
-        fprintf(stderr, "gstreamer error: '%s' debug: '%s'", error->message, error_debug);
+        SAL_WARN(
+            "avmedia",
+            "gstreamer error: '" << error->message << "' debug: '"
+                << error_debug << "'");
     }
 #endif
 
