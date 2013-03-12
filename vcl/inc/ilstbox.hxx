@@ -57,14 +57,14 @@ enum LB_EVENT_TYPE
 
 struct ImplEntryType
 {
-    XubString   maStr;
+    OUString    maStr;
     Image       maImage;
     void*       mpUserData;
-    sal_Bool        mbIsSelected;
+    sal_Bool    mbIsSelected;
     long        mnFlags;
     long        mnHeight;
 
-                ImplEntryType( const XubString& rStr, const Image& rImage ) :
+                ImplEntryType( const OUString& rStr, const Image& rImage ) :
                     maStr( rStr ),
                     maImage( rImage ),
                     mnFlags( 0 ),
@@ -74,7 +74,7 @@ struct ImplEntryType
                     mpUserData = NULL;
                 }
 
-                ImplEntryType( const XubString& rStr ) :
+                ImplEntryType( const OUString& rStr ) :
                     maStr( rStr ),
                     mnFlags( 0 ),
                     mnHeight( 0 )
@@ -143,7 +143,7 @@ public:
     sal_uInt16          GetEntryCount() const { return (sal_uInt16)maEntries.size(); }
     sal_Bool            HasImages() const { return mnImages ? sal_True : sal_False; }
 
-    XubString       GetEntryText( sal_uInt16 nPos ) const;
+    OUString        GetEntryText( sal_uInt16 nPos ) const;
 
     sal_Bool            HasEntryImage( sal_uInt16 nPos ) const;
     Image           GetEntryImage( sal_uInt16 nPos ) const;
@@ -157,7 +157,7 @@ public:
     void            SelectEntry( sal_uInt16 nPos, sal_Bool bSelect );
 
     sal_uInt16          GetSelectEntryCount() const;
-    XubString       GetSelectEntry( sal_uInt16 nIndex ) const;
+    OUString        GetSelectEntry( sal_uInt16 nIndex ) const;
     sal_uInt16          GetSelectEntryPos( sal_uInt16 nIndex ) const;
     sal_Bool            IsEntryPosSelected( sal_uInt16 nIndex ) const;
 
@@ -429,9 +429,9 @@ public:
     virtual const Wallpaper& GetDisplayBackground() const;
     virtual Window*     GetPreferredKeyInputWindow();
 
-    sal_uInt16          InsertEntry( sal_uInt16 nPos, const XubString& rStr );
+    sal_uInt16          InsertEntry( sal_uInt16 nPos, const OUString& rStr );
     sal_uInt16          InsertEntry( sal_uInt16 nPos, const Image& rImage );
-    sal_uInt16          InsertEntry( sal_uInt16 nPos, const XubString& rStr, const Image& rImage );
+    sal_uInt16          InsertEntry( sal_uInt16 nPos, const OUString& rStr, const Image& rImage );
     void            RemoveEntry( sal_uInt16 nPos );
     void            SetEntryData( sal_uInt16 nPos, void* pNewData ) { maLBWindow.GetEntryList()->SetEntryData( nPos, pNewData ); }
     void            Clear();
@@ -560,7 +560,7 @@ class ImplWin : public Control
 private:
 
     sal_uInt16      mnItemPos;  // because of UserDraw I have to know which item I draw
-    XubString       maString;
+    OUString        maString;
     Image           maImage;
 
     Rectangle       maFocusRect;
@@ -588,11 +588,11 @@ public:
     virtual void    LoseFocus();
     virtual long    PreNotify( NotifyEvent& rNEvt );
 
-    sal_uInt16          GetItemPos() const { return mnItemPos; }
+    sal_uInt16      GetItemPos() const { return mnItemPos; }
     void            SetItemPos( sal_uInt16 n ) { mnItemPos = n; }
 
-    const XubString& GetString() const { return maString; }
-    void            SetString( const XubString& rStr ) { maString = rStr; }
+    const OUString& GetString() const { return maString; }
+    void            SetString( const OUString& rStr ) { maString = rStr; }
 
     const Image&    GetImage() const { return maImage; }
     void            SetImage( const Image& rImg ) { maImage = rImg; }
