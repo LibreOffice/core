@@ -336,7 +336,7 @@ void RTSCommandPage::save()
         {
             if( !aToken.isEmpty() )
             {
-                if( aFeatures.isEmpty() )
+                if( !aFeatures.isEmpty() )
                     aFeatures += ",";
                 aFeatures += OUString( aToken );
             }
@@ -355,13 +355,13 @@ void RTSCommandPage::save()
     ::std::list< String >* pList = &m_aPrinterCommands;
     if( bExternalDialog )
     {
-        if( aFeatures.isEmpty() )
+        if( !aFeatures.isEmpty() )
             aFeatures += ",";
         aFeatures += "external_dialog" ;
     }
     if( bHaveFax )
     {
-        if( aFeatures.isEmpty() )
+        if( !aFeatures.isEmpty() )
             aFeatures += ",";
         aFeatures += "fax=" ;
         if( bFaxSwallow )
@@ -370,7 +370,7 @@ void RTSCommandPage::save()
     }
     if( bHavePdf )
     {
-        if( aFeatures.isEmpty() )
+        if( !aFeatures.isEmpty() )
             aFeatures += ",";
         aFeatures += "pdf=" ;
         aFeatures += m_aPdfDirectoryEdit.GetText() ;
