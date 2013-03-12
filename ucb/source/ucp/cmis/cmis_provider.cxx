@@ -117,10 +117,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       com::sun::star::ucb::XContentProvider );
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                       "com.sun.star.comp.CmisContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                       "com.sun.star.ucb.CmisContentProvider" )) );
+                     rtl::OUString("com.sun.star.comp.CmisContentProvider"),
+                     rtl::OUString("com.sun.star.ucb.CmisContentProvider") );
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 

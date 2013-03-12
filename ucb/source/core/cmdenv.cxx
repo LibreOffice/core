@@ -111,8 +111,7 @@ UcbCommandEnvironment::getSupportedServiceNames()
 // static
 rtl::OUString UcbCommandEnvironment::getImplementationName_Static()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.ucb.CommandEnvironment" ) );
+    return rtl::OUString( "com.sun.star.comp.ucb.CommandEnvironment" );
 }
 
 //=========================================================================
@@ -121,9 +120,7 @@ uno::Sequence< rtl::OUString >
 UcbCommandEnvironment::getSupportedServiceNames_Static()
 {
     uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ]
-        = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.ucb.CommandEnvironment" ) );
+    aSNS.getArray()[ 0 ] = "com.sun.star.ucb.CommandEnvironment";
     return aSNS;
 }
 

@@ -52,9 +52,7 @@ registerAtUcb(
     OSL_ENSURE(rServiceFactory.is(),
                "ucb::registerAtUcb(): No service factory");
 
-    bool bNoProxy
-        = rArguments.compareToAscii(RTL_CONSTASCII_STRINGPARAM("{noproxy}"))
-              == 0;
+    bool bNoProxy = rArguments.compareTo("{noproxy}") == 0;
     rtl::OUString
         aProviderArguments(bNoProxy ?
                                rArguments.
@@ -70,7 +68,7 @@ registerAtUcb(
         {
             uno::Reference< beans::XPropertySet > xFactoryProperties( rServiceFactory, uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xContext = uno::Reference< uno::XComponentContext >(
-                xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
+                xFactoryProperties->getPropertyValue( ::rtl::OUString( "DefaultContext" ) ),
                 uno::UNO_QUERY );
             xProxyFactory
                 = uno::Reference< ucb::XContentProviderFactory >(

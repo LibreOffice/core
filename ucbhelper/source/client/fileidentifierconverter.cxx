@@ -44,7 +44,7 @@ getLocalFileURL() SAL_THROW((uno::RuntimeException))
     // "vnd.sun.star.wfs:///"), this code should query all relevant UCPs for
     // their com.sun.star.ucb.XFileIdentifierConverter.getFileProviderLocality
     // and return the most local one:
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
+    return rtl::OUString("file:///");
 }
 
 //============================================================================

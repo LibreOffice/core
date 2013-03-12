@@ -84,7 +84,7 @@ namespace cmis
     uno::Any RepoContent::getBadArgExcept()
     {
         return uno::makeAny( lang::IllegalArgumentException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong argument type!")),
+            rtl::OUString("Wrong argument type!"),
             static_cast< cppu::OWeakObject * >( this ), -1) );
     }
 
@@ -203,16 +203,16 @@ namespace cmis
     {
         static const beans::Property aGenericProperties[] =
         {
-            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+            beans::Property( rtl::OUString( "IsDocument" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+            beans::Property( rtl::OUString( "IsFolder" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+            beans::Property( rtl::OUString( "Title" ),
                 -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ),
+            beans::Property( rtl::OUString( "IsReadOnly" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
@@ -228,21 +228,21 @@ namespace cmis
         {
             // Required commands
             ucb::CommandInfo
-            ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+            ( rtl::OUString( "getCommandInfo" ),
               -1, getCppuVoidType() ),
             ucb::CommandInfo
-            ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+            ( rtl::OUString( "getPropertySetInfo" ),
               -1, getCppuVoidType() ),
             ucb::CommandInfo
-            ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+            ( rtl::OUString( "getPropertyValues" ),
               -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
             ucb::CommandInfo
-            ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+            ( rtl::OUString( "setPropertyValues" ),
               -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
             // Optional standard commands
             ucb::CommandInfo
-            ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+            ( rtl::OUString( "open" ),
               -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
         };
 
@@ -280,20 +280,20 @@ namespace cmis
 
     rtl::OUString SAL_CALL RepoContent::getImplementationName() throw( uno::RuntimeException )
     {
-       return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.CmisRepoContent"));
+       return rtl::OUString("com.sun.star.comp.CmisRepoContent");
     }
 
     uno::Sequence< rtl::OUString > SAL_CALL RepoContent::getSupportedServiceNames()
            throw( uno::RuntimeException )
     {
        uno::Sequence< rtl::OUString > aSNS( 1 );
-       aSNS.getArray()[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Content"));
+       aSNS.getArray()[ 0 ] = "com.sun.star.ucb.Content";
        return aSNS;
     }
 
     rtl::OUString SAL_CALL RepoContent::getContentType() throw( uno::RuntimeException )
     {
-        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMIS_REPO_TYPE ) );
+        return rtl::OUString( CMIS_REPO_TYPE );
     }
 
     uno::Any SAL_CALL RepoContent::execute(

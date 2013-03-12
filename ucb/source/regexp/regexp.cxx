@@ -235,24 +235,22 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
         switch (m_eKind)
         {
             case KIND_PREFIX:
-                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("(.*)"));
+                aBuffer.append("(.*)");
                 break;
 
             case KIND_AUTHORITY:
-                aBuffer.
-                    appendAscii(RTL_CONSTASCII_STRINGPARAM("(([/?#].*)?)"));
+                aBuffer.append("(([/?#].*)?)");
                 break;
 
             case KIND_DOMAIN:
-                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("([^/?#]"));
+                aBuffer.append("([^/?#]");
                 aBuffer.append(sal_Unicode(m_bEmptyDomain ? '*' : '+'));
                 if (!m_aInfix.isEmpty())
                     appendStringLiteral(&aBuffer, m_aInfix);
-                aBuffer.
-                    appendAscii(RTL_CONSTASCII_STRINGPARAM("([/?#].*)?)"));
+                aBuffer.append("([/?#].*)?)");
                 break;
         }
-        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("->"));
+        aBuffer.append("->");
         if (bReverse)
         {
             if (!m_aPrefix.isEmpty())
@@ -263,7 +261,7 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
             if (!m_aReversePrefix.isEmpty())
                 appendStringLiteral(&aBuffer, m_aReversePrefix);
         }
-        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\\1"));
+        aBuffer.append("\\1");
         return aBuffer.makeStringAndClear();
     }
     else if (m_eKind == KIND_PREFIX && isScheme(m_aPrefix, true))
@@ -276,19 +274,19 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
         switch (m_eKind)
         {
             case KIND_PREFIX:
-                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(".*"));
+                aBuffer.append(".*");
                 break;
 
             case KIND_AUTHORITY:
-                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("([/?#].*)?"));
+                aBuffer.append("([/?#].*)?");
                 break;
 
             case KIND_DOMAIN:
-                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("[^/?#]"));
+                aBuffer.append("[^/?#]");
                 aBuffer.append(sal_Unicode(m_bEmptyDomain ? '*' : '+'));
                 if (!m_aInfix.isEmpty())
                     appendStringLiteral(&aBuffer, m_aInfix);
-                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("([/?#].*)?"));
+                aBuffer.append("([/?#].*)?");
                 break;
         }
         return aBuffer.makeStringAndClear();
@@ -361,8 +359,7 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
     // where <scheme> is as defined in RFC 2396:
     if (isScheme(rRegexp, false))
         return Regexp(Regexp::KIND_PREFIX,
-                      rRegexp
-                          + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":")),
+                      rRegexp + ":",
                       false,
                       rtl::OUString(),
                       false,
