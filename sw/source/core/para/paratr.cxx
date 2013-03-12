@@ -48,12 +48,6 @@ TYPEINIT1_AUTOFACTORY( SwRegisterItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY( SwNumRuleItem, SfxStringItem);
 TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
 
-/*************************************************************************
-|*    Beschreibung      Methoden von SwFmtDrop
-*************************************************************************/
-
-
-
 SwFmtDrop::SwFmtDrop()
     : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( 0 ),
@@ -90,7 +84,7 @@ SwFmtDrop::~SwFmtDrop()
 
 void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 {
-    //Ummelden
+    // Rewire
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
     if(pNew)
@@ -109,9 +103,8 @@ void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
         else if( pDefinedIn->GetDepends() &&
                 !pDefinedIn->IsModifyLocked() )
         {
-            // selbst den Abhaengigen vom Format bescheid sagen. Das
-            // Format selbst wuerde es nicht weitergeben, weil es ueber
-            // die Abpruefung nicht hinauskommt.
+            // Notify those who are dependend on the format on our own.
+            // The format itself wouldn't pass on the notify as it does not get past the check.
             pDefinedIn->ModifyBroadcast( this, this );
         }
     }
@@ -119,12 +112,12 @@ void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
 
 bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
 {
-    return true;    // weiter
+    return true; // Continue
 }
 
 int SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "No mathing attributes" );
     return ( nLines == ((SwFmtDrop&)rAttr).GetLines() &&
              nChars == ((SwFmtDrop&)rAttr).GetChars() &&
              nDistance ==  ((SwFmtDrop&)rAttr).GetDistance() &&
@@ -222,22 +215,25 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-// class SwRegisterItem -------------------------------------------------
-
+/**
+ * SwRegisterItem
+ */
 
 SfxPoolItem* SwRegisterItem::Clone( SfxItemPool * ) const
 {
     return new SwRegisterItem( *this );
 }
 
-// class SwNumRuleItem -------------------------------------------------
+/**
+ * SwNumRuleItem
+ */
 SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 {
     return new SwNumRuleItem( *this );
 }
 int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "No matching attributes" );
 
     return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
 }
@@ -261,7 +257,5 @@ SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
 {
     return new SwParaConnectBorderItem( *this );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
