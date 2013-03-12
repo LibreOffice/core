@@ -2430,8 +2430,8 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
             //to see if it's a modern re-coded apple symbol font in case that
             //font shows up on a different platform
             if (!pEntry->mpConversion &&
-                aFontSelData.maTargetName.equalsIgnoreAsciiCaseAscii("symbol") &&
-                aFontSelData.maSearchName.equalsIgnoreAsciiCaseAscii("symbol"))
+                aFontSelData.maTargetName.equalsIgnoreAsciiCase("symbol") &&
+                aFontSelData.maSearchName.equalsIgnoreAsciiCase("symbol"))
             {
                 pEntry->mpConversion = ConvertChar::GetRecodeData( OUString("Symbol"), OUString("AppleSymbol") );
             }
