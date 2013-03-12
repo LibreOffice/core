@@ -510,6 +510,7 @@ File gid_File_Pymailmerge
     Dir = gid_Brand_Dir_Program;
     ARCHIVE_TXT_FILE_BODY;
     Name = "mailmerge.zip";
+End
 #endif
 #endif
 
