@@ -48,9 +48,10 @@
 
 #if QT_VERSION >= QT_VERSION_CHECK( 4, 9, 0 )
 #define QT_UNIX_EVENT_LOOP_SUPPORT
+#endif
+
 #ifdef KDE_HAVE_GLIB
 #define GLIB_EVENT_LOOP_SUPPORT
-#endif
 #endif
 
 #ifdef GLIB_EVENT_LOOP_SUPPORT
@@ -204,7 +205,8 @@ void KDEXLib::setupEventLoop()
 // The catch is that Qt has a bug that allows triggering timers even when they should
 // not be, leading to crashes caused by QClipboard re-entering the event loop.
 // (http://bugreports.qt.nokia.com/browse/QTBUG-14461), so enable only with Qt>=4.8.0,
-// where it is(?) fixed.
+// where it is fixed.
+#if QT_VERSION >= QT_VERSION_CHECK( 4, 8, 0 )
     if( QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherGlib" ))
     {
         eventLoopType = GlibEventLoop;
@@ -215,6 +217,7 @@ void KDEXLib::setupEventLoop()
         m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
         return;
     }
+#endif
 #endif
 #ifdef QT_UNIX_EVENT_LOOP_SUPPORT
 // When Qt does not use Glib support, it uses its own Unix event dispatcher.
