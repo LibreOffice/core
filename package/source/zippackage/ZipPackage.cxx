@@ -163,6 +163,7 @@ ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
 ZipPackage::~ZipPackage( void )
 {
     delete m_pZipFile;
+    delete m_pRootFolder;
 
     // All folders and streams contain pointers to their parents, when a parent diappeares
     // it should disconnect all the children from itself during destruction automatically.
