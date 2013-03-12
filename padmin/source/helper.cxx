@@ -87,7 +87,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
  *  FindFiles
  */
 
-void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult, const String& rSuffixes, bool bRecursive )
+void padmin::FindFiles( const OUString& rDirectory, ::std::list< String >& rResult, const OUString& rSuffixes, bool bRecursive )
 {
     rResult.clear();
 
@@ -111,11 +111,11 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
                 int nToken = comphelper::string::getTokenCount(rSuffixes, ';');
                 while( nToken-- )
                 {
-                    String aSuffix = rSuffixes.GetToken( nToken, ';' );
-                    if( aFileName.Len() > aSuffix.Len()+1 )
+                    OUString aSuffix = rSuffixes.getToken( nToken, ';' );
+                    if( aFileName.Len() > aSuffix.getLength()+1 )
                     {
-                        String aExtension = aFileName.Copy( aFileName.Len()-aSuffix.Len() );
-                        if( aFileName.GetChar( aFileName.Len()-aSuffix.Len()-1 ) == '.' &&
+                        String aExtension = aFileName.Copy( aFileName.Len()-aSuffix.getLength() );
+                        if( aFileName.GetChar( aFileName.Len()-aSuffix.getLength()-1 ) == '.' &&
                             aExtension.EqualsIgnoreCaseAscii( aSuffix ) )
                         {
                             rResult.push_back( aFileName );
@@ -271,7 +271,7 @@ void padmin::freePadminRC()
         delete pRC, pRC = NULL;
 }
 
-bool padmin::chooseDirectory( String& rInOutPath )
+bool padmin::chooseDirectory( OUString& rInOutPath )
 {
     bool bRet = false;
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );

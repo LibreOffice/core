@@ -44,7 +44,6 @@ using namespace padmin;
 using namespace psp;
 using namespace osl;
 
-using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
 PPDImportDialog::PPDImportDialog( Window* pParent ) :
@@ -97,7 +96,7 @@ PPDImportDialog::~PPDImportDialog()
 
 void PPDImportDialog::Import()
 {
-    String aImportPath( m_aPathBox.GetText() );
+    OUString aImportPath( m_aPathBox.GetText() );
 
     Config& rConfig = getPadminRC();
     rConfig.SetGroup( PPDIMPORT_GROUP );
@@ -125,7 +124,7 @@ void PPDImportDialog::Import()
     aProgress.startOperation( m_aLoadingPPD );
 
     ::std::list< String > aFiles;
-    FindFiles( aImportPath, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD;PS.GZ;PPD.GZ" ) ), true );
+    FindFiles( aImportPath, aFiles, OUString( "PS;PPD;PS.GZ;PPD.GZ" ), true );
 
     int i = 0;
     aProgress.setRange( 0, aFiles.size() );
@@ -161,9 +160,9 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
     else if( pButton == &m_aOKBtn )
     {
         // copy the files
-        ::std::list< rtl::OUString > aToDirs;
+        ::std::list< OUString > aToDirs;
         psp::getPrinterPathList( aToDirs, PRINTER_PPDDIR );
-        ::std::list< rtl::OUString >::iterator writeDir = aToDirs.begin();
+        ::std::list< OUString >::iterator writeDir = aToDirs.begin();
         m_aImportedFiles.clear();
 
         for( int i = 0; i < m_aDriverLB.GetSelectEntryCount(); i++ )
@@ -190,7 +189,7 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
     }
     else if( pButton == &m_aSearchBtn )
     {
-        String aPath( m_aPathBox.GetText() );
+        OUString aPath( m_aPathBox.GetText() );
         if( chooseDirectory( aPath ) )
         {
             m_aPathBox.SetText( aPath );
