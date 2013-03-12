@@ -7259,6 +7259,8 @@ AC_SUBST([MINGW_ZLIB_DLL])
 # =====================================================================
 # This allows a lack of system python with no error, we use internal one in that case.
 AM_PATH_PYTHON([2.6],, [:])
+# Clean PYTHON_VERSION checked below if cross-compiling
+PYTHON_VERSION=""
 if test "$PYTHON" != ":"; then
     PYTHON_FOR_BUILD=$PYTHON
 fi
