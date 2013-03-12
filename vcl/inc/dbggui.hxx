@@ -29,7 +29,6 @@
 #ifdef DBG_UTIL
 
 class Window;
-class XubString;
 
 void DbgGUIInit();
 void DbgGUIDeInit();
@@ -42,7 +41,7 @@ void DbgDialogTest( Window* pWindow );
         ->DbgData::nWarningOut and ->DbgData::nTraceOut
     @see DBG_OUT_USER_CHANNEL_0
 */
-sal_uInt16 DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLine pProc );
+sal_uInt16 DbgRegisterNamedUserChannel( const OUString& _rChannelUIName, DbgPrintLine pProc );
 
 #define DBGGUI_INIT()           DbgGUIInit()
 #define DBGGUI_DEINIT()         DbgGUIDeInit()
