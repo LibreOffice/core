@@ -466,7 +466,7 @@ public class ORowSet extends TestCase {
         }
         catch(com.sun.star.uno.Exception e)
         {
-            log.println( "couldn't set up tes tenvironment:" );
+            log.println( "couldn't set up test environment:" );
             e.printStackTrace(log);
             try
             {
@@ -476,7 +476,7 @@ public class ORowSet extends TestCase {
             catch(Exception ex)
             {
             }
-            throw new StatusException( "couldn't set up tes tenvironment", e );
+            throw new StatusException( "couldn't set up test environment", e );
         }
         finally
         {
