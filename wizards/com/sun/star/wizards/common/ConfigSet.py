@@ -18,7 +18,6 @@
 import traceback
 from .ConfigGroup import ConfigGroup
 from .Configuration import Configuration
-from ..agenda.CGTopic import CGTopic
 
 class ConfigSet(ConfigGroup):
     '''
@@ -30,7 +29,8 @@ class ConfigSet(ConfigGroup):
     to avoid this "deletion" of nulls.
     '''
 
-    def __init__(self):
+    def __init__(self, childType):
+        self.childType = childType
         self.childrenList = []
         self.childrenListLen = 0
 
@@ -42,12 +42,13 @@ class ConfigSet(ConfigGroup):
             try:
                 childView = configurationView.createInstance()
                 configurationView.insertByName(index, childView)
-                topic = CGTopic()
-                topic.cp_Index = item[0].Value
-                topic.cp_Topic = item[1].Value
-                topic.cp_Responsible = item[2].Value
-                topic.cp_Time = item[3].Value
-                topic.writeConfiguration(childView, param)
+                if callable( self.childType ):
+                    topic = self.childType()
+                    topic.cp_Index = item[0].Value
+                    topic.cp_Topic = item[1].Value
+                    topic.cp_Responsible = item[2].Value
+                    topic.cp_Time = item[3].Value
+                    topic.writeConfiguration(childView, param)
             except Exception:
                 traceback.print_exc()
 
@@ -57,10 +58,11 @@ class ConfigSet(ConfigGroup):
         if names:
             for i in names:
                 try:
-                    topic = CGTopic()
-                    topic.readConfiguration(
-                        configurationView.getByName(i), param)
-                    self.childrenList.append(topic)
+                    if callable( self.childType ):
+                        topic = self.childType()
+                        topic.readConfiguration(
+                            configurationView.getByName(i), param)
+                        self.childrenList.append(topic)
                 except Exception:
                     traceback.print_exc()
         self.childrenListLen = len(self.childrenList)
