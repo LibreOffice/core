@@ -124,7 +124,7 @@ void CommandStore::getStoredCommands( const char* pGroup, ::std::list< String >&
     while( nKeys-- )
     {
         OUString aCommand( rConfig.ReadKey(rtl::OString::valueOf(nKeys), RTL_TEXTENCODING_UTF8 ) );
-        if( aCommand.isEmpty() )
+        if( !aCommand.isEmpty() )
         {
             for( it = rCommands.begin(); it != rCommands.end() && *it != aCommand; ++it )
                 ;
