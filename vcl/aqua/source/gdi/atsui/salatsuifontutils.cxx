@@ -305,7 +305,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             aUtf16Name = OUString( &aNameBuffer[0], nNameLength, eEncoding );
 
         // ignore empty strings
-        if( aUtf16Name.getLength() <= 0 )
+        if( aUtf16Name.isEmpty() )
             continue;
 
         // handle the name depending on its namecode

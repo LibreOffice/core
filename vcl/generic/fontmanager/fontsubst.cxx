@@ -184,10 +184,10 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
         return true;
     }
 
-    rtl::OUString aDummy;
+    OUString aDummy;
     const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, aDummy );
 
-    if( !aOut.maSearchName.getLength() )
+    if( aOut.maSearchName.isEmpty() )
         return false;
 
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
@@ -238,7 +238,7 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
     // FC doing it would be preferable because it knows the invariables
     // e.g. FC knows the FC rule that all Arial gets replaced by LiberationSans
     // whereas we would have to check for every size or attribute
-    if( !aOut.maSearchName.getLength() )
+    if( aOut.maSearchName.isEmpty() )
         return false;
 
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
