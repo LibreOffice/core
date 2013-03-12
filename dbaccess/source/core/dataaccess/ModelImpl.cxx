@@ -427,11 +427,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
             ,m_pSharedConnectionManager(NULL)
             ,m_nControllerLockCount(0)
 {
-    // some kind of default
     DBG_CTOR(ODatabaseModelImpl,NULL);
-    m_sConnectURL = "jdbc:";
-    m_aTableFilter.realloc(1);
-    m_aTableFilter[0] = "%";
     impl_construct_nothrow();
 }
 
