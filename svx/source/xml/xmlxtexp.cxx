@@ -407,6 +407,7 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
                 aAny = mxTable->getByName( *pNames );
                 pExporter->exportEntry( *pNames, aAny );
             }
+            delete pExporter;
 
             bRet = true;
         }
