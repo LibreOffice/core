@@ -198,8 +198,8 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
         for( int i = 0; i < m_aDriverBox.GetSelectEntryCount(); i++ )
         {
             int nSelect = m_aDriverBox.GetSelectEntryPos(i);
-            OUString aDriver( *(String*)m_aDriverBox.GetEntryData( nSelect ) );
-            if( aDriver.isEmpty() )
+            OUString aDriver( *(OUString*)m_aDriverBox.GetEntryData( nSelect ) );
+            if( !aDriver.isEmpty() )
             {
                 // never delete the default driver
                 if( aDriver.equalsIgnoreAsciiCase( "SGENPRT" ) )
