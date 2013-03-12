@@ -7920,7 +7920,7 @@ if test "$with_system_mdds" = "yes"; then
     AC_CHECK_HEADER(mdds/flat_segment_tree.hpp, [],
         [AC_MSG_ERROR(mdds/flat_segment_tree.hpp not found. install mdds)], [])
     AC_CHECK_HEADER(mdds/multi_type_matrix.hpp, [],
-        [AC_MSG_ERROR(mdds/multi_type_matrix.hpp not found. install mdds >= 0.6.0)], [])
+        [AC_MSG_ERROR(mdds/multi_type_matrix.hpp not found. install mdds >= 0.7.0)], [])
     CPPFLAGS="$save_CPPFLAGS"
     AC_LANG_POP([C++])
 else
