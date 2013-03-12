@@ -48,6 +48,7 @@ public:
     void testN757905();
     void testAllGapsWord();
     void testFdo59530();
+    void testI120158();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -70,6 +71,7 @@ void Test::run()
         {"n757905.doc", &Test::testN757905},
         {"all_gaps_word.doc", &Test::testAllGapsWord},
         {"fdo59530.doc", &Test::testFdo59530},
+        {"i120158.doc", &Test::testI120158}
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -251,6 +253,19 @@ void Test::testFdo59530()
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("346376201"), getProperty<OUString>(xPropertySet, "Name"));
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
+}
+
+void Test::testI120158()
+{
+    // See https://issues.apache.org/ooo/show_bug.cgi?id=120158
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+    // list of paragraphs
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    // get contents of 1st paragraph as text
+    uno::Reference<uno::XInterface> paragraph0(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> text0(paragraph0, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( OUString( "3/12/2013 10:48:00 AM" ), text0->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
