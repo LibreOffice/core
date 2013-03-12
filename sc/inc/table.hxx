@@ -201,6 +201,9 @@ public:
     sal_uLong       GetWeightedCount() const;
     sal_uLong       GetCodeCount() const;       // RPN code in formula
 
+    sal_uInt16 GetTextWidth(SCCOL nCol, SCROW nRow) const;
+    void SetTextWidth(SCCOL nCol, SCROW nRow, sal_uInt16 nWidth);
+
     bool        SetOutlineTable( const ScOutlineTable* pNewOutline );
     void        StartOutlineTable();
 

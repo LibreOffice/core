@@ -53,6 +53,15 @@
 
 // STATIC DATA -----------------------------------------------------------
 
+sal_uInt16 ScTable::GetTextWidth(SCCOL nCol, SCROW nRow) const
+{
+    return aCol[nCol].GetTextWidth(nRow);
+}
+
+void ScTable::SetTextWidth(SCCOL nCol, SCROW nRow, sal_uInt16 nWidth)
+{
+    aCol[nCol].SetTextWidth(nRow, nWidth);
+}
 
 bool ScTable::SetOutlineTable( const ScOutlineTable* pNewOutline )
 {
