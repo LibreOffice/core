@@ -673,6 +673,14 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	gid_File_Fnt_DejaVuSerifCondensed_BoldItalic,
 	gid_File_Fnt_DejaVuSerifCondensed_Italic,
 	gid_File_Fnt_DejaVuSerifCondensed,
+	gid_File_Fnt_GentiumBasicRegular,
+	gid_File_Fnt_GentiumBasicBold,
+	gid_File_Fnt_GentiumBasicItalic,
+	gid_File_Fnt_GentiumBasicBoldItalic,
+	gid_File_Fnt_GentiumBookBasicRegular,
+	gid_File_Fnt_GentiumBookBasicBold,
+	gid_File_Fnt_GentiumBookBasicItalic,
+	gid_File_Fnt_GentiumBookBasicBoldItalic,
 	gid_File_Fnt_LibSansNarrow_Regular, 
 	gid_File_Fnt_LibSansNarrow_Bold,
 	gid_File_Fnt_LibSansNarrow_BoldItalic,
@@ -688,21 +696,31 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	gid_File_Fnt_LiberationSerif_Bold,
 	gid_File_Fnt_LiberationSerif_BoldItalic,
 	gid_File_Fnt_LiberationSerif_Italic,
-	gid_File_Fnt_LiberationSerif_Regular
-	gid_File_Fnt_PtSerif_Regular
-	gid_File_Fnt_PtSerif_Bold
-	gid_File_Fnt_PtSerif_Italic
-	gid_File_Fnt_PtSerif_BoldItalic
-	gid_File_Fnt_OpenSans_Regular
-	gid_File_Fnt_OpenSans_Bold
-	gid_File_Fnt_OpenSans_Italic
-	gid_File_Fnt_OpenSans_BoldItalic
-	gid_File_Fnt_SourceSans_Regular
-	gid_File_Fnt_SourceSans_Bold
-	gid_File_Fnt_SourceSans_Italic
-	gid_File_Fnt_SourceSans_BoldItalic
-	gid_File_Fnt_SourceCode_Regular
-	gid_File_Fnt_SourceCode_Bold);
+	gid_File_Fnt_LiberationSerif_Regular,
+	gid_File_Fnt_LinuxLibertineG_Regular,
+	gid_File_Fnt_LinuxLibertineG_Semibold,
+	gid_File_Fnt_LinuxLibertineG_Bold,
+	gid_File_Fnt_LinuxLibertineG_Italic,
+	gid_File_Fnt_LinuxLibertineG_SemiboldItalic,
+	gid_File_Fnt_LinuxLibertineG_BoldItalic,
+	gid_File_Fnt_LinuxBiolinumG_Regular,
+	gid_File_Fnt_LinuxBiolinumG_Bold,
+	gid_File_Fnt_LinuxBiolinumG_Italic,
+	gid_File_Fnt_PtSerif_Regular,
+	gid_File_Fnt_PtSerif_Bold,
+	gid_File_Fnt_PtSerif_Italic,
+	gid_File_Fnt_PtSerif_BoldItalic,
+	gid_File_Fnt_OpenSans_Regular,
+	gid_File_Fnt_OpenSans_Bold,
+	gid_File_Fnt_OpenSans_Italic,
+	gid_File_Fnt_OpenSans_BoldItalic,
+	gid_File_Fnt_SourceSans_Regular,
+	gid_File_Fnt_SourceSans_Bold,
+	gid_File_Fnt_SourceSans_Italic,
+	gid_File_Fnt_SourceSans_BoldItalic,
+	gid_File_Fnt_SourceCode_Regular,
+	gid_File_Fnt_SourceCode_Bold,
+	gid_File_FcLocal_Conf);
 End
 #endif
 
