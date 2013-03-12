@@ -10278,9 +10278,13 @@ int main(int argc, char **argv) {
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
 
-   # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled
+    # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled.
+    # Sets also KDE_GLIB_CFLAGS/KDE_GLIB_LIBS if successful.
     PKG_CHECK_MODULES(KDE_GLIB,[glib-2.0 >= 2.4],
-        [KDE_HAVE_GLIB=1],
+        [
+        KDE_HAVE_GLIB=1
+        AC_DEFINE(KDE_HAVE_GLIB,1)
+        ],
         AC_MSG_WARN([[No Glib found, KDE4 support will not integrate with Qt's Glib event loop support]]))
 fi
 AC_SUBST(KDE4_CFLAGS)
@@ -11722,6 +11726,7 @@ AC_CONFIG_FILES([config_host.mk Makefile lo.xcent instsetoo_native/util/openoffi
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
+AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_mingw.h])
 AC_CONFIG_HEADERS([config_host/config_telepathy.h])
 AC_CONFIG_HEADERS([config_host/config_typesizes.h])

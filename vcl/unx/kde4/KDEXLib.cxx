@@ -44,6 +44,8 @@
 
 #include <stdio.h>
 
+#include <config_kde4.h>
+
 #if QT_VERSION >= QT_VERSION_CHECK( 4, 9, 0 )
 #define QT_UNIX_EVENT_LOOP_SUPPORT
 #ifdef KDE_HAVE_GLIB

@@ -63,6 +63,17 @@ $(eval $(call gb_Library_add_libs,vclplug_kde4,\
 	-lICE \
 ))
 
+ifneq ($(KDE_HAVE_GLIB),)
+$(eval $(call gb_Library_add_defs,vclplug_kde4,\
+    $(KDE_GLIB_CFLAGS) \
+))
+
+$(eval $(call gb_Library_add_libs,vclplug_kde4,\
+    $(KDE_GLIB_LIBS) \
+))
+endif
+
+
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
     vcl/unx/kde4/KDEData \
 	vcl/unx/kde4/KDE4FilePicker \
