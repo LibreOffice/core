@@ -1412,7 +1412,7 @@ void EnhancedCustomShape2d::SwapStartAndEndArrow( SdrObject* pObj ) //#108274
     pObj->SetMergedItem( aLineEndCenter );
 }
 
-basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const sal_Bool bClockwise, sal_Bool bFullCircle = sal_False )
+static basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStart, const Point& rEnd, const sal_Bool bClockwise, sal_Bool bFullCircle = sal_False )
 {
     Rectangle aRect( rRect );
     Point aStart( rStart );

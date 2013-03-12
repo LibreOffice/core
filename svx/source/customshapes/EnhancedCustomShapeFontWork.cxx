@@ -84,7 +84,7 @@ struct FWData                           // representing the whole text
 };
 
 
-sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16 nOutlinesCount2d, FWData& rFWData )
+static sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16 nOutlinesCount2d, FWData& rFWData )
 {
     sal_Bool bNoErr = sal_False;
     sal_Bool bSingleLineMode = sal_False;

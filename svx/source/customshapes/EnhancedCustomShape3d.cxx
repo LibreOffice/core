@@ -57,6 +57,8 @@ using namespace com::sun::star::uno;
 
 const char aExtrusion[] = "Extrusion";
 
+namespace {
+
 void GetOrigin( SdrCustomShapeGeometryItem& rItem, double& rOriginX, double& rOriginY )
 {
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
@@ -191,6 +193,8 @@ drawing::Direction3D GetDirection3D( SdrCustomShapeGeometryItem& rItem, const rt
     if ( pAny )
         *pAny >>= aRetValue;
     return aRetValue;
+}
+
 }
 
 EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const Rectangle& /*rBoundRect*/, const double *pM )
