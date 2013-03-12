@@ -2052,12 +2052,15 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
         }
         if ( pPrev )
         {
-            sal_uInt32 nRpt =  rRow->GetXclRow() - pPrev->GetXclRow();
-            pPrev->SetXclRowRpt( nRpt );
-            if ( nRpt > 1 )
-                aRepeated.push_back( pPrev );
             if ( pPrev->IsDefaultable())
             {
+                // if the previous row we processed is not
+                // defaultable then afaict the rows inbetween are
+                // not used ( and not repeatable )
+                sal_uInt32 nRpt =  rRow->GetXclRow() - pPrev->GetXclRow();
+                if ( nRpt > 1 )
+                    aRepeated.push_back( pPrev );
+                pPrev->SetXclRowRpt( nRpt );
                 XclExpDefaultRowData aDefData( *pPrev );
                 size_t& rnDefCount = aDefRowMap[ aDefData ];
                 rnDefCount += ( pPrev->GetXclRowRpt() - 1 );
