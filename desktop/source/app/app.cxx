@@ -30,7 +30,7 @@
 #include "lockfile.hxx"
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
-#include "exithelper.hxx"
+#include "exithelper.h"
 #include "migration.hxx"
 
 #include <svtools/javacontext.hxx>
@@ -436,7 +436,7 @@ void FatalError(const ::rtl::OUString& sMessage)
     sTitle.appendAscii (" - Fatal Error");
 
     Application::ShowNativeErrorBox (sTitle.makeStringAndClear (), sMessage);
-    _exit(ExitHelper::E_FATAL_ERROR);
+    _exit(EXITHELPER_FATAL_ERROR);
 }
 
 static bool ShouldSuppressUI(const CommandLineArgs& rCmdLine)
@@ -1306,7 +1306,7 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
                 if ( m_rSplashScreen.is() )
                     m_rSplashScreen->reset();
 
-                _exit( ExitHelper::E_CRASH_WITH_RESTART );
+                _exit( EXITHELPER_CRASH_WITH_RESTART );
             }
             else
             {
@@ -1764,7 +1764,7 @@ int Desktop::doShutdown()
         if ( m_rSplashScreen.is() )
             m_rSplashScreen->reset();
 
-        return ExitHelper::E_NORMAL_RESTART;
+        return EXITHELPER_NORMAL_RESTART;
     }
     return EXIT_SUCCESS;
 }

@@ -22,7 +22,7 @@
 #include <osl/process.h>
 #include <rtl/ustring.hxx>
 
-#include "../../../source/inc/exithelper.hxx"
+#include "../../../source/inc/exithelper.h"
 
 using namespace desktop;
 using ::rtl::OUString;
@@ -83,7 +83,7 @@ SAL_IMPLEMENT_MAIN()
             if ( info.Fields & osl_Process_EXITCODE )
             {
                 exitcode = info.Code;
-                bRestart = (ExitHelper::E_CRASH_WITH_RESTART == exitcode || ExitHelper::E_NORMAL_RESTART == exitcode);
+                bRestart = (EXITHELPER_CRASH_WITH_RESTART == exitcode || EXITHELPER_NORMAL_RESTART == exitcode);
             }
             else
                 break;

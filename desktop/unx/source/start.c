@@ -50,6 +50,7 @@
 #include <sal/main.h>
 
 #include "args.h"
+#include "exithelper.h"
 #include "splashx.h"
 
 #define PIPEDEFAULTPATH      "/tmp"
@@ -927,14 +928,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             status = child_get_exit_code(info);
             g_pProcess = 0; // reset
             switch (status) {
-            case 79: // re-start with just -env: parameters
+            case EXITHELPER_CRASH_WITH_RESTART: // re-start with just -env: parameters
 #if OSL_DEBUG_LEVEL > 0
                 fprintf (stderr, "oosplash: re-start with just -env: params !\n");
 #endif
                 bRestart = sal_True;
                 bAllArgs = sal_False;
                 break;
-            case 81: // re-start with all arguments
+            case EXITHELPER_NORMAL_RESTART: // re-start with all arguments
 #if OSL_DEBUG_LEVEL > 0
                 fprintf (stderr, "oosplash: re-start with all params !\n");
 #endif

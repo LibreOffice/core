@@ -43,7 +43,7 @@
 #include "rtl/string.h"
 #include <sal/macros.h>
 
-#include "../../../source/inc/exithelper.hxx"
+#include "../../../source/inc/exithelper.h"
 #include "../extendloaderenvironment.hxx"
 
 #define PIPE_PREFIX                 TEXT("\\\\.\\pipe\\OSL_PIPE_")
@@ -340,7 +340,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             lpCommandLine, MY_STRING(L"\""));
         p = desktop_win32::commandLineAppend(p, argv[0]);
         for (int i = 1; i < argc; ++i) {
-            if (bFirst || ::desktop::ExitHelper::E_NORMAL_RESTART == dwExitCode || wcsncmp(argv[i], MY_STRING(L"-env:")) == 0) {
+            if (bFirst || EXITHELPER_NORMAL_RESTART == dwExitCode || wcsncmp(argv[i], MY_STRING(L"-env:")) == 0) {
                 p = desktop_win32::commandLineAppend(p, MY_STRING(L"\" \""));
                 p = desktop_win32::commandLineAppend(p, argv[i]);
             }
@@ -427,7 +427,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             CloseHandle( aProcessInfo.hThread );
         }
     } while ( fSuccess
-              && ( ::desktop::ExitHelper::E_CRASH_WITH_RESTART == dwExitCode || ::desktop::ExitHelper::E_NORMAL_RESTART == dwExitCode ));
+              && ( EXITHELPER_CRASH_WITH_RESTART == dwExitCode || EXITHELPER_NORMAL_RESTART == dwExitCode ));
     delete[] lpCommandLine;
 
     return fSuccess ? dwExitCode : -1;

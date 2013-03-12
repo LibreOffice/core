@@ -22,6 +22,7 @@
 #include "desktopdllapi.h"
 
 #include "app.hxx"
+#include "exithelper.h"
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
 
@@ -100,7 +101,8 @@ Java_org_libreoffice_experimental_desktop_Desktop_runMain(JNIEnv* /* env */,
     do {
         nRet = soffice_main();
         LOGI("soffice_main returned %d", nRet );
-    } while (nRet == 81 || nRet == 79); // pretend to re-start.
+    } while (nRet == EXITHELPER_NORMAL_RESTART ||
+             nRet == EXITHELPER_CRASH_WITH_RESTART); // pretend to re-start.
 
 }
 
