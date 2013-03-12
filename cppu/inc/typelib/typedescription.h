@@ -875,42 +875,47 @@ void SAL_CALL typelib_typedescription_revokeCallback(
     description is not initialized.
     @internal
 */
-#define TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( eTypeClass ) \
-    ((eTypeClass) == typelib_TypeClass_INTERFACE_METHOD || \
-     (eTypeClass) == typelib_TypeClass_INTERFACE_ATTRIBUTE)
+inline bool TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( _typelib_TypeClass eTypeClass )
+{
+    return (eTypeClass == typelib_TypeClass_INTERFACE_METHOD) ||
+     (eTypeClass == typelib_TypeClass_INTERFACE_ATTRIBUTE);
+}
 
 /** Gets a description from the reference. The description may not be locked by this call.
     You must use the TYPELIB_DANGER_RELEASE macro to release the description fetched with
     this macro.
     @internal
 */
-#define TYPELIB_DANGER_GET( ppDescription, pTypeRef ) \
-{ \
-    typelib_TypeDescriptionReference * pMacroTypeRef = (pTypeRef); \
-    typelib_TypeDescription ** ppMacroTypeDescr = (ppDescription); \
-    if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pMacroTypeRef->eTypeClass )) \
-    { \
-        typelib_typedescriptionreference_getDescription( ppMacroTypeDescr, pMacroTypeRef ); \
-    } \
-    else if (!pMacroTypeRef->pType || !pMacroTypeRef->pType->pWeakRef) \
-    { \
-        typelib_typedescriptionreference_getDescription( ppMacroTypeDescr, pMacroTypeRef ); \
-        if (*ppMacroTypeDescr) \
-            typelib_typedescription_release( *ppMacroTypeDescr ); \
-    } \
-    else \
-    { \
-        *ppMacroTypeDescr = pMacroTypeRef->pType; \
-    } \
+inline void TYPELIB_DANGER_GET( typelib_TypeDescription** ppMacroTypeDescr,
+    typelib_TypeDescriptionReference* pMacroTypeRef )
+{
+    void SAL_CALL typelib_typedescriptionreference_getDescription(typelib_TypeDescription**, typelib_TypeDescriptionReference*) SAL_THROW_EXTERN_C();
+
+    if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pMacroTypeRef->eTypeClass ))
+    {
+        typelib_typedescriptionreference_getDescription( ppMacroTypeDescr, pMacroTypeRef );
+    }
+    else if (!pMacroTypeRef->pType || !pMacroTypeRef->pType->pWeakRef)
+    {
+        typelib_typedescriptionreference_getDescription( ppMacroTypeDescr, pMacroTypeRef );
+        if (*ppMacroTypeDescr)
+        typelib_typedescription_release( *ppMacroTypeDescr );
+    }
+    else
+    {
+        *ppMacroTypeDescr = pMacroTypeRef->pType;
+    }
 }
 
 /** Releases the description previouse fetched by TYPELIB_DANGER_GET.
     @internal
 */
-#define TYPELIB_DANGER_RELEASE( pDescription ) \
-{ \
-    if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( (pDescription)->eTypeClass )) \
-        typelib_typedescription_release( pDescription ); \
+inline void TYPELIB_DANGER_RELEASE( typelib_TypeDescription* pDescription )
+{
+    void SAL_CALL typelib_typedescription_release(typelib_TypeDescription*) SAL_THROW_EXTERN_C();
+
+    if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( pDescription->eTypeClass ))
+        typelib_typedescription_release( pDescription );
 }
 
 /** Creates a type description reference. This is a weak reference not holding the description.
