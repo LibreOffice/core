@@ -149,6 +149,7 @@ public:
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             basegfx::B2DHomMatrix& aTransformation,
+                            FillProperties& rShapeOrParentShapeFillProps,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
 
@@ -183,7 +184,9 @@ protected:
                             const ::com::sun::star::awt::Rectangle* pShapeRect,
                             sal_Bool bClearText,
                             sal_Bool bDoNotInsertEmptyTextBody,
-                            basegfx::B2DHomMatrix& aTransformation );
+                            basegfx::B2DHomMatrix& aTransformation,
+                            FillProperties& rShapeOrParentShapeFillProps
+                             );
 
     void                addChildren(
                             ::oox::core::XmlFilterBase& rFilterBase,
