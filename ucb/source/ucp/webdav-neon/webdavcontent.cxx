@@ -394,10 +394,9 @@ uno::Any SAL_CALL Content::execute(
            ucb::CommandAbortedException,
            uno::RuntimeException )
 {
-    OSL_TRACE( ">>>>> Content::execute: start: command: %s, env: %s",
-               rtl::OUStringToOString( aCommand.Name,
-                                       RTL_TEXTENCODING_UTF8 ).getStr(),
-               Environment.is() ? "present" : "missing" );
+    SAL_INFO( "ucb.ucp.webdav", "Content::execute: start: command: " <<
+              aCommand.Name << ", env: " <<
+              (Environment.is() ? "present" : "missing") );
 
     uno::Any aRet;
 
