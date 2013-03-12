@@ -290,7 +290,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
             basegfx::B2DHomMatrix aMatrix;
             if (mpShape->getExtDrawings().size() == 0)
             {
-                mpShape->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix );
+                mpShape->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, mpShape->getFillProperties() );
                 xResult = mpShape->getXShape();
             }
             else
@@ -302,7 +302,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
                     OUString aFragmentPath(pDiagramGraphicDataContext->getFragmentPathFromRelId(*aIt));
                     oox::drawingml::ShapePtr pShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) );
                     mxFilterBase->importFragment(new ShapeDrawingFragmentHandler(*mxFilterBase, aFragmentPath, pShapePtr));
-                    pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix );
+                    pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShapePtr->getFillProperties() );
                     xResult = pShapePtr->getXShape();
                 }
                 mpShape.reset((Shape*)0);
@@ -312,7 +312,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
         else if (mpShape.get() != NULL)
         {
             basegfx::B2DHomMatrix aTransformation;
-            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aTransformation);
+            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aTransformation, mpShape->getFillProperties() );
             xResult.set(mpShape->getXShape());
             mxGraphicShapeContext.clear( );
         }

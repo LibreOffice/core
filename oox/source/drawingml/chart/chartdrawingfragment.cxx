@@ -215,7 +215,7 @@ void ChartDrawingFragment::onEndElement()
                     getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
                     getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Height, 0, SAL_MAX_INT32 ) );
                 basegfx::B2DHomMatrix aMatrix;
-                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, aMatrix, &aShapeRectEmu32 );
+                mxShape->addShape( getFilter(), getFilter().getCurrentTheme(), mxDrawPage, aMatrix, mxShape->getFillProperties(), &aShapeRectEmu32 );
             }
         }
         mxShape.reset();
