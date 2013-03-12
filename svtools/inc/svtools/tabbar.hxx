@@ -339,7 +339,7 @@ private:
     ImplTabButton*  mpLastBtn;
     TabBar_Impl*    mpImpl;
     TabBarEdit*     mpEdit;
-    XubString       maEditText;
+    OUString        maEditText;
     Color           maSelColor;
     Color           maSelTextColor;
     Size            maWinSize;
@@ -476,8 +476,8 @@ public:
     sal_Bool            IsEditModeEnabled() const { return mbAutoEditMode; }
     sal_Bool            StartEditMode( sal_uInt16 nPageId );
     void            EndEditMode( sal_Bool bCancel = sal_False );
-    void            SetEditText( const XubString& rText ) { maEditText = rText; }
-    const XubString& GetEditText() const { return maEditText; }
+    void            SetEditText( const OUString& rText ) { maEditText = rText; }
+    const OUString& GetEditText() const { return maEditText; }
     sal_Bool            IsInEditMode() const { return (mpEdit != NULL); }
     sal_Bool            IsEditModeCanceled() const { return mbEditCanceled; }
     sal_uInt16          GetEditPageId() const { return mnEditId; }

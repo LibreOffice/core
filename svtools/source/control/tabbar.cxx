@@ -2405,8 +2405,8 @@ void TabBar::EndEditMode( sal_Bool bCancel )
         }
 
         // reset
-        maEditText.Erase();
-        mbEditCanceled = sal_False;
+        maEditText = OUString();
+        mbEditCanceled = false;
     }
 }
 

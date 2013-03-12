@@ -295,17 +295,17 @@ protected:
 //------------------------------------------------------------------------------
 class DoubleCurrencyField : public FormattedField
 {
-    XubString   m_sCurrencySymbol;
-    sal_Bool        m_bPrependCurrSym;
-    sal_Bool        m_bChangingFormat;
+    OUString   m_sCurrencySymbol;
+    sal_Bool   m_bPrependCurrSym;
+    sal_Bool   m_bChangingFormat;
 
 public:
     DoubleCurrencyField(Window* pParent, WinBits nStyle = 0);
 
-    XubString   getCurrencySymbol() const { return m_sCurrencySymbol; }
-    void        setCurrencySymbol(const XubString& _sSymbol);
+    OUString    getCurrencySymbol() const { return m_sCurrencySymbol; }
+    void        setCurrencySymbol(const OUString& rSymbol);
 
-    sal_Bool        getPrependCurrSym() const { return m_bPrependCurrSym; }
+    sal_Bool    getPrependCurrSym() const { return m_bPrependCurrSym; }
     void        setPrependCurrSym(sal_Bool _bPrepend);
 
 protected:

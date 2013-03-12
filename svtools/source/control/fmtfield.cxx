@@ -1209,12 +1209,12 @@ void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 }
 
 //------------------------------------------------------------------------------
-void DoubleCurrencyField::setCurrencySymbol(const String& _sSymbol)
+void DoubleCurrencyField::setCurrencySymbol(const OUString& rSymbol)
 {
-    if (m_sCurrencySymbol == _sSymbol)
+    if (m_sCurrencySymbol == rSymbol)
         return;
 
-    m_sCurrencySymbol  = _sSymbol;
+    m_sCurrencySymbol = rSymbol;
     UpdateCurrencyFormat();
     FormatChanged(FCT_CURRENCY_SYMBOL);
 }
@@ -1248,61 +1248,61 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     LanguageTag aLanguageTag( eLanguage);
     LocaleDataWrapper aLocaleInfo( aLanguageTag );
 
-    XubString sNewFormat;
+    OUStringBuffer sNewFormat;
     if (bThSep)
     {
-        sNewFormat = '#';
-        sNewFormat += aLocaleInfo.getNumThousandSep();
-        sNewFormat.AppendAscii("##0");
+        sNewFormat.append('#');
+        sNewFormat.append(aLocaleInfo.getNumThousandSep());
+        sNewFormat.append("##0");
     }
     else
-        sNewFormat = '0';
+        sNewFormat.append('0');
 
     if (nDigits)
     {
-        sNewFormat += aLocaleInfo.getNumDecimalSep();
+        sNewFormat.append(aLocaleInfo.getNumDecimalSep());
 
         rtl::OUStringBuffer sTemp;
         comphelper::string::padToLength(sTemp, nDigits, '0');
-        sNewFormat += sTemp.makeStringAndClear();
+        sNewFormat.append(sTemp);
     }
 
     if (getPrependCurrSym())
     {
-        XubString sSymbol = getCurrencySymbol();
+        OUString sSymbol = getCurrencySymbol();
         sSymbol = comphelper::string::stripStart(sSymbol, ' ');
         sSymbol = comphelper::string::stripEnd(sSymbol, ' ');
 
-        XubString sTemp = rtl::OUString("[$");
-        sTemp += sSymbol;
-        sTemp.AppendAscii("] ");
-        sTemp += sNewFormat;
+        OUStringBuffer sTemp("[$");
+        sTemp.append(sSymbol);
+        sTemp.append("] ");
+        sTemp.append(sNewFormat);
 
         // for negative values : $ -0.00, not -$ 0.00 ...
         // (the real solution would be a possibility to choose a "positive currency format" and a "negative currency format" ...
         // But not now ... (and hey, you could take a formatted field for this ....))
         // FS - 31.03.00 74642
-        sTemp.AppendAscii(";[$");
-        sTemp += sSymbol;
-        sTemp.AppendAscii("] -");
-        sTemp += sNewFormat;
+        sTemp.append(";[$");
+        sTemp.append(sSymbol);
+        sTemp.append("] -");
+        sTemp.append(sNewFormat);
 
         sNewFormat = sTemp;
     }
     else
     {
-        XubString sTemp = getCurrencySymbol();
+        OUString sTemp = getCurrencySymbol();
         sTemp = comphelper::string::stripStart(sTemp, ' ');
         sTemp = comphelper::string::stripEnd(sTemp, ' ');
 
-        sNewFormat += rtl::OUString(" [$");
-        sNewFormat += sTemp;
-        sNewFormat += ']';
+        sNewFormat.append(" [$");
+        sNewFormat.append(sTemp);
+        sNewFormat.append(']');
     }
 
     // set this new basic format
     m_bChangingFormat = sal_True;
-    SetFormat(sNewFormat, eLanguage);
+    SetFormat(sNewFormat.makeStringAndClear(), eLanguage);
     m_bChangingFormat = sal_False;
 }
 
