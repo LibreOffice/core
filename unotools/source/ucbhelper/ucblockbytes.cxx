@@ -186,7 +186,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
     for (i = 0; i < n; i++)
     {
         PropertyChangeEvent evt (rEvent[i]);
-        if (evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("DocumentHeader")))
+        if (evt.PropertyName == ::rtl::OUString("DocumentHeader"))
         {
             Sequence<DocumentHeaderField> aHead;
             if (evt.NewValue >>= aHead)
@@ -211,12 +211,12 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
 
             m_xLockBytes->SetStreamValid_Impl();
         }
-        else if (evt.PropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("PresentationURL")))
+        else if (evt.PropertyName == rtl::OUString("PresentationURL"))
         {
             ::rtl::OUString aUrl;
             if (evt.NewValue >>= aUrl)
             {
-                ::rtl::OUString aBad (RTL_CONSTASCII_USTRINGPARAM ("private:"));
+                ::rtl::OUString aBad ("private:");
                 if (!aUrl.startsWith(aBad))
                 {
                     // URL changed (Redirection).
@@ -224,7 +224,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
                 }
             }
         }
-        else if (evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("MediaType")))
+        else if (evt.PropertyName == ::rtl::OUString("MediaType"))
         {
             ::rtl::OUString aContentType;
             if (evt.NewValue >>= aContentType)
@@ -910,10 +910,10 @@ static sal_Bool UCBOpenContentSync(
         aScheme = xContId->getContentProviderScheme();
 
     // now determine whether we use a timeout or not;
-    if( ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("http"))                &&
-        ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("https"))               &&
-        ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.webdav")) &&
-        ! aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("ftp")))
+    if( ! aScheme.equalsIgnoreAsciiCase("http")                &&
+        ! aScheme.equalsIgnoreAsciiCase("https")               &&
+        ! aScheme.equalsIgnoreAsciiCase("vnd.sun.star.webdav") &&
+        ! aScheme.equalsIgnoreAsciiCase("ftp"))
         return _UCBOpenContentSync(
             xLockBytes,xContent,rArg,xSink,xInteract,xProgress,xHandler);
 

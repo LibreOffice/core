@@ -446,12 +446,12 @@ throw ( ::css::uno::RuntimeException )
 
 ::rtl::OUString OTempFileService::getImplementationName_Static ()
 {
-    return ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.comp.TempFile" ) );
+    return ::rtl::OUString ( "com.sun.star.io.comp.TempFile" );
 }
 ::css::uno::Sequence < ::rtl::OUString > OTempFileService::getSupportedServiceNames_Static()
 {
     ::css::uno::Sequence < ::rtl::OUString > aNames ( 1 );
-    aNames[0] = ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
+    aNames[0] = "com.sun.star.io.TempFile";
     return aNames;
 }
 ::css::uno::Reference < ::css::uno::XInterface >SAL_CALL XTempFile_createInstance(

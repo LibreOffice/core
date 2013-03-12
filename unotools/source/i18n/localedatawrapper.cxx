@@ -339,13 +339,11 @@ void LocaleDataWrapper::invalidateData()
 //                      && !aDebugLocale.EqualsAscii( "es-BR" ) // ?!? Brazil/es
                     )
                 {
-                    rtl::OUStringBuffer aMsg;
-                    aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-                                "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n"));
+                    rtl::OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
                     aMsg.append(aDebugLocale);
-                    aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM( "  ->  0x"));
+                    aMsg.appendAscii("  ->  0x");
                     aMsg.append(static_cast<sal_Int32>(eLang), 16);
-                    aMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM( "  ->  "));
+                    aMsg.appendAscii("  ->  ");
                     aMsg.append(aBackLanguageTag.getBcp47());
                     outputCheckMessage( aMsg.makeStringAndClear() );
                 }
@@ -610,8 +608,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     {
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "LocaleDataWrapper::getCurrSymbolsImpl: no default currency"));
+            rtl::OUString aMsg( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         nElem = 0;
@@ -720,8 +717,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "LocaleDataWrapper::getCurrFormatsImpl: no currency formats"));
+            rtl::OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: no currency formats" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
@@ -769,8 +765,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     scanCurrFormatImpl( pFormatArr[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
     if (areChecksEnabled() && (nNum == -1 || nSym == -1))
     {
-        rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                    "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?"));
+        rtl::OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?" );
         outputCheckMessage( appendLocaleInfo( aMsg ) );
     }
     if (nBlank == -1)
@@ -798,8 +793,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
         if (areChecksEnabled() && (nNum == -1 || nSym == -1 || (nPar == -1 && nSign == -1)))
         {
-            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?"));
+            rtl::OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         // NOTE: one of nPar or nSign are allowed to be -1
@@ -935,8 +929,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const rtl::OUString& rCode )
         {
             if (areChecksEnabled())
             {
-                rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                            "LocaleDataWrapper::scanDateFormat: not all DMY present"));
+                rtl::OUString aMsg( "LocaleDataWrapper::scanDateFormat: not all DMY present" );
                 outputCheckMessage( appendLocaleInfo( aMsg ) );
             }
             if (nDay == -1)
@@ -958,8 +951,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const rtl::OUString& rCode )
     {
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "LocaleDataWrapper::scanDateFormat: no magic applyable"));
+            rtl::OUString aMsg( "LocaleDataWrapper::scanDateFormat: no magic applyable" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         return DMY;
@@ -977,8 +969,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "LocaleDataWrapper::getDateFormatsImpl: no date formats"));
+            rtl::OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no date formats" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         nDateFormat = nLongDateFormat = DMY;
@@ -1022,16 +1013,14 @@ void LocaleDataWrapper::getDateFormatsImpl()
     {
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "LocaleDataWrapper::getDateFormatsImpl: no edit"));
+            rtl::OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no edit" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         if ( nDef == -1 )
         {
             if (areChecksEnabled())
             {
-                rtl::OUString aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                            "LocaleDataWrapper::getDateFormatsImpl: no default"));
+                rtl::OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no default" );
                 outputCheckMessage( appendLocaleInfo( aMsg ) );
             }
             if ( nMedium != -1 )
@@ -1078,8 +1067,8 @@ void LocaleDataWrapper::getDigitGroupingImpl()
     if (!aGrouping[0])
     {
         i18n::LanguageCountryInfo aLCInfo( getLanguageCountryInfo());
-        if (aLCInfo.Country.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("IN")) || // India
-            aLCInfo.Country.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("BT")) )  // Bhutan
+        if (aLCInfo.Country.equalsIgnoreAsciiCase("IN") || // India
+            aLCInfo.Country.equalsIgnoreAsciiCase("BT") )  // Bhutan
         {
             aGrouping[0] = 3;
             aGrouping[1] = 2;
@@ -1772,10 +1761,10 @@ rtl::OUString LocaleDataWrapper::appendLocaleInfo(const rtl::OUString& rDebugMsg
     rtl::OUStringBuffer aDebugMsg(rDebugMsg);
     aDebugMsg.append(static_cast<sal_Unicode>('\n'));
     aDebugMsg.append(maLanguageTag.getBcp47());
-    aDebugMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(" requested\n"));
+    aDebugMsg.appendAscii(" requested\n");
     LanguageTag aLoaded = getLoadedLanguageTag();
     aDebugMsg.append(aLoaded.getBcp47());
-    aDebugMsg.appendAscii(RTL_CONSTASCII_STRINGPARAM(" loaded"));
+    aDebugMsg.appendAscii(" loaded");
     return aDebugMsg.makeStringAndClear();
 }
 
