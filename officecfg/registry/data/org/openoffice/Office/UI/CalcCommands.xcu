@@ -377,33 +377,7 @@
             </node>
             <node oor:name=".uno:InsertObjectChart" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">D~iagramm...</value>
                     <value xml:lang="en-US">Ch~art...</value>
-                    <value xml:lang="ar">...رسم بياني</value>
-                    <value xml:lang="no">Ch~art...</value>
-                    <value xml:lang="ca">Diag~rama...</value>
-                    <value xml:lang="zh-TW">圖表(~A)...</value>
-                    <value xml:lang="cs">Graf...</value>
-                    <value xml:lang="da">D~iagram...</value>
-                    <value xml:lang="el">Δ~ιάγραμμα...</value>
-                    <value xml:lang="es">~Diagrama...</value>
-                    <value xml:lang="fi">~Kaavio...</value>
-                    <value xml:lang="fr">~Diagramme...</value>
-                    <value xml:lang="he">D~iagramm...</value>
-                    <value xml:lang="it">~Diagramma...</value>
-                    <value xml:lang="ja">グラフ(~A)...</value>
-                    <value xml:lang="ko">차트(~A)...</value>
-                    <value xml:lang="nl">~Diagram...</value>
-                    <value xml:lang="pl">Wykr~es...</value>
-                    <value xml:lang="pt-BR">~Gráfico...</value>
-                    <value xml:lang="ru">Диаграмма...</value>
-                    <value xml:lang="sk">Gr~af...</value>
-                    <value xml:lang="sv">~Diagram...</value>
-                    <value xml:lang="th">แผน~ภูมิ...</value>
-                    <value xml:lang="tr">Şema...</value>
-                    <value xml:lang="hi">चा~र्ट...</value>
-                    <value xml:lang="zh-CN">图表(~A)...</value>
-                    <value xml:lang="pt">~Gráfico...</value>
                 </prop>
             </node>
             <node oor:name=".uno:StarChartDialog" oor:op="replace">
