@@ -292,9 +292,9 @@ void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
     const char* lang = getenv("LANG");
     if ( lang != NULL )
     {
-        String aOpenWinDir( String::CreateFromAscii( "/usr/openwin/lib/locale/" ) );
-        aOpenWinDir.AppendAscii( lang );
-        aOpenWinDir.AppendAscii( "/OWfontpath" );
+        OUString aOpenWinDir( "/usr/openwin/lib/locale/" );
+        aOpenWinDir += OUString::createFromAscii( lang );
+        aOpenWinDir += "/OWfontpath";
 
         SvFileStream aStream( aOpenWinDir, STREAM_READ );
 
