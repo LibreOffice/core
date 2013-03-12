@@ -768,7 +768,7 @@ void ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
 
 
 
-void ScNavigatorDlg::Paint( const Rectangle& rRec )
+void ScNavigatorDlg::Paint( const Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetFaceColor();
@@ -778,7 +778,7 @@ void ScNavigatorDlg::Paint( const Rectangle& rRec )
     aFtCol.SetBackground( aBack );
     aFtRow.SetBackground( aBack );
 
-    Window::Paint( rRec );
+    Window::Paint( rRect );
 }
 
 void ScNavigatorDlg::DataChanged( const DataChangedEvent& rDCEvt )

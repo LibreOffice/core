@@ -111,7 +111,7 @@ public:
 
 protected:
 
-    virtual void    Paint( const Rectangle& rRec );
+    virtual void    Paint( const Rectangle& rRect );
 
 private:
     ScScenarioListBox   aLbScenario;
@@ -315,7 +315,7 @@ private:
 
 protected:
     virtual void    Resize();
-    virtual void    Paint( const Rectangle& rRec );
+    virtual void    Paint( const Rectangle& rRect );
     virtual void    Resizing( Size& rSize );
 
 public:

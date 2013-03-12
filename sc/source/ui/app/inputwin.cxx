@@ -1149,7 +1149,7 @@ ScMultiTextWnd::~ScMultiTextWnd()
 {
 }
 
-void ScMultiTextWnd::Paint( const Rectangle& rRec )
+void ScMultiTextWnd::Paint( const Rectangle& rRect )
 {
     EditView* pView = GetEditView();
     if ( pView )
@@ -1159,7 +1159,7 @@ void ScMultiTextWnd::Paint( const Rectangle& rRec )
             pView->Invalidate();
             mbInvalidate = false;
         }
-        pEditView->Paint( rRec );
+        pEditView->Paint( rRect );
     }
 }
 
@@ -1483,10 +1483,10 @@ ScTextWnd::~ScTextWnd()
     delete pEditEngine;
 }
 
-void ScTextWnd::Paint( const Rectangle& rRec )
+void ScTextWnd::Paint( const Rectangle& rRect )
 {
     if (pEditView)
-        pEditView->Paint( rRec );
+        pEditView->Paint( rRect );
     else
     {
         SetFont( aTextFont );

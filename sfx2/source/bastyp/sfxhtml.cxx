@@ -183,9 +183,9 @@ IMAPOBJ_SETEVENT:
     case IMAP_OBJ_RECTANGLE:
         if( aCoords.size() >=4 )
         {
-            Rectangle aRec( aCoords[0], aCoords[1],
-                            aCoords[2], aCoords[3] );
-            IMapRectangleObject aMapRObj( aRec, aHRef, aAlt, String(), aTarget, aName,
+            Rectangle aRect( aCoords[0], aCoords[1],
+                             aCoords[2], aCoords[3] );
+            IMapRectangleObject aMapRObj( aRect, aHRef, aAlt, String(), aTarget, aName,
                                           !bNoHRef );
             if( !aMacroTbl.empty() )
                 aMapRObj.SetMacroTable( aMacroTbl );

@@ -371,11 +371,11 @@ void TextView::ImpPaint( const Rectangle& rRect, sal_Bool bUseVirtDev )
             return;
         }
 
-        Rectangle aTmpRec( Point( 0, 0 ), rRect.GetSize() );
+        Rectangle aTmpRect( Point( 0, 0 ), rRect.GetSize() );
 
         Point aDocPos( mpImpl->maStartDocPos.X(), mpImpl->maStartDocPos.Y() + rRect.Top() );
         Point aStartPos = ImpGetOutputStartPos( aDocPos );
-        ImpPaint( pVDev, aStartPos, &aTmpRec, NULL, pDrawSelection );
+        ImpPaint( pVDev, aStartPos, &aTmpRect, NULL, pDrawSelection );
         mpImpl->mpWindow->DrawOutDev( rRect.TopLeft(), rRect.GetSize(),
                                 Point(0,0), rRect.GetSize(), *pVDev );
 //      ShowSelection();
@@ -435,15 +435,15 @@ void TextView::ImpHighlight( const TextSelection& rSel )
                     if ( nEndIndex < nStartIndex )
                         nEndIndex = nStartIndex;
 
-                    Rectangle aTmpRec( mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nStartIndex ), sal_False ) );
-                    aTmpRec.Top() += nY;
-                    aTmpRec.Bottom() += nY;
-                    Point aTopLeft( aTmpRec.TopLeft() );
+                    Rectangle aTmpRect( mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nStartIndex ), sal_False ) );
+                    aTmpRect.Top() += nY;
+                    aTmpRect.Bottom() += nY;
+                    Point aTopLeft( aTmpRect.TopLeft() );
 
-                    aTmpRec = mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nEndIndex ), sal_True );
-                    aTmpRec.Top() += nY;
-                    aTmpRec.Bottom() += nY;
-                    Point aBottomRight( aTmpRec.BottomRight() );
+                    aTmpRect = mpImpl->mpTextEngine->GetEditCursor( TextPaM( nPara, nEndIndex ), sal_True );
+                    aTmpRect.Top() += nY;
+                    aTmpRect.Bottom() += nY;
+                    Point aBottomRight( aTmpRect.BottomRight() );
                     aBottomRight.X()--;
 
                     // Nur Painten, wenn im sichtbaren Bereich...
@@ -1682,8 +1682,8 @@ TextPaM TextView::CursorEndOfDoc()
 
 TextPaM TextView::PageUp( const TextPaM& rPaM )
 {
-    Rectangle aRec = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
-    Point aTopLeft = aRec.TopLeft();
+    Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
+    Point aTopLeft = aRect.TopLeft();
     aTopLeft.Y() -= mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10;
     aTopLeft.X() += 1;
     if ( aTopLeft.Y() < 0 )
@@ -1695,8 +1695,8 @@ TextPaM TextView::PageUp( const TextPaM& rPaM )
 
 TextPaM TextView::PageDown( const TextPaM& rPaM )
 {
-    Rectangle aRec = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
-    Point aBottomRight = aRec.BottomRight();
+    Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor( rPaM );
+    Point aBottomRight = aRect.BottomRight();
     aBottomRight.Y() += mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10;
     aBottomRight.X() += 1;
     long nHeight = mpImpl->mpTextEngine->GetTextHeight();

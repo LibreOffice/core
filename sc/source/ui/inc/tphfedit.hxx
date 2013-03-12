@@ -73,7 +73,7 @@ public:
 
     inline ScHeaderEditEngine*  GetEditEngine() const {return pEdEngine;}
 protected:
-    virtual void    Paint( const Rectangle& rRec );
+    virtual void    Paint( const Rectangle& rRect );
     virtual void    MouseMove( const MouseEvent& rMEvt );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );

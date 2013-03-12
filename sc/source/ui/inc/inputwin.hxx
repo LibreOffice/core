@@ -90,7 +90,7 @@ public:
     DECL_LINK( NotifyHdl, void* );
 
 protected:
-    virtual void    Paint( const Rectangle& rRec );
+    virtual void    Paint( const Rectangle& rRect );
     virtual void    Resize();
 
     virtual void    MouseMove( const MouseEvent& rMEvt );
@@ -187,7 +187,7 @@ protected:
     void SetScrollBarRange();
     void InitEditEngine();
 
-    virtual void Paint( const Rectangle& rRec );
+    virtual void Paint( const Rectangle& rRect );
     DECL_LINK( NotifyHdl, EENotify* );
     DECL_LINK( ModifyHdl, EENotify* );
 private:
@@ -207,7 +207,7 @@ public:
     virtual         ~ScInputBarGroup();
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
-//    virtual void    Paint(const Rectangle& rRec );
+//    virtual void    Paint(const Rectangle& rRect );
     void            SetTextString( const String& rString );
     void            StartEditEngine();
     EditView*       GetEditView();

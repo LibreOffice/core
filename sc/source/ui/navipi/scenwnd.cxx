@@ -233,14 +233,14 @@ ScScenarioWindow::~ScScenarioWindow()
 {
 }
 
-void ScScenarioWindow::Paint( const Rectangle& rRec )
+void ScScenarioWindow::Paint( const Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetFaceColor();
 
     SetBackground( aBgColor );
 
-    Window::Paint( rRec );
+    Window::Paint( rRect );
 }
 
 // -----------------------------------------------------------------------

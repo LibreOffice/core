@@ -3137,14 +3137,14 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
     if( rMyCell.bHasShape && !rMyCell.aShapeList.empty() && pDoc )
     {
         awt::Point aPoint;
-        Rectangle aRec = pDoc->GetMMRect(static_cast<SCCOL>(rMyCell.aCellAddress.Column), static_cast<SCROW>(rMyCell.aCellAddress.Row),
+        Rectangle aRect = pDoc->GetMMRect(static_cast<SCCOL>(rMyCell.aCellAddress.Column), static_cast<SCROW>(rMyCell.aCellAddress.Row),
             static_cast<SCCOL>(rMyCell.aCellAddress.Column), static_cast<SCROW>(rMyCell.aCellAddress.Row), static_cast<SCTAB>(rMyCell.aCellAddress.Sheet));
         bool bNegativePage(pDoc->IsNegativePage(rMyCell.aCellAddress.Sheet));
         if (bNegativePage)
-            aPoint.X = aRec.Right();
+            aPoint.X = aRect.Right();
         else
-            aPoint.X = aRec.Left();
-        aPoint.Y = aRec.Top();
+            aPoint.X = aRect.Left();
+        aPoint.Y = aRect.Top();
         ScMyShapeList::const_iterator aItr = rMyCell.aShapeList.begin();
         ScMyShapeList::const_iterator aEndItr(rMyCell.aShapeList.end());
         while (aItr != aEndItr)

@@ -221,7 +221,7 @@ void ScEditWindow::SetCharAttriutes()
 
 // -----------------------------------------------------------------------
 
-void ScEditWindow::Paint( const Rectangle& rRec )
+void ScEditWindow::Paint( const Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -230,9 +230,9 @@ void ScEditWindow::Paint( const Rectangle& rRec )
 
     SetBackground( aBgColor );
 
-    Control::Paint( rRec );
+    Control::Paint( rRect );
 
-    pEdView->Paint( rRec );
+    pEdView->Paint( rRect );
 }
 
 // -----------------------------------------------------------------------

@@ -1507,7 +1507,7 @@ void TextEngine::TextModified()
 
 void TextEngine::UpdateViews( TextView* pCurView )
 {
-    if ( !GetUpdateMode() || IsFormatting() || maInvalidRec.IsEmpty() )
+    if ( !GetUpdateMode() || IsFormatting() || maInvalidRect.IsEmpty() )
         return;
 
     DBG_ASSERT( IsFormatted(), "UpdateViews: Doc nicht formatiert!" );
@@ -1517,22 +1517,22 @@ void TextEngine::UpdateViews( TextView* pCurView )
         TextView* pView = (*mpViews)[ nView ];
         pView->HideCursor();
 
-        Rectangle aClipRec( maInvalidRec );
+        Rectangle aClipRect( maInvalidRect );
         Size aOutSz = pView->GetWindow()->GetOutputSizePixel();
         Rectangle aVisArea( pView->GetStartDocPos(), aOutSz );
-        aClipRec.Intersection( aVisArea );
-        if ( !aClipRec.IsEmpty() )
+        aClipRect.Intersection( aVisArea );
+        if ( !aClipRect.IsEmpty() )
         {
             // in Fensterkoordinaten umwandeln....
-            Point aNewPos = pView->GetWindowPos( aClipRec.TopLeft() );
+            Point aNewPos = pView->GetWindowPos( aClipRect.TopLeft() );
             if ( IsRightToLeft() )
                 aNewPos.X() -= aOutSz.Width() - 1;
-            aClipRec.SetPos( aNewPos );
+            aClipRect.SetPos( aNewPos );
 
             if ( pView == pCurView )
-                pView->ImpPaint( aClipRec, !pView->GetWindow()->IsPaintTransparent() );
+                pView->ImpPaint( aClipRect, !pView->GetWindow()->IsPaintTransparent() );
             else
-                pView->GetWindow()->Invalidate( aClipRec );
+                pView->GetWindow()->Invalidate( aClipRect );
         }
     }
 
@@ -1541,7 +1541,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
         pCurView->ShowCursor( pCurView->IsAutoScroll() );
     }
 
-    maInvalidRec = Rectangle();
+    maInvalidRect = Rectangle();
 }
 
 IMPL_LINK_NOARG(TextEngine, IdleFormatHdl)
@@ -1577,7 +1577,7 @@ void TextEngine::FormatDoc()
     long nY = 0;
     sal_Bool bGrow = sal_False;
 
-    maInvalidRec = Rectangle(); // leermachen
+    maInvalidRect = Rectangle(); // leermachen
     for ( sal_uLong nPara = 0; nPara < mpTEParaPortions->Count(); nPara++ )
     {
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
@@ -1592,20 +1592,20 @@ void TextEngine::FormatDoc()
             if ( CreateLines( nPara ) )
                 bGrow = sal_True;
 
-            // InvalidRec nur einmal setzen...
-            if ( maInvalidRec.IsEmpty() )
+            // InvalidRect nur einmal setzen...
+            if ( maInvalidRect.IsEmpty() )
             {
                 // Bei Paperwidth 0 (AutoPageSize) bleibt es sonst Empty()...
                 long nWidth = (long)mnMaxTextWidth;
                 if ( !nWidth )
                     nWidth = 0x7FFFFFFF;
                 Range aInvRange( GetInvalidYOffsets( nPara ) );
-                maInvalidRec = Rectangle( Point( 0, nY+aInvRange.Min() ),
+                maInvalidRect = Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
             }
             else
             {
-                maInvalidRec.Bottom() = nY + CalcParaHeight( nPara );
+                maInvalidRect.Bottom() = nY + CalcParaHeight( nPara );
             }
 
             if ( mnCurTextWidth != 0xFFFFFFFF )
@@ -1619,26 +1619,26 @@ void TextEngine::FormatDoc()
         }
         else if ( bGrow )
         {
-            maInvalidRec.Bottom() = nY + CalcParaHeight( nPara );
+            maInvalidRect.Bottom() = nY + CalcParaHeight( nPara );
         }
         nY += CalcParaHeight( nPara );
         if ( !mbHasMultiLineParas && pTEParaPortion->GetLines().size() > 1 )
             mbHasMultiLineParas = sal_True;
     }
 
-    if ( !maInvalidRec.IsEmpty() )
+    if ( !maInvalidRect.IsEmpty() )
     {
         sal_uLong nNewHeight = CalcTextHeight();
         long nDiff = nNewHeight - mnCurTextHeight;
         if ( nNewHeight < mnCurTextHeight )
         {
-            maInvalidRec.Bottom() = (long)Max( nNewHeight, mnCurTextHeight );
-            if ( maInvalidRec.IsEmpty() )
+            maInvalidRect.Bottom() = (long)Max( nNewHeight, mnCurTextHeight );
+            if ( maInvalidRect.IsEmpty() )
             {
-                maInvalidRec.Top() = 0;
+                maInvalidRect.Top() = 0;
                 // Left und Right werden nicht ausgewertet, aber wegen IsEmpty gesetzt.
-                maInvalidRec.Left() = 0;
-                maInvalidRec.Right() = mnMaxTextWidth;
+                maInvalidRect.Left() = 0;
+                maInvalidRect.Right() = mnMaxTextWidth;
             }
         }
 

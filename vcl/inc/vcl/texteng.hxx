@@ -104,7 +104,7 @@ private:
     ::com::sun::star::lang::Locale maLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > mxBreakIterator;
 
-    Rectangle           maInvalidRec;
+    Rectangle           maInvalidRect;
     Range               maInvalidRange;
 
     LocaleDataWrapper*  mpLocaleDataWrapper;
