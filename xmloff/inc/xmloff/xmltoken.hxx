@@ -2941,6 +2941,7 @@ namespace xmloff { namespace token {
         XML_START_NEW_COLUMN            ,
         XML_RESET_PAGE_NUMBER           ,
         XML_PRINT_HEADER_ON_EACH_PAGE   ,
+        XML_SORT_EXPRESSION             ,
         XML_GROUP_EXPRESSION            ,
         XML_GROUP_HEADER                ,
         XML_GROUP_FOOTER                ,

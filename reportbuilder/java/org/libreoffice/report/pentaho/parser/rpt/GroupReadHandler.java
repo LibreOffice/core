@@ -77,6 +77,11 @@ public class GroupReadHandler extends ElementReadHandler
             function.setFormula(groupExpr);
             groupInstanceSection.setGroupingExpression(function);
         }
+        final String sortExpr  = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "sort-expression");
+        if (sortExpr != null && !"".equals(sortExpr))
+        {
+            groupInstanceSection.setSortingExpression(sortExpr);
+        }
     }
 
     /**

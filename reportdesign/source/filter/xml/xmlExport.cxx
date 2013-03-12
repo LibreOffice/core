@@ -1078,7 +1078,8 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                     if ( xGroup->getResetPageNumber() )
                         AddAttribute(XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER, XML_TRUE );
 
-                    ::rtl::OUString sExpression = xGroup->getExpression();
+                    const ::rtl::OUString sField = xGroup->getExpression();
+                    ::rtl::OUString sExpression  = sField;
                     if ( !sExpression.isEmpty() )
                     {
                         static ::rtl::OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
@@ -1097,6 +1098,7 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                         sFormula += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\")"));
                         sExpression = sFormula;
                     }
+                    AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_EXPRESSION, sField);
                     AddAttribute(XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION,sExpression);
                     sal_Int16 nRet = xGroup->getKeepTogether();
                     ::rtl::OUStringBuffer sValue;
@@ -1525,6 +1527,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                 ::rtl::OUString sFunction,sPrefix,sPostfix;
                 ::rtl::OUString sExpression = xGroup->getExpression();
                 ::rtl::OUString sFunctionName;
+                ::rtl::OUString sInitialFormula;
                 switch(nGroupOn)
                 {
                     case report::GroupOn::PREFIX_CHARACTERS:
@@ -1558,14 +1561,18 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         {
                             sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT"));
                             uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
-                            xCountFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:1"))));
+                            xCountFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:0"))));
                             ::rtl::OUString sCountName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_count_")) + sExpression;
                             xCountFunction->setName(sCountName);
                             xCountFunction->setFormula(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[")) + sCountName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("] + 1")));
                             exportFunction(xCountFunction);
                             sExpression = sCountName;
-                            sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" / ")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                            // The reference to sCountName in the formula of sFunctionName refers to the *old* value
+                            // so we need to expand the the formula of sCountName
+                            sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" + 1) / ")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
                             sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
+                            sFunction = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("));
+                            sInitialFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:0"));
                         }
                         break;
                     default:
@@ -1580,6 +1587,8 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         sFunctionName = sFunctionName.replace(pReplaceChars[j],'_');
 
                     xFunction->setName(sFunctionName);
+                    if ( !sInitialFormula.isEmpty() )
+                        xFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True, sInitialFormula));
                     sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFunction;
                     sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(["));
                     sFunction += sExpression;

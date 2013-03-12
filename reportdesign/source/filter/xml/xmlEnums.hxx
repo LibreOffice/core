@@ -60,6 +60,7 @@ namespace rptxml
         XML_TOK_START_NEW_COLUMN            ,
         XML_TOK_RESET_PAGE_NUMBER           ,
         XML_TOK_PRINT_HEADER_ON_EACH_PAGE   ,
+        XML_TOK_SORT_EXPRESSION             ,
         XML_TOK_GROUP_EXPRESSION            ,
         XML_TOK_GROUP_HEADER                ,
         XML_TOK_GROUP_GROUP                 ,

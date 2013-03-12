@@ -81,4 +81,15 @@ public class OfficeGroup extends Section
         }
         return instanceSection.getGroupingExpression();
     }
+
+    public String getSortingExpression()
+    {
+        final OfficeGroupInstanceSection instanceSection =
+                (OfficeGroupInstanceSection) findFirstChild(JFreeReportInfo.REPORT_NAMESPACE, "group-instance");
+        if (instanceSection == null)
+        {
+            return null;
+        }
+        return instanceSection.getSortingExpression();
+    }
 }

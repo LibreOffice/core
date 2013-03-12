@@ -797,6 +797,7 @@ const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
             { XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER           ,   XML_TOK_RESET_PAGE_NUMBER           },
             { XML_NAMESPACE_REPORT, XML_PRINT_HEADER_ON_EACH_PAGE   ,   XML_TOK_PRINT_HEADER_ON_EACH_PAGE   },
             { XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER           ,   XML_TOK_RESET_PAGE_NUMBER           },
+            { XML_NAMESPACE_REPORT, XML_SORT_EXPRESSION             ,   XML_TOK_SORT_EXPRESSION             },
             { XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION            ,   XML_TOK_GROUP_EXPRESSION            },
             { XML_NAMESPACE_REPORT, XML_GROUP_HEADER                ,   XML_TOK_GROUP_HEADER                },
             { XML_NAMESPACE_REPORT, XML_GROUP                       ,   XML_TOK_GROUP_GROUP                 },

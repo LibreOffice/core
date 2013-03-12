@@ -311,6 +311,37 @@ public class PentahoReportJob implements ReportJob
         }
     }
 
+    private void collectSortExpressions(final Node[] nodes, final List<Object[]> expressions, final FormulaParser parser, final Expression reportFunctions[])
+    {
+        for (int i = 0; i < nodes.length; i++)
+        {
+            final Node node = nodes[i];
+            if (node instanceof OfficeGroup)
+            {
+                final OfficeGroup group = (OfficeGroup) node;
+                final String exp = group.getSortingExpression();
+                if (exp == null)
+                {
+                    continue;
+                }
+
+                final Object[] pair = new Object[2];
+                pair[0] = exp;
+                pair[1] = group.getAttribute(OfficeNamespaces.OOREPORT_NS, "sort-ascending");
+                expressions.add(pair);
+            }
+            else if (node instanceof OfficeDetailSection)
+            {
+                return;
+            }
+            if (node instanceof Section)
+            {
+                final Section section = (Section) node;
+                collectSortExpressions(section.getNodeArray(), expressions, parser, reportFunctions);
+            }
+        }
+    }
+
     private void setMetaDataProperties(DefaultReportJob job)
     {
         job.getConfiguration().setConfigProperty(ReportEngineParameterNames.AUTHOR, (String) jobProperties.getProperty(ReportEngineParameterNames.AUTHOR));
@@ -343,11 +374,14 @@ public class PentahoReportJob implements ReportJob
             final Node[] nodes = report.getNodeArray();
 
             final FormulaParser parser = new FormulaParser();
-            final ArrayList<Object[]> expressions = new ArrayList<Object[]>();
             final OfficeReport officeReport = (OfficeReport) ((Section) nodes[0]).getNode(0);
             final Section reportBody = (Section) officeReport.getBodySection();
-            collectGroupExpressions(reportBody.getNodeArray(), expressions, parser, officeReport.getExpressions());
-            parameters.put(SDBCReportDataFactory.GROUP_EXPRESSIONS, expressions);
+            final ArrayList<Object[]> sortExpressions = new ArrayList<Object[]>();
+            collectSortExpressions(reportBody.getNodeArray(), sortExpressions, parser, officeReport.getExpressions());
+            parameters.put(SDBCReportDataFactory.SORT_EXPRESSIONS, sortExpressions);
+            final ArrayList<Object[]> groupExpressions = new ArrayList<Object[]>();
+            collectGroupExpressions(reportBody.getNodeArray(), groupExpressions, parser, officeReport.getExpressions());
+            parameters.put(SDBCReportDataFactory.GROUP_EXPRESSIONS, groupExpressions);
             final String command = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, "command");
             final String commandType = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, SDBCReportDataFactory.COMMAND_TYPE);
             final String escapeProcessing = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, SDBCReportDataFactory.ESCAPE_PROCESSING);

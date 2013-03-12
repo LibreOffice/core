@@ -139,6 +139,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
     private static final Log LOGGER = LogFactory.getLog(SDBCReportDataFactory.class);
     public static final String COMMAND_TYPE = "command-type";
     public static final String ESCAPE_PROCESSING = "escape-processing";
+    public static final String SORT_EXPRESSIONS = "sort-expressions";
     public static final String GROUP_EXPRESSIONS = "group-expressions";
     public static final String MASTER_VALUES = "master-values";
     public static final String MASTER_COLUMNS = "master-columns";
@@ -229,10 +230,10 @@ public class SDBCReportDataFactory implements DataSourceFactory
         }
     }
 
-    private String getOrderStatement(final int commandType, final String command, final List groupExpressions)
+    private String getOrderStatement(final int commandType, final String command, final List sortExpressions)
     {
         final StringBuffer order = new StringBuffer();
-        final int count = groupExpressions.size();
+        final int count = sortExpressions.size();
         if (count != 0)
         {
             try
@@ -244,7 +245,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 {
                     for (int i = 0; i < count; i++)
                     {
-                        final Object[] pair = (Object[]) groupExpressions.get(i);
+                        final Object[] pair = (Object[]) sortExpressions.get(i);
                         String expression = (String) pair[0];
 
                         if (!expression.startsWith(quote) && columns.hasByName(expression))
@@ -533,7 +534,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             WrappedTargetException,
             NoSuchElementException
     {
-        final StringBuffer order = new StringBuffer(getOrderStatement(commandType, command, (ArrayList<?>) parameters.get(GROUP_EXPRESSIONS)));
+        final StringBuffer order = new StringBuffer(getOrderStatement(commandType, command, (ArrayList<?>) parameters.get(SORT_EXPRESSIONS)));
         if (order.length() > 0 && commandType != CommandType.TABLE)
         {
             String statement = command;
