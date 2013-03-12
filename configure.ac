@@ -4029,7 +4029,6 @@ if test "$cross_compiling" = "yes"; then
     sub_conf_opts=""
     test -n "$enable_ccache" && sub_conf_opts="$sub_conf_opts --enable-ccache=$enable_ccache"
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
-    test $with_java = no && sub_conf_opts="$sub_conf_opts --without-java"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test -n "${with_solver_and_workdir_root}" && sub_conf_opts="$sub_conf_opts --with-solver-and-workdir-root=${with_solver_and_workdir_root}"
@@ -4056,6 +4055,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-postgresql-sdbc \
         --with-parallelism="$with_parallelism" \
         --without-doxygen \
+        --without-java \
         ENABLE_PDFIMPORT=FALSE \
         $sub_conf_opts \
         --srcdir=$srcdir \
