@@ -281,7 +281,7 @@ void DrawingFragment::onEndElement()
                     mxShape->setSize(Size(aShapeRectEmu.Width, aShapeRectEmu.Height));
 
                     basegfx::B2DHomMatrix aTransformation;
-                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, &aShapeRectEmu32 );
+                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, aTransformation, mxShape->getFillProperties(), &aShapeRectEmu32 );
 
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
