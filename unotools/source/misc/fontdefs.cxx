@@ -447,7 +447,7 @@ void GetEnglishSearchFontName( OUString& rName )
 OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
 {
     // check for valid start index
-    int nStringLen = rTokenStr.getLength();
+    sal_Int32 nStringLen = rTokenStr.getLength();
     if( rIndex >= nStringLen )
     {
         rIndex = -1;
@@ -504,13 +504,11 @@ static bool ImplIsFontToken( const OUString& rName, const String& rToken )
 
 static void ImplAppendFontToken( OUString& rName, const String& rNewToken )
 {
-    if ( rName.getLength() )
+    if ( !rName.isEmpty() )
     {
         rName += ";" ;
-        rName += rNewToken ;
     }
-    else
-        rName = rNewToken;
+    rName += rNewToken;
 }
 
 void AddTokenFontName( OUString& rName, const OUString& rNewToken )
