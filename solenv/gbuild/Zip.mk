@@ -50,7 +50,7 @@ $(call gb_Zip_get_target,%) :
 		RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
                         $(FILES)) && \
 	mkdir -p $(dir $(call gb_Zip_get_target,$*)) && \
-	cd $(LOCATION) && cat $${RESPONSEFILE} | tr "[:space:]" "\n" | $(gb_Zip_ZIPCOMMAND) -@rX --filesync $(call gb_Zip_get_target,$*) && \
+	cd $(LOCATION) && cat $${RESPONSEFILE} | tr "[:space:]" "\n" | $(gb_Zip_ZIPCOMMAND) -@rX --filesync --must-match $(call gb_Zip_get_target,$*) && \
 	rm -f $${RESPONSEFILE} )
 
 # the final target is a touch target; we use it as registered targets should be in workdir, not in outdir

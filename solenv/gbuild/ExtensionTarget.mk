@@ -116,7 +116,7 @@ $(call gb_ExtensionTarget_get_target,%) : \
 		$(if $(LICENSE),cp -f $(LICENSE) $(call gb_ExtensionTarget_get_rootdir,$*)/registration &&) \
 		$(if $(and $(gb_ExtensionTarget_TRANS_LANGS),$(DESCRIPTION)),cp $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(call gb_ExtensionTarget_get_workdir,$*)/description-$(lang).txt) $(call gb_ExtensionTarget_get_rootdir,$*) &&) \
 		cd $(call gb_ExtensionTarget_get_rootdir,$*) && \
-		$(gb_ExtensionTarget_ZIPCOMMAND) -rX --filesync \
+		$(gb_ExtensionTarget_ZIPCOMMAND) -rX --filesync --must-match \
 			$(call gb_ExtensionTarget_get_target,$*) \
 			$(sort $(FILES)))
 

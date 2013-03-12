@@ -291,7 +291,7 @@ $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.dat :
 	$(call gb_Output_announce,$*.dat,$(true),ZIP,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_AUTOCORR_DIR) && \
-		zip -qrX --filesync $@ $(EXTRAS_AUTOCORR_FILES) \
+		zip -qrX --filesync --must-match $@ $(EXTRAS_AUTOCORR_FILES) \
 	)
 
 define extras_Autocorr_make_file_deps
