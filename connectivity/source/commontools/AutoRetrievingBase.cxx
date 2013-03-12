@@ -23,9 +23,8 @@ namespace connectivity
 {
     ::rtl::OUString OAutoRetrievingBase::getTransformedGeneratedStatement(const ::rtl::OUString& _sInsertStatement) const
     {
-        ::rtl::OUString sStmt = _sInsertStatement;
         OSL_ENSURE( m_bAutoRetrievingEnabled,"Illegal call here. isAutoRetrievingEnabled is false!");
-        sStmt = sStmt.toAsciiUpperCase();
+        ::rtl::OUString sStmt = _sInsertStatement.toAsciiUpperCase();
         ::rtl::OUString sStatement;
         if ( sStmt.startsWith("INSERT") )
         {
