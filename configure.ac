@@ -6351,7 +6351,7 @@ if test "$SOLAR_JAVA" != ""; then
 fi
 
 
-if test "$SOLAR_JAVA" != ""; then
+if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
 #
 # Determine JAVALIB
 # If your platform follow the common pattern
@@ -6370,21 +6370,21 @@ if test "$SOLAR_JAVA" != ""; then
     aix*)
         JAVA_ARCH="ppc"
         JAVA_TOOLKIT="classic"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/aix"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/native_threads/include"
+        JAVAINC="-I$JAVA_HOME/include"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/aix"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
         ;;
 
     cygwin*)
         x_JDKLIB=
         JDKLIB="$JAVA_HOME/lib"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/win32"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
+        JAVAINC="$-I$JAVA_HOME/include/win32"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include"
         ;;
 
     darwin*)
         x_JAVALIB=[\#]
-        SOLARINC="$SOLARINC -I$FRAMEWORKSHOME/JavaVM.framework/Versions/Current/Headers -I$FRAMEWORKSHOME/JavaVM/Headers"
+        JAVAINC="-I$FRAMEWORKSHOME/JavaVM.framework/Versions/Current/Headers -I$FRAMEWORKSHOME/JavaVM/Headers"
         ;;
 
     dragonfly*)
@@ -6398,8 +6398,8 @@ if test "$SOLAR_JAVA" != ""; then
             JAVA_TOOLKIT="server"
             ;;
         esac
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/native_threads/include"
+        JAVAINC="-I$JAVA_HOME/include"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
         ;;
 
     freebsd*)
@@ -6418,11 +6418,11 @@ if test "$SOLAR_JAVA" != ""; then
             fi
             ;;
         esac
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/freebsd"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/bsd"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/linux"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/native_threads/include"
+        JAVAINC="-I$JAVA_HOME/include"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/freebsd"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/bsd"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/linux"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
         ;;
 
     k*bsd*-gnu*)
@@ -6436,8 +6436,8 @@ if test "$SOLAR_JAVA" != ""; then
             JAVA_TOOLKIT="server"
             ;;
         esac
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/native_threads/include"
+        JAVAINC="-I$JAVA_HOME/include"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
         ;;
 
     linux-gnu*)
@@ -6530,9 +6530,9 @@ if test "$SOLAR_JAVA" != ""; then
             AC_MSG_ERROR([No JAVALIB definition host_cpu $host_cpu for host_os $host_os])
             ;;
         esac
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/linux"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/native_threads/include"
+        JAVAINC="-I$JAVA_HOME/include"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/linux"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
         ;;
 
     linux-androideabi*)
@@ -6548,7 +6548,7 @@ if test "$SOLAR_JAVA" != ""; then
 
     mingw*)
         x_JAVALIB=[\#]
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
+        JAVAINC="-I$JAVA_HOME/include"
         ;;
 
     *netbsd*)
@@ -6571,9 +6571,9 @@ if test "$SOLAR_JAVA" != ""; then
             JAVA_TOOLKIT="client"
             ;;
         esac
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/netbsd"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/native_threads/include"
+        JAVAINC="-I$JAVA_HOME/include"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/netbsd"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
        ;;
 
     openbsd*)
@@ -6587,9 +6587,9 @@ if test "$SOLAR_JAVA" != ""; then
             JAVA_TOOLKIT="server"
             ;;
         esac
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/openbsd"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/native_threads/include"
+        JAVAINC="-I$JAVA_HOME/include"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/openbsd"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
         ;;
 
     solaris*)
@@ -6603,9 +6603,9 @@ if test "$SOLAR_JAVA" != ""; then
             JAVA_ARCH="sparc"
             ;;
         esac
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/solaris"
-        SOLARINC="$SOLARINC -I$JAVA_HOME/include/native_threads/include"
+        JAVAINC="-I$JAVA_HOME/include"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/solaris"
+        JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_threads/include"
         ;;
     esac
 
@@ -6616,10 +6616,11 @@ if test "$SOLAR_JAVA" != ""; then
         test -d "$JRE_BASE_DIR/$JAVA_TOOLKIT" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/$JAVA_TOOLKIT"
         test -d "$JRE_BASE_DIR/native_thread" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/native_thread"
     fi
-else
+elif test -z "$SOLAR_JAVA"; then
     x_JAVALIB=[\#]
     x_JDKLIB=[\#]
 fi
+SOLARINC="$SOLARINC $JAVAINC"
 
 AC_SUBST(JAVALIB)
 AC_SUBST(JAVACOMPILER)
