@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///zk\u003d",
+        "filename": "unotools/source/misc/fontdefs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-03-12T09:47:47Z",
+      "side": 1,
+      "message": "that should rather be +\u003d, I think",
+      "revId": "f9a0b7076b785ab6bc9860eb40c338c0f2efa09d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
