@@ -376,7 +376,7 @@ void printMethods(std::ostream & o,
         }
     }
 
-    static OString sd(RTL_CONSTASCII_STRINGPARAM("_"));
+    static OString sd("_");
     bool body = !delegate.isEmpty();
     bool defaultbody = ((delegate.equals(sd)) ? true : false);
 
@@ -500,7 +500,7 @@ void printMethods(std::ostream & o,
         o << ')';
         printExceptionSpecification(o, options, manager, reader, method);
         if ( body ) {
-            static OUString s(RTL_CONSTASCII_USTRINGPARAM("void"));
+            static OUString s("void");
             if ( defaultbody ) {
                 o << "\n" << indentation << "{\n";
                 if ( !reader.getMethodReturnTypeName(method).equals(s) ) {

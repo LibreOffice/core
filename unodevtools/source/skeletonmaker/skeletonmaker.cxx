@@ -270,9 +270,9 @@ SAL_IMPLEMENT_MAIN()
 
         // else illegal argument
         OUStringBuffer buf( 64 );
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("unexpected parameter \""));
+        buf.append("unexpected parameter \"");
         buf.append(arg);
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("\"!"));
+        buf.append("\"!");
         throw RuntimeException(buf.makeStringAndClear(),
                                Reference< XInterface >());
     }

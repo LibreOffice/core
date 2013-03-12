@@ -91,19 +91,18 @@ sal_Bool UnoTypeManager::init(
         defaultBootstrap_InitialComponentContext();
 
     if ( !xContext.is() ) {
-        OUString msg(RTL_CONSTASCII_USTRINGPARAM(
-            "internal UNO problem, can't create initial UNO component context"));
+        OUString msg(
+            "internal UNO problem, can't create initial UNO component context");
         throw RuntimeException( msg, Reference< XInterface >());
     }
     Any a = xContext->getValueByName(
-        OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "/singletons/com.sun.star.reflection.theTypeDescriptionManager")));
+        OUString(
+            "/singletons/com.sun.star.reflection.theTypeDescriptionManager"));
 
     a >>= m_pImpl->m_tdmgr;
 
     if ( !m_pImpl->m_tdmgr.is() ) {
-        OUString msg(RTL_CONSTASCII_USTRINGPARAM(
-            "internal UNO problem, can't get TypeDescriptionManager"));
+        OUString msg("internal UNO problem, can't get TypeDescriptionManager");
         throw RuntimeException( msg, Reference< XInterface >());
     }
 
@@ -112,8 +111,7 @@ sal_Bool UnoTypeManager::init(
         Reference< XMultiComponentFactory > xServiceManager(
             xContext->getServiceManager() );
         if ( !xServiceManager.is() ) {
-            OUString msg(RTL_CONSTASCII_USTRINGPARAM(
-                             "internal UNO problem, can't get ServiceManager"));
+            OUString msg("internal UNO problem, can't get ServiceManager");
             throw RuntimeException( msg, Reference< XInterface >());
         }
 
@@ -125,8 +123,7 @@ sal_Bool UnoTypeManager::init(
         {
             Reference< XSimpleRegistry > xReg(
                 xServiceManager->createInstanceWithContext(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(
-                             "com.sun.star.registry.SimpleRegistry")),
+                    OUString("com.sun.star.registry.SimpleRegistry"),
                     xContext), UNO_QUERY);
             xReg->open(convertToFileUrl(
                            OUStringToOString(*iter, RTL_TEXTENCODING_UTF8)),
@@ -138,14 +135,12 @@ sal_Bool UnoTypeManager::init(
 
         Reference< XHierarchicalNameAccess > xTDProvider(
             xServiceManager->createInstanceWithArgumentsAndContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                             "com.sun.star.reflection.TypeDescriptionProvider")),
+                OUString("com.sun.star.reflection.TypeDescriptionProvider"),
                 seqArgs, xContext),
             UNO_QUERY);
         if ( !xTDProvider.is() ) {
-            OUString msg(RTL_CONSTASCII_USTRINGPARAM(
-                             "internal UNO problem, can't create local"
-                             " type description provider"));
+            OUString msg("internal UNO problem, can't create local"
+                         " type description provider");
             throw RuntimeException( msg, Reference< XInterface >());
         }
 

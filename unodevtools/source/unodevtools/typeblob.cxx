@@ -67,63 +67,63 @@ void writeConstantData(typereg::Writer& rWriter, sal_uInt16 fieldIndex,
     {
     case TypeClass_BOOLEAN:
     {
-        uConstTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("boolean"));
+        uConstTypeName = "boolean";
         constValue.m_type = RT_TYPE_BOOL;
         aConstantAny >>= constValue.m_value.aBool;
     }
     break;
     case TypeClass_BYTE:
     {
-        uConstTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("byte"));
+        uConstTypeName = "byte";
         constValue.m_type = RT_TYPE_BYTE;
         aConstantAny >>= constValue.m_value.aByte;
     }
     break;
     case TypeClass_SHORT:
     {
-        uConstTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("short"));
+        uConstTypeName = "short";
         constValue.m_type = RT_TYPE_INT16;
         aConstantAny >>= constValue.m_value.aShort;
     }
     break;
     case TypeClass_UNSIGNED_SHORT:
     {
-        uConstTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("unsigned short"));
+        uConstTypeName = "unsigned short";
         constValue.m_type = RT_TYPE_UINT16;
         aConstantAny >>= constValue.m_value.aUShort;
     }
     break;
     case TypeClass_LONG:
     {
-        uConstTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("long"));
+        uConstTypeName = "long";
         constValue.m_type = RT_TYPE_INT32;
         aConstantAny >>= constValue.m_value.aLong;
     }
     break;
     case TypeClass_UNSIGNED_LONG:
     {
-        uConstTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("unsigned long"));
+        uConstTypeName = "unsigned long";
         constValue.m_type = RT_TYPE_UINT32;
         aConstantAny >>= constValue.m_value.aULong;
     }
     break;
     case TypeClass_FLOAT:
     {
-        uConstTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("float"));
+        uConstTypeName = "float";
         constValue.m_type = RT_TYPE_FLOAT;
         aConstantAny >>= constValue.m_value.aFloat;
     }
     break;
     case TypeClass_DOUBLE:
     {
-        uConstTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("double"));
+        uConstTypeName = "double";
         constValue.m_type = RT_TYPE_DOUBLE;
         aConstantAny >>= constValue.m_value.aDouble;
     }
     break;
     case TypeClass_STRING:
     {
-        uConstTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("string"));
+        uConstTypeName = "string";
         constValue.m_type = RT_TYPE_STRING;
         constValue.m_value.aString = ((OUString*)aConstantAny.getValue())->getStr();
     }
@@ -224,7 +224,7 @@ void writeAttributeMethodData(
     if (seqExcp.getLength() > 0) {
         rWriter.setMethodData(methodindex, OUString(), methodmode,
                               xAttr->getMemberName(),
-                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")),
+                              rtl::OUString("void"),
                               0, (sal_uInt16)seqExcp.getLength());
 
         for (sal_Int32 i=0; i < seqExcp.getLength(); i++) {
@@ -685,8 +685,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
                 writer.setMethodData(i, OUString(), RT_MODE_TWOWAY,
                                      xConstructor->getName(),
-                                     OUString(
-                                         RTL_CONSTASCII_USTRINGPARAM("void")),
+                                     OUString("void"),
                                      parameterCount, exceptionCount);
 
                 if ( !xConstructor->isDefaultConstructor() ) {

@@ -43,7 +43,7 @@ sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
     throw (RuntimeException)
 {
-    const OUString dash = OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+    const OUString dash = OUString("-");
     if(aArg.indexOf(dash) != 0)
         return sal_False;
 
@@ -61,9 +61,9 @@ sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
             pValue->copy(1).equals(dash))
         {
             OUStringBuffer buf( 32 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("incomplete option \"-") );
+            buf.append( "incomplete option \"-" );
             buf.appendAscii( pOpt );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" given!") );
+            buf.append( "\" given!" );
             throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface >() );
         } else {
 #if OSL_DEBUG_LEVEL > 1
@@ -96,8 +96,8 @@ sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
 sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
-    const OUString dashdash(RTL_CONSTASCII_USTRINGPARAM("--"));
-    const OUString dash(RTL_CONSTASCII_USTRINGPARAM("-"));
+    const OUString dashdash("--");
+    const OUString dash("-");
     OUString aOpt = OUString::createFromAscii(pOpt);
 
     if((aArg.indexOf(dash) == 0 && aOpt.equalsIgnoreAsciiCase(aArg.copy(1))) ||

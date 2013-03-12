@@ -383,7 +383,7 @@ void printMethods(std::ostream & o,
         return;
     }
 
-    static OString sd(RTL_CONSTASCII_STRINGPARAM("_"));
+    static OString sd("_");
     bool body = !delegate.isEmpty();
     bool defaultbody = ((delegate.equals(sd)) ? true : false);
 
