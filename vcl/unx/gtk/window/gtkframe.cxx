@@ -1091,7 +1091,6 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
 
     if( bDecoHandling )
     {
-        bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
         GdkWindowTypeHint eType = GDK_WINDOW_TYPE_HINT_NORMAL;
         if( (nStyle & SAL_FRAME_STYLE_DIALOG) && m_pParent != 0 )
             eType = GDK_WINDOW_TYPE_HINT_DIALOG;
@@ -1109,7 +1108,6 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), sal_False, true );
-            bNoDecor = true;
         }
         else if( (nStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
         {
@@ -1124,8 +1122,6 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
         }
 #endif
         gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), eType );
-        if( bNoDecor )
-            gtk_window_set_decorated( GTK_WINDOW(m_pWindow), FALSE );
         gtk_window_set_gravity( GTK_WINDOW(m_pWindow), GDK_GRAVITY_STATIC );
         if( m_pParent && ! (m_pParent->m_nStyle & SAL_FRAME_STYLE_PLUG) )
             gtk_window_set_transient_for( GTK_WINDOW(m_pWindow), GTK_WINDOW(m_pParent->m_pWindow) );
@@ -3331,39 +3327,11 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     return sal_False;
 }
 
-extern "C" {
-gboolean implDelayedFullScreenHdl (void *pWindow)
-{
-    SolarMutexGuard aGuard;
-
-    /* #i110881# workaround a gtk issue (see
-       https://bugzilla.redhat.com/show_bug.cgi?id=623191#c8)
-       gtk_window_fullscreen can fail due to a race condition,
-       request an additional status change to fullscreen to be
-       safe: if the window is now mapped ... and wasn't
-       previously, ie. the race; we'll end up doing a nice
-       gdk_wmspec_change_state here anyway.
-    */
-    if( pWindow )
-    {
-        gdk_window_fullscreen( GDK_WINDOW( pWindow ) );
-        g_object_unref( pWindow );
-    }
-
-    return FALSE;
-}
-}
-
 gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
     GTK_YIELD_GRAB();
-
-    if( pThis->m_bFullscreen )
-        g_idle_add_full( G_PRIORITY_HIGH, implDelayedFullScreenHdl,
-                         g_object_ref( widget_get_window( pThis->m_pWindow ) ),
-                         NULL );
 
     bool bSetFocus = pThis->m_bSetFocusOnMap;
     pThis->m_bSetFocusOnMap = false;
