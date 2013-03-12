@@ -173,9 +173,9 @@ void* SvxCheckListBox::SetEntryData ( sal_uInt16 nPos, void* pNewData )
 
 // -----------------------------------------------------------------------
 
-void* SvxCheckListBox::GetEntryData( sal_uInt16 nPos ) const
+void* SvxCheckListBox::GetEntryData( sal_Int32 nPos ) const
 {
-    if ( nPos < GetEntryCount() )
+    if ( nPos < (sal_Int32)GetEntryCount() )
         return GetEntry( nPos )->GetUserData();
     else
         return NULL;

@@ -69,7 +69,7 @@ public:
     void            ToggleCheckButton   ( SvTreeListEntry* pEntry );
 
     void*           SetEntryData        ( sal_uInt16 nPos, void* pNewData );
-    void*           GetEntryData        ( sal_uInt16 nPos ) const;
+    void*           GetEntryData        ( sal_Int32 nPos ) const;
 
     virtual void    MouseButtonDown     ( const MouseEvent& rMEvt );
     virtual void    KeyInput            ( const KeyEvent& rKEvt );

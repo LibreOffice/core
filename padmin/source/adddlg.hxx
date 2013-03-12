@@ -229,7 +229,7 @@ public:
     AddPrinterDialog( Window* pParent );
     ~AddPrinterDialog();
 
-    static String uniquePrinterName( const String& rString );
+    static OUString uniquePrinterName( const OUString& rString );
     static String getOldPrinterLocation();
 
     void enableNext( bool bEnable ) { m_aNextPB.Enable( bEnable ); }
