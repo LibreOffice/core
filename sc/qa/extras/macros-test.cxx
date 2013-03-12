@@ -61,7 +61,7 @@ public:
     void testStarBasic();
     void testVba();
     CPPUNIT_TEST_SUITE(ScMacrosTest);
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX)
     //enable this test if you want to play with star basic macros in unit tests
     //works but does nothing useful yet
     CPPUNIT_TEST(testStarBasic);
