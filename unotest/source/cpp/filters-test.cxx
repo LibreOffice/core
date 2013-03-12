@@ -103,9 +103,9 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
                     continue;
 
                 if (
-                    (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("BID"), nLastSlash+1)) ||
-                    (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("CVE"), nLastSlash+1)) ||
-                    (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("EDB"), nLastSlash+1))
+                    (sURL.match("BID", nLastSlash+1)) ||
+                    (sURL.match("CVE", nLastSlash+1)) ||
+                    (sURL.match("EDB", nLastSlash+1))
                    )
                 {
                     bEncrypted = true;

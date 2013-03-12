@@ -29,7 +29,7 @@ namespace test {
 
 bool getTestArgument(rtl::OUString const & name, rtl::OUString * value) {
     return detail::getArgument(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("testarg.")) + name, value);
+        rtl::OUString("testarg.") + name, value);
 }
 
 }

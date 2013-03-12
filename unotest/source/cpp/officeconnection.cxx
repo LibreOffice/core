@@ -50,45 +50,34 @@ void OfficeConnection::setUp() {
     rtl::OUString argSoffice;
     CPPUNIT_ASSERT(
         detail::getArgument(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")),
+            rtl::OUString("soffice"),
             &argSoffice));
-    if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("path:"))) {
-        desc = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pipe,name=")) +
-            uniquePipeName(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oootest")));
-        rtl::OUString noquickArg(
-            RTL_CONSTASCII_USTRINGPARAM("--quickstart=no"));
-        rtl::OUString nofirstArg(
-            RTL_CONSTASCII_USTRINGPARAM("--nofirststartwizard"));
-        rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("--norestore"));
-        rtl::OUString nologoArg(RTL_CONSTASCII_USTRINGPARAM("--nologo"));
+    if (argSoffice.match("path:")) {
+        desc = "pipe,name=" + uniquePipeName(rtl::OUString("oootest"));
+        rtl::OUString noquickArg("--quickstart=no");
+        rtl::OUString nofirstArg("--nofirststartwizard");
+        rtl::OUString norestoreArg("--norestore");
+        rtl::OUString nologoArg("--nologo");
             // disable use of the unix standalone splash screen app for the
             // tests (probably not needed in combination with --headless?)
-        rtl::OUString headlessArg(RTL_CONSTASCII_USTRINGPARAM("--headless"));
-        rtl::OUString acceptArg(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("--accept=")) + desc +
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
+        rtl::OUString headlessArg("--headless");
+        rtl::OUString acceptArg("--accept=" + desc + ";urp");
         rtl::OUString argUser;
         CPPUNIT_ASSERT(
-            detail::getArgument(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), &argUser));
+            detail::getArgument(rtl::OUString("user"), &argUser));
         rtl::OUString userArg(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("-env:UserInstallation=")) +
+            rtl::OUString("-env:UserInstallation=") +
             toAbsoluteFileUrl(argUser));
         rtl::OUString jreArg(
-            RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_JREHOME=true"));
-        rtl::OUString classpathArg(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
+            "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
+        rtl::OUString classpathArg("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
         rtl_uString * args[] = {
             noquickArg.pData, nofirstArg.pData, norestoreArg.pData,
             nologoArg.pData, headlessArg.pData, acceptArg.pData, userArg.pData,
             jreArg.pData, classpathArg.pData };
         rtl_uString ** envs = 0;
         rtl::OUString argEnv;
-        if (detail::getArgument(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env")), &argEnv))
+        if (detail::getArgument(rtl::OUString("env"), &argEnv))
         {
             envs = &argEnv.pData;
         }
@@ -99,7 +88,7 @@ void OfficeConnection::setUp() {
                     argSoffice.copy(RTL_CONSTASCII_LENGTH("path:"))).pData,
                 args, SAL_N_ELEMENTS(args), 0, 0, 0, envs, envs == 0 ? 0 : 1,
                 &process_));
-    } else if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("connect:"))) {
+    } else if (argSoffice.match("connect:")) {
         desc = argSoffice.copy(RTL_CONSTASCII_LENGTH("connect:"));
     } else {
         CPPUNIT_FAIL(
@@ -111,11 +100,9 @@ void OfficeConnection::setUp() {
             context_ =
                 css::uno::Reference< css::uno::XComponentContext >(
                     resolver->resolve(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno:")) +
+                        rtl::OUString("uno:") +
                         desc +
-                        rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                ";urp;StarOffice.ComponentContext"))),
+                        rtl::OUString(";urp;StarOffice.ComponentContext")),
                     css::uno::UNO_QUERY_THROW);
             break;
         } catch (css::connection::NoConnectException &) {}

@@ -33,7 +33,7 @@ namespace detail {
 bool getArgument(rtl::OUString const & name, rtl::OUString * value) {
     OSL_ASSERT(value != 0);
     return rtl::Bootstrap::get(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arg-")) + name, *value);
+        rtl::OUString("arg-") + name, *value);
 }
 
 }

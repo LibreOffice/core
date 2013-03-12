@@ -68,9 +68,7 @@ bool Prot::protect(
             context,
             CppUnit::Message(
                 convert(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "An uncaught exception of type "))
+                    rtl::OUString("An uncaught exception of type ")
                     + a.getValueTypeName()),
                 convert(e.Message)));
     }
