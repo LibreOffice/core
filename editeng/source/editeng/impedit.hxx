@@ -719,7 +719,7 @@ public:
     void                    FormatFullDoc();
     void                    UpdateViews( EditView* pCurView = 0 );
     void                    Paint( ImpEditView* pView, const Rectangle& rRect, OutputDevice* pTargetDevice = 0, sal_Bool bUseVirtDev = sal_False );
-    void                    Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aStartPos, sal_Bool bStripOnly = sal_False, short nOrientation = 0 );
+    void                    Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aStartPos, sal_Bool bStripOnly = sal_False, short nOrientation = 0 );
 
     sal_Bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
     sal_Bool                MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );
