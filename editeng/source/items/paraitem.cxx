@@ -791,14 +791,11 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
             rText = rText +
                     EE_RESSTR(nId) +
                     cpDelimTmp +
-                    OUString::number( nMinLead ) +
-                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINLEAD) +
+                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
                     cpDelimTmp +
-                    OUString::number( nMinTrail ) +
-                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINTRAIL) +
+                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail)) +
                     cpDelimTmp +
-                    OUString::number( nMaxHyphens ) +
-                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MAX);
+                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens));
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
         default: ;//prevent warning

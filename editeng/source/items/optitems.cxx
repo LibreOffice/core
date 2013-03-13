@@ -156,11 +156,9 @@ SfxItemPresentation SfxHyphenRegionItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
             rText = rText +
-                    OUString::number( nMinLead ) +
-                    EE_RESSTR( RID_SVXITEMS_HYPHEN_MINLEAD ) +
+                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
                     "," +
-                    OUString::number( nMinTrail ) +
-                    EE_RESSTR( RID_SVXITEMS_HYPHEN_MINTRAIL );
+                    EE_RESSTR(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail));
             return ePres;
         }
         default:

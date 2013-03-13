@@ -824,15 +824,15 @@ String RID_SVXITEMS_ORPHANS_COMPLETE
 };
 String RID_SVXITEMS_HYPHEN_MINLEAD
 {
-    Text [ en-US ] = "Characters at end of line" ;
+    Text [ en-US ] = "%1 characters at end of line" ;
 };
 String RID_SVXITEMS_HYPHEN_MINTRAIL
 {
-    Text [ en-US ] = "Characters at beginning of line" ;
+    Text [ en-US ] = "%1 characters at beginning of line" ;
 };
 String RID_SVXITEMS_HYPHEN_MAX
 {
-    Text [ en-US ] = "Hyphens" ;
+    Text [ en-US ] = "%1 hyphens" ;
 };
 String RID_SVXITEMS_PAGEMODEL_COMPLETE
 {
