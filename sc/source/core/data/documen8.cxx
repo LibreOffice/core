@@ -87,6 +87,7 @@
 #include "scresid.hxx"
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 //  states for online spelling in the visible range (0 is set initially)
 #define VSPL_START  0
@@ -529,11 +530,6 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
     IdleCalcTextWidthScope aScope(*this, aCurTextWidthCalcPos);
 
-    OutputDevice*       pDev     = NULL;
-    ScStyleSheet*       pStyle   = NULL;
-    ScColumnIterator*   pColIter = NULL;
-    ScTable*            pTable   = NULL;
-
     if (!ValidRow(aScope.Row()))
     {
         aScope.setRow(0);
@@ -549,9 +545,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()])
         aScope.setTab(0);
 
-    pTable = maTabs[aScope.Tab()];
-    pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(pTable->aPageStyle, SFX_STYLE_FAMILY_PAGE);
-
+    ScTable* pTable = maTabs[aScope.Tab()];
+    ScStyleSheet* pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(pTable->aPageStyle, SFX_STYLE_FAMILY_PAGE);
     OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
     if (pStyle && 0 == getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES))
@@ -565,8 +560,10 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
         // Start at specified cell position (nCol, nRow, nTab).
         ScColumn* pColumn  = &pTable->aCol[aScope.Col()];
-        pColIter = new ScColumnIterator(pColumn, aScope.Row(), MAXROW);
+        boost::scoped_ptr<ScColumnIterator> pColIter(
+            new ScColumnIterator(pColumn, aScope.Row(), MAXROW));
 
+        OutputDevice* pDev = NULL;
         while ( (nZoom > 0) && (nCount < CALCMAX) && (nRestart < 2) )
         {
             SCROW nRow;
@@ -659,10 +656,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
                     if ( nZoom > 0 )
                     {
-                        delete pColIter;
-
                         pColumn  = &pTable->aCol[aScope.Col()];
-                        pColIter = new ScColumnIterator( pColumn, aScope.Row(), MAXROW );
+                        pColIter.reset(new ScColumnIterator(pColumn, aScope.Row(), MAXROW));
                     }
                     else
                         aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
@@ -679,8 +674,6 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     }
     else
         aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
-
-    delete pColIter;
 
     return aScope.getNeedMore();
 }
