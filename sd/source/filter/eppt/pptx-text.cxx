@@ -878,7 +878,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                 PortionObj* pPortion = front();
                 CalculateGraphicBulletSize( ( pPortion ) ? pPortion->mnCharHeight : 24 );
 
-                switch( (SvxExtNumType)nNumberingType )
+                switch( nNumberingType )
                 {
                     case SVX_NUM_NUMBER_NONE : nParaFlags |= 0xf; break;
 
@@ -896,7 +896,20 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             nParaFlags |= 0x90; // we define the font and charset
                         }
                     }
-                    default:
+                    case SVX_NUM_CHARS_UPPER_LETTER :       // count from a-z, aa - az, ba - bz, ...
+                    case SVX_NUM_CHARS_LOWER_LETTER :
+                    case SVX_NUM_ROMAN_UPPER :
+                    case SVX_NUM_ROMAN_LOWER :
+                    case SVX_NUM_ARABIC :
+                    case SVX_NUM_PAGEDESC :                 // numbering from the page template
+                    case SVX_NUM_BITMAP :
+                    case SVX_NUM_CHARS_UPPER_LETTER_N :     // count from a-z, aa-zz, aaa-zzz
+                    case SVX_NUM_CHARS_LOWER_LETTER_N :
+                    case SVX_NUM_NUMBER_UPPER_ZH:
+                    case SVX_NUM_CIRCLE_NUMBER:
+                    case SVX_NUM_NUMBER_UPPER_ZH_TW:
+                    case SVX_NUM_NUMBER_LOWER_ZH:
+                    case SVX_NUM_FULL_WIDTH_ARABIC:
                     {
                         if ( nNumberingType != SVX_NUM_CHAR_SPECIAL )
                         {
