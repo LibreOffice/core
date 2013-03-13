@@ -442,7 +442,7 @@ void PieChart::createShapes()
                 }
 
                 //create data point
-                fLogicZ = -1.0; // For 3D pie chart label position
+                double fLogicZ = -1.0; // For 3D pie chart label position
                 uno::Reference<drawing::XShape> xPointShape(
                     createDataPoint( xSeriesGroupShape_Shapes, xPointProperties
                                     , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
