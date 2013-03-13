@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,libvisio))
 
 $(eval $(call gb_ExternalProject_use_unpacked,libvisio,visio))
 
+$(eval $(call gb_ExternalProject_use_autoconf,libvisio,build))
+
 $(eval $(call gb_ExternalProject_register_targets,libvisio,\
 	build \
 ))
@@ -21,42 +23,6 @@ $(eval $(call gb_ExternalProject_use_externals,libvisio,\
 	wpg \
 	libxml2 \
 ))
-
-ifeq ($(OS)$(COM),WNTMSC)
-
-ifeq ($(VCVER),90)
-$(call gb_ExternalProject_get_state_target,libvisio,build) :
-	$(call gb_ExternalProject_run,build,\
-		export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
-		&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
-		&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-		&& $(COMPATH)/vcpackages/vcbuild.exe libvisio.vcproj "Release|Win32" \
-	,build/win32)
-else ifeq ($(VCVER),100)
-$(call gb_ExternalProject_get_state_target,libvisio,build) :
-	$(call gb_ExternalProject_run,build,\
-		export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
-		&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
-		&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-		&& msbuild.exe libvisio.vcxproj /p:Configuration=Release \
-	,build/win32)
-else
-$(call gb_ExternalProject_get_state_target,libvisio,build) :
-	$(call gb_ExternalProject_run,build,\
-		export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
-		&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export LIBXML_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,xml2)/include \
-		&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-		&& msbuild.exe libvisio.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
-	,build/win32)
-endif
-
-else
 
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
 	$(call gb_ExternalProject_run,build,\
@@ -73,7 +39,5 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	)
-
-endif
 
 # vim: set noet sw=4 ts=4:
