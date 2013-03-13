@@ -156,4 +156,10 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
     return true;
 }
 
+sal_uInt16 TemplateRemoteView::createRegion(const OUString &/*rName*/)
+{
+    // TODO: Create new folder in current remote repository
+    return 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

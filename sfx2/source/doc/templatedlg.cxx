@@ -374,6 +374,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
         else
             OnRepositoryDelete();
         break;
+    case TBI_TEMPLATE_FOLDER_NEW:
+        OnFolderNew();
+        break;
     case TBI_TEMPLATE_SAVE:
         OnTemplateSaveAs();
         break;
@@ -1108,6 +1111,20 @@ void SfxTemplateManagerDlg::OnTemplateAsDefault ()
 
             createDefaultTemplateMenu();
         }
+    }
+}
+
+void SfxTemplateManagerDlg::OnFolderNew()
+{
+    InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+
+    int ret = dlg.Execute();
+
+    if (ret)
+    {
+        OUString aName = dlg.getEntryText();
+
+        mpCurView->createRegion(aName);
     }
 }
 

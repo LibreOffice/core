@@ -87,6 +87,8 @@ public:
 
     virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
+    virtual sal_uInt16 createRegion (const OUString &rName) = 0;
+
     void showOverlay (bool bVisible);
 
     void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
