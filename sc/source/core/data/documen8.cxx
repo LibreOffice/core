@@ -549,131 +549,133 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     ScStyleSheet* pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(pTable->aPageStyle, SFX_STYLE_FAMILY_PAGE);
     OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
-    if (pStyle && 0 == getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES))
+    if (!pStyle || getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES) == 0)
     {
-        sal_uInt16 nRestart = 0;
-        sal_uInt16 nCount = 0;
+        // Move to the next sheet as the current one has scale-to-pages set,
+        // and bail out.
+        aScope.incTab();
+        return false;
+    }
+
+    sal_uInt16 nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
+    Fraction aZoomFract(nZoom, 100);
+
+    // Start at specified cell position (nCol, nRow, nTab).
+    ScColumn* pColumn  = &pTable->aCol[aScope.Col()];
+    boost::scoped_ptr<ScColumnIterator> pColIter(
+        new ScColumnIterator(pColumn, aScope.Row(), MAXROW));
+
+    OutputDevice* pDev = NULL;
+    sal_uInt16 nRestart = 0;
+    sal_uInt16 nCount = 0;
+    while ( (nZoom > 0) && (nCount < CALCMAX) && (nRestart < 2) )
+    {
+        SCROW nRow;
         ScBaseCell* pCell = NULL;
-
-        sal_uInt16 nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
-        Fraction aZoomFract( nZoom, 100 );
-
-        // Start at specified cell position (nCol, nRow, nTab).
-        ScColumn* pColumn  = &pTable->aCol[aScope.Col()];
-        boost::scoped_ptr<ScColumnIterator> pColIter(
-            new ScColumnIterator(pColumn, aScope.Row(), MAXROW));
-
-        OutputDevice* pDev = NULL;
-        while ( (nZoom > 0) && (nCount < CALCMAX) && (nRestart < 2) )
+        if ( pColIter->Next(nRow, pCell) )
         {
-            SCROW nRow;
-            if ( pColIter->Next(nRow, pCell) )
+            // More cell in this column.
+            aScope.setRow(nRow);
+
+            if ( TEXTWIDTH_DIRTY == pCell->GetTextWidth() )
             {
-                // More cell in this column.
-                aScope.setRow(nRow);
-
-                if ( TEXTWIDTH_DIRTY == pCell->GetTextWidth() )
+                // Calculate text width for this cell.
+                double nPPTX = 0.0;
+                double nPPTY = 0.0;
+                if ( !pDev )
                 {
-                    // Calculate text width for this cell.
-                    double nPPTX = 0.0;
-                    double nPPTY = 0.0;
-                    if ( !pDev )
-                    {
-                        pDev = GetPrinter();
-                        aScope.setOldMapMode(pDev->GetMapMode());
-                        pDev->SetMapMode( MAP_PIXEL );  // wichtig fuer GetNeededSize
+                    pDev = GetPrinter();
+                    aScope.setOldMapMode(pDev->GetMapMode());
+                    pDev->SetMapMode( MAP_PIXEL );  // wichtig fuer GetNeededSize
 
-                        Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
-                        nPPTX = aPix1000.X() / 1000.0;
-                        nPPTY = aPix1000.Y() / 1000.0;
-                    }
-
-                    if (!aScope.hasProgressBar() && pCell->GetCellType() == CELLTYPE_FORMULA
-                        && ((ScFormulaCell*)pCell)->GetDirty())
-                    {
-                        aScope.createProgressBar();
-                    }
-
-                    sal_uInt16 nNewWidth = (sal_uInt16)GetNeededSize(
-                        aScope.Col(), aScope.Row(), aScope.Tab(),
-                        pDev, nPPTX, nPPTY, aZoomFract,aZoomFract, true, true);   // bTotalSize
-
-                    pCell->SetTextWidth( nNewWidth );
-                    aScope.setNeedMore(true);
+                    Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
+                    nPPTX = aPix1000.X() / 1000.0;
+                    nPPTY = aPix1000.Y() / 1000.0;
                 }
+
+                if (!aScope.hasProgressBar() && pCell->GetCellType() == CELLTYPE_FORMULA
+                    && ((ScFormulaCell*)pCell)->GetDirty())
+                {
+                    aScope.createProgressBar();
+                }
+
+                sal_uInt16 nNewWidth = (sal_uInt16)GetNeededSize(
+                    aScope.Col(), aScope.Row(), aScope.Tab(),
+                    pDev, nPPTX, nPPTY, aZoomFract,aZoomFract, true, true);   // bTotalSize
+
+                pCell->SetTextWidth( nNewWidth );
+                aScope.setNeedMore(true);
             }
-            else
+        }
+        else
+        {
+            // No more cell in this column.  Move to the left column and start at row 0.
+
+            bool bNewTab = false;
+
+            aScope.setRow(0);
+            aScope.incCol(-1);
+
+            if (aScope.Col() < 0)
             {
-                // No more cell in this column.  Move to the left column and start at row 0.
+                // No more column to the left.  Move to the right-most column of the next sheet.
+                aScope.setCol(MAXCOL);
+                aScope.incTab();
+                bNewTab = true;
+            }
 
-                bool bNewTab = false;
+            if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()] )
+            {
+                // Sheet doesn't exist at specified sheet position.  Restart at sheet 0.
+                aScope.setTab(0);
+                nRestart++;
+                bNewTab = true;
+            }
 
-                aScope.setRow(0);
-                aScope.incCol(-1);
-
-                if (aScope.Col() < 0)
+            if ( nRestart < 2 )
+            {
+                if ( bNewTab )
                 {
-                    // No more column to the left.  Move to the right-most column of the next sheet.
-                    aScope.setCol(MAXCOL);
-                    aScope.incTab();
-                    bNewTab = true;
-                }
+                    pTable = maTabs[aScope.Tab()];
+                    pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(
+                        pTable->aPageStyle, SFX_STYLE_FAMILY_PAGE);
 
-                if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()] )
-                {
-                    // Sheet doesn't exist at specified sheet position.  Restart at sheet 0.
-                    aScope.setTab(0);
-                    nRestart++;
-                    bNewTab = true;
-                }
-
-                if ( nRestart < 2 )
-                {
-                    if ( bNewTab )
+                    if ( pStyle )
                     {
-                        pTable = maTabs[aScope.Tab()];
-                        pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(
-                            pTable->aPageStyle, SFX_STYLE_FAMILY_PAGE);
-
-                        if ( pStyle )
+                        // Check if the scale-to-pages setting is set. If
+                        // set, we exit the loop.  If not, get the page
+                        // scale factor of the new sheet.
+                        if (getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES) == 0)
                         {
-                            // Check if the scale-to-pages setting is set. If
-                            // set, we exit the loop.  If not, get the page
-                            // scale factor of the new sheet.
-                            if (getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES) == 0)
-                            {
-                                nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
-                                aZoomFract = Fraction(nZoom, 100);
-                            }
-                            else
-                                nZoom = 0;
+                            nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
+                            aZoomFract = Fraction(nZoom, 100);
                         }
                         else
-                        {
-                            OSL_FAIL( "Missing StyleSheet :-/" );
-                        }
-                    }
-
-                    if ( nZoom > 0 )
-                    {
-                        pColumn  = &pTable->aCol[aScope.Col()];
-                        pColIter.reset(new ScColumnIterator(pColumn, aScope.Row(), MAXROW));
+                            nZoom = 0;
                     }
                     else
-                        aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
+                    {
+                        OSL_FAIL( "Missing StyleSheet :-/" );
+                    }
                 }
+
+                if ( nZoom > 0 )
+                {
+                    pColumn  = &pTable->aCol[aScope.Col()];
+                    pColIter.reset(new ScColumnIterator(pColumn, aScope.Row(), MAXROW));
+                }
+                else
+                    aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
             }
-
-            nCount++;
-
-            // Quit if either 1) its duration exceeds 50 ms, or 2) there is
-            // any pending event after processing 32 cells.
-            if ((50L < Time::GetSystemTicks() - aScope.getStartTime()) || (nCount > 31 && Application::AnyInput(ABORT_EVENTS)))
-                nCount = CALCMAX;
         }
+
+        nCount++;
+
+        // Quit if either 1) its duration exceeds 50 ms, or 2) there is any
+        // pending event after processing 32 cells.
+        if ((50L < Time::GetSystemTicks() - aScope.getStartTime()) || (nCount > 31 && Application::AnyInput(ABORT_EVENTS)))
+            nCount = CALCMAX;
     }
-    else
-        aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
 
     return aScope.getNeedMore();
 }
