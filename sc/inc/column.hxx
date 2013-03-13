@@ -94,6 +94,7 @@ class ScColumn
     ScAttrArray*       pAttrArray;
     ScDocument*                pDocument;
 
+friend class ScColumnTextWidthIterator;
 friend class ScDocument;                                       // for FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
