@@ -629,7 +629,7 @@ void DbgWindow::InsertLine( const OUString& rLine )
             maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 0x00000001 ) );
         bFirstEntry = sal_False;
 
-        aStr.replaceAt( 0, nPos+1, "" );
+        aStr = aStr.replaceAt( 0, nPos+1, "" );
         nPos = aStr.indexOf( _LF );
     }
     if ( maLstBox.GetEntryCount() >= DBGWIN_MAXLINES )
