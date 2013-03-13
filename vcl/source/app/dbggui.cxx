@@ -626,7 +626,7 @@ void DbgWindow::InsertLine( const OUString& rLine )
 
         sal_uInt16 nInsertionPos = maLstBox.InsertEntry( aStr.copy( 0, nPos ) );
         if ( bFirstEntry )
-            maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 0x00000001 ) );
+            maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 1 ) );
         bFirstEntry = sal_False;
 
         aStr = aStr.replaceAt( 0, nPos+1, "" );
@@ -636,7 +636,7 @@ void DbgWindow::InsertLine( const OUString& rLine )
         maLstBox.RemoveEntry( 0 );
     sal_uInt16 nInsertionPos = maLstBox.InsertEntry( aStr );
     if ( bFirstEntry )
-        maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 0x00000001 ) );
+        maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 1 ) );
     maLstBox.SetTopEntry( DBGWIN_MAXLINES-1 );
     maLstBox.Update();
 }
