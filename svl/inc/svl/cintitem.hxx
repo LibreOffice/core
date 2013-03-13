@@ -134,7 +134,7 @@ public:
 
     virtual SfxFieldUnit GetUnit() const;
 
-    sal_Int16 GetValue() const { return m_nValue; }
+    sal_uInt16 GetValue() const { return m_nValue; }
 
     inline void SetValue(sal_uInt16 nTheValue);
 };
