@@ -1136,16 +1136,13 @@ void SdrUndoObjSetText::Undo()
 
 void SdrUndoObjSetText::Redo()
 {
-    // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
-    OutlinerParaObject* pText1 = pNewText;
-
-    if(pText1)
-        pText1 = new OutlinerParaObject(*pText1);
-
     SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
-    if( pText )
+    if( pText && pNewText)
+    {
+        // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
+        OutlinerParaObject* pText1 = new OutlinerParaObject(*pNewText);
         static_cast< SdrTextObj* >( pObj )->NbcSetOutlinerParaObjectForText( pText1, pText );
-
+    }
     pObj->ActionChanged();
 
     // Trigger PageChangeCall
