@@ -185,7 +185,7 @@ const sal_Int32 WID_MODEL_FONTS = 13;
 
 const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
-    // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
+    // Attention: the first parameter HAS TO BE sorted!!!
     const static SfxItemPropertyMapEntry aDrawModelPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("BuildId"),                      WID_MODEL_BUILDID,  &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
@@ -424,15 +424,15 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
 
-            // ist unser SdDrawDocument gerade gestorben?
+            // did our SdDrawDocument just died?
             if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)
             {
-                // yup, also schnell ein neues erfragen
+                // yes, so we ask for a new one
                 if( mpDocShell )
                 {
                     SdDrawDocument *pNewDoc = mpDocShell->GetDoc();
 
-                    // ist ueberhaupt ein neues da?
+                    // is there a new one?
                     if( pNewDoc != mpDoc )
                     {
                         mpDoc = pNewDoc;
@@ -469,7 +469,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
     }
     else
     {
-        // Hier wird die Seite ermittelt, hinter der eingefuegt werden soll
+        // here we determine the page after which we should insert
         SdPage* pPreviousStandardPage = mpDoc->GetSdPage( Min( (sal_uInt16)(nPageCount - 1), nPage ), PK_STANDARD );
         SetOfByte aVisibleLayers = pPreviousStandardPage->TRG_GetMasterPageVisibleLayers();
         sal_Bool bIsPageBack = aVisibleLayers.IsSet( aBckgrnd );
@@ -478,11 +478,9 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         // AutoLayouts must be ready
         mpDoc->StopWorkStartupDelay();
 
-        /**************************************************************
-        * Es wird stets zuerst eine Standardseite und dann eine
-        * Notizseite erzeugt. Es ist sichergestellt, dass auf eine
-        * Standardseite stets die zugehoerige Notizseite folgt.
-        **************************************************************/
+        /* First we create a standard page and then a notes page. It is
+           guaranteed, that after a standard page the corresponding notes page
+           follows. */
 
         sal_uInt16 nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
         SdPage* pPreviousNotesPage = (SdPage*) mpDoc->GetPage( nStandardPageNum - 1 );
@@ -491,7 +489,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         String aNotesPageName;
 
         /**************************************************************
-        * Standardpage
+        * standard page
         **************************************************************/
         if( bDuplicate )
             pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
@@ -506,12 +504,12 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         pStandardPage->SetOrientation( pPreviousStandardPage->GetOrientation() );
         pStandardPage->SetName(aStandardPageName);
 
-        // Seite hinter aktueller Seite einfuegen
+        // insert page after current page
         mpDoc->InsertPage(pStandardPage, nStandardPageNum);
 
         if( !bDuplicate )
         {
-            // MasterPage der aktuellen Seite verwenden
+            // use MasterPage of the current page
             pStandardPage->TRG_SetMasterPage(pPreviousStandardPage->TRG_GetMasterPage());
             pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
             pStandardPage->SetAutoLayout(AUTOLAYOUT_NONE, sal_True );
@@ -524,7 +522,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         pStandardPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
         /**************************************************************
-        * Notespage
+        * notes page
         **************************************************************/
         SdPage* pNotesPage = NULL;
 
@@ -542,12 +540,12 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         pNotesPage->SetName(aNotesPageName);
         pNotesPage->SetPageKind(PK_NOTES);
 
-        // Seite hinter aktueller Seite einfuegen
+        // insert page after current page
         mpDoc->InsertPage(pNotesPage, nNotesPageNum);
 
         if( !bDuplicate )
         {
-            // MasterPage der aktuellen Seite verwenden
+            // use MasterPage of the current page
             pNotesPage->TRG_SetMasterPage(pPreviousNotesPage->TRG_GetMasterPage());
             pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
             pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True );
@@ -685,7 +683,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    // pPage von xPage besorgen und dann die Id (nPos )ermitteln
+    // get pPage from xPage and determine the Id (nPos ) afterwards
     SvxDrawPage* pSvxPage = SvxDrawPage::getImplementation( xPage );
     if( pSvxPage )
     {
@@ -2457,10 +2455,10 @@ sal_Bool SAL_CALL SdDrawPagesAccess::hasElements()
 
 // XDrawPages
 
-/******************************************************************************
-* Erzeugt eine neue Seite mit Model an der angegebennen Position und gibt die *
-* dazugehoerige SdDrawPage zurueck.                                           *
-******************************************************************************/
+/**
+ * Creates a new page with model at the specified position.
+ * @returns corresponding SdDrawPage
+ */
 uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByIndex( sal_Int32 nIndex )
     throw(uno::RuntimeException)
 {
@@ -2482,11 +2480,11 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByInde
     return xDrawPage;
 }
 
-/******************************************************************************
-* Entfernt die angegebenne SdDrawPage aus dem Model und aus der internen      *
-* Liste. Dies funktioniert nur, wenn mindestens eine *normale* Seite im Model *
-* nach dem entfernen dieser Seite vorhanden ist.                              *
-******************************************************************************/
+/**
+ * Removes the specified SdDrawPage from the model and the internal list. It
+ * only works, if there is at least one *normal* page in the model after
+ * removing this page.
+ */
 void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPage >& xPage )
         throw(uno::RuntimeException)
 {
@@ -2500,7 +2498,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
     sal_uInt16 nPageCount = rDoc.GetSdPageCount( PK_STANDARD );
     if( nPageCount > 1 )
     {
-        // pPage von xPage besorgen und dann die Id (nPos )ermitteln
+        // get pPage from xPage and determine the Id (nPos ) afterwards
         SdDrawPage* pSvxPage = SdDrawPage::getImplementation( xPage );
         if( pSvxPage )
         {
@@ -2617,10 +2615,10 @@ sal_Int32 SAL_CALL SdMasterPagesAccess::getCount()
     return mpModel->mpDoc->GetMasterSdPageCount(PK_STANDARD);
 }
 
-/******************************************************************************
-* Liefert ein drawing::XDrawPage Interface fuer den Zugriff auf die Masterpage and der *
-* angegebennen Position im Model.                                             *
-******************************************************************************/
+/**
+ * Provides a drawing::XDrawPage interface for accessing the Masterpage at the
+ * specified position in the model.
+ */
 uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
     throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -2751,11 +2749,11 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
     return( xDrawPage );
 }
 
-/******************************************************************************
-* Entfernt die angegebenne SdMasterPage aus dem Model und aus der internen    *
-* Liste. Dies funktioniert nur, wenn keine *normale* Seite im Model diese     *
-* Seite als Masterpage benutzt.                                               *
-******************************************************************************/
+/**
+ * Removes the specified SdMasterPage from the model and the internal list. It
+ * only works, if there is no *normal* page using this page as MasterPage in
+ * the model.
+ */
 void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawPage >& xPage )
     throw(uno::RuntimeException)
 {

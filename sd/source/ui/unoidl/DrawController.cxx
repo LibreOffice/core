@@ -438,7 +438,7 @@ void DrawController::FireSelectionChangeListener() throw()
         Reference< XInterface > xSource( (XWeak*)this );
         const lang::EventObject aEvent( xSource );
 
-        // Ueber alle Listener iterieren und Events senden
+        // iterate over all listeners and send events
         OInterfaceIteratorHelper aIt( *pLC);
         while( aIt.hasMoreElements() )
         {

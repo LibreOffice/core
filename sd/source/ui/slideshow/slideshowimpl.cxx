@@ -99,13 +99,11 @@ extern String getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 namespace sd
 {
-///////////////////////////////////////////////////////////////////////
-
-// Slots, welche im Sfx verwaltet werden und in der SlideShow disabled
-// werden sollen (muss in Reihenfolge der SIDs geordnet sein)
+/** Slots, which will be disabled in the slide show and are managed by Sfx.
+    Have to be sorted in the order of the SIDs */
 static sal_uInt16 const pAllowed[] =
 {
-    SID_OPENDOC                             , //     5501   // damit interne Spruenge klappen
+    SID_OPENDOC                             , //     5501   ///< that internally jumps work
     SID_JUMPTOMARK                          , //     5598
     SID_OPENHYPERLINK                       , //     6676
     SID_NAVIGATOR                           , //    10366
@@ -118,11 +116,6 @@ static sal_uInt16 const pAllowed[] =
     SID_NAVIGATOR_OBJECT                      //    27293
 };
 
-///////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////
-// AnimationSlideController
-///////////////////////////////////////////////////////////////////////
 
 class AnimationSlideController
 {
@@ -502,9 +495,9 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-// class SlideshowImpl
-///////////////////////////////////////////////////////////////////////
+
+
+
 
 SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, ::Window* pParentWindow )
 : SlideshowImplBase( m_aMutex )
@@ -669,7 +662,7 @@ void SAL_CALL SlideshowImpl::disposing()
     mxListenerProxy.clear();
     mpSlideController.reset();
 
-    // der DrawView das Praesentationfenster wegnehmen und ihr dafuer ihre alten Fenster wiedergeben
+    // take DrawView from presentation window, but give the old window back
     if( mpShowWindow && mpView )
         mpView->DeleteWindowFromPaintView( mpShowWindow );
 
@@ -711,7 +704,7 @@ void SAL_CALL SlideshowImpl::disposing()
         mnChildMask = 0UL;
     }
 
-    // aktuelle Fenster wieder einblenden
+    // show current window again
     if( mpViewShell && !mpViewShell->ISA(PresentationViewShell))
     {
         if( meAnimationMode == ANIMATIONMODE_SHOW )
@@ -924,7 +917,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                                         ( (meAnimationMode != ANIMATIONMODE_SHOW) ||
                                            SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage() );
 
-        // sollen Zeiten gestoppt werden?
+        // times should be measured?
         if( mbRehearseTimings )
         {
             maPresSettings.mbEndless = sal_False;
@@ -2481,7 +2474,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
         {
             sal_Int32 nFirstSlide = 0;
 
-            // normale Praesentation
+            // normal presentation
             if( eMode == AnimationSlideController::FROM )
             {
                 if( rPresSlide.Len() )

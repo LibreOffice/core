@@ -307,7 +307,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
                 if( !aSet.Count() )
                     aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
-                // Hole Wert aus ItemSet
+                // get value from ItemSet
                 aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
             }
         }

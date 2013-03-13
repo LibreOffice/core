@@ -118,7 +118,7 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
     {
-        // insert clue point
+        // insert glue point
         mpView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
     }
     else

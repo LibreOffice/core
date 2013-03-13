@@ -59,7 +59,7 @@ static sal_uInt16 aEscDirArray[] =
 SFX_IMPL_TOOLBOX_CONTROL( SdTbxCtlGlueEscDir, SfxUInt16Item )
 
 /**
- * Constructor for clue point escape direction Listbox
+ * Constructor for glue point escape direction Listbox
  */
 GlueEscDirLB::GlueEscDirLB( Window* pParent, const Reference< XFrame >& rFrame ) :
         ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),

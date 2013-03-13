@@ -284,11 +284,9 @@ const SvEventDescription* ImplGetSupportedMacroItems()
     return aMacroDescriptionsImpl;
 }
 
-/*************************************************************************
-|*
-|*    Vergleichsfkt. fuer QSort
-|*
-\************************************************************************/
+/**
+ * compare function for QSort
+ */
 struct SortStruct
 {
     SdrObject*  pObj;
@@ -911,7 +909,7 @@ bool SdXShape::IsEmptyPresObj() const throw()
     SdrObject* pObj = mpShape->GetSdrObject();
     if( (pObj != NULL) && pObj->IsEmptyPresObj() )
     {
-        // check if the object is in edit, than its temporarely not empty
+        // check if the object is in edit, than its temporarily not empty
         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
         if( pTextObj == 0 )
             return true;

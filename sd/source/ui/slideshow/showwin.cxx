@@ -64,7 +64,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
     aMap.SetMapUnit(MAP_100TH_MM);
     SetMapMode(aMap);
 
-    // HelpId setzen
+    // set HelpId
     SetHelpId( HID_SD_WIN_PRESENTATION );
     SetUniqueId( HID_SD_WIN_PRESENTATION );
 
@@ -85,11 +85,6 @@ ShowWindow::~ShowWindow(void)
     maMouseTimer.Stop();
 }
 
-/*************************************************************************
-|*
-|* Keyboard event
-|*
-\************************************************************************/
 
 void ShowWindow::KeyInput(const KeyEvent& rKEvt)
 {
@@ -173,11 +168,6 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
         mpViewShell->SetActiveWindow( this );
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown event
-|*
-\************************************************************************/
 
 void ShowWindow::MouseButtonDown(const MouseEvent& /*rMEvt*/)
 {
@@ -191,11 +181,6 @@ void ShowWindow::MouseButtonDown(const MouseEvent& /*rMEvt*/)
     }
 }
 
-/*************************************************************************
-|*
-|* MouseMove event
-|*
-\************************************************************************/
 
 void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
 {
@@ -238,11 +223,6 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
         mpViewShell->SetActiveWindow( this );
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp event
-|*
-\************************************************************************/
 
 void ShowWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -266,12 +246,9 @@ void ShowWindow::MouseButtonUp(const MouseEvent& rMEvt)
     }
 }
 
-/*************************************************************************
-|*
-|* Paint-Event: wenn FuSlideShow noch erreichbar ist, weiterleiten
-|*
-\************************************************************************/
-
+/**
+ * if FuSlideShow is still available, forward it
+ */
 void ShowWindow::Paint(const Rectangle& rRect)
 {
     if( (meShowWindowMode == SHOWWINDOWMODE_NORMAL) || (meShowWindowMode == SHOWWINDOWMODE_PREVIEW) )
@@ -304,11 +281,6 @@ void ShowWindow::Paint(const Rectangle& rRect)
     }
 }
 
-/*************************************************************************
-|*
-|* Notify
-|*
-\************************************************************************/
 
 long ShowWindow::Notify(NotifyEvent& rNEvt)
 {
@@ -324,7 +296,7 @@ long ShowWindow::Notify(NotifyEvent& rNEvt)
 
 void ShowWindow::GetFocus()
 {
-    // Basisklasse
+    // base class
     Window::GetFocus();
 }
 
@@ -647,7 +619,7 @@ IMPL_LINK_NOARG(ShowWindow, MouseTimeoutHdl)
     if( mbMouseCursorHidden )
     {
         // not enough mouse movements since first recording so
-        // cancle show mouse pointer for now
+        // cancel show mouse pointer for now
         mnFirstMouseMove = 0;
     }
     else

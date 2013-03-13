@@ -375,7 +375,7 @@ SdFilterDetect::~SdFilterDetect()
                         }
                         else
                         {
-                            // Vektorgraphik?
+                            // vector graphic?
                             pStm->Seek( STREAM_SEEK_TO_BEGIN );
 
                             const String        aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );

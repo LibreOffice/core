@@ -121,12 +121,12 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && mpView->IsInsGluePointMode())
         {
-            // insert clue points
+            // insert glue points
             mpView->BegInsGluePoint(aMDPos);
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
         {
-            // select clue points
+            // select glue points
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
@@ -139,7 +139,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else if (eHit == SDRHIT_GLUEPOINT)
         {
-            // select clue points
+            // select glue points
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllGluePoints();
 
@@ -181,7 +181,7 @@ sal_Bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else if (mpView->AreObjectsMarked())
             {
-                // select clue point
+                // select glue point
                 if (!rMEvt.IsShift())
                     mpView->UnmarkAllGluePoints();
 

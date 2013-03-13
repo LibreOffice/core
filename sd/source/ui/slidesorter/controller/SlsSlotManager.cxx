@@ -311,7 +311,7 @@ void SlotManager::FuPermanent (SfxRequest& rRequest)
         pShell->SetOldFunction(pShell->GetCurrentFunction());
     }
 
-    //! das ist nur bis das ENUM-Slots sind
+    //! that's only until ENUM-Slots ?are
     //  Invalidate( SID_OBJECT_SELECT );
 }
 
@@ -427,14 +427,14 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
     {
         case SID_RELOAD:
         {
-            // Undo-Manager leeren
+            // empty Undo-Manager
             mrSlideSorter.GetModel().GetDocument()->GetDocSh()->ClearUndoBuffer();
 
-            // Normale Weiterleitung an ViewFrame zur Ausfuehrung
+            // normal forwarding to ViewFrame for execution
             if (pViewShell != NULL)
                 pViewShell->GetViewFrame()->ExecuteSlot(rRequest);
 
-            // Muss sofort beendet werden
+            // has to be finished right away
             return;
         }
 
@@ -486,7 +486,7 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
 
 void SlotManager::GetAttrState (SfxItemSet& rSet)
 {
-    // Iteratate over all items.
+    // Iterate over all items.
     SfxWhichIter aIter (rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     while (nWhich)
@@ -556,7 +556,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
                     }
                     else
                     {
-                        // check if the object is in edit, than its temporarely not empty
+                        // check if the object is in edit, than its temporarily not empty
                         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                         if( pTextObj )
                         {
@@ -600,7 +600,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
             rSet.DisableItem (SID_SUMMARY_PAGE);
     }
 
-    // Starten der Praesentation moeglich?
+    // starting of presentation possible?
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
     {
@@ -694,7 +694,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
     if (rSet.GetItemState(SID_PASTE)  == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_PASTE_SPECIAL)  == SFX_ITEM_AVAILABLE)
     {
-        // Keine eigenen Clipboard-Daten?
+        // no own clipboard data?
         if ( !pTransferClip || !pTransferClip->GetDocShell() )
         {
             rSet.DisableItem(SID_PASTE);
@@ -811,7 +811,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
 
 void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 {
-    // Seitenanzeige und Layout
+    // page view and layout
     SdPage* pPage      = NULL;
     SdPage* pFirstPage = NULL;
     sal_uInt16  nFirstPage;

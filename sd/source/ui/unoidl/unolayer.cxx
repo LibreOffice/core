@@ -309,7 +309,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
 {
     if(pLayer&&pLayerManager)
     {
-        // Versuch 1. ist eine beliebige Seite geoeffnet?
+        // Try 1. is an arbitrary page open?
         ::sd::View *pView = pLayerManager->GetView();
         SdrPageView* pSdrPageView = NULL;
         if(pView)
@@ -326,7 +326,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
             }
         }
 
-        // Versuch 2. Info von der FrameView besorgen
+        // Try 2. get info from FrameView
         if(pLayerManager->GetDocShell())
         {
             ::sd::FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
@@ -346,7 +346,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
 {
     if(pLayer&&pLayerManager)
     {
-        // Versuch 1. ist eine beliebige Seite geoeffnet?
+        // Try 1. is an arbitrary page open?
         ::sd::View *pView = pLayerManager->GetView();
         SdrPageView* pSdrPageView = NULL;
         if(pView)
@@ -366,7 +366,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
             }
         }
 
-        // Versuch 2. Info von der FrameView besorgen
+        // Try 2. get info from FrameView
         if(pLayerManager->GetDocShell())
         {
             ::sd::FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
@@ -527,7 +527,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         sal_Int32 nLayer = nLayerCnt - 2 + 1;
         String aLayerName;
 
-        // Ueberpruefung auf schon vorhandene Namen
+        // Test for existing names
         while( aLayerName.Len()==0 || rLayerAdmin.GetLayer( aLayerName, sal_False) )
         {
             aLayerName = String(SdResId(STR_LAYER));
@@ -718,8 +718,10 @@ sal_Bool SAL_CALL SdLayerManager::hasElements() throw(uno::RuntimeException)
     return getCount() > 0;
 }
 
-/** Falls an den Layern was geaendert wurde sorgt diese Methode dafuer, das
-    die Aenderungen auch in der sdbcx::View sichtbar gemacht werden */
+/**
+ * If something was changed at the layers, this methods takes care that the
+ * changes are made visible in sdbcx::View.
+ */
 void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
 {
     if(mpModel->mpDocShell)

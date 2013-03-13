@@ -687,7 +687,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
 {
     if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
     {
-        // "Letzte Version" vom SFx en/disablen lassen
+        // let SFx en-/disable "last version"
         SfxViewFrame* pSlideViewFrame = SfxViewFrame::Current();
         DBG_ASSERT(pSlideViewFrame!=NULL,
             "SlideSorterController::GetCtrlState: ViewFrame not found");
@@ -695,7 +695,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         {
             pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
         }
-        else        // MI sagt: kein MDIFrame --> disablen
+        else        // MI says: no MDIFrame --> disable
         {
             rSet.DisableItem(SID_RELOAD);
         }
