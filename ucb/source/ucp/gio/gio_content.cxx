@@ -405,7 +405,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
 
         if ( rProp.Name == "IsDocument" )
         {
-            if (g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE))
+            if (pInfo != 0 && g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE))
                 xRow->appendBoolean( rProp, ( g_file_info_get_file_type( pInfo ) == G_FILE_TYPE_REGULAR ||
                                                g_file_info_get_file_type( pInfo ) == G_FILE_TYPE_UNKNOWN ) );
             else
@@ -413,45 +413,45 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         }
         else if ( rProp.Name == "IsFolder" )
         {
-            if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) )
+            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_TYPE) )
                 xRow->appendBoolean( rProp, ( g_file_info_get_file_type( pInfo ) == G_FILE_TYPE_DIRECTORY ));
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "Title" )
         {
-            if (g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME))
+            if (pInfo != 0 && g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME))
             {
                 const char *pName = g_file_info_get_display_name(pInfo);
                 xRow->appendString( rProp, rtl::OUString(pName, strlen(pName), RTL_TEXTENCODING_UTF8) );
             }
             else
-                xRow->appendVoid( rProp );
+                xRow->appendVoid(rProp);
         }
         else if ( rProp.Name == "IsReadOnly" )
         {
-            if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE ) )
+            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE ) )
                 xRow->appendBoolean( rProp, !g_file_info_get_attribute_boolean( pInfo, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE) );
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "DateCreated" )
         {
-            if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_TIME_CREATED ) )
+            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_TIME_CREATED ) )
                 xRow->appendTimestamp( rProp, getDateFromUnix(g_file_info_get_attribute_uint64(pInfo, G_FILE_ATTRIBUTE_TIME_CREATED)) );
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "DateModified" )
         {
-            if( g_file_info_has_attribute( pInfo,  G_FILE_ATTRIBUTE_TIME_CHANGED ) )
+            if (pInfo != 0 && g_file_info_has_attribute( pInfo,  G_FILE_ATTRIBUTE_TIME_CHANGED ) )
                 xRow->appendTimestamp( rProp, getDateFromUnix(g_file_info_get_attribute_uint64(pInfo, G_FILE_ATTRIBUTE_TIME_CHANGED)) );
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "Size" )
         {
-            if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_SIZE) )
+            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_SIZE) )
                 xRow->appendLong( rProp, ( g_file_info_get_size( pInfo ) ));
             else
                 xRow->appendVoid( rProp );
@@ -463,14 +463,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         }
         else if ( rProp.Name == "IsCompactDisc" )
         {
-            if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT ) )
+            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT ) )
                 xRow->appendBoolean( rProp, g_file_info_get_attribute_boolean(pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT) );
             else
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "IsRemoveable" )
         {
-            if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT ) )
+            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT ) )
                 xRow->appendBoolean( rProp, g_file_info_get_attribute_boolean(pInfo, G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT ) );
             else
                 xRow->appendVoid( rProp );
@@ -481,7 +481,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         }
         else if ( rProp.Name == "IsHidden" )
         {
-            if( g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN) )
+            if (pInfo != 0 && g_file_info_has_attribute( pInfo, G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN) )
                 xRow->appendBoolean( rProp, ( g_file_info_get_is_hidden ( pInfo ) ) );
             else
                 xRow->appendVoid( rProp );
@@ -506,11 +506,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Sequence< beans::Property >& rProperties,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
-    GError *pError = NULL;
-    GFileInfo *pInfo = getGFileInfo(xEnv, &pError);
-    if (!pInfo)
-        ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
-
+    GFileInfo *pInfo = getGFileInfo(xEnv);
     return getPropertyValuesFromGFileInfo(pInfo, m_xContext, xEnv, rProperties);
 }
 
@@ -1063,6 +1059,9 @@ void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Refer
     throw( uno::Exception )
 {
     rtl::OUString sDest = m_xIdentifier->getContentIdentifier();
+    if (!sDest.endsWith("/")) {
+        sDest += "/";
+    }
     if (aTransferInfo.NewTitle.getLength())
         sDest += aTransferInfo.NewTitle;
     else
