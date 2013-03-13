@@ -972,7 +972,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
         if (LocaleDataWrapper::areChecksEnabled())
         {
             const LanguageTag& rLoadedLocale = xLocaleData->getLoadedLanguageTag();
-            if ( rLoadedLocale != maLanguageTag )
+            if ( !rLoadedLocale.equals( maLanguageTag, true) )
             {
                 OUString aMsg("SvNumerFormatter::ImpGenerateCL: locales don't match:");
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg ));
