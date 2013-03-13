@@ -143,9 +143,9 @@ public:
     // When Event is called, SalInstance::Yield() must be returned
     virtual sal_Bool                PostEvent( void* pData ) = 0;
 
-    virtual void                SetTitle( const rtl::OUString& rTitle ) = 0;
+    virtual void                SetTitle( const OUString& rTitle ) = 0;
     virtual void                SetIcon( sal_uInt16 nIcon ) = 0;
-    virtual void                SetRepresentedURL( const rtl::OUString& );
+    virtual void                SetRepresentedURL( const OUString& );
     virtual void                    SetMenu( SalMenu *pSalMenu ) = 0;
     virtual void                    DrawMenuBar() = 0;
 
@@ -192,7 +192,7 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext ) = 0;
     virtual void                EndExtTextInput( sal_uInt16 nFlags ) = 0;
 
-    virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode ) = 0;
+    virtual OUString              GetKeyName( sal_uInt16 nKeyCode ) = 0;
 
     // returns in 'rKeyCode' the single keycode that translates to the given unicode when using a keyboard layout of language 'aLangType'
     // returns sal_False if no mapping exists or function not supported
@@ -236,7 +236,7 @@ public:
     // move the frame to a new screen
     virtual void                SetScreenNumber( unsigned int nScreen ) = 0;
 
-    virtual void                SetApplicationID( const rtl::OUString &rApplicationID) = 0;
+    virtual void                SetApplicationID( const OUString &rApplicationID) = 0;
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
@@ -257,7 +257,7 @@ public:
     Window*                       GetWindow() const { return m_pWindow; }
 
     // Call the callback set; this sometimes necessary for implementation classes
-    // that should not now more than necessary about the SalFrame implementation
+    // that should not know more than necessary about the SalFrame implementation
     // (e.g. input methods, printer update handlers).
     long                        CallCallback( sal_uInt16 nEvent, const void* pEvent ) const
     { return m_pProc ? m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent ) : 0; }
