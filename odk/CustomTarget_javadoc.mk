@@ -19,7 +19,7 @@ odk_JAVAPACKAGES := com.sun.star.comp.helper \
 
 $(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/java/ref,index.html))
 
-$(odk_WORKDIR)/docs/java/ref/index.html: $(call gb_Jar_get_target,ridl)
+$(odk_WORKDIR)/docs/java/ref/index.html: $(call gb_Jar_get_outdir_target,ridl)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
 	$(JAVADOC) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
