@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hunspell,\
 	hunspell/hunspell-1.3.2-nullptr.patch \
 	hunspell/hunspell-1.3.2-literal.patch \
 	hunspell/hunspell-1.3.2-compound.patch \
+	hunspell/hunspell.rhbz918938.patch \
 ))
 
 ifeq ($(COM),MSC)
