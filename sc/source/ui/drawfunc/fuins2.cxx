@@ -196,12 +196,6 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
 }
 
-/*************************************************************************
-|*
-|* FuInsertOLE::Konstruktor
-|*
-\************************************************************************/
-
 FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
@@ -432,43 +426,19 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
         rReq.Ignore();
 }
 
-/*************************************************************************
-|*
-|* FuInsertOLE::Destruktor
-|*
-\************************************************************************/
-
 FuInsertOLE::~FuInsertOLE()
 {
 }
-
-/*************************************************************************
-|*
-|* FuInsertOLE::Function aktivieren
-|*
-\************************************************************************/
 
 void FuInsertOLE::Activate()
 {
     FuPoor::Activate();
 }
 
-/*************************************************************************
-|*
-|* FuInsertOLE::Function deaktivieren
-|*
-\************************************************************************/
-
 void FuInsertOLE::Deactivate()
 {
     FuPoor::Deactivate();
 }
-
-/*************************************************************************
-|*
-|* FuInsertChart::Konstruktor
-|*
-\************************************************************************/
 
 FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
@@ -800,32 +770,14 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     }
 }
 
-/*************************************************************************
-|*
-|* FuInsertChart::Destruktor
-|*
-\************************************************************************/
-
 FuInsertChart::~FuInsertChart()
 {
 }
-
-/*************************************************************************
-|*
-|* FuInsertChart::Function aktivieren
-|*
-\************************************************************************/
 
 void FuInsertChart::Activate()
 {
     FuPoor::Activate();
 }
-
-/*************************************************************************
-|*
-|* FuInsertChart::Function deaktivieren
-|*
-\************************************************************************/
 
 void FuInsertChart::Deactivate()
 {

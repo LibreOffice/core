@@ -34,8 +34,6 @@ class FuInsertGraphic : public FuPoor
     virtual void Deactivate();
 };
 
-/************************************************************************/
-
 class FuInsertOLE : public FuPoor
 {
  public:
@@ -47,8 +45,6 @@ class FuInsertOLE : public FuPoor
     virtual void Deactivate();
 };
 
-/************************************************************************/
-
 class FuInsertChart : public FuPoor
 {
  public:
@@ -59,8 +55,6 @@ class FuInsertChart : public FuPoor
     virtual void Activate();
     virtual void Deactivate();
 };
-
-/************************************************************************/
 
 class FuInsertMedia : public FuPoor
 {
