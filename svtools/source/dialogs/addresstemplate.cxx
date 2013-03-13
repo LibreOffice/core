@@ -409,9 +409,11 @@ void AssignmentPersistentData::Commit()
         if (_rAssignment.isEmpty())
         {
             if (hasFieldAssignment(_rLogicalName))
+            {
                 // the assignment exists but it should be reset
                 clearFieldAssignment(_rLogicalName);
-                return;
+            }
+            return;
         }
 
         // Fields
