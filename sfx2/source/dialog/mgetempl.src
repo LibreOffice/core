@@ -103,18 +103,11 @@ TabPage TP_MANAGE_STYLES
     };
     FixedText FT_DESC
     {
+        HelpID = "sfx2:MultiLineEdit:TP_MANAGE_STYLES:ED_DESC";
         Pos = MAP_APPFONT ( 12 , 88  ) ;
         Size = MAP_APPFONT ( 236 , 85 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
-    };
-    MultiLineEdit ED_DESC
-    {
-        HelpID = "sfx2:MultiLineEdit:TP_MANAGE_STYLES:ED_DESC";
-        Pos = MAP_APPFONT ( 12 , 88  ) ;
-        Size = MAP_APPFONT ( 236 , 85 ) ;
-        ReadOnly = TRUE ;
-        IgnoreTab = TRUE;
     };
     FixedLine GB_DESC
     {

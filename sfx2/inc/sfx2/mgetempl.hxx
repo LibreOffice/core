@@ -61,7 +61,6 @@ class SfxManageStyleSheetPage : public SfxTabPage
 
     FixedLine aDescGb;
     FixedInfo aDescFt;
-    MultiLineEdit aDescED;
 
     SfxStyleSheetBase *pStyle;
     SfxStyleFamilies *pFamilies;

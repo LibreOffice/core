@@ -61,7 +61,6 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     aDescGb     ( this, SfxResId( GB_DESC ) ),
     aDescFt     ( this, SfxResId( FT_DESC ) ),
-    aDescED     ( this, SfxResId( ED_DESC ) ),
 
     pStyle( &( (SfxStyleDialog*)GetParentDialog() )->GetStyleSheet() ),
 
@@ -80,13 +79,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 {
     FreeResource();
 
-    if ( IsBackground() )
-        aDescED.SetBackground( GetBackground() );
     FixedInfo* pInfo = new FixedInfo( this );
-    aDescED.SetFont( pInfo->GetFont() );
     delete pInfo;
 
-    aDescED.Hide();
     aDescFt.Show();
 
     // this Page needs ExchangeSupport
