@@ -1859,7 +1859,7 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
     aLbHatchBckgrdColor.Hide();
 
     // set table text
-    String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
     INetURLObject   aURL( pColorList->GetPath() );
 
     aURL.Append( pColorList->GetName() );
@@ -1867,11 +1867,11 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
 
     if( aURL.getBase().getLength() > 18 )
     {
-        aString += String(aURL.getBase()).Copy( 0, 15 );
-        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+        aString += aURL.getBase().copy( 0, 15 );
+        aString += "...";
     }
     else
-        aString += String(aURL.getBase());
+        aString += aURL.getBase();
 
     ModifyColorHdl_Impl( this );
 }
@@ -1948,7 +1948,7 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
     aLbHatchBckgrdColor.Hide();
 
     // set table text
-    String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
     INetURLObject   aURL( pGradientList->GetPath() );
 
     aURL.Append( pGradientList->GetName() );
@@ -1956,11 +1956,11 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
 
     if( aURL.getBase().getLength() > 18 )
     {
-        aString += String(aURL.getBase()).Copy( 0, 15 );
-        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+        aString += aURL.getBase().copy( 0, 15 );
+        aString += "...";
     }
     else
-        aString += String(aURL.getBase());
+        aString += aURL.getBase();
 
     ModifyGradientHdl_Impl( this );
     ModifyStepCountHdl_Impl( &aTsbStepCount );
@@ -2039,7 +2039,7 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
     aLbHatchBckgrdColor.Enable();
 
     // set table text
-    String          aString( CUI_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
     INetURLObject   aURL( pHatchingList->GetPath() );
 
     aURL.Append( pHatchingList->GetName() );
@@ -2047,11 +2047,11 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
 
     if( aURL.getBase().getLength() > 18 )
     {
-        aString += String(String(aURL.getBase()).Copy( 0, 15 ));
-        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+        aString += aURL.getBase().copy( 0, 15 );
+        aString += "...";
     }
     else
-        aString += String(aURL.getBase());
+        aString += aURL.getBase();
 
     ModifyHatchingHdl_Impl( this );
     ModifyHatchBckgrdColorHdl_Impl( this );
@@ -2198,7 +2198,7 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
     aFlOffset.Show();
 
     // set table text
-    String          aString( CUI_RES( RID_SVXSTR_TABLE ) );     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+    OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
     INetURLObject   aURL( pBitmapList->GetPath() );
 
     aURL.Append( pBitmapList->GetName() );
@@ -2206,11 +2206,11 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
 
     if( aURL.getBase().getLength() > 18 )
     {
-        aString += String(aURL.getBase()).Copy( 0, 15 );
-        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+        aString += aURL.getBase().copy( 0, 15 );
+        aString += "...";
     }
     else
-        aString += String(aURL.getBase());
+        aString += aURL.getBase();
 
     ModifyBitmapHdl_Impl( this );
     ModifyTileHdl_Impl( &aTsbOriginal );

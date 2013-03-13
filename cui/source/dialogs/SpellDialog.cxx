@@ -1897,10 +1897,10 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
         sal_uLong nPara = pTextEngine->GetParagraphCount();
         if (nPara > 1)
         {
-            String aLeftOverText;
+            OUString aLeftOverText;
             for (sal_uLong i = 1;  i < nPara;  ++i)
             {
-                aLeftOverText.AppendAscii( "\x0a" );    // the manual line break...
+                aLeftOverText += "\x0a";    // the manual line break...
                 aLeftOverText += pTextEngine->GetText(i);
             }
             if (pError)

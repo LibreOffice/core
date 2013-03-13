@@ -2708,22 +2708,22 @@ void lcl_PrintDebugOutput(FixedText& rFixed, const SvxNumberFormat& rNumFmt)
 {
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
-    sal_Char const sHash[] = " # ";
+    OUString const sHash( " # " );
     if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        String sDebugText( OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetAbsLSpace() ) ) );
-        sDebugText.AppendAscii( sHash );
+        OUString sDebugText( OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetAbsLSpace() ) ) );
+        sDebugText += sHash;
         sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetCharTextDistance() ) );
-        sDebugText.AppendAscii( sHash );
+        sDebugText += sHash;
         sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetFirstLineOffset() ) );
         rFixed.SetText(sDebugText);
     }
     else if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
         String sDebugText( OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetListtabPos() ) ) );
-        sDebugText.AppendAscii( sHash );
+        sDebugText += sHash;
         sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetFirstLineIndent() ) );
-        sDebugText.AppendAscii( sHash );
+        sDebugText += sHash;
         sDebugText += OUString::valueOf( TWIP_TO_MM100(rNumFmt.GetIndentAt() ) );
         rFixed.SetText(sDebugText);
     }
