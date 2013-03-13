@@ -1,0 +1,71 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "macros.inc"
+
+Module gid_Module_Reportbuilder
+    MOD_NAME_DESC(MODULE_PRG_REPORTBUILDER);
+    ParentID = gid_Module_Root_Brand;
+    Styles = (HIDDEN_ROOT);
+    Dirs = (gid_Dir_Share_Reportbuilder);
+    Files = (
+#if !defined SYSTEM_APACHE_COMMONS
+        gid_File_Jar_CommonsLogging,
+#endif
+#if ! defined SYSTEM_JFREEREPORT
+        gid_File_Jar_FlowEngine,
+        gid_File_Jar_Flute,
+        gid_File_Jar_Libbase,
+        gid_File_Jar_Libfonts,
+        gid_File_Jar_Libformula,
+        gid_File_Jar_Liblayout,
+        gid_File_Jar_Libloader,
+        gid_File_Jar_Librepository,
+        gid_File_Jar_Libserializer,
+        gid_File_Jar_Libxml,
+        gid_File_Jar_Sac,
+#endif
+        gid_File_Jar_Reportbuilder,
+        gid_File_Xcd_Reportbuilder);
+End
+
+Directory gid_Dir_Share_Reportbuilder
+    ParentID = gid_Brand_Dir_Share;
+    DosName = "reportbuilder";
+End
+
+STD_JAR_FILE( gid_File_Jar_Reportbuilder, reportbuilder )
+
+#if !defined SYSTEM_APACHE_COMMONS
+STD_JAR_FILE(gid_File_Jar_CommonsLogging, commons-logging-1.1.1)
+#endif
+
+/* Not sure, if can we use CONCAT3 in that context here? */
+#ifndef SYSTEM_JFREEREPORT
+    STD_JAR_FILE( gid_File_Jar_FlowEngine, CONCAT3(flow-engine,-,FLOW_ENGINE_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Flute, CONCAT3(flute,-,FLUTE_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Libbase, CONCAT3(libbase,-,LIBBASE_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Libfonts, CONCAT3(libfonts,-,LIBFONTS_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Libformula, CONCAT3(libformula,-,LIBFORMULA_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Liblayout, CONCAT3(liblayout,-,LIBLAYOUT_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Libloader, CONCAT3(libloader,-,LIBLOADER_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Librepository, CONCAT3(librepository,-,LIBREPOSITORY_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Libserializer, CONCAT3(libserializer,-,LIBSERIALIZER_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Libxml, CONCAT3(libxml,-,LIBXML_VERSION) )
+    STD_JAR_FILE( gid_File_Jar_Sac, sac )
+#endif
+
+File gid_File_Xcd_Reportbuilder
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Registry;
+    Name = "reportbuilder.xcd";
+    Styles = (PACKED);
+End
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
