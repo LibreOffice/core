@@ -1800,7 +1800,9 @@ BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
     switch( nElement )
     {
         case XLS_TOKEN( left ):     return &maModel.maLeft;
+        case XLS_TOKEN( start ):     return &maModel.maLeft;
         case XLS_TOKEN( right ):    return &maModel.maRight;
+        case XLS_TOKEN( end ):    return &maModel.maRight;
         case XLS_TOKEN( top ):      return &maModel.maTop;
         case XLS_TOKEN( bottom ):   return &maModel.maBottom;
         case XLS_TOKEN( diagonal ): return &maModel.maDiagonal;
