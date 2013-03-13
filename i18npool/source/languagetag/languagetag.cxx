@@ -1094,6 +1094,13 @@ LanguageTag & LanguageTag::makeFallback()
 }
 
 
+bool LanguageTag::equals( const LanguageTag & rLanguageTag, bool bResolveSystem ) const
+{
+    // Compare full language tag strings.
+    return getBcp47( bResolveSystem) == rLanguageTag.getBcp47( bResolveSystem);
+}
+
+
 bool LanguageTag::operator==( const LanguageTag & rLanguageTag ) const
 {
     // Compare full language tag strings but SYSTEM unresolved.

@@ -236,10 +236,30 @@ public:
      */
     ::std::vector< OUString >       getFallbackStrings() const;
 
-    /* Test equality of two LangageTag. */
+    /** Test equality of two LanguageTag, possibly resolving system locale.
+
+        @param bResolveSystem
+               If TRUE, resolve empty language tags denoting the system
+               locale to the real locale used before comparing.
+               If FALSE, the behavior is identical to operator==(), system
+               locales are not resolved first.
+      */
+    bool                            equals( const LanguageTag & rLanguageTag, bool bResolveSystem = false ) const;
+
+    /** Test equality of two LanguageTag.
+
+        Does NOT resolve system, i.e. if the system locale is en-US
+        LanguageTag("")==LanguageTag("en-US") returns false! Use
+        equals(...,true) instead if system locales shall be resolved.
+     */
     bool    operator==( const LanguageTag & rLanguageTag ) const;
 
-    /* Test inequality of two LangageTag. */
+    /** Test inequality of two LanguageTag.
+
+        Does NOT resolve system, i.e. if the system locale is en-US
+        LanguageTag("")!=LanguageTag("en-US") returns true! Use
+        !equals(,...true) instead if system locales shall be resolved.
+     */
     bool    operator!=( const LanguageTag & rLanguageTag ) const;
 
 private:
