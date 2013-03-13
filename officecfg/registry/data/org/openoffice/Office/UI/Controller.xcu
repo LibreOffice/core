@@ -429,6 +429,117 @@
           <value>com.sun.star.svx.UpSearchToolboxController</value>
         </prop>
       </node>
+
+      <node oor:name="c4" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:FontColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c5" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:BackgroundColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c6" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:Color</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c7" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:BasicShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c8" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:SymbolShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c9" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:ArrowShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c10" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:FlowChartShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c11" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:CalloutShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c12" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:StarShapes</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c14" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:CharFontName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.ReportToolboxController</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="StatusBar">
       <node oor:name="c1" oor:op="replace">
@@ -508,6 +619,30 @@
             <value>com.sun.star.comp.framework.LangSelectionStatusbarController</value>
         </prop>
       </node>
+
+      <node oor:name="c8" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:ZoomSlider</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.comp.StatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c9" oor:op="replace" install:module="reportbuilder">
+        <prop oor:name="Command">
+          <value>.uno:Zoom</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.report.ReportDefinition</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.report.comp.StatusbarController</value>
+        </prop>
+      </node>
+
     </node>
   </node>
 </oor:component-data>
