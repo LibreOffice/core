@@ -31,7 +31,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include "oox/core/fragmenthandler.hxx"
-
 #include "oox/ppt/comments.hxx"
 
 #include <list>
@@ -118,14 +117,8 @@ public:
     ::oox::drawingml::ShapePtr getShape( const ::rtl::OUString & id ) { return maShapeMap[ id ]; }
     ::oox::drawingml::ShapeIdMap& getShapeMap() { return maShapeMap; }
 
-    //comments
-private:
-    commentList commentsList;
-    commentAuthorList commentAuthors;
-
-public:
-    commentList* getCommentsList() { return &commentsList; }
-    commentAuthorList* getCommentAuthors() { return &commentAuthors; }
+    CommentList& getCommentsList() { return maCommentsList; }
+    CommentAuthorList& getCommentAuthors() { return maCommentAuthors; }
 
 private:
     rtl::OUString                                                           maPath;
@@ -155,6 +148,10 @@ private:
 
     std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > > maAnimNodesMap;
     std::map< ::rtl::OUString, ::oox::drawingml::ShapePtr > maShapeMap;
+
+    // slide comments
+    CommentList                                                             maCommentsList;
+    CommentAuthorList                                                       maCommentAuthors;
 };
 
 } }

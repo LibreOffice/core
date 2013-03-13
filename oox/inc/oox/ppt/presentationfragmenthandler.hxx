@@ -42,9 +42,6 @@ public:
     virtual ~PresentationFragmentHandler() throw();
     virtual void finalizeImport();
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
-private:
-    commentAuthorList AuthorList;
-    int readCommentAuthors; // read commentAuthors.xml only once
 
 protected:
     bool importSlide( const ::oox::core::FragmentHandlerRef& rxSlideFragmentHandler,
@@ -63,6 +60,9 @@ private:
     ::com::sun::star::awt::Size maNotesSize;
 
     std::vector< CustomShow >   maCustomShowList;
+
+    CommentAuthorList           maAuthorList;
+    bool                        mbCommentAuthorsRead; // read commentAuthors.xml only once
 };
 
 } }
