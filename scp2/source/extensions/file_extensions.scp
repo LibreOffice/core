@@ -46,19 +46,6 @@ End
 
 #endif
 
-/* ** Report Builder ** */
-
-#ifndef WITHOUT_EXTENSION_REPORTDESIGN
-
-File gid_File_Oxt_Report_Builder
-    TXT_FILE_BODY;
-    Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Report_Builder;
-    Name = "report-builder.oxt";
-End
-
-#endif
-
 /* ** MediaWiki Publisher** */
 
 #ifndef WITHOUT_EXTENSION_MEDIAWIKI
