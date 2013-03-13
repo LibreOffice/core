@@ -978,6 +978,7 @@ public:
     Rectangle           PixelToLogic( const Rectangle& rDeviceRect ) const;
     Polygon             PixelToLogic( const Polygon& rDevicePoly ) const;
     PolyPolygon         PixelToLogic( const PolyPolygon& rDevicePolyPoly ) const;
+    basegfx::B2DPolyPolygon PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
     Region              PixelToLogic( const Region& rDeviceRegion ) const;
     Point               PixelToLogic( const Point& rDevicePt,
                                       const MapMode& rMapMode ) const;

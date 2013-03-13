@@ -1414,6 +1414,14 @@ PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly ) con
     return aPolyPoly;
 }
 
+basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygon& rPixelPolyPoly ) const
+{
+    basegfx::B2DPolyPolygon aTransformedPoly = rPixelPolyPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
+}
+
 // -----------------------------------------------------------------------
 
 Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
