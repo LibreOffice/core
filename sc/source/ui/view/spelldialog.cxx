@@ -47,7 +47,7 @@ ScSpellDialogChildWindow::ScSpellDialogChildWindow( Window* pParentP, sal_uInt16
     mpDocShell( 0 ),
     mpDoc( 0 ),
     mbNeedNextObj( false ),
-    mbOldIdleDisabled( false )
+    mbOldIdleEnabled(true)
 {
     Init();
 }
@@ -141,7 +141,7 @@ void ScSpellDialogChildWindow::Reset()
         mpViewShell->KillEditView( sal_True );
         mpDocShell->PostPaintGridAll();
         mpViewShell->UpdateInputHandler();
-        mpDoc->DisableIdle( mbOldIdleDisabled );
+        mpDoc->EnableIdle(mbOldIdleEnabled);
     }
     mxEngine.reset();
     mxUndoDoc.reset();
@@ -153,7 +153,7 @@ void ScSpellDialogChildWindow::Reset()
     mpDocShell = 0;
     mpDoc = 0;
     mbNeedNextObj = false;
-    mbOldIdleDisabled = false;
+    mbOldIdleEnabled = true;
 }
 
 void ScSpellDialogChildWindow::Init()
@@ -214,8 +214,8 @@ void ScSpellDialogChildWindow::Init()
             OSL_FAIL( "ScSpellDialogChildWindow::Init - unknown selection type" );
     }
 
-    mbOldIdleDisabled = mpDoc->IsIdleDisabled();
-    mpDoc->DisableIdle( true );   // stop online spelling
+    mbOldIdleEnabled = mpDoc->IsIdleEnabled();
+    mpDoc->EnableIdle(false);   // stop online spelling
 
     // *** create Undo/Redo documents *** -------------------------------------
 

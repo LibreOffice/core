@@ -48,7 +48,7 @@ private:
     static  sal_uLong           nInterpretProgress;
     static  sal_Bool            bAllowInterpretProgress;
     static  ScDocument*     pInterpretDoc;
-    static  sal_Bool            bIdleWasDisabled;
+    static  bool            bIdleWasEnabled;
 
             SfxProgress*    pProgress;
 

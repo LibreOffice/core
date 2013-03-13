@@ -44,7 +44,7 @@ ScProgress*     ScProgress::pOldInterpretProgress = NULL;
 sal_uLong           ScProgress::nInterpretProgress = 0;
 sal_Bool            ScProgress::bAllowInterpretProgress = sal_True;
 ScDocument*     ScProgress::pInterpretDoc;
-sal_Bool            ScProgress::bIdleWasDisabled = false;
+bool            ScProgress::bIdleWasEnabled = false;
 
 
 static sal_Bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
@@ -145,8 +145,8 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, sal_Bool bWait )
         else if ( pDoc->GetAutoCalc() )
         {
             nInterpretProgress = 1;
-            bIdleWasDisabled = pDoc->IsIdleDisabled();
-            pDoc->DisableIdle( sal_True );
+            bIdleWasEnabled = pDoc->IsIdleEnabled();
+            pDoc->EnableIdle(false);
             // Interpreter may be called in many circumstances, also if another
             // progress bar is active, for example while adapting row heights.
             // Keep the dummy interpret progress.
@@ -180,7 +180,7 @@ void ScProgress::DeleteInterpretProgress()
                 delete pTmpProgress;
             }
             if ( pInterpretDoc )
-                pInterpretDoc->DisableIdle( bIdleWasDisabled );
+                pInterpretDoc->EnableIdle(bIdleWasEnabled);
         }
         --nInterpretProgress;
     }

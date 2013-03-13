@@ -250,7 +250,7 @@ sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 
 void ScDocShell::BeforeXMLLoading()
 {
-    aDocument.DisableIdle( sal_True );
+    aDocument.EnableIdle(false);
 
     // prevent unnecessary broadcasts and updates
     OSL_ENSURE(pModificator == NULL, "The Modificator should not exist");
@@ -367,7 +367,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
         OSL_FAIL("The Modificator should exist");
     }
 
-    aDocument.DisableIdle( false );
+    aDocument.EnableIdle(true);
 }
 
 namespace {
@@ -479,7 +479,7 @@ sal_Bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::un
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::SaveXML" );
 
-    aDocument.DisableIdle( sal_True );
+    aDocument.EnableIdle(false);
 
     ScXMLImportWrapper aImport( aDocument, pSaveMedium, xStor );
     sal_Bool bRet(false);
@@ -488,7 +488,7 @@ sal_Bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::un
     else
         bRet = aImport.Export(sal_True);
 
-    aDocument.DisableIdle( false );
+    aDocument.EnableIdle(true);
 
     return bRet;
 }
@@ -2443,7 +2443,7 @@ sal_uInt16 ScDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 
     sal_uInt16 nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
     if (nRet == sal_True)                       // sal_True = schliessen
-        aDocument.DisableIdle(sal_True);        // nicht mehr drin rumpfuschen !!!
+        aDocument.EnableIdle(false);        // nicht mehr drin rumpfuschen !!!
 
     return nRet;
 }
@@ -2976,9 +2976,9 @@ ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     bAutoCalcShellDisabled = pDoc->IsAutoCalcShellDisabled();
-    bIdleDisabled = pDoc->IsIdleDisabled();
+    bIdleEnabled = pDoc->IsIdleEnabled();
     pDoc->SetAutoCalcShellDisabled( sal_True );
-    pDoc->DisableIdle( sal_True );
+    pDoc->EnableIdle(false);
 }
 
 
@@ -2988,7 +2988,7 @@ ScDocShellModificator::~ScDocShellModificator()
     pDoc->SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
     if ( !bAutoCalcShellDisabled && rDocShell.IsDocumentModifiedPending() )
         rDocShell.SetDocumentModified();    // last one shuts off the lights
-    pDoc->DisableIdle( bIdleDisabled );
+    pDoc->EnableIdle(bIdleEnabled);
 }
 
 

@@ -2277,8 +2277,8 @@ void ScInterpreter::ScDde()
             //  solange der Link nicht ausgewertet ist, Idle abklemmen
             //  (um zirkulaere Referenzen zu vermeiden)
 
-        bool bOldDis = pDok->IsIdleDisabled();
-        pDok->DisableIdle( true );
+        bool bOldEnabled = pDok->IsIdleEnabled();
+        pDok->EnableIdle(false);
 
             //  Link-Objekt holen / anlegen
 
@@ -2337,7 +2337,7 @@ void ScInterpreter::ScDde()
         else
             PushNA();
 
-        pDok->DisableIdle( bOldDis );
+        pDok->EnableIdle(bOldEnabled);
         pLinkMgr->CloseCachedComps();
     }
 }

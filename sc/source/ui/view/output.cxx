@@ -1949,8 +1949,8 @@ void ScOutputData::FindChanged()
     SCCOL   nX;
     SCSIZE  nArrY;
 
-    bool bWasIdleDisabled = mpDoc->IsIdleDisabled();
-    mpDoc->DisableIdle(true);
+    bool bWasIdleEnabled = mpDoc->IsIdleEnabled();
+    mpDoc->EnableIdle(false);
     for (nArrY=0; nArrY<nArrCount; nArrY++)
         pRowInfo[nArrY].bChanged = false;
 
@@ -1997,7 +1997,7 @@ void ScOutputData::FindChanged()
     }
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
-    mpDoc->DisableIdle( bWasIdleDisabled );
+    mpDoc->EnableIdle(bWasIdleEnabled);
 }
 
 void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,

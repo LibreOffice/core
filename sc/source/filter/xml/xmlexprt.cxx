@@ -4694,10 +4694,10 @@ sal_Bool SAL_CALL ScXMLExport::filter( const ::com::sun::star::uno::Sequence< ::
 {
     SolarMutexGuard aGuard;
     if (pDoc)
-        pDoc->DisableIdle(true);
+        pDoc->EnableIdle(false);
     bool bReturn(SvXMLExport::filter(aDescriptor));
     if (pDoc)
-        pDoc->DisableIdle(false);
+        pDoc->EnableIdle(true);
     return bReturn;
 }
 
@@ -4706,7 +4706,7 @@ void SAL_CALL ScXMLExport::cancel()
 {
     SolarMutexGuard aGuard;
     if (pDoc)
-        pDoc->DisableIdle(false);
+        pDoc->EnableIdle(true);
     SvXMLExport::cancel();
 }
 

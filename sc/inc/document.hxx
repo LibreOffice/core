@@ -356,7 +356,7 @@ private:
     bool                bCalcingAfterLoad;              // in CalcAfterLoad TRUE
     // don't construct/destruct listeners temporarily
     bool                bNoListening;
-    bool                bIdleDisabled;
+    bool                mbIdleEnabled;
     bool                bInLinkUpdate;                  // TableLink or AreaLink
     bool                bChartListenerCollectionNeedsUpdate;
     // are/were there RC_FORCED formula cells in the document (if set once to TRUE then set forever)
@@ -1538,8 +1538,8 @@ public:
     void            RepaintRange( const ScRange& rRange );
     void            RepaintRange( const ScRangeList& rRange );
 
-    bool        IsIdleDisabled() const      { return bIdleDisabled; }
-    void            DisableIdle(bool bDo)   { bIdleDisabled = bDo; }
+    bool IsIdleEnabled() const { return mbIdleEnabled; }
+    void EnableIdle(bool bDo) { mbIdleEnabled = bDo; }
 
     bool            IsDetectiveDirty() const     { return bDetectiveDirty; }
     void            SetDetectiveDirty(bool bSet) { bDetectiveDirty = bSet; }

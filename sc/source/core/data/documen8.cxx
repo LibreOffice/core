@@ -446,9 +446,10 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
 bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder versuchen
 {
     // #i75610# if a printer hasn't been set or created yet, don't create one for this
-    if ( bIdleDisabled || IsInLinkUpdate() || GetPrinter(false) == NULL )
+    if (!mbIdleEnabled || IsInLinkUpdate() || GetPrinter(false) == NULL)
         return false;
-    bIdleDisabled = true;
+
+    mbIdleEnabled = false;
 
     const sal_uLong         nStart   = Time::GetSystemTicks();
     OutputDevice*       pDev     = NULL;
@@ -623,7 +624,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     aCurTextWidthCalcPos.SetCol( (SCCOL)nCol );
 
     pStylePool->SetSearchMask( eOldFam, nOldMask );
-    bIdleDisabled = false;
+    mbIdleEnabled = true;
 
     return bNeedMore;
 }
@@ -819,7 +820,7 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
 
 bool ScDocument::ContinueOnlineSpelling()
 {
-    if ( bIdleDisabled || !pDocOptions->IsAutoSpell() || (pShell && pShell->IsReadOnly()) )
+    if (!mbIdleEnabled || !pDocOptions->IsAutoSpell() || (pShell && pShell->IsReadOnly()))
         return false;
 
     // #i48433# set bInsertingFromOtherDoc flag so there are no broadcasts when PutCell is called

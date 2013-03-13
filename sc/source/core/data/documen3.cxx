@@ -1340,10 +1340,10 @@ void ScDocument::Sort(SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
-        bool bOldDisableIdle = IsIdleDisabled();
-        DisableIdle( true );
+        bool bOldEnableIdle = IsIdleEnabled();
+        EnableIdle(false);
         maTabs[nTab]->Sort(rSortParam, bKeepQuery, pProgress);
-        DisableIdle( bOldDisableIdle );
+        EnableIdle(bOldEnableIdle);
     }
 }
 

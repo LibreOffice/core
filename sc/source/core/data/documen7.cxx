@@ -280,8 +280,8 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     bCalculatingFormulaTree = true;
 
     SetForcedFormulaPending( false );
-    bool bOldIdleDisabled = IsIdleDisabled();
-    DisableIdle( true );
+    bool bOldIdleEnabled = IsIdleEnabled();
+    EnableIdle(false);
     bool bOldAutoCalc = GetAutoCalc();
     //! _nicht_ SetAutoCalc( true ) weil das evtl. CalcFormulaTree( true )
     //! aufruft, wenn vorher disabled war und bHasForcedFormulas gesetzt ist
@@ -373,7 +373,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
             ScProgress::DeleteInterpretProgress();
     }
     bAutoCalc = bOldAutoCalc;
-    DisableIdle( bOldIdleDisabled );
+    EnableIdle(bOldIdleEnabled);
     bCalculatingFormulaTree = false;
 }
 

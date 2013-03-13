@@ -1413,8 +1413,8 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, mpDev->GetExtOutDevData() );
 
-    sal_Bool bWasIdleDisabled = mpDoc->IsIdleDisabled();
-    mpDoc->DisableIdle( true );
+    bool bWasIdleEnabled = mpDoc->IsIdleEnabled();
+    mpDoc->EnableIdle(false);
 
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
@@ -2015,7 +2015,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
     }
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
-    mpDoc->DisableIdle( bWasIdleDisabled );
+    mpDoc->EnableIdle(bWasIdleEnabled);
 }
 
 //  -------------------------------------------------------------------------------

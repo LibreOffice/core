@@ -454,7 +454,7 @@ class SC_DLLPUBLIC ScDocShellModificator
             ScDocShell&     rDocShell;
     ScRefreshTimerProtector aProtector;
             sal_Bool            bAutoCalcShellDisabled;
-            sal_Bool            bIdleDisabled;
+            bool            bIdleEnabled;
 
                             // not implemented
                             ScDocShellModificator( const ScDocShellModificator& );

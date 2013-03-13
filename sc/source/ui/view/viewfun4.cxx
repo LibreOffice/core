@@ -511,8 +511,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
 
     //  ab hier kein return mehr
 
-    sal_Bool bOldDis = pDoc->IsIdleDisabled();
-    pDoc->DisableIdle( true );   // stop online spelling
+    bool bOldEnabled = pDoc->IsIdleEnabled();
+    pDoc->EnableIdle(false);   // stop online spelling
 
     // *** create and init the edit engine *** --------------------------------
 
@@ -579,7 +579,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Boo
     delete pEngine;
     pDocSh->PostPaintGridAll();
     rViewData.GetViewShell()->UpdateInputHandler();
-    pDoc->DisableIdle(bOldDis);
+    pDoc->EnableIdle(bOldEnabled);
 }
 
 // Pasten von FORMAT_FILE-Items

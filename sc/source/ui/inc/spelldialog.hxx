@@ -89,7 +89,7 @@ private:
     ScDocShell*         mpDocShell;
     ScDocument*         mpDoc;
     bool                mbNeedNextObj;
-    bool                mbOldIdleDisabled;
+    bool                mbOldIdleEnabled;
 };
 
 // ============================================================================
