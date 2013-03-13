@@ -88,8 +88,6 @@
 
 #include <memory>
 
-#define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
-
 //  states for online spelling in the visible range (0 is set initially)
 #define VSPL_START  0
 #define VSPL_DONE   1
@@ -97,7 +95,14 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-//------------------------------------------------------------------------
+namespace {
+
+inline sal_uInt16 getScaleValue(SfxStyleSheetBase& rStyle, sal_uInt16 nWhich)
+{
+    return static_cast<const SfxUInt16Item&>(rStyle.GetItemSet().Get(nWhich)).GetValue();
+}
+
+}
 
 void ScDocument::ImplCreateOptions()
 {
@@ -229,11 +234,11 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
     {
         case SFX_STYLE_FAMILY_PAGE:
             {
-                const sal_uInt16 nOldScale        = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALE);
-                const sal_uInt16 nOldScaleToPages = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALETOPAGES);
+                const sal_uInt16 nOldScale = getScaleValue(rStyleSheet, ATTR_PAGE_SCALE);
+                const sal_uInt16 nOldScaleToPages = getScaleValue(rStyleSheet, ATTR_PAGE_SCALETOPAGES);
                 rSet.Put( rChanges );
-                const sal_uInt16 nNewScale        = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALE);
-                const sal_uInt16 nNewScaleToPages = GET_SCALEVALUE(rSet,ATTR_PAGE_SCALETOPAGES);
+                const sal_uInt16 nNewScale        = getScaleValue(rStyleSheet, ATTR_PAGE_SCALE);
+                const sal_uInt16 nNewScaleToPages = getScaleValue(rStyleSheet, ATTR_PAGE_SCALETOPAGES);
 
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
                     InvalidateTextWidth( rStyleSheet.GetName() );
@@ -479,13 +484,13 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
     bool bProgress = false;
-    if ( pStyle && 0 == GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALETOPAGES) )
+    if ( pStyle && 0 == getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES))
     {
         sal_uInt16 nRestart = 0;
         sal_uInt16 nCount = 0;
         ScBaseCell* pCell = NULL;
 
-        sal_uInt16 nZoom = GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALE);
+        sal_uInt16 nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
         Fraction aZoomFract( nZoom, 100 );
 
         // Start at specified cell position (nCol, nRow, nTab).
@@ -568,10 +573,9 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                             // Check if the scale-to-pages setting is set. If
                             // set, we exit the loop.  If not, get the page
                             // scale factor of the new sheet.
-                            SfxItemSet& rSet = pStyle->GetItemSet();
-                            if ( GET_SCALEVALUE( rSet, ATTR_PAGE_SCALETOPAGES ) == 0 )
+                            if (getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES) == 0)
                             {
-                                nZoom = GET_SCALEVALUE(rSet, ATTR_PAGE_SCALE );
+                                nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
                                 aZoomFract = Fraction(nZoom, 100);
                             }
                             else
