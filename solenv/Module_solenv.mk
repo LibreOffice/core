@@ -31,15 +31,20 @@ $(eval $(call gb_Module_add_targets_for_build,solenv,\
 	Executable_concat-deps \
 ))
 
-ifneq ($(OS),WNT)
-ifneq ($(OS),IOS)
-ifneq ($(OS),ANDROID)
+ifeq ($(COM),MSC)
+$(eval $(call gb_Module_add_targets,solenv,\
+	StaticLibrary_wrapper \
+	Executable_gcc-wrapper \
+	Executable_g++-wrapper \
+))
+endif
+
+
+ifneq ($(filter-out WNT IOS ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,solenv,\
 	CustomTarget_gdb \
 	Package_gdb \
 ))
-endif
-endif
 endif
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
