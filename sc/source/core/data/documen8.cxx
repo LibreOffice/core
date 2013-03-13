@@ -454,13 +454,15 @@ class IdleCalcTextWidthScope
     MapMode maOldMapMode;
     sal_uLong mnStartTime;
     bool mbNeedMore;
+    bool mbProgress;
 
 public:
     IdleCalcTextWidthScope(ScDocument& rDoc, ScAddress& rCalcPos) :
         mrDoc(rDoc),
         mrCalcPos(rCalcPos),
         mnStartTime(Time::GetSystemTicks()),
-        mbNeedMore(false)
+        mbNeedMore(false),
+        mbProgress(false)
     {
         mrDoc.EnableIdle(false);
 
@@ -477,6 +479,9 @@ public:
         SfxPrinter* pDev = mrDoc.GetPrinter();
         if (pDev)
             pDev->SetMapMode(maOldMapMode);
+
+        if (mbProgress)
+            ScProgress::DeleteInterpretProgress();
 
         ScStyleSheetPool* pStylePool = mrDoc.GetStyleSheetPool();
         pStylePool->SetSearchMask(meOldFamily, mnOldSearchMask);
@@ -501,6 +506,14 @@ public:
     bool getNeedMore() const { return mbNeedMore; }
 
     sal_uLong getStartTime() const { return mnStartTime; }
+
+    void createProgressBar()
+    {
+        ScProgress::CreateInterpretProgress(&mrDoc, false);
+        mbProgress = true;
+    }
+
+    bool hasProgressBar() const { return mbProgress; }
 };
 
 }
@@ -542,8 +555,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
     OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
-    bool bProgress = false;
-    if ( pStyle && 0 == getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES))
+    if (pStyle && 0 == getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES))
     {
         sal_uInt16 nRestart = 0;
         sal_uInt16 nCount = 0;
@@ -579,11 +591,11 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                         nPPTX = aPix1000.X() / 1000.0;
                         nPPTY = aPix1000.Y() / 1000.0;
                     }
-                    if ( !bProgress && pCell->GetCellType() == CELLTYPE_FORMULA
-                      && ((ScFormulaCell*)pCell)->GetDirty() )
+
+                    if (!aScope.hasProgressBar() && pCell->GetCellType() == CELLTYPE_FORMULA
+                        && ((ScFormulaCell*)pCell)->GetDirty())
                     {
-                        ScProgress::CreateInterpretProgress( this, false );
-                        bProgress = true;
+                        aScope.createProgressBar();
                     }
 
                     sal_uInt16 nNewWidth = (sal_uInt16)GetNeededSize(
@@ -668,9 +680,6 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     }
     else
         aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
-
-    if ( bProgress )
-        ScProgress::DeleteInterpretProgress();
 
     delete pColIter;
 
