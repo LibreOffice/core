@@ -110,6 +110,8 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_executables,OOO,\
 	crashrep_com \
 	gengal \
+	gcc-wrapper \
+	g++-wrapper \
 	guiloader \
 	guistdio \
 	langsupport \
@@ -138,6 +140,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	directxcanvas \
 	winextendloaderenv \
 	winlauncher \
+	wrapper \
 ))
 
 else
