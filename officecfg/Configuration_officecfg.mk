@@ -34,6 +34,7 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/Calc.xcu \
 	org/openoffice/Office/Canvas.xcu \
 	org/openoffice/Office/Compatibility.xcu \
+	org/openoffice/Office/ExtendedColorScheme.xcu \
 	org/openoffice/Office/ExtensionDependencies.xcu \
 	org/openoffice/Office/ExtensionManager.xcu \
 	org/openoffice/Office/Impress.xcu \
@@ -48,8 +49,12 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/Views.xcu \
 	org/openoffice/Office/Paths.xcu \
 	org/openoffice/Office/Histories.xcu \
+	org/openoffice/Office/ReportDesign.xcu \
 	org/openoffice/Office/UI/Controller.xcu \
 	org/openoffice/Office/UI/Factories.xcu \
+	org/openoffice/Office/UI/ReportCommands.xcu \
+	org/openoffice/TypeDetection/Filter.xcu \
+	org/openoffice/TypeDetection/Types.xcu \
 	org/openoffice/TypeDetection/UISort.xcu \
 	org/openoffice/ucb/Configuration.xcu \
 ))
@@ -65,11 +70,13 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Setup-base.xcu \
 	org/openoffice/Setup-math.xcu \
 	org/openoffice/Setup-report.xcu \
+	org/openoffice/Setup-reportbuilder.xcu \
 	org/openoffice/Setup-start.xcu \
 	org/openoffice/UserProfile-unixdesktop.xcu \
 	org/openoffice/VCL-gconflockdown.xcu \
 	org/openoffice/VCL-unixdesktop.xcu \
 	org/openoffice/Office/Accelerators-macosx.xcu \
+	org/openoffice/Office/Accelerators-reportbuilder.xcu \
 	org/openoffice/Office/Accelerators-unxwnt.xcu \
 	org/openoffice/Office/Addons-librelogo.xcu \
 	org/openoffice/Office/Common-writer.xcu \
@@ -93,6 +100,7 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Common-ctlseqcheck.xcu \
 	org/openoffice/Office/Common-korea.xcu \
 	org/openoffice/Office/DataAccess-evoab2.xcu \
+	org/openoffice/Office/DataAccess-reportbuilder.xcu \
 	org/openoffice/Office/Paths-macosx.xcu \
 	org/openoffice/Office/Paths-unxwnt.xcu \
 	org/openoffice/Office/Paths-unixdesktop.xcu \
@@ -106,9 +114,11 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Embedding-impress.xcu \
 	org/openoffice/Office/Embedding-math.xcu \
 	org/openoffice/Office/Embedding-base.xcu \
+	org/openoffice/Office/Embedding-reportbuilder.xcu \
 	org/openoffice/Office/Embedding-writer.xcu \
 	org/openoffice/Office/Recovery-gconflockdown.xcu \
 	org/openoffice/Office/UI/WriterWindowState-librelogo.xcu \
+	org/openoffice/Office/UI/Controller-reportbuilder.xcu \
 	org/openoffice/TypeDetection/UISort-writer.xcu \
 	org/openoffice/TypeDetection/UISort-calc.xcu \
 	org/openoffice/TypeDetection/UISort-draw.xcu \
@@ -150,6 +160,7 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/UI/DbQueryWindowState.xcu \
 	org/openoffice/Office/UI/DbTableWindowState.xcu \
 	org/openoffice/Office/UI/DbRelationWindowState.xcu \
+        org/openoffice/Office/UI/DbReportWindowState.xcu \
 	org/openoffice/Office/UI/DbBrowserWindowState.xcu \
 	org/openoffice/Office/UI/DbTableDataWindowState.xcu \
 	org/openoffice/Office/UI/DrawImpressCommands.xcu \

@@ -367,6 +367,25 @@ postprocess_DEPS_pyuno := main
 postprocess_FILES_pyuno := \
 	$(postprocess_MOD)/org/openoffice/Office/Scripting-python.xcu
 
+ifeq ($(ENABLE_REPORTBUILDER),TRUE)
+postprocess_XCDS += reportbuilder.xcd
+postprocess_DEPS_reportbuilder := main
+postprocess_FILES_reportbuilder := \
+	$(postprocess_XCS)/Office/ReportDesign.xcs \
+	$(postprocess_XCS)/Office/UI/DbReportWindowState.xcs \
+	$(postprocess_XCS)/Office/UI/ReportCommands.xcs \
+	$(postprocess_XCU)/Office/ExtendedColorScheme.xcu \
+	$(postprocess_XCU)/Office/ReportDesign.xcu \
+	$(postprocess_XCU)/Office/UI/DbReportWindowState.xcu \
+	$(postprocess_XCU)/Office/UI/ReportCommands.xcu \
+	$(postprocess_XCU)/TypeDetection/Filter.xcu \
+	$(postprocess_XCU)/TypeDetection/Types.xcu \
+	$(postprocess_MOD)/org/openoffice/Setup-reportbuilder.xcu \
+	$(postprocess_MOD)/org/openoffice/Office/Accelerators-reportbuilder.xcu \
+	$(postprocess_MOD)/org/openoffice/Office/DataAccess-reportbuilder.xcu \
+	$(postprocess_MOD)/org/openoffice/Office/Embedding-reportbuilder.xcu
+endif
+
 postprocess_DEPS_writer := main
 postprocess_FILES_writer := \
 	$(postprocess_XCS)/Office/UI/WriterCommands.xcs \

@@ -334,4 +334,10 @@ $(eval $(call gb_Rdb_add_components,services,\
 ))
 endif
 
+ifeq ($(ENABLE_REPORTBUILDER),TRUE)
+$(eval $(call gb_Rdb_add_components,services,\
+	reportbuilder/java/reportbuilder \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

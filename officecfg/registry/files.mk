@@ -43,6 +43,7 @@ officecfg_XCSFILES := \
     Office/PresenterScreen \
     Office/ProtocolHandler \
     Office/Recovery \
+    Office/ReportDesign \
     Office/SFX \
     Office/Scripting \
     Office/Security \
@@ -66,6 +67,7 @@ officecfg_XCSFILES := \
     Office/UI/DbBrowserWindowState \
     Office/UI/DbQueryWindowState \
     Office/UI/DbRelationWindowState \
+    Office/UI/DbReportWindowState \
     Office/UI/DbTableDataWindowState \
     Office/UI/DbTableWindowState \
     Office/UI/DbuCommands \
@@ -79,6 +81,7 @@ officecfg_XCSFILES := \
     Office/UI/ImpressWindowState \
     Office/UI/MathCommands \
     Office/UI/MathWindowState \
+    Office/UI/ReportCommands \
     Office/UI/StartModuleCommands \
     Office/UI/StartModuleWindowState \
     Office/UI/WindowContentFactories \
