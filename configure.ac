@@ -8140,22 +8140,24 @@ if test "$with_system_icu" = "yes"; then
     AC_PREPROC_IFELSE([AC_LANG_SOURCE([[unicode/rbbi.h]])],[AC_MSG_RESULT(checked.)],[AC_MSG_ERROR(icu headers not found.)])
     AC_LANG_POP([C++])
 
-    ICUPATH="$PATH"
-    if test "$WITH_MINGW" = "yes"; then
-        ICUPATH=`$CC -print-sysroot`/mingw/bin:"$ICUPATH"
-    fi
-    AC_PATH_PROG(ICUCONFIG,icu-config,,[$ICUPATH])
+    if test "$cross_compiling" != "yes" -o "$WITH_MINGW" = "yes"; then
+        ICUPATH="$PATH"
+        if test "$WITH_MINGW" = "yes"; then
+            ICUPATH=`$CC -print-sysroot`/mingw/bin:"$ICUPATH"
+        fi
+        AC_PATH_PROG(ICUCONFIG,icu-config,,[$ICUPATH])
 
-    AC_MSG_CHECKING([ICU version])
-    ICU_VERSION=`$ICUCONFIG --noverify --version 2>/dev/null || $ICUCONFIG --version`
-    ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
-    ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
-    ICU_MICRO=`echo $ICU_VERSION | cut -d"." -f3`
+        AC_MSG_CHECKING([ICU version])
+        ICU_VERSION=`$ICUCONFIG --noverify --version 2>/dev/null || $ICUCONFIG --version`
+        ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
+        ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
+        ICU_MICRO=`echo $ICU_VERSION | cut -d"." -f3`
 
-    if test "$ICU_MAJOR" -ge "49" -o \( "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "2" \); then
-        AC_MSG_RESULT([OK, $ICU_VERSION])
-    else
-        AC_MSG_ERROR([not suitable, only >= 4.2 supported currently])
+        if test "$ICU_MAJOR" -ge "49" -o \( "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "2" \); then
+            AC_MSG_RESULT([OK, $ICU_VERSION])
+        else
+            AC_MSG_ERROR([not suitable, only >= 4.2 supported currently])
+        fi
     fi
 
     if test "$cross_compiling" = "yes" -a \( "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" \); then
