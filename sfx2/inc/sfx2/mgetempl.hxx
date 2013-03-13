@@ -22,12 +22,8 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/stdctrl.hxx>
-#include <svtools/svmedit.hxx>
-
+#include <vcl/vclmedit.hxx>
 #include <sfx2/tabdlg.hxx>
-
-#include <svtools/svmedit2.hxx>
 
 /* expected:
     SID_TEMPLATE_NAME   :   In: StringItem, Name of Template
@@ -38,29 +34,23 @@ class SfxStyleFamilies;
 class SfxStyleFamilyItem;
 class SfxStyleSheetBase;
 
-#ifdef _SFXDLG_HXX
-#define FixedInfo FixedText
-#endif
-
 class SfxManageStyleSheetPage : public SfxTabPage
 {
-    FixedText aNameFt;
-    Edit aNameEd;
-    ExtMultiLineEdit aNameMLE;
+    VclMultiLineEdit* m_pNameRo;
+    Edit* m_pNameRw;
 
-    CheckBox    aAutoCB;
+    CheckBox* m_pAutoCB;
 
-    FixedText aFollowFt;
-    ListBox aFollowLb;
+    FixedText* m_pFollowFt;
+    ListBox* m_pFollowLb;
 
-    FixedText aBaseFt;
-    ListBox aBaseLb;
+    FixedText* m_pBaseFt;
+    ListBox* m_pBaseLb;
 
-    FixedText aFilterFt;
-    ListBox aFilterLb;
+    FixedText* m_pFilterFt;
+    ListBox* m_pFilterLb;
 
-    FixedLine aDescGb;
-    FixedInfo aDescFt;
+    FixedText *m_pDescFt;
 
     SfxStyleSheetBase *pStyle;
     SfxStyleFamilies *pFamilies;
@@ -97,10 +87,6 @@ protected:
         using TabPage::DeactivatePage;
     virtual int     DeactivatePage(SfxItemSet * = 0);
 };
-
-#ifdef FixedInfo
-#undef FixedInfo
-#endif
 
 #endif
 

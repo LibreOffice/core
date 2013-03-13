@@ -39,50 +39,30 @@
 
 #include <svl/style.hrc>
 
-// SfxManageStyleSheetPage -----------------------------------------------
-
-SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItemSet& rAttrSet ) :
-
-    SfxTabPage( pParent, SfxResId( TP_MANAGE_STYLES ), rAttrSet ),
-
-    aNameFt     ( this, SfxResId( FT_NAME ) ),
-    aNameEd     ( this, SfxResId( ED_NAME ) ),
-    aNameMLE    ( this, SfxResId( MLE_NAME ) ),
-    aAutoCB     ( this, SfxResId( CB_AUTO ) ),
-
-    aFollowFt   ( this, SfxResId( FT_NEXT ) ),
-    aFollowLb   ( this, SfxResId( LB_NEXT ) ),
-
-    aBaseFt     ( this, SfxResId( FT_BASE ) ),
-    aBaseLb     ( this, SfxResId( LB_BASE ) ),
-
-    aFilterFt   ( this, SfxResId( FT_REGION ) ),
-    aFilterLb   ( this, SfxResId( LB_REGION ) ),
-
-    aDescGb     ( this, SfxResId( GB_DESC ) ),
-    aDescFt     ( this, SfxResId( FT_DESC ) ),
-
-    pStyle( &( (SfxStyleDialog*)GetParentDialog() )->GetStyleSheet() ),
-
-    pItem       ( 0 ),
-    bModified   ( sal_False ),
-    aName       ( pStyle->GetName() ),
-    aFollow     ( pStyle->GetFollow() ),
-    aParent     ( pStyle->GetParent() ),
-    nFlags      ( pStyle->GetMask() )
-
-/*  [Description]
-
-    Constructor, initializes the list box with the templates
-*/
-
+/*  SfxManageStyleSheetPage Constructor
+ *
+ *  initializes the list box with the templates
+ */
+SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemSet& rAttrSet)
+    : SfxTabPage(pParent, "ManageStylePage", "sfx/ui/managestylepage.ui", rAttrSet)
+    , pStyle(&((SfxStyleDialog*)GetParentDialog())->GetStyleSheet())
+    , pItem(0)
+    , bModified(false)
+    , aName(pStyle->GetName())
+    , aFollow(pStyle->GetFollow())
+    , aParent(pStyle->GetParent())
+    , nFlags(pStyle->GetMask())
 {
-    FreeResource();
-
-    FixedInfo* pInfo = new FixedInfo( this );
-    delete pInfo;
-
-    aDescFt.Show();
+    get(m_pNameRo, "namero");
+    get(m_pNameRw, "namerw");
+    get(m_pAutoCB, "autoupdate");
+    get(m_pFollowFt, "nextstyleft");
+    get(m_pFollowLb, "nextstyle");
+    get(m_pBaseFt, "linkedwithft");
+    get(m_pBaseLb, "linkedwith");
+    get(m_pFilterFt, "categoryft");
+    get(m_pFilterLb, "category");
+    get(m_pDescFt, "desc");
 
     // this Page needs ExchangeSupport
     SetExchangeSupport();
@@ -122,18 +102,15 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         aFollow = pStyle->GetFollow();
         aParent = pStyle->GetParent();
     }
-    aNameEd.SetText(pStyle->GetName());
+    m_pNameRw->SetText(pStyle->GetName());
 
     // Set the field read-only if it is NOT an user-defined style
     // but allow selecting and copying
-    if ( !pStyle->IsUserDefined() ) {
-        aNameEd.SetReadOnly();
-        aNameEd.Hide();
-
-        aNameMLE.SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
-        aNameMLE.SetText( pStyle->GetName() );
-        aNameMLE.EnableCursor( sal_False );
-        aNameMLE.Show();
+    if (!pStyle->IsUserDefined())
+    {
+        m_pNameRo->SetText(m_pNameRw->GetText());
+        m_pNameRo->Show();
+        m_pNameRw->Hide();
     }
 
     if ( pStyle->HasFollowSupport() && pPool )
@@ -142,31 +119,25 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
         while ( pPoolStyle )
         {
-            aFollowLb.InsertEntry( pPoolStyle->GetName() );
+            m_pFollowLb->InsertEntry( pPoolStyle->GetName() );
             pPoolStyle = pPool->Next();
         }
 
-        // A new Template is not jet in the Pool
-        if ( LISTBOX_ENTRY_NOTFOUND == aFollowLb.GetEntryPos( pStyle->GetName() ) )
-            aFollowLb.InsertEntry( pStyle->GetName() );
+        // A new Template is not yet in the Pool
+        if ( LISTBOX_ENTRY_NOTFOUND == m_pFollowLb->GetEntryPos( pStyle->GetName() ) )
+            m_pFollowLb->InsertEntry( pStyle->GetName() );
     }
     else
     {
-        aFollowFt.Hide();
-        aFollowLb.Hide();
-
-        aFilterFt.SetPosPixel( aBaseFt.GetPosPixel() );
-        aFilterLb.SetPosPixel( aBaseLb.GetPosPixel() );
-
-        aBaseFt.SetPosPixel( aFollowFt.GetPosPixel() );
-        aBaseLb.SetPosPixel( aFollowLb.GetPosPixel() );
+        m_pFollowFt->Hide();
+        m_pFollowLb->Hide();
     }
 
     if ( pStyle->HasParentSupport() && pPool )
     {
         if ( pStyle->HasClearParentSupport() )
             // the base template can be set to NULL
-            aBaseLb.InsertEntry( SfxResId(STR_NONE).toString() );
+            m_pBaseLb->InsertEntry( SfxResId(STR_NONE).toString() );
 
         SfxStyleSheetBase* pPoolStyle = pPool->First();
 
@@ -175,14 +146,14 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
             const String aStr( pPoolStyle->GetName() );
             // own name as base template
             if ( aStr != aName )
-                aBaseLb.InsertEntry( aStr );
+                m_pBaseLb->InsertEntry( aStr );
             pPoolStyle = pPool->Next();
         }
     }
     else
     {
-        aBaseFt.Disable();
-        aBaseLb.Disable();
+        m_pBaseFt->Disable();
+        m_pBaseLb->Disable();
     }
 
     size_t nCount = pFamilies->size();
@@ -215,8 +186,8 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
                  pTupel->nFlags != SFXSTYLEBIT_USED     &&
                  pTupel->nFlags != SFXSTYLEBIT_ALL )
             {
-                aFilterLb.InsertEntry( pTupel->aName, nIdx );
-                aFilterLb.SetEntryData(nIdx, (void*)(long)i);
+                m_pFilterLb->InsertEntry( pTupel->aName, nIdx );
+                m_pFilterLb->SetEntryData(nIdx, (void*)(long)i);
 
                 if ( ( pTupel->nFlags & nMask ) == nMask )
                     nStyleFilterIdx = nIdx;
@@ -225,34 +196,29 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
         }
 
         if ( nStyleFilterIdx != 0xFFFF )
-            aFilterLb.SelectEntryPos( nStyleFilterIdx );
+            m_pFilterLb->SelectEntryPos( nStyleFilterIdx );
     }
 
-    if ( !aFilterLb.GetEntryCount() || !pStyle->IsUserDefined() )
+    if ( !m_pFilterLb->GetEntryCount() || !pStyle->IsUserDefined() )
     {
         pItem = 0;
-        aFilterFt.Disable();
-        aFilterLb.Disable();
+        m_pFilterFt->Disable();
+        m_pFilterLb->Disable();
     }
     else
-        aFilterLb.SaveValue();
+        m_pFilterLb->SaveValue();
     SetDescriptionText_Impl();
 
-    if ( aFollowLb.IsEnabled() || aBaseLb.IsEnabled() )
+    if ( m_pFollowLb->IsEnabled() || m_pBaseLb->IsEnabled() )
     {
-        aNameEd.SetGetFocusHdl(
+        m_pNameRw->SetGetFocusHdl(
             LINK( this, SfxManageStyleSheetPage, GetFocusHdl ) );
-        aNameEd.SetLoseFocusHdl(
+        m_pNameRw->SetLoseFocusHdl(
             LINK( this, SfxManageStyleSheetPage, LoseFocusHdl ) );
     }
     // It is a style with auto update? (SW only)
     if(SFX_ITEM_SET == rAttrSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE))
-    {
-        Size aSize = aNameEd.GetSizePixel();
-        aSize.Width() /= 2;
-        aNameEd.SetSizePixel(aSize);
-        aAutoCB.Show();
-    }
+        m_pAutoCB->Show();
 }
 
 //-------------------------------------------------------------------------
@@ -265,8 +231,8 @@ SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 */
 
 {
-    aNameEd.SetGetFocusHdl( Link() );
-    aNameEd.SetLoseFocusHdl( Link() );
+    m_pNameRw->SetGetFocusHdl( Link() );
+    m_pNameRw->SetLoseFocusHdl( Link() );
     delete pFamilies;
     pItem = 0;
     pStyle = 0;
@@ -336,7 +302,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
         default:
             OSL_FAIL( "non supported field unit" );
     }
-    aDescFt.SetText( pStyle->GetDescription( eUnit ) );
+    m_pDescFt->SetText( pStyle->GetDescription( eUnit ) );
 }
 
 //-------------------------------------------------------------------------
@@ -370,7 +336,7 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
     pEdit->SetText( aStr );
     // Update the Listbox of the base template if possible
     if ( aStr != aBuf )
-        UpdateName_Impl( &aFollowLb, aStr );
+        UpdateName_Impl(m_pFollowLb, aStr);
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
@@ -399,24 +365,24 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 */
 
 {
-    const sal_uInt16 nFilterIdx = aFilterLb.GetSelectEntryPos();
+    const sal_uInt16 nFilterIdx = m_pFilterLb->GetSelectEntryPos();
 
     // Set Filter
 
     if ( LISTBOX_ENTRY_NOTFOUND  != nFilterIdx      &&
-         nFilterIdx != aFilterLb.GetSavedValue()    &&
-         aFilterLb.IsEnabled() )
+         nFilterIdx != m_pFilterLb->GetSavedValue()    &&
+         m_pFilterLb->IsEnabled() )
     {
         bModified = sal_True;
         OSL_ENSURE( pItem, "No Item" );
         // is only possibly for user templates
-        sal_uInt16 nMask = pItem->GetFilterList()[ (size_t)aFilterLb.GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
+        sal_uInt16 nMask = pItem->GetFilterList()[ (size_t)m_pFilterLb->GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );
     }
-    if(aAutoCB.IsVisible() &&
-        aAutoCB.IsChecked() != aAutoCB.GetSavedValue())
+    if(m_pAutoCB->IsVisible() &&
+        m_pAutoCB->IsChecked() != m_pAutoCB->GetSavedValue())
     {
-        rSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, aAutoCB.IsChecked()));
+        rSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pAutoCB->IsChecked()));
     }
 
     return bModified;
@@ -445,9 +411,9 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
     if ( sCmp != aName )
         pStyle->SetName( aName );
-    aNameEd.SetText( aName );
+    m_pNameRw->SetText( aName );
 
-    if ( aFollowLb.IsEnabled() )
+    if ( m_pFollowLb->IsEnabled() )
     {
         sCmp = pStyle->GetFollow();
 
@@ -455,12 +421,12 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
             pStyle->SetFollow( aFollow );
 
         if ( !aFollow.Len() )
-            aFollowLb.SelectEntry( aName );
+            m_pFollowLb->SelectEntry( aName );
         else
-            aFollowLb.SelectEntry( aFollow );
+            m_pFollowLb->SelectEntry( aFollow );
     }
 
-    if ( aBaseLb.IsEnabled() )
+    if ( m_pBaseLb->IsEnabled() )
     {
         sCmp = pStyle->GetParent();
 
@@ -468,25 +434,25 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
             pStyle->SetParent( aParent );
 
         if ( !aParent.Len() )
-            aBaseLb.SelectEntry( SfxResId(STR_NONE).toString() );
+            m_pBaseLb->SelectEntry( SfxResId(STR_NONE).toString() );
         else
-            aBaseLb.SelectEntry( aParent );
+            m_pBaseLb->SelectEntry( aParent );
 
         if ( SfxResId(STR_STANDARD).toString().equals(aName) )
         {
             // the default template can not be linked
-            aBaseFt.Disable();
-            aBaseLb.Disable();
+            m_pBaseFt->Disable();
+            m_pBaseLb->Disable();
         }
     }
 
-    if ( aFilterLb.IsEnabled() )
+    if ( m_pFilterLb->IsEnabled() )
     {
         sal_uInt16 nCmp = pStyle->GetMask();
 
         if ( nCmp != nFlags )
             pStyle->SetMask( nFlags );
-        aFilterLb.SelectEntryPos( aFilterLb.GetSavedValue() );
+        m_pFilterLb->SelectEntryPos( m_pFilterLb->GetSavedValue() );
     }
 }
 
@@ -535,8 +501,8 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
     if ( SFX_ITEM_SET ==
          rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, sal_False, &pPoolItem ) )
-        aAutoCB.Check( ( (const SfxBoolItem*)pPoolItem )->GetValue() );
-    aAutoCB.SaveValue();
+        m_pAutoCB->Check( ( (const SfxBoolItem*)pPoolItem )->GetValue() );
+    m_pAutoCB->SaveValue();
 }
 
 //-------------------------------------------------------------------------
@@ -560,26 +526,26 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 {
     int nRet = SfxTabPage::LEAVE_PAGE;
 
-    if ( aNameEd.IsModified() )
+    if ( m_pNameRw->IsModified() )
     {
         // By pressing <Enter> LoseFocus() is not trigged through StarView
-        if ( aNameEd.HasFocus() )
-            LoseFocusHdl( &aNameEd );
+        if ( m_pNameRw->HasFocus() )
+            LoseFocusHdl( m_pNameRw );
 
-        if (!pStyle->SetName(comphelper::string::stripStart(aNameEd.GetText(), ' ')))
+        if (!pStyle->SetName(comphelper::string::stripStart(m_pNameRw->GetText(), ' ')))
         {
             InfoBox aBox( this, SfxResId( MSG_TABPAGE_INVALIDNAME ) );
             aBox.Execute();
-            aNameEd.GrabFocus();
-            aNameEd.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+            m_pNameRw->GrabFocus();
+            m_pNameRw->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
             return SfxTabPage::KEEP_PAGE;
         }
         bModified = sal_True;
     }
 
-    if ( pStyle->HasFollowSupport() && aFollowLb.IsEnabled() )
+    if ( pStyle->HasFollowSupport() && m_pFollowLb->IsEnabled() )
     {
-        const OUString aFollowEntry( aFollowLb.GetSelectEntry() );
+        const OUString aFollowEntry( m_pFollowLb->GetSelectEntry() );
 
         if ( pStyle->GetFollow() != aFollowEntry )
         {
@@ -587,16 +553,16 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
             {
                 InfoBox aBox( this, SfxResId( MSG_TABPAGE_INVALIDSTYLE ) );
                 aBox.Execute();
-                aFollowLb.GrabFocus();
+                m_pFollowLb->GrabFocus();
                 return SfxTabPage::KEEP_PAGE;
             }
             bModified = sal_True;
         }
     }
 
-    if ( aBaseLb.IsEnabled() )
+    if ( m_pBaseLb->IsEnabled() )
     {
-        OUString aParentEntry( aBaseLb.GetSelectEntry() );
+        OUString aParentEntry( m_pBaseLb->GetSelectEntry() );
 
         if ( SfxResId(STR_NONE).toString().equals(aParentEntry) || aParentEntry == pStyle->GetName() )
             aParentEntry = OUString();
@@ -607,7 +573,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
             {
                 InfoBox aBox( this, SfxResId( MSG_TABPAGE_INVALIDPARENT ) );
                 aBox.Execute();
-                aBaseLb.GrabFocus();
+                m_pBaseLb->GrabFocus();
                 return SfxTabPage::KEEP_PAGE;
             }
             bModified = sal_True;
