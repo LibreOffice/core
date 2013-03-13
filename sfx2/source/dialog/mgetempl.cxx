@@ -35,7 +35,6 @@
 
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
-#include "mgetempl.hrc"
 
 #include <svl/style.hrc>
 
@@ -58,10 +57,13 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     get(m_pAutoCB, "autoupdate");
     get(m_pFollowFt, "nextstyleft");
     get(m_pFollowLb, "nextstyle");
+    m_pFollowLb->SetStyle(m_pFollowLb->GetStyle() | WB_SORT);
     get(m_pBaseFt, "linkedwithft");
     get(m_pBaseLb, "linkedwith");
+    m_pBaseLb->SetStyle(m_pBaseLb->GetStyle() | WB_SORT);
     get(m_pFilterFt, "categoryft");
     get(m_pFilterLb, "category");
+    m_pFilterLb->SetStyle(m_pFilterLb->GetStyle() | WB_SORT);
     get(m_pDescFt, "desc");
 
     // this Page needs ExchangeSupport
@@ -109,8 +111,10 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     if (!pStyle->IsUserDefined())
     {
         m_pNameRo->SetText(m_pNameRw->GetText());
-        m_pNameRo->Show();
         m_pNameRw->Hide();
+        m_pNameRo->Show();
+        FixedText *pLabel = get<FixedText>("nameft");
+        pLabel->set_mnemonic_widget(m_pNameRo);
     }
 
     if ( pStyle->HasFollowSupport() && pPool )
