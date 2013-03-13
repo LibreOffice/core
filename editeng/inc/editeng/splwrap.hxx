@@ -128,7 +128,7 @@ protected:
     virtual sal_Bool HasOtherCnt();             // Are there any special areas?
     virtual void     SpellStart( SvxSpellArea eSpell ); // Preparing the area
     virtual sal_Bool SpellContinue();     // Check Areas
-                                          // Result avaliable through GetLast
+                                          // Result available through GetLast
     virtual void ReplaceAll( const String &rNewText, sal_Int16 nLanguage ); //Replace word from the replace list
     virtual void StartThesaurus( const String &rWord, sal_uInt16 nLang );
     virtual ::com::sun::star::uno::Reference<

@@ -386,7 +386,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw
     ReadGuard aReadLock( m_aLock );
 
     // Return current active frame.
-    // This information is avaliable on the container.
+    // This information is available on the container.
     return m_aChildFrameContainer.getActive();
 }
 

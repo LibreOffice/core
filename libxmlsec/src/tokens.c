@@ -20,7 +20,7 @@
  * every eligibl slot in the list.
  *
  * When try to find a slot for a particular mechanism, the slot bound with
- * avaliable mechanism will be looked up firstly.
+ * available mechanism will be looked up firstly.
  */
 #include "globals.h"
 #include <string.h>

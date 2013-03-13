@@ -74,7 +74,7 @@ public final class UrlToFileMapper {
                                StringHelper.replace(url.getPath(), '+', "%2B")))
                 : null;
         } else {
-            // If java.net.URI is avaliable, do
+            // If java.net.URI is available, do
             //   URI uri = new URI(encodedUrl);
             //   try {
             //       return new File(uri);
