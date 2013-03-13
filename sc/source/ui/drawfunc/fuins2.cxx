@@ -426,10 +426,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
         rReq.Ignore();
 }
 
-FuInsertOLE::~FuInsertOLE()
-{
-}
-
 void FuInsertOLE::Activate()
 {
     FuPoor::Activate();
@@ -768,10 +764,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         // BM/IHA --
     }
-}
-
-FuInsertChart::~FuInsertChart()
-{
 }
 
 void FuInsertChart::Activate()

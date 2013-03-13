@@ -39,7 +39,6 @@ class FuInsertOLE : public FuPoor
  public:
     FuInsertOLE( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertOLE();
 
     virtual void Activate();
     virtual void Deactivate();
@@ -50,7 +49,16 @@ class FuInsertChart : public FuPoor
  public:
     FuInsertChart( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertChart();
+
+    virtual void Activate();
+    virtual void Deactivate();
+};
+
+class FuInsertChartFromFile : public FuPoor
+{
+ public:
+    FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
+           SdrModel* pDoc, SfxRequest& rReq);
 
     virtual void Activate();
     virtual void Deactivate();
