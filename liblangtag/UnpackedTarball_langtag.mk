@@ -48,9 +48,17 @@ $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	liblangtag/liblangtag-0.4.0-mingw.patch \
 ))
 else
+
+# liblangtag-0.4.0-ar-lib.patch and ar-lib are addressed upstream as
+# <https://bitbucket.org/tagoh/liblangtag/issue/1>
+
 $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	liblangtag/liblangtag-0.4.0-msc-configure.patch \
 	liblangtag/liblangtag-0.4.0-cross.patch \
+	liblangtag/liblangtag-0.4.0-ar-lib.patch \
+))
+$(eval $(call gb_UnpackedTarball_add_files,langtag,,\
+	liblangtag/ar-lib \
 ))
 endif
 endif
