@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<component loader="com.sun.star.loader.Java2"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.libreoffice.report.pentaho.SOFormulaParser">
+    <service name="com.sun.star.report.meta.FormulaParser"/>
+  </implementation>
+  <implementation name="org.libreoffice.report.pentaho.SOFunctionManager">
+    <service name="com.sun.star.report.meta.FunctionManager"/>
+  </implementation>
+  <implementation name="org.libreoffice.report.pentaho.SOReportJobFactory$_SOReportJobFactory">
+    <service name="org.libreoffice.report.pentaho.SOReportJobFactory"/>
+  </implementation>
+</component>
