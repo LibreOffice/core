@@ -482,12 +482,13 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     if ( pStyle && 0 == GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALETOPAGES) )
     {
         sal_uInt16 nRestart = 0;
-        sal_uInt16 nZoom = 0;
         sal_uInt16 nCount = 0;
         ScBaseCell* pCell = NULL;
 
-        nZoom    = GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALE);
+        sal_uInt16 nZoom = GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALE);
         Fraction aZoomFract( nZoom, 100 );
+
+        // Start at specified cell position (nCol, nRow, nTab).
         ScColumn* pColumn  = &pTable->aCol[nCol];
         pColIter = new ScColumnIterator( pColumn, nRow, MAXROW );
 
@@ -495,8 +496,11 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
         {
             if ( pColIter->Next( nRow, pCell ) )
             {
+                // More cell in this column.
+
                 if ( TEXTWIDTH_DIRTY == pCell->GetTextWidth() )
                 {
+                    // Calculate text width for this cell.
                     double nPPTX = 0.0;
                     double nPPTY = 0.0;
                     if ( !pDev )
@@ -528,6 +532,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
             }
             else
             {
+                // No more cell in this column.  Move to the left column and start at row 0.
+
                 bool bNewTab = false;
 
                 nRow = 0;
@@ -535,6 +541,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
                 if ( nCol < 0 )
                 {
+                    // No more column to the left.  Move to the right-most column of the next sheet.
                     nCol = MAXCOL;
                     nTab++;
                     bNewTab = true;
@@ -542,6 +549,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
                 if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
                 {
+                    // Sheet doesn't exist at specified sheet position.  Restart at sheet 0.
                     nTab = 0;
                     nRestart++;
                     bNewTab = true;
@@ -557,9 +565,15 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
                         if ( pStyle )
                         {
+                            // Check if the scale-to-pages setting is set. If
+                            // set, we exit the loop.  If not, get the page
+                            // scale factor of the new sheet.
                             SfxItemSet& rSet = pStyle->GetItemSet();
                             if ( GET_SCALEVALUE( rSet, ATTR_PAGE_SCALETOPAGES ) == 0 )
+                            {
                                 nZoom = GET_SCALEVALUE(rSet, ATTR_PAGE_SCALE );
+                                aZoomFract = Fraction(nZoom, 100);
+                            }
                             else
                                 nZoom = 0;
                         }
@@ -577,24 +591,20 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                         pColIter = new ScColumnIterator( pColumn, nRow, MAXROW );
                     }
                     else
-                        nTab++; // Tabelle nicht mit absolutem Zoom -> naechste
+                        ++nTab; // Move to the next sheet as the current one has scale-to-pages set.
                 }
             }
 
             nCount++;
 
-            // Idle Berechnung abbrechen, wenn Berechnungen laenger als
-            // 50ms dauern, oder nach 32 Berechnungen mal nachschauen, ob
-            // bestimmte Events anstehen, die Beachtung wuenschen:
-
-
-            if (   ( 50L < Time::GetSystemTicks() - nStart )
-                || ( !(nCount&31) && Application::AnyInput( ABORT_EVENTS ) ) )
+            // Quit if either 1) its duration exceeds 50 ms, or 2) there is
+            // any pending event after processing 32 cells.
+            if ((50L < Time::GetSystemTicks() - nStart) || (nCount > 31 && Application::AnyInput(ABORT_EVENTS)))
                 nCount = CALCMAX;
         }
     }
     else
-        nTab++; // Tabelle nicht mit absolutem Zoom -> naechste
+        ++nTab; // Move to the next sheet as the current one has scale-to-pages set.
 
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
