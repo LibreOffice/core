@@ -131,6 +131,8 @@ namespace XSLT
         // ctor...
         XSLTFilter(const css::uno::Reference<XMultiServiceFactory> &r);
 
+        ~XSLTFilter();
+
         // XStreamListener
         virtual void SAL_CALL
         error(const Any& a) throw (RuntimeException);
@@ -165,6 +167,11 @@ namespace XSLT
 m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     {
         m_cTransformed = osl_createCondition();
+    }
+
+    XSLTFilter::~XSLTFilter()
+    {
+        osl_destroyCondition(m_cTransformed);
     }
 
     void
