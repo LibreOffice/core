@@ -6378,7 +6378,7 @@ if test -n "$SOLAR_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
     cygwin*)
         x_JDKLIB=
         JDKLIB="$JAVA_HOME/lib"
-        JAVAINC="$-I$JAVA_HOME/include/win32"
+        JAVAINC="-I$JAVA_HOME/include/win32"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include"
         ;;
 
