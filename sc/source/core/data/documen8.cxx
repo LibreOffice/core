@@ -449,10 +449,11 @@ class IdleCalcTextWidthScope
 {
     ScDocument& mrDoc;
     ScAddress& mrCalcPos;
-    sal_uInt16 mnOldSearchMask;
-    SfxStyleFamily meOldFamily;
     MapMode maOldMapMode;
     sal_uLong mnStartTime;
+    ScStyleSheetPool* mpStylePool;
+    sal_uInt16 mnOldSearchMask;
+    SfxStyleFamily meOldFamily;
     bool mbNeedMore;
     bool mbProgress;
 
@@ -461,17 +462,18 @@ public:
         mrDoc(rDoc),
         mrCalcPos(rCalcPos),
         mnStartTime(Time::GetSystemTicks()),
+        mpStylePool(rDoc.GetStyleSheetPool()),
+        mnOldSearchMask(mpStylePool->GetSearchMask()),
+        meOldFamily(mpStylePool->GetSearchFamily()),
         mbNeedMore(false),
         mbProgress(false)
     {
-        mrDoc.EnableIdle(false);
-
         // The old search mask / family flags must be restored so that e.g.
         // the styles dialog shows correct listing when it's opened in-between
         // the calls.
-        ScStyleSheetPool* pStylePool = mrDoc.GetStyleSheetPool();
-        mnOldSearchMask = pStylePool->GetSearchMask();
-        meOldFamily = pStylePool->GetSearchFamily();
+
+        mrDoc.EnableIdle(false);
+        mpStylePool->SetSearchMask(SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL);
     }
 
     ~IdleCalcTextWidthScope()
@@ -483,8 +485,7 @@ public:
         if (mbProgress)
             ScProgress::DeleteInterpretProgress();
 
-        ScStyleSheetPool* pStylePool = mrDoc.GetStyleSheetPool();
-        pStylePool->SetSearchMask(meOldFamily, mnOldSearchMask);
+        mpStylePool->SetSearchMask(meOldFamily, mnOldSearchMask);
         mrDoc.EnableIdle(true);
     }
 
@@ -514,6 +515,8 @@ public:
     }
 
     bool hasProgressBar() const { return mbProgress; }
+
+    ScStyleSheetPool* getStylePool() { return mpStylePool; }
 };
 
 }
@@ -546,12 +549,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()])
         aScope.setTab(0);
 
-    ScStyleSheetPool* pStylePool = xPoolHelper->GetStylePool();
-
     pTable = maTabs[aScope.Tab()];
-    pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL );
-    pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
-                                              SFX_STYLE_FAMILY_PAGE );
+    pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(pTable->aPageStyle, SFX_STYLE_FAMILY_PAGE);
 
     OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
@@ -636,8 +635,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                     if ( bNewTab )
                     {
                         pTable = maTabs[aScope.Tab()];
-                        pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
-                                                                  SFX_STYLE_FAMILY_PAGE );
+                        pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(
+                            pTable->aPageStyle, SFX_STYLE_FAMILY_PAGE);
 
                         if ( pStyle )
                         {
