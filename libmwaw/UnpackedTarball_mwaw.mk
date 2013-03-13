@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,mwaw))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,mwaw,$(MWAW_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,mwaw,1))
+
+$(eval $(call gb_UnpackedTarball_add_patches,mwaw,\
+       libmwaw/libmwaw-0.1.7-autotools.patch \
+))
+
 # vim: set noet sw=4 ts=4:
