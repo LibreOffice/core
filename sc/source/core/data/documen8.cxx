@@ -545,8 +545,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()])
         aScope.setTab(0);
 
-    ScTable* pTable = maTabs[aScope.Tab()];
-    ScStyleSheet* pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(pTable->aPageStyle, SFX_STYLE_FAMILY_PAGE);
+    ScTable* pTab = maTabs[aScope.Tab()];
+    ScStyleSheet* pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(pTab->aPageStyle, SFX_STYLE_FAMILY_PAGE);
     OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
     if (!pStyle || getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES) == 0)
@@ -561,9 +561,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     Fraction aZoomFract(nZoom, 100);
 
     // Start at specified cell position (nCol, nRow, nTab).
-    ScColumn* pColumn  = &pTable->aCol[aScope.Col()];
-    boost::scoped_ptr<ScColumnIterator> pColIter(
-        new ScColumnIterator(pColumn, aScope.Row(), MAXROW));
+    ScColumn* pCol  = &pTab->aCol[aScope.Col()];
+    boost::scoped_ptr<ScColumnIterator> pColIter(new ScColumnIterator(pCol, aScope.Row(), MAXROW));
 
     OutputDevice* pDev = NULL;
     sal_uInt16 nRestart = 0;
@@ -582,7 +581,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                 // Calculate text width for this cell.
                 double nPPTX = 0.0;
                 double nPPTY = 0.0;
-                if ( !pDev )
+                if (!pDev)
                 {
                     pDev = GetPrinter();
                     aScope.setOldMapMode(pDev->GetMapMode());
@@ -636,9 +635,9 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
             {
                 if ( bNewTab )
                 {
-                    pTable = maTabs[aScope.Tab()];
+                    pTab = maTabs[aScope.Tab()];
                     pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(
-                        pTable->aPageStyle, SFX_STYLE_FAMILY_PAGE);
+                        pTab->aPageStyle, SFX_STYLE_FAMILY_PAGE);
 
                     if ( pStyle )
                     {
@@ -661,8 +660,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
                 if ( nZoom > 0 )
                 {
-                    pColumn  = &pTable->aCol[aScope.Col()];
-                    pColIter.reset(new ScColumnIterator(pColumn, aScope.Row(), MAXROW));
+                    pCol  = &pTab->aCol[aScope.Col()];
+                    pColIter.reset(new ScColumnIterator(pCol, aScope.Row(), MAXROW));
                 }
                 else
                     aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
