@@ -138,7 +138,6 @@ my %replaceable = (
     $brand_program_dir . '/classes' => '\.jar$',
     'ure-link/share/java' => '\.jar$',
     'share/extensions/nlpsolver' => '\.jar$',
-    'share/extensions/report-builder' => '\.jar$',
     'share/extensions/wiki-publisher' => '\.jar$',
     'share/extensions/pdf-import' => "(\\.so|\\.dll|\\.exe|\\.com$bin)\$",
     'share/extensions/presenter-screen' => "(\\.so|\\.dll|\\.exe|\\.com$bin)\$",

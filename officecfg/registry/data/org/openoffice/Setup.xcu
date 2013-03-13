@@ -757,6 +757,26 @@
                     <value>Base</value>
                 </prop>
             </node>
+            <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace" install:module="reportbuilder">
+                <prop oor:name="ooSetupFactoryCommandConfigRef">
+                    <value >ReportCommands</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryShortName">
+                    <value >dbreport</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >DbReportWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryIcon">
+                    <value >12</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                  <value >Base: Oracle Report Builder</value>
+                </prop>
+            </node>
         </node>
     </node>
   <node oor:name="Migration">
