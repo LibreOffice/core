@@ -40,7 +40,6 @@ gb_HelpTarget_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
 	$(OUTDIR)/bin \
-	$(OUTDIR)/idl \
 	$(OUTDIR)/inc \
 	$(OUTDIR)/lib \
 	$(OUTDIR)/par \
