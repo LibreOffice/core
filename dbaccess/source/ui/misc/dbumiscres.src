@@ -86,7 +86,7 @@ String STR_NAMED_OBJECT_ALREADY_EXISTS
 String RID_STR_EXTENSION_NOT_PRESENT
 {
     // #i96130# use hard coded name
-    Text [ en-US ] = "The report, \"$file$\", requires the extension Oracle Report Builder.";
+    Text [ en-US ] = "The report, \"$file$\", requires the Oracle Report Builder feature.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,9 +25,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Jar_Jar,report-builder))
+$(eval $(call gb_Jar_Jar,reportbuilder))
 
-$(eval $(call gb_Jar_use_jars,report-builder,\
+$(eval $(call gb_Jar_use_jars,reportbuilder,\
 	java_uno \
 	juh \
 	jurt \
@@ -35,7 +35,7 @@ $(eval $(call gb_Jar_use_jars,report-builder,\
 	unoil \
 ))
 
-$(eval $(call gb_Jar_use_externals,report-builder,\
+$(eval $(call gb_Jar_use_externals,reportbuilder,\
 	commons-logging \
 	flow-engine \
 	flute \
@@ -50,11 +50,13 @@ $(eval $(call gb_Jar_use_externals,report-builder,\
 	sac \
 ))
 
-$(eval $(call gb_Jar_set_manifest,report-builder,$(SRCDIR)/reportbuilder/util/manifest.mf))
+$(eval $(call gb_Jar_set_manifest,reportbuilder,$(SRCDIR)/reportbuilder/java/manifest.mf))
 
-$(eval $(call gb_Jar_set_packageroot,report-builder,org))
+$(eval $(call gb_Jar_set_componentfile,reportbuilder,reportbuilder/java/reportbuilder,OOO))
 
-$(eval $(call gb_Jar_add_sourcefiles,report-builder,\
+$(eval $(call gb_Jar_set_packageroot,reportbuilder,org))
+
+$(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/DataRow \
     reportbuilder/java/org/libreoffice/report/DataSource \
     reportbuilder/java/org/libreoffice/report/DataSourceException \
@@ -249,13 +251,13 @@ $(eval $(call gb_Jar_add_sourcefiles,report-builder,\
     reportbuilder/java/org/libreoffice/report/util/ManifestWriter \
 ))
 
-$(eval $(call gb_Jar_add_packagefiles,report-builder,,\
+$(eval $(call gb_Jar_add_packagefiles,reportbuilder,,\
 	$(SRCDIR)/reportbuilder/java/jfreereport.properties \
 	$(SRCDIR)/reportbuilder/java/libformula.properties \
 	$(SRCDIR)/reportbuilder/java/loader.properties \
 ))
 
-$(eval $(call gb_Jar_add_packagefiles,report-builder,org/libreoffice/report/function/metadata,\
+$(eval $(call gb_Jar_add_packagefiles,reportbuilder,org/libreoffice/report/function/metadata,\
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/function/metadata/Author-Function.properties \
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/function/metadata/Author-Function_en_US.properties \
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/function/metadata/Title-Function.properties \
@@ -264,7 +266,7 @@ $(eval $(call gb_Jar_add_packagefiles,report-builder,org/libreoffice/report/func
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/function/metadata/category_en_US.properties \
 ))
 
-$(eval $(call gb_Jar_add_packagefiles,report-builder,org/libreoffice/report/pentaho,\
+$(eval $(call gb_Jar_add_packagefiles,reportbuilder,org/libreoffice/report/pentaho,\
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/configuration.properties \
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/module.properties \
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/oasis-datastyle.css \
@@ -281,13 +283,13 @@ $(eval $(call gb_Jar_add_packagefiles,report-builder,org/libreoffice/report/pent
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/xsl-fo.css \
 ))
 
-$(eval $(call gb_Jar_add_packagefiles,report-builder,org/libreoffice/report/pentaho/parser,\
+$(eval $(call gb_Jar_add_packagefiles,reportbuilder,org/libreoffice/report/pentaho/parser,\
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/parser/rpt-schema-v1.0-os.xsd \
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/parser/selectors.properties \
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/parser/style-mapping.txt \
 ))
 
-$(eval $(call gb_Jar_add_packagefiles,report-builder,org/libreoffice/report/pentaho/styles,\
+$(eval $(call gb_Jar_add_packagefiles,reportbuilder,org/libreoffice/report/pentaho/styles,\
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/styles/stylemapper.xml \
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/styles/stylemapper.xsd \
 ))

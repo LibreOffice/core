@@ -27,12 +27,9 @@
 
 $(eval $(call gb_Module_Module,reportbuilder))
 
-ifeq ($(ENABLE_REPORTBUILDER),YES)
+ifeq ($(ENABLE_REPORTBUILDER),TRUE)
 $(eval $(call gb_Module_add_targets,reportbuilder,\
-	Configuration_reportbuilder \
-	Extension_reportbuilder \
 	Jar_reportbuilder \
-	Package_readme \
 ))
 endif
 

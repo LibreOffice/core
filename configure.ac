@@ -623,9 +623,9 @@ AC_ARG_ENABLE(ext-presenter-minimizer,
         [Disable the Presentation Minimizer extension.])
 )
 
-AC_ARG_ENABLE(ext-report-builder,
-    AS_HELP_STRING([--disable-ext-report-builder],
-        [Disable the Report Builder extension.])
+AC_ARG_ENABLE(report-builder,
+    AS_HELP_STRING([--disable-report-builder],
+        [Disable the Report Builder.])
 )
 
 AC_ARG_ENABLE(ext-wiki-publisher,
@@ -9535,9 +9535,9 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
+if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
     AC_MSG_RESULT([yes])
-    ENABLE_REPORTBUILDER=YES
+    ENABLE_REPORTBUILDER=TRUE
     AC_MSG_CHECKING([which jfreereport libs to use])
     if test "$with_system_jfreereport" = "yes"; then
         SYSTEM_JFREEREPORT=YES
@@ -9705,8 +9705,7 @@ if test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration"
     fi
 else
     AC_MSG_RESULT([no])
-    ENABLE_REPORTBUILDER=NO
-    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_REPORTDESIGN"
+    ENABLE_REPORTBUILDER=FALSE
     SYSTEM_JFREEREPORT=NO
 fi
 AC_SUBST(ENABLE_REPORTBUILDER)
@@ -9725,7 +9724,7 @@ AC_SUBST(LIBSERIALIZER_JAR)
 
 # this has to be here because both the Wiki Publisher and the SRB use
 # commons-logging
-if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
+if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
     AC_MSG_CHECKING([which Apache commons-* libs to use])
     if test "$with_system_apache_commons" = "yes"; then
         SYSTEM_APACHE_COMMONS=YES
@@ -9776,7 +9775,7 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
                     [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
             fi
         fi
-        if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
+        if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "TRUE"; then
             if test -z $COMMONS_LOGGING_JAR; then
                 AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.1.jar,
                    [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar ],

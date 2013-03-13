@@ -57,21 +57,6 @@ Module gid_Module_Optional_Extensions_MINIMIZER
 End
 #endif
 
-/* ** Report Builder ** */
-
-#ifndef WITHOUT_EXTENSION_REPORTDESIGN
-Module gid_Module_Optional_Extensions_REPORTDESIGN
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_REPORTDESIGN);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_Report_Builder );
-    Minimal = NO;
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
 /* ** MediaWiki Publisher** */
 
 #ifndef WITHOUT_EXTENSION_MEDIAWIKI

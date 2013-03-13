@@ -777,6 +777,7 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	pocketword \
 	query \
 	report \
+	reportbuilder \
 	reportbuilderwizard \
 	sdbc_hsqldb \
 	table \
@@ -791,7 +792,6 @@ $(eval $(call gb_Helper_register_jars,OXT, \
 	mediawiki \
 	nlpsolver \
 	passive_java \
-	report-builder \
 ))
 
 # External executables
