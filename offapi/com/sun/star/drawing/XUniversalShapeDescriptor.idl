@@ -29,7 +29,6 @@
  */
 published interface XUniversalShapeDescriptor: com::sun::star::drawing::XShapeDescriptor
 {
-    // DOCUMENTATION OMITTED FOR XUniversalShapeDescriptor::setShapeType
     void setShapeType( [in] string aShapeTypeName );
 
 };

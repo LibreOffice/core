@@ -30,13 +30,9 @@ published struct Position3D
     /** the position on the X-Axis in the 3D room in 100th of millimeters
      */
     double PositionX;
-
-    // DOCUMENTATION OMITTED FOR Position3D::PositionY
     /** the position on the Y-Axis in the 3D room in 100th of millimeters
      */
     double PositionY;
-
-    // DOCUMENTATION OMITTED FOR Position3D::PositionZ
     /** the position on the Z-Axis in the 3D room in 100th of millimeters
      */
     double PositionZ;

@@ -31,16 +31,9 @@
  */
 published constants ModelDependent
 {
-    // DOCUMENTATION OMITTED FOR constants::1
     const short UNO = 1;
-
-    // DOCUMENTATION OMITTED FOR constants::2
     const short OLE = 2;
-
-    // DOCUMENTATION OMITTED FOR constants::3
     const short JAVA = 3;
-
-    // DOCUMENTATION OMITTED FOR constants::4
     const short CORBA = 4;
 
 };

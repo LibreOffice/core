@@ -28,19 +28,10 @@
  */
 published enum MeasureTextVertPos
 {
-    // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   AUTO,
     AUTO,
-
-    // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   EAST,
     EAST,
-
-    // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   BREAKEDLINE,
     BREAKEDLINE,
-
-    // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   WEST,
     WEST,
-
-    // DOCUMENTATION OMITTED FOR MeasureTextVertPos::   CENTERED
     CENTERED
 
 };

@@ -28,11 +28,7 @@
 published struct Direction3D
 {
     double DirectionX;
-
-    // DOCUMENTATION OMITTED FOR Direction3D::DirectionY
     double DirectionY;
-
-    // DOCUMENTATION OMITTED FOR Direction3D::DirectionZ
     double DirectionZ;
 
 };

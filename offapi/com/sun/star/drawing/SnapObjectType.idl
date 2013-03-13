@@ -27,13 +27,8 @@
  */
 published enum SnapObjectType
 {
-    // DOCUMENTATION OMITTED FOR SnapObjectType::   POINT,
     POINT,
-
-    // DOCUMENTATION OMITTED FOR SnapObjectType::   VERTICAL,
     VERTICAL,
-
-    // DOCUMENTATION OMITTED FOR SnapObjectType::   HORIZONTAL
     HORIZONTAL
 
 };

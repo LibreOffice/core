@@ -28,562 +28,339 @@
  */
 published enum AnimationEffect
 {
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  NONE,
     /** use no animation effects.
      */
     NONE,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_LEFT,
     /** use the animation effect "Fade from Left".
      */
     FADE_FROM_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_TOP,
     /** use the animation effect "Fade from Top".
      */
     FADE_FROM_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_RIGHT,
     /** use the animation effect "Fade from Right".
      */
     FADE_FROM_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_BOTTOM,
     /** use the animation effect "Fade from Bottom".
      */
     FADE_FROM_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_TO_CENTER,
     /** use the animation effect "Fade to Center".
      */
     FADE_TO_CENTER,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_CENTER,
     /** use the animation effect "Fade from Center".
      */
     FADE_FROM_CENTER,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_LEFT,
     /** use the animation effect "Move from Left".
      */
     MOVE_FROM_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_TOP,
     /** use the animation effect "Move from Top".
      */
     MOVE_FROM_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_RIGHT,
     /** use the animation effect "Move from Right".
      */
     MOVE_FROM_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_BOTTOM,
     /** use the animation effect "Move from Bottom".
      */
     MOVE_FROM_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_STRIPES,
     /** use the animation effect "Vertical Stripes".
      */
     VERTICAL_STRIPES,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_STRIPES,
     /** use the animation effect "Horizontal Stripes".
      */
     HORIZONTAL_STRIPES,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  CLOCKWISE,
     /** use the animation effect "Clockwise".
      */
     CLOCKWISE,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  COUNTERCLOCKWISE,
     /** use the animation effect "Counter Clockwise".
      */
     COUNTERCLOCKWISE,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_UPPERLEFT,
     /** use the animation effect "Fade from Upper Left".
      */
     FADE_FROM_UPPERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_UPPERRIGHT,
     /** use the animation effect "Fade from Upper Right".
      */
     FADE_FROM_UPPERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_LOWERLEFT,
     /** use the animation effect "Fade from Lower Left".
      */
     FADE_FROM_LOWERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  FADE_FROM_LOWERRIGHT,
     /** use the animation effect "Fade from Lower Right".
      */
     FADE_FROM_LOWERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  CLOSE_VERTICAL,
     /** use the animation effect "Close Vertical".
      */
     CLOSE_VERTICAL,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  CLOSE_HORIZONTAL,
     /** use the animation effect "Close Horizontal".
      */
     CLOSE_HORIZONTAL,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  OPEN_VERTICAL,
     /** use the animation effect "Open Vertical".
      */
     OPEN_VERTICAL,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  OPEN_HORIZONTAL,
     /** use the animation effect "Open Horizontal".
      */
     OPEN_HORIZONTAL,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  PATH,
     /** use the animation effect "Path".
      */
     PATH,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_LEFT,
     /** use the animation effect "Move to Left".
      */
     MOVE_TO_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_TOP,
     /** use the animation effect "Move to Top".
      */
     MOVE_TO_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_RIGHT,
     /** use the animation effect "Move to Right".
      */
     MOVE_TO_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_BOTTOM,
     /** use the animation effect "Move to Bottom".
      */
     MOVE_TO_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  SPIRALIN_LEFT,
     /** use the animation effect "Spiral Inward Left".
      */
     SPIRALIN_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  SPIRALIN_RIGHT,
     /** use the animation effect "Spiral Inward Right".
      */
     SPIRALIN_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  SPIRALOUT_LEFT,
     /** use the animation effect "Spiral Outward Left".
      */
     SPIRALOUT_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  SPIRALOUT_RIGHT,
     /** use the animation effect "Spiral Outward Right".
      */
     SPIRALOUT_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  DISSOLVE,
     /** use the animation effect "Spiral Inward Left".
      */
     DISSOLVE,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  WAVYLINE_FROM_LEFT,
     /** use the animation effect "Wavy Line from Left".
      */
     WAVYLINE_FROM_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  WAVYLINE_FROM_TOP,
     /** use the animation effect "Wavy Line from Top".
      */
     WAVYLINE_FROM_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  WAVYLINE_FROM_RIGHT,
     /** use the animation effect "Wavy Line from Right".
      */
     WAVYLINE_FROM_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  WAVYLINE_FROM_BOTTOM,
     /** use the animation effect "Wavy Line from Button".
      */
     WAVYLINE_FROM_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  RANDOM,
     /** use the animation effect "Random".
      */
     RANDOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_LINES,
     /** use the animation effect "Vertical Lines".
      */
     VERTICAL_LINES,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_LINES,
     /** use the animation effect "Horizontal Lines".
      */
     HORIZONTAL_LINES,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_LEFT,
     /** use the animation effect "Wavy Line from Left".
      */
     LASER_FROM_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_TOP,
     /** use the animation effect "Laser from Top".
      */
     LASER_FROM_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_RIGHT,
     /** use the animation effect "Laser from Right".
      */
     LASER_FROM_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_BOTTOM,
     /** use the animation effect "Laser from Bottom".
      */
     LASER_FROM_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_UPPERLEFT,
     /** use the animation effect "Laser from Upper Left".
      */
     LASER_FROM_UPPERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_UPPERRIGHT,
     /** use the animation effect "Laser from Upper Right".
      */
     LASER_FROM_UPPERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_LOWERLEFT,
     /** use the animation effect "Laser from Lower Left".
      */
     LASER_FROM_LOWERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  LASER_FROM_LOWERRIGHT,
     /** use the animation effect "Laser from Lower Right".
      */
     LASER_FROM_LOWERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  APPEAR,
     /** use the animation effect "Appear".
      */
     APPEAR,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  HIDE
     /** use the animation effect "Hide".
      */
     HIDE,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_UPPERLEFT,
     /** use the animation effect "Move from Upper Left".
      */
     MOVE_FROM_UPPERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_UPPERRIGHT,
     /** use the animation effect "Move from Upper Right".
      */
     MOVE_FROM_UPPERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_LOWERRIGHT,
     /** use the animation effect "Move from Lower Right".
      */
     MOVE_FROM_LOWERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_FROM_LOWERLEFT,
     /** use the animation effect "Move from Lower Left".
      */
     MOVE_FROM_LOWERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_UPPERLEFT,
     /** use the animation effect "Move to Upper Left".
      */
     MOVE_TO_UPPERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_UPPERRIGHT,
     /** use the animation effect "Move to Upper Right".
      */
     MOVE_TO_UPPERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_LOWERRIGHT,
     /** use the animation effect "Move to Lower Right".
      */
     MOVE_TO_LOWERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_TO_LOWERLEFT,
     /** use the animation effect "Move to Lower Left".
      */
     MOVE_TO_LOWERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_LEFT
     /** use the animation effect "Move Short from Left".
      */
     MOVE_SHORT_FROM_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_UPPERLEFT
     /** use the animation effect "Move Short from Upper Left".
      */
     MOVE_SHORT_FROM_UPPERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_TOP
     /** use the animation effect "Move Short from Top".
      */
     MOVE_SHORT_FROM_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_UPPERRIGHT
     /** use the animation effect "Move Short from Upper Right".
      */
     MOVE_SHORT_FROM_UPPERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_RIGHT
     /** use the animation effect "Move Short from Right".
      */
     MOVE_SHORT_FROM_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_LOWERRIGHT
     /** use the animation effect "Move Short from Lower Right".
      */
     MOVE_SHORT_FROM_LOWERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_BOTTOM
     /** use the animation effect "Move Short from Bottom".
      */
     MOVE_SHORT_FROM_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_FROM_LOWERLEFT
     /** use the animation effect "Move Short from Lower Left".
      */
     MOVE_SHORT_FROM_LOWERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_LEFT
     /** use the animation effect "Move Short to Left".
      */
     MOVE_SHORT_TO_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_UPPERLEFT
     /** use the animation effect "Move Short to Upper Left".
      */
     MOVE_SHORT_TO_UPPERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_TOP
     /** use the animation effect "Move Short to Top".
      */
     MOVE_SHORT_TO_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_UPPERRIGHT
     /** use the animation effect "Move Short to Upper Right".
      */
     MOVE_SHORT_TO_UPPERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_RIGHT
     /** use the animation effect "Move Short to Right".
      */
     MOVE_SHORT_TO_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_LOWERRIGHT
     /** use the animation effect "Move Short to Lower Right".
      */
     MOVE_SHORT_TO_LOWERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_BOTTOM
     /** use the animation effect "Move Short to Bottom".
      */
     MOVE_SHORT_TO_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  MOVE_SHORT_TO_LOWERLEFT
     /** use the animation effect "Move Short to Lower Left".
      */
     MOVE_SHORT_TO_LOWERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_CHECKERBOARD
     /** use the animation effect "Vertical Checkerboard".
      */
     VERTICAL_CHECKERBOARD,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_CHECKERBOARD
     /** use the animation effect "Horizontal Checkerboard".
      */
     HORIZONTAL_CHECKERBOARD,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_ROTATE
     /** use the animation effect "Horizontal Rotate".
      */
     HORIZONTAL_ROTATE,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_ROTATE
     /** use the animation effect "Vertical Rotate".
      */
     VERTICAL_ROTATE,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  HORIZONTAL_STRETCH
     /** use the animation effect "Horizontal Stretch".
      */
     HORIZONTAL_STRETCH,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  VERTICAL_STRETCH
     /** use the animation effect "Vertical Stretch".
      */
     VERTICAL_STRETCH,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_LEFT
     /** use the animation effect "Stretch From Left".
      */
     STRETCH_FROM_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_UPPERLEFT
     /** use the animation effect "Stretch From Upper Left".
      */
     STRETCH_FROM_UPPERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_TOP
     /** use the animation effect "Stretch From Top".
      */
     STRETCH_FROM_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_UPPERRIGHT
     /** use the animation effect "Stretch From Upper Right".
      */
     STRETCH_FROM_UPPERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_RIGHT
     /** use the animation effect "Stretch From Right".
      */
     STRETCH_FROM_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_LOWERRIGHT
     /** use the animation effect "Stretch From Lower Right".
      */
     STRETCH_FROM_LOWERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_BOTTOM
     /** use the animation effect "Stretch From Bottom".
      */
     STRETCH_FROM_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect::  STRETCH_FROM_LOWERLEFT
     /** use the animation effect "Stretch From Lower Left".
      */
     STRETCH_FROM_LOWERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN
     /** use the animation effect "Zoom In".
      */
     ZOOM_IN,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_SMALL
     /** use the animation effect "Zoom In Small".
      */
     ZOOM_IN_SMALL,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_SPIRAL
     /** use the animation effect "Zoom In Spiral".
      */
     ZOOM_IN_SPIRAL,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT
     /** use the animation effect "Zoom Out".
      */
     ZOOM_OUT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_SMALL
     /** use the animation effect "Zoom Out Small".
      */
     ZOOM_OUT_SMALL,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_SPIRAL
     /** use the animation effect "Zoom Out Spiral".
      */
     ZOOM_OUT_SPIRAL,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_LEFT
     /** use the animation effect "Zoom In From Left".
      */
     ZOOM_IN_FROM_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_UPPERLEFT
     /** use the animation effect "Zoom In From Upper Left".
      */
     ZOOM_IN_FROM_UPPERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_TOP
     /** use the animation effect "Zoom In From Top".
      */
     ZOOM_IN_FROM_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_UPPERRIGHT
     /** use the animation effect "Zoom In From Upper Right".
      */
     ZOOM_IN_FROM_UPPERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_RIGHT
     /** use the animation effect "Zoom In From Right".
      */
     ZOOM_IN_FROM_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_LOWERRIGHT
     /** use the animation effect "Zoom In From Lower Right".
      */
     ZOOM_IN_FROM_LOWERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_BOTTOM
     /** use the animation effect "Zoom In From Bottom".
      */
     ZOOM_IN_FROM_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_LOWERLEFT
     /** use the animation effect "Zoom In From Lower Left".
      */
     ZOOM_IN_FROM_LOWERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_IN_FROM_CENTER
     /** use the animation effect "Zoom In From Center".
      */
     ZOOM_IN_FROM_CENTER,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_LEFT
     /** use the animation effect "Zoom Out From Left".
      */
     ZOOM_OUT_FROM_LEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_UPPERLEFT
     /** use the animation effect "Zoom Out From Upper Left".
      */
     ZOOM_OUT_FROM_UPPERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_TOP
     /** use the animation effect "Zoom Out From Top".
      */
     ZOOM_OUT_FROM_TOP,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_UPPERRIGHT
     /** use the animation effect "Zoom Out From Upper Right".
      */
     ZOOM_OUT_FROM_UPPERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_RIGHT
     /** use the animation effect "Zoom Out From Right".
      */
     ZOOM_OUT_FROM_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_LOWERRIGHT
     /** use the animation effect "Zoom Out From Lower Right".
      */
     ZOOM_OUT_FROM_LOWERRIGHT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_BOTTOM
     /** use the animation effect "Zoom Out From Bottom".
      */
     ZOOM_OUT_FROM_BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_LOWERLEFT
     /** use the animation effect "Zoom Out From Lower Left".
      */
     ZOOM_OUT_FROM_LOWERLEFT,
-
-    // DOCUMENTATION OMITTED FOR AnimationEffect:: ZOOM_OUT_FROM_CENTER
     /** use the animation effect "Zoom Out From Center".
      */
     ZOOM_OUT_FROM_CENTER

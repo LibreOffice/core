@@ -30,12 +30,9 @@
  */
 published enum MeasureKind
 {
-    // DOCUMENTATION OMITTED FOR MeasureKind::  STANDARD,
     /** use the length measurement.
      */
     STANDARD,
-
-    // DOCUMENTATION OMITTED FOR MeasureKind::  RADIUS
     /** use the radius measurement.
         This option cannot be used from the GUI Interface.
      */

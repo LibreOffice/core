@@ -31,42 +31,27 @@
  */
 published enum RegistryValueType
 {
-    // DOCUMENTATION OMITTED FOR RegistryValueType::    NOT_DEFINED,
     /** the type of the key is not defined.
      */
     NOT_DEFINED,
-
-    // DOCUMENTATION OMITTED FOR RegistryValueType::    LONG,
     /** the type of the key is long.
      */
     LONG,
-
-    // DOCUMENTATION OMITTED FOR RegistryValueType::    ASCII,
     /** the type of the key is ASCII.
      */
     ASCII,
-
-    // DOCUMENTATION OMITTED FOR RegistryValueType::    STRING,
     /** the type of the key is a string.
      */
     STRING,
-
-    // DOCUMENTATION OMITTED FOR RegistryValueType::    BINARY,
     /** the type of the key is binary.
      */
     BINARY,
-
-    // DOCUMENTATION OMITTED FOR RegistryValueType::    LONGLIST,
     /** the type of the key is LONGLIST.
      */
     LONGLIST,
-
-    // DOCUMENTATION OMITTED FOR RegistryValueType::    ASCIILIST,
     /** the type of the key is a ASCIILIST.
      */
     ASCIILIST,
-
-    // DOCUMENTATION OMITTED FOR RegistryValueType::    STRINGLIST
     /** the type of the key is a STRINGLIST.
      */
     STRINGLIST

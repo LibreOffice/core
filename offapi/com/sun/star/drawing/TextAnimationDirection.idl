@@ -27,16 +27,9 @@
  */
 published enum TextAnimationDirection
 {
-    // DOCUMENTATION OMITTED FOR TextAnimationDirection::   LEFT,
     LEFT,
-
-    // DOCUMENTATION OMITTED FOR TextAnimationDirection::   RIGHT,
     RIGHT,
-
-    // DOCUMENTATION OMITTED FOR TextAnimationDirection::   UP,
     UP,
-
-    // DOCUMENTATION OMITTED FOR TextAnimationDirection::   DOWN
     DOWN
 
 };

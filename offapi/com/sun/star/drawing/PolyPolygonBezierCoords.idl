@@ -32,8 +32,6 @@
 published struct PolyPolygonBezierCoords
 {
     com::sun::star::drawing::PointSequenceSequence Coordinates;
-
-    // DOCUMENTATION OMITTED FOR PolyPolygonBezierCoords::Flags
     com::sun::star::drawing::FlagSequenceSequence Flags;
 
 };

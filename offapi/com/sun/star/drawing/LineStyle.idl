@@ -28,17 +28,12 @@
  */
 published enum LineStyle
 {
-    // DOCUMENTATION OMITTED FOR LineStyle::    NONE,
     /** the line is hidden.
      */
     NONE,
-
-    // DOCUMENTATION OMITTED FOR LineStyle::    SOLID,
     /** the line is solid.
      */
     SOLID,
-
-    // DOCUMENTATION OMITTED FOR LineStyle::    DASH
     /** the line use dashes.
      */
     DASH

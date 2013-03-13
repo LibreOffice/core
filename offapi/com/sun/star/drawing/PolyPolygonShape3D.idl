@@ -30,11 +30,7 @@
 published struct PolyPolygonShape3D
 {
     com::sun::star::drawing::DoubleSequenceSequence SequenceX;
-
-    // DOCUMENTATION OMITTED FOR PolyPolygonShape3D::SequenceY
     com::sun::star::drawing::DoubleSequenceSequence SequenceY;
-
-    // DOCUMENTATION OMITTED FOR PolyPolygonShape3D::SequenceZ
     com::sun::star::drawing::DoubleSequenceSequence SequenceZ;
 
 };

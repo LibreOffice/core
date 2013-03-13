@@ -30,14 +30,8 @@
 published struct HomogenMatrix
 {
     com::sun::star::drawing::HomogenMatrixLine Line1;
-
-    // DOCUMENTATION OMITTED FOR HomogenMatrix::Line2
     com::sun::star::drawing::HomogenMatrixLine Line2;
-
-    // DOCUMENTATION OMITTED FOR HomogenMatrix::Line3
     com::sun::star::drawing::HomogenMatrixLine Line3;
-
-    // DOCUMENTATION OMITTED FOR HomogenMatrix::Line4
     com::sun::star::drawing::HomogenMatrixLine Line4;
 
 };

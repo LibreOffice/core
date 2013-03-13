@@ -30,27 +30,18 @@
  */
 published enum LineEndType
 {
-    // DOCUMENTATION OMITTED FOR LineEndType::  NONE,
     /** the line has no special end.
      */
     NONE,
-
-    // DOCUMENTATION OMITTED FOR LineEndType::  ARROW,
     /** the line uses an arrow for the line end.
      */
     ARROW,
-
-    // DOCUMENTATION OMITTED FOR LineEndType::  CIRCLE,
     /** the line uses a circle for the line end.
      */
     CIRCLE,
-
-    // DOCUMENTATION OMITTED FOR LineEndType::  SQUARE,
     /** the line uses a square for the line end.
      */
     SQUARE,
-
-    // DOCUMENTATION OMITTED FOR LineEndType::  SPECIAL
     /** deprecated
      */
     SPECIAL

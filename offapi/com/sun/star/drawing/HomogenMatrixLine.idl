@@ -28,14 +28,8 @@
 published struct HomogenMatrixLine
 {
     double Column1;
-
-    // DOCUMENTATION OMITTED FOR HomogenMatrixLine::Column2
     double Column2;
-
-    // DOCUMENTATION OMITTED FOR HomogenMatrixLine::Column3
     double Column3;
-
-    // DOCUMENTATION OMITTED FOR HomogenMatrixLine::Column4
     double Column4;
 
 };

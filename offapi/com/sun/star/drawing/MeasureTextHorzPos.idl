@@ -28,16 +28,9 @@
  */
 published enum MeasureTextHorzPos
 {
-    // DOCUMENTATION OMITTED FOR MeasureTextHorzPos::   AUTO,
     AUTO,
-
-    // DOCUMENTATION OMITTED FOR MeasureTextHorzPos::   LEFTOUTSIDE,
     LEFTOUTSIDE,
-
-    // DOCUMENTATION OMITTED FOR MeasureTextHorzPos::   INSIDE,
     INSIDE,
-
-    // DOCUMENTATION OMITTED FOR MeasureTextHorzPos::   RIGHTOUTSIDE
     RIGHTOUTSIDE
 
 };

@@ -28,17 +28,12 @@
  */
 published enum HorizontalAlignment
 {
-    // DOCUMENTATION OMITTED FOR HorizontalAlignment::  LEFT,
     /** set the horizontal alignment to the left margin from the container object
      */
     LEFT,
-
-    // DOCUMENTATION OMITTED FOR HorizontalAlignment::  CENTER,
     /** set the horizontal alignment to the center between the margins from the container object
      */
     CENTER,
-
-    // DOCUMENTATION OMITTED FOR HorizontalAlignment::  RIGHT
     /** set the horizontal alignment to the right margin from the container object
      */
     RIGHT

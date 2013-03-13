@@ -27,22 +27,15 @@
  */
 published enum PolygonFlags
 {
-    // DOCUMENTATION OMITTED FOR PolygonFlags:: NORMAL,
     /** the point is normal, from the curve discussion view.
      */
     NORMAL,
-
-    // DOCUMENTATION OMITTED FOR PolygonFlags:: SMOOTH,
     /** the point is smooth, the first derivation from the curve discussion view.
      */
     SMOOTH,
-
-    // DOCUMENTATION OMITTED FOR PolygonFlags:: CONTROL,
     /** the point is a control point, to control the curve from the user interface.
      */
     CONTROL,
-
-    // DOCUMENTATION OMITTED FOR PolygonFlags:: SYMMETRIC
     /** the point is symmetric, the second derivation from the curve discussion view.
      */
     SYMMETRIC

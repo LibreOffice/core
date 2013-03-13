@@ -28,12 +28,9 @@
  */
 published enum ProjectionMode
 {
-    // DOCUMENTATION OMITTED FOR ProjectionMode::   PARALLEL,
     /** the 3D objects are drawn in the parallel projection.
      */
     PARALLEL,
-
-    // DOCUMENTATION OMITTED FOR ProjectionMode::   PERSPECTIVE
     /** the 3D objects are drawn in the perspective projection.
      */
     PERSPECTIVE

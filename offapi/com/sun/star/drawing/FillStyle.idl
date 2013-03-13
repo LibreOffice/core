@@ -27,27 +27,18 @@
  */
 published enum FillStyle
 {
-    // DOCUMENTATION OMITTED FOR FillStyle::    NONE,
     /** the area is not filled.
      */
     NONE,
-
-    // DOCUMENTATION OMITTED FOR FillStyle::    SOLID,
     /** use a solid color to fill the area.
      */
     SOLID,
-
-    // DOCUMENTATION OMITTED FOR FillStyle::    GRADIENT,
     /** use a gradient color to fill the area.
      */
     GRADIENT,
-
-    // DOCUMENTATION OMITTED FOR FillStyle::    HATCH,
     /** use a hatch to fill the area.
      */
     HATCH,
-
-    // DOCUMENTATION OMITTED FOR FillStyle::    BITMAP
     /** use a bitmap to fill the  area.
      */
     BITMAP

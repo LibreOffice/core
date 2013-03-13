@@ -28,31 +28,14 @@
  */
 published enum Alignment
 {
-    // DOCUMENTATION OMITTED FOR Alignment::    TOP_LEFT,
     TOP_LEFT,
-
-    // DOCUMENTATION OMITTED FOR Alignment::    TOP,
     TOP,
-
-    // DOCUMENTATION OMITTED FOR Alignment::    TOP_RIGHT,
     TOP_RIGHT,
-
-    // DOCUMENTATION OMITTED FOR Alignment::    LEFT,
     LEFT,
-
-    // DOCUMENTATION OMITTED FOR Alignment::    CENTER,
     CENTER,
-
-    // DOCUMENTATION OMITTED FOR Alignment::    RIGHT,
     RIGHT,
-
-    // DOCUMENTATION OMITTED FOR Alignment::    BOTTOM_LEFT,
     BOTTOM_LEFT,
-
-    // DOCUMENTATION OMITTED FOR Alignment::    BOTTOM,
     BOTTOM,
-
-    // DOCUMENTATION OMITTED FOR Alignment::    BOTTOM_RIGHT
     BOTTOM_RIGHT
 
 };
