@@ -512,9 +512,9 @@ void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void ScOutlineWindow::SetEntryAreaClipRegion()
 {
-    SetClipRegion( Rectangle(
+    SetClipRegion( Region(Rectangle(
         GetPoint( 0, mnMainFirstPos ),
-        GetPoint( GetOutputSizeLevel() - 1, mnMainLastPos ) ) );
+        GetPoint( GetOutputSizeLevel() - 1, mnMainLastPos ))));
 }
 
 void ScOutlineWindow::DrawLineRel(

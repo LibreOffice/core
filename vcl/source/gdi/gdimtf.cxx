@@ -1403,7 +1403,9 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_ISECTRECTCLIPREGION_ACTION ):
                 {
                     MetaISectRectClipRegionAction*  pAct = (MetaISectRectClipRegionAction*) pAction;
-                    aMtf.AddAction( new MetaISectRegionClipRegionAction( ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
+                    aMtf.AddAction( new MetaISectRegionClipRegionAction(Region(
+                        ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor,
+                            aRotOffset, fSin, fCos )) ) );
                 }
                 break;
 

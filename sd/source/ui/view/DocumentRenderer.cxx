@@ -327,7 +327,8 @@ namespace {
         if (pView!=NULL && bPrintMarkedOnly)
             pView->DrawMarkedObj(rPrinter);
         else
-            rPrintView.CompleteRedraw(&rPrinter, Rectangle(Point(0,0), rPage.GetSize()));
+            rPrintView.CompleteRedraw(&rPrinter,
+                    Region(Rectangle(Point(0,0), rPage.GetSize())));
 
         rPrinter.SetMapMode(aOriginalMapMode);
 

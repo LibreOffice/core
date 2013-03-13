@@ -1007,7 +1007,7 @@ void DataBrowser::PaintCell(
     // clipping
     if( aPos.X() < rRect.Right() || aPos.X() + TxtSize.Width() > rRect.Right() ||
         aPos.Y() < rRect.Top() || aPos.Y() + TxtSize.Height() > rRect.Bottom())
-        rDev.SetClipRegion( rRect );
+        rDev.SetClipRegion(Region(rRect));
 
     // allow for a disabled control ...
     sal_Bool bEnabled = IsEnabled();

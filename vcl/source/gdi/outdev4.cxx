@@ -800,7 +800,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             if( OUTDEV_PRINTER == meOutDevType )
             {
                 Push( PUSH_CLIPREGION );
-                IntersectClipRegion( rPolyPoly );
+                IntersectClipRegion(Region(rPolyPoly));
                 DrawGradient( aRect, rGradient );
                 Pop();
             }

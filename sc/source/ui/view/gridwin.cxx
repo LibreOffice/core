@@ -4573,7 +4573,7 @@ void ScGridWindow::UpdateFormulas()
     PolyPolygon aChangedPoly( aOutputData.GetChangedArea() );   // logic (PixelToLogic)
     if ( aChangedPoly.Count() )
     {
-        Invalidate( aChangedPoly );
+        Invalidate(Region(aChangedPoly));
     }
 
     CheckNeedsRepaint();    // #i90362# used to be called via Draw() - still needed here

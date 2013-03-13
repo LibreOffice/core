@@ -348,7 +348,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         }
 
         Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
-        IntersectClipRegion( rPolyPoly );
+        IntersectClipRegion(Region(rPolyPoly));
         SetLineColor( GetFillColor() );
         const sal_Bool bOldMap = mbMap;
         EnableMapMode( sal_False );

@@ -79,12 +79,12 @@ public: // public within vcl
 #endif
 
 public:
-                    Region();
-                    Region( RegionType eType );
-                    Region( const Rectangle& rRect );
-                    Region( const Polygon& rPolygon );
-                    Region( const PolyPolygon& rPolyPoly );
-                    Region( const basegfx::B2DPolyPolygon& );
+    explicit        Region();
+    explicit        Region( RegionType eType );
+    explicit        Region( const Rectangle& rRect );
+    explicit        Region( const Polygon& rPolygon );
+    explicit        Region( const PolyPolygon& rPolyPoly );
+    explicit        Region( const basegfx::B2DPolyPolygon& );
                     Region( const Region& rRegion );
                     ~Region();
 

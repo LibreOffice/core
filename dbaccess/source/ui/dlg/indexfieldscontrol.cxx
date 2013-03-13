@@ -155,7 +155,7 @@ DBG_NAME(IndexFieldsControl)
         // clipping
         if (aPos.X() < _rRect.Right() || aPos.X() + TxtSize.Width() > _rRect.Right() ||
             aPos.Y() < _rRect.Top() || aPos.Y() + TxtSize.Height() > _rRect.Bottom())
-            _rDev.SetClipRegion( _rRect );
+            _rDev.SetClipRegion(Region(_rRect));
 
         // allow for a disabled control ...
         sal_Bool bEnabled = IsEnabled();

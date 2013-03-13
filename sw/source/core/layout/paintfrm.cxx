@@ -2370,7 +2370,7 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
     Size aSize( rRect.SSize() );
     // Hack! Necessary, because the layout is not pixel aligned!
     aSize.Width() += nPixelSzW; aSize.Height() += nPixelSzH;
-    rDev.SetClipRegion( Rectangle( rRect.Pos(), aSize ) );
+    rDev.SetClipRegion(Region(Rectangle(rRect.Pos(), aSize)));
 
     // The following stuff if necessary to have the new table borders fit
     // into a ::SwAlignRect adjusted world.
@@ -4010,7 +4010,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                     ViewShell *pSh = getRootFrm()->GetCurrShell();
                     if ( !pOut->GetConnectMetaFile() || !pSh || !pSh->GetWin() )
                     {
-                        pOut->SetClipRegion( aPoly );
+                        pOut->SetClipRegion(Region(aPoly));
                     }
                     for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                         PaintBackground( aRegion[i], pPage, rAttrs, sal_False, sal_True );

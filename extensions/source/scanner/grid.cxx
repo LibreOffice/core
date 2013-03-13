@@ -387,7 +387,7 @@ void GridWindow::drawNew()
 {
     if( m_nValues && m_pXValues && m_pNewYValues )
     {
-        SetClipRegion( m_aGridArea );
+        SetClipRegion(Region(m_aGridArea));
         SetLineColor( Color( COL_YELLOW ) );
         for( int i = 0; i < m_nValues-1; i++ )
         {

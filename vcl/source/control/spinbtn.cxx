@@ -505,13 +505,13 @@ long SpinButton::PreNotify( NotifyEvent& rNEvt )
                     Region aRgn( GetActiveClipRegion() );
                     if( pLastRect )
                     {
-                        SetClipRegion( *pLastRect );
+                        SetClipRegion(Region(*pLastRect));
                         Paint( *pLastRect );
                         SetClipRegion( aRgn );
                     }
                     if( pRect )
                     {
-                        SetClipRegion( *pRect );
+                        SetClipRegion(Region(*pRect));
                         Paint( *pRect );
                         SetClipRegion( aRgn );
                     }

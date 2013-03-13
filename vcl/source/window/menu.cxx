@@ -4038,7 +4038,7 @@ Region MenuFloatingWindow::ImplCalcClipRegion( sal_Bool bIncludeLogo ) const
     if ( pMenu && pMenu->pLogo && !bIncludeLogo )
         aRect.Left() += pMenu->pLogo->aBitmap.GetSizePixel().Width();
 
-    Region aRegion = aRect;
+    Region aRegion(aRect);
     if ( pMenu && pMenu->pLogo && bIncludeLogo && nScrollerHeight )
         aRegion.Union( Rectangle( Point(), Size( pMenu->pLogo->aBitmap.GetSizePixel().Width(), aOutSz.Height() ) ) );
 

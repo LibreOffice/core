@@ -156,8 +156,8 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
         }
         long nClipStartX = bLayoutRTL ? aOuter.Left() + nBWidth : aInner.Left();
         long nClipEndX = bLayoutRTL ? aInner.Right() : aOuter.Right() - nBWidth;
-        pDev->SetClipRegion( Rectangle( nClipStartX, nButtonY + nVer/2,
-                                nClipEndX, nButtonY + nVer/2 + aTextSize.Height() ) );
+        pDev->SetClipRegion( Region(Rectangle( nClipStartX, nButtonY + nVer/2,
+                            nClipEndX, nButtonY + nVer/2 + aTextSize.Height())) );
     }
 
     pDev->DrawText( Point( nTextStart, nButtonY + nVer/2 ), rTitle );
@@ -1252,7 +1252,7 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
             Rectangle aRect = GetListValButtonRect( aListValPos );
             aComboButton.SetPosPixel( aRect.TopLeft() );
             aComboButton.SetSizePixel( aRect.GetSize() );
-            pContentDev->SetClipRegion( aRect );
+            pContentDev->SetClipRegion(Region(aRect));
             aComboButton.Draw( false, false );
             pContentDev->SetClipRegion();           // always called from Draw() without clip region
             aComboButton.SetPosPixel( aOldPos );    // restore old state

@@ -585,14 +585,14 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
                     b=Int1+sal_Int16((sal_Int32)(Int2-Int1)*(sal_Int32)(i-y1) /(sal_Int32)(y2-y1+1));
                     if (b!=b0) {
                         SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
-                        rOut.SetClipRegion(Rectangle(x1,i0,x2,i-1));
+                        rOut.SetClipRegion(Region(Rectangle(x1,i0,x2,i-1)));
                         rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                         i0=i; b0=b;
                     }
                     i++;
                 }
                 SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
-                rOut.SetClipRegion(Rectangle(x1,i0,x2,y2));
+                rOut.SetClipRegion(Region(Rectangle(x1,i0,x2,y2)));
                 rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                 rOut.SetClipRegion(ClipMerk);
             } break;
@@ -604,14 +604,14 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
                     b=Int1+sal_Int16((sal_Int32)(Int2-Int1)*(sal_Int32)(i-x1) /(sal_Int32)(x2-x1+1));
                     if (b!=b0) {
                         SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)b0,rOut);
-                        rOut.SetClipRegion(Rectangle(i0,y1,i-1,y2));
+                        rOut.SetClipRegion(Region(Rectangle(i0,y1,i-1,y2)));
                         rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                         i0=i; b0=b;
                     }
                     i++;
                 }
                 SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
-                rOut.SetClipRegion(Rectangle(i0,y1,x2,y2));
+                rOut.SetClipRegion(Region(Rectangle(i0,y1,x2,y2)));
                 rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                 rOut.SetClipRegion(ClipMerk);
             } break;

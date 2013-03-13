@@ -2322,7 +2322,7 @@ sal_Bool Region::IsInside( const Rectangle& rRect ) const
         return sal_False;
 
     // create region from rectangle and intersect own region
-    Region aRegion = rRect;
+    Region aRegion(rRect);
     aRegion.Exclude( *this );
 
     // rectangle is inside if exclusion is empty
@@ -2341,7 +2341,7 @@ sal_Bool Region::IsOver( const Rectangle& rRect ) const
     // Can we optimize this ??? - is used in StarDraw for brushes pointers
     // Why we have no IsOver for Regions ???
     // create region from rectangle and intersect own region
-    Region aRegion = rRect;
+    Region aRegion(rRect);
     aRegion.Intersect( *this );
 
     // rectangle is over if include is not empty

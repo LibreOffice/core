@@ -471,7 +471,10 @@ namespace svt
                 :m_rDevice( i_rImpl.m_rTabBar )
             {
                 m_rDevice.Push( PUSH_CLIPREGION );
-                m_rDevice.SetClipRegion( i_rImpl.m_aNormalizer.getTransformed( i_rImpl.m_aGeometry.getItemsRect(), i_rImpl.m_eTabAlignment ) );
+                m_rDevice.SetClipRegion(Region(
+                    i_rImpl.m_aNormalizer.getTransformed(
+                        i_rImpl.m_aGeometry.getItemsRect(),
+                        i_rImpl.m_eTabAlignment )));
             }
 
             ~ClipItemRegion()
@@ -1042,7 +1045,7 @@ namespace svt
         // background
         const Rectangle aNormalizedPaintArea( m_pImpl->m_aNormalizer.getNormalized( i_rRect, m_pImpl->m_eTabAlignment ) );
         m_pImpl->m_aRenderDevice.Push( PUSH_CLIPREGION );
-        m_pImpl->m_aRenderDevice.SetClipRegion( aNormalizedPaintArea );
+        m_pImpl->m_aRenderDevice.SetClipRegion(Region(aNormalizedPaintArea));
         m_pImpl->m_pRenderer->renderBackground();
         m_pImpl->m_aRenderDevice.Pop();
         m_pImpl->CopyFromRenderDevice( aNormalizedPaintArea );

@@ -64,7 +64,7 @@ void ClientView::InvalidateOneWin(::Window& rWin)
 
 void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
 {
-    CompleteRedraw(&rWin, rRect);
+    CompleteRedraw(&rWin, Region(rRect));
 }
 
 void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector )

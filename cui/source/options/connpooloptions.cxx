@@ -294,7 +294,7 @@ namespace offapp
 
         if (m_aSeekRow != m_aSettings.end())
         {
-            rDev.SetClipRegion(rRect);
+            rDev.SetClipRegion(Region(rRect));
 
             sal_uInt16 nStyle = TEXT_DRAW_CLIP;
             if (!IsEnabled())

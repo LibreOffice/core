@@ -279,7 +279,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
          FindFlyFrm()->GetContour( aPoly, sal_True )
        )
     {
-        pOut->SetClipRegion( aPoly );
+        pOut->SetClipRegion(Region(aPoly));
         bClip = false;
     }
 

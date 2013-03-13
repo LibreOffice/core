@@ -363,7 +363,7 @@ void _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRe
             rDev.DrawText(rRect.TopLeft(),pEntry->aName);
         }
     } else {
-        rDev.SetClipRegion(aR);
+        rDev.SetClipRegion(Region(aR));
         rDev.DrawText(aR.TopLeft(),GetCellText(nAktPaintRow,nColumnId));
         rDev.SetClipRegion();
     }

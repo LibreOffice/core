@@ -117,7 +117,7 @@ sal_Bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbutt
             bNativeOK = pBorder->DrawNativeControl( CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn, CTRL_STATE_ENABLED,
                         rSpinbuttonValue, rtl::OUString() );
 
-            pBorder->SetClipRegion( oldRgn );
+            pBorder->SetClipRegion(Region(oldRgn));
         }
     }
     return bNativeOK;
@@ -925,13 +925,13 @@ long SpinField::PreNotify( NotifyEvent& rNEvt )
                         Region aRgn( GetActiveClipRegion() );
                         if( pLastRect )
                         {
-                            SetClipRegion( *pLastRect );
+                            SetClipRegion(Region(*pLastRect));
                             Paint( *pLastRect );
                             SetClipRegion( aRgn );
                         }
                         if( pRect )
                         {
-                            SetClipRegion( *pRect );
+                            SetClipRegion(Region(*pRect));
                             Paint( *pRect );
                             SetClipRegion( aRgn );
                         }

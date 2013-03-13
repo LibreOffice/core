@@ -264,7 +264,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
             pView->SetActiveLayer( pFrameView->GetActiveLayer() );
     }
 
-    pView->CompleteRedraw( &aVDev, Rectangle( aNullPt, aSize ) );
+    pView->CompleteRedraw( &aVDev, Region(Rectangle(aNullPt, aSize)) );
 
     // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
     delete pView;

@@ -88,7 +88,7 @@ namespace vclcanvas
             // wouldn't save much render time, and b) will clutter
             // scrolled sprite content outside this area)
             rOutDev.EnableMapMode( sal_False );
-            rOutDev.SetClipRegion( rRequestedArea );
+            rOutDev.SetClipRegion(Region(rRequestedArea));
 
             // repaint affected sprite directly to output device (at
             // the actual screen output position)

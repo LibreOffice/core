@@ -568,7 +568,9 @@ sal_Bool SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& r
             pOut->Push();
             pOut->SetMapMode( aMap );
             aView.ShowSdrPage( const_cast< FmFormPage* >( pPage ));
-            aView.CompleteRedraw( pOut, Rectangle( pOut->PixelToLogic( Point() ), pOut->GetOutputSize() ) );
+            aView.CompleteRedraw( pOut,
+                    Region(Rectangle(pOut->PixelToLogic(Point()),
+                                     pOut->GetOutputSize())));
             pOut->Pop();
 
             bRet = sal_True;

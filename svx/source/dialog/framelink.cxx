@@ -715,7 +715,7 @@ inline Polygon lclCreatePolygon( const PointVec& rPoints )
 }
 
 /** Returns a polygon constructed from the five passed points. */
-Polygon lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, const Point& rP4, const Point& rP5 )
+Region lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, const Point& rP4, const Point& rP5 )
 {
     PointVec aPoints;
     aPoints.reserve( 5 );
@@ -724,7 +724,7 @@ Polygon lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, 
     aPoints.push_back( rP3 );
     aPoints.push_back( rP4 );
     aPoints.push_back( rP5 );
-    return lclCreatePolygon( aPoints );
+    return Region(lclCreatePolygon(aPoints));
 }
 
 /** Sets the color of the passed frame style to the output device.

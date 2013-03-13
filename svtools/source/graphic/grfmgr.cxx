@@ -554,7 +554,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
             }
             else
             {
-                pOut->IntersectClipRegion( aClipPolyPoly );
+                pOut->IntersectClipRegion(Region(aClipPolyPoly));
             }
         }
     }
@@ -693,7 +693,7 @@ sal_Bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, co
                     if( bRectClip )
                         pOut->IntersectClipRegion( aClipPolyPoly.GetBoundRect() );
                     else
-                        pOut->IntersectClipRegion( aClipPolyPoly );
+                        pOut->IntersectClipRegion(Region(aClipPolyPoly));
                 }
             }
 

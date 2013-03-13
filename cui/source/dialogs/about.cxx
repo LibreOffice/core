@@ -429,7 +429,7 @@ void AboutDialog::MoveControl(Control& rControl, sal_Int32 X, sal_Int32 Y)
 
 void AboutDialog::Paint( const Rectangle& rRect )
 {
-    SetClipRegion( rRect );
+    SetClipRegion(Region(rRect));
     Point aPos ( rRect.GetWidth() - aBackgroundBitmap.GetSizePixel().Width(), rRect.GetHeight() - aBackgroundBitmap.GetSizePixel().Height() );
     DrawBitmapEx( aPos, aBackgroundBitmap );
 }

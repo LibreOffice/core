@@ -295,7 +295,7 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
 
     Region aTestRegion( GetActiveClipRegion() );
     aTestRegion.Intersect( rControlRegion );
-    if( aTestRegion == rControlRegion )
+    if (aTestRegion == Region(rControlRegion))
         nState |= CTRL_CACHING_ALLOWED;   // control is not clipped, caching allowed
 
     sal_Bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
