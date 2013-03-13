@@ -38,7 +38,8 @@ $(eval $(call gb_InternalUnoApi_define_api_dependencies,scaddins,offapi,\
 
 $(eval $(call gb_InternalUnoApi_set_include,scaddins,\
     -I$(SRCDIR)/scaddins/idl \
-    -I$(OUTDIR)/idl \
+    -I$(SRCDIR)/offapi \
+    -I$(SRCDIR)/udkapi \
     $$(INCLUDE) \
 ))
 

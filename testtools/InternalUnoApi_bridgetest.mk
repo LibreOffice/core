@@ -31,7 +31,7 @@ $(eval $(call gb_InternalUnoApi_use_api,bridgetest,\
 ))
 
 $(eval $(call gb_InternalUnoApi_set_include,bridgetest,\
-    -I$(OUTDIR)/idl \
+    -I$(SRCDIR)/udkapi \
     $$(INCLUDE) \
 ))
 

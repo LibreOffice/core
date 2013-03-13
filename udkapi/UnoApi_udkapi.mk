@@ -31,7 +31,6 @@ $(eval $(call gb_UnoApi_UnoApi,udkapi))
 $(eval $(call gb_UnoApi_set_include,udkapi,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/udkapi \
-	-I$(OUTDIR)/idl \
 ))
 
 

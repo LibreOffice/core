@@ -32,7 +32,7 @@ $(eval $(call gb_InternalUnoApi_use_api,cppuhelper,\
 ))
 
 $(eval $(call gb_InternalUnoApi_set_include,cppuhelper,\
-    -I$(OUTDIR)/idl \
+    -I$(SRCDIR)/udkapi \
     $$(INCLUDE) \
 ))
 

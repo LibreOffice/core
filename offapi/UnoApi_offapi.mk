@@ -25,8 +25,8 @@ $(eval $(call gb_UnoApi_use_api,offapi,\
 
 $(eval $(call gb_UnoApi_set_include,offapi,\
 	$$(INCLUDE) \
+	-I$(SRCDIR)/udkapi \
 	-I$(SRCDIR)/offapi \
-	-I$(OUTDIR)/idl \
 ))
 
 

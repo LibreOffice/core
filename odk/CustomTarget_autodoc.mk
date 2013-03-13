@@ -19,7 +19,7 @@ $(odk_WORKDIR)/docs/common/ref/module-ix.html: $(SRCDIR)/odk/pack/copying/idl_ch
 	$(call gb_Helper_execute,autodoc) -html $(dir $@) \
 		-dvgroot "http://wiki.services.openoffice.org/wiki" \
 		-name "LibreOffice $(PRODUCTVERSION) API" \
-		-lg idl -dvgfile $< -t $(OUTDIR)/idl
+		-lg idl -dvgfile $< -t $(SRCDIR)/udkapi $(SRCDIR)/offapi
 
 
 # vim: set noet sw=4 ts=4:

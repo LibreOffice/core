@@ -19,7 +19,7 @@ $(eval $(call gb_InternalUnoApi_define_api_dependencies,touch, \
 
 $(eval $(call gb_InternalUnoApi_set_include,touch,\
 	-I$(SRCDIR)/touch/idl \
-	-I$(OUTDIR)/idl \
+	-I$(SRCDIR)/udkapi \
 	$$(INCLUDE) \
 ))
 

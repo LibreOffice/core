@@ -14,7 +14,7 @@ $(eval $(call gb_InternalUnoApi_use_api,test_urp,\
 ))
 
 $(eval $(call gb_InternalUnoApi_set_include,test_urp,\
-    -I$(OUTDIR)/idl \
+    -I$(SRCDIR)/udkapi \
     $$(INCLUDE) \
 ))
 

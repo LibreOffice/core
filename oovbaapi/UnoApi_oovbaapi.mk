@@ -27,7 +27,8 @@ $(eval $(call gb_UnoApi_use_api,oovbaapi,\
 $(eval $(call gb_UnoApi_set_include,oovbaapi,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/oovbaapi \
-	-I$(OUTDIR)/idl \
+	-I$(SRCDIR)/offapi \
+	-I$(SRCDIR)/udkapi \
 ))
 
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,oovbaapi,oovbaapi/ooo/vba/excel,\
