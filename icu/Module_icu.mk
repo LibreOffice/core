@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,icu))
 
 ifeq ($(SYSTEM_ICU),NO)
-$(eval $(call gb_Module_add_targets_for_build,icu,\
+$(eval $(call gb_Module_add_targets,icu,\
 	UnpackedTarball_icu \
 	ExternalPackage_icu \
 	ExternalProject_icu \
