@@ -1,0 +1,982 @@
+--- build/langtag/Makefile.in	2012-10-21 23:47:24.000000000 -0400
++++ build/langtag/Makefile.in	2013-03-11 20:44:23.978000000 -0400
+@@ -60,8 +60,8 @@
+	$(srcdir)/liblangtag-gobject.pc.in \
+	$(srcdir)/liblangtag-uninstalled.pc.in \
+	$(srcdir)/liblangtag.pc.in $(top_srcdir)/configure AUTHORS \
+-	COPYING ChangeLog INSTALL NEWS config.guess config.sub depcomp \
+-	install-sh ltmain.sh missing mkinstalldirs
++	COPYING ChangeLog INSTALL NEWS ar-lib config.guess config.sub \
++	depcomp install-sh ltmain.sh missing mkinstalldirs
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/m4macros/ax_pthread.m4 \
+	$(top_srcdir)/m4macros/gtk-doc.m4 \
+--- build/langtag/aclocal.m4	2012-10-21 23:47:22.000000000 -0400
++++ build/langtag/aclocal.m4	2013-03-11 20:44:16.964000000 -0400
+@@ -343,7 +343,8 @@
+ # ----------------------------------
+ AC_DEFUN([PKG_PROG_PKG_CONFIG],
+ [m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+-m4_pattern_allow([^PKG_CONFIG(_PATH)?$])
++m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
++m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
+ AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])
+ AC_ARG_VAR([PKG_CONFIG_PATH], [directories to add to pkg-config's search path])
+ AC_ARG_VAR([PKG_CONFIG_LIBDIR], [path overriding pkg-config's built-in search path])
+@@ -389,7 +390,8 @@
+     pkg_cv_[]$1="$$1"
+  elif test -n "$PKG_CONFIG"; then
+     PKG_CHECK_EXISTS([$3],
+-                     [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`],
++                     [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes ],
+		     [pkg_failed=yes])
+  else
+     pkg_failed=untried
+@@ -452,7 +454,7 @@
+ Consider adjusting the PKG_CONFIG_PATH environment variable if you
+ installed software in a non-standard prefix.
+
+-_PKG_TEXT])
++_PKG_TEXT])[]dnl
+         ])
+ elif test $pkg_failed = untried; then
+	AC_MSG_RESULT([no])
+@@ -463,7 +465,7 @@
+
+ _PKG_TEXT
+
+-To get pkg-config, see <http://pkg-config.freedesktop.org/>.])
++To get pkg-config, see <http://pkg-config.freedesktop.org/>.])[]dnl
+         ])
+ else
+	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
+@@ -473,6 +475,61 @@
+ fi[]dnl
+ ])# PKG_CHECK_MODULES
+
++
++# PKG_INSTALLDIR(DIRECTORY)
++# -------------------------
++# Substitutes the variable pkgconfigdir as the location where a module
++# should install pkg-config .pc files. By default the directory is
++# $libdir/pkgconfig, but the default can be changed by passing
++# DIRECTORY. The user can override through the --with-pkgconfigdir
++# parameter.
++AC_DEFUN([PKG_INSTALLDIR],
++[m4_pushdef([pkg_default], [m4_default([$1], ['${libdir}/pkgconfig'])])
++m4_pushdef([pkg_description],
++    [pkg-config installation directory @<:@]pkg_default[@:>@])
++AC_ARG_WITH([pkgconfigdir],
++    [AS_HELP_STRING([--with-pkgconfigdir], pkg_description)],,
++    [with_pkgconfigdir=]pkg_default)
++AC_SUBST([pkgconfigdir], [$with_pkgconfigdir])
++m4_popdef([pkg_default])
++m4_popdef([pkg_description])
++]) dnl PKG_INSTALLDIR
++
++
++# PKG_NOARCH_INSTALLDIR(DIRECTORY)
++# -------------------------
++# Substitutes the variable noarch_pkgconfigdir as the location where a
++# module should install arch-independent pkg-config .pc files. By
++# default the directory is $datadir/pkgconfig, but the default can be
++# changed by passing DIRECTORY. The user can override through the
++# --with-noarch-pkgconfigdir parameter.
++AC_DEFUN([PKG_NOARCH_INSTALLDIR],
++[m4_pushdef([pkg_default], [m4_default([$1], ['${datadir}/pkgconfig'])])
++m4_pushdef([pkg_description],
++    [pkg-config arch-independent installation directory @<:@]pkg_default[@:>@])
++AC_ARG_WITH([noarch-pkgconfigdir],
++    [AS_HELP_STRING([--with-noarch-pkgconfigdir], pkg_description)],,
++    [with_noarch_pkgconfigdir=]pkg_default)
++AC_SUBST([noarch_pkgconfigdir], [$with_noarch_pkgconfigdir])
++m4_popdef([pkg_default])
++m4_popdef([pkg_description])
++]) dnl PKG_NOARCH_INSTALLDIR
++
++
++# PKG_CHECK_VAR(VARIABLE, MODULE, CONFIG-VARIABLE,
++# [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
++# -------------------------------------------
++# Retrieves the value of the pkg-config variable for the given module.
++AC_DEFUN([PKG_CHECK_VAR],
++[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
++AC_ARG_VAR([$1], [value of $3 for $2, overriding pkg-config])dnl
++
++_PKG_CONFIG([$1], [variable="][$3]["], [$2])
++AS_VAR_COPY([$1], [pkg_cv_][$1])
++
++AS_VAR_IF([$1], [""], [$5], [$4])dnl
++])# PKG_CHECK_VAR
++
+ # Copyright (C) 2002, 2003, 2005, 2006, 2007, 2008, 2011 Free Software
+ # Foundation, Inc.
+ #
+@@ -512,6 +569,67 @@
+   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
+ _AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
+
++# Copyright (C) 2011 Free Software Foundation, Inc.
++#
++# This file is free software; the Free Software Foundation
++# gives unlimited permission to copy and/or distribute it,
++# with or without modifications, as long as this notice is preserved.
++
++# serial 1
++
++# AM_PROG_AR([ACT-IF-FAIL])
++# -------------------------
++# Try to determine the archiver interface, and trigger the ar-lib wrapper
++# if it is needed.  If the detection of archiver interface fails, run
++# ACT-IF-FAIL (default is to abort configure with a proper error message).
++AC_DEFUN([AM_PROG_AR],
++[AC_BEFORE([$0], [LT_INIT])dnl
++AC_BEFORE([$0], [AC_PROG_LIBTOOL])dnl
++AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
++AC_REQUIRE_AUX_FILE([ar-lib])dnl
++AC_CHECK_TOOLS([AR], [ar lib "link -lib"], [false])
++: ${AR=ar}
++
++AC_CACHE_CHECK([the archiver ($AR) interface], [am_cv_ar_interface],
++  [am_cv_ar_interface=ar
++   AC_COMPILE_IFELSE([AC_LANG_SOURCE([[int some_variable = 0;]])],
++     [am_ar_try='$AR cru libconftest.a conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
++      AC_TRY_EVAL([am_ar_try])
++      if test "$ac_status" -eq 0; then
++        am_cv_ar_interface=ar
++      else
++        am_ar_try='$AR -NOLOGO -OUT:conftest.lib conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
++        AC_TRY_EVAL([am_ar_try])
++        if test "$ac_status" -eq 0; then
++          am_cv_ar_interface=lib
++        else
++          am_cv_ar_interface=unknown
++        fi
++      fi
++      rm -f conftest.lib libconftest.a
++     ])
++   ])
++
++case $am_cv_ar_interface in
++ar)
++  ;;
++lib)
++  # Microsoft lib, so override with the ar-lib wrapper script.
++  # FIXME: It is wrong to rewrite AR.
++  # But if we don't then we get into trouble of one sort or another.
++  # A longer-term fix would be to have automake use am__AR in this case,
++  # and then we could set am__AR="$am_aux_dir/ar-lib \$(AR)" or something
++  # similar.
++  AR="$am_aux_dir/ar-lib $AR"
++  ;;
++unknown)
++  m4_default([$1],
++             [AC_MSG_ERROR([could not determine $AR interface])])
++  ;;
++esac
++AC_SUBST([AR])dnl
++])
++
+ # AM_AUX_DIR_EXPAND                                         -*- Autoconf -*-
+
+ # Copyright (C) 2001, 2003, 2005, 2011 Free Software Foundation, Inc.
+--- build/langtag/configure	2013-03-11 20:36:29.241000000 -0400
++++ build/langtag/configure	2013-03-11 20:44:21.552000000 -0400
+@@ -681,8 +681,6 @@
+ DSYMUTIL
+ MANIFEST_TOOL
+ RANLIB
+-ac_ct_AR
+-AR
+ DLLTOOL
+ OBJDUMP
+ LN_S
+@@ -694,6 +692,15 @@
+ EGREP
+ GREP
+ SED
++host_os
++host_vendor
++host_cpu
++host
++build_os
++build_vendor
++build_cpu
++build
++LIBTOOL
+ am__fastdepCC_FALSE
+ am__fastdepCC_TRUE
+ CCDEPMODE
+@@ -711,15 +718,8 @@
+ LDFLAGS
+ CFLAGS
+ CC
+-host_os
+-host_vendor
+-host_cpu
+-host
+-build_os
+-build_vendor
+-build_cpu
+-build
+-LIBTOOL
++ac_ct_AR
++AR
+ MAINT
+ MAINTAINER_MODE_FALSE
+ MAINTAINER_MODE_TRUE
+@@ -793,11 +793,11 @@
+ enable_option_checking
+ enable_silent_rules
+ enable_maintainer_mode
++enable_dependency_tracking
+ enable_shared
+ enable_static
+ with_pic
+ enable_fast_install
+-enable_dependency_tracking
+ with_gnu_ld
+ with_sysroot
+ enable_libtool_lock
+@@ -1458,12 +1458,12 @@
+   --disable-silent-rules         verbose build output (undo: `make V=0')
+   --enable-maintainer-mode  enable make rules and dependencies not useful
+			  (and sometimes confusing) to the casual installer
++  --disable-dependency-tracking  speeds up one-time build
++  --enable-dependency-tracking   do not reject slow dependency extractors
+   --enable-shared[=PKGS]  build shared libraries [default=yes]
+   --enable-static[=PKGS]  build static libraries [default=yes]
+   --enable-fast-install[=PKGS]
+                           optimize for fast installation [default=yes]
+-  --disable-dependency-tracking  speeds up one-time build
+-  --enable-dependency-tracking   do not reject slow dependency extractors
+   --disable-libtool-lock  avoid locking (might break parallel builds)
+   --enable-compile-warnings=[no/minimum/yes/maximum/error]
+                           Turn on compiler warnings
+@@ -2967,171 +2967,6 @@
+
+
+
+-case `pwd` in
+-  *\ * | *\	*)
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&5
+-$as_echo "$as_me: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&2;} ;;
+-esac
+-
+-
+-
+-macro_version='2.4.2'
+-macro_revision='1.3337'
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-ltmain="$ac_aux_dir/ltmain.sh"
+-
+-# Make sure we can run config.sub.
+-$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
+-  as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
+-
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking build system type" >&5
+-$as_echo_n "checking build system type... " >&6; }
+-if ${ac_cv_build+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_build_alias=$build_alias
+-test "x$ac_build_alias" = x &&
+-  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
+-test "x$ac_build_alias" = x &&
+-  as_fn_error $? "cannot guess build type; you must specify one" "$LINENO" 5
+-ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
+-  as_fn_error $? "$SHELL $ac_aux_dir/config.sub $ac_build_alias failed" "$LINENO" 5
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_build" >&5
+-$as_echo "$ac_cv_build" >&6; }
+-case $ac_cv_build in
+-*-*-*) ;;
+-*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
+-esac
+-build=$ac_cv_build
+-ac_save_IFS=$IFS; IFS='-'
+-set x $ac_cv_build
+-shift
+-build_cpu=$1
+-build_vendor=$2
+-shift; shift
+-# Remember, the first character of IFS is used to create $*,
+-# except with old shells:
+-build_os=$*
+-IFS=$ac_save_IFS
+-case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
+-
+-
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking host system type" >&5
+-$as_echo_n "checking host system type... " >&6; }
+-if ${ac_cv_host+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "x$host_alias" = x; then
+-  ac_cv_host=$ac_cv_build
+-else
+-  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
+-    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $host_alias failed" "$LINENO" 5
+-fi
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_host" >&5
+-$as_echo "$ac_cv_host" >&6; }
+-case $ac_cv_host in
+-*-*-*) ;;
+-*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
+-esac
+-host=$ac_cv_host
+-ac_save_IFS=$IFS; IFS='-'
+-set x $ac_cv_host
+-shift
+-host_cpu=$1
+-host_vendor=$2
+-shift; shift
+-# Remember, the first character of IFS is used to create $*,
+-# except with old shells:
+-host_os=$*
+-IFS=$ac_save_IFS
+-case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+-
+-
+-# Backslashify metacharacters that are still active within
+-# double-quoted strings.
+-sed_quote_subst='s/\(["`$\\]\)/\\\1/g'
+-
+-# Same as above, but do not quote variable references.
+-double_quote_subst='s/\(["`\\]\)/\\\1/g'
+-
+-# Sed substitution to delay expansion of an escaped shell variable in a
+-# double_quote_subst'ed string.
+-delay_variable_subst='s/\\\\\\\\\\\$/\\\\\\$/g'
+-
+-# Sed substitution to delay expansion of an escaped single quote.
+-delay_single_quote_subst='s/'\''/'\'\\\\\\\'\''/g'
+-
+-# Sed substitution to avoid accidental globbing in evaled expressions
+-no_glob_subst='s/\*/\\\*/g'
+-
+-ECHO='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
+-ECHO=$ECHO$ECHO$ECHO$ECHO$ECHO
+-ECHO=$ECHO$ECHO$ECHO$ECHO$ECHO$ECHO
+-
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to print strings" >&5
+-$as_echo_n "checking how to print strings... " >&6; }
+-# Test print first, because it will be a builtin if present.
+-if test "X`( print -r -- -n ) 2>/dev/null`" = X-n && \
+-   test "X`print -r -- $ECHO 2>/dev/null`" = "X$ECHO"; then
+-  ECHO='print -r --'
+-elif test "X`printf %s $ECHO 2>/dev/null`" = "X$ECHO"; then
+-  ECHO='printf %s\n'
+-else
+-  # Use this function as a fallback that always works.
+-  func_fallback_echo ()
+-  {
+-    eval 'cat <<_LTECHO_EOF
+-$1
+-_LTECHO_EOF'
+-  }
+-  ECHO='func_fallback_echo'
+-fi
+-
+-# func_echo_all arg...
+-# Invoke $ECHO with all args, space-separated.
+-func_echo_all ()
+-{
+-    $ECHO ""
+-}
+-
+-case "$ECHO" in
+-  printf*) { $as_echo "$as_me:${as_lineno-$LINENO}: result: printf" >&5
+-$as_echo "printf" >&6; } ;;
+-  print*) { $as_echo "$as_me:${as_lineno-$LINENO}: result: print -r" >&5
+-$as_echo "print -r" >&6; } ;;
+-  *) { $as_echo "$as_me:${as_lineno-$LINENO}: result: cat" >&5
+-$as_echo "cat" >&6; } ;;
+-esac
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+ DEPDIR="${am__leading_dot}deps"
+
+ ac_config_commands="$ac_config_commands depfiles"
+@@ -4113,6 +3948,332 @@
+ fi
+
+
++
++if test -n "$ac_tool_prefix"; then
++  for ac_prog in ar lib "link -lib"
++  do
++    # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
++set dummy $ac_tool_prefix$ac_prog; ac_word=$2
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++$as_echo_n "checking for $ac_word... " >&6; }
++if ${ac_cv_prog_AR+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  if test -n "$AR"; then
++  ac_cv_prog_AR="$AR" # Let the user override the test.
++else
++as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_exec_ext in '' $ac_executable_extensions; do
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
++    ac_cv_prog_AR="$ac_tool_prefix$ac_prog"
++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++    break 2
++  fi
++done
++  done
++IFS=$as_save_IFS
++
++fi
++fi
++AR=$ac_cv_prog_AR
++if test -n "$AR"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $AR" >&5
++$as_echo "$AR" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++fi
++
++
++    test -n "$AR" && break
++  done
++fi
++if test -z "$AR"; then
++  ac_ct_AR=$AR
++  for ac_prog in ar lib "link -lib"
++do
++  # Extract the first word of "$ac_prog", so it can be a program name with args.
++set dummy $ac_prog; ac_word=$2
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++$as_echo_n "checking for $ac_word... " >&6; }
++if ${ac_cv_prog_ac_ct_AR+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  if test -n "$ac_ct_AR"; then
++  ac_cv_prog_ac_ct_AR="$ac_ct_AR" # Let the user override the test.
++else
++as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_exec_ext in '' $ac_executable_extensions; do
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
++    ac_cv_prog_ac_ct_AR="$ac_prog"
++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++    break 2
++  fi
++done
++  done
++IFS=$as_save_IFS
++
++fi
++fi
++ac_ct_AR=$ac_cv_prog_ac_ct_AR
++if test -n "$ac_ct_AR"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_AR" >&5
++$as_echo "$ac_ct_AR" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++fi
++
++
++  test -n "$ac_ct_AR" && break
++done
++
++  if test "x$ac_ct_AR" = x; then
++    AR="false"
++  else
++    case $cross_compiling:$ac_tool_warned in
++yes:)
++{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
++$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
++ac_tool_warned=yes ;;
++esac
++    AR=$ac_ct_AR
++  fi
++fi
++
++: ${AR=ar}
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking the archiver ($AR) interface" >&5
++$as_echo_n "checking the archiver ($AR) interface... " >&6; }
++if ${am_cv_ar_interface+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  am_cv_ar_interface=ar
++   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++int some_variable = 0;
++_ACEOF
++if ac_fn_c_try_compile "$LINENO"; then :
++  am_ar_try='$AR cru libconftest.a conftest.$ac_objext >&5'
++      { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$am_ar_try\""; } >&5
++  (eval $am_ar_try) 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }
++      if test "$ac_status" -eq 0; then
++        am_cv_ar_interface=ar
++      else
++        am_ar_try='$AR -NOLOGO -OUT:conftest.lib conftest.$ac_objext >&5'
++        { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$am_ar_try\""; } >&5
++  (eval $am_ar_try) 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }
++        if test "$ac_status" -eq 0; then
++          am_cv_ar_interface=lib
++        else
++          am_cv_ar_interface=unknown
++        fi
++      fi
++      rm -f conftest.lib libconftest.a
++
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_ar_interface" >&5
++$as_echo "$am_cv_ar_interface" >&6; }
++
++case $am_cv_ar_interface in
++ar)
++  ;;
++lib)
++  # Microsoft lib, so override with the ar-lib wrapper script.
++  # FIXME: It is wrong to rewrite AR.
++  # But if we don't then we get into trouble of one sort or another.
++  # A longer-term fix would be to have automake use am__AR in this case,
++  # and then we could set am__AR="$am_aux_dir/ar-lib \$(AR)" or something
++  # similar.
++  AR="$am_aux_dir/ar-lib $AR"
++  ;;
++unknown)
++  as_fn_error $? "could not determine $AR interface" "$LINENO" 5
++  ;;
++esac
++
++case `pwd` in
++  *\ * | *\	*)
++    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&5
++$as_echo "$as_me: WARNING: Libtool does not cope well with whitespace in \`pwd\`" >&2;} ;;
++esac
++
++
++
++macro_version='2.4.2'
++macro_revision='1.3337'
++
++
++
++
++
++
++
++
++
++
++
++
++
++ltmain="$ac_aux_dir/ltmain.sh"
++
++# Make sure we can run config.sub.
++$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
++  as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking build system type" >&5
++$as_echo_n "checking build system type... " >&6; }
++if ${ac_cv_build+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  ac_build_alias=$build_alias
++test "x$ac_build_alias" = x &&
++  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
++test "x$ac_build_alias" = x &&
++  as_fn_error $? "cannot guess build type; you must specify one" "$LINENO" 5
++ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
++  as_fn_error $? "$SHELL $ac_aux_dir/config.sub $ac_build_alias failed" "$LINENO" 5
++
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_build" >&5
++$as_echo "$ac_cv_build" >&6; }
++case $ac_cv_build in
++*-*-*) ;;
++*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
++esac
++build=$ac_cv_build
++ac_save_IFS=$IFS; IFS='-'
++set x $ac_cv_build
++shift
++build_cpu=$1
++build_vendor=$2
++shift; shift
++# Remember, the first character of IFS is used to create $*,
++# except with old shells:
++build_os=$*
++IFS=$ac_save_IFS
++case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
++
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking host system type" >&5
++$as_echo_n "checking host system type... " >&6; }
++if ${ac_cv_host+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  if test "x$host_alias" = x; then
++  ac_cv_host=$ac_cv_build
++else
++  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
++    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $host_alias failed" "$LINENO" 5
++fi
++
++fi
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_host" >&5
++$as_echo "$ac_cv_host" >&6; }
++case $ac_cv_host in
++*-*-*) ;;
++*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
++esac
++host=$ac_cv_host
++ac_save_IFS=$IFS; IFS='-'
++set x $ac_cv_host
++shift
++host_cpu=$1
++host_vendor=$2
++shift; shift
++# Remember, the first character of IFS is used to create $*,
++# except with old shells:
++host_os=$*
++IFS=$ac_save_IFS
++case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
++
++
++# Backslashify metacharacters that are still active within
++# double-quoted strings.
++sed_quote_subst='s/\(["`$\\]\)/\\\1/g'
++
++# Same as above, but do not quote variable references.
++double_quote_subst='s/\(["`\\]\)/\\\1/g'
++
++# Sed substitution to delay expansion of an escaped shell variable in a
++# double_quote_subst'ed string.
++delay_variable_subst='s/\\\\\\\\\\\$/\\\\\\$/g'
++
++# Sed substitution to delay expansion of an escaped single quote.
++delay_single_quote_subst='s/'\''/'\'\\\\\\\'\''/g'
++
++# Sed substitution to avoid accidental globbing in evaled expressions
++no_glob_subst='s/\*/\\\*/g'
++
++ECHO='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
++ECHO=$ECHO$ECHO$ECHO$ECHO$ECHO
++ECHO=$ECHO$ECHO$ECHO$ECHO$ECHO$ECHO
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking how to print strings" >&5
++$as_echo_n "checking how to print strings... " >&6; }
++# Test print first, because it will be a builtin if present.
++if test "X`( print -r -- -n ) 2>/dev/null`" = X-n && \
++   test "X`print -r -- $ECHO 2>/dev/null`" = "X$ECHO"; then
++  ECHO='print -r --'
++elif test "X`printf %s $ECHO 2>/dev/null`" = "X$ECHO"; then
++  ECHO='printf %s\n'
++else
++  # Use this function as a fallback that always works.
++  func_fallback_echo ()
++  {
++    eval 'cat <<_LTECHO_EOF
++$1
++_LTECHO_EOF'
++  }
++  ECHO='func_fallback_echo'
++fi
++
++# func_echo_all arg...
++# Invoke $ECHO with all args, space-separated.
++func_echo_all ()
++{
++    $ECHO ""
++}
++
++case "$ECHO" in
++  printf*) { $as_echo "$as_me:${as_lineno-$LINENO}: result: printf" >&5
++$as_echo "printf" >&6; } ;;
++  print*) { $as_echo "$as_me:${as_lineno-$LINENO}: result: print -r" >&5
++$as_echo "print -r" >&6; } ;;
++  *) { $as_echo "$as_me:${as_lineno-$LINENO}: result: cat" >&5
++$as_echo "cat" >&6; } ;;
++esac
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for a sed that does not truncate output" >&5
+ $as_echo_n "checking for a sed that does not truncate output... " >&6; }
+ if ${ac_cv_path_SED+:} false; then :
+@@ -5538,7 +5699,6 @@
+
+
+
+-
+ if test -n "$ac_tool_prefix"; then
+   for ac_prog in ar
+   do
+@@ -12605,8 +12765,8 @@
+ if ac_fn_c_try_link "$LINENO"; then :
+   as_fn_error $? "liblangtag has to be built with -march=i486 or later." "$LINENO" 5
+ else
+-       lt_cv_has_atomic=no
+-       CFLAGS="$_save_cflags"
++  lt_cv_has_atomic=no
++        CFLAGS="$_save_cflags"
+ fi
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+@@ -12838,6 +12998,7 @@
+
+
+
++
+ if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+   # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+@@ -12966,6 +13127,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+   pkg_cv_LIBXML2_CFLAGS=`$PKG_CONFIG --cflags "libxml-2.0 >= $LIBXML2_REQUIRED" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+ fi
+@@ -12982,6 +13144,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+   pkg_cv_LIBXML2_LIBS=`$PKG_CONFIG --libs "libxml-2.0 >= $LIBXML2_REQUIRED" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+ fi
+@@ -13001,9 +13164,9 @@
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        LIBXML2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libxml-2.0 >= $LIBXML2_REQUIRED" 2>&1`
++	        LIBXML2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libxml-2.0 >= $LIBXML2_REQUIRED" 2>&1`
+         else
+-	        LIBXML2_PKG_ERRORS=`$PKG_CONFIG --print-errors "libxml-2.0 >= $LIBXML2_REQUIRED" 2>&1`
++	        LIBXML2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libxml-2.0 >= $LIBXML2_REQUIRED" 2>&1`
+         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBXML2_PKG_ERRORS" >&5
+@@ -13018,7 +13181,6 @@
+ Alternatively, you may set the environment variables LIBXML2_CFLAGS
+ and LIBXML2_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details." "$LINENO" 5
+-
+ elif test $pkg_failed = untried; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+@@ -13034,7 +13196,6 @@
+
+ To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+ See \`config.log' for more details" "$LINENO" 5; }
+-
+ else
+	LIBXML2_CFLAGS=$pkg_cv_LIBXML2_CFLAGS
+	LIBXML2_LIBS=$pkg_cv_LIBXML2_LIBS
+@@ -13057,6 +13218,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+   pkg_cv_GOBJECT_CFLAGS=`$PKG_CONFIG --cflags "gobject-2.0 >= $GOBJECT_REQUIRED" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+ fi
+@@ -13073,6 +13235,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+   pkg_cv_GOBJECT_LIBS=`$PKG_CONFIG --libs "gobject-2.0 >= $GOBJECT_REQUIRED" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+ fi
+@@ -13092,9 +13255,9 @@
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        GOBJECT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "gobject-2.0 >= $GOBJECT_REQUIRED" 2>&1`
++	        GOBJECT_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gobject-2.0 >= $GOBJECT_REQUIRED" 2>&1`
+         else
+-	        GOBJECT_PKG_ERRORS=`$PKG_CONFIG --print-errors "gobject-2.0 >= $GOBJECT_REQUIRED" 2>&1`
++	        GOBJECT_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gobject-2.0 >= $GOBJECT_REQUIRED" 2>&1`
+         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GOBJECT_PKG_ERRORS" >&5
+@@ -13128,6 +13291,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+   pkg_cv_CHECK_CFLAGS=`$PKG_CONFIG --cflags "check >= $CHECK_REQUIRED" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+ fi
+@@ -13144,6 +13308,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+   pkg_cv_CHECK_LIBS=`$PKG_CONFIG --libs "check >= $CHECK_REQUIRED" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+ fi
+@@ -13163,9 +13328,9 @@
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        CHECK_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "check >= $CHECK_REQUIRED" 2>&1`
++	        CHECK_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "check >= $CHECK_REQUIRED" 2>&1`
+         else
+-	        CHECK_PKG_ERRORS=`$PKG_CONFIG --print-errors "check >= $CHECK_REQUIRED" 2>&1`
++	        CHECK_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "check >= $CHECK_REQUIRED" 2>&1`
+         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$CHECK_PKG_ERRORS" >&5
+@@ -13195,6 +13360,10 @@
+ fi
+
+
++case $host_os in
++  cygwin* | mingw*)
++    ;;
++  *)
+
+
+ ac_ext=c
+@@ -13203,10 +13372,6 @@
+ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+-case $host_os in
+-  cygwin* | mingw*)
+-    ;;
+-  *)
+ ax_pthread_ok=no
+
+ # We used to check for pthread.h first, but this fails if pthread.h
+@@ -13588,8 +13753,6 @@
+         ax_pthread_ok=no
+         as_fn_error $? "*** pthread library are required" "$LINENO" 5
+ fi
+-;;
+-esac
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+@@ -13597,6 +13760,8 @@
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
++    ;;
++esac
+
+
+
+@@ -13879,6 +14044,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+   pkg_cv_GTKDOC_DEPS_CFLAGS=`$PKG_CONFIG --cflags "glib-2.0 >= 2.10.0 gobject-2.0  >= 2.10.0" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+ fi
+@@ -13895,6 +14061,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+   pkg_cv_GTKDOC_DEPS_LIBS=`$PKG_CONFIG --libs "glib-2.0 >= 2.10.0 gobject-2.0  >= 2.10.0" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+ fi
+@@ -13914,9 +14081,9 @@
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        GTKDOC_DEPS_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "glib-2.0 >= 2.10.0 gobject-2.0  >= 2.10.0" 2>&1`
++	        GTKDOC_DEPS_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "glib-2.0 >= 2.10.0 gobject-2.0  >= 2.10.0" 2>&1`
+         else
+-	        GTKDOC_DEPS_PKG_ERRORS=`$PKG_CONFIG --print-errors "glib-2.0 >= 2.10.0 gobject-2.0  >= 2.10.0" 2>&1`
++	        GTKDOC_DEPS_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "glib-2.0 >= 2.10.0 gobject-2.0  >= 2.10.0" 2>&1`
+         fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$GTKDOC_DEPS_PKG_ERRORS" >&5
+@@ -13931,7 +14098,6 @@
+ Alternatively, you may set the environment variables GTKDOC_DEPS_CFLAGS
+ and GTKDOC_DEPS_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details." "$LINENO" 5
+-
+ elif test $pkg_failed = untried; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+ $as_echo "no" >&6; }
+@@ -13947,7 +14113,6 @@
+
+ To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+ See \`config.log' for more details" "$LINENO" 5; }
+-
+ else
+	GTKDOC_DEPS_CFLAGS=$pkg_cv_GTKDOC_DEPS_CFLAGS
+	GTKDOC_DEPS_LIBS=$pkg_cv_GTKDOC_DEPS_LIBS
+
+--- build/langtag/configure.ac	2013-03-11 20:36:29.238000000 -0400
++++ build/langtag/configure.ac	2013-03-11 20:38:35.690000000 -0400
+@@ -14,6 +14,7 @@
+ AM_CONFIG_HEADER([config.h])
+ AC_CONFIG_MACRO_DIR([m4macros])
+
++AM_PROG_AR
+ AC_PROG_LIBTOOL
+ AC_PROG_CC
