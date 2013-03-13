@@ -34,6 +34,8 @@ Module gid_Module_Optional_Sdkoo
     ParentID = gid_Module_Optional;
     Default = NO;
     Files = (gid_File_Zip_Odkexamples, gid_File_Zip_Odkcommon,
+        gid_File_Zip_OdkIdl_udkapi,
+        gid_File_Zip_OdkIdl_offapi,
         gid_File_Zip_Odkheaders_sal_generated,
         gid_File_Zip_Odkheaders_sal,
         gid_File_Zip_Odkheaders_salhelper,

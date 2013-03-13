@@ -131,6 +131,20 @@ File gid_File_Zip_Odkcommon
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
 End
 
+File gid_File_Zip_OdkIdl_udkapi
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Basis_Sdk;
+    Name = "udkapi.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+End
+
+File gid_File_Zip_OdkIdl_offapi
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Basis_Sdk;
+    Name = "offapi.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+End
+
 File gid_File_Zip_Odkheaders_sal_generated
     TXT_FILE_BODY;
     Dir = gid_Dir_Basis_Sdk;
