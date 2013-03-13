@@ -30,12 +30,9 @@
 #include <svx/langbox.hxx>
 class SvxFieldData;
 
-/*************************************************************************
-|*
-|* Dialog zum Bearbeiten von Feldbefehlen
-|*
-\************************************************************************/
-
+/**
+ * dialog to adjust field-commands
+ */
 class SdModifyFieldDlg : public ModalDialog
 {
 private:

@@ -29,11 +29,9 @@ class SfxItemSet;
 class SfxObjectShell;
 
 
-/*************************************************************************
-|*
-|* Zeichen-Tab-Dialog
-|*
-\************************************************************************/
+/**
+ * Character-Tab-Dialog
+ */
 class SdCharDlg : public SfxTabDialog
 {
 private:

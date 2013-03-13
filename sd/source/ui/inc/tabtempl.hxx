@@ -28,11 +28,9 @@ class SfxObjectShell;
 class SdrView;
 
 
-/*************************************************************************
-|*
-|* Vorlagen-Tab-Dialog
-|*
-\************************************************************************/
+/**
+ * Template-Tab-Dialog
+ */
 class SdTabTemplateDlg : public SfxStyleDialog
 {
 private:

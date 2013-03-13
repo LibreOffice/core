@@ -26,12 +26,9 @@
 
 class SvxFieldData;
 
-/*************************************************************************
-|*
-|* PopupMenu zum Bearbeiten von Feldbefehlen
-|*
-\************************************************************************/
-
+/**
+ * PopupMenu for editing field-commands
+ */
 class SdFieldPopup : public PopupMenu
 {
 private:

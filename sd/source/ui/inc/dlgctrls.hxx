@@ -28,12 +28,9 @@
 #include "fadedef.h"
 #include "sddllapi.h"
 
-/*************************************************************************
-|*
-|* FadeEffectLB
-|*
-\************************************************************************/
-
+/**
+ * FadeEffectLB
+ */
 struct FadeEffectLBImpl;
 
 class SD_DLLPUBLIC FadeEffectLB : public ListBox

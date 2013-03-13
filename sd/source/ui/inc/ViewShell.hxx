@@ -39,7 +39,7 @@
 
 class SdPage;
 class SvxRuler;
-class SdrOle2Obj;       // fuer die, die Teile von SVDRAW rausdefiniert haben
+class SdrOle2Obj;       // for the ones, who have undefined parts of SVDRAW
 class ScrollBarBox;
 class SdDrawDocument;
 class ScrollBar;
@@ -491,9 +491,9 @@ protected:
     Size        maViewSize;
     Size        maScrBarWH;
 
-    sal_Bool        mbCenterAllowed;          // wird an Fenster weitergegeben
+    sal_Bool        mbCenterAllowed;          // will be forwarded to window
 
-    sal_Bool        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
+    sal_Bool        mbStartShowWithDialog;    // presentation is started by dialog
     sal_uInt16      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
     sal_uInt16      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
 
@@ -527,11 +527,11 @@ protected:
     DECL_LINK( HScrollHdl, ScrollBar * );
     DECL_LINK( VScrollHdl, ScrollBar * );
 
-    // virt. Scroll-Handler, hier koennen sich abgeleitete Klassen einklinken
+    // virtual scroll handler, here, derivative classes can add themselves here
     virtual long VirtHScrollHdl(ScrollBar* pHScroll);
     virtual long VirtVScrollHdl(ScrollBar* pVScroll);
 
-    // virtuelle Funktionen fuer Lineal-Handling
+    // virtual functions ruler handling
     virtual SvxRuler* CreateHRuler(::sd::Window* pWin, sal_Bool bIsFirst);
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
     virtual void UpdateHRuler();

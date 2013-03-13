@@ -27,12 +27,9 @@ class SfxBindings;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Ableitung vom SfxChildWindowContext als "Behaelter" fuer Navigator
-|*
-\************************************************************************/
-
+/**
+ * Derivative of SfxChildWindowContext as "container" for navigator
+ */
 class NavigatorChildWindow
     : public SfxChildWindowContext
 {

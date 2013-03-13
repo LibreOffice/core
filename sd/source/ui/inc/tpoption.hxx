@@ -30,11 +30,9 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/optgrid.hxx>
 
-/*************************************************************************
-|*
-|* Optionen-Tab-Page: Snap
-|*
-\************************************************************************/
+/**
+ * Option-Tab-Page: Snap
+ */
 class SdTpOptionsSnap : public SvxGridTabPage
 {
 public:
@@ -46,11 +44,10 @@ public:
     virtual void Reset( const SfxItemSet & );
 
 };
-/*************************************************************************
-|*
-|* Optionen-Tab-Page: Contents (Inhalte)
-|*
-\************************************************************************/
+
+/**
+ * Option-Tab-Page: Contents
+ */
 class SdTpOptionsContents : public SfxTabPage
 {
 private:
@@ -70,11 +67,9 @@ public:
     virtual void Reset( const SfxItemSet & );
 };
 
-/*************************************************************************
-|*
-|* Optionen-Tab-Page: View
-|*
-\************************************************************************/
+/**
+ * Option-Tab-Page: View
+ */
 class SdModule;
 class SdTpOptionsMisc : public SfxTabPage
 {

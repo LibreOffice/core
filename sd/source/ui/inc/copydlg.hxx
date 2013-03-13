@@ -31,11 +31,9 @@ namespace sd {
 
 class View;
 
-/*************************************************************************
-|*
-|* Dialog zum Einstellen des Bildschirms
-|*
-\************************************************************************/
+/**
+ * dialog to adjust screen
+ */
 class CopyDlg
     : public SfxModalDialog
 {

@@ -28,12 +28,6 @@ class SdrObject;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Rechteck zeichnen
-|*
-\************************************************************************/
-
 class FuConstructCustomShape
     : public FuConstruct
 {
@@ -49,7 +43,7 @@ public:
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
+    virtual void Activate();
 
     void SetAttributes( SdrObject* pObj );
 

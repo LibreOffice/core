@@ -24,12 +24,6 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* FuEditGluePoints
-|*
-\************************************************************************/
-
 class FuEditGluePoints
     : public FuDraw
 {
@@ -47,8 +41,8 @@ public:
     virtual sal_Bool Command(const CommandEvent& rCEvt);
     virtual void ReceiveRequest(SfxRequest& rReq);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 
 protected:
     FuEditGluePoints (

@@ -32,15 +32,14 @@ class Control;
 
 class SD_DLLPUBLIC Assistent
 {
+    /** contains for every page the controls, which have to be
+        connected? correctly */
     std::vector<Control*> maPages[MAX_PAGES];
-        //enthaelt fuer jede Seite die Controls die
-        //korrekt geschaltet werden muessen
 
+    /// number of pages
     int mnPages;
-        //gibt die Anzahl der Seiten an
 
     int mnCurrentPage;
-        //gibt die aktuelle Seite an
 
     boost::scoped_array<bool> mpPageStatus;
 
@@ -52,26 +51,20 @@ public:
     void EnablePage( int nPage );
     void DisablePage( int nPage );
 
+    /// adds a control to the specified page
     bool InsertControl(int nDestPage,Control* pUsedControl);
-        //fuegt einer spezifizierten Seite ein Control hinzu
 
     bool NextPage();
-        //springt zur naechsten Seite
 
     bool PreviousPage();
-        //springt zur vorherigen Seite
 
     bool GotoPage(const int nPageToGo);
-        //springt zu einer angegebenen Seite
 
     bool IsLastPage() const;
-        //gibt an ob die aktuelle Seite die letzte ist
 
     bool IsFirstPage() const;
-        //gibt an ob die aktuelle Seite die erste ist
 
     int  GetCurrentPage() const;
-        //gibt die aktuelle Seite zurueck
 };
 
 

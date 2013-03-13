@@ -28,11 +28,9 @@ namespace sd {
 
 class View;
 
-/*************************************************************************
-|*
-|* Bullet-Tab-Dialog
-|*
-\************************************************************************/
+/**
+ * Bullet-Tab-Dialog
+ */
 class OutlineBulletDlg
     : public SfxTabDialog
 {

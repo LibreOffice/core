@@ -25,11 +25,9 @@
 
 #include "paragr.hrc"
 
-/*************************************************************************
-|*
-|* Absatz-Tab-Dialog
-|*
-\************************************************************************/
+/**
+ * Paragraph-Tab-Dialog
+ */
 class SdParagraphDlg : public SfxTabDialog
 {
 private:

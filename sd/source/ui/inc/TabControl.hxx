@@ -25,11 +25,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* TabControl-Klasse fuer Seitenumschaltung
-|*
-\************************************************************************/
+/**
+ * TabControl-Class for page switch
+ */
 
 class DrawViewShell;
 

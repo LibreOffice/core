@@ -25,7 +25,7 @@
 
 #define IMAGE_MASK_STDCOLOR Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
 
-// Bitmaps fuer Tree-ListBox im Effekte-TabDialog
+// Bitmaps for Tree-ListBox in Effects-TabDialog
 #define BMP_PAGE                RID_APP_START+42
 #define BMP_PAGEOBJS            RID_APP_START+43
 #define BMP_OBJECTS             RID_APP_START+44
@@ -39,7 +39,7 @@
 #define BMP_COLLAPSE            RID_APP_START+52
 #define BMP_GRAPHIC             RID_APP_START+53
 
-// Bimaps fuer ValueSet im EffekteWindow
+// Bitmaps for ValueSet in EffectWindow
 
 // -----------------------------------------------------------------------------
 
@@ -194,9 +194,7 @@
 
 // -----------------------------------------------------------------------------
 
-/*
- *  ResourceIDs fuer Popup-Menues brauchen keinen Dummy-String !!!
- */
+// ResourceIDs for Popup-Menus do not need a dummy string!!!
 
 #define RID_DRAW_TEXTOBJ_POPUP              RID_APP_START+43
 #define RID_DRAW_GEOMOBJ_POPUP              RID_APP_START+44
@@ -262,9 +260,9 @@
 
 
 /*
- *  ResourceIDs fuer Toolboxen nicht aendern, ohne die Strings in
- *  strings.hrc auf die selben IDs zu setzen (eine Toolbox und sein
- *  Konfigurationsstring muessen dieselbe ResourceID haben!).
+ * Do not change ResourceIDs for toolboxes without also changing the strings in
+ * strings.hrc to the same IDs. A toolbox and its configuration string have to
+ * have the same ResourceID!
  */
 
 #define RID_DRAW_SNAPOBJECT_POPUP           RID_APP_START+390

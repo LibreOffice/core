@@ -47,9 +47,9 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    String          aLayoutName;    // Layoutname der aktuell eingefuegten Seite
-    String          aFilterName;    // gewaehlter Dateifilter
-    String          aFile;          // gewaehlter Dateiname
+    String          aLayoutName;    ///< layout name of the currently inserted page
+    String          aFilterName;    ///< chosen file filter
+    String          aFile;          ///< chosen file name
 
     void            InsTextOrRTFinOlMode(SfxMedium* pMedium);
     sal_Bool            InsSDDinOlMode(SfxMedium* pMedium);

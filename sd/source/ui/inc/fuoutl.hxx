@@ -34,12 +34,9 @@ class View;
 class ViewShell;
 class Window;
 
-/*************************************************************************
-|*
-|* Basisklasse der Funktionen des Outlinemodus
-|*
-\************************************************************************/
-
+/**
+ * Base class of functions of outline mode
+ */
 class FuOutline
     : public FuPoor
 {

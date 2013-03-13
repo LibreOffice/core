@@ -37,11 +37,9 @@ namespace sd {
 }
 class SdDrawDocument;
 
-/*************************************************************************
-|*
-|* Effekte-SingleTab-Dialog
-|*
-\************************************************************************/
+/**
+ * Effect-SingleTab-Dialog
+ */
 class SdActionDlg : public SfxNoLayoutSingleTabDialog
 {
 private:
@@ -53,12 +51,9 @@ public:
             ~SdActionDlg() {};
 };
 
-/*************************************************************************
-|*
-|* Interaktions-Tab-Page
-|*
-\************************************************************************/
-
+/**
+ * Interaction-Tab-Page
+ */
 class SdTPAction : public SfxTabPage
 {
 private:

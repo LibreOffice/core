@@ -29,12 +29,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Document-Shell fuer Draw-Dokumente
-|*
-\************************************************************************/
-
+/**
+ * document shell for draw documents
+ */
 class GraphicDocShell
     : public DrawDocShell
 {

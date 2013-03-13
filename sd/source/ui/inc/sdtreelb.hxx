@@ -52,17 +52,14 @@ SV_DECL_REF(DrawDocShell)
 #endif
 }
 
-/*************************************************************************
-|*
-|* Effekte-Tab-Dialog
-|*
-\************************************************************************/
-
+/**
+ * Effect-Tab-Dialog
+ */
 class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
 {
 private:
 
-    static sal_Bool  SD_DLLPRIVATE bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
+    static sal_Bool  SD_DLLPRIVATE bIsInDrag;      ///< static, in the case the navigator is deleted in ExecuteDrag
 
 public:
 
@@ -129,11 +126,11 @@ protected:
     SfxMedium*              mpOwnMedium;
     Image                   maImgOle;
     Image                   maImgGraphic;
-    sal_Bool                    mbLinkableSelected;
-    sal_Bool                    mbDragEnabled;
+    sal_Bool                mbLinkableSelected;
+    sal_Bool                mbDragEnabled;
     String                  maDocName;
-    ::sd::DrawDocShellRef       mxBookmarkDocShRef; // Zum Laden von Bookmarks
-    ::sd::DrawDocShell*         mpDropDocSh;
+    ::sd::DrawDocShellRef   mxBookmarkDocShRef; ///< for the loading of bookmarks
+    ::sd::DrawDocShell*     mpDropDocSh;
     SdNavigatorWin*         mpDropNavWin;
     SfxViewFrame*           mpFrame;
 
@@ -201,13 +198,9 @@ public:
     sal_Bool                    SelectEntry( const String& rName );
     String                  GetSelectEntry();
 
-    /*************************************************************************
-    |*
-    |* Selektierte Eintrage zurueckgeben
-    |* nDepth == 0 -> Seiten
-    |* nDepth == 1 -> Objekte
-    |*
-    \************************************************************************/
+    /** return selected entries
+          nDepth == 0 -> pages
+          nDepth == 1 -> objects  */
 
     std::vector<rtl::OUString> GetSelectEntryList (const sal_uInt16 nDepth) const;
 

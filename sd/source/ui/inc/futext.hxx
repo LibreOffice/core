@@ -31,12 +31,9 @@ class OutlinerView;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Basisklasse fuer Textfunktionen
-|*
-\************************************************************************/
-
+/**
+ * Base class for text functions
+ */
 class FuText
     : public FuConstruct
 {
@@ -55,8 +52,8 @@ public:
     virtual void ReceiveRequest(SfxRequest& rReq);
     virtual void DoubleClick(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();           ///< activates the function
+    virtual void Deactivate();         ///< deactivates the function
 
     void    SetInEditMode(const MouseEvent& rMEvt, sal_Bool bQuickDrag);
     sal_Bool    DeleteDefaultText();

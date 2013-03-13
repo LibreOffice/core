@@ -41,12 +41,9 @@ class View;
 class ViewShell;
 class Window;
 
-/*************************************************************************
-|*
-|* Basisklasse fuer alle Funktionen
-|*
-\************************************************************************/
-
+/**
+ * Base class for all functions
+ */
 class FuPoor : public SimpleReferenceComponent
 {
 public:
@@ -80,8 +77,8 @@ public:
     virtual void Paint(const Rectangle&, ::sd::Window* );
     virtual void ReceiveRequest(SfxRequest& rReq);
 
-    virtual void Activate();        // Function aktivieren
-    virtual void Deactivate();      // Function deaktivieren
+    virtual void Activate();        ///< activates the function
+    virtual void Deactivate();      ///< deactivates the function
 
     void SetWindow(::sd::Window* pWin) { mpWindow = pWin; }
 
@@ -158,30 +155,27 @@ protected:
     sal_uInt16          nSlotId;
     sal_uInt16          nSlotValue;
 
-    Dialog*         pDialog;
+    Dialog*             pDialog;
 
-    Timer           aScrollTimer;           // fuer Autoscrolling
+    Timer               aScrollTimer;           ///< for auto-scrolling
     DECL_LINK( ScrollHdl, void * );
     void ForceScroll(const Point& aPixPos);
 
-    Timer           aDragTimer;             // fuer Drag&Drop
+    Timer               aDragTimer;             ///< for Drag&Drop
     DECL_LINK(DragHdl, void *);
     sal_Bool            bIsInDragMode;
-    Point           aMDPos;                 // Position von MouseButtonDown
+    Point               aMDPos;                 ///< position of MouseButtonDown
 
-    // Flag, um AutoScrolling zu verhindern, bis von ausserhalb in das
-    // Fenster hinein gedragt wurde
+    /// Flag to prevent auto-scrolling until one drags from outside into the window
     sal_Bool            bNoScrollUntilInside;
 
-    // Timer um das scrolling zu verzoegern, wenn aus dem fenster
-    // herausgedraggt wird (ca. 1 sec.)
-    Timer           aDelayToScrollTimer;    // fuer Verzoegerung bis scroll
+    /// timer to delay scrolling (~ 1 sec) when dragging out of the window
+    Timer               aDelayToScrollTimer;
     sal_Bool            bScrollable;
     sal_Bool            bDelayActive;
     sal_Bool            bFirstMouseMove;
 
-    // member to hold state of the mouse buttons for creation
-    // of own MouseEvents (like in ScrollHdl)
+    /// member to hold state of the mouse buttons for creation of own MouseEvents (like in ScrollHdl)
 
 private:
     sal_uInt16      mnCode;

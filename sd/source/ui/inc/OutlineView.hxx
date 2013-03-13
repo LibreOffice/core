@@ -46,9 +46,8 @@ class DrawDocShell;
 
 static const int MAX_OUTLINERVIEWS = 4;
 
-/*************************************************************************
-|*
-|* Ableitung von ::sd::View fuer den Outline-Modus
+/**
+ * Derivative of ::sd::View for the outline mode
 |*
 \************************************************************************/
 
@@ -184,7 +183,7 @@ private:
     std::vector<Paragraph*> maOldParaOrder;
     std::vector<Paragraph*> maSelectedParas;
 
-    sal_uInt16              mnPagesToProcess;    // fuer die Fortschrittsanzeige
+    sal_uInt16              mnPagesToProcess;    // for the progress bar
     sal_uInt16              mnPagesProcessed;
 
     sal_Bool                mbFirstPaint;

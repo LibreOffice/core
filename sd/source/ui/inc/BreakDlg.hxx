@@ -38,11 +38,9 @@ namespace sd {
 class DrawDocShell;
 class DrawView;
 
-/*************************************************************************
-|*
-|* Dialog zum aufbrechen von Metafiles
-|*
-\************************************************************************/
+/**
+ * dialog to break meta files
+ */
 class BreakDlg
     : public SfxModalDialog
 {

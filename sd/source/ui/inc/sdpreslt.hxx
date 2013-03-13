@@ -66,8 +66,8 @@ private:
 
     boost::ptr_vector<String> maLayoutNames;
 
-    String              maName;          // Layoutname oder Dateiname
-    long                mnLayoutCount;  // Anzahl, der im Dokument vorhandenen MasterPages
+    String              maName;          ///< layout name or file name
+    long                mnLayoutCount;   ///< number of master pages in the document
     const String        maStrNone;
 
     void                FillValueSet();

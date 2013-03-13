@@ -25,12 +25,9 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* TabBar fuer die Layerverwaltung
-|*
-\************************************************************************/
-
+/**
+ * TabBar for layer administration
+ */
 class DrawViewShell;
 
 class LayerTabBar

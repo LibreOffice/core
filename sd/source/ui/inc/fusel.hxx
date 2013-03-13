@@ -45,8 +45,8 @@ public:
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Activate function
-    virtual void Deactivate();         // Deactivate function
+    virtual void Activate();
+    virtual void Deactivate();
 
     virtual void SelectionHasChanged();
 

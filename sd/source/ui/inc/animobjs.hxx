@@ -167,12 +167,9 @@ private:
     Fraction        GetScale();
 };
 
-/*************************************************************************
-|*
-|* ControllerItem fuer Animator
-|*
-\************************************************************************/
-
+/**
+ * ControllerItem for Animator
+ */
 class AnimationControllerItem : public SfxControllerItem
 {
 

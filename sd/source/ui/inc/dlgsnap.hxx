@@ -36,12 +36,9 @@ namespace sd {
     class View;
 }
 
-/*************************************************************************
-|*
-|* Dialog zum Einstellen von Fanglinien und -punkten
-|*
-\************************************************************************/
-
+/**
+ * dialog to adjust snap- lines and points
+ */
 class SdSnapLineDlg : public ModalDialog
 {
 private:

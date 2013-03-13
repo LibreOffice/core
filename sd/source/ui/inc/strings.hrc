@@ -133,7 +133,7 @@
 
 #define STR_DRAW_GRAF_TOOLBOX       RID_DRAW_GRAF_TOOLBOX
 
-// IDs fuer Praesentationsfolien
+// IDs for presentation slides
 #define STR_AUTOLAYOUT_NONE                     (RID_APP_START+210)
 #define STR_AUTOLAYOUT_ONLY_TITLE               (RID_APP_START+211)
 #define STR_AUTOLAYOUT_ONLY_TEXT                (RID_APP_START+212)

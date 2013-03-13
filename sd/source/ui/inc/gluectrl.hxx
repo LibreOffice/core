@@ -23,11 +23,9 @@
 #include <vcl/lstbox.hxx>
 #include <sfx2/tbxctrl.hxx>
 
-/*************************************************************************
-|*
-|* GluePointEscDirLB
-|*
-\************************************************************************/
+/**
+ * GluePointEscDirLB
+ */
 class GlueEscDirLB : public ListBox
 {
 private:
@@ -42,12 +40,9 @@ public:
     void         Fill();
 };
 
-/*************************************************************************
-|*
-|* Toolbox-Controller fuer Klebepunkte-Austrittsrichtung
-|*
-\************************************************************************/
-
+/**
+ * Toolbox controller for glue-point escape direction
+ */
 class SdTbxCtlGlueEscDir: public SfxToolBoxControl
 {
 private:

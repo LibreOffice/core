@@ -28,12 +28,9 @@ class SdrObject;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* Basisklasse fuer alle Drawmodul-spezifischen Funktionen
-|*
-\************************************************************************/
-
+/**
+ * Base class for all Draw specific functions
+ */
 class FuDraw
     : public FuPoor
 {

@@ -26,12 +26,9 @@ namespace sd {
 
 class DrawViewShell;
 
-/************************************************************************
-|*
-|* Die SdClientView wird fuer DrawDocShell::Draw() verwendet
-|*
-\************************************************************************/
-
+/**
+ * The SdClientView is used for DrawDocShell::Draw()
+ */
 class ClientView
     : public DrawView
 {
@@ -44,9 +41,8 @@ public:
 
     virtual void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
-    // Wenn die View kein Invalidate() an den Fenstern durchfuehren soll, muss
-    // man diese beiden folgenden Methoden ueberladen und entsprechend anders
-    // reagieren.
+    /* if the view should not do a Invalidate() on the windows, you have to
+       overload the following two methods and do something different */
     virtual void InvalidateOneWin(::Window& rWin);
     virtual void InvalidateOneWin(::Window& rWin, const Rectangle& rRect);
 };

@@ -31,9 +31,9 @@ class SfxItemSet;
 class List;
 class SdCustomShowList;
 
-/*************************************************************************
-|* Dialog zum Festlegen von Optionen und Starten der Praesentation
-\************************************************************************/
+/**
+ * Dialog to define options and to start the presentation
+ */
 class SdStartPresentationDlg : public ModalDialog
 {
 private:

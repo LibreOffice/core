@@ -29,11 +29,9 @@ class SdOptions;
 
 namespace sd {
 
-/*************************************************************************
-|*
-|* View fuer den MDIFrame
-|*
-\************************************************************************/
+/**
+ * View for MDIFrame
+ */
 class SD_DLLPUBLIC FrameView
     : public SdrView
 {
@@ -184,26 +182,26 @@ private:
     SdrHelpLineList maStandardHelpLines;
     SdrHelpLineList maNotesHelpLines;
     SdrHelpLineList maHandoutHelpLines;
-    sal_Bool            mbNoColors;        // Gliederungsmodus
-    sal_Bool            mbNoAttribs;       // Gliederungsmodus
-    Rectangle       maVisArea;         // Sichtbarer Bereich
-    PageKind        mePageKind;        // Seitentyp (Standard, Notizen, Handzettel)
-    sal_uInt16          mnSelectedPage;    // Selektierte Seite
-    PageKind        mePageKindOnLoad;
+    sal_Bool            mbNoColors;        ///< structuring mode
+    sal_Bool            mbNoAttribs;       ///< structuring mode
+    Rectangle           maVisArea;         ///< visible area
+    PageKind            mePageKind;        ///< kind of page (standard, notes, handout)
+    sal_uInt16          mnSelectedPage;
+    PageKind            mePageKindOnLoad;
     sal_uInt16          mnSelectedPageOnLoad;
-    EditMode        meStandardEditMode; // Editmode im Zeichenmodus (Page/MasterPage)
-    EditMode        meNotesEditMode;    // Editmode im Notizen-Modus (Page/MasterPage)
-    EditMode        meHandoutEditMode;  // Editmode im Handzettel-Modus (Page/MasterPage)
-    EditMode        meEditModeOnLoad;
-    sal_Bool            mbLayerMode;       // Layer an/aus
-    sal_Bool            mbQuickEdit;       // QuickEdit an/aus
-    sal_Bool            mbDoubleClickTextEdit; // Textmodus nach Doppelklick
-    sal_Bool            mbClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
-    sal_uInt16          mnPresViewShellId;  // ViewShell aus der die Pres. gestartet wurde
-    sal_uInt16          mnSlotId;          // SlotId, welche initial ausgefuehrt wird
-    sal_uInt16          mnSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
-    sal_uLong           mnDrawMode;        // Drawmode fuer das normale Fenster
-    double          mnTabCtrlPercent;
+    EditMode            meStandardEditMode; ///< edit mode in drawing mode (Page/MasterPage)
+    EditMode            meNotesEditMode;    ///< edit mode in notes mode (Page/MasterPage)
+    EditMode            meHandoutEditMode;  ///< edit mode in handout mode (Page/MasterPage)
+    EditMode            meEditModeOnLoad;
+    sal_Bool            mbLayerMode;        ///< layer on/off
+    sal_Bool            mbQuickEdit;        ///< QuickEdit on/off
+    sal_Bool            mbDoubleClickTextEdit; ///< text mode after double click
+    sal_Bool            mbClickChangeRotation; ///< single click switches between selection/rotation mode
+    sal_uInt16          mnPresViewShellId;  ///< ViewShell from which the presentation was started
+    sal_uInt16          mnSlotId;           ///< SlotId, which was initial mentioned
+    sal_uInt16          mnSlidesPerRow;     ///< slides per row on the slide-desk
+    sal_uLong           mnDrawMode;         ///< draw mode for the normal window
+    double              mnTabCtrlPercent;
     /** Remember whether the navigator shows all shapes (<TRUE/>) or only
         the names ones (<FALSE/>).  Not persistent.
     */

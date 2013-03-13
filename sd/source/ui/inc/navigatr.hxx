@@ -151,12 +151,9 @@ private:
 
 
 
-/*************************************************************************
-|*
-|* ControllerItem fuer Navigator
-|*
-\************************************************************************/
-
+/**
+ * ControllerItem for Navigator
+ */
 class SdNavigatorControllerItem : public SfxControllerItem
 {
 public:
@@ -172,12 +169,9 @@ private:
 
 
 
-/*************************************************************************
-|*
-|* ControllerItem fuer Navigator zum Anzeigen der Seite in der TreeLB
-|*
-\************************************************************************/
-
+/**
+ * ControllerItem for Navigator to show the page in the TreeLB
+ */
 class SdPageNameControllerItem : public SfxControllerItem
 {
 public:

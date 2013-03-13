@@ -25,18 +25,16 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/tabarea.hxx>
 
-#include "prlayout.hxx" // fuer enum PresentationObjects
+#include "prlayout.hxx" // for enum PresentationObjects
 
 
 class SfxObjectShell;
 class SfxStyleSheetBase;
 class SfxStyleSheetBasePool;
 
-/*************************************************************************
-|*
-|* Vorlagen-Tab-Dialog
-|*
-\************************************************************************/
+/**
+ * Template-Tab-Dialog
+ */
 class SdPresLayoutTemplateDlg : public SfxTabDialog
 {
 private:
@@ -62,7 +60,7 @@ private:
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
-    // fuers Maping mit dem neuen SvxNumBulletItem
+    // for mapping with the new SvxNumBulletItem
     SfxItemSet aInputSet;
     SfxItemSet* pOutSet;
     const SfxItemSet* pOrgSet;

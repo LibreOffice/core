@@ -32,7 +32,7 @@ class SdPresentationLayoutUndoAction : public SdUndoAction
     String          aNewLayoutName;
     AutoLayout      eOldAutoLayout;
     AutoLayout      eNewAutoLayout;
-    sal_Bool            bSetAutoLayout;     // sal_True: AutoLayout aendern
+    sal_Bool        bSetAutoLayout;     // sal_True: change AutoLayout
     SdPage*         pPage;
     String          aComment;
 

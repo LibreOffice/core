@@ -28,11 +28,9 @@ class SfxObjectShell;
 
 typedef sal_uInt16 ChangeType;
 
-/*************************************************************************
-|*
-|* Seite einrichten-Tab-Dialog
-|*
-\************************************************************************/
+/**
+ * Page configuration-tab-dialog
+ */
 class SdPageDlg : public SfxTabDialog
 {
 private:

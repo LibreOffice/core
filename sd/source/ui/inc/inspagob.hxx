@@ -52,13 +52,9 @@ public:
                                 const String& rFileName );
                 ~SdInsertPagesObjsDlg();
 
-    /*************************************************************************
-    |*
-    |*  Liefert die Liste zurueck
-    |*  nType == 0 -> Seiten
-    |*  nType == 1 -> Objekte
-    |*
-    \************************************************************************/
+    /** returns the list
+          nType == 0 -> pages
+          nType == 1 -> objects    */
 
     std::vector<rtl::OUString> GetList ( const sal_uInt16 nType ) ;
 

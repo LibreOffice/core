@@ -31,11 +31,9 @@ class View;
 class ViewShell;
 class Window;
 
-/*************************************************************************
-|*
-|* Textfunktionen im Outlinermodus
-|*
-\************************************************************************/
+/**
+ * text functions in outline mode
+ */
 class FuOutlineText
     : public FuOutline
 {

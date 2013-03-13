@@ -31,12 +31,9 @@ class View;
 class ViewShell;
 class Window;
 
-/*************************************************************************
-|*
-|* Bulletfunktionen im Outlinermodus
-|*
-\************************************************************************/
-
+/**
+ * bullet functions in outline mode
+ */
 class FuOutlineBullet
     : public FuPoor
 {

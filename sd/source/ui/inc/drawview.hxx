@@ -28,12 +28,9 @@ namespace sd {
 class DrawDocShell;
 class DrawViewShell;
 
-/*************************************************************************
-|*
-|* Ableitung von ::sd::View; enthaelt auch einen Zeiger auf das Dokument
-|*
-\************************************************************************/
-
+/**
+ * Derivative of ::sd::View; contains also a pointer to the document
+ */
 class DrawView : public ::sd::View
 {
 public:
@@ -71,7 +68,7 @@ private:
     DrawViewShell*  mpDrawViewShell;
     VirtualDevice*  mpVDev;
 
-    sal_uInt16          mnPOCHSmph; // zum blockieren des PageOrderChangedHint
+    sal_uInt16          mnPOCHSmph; ///< for blocking PageOrderChangedHint
 };
 
 } // end of namespace sd

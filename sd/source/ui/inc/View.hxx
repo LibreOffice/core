@@ -157,16 +157,12 @@ public:
 
     virtual SfxStyleSheet*  GetStyleSheet() const;
 
-    /*************************************************************************
-    |*
-    |* Rueckgabeparameter:
-    |* pExchangeList == NULL -> Namen sind alle eindeutig
-    |* bNameOK == sal_False -> Benutzer hat abgebrochen
-    |* nType == 0 -> Seiten
-    |* nType == 1 -> Objekte
-    |* nType == 2 -> Seiten + Objekte
-    |*
-    \************************************************************************/
+    /** return parameter:
+        pExchangeList == NULL -> all names are unique
+        bNameOK == sal_False -> cancel by user
+        nType == 0 -> pages
+        nType == 1 -> objects
+        nType == 2 -> pages and objects    */
 
     bool GetExchangeList( std::vector<rtl::OUString> &rExchangeList,
                           std::vector<rtl::OUString> &rBookmarkList,
