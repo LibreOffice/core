@@ -391,7 +391,6 @@ void PieChart::createShapes()
             if( !bIsVisible )
                 continue;
 
-            double fLogicZ = -1.0;//as defined
             double fDepth  = this->getTransformedDepth() * (n3DRelativeHeight / 100.0);
 
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
