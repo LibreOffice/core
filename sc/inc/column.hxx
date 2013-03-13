@@ -28,6 +28,9 @@
 #include <set>
 #include <vector>
 
+#include <mdds/multi_type_vector.hpp>
+#include <mdds/multi_type_vector_trait.hpp>
+
 namespace editeng { class SvxBorderLine; }
 
 class Fraction;
@@ -79,8 +82,9 @@ struct ColEntry
 
 class ScColumn
 {
-private:
-    ScColumnImpl* mpImpl;
+    typedef mdds::multi_type_vector<mdds::mtv::element_block_func> TextWidthType;
+
+    TextWidthType maTextWidths;
 
     SCCOL           nCol;
     SCTAB           nTab;

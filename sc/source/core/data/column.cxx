@@ -36,8 +36,6 @@
 
 #include <cstring>
 #include <map>
-#include <mdds/multi_type_vector.hpp>
-#include <mdds/multi_type_vector_trait.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace formula;
@@ -55,22 +53,13 @@ inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
 
 }
 
-struct ScColumnImpl
-{
-    typedef mdds::multi_type_vector<mdds::mtv::element_block_func> TextWidthType;
-
-    TextWidthType maTextWidths;
-
-    ScColumnImpl() : maTextWidths(MAXROWCOUNT) {}
-};
-
 ScNeededSizeOptions::ScNeededSizeOptions() :
     pPattern(NULL), bFormula(false), bSkipMerged(true), bGetFont(true), bTotalSize(false)
 {
 }
 
 ScColumn::ScColumn() :
-    mpImpl(new ScColumnImpl),
+    maTextWidths(MAXROWCOUNT),
     nCol( 0 ),
     pAttrArray( NULL ),
     pDocument( NULL )
@@ -862,15 +851,23 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 be performed (but keep broadcasters and notes at old position). */
             maItems[nIndex1].pCell = pCell2;
             maItems[nIndex2].pCell = pCell1;
+            CellStorageModified();
 
             SvtBroadcaster* pBC2 = pCell2->ReleaseBroadcaster();
             pCell1->TakeBroadcaster( pBC2 );
             pCell2->TakeBroadcaster( pBC1 );
 
-            CellStorageModified();
+            // Swap text width values.
+            unsigned short nVal1 = maTextWidths.get<unsigned short>(nRow1);
+            unsigned short nVal2 = maTextWidths.get<unsigned short>(nRow2);
+            maTextWidths.set<unsigned short>(nRow1, nVal2);
+            maTextWidths.set<unsigned short>(nRow2, nVal1);
         }
         else
         {
+            // Only cell 1 exists; cell 2 is empty.  Move cell 1 from to row
+            // 2.
+
             ScNoteCell* pDummyCell = pBC1 ? new ScNoteCell( pBC1 ) : 0;
             if ( pDummyCell )
             {
@@ -885,7 +882,12 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 CellStorageModified();
             }
 
-            // insert ColEntry at new position
+            // Empty text width at the cell 1 position.  For now, we don't
+            // transfer the old value to the cell 2 position since Insert() is
+            // quite complicated.
+            maTextWidths.set_empty(nRow1, nRow1);
+
+            // insert ColEntry at new position.
             Insert( nRow2, pCell1 );
         }
 
@@ -988,11 +990,10 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
 
     if ( pCell2 )
     {
-        // swap
+        // Both cell 1 and cell 2 exist. Swap them.
+
         maItems[nIndex1].pCell = pCell2;
-        CellStorageModified();
         rCol.maItems[nIndex2].pCell = pCell1;
-        rCol.CellStorageModified();
 
         // update references
         SCsCOL dx = rCol.nCol - nCol;
@@ -1010,12 +1011,20 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
             pFmlaCell2->aPos.SetCol( nCol );
             pFmlaCell2->UpdateReference(URM_MOVE, aRange, -dx, 0, 0);
         }
+
+        CellStorageModified();
+        rCol.CellStorageModified();
+
+        // Swap the text widths.
+        unsigned short nVal1 = maTextWidths.get<unsigned short>(nRow);
+        unsigned short nVal2 = rCol.maTextWidths.get<unsigned short>(nRow);
+        maTextWidths.set<unsigned short>(nRow, nVal2);
+        rCol.maTextWidths.set<unsigned short>(nRow, nVal1);
     }
     else
     {
-        // remove
+        // Cell 1 exists but cell 2 isn't.
         maItems.erase(maItems.begin() + nIndex1);
-        CellStorageModified();
 
         // update references
         SCsCOL dx = rCol.nCol - nCol;
@@ -1026,6 +1035,12 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
             pFmlaCell1->aPos.SetCol( rCol.nCol );
             pFmlaCell1->UpdateReference(URM_MOVE, aRange, dx, 0, 0);
         }
+
+        CellStorageModified();
+        maTextWidths.set_empty(nRow, nRow);
+        // We don't transfer the text width to the destination column because
+        // of Insert()'s complexity.
+
         // insert
         rCol.Insert(nRow, pCell1);
     }
@@ -1174,6 +1189,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     pDocument->SetAutoCalc( bOldAutoCalc );
 
     CellStorageModified();
+    maTextWidths.insert_empty(nStartRow, nSize);
 }
 
 
@@ -1571,6 +1587,8 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
 void ScColumn::SwapCol(ScColumn& rCol)
 {
     maItems.swap(rCol.maItems);
+    maTextWidths.swap(rCol.maTextWidths);
+
     CellStorageModified();
     rCol.CellStorageModified();
 
@@ -1651,6 +1669,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
 
         // must iterate backwards, because indexes of following cells become invalid
+        bool bErased = false;
         for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
                 it != aEntries.rend(); ++it)
         {
@@ -1665,11 +1684,16 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             }
             // Erase the slots containing pointers to the dummy cell instance.
             maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos);
-            CellStorageModified();
+            bErased = true;
         }
         pNoteCell->Delete(); // Delete the dummy cell instance.
-    }
 
+        if (bErased)
+        {
+            CellStorageModified();
+            maTextWidths.set_empty(nStartRow, nEndRow);
+        }
+    }
 }
 
 bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -2292,24 +2316,6 @@ bool ScColumn::SearchStyleRange(
     }
     else
         return pAttrArray->SearchStyleRange( rRow, rEndRow, pSearchStyle, bUp, NULL );
-}
-
-sal_uInt16 ScColumn::GetTextWidth(SCROW nRow) const
-{
-    switch (mpImpl->maTextWidths.get_type(nRow))
-    {
-        case mdds::mtv::element_type_ushort:
-            return mpImpl->maTextWidths.get<unsigned short>(nRow);
-        default:
-            ;
-    }
-    return TEXTWIDTH_DIRTY;
-}
-
-void ScColumn::SetTextWidth(SCROW nRow, sal_uInt16 nWidth)
-{
-    // We only use unsigned short type in this container.
-    mpImpl->maTextWidths.set(nRow, static_cast<unsigned short>(nWidth));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

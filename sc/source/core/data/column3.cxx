@@ -58,13 +58,13 @@ using namespace formula;
 
 void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
 {
-    sal_Bool bIsAppended = false;
+    bool bIsAppended = false;
     if ( !maItems.empty() )
     {
         if (maItems.back().nRow < nRow)
         {
-            Append(nRow, pNewCell );
-            bIsAppended = sal_True;
+            Append(nRow, pNewCell);
+            bIsAppended = true;
         }
     }
     if ( !bIsAppended )
@@ -81,7 +81,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
             if ( pOldCell->GetCellType() == CELLTYPE_FORMULA && !pDocument->IsClipOrUndo() )
             {
                 pOldCell->EndListeningTo( pDocument );
-                // If in EndListening NoteCell is destroied in same Col
+                // If in EndListening NoteCell is destroyed in same Col
                 if ( nIndex >= maItems.size() || maItems[nIndex].nRow != nRow )
                     Search(nRow, nIndex);
             }
@@ -96,6 +96,8 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
             maItems[nIndex].nRow  = nRow;
             CellStorageModified();
         }
+
+        maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
     }
     // When we insert from the Clipboard we still have wrong (old) References!
     // First they are rewired in CopyBlockFromClip via UpdateReference and the
@@ -140,6 +142,7 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
     maItems.back().nRow  = nRow;
 
     CellStorageModified();
+    maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
 }
 
 
@@ -152,6 +155,7 @@ void ScColumn::Delete( SCROW nRow )
         ScBaseCell* pCell = maItems[nIndex].pCell;
         ScNoteCell* pNoteCell = new ScNoteCell;
         maItems[nIndex].pCell = pNoteCell; // Dummy for Interpret
+        CellStorageModified();
         pDocument->Broadcast( ScHint( SC_HINT_DYING,
             ScAddress( nCol, nRow, nTab ), pCell ) );
         if ( SvtBroadcaster* pBC = pCell->ReleaseBroadcaster() )
@@ -162,12 +166,13 @@ void ScColumn::Delete( SCROW nRow )
         {
             pNoteCell->Delete();
             maItems.erase( maItems.begin() + nIndex);
+            CellStorageModified();
             // Should we free memory here (delta)? It'll be slower!
         }
         pCell->EndListeningTo( pDocument );
         pCell->Delete();
 
-        CellStorageModified();
+        maTextWidths.set_empty(nRow, nRow);
     }
 }
 
@@ -175,16 +180,18 @@ void ScColumn::Delete( SCROW nRow )
 void ScColumn::DeleteAtIndex( SCSIZE nIndex )
 {
     ScBaseCell* pCell = maItems[nIndex].pCell;
+    SCROW nRow = maItems[nIndex].nRow;
     ScNoteCell* pNoteCell = new ScNoteCell;
     maItems[nIndex].pCell = pNoteCell; // Dummy for Interpret
-    pDocument->Broadcast( ScHint( SC_HINT_DYING,
-        ScAddress( nCol, maItems[nIndex].nRow, nTab ), pCell ) );
+    pDocument->Broadcast(
+        ScHint(SC_HINT_DYING, ScAddress(nCol, nRow, nTab), pCell));
     pNoteCell->Delete();
     maItems.erase(maItems.begin() + nIndex);
     pCell->EndListeningTo( pDocument );
     pCell->Delete();
 
     CellStorageModified();
+    maTextWidths.set_empty(nRow, nRow);
 }
 
 
@@ -195,6 +202,7 @@ void ScColumn::FreeAll()
     maItems.clear();
 
     CellStorageModified();
+    maTextWidths.clear();
 }
 
 
@@ -305,6 +313,9 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         drawing undo. */
 
     ScHint aHint( SC_HINT_DYING, ScAddress( nCol, 0, nTab ), 0 );
+
+    SCROW nStartRow = maItems[nStartIndex].nRow;
+    SCROW nEndRow = maItems[nEndIndex].nRow;
 
     // cache all formula cells, they will be deleted at end of this function
     typedef ::std::vector< ScFormulaCell* > FormulaCellVector;
@@ -491,6 +502,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             nShift += maItems.size() - nStartSegment;
         maItems.erase(maItems.end() - nShift, maItems.end());
         CellStorageModified();
+        maTextWidths.set_empty(nStartRow, nEndRow);
     }
 
     // *** delete all formula cells ***
@@ -1418,6 +1430,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 pOldCell->Delete();
                 maItems[i].pCell = pNewCell; // Replace
                 CellStorageModified();
+                SetTextWidth(nRow, TEXTWIDTH_DIRTY);
 
                 if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )
                 {
@@ -1642,6 +1655,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
                     delete pFormula;
 
                     CellStorageModified();
+                    SetTextWidth(maItems[nIndex].nRow, TEXTWIDTH_DIRTY);
                 }
                 ++nIndex;
             }

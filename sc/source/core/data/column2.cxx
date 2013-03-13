@@ -1386,6 +1386,16 @@ void ScColumn::CellStorageModified()
 {
 }
 
+unsigned short ScColumn::GetTextWidth(SCROW nRow) const
+{
+    return maTextWidths.get<unsigned short>(nRow);
+}
+
+void ScColumn::SetTextWidth(SCROW nRow, unsigned short nWidth)
+{
+    maTextWidths.set(nRow, nWidth);
+}
+
 void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
 {
     // check if we are in a data area
