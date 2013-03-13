@@ -37,6 +37,10 @@ gb_BUILD_TOOLS = \
 		uiex \
 		ulfex \
 		xrmex \
+		$(call gb_Helper_optional_for_host,DESKTOP, \
+			HelpIndexer \
+			HelpLinker \
+		) \
 	,$(call gb_Executable_get_runtime_dependencies,$(executable))) \
 	$(foreach executable, \
 		xsltproc \
