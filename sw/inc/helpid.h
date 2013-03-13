@@ -151,7 +151,6 @@
 #define HID_FRM_EXT                                             "SW_HID_FRM_EXT"
 #define HID_FRM_STD                                             "SW_HID_FRM_STD"
 #define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
-#define HID_FOOTNOTE_PAGE                                       "SW_HID_FOOTNOTE_PAGE"
 #define HID_LAB_LAB                                             "SW_HID_LAB_LAB"
 #define HID_LAB_PRT                                             "SW_HID_LAB_PRT"
 #define HID_ENV_PRT                                             "SW_HID_ENV_PRT"

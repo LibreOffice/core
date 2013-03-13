@@ -40,7 +40,6 @@
 
 #include <globals.hrc>
 #include <misc.hrc>
-#include <pgfnote.hrc>
 
 
 using namespace ::com::sun::star;
@@ -56,7 +55,7 @@ static sal_uInt16 aPageRg[] = {
 ------------------------------------------------------------------------*/
 IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightPage)
 {
-    aMaxHeightEdit.Enable(sal_False);
+    m_pMaxHeightEdit->Enable(sal_False);
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightPage)
@@ -64,8 +63,8 @@ IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightPage)
 
 IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightMetric)
 {
-    aMaxHeightEdit.Enable();
-    aMaxHeightEdit.GrabFocus();
+    m_pMaxHeightEdit->Enable();
+    m_pMaxHeightEdit->GrabFocus();
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightMetric)
@@ -75,21 +74,21 @@ IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightMetric)
 ------------------------------------------------------------------------*/
 IMPL_LINK_NOARG(SwFootNotePage, HeightModify)
 {
-    aMaxHeightEdit.SetMax(aMaxHeightEdit.Normalize(lMaxHeight -
-            (aDistEdit.Denormalize(aDistEdit.GetValue(FUNIT_TWIP)) +
-            aLineDistEdit.Denormalize(aLineDistEdit.GetValue(FUNIT_TWIP)))),
+    m_pMaxHeightEdit->SetMax(m_pMaxHeightEdit->Normalize(lMaxHeight -
+            (m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP)) +
+            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP)))),
             FUNIT_TWIP);
-    if(aMaxHeightEdit.GetValue() < 0)
-        aMaxHeightEdit.SetValue(0);
-    aDistEdit.SetMax(aDistEdit.Normalize(lMaxHeight -
-            (aMaxHeightEdit.Denormalize(aMaxHeightEdit.GetValue(FUNIT_TWIP)) +
-            aLineDistEdit.Denormalize(aLineDistEdit.GetValue(FUNIT_TWIP)))),
+    if(m_pMaxHeightEdit->GetValue() < 0)
+        m_pMaxHeightEdit->SetValue(0);
+    m_pDistEdit->SetMax(m_pDistEdit->Normalize(lMaxHeight -
+            (m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP)) +
+            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP)))),
             FUNIT_TWIP);
-    if(aDistEdit.GetValue() < 0)
-        aDistEdit.SetValue(0);
-    aLineDistEdit.SetMax(aLineDistEdit.Normalize(lMaxHeight -
-            (aMaxHeightEdit.Denormalize(aMaxHeightEdit.GetValue(FUNIT_TWIP)) +
-            aDistEdit.Denormalize(aDistEdit.GetValue(FUNIT_TWIP)))),
+    if(m_pDistEdit->GetValue() < 0)
+        m_pDistEdit->SetValue(0);
+    m_pLineDistEdit->SetMax(m_pLineDistEdit->Normalize(lMaxHeight -
+            (m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP)) +
+            m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP)))),
             FUNIT_TWIP);
     return 0;
 }
@@ -97,57 +96,44 @@ IMPL_LINK_NOARG(SwFootNotePage, HeightModify)
 IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl)
 {
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
-                aLineWidthEdit.GetValue( ),
-                aLineWidthEdit.GetDecimalDigits( ),
-                aLineWidthEdit.GetUnit(), MAP_TWIP ));
-    aLineTypeBox.SetWidth( nVal );
+                m_pLineWidthEdit->GetValue( ),
+                m_pLineWidthEdit->GetDecimalDigits( ),
+                m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
+    m_pLineTypeBox->SetWidth( nVal );
 
     return 0;
 }
 
 IMPL_LINK_NOARG(SwFootNotePage, LineColorSelected_Impl)
 {
-    aLineTypeBox.SetColor( aLineColorBox.GetSelectEntryColor() );
+    m_pLineTypeBox->SetColor( m_pLineColorBox->GetSelectEntryColor() );
     return 0;
 }
 
-// CTOR / DTOR -----------------------------------------------------------
+SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet)
+    : SfxTabPage(pParent, "FootnoteAreaPage",
+        "modules/swriter/ui/footnoteareapage.ui", rSet)
+{
+    get(m_pMaxHeightPageBtn, "maxheightpage");
+    get(m_pMaxHeightBtn, "maxheight");
+    get(m_pMaxHeightEdit, "maxheightsb");
+    get(m_pDistEdit, "spacetotext");
 
-SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
-
-    SfxTabPage(pParent, SW_RES(TP_FOOTNOTE_PAGE), rSet),
-    aPosHeader(this,        SW_RES(FL_FOOTNOTE_SIZE)),
-    aMaxHeightPageBtn(this, SW_RES(RB_MAXHEIGHT_PAGE)),
-    aMaxHeightBtn(this,     SW_RES(RB_MAXHEIGHT)),
-    aMaxHeightEdit(this,    SW_RES(ED_MAXHEIGHT)),
-    aDistLbl(this,          SW_RES(FT_DIST)),
-    aDistEdit(this,         SW_RES(ED_DIST)),
-
-    aLineHeader(this,       SW_RES(FL_LINE)),
-    aLinePosLbl(this,       SW_RES(FT_LINEPOS)),
-    aLinePosBox(this,       SW_RES(DLB_LINEPOS)),
-    aLineTypeLbl(this,      SW_RES(FT_LINETYPE)),
-    aLineTypeBox(this,      SW_RES(DLB_LINETYPE)),
-    aLineWidthLbl(this,     SW_RES(FT_LINEWIDTH)),
-    aLineWidthEdit(this,    SW_RES(ED_LINEWIDTH)),
-    aLineColorLbl(this,     SW_RES(FT_LINECOLOR)),
-    aLineColorBox(this,     SW_RES(DLB_LINECOLOR)),
-    aLineLengthLbl(this,    SW_RES(FT_LINELENGTH)),
-    aLineLengthEdit(this,   SW_RES(ED_LINELENGTH)),
-    aLineDistLbl(this,      SW_RES(FT_LINEDIST)),
-    aLineDistEdit(this,     SW_RES(ED_LINEDIST))
-    {
-    FreeResource();
+    get(m_pLinePosBox, "position");
+    get(m_pLineTypeBox, "style");
+    get(m_pLineWidthEdit, "thickness");
+    get(m_pLineColorBox, "color");
+    get(m_pLineLengthEdit, "length");
+    get(m_pLineDistEdit, "spacingtocontents");
 
     SetExchangeSupport();
     FieldUnit aMetric = ::GetDfltMetric(sal_False);
-    SetMetric( aMaxHeightEdit,  aMetric );
-    SetMetric( aDistEdit,       aMetric );
-    SetMetric( aLineDistEdit,   aMetric );
+    SetMetric(*m_pMaxHeightEdit, aMetric);
+    SetMetric(*m_pDistEdit, aMetric);
+    SetMetric(*m_pLineDistEdit, aMetric);
     MeasurementSystem eSys = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     long nHeightValue = MEASURE_METRIC != eSys ? 1440 : 1134;
-    aMaxHeightEdit.SetValue(aMaxHeightEdit.Normalize(nHeightValue),FUNIT_TWIP);
-    aMaxHeightEdit.SetAccessibleRelationLabeledBy(&aMaxHeightBtn);
+    m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(nHeightValue),FUNIT_TWIP);
 }
 
 SwFootNotePage::~SwFootNotePage()
@@ -180,44 +166,44 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     SwTwips lHeight = pFtnInfo->GetHeight();
     if(lHeight)
     {
-        aMaxHeightEdit.SetValue(aMaxHeightEdit.Normalize(lHeight),FUNIT_TWIP);
-        aMaxHeightBtn.Check(sal_True);
+        m_pMaxHeightEdit->SetValue(m_pMaxHeightEdit->Normalize(lHeight),FUNIT_TWIP);
+        m_pMaxHeightBtn->Check(sal_True);
     }
     else
     {
-        aMaxHeightPageBtn.Check(sal_True);
-        aMaxHeightEdit.Enable(sal_False);
+        m_pMaxHeightPageBtn->Check(sal_True);
+        m_pMaxHeightEdit->Enable(sal_False);
     }
-    aMaxHeightPageBtn.SetClickHdl(LINK(this,SwFootNotePage,HeightPage));
-    aMaxHeightBtn.SetClickHdl(LINK(this,SwFootNotePage,HeightMetric));
+    m_pMaxHeightPageBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightPage));
+    m_pMaxHeightBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightMetric));
     Link aLk = LINK(this, SwFootNotePage, HeightModify);
-    aMaxHeightEdit.SetLoseFocusHdl( aLk );
-    aDistEdit.SetLoseFocusHdl( aLk );
-    aLineDistEdit.SetLoseFocusHdl( aLk );
+    m_pMaxHeightEdit->SetLoseFocusHdl( aLk );
+    m_pDistEdit->SetLoseFocusHdl( aLk );
+    m_pLineDistEdit->SetLoseFocusHdl( aLk );
 
     // Separator width
-    aLineWidthEdit.SetModifyHdl( LINK( this, SwFootNotePage, LineWidthChanged_Impl ) );
+    m_pLineWidthEdit->SetModifyHdl( LINK( this, SwFootNotePage, LineWidthChanged_Impl ) );
 
     sal_Int64 nWidthPt = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
-            sal_Int64( pFtnInfo->GetLineWidth() ), aLineWidthEdit.GetDecimalDigits(),
-            MAP_TWIP, aLineWidthEdit.GetUnit( ) ));
-    aLineWidthEdit.SetValue( nWidthPt );
+            sal_Int64( pFtnInfo->GetLineWidth() ), m_pLineWidthEdit->GetDecimalDigits(),
+            MAP_TWIP, m_pLineWidthEdit->GetUnit( ) ));
+    m_pLineWidthEdit->SetValue( nWidthPt );
 
     // Separator style
-    aLineTypeBox.SetSourceUnit( FUNIT_TWIP );
+    m_pLineTypeBox->SetSourceUnit( FUNIT_TWIP );
 
-    aLineTypeBox.SetNone(SW_RESSTR(SW_STR_NONE));
-    aLineTypeBox.InsertEntry(
+    m_pLineTypeBox->SetNone(SW_RESSTR(SW_STR_NONE));
+    m_pLineTypeBox->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::SOLID),
         table::BorderLineStyle::SOLID );
-    aLineTypeBox.InsertEntry(
+    m_pLineTypeBox->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DOTTED),
         table::BorderLineStyle::DOTTED );
-    aLineTypeBox.InsertEntry(
+    m_pLineTypeBox->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::DASHED),
         table::BorderLineStyle::DASHED );
-    aLineTypeBox.SetWidth( pFtnInfo->GetLineWidth( ) );
-    aLineTypeBox.SelectEntry( pFtnInfo->GetLineStyle() );
+    m_pLineTypeBox->SetWidth( pFtnInfo->GetLineWidth( ) );
+    m_pLineTypeBox->SelectEntry( pFtnInfo->GetLineStyle() );
 
     // Separator Color
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
@@ -236,39 +222,39 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
 
     if ( pColorList.is() )
     {
-        aLineColorBox.SetUpdateMode( sal_False );
+        m_pLineColorBox->SetUpdateMode( sal_False );
 
         for ( long i = 0; i < pColorList->Count(); ++i )
         {
             XColorEntry* pEntry = pColorList->GetColor(i);
-            aLineColorBox.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            m_pLineColorBox->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
-        aLineColorBox.SetUpdateMode( sal_True );
+        m_pLineColorBox->SetUpdateMode( sal_True );
     }
 
     // select color in the list or add it as a user color
-    sal_uInt16 nSelPos = aLineColorBox.GetEntryPos( pFtnInfo->GetLineColor() );
+    sal_uInt16 nSelPos = m_pLineColorBox->GetEntryPos( pFtnInfo->GetLineColor() );
     if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
-        nSelPos = aLineColorBox.InsertEntry( pFtnInfo->GetLineColor(),
+        nSelPos = m_pLineColorBox->InsertEntry( pFtnInfo->GetLineColor(),
                 String( SW_RES( RID_SVXSTR_COLOR_USER ) ) );
 
-    aLineColorBox.SetSelectHdl( LINK( this, SwFootNotePage, LineColorSelected_Impl ) );
-    aLineColorBox.SelectEntryPos( nSelPos );
-    aLineTypeBox.SetColor( pFtnInfo->GetLineColor() );
+    m_pLineColorBox->SetSelectHdl( LINK( this, SwFootNotePage, LineColorSelected_Impl ) );
+    m_pLineColorBox->SelectEntryPos( nSelPos );
+    m_pLineTypeBox->SetColor( pFtnInfo->GetLineColor() );
 
 
     // position
-    aLinePosBox.SelectEntryPos( static_cast< sal_uInt16 >(pFtnInfo->GetAdj()) );
+    m_pLinePosBox->SelectEntryPos( static_cast< sal_uInt16 >(pFtnInfo->GetAdj()) );
 
         // width
     Fraction aTmp( 100, 1 );
     aTmp *= pFtnInfo->GetWidth();
-    aLineLengthEdit.SetValue( static_cast<long>(aTmp) );
+    m_pLineLengthEdit->SetValue( static_cast<long>(aTmp) );
 
         // gap footnote area
-    aDistEdit.SetValue(aDistEdit.Normalize(pFtnInfo->GetTopDist()),FUNIT_TWIP);
-    aLineDistEdit.SetValue(
-        aLineDistEdit.Normalize(pFtnInfo->GetBottomDist()), FUNIT_TWIP);
+    m_pDistEdit->SetValue(m_pDistEdit->Normalize(pFtnInfo->GetTopDist()),FUNIT_TWIP);
+    m_pLineDistEdit->SetValue(
+        m_pLineDistEdit->Normalize(pFtnInfo->GetBottomDist()), FUNIT_TWIP);
     ActivatePage( rSet );
     delete pDefFtnInfo;
 }
@@ -284,36 +270,36 @@ sal_Bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
     SwPageFtnInfo &rFtnInfo = aItem.GetPageFtnInfo();
 
         // footnote area's height
-    if(aMaxHeightBtn.IsChecked())
+    if(m_pMaxHeightBtn->IsChecked())
         rFtnInfo.SetHeight( static_cast< SwTwips >(
-                aMaxHeightEdit.Denormalize(aMaxHeightEdit.GetValue(FUNIT_TWIP))));
+                m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP))));
     else
         rFtnInfo.SetHeight(0);
 
         // gap footnote area
     rFtnInfo.SetTopDist(  static_cast< SwTwips >(
-            aDistEdit.Denormalize(aDistEdit.GetValue(FUNIT_TWIP))));
+            m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP))));
     rFtnInfo.SetBottomDist(  static_cast< SwTwips >(
-            aLineDistEdit.Denormalize(aLineDistEdit.GetValue(FUNIT_TWIP))));
+            m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP))));
 
     // Separator style
-    rFtnInfo.SetLineStyle( ::editeng::SvxBorderStyle( aLineTypeBox.GetSelectEntryStyle() ) );
+    rFtnInfo.SetLineStyle( ::editeng::SvxBorderStyle( m_pLineTypeBox->GetSelectEntryStyle() ) );
 
     // Separator width
     long nWidth = static_cast<long>(MetricField::ConvertDoubleValue(
-                   aLineWidthEdit.GetValue( ),
-                   aLineWidthEdit.GetDecimalDigits( ),
-                   aLineWidthEdit.GetUnit(), MAP_TWIP ));
+                   m_pLineWidthEdit->GetValue( ),
+                   m_pLineWidthEdit->GetDecimalDigits( ),
+                   m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
     rFtnInfo.SetLineWidth( nWidth );
 
     // Separator color
-    rFtnInfo.SetLineColor( aLineColorBox.GetSelectEntryColor() );
+    rFtnInfo.SetLineColor( m_pLineColorBox->GetSelectEntryColor() );
 
         // Position
-    rFtnInfo.SetAdj((SwFtnAdj)aLinePosBox.GetSelectEntryPos());
+    rFtnInfo.SetAdj((SwFtnAdj)m_pLinePosBox->GetSelectEntryPos());
 
         // Breite
-    rFtnInfo.SetWidth(Fraction( static_cast< long >(aLineLengthEdit.GetValue()), 100));
+    rFtnInfo.SetWidth(Fraction( static_cast< long >(m_pLineLengthEdit->GetValue()), 100));
 
     const SfxPoolItem* pOldItem;
     if(0 == (pOldItem = GetOldItem( rSet, FN_PARAM_FTN_INFO )) ||

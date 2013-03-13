@@ -44,26 +44,17 @@ private:
     SwFootNotePage(Window *pParent, const SfxItemSet &rSet);
     ~SwFootNotePage();
 
-    FixedLine       aPosHeader;
-    RadioButton     aMaxHeightPageBtn;
-    RadioButton     aMaxHeightBtn;
-    MetricField     aMaxHeightEdit;
-    FixedText       aDistLbl;
-    MetricField     aDistEdit;
+    RadioButton*    m_pMaxHeightPageBtn;
+    RadioButton*    m_pMaxHeightBtn;
+    MetricField*    m_pMaxHeightEdit;
+    MetricField*    m_pDistEdit;
 
-    FixedLine       aLineHeader;
-    FixedText       aLinePosLbl;
-    ListBox         aLinePosBox;
-    FixedText       aLineTypeLbl;
-    LineListBox     aLineTypeBox;
-    FixedText       aLineWidthLbl;
-    MetricField     aLineWidthEdit;
-    FixedText       aLineColorLbl;
-    ColorListBox    aLineColorBox;
-    FixedText       aLineLengthLbl;
-    MetricField     aLineLengthEdit;
-    FixedText       aLineDistLbl;
-    MetricField     aLineDistEdit;
+    ListBox*        m_pLinePosBox;
+    LineListBox*    m_pLineTypeBox;
+    MetricField*    m_pLineWidthEdit;
+    ColorListBox*   m_pLineColorBox;
+    MetricField*    m_pLineLengthEdit;
+    MetricField*    m_pLineDistEdit;
 
     DECL_LINK(HeightPage, void *);
     DECL_LINK(HeightMetric, void *);

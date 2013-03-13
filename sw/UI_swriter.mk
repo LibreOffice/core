@@ -26,6 +26,7 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/exchangedatabases \
 	sw/uiconfig/swriter/ui/formattablepage \
 	sw/uiconfig/swriter/ui/footnotepage \
+	sw/uiconfig/swriter/ui/footnoteareapage \
 	sw/uiconfig/swriter/ui/indexentry \
 	sw/uiconfig/swriter/ui/insertbookmark \
 	sw/uiconfig/swriter/ui/insertbreak \
