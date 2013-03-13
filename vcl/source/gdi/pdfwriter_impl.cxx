@@ -226,18 +226,6 @@ void doTestCode()
     // enable structure
     aWriter.EndStructureElement();
 
-    // add something to the long paragraph as an afterthought
-    /* PDFWriter::aWriter.GetCurrentStructureElement removed as an unusedcode.easy item:
-    http://cgit.freedesktop.org/libreoffice/core/commit/?id=09279fe3dad24ab58121e4f0a9564d252b64d81a
-
-    sal_Int32 nSaveStruct = aWriter.GetCurrentStructureElement();
-    aWriter.SetCurrentStructureElement( nLongPara );
-    aWriter.DrawText( Rectangle( Point( 4500,4500 ),  Size( 12000, 1000 ) ),
-                      String( RTL_CONSTASCII_USTRINGPARAM( "Add something to the longish paragraph above." ) ),
-                      TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-    aWriter.SetCurrentStructureElement( nSaveStruct );
-    */
-
     aWriter.EndStructureElement();
     aWriter.EndStructureElement();
     aWriter.BeginStructureElement( PDFWriter::Figure );
@@ -304,20 +292,6 @@ void doTestCode()
     aWriter.SetFillColor( Color( COL_LIGHTRED ) );
     aWriter.DrawRect( aTranspRect );
 
-    /*
-    EndTransparencyGroup( const Rectangle& rBoundRect, const Bitmap& rAlphaMask ) is removed as an unusedcode.easy item:
-    http://cgit.freedesktop.org/libreoffice/core/commit/?id=581e7d7057afa87036d84e42c0e0a8a7368e20c7
-
-    aWriter.BeginTransparencyGroup();
-    aWriter.SetFillColor( Color( COL_LIGHTGREEN ) );
-    aWriter.DrawEllipse( aTranspRect );
-    aWriter.SetTextColor( Color( COL_LIGHTBLUE ) );
-    aWriter.DrawText( aTranspRect,
-                      String( RTL_CONSTASCII_USTRINGPARAM( "Some transparent text" ) ),
-                      TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-    aWriter.EndTransparencyGroup( aTranspRect, aTransMask );
-    */
-
     Bitmap aImageBmp( Size( 256, 256 ), 24 );
     pAcc = aImageBmp.AcquireWriteAccess();
     pAcc->SetFillColor( Color( 0xff, 0, 0xff ) );
@@ -353,29 +327,6 @@ void doTestCode()
     Wallpaper aWall( aTransMask );
     aWall.SetStyle( WALLPAPER_TILE );
     aWriter.DrawWallpaper( Rectangle( Point( 4400, 4200 ), Size( 10200, 6300 ) ), aWall );
-
-    /*
-    BeginPattern/EndPattern is removed as an unusedcode.easy item:
-    http://cgit.freedesktop.org/libreoffice/core/commit/?id=581e7d7057afa87036d84e42c0e0a8a7368e20c7
-
-    aWriter.Push( PUSH_ALL );
-    aWriter.BeginPattern(Rectangle(Point(0,0),Size(2000,1000)));
-    aWriter.SetFillColor( Color( COL_RED ) );
-    aWriter.SetLineColor( Color( COL_LIGHTBLUE ) );
-    Point aFillPoints[] = { Point( 1000, 0 ),
-                            Point( 0, 1000 ),
-                            Point( 2000, 1000 ) };
-    aWriter.DrawPolygon( Polygon( 3, aFillPoints ) );
-    aWriter.DrawBitmap( Point( 200, 200 ), Size( 1600, 600 ), aTransMask );
-    aWriter.DrawText( Rectangle( Point( 200, 200 ), Size( 1600, 600 ) ), String( RTL_CONSTASCII_USTRINGPARAM( "Pattern" ) ) );
-    sal_Int32 nPattern = aWriter.EndPattern( SvtGraphicFill::Transform() );
-    aWriter.Pop();
-    Rectangle aPolyRect( Point( 3800, 11200 ), Size( 10200, 6300 ) );
-    aWriter.DrawPolyPolygon( PolyPolygon( Polygon( aPolyRect ) ), nPattern, true );
-    aWriter.SetFillColor();
-    aWriter.SetLineColor( Color( COL_LIGHTBLUE ) );
-    aWriter.DrawRect( aPolyRect );
-    */
 
     aWriter.NewPage( 595, 842 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
