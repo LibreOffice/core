@@ -14,7 +14,6 @@ $(eval $(call gb_Zip_Zip,osxicons,$(SRCDIR)/sysui/desktop))
 $(eval $(call gb_Zip_add_files,osxicons,\
 	$(addprefix icons/,$(osxicons_LIST)) \
 	macosx/Info.plist \
-	macosx/extract_icons_names.pl \
 ))
 
 # vim: set ts=4 sw=4 et:
