@@ -15,19 +15,10 @@ ifeq ($(SYSTEM_LIBLANGTAG),NO)
 $(eval $(call gb_Module_add_targets,liblangtag,\
 	UnpackedTarball_langtag \
 	ExternalPackage_langtag_data \
-	Zip_liblangtag_data \
-))
-
-ifeq ($(COM),MSC)
-$(eval $(call gb_Module_add_targets,liblangtag,\
-	StaticLibrary_langtag \
-))
-else
-$(eval $(call gb_Module_add_targets,liblangtag,\
 	ExternalPackage_langtag \
 	ExternalProject_langtag \
+	Zip_liblangtag_data \
 ))
-endif
 endif
 endif
 
