@@ -618,9 +618,9 @@ AC_ARG_ENABLE(ext-presenter-minimizer,
         [Disable the Presentation Minimizer extension.])
 )
 
-AC_ARG_ENABLE(ext-report-builder,
-    AS_HELP_STRING([--disable-ext-report-builder],
-        [Disable the Report Builder extension.])
+AC_ARG_ENABLE(report-builder,
+    AS_HELP_STRING([--disable-report-builder],
+        [Disable the Report Builder.])
 )
 
 AC_ARG_ENABLE(ext-wiki-publisher,
@@ -9524,7 +9524,7 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
+if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_REPORTBUILDER=YES
     AC_MSG_CHECKING([which jfreereport libs to use])
@@ -9695,7 +9695,6 @@ if test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration"
 else
     AC_MSG_RESULT([no])
     ENABLE_REPORTBUILDER=NO
-    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_REPORTDESIGN"
     SYSTEM_JFREEREPORT=NO
 fi
 AC_SUBST(ENABLE_REPORTBUILDER)

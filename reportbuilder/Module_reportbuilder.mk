@@ -29,11 +29,12 @@ $(eval $(call gb_Module_Module,reportbuilder))
 
 ifeq ($(ENABLE_REPORTBUILDER),YES)
 $(eval $(call gb_Module_add_targets,reportbuilder,\
-	Configuration_reportbuilder \
-	Extension_reportbuilder \
 	Jar_reportbuilder \
-	Package_readme \
 ))
 endif
+
+#	Package_readme \
+#	Configuration_reportbuilder \
+#	Extension_reportbuilder \
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
