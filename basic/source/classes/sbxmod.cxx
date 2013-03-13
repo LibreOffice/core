@@ -1934,7 +1934,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                 }
                 if( !pMeth )    // Let
                 {
-                    OUString aProcName("Property Set " );
+                    OUString aProcName("Property Let " );
                     aProcName += pProcProperty->GetName();
                     pMeth = Find( aProcName, SbxCLASS_METHOD );
                 }
