@@ -1,0 +1,124 @@
+--- a/src/lib/CWGraph.cxx
++++ b/src/lib/CWGraph.cxx
+@@ -55,6 +55,8 @@
+ 
+ #include "CWGraph.hxx"
+ 
++#include "libmwaw_internal.hxx"
++
+ /** Internal: the structures of a CWGraph */
+ namespace CWGraphInternal
+ {
+--- a/src/lib/EDParser.cxx
++++ b/src/lib/EDParser.cxx
+@@ -756,7 +756,7 @@ private:
+ 
+ bool DeflateStruct::sendDuplicated(int num, int depl)
+ {
+-  ssize_t readPos=ssize_t(m_circQueuePos)+ssize_t(depl);
++  int64_t readPos=m_circQueuePos+depl;
+   while (readPos < 0) readPos+=0x2000;
+   while (readPos >= 0x2000) readPos-=0x2000;
+ 
+--- a/src/lib/HMWKGraph.cxx
++++ b/src/lib/HMWKGraph.cxx
+@@ -53,6 +53,8 @@
+ 
+ #include "HMWKGraph.hxx"
+ 
++#include "libmwaw_internal.hxx"
++
+ /** Internal: the structures of a HMWKGraph */
+ namespace HMWKGraphInternal
+ {
+--- a/src/lib/MSW1Parser.cxx
++++ b/src/lib/MSW1Parser.cxx
+@@ -527,7 +527,7 @@ bool MSW1Parser::prepareTextZones()
+     return false;
+   }
+ 
+-  std::map<long,MSW1ParserInternal::PLC>::iterator plcIt = m_state->m_plcMap.begin();
++  std::multimap<long,MSW1ParserInternal::PLC>::iterator plcIt = m_state->m_plcMap.begin();
+   long pos = 0x80, prevMainPos=pos;
+   int actPage = 1;
+   int actType = 0;
+@@ -1216,7 +1216,7 @@ bool MSW1Parser::sendText(MWAWEntry const &textEntry, bool isMain)
+   libmwaw::DebugStream f;
+   f << "TextContent:";
+   int actFId=-1, actRId = -1, actPage=0;
+-  std::map<long,MSW1ParserInternal::PLC>::iterator plcIt = m_state->m_plcMap.begin();
++  std::multimap<long,MSW1ParserInternal::PLC>::iterator plcIt = m_state->m_plcMap.begin();
+   while (plcIt != m_state->m_plcMap.end() && plcIt->first < pos) {
+     MSW1ParserInternal::PLC const &plc = plcIt++->second;
+     if (plc.m_type == MSW1ParserInternal::FONT)
+--- a/src/lib/MSWStruct.cxx
++++ b/src/lib/MSWStruct.cxx
+@@ -1027,7 +1027,7 @@ void Paragraph::insert(Paragraph const &para, bool insertModif)
+       for (size_t j = 0; j < m_tabs->size(); j++) {
+         if (m_tabs.get()[j].m_position < val-1e-4 || m_tabs.get()[j].m_position > val+1e-4)
+           continue;
+-        m_tabs->erase (m_tabs->begin()+ssize_t(j));
++        m_tabs->erase (m_tabs->begin()+j);
+         done = true;
+         break;
+       }
+--- a/src/lib/MWAWPageSpan.cxx
++++ b/src/lib/MWAWPageSpan.cxx
+@@ -236,7 +236,7 @@ void MWAWPageSpan::getPageProperty(WPXPropertyList &propList) const
+ 
+   propList.insert("fo:page-height", getFormLength());
+   propList.insert("fo:page-width", getFormWidth());
+-  if (getFormOrientation() == MWAWPageSpan::MWAWPageSpan::LANDSCAPE)
++  if (getFormOrientation() == LANDSCAPE)
+     propList.insert("style:print-orientation", "landscape");
+   else
+     propList.insert("style:print-orientation", "portrait");
+--- a/src/lib/WNParser.cxx
++++ b/src/lib/WNParser.cxx
+@@ -336,7 +336,7 @@ bool WNParser::createZones()
+   } else if (!readDocEntries())
+     return false;
+ 
+-  std::map<std::string, WNEntry const *>::const_iterator iter;
++  std::multimap<std::string, WNEntry const *>::const_iterator iter;
+ 
+   // the Color map zone
+   iter = m_entryManager->m_typeMap.find("ColMap");
+--- a/src/lib/WNText.cxx
++++ b/src/lib/WNText.cxx
+@@ -589,7 +589,7 @@ WNEntry WNText::getFooter() const
+ ////////////////////////////////////////////////////////////
+ bool WNText::createZones()
+ {
+-  std::map<std::string, WNEntry const *>::const_iterator iter;
++  std::multimap<std::string, WNEntry const *>::const_iterator iter;
+ 
+   iter = m_entryManager->m_typeMap.find("FontZone");
+   if (iter != m_entryManager->m_typeMap.end())
+--- a/src/lib/ZWText.cxx
++++ b/src/lib/ZWText.cxx
+@@ -433,7 +433,7 @@ bool ZWText::sendText(ZWTextInternal::Section const &zone, MWAWEntry const &entr
+ 
+   ZWTextInternal::Font actFont;
+   actFont.m_font=MWAWFont(3,12);
+-  std::multimap<long, ZWTextInternal::Font>::const_iterator fIt=
++  std::map<long, ZWTextInternal::Font>::const_iterator fIt=
+     zone.m_idFontMap.begin();
+   long cPos = pos-zone.m_pos.begin();
+   while (fIt != zone.m_idFontMap.end() && fIt->first<cPos)
+--- a/src/lib/libmwaw_internal.hxx
++++ b/src/lib/libmwaw_internal.hxx
+@@ -41,8 +41,13 @@
+ #include <map>
+ #include <ostream>
+ #include <string>
++#include <math.h>
+ #include <vector>
+ 
++#ifndef M_PI
++#define M_PI 3.14159265358979323846
++#endif
++
+ #include <libwpd-stream/libwpd-stream.h>
+ #include <libwpd/libwpd.h>
+ 
