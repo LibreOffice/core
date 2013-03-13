@@ -26,38 +26,29 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::ObjectIndex
 /** specifies service of object indexes within a document.@see com::sun::star::text::BaseIndex
  */
 published service ObjectIndex
 {
-    // DocMerge: empty anyway
     service  com::sun::star::text::BaseIndex;
 
     /** Determines if star office math objects are included in the office.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromStarMath;//objects
     /** Determines if star office image objects are included in the office.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromStarImage;//objects
     /** Determines if star office chart objects are included in the office.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromStarChart;//objects
     /** Determines if star office calc objects are included in the office.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromStarCalc;//objects
     /** Determines if star office draw objects are included in the office.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromStarDraw;//objects
     /** Determines if external embedded objects are included in the office.
      */
-    // DocMerge: empty anyway
     [optional, property] boolean CreateFromOtherEmbeddedObjects;//objects
 };
 

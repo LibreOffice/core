@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module lang {
 
-
-// DocMerge from xml: exception com::sun::star::lang::ListenerExistException
 /** is thrown by the <member>XConnectionPoint::advise</member> method
     to indicate that there is only one listener allowed.
 

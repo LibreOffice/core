@@ -29,8 +29,6 @@
 
  module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: service com::sun::star::io::Pump
 /** the implementation of a data source and a data sink.
     <p>A thread will be created that reads from the input stream and writes
     the data to the connected output stream. Data will not be buffered by

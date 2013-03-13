@@ -24,8 +24,6 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: exception com::sun::star::io::ConnectException
 /** Signals that an error occurred while attempting to connect a
     socket to a remote address and port. Typically, the connection
     was refused remotely (e.g., no process is listening on the remote

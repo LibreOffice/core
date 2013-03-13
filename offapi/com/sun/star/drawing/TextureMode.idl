@@ -23,27 +23,19 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::TextureMode
 /** The <type>TextureMode</type> defines in which way the texture color data
     replaces the object color data.
  */
 published enum TextureMode
 {
-
-    // DocMerge from xml: value com::sun::star::drawing::TextureMode::REPLACE
     /** This is the standard mode.
      */
     REPLACE,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::TextureMode::MODULATE
     /** This mixes up colors in a way defined by the texture bitmap.
      */
     MODULATE,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::TextureMode::BLEND
     /** This mixes both data sources in a fixed ratio.
      */
     BLEND

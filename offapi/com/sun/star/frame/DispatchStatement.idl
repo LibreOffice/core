@@ -24,15 +24,12 @@
 
  module com {  module sun {  module star {  module frame {
 
-
-// DocMerge from xml: struct com::sun::star::frame::DispatchStatement
 /** represents a dispatch statement from a recorded macro
 
     @since OOo 1.1.2
  */
 published struct DispatchStatement
 {
-    // DocMerge from xml: field com::sun::star::frame::DispatchStatement::aCommand
         /** specifies the dispatch command
 
             <p>
@@ -42,8 +39,6 @@ published struct DispatchStatement
     string aCommand;
 
 
-
-        // DocMerge from xml: field com::sun::star::frame::DispatchStatement::aTarget
         /** specifies the frame target
 
             <p>
@@ -52,8 +47,6 @@ published struct DispatchStatement
          */
         string aTarget;
 
-
-        // DocMerge from xml: field com::sun::star::frame::DispatchStatement::aArgs
         /** specifies the dispatch command arguments
 
             <p>
@@ -62,8 +55,6 @@ published struct DispatchStatement
          */
         sequence < com::sun::star::beans::PropertyValue > aArgs;
 
-
-        // DocMerge from xml: field com::sun::star::frame::DispatchStatement::nFlags
         /** specifies the optional search flags
             <p>
             That means the <var>SearchFlags</var> parameter of a corresponding <member>XDispatchProvider::queryDispatch()</member> request.
@@ -71,8 +62,6 @@ published struct DispatchStatement
          */
         long nFlags;
 
-
-        // DocMerge from xml: field com::sun::star::frame::DispatchStatement::bIsComment
         /** specifies if this statement should be recorded as commented out or not
 
             @see XDispatchRecorder::recordDispatchAsComment()

@@ -23,19 +23,14 @@
 
  module com {  module sun {  module star {  module style {
 
-
-// DocMerge from xml: struct com::sun::star::style::LineSpacing
 /** This structure is used to specify the height of a text line.@see LineSpacingMode
  */
 published struct LineSpacing
 {
-    // DocMerge from xml: field com::sun::star::style::LineSpacing::Mode
     /** This value specifies the way the height is specified.
      */
     short Mode;
 
-
-    // DocMerge from xml: field com::sun::star::style::LineSpacing::Height
     /** This value specifies the height in regard to <var>Mode</var>.
      */
     short Height;

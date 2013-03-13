@@ -23,21 +23,15 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::ShadeMode
 /** The <type>ShadeMode</type> determines the quality of displaying the object.
  */
 published enum ShadeMode
 {
-
-    // DocMerge from xml: value com::sun::star::drawing::ShadeMode::FLAT
     /** With <const>FLAT</const> shading, the faces of the object are
         rendered in a solid color.
      */
     FLAT,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::ShadeMode::PHONG
     /** With <const>PHONG</const> shading, the normal itself is interpolated
         to get more realistic colors and light reflections.
      */
@@ -49,8 +43,6 @@ published enum ShadeMode
      */
     SMOOTH,
 
-
-    // DocMerge: empty anyway
     /** <const>DRAFT</const> is a special mode which uses a BSP tree and
                 triangle subdivision for displaying.
      */

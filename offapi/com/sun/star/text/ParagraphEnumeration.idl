@@ -25,16 +25,12 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::ParagraphEnumeration
 /** provides access to the paragraphs of an <type>XText</type>
     interface.
  */
 published service ParagraphEnumeration
 {
 
-
-    // DocMerge from xml: service com::sun::star::text::ParagraphEnumeration: interface com::sun::star::container::XEnumeration
     /** provides access to the paragraph objects.
      */
     interface com::sun::star::container::XEnumeration;

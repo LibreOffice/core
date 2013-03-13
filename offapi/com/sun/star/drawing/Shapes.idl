@@ -25,13 +25,10 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: service com::sun::star::drawing::Shapes
 /** This service is for a generic collection of shapes.
  */
 published service Shapes
 {
-    // DocMerge: empty anyway
     interface com::sun::star::drawing::XShapes;
 
 };

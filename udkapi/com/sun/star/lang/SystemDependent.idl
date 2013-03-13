@@ -23,8 +23,6 @@
 
 module com {  module sun {  module star {  module lang {
 
-
-// DocMerge from idl: constants com::sun::star::lang::SystemDependent
 /** These constants are used to specify systems which depend on return values.
 
     <p> You should avoid system-dependent methods if possible.
@@ -48,24 +46,18 @@ module com {  module sun {  module star {  module lang {
  */
 published constants SystemDependent
 {
-
-    // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_WIN32
     /** The called interface method returns a value specified for Windows.
 
         <p>These are Windows XP or higher. </p>
      */
     const short SYSTEM_WIN32 = 1;
 
-
-    // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_WIN16
     /** The called interface method returns a value specified for 16-bit Windows.
 
         <p>This is Windows 3.11. </p>
      */
     const short SYSTEM_WIN16 = 2;
 
-
-    // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_JAVA
     /** The called interface method returns a value specified for Java.
 
         <p>These are <em>JRE 1.1</em>, <em>JRE 1.2</em>, <em>JDK 1.1</em>,
@@ -77,31 +69,21 @@ published constants SystemDependent
      */
     const short SYSTEM_JAVA = 3;
 
-
-    // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_OS2
     /** The called interface method returns a value specified for <em>OS/2</em>.
      */
     const short SYSTEM_OS2 = 4;
-
-    // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_MAC
     /** The called interface method returns a value specified for <em>Mac OS X</em>.
      */
     const short SYSTEM_MAC = 5;
 
-
-    // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW
     /** The called interface method returns a value specified for the <em>X Window System</em>.
      */
     const short SYSTEM_XWINDOW = 6;
 
-
-    // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_IOS
     /** The called interface method returns a value specified for <em>iOS</em>.
      */
     const short SYSTEM_IOS = 7;
 
-
-    // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_ANDROID
     /** The called interface method returns a value specified for <em>Android</em>.
      */
     const short SYSTEM_ANDROID = 8;

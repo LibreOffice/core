@@ -26,13 +26,10 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::AutoTextContainer
 /** provides access to groups of text blocks.
  */
 published service AutoTextContainer
 {
-    // DocMerge: empty anyway
     interface com::sun::star::text::XAutoTextContainer;
 
     [optional] interface com::sun::star::container::XIndexAccess;

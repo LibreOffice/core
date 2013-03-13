@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module form {
 
-
-// DocMerge from xml: struct com::sun::star::form::ErrorEvent
 /** occurs in case of fired database exceptions triggered by
     a database form.
     <p>Please do <em><b>not</b></em> use anymore, this struct is deprecated.

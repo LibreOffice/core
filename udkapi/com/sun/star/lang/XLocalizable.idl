@@ -26,20 +26,14 @@
 
 module com {  module sun {  module star {  module lang {
 
-
-// DocMerge from xml: interface com::sun::star::lang::XLocalizable
 /** makes it possible to set a <type>Locale</type> to be used by the object.
  */
 published interface XLocalizable: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::lang::XLocalizable::setLocale
     /** sets the locale to be used by this object.
      */
     void setLocale( [in] Locale eLocale );
 
-
-    // DocMerge from idl: method com::sun::star::lang::XLocalizable::getLocale
     /** @returns
                 the locale, which is used by this object.
      */

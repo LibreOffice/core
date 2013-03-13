@@ -29,15 +29,11 @@
 
  module com {  module sun {  module star {  module registry {
 
-
-// DocMerge from xml: interface com::sun::star::registry::XImplementationRegistration
 /** offers a registry for implementation objects and provides information
     about the registered implementations.
  */
 published interface XImplementationRegistration: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::registry::XImplementationRegistration::registerImplementation
     /** registers a component which provides one or more implementations.
 
         @param aLocation
@@ -53,8 +49,6 @@ published interface XImplementationRegistration: com::sun::star::uno::XInterface
              [in] com::sun::star::registry::XSimpleRegistry xReg )
             raises( com::sun::star::registry::CannotRegisterImplementationException );
 
-
-    // DocMerge from xml: method com::sun::star::registry::XImplementationRegistration::revokeImplementation
     /** revokes a component and all their provided implementations from the registry.
 
         @param aLocation
@@ -69,8 +63,6 @@ published interface XImplementationRegistration: com::sun::star::uno::XInterface
              [in] com::sun::star::registry::XSimpleRegistry xReg );
 
     // DOCUMENTATION CHANGED FOR XImplementationRegistration::getImplementations
-
-    // DocMerge from idl: method com::sun::star::registry::XImplementationRegistration::getImplementations
     /** @returns
             the names of the implementations registered by the url location.
 
@@ -86,8 +78,6 @@ published interface XImplementationRegistration: com::sun::star::uno::XInterface
              [in] string aLocation );
 
     // DOCUMENTATION CHANGED FOR XImplementationRegistration::checkInstantiation
-
-    // DocMerge from idl: method com::sun::star::registry::XImplementationRegistration::checkInstantiation
     /** @returns
              a sequence with names of the missing services to create an instance of this implementation.
 

@@ -26,15 +26,11 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::Bookmarks
 /** This service specifies a collection of <type>Bookmark</type>s.
  */
 published service Bookmarks
 {
 
-
-    // DocMerge from xml: service com::sun::star::text::Bookmarks: interface com::sun::star::container::XNameAccess
     /** makes it possible to access the bookmarks by their names.
 
                 <p>All contents support the service <type>Bookmark</type>.

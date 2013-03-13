@@ -23,43 +23,31 @@
 
  module com {  module sun {  module star {  module style {
 
-
-// DocMerge from xml: enum com::sun::star::style::TabAlign
 /** These enumeration values are used to specify the alignment of
     the text range delimited by a tabulator.
  */
 published enum TabAlign
 {
-
-    // DocMerge from xml: value com::sun::star::style::TabAlign::LEFT
     /** The text range is left-aligned between the previous tabulator
         (or the left border, if none) and this tabulator.
      */
     LEFT,
 
-
-    // DocMerge from xml: value com::sun::star::style::TabAlign::CENTER
     /** The text range is centered between the previous tabulator
         (or the left border, if none) and this tabulator.
      */
     CENTER,
 
-
-    // DocMerge from xml: value com::sun::star::style::TabAlign::RIGHT
     /** The text range is right-aligned between the previous tabulator
         (or the left border, if none) and this tabulator.
      */
     RIGHT,
 
-
-    // DocMerge from xml: value com::sun::star::style::TabAlign::DECIMAL
     /** The decimal point of the text range to the left of this
         tabulator is aligned to the position of this tabulator.
      */
     DECIMAL,
 
-
-    // DocMerge from xml: value com::sun::star::style::TabAlign::DEFAULT
     /** The default alignment for tabulators is applied.
      */
     DEFAULT

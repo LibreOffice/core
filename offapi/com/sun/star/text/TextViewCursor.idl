@@ -26,18 +26,13 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::TextViewCursor
 /** A <type>TextViewCursor</type> is a <type>TextRange</type> which can travel
     within a view of a <type>Text</type> object.
     @see TextDocumentView
  */
 published service TextViewCursor
 {
-    // DocMerge: empty anyway
     service com::sun::star::text::TextLayoutCursor;
-
-    // DocMerge: empty anyway
     interface com::sun::star::view::XScreenCursor;
 
 };

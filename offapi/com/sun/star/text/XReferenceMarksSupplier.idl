@@ -27,8 +27,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XReferenceMarksSupplier
 /** provides access to the reference marks within this context (i.e. document).
 
 
@@ -40,8 +38,6 @@
  */
 published interface XReferenceMarksSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::text::XReferenceMarksSupplier::getReferenceMarks
     /** @returns
                 the collection of reference marks.
      */

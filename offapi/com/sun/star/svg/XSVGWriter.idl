@@ -29,7 +29,6 @@
 */
 published interface XSVGWriter: com::sun::star::uno::XInterface
 {
-    // DocMerge: empty anyway
     void        write(  [in] com::sun::star::xml::sax::XDocumentHandler aHandler,
                         [in] sequence< byte > aMtf );
 };

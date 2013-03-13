@@ -27,15 +27,11 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XChapterNumberingSupplier
 /** contains the settings of the chapter numbering in a text
     document.
  */
 published interface XChapterNumberingSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::text::XChapterNumberingSupplier::getChapterNumberingRules
     /** @returns
                 the collection of numbering rules for this document.
 

@@ -26,8 +26,6 @@
  module com {  module sun {  module star {  module text {
 
  published interface XTextContent;
-
-// DocMerge from xml: interface com::sun::star::text::XRelativeTextContentRemove
 /** makes it possible to remove text contents before or
     after existing text contents.
 
@@ -41,8 +39,6 @@
  */
 published interface XRelativeTextContentRemove: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::text::XRelativeTextContentRemove::removeTextContentBefore
     /** removes the text content that precedes the argument.
 
         <p> This is helpful to remove empty paragraphs before text tables. </p>
@@ -50,8 +46,6 @@ published interface XRelativeTextContentRemove: com::sun::star::uno::XInterface
     void removeTextContentBefore(
             [in] XTextContent xSuccessor )
         raises( com::sun::star::lang::IllegalArgumentException );
-
-    // DocMerge from xml: method com::sun::star::text::XRelativeTextContentRemove::removeTextContentAfter
     /** removes the text content that follows the argument.
 
         <p> This is helpful to remove empty paragraphs following text tables especially in

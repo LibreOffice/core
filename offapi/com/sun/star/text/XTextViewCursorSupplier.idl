@@ -27,8 +27,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XTextViewCursorSupplier
 /** supplies access to the cursor in the view.
 
 
@@ -40,8 +38,6 @@
  */
 published interface XTextViewCursorSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::text::XTextViewCursorSupplier::getViewCursor
     /** @returns
                 the cursor of the document view.
      */

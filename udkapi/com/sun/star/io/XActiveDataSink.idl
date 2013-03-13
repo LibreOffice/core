@@ -27,8 +27,6 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: interface com::sun::star::io::XActiveDataSink
 /** makes it possible to read the corresponding object from an input stream.
 
     <p>If you want to allow control from outside, also implement the
@@ -36,8 +34,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XActiveDataSink: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::io::XActiveDataSink::setInputStream
     /** plugs the input stream.
 
         <p>If <type>XConnectable</type> is also implemented, this
@@ -46,8 +42,6 @@ published interface XActiveDataSink: com::sun::star::uno::XInterface
      */
     void setInputStream( [in] com::sun::star::io::XInputStream aStream );
 
-
-    // DocMerge from idl: method com::sun::star::io::XActiveDataSink::getInputStream
     /** @returns
                 the plugged stream.
      */

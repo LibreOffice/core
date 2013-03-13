@@ -36,8 +36,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::Paragraph
 /** is a piece of text which can take its own paragraph-specific
     attributes (technically, properties).
  */
@@ -64,12 +62,8 @@ published service Paragraph
     /** This service is present when the paragraph object refers
         to a text table */
     [optional] service com::sun::star::text::TextTable;
-
-    // DocMerge: empty anyway
     service com::sun::star::text::TextContent;
 
-
-    // DocMerge from xml: service com::sun::star::text::Paragraph: interface com::sun::star::beans::XPropertySet
     /** This interface gives access to the properties of the paragraph
                 itself (or its style sheet). So this interface may show
                 property values which are not valid for any of the
@@ -78,16 +72,12 @@ published service Paragraph
      */
     interface com::sun::star::beans::XPropertySet;
 
-
-    // DocMerge from xml: service com::sun::star::text::Paragraph: interface com::sun::star::beans::XPropertyState
     /** This interface gives access to the state of the property values
                 in these properties. So, it is possible to determine if a specific
                 properties value is defined in the paragraph or its style sheet.
      */
     interface com::sun::star::beans::XPropertyState;
 
-
-    // DocMerge from xml: service com::sun::star::text::Paragraph: interface com::sun::star::container::XEnumerationAccess
     /** This interface enumerates the text portions of this paragraph.
 
                 <p>A text portion is defined as the largest possible <type>TextRange</type>

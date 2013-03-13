@@ -27,22 +27,16 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::TextContentCollection
 /** Objects of this type are collections of text contents of the same type.@see Text
  */
 published service TextContentCollection
 {
 
-
-    // DocMerge from xml: service com::sun::star::text::TextContentCollection: interface com::sun::star::container::XNameAccess
     /** Each text content is accessible by its name, which is unique
                 within the collection.
      */
     interface com::sun::star::container::XNameAccess;
 
-
-    // DocMerge from xml: service com::sun::star::text::TextContentCollection: interface com::sun::star::container::XContainer
     /** The insertion and removal of text contents of this type are
                 broadcasted via this interface.
      */

@@ -23,30 +23,22 @@
 
  module com {  module sun {  module star {  module style {
 
-
-// DocMerge from xml: enum com::sun::star::style::VerticalAlignment
 /** specify the horizontal alignment of
     an object within a container object.
  */
 published enum VerticalAlignment
 {
     // DOCUMENTATION OMITTING FOR VerticalAlignment::   TOP,
-
-    // DocMerge from xml: value com::sun::star::style::VerticalAlignment::TOP
     /** set the vertical alignment to the center between the top and bottom margins from the container object.
      */
     TOP,
 
     // DOCUMENTATION OMITTING FOR VerticalAlignment::   MIDDLE,
-
-    // DocMerge from xml: value com::sun::star::style::VerticalAlignment::MIDDLE
     /** set the vertical alignment to the top margin from the container object.
      */
     MIDDLE,
 
     // DOCUMENTATION OMITTING FOR VerticalAlignment::   BOTTOM
-
-    // DocMerge from xml: value com::sun::star::style::VerticalAlignment::BOTTOM
     /** set the vertical alignment to the bottom margin from the container object.
      */
     BOTTOM

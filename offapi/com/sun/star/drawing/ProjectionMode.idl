@@ -23,23 +23,17 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::ProjectionMode
 /** defines whether the 3D objects are to be
     drawn in perspective or parallel projection.
  */
 published enum ProjectionMode
 {
     // DOCUMENTATION OMITTED FOR ProjectionMode::   PARALLEL,
-
-    // DocMerge from xml: value com::sun::star::drawing::ProjectionMode::PARALLEL
     /** the 3D objects are drawn in the parallel projection.
      */
     PARALLEL,
 
     // DOCUMENTATION OMITTED FOR ProjectionMode::   PERSPECTIVE
-
-    // DocMerge from xml: value com::sun::star::drawing::ProjectionMode::PERSPECTIVE
     /** the 3D objects are drawn in the perspective projection.
      */
     PERSPECTIVE

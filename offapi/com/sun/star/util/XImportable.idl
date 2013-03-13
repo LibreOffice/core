@@ -27,21 +27,15 @@
 
  module com {  module sun {  module star {  module util {
 
-
-// DocMerge from xml: interface com::sun::star::util::XImportable
 /** makes it possible to import files into the object.
  */
 published interface XImportable: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::util::XImportable::createImportDescriptor
     /** @returns
                     a descriptor which contains the arguments for an import.
      */
     sequence<com::sun::star::beans::PropertyValue> createImportDescriptor( [in] boolean bEmpty );
 
-
-    // DocMerge from xml: method com::sun::star::util::XImportable::doImport
     /** imports data from an external database.
      */
     void doImport( [in] sequence<com::sun::star::beans::PropertyValue> aDescriptor );

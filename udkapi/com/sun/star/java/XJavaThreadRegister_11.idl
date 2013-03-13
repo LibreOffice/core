@@ -25,8 +25,6 @@
 
 module com {  module sun {  module star {  module java {
 
-
-// DocMerge from xml: interface com::sun::star::java::XJavaThreadRegister_11
 /** must be implemented by the user of the XJavaThreadRegister_11.
 
     @incomplete
@@ -34,14 +32,10 @@ module com {  module sun {  module star {  module java {
  */
 published interface XJavaThreadRegister_11: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::java::XJavaThreadRegister_11::isThreadAttached
     /** returns <true/> if the current thread is already attached to the VM otherwise <false/>.
      */
     boolean isThreadAttached();
 
-
-    // DocMerge from xml: method com::sun::star::java::XJavaThreadRegister_11::registerThread
     /** registers the current thread.
 
         <p>This method should be called every time a JNI function is called from Java. </p>
@@ -49,8 +43,6 @@ published interface XJavaThreadRegister_11: com::sun::star::uno::XInterface
     void registerThread();
 
 
-
-    // DocMerge from xml: method com::sun::star::java::XJavaThreadRegister_11::revokeThread
     /** revokes the current thread from the list of registerd threads.
 
         <p>This method should be called at the end of every JNI call from Java. </p>

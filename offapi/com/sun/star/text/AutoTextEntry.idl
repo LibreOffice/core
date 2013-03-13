@@ -26,8 +26,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::AutoTextEntry
 /** provides access to a text block in a group of
     an <type>AutoTextContainer</type>.
         @see com::sun::star::text::AutoTextContainer
@@ -35,11 +33,8 @@
  */
 published service AutoTextEntry
 {
-    // DocMerge: empty anyway
     interface com::sun::star::text::XAutoTextEntry;
 
-
-    // DocMerge from xml: service com::sun::star::text::AutoTextEntry: interface com::sun::star::text::XText
     /** provides access to the <type>Text</type> of this entry.
      */
     interface com::sun::star::text::XText;

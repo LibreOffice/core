@@ -39,14 +39,10 @@
  */
 published interface XAdapter: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::uno::XAdapter::queryAdapted
     /** queries the adapted object if it is alive.
      */
     com::sun::star::uno::XInterface queryAdapted();
 
-
-    // DocMerge from xml: method com::sun::star::uno::XAdapter::addReference
     /** adds a reference to the adapter.
 
 
@@ -57,8 +53,6 @@ published interface XAdapter: com::sun::star::uno::XInterface
      */
     void addReference( [in] com::sun::star::uno::XReference xRef );
 
-
-    // DocMerge from xml: method com::sun::star::uno::XAdapter::removeReference
     /** removes a reference from the adapter.
      */
     void removeReference( [in] com::sun::star::uno::XReference xRef );

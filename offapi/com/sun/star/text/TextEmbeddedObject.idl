@@ -27,8 +27,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::TextEmbeddedObject
 /** provides access to the properties and methods of an embedded object.
  */
 published service TextEmbeddedObject
@@ -37,7 +35,6 @@ published service TextEmbeddedObject
      graphic objects and embedded objects.
      */
     service BaseFrame;
-    // DocMerge: empty anyway
     interface com::sun::star::document::XEmbeddedObjectSupplier;
         /* If you get this property you get the CLSID of the OLE2 document stream
                 contained in this OLE2 shape. If you set it, an empty OLE2 document stream

@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: struct com::sun::star::drawing::HomogenMatrix
 /** specifies a homogeneous matrix by four homogeneous lines.
  */
 published struct HomogenMatrix4

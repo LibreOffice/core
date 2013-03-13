@@ -29,15 +29,11 @@
  module com {  module sun {  module star {  module mozilla {
 
 
-
-// DocMerge from xml: interface com::sun::star::mozilla::XMenuProxy
 /** Allows to execute dispatch for a menu item
     and handles listeners for changes in menu items.
  */
 published interface XMenuProxy: com::sun::star::lang::XComponent
 {
-
-    // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::executeMenuItem
     /** Executes dispatch for the given menu id
 
         @param ID   [in]:   the menu item
@@ -45,8 +41,6 @@ published interface XMenuProxy: com::sun::star::lang::XComponent
      */
     void executeMenuItem([in] short ID);
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::addMenuProxyListener
     /** Registers an event listener, which will be called when the menu changes
 
         @param xListener    [in]:   the listener to be set
@@ -54,8 +48,6 @@ published interface XMenuProxy: com::sun::star::lang::XComponent
      */
     void addMenuProxyListener([in] XMenuProxyListener xListener );
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::removeMenuProxyListener
     /** Unregisters an event listener which was registered with
         <member>XMenuProxy::addMenuProxyListener()</member>.
 

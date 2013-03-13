@@ -31,8 +31,6 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: interface com::sun::star::io::XDataExporter
 /** makes it possible to export data from a component into a data sink.
 
     <p>Exporter objects are registered for specific components and data types.
@@ -40,16 +38,12 @@ module com {  module sun {  module star {  module io {
  */
 published interface XDataExporter: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::io::XDataExporter::exportData
     /** exports data for a component into an output stream.
      */
     void exportData( [in] com::sun::star::io::XOutputStream aOutputStream,
              [in] com::sun::star::lang::XComponent Component,
              [in] com::sun::star::io::XDataTransferEventListener aListener );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataExporter::cancel
     /** cancels the export process.
      */
     void cancel();

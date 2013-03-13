@@ -25,22 +25,16 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XFootnote
 /** specifies a footnote within a Text.@see Footnote
  */
 published interface XFootnote: com::sun::star::text::XTextContent
 {
-
-    // DocMerge from idl: method com::sun::star::text::XFootnote::getLabel
     /** @returns the label of the footnote.
 
          @see XFootnote::setLabel
      */
     string getLabel();
 
-
-    // DocMerge from xml: method com::sun::star::text::XFootnote::setLabel
     /** sets the label of the footnote.
      */
     void setLabel( [in] string aLabel );

@@ -27,15 +27,11 @@
 
  module com {  module sun {  module star {  module style {
 
-
-// DocMerge from xml: interface com::sun::star::style::XStyleFamiliesSupplier
 /** This interface provides access to the style families within the
     container document.
  */
 published interface XStyleFamiliesSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::style::XStyleFamiliesSupplier::getStyleFamilies
     /** This method returns the collection of style families available
         in the container document.@see StyleFamilies
      */

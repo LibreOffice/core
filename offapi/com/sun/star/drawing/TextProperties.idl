@@ -114,8 +114,6 @@ published service TextProperties
      */
     [property] boolean TextAutoGrowWidth;
 
-
-    // DocMerge from xml: property com::sun::star::drawing::Text::TextContourFrame
     /** If this value is <TRUE/>, the left edge of every line of text is
         aligned with the left edge of this <type>Shape</type>.
      */

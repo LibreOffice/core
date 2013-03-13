@@ -23,31 +23,21 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from idl: constants com::sun::star::text::DocumentStatistic
 /** These constants are used to specify the type of a document statistic
         field.
  */
 published constants DocumentStatistic
 {
     // The text field displays the number of pages of the document.
-
-    // DocMerge: empty anyway
     const short PAGES = 0;
 
     // The text field displays the number of paragraphs of the document.
-
-    // DocMerge: empty anyway
     const short PARAS = 1;
 
     // The text field words the number of paragraphs of the document.
-
-    // DocMerge: empty anyway
     const short WORDS = 2;
 
     // The text field characters the number of paragraphs of the document.
-
-    // DocMerge: empty anyway
     const short CHARS = 3;
 
 };

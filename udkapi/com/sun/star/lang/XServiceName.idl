@@ -25,15 +25,11 @@
 
  module com {  module sun {  module star {  module lang {
 
-
-// DocMerge from xml: interface com::sun::star::lang::XServiceName
 /** identifies the object with a service name which can be used to create
     such an object by a factory.
  */
 published interface XServiceName: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::lang::XServiceName::getServiceName
     /** @returns
             the service name that can be used to create such an object
             by a factory.

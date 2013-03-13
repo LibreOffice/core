@@ -23,45 +23,31 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::ConnectionType
 /** the direction where the
     connection line leaves the connection point.
  */
 published enum ConnectionType
 {
-
-    // DocMerge from xml: value com::sun::star::drawing::ConnectionType::AUTO
     /** the connection point is chosen automatically,
      */
     AUTO,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::ConnectionType::LEFT
     /** the connection line leaves the connected object to the left,
      */
     LEFT,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::ConnectionType::TOP
     /** the connection line leaves the connected object from the top,
      */
     TOP,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::ConnectionType::RIGHT
     /** the connection line leaves the connected object to the right,
      */
     RIGHT,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::ConnectionType::BOTTOM
     /** the connection line leaves the connected object from the bottom,
      */
     BOTTOM,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::ConnectionType::SPECIAL
     /** not implemented, yet.
      */
     SPECIAL

@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module registry {
 
-
-// DocMerge from xml: service com::sun::star::registry::SimpleRegistry
 /** makes it possible to create, open, or close a registry. Further, it is
     possible to merge a registry under a specified key in the open registry.
 

@@ -27,14 +27,10 @@
  module com {  module sun {  module star {  module mozilla {
 
 
-
-// DocMerge from xml: service com::sun::star::mozilla::MenuProxyListener
 /** Listens for changes in menu items.
  */
 published service MenuProxyListener
 {
-
-    // DocMerge from xml: service com::sun::star::mozilla::MenuProxyListener: interface com::sun::star::mozilla::XMenuProxyListener
     /** @see XMenuProxyListener
      */
     interface XMenuProxyListener;

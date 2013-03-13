@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module registry {
 
-
-// DocMerge from xml: exception com::sun::star::registry::InvalidValueException
 /** signals that the value of the key is invalid or does not have the
     appropriate key type.
  */

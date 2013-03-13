@@ -25,14 +25,10 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::TextFields
 /** This is a collection of <type>TextField</type> instances.
  */
 published service TextFields
 {
-
-    // DocMerge from xml: service com::sun::star::text::TextFields: interface com::sun::star::container::XEnumerationAccess
     /** This interface makes it possible to create an enumeration through
                 all text fields in this container.
 

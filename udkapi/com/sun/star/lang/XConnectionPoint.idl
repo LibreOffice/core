@@ -30,8 +30,6 @@
 
 module com {  module sun {  module star {  module lang {
 
-
-// DocMerge from idl: interface com::sun::star::lang::XConnectionPoint
 /** supports connection points for connectable objects.
 
     <p>Connectable objects support the following features: </p>
@@ -90,8 +88,6 @@ module com {  module sun {  module star {  module lang {
  */
 published interface XConnectionPoint: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::getConnectionType
     /** @returns
                 the type of the outgoing interface managed by this
                 connection point.
@@ -108,8 +104,6 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
      */
     type getConnectionType();
 
-
-    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::getConnectionPointContainer
     /** @returns
             the <type>XConnectionPointContainer</type> interface on
             the parent connectable object.
@@ -118,8 +112,6 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
      */
     com::sun::star::lang::XConnectionPointContainer getConnectionPointContainer();
 
-
-    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::advise
     /** creates a connection between a connection point and a
         client's sink, where the sink implements the outgoing interface
         supported by this connection point.
@@ -147,8 +139,6 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
             raises( com::sun::star::lang::ListenerExistException,
                     com::sun::star::lang::InvalidListenerException );
 
-
-    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::unadvise
     /** terminates a notification previously set up with advise.
 
         <p>A few <code>remove...Listener</code> methods need additional
@@ -164,8 +154,6 @@ published interface XConnectionPoint: com::sun::star::uno::XInterface
      */
     void unadvise( [in] com::sun::star::uno::XInterface xListener );
 
-
-    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::getConnections
     /** @returns
                 a sequence of all currently advised connections.
      */

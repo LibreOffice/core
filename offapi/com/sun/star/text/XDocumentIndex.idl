@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XDocumentIndex
 /** This is the main interface for a document index.
 
 
@@ -47,14 +45,10 @@
  */
 published interface XDocumentIndex: com::sun::star::text::XTextContent
 {
-
-    // DocMerge from xml: method com::sun::star::text::XDocumentIndex::getServiceName
     /** returns the service name that was used to create this document index type.
      */
     string getServiceName();
 
-
-    // DocMerge from xml: method com::sun::star::text::XDocumentIndex::update
     /** initiates an update to the document index.
      */
     void update();

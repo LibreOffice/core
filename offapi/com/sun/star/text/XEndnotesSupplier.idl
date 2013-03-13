@@ -29,22 +29,16 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XEndnotesSupplier
 /** makes it possible to access the endnotes within the
     context (e.g. document).
  */
 published interface XEndnotesSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::text::XEndnotesSupplier::getEndnotes
     /** @returns
                 a collection of endnotes.
      */
     com::sun::star::container::XIndexAccess getEndnotes();
 
-
-    // DocMerge from idl: method com::sun::star::text::XEndnotesSupplier::getEndnoteSettings
     /** @returns
                 the endnote settings of the document.
      */

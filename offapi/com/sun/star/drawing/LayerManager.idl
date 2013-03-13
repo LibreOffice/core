@@ -27,8 +27,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: service com::sun::star::drawing::LayerManager
 /** This service is provided by documents to support <type>Layer</type>s.
 
     @see DrawingDocument
@@ -36,8 +34,6 @@
 published service LayerManager
 {
 
-
-    // DocMerge from xml: service com::sun::star::drawing::LayerManager: interface com::sun::star::drawing::XLayerManager
     /** gives you access to the existing <type>Layer</type>s by
                 index and makes it possible to add and remove <type>Layer</type>s and
                 to attach <type>Shape</type>s to <type>Layer</type>s.
@@ -47,8 +43,6 @@ published service LayerManager
      */
     interface com::sun::star::drawing::XLayerManager;
 
-
-    // DocMerge from xml: service com::sun::star::drawing::LayerManager: interface com::sun::star::container::XNameAccess
     /** gives access to the existing <type>Layer</type>s by name.
 
                 <p>The contents of the collection all support <type>Layer</type>

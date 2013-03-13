@@ -25,16 +25,12 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::Footnotes
 /** provides access to the footnotes or endnotes of a (text)
     document.
  */
 published service Footnotes
 {
 
-
-    // DocMerge from xml: service com::sun::star::text::Footnotes: interface com::sun::star::container::XIndexAccess
     /** provides access to the footnotes of the document.
      */
     interface com::sun::star::container::XIndexAccess;

@@ -36,8 +36,6 @@
  */
 published interface XProfileManager: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::mozilla::XProfileManager::bootupProfile
     /** attempts to init XPCOM runtime using given profile.
 
         @param product

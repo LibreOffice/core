@@ -25,28 +25,19 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: struct com::sun::star::drawing::HomogenMatrix
 /** specifies a homogeneous matrix by three homogeneous lines
  */
 published struct HomogenMatrix
 {
-    // DocMerge: empty anyway
     com::sun::star::drawing::HomogenMatrixLine Line1;
 
     // DOCUMENTATION OMITTED FOR HomogenMatrix::Line2
-
-    // DocMerge: empty anyway
     com::sun::star::drawing::HomogenMatrixLine Line2;
 
     // DOCUMENTATION OMITTED FOR HomogenMatrix::Line3
-
-    // DocMerge: empty anyway
     com::sun::star::drawing::HomogenMatrixLine Line3;
 
     // DOCUMENTATION OMITTED FOR HomogenMatrix::Line4
-
-    // DocMerge: empty anyway
     com::sun::star::drawing::HomogenMatrixLine Line4;
 
 };

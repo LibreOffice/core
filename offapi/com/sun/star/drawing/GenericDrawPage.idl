@@ -38,8 +38,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: service com::sun::star::drawing::GenericDrawPage
 /** This abstract service is implemented by every page of a
     <type>DrawingDocument</type>.
 
@@ -62,8 +60,6 @@
 published service GenericDrawPage
 {
 
-
-    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::drawing::XShapes
     /** manages the <type>Shape</type>s of this page.
 
                 <p>It also lets you add new <type>Shape</type>s. The program currently
@@ -74,86 +70,60 @@ published service GenericDrawPage
      */
     interface com::sun::star::drawing::XShapes;
 
-
-    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::drawing::XShapeGrouper
     /** With this interface you can group/ungroup a collection of
                 <type>Shape</type>s.
      */
     interface com::sun::star::drawing::XShapeGrouper;
 
-
-    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::drawing::XShapeCombiner
     /** With this interface you can combine/split a collection of
                 <type>Shape</type>s.
      */
     [optional] interface com::sun::star::drawing::XShapeCombiner;
 
-
-    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::drawing::XShapeBinder
     /** With this interface you can bind/unbind a collection of
                 <type>Shape</type>s.
      */
     [optional] interface com::sun::star::drawing::XShapeBinder;
 
-
-    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::container::XNamed
     /** Gets or sets the name of this page.
 
                 <p>Duplicated page names inside a document are not allowed.
      */
     [optional] interface com::sun::star::container::XNamed;
 
-
-    // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::beans::XPropertySet
     /** gives you access to the properties of this
                 <type>DrawPage</type>.
      */
     [optional] interface com::sun::star::beans::XPropertySet;
 
-
-    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderBottom
     /** This is the border at the bottom.
      */
         [optional, property] long BorderBottom;
 
-
-    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderLeft
     /** This is the border at the left.
      */
         [optional, property] long BorderLeft;
 
-
-    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderRight
     /** This is the border at the right.
      */
         [optional, property] long BorderRight;
 
-
-    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::BorderTop
     /** This is the border at the top.
      */
         [optional, property] long BorderTop;
 
-
-    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Height
     /** This is the height.
      */
         [optional, property] long Height;
 
-
-    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Width
     /** This is the width.
      */
         [optional, property] long Width;
 
-
-    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Number
     /** This is the number of this page, starting with 1.
      */
         [optional, readonly, property] short Number;
 
-
-    // DocMerge from xml: property com::sun::star::drawing::GenericDrawPage::Orientation
     /** This is the orientation of this page.
      */
         [optional, property] com::sun::star::view::PaperOrientation Orientation;

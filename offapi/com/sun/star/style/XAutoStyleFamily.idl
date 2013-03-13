@@ -26,8 +26,6 @@
 
  module com {  module sun {  module star {  module style {
 
-
-// DocMerge from xml: service com::sun::star::style::StyleFamilies
 /** This service contains the collection of automatic style families within the
     container document.
 

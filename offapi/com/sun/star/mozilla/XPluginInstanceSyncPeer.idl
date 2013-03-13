@@ -25,16 +25,12 @@
 
  module com {  module sun {  module star {  module mozilla {
 
-
-// DocMerge from xml: interface com::sun::star::mozilla::XPluginInstanceSyncPeer
 /** This interface is an extension for <type>XPluginInstancePeer</type> interface.
     An object can support this interface in addition to <type>XPluginInstancePeer</type> interface.
  */
 published interface XPluginInstanceSyncPeer : com::sun::star::uno::XInterface
 {
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstanceSyncPeer::openNewBrowserWindow
     /** Opens a new browser window with a plugin instance synchronously.
 
         @param aInstance            [out]:  new plugin instance in case of success

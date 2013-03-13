@@ -34,16 +34,12 @@
  published interface XPluginInstanceNotifySink;
 
 
-
-// DocMerge from xml: interface com::sun::star::mozilla::XPluginInstancePeer
 /** Allows to communicate with a plugin from the office side.
     This interface is oriented for communication with browsers plugins.
  */
 published interface XPluginInstancePeer: com::sun::star::uno::XInterface
 {
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::setWindowSize
     /** Alters the plugin's window size in the browser window.
 
         @param width    [in]: the new window width
@@ -54,8 +50,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
     boolean setWindowSize( [in] long width, [in] long heigth );
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::showStatusMessage
     /** Show status / hint message in browser's message area.
 
         @param message  [in]: the string to be displayed
@@ -63,8 +57,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
     void showStatusMessage( [in] string message );
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::enableScripting
     /** Indicates to the plugin that the document was loaded successfully and scripting
         interfaces are now available.
 
@@ -75,8 +67,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
     void enableScripting( [in] com::sun::star::uno::XInterface document, [in] com::sun::star::lang::XMultiServiceFactory servicemanager );
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::newStream
     /** Creates a new stream of data produced by the plug-in and consumed by
         the browser.
 
@@ -92,8 +82,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
     );
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::getURL
     /** Fetches an URL into the target window. The parameters and their meaning map to the
         corresponding Netscape-API call.
 
@@ -113,8 +101,6 @@ published interface XPluginInstancePeer: com::sun::star::uno::XInterface
     );
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::postURL
     /** Posts to a URL with post data and/or post headers. The parameters and their meaning
         map to the corresponding Netscape-API call.
 

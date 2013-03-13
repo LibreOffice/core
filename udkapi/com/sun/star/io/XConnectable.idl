@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: interface com::sun::star::io::XConnectable
 /** makes it possible to connect data sinks and sources.
 
     <p>The predecessor-member is the element in the connection that is
@@ -40,27 +38,19 @@
  */
 published interface XConnectable: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::io::XConnectable::setPredecessor
     /** sets the source of the data flow for this object.
      */
     void setPredecessor( [in] com::sun::star::io::XConnectable aPredecessor );
 
-
-    // DocMerge from idl: method com::sun::star::io::XConnectable::getPredecessor
     /** @returns
             the predecessor of this object.
      */
     com::sun::star::io::XConnectable getPredecessor();
 
-
-    // DocMerge from xml: method com::sun::star::io::XConnectable::setSuccessor
     /** sets the sink of the data flow for this object.
      */
     void setSuccessor( [in] com::sun::star::io::XConnectable aSuccessor );
 
-
-    // DocMerge from idl: method com::sun::star::io::XConnectable::getSuccessor
     /** @returns
             the successor of this object.
      */

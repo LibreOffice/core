@@ -25,23 +25,16 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: struct com::sun::star::drawing::PolyPolygonShape3D
 /** specifies the coordinates of a 3-dimensional poly polygon.
  */
 published struct PolyPolygonShape3D
 {
-    // DocMerge: empty anyway
     com::sun::star::drawing::DoubleSequenceSequence SequenceX;
 
     // DOCUMENTATION OMITTED FOR PolyPolygonShape3D::SequenceY
-
-    // DocMerge: empty anyway
     com::sun::star::drawing::DoubleSequenceSequence SequenceY;
 
     // DOCUMENTATION OMITTED FOR PolyPolygonShape3D::SequenceZ
-
-    // DocMerge: empty anyway
     com::sun::star::drawing::DoubleSequenceSequence SequenceZ;
 
 };

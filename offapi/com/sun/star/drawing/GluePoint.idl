@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: struct com::sun::star::drawing::GluePoint
 /** A <type>GluePoint</type> could be attached to a shape or to a page.
 
 
@@ -40,27 +38,20 @@
  */
 published struct GluePoint
 {
-    // DocMerge from xml: field com::sun::star::drawing::GluePoint::Position
     /** This is the position of this <type>GluePoint</type>.
      */
     com::sun::star::awt::Point Position;
 
-
-    // DocMerge from xml: field com::sun::star::drawing::GluePoint::EscapeDirection
     /** This is the direction in which the connector line leaves the
         <type>GluePoint</type>.
      */
     short EscapeDirection;
 
-
-    // DocMerge from xml: field com::sun::star::drawing::GluePoint::PositionAbsolute
     /** If this is <TRUE/>, then the position of this <type>GluePoint</type> is
         absolute on a page and is not relative to a shape.
      */
     boolean PositionAbsolute;
 
-
-    // DocMerge from xml: field com::sun::star::drawing::GluePoint::Alignment
     /** The alignment of a <code>GluePoint</code> defines how the position of
         the point is affected by resizing the parent <code>Shape</code>.
      */

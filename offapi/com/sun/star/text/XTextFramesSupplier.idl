@@ -27,15 +27,11 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XTextFramesSupplier
 /** makes it possible to access the <type>TextFrame</type> instances in this
     context (e.g. document).
  */
 published interface XTextFramesSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::text::XTextFramesSupplier::getTextFrames
     /** returns a collection of text frames.
      */
     com::sun::star::container::XNameAccess getTextFrames();

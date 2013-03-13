@@ -33,8 +33,6 @@
  */
 published interface XShapeGroup: com::sun::star::drawing::XShape
 {
-
-    // DocMerge from xml: method com::sun::star::drawing::XShapeGroup::enterGroup
     /** enters the group which enables the editing function
         for the parts of a grouped <type>Shape</type>. Then the parts can
         be edited instead of the group as a whole.
@@ -47,8 +45,6 @@ published interface XShapeGroup: com::sun::star::drawing::XShape
      */
     void enterGroup();
 
-
-    // DocMerge from xml: method com::sun::star::drawing::XShapeGroup::leaveGroup
     /** leaves the group, which disables the editing function
         for the parts of a grouped <type>Shape</type>. Then only the
         group as a whole can be edited.

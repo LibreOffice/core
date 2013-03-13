@@ -23,8 +23,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::TextFitToSizeType
 /** This enumeration specifies how the text within a shape relates to the
     size of the shape.
  */

@@ -23,8 +23,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: struct com::sun::star::text::HoriOrientationFormat
 /** describes the horizontal orientation of an object.
 
 
@@ -40,27 +38,20 @@
  */
 published struct HoriOrientationFormat
 {
-    // DocMerge from xml: field com::sun::star::text::HoriOrientationFormat::XPos
     /** contains the distance from the left border. Only valid if
         the property HorizontalOrientation contains the value HORI_NONE.
      */
     long XPos;
 
-
-    // DocMerge from xml: field com::sun::star::text::HoriOrientationFormat::HorizontalOrientation
     /** determines the horizontal alignment of an object.
         The values refer to com::sun::star::HoriOrientation.
      */
     short HorizontalOrientation;
 
-
-    // DocMerge from xml: field com::sun::star::text::HoriOrientationFormat::HorizontalRelation
     /** determines the reference position of the horizontal alignment.@see com::sun::star::text::RelOrientation
      */
     short HorizontalRelation;
 
-
-    // DocMerge from xml: field com::sun::star::text::HoriOrientationFormat::PositionToggle
     /** determines if the orientation toggles between left and right pages.
      */
     boolean PositionToggle;

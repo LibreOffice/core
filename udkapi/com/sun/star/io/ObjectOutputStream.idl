@@ -29,8 +29,6 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: service com::sun::star::io::ObjectOutputStream
 /** is a stream which allows writing the data of persistent objects.
 
     <p>Implementations of this service must fulfill the specifications of the

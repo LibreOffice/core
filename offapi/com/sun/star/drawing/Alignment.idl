@@ -23,56 +23,36 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::Alignment
 /** The <type>Alignment</type> enumeration is a general way to specify the
     alignment of an object or sub-object relative to another object.
  */
 published enum Alignment
 {
     // DOCUMENTATION OMITTED FOR Alignment::    TOP_LEFT,
-
-    // DocMerge: empty anyway
     TOP_LEFT,
 
     // DOCUMENTATION OMITTED FOR Alignment::    TOP,
-
-    // DocMerge: empty anyway
     TOP,
 
     // DOCUMENTATION OMITTED FOR Alignment::    TOP_RIGHT,
-
-    // DocMerge: empty anyway
     TOP_RIGHT,
 
     // DOCUMENTATION OMITTED FOR Alignment::    LEFT,
-
-    // DocMerge: empty anyway
     LEFT,
 
     // DOCUMENTATION OMITTED FOR Alignment::    CENTER,
-
-    // DocMerge: empty anyway
     CENTER,
 
     // DOCUMENTATION OMITTED FOR Alignment::    RIGHT,
-
-    // DocMerge: empty anyway
     RIGHT,
 
     // DOCUMENTATION OMITTED FOR Alignment::    BOTTOM_LEFT,
-
-    // DocMerge: empty anyway
     BOTTOM_LEFT,
 
     // DOCUMENTATION OMITTED FOR Alignment::    BOTTOM,
-
-    // DocMerge: empty anyway
     BOTTOM,
 
     // DOCUMENTATION OMITTED FOR Alignment::    BOTTOM_RIGHT
-
-    // DocMerge: empty anyway
     BOTTOM_RIGHT
 
 };

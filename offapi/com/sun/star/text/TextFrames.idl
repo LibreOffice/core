@@ -27,16 +27,12 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::TextFrames
 /** This is the collection of all <type>TextFrame</type> instances within a
     context (e.g. a document).
  */
 published service TextFrames
 {
 
-
-    // DocMerge from xml: service com::sun::star::text::TextFrames: interface com::sun::star::container::XNameAccess
     /** This interface makes it possible to access all <type>TextFrame</type>
                 instances within this context (e.g. a document) by its name.
 
@@ -52,8 +48,6 @@ published service TextFrames
      */
     interface com::sun::star::container::XIndexAccess;
 
-
-    // DocMerge from xml: service com::sun::star::text::TextFrames: interface com::sun::star::container::XContainer
     /** This optional interface makes it possible to register for events
                 which occur upon insertion and removal of <type>TextFrame</type>
                 instances.

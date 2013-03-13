@@ -23,29 +23,19 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from idl: constants com::sun::star::text::SetVariableType
 /** These constants define the type of a variable text field.
  */
 published constants SetVariableType
 {
-
-    // DocMerge from idl: value com::sun::star::text::SetVariableType::VAR
     /** specifies a simple variable.
      */
     const short VAR = 0;
-
-    // DocMerge from idl: value com::sun::star::text::SetVariableType::SEQUENCE
     /** specifies a number sequence field.
      */
     const short SEQUENCE = 1;
-
-    // DocMerge from idl: value com::sun::star::text::SetVariableType::FORMULA
     /** specifies a formula field.
      */
     const short FORMULA = 2;
-
-    // DocMerge from idl: value com::sun::star::text::SetVariableType::STRING
     /** specifies a string field.
      */
     const short STRING = 3;

@@ -25,15 +25,11 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: struct com::sun::star::io::DataTransferEvent
 /** is broadcast by a filter.
     @see XDataTransferEventListener
  */
 published struct DataTransferEvent: com::sun::star::lang::EventObject
 {
-
-    // DocMerge from xml: field com::sun::star::io::DataTransferEvent::aException
     /** specifies an occurred exception.
      */
     any aException;

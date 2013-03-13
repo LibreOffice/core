@@ -25,8 +25,6 @@
 
 module com {  module sun {  module star {  module lang {
 
-
-// DocMerge from xml: exception com::sun::star::lang::ServiceNotRegisteredException
 /** This exception is thrown when a needed service is not found.
 
     <p>Applications should throw instances of this class to indicate

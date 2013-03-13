@@ -52,8 +52,6 @@ published interface XConnection: com::sun::star::uno::XInterface
     long read( [out] sequence < byte > aReadBytes , [in] long nBytesToRead )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::connection::XConnection::write
     /** writes the given bytesequence to the stream.
         <p>The method blocks until the whole sequence is written.
 

@@ -22,24 +22,16 @@
 //=============================================================================
 
  module com {  module sun {  module star {  module drawing {
-
-// DocMerge from xml: enum com::sun::star::drawing::LineCap
 /** The <type>LineCap</type> defines rendering of ends of thick lines
  */
 published enum LineCap
 {
-
-    // DocMerge from xml: value com::sun::star::drawing::LineCap::BUTT
     /** the line will end without any additional shape
      */
     BUTT,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineCap::ROUND
     /** the line will get a half cirle as additional cap
      */
     ROUND,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineCap::SQUARE
     /** the line will get a half square as additional cap
      */
     SQUARE

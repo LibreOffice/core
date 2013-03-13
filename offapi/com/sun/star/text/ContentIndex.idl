@@ -31,7 +31,6 @@ module com {  module sun {  module star {  module text {
  */
 published service ContentIndex
 {
-    // DocMerge: empty anyway
     service  com::sun::star::text::BaseIndex;
 
     /** determines the depth of outline levels that are included into the content index.*/

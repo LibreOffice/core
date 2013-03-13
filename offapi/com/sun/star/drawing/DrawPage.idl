@@ -28,8 +28,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: service com::sun::star::drawing::DrawPage
 /** This service specifies a page for the actual draw pages to contain
     the drawings.
     @see    GenericDrawPage
@@ -38,15 +36,11 @@
 published service DrawPage
 {
 
-
-    // DocMerge from xml: service com::sun::star::drawing::DrawPage: service com::sun::star::drawing::GenericDrawPage
     /** This service describes the base functionality that every
                 draw/master page has.
      */
     service com::sun::star::drawing::GenericDrawPage;
 
-
-    // DocMerge from xml: service com::sun::star::drawing::DrawPage: interface com::sun::star::drawing::XMasterPageTarget
     /** provides the link to a <type>MasterPage</type>.
      */
     interface com::sun::star::drawing::XMasterPageTarget;

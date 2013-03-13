@@ -25,14 +25,10 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XDocumentIndexMark
 /** gives access to the mark of a document index entry.@see DocumentIndexMark
  */
 published interface XDocumentIndexMark: com::sun::star::text::XTextContent
 {
-
-    // DocMerge from idl: method com::sun::star::text::XDocumentIndexMark::getMarkEntry
     /** @returns
                 the explicitly set string for the index mark.
 
@@ -40,8 +36,6 @@ published interface XDocumentIndexMark: com::sun::star::text::XTextContent
      */
     string getMarkEntry();
 
-
-    // DocMerge from xml: method com::sun::star::text::XDocumentIndexMark::setMarkEntry
     /** sets an explicit string for this index mark to use
         in the index.
 

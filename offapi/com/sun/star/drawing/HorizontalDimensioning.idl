@@ -23,34 +23,24 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::HorizontalDimensioning
 /** The <type>HorizontalDimensioning</type> specifies the horizontal position
     of the text of a dimensioning shape.
  */
 published enum HorizontalDimensioning
 {
-
-    // DocMerge from xml: value com::sun::star::drawing::HorizontalDimensioning::AUTO
     /** Set this to have the application select the best horizontal
         position for the text.
      */
     AUTO,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::HorizontalDimensioning::LEFT
     /** The text is positioned to the left.
      */
     LEFT,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::HorizontalDimensioning::CENTERED
     /** The text is positioned at the center.
      */
     CENTERED,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::HorizontalDimensioning::RIGHT
     /** The text is positioned to the right.
      */
     RIGHT

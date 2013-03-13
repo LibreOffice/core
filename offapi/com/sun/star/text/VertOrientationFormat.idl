@@ -23,8 +23,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: struct com::sun::star::text::VertOrientationFormat
 /** describes the vertical orientation of an object.
 
 
@@ -36,21 +34,16 @@
  */
 published struct VertOrientationFormat
 {
-    // DocMerge from xml: field com::sun::star::text::VertOrientationFormat::YPos
     /** contains the distance from top. Only valid if the property
         VerticalOrientation contains the value VERT_NONE.
      */
     long YPos;
 
-
-    // DocMerge from xml: field com::sun::star::text::VertOrientationFormat::VerticalOrientation
     /** determines the vertical alignment of an object.
         The values refer to com::sun::star::VertOrientation.
      */
     short VerticalOrientation;
 
-
-    // DocMerge from xml: field com::sun::star::text::VertOrientationFormat::VerticalRelation
     /** determines the reference position of the vertical alignment.@see com::sun::star::text::RelOrientation
      */
     short VerticalRelation;

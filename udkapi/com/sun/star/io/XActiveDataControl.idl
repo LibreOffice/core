@@ -27,8 +27,6 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: interface com::sun::star::io::XActiveDataControl
 /** makes it possible to control an active data source.
 
     <p>This interface should be supported by objects which implement
@@ -36,16 +34,12 @@ module com {  module sun {  module star {  module io {
  */
 published interface XActiveDataControl: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::io::XActiveDataControl::addListener
     /** registers an object to receive events from this data source.
        <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.
      */
     void addListener( [in] com::sun::star::io::XStreamListener aListener );
 
-
-    // DocMerge from xml: method com::sun::star::io::XActiveDataControl::removeListener
     /** unregisters an object to receive events from this data source.
 
        <p>It is suggested to allow multiple registration of the same listener,
@@ -53,8 +47,6 @@ published interface XActiveDataControl: com::sun::star::uno::XInterface
      */
     void removeListener( [in] com::sun::star::io::XStreamListener aListener );
 
-
-    // DocMerge from xml: method com::sun::star::io::XActiveDataControl::start
     /** starts I/O.
 
         <p>Either <member>XActiveDataControl::setInputStream()</member> or
@@ -66,8 +58,6 @@ published interface XActiveDataControl: com::sun::star::uno::XInterface
      */
     void start();
 
-
-    // DocMerge from xml: method com::sun::star::io::XActiveDataControl::terminate
     /** does a weak abort.
 
         <p>It closes all connected resources and calls

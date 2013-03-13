@@ -23,34 +23,22 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::LineJoint
 /** The <type>LineJoint</type> defines rendering of joints between thick lines
  */
 published enum LineJoint
 {
-
-    // DocMerge from xml: value com::sun::star::drawing::LineJoint::NONE
     /** the joint between lines will not be connected
      */
     NONE,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineJoint::MIDDLE
     /** the middle value between the joints is used
      */
     MIDDLE,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineJoint::BEVEL
     /** the edges of the thick lines will be joined by lines
      */
     BEVEL,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineJoint::MITER
     /** the lines join at intersections
      */
     MITER,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineJoint::ROUND
     /** the lines join with an arc
      */
     ROUND

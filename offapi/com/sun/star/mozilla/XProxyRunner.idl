@@ -27,7 +27,6 @@
 
 
 published interface XCodeProxy;
-// DocMerge from xml: interface com::sun::star::mozilla::XProxyRunner
 /** is the interface run Mozilla XPCOM code in a managed environment
 
     @see com::sun::star::mozilla::XProfileDiscover
@@ -35,8 +34,6 @@ published interface XCodeProxy;
  */
 published interface XProxyRunner: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::mozilla::XProxyRunner::Run
     /** attempts to Run XPCOM code in a managed environment
 
         @param aCode

@@ -23,8 +23,6 @@
 
  module com {  module sun {  module star {  module registry {
 
-
-// DocMerge from xml: enum com::sun::star::registry::RegistryValueType
 /** represents all possible types of a key value.
 
     <p>An ASCII value and a string value will both be handled with type
@@ -34,57 +32,41 @@
 published enum RegistryValueType
 {
     // DOCUMENTATION OMITTED FOR RegistryValueType::    NOT_DEFINED,
-
-    // DocMerge from xml: value com::sun::star::registry::RegistryValueType::NOT_DEFINED
     /** the type of the key is not defined.
      */
     NOT_DEFINED,
 
     // DOCUMENTATION OMITTED FOR RegistryValueType::    LONG,
-
-    // DocMerge from xml: value com::sun::star::registry::RegistryValueType::LONG
     /** the type of the key is long.
      */
     LONG,
 
     // DOCUMENTATION OMITTED FOR RegistryValueType::    ASCII,
-
-    // DocMerge from xml: value com::sun::star::registry::RegistryValueType::ASCII
     /** the type of the key is ASCII.
      */
     ASCII,
 
     // DOCUMENTATION OMITTED FOR RegistryValueType::    STRING,
-
-    // DocMerge from xml: value com::sun::star::registry::RegistryValueType::STRING
     /** the type of the key is a string.
      */
     STRING,
 
     // DOCUMENTATION OMITTED FOR RegistryValueType::    BINARY,
-
-    // DocMerge from xml: value com::sun::star::registry::RegistryValueType::BINARY
     /** the type of the key is binary.
      */
     BINARY,
 
     // DOCUMENTATION OMITTED FOR RegistryValueType::    LONGLIST,
-
-    // DocMerge from xml: value com::sun::star::registry::RegistryValueType::LONGLIST
     /** the type of the key is LONGLIST.
      */
     LONGLIST,
 
     // DOCUMENTATION OMITTED FOR RegistryValueType::    ASCIILIST,
-
-    // DocMerge from xml: value com::sun::star::registry::RegistryValueType::ASCIILIST
     /** the type of the key is a ASCIILIST.
      */
     ASCIILIST,
 
     // DOCUMENTATION OMITTED FOR RegistryValueType::    STRINGLIST
-
-    // DocMerge from xml: value com::sun::star::registry::RegistryValueType::STRINGLIST
     /** the type of the key is a STRINGLIST.
      */
     STRINGLIST

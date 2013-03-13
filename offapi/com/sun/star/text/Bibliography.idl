@@ -26,13 +26,10 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::Bibliography
 /** specifies service of bibliography within a text document.@see com::sun::star::text::BaseIndex
  */
 published service Bibliography
 {
-    // DocMerge: empty anyway
     service  com::sun::star::text::BaseIndex;
     /** contains the locale of the index.
      */

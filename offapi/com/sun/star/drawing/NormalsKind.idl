@@ -23,28 +23,20 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::NormalsKind
 /** specifies in which way the standard normals
     for an object are produced.
  */
 published enum NormalsKind
 {
-
-    // DocMerge from xml: value com::sun::star::drawing::NormalsKind::SPECIFIC
     /** does not produce standard normals, but leaves
         the object-specific ones untouched.
      */
     SPECIFIC,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::NormalsKind::FLAT
     /** forces one normal per flat part.
      */
     FLAT,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::NormalsKind::SPHERE
     /** forces normals to think that the object is a
         sphere.
      */

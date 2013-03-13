@@ -23,31 +23,21 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::MeasureTextHorzPos
 /** This enumeration defines the relative horizontal placement of the text
     inside a measure shape.
  */
 published enum MeasureTextHorzPos
 {
     // DOCUMENTATION OMITTED FOR MeasureTextHorzPos::   AUTO,
-
-    // DocMerge: empty anyway
     AUTO,
 
     // DOCUMENTATION OMITTED FOR MeasureTextHorzPos::   LEFTOUTSIDE,
-
-    // DocMerge: empty anyway
     LEFTOUTSIDE,
 
     // DOCUMENTATION OMITTED FOR MeasureTextHorzPos::   INSIDE,
-
-    // DocMerge: empty anyway
     INSIDE,
 
     // DOCUMENTATION OMITTED FOR MeasureTextHorzPos::   RIGHTOUTSIDE
-
-    // DocMerge: empty anyway
     RIGHTOUTSIDE
 
 };

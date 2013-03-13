@@ -44,8 +44,6 @@ published interface XIndexAccess: com::sun::star::container::XElementAccess
      */
     long getCount();
 
-
-    // DocMerge from idl: method com::sun::star::container::XIndexAccess::getByIndex
     /** @returns
             the element at the specified index.
 

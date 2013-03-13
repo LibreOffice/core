@@ -23,32 +23,22 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::CircleKind
 /** This enumeration defines a circle.
  */
 published enum CircleKind
 {
-
-    // DocMerge from xml: value com::sun::star::drawing::CircleKind::FULL
     /** a full circle
      */
     FULL,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::CircleKind::SECTION
     /** a circle with a cut connected by a line
      */
     SECTION,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::CircleKind::CUT
     /** a circle with a cut connected by two lines
      */
     CUT,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::CircleKind::ARC
     /** a circle with an open cut
      */
     ARC

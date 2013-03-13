@@ -27,8 +27,6 @@
 
 module com {  module sun {  module star {  module lang {
 
-
-// DocMerge from xml: interface com::sun::star::lang::XInitialization
 /** initializes an object directly after its creation.
 
     <p>This interface works together with factories. If you want to
@@ -47,8 +45,6 @@ module com {  module sun {  module star {  module lang {
  */
 published interface XInitialization: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::lang::XInitialization::initialize
     /** initializes the object.
 
         <p>It should be called directly after the object is created.

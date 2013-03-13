@@ -34,7 +34,6 @@ module com {  module sun {  module star {  module connection {
  */
 published interface XAcceptor: com::sun::star::uno::XInterface
 {
-    // DocMerge from xml: method com::sun::star::connection::XAcceptor::accept
     /** accepts an interprocess connection. Waits until someone connects to the resource.
         <p>
         After a successful return, the method may be called again to accept

@@ -23,25 +23,18 @@
 
  module com {  module sun {  module star {  module style {
 
-
-// DocMerge from xml: struct com::sun::star::style::DropCapFormat
 /** This struct describes drop caps at a paragraph object.
  */
 published struct DropCapFormat
 {
-    // DocMerge from xml: field com::sun::star::style::DropCapFormat::Lines
     /** This is the number of lines used for a drop cap.
      */
     byte Lines;
 
-
-    // DocMerge from xml: field com::sun::star::style::DropCapFormat::Count
     /** This is the number of characters in the drop cap.
      */
     byte Count;
 
-
-    // DocMerge from xml: field com::sun::star::style::DropCapFormat::Distance
     /** This is the distance between the drop cap in the following text.
      */
     short Distance;

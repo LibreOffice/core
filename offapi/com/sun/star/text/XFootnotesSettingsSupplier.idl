@@ -27,15 +27,11 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XFootnotesSettingsSupplier
 /** makes it possible to access the <type>FootnoteSettings</type>
     with the context (e.g. document).
  */
 published interface XFootnotesSettingsSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::text::XFootnotesSettingsSupplier::getFootnotesSettings
     /** @returns
                      <type>FootnoteSettings</type> of the object.
      */

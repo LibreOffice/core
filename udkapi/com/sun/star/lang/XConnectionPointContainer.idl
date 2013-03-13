@@ -26,8 +26,6 @@ module com {  module sun {  module star {  module lang {
 
  published interface XConnectionPoint;
 
-
-// DocMerge from xml: interface com::sun::star::lang::XConnectionPointContainer
 /** makes it possible to locate a specific connection point
     for a specified UIK and manages a sequence of connections points.
 
@@ -40,16 +38,12 @@ module com {  module sun {  module star {  module lang {
  */
 published interface XConnectionPointContainer: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::lang::XConnectionPointContainer::getConnectionPointTypes
     /** @returns
             a sequence of all outgoing types; specifies which are supported
             by this connectable object.
      */
     sequence<type> getConnectionPointTypes();
 
-
-    // DocMerge from idl: method com::sun::star::lang::XConnectionPointContainer::queryConnectionPoint
     /** @returns
             an <type>XConnectionPoint</type> interface of a
             connection point for a specified type if that type
@@ -61,8 +55,6 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
      */
     XConnectionPoint queryConnectionPoint( [in] type aType );
 
-
-    // DocMerge from xml: method com::sun::star::lang::XConnectionPointContainer::advise
     /** creates a connection between this object and a
         client's sink, where the sink implements the outgoing
         interface specified with ID.
@@ -80,8 +72,6 @@ published interface XConnectionPointContainer: com::sun::star::uno::XInterface
     void advise( [in] type aType,
              [in] com::sun::star::uno::XInterface xListener );
 
-
-    // DocMerge from xml: method com::sun::star::lang::XConnectionPointContainer::unadvise
     /** terminates a notification previously set up with
         advise at the container or at the suitable connection point.
 

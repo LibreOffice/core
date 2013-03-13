@@ -23,43 +23,31 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::FillStyle
 /** specifies how an area will be filled.
  */
 published enum FillStyle
 {
     // DOCUMENTATION OMITTED FOR FillStyle::    NONE,
-
-    // DocMerge from xml: value com::sun::star::drawing::FillStyle::NONE
     /** the area is not filled.
      */
     NONE,
 
     // DOCUMENTATION OMITTED FOR FillStyle::    SOLID,
-
-    // DocMerge from xml: value com::sun::star::drawing::FillStyle::SOLID
     /** use a solid color to fill the area.
      */
     SOLID,
 
     // DOCUMENTATION OMITTED FOR FillStyle::    GRADIENT,
-
-    // DocMerge from xml: value com::sun::star::drawing::FillStyle::GRADIENT
     /** use a gradient color to fill the area.
      */
     GRADIENT,
 
     // DOCUMENTATION OMITTED FOR FillStyle::    HATCH,
-
-    // DocMerge from xml: value com::sun::star::drawing::FillStyle::HATCH
     /** use a hatch to fill the area.
      */
     HATCH,
 
     // DOCUMENTATION OMITTED FOR FillStyle::    BITMAP
-
-    // DocMerge from xml: value com::sun::star::drawing::FillStyle::BITMAP
     /** use a bitmap to fill the  area.
      */
     BITMAP

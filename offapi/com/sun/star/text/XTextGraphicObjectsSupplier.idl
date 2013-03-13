@@ -27,15 +27,11 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XTextGraphicObjectsSupplier
 /** provides access to the collection of all embedded and linked graphics
     within this context (i.e. within this document).
  */
 published interface XTextGraphicObjectsSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::text::XTextGraphicObjectsSupplier::getGraphicObjects
     /** @returns
                 the collection of graphic objects in this object (document).
      */

@@ -23,8 +23,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::MeasureKind
 /** determines whether a measured shape is a standard
     measure or a radius measure.
 
@@ -33,15 +31,11 @@
 published enum MeasureKind
 {
     // DOCUMENTATION OMITTED FOR MeasureKind::  STANDARD,
-
-    // DocMerge from xml: value com::sun::star::drawing::MeasureKind::STANDARD
     /** use the length measurement.
      */
     STANDARD,
 
     // DOCUMENTATION OMITTED FOR MeasureKind::  RADIUS
-
-    // DocMerge from xml: value com::sun::star::drawing::MeasureKind::RADIUS
     /** use the radius measurement.
         This option cannot be used from the GUI Interface.
      */

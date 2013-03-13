@@ -27,25 +27,18 @@
  module com {  module sun {  module star {  module mozilla {
 
 
-
-// DocMerge from idl: struct com::sun::star::mozilla::MenuSingleChange
 /** Explains a change for a menu item
  */
 published struct MenuSingleChange
 {
-    // DocMerge from xml: field com::sun::star::mozilla::MenuSingleChange::ID
     /** unique ID of this menu item
      */
     short   ID;
 
-
-    // DocMerge from xml: field com::sun::star::mozilla::MenuSingleChange::ChangeID
     /** ID identifying the type of change in the any type change
      */
     short   ChangeID;
 
-
-    // DocMerge from xml: field com::sun::star::mozilla::MenuSingleChange::Change
     /** value of change
      */
     any     Change;

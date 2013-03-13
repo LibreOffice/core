@@ -29,8 +29,6 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: interface com::sun::star::io::XInputStream
 /** This is the basic interface to read data from a stream.
     <p>
     See the <a href="http://udk.openoffice.org/common/man/concept/streams.html">
@@ -38,8 +36,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XInputStream: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::io::XInputStream::readBytes
     /** reads the specified number of bytes in the given sequence.
 
         <p>The return value specifies the number of bytes which have been
@@ -81,8 +77,6 @@ published interface XInputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::BufferSizeExceededException,
                     com::sun::star::io::IOException);
 
-
-    // DocMerge from xml: method com::sun::star::io::XInputStream::readSomeBytes
     /** reads the available number of bytes, at maximum
         <var>nMaxBytesToRead</var>.
 
@@ -104,8 +98,6 @@ published interface XInputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::BufferSizeExceededException,
                     com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XInputStream::skipBytes
     /** skips the next <var>nBytesToSkip</var> bytes (must be positive).
 
         <p>It is up to the implementation whether this method is
@@ -118,8 +110,6 @@ published interface XInputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::BufferSizeExceededException,
                     com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XInputStream::available
     /** states how many bytes can be read or skipped without blocking.
 
         <p>Note: This method offers no information on whether the EOF
@@ -130,8 +120,6 @@ published interface XInputStream: com::sun::star::uno::XInterface
                     com::sun::star::io::IOException
                     );
 
-
-    // DocMerge from xml: method com::sun::star::io::XInputStream::closeInput
     /** closes the stream.
 
         <p>Users must close the stream explicitly when no further

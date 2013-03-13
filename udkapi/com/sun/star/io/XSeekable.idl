@@ -27,8 +27,6 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: interface com::sun::star::io::XSeekable
 /** makes it possible to seek to a certain position within a stream.
 
     <p>This interface should be supported, if it is possible to access the
@@ -38,8 +36,6 @@ module com {  module sun {  module star {  module io {
  */
 published interface XSeekable: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::io::XSeekable::seek
     /** changes the seek pointer to a new location relative to the beginning of the stream.
 
 
@@ -52,8 +48,6 @@ published interface XSeekable: com::sun::star::uno::XInterface
     void seek( [in] hyper location )
         raises( com::sun::star::lang::IllegalArgumentException, com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XSeekable::getPosition
     /** returns the current offset of the stream.
        @returns
              the current offset in this stream.
@@ -61,8 +55,6 @@ published interface XSeekable: com::sun::star::uno::XInterface
     hyper getPosition()
         raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XSeekable::getLength
     /** returns the length of the stream.
        @returns
             the length of the storage medium on which the stream works.

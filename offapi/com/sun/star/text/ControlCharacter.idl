@@ -23,34 +23,24 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from idl: constants com::sun::star::text::ControlCharacter
 /** These constants are the codes for inserting control characters
         using <method>XSimpleText::insertControlCharacter</method> interface.
  */
 published constants ControlCharacter
 {
-
-    // DocMerge from idl: value com::sun::star::text::ControlCharacter::PARAGRAPH_BREAK
     /** This control character starts a new paragraph.
      */
     const short PARAGRAPH_BREAK = 0;
 
-
-    // DocMerge from idl: value com::sun::star::text::ControlCharacter::LINE_BREAK
     /** This control character starts a new line in a paragraph.
      */
     const short LINE_BREAK = 1;
 
-
-    // DocMerge from idl: value com::sun::star::text::ControlCharacter::HARD_HYPHEN
     /** This control character equals a dash but prevents this
                 position from being hyphenated.
      */
     const short HARD_HYPHEN = 2;
 
-
-    // DocMerge from idl: value com::sun::star::text::ControlCharacter::SOFT_HYPHEN
     /** This control character defines a special position as a
                 hyphenation point. If a word containing a soft hyphen
                 must be split at the end of a line, then this position
@@ -58,8 +48,6 @@ published constants ControlCharacter
      */
     const short SOFT_HYPHEN = 3;
 
-
-    // DocMerge from idl: value com::sun::star::text::ControlCharacter::HARD_SPACE
     /** This control character is used to link two words and
                 prevents this concatenation from being hyphenated.
                 It is printed as a space.

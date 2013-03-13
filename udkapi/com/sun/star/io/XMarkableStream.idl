@@ -29,21 +29,15 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: interface com::sun::star::io::XMarkableStream
 /** makes it possible to set and remove seekable marks to a stream.
  */
 published interface XMarkableStream: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::io::XMarkableStream::createMark
     /** creates a mark of the current postion and returns an identifier to it.
      */
     long createMark()
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XMarkableStream::deleteMark
     /** deletes the mark that you previously created with
         <member>XMarkableStream::createMark</member>.
 
@@ -56,8 +50,6 @@ published interface XMarkableStream: com::sun::star::uno::XInterface
             raises( com::sun::star::io::IOException,
                     com::sun::star::lang::IllegalArgumentException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XMarkableStream::jumpToMark
     /** jumps to a previously created mark.
      */
     void jumpToMark( [in] long nMark )
@@ -74,8 +66,6 @@ published interface XMarkableStream: com::sun::star::uno::XInterface
     void jumpToFurthest()
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from idl: method com::sun::star::io::XMarkableStream::offsetToMark
     /** @returns
             the offset from the current stream position to the
             mark ("current position" - "mark position").

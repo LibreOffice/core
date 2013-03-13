@@ -23,26 +23,18 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::HatchStyle
 /** The <type>HatchStyle</type> defines the style of the lines in a hatch.
  */
 published enum HatchStyle
 {
-
-    // DocMerge from xml: value com::sun::star::drawing::HatchStyle::SINGLE
     /** the hatch consists of a single horizontal line
      */
     SINGLE,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::HatchStyle::DOUBLE
     /** the hatch has a horizontal and a vertical line
      */
     DOUBLE,
 
-
-    // DocMerge from xml: value com::sun::star::drawing::HatchStyle::TRIPLE
     /** the hatch has a horizontal, a vertical and a diagonal line
      */
     TRIPLE

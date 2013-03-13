@@ -26,15 +26,11 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XTextFrame
 /** provides access to the <type>Text</type> of a <type>TextFrame</type>.
     @see TextFrame
  */
 published interface XTextFrame: com::sun::star::text::XTextContent
 {
-
-    // DocMerge from idl: method com::sun::star::text::XTextFrame::getText
     /** @returns
                 the text within this frame. The returned interface belongs
                 to an object which implements the service <type>Text</type>.

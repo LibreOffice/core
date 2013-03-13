@@ -25,8 +25,6 @@
 
 module com {  module sun {  module star {  module lang {
 
-
-// DocMerge from xml: exception com::sun::star::lang::WrappedTargetException
 /** This is a checked exception that wraps an exception thrown
     by the original target.
 
@@ -38,8 +36,6 @@ module com {  module sun {  module star {  module lang {
  */
 published exception WrappedTargetException: com::sun::star::uno::Exception
 {
-
-    // DocMerge from xml: field com::sun::star::lang::WrappedTargetException::TargetException
     /** The exception is thrown by the target.
      */
     any TargetException;

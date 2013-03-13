@@ -32,8 +32,6 @@
  */
 published interface XInteractionContinuation: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::task::XInteractionContinuation::select
     /** Select this way of continuing from an
         <type scope="com::sun::star::task">XInteractionRequest</type> (given a
         choice of various

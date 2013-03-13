@@ -25,33 +25,24 @@
 
  module com {  module sun {  module star {  module style {
 
-
-// DocMerge from xml: struct com::sun::star::style::TabStop
 /** This structure is used to specify a single tabulator stop.
  */
 published struct TabStop
 {
-    // DocMerge from xml: field com::sun::star::style::TabStop::Position
     /** This field specifies the position of the tabulator in relation
         to the left border.
      */
     long Position;
 
-
-    // DocMerge from xml: field com::sun::star::style::TabStop::Alignment
     /** This field specifies the alignment of the text range before the
         tabulator.
      */
     com::sun::star::style::TabAlign Alignment;
 
-
-    // DocMerge from xml: field com::sun::star::style::TabStop::DecimalChar
     /** This field specifies which delimiter is used for the decimal.
      */
     char DecimalChar;
 
-
-    // DocMerge from xml: field com::sun::star::style::TabStop::FillChar
     /** This field specifies the character that is used to fill up the
         space between the text in the text range and the tabulators.
      */

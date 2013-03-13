@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: service com::sun::star::drawing::PageShape
 /** This service is for a page shape.
     A page shape displays a preview of another page. These shapes
     are used inside notes pages to preview the corresponding
@@ -35,7 +33,6 @@
  */
 published service PageShape
 {
-    // DocMerge: empty anyway
     service com::sun::star::drawing::Shape;
 
     /** this is the page number that is used for the preview.

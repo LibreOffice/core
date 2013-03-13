@@ -23,30 +23,22 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::LineStyle
 /** specifies the appearance of the lines of a
     shape.
  */
 published enum LineStyle
 {
     // DOCUMENTATION OMITTED FOR LineStyle::    NONE,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineStyle::NONE
     /** the line is hidden.
      */
     NONE,
 
     // DOCUMENTATION OMITTED FOR LineStyle::    SOLID,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineStyle::SOLID
     /** the line is solid.
      */
     SOLID,
 
     // DOCUMENTATION OMITTED FOR LineStyle::    DASH
-
-    // DocMerge from xml: value com::sun::star::drawing::LineStyle::DASH
     /** the line use dashes.
      */
     DASH

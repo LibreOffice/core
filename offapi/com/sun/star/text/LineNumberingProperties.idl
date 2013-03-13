@@ -24,8 +24,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::LineNumberingProperties
 /** provides access to the settings of the line numbering.
  */
 published service LineNumberingProperties

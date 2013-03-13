@@ -27,14 +27,10 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XBookmarksSupplier
 /** provides access to the collection of all bookmarks within this text container.
  */
 published interface XBookmarksSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::text::XBookmarksSupplier::getBookmarks
     /** @returns
                 the collection of all <type>Bookmark</type> instances which are
                 within this context and which support the <type>Bookmarks</type> service.

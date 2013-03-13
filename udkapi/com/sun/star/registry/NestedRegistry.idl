@@ -26,8 +26,6 @@
 
  module com {  module sun {  module star {  module registry {
 
-
-// DocMerge from xml: service com::sun::star::registry::NestedRegistry
 /** supports a shared view on two different registries. The registry
     files will be opened in two different modes, registry1 will be opened with read/write
     rights and registry2 will be opened read-only.
@@ -130,10 +128,7 @@
  */
 published service NestedRegistry
 {
-    // DocMerge: empty anyway
     interface com::sun::star::registry::XSimpleRegistry;
-
-    // DocMerge: empty anyway
     interface com::sun::star::lang::XInitialization;
 };
 

@@ -25,8 +25,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: struct com::sun::star::drawing::BezierPoint
 /** This is a point on a Bezier curve.
 
     <p>The two control points specify how the Bezier curve
@@ -36,19 +34,14 @@
  */
 published struct BezierPoint
 {
-    // DocMerge from xml: field com::sun::star::drawing::BezierPoint::Position
     /** This is the position of this point.
      */
     com::sun::star::awt::Point Position;
 
-
-    // DocMerge from xml: field com::sun::star::drawing::BezierPoint::ControlPoint1
     /** This is the position of the first control point.
      */
     com::sun::star::awt::Point ControlPoint1;
 
-
-    // DocMerge from xml: field com::sun::star::drawing::BezierPoint::ControlPoint2
     /** This is the position of the second control point.
      */
     com::sun::star::awt::Point ControlPoint2;

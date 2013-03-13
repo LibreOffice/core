@@ -24,8 +24,6 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: exception com::sun::star::io::UnknownHostException
 /** is thrown when the IP address of a host could not be determined.
  */
 exception UnknownHostException: com::sun::star::io::IOException

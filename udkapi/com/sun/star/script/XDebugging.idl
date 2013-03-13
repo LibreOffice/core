@@ -27,8 +27,6 @@
 
  module com {  module sun {  module star {  module script {
 
-
-// DocMerge from xml: interface com::sun::star::script::XDebugging
 /** makes it possible to set breakpoints in an interpreter.
     @deprecated
  */

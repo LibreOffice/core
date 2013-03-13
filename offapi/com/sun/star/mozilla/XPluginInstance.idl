@@ -26,24 +26,18 @@
  module com {  module sun {  module star {  module mozilla {
 
 
-
-// DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::start
 /** Allows to control an office side plugin instance and to communicate with it.
     This interface is oriented for communication with browsers plugins.
  */
 published interface XPluginInstance: com::sun::star::uno::XInterface
 {
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::start
     /** Starts plugin operation. This is called after a plugin instance is
         created.
      */
     void start();
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::stop
     /** Stops plugin operation. This is called when the user goes to another web
         page. The <member>XPluginInstance::destroy</member> method is directly called
         afterwards.
@@ -51,8 +45,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     void stop();
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::destroy
     /** Destroy the plugin instance. This method is called when it is no
         longer possible to return to the plugin instance, because it was
         destroyed by the browser (e.g., window close).
@@ -60,8 +52,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     void destroy();
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::createWindow
     /** Creates a new window for plugin operation.
 
         @param PlatformParentData   [in]:   platform dependent window data
@@ -71,8 +61,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     void createWindow( [in] any PlatformParentData, [in] boolean embedded );
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::newStream
     /** Notifies the plugin of a new stream to display.
 
         @param MIMEDesc     [in]:   the MIMEtype of the data stream
@@ -91,8 +79,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     );
 
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::newURL
     /** Notifies the plugin of a new url to open as document.
 
         @param MIMEDesc     [in]:   the MIMEtype of the data stream
@@ -104,8 +90,6 @@ published interface XPluginInstance: com::sun::star::uno::XInterface
     void newURL( [in] string MIMEDesc, [in] string theURL, [in] string filter, [in] any sessionData );
 
 
-
-    // DocMerge from idl: method com::sun::star::mozilla::XPluginInstance::getHttpServerURL
     /** Retrieves the URL of the HTTP Load balancing Slave.
 
         @param aURL     [out]:  the full qualified host name of the LBS

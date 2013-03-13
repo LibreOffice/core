@@ -25,15 +25,11 @@
  module com {  module sun {  module star {  module mozilla {
 
 
-
-// DocMerge from xml: interface com::sun::star::mozilla::XCloseSessionListener
 /** Listener for closing of the corresponding session.
 */
 published interface XCloseSessionListener: com::sun::star::uno::XInterface
 {
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XCloseSessionListener::sessionClosed
     /** Notifies a closesession listener that the corresponding session was logged out
 
         @param sessionData  [in]:   the data identifying the session that was closed

@@ -27,8 +27,6 @@
 
  module com {  module sun {  module star {  module uno {
 
-
-// DocMerge from xml: interface com::sun::star::uno::XWeak
 /** the server-side interface to a weak object.
 
 
@@ -82,8 +80,6 @@
  */
 published interface XWeak: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::uno::XWeak::queryAdapter
     /** queries the weak adapter.
 
 

@@ -23,8 +23,6 @@
 
  module com {  module sun {  module star {  module registry {
 
-
-// DocMerge from xml: enum com::sun::star::registry::RegistryKeyType
 /** represents all possible types of a key.
 
     <p>A key can be a normal key with a value and subkeys, or it can be a
@@ -33,13 +31,9 @@
 published enum RegistryKeyType
 {
     // DOCUMENTATION OMITTED FOR RegistryKeyType::  KEY,
-
-    // DocMerge: empty anyway
     KEY,
 
     // DOCUMENTATION OMITTED FOR RegistryKeyType::  LINK
-
-    // DocMerge: empty anyway
     LINK
 
 };

@@ -40,36 +40,23 @@
  */
 published service DatabaseRange
 {
-    // DocMerge: empty anyway
     interface com::sun::star::sheet::XDatabaseRange;
-
-    // DocMerge: empty anyway
     interface com::sun::star::sheet::XCellRangeReferrer;
-
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
-
-    // DocMerge: empty anyway
     interface com::sun::star::container::XNamed;
 
     [optional] interface com::sun::star::util::XRefreshable;
 
-
-    // DocMerge from xml: property com::sun::star::sheet::DatabaseRange::MoveCells
     /** if this property is set, columns or rows are inserted or deleted
         when the size of the range is changed by an update operation.
      */
     [property] boolean MoveCells;
 
-
-    // DocMerge from xml: property com::sun::star::sheet::DatabaseRange::KeepFormats
     /** if this property is set, cell formats are extended
         when the size of the range is changed by an update operation.
      */
     [property] boolean KeepFormats;
 
-
-    // DocMerge from xml: property com::sun::star::sheet::DatabaseRange::StripData
     /** if this property is set, the cell contents within the database
         range are left out when the document is saved.
      */

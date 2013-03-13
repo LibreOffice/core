@@ -26,13 +26,10 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::TextColumns
 /** provides access to columns in text (e.g., in TextFrames ).
  */
 published service TextColumns
 {
-    // DocMerge: empty anyway
     interface com::sun::star::text::XTextColumns;
 
     /** determines whether the columns all have equal width. This flag is set if XTextColumns::setColumnCount() is called

@@ -48,8 +48,6 @@ published interface XContentEnumerationAccess: com::sun::star::uno::XInterface
      */
     com::sun::star::container::XEnumeration createContentEnumeration( [in] string aServiceName );
 
-
-    // DocMerge from idl: method com::sun::star::container::XContentEnumerationAccess::getAvailableServiceNames
     /** @returns
                 all names of services of which instances exist in this object.
 

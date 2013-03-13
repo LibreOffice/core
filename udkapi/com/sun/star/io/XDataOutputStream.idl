@@ -27,73 +27,53 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: interface com::sun::star::io::XDataOutputStream
 /** makes it possible to write machine-independent simple data types to a
     stream.
     @see com::sun::star::io::XDataInputStream
  */
 published interface XDataOutputStream: com::sun::star::io::XOutputStream
 {
-
-    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeBoolean
     /** writes a boolean. It is an 8-bit value. 0 means FALSE; all other
         values mean TRUE.
      */
     void writeBoolean( [in] boolean Value )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeByte
     /** writes an 8-bit byte.
      */
     void writeByte( [in] byte Value )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeChar
     /** writes a 16-bit character.
      */
     void writeChar( [in] char Value )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeShort
     /** writes a 16-bit big endian integer.
      */
     void writeShort( [in] short Value )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeLong
     /** writes a 32-bit big endian integer.
      */
     void writeLong( [in] long Value )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeHyper
     /** writes a 64-bit big endian integer.
      */
     void writeHyper( [in] hyper Value )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeFloat
     /** writes a 32-bit IEEE float.
      */
     void writeFloat( [in] float Value )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeDouble
     /** writes a 64-bit IEEE double.
      */
     void writeDouble( [in] double Value )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataOutputStream::writeUTF
     /** writes a string in UTF format.
      */
     void writeUTF( [in] string Value )

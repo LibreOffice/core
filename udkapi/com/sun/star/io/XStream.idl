@@ -27,14 +27,10 @@
 module com {  module sun {  module star {  module io {
 
 
-
-// DocMerge from xml: interface com::sun::star::io::XStream
 /** offers read and write access to the same stream.
  */
 published interface XStream: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::io::XStream::getInputStream
     /** @returns
             the <type>XInputStream</type> part of the stream.  Closing the returned
             <type>XInputStream</type> also closes any <type>XOutputStream</type> part.
@@ -42,8 +38,6 @@ published interface XStream: com::sun::star::uno::XInterface
     XInputStream getInputStream();
 
 
-
-    // DocMerge from xml: method com::sun::star::io::XStream::getOutputStream
     /** @returns
             the <type>XInputStream</type> part of the stream. Closing the returned
             <type>XOutputStream</type> also closes the <type>XInputStream</type> part.

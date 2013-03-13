@@ -23,8 +23,6 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: service com::sun::star::io::Pipe
 /** the implementation of an output stream and an input stream.
     <p>
     All data written through the outputstream is buffered until it is

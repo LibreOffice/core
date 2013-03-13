@@ -31,24 +31,18 @@
 
 module com {  module sun {  module star {  module io {
 
-
-// DocMerge from xml: interface com::sun::star::io::XDataImporter
 /** makes it possible to import data from a data source into a component.
 
     <p>Importer objects are registered for specific components and data types.</p>
  */
 published interface XDataImporter: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::io::XDataImporter::importData
     /** imports data for a component from an active data source.
      */
     void importData( [in] com::sun::star::io::XActiveDataSource aActiveSource,
              [in] com::sun::star::lang::XComponent Component,
              [in] com::sun::star::io::XDataTransferEventListener aListener );
 
-
-    // DocMerge from xml: method com::sun::star::io::XDataImporter::cancel
     /** cancels the import process.
      */
     void cancel();

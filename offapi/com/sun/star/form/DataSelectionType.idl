@@ -23,8 +23,6 @@
 
  module com {  module sun {  module star {  module form {
 
-
-// DocMerge from xml: enum com::sun::star::form::DataSelectionType
 /** describes the type of datasource used for a form.
     <p>Please do <em><b>not</b></em> use anymore, this enum is deprecated.
     @deprecated

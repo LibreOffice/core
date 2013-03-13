@@ -27,16 +27,12 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: exception com::sun::star::text::InvalidTextContentException
 /** is thrown whenever a method gets a <type>TextContent</type>
     as an actual argument when the text content cannot be used for that
     operation.
  */
 published exception InvalidTextContentException: com::sun::star::uno::Exception
 {
-
-    // DocMerge from xml: field com::sun::star::text::InvalidTextContentException::TextContent
     /** contains the interface of the text content that caused the exception.
      */
     com::sun::star::text::XTextContent TextContent;

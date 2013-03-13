@@ -24,16 +24,12 @@
 
  module com {  module sun {  module star {  module mozilla {
 
-
-// DocMerge from xml: interface com::sun::star::mozilla::XPluginWindowPeer
 /** Allows to notify a plugin from the office side about plugin window's child window creation.
     This interface is oriented for communication with browsers plugins.
  */
 published interface XPluginWindowPeer: com::sun::star::uno::XInterface
 {
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginWindowPeer::setChildWindow
     /** Notifies the peer of the created child window.
 
         @param SystemWindowData [in]:   platform dependent window data

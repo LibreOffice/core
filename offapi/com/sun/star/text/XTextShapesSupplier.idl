@@ -27,14 +27,10 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XTextShapesSupplier
 /** provides the collection of <type scope="com::sun::star::drawing">TextShape</type>s.
  */
 published interface XTextShapesSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::text::XTextShapesSupplier::getShapes
     /** returns the collection of shapes.
 
         @see com::sun::star::drawing::DrawPage

@@ -32,8 +32,6 @@ module com {  module sun {  module star {  module connection {
  */
 published interface XConnector: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::connection::XConnector::connect
     /** creates a new connection interprocess connection.
         <p>
         Tries to connect to an <type>XAcceptor</type>.  Behavior is unspecified

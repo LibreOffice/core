@@ -23,71 +23,51 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::RectanglePoint
 /** specifies one of nine points in a rectangle.
  */
 published enum RectanglePoint
 {
     // DOCUMENTATION OMITTED FOR RectanglePoint::   LEFT_TOP,
-
-    // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::LEFT_TOP
     /** specify to the point on the left side from the top of the rectangle.
      */
     LEFT_TOP,
 
     // DOCUMENTATION OMITTED FOR RectanglePoint::   MIDDLE_TOP,
-
-    // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::MIDDLE_TOP
     /** specify to the point on the middle of the top from the rectangle.
      */
     MIDDLE_TOP,
 
     // DOCUMENTATION OMITTED FOR RectanglePoint::   RIGHT_TOP,
-
-    // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::RIGHT_TOP
     /** specify to the point on the right side from the top of the rectangle.
      */
     RIGHT_TOP,
 
     // DOCUMENTATION OMITTED FOR RectanglePoint::   LEFT_MIDDLE,
-
-    // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::LEFT_MIDDLE
     /** specify to the point on the middle of the left side from the rectangle.
      */
     LEFT_MIDDLE,
 
     // DOCUMENTATION OMITTED FOR RectanglePoint::   MIDDLE_MIDDLE,
-
-    // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::MIDDLE_MIDDLE
     /** specify to the point on the center from the rectangle.
      */
     MIDDLE_MIDDLE,
 
     // DOCUMENTATION OMITTED FOR RectanglePoint::   RIGHT_MIDDLE,
-
-    // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::RIGHT_MIDDLE
     /** specify to the point on the middle of the right side from the rectangle.
      */
     RIGHT_MIDDLE,
 
     // DOCUMENTATION OMITTED FOR RectanglePoint::   LEFT_BOTTOM,
-
-    // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::LEFT_BOTTOM
     /** specify to the point on the bottom of the left side from the rectangle.
      */
     LEFT_BOTTOM,
 
     // DOCUMENTATION OMITTED FOR RectanglePoint::   MIDDLE_BOTTOM,
-
-    // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::MIDDLE_BOTTOM
     /** specify to the point on the middle of the bottom from the rectangle.
      */
     MIDDLE_BOTTOM,
 
     // DOCUMENTATION OMITTED FOR RectanglePoint::   RIGHT_BOTTOM
-
-    // DocMerge from xml: value com::sun::star::drawing::RectanglePoint::RIGHT_BOTTOM
     /** specify to the point on the bottom of the right side from the rectangle.
      */
     RIGHT_BOTTOM

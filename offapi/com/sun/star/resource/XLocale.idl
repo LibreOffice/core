@@ -29,16 +29,12 @@
 
  module com {  module sun {  module star {  module resource {
 
-
-// DocMerge from xml: interface com::sun::star::resource::XLocale
 /** offers some operations on <type scope="com::sun::star::lang">Locale</type>
     structures.@see         XResourceBundle
         @see         Locale
  */
 published interface XLocale: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::resource::XLocale::create
     /** creates a locale from language, country, and variant.
 
         <p>NOTE: ISO 639 is not a stable standard; some of the
@@ -55,8 +51,6 @@ published interface XLocale: com::sun::star::uno::XInterface
              [in] string aCountry,
              [in] string aVariant );
 
-
-    // DocMerge from xml: method com::sun::star::resource::XLocale::getDefault
     /** the common method of getting the current default locale.
 
         <p>It is used for the presentation (for menus, dialogs, etc.).
@@ -72,8 +66,6 @@ published interface XLocale: com::sun::star::uno::XInterface
      */
     com::sun::star::lang::Locale getDefault();
 
-
-    // DocMerge from xml: method com::sun::star::resource::XLocale::setDefault
     /** sets the default locale for the whole environment.
 
         <p>It is normally set once at the beginning of an application,
@@ -84,53 +76,39 @@ published interface XLocale: com::sun::star::uno::XInterface
      */
     void setDefault( [in] com::sun::star::lang::Locale newLocale );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getAvailableLocales
     /** @returns
                     a sequence of all locales which are available in the system.
      */
     sequence<com::sun::star::lang::Locale> getAvailableLocales();
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getISOCountries
     /** @returns
                     a sequence of all ISO country codes known to the component.
      */
     sequence<string> getISOCountries();
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getISOLanguages
     /** @returns
                     a sequence of all ISO language codes known to the component.
      */
     sequence<string> getISOLanguages();
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getLanguagesForCountry
     /** @returns
                     a sequence for language codes which are valid within the
                     given country.
      */
     sequence<string> getLanguagesForCountry( [in] string country );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getISO3Language
     /** @returns
                     the ISO language code for the specified locale.
      */
     string getISO3Language( [in] com::sun::star::lang::Locale locale )
             raises( com::sun::star::resource::MissingResourceException );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getISO3Country
     /** @returns
                     the ISO country code for the specified locale.
      */
     string getISO3Country( [in] com::sun::star::lang::Locale locale )
             raises( com::sun::star::resource::MissingResourceException );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayLanguage_Default
     /** @returns
                     language code for display of field to user. If the localized
                     name is not found, returns the ISO code. The desired user language
@@ -139,8 +117,6 @@ published interface XLocale: com::sun::star::uno::XInterface
     string getDisplayLanguage_Default( [in] com::sun::star::lang::Locale locale );
 
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayLanguage
     /** @return
                     language code for display of field to user. If the localized
                     name is not found, returns the ISO codes.
@@ -154,8 +130,6 @@ published interface XLocale: com::sun::star::uno::XInterface
     string getDisplayLanguage( [in] com::sun::star::lang::Locale locale,
              [in] com::sun::star::lang::Locale inLocale );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayCountry_Default
     /** @returns
                     country code for display of field to user. If the localized
                     name is not found, returns the ISO code. The desired user country
@@ -163,8 +137,6 @@ published interface XLocale: com::sun::star::uno::XInterface
      */
     string getDisplayCountry_Default( [in] com::sun::star::lang::Locale locale );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayCountry
     /** @returns
                     country code for display of field to user. If the localized
                     name is not found, returns the ISO codes.
@@ -175,16 +147,12 @@ published interface XLocale: com::sun::star::uno::XInterface
     string getDisplayCountry( [in] com::sun::star::lang::Locale locale,
              [in] com::sun::star::lang::Locale inLocale );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayVariant_Default
     /** @returns
                     variant code for display of field to user. The desired user variant
                     is from the default locale.
      */
     string getDisplayVariant_Default( [in] com::sun::star::lang::Locale locale );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayVariant
     /** @returns
                     variant code for display of field to user. If the localized
                     name is not found, returns the ISO codes.
@@ -195,8 +163,6 @@ published interface XLocale: com::sun::star::uno::XInterface
     string getDisplayVariant( [in] com::sun::star::lang::Locale locale,
              [in] com::sun::star::lang::Locale inLocale );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayName_Default
     /** @returns
                     a string to display the entire locale to user. If the localized
                     name is not found, uses the ISO codes. The default locale is used
@@ -204,8 +170,6 @@ published interface XLocale: com::sun::star::uno::XInterface
      */
     string getDisplayName_Default( [in] com::sun::star::lang::Locale locale );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::getDisplayName
     /** @returns
                     a string to display the entire locale to user. If the localized
                     name is not found, uses the ISO codes.
@@ -216,8 +180,6 @@ published interface XLocale: com::sun::star::uno::XInterface
     string getDisplayName( [in] com::sun::star::lang::Locale locale,
              [in] com::sun::star::lang::Locale inLocale );
 
-
-    // DocMerge from idl: method com::sun::star::resource::XLocale::equals
     /** @returns
                 <TRUE/> if the <type scope="com::sun::star::lang">Locale</type> <var>l1</var> is equal to the
                 other one.

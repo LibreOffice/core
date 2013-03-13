@@ -24,16 +24,12 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::TextFieldMasters
 /** This is a collection of instances of <type>TextFieldMaster</type>, defined
     in a context (e.g. in a document).
  */
 published service TextFieldMasters
 {
 
-
-    // DocMerge from xml: service com::sun::star::text::TextFieldMasters: interface com::sun::star::container::XNameAccess
     /** This interface makes it possible to access the instances of service
                 <type>TextFieldMaster</type> defined in this context (e.g. this
                 document).

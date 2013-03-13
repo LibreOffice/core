@@ -27,14 +27,10 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XTextSectionsSupplier
 /** manages the text sections within the context (i.e. the document).
  */
 published interface XTextSectionsSupplier: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::text::XTextSectionsSupplier::getTextSections
     /** @returns
                 the collection of text sections.
      */

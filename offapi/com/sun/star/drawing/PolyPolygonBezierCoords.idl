@@ -27,18 +27,13 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: struct com::sun::star::drawing::PolyPolygonBezierCoords
 /** specifies the coordinates for a poly polygon Bezier.
  */
 published struct PolyPolygonBezierCoords
 {
-    // DocMerge: empty anyway
     com::sun::star::drawing::PointSequenceSequence Coordinates;
 
     // DOCUMENTATION OMITTED FOR PolyPolygonBezierCoords::Flags
-
-    // DocMerge: empty anyway
     com::sun::star::drawing::FlagSequenceSequence Flags;
 
 };

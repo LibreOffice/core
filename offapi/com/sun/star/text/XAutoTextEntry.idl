@@ -27,8 +27,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: interface com::sun::star::text::XAutoTextEntry
 /** identifies an autotext entry.
 
 
@@ -47,8 +45,6 @@
  */
 published interface XAutoTextEntry: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::text::XAutoTextEntry::applyTo
     /** inserts the contents represented by this auto text entry at the
         specified text range.
      */

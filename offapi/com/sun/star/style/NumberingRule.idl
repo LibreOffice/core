@@ -27,8 +27,6 @@
 
  module com {  module sun {  module star {  module style {
 
-
-// DocMerge from xml: service com::sun::star::style::NumberingRule
 /** specifies a rule to format numberings.
 
     <p>It is normally represented by a sequence of
@@ -36,10 +34,7 @@
  */
 published service NumberingRule
 {
-    // DocMerge: empty anyway
     service com::sun::star::style::NumberingAlignment;
-
-    // DocMerge: empty anyway
     service com::sun::star::style::NumberingLevel;
 
 };

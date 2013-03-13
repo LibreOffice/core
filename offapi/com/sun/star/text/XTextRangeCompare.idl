@@ -29,8 +29,6 @@
  published interface XText;
  published interface XTextRange;
 
-
-// DocMerge from xml: interface com::sun::star::text::XTextRangeCompare
 /** compares the positions of two <type>TextRange</type>s within a
     <type>Text</type>.
 
@@ -42,8 +40,6 @@
  */
 published interface XTextRangeCompare: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from idl: method com::sun::star::text::XTextRangeCompare::compareRegionStarts
     /** @returns
                     1 if <var>xR1</var> starts before <var>xR2</var>,
                     0 if <var>xR1</var> starts at the same position as <var>xR2</var> and
@@ -56,8 +52,6 @@ published interface XTextRangeCompare: com::sun::star::uno::XInterface
     short compareRegionStarts( [in] XTextRange xR1, [in] XTextRange xR2 )
             raises( com::sun::star::lang::IllegalArgumentException );
 
-
-    // DocMerge from idl: method com::sun::star::text::XTextRangeCompare::compareRegionEnds
     /** @returns
                     1, if <var>xR1</var> ends before <var>xR2</var>,
                     0, if <var>xR1</var> ends at the same position as <var>xR2</var> and

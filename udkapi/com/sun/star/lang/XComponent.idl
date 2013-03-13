@@ -26,8 +26,6 @@ module com {  module sun {  module star {  module lang {
 
  published interface XEventListener;
 
-
-// DocMerge from xml: interface com::sun::star::lang::XComponent
 /** allows to exclicitly free resources and break cyclic references.
 
     <p>Actually the real lifetime of an UNO object is controlled by
@@ -43,8 +41,6 @@ module com {  module sun {  module star {  module lang {
  */
 published interface XComponent: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::lang::XComponent::dispose
     /** The owner of an object calls this method to explicitly free all
         resources kept by this object and thus break cyclic references.
 
@@ -76,8 +72,6 @@ published interface XComponent: com::sun::star::uno::XInterface
      */
     void dispose();
 
-
-    // DocMerge from xml: method com::sun::star::lang::XComponent::addEventListener
     /** adds an event listener to the object.
 
         <p>The broadcaster fires the disposing method of this listener
@@ -100,8 +94,6 @@ published interface XComponent: com::sun::star::uno::XInterface
      */
     void addEventListener( [in] XEventListener xListener );
 
-
-    // DocMerge from xml: method com::sun::star::lang::XComponent::removeEventListener
     /** removes an event listener from the listener list.
 
         <p>It is a "noop" if the specified listener is not registered.</p>

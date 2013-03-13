@@ -23,8 +23,6 @@
 
  module com {  module sun {  module star {  module drawing {
 
-
-// DocMerge from xml: enum com::sun::star::drawing::LineEndType
 /** The <type>LineEndType</type> specifies the appearance of the bullet at the
     end of a line.
 
@@ -33,36 +31,26 @@
 published enum LineEndType
 {
     // DOCUMENTATION OMITTED FOR LineEndType::  NONE,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineEndType::NONE
     /** the line has no special end.
      */
     NONE,
 
     // DOCUMENTATION OMITTED FOR LineEndType::  ARROW,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineEndType::ARROW
     /** the line uses an arrow for the line end.
      */
     ARROW,
 
     // DOCUMENTATION OMITTED FOR LineEndType::  CIRCLE,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineEndType::CIRCLE
     /** the line uses a circle for the line end.
      */
     CIRCLE,
 
     // DOCUMENTATION OMITTED FOR LineEndType::  SQUARE,
-
-    // DocMerge from xml: value com::sun::star::drawing::LineEndType::SQUARE
     /** the line uses a square for the line end.
      */
     SQUARE,
 
     // DOCUMENTATION OMITTED FOR LineEndType::  SPECIAL
-
-    // DocMerge from xml: value com::sun::star::drawing::LineEndType::SPECIAL
     /** deprecated
      */
     SPECIAL

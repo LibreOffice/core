@@ -27,18 +27,13 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::Bookmark
 /** A bookmark is a <type>TextContent</type>, which is like a jump
     target or a label.
  */
 published service Bookmark
 {
-    // DocMerge: empty anyway
     service com::sun::star::text::TextContent;
 
-
-    // DocMerge from xml: service com::sun::star::text::Bookmark: interface com::sun::star::container::XNamed
     /** This interface specifies the name of the bookmark.
      */
     interface com::sun::star::container::XNamed;

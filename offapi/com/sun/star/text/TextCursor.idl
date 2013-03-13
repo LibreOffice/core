@@ -34,52 +34,35 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::TextCursor
 /** A <type>TextCursor</type> is a <type>TextRange</type> which can be moved
     within a <type>Text</type> object.
     @see TextRange
  */
 published service TextCursor
 {
-    // DocMerge: empty anyway
     service com::sun::star::text::TextRange;
 
     interface com::sun::star::text::XTextCursor;
-
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XWordCursor;
-
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XSentenceCursor;
-
-    // DocMerge: empty anyway
     [optional] interface com::sun::star::text::XParagraphCursor;
 
-
-    // DocMerge from xml: service com::sun::star::text::TextCursor: interface com::sun::star::beans::XPropertySet
     /** This interface gives access to the properties of the range that is
                 selected by the cursor.
      */
     interface com::sun::star::beans::XPropertySet;
 
-
-    // DocMerge from xml: service com::sun::star::text::TextCursor: interface com::sun::star::beans::XPropertyState
     /** This interface gives access to the state of the properties of the
                 range that is selected by the cursor.
      */
     interface com::sun::star::beans::XPropertyState;
     interface com::sun::star::beans::XMultiPropertyStates;
 
-
-    // DocMerge from xml: service com::sun::star::text::TextCursor: interface com::sun::star::document::XDocumentInsertable
     /** This optional interface makes it possible to insert a document
                 from an external source at the cursor position.
      */
     [optional] interface com::sun::star::document::XDocumentInsertable;
 
-
-    // DocMerge from xml: service com::sun::star::text::TextCursor: interface com::sun::star::util::XSortable
     /** This optional interface makes it possible to sort the contents at
                 the cursor position.
      */

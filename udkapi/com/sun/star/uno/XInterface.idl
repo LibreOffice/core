@@ -22,8 +22,6 @@
 
  module com {  module sun {  module star {  module uno {
 
-
-// DocMerge from xml: interface com::sun::star::uno::XInterface
 /** base interface of all UNO interfaces
 
     <p> It provides lifetime control by reference counting and the
@@ -101,8 +99,6 @@ published interface XInterface
      */
     void acquire();
 
-
-    // DocMerge from xml: method com::sun::star::uno::XInterface::release
     /** decreases the reference counter by one.
         <p>When the reference counter reaches 0, the object gets deleted.</p>
         <p>Calling release() on the object is often called releasing

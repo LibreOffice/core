@@ -29,17 +29,12 @@
 */
 published interface XSVGPrinter: com::sun::star::uno::XInterface
 {
-    // DocMerge: empty anyway
     boolean         startJob( [in] com::sun::star::xml::sax::XDocumentHandler aHandler,
                               [in] sequence< byte > aJobSetup,
                               [in] string aJobName,
                               [in] unsigned long nCopies,
                               [in] boolean  bCollate );
-
-    // DocMerge: empty anyway
     void            printPage( [in] sequence< byte > aPrintPage );
-
-    // DocMerge: empty anyway
     void            endJob();
 };
 

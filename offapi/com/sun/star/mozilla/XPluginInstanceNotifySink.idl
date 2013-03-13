@@ -25,8 +25,6 @@
  module com {  module sun {  module star {  module mozilla {
 
 
-
-// DocMerge from xml: interface com::sun::star::mozilla::XPluginInstanceNotifySink
 /** Allows a plugin to get notification from office side
     about status of new document opening.
     This interface is oriented for communication with browsers plugins.
@@ -34,8 +32,6 @@
 published interface XPluginInstanceNotifySink: com::sun::star::uno::XInterface
 {
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XPluginInstanceNotifySink::notifyURL
     /** Notifies the plugin that a getURL / postURL operation on the
         corresponding XPluginInstancePeer was finished.
 

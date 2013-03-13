@@ -31,28 +31,20 @@
  module com {  module sun {  module star {  module mozilla {
 
 
-
-// DocMerge from xml: interface com::sun::star::mozilla::XMenuProxyListener
 /** Listens for changes in menu items.
  */
 published interface XMenuProxyListener: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::mozilla::XMenuProxyListener::menuChangedMultiple
     /** is called, if the content or graphical representation/state of the menu changes
         completely, for one or more menu items
      */
     void menuChangedMultiple([in] sequence<MenuMultipleChange> MenuMultipleChanges);
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XMenuProxyListener::menuChangedSingle
     /** is called, if the content or graphical representation/state of the menu changes,
         by one property for one or more menu items
      */
     void menuChangedSingle([in] sequence<MenuSingleChange> MenuSingleChanges);
 
-
-    // DocMerge from xml: method com::sun::star::mozilla::XMenuProxyListener::menuItemDeleted
     /** is called, if one menu item designated by the ID, is deleted.
 
         @param ID   [in]:   the menu item

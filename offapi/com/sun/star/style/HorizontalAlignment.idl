@@ -23,30 +23,22 @@
 
  module com {  module sun {  module star {  module style {
 
-
-// DocMerge from xml: enum com::sun::star::style::HorizontalAlignment
 /** values specify the horizontal alignment of
     an object within a container object.
  */
 published enum HorizontalAlignment
 {
     // DOCUMENTATION OMITTED FOR HorizontalAlignment::  LEFT,
-
-    // DocMerge from xml: value com::sun::star::style::HorizontalAlignment::LEFT
     /** set the horizontal alignment to the left margin from the container object
      */
     LEFT,
 
     // DOCUMENTATION OMITTED FOR HorizontalAlignment::  CENTER,
-
-    // DocMerge from xml: value com::sun::star::style::HorizontalAlignment::CENTER
     /** set the horizontal alignment to the center between the margins from the container object
      */
     CENTER,
 
     // DOCUMENTATION OMITTED FOR HorizontalAlignment::  RIGHT
-
-    // DocMerge from xml: value com::sun::star::style::HorizontalAlignment::RIGHT
     /** set the horizontal alignment to the right margin from the container object
      */
     RIGHT

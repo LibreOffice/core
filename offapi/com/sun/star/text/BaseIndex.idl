@@ -33,8 +33,6 @@
 
  module com {  module sun {  module star {  module text {
 
-
-// DocMerge from xml: service com::sun::star::text::BaseIndex
 /** specifies the basic service of different indexes within a document.@see com::sun::star::text::DocumentIndex
         @see com::sun::star::text::ContentIndex
         @see com::sun::star::text::UserDefinedIndex
@@ -44,88 +42,49 @@
  */
 published service BaseIndex
 {
-    // DocMerge: empty anyway
     interface com::sun::star::text::XDocumentIndex;
 
     /** @since LibreOffice 4.0 */
     [optional] interface com::sun::star::util::XRefreshable;
 
     /** contains the title of the index.*/
-
-    // DocMerge: empty anyway
     [property] string Title;
     /** determines if the index is protected.*/
-
-    // DocMerge: empty anyway
     [property] boolean IsProtected;
     /** contains the name of the paragraph style that is applied to the heading.*/
-
-    // DocMerge: empty anyway
     [property] string ParaStyleHeading;
     /** contains the name of the paragraph style that is applied to the 1st level.*/
-
-    // DocMerge: empty anyway
     [property] string ParaStyleLevel1;
     /** contains the name of the paragraph style that is applied to the 2nd level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleLevel2;
     /** contains the name of the paragraph style that is applied to the 3rd level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleLevel3;
     /** contains the name of the paragraph style that is applied to the 4th level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleLevel4;
     /** contains the name of the paragraph style that is applied to the 5th level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleLevel5;
     /** contains the name of the paragraph style that is applied to the 6th level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleLevel6;
     /** contains the name of the paragraph style that is applied to the 7th level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleLevel7;
     /** contains the name of the paragraph style that is applied to the 8th level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleLevel8;
     /** contains the name of the paragraph style that is applied to the 9th level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleLevel9;
     /** contains the name of the paragraph style that is applied to the 10th level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleLevel10;
     /** contains the name of the paragraph style that is applied to the separator level.*/
-
-    // DocMerge: empty anyway
     [optional, property] string ParaStyleSeparator;
     /** contains the column interface.*/
-
-    // DocMerge: empty anyway
     [property] XTextColumns TextColumns;
     /** contains the URL of a graphic file that is displayed as background graphic*/
-
-    // DocMerge: empty anyway
     [property] string BackGraphicURL;
     /** contains the name of the filter of the graphic file that is
          displayed as background graphic*/
-
-    // DocMerge: empty anyway
     [property] string BackGraphicFilter;
-
-    // DocMerge from xml: property com::sun::star::text::BaseIndex::BackGraphicLocation
     /** determines the position of the background graphic.@see GraphicLocation
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
-
-    // DocMerge from xml: property com::sun::star::text::BaseIndex::BackTransparent
     /** specifies the color of the background.
      */
     [property] com::sun::star::util::Color BackColor;
@@ -140,7 +99,6 @@ published service BaseIndex
      </p>
      @see DocumentIndexLevelFormat
      */
-    // DocMerge: empty anyway
     [optional, property] com::sun::star::container::XIndexReplace LevelFormat;
     /** determines if the content of the document index is created from the
          complete document content or from the current chapter only.
