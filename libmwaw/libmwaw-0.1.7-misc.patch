@@ -11,7 +11,16 @@
  {
 --- a/src/lib/EDParser.cxx
 +++ b/src/lib/EDParser.cxx
-@@ -756,7 +756,7 @@ private:
+@@ -51,6 +51,8 @@
+ #include "MWAWRSRCParser.hxx"
+ #include "MWAWSubDocument.hxx"
+ 
++#include "libmwaw_internal.hxx"
++
+ #include "EDParser.hxx"
+ 
+ /** Internal: the structures of a EDParser */
+@@ -756,7 +758,7 @@ private:
  
  bool DeflateStruct::sendDuplicated(int num, int depl)
  {
