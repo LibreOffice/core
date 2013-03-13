@@ -157,16 +157,16 @@ namespace
 namespace sw
 {
     //For i120928,size conversion before exporting graphic of bullet
-    Frame::Frame(const Graphic&rGrf, const SwPosition &rPos)
-        :mpFlyFrm(NULL),
-        maPos(rPos),
-        maSize(),
-        maLayoutSize(),
-        mpStartFrameContent(0),
-        mbIsInline(true),
-        meWriterType(eBulletGrf),
-        maGrf(rGrf),
-        mbForBullet(true)
+    Frame::Frame(const Graphic &rGrf, const SwPosition &rPos)
+        : mpFlyFrm(NULL)
+        , maPos(rPos)
+        , maSize()
+        , maLayoutSize()
+        , meWriterType(eBulletGrf)
+        , mpStartFrameContent(0)
+        , mbIsInline(true)
+        , mbForBullet(true)
+        , maGrf(rGrf)
     {
         const MapMode aMap100mm( MAP_100TH_MM );
         Size    aSize( rGrf.GetPrefSize() );
@@ -183,17 +183,17 @@ namespace sw
     }
 
     Frame::Frame(const SwFrmFmt &rFmt, const SwPosition &rPos)
-        : mpFlyFrm(&rFmt),
-          maPos(rPos),
-          maSize(),
-          maLayoutSize(), // #i43447#
-          meWriterType(eTxtBox),
-          mpStartFrameContent(0),
-          // #i43447# - move to initialization list
-          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
-          // #i120928# - handle graphic of bullet within existing implementation
-          ,maGrf()
-          ,mbForBullet(false)
+        : mpFlyFrm(&rFmt)
+        , maPos(rPos)
+        , maSize()
+        , maLayoutSize() // #i43447#
+        , meWriterType(eTxtBox)
+        , mpStartFrameContent(0)
+        // #i43447# - move to initialization list
+        , mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
+        // #i120928# - handle graphic of bullet within existing implementation
+        , mbForBullet(false)
+        , maGrf()
     {
         switch (rFmt.Which())
         {

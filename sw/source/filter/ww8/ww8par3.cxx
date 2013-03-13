@@ -1070,9 +1070,9 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     return pMyNumRule;
 }
 
-SwNumRule* WW8ListManager::GetNumRule(int i)
+SwNumRule* WW8ListManager::GetNumRule(size_t i)
 {
-    if ( i >= 0 && i < maLSTInfos.size() )
+    if (i < maLSTInfos.size())
         return maLSTInfos[i]->pNumRule;
     else
         return 0;

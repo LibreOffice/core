@@ -808,7 +808,8 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
 
     rStrm.Write( aArr, nHdrLen );
 }
-void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm,  const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight)
+
+void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm, const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight)
 {
     if (rWrt.bWrtWW8)
     {
@@ -819,8 +820,6 @@ void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm,  const Graphic &rGrf, sal_uI
     }
     else
     {
-        bool bSwapped = rGrf.IsSwapOut() ? true : false;
-
         GDIMetaFile aMeta;
         switch (rGrf.GetType())
         {

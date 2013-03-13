@@ -4746,8 +4746,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                         }
                     }
                     // update graphic bullet information
-                    int nCount = pLstManager->GetWW8LSTInfoNum();
-                    for (int i = 0; i < nCount; ++i)
+                    size_t nCount = pLstManager->GetWW8LSTInfoNum();
+                    for (size_t i = 0; i < nCount; ++i)
                     {
                         SwNumRule* pRule = pLstManager->GetNumRule(i);
                         for (int j = 0; j < MAXLEVEL; ++j)
