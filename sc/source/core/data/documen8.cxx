@@ -443,41 +443,99 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
 #define CALCMAX                 1000    // Berechnungen
 #define ABORT_EVENTS            (VCL_INPUT_ANY & ~VCL_INPUT_TIMER & ~VCL_INPUT_OTHER)
 
+namespace {
+
+class IdleCalcTextWidthScope
+{
+    ScDocument& mrDoc;
+    ScAddress& mrCalcPos;
+    sal_uInt16 mnOldSearchMask;
+    SfxStyleFamily meOldFamily;
+    MapMode maOldMapMode;
+    sal_uLong mnStartTime;
+    bool mbNeedMore;
+
+public:
+    IdleCalcTextWidthScope(ScDocument& rDoc, ScAddress& rCalcPos) :
+        mrDoc(rDoc),
+        mrCalcPos(rCalcPos),
+        mnStartTime(Time::GetSystemTicks()),
+        mbNeedMore(false)
+    {
+        mrDoc.EnableIdle(false);
+
+        // The old search mask / family flags must be restored so that e.g.
+        // the styles dialog shows correct listing when it's opened in-between
+        // the calls.
+        ScStyleSheetPool* pStylePool = mrDoc.GetStyleSheetPool();
+        mnOldSearchMask = pStylePool->GetSearchMask();
+        meOldFamily = pStylePool->GetSearchFamily();
+    }
+
+    ~IdleCalcTextWidthScope()
+    {
+        SfxPrinter* pDev = mrDoc.GetPrinter();
+        if (pDev)
+            pDev->SetMapMode(maOldMapMode);
+
+        ScStyleSheetPool* pStylePool = mrDoc.GetStyleSheetPool();
+        pStylePool->SetSearchMask(meOldFamily, mnOldSearchMask);
+        mrDoc.EnableIdle(true);
+    }
+
+    SCTAB Tab() const { return mrCalcPos.Tab(); }
+    SCCOL Col() const { return mrCalcPos.Col(); }
+    SCROW Row() const { return mrCalcPos.Row(); }
+
+    void setTab(SCTAB nTab) { mrCalcPos.SetTab(nTab); }
+    void setCol(SCCOL nCol) { mrCalcPos.SetCol(nCol); }
+    void setRow(SCROW nRow) { mrCalcPos.SetRow(nRow); }
+
+    void incTab(SCTAB nInc=1) { mrCalcPos.IncTab(nInc); }
+    void incCol(SCCOL nInc=1) { mrCalcPos.IncCol(nInc); }
+    void incRow(SCROW nInc=1) { mrCalcPos.IncRow(nInc); }
+
+    void setOldMapMode(const MapMode& rOldMapMode) { maOldMapMode = rOldMapMode; }
+
+    void setNeedMore(bool b) { mbNeedMore = b; }
+    bool getNeedMore() const { return mbNeedMore; }
+
+    sal_uLong getStartTime() const { return mnStartTime; }
+};
+
+}
+
 bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder versuchen
 {
     // #i75610# if a printer hasn't been set or created yet, don't create one for this
     if (!mbIdleEnabled || IsInLinkUpdate() || GetPrinter(false) == NULL)
         return false;
 
-    mbIdleEnabled = false;
+    IdleCalcTextWidthScope aScope(*this, aCurTextWidthCalcPos);
 
-    const sal_uLong         nStart   = Time::GetSystemTicks();
     OutputDevice*       pDev     = NULL;
-    MapMode             aOldMap;
     ScStyleSheet*       pStyle   = NULL;
     ScColumnIterator*   pColIter = NULL;
     ScTable*            pTable   = NULL;
-    SCTAB               nTab     = aCurTextWidthCalcPos.Tab();
-    SCROW               nRow     = aCurTextWidthCalcPos.Row();
-    SCsCOL              nCol     = aCurTextWidthCalcPos.Col();
-    bool                bNeedMore= false;
 
-    if ( !ValidRow(nRow) )
-        nRow = 0, nCol--;
-    if ( nCol < 0 )
-        nCol = MAXCOL, nTab++;
-    if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
-        nTab = 0;
+    if (!ValidRow(aScope.Row()))
+    {
+        aScope.setRow(0);
+        aScope.incCol(-1);
+    }
 
-    //  SearchMask/Family muss gemerkt werden,
-    //  damit z.B. der Organizer nicht durcheinanderkommt, wenn zwischendurch eine
-    //  Query-Box aufgemacht wird !!!
+    if (aScope.Col() < 0)
+    {
+        aScope.setCol(MAXCOL);
+        aScope.incTab();
+    }
+
+    if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()])
+        aScope.setTab(0);
 
     ScStyleSheetPool* pStylePool = xPoolHelper->GetStylePool();
-    sal_uInt16 nOldMask = pStylePool->GetSearchMask();
-    SfxStyleFamily eOldFam = pStylePool->GetSearchFamily();
 
-    pTable = maTabs[nTab];
+    pTable = maTabs[aScope.Tab()];
     pStylePool->SetSearchMask( SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL );
     pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
                                               SFX_STYLE_FAMILY_PAGE );
@@ -495,14 +553,16 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
         Fraction aZoomFract( nZoom, 100 );
 
         // Start at specified cell position (nCol, nRow, nTab).
-        ScColumn* pColumn  = &pTable->aCol[nCol];
-        pColIter = new ScColumnIterator( pColumn, nRow, MAXROW );
+        ScColumn* pColumn  = &pTable->aCol[aScope.Col()];
+        pColIter = new ScColumnIterator(pColumn, aScope.Row(), MAXROW);
 
         while ( (nZoom > 0) && (nCount < CALCMAX) && (nRestart < 2) )
         {
-            if ( pColIter->Next( nRow, pCell ) )
+            SCROW nRow;
+            if ( pColIter->Next(nRow, pCell) )
             {
                 // More cell in this column.
+                aScope.setRow(nRow);
 
                 if ( TEXTWIDTH_DIRTY == pCell->GetTextWidth() )
                 {
@@ -512,7 +572,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                     if ( !pDev )
                     {
                         pDev = GetPrinter();
-                        aOldMap = pDev->GetMapMode();
+                        aScope.setOldMapMode(pDev->GetMapMode());
                         pDev->SetMapMode( MAP_PIXEL );  // wichtig fuer GetNeededSize
 
                         Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
@@ -526,14 +586,12 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                         bProgress = true;
                     }
 
-                    sal_uInt16 nNewWidth = (sal_uInt16)GetNeededSize( nCol, nRow, nTab,
-                                                              pDev, nPPTX, nPPTY,
-                                                              aZoomFract,aZoomFract, true,
-                                                              true );   // bTotalSize
+                    sal_uInt16 nNewWidth = (sal_uInt16)GetNeededSize(
+                        aScope.Col(), aScope.Row(), aScope.Tab(),
+                        pDev, nPPTX, nPPTY, aZoomFract,aZoomFract, true, true);   // bTotalSize
 
                     pCell->SetTextWidth( nNewWidth );
-
-                    bNeedMore = true;
+                    aScope.setNeedMore(true);
                 }
             }
             else
@@ -542,21 +600,21 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
                 bool bNewTab = false;
 
-                nRow = 0;
-                nCol--;
+                aScope.setRow(0);
+                aScope.incCol(-1);
 
-                if ( nCol < 0 )
+                if (aScope.Col() < 0)
                 {
                     // No more column to the left.  Move to the right-most column of the next sheet.
-                    nCol = MAXCOL;
-                    nTab++;
+                    aScope.setCol(MAXCOL);
+                    aScope.incTab();
                     bNewTab = true;
                 }
 
-                if ( !ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] )
+                if (!ValidTab(aScope.Tab()) || aScope.Tab() >= static_cast<SCTAB>(maTabs.size()) || !maTabs[aScope.Tab()] )
                 {
                     // Sheet doesn't exist at specified sheet position.  Restart at sheet 0.
-                    nTab = 0;
+                    aScope.setTab(0);
                     nRestart++;
                     bNewTab = true;
                 }
@@ -565,7 +623,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                 {
                     if ( bNewTab )
                     {
-                        pTable = maTabs[nTab];
+                        pTable = maTabs[aScope.Tab()];
                         pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
                                                                   SFX_STYLE_FAMILY_PAGE );
 
@@ -592,11 +650,11 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                     {
                         delete pColIter;
 
-                        pColumn  = &pTable->aCol[nCol];
-                        pColIter = new ScColumnIterator( pColumn, nRow, MAXROW );
+                        pColumn  = &pTable->aCol[aScope.Col()];
+                        pColIter = new ScColumnIterator( pColumn, aScope.Row(), MAXROW );
                     }
                     else
-                        ++nTab; // Move to the next sheet as the current one has scale-to-pages set.
+                        aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
                 }
             }
 
@@ -604,29 +662,19 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
             // Quit if either 1) its duration exceeds 50 ms, or 2) there is
             // any pending event after processing 32 cells.
-            if ((50L < Time::GetSystemTicks() - nStart) || (nCount > 31 && Application::AnyInput(ABORT_EVENTS)))
+            if ((50L < Time::GetSystemTicks() - aScope.getStartTime()) || (nCount > 31 && Application::AnyInput(ABORT_EVENTS)))
                 nCount = CALCMAX;
         }
     }
     else
-        ++nTab; // Move to the next sheet as the current one has scale-to-pages set.
+        aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
 
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
 
     delete pColIter;
 
-    if (pDev)
-        pDev->SetMapMode(aOldMap);
-
-    aCurTextWidthCalcPos.SetTab( nTab );
-    aCurTextWidthCalcPos.SetRow( nRow );
-    aCurTextWidthCalcPos.SetCol( (SCCOL)nCol );
-
-    pStylePool->SetSearchMask( eOldFam, nOldMask );
-    mbIdleEnabled = true;
-
-    return bNeedMore;
+    return aScope.getNeedMore();
 }
 
 //------------------------------------------------------------------------
