@@ -25,6 +25,12 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+ifeq ($(ENABLE_REPORTBUILDER),TRUE)
+ifneq ($(SYSTEM_JFREEREPORT),YES)
+include $(SRCDIR)/jfreereport/version.mk
+endif
+endif
+
 $(eval $(call gb_InstallModule_InstallModule,scp2/ooo))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,ooo))
@@ -51,6 +57,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_TDEAB \
 	ENABLE_TELEPATHY \
 	MERGELIBS \
+	SYSTEM_APACHE_COMMONS \
 	SYSTEM_BOOST \
 	SYSTEM_CAIRO \
 	SYSTEM_CLUCENE \
@@ -61,6 +68,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_HUNSPELL \
 	SYSTEM_HYPH \
 	SYSTEM_ICU \
+	SYSTEM_JFREEREPORT \
 	SYSTEM_JPEG \
 	SYSTEM_LCMS2 \
 	SYSTEM_LIBEXTTEXTCAT \
@@ -178,6 +186,23 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 ))
 endif
 
+ifneq ($(SYSTEM_JFREEREPORT),YES)
+
+$(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
+	-DFLOW_ENGINE_VERSION=$(FLOW_ENGINE_VERSION) \
+	-DFLUTE_VERSION=$(FLUTE_VERSION) \
+	-DLIBBASE_VERSION=$(LIBBASE_VERSION) \
+	-DLIBFONTS_VERSION=$(LIBFONTS_VERSION) \
+	-DLIBFORMULA_VERSION=$(LIBFORMULA_VERSION) \
+	-DLIBLAYOUT_VERSION=$(LIBLAYOUT_VERSION) \
+	-DLIBLOADER_VERSION=$(LIBLOADER_VERSION) \
+	-DLIBREPOSITORY_VERSION=$(LIBREPOSITORY_VERSION) \
+	-DLIBSERIALIZER_VERSION=$(LIBSERIALIZER_VERSION) \
+	-DLIBXML_VERSION=$(LIBXML_VERSION) \
+))
+
+endif
+
 $(eval $(call gb_InstallModule_add_templates,scp2/ooo,\
     scp2/source/templates/module_helppack \
     scp2/source/templates/module_helppack_root \
@@ -220,6 +245,12 @@ $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/ooo,\
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/module_pdfimport \
+))
+endif
+
+ifeq ($(ENABLE_REPORTBUILDER),TRUE)
+$(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
+    scp2/source/ooo/module_reportbuilder \
 ))
 endif
 

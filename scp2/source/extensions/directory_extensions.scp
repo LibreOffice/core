@@ -44,17 +44,6 @@ End
 
 #endif
 
-/* ** Report Builder ** */
-
-#ifndef WITHOUT_EXTENSION_REPORTDESIGN
-
-Directory gid_Brand_Dir_Share_Extensions_Report_Builder
-	ParentID = gid_Brand_Dir_Share_Extensions;
-	DosName = "report-builder";
-End
-
-#endif
-
 /* ** MediaWiki Publisher** */
 
 #ifndef WITHOUT_EXTENSION_MEDIAWIKI
