@@ -27,9 +27,10 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/base))
 
-$(eval $(call gb_InstallModule_define_if_set,scp2/base,\
-	ENABLE_REPORTBUILDER \
-))
+# Not sure about that?
+#$(eval $(call gb_InstallModule_define_if_set,scp2/base,\
+#	ENABLE_REPORTBUILDER \
+#))
 
 $(eval $(call gb_InstallModule_add_templates,scp2/base,\
     scp2/source/templates/module_langpack_base \
