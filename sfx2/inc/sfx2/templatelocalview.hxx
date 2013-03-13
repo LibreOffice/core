@@ -42,7 +42,7 @@ public:
     std::vector<TemplateItemProperties>
         getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
-    sal_uInt16 createRegion (const OUString &rName);
+    virtual sal_uInt16 createRegion (const OUString &rName);
 
     bool removeRegion (const sal_uInt16 nItemId);
 

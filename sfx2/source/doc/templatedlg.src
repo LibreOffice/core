@@ -230,6 +230,17 @@ ModelessDialog DLG_TEMPLATE_MANAGER
                     ImageBitmap = Bitmap { File = "actionview028.png" ; };
                 };
             };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_FOLDER_NEW;
+                Text [ en-US ] = "New folder";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "actionview029.png"; };
+                };
+            };
         };
     };
 

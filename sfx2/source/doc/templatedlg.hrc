@@ -41,6 +41,8 @@
 
 #define TBI_TEMPLATE_SAVE           28
 
+#define TBI_TEMPLATE_FOLDER_NEW     29
+
 #define STR_ACTION_REFRESH          263
 #define STR_ACTION_SORT_NAME        264
 
