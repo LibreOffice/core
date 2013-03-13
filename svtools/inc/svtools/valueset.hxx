@@ -251,7 +251,7 @@ private:
     SVT_DLLPRIVATE void         ImplInitScrollBar();
     SVT_DLLPRIVATE void         ImplDeleteItems();
     SVT_DLLPRIVATE void         ImplFormatItem( ValueSetItem* pItem, Rectangle aRect );
-    SVT_DLLPRIVATE void         ImplDrawItemText( const XubString& rStr );
+    SVT_DLLPRIVATE void         ImplDrawItemText(const OUString& rStr);
     SVT_DLLPRIVATE void         ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel );
     SVT_DLLPRIVATE void         ImplDrawSelect();
     SVT_DLLPRIVATE void         ImplHideSelect( sal_uInt16 nItemId );
@@ -315,10 +315,10 @@ public:
     void            InsertItem( sal_uInt16 nItemId, const Color& rColor,
                                 size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
-                                const Image& rImage, const XubString& rStr,
+                                const Image& rImage, const OUString& rStr,
                                 size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
-                                const Color& rColor, const XubString& rStr,
+                                const Color& rColor, const OUString& rStr,
                                 size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
                                 size_t nPos = VALUESET_APPEND );
@@ -357,8 +357,8 @@ public:
     Color           GetItemColor( sal_uInt16 nItemId ) const;
     void            SetItemData( sal_uInt16 nItemId, void* pData );
     void*           GetItemData( sal_uInt16 nItemId ) const;
-    void            SetItemText( sal_uInt16 nItemId, const XubString& rStr );
-    XubString       GetItemText( sal_uInt16 nItemId ) const;
+    void            SetItemText( sal_uInt16 nItemId, const OUString& rStr );
+    OUString        GetItemText( sal_uInt16 nItemId ) const;
     void            SetColor( const Color& rColor );
     void            SetColor() { SetColor( Color( COL_TRANSPARENT ) ); }
     Color           GetColor() const { return maColor; }

@@ -678,13 +678,13 @@ void ValueSet::Format()
 
 // -----------------------------------------------------------------------
 
-void ValueSet::ImplDrawItemText( const XubString& rText )
+void ValueSet::ImplDrawItemText(const OUString& rText)
 {
     if ( !(GetStyle() & WB_NAMEFIELD) )
         return;
 
     Size    aWinSize = GetOutputSizePixel();
-    long    nTxtWidth = GetTextWidth( rText );
+    long    nTxtWidth = GetTextWidth(rText);
     long    nTxtOffset = mnTextOffset;
 
     // delete rectangle and show text
@@ -716,8 +716,7 @@ void ValueSet::ImplDrawSelect()
 
     if ( !bFocus && !bDrawSel )
     {
-        XubString aEmptyStr;
-        ImplDrawItemText( aEmptyStr );
+        ImplDrawItemText(OUString());
         return;
     }
 
@@ -885,7 +884,7 @@ void ValueSet::ImplDrawSelect( sal_uInt16 nItemId, const bool bFocus, const bool
                 ShowFocus( aRect2 );
         }
 
-        ImplDrawItemText( pItem->maText );
+        ImplDrawItemText(pItem->maText);
     }
 }
 
@@ -1669,7 +1668,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos 
 // -----------------------------------------------------------------------
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                           const XubString& rText, size_t nPos )
+                           const OUString& rText, size_t nPos )
 {
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
@@ -1682,7 +1681,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 // -----------------------------------------------------------------------
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
-                           const XubString& rText, size_t nPos )
+                           const OUString& rText, size_t nPos )
 {
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
@@ -2151,7 +2150,7 @@ void* ValueSet::GetItemData( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ValueSet::SetItemText( sal_uInt16 nItemId, const XubString& rText )
+void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 {
     size_t nPos = GetItemPos( nItemId );
 
@@ -2178,7 +2177,7 @@ void ValueSet::SetItemText( sal_uInt16 nItemId, const XubString& rText )
             nTempId = mnHighItemId;
 
         if ( nTempId == nItemId )
-            ImplDrawItemText( pItem->maText );
+            ImplDrawItemText(pItem->maText);
     }
 
     if (ImplHasAccessibleListeners())
@@ -2194,14 +2193,14 @@ void ValueSet::SetItemText( sal_uInt16 nItemId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-XubString ValueSet::GetItemText( sal_uInt16 nItemId ) const
+OUString ValueSet::GetItemText( sal_uInt16 nItemId ) const
 {
     size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
         return mItemList[nPos]->maText;
-    else
-        return XubString();
+
+    return OUString();
 }
 
 // -----------------------------------------------------------------------
