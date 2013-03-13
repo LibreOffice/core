@@ -27,6 +27,8 @@ public:
 
     bool loadRepository (TemplateRepository* pRepository, bool bRefresh);
 
+    virtual sal_uInt16 createRegion (const OUString &rName);
+
 private:
 
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
