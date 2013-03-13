@@ -105,7 +105,7 @@ public:
     virtual void                GetPrinterQueueInfo( ImplPrnQueueList* pList ) = 0;
     virtual void                GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) = 0;
     virtual void                DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) = 0;
-    virtual rtl::OUString              GetDefaultPrinter() = 0;
+    virtual OUString              GetDefaultPrinter() = 0;
 
     // SalTimer
     virtual SalTimer*           CreateSalTimer() = 0;
@@ -160,7 +160,7 @@ public:
         CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments );
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
-    virtual void        AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType) = 0;
+    virtual void        AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType) = 0;
 
     virtual bool hasNativeFileSelection() const { return false; }
 
@@ -187,9 +187,9 @@ void DestroySalInstance( SalInstance* pInst );
 // - SalInstance-Functions -
 // -------------------------
 
-void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore );
+void SalAbort( const OUString& rErrorText, bool bDumpCore );
 
-VCL_PLUGIN_PUBLIC const ::rtl::OUString& SalGetDesktopEnvironment();
+VCL_PLUGIN_PUBLIC const OUString& SalGetDesktopEnvironment();
 
 // -----------
 // - SalData -
