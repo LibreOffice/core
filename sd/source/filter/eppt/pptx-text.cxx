@@ -878,7 +878,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                 PortionObj* pPortion = front();
                 CalculateGraphicBulletSize( ( pPortion ) ? pPortion->mnCharHeight : 24 );
 
-                switch( (SvxExtNumType)nNumberingType )
+                switch( nNumberingType )
                 {
                     case SVX_NUM_NUMBER_NONE : nParaFlags |= 0xf; break;
 
