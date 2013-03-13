@@ -259,6 +259,37 @@
         <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value>
       </prop>
     </node>
+    <node oor:name="D7896D52-B7AF-4820-9DFE-D404D015960F" oor:op="replace" install:module="reportbuilder">
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.report.ReportDefinition</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus">
+        <value>1</value>
+      </prop>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value>
+      </prop>
+    </node>
+    <node oor:name="80243D39-6741-46C5-926E-069164FF87BB" oor:op="replace" >
+      <prop oor:name="ObjectFactory">
+        <value>com.sun.star.embed.OOoEmbeddedObjectFactory</value>
+      </prop>
+      <prop oor:name="ObjectDocumentServiceName">
+        <value>com.sun.star.chart2.ChartDocument</value>
+      </prop>
+      <prop oor:name="ObjectDocumentFilterName">
+        <value>StarOffice XML (Base) Report Chart</value>
+      </prop>
+      <prop oor:name="ObjectMiscStatus">
+        <value>1</value>
+      </prop>
+      <prop oor:name="ObjectVerbs">
+        <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE</value>
+      </prop>
+    </node>
   </node>
   <node oor:name="ObjectNames">
     <node oor:name="Calc" oor:op="replace" install:module="calc">
@@ -315,6 +346,15 @@
         <value>8BC6B165-B1B2-4EDD-AA47-DAE2EE689DD6</value>
       </prop>
     </node>
+  </node>
+
+  <node oor:name="MimeTypeClassIDRelations" install:module="reportbuilder">
+    <prop oor:name="application/vnd.sun.xml.report.chart" oor:op="replace" oor:type="xs:string">
+      <value>80243D39-6741-46C5-926E-069164FF87BB</value>
+    </prop>
+    <prop oor:name="application/vnd.sun.xml.report" oor:op="replace" oor:type="xs:string">
+      <value>D7896D52-B7AF-4820-9DFE-D404D015960F</value>
+    </prop>
   </node>
 </oor:component-data>
 
