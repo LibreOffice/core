@@ -631,8 +631,8 @@ void GtkData::Init()
     // is there a -display command line parameter?
     rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
     int nParams = osl_getCommandArgCount();
-    rtl::OString aDisplay;
-    rtl::OUString aParam, aBin;
+    OString aDisplay;
+    OUString aParam, aBin;
     char** pCmdLineAry = new char*[ nParams+1 ];
     osl_getExecutableFile( &aParam.pData );
     osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
@@ -657,10 +657,10 @@ void GtkData::Init()
     g_set_application_name(SalGenericSystem::getFrameClassName());
 
     // Set consistant name of the root accessible
-    rtl::OUString aAppName = Application::GetAppName();
+    OUString aAppName = Application::GetAppName();
     if( !aAppName.isEmpty() )
     {
-        rtl::OString aPrgName = rtl::OUStringToOString(aAppName, aEnc);
+        OString aPrgName = rtl::OUStringToOString(aAppName, aEnc);
         g_set_prgname(aPrgName.getStr());
     }
 
@@ -681,11 +681,11 @@ void GtkData::Init()
     pGdkDisp = gdk_display_get_default();
     if ( !pGdkDisp )
     {
-        rtl::OUString aProgramFileURL;
+        OUString aProgramFileURL;
         osl_getExecutableFile( &aProgramFileURL.pData );
-        rtl::OUString aProgramSystemPath;
+        OUString aProgramSystemPath;
         osl_getSystemPathFromFileURL (aProgramFileURL.pData, &aProgramSystemPath.pData);
-        rtl::OString  aProgramName = rtl::OUStringToOString(
+        OString  aProgramName = rtl::OUStringToOString(
                                             aProgramSystemPath,
                                             osl_getThreadTextEncoding() );
         fprintf( stderr, "%s X11 error: Can't open display: %s\n",
@@ -703,9 +703,9 @@ void GtkData::Init()
      * the clipboard build another connection
      * to the xserver using $DISPLAY
      */
-    rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+    OUString envVar("DISPLAY");
     const gchar *name = gdk_display_get_name( pGdkDisp );
-    rtl::OUString envValue(name, strlen(name), aEnc);
+    OUString envValue(name, strlen(name), aEnc);
     osl_setEnvironment(envVar.pData, envValue.pData);
 
     GtkSalDisplay *pDisplay = new GtkSalDisplay( pGdkDisp );
