@@ -22,11 +22,7 @@
 
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
-
-namespace rtl
-{
-    class OUString;
-}
+#include <rtl/ustring.hxx>
 
 /* Button combinations for ShowNativeMessageBox
 */
@@ -103,7 +99,7 @@ public:
 
        @returns the name of the screen
     */
-    virtual rtl::OUString GetDisplayScreenName( unsigned int nScreen ) = 0;
+    virtual OUString GetDisplayScreenName( unsigned int nScreen ) = 0;
 
     /*  Shows a native message box with the specified title, message and button
         combination.
@@ -132,11 +128,12 @@ public:
         See button identifier above. If the function fails the
         return value is 0.
     */
-    virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
-                                      const rtl::OUString& rMessage,
+    virtual int ShowNativeMessageBox( const OUString& rTitle,
+                                      const OUString& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton,
                                       bool bUseResources ) = 0;
+
 };
 
 SalSystem* ImplGetSalSystem();

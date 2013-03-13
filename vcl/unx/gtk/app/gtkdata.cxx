@@ -646,7 +646,7 @@ void GtkData::Init()
         {
             pCmdLineAry[i+1] = g_strdup( "--display" );
             osl_getCommandArg(i+1, &aParam.pData );
-            aDisplay = rtl::OUStringToOString( aParam, aEnc );
+            aDisplay = OUStringToOString( aParam, aEnc );
         }
         else
             pCmdLineAry[i+1] = g_strdup( aBParam.getStr() );
@@ -660,7 +660,7 @@ void GtkData::Init()
     OUString aAppName = Application::GetAppName();
     if( !aAppName.isEmpty() )
     {
-        OString aPrgName = rtl::OUStringToOString(aAppName, aEnc);
+        OString aPrgName = OUStringToOString(aAppName, aEnc);
         g_set_prgname(aPrgName.getStr());
     }
 
