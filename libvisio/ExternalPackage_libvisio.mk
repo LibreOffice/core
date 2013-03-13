@@ -17,8 +17,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libvisio,inc/external/libvis
 
 $(eval $(call gb_ExternalPackage_use_external_project,libvisio,libvisio))
 
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_ExternalPackage_add_file,libvisio,lib/visio-0.0.lib,build/win32/Release/lib/libvisio-0.0.lib))
+ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalPackage_add_file,libvisio,lib/visio-0.0.lib,src/lib/.libs/libvisio-0.0.lib))
 else
 $(eval $(call gb_ExternalPackage_add_file,libvisio,lib/libvisio-0.0.a,src/lib/.libs/libvisio-0.0.a))
 endif
