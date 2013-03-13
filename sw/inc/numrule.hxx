@@ -75,13 +75,12 @@ public:
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt* );
 
+    virtual void            SetCharFmtName(const String& rSet);
+    virtual const String&   GetCharFmtName()const;
+
     //For i120928,access the cp info of graphic within bullet
     void            SetGrfBulletCP(sal_Unicode cP){cGrfBulletCP = cP;}
     sal_Unicode     GetGrfBulletCP()const {return cGrfBulletCP;}
-    void ForgetCharFmt();
-
-    virtual void            SetCharFmtName(const String& rSet);
-    virtual const String&   GetCharFmtName()const;
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0);
 
