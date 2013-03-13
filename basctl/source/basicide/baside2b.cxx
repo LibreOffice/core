@@ -746,6 +746,14 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         {
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
         }
+        else if( rTextHint.GetId() == TEXT_HINT_VIEWSELECTIONCHANGED )
+        {
+            if (SfxBindings* pBindings = GetBindingsPtr())
+            {
+                pBindings->Invalidate( SID_CUT );
+                pBindings->Invalidate( SID_COPY );
+            }
+        }
     }
 }
 
