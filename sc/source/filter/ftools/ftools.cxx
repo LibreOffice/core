@@ -114,15 +114,15 @@ rtl_TextEncoding ScfTools::GetSystemTextEncoding()
     return osl_getThreadTextEncoding();
 }
 
-String ScfTools::GetHexStr( sal_uInt16 nValue )
+OUString ScfTools::GetHexStr( sal_uInt16 nValue )
 {
     const sal_Char pHex[] = "0123456789ABCDEF";
-    String aStr;
+    OUString aStr;
 
-    aStr += pHex[ nValue >> 12 ];
-    aStr += pHex[ (nValue >> 8) & 0x000F ];
-    aStr += pHex[ (nValue >> 4) & 0x000F ];
-    aStr += pHex[ nValue & 0x000F ];
+    aStr += OUString( pHex[ nValue >> 12 ] );
+    aStr += OUString( pHex[ (nValue >> 8) & 0x000F ] );
+    aStr += OUString( pHex[ (nValue >> 4) & 0x000F ] );
+    aStr += OUString( pHex[ nValue & 0x000F ] );
     return aStr;
 }
 
@@ -223,17 +223,17 @@ void ScfTools::PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, bool bSk
 
 namespace {
 
-ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const String& rStyleName, SfxStyleFamily eFamily, bool bForceName )
+ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName, SfxStyleFamily eFamily, bool bForceName )
 {
     // find an unused name
-    String aNewName( rStyleName );
+    OUString aNewName( rStyleName );
     sal_Int32 nIndex = 0;
     SfxStyleSheetBase* pOldStyleSheet = 0;
     while( SfxStyleSheetBase* pStyleSheet = rPool.Find( aNewName, eFamily ) )
     {
         if( !pOldStyleSheet )
             pOldStyleSheet = pStyleSheet;
-        aNewName.Assign( rStyleName ).Append( ' ' ).Append( OUString::number( ++nIndex ) );
+        aNewName = rStyleName + " " + OUString::number( ++nIndex );
     }
 
     // rename existing style
@@ -249,12 +249,12 @@ ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const String& rStyleNa
 
 } // namespace
 
-ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const String& rStyleName, bool bForceName )
+ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName, bool bForceName )
 {
     return lclMakeStyleSheet( rPool, rStyleName, SFX_STYLE_FAMILY_PARA, bForceName );
 }
 
-ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const String& rStyleName, bool bForceName )
+ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName, bool bForceName )
 {
     return lclMakeStyleSheet( rPool, rStyleName, SFX_STYLE_FAMILY_PAGE, bForceName );
 }
@@ -277,32 +277,32 @@ void ScfTools::AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding
 
 // *** HTML table names <-> named range names *** -----------------------------
 
-const String& ScfTools::GetHTMLDocName()
+const OUString& ScfTools::GetHTMLDocName()
 {
-    static const String saHTMLDoc( RTL_CONSTASCII_USTRINGPARAM( "HTML_all" ) );
+    static const OUString saHTMLDoc( "HTML_all" );
     return saHTMLDoc;
 }
 
-const String& ScfTools::GetHTMLTablesName()
+const OUString& ScfTools::GetHTMLTablesName()
 {
-    static const String saHTMLTables( RTL_CONSTASCII_USTRINGPARAM( "HTML_tables" ) );
+    static const OUString saHTMLTables( "HTML_tables" );
     return saHTMLTables;
 }
 
 const String& ScfTools::GetHTMLIndexPrefix()
 {
-    static const String saHTMLIndexPrefix( RTL_CONSTASCII_USTRINGPARAM( "HTML_" ) );
+    static const String saHTMLIndexPrefix( "HTML_" );
     return saHTMLIndexPrefix;
 
 }
 
 const String& ScfTools::GetHTMLNamePrefix()
 {
-    static const String saHTMLNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "HTML__" ) );
+    static const String saHTMLNamePrefix( "HTML__" );
     return saHTMLNamePrefix;
 }
 
-String ScfTools::GetNameFromHTMLIndex( sal_uInt32 nIndex )
+OUString ScfTools::GetNameFromHTMLIndex( sal_uInt32 nIndex )
 {
     OUString aName = GetHTMLIndexPrefix() +
                      OUString::number( static_cast< sal_Int32 >( nIndex ) );
@@ -316,19 +316,19 @@ String ScfTools::GetNameFromHTMLName( const String& rTabName )
     return aName;
 }
 
-bool ScfTools::IsHTMLDocName( const String& rSource )
+bool ScfTools::IsHTMLDocName( const OUString& rSource )
 {
-    return rSource.EqualsIgnoreCaseAscii( GetHTMLDocName() );
+    return rSource.equalsIgnoreAsciiCase( GetHTMLDocName() );
 }
 
-bool ScfTools::IsHTMLTablesName( const String& rSource )
+bool ScfTools::IsHTMLTablesName( const OUString& rSource )
 {
-    return rSource.EqualsIgnoreCaseAscii( GetHTMLTablesName() );
+    return rSource.equalsIgnoreAsciiCase( GetHTMLTablesName() );
 }
 
-bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
+bool ScfTools::GetHTMLNameFromName( const String& rSource, OUString& rName )
 {
-    rName.Erase();
+    rName = "";
     if( rSource.EqualsIgnoreCaseAscii( GetHTMLNamePrefix(), 0, GetHTMLNamePrefix().Len() ) )
     {
         rName = rSource.Copy( GetHTMLNamePrefix().Len() );
@@ -336,11 +336,11 @@ bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
     }
     else if( rSource.EqualsIgnoreCaseAscii( GetHTMLIndexPrefix(), 0, GetHTMLIndexPrefix().Len() ) )
     {
-        String aIndex( rSource.Copy( GetHTMLIndexPrefix().Len() ) );
-        if( CharClass::isAsciiNumeric( aIndex ) && (aIndex.ToInt32() > 0) )
+        OUString aIndex( rSource.Copy( GetHTMLIndexPrefix().Len() ) );
+        if( CharClass::isAsciiNumeric( aIndex ) && (aIndex.toInt32() > 0) )
             rName = aIndex;
     }
-    return rName.Len() > 0;
+    return rName.getLength() > 0;
 }
 
 ScFormatFilterPluginImpl::ScFormatFilterPluginImpl() {}

@@ -88,7 +88,7 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pD
 
     if ( m_pRefEdit )
     {
-        String  aStr;
+        OUString  aStr;
         rRange.Format( aStr, SCR_ABS_3D, pDoc );
         m_pRefEdit->SetRefString( aStr );
     }
@@ -250,18 +250,18 @@ ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
     @descr  Keeps all empty strings.
     Example: abc\ndef\n\nghi -> "abc";"def";"";"ghi".
     @param rFmlaStr  (out-param) The converted formula string. */
-void lclGetFormulaFromStringList( String& rFmlaStr, const String& rStringList, sal_Unicode cFmlaSep )
+void lclGetFormulaFromStringList( OUString& rFmlaStr, const OUString& rStringList, sal_Unicode cFmlaSep )
 {
-    rFmlaStr.Erase();
+    rFmlaStr = "";
     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rStringList, '\n');
     for( sal_Int32 nToken = 0, nStringIx = 0; nToken < (sal_Int32) nTokenCnt; ++nToken )
     {
-        String aToken( rStringList.GetToken( 0, '\n', nStringIx ) );
+        OUString aToken( rStringList.getToken( 0, '\n', nStringIx ) );
         ScGlobal::AddQuotes( aToken, '"' );
         rFmlaStr = ScGlobal::addToken(rFmlaStr, aToken, cFmlaSep);
     }
-    if( !rFmlaStr.Len() )
-        rFmlaStr.AssignAscii( "\"\"" );
+    if( rFmlaStr.isEmpty() )
+        rFmlaStr = "\"\"";
 }
 
 
@@ -270,20 +270,20 @@ void lclGetFormulaFromStringList( String& rFmlaStr, const String& rStringList, s
     Example: "abc";;;"def";"";"ghi" -> abc\ndef\n\nghi.
     @param rStringList  (out-param) The converted line feed separated string list.
     @return  true = Conversion successful. */
-bool lclGetStringListFromFormula( String& rStringList, const String& rFmlaStr, sal_Unicode cFmlaSep )
+bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaStr, sal_Unicode cFmlaSep )
 {
-    String aQuotes( RTL_CONSTASCII_USTRINGPARAM( "\"\"" ) );
-    xub_StrLen nTokenCnt = ScStringUtil::GetQuotedTokenCount(rFmlaStr, aQuotes, cFmlaSep );
+    OUString aQuotes( "\"\"" );
+    sal_Int32 nTokenCnt = ScStringUtil::GetQuotedTokenCount(rFmlaStr, aQuotes, cFmlaSep );
 
-    rStringList.Erase();
+    rStringList="";
     bool bIsStringList = (nTokenCnt > 0);
     bool bTokenAdded = false;
 
-    for( xub_StrLen nToken = 0, nStringIx = 0; bIsStringList && (nToken < nTokenCnt); ++nToken )
+    for( sal_Int32 nToken = 0, nStringIx = 0; bIsStringList && (nToken < nTokenCnt); ++nToken )
     {
-        String aToken( ScStringUtil::GetQuotedToken(rFmlaStr, 0, aQuotes, cFmlaSep, nStringIx ) );
+        OUString aToken( ScStringUtil::GetQuotedToken(rFmlaStr, 0, aQuotes, cFmlaSep, nStringIx ) );
         aToken = comphelper::string::strip(aToken, ' ');
-        if( aToken.Len() )      // ignore empty tokens, i.e. "a";;"b"
+        if( aToken.getLength() )      // ignore empty tokens, i.e. "a";;"b"
         {
             bIsStringList = ScGlobal::IsQuoted( aToken, '"' );
             if( bIsStringList )
@@ -430,7 +430,7 @@ sal_Bool ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
 
 String ScTPValidationValue::GetFirstFormula() const
 {
-    String aFmlaStr;
+    OUString aFmlaStr;
     if( maLbAllow.GetSelectEntryPos() == SC_VALIDDLG_ALLOW_LIST )
         lclGetFormulaFromStringList( aFmlaStr, maEdList.GetText(), mcFmlaSep );
     else
@@ -443,10 +443,10 @@ String ScTPValidationValue::GetSecondFormula() const
     return maEdMax.GetText();
 }
 
-void ScTPValidationValue::SetFirstFormula( const String& rFmlaStr )
+void ScTPValidationValue::SetFirstFormula( const OUString& rFmlaStr )
 {
     // try if formula is a string list, validation mode must already be set
-    String aStringList;
+    OUString aStringList;
     if( (maLbAllow.GetSelectEntryPos() == SC_VALIDDLG_ALLOW_RANGE) &&
         lclGetStringListFromFormula( aStringList, rFmlaStr, mcFmlaSep ) )
     {

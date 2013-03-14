@@ -187,7 +187,7 @@ private:
     String                      GetFirstFormula() const;
     String                      GetSecondFormula() const;
 
-    void                        SetFirstFormula( const String& rFmlaStr );
+    void                        SetFirstFormula( const OUString& rFmlaStr );
     void                        SetSecondFormula( const String& rFmlaStr );
 
                                 DECL_LINK(SelectHdl, void *);

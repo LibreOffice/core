@@ -1797,12 +1797,13 @@ XclExpWebQuery::XclExpWebQuery(
 {
     // comma separated list of HTML table names or indexes
     xub_StrLen nTokenCnt = comphelper::string::getTokenCount(rSource, ';');
-    String aNewTables, aAppendTable;
+    String aNewTables;
+    OUString aAppendTable;
     sal_Int32 nStringIx = 0;
     bool bExitLoop = false;
     for( xub_StrLen nToken = 0; (nToken < nTokenCnt) && !bExitLoop; ++nToken )
     {
-        String aToken( rSource.GetToken( 0, ';', nStringIx ) );
+        OUString aToken( rSource.GetToken( 0, ';', nStringIx ) );
         mbEntireDoc = ScfTools::IsHTMLDocName( aToken );
         bExitLoop = mbEntireDoc || ScfTools::IsHTMLTablesName( aToken );
         if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )
