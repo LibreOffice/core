@@ -569,11 +569,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
     int nProps;
-    GnomeVFSResult result;
     uno::Sequence< beans::Property > allProperties;
 
-    if( ( result = getInfo( xEnv ) ) != GNOME_VFS_OK )
-        cancelCommandExecution( result, xEnv, sal_False );
+    getInfo( xEnv );
 
     const beans::Property* pProps;
 
@@ -594,10 +592,13 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         const beans::Property& rProp = pProps[ n ];
 
         if ( rProp.Name == "Title" ) {
-            if (m_info.name && m_info.name[0] == '/')
-                g_warning ("Odd NFS title on item '%s' == '%s'",
-                       getURI(), m_info.name);
-            xRow->appendString( rProp, GnomeToOUString( m_info.name ) );
+            if ( m_info.name ) {
+                if (m_info.name[0] == '/')
+                    g_warning ("Odd NFS title on item '%s' == '%s'",
+                               getURI(), m_info.name);
+                xRow->appendString( rProp, GnomeToOUString( m_info.name ) );
+            } else
+                xRow->appendVoid( rProp );
         }
 
         else if ( rProp.Name == "ContentType" )
@@ -643,7 +644,10 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xRow->appendVoid( rProp );
         }
         else if ( rProp.Name == "IsHidden" )
-            xRow->appendBoolean( rProp, ( m_info.name && m_info.name[0] == '.' ) );
+            if ( m_info.name )
+                xRow->appendBoolean( rProp, m_info.name[0] == '.' );
+            else
+                xRow->appendVoid( rProp );
 
         else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsVolume" ) ) ||
              rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsCompactDisk" ) ) )
@@ -965,7 +969,7 @@ void Content::insert(
     GnomeVFSHandle *handle = NULL;
     ::rtl::OString aURI = getOURI();
 
-    result = GNOME_VFS_OK;
+    result = GNOME_VFS_ERROR_GENERIC;
     if ( bReplaceExisting ) {
         Authentication aAuth( xEnv );
         result = gnome_vfs_open( &handle, aURI.getStr(), GNOME_VFS_OPEN_WRITE );
