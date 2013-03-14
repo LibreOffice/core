@@ -10,13 +10,36 @@
 #ifndef __SC_COLUMNITERATOR_HXX__
 #define __SC_COLUMNITERATOR_HXX__
 
+#include <boost/noncopyable.hpp>
+
+#include "column.hxx"
+
 class ScColumn;
 
-class ScColumnTextWidthIterator
+class ScColumnTextWidthIterator : boost::noncopyable
 {
-    ScColumn& mrCol;
+    typedef ScColumn::TextWidthType TextWidthType;
+
+    TextWidthType& mrTextWidths;
+    const size_t mnEnd;
+    size_t mnCurPos;
+    TextWidthType::iterator miBlockCur;
+    TextWidthType::iterator miBlockEnd;
+    mdds::mtv::ushort_element_block::iterator miDataCur;
+    mdds::mtv::ushort_element_block::iterator miDataEnd;
+
 public:
-    ScColumnTextWidthIterator(ScColumn& rCol);
+    ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow);
+
+    void next();
+    bool hasCell() const;
+    SCROW getPos() const;
+    sal_uInt16 getValue() const;
+    void setValue(sal_uInt16 nVal);
+
+private:
+    void getDataIterators(size_t nOffsetInBlock);
+    void checkEndRow();
 };
 
 #endif

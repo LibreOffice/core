@@ -61,7 +61,7 @@ struct ScMergePatternState;
 class ScFlatBoolRowSegments;
 struct ScSetStringParam;
 struct ScColWidthParam;
-struct ScColumnImpl;
+class ScColumnTextWidthIterator;
 
 struct ScNeededSizeOptions
 {
