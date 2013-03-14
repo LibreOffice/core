@@ -27,9 +27,9 @@
 class SdrObject;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// To make things more safe, allow users of the page to register at it. The users need to be derived
-// from sdr::PageUser to get a call. The users do not need to call RemovePageUser() at the page
-// when they get called from PageInDestruction().
+// To make things more safe, allow users of an object to register at it. The users need to be derived
+// from sdr::ObjectUser to get a call. The users do not need to call RemoveObjectUser() at the page
+// when they get called from ObjectInDestruction().
 
 namespace sdr
 {
