@@ -470,6 +470,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWi
     else
         pBracket->nPostWidth = 0;
     nMaxWidth += rInf.X();
+    delete(pTmpFnt);
 }
 
 /*--------------------------------------------------
