@@ -52,10 +52,13 @@ $(eval $(call gb_Library_use_externals,wpftwriter,\
 	wpd \
 	wpg \
 	wps \
+	mwaw \
+	zlib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/MSWorksImportFilter \
+	writerperfect/source/writer/MWAWImportFilter \
 	writerperfect/source/writer/WordPerfectImportFilter \
 	writerperfect/source/writer/wpftwriter_genericfilter \
 ))

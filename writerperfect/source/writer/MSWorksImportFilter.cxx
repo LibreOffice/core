@@ -55,7 +55,6 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
-void callHandler(Reference < XDocumentHandler > xDocHandler);
 
 sal_Bool SAL_CALL MSWorksImportFilter::importImpl( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
 throw (RuntimeException)

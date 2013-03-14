@@ -22,6 +22,10 @@
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Writer.MWAWImportFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExtendedTypeDetection"/>
+  </implementation>
   <implementation name="com.sun.star.comp.Writer.WordPerfectImportFilter">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
     <service name="com.sun.star.document.ImportFilter"/>

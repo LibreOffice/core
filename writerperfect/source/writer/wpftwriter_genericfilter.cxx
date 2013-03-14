@@ -33,6 +33,7 @@
 
 #include "WordPerfectImportFilter.hxx"
 #include "MSWorksImportFilter.hxx"
+#include "MWAWImportFilter.hxx"
 
 namespace {
 
@@ -42,6 +43,9 @@ static cppu::ImplementationEntry const services[] = {
       &cppu::createSingleComponentFactory, 0, 0 },
     { &MSWorksImportFilter_createInstance, &MSWorksImportFilter_getImplementationName,
       &MSWorksImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &MWAWImportFilter_createInstance, &MWAWImportFilter_getImplementationName,
+      &MWAWImportFilter_getSupportedServiceNames,
       &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 } };
 

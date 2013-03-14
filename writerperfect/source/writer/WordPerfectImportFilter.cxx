@@ -55,8 +55,6 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
-void callHandler(Reference < XDocumentHandler > xDocHandler);
-
 
 static bool handleEmbeddedWPGObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
