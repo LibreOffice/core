@@ -269,8 +269,6 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
         // eingefuegte Grafik in eigenen Absatz, falls am Ende
         // eines nichtleeren Absatzes
     //For i120928,avoid to split node
-    //if ( IsEndPara() && !IsSttPara() )
-    //  SwFEShell::SplitNode();
 
     EnterSelFrmMode();
 

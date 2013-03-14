@@ -655,17 +655,17 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         if(aLVL.nLenGrpprlChpx != rSt.Read(&aGrpprlChpx, aLVL.nLenGrpprlChpx))
             return false;
 
-    //For i120928,parse the graphic info of bullets
-    sal_uInt8 *pSprmWhichPis = GrpprlHasSprm(0x6887,aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
-    sal_uInt8 *pSprmIsPicBullet = GrpprlHasSprm(0x4888,aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
-    if (pSprmWhichPis)
-    {
-        nWitchPicIsBullet = *pSprmWhichPis;
-    }
-    if (pSprmIsPicBullet)
-    {
-        bIsPicBullet = (*pSprmIsPicBullet) & 0x0001;
-    }
+        //For i120928,parse the graphic info of bullets
+        sal_uInt8 *pSprmWhichPis = GrpprlHasSprm(0x6887,aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+        sal_uInt8 *pSprmIsPicBullet = GrpprlHasSprm(0x4888,aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+        if (pSprmWhichPis)
+        {
+            nWitchPicIsBullet = *pSprmWhichPis;
+        }
+        if (pSprmIsPicBullet)
+        {
+            bIsPicBullet = (*pSprmIsPicBullet) & 0x0001;
+        }
 
         // neues ItemSet fuer die Zeichenattribute anlegen
         rpItemSet = new SfxItemSet( rDoc.GetAttrPool(), RES_CHRATR_BEGIN,
@@ -814,10 +814,12 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
         if (!cBullet)  // unsave control code?
             cBullet = 0x2190;
-    }   else if (SVX_NUM_BITMAP == eType)   //For i120928,position index info of graphic
+    }
+    else if (SVX_NUM_BITMAP == eType)   //For i120928,position index info of graphic
     {
         cGrfBulletCP = nWitchPicIsBullet;       // This is a bullet picture ID
-    } else
+    }
+    else
     {
         /*
         #i173#

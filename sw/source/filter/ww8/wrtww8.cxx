@@ -1415,12 +1415,12 @@ int WW8Export::CollectGrfsOfBullets() const
     {
         int nCountRule = pDoc->GetNumRuleTbl().size();
         for (int n = 0; n < nCountRule; ++n)
-            {
+        {
             const SwNumRule &rRule = *( pDoc->GetNumRuleTbl().at(n) );
             sal_uInt16 nLevels = rRule.IsContinusNum() ? 1 : 9;
             for (sal_uInt16 nLvl = 0; nLvl < nLevels; ++nLvl)
-                {
-                        const SwNumFmt &rFmt = rRule.Get(nLvl);
+            {
+                const SwNumFmt &rFmt = rRule.Get(nLvl);
                 if (SVX_NUM_BITMAP != rFmt.GetNumberingType())
                 {
                     continue;

@@ -50,12 +50,6 @@
 #include <unotools/streamwrap.hxx>
 #include <numrule.hxx>
 #include <vcl/svapp.hxx>//For i120928
-#ifdef DEBUGDUMP
-#  include <vcl/svapp.hxx>
-#  include <tools/urlobj.hxx>
-#  include <unotools/ucbstreamhelper.hxx>
-#  include <unotools/localfilehelper.hxx>
-#endif
 
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;

@@ -912,8 +912,7 @@ public:
 
     sal_uInt8 bWrtWW8 : 1;                   ///< Write WW95 (false) or WW97 (true) file format
 
-        //For i120928,this vector is to record all the graphics of bullets
-    mutable std::vector<const Graphic*> m_vecBulletPic;
+    mutable std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
 
 protected:
     SwWW8Writer        *m_pWriter;      ///< Pointer to the writer

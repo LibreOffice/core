@@ -255,18 +255,18 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         }
 
         m_rWW8Export.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rWW8Export.mbExportModeRTF );
-    //For i120928,achieve graphic's index of bullet from the bullet bookmark
-    if (SVX_NUM_BITMAP == nNumberingType && pBrush)
-    {
-        int nIndex = m_rWW8Export.GetGrfIndex(*pBrush);
-        if ( nIndex != -1 )
+        //For i120928,achieve graphic's index of bullet from the bullet bookmark
+        if (SVX_NUM_BITMAP == nNumberingType && pBrush)
         {
-            m_rWW8Export.InsUInt16(0x6887);
-            m_rWW8Export.InsUInt32(nIndex);
-            m_rWW8Export.InsUInt16(0x4888);
-            m_rWW8Export.InsUInt16(1);
+            int nIndex = m_rWW8Export.GetGrfIndex(*pBrush);
+            if ( nIndex != -1 )
+            {
+                m_rWW8Export.InsUInt16(0x6887);
+                m_rWW8Export.InsUInt32(nIndex);
+                m_rWW8Export.InsUInt16(0x4888);
+                m_rWW8Export.InsUInt16(1);
+            }
         }
-    }
 
         m_rWW8Export.pO = pOldpO;
     }
@@ -493,7 +493,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     pPseudoFont, pOutSet,
                     nIndentAt, nFirstLineIndex, nListTabPos,
                     sNumStr,
-                    rFmt.GetNumberingType()==SVX_NUM_BITMAP ? rFmt.GetBrush():0);//Start for i120928,export graphic bullet,2012.9.25
+                    rFmt.GetNumberingType()==SVX_NUM_BITMAP ? rFmt.GetBrush():0);
 
             delete pPseudoFont;
         }

@@ -4754,8 +4754,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     GrafikDtor();
     DELETEZ( pMSDffManager );
     DELETEZ( pHdFt );
-    //For i120928,delay the destruct action
-    //DELETEZ( pLstManager );
     DELETEZ( pSBase );
     delete pWDop;
     DELETEZ( pFonts );
@@ -4780,12 +4778,12 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                                                 rDoc.getIDocumentMarkAccess();
         if ( pMarkAccess )
         {
-                  IDocumentMarkAccess::const_iterator_t ppBkmk =
-                                        pMarkAccess->findBookmark( "_PictureBullets" );
-                  if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
-                             IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
-                                == IDocumentMarkAccess::BOOKMARK )
-                    {
+            IDocumentMarkAccess::const_iterator_t ppBkmk =
+                                  pMarkAccess->findBookmark( "_PictureBullets" );
+            if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
+                       IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
+                          == IDocumentMarkAccess::BOOKMARK )
+            {
                 SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
                          if ( pTxtNode )
                 {
@@ -4846,8 +4844,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                     }
                 }
             }
-            DELETEZ( pLstManager );
         }
+        DELETEZ( pLstManager );
     }
 
     //remove extra paragraphs after attribute ctrl

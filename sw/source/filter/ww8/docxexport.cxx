@@ -152,6 +152,11 @@ void DocxExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
     m_pAttrOutput->WriteBookmarks_Impl( aStarts, aEnds );
 }
 
+void DocxExport::ExportGrfBullet(const SwTxtNode&)
+{
+    SAL_INFO("sw.docx", "TODO: " << OSL_THIS_FUNC);
+}
+
 ::rtl::OString DocxExport::AddRelation( const OUString& rType, const OUString& rTarget )
 {
     OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),

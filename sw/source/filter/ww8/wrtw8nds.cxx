@@ -1977,12 +1977,12 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                         m_aCurrentCharPropStarts.pop();
                         AttrOutput().EndTOX( *pTOXSect );
                     }
-            //For i120928,the position of the bullet's graphic is at end of doc
-            if (bLastCR && (!bExported))
-            {
-                ExportGrfBullet(rNode);
-                bExported = true;
-            }
+                    //For i120928,the position of the bullet's graphic is at end of doc
+                    if (bLastCR && (!bExported))
+                    {
+                        ExportGrfBullet(rNode);
+                        bExported = true;
+                    }
 
                     WriteCR( pTextNodeInfoInner );
                 }

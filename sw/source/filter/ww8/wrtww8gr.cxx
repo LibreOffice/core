@@ -866,11 +866,11 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         //For i120928,add branch to export graphic of bullet
         case sw::Frame::eBulletGrf:
         {
-        if (rItem.maFly.HasGraphic())
-        {
-            const Graphic& rGrf = rItem.maFly.GetGraphic();
-            WriteGrfForBullet(rStrm, rGrf, nWidth, nHeight);
-        }
+            if (rItem.maFly.HasGraphic())
+            {
+                const Graphic& rGrf = rItem.maFly.GetGraphic();
+                WriteGrfForBullet(rStrm, rGrf, nWidth, nHeight);
+            }
         }
         break;
 

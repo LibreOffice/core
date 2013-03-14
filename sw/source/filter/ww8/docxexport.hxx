@@ -108,7 +108,7 @@ public:
 
     virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
 
-    virtual void ExportGrfBullet(const SwTxtNode&) {}
+    virtual void ExportGrfBullet(const SwTxtNode&);
 
     /// Returns the relationd id
     rtl::OString AddRelation( const rtl::OUString& rType, const rtl::OUString& rTarget );
