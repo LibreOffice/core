@@ -1844,6 +1844,8 @@ public:
     void RemoveSubTotalCell(ScFormulaCell* pCell);
     void SetSubTotalCellsDirty(const ScRange& rDirtyRange);
 
+    void SetTextWidth( const ScAddress& rPos, sal_uInt16 nWidth );
+
 private: // CLOOK-Impl-methods
 
     /**

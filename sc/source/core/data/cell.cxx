@@ -69,7 +69,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell )
 
 ScBaseCell::ScBaseCell( CellType eNewType ) :
     mpBroadcaster( 0 ),
-    nTextWidth( TEXTWIDTH_DIRTY ),
     eCellType( sal::static_int_cast<sal_uInt8>(eNewType) ),
     nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
@@ -77,7 +76,6 @@ ScBaseCell::ScBaseCell( CellType eNewType ) :
 
 ScBaseCell::ScBaseCell( const ScBaseCell& rCell ) :
     mpBroadcaster( 0 ),
-    nTextWidth( rCell.nTextWidth ),
     eCellType( rCell.eCellType ),
     nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
@@ -1002,7 +1000,7 @@ void ScFormulaCell::Compile( const rtl::OUString& rFormula, bool bNoListening,
     else
     {
         bChanged = true;
-        SetTextWidth( TEXTWIDTH_DIRTY );
+        pDocument->SetTextWidth(aPos, TEXTWIDTH_DIRTY);
         SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
     }
     if ( bWasInFormulaTree )
@@ -1096,7 +1094,7 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
     else
     {
         bChanged = true;
-        SetTextWidth( TEXTWIDTH_DIRTY );
+        pDocument->SetTextWidth(aPos, TEXTWIDTH_DIRTY);
         SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
     }
 
@@ -1367,7 +1365,7 @@ void ScFormulaCell::Interpret()
                             pIterCell->bTableOpDirty = false;
                             pIterCell->aResult.SetResultError( errNoConvergence);
                             pIterCell->bChanged = true;
-                            pIterCell->SetTextWidth( TEXTWIDTH_DIRTY);
+                            pDocument->SetTextWidth(pIterCell->aPos, TEXTWIDTH_DIRTY);
                             pIterCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN);
                         }
                     }
@@ -1662,7 +1660,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
         if( bChanged )
         {
-            SetTextWidth( TEXTWIDTH_DIRTY );
+            pDocument->SetTextWidth(aPos, TEXTWIDTH_DIRTY);
             SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
         }
         if (bContentChanged && pDocument->IsStreamValid(aPos.Tab()))

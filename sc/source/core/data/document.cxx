@@ -5695,6 +5695,13 @@ void ScDocument::SetSubTotalCellsDirty(const ScRange& rDirtyRange)
     maSubTotalCells.swap(aNewSet); // update the list.
 }
 
+void ScDocument::SetTextWidth( const ScAddress& rPos, sal_uInt16 nWidth )
+{
+    SCTAB nTab = rPos.Tab();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->SetTextWidth(rPos.Col(), rPos.Row(), nWidth);
+}
+
 void ScDocument::EnableUndo( bool bVal )
 {
     // The undo manager increases lock count every time undo is disabled.

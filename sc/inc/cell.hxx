@@ -101,10 +101,6 @@ public:
         Returns false for formula cells returning nothing, use HasEmptyData() for that. */
     bool            IsBlank() const;
 
-// for idle-calculations
-    inline sal_uInt16   GetTextWidth() const { return nTextWidth; }
-    inline void     SetTextWidth( sal_uInt16 nNew ) { nTextWidth = nNew; }
-
     inline sal_uInt8     GetScriptType() const { return nScriptType; }
     inline void     SetScriptType( sal_uInt8 nNew ) { nScriptType = nNew; }
 
@@ -148,7 +144,6 @@ private:
     SvtBroadcaster* mpBroadcaster;  /// Broadcaster for changed values. Cell takes ownership!
 
 protected:
-    sal_uInt16          nTextWidth;
     sal_uInt8            eCellType;      // enum CellType - sal_uInt8 spart Speicher
     sal_uInt8            nScriptType;
 };
