@@ -100,7 +100,7 @@ public class PresentationFragment extends SherlockFragment {
         mNotes = (WebView) v.findViewById(R.id.presentation_notes);
 
         String summary = "<html><body>This is just a test<br/><ul><li>And item</li><li>And again</li></ul>More text<br/>Blabla<br/>Blabla<br/>blabla<br/>Blabla</body></html>";
-        mNotes.loadData(summary, "text/html", "UTF-8");
+        mNotes.loadDataWithBaseURL(null, summary, "text/html", "UTF-8", null);
         mNotes.setBackgroundColor(Color.TRANSPARENT);
 
         mTopView = (CoverFlow) v.findViewById(R.id.presentation_coverflow);
@@ -156,8 +156,8 @@ public class PresentationFragment extends SherlockFragment {
         //        int aSlide = mCommunicationService.getSlideShow().getCurrentSlide();
         mNumberText.setText((aPosition + 1) + "/"
                         + mCommunicationService.getSlideShow().getSize());
-        mNotes.loadData(mCommunicationService.getSlideShow()
-                        .getNotes(aPosition), "text/html", "UTF-8");
+        mNotes.loadDataWithBaseURL(null, mCommunicationService.getSlideShow()
+                        .getNotes(aPosition), "text/html", "UTF-8", null);
     }
 
     // -------------------------------------------------- RESIZING LISTENER ----
@@ -281,8 +281,8 @@ public class PresentationFragment extends SherlockFragment {
                             CommunicationService.MSG_SLIDE_NOTES)) {
                 int aPosition = aIntent.getExtras().getInt("slide_number");
                 if ( aPosition == mTopView.getSelectedItemPosition() ) {
-                    mNotes.loadData(mCommunicationService.getSlideShow()
-                                    .getNotes(aPosition), "text/html", "UTF-8");
+                    mNotes.loadDataWithBaseURL(null, mCommunicationService.getSlideShow()
+                                    .getNotes(aPosition), "text/html", "UTF-8", null);
                 }
             }
 
