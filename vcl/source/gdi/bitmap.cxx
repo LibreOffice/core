@@ -1901,4 +1901,17 @@ bool Bitmap::GetSystemData( BitmapSystemData& rData ) const
     return bRet;
 }
 
+bool Bitmap::HasAlpha()
+{
+    bool bRet = false;
+    if( mpImpBmp )
+    {
+        SalBitmap* pSalBitmap = mpImpBmp->ImplGetSalBitmap();
+        if( pSalBitmap )
+            bRet = pSalBitmap->HasAlpha();
+    }
+
+    return bRet;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

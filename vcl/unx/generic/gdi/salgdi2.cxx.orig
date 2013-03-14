@@ -90,7 +90,7 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
     else
     {
         X11SalBitmap aBM;
-        aBM.ImplCreateFromDrawable( aSrc, NULL, nXScreenSrc, nSrcDepth, src_x, src_y, w, h );
+        aBM.ImplCreateFromDrawable( aSrc, nXScreenSrc, nSrcDepth, src_x, src_y, w, h );
         SalTwoRect aTwoRect;
         aTwoRect.mnSrcX = aTwoRect.mnSrcY = 0;
         aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = w;
@@ -913,7 +913,7 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
         nBitCount = 1;
 
     if( ! bFakeWindowBG )
-        pSalBitmap->ImplCreateFromDrawable( GetDrawable(), NULL, m_nXScreen, nBitCount, nX, nY, nDX, nDY );
+        pSalBitmap->ImplCreateFromDrawable( GetDrawable(), m_nXScreen, nBitCount, nX, nY, nDX, nDY );
     else
         pSalBitmap->Create( Size( nDX, nDY ), (nBitCount > 8) ? 24 : nBitCount, BitmapPalette( nBitCount > 8 ? nBitCount : 0 ) );
 

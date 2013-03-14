@@ -187,7 +187,7 @@ namespace cairo
         mpSurface(
             cairo_xlib_surface_create( (Display*)rSysData.pDisplay,
                                        (Drawable)rData.aPixmap,
-                                       (Visual*) rSysData.pVisual,
+                                       (Visual*) (rData.aVisual ? rData.aVisual : rSysData.pVisual),
                                        rData.mnWidth, rData.mnHeight ),
             &cairo_surface_destroy)
     {
@@ -310,6 +310,11 @@ namespace cairo
             return ((XRenderPictFormat*) maSysData.pRenderFormat)->depth;
 
         return -1;
+    }
+
+    void* X11Surface::getVisual() const
+    {
+        return cairo_xlib_surface_get_visual( mpSurface.get() );
     }
 
     SurfaceSharedPtr createSurface( const CairoSurfaceSharedPtr& rSurface )

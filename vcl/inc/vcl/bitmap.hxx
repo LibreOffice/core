@@ -325,6 +325,7 @@ struct BitmapSystemData
     void* rImageContext;     //Image context (CGContextRef)
     #else
     void* aPixmap;
+    void* aVisual;
     #endif
     int mnWidth;
     int mnHeight;
@@ -845,6 +846,8 @@ public:
     sal_Bool                    Filter( BmpFilter eFilter,
                                     const BmpFilterParam* pFilterParam = NULL,
                                     const Link* pProgress = NULL );
+
+    bool                        HasAlpha();
 
 public:
     BitmapReadAccess*       AcquireReadAccess();

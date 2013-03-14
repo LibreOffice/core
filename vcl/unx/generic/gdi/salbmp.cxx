@@ -566,6 +566,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
 // -----------------------------------------------------------------------------
 bool X11SalBitmap::ImplCreateFromDrawable(
     Drawable aDrawable,
+    void *pVisual,
     SalX11Screen nScreen,
     long nDrawableDepth,
     long nX,
@@ -576,7 +577,7 @@ bool X11SalBitmap::ImplCreateFromDrawable(
     Destroy();
 
     if( aDrawable && nWidth && nHeight && nDrawableDepth )
-        mpDDB = new ImplSalDDB( aDrawable, nScreen, nDrawableDepth, nX, nY, nWidth, nHeight );
+        mpDDB = new ImplSalDDB( aDrawable, pVisual, nScreen, nDrawableDepth, nX, nY, nWidth, nHeight );
 
     return( mpDDB != NULL );
 }
@@ -736,7 +737,8 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
     }
     else if(  rSalBmp.mpDDB )
         ImplCreateFromDrawable( rSalBmp.mpDDB->ImplGetPixmap(),
-                                rSalBmp.mpDDB->ImplGetScreen(),
+                                rSalBmp.mpDDB->ImplGetVisual(),
+                               rSalBmp.mpDDB->ImplGetScreen(),
                                 rSalBmp.mpDDB->ImplGetDepth(),
                                 0, 0, rSalBmp.mpDDB->ImplGetWidth(), rSalBmp.mpDDB->ImplGetHeight() );
 
@@ -775,11 +777,13 @@ bool X11SalBitmap::Create(
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
             long pixmapHandle;
-            if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
+            sal_Int64 nVisualPtr;
+            if( args.getLength() >= 4 && ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) && ( args[3] >>= nVisualPtr ) ) {
 
                 mbGrey = bMask;
                 bool bSuccess = ImplCreateFromDrawable(
                                     pixmapHandle,
+                                    reinterpret_cast<void*>(nVisualPtr),
                                     // FIXME: this seems multi-screen broken to me
                                     SalX11Screen( 0 ),
                                     depth,
@@ -891,6 +895,7 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
         // prolly not a good idea, since it's accessed from
         // non-platform aware code in vcl/bitmap.hxx)
         rData.aPixmap = (void*)mpDDB->ImplGetPixmap();
+        rData.aVisual = mpDDB->ImplGetVisual ();
         rData.mnWidth = mpDDB->ImplGetWidth ();
         rData.mnHeight = mpDDB->ImplGetHeight ();
         return true;
@@ -906,6 +911,7 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
 ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
                         SalX11Screen nXScreen, const SalTwoRect& rTwoRect )
     : maPixmap    ( 0 )
+    , mpVisual    ( NULL )
     , maTwoRect   ( rTwoRect )
     , mnDepth     ( pImage->depth )
     , mnXScreen   ( nXScreen )
@@ -937,13 +943,15 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
 
 ImplSalDDB::ImplSalDDB(
     Drawable aDrawable,
+    void *pVisual,
     SalX11Screen nXScreen,
     long nDrawableDepth,
     long nX,
     long nY,
     long nWidth,
     long nHeight
-)   : mnDepth( nDrawableDepth )
+)   : mpVisual    ( pVisual )
+    , mnDepth( nDrawableDepth )
     , mnXScreen( nXScreen )
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();

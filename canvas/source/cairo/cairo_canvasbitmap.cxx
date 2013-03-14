@@ -134,6 +134,30 @@ namespace cairocanvas
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }
 
+        void SAL_CALL CanvasBitmap::setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rAny )  throw (uno::RuntimeException)
+    {
+        sal_Int64 nPointer;
+
+        if ( nHandle == 0 )
+        {
+            rAny >>= nPointer;
+
+            if ( nPointer )
+            {
+                ::Bitmap *pBitmap = reinterpret_cast< ::Bitmap* >( nPointer );
+
+                mpBufferSurface = createSurface( *pBitmap );
+                mpBufferCairo = mpBufferSurface->getCairo();
+
+                ::Size aSize( pBitmap->GetSizePixel() );
+                maSize = ::basegfx::B2ISize( aSize.getWidth(), aSize.getHeight() );
+
+                maCanvasHelper.setSize( maSize );
+                maCanvasHelper.setSurface( mpBufferSurface, mbHasAlpha );
+            }
+        }
+    }
+
     uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )  throw (uno::RuntimeException)
     {
         uno::Any aRV( sal_Int32(0) );
@@ -152,10 +176,11 @@ namespace cairocanvas
 #ifdef CAIRO_HAS_XLIB_SURFACE
                 X11Surface* pXlibSurface=dynamic_cast<X11Surface*>(mpBufferSurface.get());
                 OSL_ASSERT(pXlibSurface);
-                uno::Sequence< uno::Any > args( 3 );
+                uno::Sequence< uno::Any > args( 4 );
                 args[0] = uno::Any( false );  // do not call XFreePixmap on it
                 args[1] = uno::Any( pXlibSurface->getPixmap()->mhDrawable );
                 args[2] = uno::Any( sal_Int32( pXlibSurface->getDepth() ) );
+                args[3] = uno::Any( sal_Int64( pXlibSurface->getVisual () ) );
 
                 aRV = uno::Any( args );
 #elif defined CAIRO_HAS_QUARTZ_SURFACE
@@ -180,7 +205,7 @@ namespace cairocanvas
             case 2:
             {
 #ifdef CAIRO_HAS_XLIB_SURFACE
-                uno::Sequence< uno::Any > args( 3 );
+                uno::Sequence< uno::Any > args( 4 );
                 SurfaceSharedPtr pAlphaSurface = mpSurfaceProvider->createSurface( maSize, CAIRO_CONTENT_COLOR );
                 CairoSharedPtr   pAlphaCairo = pAlphaSurface->getCairo();
                 X11Surface* pXlibSurface=dynamic_cast<X11Surface*>(pAlphaSurface.get());
@@ -199,6 +224,7 @@ namespace cairocanvas
                 args[0] = uno::Any( true );
                 args[1] = ::com::sun::star::uno::Any( pPixmap->mhDrawable );
                 args[2] = ::com::sun::star::uno::Any( sal_Int32( pXlibSurface->getDepth () ) );
+                args[3] = ::com::sun::star::uno::Any( sal_Int64( pXlibSurface->getVisual () ) );
                 pPixmap->clear(); // caller takes ownership of pixmap
 
                 // return pixmap and alphachannel pixmap - it will be used in BitmapEx

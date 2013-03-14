@@ -115,14 +115,14 @@ namespace cairocanvas
         //     2nd the pixmap handle
         //     3rd the pixmap depth
         virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException) {}
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException);
 
     private:
         SurfaceProviderRef        mpSurfaceProvider;
         ::cairo::SurfaceSharedPtr mpBufferSurface;
         ::cairo::CairoSharedPtr   mpBufferCairo;
 
-        const ::basegfx::B2ISize  maSize;
+        ::basegfx::B2ISize        maSize;
         const bool                mbHasAlpha;
     };
 }
