@@ -27,7 +27,10 @@
 $(eval $(call gb_Module_Module,registry))
 
 $(eval $(call gb_Module_add_targets,registry,\
+	Executable_regmerge \
+	Executable_regview \
 	Library_reg \
+	StaticLibrary_registry_helper \
 	ZipPackage_registry_odk_headers \
 ))
 
@@ -36,9 +39,6 @@ ifneq (,$(if $(CROSS_COMPILING),,T)$(filter ODK,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,registry,\
 	Executable_regcompare \
-	Executable_regmerge \
-	Executable_regview \
-	StaticLibrary_registry_helper \
 ))
 
 endif
