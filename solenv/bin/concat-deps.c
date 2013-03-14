@@ -40,6 +40,7 @@
 #if defined(__linux) || defined(__OpenBSD__) || \
     defined(__FreeBSD__) || defined(__NetBSD__) || \
     defined(__DragonFly__) || defined(__FreeBSD_kernel__)
+#include <sys/param.h>
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #define CORE_BIG_ENDIAN 0
 #define CORE_LITTLE_ENDIAN 1
