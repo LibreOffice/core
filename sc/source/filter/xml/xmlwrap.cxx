@@ -140,15 +140,15 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             uno::Any aAny = xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
             aAny >>= bEncrypted;
         }
-        catch( packages::WrongPasswordException& )
+        catch( const packages::WrongPasswordException& )
         {
             return ERRCODE_SFX_WRONGPASSWORD;
         }
-        catch( packages::zip::ZipIOException& )
+        catch( const packages::zip::ZipIOException& )
         {
             return ERRCODE_IO_BROKENPACKAGE;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
             return SCERR_IMPORT_UNKNOWN;
         }
@@ -187,7 +187,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     {
         xParser->parseStream( aParserInput );
     }
-    catch( xml::sax::SAXParseException& r )
+    catch( const xml::sax::SAXParseException& r )
     {
         // sax parser sends wrapped exceptions,
         // try to find the original one
@@ -444,7 +444,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                     pObjSh->GetMedium()->GetInteractionHandler() );
                 xDMA->loadMetadataFromStorage( xStorage, xBaseURI, xHandler );
             }
-            catch (lang::WrappedTargetException & e)
+            catch ( const lang::WrappedTargetException & e)
             {
                 ucb::InteractiveAugmentedIOException iaioe;
                 if ( e.TargetException >>= iaioe )
@@ -456,7 +456,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                     nError = SCWARN_IMPORT_FEATURES_LOST;
                 }
             }
-            catch (uno::Exception &)
+            catch ( const uno::Exception &)
             {
                 nError = SCWARN_IMPORT_FEATURES_LOST;
             }
@@ -628,7 +628,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY_THROW );
                     xVBACompat->setVBACompatibilityMode( sal_True );
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {
                 }
             }
@@ -741,7 +741,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
                     if (xSrcStream.is())
                         xSrcInput = xSrcStream->getInputStream();
                 }
-                catch (uno::Exception&)
+                catch ( const uno::Exception&)
                 {
                     // stream not available (for example, password protected) - save normally (xSrcInput is null)
                 }
@@ -882,10 +882,10 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
                     xDMA->storeMetadataToStorage( xStorage );
                 }
             }
-            catch (beans::UnknownPropertyException &)
+            catch ( const beans::UnknownPropertyException &)
             {
             }
-            catch (uno::Exception &)
+            catch ( const uno::Exception &)
             {
             }
         }
