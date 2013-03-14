@@ -257,7 +257,7 @@ bool MWAWObjectHandlerInternal::Shape::read(const char *psName, WPXPropertyList 
             }
             else readOk = false;
 
-            long w;
+            long w(0);
             if (readOk)
             {
                 char *res;
