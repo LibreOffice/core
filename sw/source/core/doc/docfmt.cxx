@@ -1035,15 +1035,15 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         if (aEndPos.nNode.GetNode().GetTxtNode() && aEndPos.nContent != aEndPos.nNode.GetNode().GetTxtNode()->Len())
             aEndPos.nNode--;
 
-        for (;aStartPos<=aEndPos;aStartPos.nNode++)
+        sal_uLong nStart = aStartPos.nNode.GetIndex();
+        sal_uLong nEnd = aEndPos.nNode.GetIndex();
+        for(; nStart <= nEnd; ++nStart)
         {
-            SwTxtNode* pCurrentNd = aStartPos.nNode.GetNode().GetTxtNode();
-
-            if (pCurrentNd)
-            {
-                 pCurrentNd->TryCharSetExpandToNum(*pCharSet);
-
-            }
+            SwNode* pNd = pDoc->GetNodes()[ nStart ];
+            if (!pNd || !pNd->IsTxtNode())
+                continue;
+            SwTxtNode *pCurrentNd = (SwTxtNode*)pNd;
+            pCurrentNd->TryCharSetExpandToNum(*pCharSet);
 
         }
     }
