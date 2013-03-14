@@ -125,7 +125,6 @@ protected:
 
     sal_uInt16                  GetId() const { return m_nId; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& GetFrame() const { return m_xFrame; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceManager() const { return ::comphelper::getProcessServiceFactory(); }
 
     void                    BindListener();
     void                    UnbindListener();
