@@ -2492,20 +2492,27 @@ void TimeField::ImplTimeSpinArea( sal_Bool bUp )
 {
     if ( GetField() )
     {
-        xub_StrLen nTimeArea = 0;
+        sal_Int32 nTimeArea = 0;
         Time aTime( GetTime() );
         OUString aText( GetText() );
         Selection aSelection( GetField()->GetSelection() );
 
-        // Area suchen
+        // Area search
         if ( GetFormat() != TIMEF_SEC_CS )
         {
-            for ( xub_StrLen i = 1, nPos = 0; i <= 4; i++ )
+            //Which area is the cursor in of HH:MM:SS.TT
+            for ( sal_Int32 i = 1, nPos = 0; i <= 4; i++ )
             {
                 sal_Int32 nPos1 = aText.indexOf( ImplGetLocaleDataWrapper().getTimeSep(), nPos );
                 sal_Int32 nPos2 = aText.indexOf( ImplGetLocaleDataWrapper().getTime100SecSep(), nPos );
-                nPos = nPos1 < nPos2 ? nPos1 : nPos2;
-                if ( nPos >= (xub_StrLen)aSelection.Max() )
+                //which ever comes first, bearing in mind that one might not be there
+                if (nPos1 >= 0 && nPos2 >= 0)
+                    nPos = nPos1 < nPos2 ? nPos1 : nPos2;
+                else if (nPos1 >= 0)
+                    nPos = nPos1;
+                else
+                    nPos = nPos2;
+                if ( nPos < 0 || nPos >= aSelection.Max() )
                 {
                     nTimeArea = i;
                     break;
@@ -2517,7 +2524,7 @@ void TimeField::ImplTimeSpinArea( sal_Bool bUp )
         else
         {
             sal_Int32 nPos = aText.indexOf( ImplGetLocaleDataWrapper().getTime100SecSep() );
-            if ( nPos < 0 || nPos >= (xub_StrLen)aSelection.Max() )
+            if ( nPos < 0 || nPos >= aSelection.Max() )
                 nTimeArea = 3;
             else
                 nTimeArea = 4;
