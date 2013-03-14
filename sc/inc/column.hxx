@@ -387,6 +387,9 @@ public:
     sal_uInt16 GetTextWidth(SCROW nRow) const;
     void SetTextWidth(SCROW nRow, sal_uInt16 nWidth);
 
+    sal_uInt8 GetScriptType( SCROW nRow ) const;
+    void SetScriptType( SCROW nRow, sal_uInt8 nType );
+
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos) const;
 

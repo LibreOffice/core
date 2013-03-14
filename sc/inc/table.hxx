@@ -793,6 +793,9 @@ public:
 
     sal_uLong          AddCondFormat( ScConditionalFormat* pNew );
 
+    sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow ) const;
+    void SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType );
+
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd,

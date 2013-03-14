@@ -5767,4 +5767,13 @@ void ScDocument::SetAutoNameCache(  ScAutoNameCache* pCache )
     delete pAutoNameCache;
     pAutoNameCache = pCache;
 }
+
+sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+{
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
+        return SC_SCRIPTTYPE_UNKNOWN;
+
+    return maTabs[nTab]->GetScriptType(nCol, nRow);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

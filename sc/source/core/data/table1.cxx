@@ -2080,6 +2080,22 @@ sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
     return nMax + 1;
 }
 
+sal_uInt8 ScTable::GetScriptType( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidCol(nCol))
+        return SC_SCRIPTTYPE_UNKNOWN;
+
+    return aCol[nCol].GetScriptType(nRow);
+}
+
+void ScTable::SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].SetScriptType(nRow, nType);
+}
+
 void ScTable::DeleteConditionalFormat( sal_uLong nIndex )
 {
     mpCondFormatList->erase(nIndex);

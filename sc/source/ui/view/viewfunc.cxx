@@ -823,7 +823,7 @@ sal_uInt8 ScViewFunc::GetSelectionScriptType()
         // no selection -> cursor
 
         nScript = pDoc->GetScriptType( GetViewData()->GetCurX(),
-                            GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                            GetViewData()->GetCurY(), GetViewData()->GetTabNo(), NULL );
     }
     else
     {

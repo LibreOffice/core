@@ -1177,7 +1177,8 @@ public:
     bool            HasStringWeakCharacters( const rtl::OUString& rString );
     SC_DLLPUBLIC sal_uInt8          GetStringScriptType( const rtl::OUString& rString );
     SC_DLLPUBLIC sal_uInt8          GetCellScriptType( ScBaseCell* pCell, sal_uLong nNumberFormat );
-    SC_DLLPUBLIC sal_uInt8          GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell = NULL );
+    SC_DLLPUBLIC sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell );
+    sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     bool            HasDetectiveOperations() const;
     void            AddDetectiveOperation( const ScDetOpData& rData );

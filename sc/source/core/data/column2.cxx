@@ -1396,6 +1396,20 @@ void ScColumn::SetTextWidth(SCROW nRow, unsigned short nWidth)
     maTextWidths.set(nRow, nWidth);
 }
 
+sal_uInt8 ScColumn::GetScriptType( SCROW nRow ) const
+{
+    if (!ValidRow(nRow))
+        return SC_SCRIPTTYPE_UNKNOWN;
+
+    return SC_SCRIPTTYPE_UNKNOWN;
+}
+
+void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
+{
+    if (!ValidRow(nRow))
+        return;
+}
+
 void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
 {
     // check if we are in a data area
