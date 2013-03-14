@@ -115,3 +115,33 @@
  namespace sql
  {
 
+--- misc/mysql-connector-c++-1.1.0/driver/nativeapi/libmysql_static_proxy.cpp	2010-09-10 11:47:47.000000000 +0200
++++ misc/build/mysql-connector-c++-1.1.0/driver/nativeapi/libmysql_static_proxy.cpp	2013-03-14 11:10:14.850848088 +0100
+@@ -213,7 +213,8 @@
+ int
+ LibmysqlStaticProxy::library_init(int argc,char **argv,char **groups)
+ {
+-	return ::mysql_library_init(argc, argv, groups);
++//	return ::mysql_library_init(argc, argv, groups);
++   return 0;
+ }
+ /* }}} */
+ 
+@@ -222,7 +223,7 @@
+ void
+ LibmysqlStaticProxy::library_end()
+ {
+-	return ::mysql_library_end();
++//	return ::mysql_library_end();
+ }
+ /* }}} */
+ 
+@@ -352,7 +353,7 @@
+ 							const char * capath,
+ 							const char * cipher)
+ {
+-	return ::mysql_ssl_set(mysql, key, cert, ca, capath, cipher);
++	return ::mysql_ssl_set(mysql, key, cert, ca, capath);
+ }
+ /* }}} */
+ 

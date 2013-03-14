@@ -1,2 +1,0 @@
-#define HAVE_DLFCN_H 1
-//#define MYSQLCLIENT_STATIC_BINDING 1
