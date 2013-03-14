@@ -827,21 +827,21 @@ AccountContactPairV TeleManager::getContacts()
 rtl::OString TeleManager::getFullClientName()
 {
     OStringBuffer aBuf(64);
-    aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_CLIENT_SUFFIX)).append( pImpl->msNameSuffix);
+    aBuf.append( LIBO_CLIENT_SUFFIX ).append( pImpl->msNameSuffix);
     return aBuf.makeStringAndClear();
 }
 
 rtl::OString TeleManager::getFullServiceName()
 {
     OStringBuffer aBuf(64);
-    aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_DTUBE_SERVICE)).append( pImpl->msNameSuffix);
+    aBuf.append( LIBO_DTUBE_SERVICE ).append( pImpl->msNameSuffix);
     return aBuf.makeStringAndClear();
 }
 
 rtl::OString TeleManager::getFullObjectPath()
 {
     OStringBuffer aBuf(64);
-    aBuf.append( '/').append( RTL_CONSTASCII_STRINGPARAM( LIBO_DTUBE_SERVICE)).append( pImpl->msNameSuffix);
+    aBuf.append( '/').append( LIBO_DTUBE_SERVICE ).append( pImpl->msNameSuffix);
     OString aStr( aBuf.makeStringAndClear().replace( '.', '/'));
     return aStr;
 }
