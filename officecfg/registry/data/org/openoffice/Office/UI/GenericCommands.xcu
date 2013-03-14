@@ -2131,6 +2131,11 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:InsertObjectChartFromFile" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Chart from File</value>
+                </prop>
+            </node>
             <node oor:name=".uno:DefaultBullet" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Bullets On/Off</value>

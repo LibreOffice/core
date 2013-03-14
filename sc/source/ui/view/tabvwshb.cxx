@@ -59,6 +59,9 @@
 #include "drawview.hxx"
 #include "ChartRangeSelectionListener.hxx"
 
+#include <tools/urlobj.hxx>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
@@ -299,6 +302,19 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_INSERT_SMATH:
         case SID_INSERT_FLOATINGFRAME:
             FuInsertOLE(this, pWin, pView, pDrModel, rReq);
+            break;
+
+        case SID_INSERT_DIAGRAM_FROM_FILE:
+            {
+                sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                        0, OUString("com.sun.star.chart2.ChartDocument"));
+                if(aDlg.Execute() == ERRCODE_NONE )
+                {
+                    INetURLObject aURLObj( aDlg.GetPath() );
+                    OUString aURL = aURLObj.GetURLNoPass();
+                    FuInsertChartFromFile(this, pWin, pView, pDrModel, rReq, aURL);
+                }
+            }
             break;
 
         case SID_OBJECTRESIZE:

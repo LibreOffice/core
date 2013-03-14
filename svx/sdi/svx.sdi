@@ -6449,6 +6449,31 @@ SfxVoidItem InsertObjectChart SID_INSERT_DIAGRAM
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem InsertObjectChartFromFile SID_INSERT_DIAGRAM_FROM_FILE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem InsertPlugin SID_INSERT_PLUGIN
 (SfxStringItem ClassLocation FN_PARAM_2,
  SfxStringItem Commands FN_PARAM_3)

@@ -380,6 +380,11 @@
                     <value xml:lang="en-US">Ch~art...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:InsertObjectChartFromFile" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Load Chart From File</value>
+                </prop>
+            </node>
             <node oor:name=".uno:StarChartDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Ch~art...</value>

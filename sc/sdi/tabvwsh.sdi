@@ -113,6 +113,7 @@ interface BaseSelection
     SID_FM_CREATE_CONTROL   [ ExecMethod = ExecDraw ; ]
     SID_LINKS               [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_DRAW_CHART          [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
+    SID_INSERT_DIAGRAM_FROM_FILE [ ExecMethod = ExecDrawIns; StateMethod = GetDrawState; ]
     SID_FM_CREATE_FIELDCONTROL [ ExecMethod = ExecDrawIns ; ]
 
     // } Einfuegen von Objekten

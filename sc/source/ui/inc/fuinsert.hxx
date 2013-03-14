@@ -58,7 +58,7 @@ class FuInsertChartFromFile : public FuPoor
 {
  public:
     FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, SfxRequest& rReq);
+           SdrModel* pDoc, SfxRequest& rReq, const OUString& rURL);
 
     virtual void Activate();
     virtual void Deactivate();

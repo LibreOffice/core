@@ -214,9 +214,10 @@
                     <menu:menuitem menu:id=".uno:InsertSound"/>
                     <menu:menuitem menu:id=".uno:InsertVideo"/>
                     <menu:menuitem menu:id=".uno:InsertObjectStarMath"/>
+                    <menu:menuitem menu:id=".uno:InsertObjectChart"/>
+                    <menu:menuitem menu:id=".uno:InsertObjectChartFromFile"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertObjectChart"/>
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
         </menu:menupopup>
     </menu:menu>

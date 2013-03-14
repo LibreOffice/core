@@ -333,6 +333,7 @@
 #define SID_OBJECT_ALIGN_UP                             ( SID_SVX_START + 134 )
 #define SID_OBJECT_ALIGN_MIDDLE                         ( SID_SVX_START + 135 )
 #define SID_OBJECT_ALIGN_DOWN                           ( SID_SVX_START + 136 )
+#define SID_INSERT_DIAGRAM_FROM_FILE                    ( SID_SVX_START + 139 )
 #define SID_INSERT_DIAGRAM                              ( SID_SVX_START + 140 )
 #define SID_DRAW_CHART                                      SID_INSERT_DIAGRAM
 #define SID_INSERT_TABLE                                ( SID_SVX_START + 141 )

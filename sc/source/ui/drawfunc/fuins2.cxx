@@ -61,6 +61,9 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <cppuhelper/bootstrap.hxx>
 
+#include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
+#include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
+
 using namespace ::com::sun::star;
 // BM/IHA --
 
@@ -772,6 +775,58 @@ void FuInsertChart::Activate()
 }
 
 void FuInsertChart::Deactivate()
+{
+    FuPoor::Deactivate();
+}
+
+FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
+           SdrModel* pDoc, SfxRequest& rReq, const OUString& rURL):
+    FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
+{
+    uno::Reference< io::XInputStream > xStorage = comphelper::OStorageHelper::GetInputStreamFromURL(
+            rURL, comphelper::getProcessComponentContext());
+
+    comphelper::EmbeddedObjectContainer& rObjContainer =
+        pViewShell->GetObjectShell()->GetEmbeddedObjectContainer();
+
+    OUString aName;
+    uno::Reference< embed::XEmbeddedObject > xObj = rObjContainer.InsertEmbeddedObject( xStorage, aName );
+
+    uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
+    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+    if( xCompSupp.is())
+        xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+
+    const sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+    awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+    Size aSize( aSz.Width, aSz.Height );
+
+    MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
+    ScRange aPositionRange = pViewSh->GetViewData()->GetCurPos();
+    Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
+    Rectangle aRect (aStart, aSize);
+    SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
+
+    pSkipPaintObj = pObj;
+
+    SdrPageView* pPV = pView->GetSdrPageView();
+
+    // use the page instead of the view to insert, so no undo action is created yet
+    SdrPage* pInsPage = pPV->GetPage();
+    pInsPage->InsertObject( pObj );
+    pView->UnmarkAllObj();
+    pView->MarkObj( pObj, pPV );
+
+    pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
+
+}
+
+void FuInsertChartFromFile::Activate()
+{
+    FuPoor::Activate();
+}
+
+void FuInsertChartFromFile::Deactivate()
 {
     FuPoor::Deactivate();
 }
