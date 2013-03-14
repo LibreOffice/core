@@ -200,7 +200,7 @@ endef
 # default log_filename is <run_target>.log
 #
 
-AUTOCONF_WRAPPERS := \
+AUTOCONF_WRAPPERS = \
 	REAL_CC="$(shell cygpath -w $(CC))" \
 	CC="$(call gb_Executable_get_target,gcc-wrapper)" \
 	REAL_CXX="$(shell cygpath -w $(CXX))" \
