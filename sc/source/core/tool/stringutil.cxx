@@ -183,22 +183,22 @@ bool ScStringUtil::parseSimpleNumber(
     return true;
 }
 
-xub_StrLen ScStringUtil::GetQuotedTokenCount(const UniString &rIn, const UniString& rQuotedPairs, sal_Unicode cTok )
+sal_Int32 ScStringUtil::GetQuotedTokenCount(const OUString &rIn, const OUString& rQuotedPairs, sal_Unicode cTok )
 {
-    assert( !(rQuotedPairs.Len()%2) );
-    assert( rQuotedPairs.Search(cTok) );
+    assert( !(rQuotedPairs.getLength()%2) );
+    assert( rQuotedPairs.indexOf(cTok) );
 
     // empty string: TokenCount is 0 per definition
-    if ( !rIn.Len() )
+    if ( rIn.isEmpty() )
         return 0;
 
-    xub_StrLen      nTokCount       = 1;
-    sal_Int32       nLen            = rIn.Len();
-    xub_StrLen      nQuotedLen      = rQuotedPairs.Len();
+    sal_Int32      nTokCount       = 1;
+    sal_Int32      nLen            = rIn.getLength();
+    sal_Int32      nQuotedLen      = rQuotedPairs.getLength();
     sal_Unicode         cQuotedEndChar  = 0;
-    const sal_Unicode*  pQuotedStr      = rQuotedPairs.GetBuffer();
-    const sal_Unicode*  pStr            = rIn.GetBuffer();
-    sal_Int32       nIndex          = 0;
+    const sal_Unicode*  pQuotedStr      = rQuotedPairs.getStr();
+    const sal_Unicode*  pStr            = rIn.getStr();
+    sal_Int32       nIndex         = 0;
     while ( nIndex < nLen )
     {
         sal_Unicode c = *pStr;
@@ -211,7 +211,7 @@ xub_StrLen ScStringUtil::GetQuotedTokenCount(const UniString &rIn, const UniStri
         else
         {
             // Is the char a quote-beginn char ?
-            xub_StrLen nQuoteIndex = 0;
+            sal_Int32 nQuoteIndex = 0;
             while ( nQuoteIndex < nQuotedLen )
             {
                 if ( pQuotedStr[nQuoteIndex] == c )
@@ -235,20 +235,20 @@ xub_StrLen ScStringUtil::GetQuotedTokenCount(const UniString &rIn, const UniStri
     return nTokCount;
 }
 
-UniString ScStringUtil::GetQuotedToken(const UniString &rIn, xub_StrLen nToken, const UniString& rQuotedPairs,
-                               sal_Unicode cTok, xub_StrLen& rIndex )
+OUString ScStringUtil::GetQuotedToken(const OUString &rIn, sal_Int32 nToken, const OUString& rQuotedPairs,
+                               sal_Unicode cTok, sal_Int32& rIndex )
 {
     assert( !(rQuotedPairs.Len()%2) );
-    assert( rQuotedPairs.Search(cTok) == STRING_NOTFOUND );
+    assert( rQuotedPairs.indexOf(cTok) == -1 );
 
-    const sal_Unicode*  pStr            = rIn.GetBuffer();
-    const sal_Unicode*  pQuotedStr      = rQuotedPairs.GetBuffer();
+    const sal_Unicode*  pStr            = rIn.getStr();
+    const sal_Unicode*  pQuotedStr      = rQuotedPairs.getStr();
     sal_Unicode         cQuotedEndChar  = 0;
-    xub_StrLen      nQuotedLen      = rQuotedPairs.Len();
-    xub_StrLen      nLen            = rIn.Len();
-    xub_StrLen      nTok            = 0;
-    xub_StrLen      nFirstChar      = rIndex;
-    xub_StrLen      i               = nFirstChar;
+    sal_Int32      nQuotedLen      = rQuotedPairs.getLength();
+    sal_Int32      nLen            = rIn.getLength();
+    sal_Int32      nTok            = 0;
+    sal_Int32      nFirstChar      = rIndex;
+    sal_Int32      i               = nFirstChar;
 
     // detect token position and length
     pStr += i;
@@ -264,7 +264,7 @@ UniString ScStringUtil::GetQuotedToken(const UniString &rIn, xub_StrLen nToken, 
         else
         {
             // Is the char a quote-begin char ?
-            xub_StrLen nQuoteIndex = 0;
+            sal_Int32 nQuoteIndex = 0;
             while ( nQuoteIndex < nQuotedLen )
             {
                 if ( pQuotedStr[nQuoteIndex] == c )
@@ -300,13 +300,13 @@ UniString ScStringUtil::GetQuotedToken(const UniString &rIn, xub_StrLen nToken, 
         if ( i < nLen )
             rIndex = i+1;
         else
-            rIndex = STRING_NOTFOUND;
-        return rIn.Copy( nFirstChar, i-nFirstChar );
+            rIndex = -1;
+        return rIn.copy( nFirstChar, i-nFirstChar );
     }
     else
     {
-        rIndex = STRING_NOTFOUND;
-        return UniString();
+        rIndex = -1;
+        return OUString();
     }
 }
 

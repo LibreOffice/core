@@ -939,23 +939,23 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
     if( meMode == xlWQSpecTables )
     {
         rStrm.Ignore( 4 );
-        String aTables( rStrm.ReadUniString() );
+        OUString aTables( rStrm.ReadUniString() );
 
         const sal_Unicode cSep = ';';
-        String aQuotedPairs( RTL_CONSTASCII_USTRINGPARAM( "\"\"" ) );
+        OUString aQuotedPairs( "\"\"" );
         xub_StrLen nTokenCnt = ScStringUtil::GetQuotedTokenCount( aTables, aQuotedPairs, ',' );
         maTables.Erase();
-        xub_StrLen nStringIx = 0;
+        sal_Int32 nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
-            String aToken( ScStringUtil::GetQuotedToken( aTables, 0, aQuotedPairs, ',', nStringIx ) );
-            sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
+            OUString aToken( ScStringUtil::GetQuotedToken( aTables, 0, aQuotedPairs, ',', nStringIx ) );
+            sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.toInt32() : 0;
             if( nTabNum > 0 )
                 maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );
             else
             {
                 ScGlobal::EraseQuotes( aToken, '"', false );
-                if( aToken.Len() )
+                if( aToken.getLength() )
                     maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
             }
         }

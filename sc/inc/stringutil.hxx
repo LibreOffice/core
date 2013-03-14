@@ -106,9 +106,9 @@ public:
     static bool parseSimpleNumber(
         const ::rtl::OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal);
 
-    static xub_StrLen SC_DLLPUBLIC GetQuotedTokenCount(const UniString &rIn, const UniString& rQuotedPairs, sal_Unicode cTok = ';' );
-    static UniString  SC_DLLPUBLIC GetQuotedToken(const UniString &rIn, xub_StrLen nToken, const UniString& rQuotedPairs,
-                                        sal_Unicode cTok,  xub_StrLen& rIndex );
+    static sal_Int32 SC_DLLPUBLIC GetQuotedTokenCount(const OUString &rIn, const OUString& rQuotedPairs, sal_Unicode cTok = ';' );
+    static OUString  SC_DLLPUBLIC GetQuotedToken(const OUString &rIn, sal_Int32 nToken, const OUString& rQuotedPairs,
+                                        sal_Unicode cTok,  sal_Int32& rIndex );
 };
 
 
