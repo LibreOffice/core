@@ -109,7 +109,7 @@ interface XGroup
     */
     [attribute,readonly] com::sun::star::report::XGroups Groups;
 
-    /** Defines either a column name or a expression.
+    /** Defines either a column name or an expression.
     */
     [attribute,bound] string Expression;
 
