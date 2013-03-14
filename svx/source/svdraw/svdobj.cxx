@@ -2969,8 +2969,8 @@ SvxShape* SdrObject::getSvxShape()
         // retrieving the impl pointer and subsequently using it is not thread-safe, of course, so it needs to be
         // guarded by the SolarMutex
 
-#if OSL_DEBUG_LEVEL > 0
     uno::Reference< uno::XInterface > xShape( maWeakUnoShape );
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( !( !xShape.is() && mpSvxShape ),
         "SdrObject::getSvxShape: still having IMPL-Pointer to dead object!" );
 #endif
