@@ -37,6 +37,7 @@ $(eval $(call gb_Executable_add_objcxxobjects,Viewer,\
 $(eval $(call gb_Executable_use_libraries,Viewer,\
 	msword \
 	scfilt \
+	sdfilt \
 ))
 
 # vim: set ts=4 sw=4 et:
