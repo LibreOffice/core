@@ -26,6 +26,7 @@
 #include <com/sun/star/xforms/Model.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
+#include <com/sun/star/xforms/XForms.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -53,13 +54,6 @@ bool SwDoc::isXForms() const
     return mxXForms.is();
 }
 
-static Reference<XInterface> lcl_createInstance( const sal_Char* pServiceName )
-{
-    OSL_ENSURE( pServiceName != NULL, "no service name" );
-    return comphelper::getProcessServiceFactory()->createInstance(
-        OUString::createFromAscii( pServiceName  ) );
-}
-
 void SwDoc::initXForms( bool bCreateDefaultModel )
 {
     OSL_ENSURE( ! isXForms(), "please initialize only once" );
@@ -67,9 +61,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
     try
     {
         // create XForms components
-        mxXForms.set( lcl_createInstance( "com.sun.star.xforms.XForms" ),
-                    UNO_QUERY );
-        OSL_ENSURE( mxXForms.is(), "can't create XForms container" );
+        mxXForms = xforms::XForms::create( comphelper::getProcessComponentContext() );
 
         // change our module identifier, to be able to have a dedicated UI
         Reference< XModule > xModule;
