@@ -37,6 +37,7 @@ namespace com { namespace sun { namespace star { namespace uno
 
 class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public UniRefBase
 {
+    friend class Test;
     friend class SvXMLAutoStylePoolP_Impl;
 
     SvXMLAutoStylePoolP_Impl    *pImpl;

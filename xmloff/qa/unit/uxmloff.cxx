@@ -11,13 +11,16 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <xmloff/xmlexp.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlaustp.hxx>
 #include "SchXMLExport.hxx"
+#include "XMLChartPropertySetMapper.hxx"
+#include "impastpl.hxx"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
 
+using namespace ::xmloff::token;
 using namespace ::com::sun::star;
-
-namespace {
 
 class Test : public test::BootstrapFixture {
 public:
@@ -26,15 +29,14 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    void testSomething();
+    void testAutoStylePool();
 
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testSomething);
+    CPPUNIT_TEST(testAutoStylePool);
     CPPUNIT_TEST_SUITE_END();
 private:
     SvXMLExport *pExport;
 };
-
 
 Test::Test()
     : pExport( NULL )
@@ -55,16 +57,32 @@ void Test::tearDown()
     BootstrapFixture::tearDown();
 }
 
-void Test::testSomething()
+void Test::testAutoStylePool()
 {
-    OUString s1("A");
-    OUString s2("B");
-    CPPUNIT_ASSERT_MESSAGE("these strings are supposed to be different!", s1 != s2);
+    UniReference< SvXMLAutoStylePoolP > xPool(
+        new SvXMLAutoStylePoolP( *pExport ) );
+    UniReference< XMLPropertySetMapper > xSetMapper(
+        new XMLChartPropertySetMapper );
+    UniReference< XMLChartExportPropertyMapper > xExportPropMapper(
+        new XMLChartExportPropertyMapper( xSetMapper, *pExport ) );
+
+    xPool->AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                      GetXMLToken( XML_PARAGRAPH ),
+                      xExportPropMapper.get(),
+                      OUString( "Bob" ) );
+
+    std::vector< XMLPropertyState > aProperties;
+    OUString aName = xPool->Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
+
+    // not that interesting but worth checking
+    CPPUNIT_ASSERT_MESSAGE( "style / naming changed", aName == "Bob1" );
+
+    // find ourselves again:
+    OUString aSameName = xPool->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
+    CPPUNIT_ASSERT_MESSAGE( "same style not found", aSameName == aName );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-
-}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
