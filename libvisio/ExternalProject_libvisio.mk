@@ -22,6 +22,7 @@ $(eval $(call gb_ExternalProject_use_externals,libvisio,\
 	wpd \
 	wpg \
 	libxml2 \
+	zlib \
 ))
 
 $(call gb_ExternalProject_get_state_target,libvisio,build) :

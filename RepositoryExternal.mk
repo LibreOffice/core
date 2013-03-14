@@ -298,6 +298,8 @@ define gb_LinkTarget__use_zlib_x64
 
 endef
 
+gb_ExternalProject__use_zlib :=
+
 else # !SYSTEM_ZLIB
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
@@ -330,6 +332,12 @@ endef
 
 define gb_LinkTarget__use_zlib_x64
 $(call gb_LinkTarget__use_zlib_multiarch,$(1),zlib_x64)
+
+endef
+
+define gb_ExternalProject__use_zlib
+$(call gb_ExternalProject_use_package,$(1),zlib_inc)
+$(call gb_ExternalProject_use_static_libraries,$(1),zlib)
 
 endef
 

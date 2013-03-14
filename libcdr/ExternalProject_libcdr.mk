@@ -20,6 +20,7 @@ $(eval $(call gb_ExternalProject_use_externals,libcdr,\
 	lcms2 \
 	wpd \
 	wpg \
+	zlib \
 ))
 
 ifeq ($(OS)$(COM),WNTMSC)
