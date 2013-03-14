@@ -6042,7 +6042,8 @@ void Test::testCellTextWidth()
     m_pDoc->SetString(0, 0, 0, "Only one cell");
     pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
     CPPUNIT_ASSERT_MESSAGE("Column should have a cell.", pIter->hasCell());
-    CPPUNIT_ASSERT_EQUAL(0, pIter->getPos());
+    SCROW nTestRow = 0;
+    CPPUNIT_ASSERT_EQUAL(nTestRow, pIter->getPos());
 
     // Setting a text width here should commit it to the column.
     sal_uInt16 nTestVal = 432;
