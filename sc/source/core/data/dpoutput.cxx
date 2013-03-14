@@ -692,7 +692,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
         {
             aData = xResult->getResults();
         }
-        catch (uno::RuntimeException&)
+        catch (const uno::RuntimeException&)
         {
             bResultsError = true;
         }
@@ -711,7 +711,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
             aAny >>= aUStr;
             aDataDescription = aUStr;
         }
-        catch(uno::Exception&)
+        catch(const uno::Exception&)
         {
         }
     }
@@ -1306,7 +1306,7 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
                                     aGivenName = strLayoutName;
                         }
                     }
-                    catch(uno::Exception&)
+                    catch(const uno::Exception&)
                     {
                     }
                     rDataNames.push_back( aSourceName );
@@ -1626,7 +1626,7 @@ uno::Sequence<sheet::GeneralFunction> lcl_GetSubTotals(
             uno::Any aValue = xLevelProp->getPropertyValue( rtl::OUString(SC_UNO_DP_SUBTOTAL) );
             aValue >>= aSubTotals;
         }
-        catch(uno::Exception&)
+        catch(const uno::Exception&)
         {
         }
     }
