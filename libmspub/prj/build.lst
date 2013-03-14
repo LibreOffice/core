@@ -1,2 +1,0 @@
-mspub	libmspub	: libwpd libwpg ZLIB:zlib BOOST:boost ICU:icu soltools NULL
-mspub	libmspub\prj	nmake	-	all	mspub_libmspub NULL

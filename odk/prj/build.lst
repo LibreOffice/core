@@ -1,2 +1,0 @@
-od      odk     ::      cppuhelper jurt javaunohelper udkapi ridljar offapi autodoc DESKTOP:unodevtools external NULL
-od	odk\prj				nmake	-	all	od_util  NULL

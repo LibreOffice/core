@@ -1,2 +1,0 @@
-fl      filter  :    svtools unotools xmloff cppu tools cppuhelper sal salhelper svx javaunohelper XPDF:xpdf jvmaccess canvas LIBXSLT:libxslt basegfx package PYTHON:python3 NULL
-fl  filter\prj nmake - all fl_prj   NULL

@@ -1,3 +1,0 @@
-ac      apache-commons  :       solenv TOMCAT:tomcat NULL
-ac	apache-commons\prj			nmake	-	all	ac_prj	 NULL
-

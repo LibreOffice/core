@@ -1,5 +1,0 @@
-ex  extensions :  officecfg salhelper OPENLDAP:openldap svx SANE:sane TWAIN:twain np_sdk offapi stoc ZLIB:zlib CURL:curl LIBXSLT:libxslt CPPUNIT:cppunit NULL
-ex  extensions\prj                              nmake   -   all ex_prj NULL
-
-# Fails at the moment
-# ex  extensions\qa\complex\extensions            nmake   -   all ex_complex ex_util NULL

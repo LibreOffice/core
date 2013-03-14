@@ -1,2 +1,0 @@
-r	rsc	:	tools NULL
-r	rsc\prj		nmake	-	all	rsc_prj NULL

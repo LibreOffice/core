@@ -1,2 +1,0 @@
-el  external : soltools NULL
-el  external\prj                                        nmake - all el_external NULL

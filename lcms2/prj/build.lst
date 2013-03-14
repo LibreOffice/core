@@ -1,2 +1,0 @@
-lcms	lcms2	: soltools ZLIB:zlib NULL
-lcms	lcms2/prj nmake	-	all	lcms_prj NULL

@@ -1,2 +1,0 @@
-gr	graphite	:	solenv soltools NULL
-gr	graphite\prj		nmake	-	all	gr_graphite NULL

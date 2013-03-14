@@ -1,2 +1,0 @@
-av	avmedia	:    tools sfx2 LIBXSLT:libxslt NULL
-av	avmedia\prj				nmake	-	all	av_prj	NULL

@@ -1,4 +1,0 @@
-dl	drawinglayer	:	sal vcl basegfx offapi cppuhelper cppu svtools avmedia canvas cppcanvas NULL
-dl	drawinglayer						usr1	-	all	dl_mkout NULL
-dl	drawinglayer\prj					nmake	-	all	dl_prj NULL
-

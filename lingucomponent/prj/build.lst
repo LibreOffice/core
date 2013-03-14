@@ -1,2 +1,0 @@
-lc  lingucomponent  :      linguistic LIBEXTTEXTCAT:libexttextcat svl HYPHEN:hyphen HUNSPELL:hunspell MYTHES:mythes LIBXSLT:libxslt NULL
-lc  lingucomponent\prj     nmake - all lc_prj NULL

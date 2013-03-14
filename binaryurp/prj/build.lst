@@ -1,2 +1,0 @@
-bu binaryurp : BOOST:boost LIBXSLT:libxslt cppu cppuhelper offapi sal salhelper CPPUNIT:cppunit NULL
-bu binaryurp\prj nmake - all bu_prj NULL

@@ -1,2 +1,0 @@
-jvmf jvmfwk : cppu cppuhelper sal comphelper LIBXML2:libxml2 NULL
-jvmf jvmfwk\prj nmake - all jvmf_prj NULL

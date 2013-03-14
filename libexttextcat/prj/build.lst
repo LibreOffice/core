@@ -1,2 +1,0 @@
-ltc     libexttextcat      :       soltools solenv NULL
-ltc     libexttextcat\prj              nmake   -       all ltc_libtextcat NULL

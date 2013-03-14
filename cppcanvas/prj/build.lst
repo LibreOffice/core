@@ -1,2 +1,0 @@
-cx	cppcanvas	:	comphelper cppuhelper offapi tools vcl basegfx canvas NULL
-cx	cppcanvas\prj						nmake	-	all	cx_prj NULL

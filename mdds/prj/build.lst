@@ -1,2 +1,0 @@
-mdd     mdds : solenv BOOST:boost NULL
-mdd	mdds\prj		nmake	-	all	mdd_mdds NULL

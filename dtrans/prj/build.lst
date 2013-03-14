@@ -1,2 +1,0 @@
-dr	dtrans	:	unotools offapi stoc LIBXSLT:libxslt NULL
-dr	dtrans\prj								nmake	-	all	dr_prj NULL

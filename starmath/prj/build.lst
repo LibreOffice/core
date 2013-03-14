@@ -1,2 +1,0 @@
-sm	starmath	: LIBXSLT:libxslt svx configmgr dtrans ure test NULL
-sm	starmath\prj							nmake	-	all	sm_prj NULL

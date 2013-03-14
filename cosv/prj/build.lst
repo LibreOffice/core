@@ -1,3 +1,0 @@
-cs	cosv	: sal soltools NULL
-cs	cosv								usr1	-	all	cs_mkout NULL
-cs	cosv\prj							nmake		-	all	cs_prj NULL

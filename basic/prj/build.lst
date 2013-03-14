@@ -1,3 +1,0 @@
-sb	basic	:    offapi oovbaapi svtools xmlscript framework salhelper LIBXSLT:libxslt unotest NULL
-sb	basic									usr1	-	all	sb_mkout NULL
-sb	basic\prj								nmake	-	all	sb_prj NULL

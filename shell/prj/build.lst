@@ -1,2 +1,0 @@
-sl    shell	:    offapi tools sal EXPAT:expat LIBXSLT:libxslt NULL
-sl    shell\prj			                           nmake   -   all sl_prj NULL

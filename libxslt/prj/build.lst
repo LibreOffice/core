@@ -1,2 +1,0 @@
-lxslt	libxslt	: soltools LIBXML2:libxml2 NULL
-lxslt	libxslt\prj			    nmake	-	all	lxslt_libxslt NULL

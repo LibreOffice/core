@@ -1,3 +1,0 @@
-tr l10ntools : EXPAT:expat LIBXML2:libxml2 LIBXSLT:libxslt ICU:icu sal NULL
-tr	l10ntools					usr1	-	all	tr_mkout NULL
-tr	l10ntools\prj					nmake	-	all	tr_prj NULL

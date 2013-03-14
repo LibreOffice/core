@@ -1,3 +1,0 @@
-cu cui : salhelper sax svtools svx NULL
-cu	cui										usr1	-	all	cui_mkout NULL
-cu	cui\prj									nmake	-	all	cui_prj NULL

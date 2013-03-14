@@ -1,3 +1,0 @@
-cm	codemaker	:	BOOST:boost registry NULL
-cm	codemaker							usr1	-	all	cm_mkout NULL
-cm	codemaker\prj							nmake		-	all	cm_prj NULL

@@ -1,3 +1,0 @@
-us	UnoControls	: LIBXSLT:libxslt cppuhelper offapi tools NULL
-us	UnoControls								usr1	-	all	us_mkout NULL
-us	UnoControls\prj						nmake	-	all	us_prj NULL

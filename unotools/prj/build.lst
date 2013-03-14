@@ -1,3 +1,0 @@
-ut     unotools        : LIBXSLT:libxslt comphelper cppuhelper offapi tools ucbhelper NULL
-ut     unotools\prj                                                  nmake   -       all     ut_prj NULL
-

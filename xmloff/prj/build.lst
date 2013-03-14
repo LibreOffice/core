@@ -1,2 +1,0 @@
-xo	xmloff	: LIBXSLT:libxslt offapi svl sax NULL
-xo	xmloff\prj								nmake	-	all	xo_prj NULL

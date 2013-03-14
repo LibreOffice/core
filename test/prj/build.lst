@@ -1,2 +1,0 @@
-te test : unotest vcl i18npool NULL
-te     test\prj                                                      nmake   -       all     te_prj NULL

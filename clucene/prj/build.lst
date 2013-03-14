@@ -1,3 +1,0 @@
-cl	clucene : ZLIB:zlib BOOST:boost solenv NULL
-cl	clucene			usr1	-   all	cl_mkout NULL
-cl	clucene\prj		nmake	-   all	cl_prj NULL

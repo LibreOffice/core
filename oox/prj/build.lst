@@ -1,3 +1,0 @@
-oox	oox : cppu cppuhelper comphelper filter sal offapi sax basegfx svx xmlscript tools vcl unotools BOOST:boost OPENSSL:openssl LIBXSLT:libxslt NULL
-oox	oox				usr1	-   all	oox_mkout NULL
-oox	oox\prj				nmake	-   all	oox_prj NULL

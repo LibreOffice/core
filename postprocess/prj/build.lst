@@ -1,2 +1,0 @@
-po      postprocess     ::      tail_build NULL
-po	postprocess\prj		nmake	-	all	po_prj NULL

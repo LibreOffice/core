@@ -1,2 +1,0 @@
-lx	libxml2	: soltools NULL
-lx	libxml2\prj			    nmake	-	all	lx_libxml2 NULL

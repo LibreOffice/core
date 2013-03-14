@@ -1,2 +1,0 @@
-bs	more_fonts	:	solenv NULL
-bs	more_fonts\prj		nmake	-	all	more_fonts NULL

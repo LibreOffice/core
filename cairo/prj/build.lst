@@ -1,2 +1,0 @@
-lcairo	cairo	: FONTCONFIG:fontconfig ZLIB:zlib LIBPNG:libpng soltools NULL
-lcairo	cairo\prj		    nmake	-	all	lcairo_prj NULL

@@ -1,2 +1,0 @@
-af	afms : solenv NULL
-af      afms\prj          nmake   -       all     afms_prj NULL

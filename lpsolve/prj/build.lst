@@ -1,2 +1,0 @@
-lps     lpsolve : solenv NULL
-lps	lpsolve\prj		nmake	-	all	lps_lpsolve NULL

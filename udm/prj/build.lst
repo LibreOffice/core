@@ -1,3 +1,0 @@
-ud	udm	:  cosv NULL
-ud	udm								usr1	-	all	ud_mkout NULL
-ud	udm\prj							nmake		-	all	ud_prj NULL

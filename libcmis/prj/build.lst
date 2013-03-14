@@ -1,2 +1,0 @@
-lc     libcmis      :       BOOST:boost CURL:curl LIBXML2:libxml2 soltools NULL
-lc     libcmis\prj         nmake   -       all lc_libcmis NULL

@@ -1,3 +1,0 @@
-dt      desktop :    sfx2 stoc BOOST:boost svx DESKTOP:xmlhelp sal salhelper unoil officecfg offapi filter LIBXSLT:libxslt DESKTOP:helpcompiler NULL
-dt	desktop									usr1	-	all	dt_mkout NULL
-dt	desktop\prj						nmake	-	all	dt_prj NULL

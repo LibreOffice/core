@@ -1,2 +1,0 @@
-shp	salhelper	:	sal NULL
-shp	salhelper\prj   	nmake	-	all shp_prj NULL

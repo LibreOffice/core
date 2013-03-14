@@ -1,3 +1,0 @@
-animations	animations	:	cppuhelper comphelper offapi LIBXSLT:libxslt NULL
-animations	animations						usr1	-	all	animations_mkout NULL
-animations	animations\prj                  nmake	-	all	animations_prj NULL

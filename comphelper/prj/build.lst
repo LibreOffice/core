@@ -1,2 +1,0 @@
-ch comphelper : BOOST:boost cppuhelper ucbhelper offapi officecfg salhelper LIBXSLT:libxslt NULL
-ch comphelper\prj nmake - all ch_all NULL

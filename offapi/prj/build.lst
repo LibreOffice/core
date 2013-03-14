@@ -1,2 +1,0 @@
-oa	offapi	:	udkapi DESKTOP:idlc solenv NULL
-oa	offapi/prj									nmake	-	all	oa_prj NULL

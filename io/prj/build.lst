@@ -1,3 +1,0 @@
-io	io	: LIBXSLT:libxslt cppuhelper NULL
-io	io										usr1	-	all	io_mkout NULL
-io	io\prj									nmake	-	all	io_prj NULL

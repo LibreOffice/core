@@ -1,2 +1,0 @@
-lpng    libpng : ZLIB:zlib soltools NULL
-lpng	libpng\prj  nmake	-	all	lpng_libpng NULL

@@ -1,3 +1,0 @@
-tc	stoc : cppuhelper cppu jvmaccess sal salhelper jvmfwk LIBXSTL:libxslt registry NULL
-tc	stoc									usr1	-	all	tc_mkout NULL
-tc	stoc\prj								nmake	-	all	tc_prj NULL

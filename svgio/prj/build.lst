@@ -1,2 +1,0 @@
-dl  svgio : sal basegfx drawinglayer cppuhelper cppu svtools NULL
-dl  svgio\prj nmake - all svgio_prj NULL

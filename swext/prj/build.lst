@@ -1,3 +1,0 @@
-swext swext :   officecfg DESKTOP:l10ntools javaunohelper ridljar unoil jurt APACHE_COMMONS:apache-commons readlicense_oo xsltml DESKTOP:xmlhelp DESKTOP:helpcompiler NULL
-swext swext\prj    nmake   -    all    swext_prj NULL
-

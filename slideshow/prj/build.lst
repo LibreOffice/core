@@ -1,3 +1,0 @@
-pe	slideshow	:	tools sal cppu vcl comphelper cppuhelper offapi cppcanvas basegfx svtools unotools toolkit animations avmedia MESA:Mesa LIBXSLT:libxslt NULL
-pe	slideshow								usr1	-	all	pe_mkout NULL
-pe	slideshow\prj							nmake	-	all	pe_prj NULL

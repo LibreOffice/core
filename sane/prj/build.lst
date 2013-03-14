@@ -1,2 +1,0 @@
-sa	sane	:	solenv NULL
-sa	sane\prj	nmake		-	all	sa_prj NULL

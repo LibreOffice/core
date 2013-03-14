@@ -1,2 +1,0 @@
-xc	curl	: external NULL
-xc	curl\prj	nmake	-	all	xc_curl NULL

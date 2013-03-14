@@ -1,2 +1,0 @@
-su	sysui	:	offapi DESKTOP:l10ntools NULL
-su	sysui\prj					nmake	-	w	su_iconsw NULL

@@ -1,2 +1,0 @@
-lg  linguistic  :   svl vcl xmloff ucbhelper comphelper ICU:icu LIBXSLT:libxslt NULL
-lg	linguistic\prj							nmake		-	all	lg_prj NULL

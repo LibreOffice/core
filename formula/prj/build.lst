@@ -1,3 +1,0 @@
-fml  formula    :   BOOST:boost LIBXSLT:libxslt comphelper svx NULL
-fml  formula                                                        usr1    -   all fml_mkout NULL
-fml  formula\prj                                                    nmake   -   all fml_prj NULL

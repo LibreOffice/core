@@ -1,3 +1,0 @@
-bc	basctl	: LIBXSLT:libxslt svx NULL
-bc	basctl									usr1	-	all	bc_mkout NULL
-bc	basctl\prj								nmake	-	all	bc_prj NULL

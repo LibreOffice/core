@@ -1,2 +1,0 @@
-librelogo	librelogo	:	offapi officecfg comphelper unotools DESKTOP:l10ntools cppu tools cppuhelper sal javaunohelper officecfg DESKTOP:xmlhelp DESKTOP:helpcompiler NULL
-librelogo librelogo\prj    nmake   -    all    librelogo_prj NULL

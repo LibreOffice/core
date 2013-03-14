@@ -1,2 +1,0 @@
-smt smoketest :: javaunohelper soltools test unoil NULL
-smt smoketest\prj nmake - all smoketest_prj NULL

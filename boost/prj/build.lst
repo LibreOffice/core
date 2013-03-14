@@ -1,2 +1,0 @@
-bo      boost : solenv soltools NULL
-bo      boost\prj           nmake   -       all     bo_boost NULL

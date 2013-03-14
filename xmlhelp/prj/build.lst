@@ -1,3 +1,0 @@
-xh      xmlhelp :       comphelper ucbhelper LIBXSLT:libxslt unoil javaunohelper DESKTOP:l10ntools DESKTOP:helpcompiler unotools NULL
-xh	xmlhelp									usr1	-	all	xh_mkout NULL
-xh	xmlhelp\prj					nmake	-	all	xh_prj NULL

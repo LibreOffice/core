@@ -1,2 +1,0 @@
-cdr	libcdr	: libwpd libwpg LCMS2:lcms2 ZLIB:zlib soltools NULL
-cdr	libcdr\prj	nmake	-	all	cdr_libcdr NULL

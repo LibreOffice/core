@@ -1,3 +1,0 @@
-tr helpcompiler : EXPAT:expat LIBXSLT:libxslt CLUCENE:clucene sal comphelper NULL
-tr	helpcompiler					usr1	-	all	tr_mkout NULL
-tr	helpcompiler\prj					nmake	-	all	tr_prj NULL

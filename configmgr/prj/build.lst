@@ -1,4 +1,0 @@
-cg configmgr : BOOST:boost LIBXSLT:libxslt comphelper cppu cppuhelper offapi sal salhelper xmlreader NULL
-cg configmgr\prj nmake - all cg_prj NULL
-# migrated to gbuild
-#cg configmgr\qa\unoapi nmake - all cg_qa_unoapi NULL

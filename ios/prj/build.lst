@@ -1,2 +1,0 @@
-ios ios :: postprocess NULL
-ios ios\prj nmake - all an_prj NULL

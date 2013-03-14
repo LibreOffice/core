@@ -1,3 +1,0 @@
-cp    scp2    :    i18npool DESKTOP:l10ntools PYTHON:python3 ICU:icu REDLAND:redland LIBXSLT:libxslt NULL
-cp    scp2                        usr1     -    all    cp_mkout NULL
-cp    scp2\prj                    nmake    -    all    cp_prj NULL

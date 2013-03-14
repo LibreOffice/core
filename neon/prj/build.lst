@@ -1,2 +1,0 @@
-xh      neon  :  OPENSSL:openssl ZLIB:zlib soltools external EXPAT:expat LIBXML2:libxml2 NULL
-xh      neon\prj     nmake          -       all     xh_neon NULL

@@ -1,2 +1,0 @@
-hs	hsqldb	:	solenv NULL
-hs	hsqldb\prj			nmake	-	all	hs_prj NULL

@@ -1,2 +1,0 @@
-mc	mysqlc	:	solenv MYSQLCPPCONN:mysqlcppconn offapi cppu soltools cppuhelper readlicense_oo NULL
-mc	mysqlc\prj       nmake   -   all mc_mysqlc NULL

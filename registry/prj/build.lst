@@ -1,2 +1,0 @@
-rg	registry	:	salhelper store NULL
-rg registry\prj       nmake - all rg_prj NULL

@@ -1,2 +1,0 @@
-fp	fpicker	: LIBXSLT:libxslt svtools ucb NULL
-fp	fpicker\prj			nmake	-	all	fp_prj NULL

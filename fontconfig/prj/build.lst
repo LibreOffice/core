@@ -1,2 +1,0 @@
-fc     fontconfig      :       FREETYPE:freetype EXPAT:expat NULL
-fc     fontconfig\prj              nmake   -       u fc_libfontconfig NULL

@@ -1,3 +1,0 @@
-scc	sccomp	:    offapi comphelper LPSOLVE:lpsolve tools DESKTOP:rsc LIBXSLT:libxslt NULL
-scc	sccomp									usr1	-	all	scc_mkout NULL
-scc	sccomp\prj								nmake	-	all	scc_prj NULL

@@ -1,2 +1,0 @@
-ti toolkit : LIBXSLT:libxslt vcl touch QADEVOOO:qadevOOo test NULL
-ti toolkit\prj					nmake - all ti_prj NULL

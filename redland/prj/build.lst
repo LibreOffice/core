@@ -1,2 +1,0 @@
-rld     redland : soltools LIBXML2:libxml2 LIBXSLT:libxslt OPENSSL:openssl NULL
-rld	redland\prj				nmake	-	all	rld_redland	NULL

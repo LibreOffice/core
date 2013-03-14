@@ -1,3 +1,0 @@
-cv	canvas	:	javaunohelper comphelper cppuhelper offapi unoil tools svtools vcl basegfx CAIRO:cairo LIBXSLT:libxslt NULL
-cv	canvas\prj										 nmake	-	all	cv_prj NULL
-

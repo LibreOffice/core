@@ -1,3 +1,0 @@
-ca	scaddins	: LIBXSLT:libxslt vcl NULL
-ca	scaddins								usr1	-	all	sc_mkout NULL
-ca	scaddins\prj				            nmake	-	all	sc_prj NULL

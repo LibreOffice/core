@@ -1,3 +1,0 @@
-ure     cli_ure :       cppu cppuhelper sal DESKTOP:codemaker stoc udkapi bridges NULL
-ure	cli_ure						usr1	-	all	ure_mkout NULL
-ure	cli_ure\prj					nmake   -   all   ure_prj NULL

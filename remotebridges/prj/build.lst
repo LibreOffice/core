@@ -1,2 +1,0 @@
-rb	remotebridges	: LIBXSLT:libxslt cppu cppuhelper offapi sal NULL
-rb	remotebridges\prj	nmake	-	all	rb_prj NULL

@@ -1,2 +1,0 @@
-es	embedserv	:	offapi sal cppu cppuhelper comphelper LIBXSLT:libxslt NULL
-es	embedserv\prj	nmake	-	all	es_prj NULL

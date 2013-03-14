@@ -1,2 +1,0 @@
-wp	lotuswordpro : sfx2 sot svx comphelper configmgr BOOST:boost ure test NULL
-wp	lotuswordpro\prj	nmake	-	all	lwp_prj NULL

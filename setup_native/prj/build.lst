@@ -1,2 +1,0 @@
-pk	setup_native	:	DESKTOP:l10ntools soltools sal NULL
-pk  setup_native\prj                           nmake   -  u   sn_setup_native NULL

@@ -1,3 +1,0 @@
-er  extras  :   solenv LIBXSLT:libxslt NULL
-er  extras                                  usr1    -   all er_mkout NULL
-er  extras\prj                  nmake   -   all er_prj NULL

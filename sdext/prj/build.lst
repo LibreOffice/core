@@ -1,3 +1,0 @@
-dx	sdext	:	offapi comphelper unotools readlicense_oo cppu tools cppuhelper sal javaunohelper officecfg XPDF:xpdf LIBXSLT:libxslt DESKTOP:xmlhelp DESKTOP:helpcompiler NULL
-dx	sdext									usr1	-	all	sdext_mkout NULL
-dx	sdext\prj								nmake		-	all	sdext_prj NULL

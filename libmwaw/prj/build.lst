@@ -1,2 +1,0 @@
-mwaw	libmwaw	: libwpd BOOST:boost ZLIB:zlib soltools NULL
-mwaw	libmwaw\prj	nmake	-	all	mwaw_libmwaw NULL

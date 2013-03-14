@@ -1,2 +1,0 @@
-ux	unoxml	:	offapi cppuhelper LIBXML2:libxml2 LIBXSLT:libxslt REDLAND:redland sax comphelper ucbhelper NULL
-ux	unoxml\prj    nmake	-	all ux_prj NULL

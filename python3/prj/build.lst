@@ -1,2 +1,0 @@
-py python3 : solenv EXPAT:expat OPENSSL:openssl NULL
-py python3\prj  nmake - all py_python3 NULL

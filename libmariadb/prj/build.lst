@@ -1,2 +1,0 @@
-lmdb	libmariadb	: soltools NULL
-lmdb	libmariadb\prj	nmake	-	all	lmdb_libmariadb NULL

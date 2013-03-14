@@ -1,2 +1,0 @@
-moz	moz : solenv NSS:nss NULL
-moz	moz				nmake	-	all	moz_mozilla     NULL

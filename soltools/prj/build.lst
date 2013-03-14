@@ -1,3 +1,0 @@
-so  soltools : solenv NULL
-so  soltools						usr1 - all so_usr1 NULL
-so  soltools\prj                                        nmake - all ro_prj NULL

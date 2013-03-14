@@ -1,4 +1,0 @@
-udt	unodevtools	:	DESKTOP:codemaker cppuhelper NULL
-udt	unodevtools						usr1	-	all	udt_mkout NULL
-udt	unodevtools\prj						nmake		-	all	udt_prj NULL
-

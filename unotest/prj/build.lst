@@ -1,2 +1,0 @@
-unote unotest : BOOST:boost cppu cppuhelper comphelper CPPUNIT:cppunit javaunohelper offapi ridljar sal solenv unoil QADEVOOO:qadevOOo NULL
-unote unotest\prj nmake - all unotest_prj NULL

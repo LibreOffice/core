@@ -1,2 +1,0 @@
-oc  officecfg   :    l10ntools soltools solenv LIBXSLT:libxslt NULL
-oc  officecfg\prj nmake - all oc_prj   NULL

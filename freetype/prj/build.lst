@@ -1,2 +1,0 @@
-ft     freetype      :       solenv NULL
-ft     freetype\prj              nmake   -       u ft_libfreetype NULL

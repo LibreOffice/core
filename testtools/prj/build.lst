@@ -1,3 +1,0 @@
-tt testtools : cpputools io remotebridges stoc javaunohelper PYUNO:pyuno cli_ure offapi ure LIBXSLT:libxslt NULL
-tt testtools   		    		       		 usr1		 -	 all 	tt_mkout NULL
-tt testtools\prj 					 nmake		 -	 all 	tt_prj NULL

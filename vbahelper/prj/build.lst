@@ -1,3 +1,0 @@
-vba     vbahelper       :    oovbaapi offapi basic sfx2 svx filter cppuhelper vcl comphelper svtools tools sal LIBXSLT:libxslt NULL
-vba	vbahelper									usr1	-	all	  vba_mkout NULL
-vba	vbahelper\prj	nmake	-	all	vba_prj NULL

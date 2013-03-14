@@ -1,3 +1,0 @@
-rpb  reportbuilder    :   BOOST:boost JFREEREPORT:jfreereport wizards readlicense_oo APACHE_COMMONS:apache-commons officecfg NULL
-rpb  reportbuilder                                                        usr1    -   all rpb_mkout NULL
-rpb  reportbuilder\prj							                        nmake   -   all rpb_prj NULL

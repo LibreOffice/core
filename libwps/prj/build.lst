@@ -1,2 +1,0 @@
-lwps	libwps	: libwpd BOOST:boost soltools NULL
-lwps	libwps\prj	nmake	-	all	lwps_libwps NULL

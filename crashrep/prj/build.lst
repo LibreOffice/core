@@ -1,2 +1,0 @@
-cr	crashrep	:    sal sysui shell NULL
-cr	crashrep\prj		nmake	-	all	cr_crashrep NULL
