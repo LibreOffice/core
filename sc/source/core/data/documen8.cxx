@@ -495,6 +495,8 @@ public:
     SCCOL Col() const { return mrCalcPos.Col(); }
     SCROW Row() const { return mrCalcPos.Row(); }
 
+    const ScAddress& Pos() const { return mrCalcPos; }
+
     void setTab(SCTAB nTab) { mrCalcPos.SetTab(nTab); }
     void setCol(SCCOL nCol) { mrCalcPos.SetCol(nCol); }
     void setRow(SCROW nRow) { mrCalcPos.SetRow(nRow); }
@@ -563,21 +565,20 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
     // Start at specified cell position (nCol, nRow, nTab).
     ScColumn* pCol  = &pTab->aCol[aScope.Col()];
-    boost::scoped_ptr<ScColumnIterator> pColIter(new ScColumnIterator(pCol, aScope.Row(), MAXROW));
+    boost::scoped_ptr<ScColumnTextWidthIterator> pColIter(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MAXROW));
 
     OutputDevice* pDev = NULL;
     sal_uInt16 nRestart = 0;
     sal_uInt16 nCount = 0;
     while ( (nZoom > 0) && (nCount < CALCMAX) && (nRestart < 2) )
     {
-        SCROW nRow;
-        ScBaseCell* pCell = NULL;
-        if ( pColIter->Next(nRow, pCell) )
+        if (pColIter->hasCell())
         {
             // More cell in this column.
+            SCROW nRow = pColIter->getPos();
             aScope.setRow(nRow);
 
-            if ( TEXTWIDTH_DIRTY == pCell->GetTextWidth() )
+            if (pColIter->getValue() == TEXTWIDTH_DIRTY)
             {
                 // Calculate text width for this cell.
                 double nPPTX = 0.0;
@@ -593,17 +594,14 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                     nPPTY = aPix1000.Y() / 1000.0;
                 }
 
-                if (!aScope.hasProgressBar() && pCell->GetCellType() == CELLTYPE_FORMULA
-                    && ((ScFormulaCell*)pCell)->GetDirty())
-                {
+                if (!aScope.hasProgressBar() && pCol->IsFormulaDirty(nRow))
                     aScope.createProgressBar();
-                }
 
                 sal_uInt16 nNewWidth = (sal_uInt16)GetNeededSize(
                     aScope.Col(), aScope.Row(), aScope.Tab(),
                     pDev, nPPTX, nPPTY, aZoomFract,aZoomFract, true, true);   // bTotalSize
 
-                pCell->SetTextWidth( nNewWidth );
+                pColIter->setValue(nNewWidth);
                 aScope.setNeedMore(true);
             }
         }
@@ -662,14 +660,14 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                 if ( nZoom > 0 )
                 {
                     pCol  = &pTab->aCol[aScope.Col()];
-                    pColIter.reset(new ScColumnIterator(pCol, aScope.Row(), MAXROW));
+                    pColIter.reset(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MAXROW));
                 }
                 else
                     aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
             }
         }
 
-        nCount++;
+        ++nCount;
 
         // Quit if either 1) its duration exceeds 50 ms, or 2) there is any
         // pending event after processing 32 cells.

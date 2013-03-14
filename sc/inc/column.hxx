@@ -244,6 +244,8 @@ public:
     bool    HasValueData( SCROW nRow ) const;
     bool    HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
 
+    bool IsFormulaDirty( SCROW nRow ) const;
+
     void        SetDirty();
     void        SetDirty( const ScRange& );
     void        SetDirtyVar();

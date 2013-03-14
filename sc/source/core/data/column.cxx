@@ -2008,6 +2008,23 @@ void ScColumn::SetDirtyVar()
     }
 }
 
+bool ScColumn::IsFormulaDirty( SCROW nRow ) const
+{
+    if (!ValidRow(nRow))
+        return false;
+
+    SCSIZE nIndex;
+    if (!Search(nRow, nIndex))
+        // No cell at this row position.
+        return false;
+
+    const ScBaseCell* pCell = maItems[nIndex].pCell;
+    if (pCell->GetCellType() != CELLTYPE_FORMULA)
+        // Not even a formula cell.
+        return false;
+
+    return static_cast<const ScFormulaCell*>(pCell)->GetDirty();
+}
 
 void ScColumn::SetDirty()
 {
