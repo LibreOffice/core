@@ -27,11 +27,13 @@
 $(eval $(call gb_Module_Module,registry))
 
 $(eval $(call gb_Module_add_targets,registry,\
-	Executable_regmerge \
-	Executable_regview \
 	Library_reg \
-	StaticLibrary_registry_helper \
 	ZipPackage_registry_odk_headers \
+	$(if $(filter-out $(OS),IOS), \
+		Executable_regmerge \
+		Executable_regview \
+		StaticLibrary_registry_helper \
+	) \
 ))
 
 # if not cross-compiling or we need this for ODK
