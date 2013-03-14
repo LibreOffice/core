@@ -180,38 +180,18 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : \
 
 endef
 
-# Use the gcc wrappers for a autoconf based project
-#
-# gb_ExternalProject_register_targets project state_target
-define gb_ExternalProject_use_autoconf
-ifeq ($(COM),MSC)
-$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Executable_get_runtime_dependencies,gcc-wrapper) \
-	$(call gb_Executable_get_runtime_dependencies,g++-wrapper)
-$(call gb_ExternalProject_get_state_target,$(1),$(2)): WRAPPERS := $(AUTOCONF_WRAPPERS)
-endif
-endef
-
 # Run a target command
 #
-# This provide a wrapper that cange to the right directory
-# touch the 'target' if sucessfull and also provide
+# This provides a wrapper that changes to the right directory,
+# touches the 'target' if sucessful and also provides
 # the ability to hide the output if there is no failure
 # gb_ExternalProject_run,run_target,command,optional_extra_sub_directory,optional_log_filename)
 # default log_filename is <run_target>.log
 #
 
-ifeq ($(COM),MSC)
-AUTOCONF_WRAPPERS := \
-	REAL_CC="$(shell cygpath -w $(CC))" \
-	CC="$(call gb_Executable_get_target,gcc-wrapper)" \
-	REAL_CXX="$(shell cygpath -w $(CXX))" \
-	CXX="$(call gb_Executable_get_target,g++-wrapper)" \
-    LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"
-endif
-
 define gb_ExternalProject_run
 $(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/$(3) && \
-	$(if $(filter MSC,$(COM)),$(if $(WRAPPERS),export $(WRAPPERS) &&)) \
+	$(if $(WRAPPERS),export $(WRAPPERS) &&) \
 	$(2) && touch $@,$(EXTERNAL_WORKDIR)/$(if $(3),$(3)/,)$(if $(4),$(4),$(1).log))
 endef
 

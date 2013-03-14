@@ -539,6 +539,24 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 
 endef
 
+# ExternalProject class
+
+# Use the gcc wrappers for a autoconf based project
+#
+# gb_ExternalProject_register_targets project state_target
+define gb_ExternalProject_use_autoconf
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Executable_get_runtime_dependencies,gcc-wrapper) \
+	$(call gb_Executable_get_runtime_dependencies,g++-wrapper)
+$(call gb_ExternalProject_get_state_target,$(1),$(2)): WRAPPERS := $(gb_AUTOCONF_WRAPPERS)
+endef
+
+gb_AUTOCONF_WRAPPERS := \
+	REAL_CC="$(shell cygpath -w $(CC))" \
+	CC="$(call gb_Executable_get_target,gcc-wrapper)" \
+	REAL_CXX="$(shell cygpath -w $(CXX))" \
+	CXX="$(call gb_Executable_get_target,g++-wrapper)" \
+    LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"
+
 # InstallScript class
 
 gb_InstallScript_EXT := .inf

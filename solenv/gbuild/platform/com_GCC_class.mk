@@ -268,4 +268,8 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 endif
 
+# ExternalProject class
+
+gb_ExternalProject_use_autoconf :=
+
 # vim: set noet sw=4 ts=4:
