@@ -784,7 +784,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/errinf.hxx>
-#include <tools/fsys.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
