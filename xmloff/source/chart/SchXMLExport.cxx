@@ -261,7 +261,6 @@ private:
 public:
     SvXMLExport& mrExport;
     SvXMLAutoStylePoolP& mrAutoStylePool;
-    UniReference< XMLPropertyHandlerFactory > mxPropertyHandlerFactory;
     UniReference< XMLPropertySetMapper > mxPropertySetMapper;
     UniReference< XMLChartExportPropertyMapper > mxExpPropMapper;
 
@@ -1083,15 +1082,8 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
 {
     msTableName = OUString( "local-table" );
 
-    // create factory
-    mxPropertyHandlerFactory = new XMLChartPropHdlFactory;
-
-    if( mxPropertyHandlerFactory.is() )
-    {
-        // create property set mapper
-        mxPropertySetMapper = new XMLChartPropertySetMapper;
-    }
-
+    // create property set mapper
+    mxPropertySetMapper = new XMLChartPropertySetMapper;
     mxExpPropMapper = new XMLChartExportPropertyMapper( mxPropertySetMapper, rExport );
 
     // register chart auto-style family
