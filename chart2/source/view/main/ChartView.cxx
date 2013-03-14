@@ -683,7 +683,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                         if (n3DRelativeHeightOldValue != n3DRelativeHeight)
                             xPropertySet->setPropertyValue( C2U("3DRelativeHeight"), uno::makeAny(n3DRelativeHeight) );
                     }
-                    catch(const uno::Exception& e){}
+                    catch (const uno::Exception&) { }
                 }
             }
 
