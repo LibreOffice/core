@@ -43,7 +43,6 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_qa_cppunit, \
 	unoidl \
 	unotest \
 	utl \
-	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,svl_qa_cppunit,\
