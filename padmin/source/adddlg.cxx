@@ -205,7 +205,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 if( aDriver.equalsIgnoreAsciiCase( "SGENPRT" ) )
                 {
                     OUString aText( PaResId( RID_ERR_REMOVESGENPRT ) );
-                    aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    aText = aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
                     aErrorBox.SetText( m_aRemStr );
                     aErrorBox.Execute();
@@ -218,7 +218,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 if( aDefInfo.m_aDriverName == aPPD )
                 {
                     OUString aText( PaResId( RID_ERR_REMOVEDEFAULTDRIVER ) );
-                    aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    aText = aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
                     aErrorBox.SetText( m_aRemStr );
                     aErrorBox.Execute();
@@ -238,7 +238,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 if( it != aPrinters.end() )
                 {
                     OUString aText( PaResId( RID_QUERY_DRIVERUSED ) );
-                    aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    aText = aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     QueryBox aBox( this, WB_YES_NO | WB_DEF_NO, aText );
                     aBox.SetText( m_aRemStr );
                     if( aBox.Execute() == RET_NO )
@@ -247,7 +247,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 else
                 {
                     OUString aText( PaResId( RID_QUERY_REMOVEDRIVER ) );
-                    aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    aText = aText.replaceFirst( OUString( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
                     QueryBox aBox( this, WB_YES_NO | WB_DEF_NO, aText );
                     aBox.SetText( m_aRemStr );
                     if( aBox.Execute() == RET_NO )
@@ -289,8 +289,8 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                             if (unlink(aSysPath.getStr()))
                             {
                                 OUString aText( PaResId( RID_ERR_REMOVEDRIVERFAILED ) );
-                                aText.replaceFirst( OUString( "%s1" ), m_aDriverBox.GetSelectEntry( i ) );
-                                aText.replaceFirst( OUString( "%s2" ), aFile );
+                                aText = aText.replaceFirst( OUString( "%s1" ), m_aDriverBox.GetSelectEntry( i ) );
+                                aText = aText.replaceFirst( OUString( "%s2" ), aFile );
                                 ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
                                 aErrorBox.SetText( m_aRemStr );
                                 aErrorBox.Execute();
@@ -516,8 +516,8 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         if( pParser == NULL )
         {
             OUString aText( PaResId( RID_TXT_DRIVERDOESNOTEXIST ) );
-            aText.replaceFirst( OUString(  "%s1"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
-            aText.replaceFirst( OUString(  "%s2"  ), rtl::OStringToOUString(aDriver, aEncoding) );
+            aText = aText.replaceFirst( OUString(  "%s1"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
+            aText = aText.replaceFirst( OUString(  "%s2"  ), rtl::OStringToOUString(aDriver, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
@@ -529,7 +529,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         if (!aCommand.isEmpty())
         {
             OUString aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
-            aText.replaceFirst( OUString(  "%s"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
+            aText = aText.replaceFirst( OUString(  "%s"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
@@ -640,7 +640,7 @@ void APOldPrinterPage::addOldPrinters()
         if( ! rManager.addPrinter( pInfo->m_aPrinterName, pInfo->m_aDriverName ) )
         {
             OUString aText( PaResId( RID_TXT_PRINTERADDFAILED ) );
-            aText.replaceFirst( OUString(  "%s"  ), pInfo->m_aPrinterName );
+            aText = aText.replaceFirst( OUString(  "%s"  ), pInfo->m_aPrinterName );
                 ErrorBox aBox( this, WB_OK | WB_DEF_OK, aText );
                 aBox.Execute();
                 continue;
