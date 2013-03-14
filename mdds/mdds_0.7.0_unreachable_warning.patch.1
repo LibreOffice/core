@@ -1,0 +1,13 @@
+diff -ru mdds.old/include/mdds/multi_type_vector_def.inl mdds/include/mdds/multi_type_vector_def.inl
+--- mdds.old/include/mdds/multi_type_vector_def.inl	2013-03-12 21:18:16.340506918 +0100
++++ mdds/include/mdds/multi_type_vector_def.inl	2013-03-14 17:56:07.275475086 +0100
+@@ -652,7 +652,9 @@
+             }
+         }
+ 
++#ifndef _MSC_VER // MSVC is too smart and warns about unreachable code
+         assert(!"this code path should never be reached!");
++#endif
+     }
+ 
+     // This empty block is right below a non-empty block.

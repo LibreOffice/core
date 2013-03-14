@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,3))
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
 	mdds/mdds_0.6.0.patch \
 	mdds/0001-Workaround-for-gcc-bug.patch \
+	mdds/mdds_0.7.0_unreachable_warning.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_mark_output_files,mdds,\
