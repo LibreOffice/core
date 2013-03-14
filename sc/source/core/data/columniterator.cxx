@@ -9,6 +9,8 @@
 
 #include "columniterator.hxx"
 #include "column.hxx"
+#include "document.hxx"
+#include "table.hxx"
 
 ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow) :
     mrTextWidths(rCol.maTextWidths),
@@ -17,58 +19,17 @@ ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStar
     miBlockCur(mrTextWidths.begin()),
     miBlockEnd(mrTextWidths.end())
 {
-    if (!ValidRow(nStartRow) || !ValidRow(nEndRow))
-        miBlockCur = miBlockEnd;
+    init(nStartRow, nEndRow);
+}
 
-    size_t nStart = static_cast<size_t>(nStartRow);
-
-    // Locate the start row position.
-    size_t nBlockStart = 0, nBlockEnd = 0;
-    for (; miBlockCur != miBlockEnd; ++miBlockCur, nBlockStart = nBlockEnd)
-    {
-        nBlockEnd = nBlockStart + miBlockCur->size; // non-inclusive end point.
-        if (nBlockStart <= nStart && nStart < nBlockEnd)
-        {
-            // Initial block is found!
-            break;
-        }
-    }
-
-    if (miBlockCur == miBlockEnd)
-        // Initial block not found for whatever reason... Bail out.
-        return;
-
-    // Locate the initial row position within this block.
-    if (miBlockCur->type == mdds::mtv::element_type_ushort)
-    {
-        // This block stores text widths for non-empty cells.
-        size_t nOffsetInBlock = nStart - nBlockStart;
-        mnCurPos = nStart;
-        getDataIterators(nOffsetInBlock);
-        checkEndRow();
-        return;
-    }
-
-    // Current block is not of ushort type.  Skip to the next block.
-    nBlockStart = nBlockEnd;
-    ++miBlockCur;
-
-    // Look for the first ushort block.
-    for (; miBlockCur != miBlockEnd; ++miBlockCur, nBlockStart = nBlockEnd)
-    {
-        nBlockEnd = nBlockStart + miBlockCur->size; // non-inclusive end point.
-        if (miBlockCur->type != mdds::mtv::element_type_ushort)
-            continue;
-
-        // Found!
-        mnCurPos = nBlockStart;
-        getDataIterators(0);
-        checkEndRow();
-        return;
-    }
-
-    // Not found.
-    OSL_ASSERT(miBlockCur == miBlockEnd);
+ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScDocument& rDoc, const ScAddress& rStartPos, SCROW nEndRow) :
+    mrTextWidths(rDoc.maTabs[rStartPos.Tab()]->aCol[rStartPos.Col()].maTextWidths),
+    mnEnd(static_cast<size_t>(nEndRow)),
+    mnCurPos(0),
+    miBlockCur(mrTextWidths.begin()),
+    miBlockEnd(mrTextWidths.end())
+{
+    init(rStartPos.Row(), nEndRow);
 }
 
 void ScColumnTextWidthIterator::next()
@@ -123,6 +84,62 @@ void ScColumnTextWidthIterator::setValue(sal_uInt16 nVal)
 {
     OSL_ASSERT(miBlockCur != miBlockEnd && miDataCur != miDataEnd);
     *miDataCur = nVal;
+}
+
+void ScColumnTextWidthIterator::init(SCROW nStartRow, SCROW nEndRow)
+{
+    if (!ValidRow(nStartRow) || !ValidRow(nEndRow))
+        miBlockCur = miBlockEnd;
+
+    size_t nStart = static_cast<size_t>(nStartRow);
+
+    // Locate the start row position.
+    size_t nBlockStart = 0, nBlockEnd = 0;
+    for (; miBlockCur != miBlockEnd; ++miBlockCur, nBlockStart = nBlockEnd)
+    {
+        nBlockEnd = nBlockStart + miBlockCur->size; // non-inclusive end point.
+        if (nBlockStart <= nStart && nStart < nBlockEnd)
+        {
+            // Initial block is found!
+            break;
+        }
+    }
+
+    if (miBlockCur == miBlockEnd)
+        // Initial block not found for whatever reason... Bail out.
+        return;
+
+    // Locate the initial row position within this block.
+    if (miBlockCur->type == mdds::mtv::element_type_ushort)
+    {
+        // This block stores text widths for non-empty cells.
+        size_t nOffsetInBlock = nStart - nBlockStart;
+        mnCurPos = nStart;
+        getDataIterators(nOffsetInBlock);
+        checkEndRow();
+        return;
+    }
+
+    // Current block is not of ushort type.  Skip to the next block.
+    nBlockStart = nBlockEnd;
+    ++miBlockCur;
+
+    // Look for the first ushort block.
+    for (; miBlockCur != miBlockEnd; ++miBlockCur, nBlockStart = nBlockEnd)
+    {
+        nBlockEnd = nBlockStart + miBlockCur->size; // non-inclusive end point.
+        if (miBlockCur->type != mdds::mtv::element_type_ushort)
+            continue;
+
+        // Found!
+        mnCurPos = nBlockStart;
+        getDataIterators(0);
+        checkEndRow();
+        return;
+    }
+
+    // Not found.
+    OSL_ASSERT(miBlockCur == miBlockEnd);
 }
 
 void ScColumnTextWidthIterator::getDataIterators(size_t nOffsetInBlock)

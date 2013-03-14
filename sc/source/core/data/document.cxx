@@ -5695,6 +5695,15 @@ void ScDocument::SetSubTotalCellsDirty(const ScRange& rDirtyRange)
     maSubTotalCells.swap(aNewSet); // update the list.
 }
 
+sal_uInt16 ScDocument::GetTextWidth( const ScAddress& rPos ) const
+{
+    SCTAB nTab = rPos.Tab();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetTextWidth(rPos.Col(), rPos.Row());
+
+    return 0;
+}
+
 void ScDocument::SetTextWidth( const ScAddress& rPos, sal_uInt16 nWidth )
 {
     SCTAB nTab = rPos.Tab();

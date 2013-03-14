@@ -187,7 +187,7 @@ friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
 friend class ScAttrRectIterator;
-
+friend class ScColumnTextWidthIterator;
 
 public:
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const rtl::OUString& rNewName,

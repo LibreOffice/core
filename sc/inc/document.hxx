@@ -214,6 +214,7 @@ friend class ScDocAttrIterator;
 friend class ScAttrRectIterator;
 friend class ScDocShell;
 friend class ScDocRowHeightUpdater;
+friend class ScColumnTextWidthIterator;
 
     typedef ::std::vector<ScTable*> TableContainer;
 private:
@@ -1844,6 +1845,7 @@ public:
     void RemoveSubTotalCell(ScFormulaCell* pCell);
     void SetSubTotalCellsDirty(const ScRange& rDirtyRange);
 
+    sal_uInt16 GetTextWidth( const ScAddress& rPos ) const;
     void SetTextWidth( const ScAddress& rPos, sal_uInt16 nWidth );
 
 private: // CLOOK-Impl-methods

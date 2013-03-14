@@ -65,6 +65,7 @@
 #include "dpfilteredcache.hxx"
 #include "calcconfig.hxx"
 #include "interpre.hxx"
+#include "columniterator.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -262,6 +263,7 @@ public:
     void testDeleteRow();
     void testDeleteCol();
     void testAnchoredRotatedShape();
+    void testCellTextWidth();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -323,6 +325,7 @@ public:
     CPPUNIT_TEST(testDeleteRow);
     CPPUNIT_TEST(testDeleteCol);
     CPPUNIT_TEST(testAnchoredRotatedShape);
+    CPPUNIT_TEST(testCellTextWidth);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6022,6 +6025,82 @@ void Test::testAnchoredRotatedShape()
         printf("expected endcol %ld actual %ld\n", (long)aAnchor.maEnd.Col(), (long)pData->maEnd.Col()  );
         CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Col(), pData->maEnd.Col() ); // end col 7
     }
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCellTextWidth()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScAddress aTopCell(0, 0, 0);
+
+    // Sheet is empty.
+    boost::scoped_ptr<ScColumnTextWidthIterator> pIter(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+    CPPUNIT_ASSERT_MESSAGE("Column should have no text widths stored.", !pIter->hasCell());
+
+    // Sheet only has one cell.
+    m_pDoc->SetString(0, 0, 0, "Only one cell");
+    pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+    CPPUNIT_ASSERT_MESSAGE("Column should have a cell.", pIter->hasCell());
+    CPPUNIT_ASSERT_EQUAL(0, pIter->getPos());
+
+    // Setting a text width here should commit it to the column.
+    sal_uInt16 nTestVal = 432;
+    pIter->setValue(nTestVal);
+    CPPUNIT_ASSERT_EQUAL(nTestVal, m_pDoc->GetTextWidth(aTopCell));
+
+    // Set values to row 2 through 6.
+    for (SCROW i = 2; i <= 6; ++i)
+        m_pDoc->SetString(0, i, 0, "foo");
+
+    // Set values to row 10 through 18.
+    for (SCROW i = 10; i <= 18; ++i)
+        m_pDoc->SetString(0, i, 0, "foo");
+
+    {
+        // Full range.
+        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+        SCROW aRows[] = { 0, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18 };
+        size_t n = SAL_N_ELEMENTS(aRows);
+        for (size_t i = 0; i < n; ++i, pIter->next())
+        {
+            CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
+            CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
+        }
+        CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
+    }
+
+    {
+        // Specify start and end rows (6 - 16)
+        ScAddress aStart = aTopCell;
+        aStart.SetRow(6);
+        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aStart, 16));
+        SCROW aRows[] = { 6, 10, 11, 12, 13, 14, 15, 16 };
+        size_t n = SAL_N_ELEMENTS(aRows);
+        for (size_t i = 0; i < n; ++i, pIter->next())
+        {
+            CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
+            CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
+        }
+        CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
+    }
+
+    // Clear from row 3 to row 17. After this, we should only have cells at rows 0, 2 and 18.
+    clearRange(m_pDoc, ScRange(0, 3, 0, 0, 17, 0));
+
+    {
+        // Full range again.
+        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+        SCROW aRows[] = { 0, 2, 18 };
+        size_t n = SAL_N_ELEMENTS(aRows);
+        for (size_t i = 0; i < n; ++i, pIter->next())
+        {
+            CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
+            CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
+        }
+        CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
+    }
+
     m_pDoc->DeleteTab(0);
 }
 

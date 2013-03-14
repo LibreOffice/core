@@ -31,6 +31,16 @@ class ScColumnTextWidthIterator : boost::noncopyable
 public:
     ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow);
 
+    /**
+     * @param rDoc document instance.
+     * @param rStartPos position of the first cell from which to start
+     *                  iteration. Note that the caller must ensure that this
+     *                  position is valid; the constructor does not check its
+     *                  validity.
+     * @param nEndRow end row position.
+     */
+    ScColumnTextWidthIterator(ScDocument& rDoc, const ScAddress& rStartPos, SCROW nEndRow);
+
     void next();
     bool hasCell() const;
     SCROW getPos() const;
@@ -38,6 +48,7 @@ public:
     void setValue(sal_uInt16 nVal);
 
 private:
+    void init(SCROW nStartRow, SCROW nEndRow);
     void getDataIterators(size_t nOffsetInBlock);
     void checkEndRow();
 };

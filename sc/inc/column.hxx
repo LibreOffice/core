@@ -97,7 +97,6 @@ class ScColumn
     ScAttrArray*       pAttrArray;
     ScDocument*                pDocument;
 
-friend class ScColumnTextWidthIterator;
 friend class ScDocument;                                       // for FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
@@ -109,6 +108,7 @@ friend class ScMarkedDataIter;
 friend class ScCellIterator;
 friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
+friend class ScColumnTextWidthIterator;
 
     ScColumn(const ScColumn&); // disabled
     ScColumn& operator= (const ScColumn&); // disabled
