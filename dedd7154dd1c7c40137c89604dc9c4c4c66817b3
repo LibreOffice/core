@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///kw\u003d",
+        "filename": "sc/source/filter/ftools/ftools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-03-14T20:50:11Z",
+      "side": 1,
+      "message": "See the question in the header.",
+      "revId": "dedd7154dd1c7c40137c89604dc9c4c4c66817b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///k0\u003d",
+        "filename": "sc/source/filter/inc/ftools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-03-14T20:50:11Z",
+      "side": 1,
+      "message": "Why do you change the sal_uInt16 to sal_Int32 here?",
+      "revId": "dedd7154dd1c7c40137c89604dc9c4c4c66817b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
