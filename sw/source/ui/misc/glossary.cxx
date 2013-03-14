@@ -76,7 +76,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::comphelper;
 using namespace ::ucbhelper;
 using namespace ::sfx2;
 
@@ -1139,10 +1138,8 @@ void SwGlossaryDlg::ResumeShowAutoText()
     {
         if(!m_xAutoText.is())
         {
-            uno::Reference< lang::XMultiServiceFactory > xMgr = getProcessServiceFactory();
             //now the AutoText ListBoxes have to be filled
-
-            m_xAutoText = text::AutoTextContainer::create( comphelper::getComponentContext(xMgr) );
+            m_xAutoText = text::AutoTextContainer::create( comphelper::getProcessComponentContext() );
         }
 
         uno::Reference< XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();

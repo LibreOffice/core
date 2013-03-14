@@ -128,7 +128,7 @@ sal_Int32 ReadThroughComponent(
     uno::Reference<io::XInputStream> xInputStream,
     uno::Reference<XComponent> xModelComponent,
     const String& rStreamName,
-    uno::Reference<lang::XMultiServiceFactory> & rFactory,
+    uno::Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
@@ -137,7 +137,7 @@ sal_Int32 ReadThroughComponent(
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
-    OSL_ENSURE(rFactory.is(), "factory missing");
+    OSL_ENSURE(rxContext.is(), "factory missing");
     OSL_ENSURE(NULL != pFilterName,"I need a service name for the component!");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sw", "mb93740", "ReadThroughComponent" );
@@ -148,13 +148,13 @@ sal_Int32 ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(rFactory));
+    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
     OUString aFilterName(OUString::createFromAscii(pFilterName));
     uno::Reference< xml::sax::XDocumentHandler > xFilter(
-        rFactory->createInstanceWithArguments(aFilterName, rFilterArguments),
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext),
         UNO_QUERY);
     SAL_WARN_IF(!xFilter.is(), "sw", "Can't instantiate filter component: " << aFilterName);
     if( !xFilter.is() )
@@ -298,7 +298,7 @@ sal_Int32 ReadThroughComponent(
     uno::Reference<XComponent> xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
-    uno::Reference<lang::XMultiServiceFactory> & rFactory,
+    uno::Reference<uno::XComponentContext> & rxContext,
     const sal_Char* pFilterName,
     const Sequence<Any>& rFilterArguments,
     const OUString& rName,
@@ -368,7 +368,7 @@ sal_Int32 ReadThroughComponent(
 
         // read from the stream
         return ReadThroughComponent(
-            xInputStream, xModelComponent, sStreamName, rFactory,
+            xInputStream, xModelComponent, sStreamName, rxContext,
             pFilterName, rFilterArguments,
             rName, bMustBeSuccessfull, bEncrypted );
     }
@@ -511,8 +511,6 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
 {
     // Get service factory
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
     uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
 
@@ -894,7 +892,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
 
     // #i103539#: always read meta.xml for generator
     sal_uInt32 const nWarn = ReadThroughComponent(
-        xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+        xStorage, xModelComp, "meta.xml", "Meta.xml", xContext,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
                 : "com.sun.star.comp.Writer.XMLMetaImporter"),
         aEmptyArgs, rName, false );
@@ -904,21 +902,21 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
           bInsertMode) )
     {
         nWarn2 = ReadThroughComponent(
-            xStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
+            xStorage, xModelComp, "settings.xml", NULL, xContext,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisSettingsImporter"
                     : "com.sun.star.comp.Writer.XMLSettingsImporter"),
             aFilterArgs, rName, false );
     }
 
     nRet = ReadThroughComponent(
-        xStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
+        xStorage, xModelComp, "styles.xml", NULL, xContext,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisStylesImporter"
                 : "com.sun.star.comp.Writer.XMLStylesImporter"),
         aFilterArgs, rName, true );
 
     if( !nRet && !(IsOrganizerMode() || aOpt.IsFmtsOnly()) )
         nRet = ReadThroughComponent(
-           xStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
+           xStorage, xModelComp, "content.xml", "Content.xml", xContext,
             (bOASIS ? "com.sun.star.comp.Writer.XMLOasisContentImporter"
                     : "com.sun.star.comp.Writer.XMLContentImporter"),
            aFilterArgs, rName, true );
