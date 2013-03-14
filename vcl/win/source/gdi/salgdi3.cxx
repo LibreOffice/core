@@ -231,7 +231,8 @@ ImplDevFontAttributes ImplFontAttrCache::GetFontAttr( const String& rFontFileNam
 
 void ImplFontAttrCache::AddFontAttr( const String& rFontFileName, const ImplDevFontAttributes& rDFA )
 {
-    DBG_ASSERT( rFontFileName.Len() && !rDFA.GetFamilyName().isEmpty(), "ImplFontNameCache::AddFontName - invalid data!" );
+    SAL_WARN_IF(!rFontFileName.Len() || rDFA.GetFamilyName().isEmpty(),
+        "vcl.gdi", "ImplFontNameCache::AddFontName - invalid data!");
     if ( rFontFileName.Len() && !rDFA.GetFamilyName().isEmpty() )
     {
         aFontAttributes.insert( FontAttrMap::value_type( OptimizeURL( rFontFileName ), rDFA ) );
