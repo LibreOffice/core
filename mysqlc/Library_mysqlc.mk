@@ -15,9 +15,7 @@ $(eval $(call gb_Library_add_cxxflags,mysqlc,-DRTL_DISABLE_FAST_STRING))
 
 $(eval $(call gb_Library_use_externals,mysqlc,\
 	boost_headers \
-	mysql \
 	mysqlcppconn \
-	mariadb \
 ))
 
 ifeq ($(SYSTEM_MYSQL_CPPCONN),NO)
@@ -35,12 +33,6 @@ $(eval $(call gb_Library_use_libraries,mysqlc,\
 	salhelper \
 	cppuhelper \
 ))
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_libs,mysqlc,\
-	-lpthread \
-))
-endif
 
 $(eval $(call gb_Library_add_defs,mysqlc,\
 	-DCPPDBC_EXPORTS \
