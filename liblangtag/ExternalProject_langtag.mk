@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		./configure --disable-modules --disable-test --disable-introspection --disable-shared --enable-static --with-pic \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		$(if $(filter NO,$(SYSTEM_LIBXML)),LIBXML2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,xml2)/include" LIBXML2_LIBS=" ",\
+		$(if $(filter NO,$(SYSTEM_LIBXML)),LIBXML2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,xml2)/include" LIBXML2_LIBS="-L$(gb_Helper_OUTDIRLIBDIR) -lxml2",\
 		$(if $(filter MACOSX,$(OS)),LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)")) \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
