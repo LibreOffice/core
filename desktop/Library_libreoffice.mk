@@ -9,6 +9,11 @@
 
 $(eval $(call gb_Library_Library,libreoffice))
 
+$(eval $(call gb_Library_use_packages,libreoffice,\
+	sal_generated \
+	sal_odk_headers \
+))
+
 $(eval $(call gb_Library_set_include,libreoffice,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \
