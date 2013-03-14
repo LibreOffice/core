@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,extras))
 $(eval $(call gb_Module_add_targets,extras,\
 	AllLangZip_autotextshare \
 	CustomTarget_autocorr \
+	CustomTarget_glade \
 	Package_fonts \
 	Package_glade \
 	Package_labels \
