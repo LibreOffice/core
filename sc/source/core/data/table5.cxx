@@ -37,6 +37,7 @@
 #include "globstr.hrc"
 #include "segmenttree.hxx"
 #include "columniterator.hxx"
+#include "globalnames.hxx"
 
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 

@@ -44,6 +44,7 @@
 #include "postit.hxx"
 #include "stringutil.hxx"
 #include "docpool.hxx"
+#include "globalnames.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 

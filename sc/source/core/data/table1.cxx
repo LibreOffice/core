@@ -44,6 +44,7 @@
 #include "dbdata.hxx"
 #include "colorscale.hxx"
 #include "conditio.hxx"
+#include "globalnames.hxx"
 
 #include <vector>
 

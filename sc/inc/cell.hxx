@@ -38,7 +38,6 @@
 #include "scdllapi.h"
 
 #define USE_MEMPOOL
-#define TEXTWIDTH_DIRTY     0xffff
 
 // in addition to SCRIPTTYPE_... flags from scripttypeitem.hxx:
 // set (in nScriptType) if type has not been determined yet

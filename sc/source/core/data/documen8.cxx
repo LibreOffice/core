@@ -86,6 +86,7 @@
 #include "docuno.hxx"
 #include "scresid.hxx"
 #include "columniterator.hxx"
+#include "globalnames.hxx"
 
 #include <memory>
 #include <boost/scoped_ptr.hpp>

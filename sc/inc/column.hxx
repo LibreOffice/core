@@ -84,6 +84,9 @@ class ScColumn
 {
     typedef mdds::multi_type_vector<mdds::mtv::element_block_func> TextWidthType;
 
+    // Only stores empty or unsigned short values.  Empty values correspond
+    // with empty cells. All non-empty cell positions must have unsigned short
+    // values; either the reall text widths or TEXTWIDTH_DIRTY.
     TextWidthType maTextWidths;
 
     SCCOL           nCol;

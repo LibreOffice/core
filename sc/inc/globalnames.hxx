@@ -34,6 +34,8 @@
 
 #define STR_GLOBAL_RANGE_NAME "__Global_Range_Name__"
 
+#define TEXTWIDTH_DIRTY 0xffff
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

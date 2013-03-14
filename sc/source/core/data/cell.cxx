@@ -40,6 +40,7 @@
 #include "externalrefmgr.hxx"
 #include "macromgr.hxx"
 #include "dbdata.hxx"
+#include "globalnames.hxx"
 
 #include <editeng/editobj.hxx>
 #include <svl/intitem.hxx>
