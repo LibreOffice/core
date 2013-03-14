@@ -143,15 +143,6 @@ drawing::ShadeMode GetShadeMode( SdrCustomShapeGeometryItem& rItem, const drawin
     return eRet;
 }
 
-sal_Int32 GetInt32( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const sal_Int32 nDefault )
-{
-    sal_Int32 nRetValue = nDefault;
-    Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), rPropertyName );
-    if ( pAny )
-        *pAny >>= nRetValue;
-    return nRetValue;
-}
-
 sal_Bool GetBool( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const sal_Bool bDefault )
 {
     sal_Bool bRetValue = bDefault;
@@ -159,15 +150,6 @@ sal_Bool GetBool( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPrope
     if ( pAny )
         *pAny >>= bRetValue;
     return bRetValue;
-}
-
-awt::Point GetPoint( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const awt::Point& rDefault )
-{
-    awt::Point aRetValue( rDefault );
-    const Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), rPropertyName );
-    if ( pAny )
-        *pAny >>= aRetValue;
-    return aRetValue;
 }
 
 drawing::Position3D GetPosition3D( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName,
