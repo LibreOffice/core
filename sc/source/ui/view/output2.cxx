@@ -1073,13 +1073,6 @@ static inline void lcl_CreateInterpretProgress( sal_Bool& bProgress, ScDocument*
     }
 }
 
-inline sal_uInt8 GetScriptType( ScDocument* pDoc, ScBaseCell* pCell,
-                            const ScPatternAttr* pPattern,
-                            const SfxItemSet* pCondSet )
-{
-    return pDoc->GetCellScriptType( pCell, pPattern->GetNumberFormat( pDoc->GetFormatTable(), pCondSet ) );
-}
-
 inline sal_Bool IsAmbiguousScript( sal_uInt8 nScript )
 {
     return ( nScript != SCRIPTTYPE_LATIN &&
@@ -1604,8 +1597,12 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                         pPattern = pAltPattern;
                     }
 
-                    sal_uInt8 nScript = GetScriptType( mpDoc, pCell, pPattern, pCondSet );
-                    if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
+                    sal_uInt8 nScript = mpDoc->GetCellScriptType(
+                        pCell, pPattern->GetNumberFormat(mpDoc->GetFormatTable(), pCondSet));
+
+                    if (nScript == 0)
+                        nScript = ScGlobal::GetDefaultScriptType();
+
                     if ( pPattern != pOldPattern || pCondSet != pOldCondSet ||
                          nScript != nOldScript || mbSyntaxMode )
                     {
