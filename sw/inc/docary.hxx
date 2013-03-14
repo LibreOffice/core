@@ -66,8 +66,11 @@ public:
     virtual ~SwGrfFmtColls() {}
 };
 
+/// stupid base class to work around MSVC dllexport mess
+class SAL_DLLPUBLIC_TEMPLATE SwFrmFmts_Base : public std::vector<SwFrmFmt*> {};
+
 /// Specific frame formats (frames, DrawObjects).
-class SW_DLLPUBLIC SwFrmFmts : public std::vector<SwFrmFmt*>, public SwFmtsBase
+class SW_DLLPUBLIC SwFrmFmts : public SwFrmFmts_Base, public SwFmtsBase
 {
 public:
     virtual size_t GetFmtCount() const { return size(); }
