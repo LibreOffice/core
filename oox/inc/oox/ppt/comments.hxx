@@ -12,10 +12,7 @@
 #define OOX_PPT_COMMENTS_HXX
 
 #include <vector>
-#include <boost/algorithm/string.hpp> //split function to tokenize for date time
-
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 namespace oox { namespace ppt {
 
@@ -34,20 +31,7 @@ class CommentAuthorList
         std::vector<CommentAuthor> cmAuthorLst;
 
     public:
-        void setValues(const CommentAuthorList& list)
-        {
-            std::vector<CommentAuthor>::const_iterator it;
-            for(it = list.cmAuthorLst.begin(); it != list.cmAuthorLst.end(); ++it)
-            {
-                CommentAuthor temp;
-                cmAuthorLst.push_back(temp);
-                cmAuthorLst.back().clrIdx = it->clrIdx;
-                cmAuthorLst.back().id = it->id;
-                cmAuthorLst.back().initials = it->initials;
-                cmAuthorLst.back().lastIdx = it->lastIdx;
-                cmAuthorLst.back().name = it->name;
-            }
-        }
+        void setValues(const CommentAuthorList& list);
 
         const std::vector<CommentAuthor>& getCmAuthorLst() const
         {
@@ -73,20 +57,7 @@ class Comment
         ::rtl::OUString text;
         ::com::sun::star::util::DateTime aDateTime;
 
-        //DateTime is saved as : 2013-01-10T15:53:26.000
-        void setDateTime (::rtl::OUString datetime)
-        {
-            std::string _datetime = rtl::OUStringToOString(datetime, RTL_TEXTENCODING_UTF8).getStr();
-            std::vector<std::string> _dt;
-            boost::split( _dt, _datetime, boost::is_any_of( "-:T" ) );
-            aDateTime.Year = atoi(_dt.at(0).c_str());
-            aDateTime.Month = atoi(_dt.at(1).c_str());
-            aDateTime.Day = atoi(_dt.at(2).c_str());
-            aDateTime.Hours = atoi(_dt.at(3).c_str());
-            aDateTime.Minutes = atoi(_dt.at(4).c_str());
-            aDateTime.HundredthSeconds = atoi(_dt.at(5).c_str());
-            std::vector<std::string>::iterator i;
-        }
+        void setDateTime (::rtl::OUString datetime);
 
     public:
         void setAuthorId(const ::rtl::OUString& _aId)
@@ -106,10 +77,6 @@ class Comment
         {
             x=_x;
             y=_y;
-        }
-        void setText(std::string _text)
-        {
-            text = rtl::OUString::createFromAscii (  _text.c_str() );
         }
         void setText(const rtl::OUString& _text)
         {
@@ -143,32 +110,15 @@ class Comment
         {
             return aDateTime;
         }
-        int getIntX()
+        sal_Int32 getIntX()
         {
-            std::string temp = rtl::OUStringToOString(get_X(), RTL_TEXTENCODING_UTF8).getStr();
-            return atoi(temp.c_str());
+            return x.toInt32();
         }
-        int getIntY()
+        sal_Int32 getIntY()
         {
-            std::string temp = rtl::OUStringToOString(get_Y(), RTL_TEXTENCODING_UTF8).getStr();
-            return atoi(temp.c_str());
+            return y.toInt32();
         }
-        OUString getAuthor ( const CommentAuthorList& list )
-        {
-            std::string temp = rtl::OUStringToOString(authorId, RTL_TEXTENCODING_UTF8).getStr();
-            int aId = atoi(temp.c_str());
-            std::vector<CommentAuthor>::const_iterator it;
-            for(it = list.cmAuthorLst.begin(); it != list.cmAuthorLst.end(); ++it)
-            {
-                temp = rtl::OUStringToOString(it->id, RTL_TEXTENCODING_UTF8).getStr();
-
-                int list_aId = atoi(temp.c_str());
-                std::string temp_a =rtl::OUStringToOString(it->name, RTL_TEXTENCODING_UTF8).getStr();
-                if(list_aId == aId)
-                    return it->name;
-            }
-            return OUString("Anonymous");
-        }
+        ::rtl::OUString getAuthor ( const CommentAuthorList& list );
 };
 
 class CommentList
@@ -179,13 +129,7 @@ class CommentList
         {
             return (int)cmLst.size();
         }
-        const Comment& getCommentAtIndex (int index)
-        {
-            if(index < (int)cmLst.size() && index >= 0)
-                return cmLst.at(index);
-            else
-                throw css::lang::IllegalArgumentException();
-        }
+        const Comment& getCommentAtIndex (int index);
 };
 
 } }

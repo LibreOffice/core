@@ -253,6 +253,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/ppt/animvariantcontext \
     oox/source/ppt/backgroundproperties \
     oox/source/ppt/buildlistcontext \
+    oox/source/ppt/comments \
     oox/source/ppt/commonbehaviorcontext \
     oox/source/ppt/commontimenodecontext \
     oox/source/ppt/conditioncontext \
