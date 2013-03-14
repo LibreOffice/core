@@ -61,9 +61,6 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <cppuhelper/bootstrap.hxx>
 
-#include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
-#include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
-
 using namespace ::com::sun::star;
 // BM/IHA --
 
@@ -792,16 +789,10 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* p
     OUString aName;
     uno::Reference< embed::XEmbeddedObject > xObj = rObjContainer.InsertEmbeddedObject( xStorage, aName );
 
-    uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
-    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
-    if( xCompSupp.is())
-        xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-
     const sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
     awt::Size aSz = xObj->getVisualAreaSize( nAspect );
     Size aSize( aSz.Width, aSz.Height );
 
-    MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
     ScRange aPositionRange = pViewSh->GetViewData()->GetCurPos();
     Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
     Rectangle aRect (aStart, aSize);
@@ -818,7 +809,6 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* p
     pView->MarkObj( pObj, pPV );
 
     pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
-
 }
 
 void FuInsertChartFromFile::Activate()
