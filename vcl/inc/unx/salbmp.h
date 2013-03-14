@@ -89,6 +89,7 @@ public:
 
     SAL_DLLPRIVATE bool         ImplCreateFromDrawable(
                                     Drawable aDrawable,
+                                    void* pVisual,
                                     SalX11Screen nXScreen,
                                     long nDrawableDepth,
                                     long nX,
@@ -171,6 +172,7 @@ class ImplSalDDB
 private:
 
     Pixmap          maPixmap;
+    void*           mpVisual;
     SalTwoRect      maTwoRect;
     long            mnDepth;
     SalX11Screen    mnXScreen;
@@ -202,6 +204,7 @@ public:
 
                     ImplSalDDB(
                         Drawable aDrawable,
+                        void *pVisual,
                         SalX11Screen nXScreen,
                         long nDrawableDepth,
                         long nX,
@@ -213,6 +216,7 @@ public:
                     ~ImplSalDDB();
 
     Pixmap          ImplGetPixmap() const { return maPixmap; }
+    void*           ImplGetVisual() const { return mpVisual; }
     long            ImplGetWidth() const { return maTwoRect.mnDestWidth; }
     long            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
     long            ImplGetDepth() const { return mnDepth; }

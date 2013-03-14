@@ -101,6 +101,7 @@ namespace cairo {
         X11PixmapSharedPtr getPixmap() const { return mpPixmap; }
         void* getRenderFormat() const { return maSysData.pRenderFormat; }
         long getDrawable() const { return mpPixmap ? mpPixmap->mhDrawable : maSysData.hDrawable; }
+        void* getVisual() const;
     };
 }
 
