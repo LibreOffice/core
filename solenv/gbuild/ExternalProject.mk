@@ -200,12 +200,14 @@ endef
 # default log_filename is <run_target>.log
 #
 
-AUTOCONF_WRAPPERS = \
+ifeq ($(COM),MSC)
+AUTOCONF_WRAPPERS := \
 	REAL_CC="$(shell cygpath -w $(CC))" \
 	CC="$(call gb_Executable_get_target,gcc-wrapper)" \
 	REAL_CXX="$(shell cygpath -w $(CXX))" \
 	CXX="$(call gb_Executable_get_target,g++-wrapper)" \
     LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"
+endif
 
 define gb_ExternalProject_run
 $(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/$(3) && \
