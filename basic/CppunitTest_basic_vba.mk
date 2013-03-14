@@ -60,8 +60,8 @@ $(eval $(call gb_CppunitTest_use_ure,basic_vba))
 $(eval $(call gb_CppunitTest_use_components,basic_vba,\
 	configmgr/source/configmgr \
 	i18npool/util/i18npool \
-	$(if $(filter $(OS),WNT), \
-		extensions/source/ole/oleautobridge) \
+	$(if $(DISABLE_ATL),,$(if $(filter $(OS),WNT), \
+		extensions/source/ole/oleautobridge)) \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,basic_vba))
