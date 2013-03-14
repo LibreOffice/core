@@ -53,6 +53,9 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">allslides</property>
+                                <accessibility>
+                                  <relation type="label-for" target="from_cb"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -65,8 +68,15 @@
                               <object class="GtkComboBox" id="from_cb">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">6</property>
                                 <property name="hexpand">True</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="from"/>
+                                </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="from_cb-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Starting slide</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -112,6 +122,9 @@
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">from</property>
+                            <accessibility>
+                              <relation type="label-for" target="customslideshow_cb"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -126,6 +139,9 @@
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
                             <property name="hexpand">True</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="customslideshow"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -362,6 +378,9 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">window</property>
+                                <accessibility>
+                                  <relation type="label-for" target="pauseduration:hh:mm"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -393,7 +412,16 @@
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Duration of pause</property>
                                 <property name="margin_left">12</property>
+                                <accessibility>
+                                  <relation type="labelled-by" target="auto"/>
+                                </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="pauseduration:hh:mm-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Pause Duration</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>

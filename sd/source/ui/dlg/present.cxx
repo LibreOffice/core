@@ -90,12 +90,6 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aTmfPause->SetModifyHdl( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
     aTmfPause->SetFormat( TIMEF_SEC );
 
-    aLbDias->SetAccessibleRelationLabeledBy( aRbtAtDia );
-    aLbDias->SetAccessibleName(aRbtAtDia->GetText());
-    aLbCustomshow->SetAccessibleRelationLabeledBy( aRbtCustomshow );
-    aTmfPause->SetAccessibleRelationLabeledBy( aRbtAuto );
-    aTmfPause->SetAccessibleName(aRbtAuto->GetText());
-
     // fill Listbox with page names
     for (std::vector<String>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
         aLbDias->InsertEntry(*pIter);
