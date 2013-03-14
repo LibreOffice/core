@@ -26,6 +26,10 @@ $(eval $(call gb_Module_add_targets,xmloff,\
     Package_inc \
 ))
 
+$(eval $(call gb_Module_add_check_targets,xmloff,\
+    CppunitTest_xmloff_uxmloff \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,xmloff,\
     JunitTest_xmloff_unoapi \
 ))

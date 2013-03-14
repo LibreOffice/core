@@ -81,6 +81,7 @@ public:
     void ClearEntries();
 };
 
+/// A set that finds and sorts based only on mnFamily
 typedef boost::ptr_set<XMLFamilyData_Impl> XMLFamilyDataList_Impl;
 
 ///////////////////////////////////////////////////////////////////////////////

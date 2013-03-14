@@ -78,6 +78,21 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         aPrefix += rStrPrefix;
     }
 
+#if OSL_DEBUG_LEVEL > 0
+    XMLFamilyData_Impl aTemporary( nFamily );
+    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTemporary);
+    if( aFind != maFamilyList.end() )
+    {
+        // FIXME: do we really intend to replace the previous nFamily
+        // entry in this case ?
+        SAL_WARN_IF( aFind->mxMapper != rMapper, "xmloff",
+                     "Adding duplicate family " << rStrName <<
+                     " with mismatching mapper ! " <<
+                     typeid(*aFind->mxMapper.get()).name() << " " <<
+                     typeid(rMapper.get()).name() );
+    }
+#endif
+
     XMLFamilyData_Impl *pFamily = new XMLFamilyData_Impl( nFamily, rStrName, rMapper, aPrefix, bAsFamily );
     maFamilyList.insert(pFamily);
 }
