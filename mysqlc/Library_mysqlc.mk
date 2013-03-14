@@ -36,6 +36,12 @@ $(eval $(call gb_Library_use_libraries,mysqlc,\
 	cppuhelper \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,mysqlc,\
+	-lpthread \
+))
+endif
+
 $(eval $(call gb_Library_add_defs,mysqlc,\
 	-DCPPDBC_EXPORTS \
 	-DCPPCONN_LIB_BUILD \

@@ -53,6 +53,12 @@ $(eval $(call gb_Library_set_include,mysqlcppconn,\
 	$(MARIADB_CFLAGS) \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,mysqlcppconn,\
+	-lpthread \
+))
+endif
+
 $(eval $(call gb_Library_add_generated_exception_objects,mysqlcppconn,\
 	UnpackedTarball/mysqlcppconn/driver/mysql_art_resultset \
 	UnpackedTarball/mysqlcppconn/driver/mysql_art_rset_metadata \

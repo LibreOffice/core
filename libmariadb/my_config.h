@@ -160,3 +160,5 @@
 
 #define RETSIGTYPE void
 #define RETQSORTTYPE void
+
+#define THREAD 1
