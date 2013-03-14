@@ -163,7 +163,12 @@ if test -n "$with_android_ndk"; then
         android_cpu=x86
     fi
 
-    # Check if there is a (self-built) 64-bit tool-chain
+    # Check if there is a (self-built) 64-bit tool-chain. Google does not provide 64-bit binaries of
+    # the NDK tool-chain, sigh, but it is easy to build one yourself. Using a 64-bit linker is
+    # required if you compile everything with -g. A 32-bit linker just won't manage to link the
+    # (app-specific) single huge .so that is built for the apps in android/experimental/*. (A 64-bit
+    # ld.gold grows to over 10 gigabytes of virtual space when linking such a .so where all objects
+    # have been built with debug information.)
     toolchain_system='*'
     if test $build_os = linux-gnu; then
         case $build_cpu in
