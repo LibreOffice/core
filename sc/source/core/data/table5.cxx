@@ -36,6 +36,8 @@
 #include "tabprotection.hxx"
 #include "globstr.hrc"
 #include "segmenttree.hxx"
+#include "columniterator.hxx"
+
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 
 #include <algorithm>
@@ -1145,20 +1147,64 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
 {
     if ( pAdrFrom && !pAdrTo )
     {
-        ScBaseCell* pCell = aCol[pAdrFrom->Col()].GetCell( pAdrFrom->Row() );
-        if ( pCell )
+        // Special case: only process the "from" cell.
+        SCCOL nCol = pAdrFrom->Col();
+        SCROW nRow = pAdrFrom->Row();
+        ScColumn& rCol = aCol[nCol];
+        ScBaseCell* pCell = rCol.GetCell(nRow);
+        if (!pCell)
+            return;
+
+        rCol.SetTextWidth(nRow, TEXTWIDTH_DIRTY);
+
+        if ( bNumFormatChanged )
+            pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+
+        if ( bBroadcast )
+        {   // nur bei CalcAsShown
+            switch ( pCell->GetCellType() )
+            {
+                case CELLTYPE_VALUE :
+                    pDocument->Broadcast(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab), pCell);
+                    break;
+                case CELLTYPE_FORMULA :
+                    ((ScFormulaCell*)pCell)->SetDirty();
+                    break;
+                default:
+                {
+                    // added to avoid warnings
+                }
+            }
+        }
+
+        return;
+    }
+
+    const SCCOL nCol1 = pAdrFrom ? pAdrFrom->Col() : 0;
+    const SCROW nRow1 = pAdrFrom ? pAdrFrom->Row() : 0;
+    const SCCOL nCol2 = pAdrTo   ? pAdrTo->Col()   : MAXCOL;
+    const SCROW nRow2 = pAdrTo   ? pAdrTo->Row()   : MAXROW;
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+    {
+        ScColumnTextWidthIterator aIter(aCol[nCol], nRow1, nRow2);
+
+        for (; aIter.hasCell(); aIter.next())
         {
-            pCell->SetTextWidth( TEXTWIDTH_DIRTY );
+            SCROW nRow = aIter.getPos();
+            aIter.setValue(TEXTWIDTH_DIRTY);
+            ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
+
             if ( bNumFormatChanged )
                 pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+
             if ( bBroadcast )
             {   // nur bei CalcAsShown
                 switch ( pCell->GetCellType() )
                 {
                     case CELLTYPE_VALUE :
                         pDocument->Broadcast( SC_HINT_DATACHANGED,
-                            ScAddress( pAdrFrom->Col(), pAdrFrom->Row(), nTab ),
-                            pCell );
+                            ScAddress( nCol, nRow, nTab ), pCell );
                         break;
                     case CELLTYPE_FORMULA :
                         ((ScFormulaCell*)pCell)->SetDirty();
@@ -1166,44 +1212,6 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                     default:
                     {
                         // added to avoid warnings
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        const SCCOL nColStart = pAdrFrom ? pAdrFrom->Col() : 0;
-        const SCROW nRowStart = pAdrFrom ? pAdrFrom->Row() : 0;
-        const SCCOL nColEnd   = pAdrTo   ? pAdrTo->Col()   : MAXCOL;
-        const SCROW nRowEnd   = pAdrTo   ? pAdrTo->Row()   : MAXROW;
-
-        for ( SCCOL nCol=nColStart; nCol<=nColEnd; nCol++ )
-        {
-            ScColumnIterator aIter( &aCol[nCol], nRowStart, nRowEnd );
-            ScBaseCell*      pCell = NULL;
-            SCROW            nRow  = nRowStart;
-
-            while ( aIter.Next( nRow, pCell ) )
-            {
-                pCell->SetTextWidth( TEXTWIDTH_DIRTY );
-                if ( bNumFormatChanged )
-                    pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
-                if ( bBroadcast )
-                {   // nur bei CalcAsShown
-                    switch ( pCell->GetCellType() )
-                    {
-                        case CELLTYPE_VALUE :
-                            pDocument->Broadcast( SC_HINT_DATACHANGED,
-                                ScAddress( nCol, nRow, nTab ), pCell );
-                            break;
-                        case CELLTYPE_FORMULA :
-                            ((ScFormulaCell*)pCell)->SetDirty();
-                            break;
-                        default:
-                        {
-                            // added to avoid warnings
-                        }
                     }
                 }
             }
