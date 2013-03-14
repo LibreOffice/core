@@ -146,7 +146,7 @@ public:
     /** Returns system text encoding for byte string conversion. */
     static rtl_TextEncoding GetSystemTextEncoding();
     /** Returns a string representing the hexadecimal value of nValue. */
-    static String       GetHexStr( sal_uInt16 nValue );
+    static OUString       GetHexStr( sal_uInt16 nValue );
 
     /** Mixes RGB components with given transparence.
         @param nTrans  Foreground transparence (0x00 == full nFore ... 0x80 = full nBack). */
@@ -212,14 +212,14 @@ public:
         true = Old existing style will be renamed; false = New style gets another name. */
     static ScStyleSheet& MakeCellStyleSheet(
                             ScStyleSheetPool& rPool,
-                            const String& rStyleName, bool bForceName );
+                            const OUString& rStyleName, bool bForceName );
     /** Creates and returns a page style sheet and inserts it into the pool.
         @descr  If the style sheet is already in the pool, another unused style name is used.
         @param bForceName  Controls behaviour, if the style already exists:
         true = Old existing style will be renamed; false = New style gets another name. */
     static ScStyleSheet& MakePageStyleSheet(
                             ScStyleSheetPool& rPool,
-                            const String& rStyleName, bool bForceName );
+                            const OUString& rStyleName, bool bForceName );
 
 // *** byte string import operations *** --------------------------------------
 
@@ -237,23 +237,23 @@ public:
 // *** HTML table names <-> named range names *** -----------------------------
 
     /** Returns the built-in range name for an HTML document. */
-    static const String& GetHTMLDocName();
+    static const OUString& GetHTMLDocName();
     /** Returns the built-in range name for all HTML tables. */
-    static const String& GetHTMLTablesName();
+    static const OUString& GetHTMLTablesName();
     /** Returns the built-in range name for an HTML table, specified by table index. */
-    static String       GetNameFromHTMLIndex( sal_uInt32 nIndex );
+    static OUString       GetNameFromHTMLIndex( sal_uInt32 nIndex );
     /** Returns the built-in range name for an HTML table, specified by table name. */
     static String       GetNameFromHTMLName( const String& rTabName );
 
     /** Returns true, if rSource is the built-in range name for an HTML document. */
-    static bool         IsHTMLDocName( const String& rSource );
+    static bool         IsHTMLDocName( const OUString& rSource );
     /** Returns true, if rSource is the built-in range name for all HTML tables. */
-    static bool         IsHTMLTablesName( const String& rSource );
+    static bool         IsHTMLTablesName( const OUString& rSource );
     /** Converts a built-in range name to an HTML table name.
         @param rSource  The string to be determined.
         @param rName  The HTML table name.
         @return  true, if conversion was successful. */
-    static bool         GetHTMLNameFromName( const String& rSource, String& rName );
+    static bool         GetHTMLNameFromName( const String& rSource, OUString& rName );
 
 private:
     /** Returns the prefix for table index names. */

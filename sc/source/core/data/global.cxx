@@ -814,7 +814,7 @@ bool ScGlobal::IsQuoted( const String& rString, sal_Unicode cQuote )
     return (rString.Len() >= 2) && (rString.GetChar( 0 ) == cQuote) && (rString.GetChar( rString.Len() - 1 ) == cQuote);
 }
 
-void ScGlobal::AddQuotes( String& rString, sal_Unicode cQuote, bool bEscapeEmbedded )
+void ScGlobal::AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmbedded )
 {
     if (bEscapeEmbedded)
     {
@@ -822,23 +822,23 @@ void ScGlobal::AddQuotes( String& rString, sal_Unicode cQuote, bool bEscapeEmbed
         pQ[0] = pQ[1] = cQuote;
         pQ[2] = 0;
         rtl::OUString aQuotes( pQ );
-        rString.SearchAndReplaceAll( rtl::OUString(cQuote), aQuotes);
+        rString.replaceAll( OUString(cQuote), aQuotes);
     }
-    rString.Insert( cQuote, 0 ).Append( cQuote );
+    rString = OUString( cQuote ) + OUString( cQuote );
 }
 
-void ScGlobal::EraseQuotes( String& rString, sal_Unicode cQuote, bool bUnescapeEmbedded )
+void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescapeEmbedded )
 {
     if ( IsQuoted( rString, cQuote ) )
     {
-        rString.Erase( rString.Len() - 1 ).Erase( 0, 1 );
+        rString = rString.copy( 0, rString.getLength() - 1 ).copy( 1 );
         if (bUnescapeEmbedded)
         {
             sal_Unicode pQ[3];
             pQ[0] = pQ[1] = cQuote;
             pQ[2] = 0;
             rtl::OUString aQuotes( pQ );
-            rString.SearchAndReplaceAll( aQuotes, rtl::OUString(cQuote));
+            rString.replaceAll( aQuotes, OUString(cQuote));
         }
     }
 }
