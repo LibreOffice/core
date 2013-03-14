@@ -22,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mariadb,1))
 $(eval $(call gb_UnpackedTarball_add_patches,mariadb,\
     libmariadb/mariadb-thread.patch \
     libmariadb/mariadb-swap.patch \
+    libmariadb/mariadb-trunk-40.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
