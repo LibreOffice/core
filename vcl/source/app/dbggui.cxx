@@ -1608,7 +1608,7 @@ long SolarMessageBoxExecutor::doIt()
 #ifdef WNT
     sal_Bool bOldCallTimer = pSVData->mbNoCallTimer;
     pSVData->mbNoCallTimer = sal_True;
-    nResult = MessageBoxW( 0, (LPWSTR)m_sDebugMessage.GetBuffer(), L"Debug Output",
+    nResult = MessageBoxW( 0, (LPWSTR)m_sDebugMessage.getStr(), L"Debug Output",
                                      MB_TASKMODAL | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP );
     pSVData->mbNoCallTimer = bOldCallTimer;
     switch ( nResult )

@@ -231,7 +231,7 @@ ImplDevFontAttributes ImplFontAttrCache::GetFontAttr( const String& rFontFileNam
 
 void ImplFontAttrCache::AddFontAttr( const String& rFontFileName, const ImplDevFontAttributes& rDFA )
 {
-    DBG_ASSERT( rFontFileName.Len() && rDFA.GetFamilyName().Len(), "ImplFontNameCache::AddFontName - invalid data!" );
+    DBG_ASSERT( rFontFileName.Len() && !rDFA.GetFamilyName().isEmpty(), "ImplFontNameCache::AddFontName - invalid data!" );
     if ( rFontFileName.Len() && !rDFA.GetFamilyName().isEmpty() )
     {
         aFontAttributes.insert( FontAttrMap::value_type( OptimizeURL( rFontFileName ), rDFA ) );
