@@ -53,7 +53,7 @@ TARFILE_MD5=ff369e69ef0f0143beb5626164e87ae2
 PATCH_FILES=neon.patch neon_ne_set_request_flag.patch
 
 .IF "$(GUI)"=="WNT"
-    PATCH_FILES+=neon_exports_win.patch
+    PATCH_FILES+=neon_exports_win.patch neon_win32_root_certs.patch
 .ELSE
     PATCH_FILES+=neon_exports_unix.patch
 .ENDIF

@@ -1,0 +1,58 @@
+--- misc/neon-0.29.5/src/ne_openssl.c
++++ misc/build/neon-0.29.5/src/ne_openssl.c
+@@ -41,6 +41,13 @@
+ #include <pthread.h>
+ #endif
+ 
++#ifdef WIN32
++#define X509_NAME WIN32_X509_NAME
++#include <windows.h>
++#include <wincrypt.h>
++#undef X509_NAME
++#endif
++
+ #include "ne_ssl.h"
+ #include "ne_string.h"
+ #include "ne_session.h"
+@@ -798,6 +798,31 @@
+     X509_STORE_load_locations(store, NE_SSL_CA_BUNDLE, NULL);
+ #else
+     X509_STORE_set_default_paths(store);
++#ifdef WIN32
++    {
++	HCERTSTORE hStore;
++	PCCERT_CONTEXT pContext = NULL;
++	X509 *x509;
++
++	hStore = CertOpenSystemStore(0, "ROOT");
++	if (hStore)
++	{
++	    while (pContext = CertEnumCertificatesInStore(hStore, pContext))
++	    {
++		x509 = d2i_X509(NULL, &pContext->pbCertEncoded, pContext->cbCertEncoded);
++		if (x509)
++		{
++		    X509_STORE_add_cert(store, x509);
++		    X509_free(x509);
++		}
++	    }
++	}
++
++	CertFreeCertificateContext(pContext);
++	CertCloseStore(hStore, 0);
++    }
++#endif
++
+ #endif
+ }
+ 
+--- misc/neon-0.29.5/src/makefile.mk
++++ misc/build/neon-0.29.5/src/makefile.mk
+@@ -80,6 +80,7 @@
+ .IF "$(GUI)"=="WNT"
+ 	SHL1STDLIBS+= $(WS2_32LIB)
+ 	SHL1STDLIBS+= $(OPENSSLLIB)
++	SHL1STDLIBS+= crypt32.lib
+ .ELSE # WNT
+ 	.IF "$(OS)"=="SOLARIS"
+ 		SHL1STDLIBS+= -lnsl -lsocket -ldl
