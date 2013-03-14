@@ -604,6 +604,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                 pColIter->setValue(nNewWidth);
                 aScope.setNeedMore(true);
             }
+            pColIter->next();
         }
         else
         {
