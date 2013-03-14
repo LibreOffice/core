@@ -90,7 +90,7 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
     else
     {
         X11SalBitmap aBM;
-        aBM.ImplCreateFromDrawable( aSrc, nXScreenSrc, nSrcDepth, src_x, src_y, w, h );
+        aBM.ImplCreateFromDrawable( aSrc, NULL, nXScreenSrc, nSrcDepth, src_x, src_y, w, h );
         SalTwoRect aTwoRect;
         aTwoRect.mnSrcX = aTwoRect.mnSrcY = 0;
         aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = w;
@@ -658,8 +658,8 @@ bool X11SalGraphics::drawAlphaBitmapOpt( const SalTwoRect& rTR,
     const SalVisual& rSalVis = pSalDisp->GetVisual( m_nXScreen );
     Display* pXDisplay = pSalDisp->GetDisplay();
 
-    Picture aAlphaPic;
-    Pixmap aAlphaPM;
+    Picture aAlphaPic = 0;
+    Pixmap aAlphaPM = 0;
     // create source Picture
     int nDepth = m_pVDev ? m_pVDev->GetDepth() : rSalVis.GetDepth();
     const X11SalBitmap& rSrcX11Bmp = static_cast<const X11SalBitmap&>( rSrcBitmap );
@@ -911,7 +911,7 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
         nBitCount = 1;
 
     if( ! bFakeWindowBG )
-        pSalBitmap->ImplCreateFromDrawable( GetDrawable(), m_nXScreen, nBitCount, nX, nY, nDX, nDY );
+        pSalBitmap->ImplCreateFromDrawable( GetDrawable(), NULL, m_nXScreen, nBitCount, nX, nY, nDX, nDY );
     else
         pSalBitmap->Create( Size( nDX, nDY ), (nBitCount > 8) ? 24 : nBitCount, BitmapPalette( nBitCount > 8 ? nBitCount : 0 ) );
 

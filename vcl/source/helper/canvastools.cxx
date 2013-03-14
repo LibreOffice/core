@@ -21,6 +21,8 @@
 #include <rtl/logfile.hxx>
 #include <cppuhelper/compbase1.hxx>
 
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
@@ -70,10 +72,31 @@ namespace vcl
 {
     namespace unotools
     {
-        uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx( const uno::Reference< rendering::XGraphicDevice >&    /*xGraphicDevice*/,
+        uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx( const uno::Reference< rendering::XGraphicDevice >& xGraphicDevice,
                                                                   const ::BitmapEx&                                     inputBitmap )
         {
             RTL_LOGFILE_CONTEXT( aLog, "::vcl::unotools::xBitmapFromBitmapEx()" );
+
+            if ( inputBitmap.GetBitmap().HasAlpha() )
+            {
+                geometry::IntegerSize2D aSize;
+
+                aSize.Width = aSize.Height = 1;
+
+                uno::Reference< rendering::XBitmap > xBitmap = xGraphicDevice->createCompatibleAlphaBitmap( aSize );
+
+                uno::Reference< beans::XFastPropertySet > rPropSet( xBitmap, uno::UNO_QUERY );
+                if ( rPropSet.is() )
+                {
+                    Bitmap aBitmap = inputBitmap.GetBitmap();
+                    rPropSet->setFastPropertyValue( 0, uno::Any( sal_Int64( &aBitmap )));
+
+                    aSize = xBitmap->getSize();
+
+                    if ( aSize.Width != 1 || aSize.Height != 1 )
+                        return xBitmap;
+                }
+            }
 
             return new vcl::unotools::VclCanvasBitmap( inputBitmap );
         }
