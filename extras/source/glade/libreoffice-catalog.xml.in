@@ -81,8 +81,14 @@
     <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
                         generic-name="Table Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Caption Preview" name="swuilo-SwCaptionPreview"
+                        generic-name="Caption Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Text Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Category ComboBox" name="swuilo-CategoryBox"
+                        generic-name="CategoryComboBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Bookmark Combo" name="swuilo-BookmarkCombo"
                         generic-name="BookmarkComboBox" parent="GtkTreeView"
