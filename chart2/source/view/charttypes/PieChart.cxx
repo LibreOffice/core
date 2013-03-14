@@ -349,7 +349,7 @@ void PieChart::createShapes()
             uno::Any aAny = xPropertySet->getPropertyValue( "3DRelativeHeight" );
             aAny >>= n3DRelativeHeight;
         }
-        catch(const uno::Exception& e) {}
+        catch (const uno::Exception&) { }
     }
 
 //=============================================================================
