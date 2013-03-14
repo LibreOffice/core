@@ -2328,6 +2328,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         }
         return pTmp;
     }
+    delete (pCreate);
     return pRest;
 }
 
