@@ -1751,7 +1751,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         return;
 
     bool bFormula = false;  //! ueberge
-    long nPixel = pCell->GetTextWidth();
+    long nPixel = aCol[rCol].GetTextWidth(nRow);
 
     // Breite bereits im Idle-Handler berechnet?
     if ( TEXTWIDTH_DIRTY == nPixel )
@@ -1764,7 +1764,8 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         Fraction aZoom(1,1);
         nPixel = aCol[rCol].GetNeededSize(
             nRow, pDev, nPPTX, nPPTY, aZoom, aZoom, true, aOptions );
-        pCell->SetTextWidth( (sal_uInt16)nPixel );
+
+        aCol[rCol].SetTextWidth(nRow, static_cast<sal_uInt16>(nPixel));
     }
 
     long nTwips = (long) (nPixel / nPPTX);
