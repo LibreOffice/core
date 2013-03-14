@@ -156,7 +156,7 @@ void PieChart::setScales( const std::vector< ExplicitScaleData >& rScales, bool 
 drawing::Direction3D PieChart::getPreferredDiagramAspectRatio() const
 {
     if( m_nDimension == 3 )
-        return drawing::Direction3D(1,1,0.25);
+        return drawing::Direction3D(1,1,0.10);
     return drawing::Direction3D(1,1,1);
 }
 
