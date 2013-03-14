@@ -664,7 +664,10 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                     pColIter.reset(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MAXROW));
                 }
                 else
+                {
                     aScope.incTab(); // Move to the next sheet as the current one has scale-to-pages set.
+                    return false;
+                }
             }
         }
 
