@@ -39,20 +39,11 @@
 //  Local Defines and Function
 //----------------------------------------------------------------------------
 
-inline void EnableDisable( Window& rWin, sal_Bool bEnable )
-{
-    if (bEnable)
-        rWin.Enable();
-    else
-        rWin.Disable();
-}
-
 static long nStaticTabs[]=
 {
     5,10,65,120,170,220
 };
 
-#define MIN_DISTANCE    6
 #define WRITER_DATE     2
 #define CALC_DATE       3
 
