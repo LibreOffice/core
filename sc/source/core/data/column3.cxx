@@ -200,7 +200,9 @@ void ScColumn::FreeAll()
         maItems[i].pCell->Delete();
     maItems.clear();
 
+    // Text width should keep a logical empty range of 0-MAXROW when the cell array is empty.
     maTextWidths.clear();
+    maTextWidths.resize(MAXROW);
     CellStorageModified();
 }
 
@@ -257,6 +259,12 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     else
         i = nFirstIndex;
 
+    // There are cells below the deletion point.  Shift their row positions.
+
+    // Shift the text width array too (before the broadcast).
+    maTextWidths.erase(nStartRow, nSize);
+    maTextWidths.resize(MAXROW);
+
     ScAddress aAdr( nCol, 0, nTab );
     ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL ); // only areas (ScBaseCell* == NULL)
     ScAddress& rAddress = aHint.GetAddress();
@@ -300,6 +308,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
         pDocument->AreaBroadcastInRange( aRange, aHint );
     }
 
+    CellStorageModified();
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
