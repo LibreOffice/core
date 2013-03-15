@@ -362,9 +362,9 @@ namespace toolkit
             }
 
             throw IllegalArgumentException(
-                        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to convert the given value for the property "))
+                        ( OUString("Unable to convert the given value for the property ")
                     +=  GetPropertyName((sal_uInt16)nPropId) )
-                    +=  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (double, integer, or string expected).")),
+                    +=  OUString(" (double, integer, or string expected)."),
                 static_cast< XPropertySet* >(this),
                 1);
         }
@@ -427,9 +427,9 @@ namespace toolkit
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString UnoFormattedFieldControl::GetComponentServiceName()
+    OUString UnoFormattedFieldControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField"));
+        return OUString("FormattedField");
     }
 
     // -------------------------------------------------------------------

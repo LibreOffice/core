@@ -74,7 +74,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString AnimatedImagesControl::GetComponentServiceName()
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AnimatedImages" ) );
+        return ::rtl::OUString( "AnimatedImages" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL AnimatedImagesControl::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.toolkit.AnimatedImagesControl" ) );
+        return ::rtl::OUString( "org.openoffice.comp.toolkit.AnimatedImagesControl" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -279,15 +279,15 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL AnimatedImagesControlModel::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.toolkit.AnimatedImagesControlModel"));
+        return ::rtl::OUString("org.openoffice.comp.toolkit.AnimatedImagesControlModel");
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL AnimatedImagesControlModel::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getSupportedServiceNames() throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServiceNames(2);
+        Sequence< OUString > aServiceNames(2);
         aServiceNames[0] = ::rtl::OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
-        aServiceNames[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlModel"));
+        aServiceNames[1] = "com.sun.star.awt.UnoControlModel";
         return aServiceNames;
     }
 

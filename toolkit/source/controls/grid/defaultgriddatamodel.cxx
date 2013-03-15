@@ -425,7 +425,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL DefaultGridDataModel::getImplementationName(  ) throw (RuntimeException)
     {
-        static const ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "toolkit.DefaultGridDataModel" ) );
+        static const ::rtl::OUString aImplName( "toolkit.DefaultGridDataModel" );
         return aImplName;
     }
 
