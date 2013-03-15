@@ -1241,11 +1241,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
 
     SvXMLElementExport* pElChart = 0;
     // get property states for autostyles
-    {
-        Reference< beans::XPropertySet > xPropSet( rChartDoc->getArea(), uno::UNO_QUERY );
-        if( xPropSet.is())
-            aPropertyStates.filter( xPropSet );
-    }
+    aPropertyStates.filter( rChartDoc->getArea(), uno::UNO_QUERY );
 
     if( bExportContent )
     {
@@ -1325,11 +1321,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     if( bHasMainTitle )
     {
         // get property states for autostyles
-        {
-            Reference< beans::XPropertySet > xPropSet( rChartDoc->getTitle(), uno::UNO_QUERY );
-            if( xPropSet.is())
-                aPropertyStates.filter( xPropSet );
-        }
+        aPropertyStates.filter( rChartDoc->getTitle(), uno::UNO_QUERY );
 
         if( bExportContent )
         {
@@ -1368,11 +1360,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     if( bHasSubTitle )
     {
         // get property states for autostyles
-        {
-            Reference< beans::XPropertySet > xPropSet( rChartDoc->getSubTitle(), uno::UNO_QUERY );
-            if( xPropSet.is())
-                aPropertyStates.filter( xPropSet );
-        }
+        aPropertyStates.filter( rChartDoc->getSubTitle(), uno::UNO_QUERY );
 
         if( bExportContent )
         {
@@ -1410,9 +1398,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     if( bHasLegend )
     {
         // get property states for autostyles
-        Reference< beans::XPropertySet > xPropSet( rChartDoc->getLegend(), uno::UNO_QUERY );
-        if( xPropSet.is())
-            aPropertyStates.filter( xPropSet );
+        aPropertyStates.filter( rChartDoc->getLegend(), uno::UNO_QUERY );
 
         if( bExportContent )
         {
@@ -2061,66 +2047,49 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         if( xStockPropProvider.is())
         {
             // stock-gain-marker
-            Reference< beans::XPropertySet > xStockPropSet = xStockPropProvider->getUpBar();
-            if( xStockPropSet.is())
+            aPropertyStates.filter( xStockPropProvider->getUpBar() );
+            if( !aPropertyStates.empty() )
             {
-                aPropertyStates.clear();
-                aPropertyStates.filter( xStockPropSet );
-
-                if( !aPropertyStates.empty() )
+                if( bExportContent )
                 {
-                    if( bExportContent )
-                    {
-                        AddAutoStyleAttribute( aPropertyStates );
-
-                        SvXMLElementExport aGain( mrExport, XML_NAMESPACE_CHART, XML_STOCK_GAIN_MARKER, sal_True, sal_True );
-                    }
-                    else
-                    {
-                        CollectAutoStyle( aPropertyStates );
-                    }
+                    AddAutoStyleAttribute( aPropertyStates );
+                    SvXMLElementExport aGain( mrExport, XML_NAMESPACE_CHART, XML_STOCK_GAIN_MARKER, sal_True, sal_True );
+                }
+                else
+                {
+                    CollectAutoStyle( aPropertyStates );
                 }
             }
 
             // stock-loss-marker
-            xStockPropSet = xStockPropProvider->getDownBar();
-            if( xStockPropSet.is())
+            aPropertyStates.filter( xStockPropProvider->getDownBar() );
+            if( !aPropertyStates.empty() )
             {
-                aPropertyStates.filter( xStockPropSet );
-
-                if( !aPropertyStates.empty() )
+                if( bExportContent )
                 {
-                    if( bExportContent )
-                    {
-                        AddAutoStyleAttribute( aPropertyStates );
+                    AddAutoStyleAttribute( aPropertyStates );
 
-                        SvXMLElementExport aGain( mrExport, XML_NAMESPACE_CHART, XML_STOCK_LOSS_MARKER, sal_True, sal_True );
-                    }
-                    else
-                    {
-                        CollectAutoStyle( aPropertyStates );
-                    }
+                    SvXMLElementExport aGain( mrExport, XML_NAMESPACE_CHART, XML_STOCK_LOSS_MARKER, sal_True, sal_True );
+                }
+                else
+                {
+                    CollectAutoStyle( aPropertyStates );
                 }
             }
 
             // stock-range-line
-            xStockPropSet = xStockPropProvider->getMinMaxLine();
-            if( xStockPropSet.is())
+            aPropertyStates.filter( xStockPropProvider->getMinMaxLine() );
+            if( !aPropertyStates.empty() )
             {
-                aPropertyStates.filter( xStockPropSet );
-
-                if( !aPropertyStates.empty() )
+                if( bExportContent )
                 {
-                    if( bExportContent )
-                    {
-                        AddAutoStyleAttribute( aPropertyStates );
+                    AddAutoStyleAttribute( aPropertyStates );
 
-                        SvXMLElementExport aGain( mrExport, XML_NAMESPACE_CHART, XML_STOCK_RANGE_LINE, sal_True, sal_True );
-                    }
-                    else
-                    {
-                        CollectAutoStyle( aPropertyStates );
-                    }
+                    SvXMLElementExport aGain( mrExport, XML_NAMESPACE_CHART, XML_STOCK_RANGE_LINE, sal_True, sal_True );
+                }
+                else
+                {
+                    CollectAutoStyle( aPropertyStates );
                 }
             }
         }
@@ -2133,54 +2102,40 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     if( mxExpPropMapper.is() &&
         xWallFloorSupplier.is())
     {
-        // remove property states for autostyles
-        aPropertyStates.clear();
-
-        Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
-        if( xWallPropSet.is())
+        aPropertyStates.filter( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
+        if( !aPropertyStates.empty() )
         {
-            aPropertyStates.filter( xWallPropSet );
-            if( !aPropertyStates.empty() )
+            // write element
+            if( bExportContent )
             {
-                // write element
-                if( bExportContent )
-                {
-                    // add style name attribute
-                    AddAutoStyleAttribute( aPropertyStates );
+                // add style name attribute
+                AddAutoStyleAttribute( aPropertyStates );
 
-                    SvXMLElementExport aWall( mrExport, XML_NAMESPACE_CHART, XML_WALL, sal_True, sal_True );
-                }
-                else    // autostyles
-                {
-                    CollectAutoStyle( aPropertyStates );
-                }
+                SvXMLElementExport aWall( mrExport, XML_NAMESPACE_CHART, XML_WALL, sal_True, sal_True );
+            }
+            else    // autostyles
+            {
+                CollectAutoStyle( aPropertyStates );
             }
         }
 
         // floor element
         // -------------
 
-        // remove property states for autostyles
-        aPropertyStates.clear();
-
-        Reference< beans::XPropertySet > xFloorPropSet( xWallFloorSupplier->getFloor(), uno::UNO_QUERY );
-        if( xFloorPropSet.is())
+        aPropertyStates.filter( xWallFloorSupplier->getFloor(), uno::UNO_QUERY );
+        if( !aPropertyStates.empty() )
         {
-            aPropertyStates.filter( xFloorPropSet );
-            if( !aPropertyStates.empty() )
+            // write element
+            if( bExportContent )
             {
-                // write element
-                if( bExportContent )
-                {
-                    // add style name attribute
-                    AddAutoStyleAttribute( aPropertyStates );
+                // add style name attribute
+                AddAutoStyleAttribute( aPropertyStates );
 
-                    SvXMLElementExport aFloor( mrExport, XML_NAMESPACE_CHART, XML_FLOOR, sal_True, sal_True );
-                }
-                else    // autostyles
-                {
-                    CollectAutoStyle( aPropertyStates );
-                }
+                SvXMLElementExport aFloor( mrExport, XML_NAMESPACE_CHART, XML_FLOOR, sal_True, sal_True );
+            }
+            else    // autostyles
+            {
+                CollectAutoStyle( aPropertyStates );
             }
         }
     }

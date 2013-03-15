@@ -56,8 +56,16 @@ class XMLOFF_DLLPUBLIC SvXMLAutoFilteredSet
     /// return the relevant family's property mapper
     const UniReference < SvXMLExportPropertyMapper > & getMapper();
     /// filter properties
-    SvXMLAutoFilteredSet &filter( const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::beans::XPropertySet > &xPropSet );
+    void filter( const ::com::sun::star::uno::Reference<
+                     ::com::sun::star::beans::XPropertySet > &xPropSet );
+    /// filter properties - query for XPropertySet with no throw on failure
+    void filter( const ::com::sun::star::uno::Reference<
+                     ::com::sun::star::uno::XInterface > &xInterface,
+                 ::com::sun::star::uno::UnoReference_Query );
+    /// filter properties - query for XPropertySet with exception on failure
+    void filter( const ::com::sun::star::uno::Reference<
+                     ::com::sun::star::uno::XInterface > &xInterface,
+                 ::com::sun::star::uno::UnoReference_QueryThrow );
     /// discard all content
     void      clear();
     /// do we have any valid properties ie. some were not filtered ?

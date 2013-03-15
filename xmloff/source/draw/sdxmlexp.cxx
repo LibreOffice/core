@@ -1692,7 +1692,8 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( Reference<XDrawPage> xDrawPage
 
         SvXMLAutoFilteredSet aFilterSet( GetAutoStylePool(),
                                          XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID );
-        sStyleName = aFilterSet.filter( xPropSet ).add( "" );
+        aFilterSet.filter( xPropSet );
+        sStyleName = aFilterSet.add( "" );
     }
 
     return sStyleName;

@@ -495,11 +495,32 @@ SvXMLAutoFilteredSet::~SvXMLAutoFilteredSet()
 {
 }
 
-SvXMLAutoFilteredSet &SvXMLAutoFilteredSet::filter( const ::com::sun::star::uno::Reference<
-                                                        ::com::sun::star::beans::XPropertySet > &xPropSet )
+void SvXMLAutoFilteredSet::filter( const ::com::sun::star::uno::Reference<
+                                       ::com::sun::star::beans::XPropertySet > &xPropSet )
 {
     maProperties = mpFamily->mxMapper->Filter( xPropSet );
-    return *this;
+}
+
+void SvXMLAutoFilteredSet::filter( const ::com::sun::star::uno::Reference<
+                                       ::com::sun::star::uno::XInterface > &xInterface,
+                                   ::com::sun::star::uno::UnoReference_Query )
+{
+    uno::Reference< beans::XPropertySet > xPropSet( xInterface, uno::UNO_QUERY );
+    if( xPropSet.is() )
+        maProperties = mpFamily->mxMapper->Filter( xPropSet );
+    else
+        maProperties.clear();
+}
+
+void SvXMLAutoFilteredSet::filter( const ::com::sun::star::uno::Reference<
+                                       ::com::sun::star::uno::XInterface > &xInterface,
+                                   ::com::sun::star::uno::UnoReference_QueryThrow )
+{
+    uno::Reference< beans::XPropertySet > xPropSet( xInterface, uno::UNO_QUERY_THROW );
+    if( xPropSet.is() )
+        maProperties = mpFamily->mxMapper->Filter( xPropSet );
+    else
+        maProperties.clear();
 }
 
 bool SvXMLAutoFilteredSet::hasValidContent()
