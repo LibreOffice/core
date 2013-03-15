@@ -124,7 +124,9 @@ namespace accessibility
             model) contained in the given SvxEditSource.
 
         */
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         explicit AccessibleTextHelper( ::std::auto_ptr< SvxEditSource > pEditSource );
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         virtual ~AccessibleTextHelper();
 
     protected:
@@ -185,7 +187,9 @@ namespace accessibility
             The new edit source to set. Object ownership is transferred
             from the caller to the callee.
         */
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         virtual void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         /** Set the event source
 

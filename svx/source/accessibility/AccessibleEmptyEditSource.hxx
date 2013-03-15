@@ -77,7 +77,9 @@ namespace accessibility
 
             @dyn
          */
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< SvxEditSource >  mpEditSource;
+        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         SdrObject&                      mrObj;
         SdrView&                        mrView;
