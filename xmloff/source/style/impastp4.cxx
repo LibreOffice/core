@@ -513,9 +513,16 @@ sal_Int32 SvXMLAutoFilteredSet::countValidProperties()
 /// Insert into the auto style pool and return the name of the (new or re-used) auto-style
 OUString SvXMLAutoFilteredSet::add( const OUString &rParent, bool bCache, bool bDontSeek )
 {
+    if (!hasValidContent())
+        return OUString( "" );
     OUString aStyleName;
     mxPool->pImpl->Add( aStyleName, *mpFamily, rParent, maProperties, bCache, bDontSeek );
     return aStyleName;
+}
+
+void SvXMLAutoFilteredSet::clear()
+{
+    maProperties.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

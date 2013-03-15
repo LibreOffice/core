@@ -50,13 +50,17 @@ class XMLOFF_DLLPUBLIC SvXMLAutoFilteredSet
  public:
     SvXMLAutoFilteredSet( const UniReference< SvXMLAutoStylePoolP > &xPool, sal_Int32 nFamily );
     ~SvXMLAutoFilteredSet();
+    /// filter properties
     SvXMLAutoFilteredSet &filter( const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::beans::XPropertySet > &xPropSet );
+    /// discard all content
+    void      clear();
+    /// do we have any valid properties ie. some were not filtered ?
     bool      hasValidContent();
+    /// how many valid properties do we have ?
     sal_Int32 countValidProperties();
-
     /// Insert into the auto style pool and return the name of the new auto-style
-    OUString add( const OUString &rParent,  bool bCache = false, bool bDontSeek = false );
+    OUString  add( const OUString &rParent,  bool bCache = false, bool bDontSeek = false );
 };
 
 class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public UniRefBase
