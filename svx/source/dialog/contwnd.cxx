@@ -132,10 +132,10 @@ void ContourWindow::SdrObjCreated( const SdrObject&  )
     pView->CombineMarkedObjects( sal_False );
 }
 
-sal_Bool ContourWindow::IsContourChanged() const
+bool ContourWindow::IsContourChanged() const
 {
     SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
-    sal_Bool        bRet = sal_False;
+    bool        bRet = false;
 
     if ( pPage && pPage->GetObjCount() )
         bRet = ( (SdrPathObj*) pPage->GetObj( 0 ) )->GetPathPoly().count() && pModel->IsChanged();

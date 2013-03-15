@@ -126,7 +126,7 @@ short TabDialog4Recovery::Execute()
 
 //===============================================
 RecoveryCore::RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                 sal_Bool                                            bUsedForSaving)
+                                 bool                                            bUsedForSaving)
     : m_xContext        ( rxContext    )
     , m_pListener       ( 0            )
     , m_bListenForSaving(bUsedForSaving)
@@ -153,10 +153,10 @@ TURLList* RecoveryCore::getURLListAccess()
 }
 
 //===============================================
-sal_Bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
+bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
 {
     if (rInfo.TempURL.isEmpty())
-        return sal_False;
+        return false;
 
     // Note: If the original files was recovery ... but a temp file
     // exists ... an error inside the temp file exists!
@@ -164,9 +164,9 @@ sal_Bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
         !(rInfo.RecoveryState == E_RECOVERY_FAILED            ) &&
         !(rInfo.RecoveryState == E_ORIGINAL_DOCUMENT_RECOVERED)
        )
-       return sal_False;
+       return false;
 
-    return sal_True;
+    return true;
 }
 
 //===============================================
@@ -1375,7 +1375,7 @@ String RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
 //===============================================
 BrokenRecoveryDialog::BrokenRecoveryDialog(Window*       pParent        ,
                                            RecoveryCore* pCore          ,
-                                           sal_Bool      bBeforeRecovery)
+                                           bool      bBeforeRecovery)
     : ModalDialog   ( pParent, SVX_RES( RID_SVX_MDLG_DOCRECOVERY_BROKEN ) )
     , m_aDescrFT    ( this   , SVX_RES( FT_BROKEN_DESCR                   ) )
     , m_aFileListFT ( this   , SVX_RES( FT_BROKEN_FILELIST                ) )

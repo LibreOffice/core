@@ -217,7 +217,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
                     on the core dispatch implementation, we must know,
                     which URL we have to use for deregistration!
          */
-        sal_Bool m_bListenForSaving;
+        bool m_bListenForSaving;
 
     //-------------------------------------------
     // native interface
@@ -226,7 +226,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
         //---------------------------------------
         /** @short  TODO */
         RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                           sal_Bool                                            bUsedForSaving);
+                           bool                                            bUsedForSaving);
 
         //---------------------------------------
         /** @short  TODO */
@@ -242,7 +242,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         //---------------------------------------
         /** @short  TODO */
-        static sal_Bool isBrokenTempEntry(const TURLInfo& rInfo);
+        static bool isBrokenTempEntry(const TURLInfo& rInfo);
         virtual void saveBrokenTempEntries(const ::rtl::OUString& sSaveDir);
         virtual void saveAllTempEntries(const ::rtl::OUString& sSaveDir);
         virtual void forgetBrokenTempEntries();
@@ -698,7 +698,7 @@ class BrokenRecoveryDialog : public ModalDialog
 
         ::rtl::OUString m_sSavePath;
         RecoveryCore*   m_pCore;
-        sal_Bool        m_bBeforeRecovery;
+        bool        m_bBeforeRecovery;
         sal_Bool        m_bExecutionNeeded;
 
     //-------------------------------------------
@@ -709,7 +709,7 @@ class BrokenRecoveryDialog : public ModalDialog
         /** @short TODO */
         BrokenRecoveryDialog(Window*       pParent        ,
                              RecoveryCore* pCore          ,
-                             sal_Bool      bBeforeRecovery);
+                             bool      bBeforeRecovery);
 
         //---------------------------------------
         /** @short TODO */

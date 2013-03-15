@@ -281,7 +281,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
     if(!IsCompletelyDisabled())
     {
         RECT_POINT eNewRP = eRP;
-        sal_Bool bUseMM = (eCS != CS_SHADOW) && (eCS != CS_ANGLE);
+        bool bUseMM = (eCS != CS_SHADOW) && (eCS != CS_ANGLE);
 
         switch( rKeyEvt.GetKeyCode().GetCode() )
         {
@@ -459,8 +459,8 @@ void SvxRectCtl::Paint( const Rectangle& )
     Point aBtnPnt2( 11,0 );
     Point aBtnPnt3( 22,0 );
 
-    sal_Bool bNoHorz = (m_nState & CS_NOHORZ) != 0;
-    sal_Bool bNoVert = (m_nState & CS_NOVERT) != 0;
+    bool bNoHorz = (m_nState & CS_NOHORZ) != 0;
+    bool bNoVert = (m_nState & CS_NOVERT) != 0;
 
     Bitmap&         rBitmap = GetRectBitmap();
 
@@ -480,9 +480,9 @@ void SvxRectCtl::Paint( const Rectangle& )
     }
     else
     {
-        DrawBitmap( aPtLT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtLT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
         DrawBitmap( aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-        DrawBitmap( aPtRT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtRT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
         DrawBitmap( aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
@@ -492,9 +492,9 @@ void SvxRectCtl::Paint( const Rectangle& )
 
         DrawBitmap( aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
-        DrawBitmap( aPtLB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
         DrawBitmap( aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-        DrawBitmap( aPtRB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtRB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
     }
 
     // draw active button, avoid center pos for angle
@@ -1197,7 +1197,7 @@ void GradientLB::SelectEntryByList( const XGradientListRef &pList, const String&
 {
     long nCount = pList->Count();
     XGradientEntry* pEntry;
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     String aStr;
 
     long i;
@@ -1208,7 +1208,7 @@ void GradientLB::SelectEntryByList( const XGradientListRef &pList, const String&
         aStr = pEntry->GetName();
 
         if( rStr == aStr && rGradient == pEntry->GetGradient() )
-            bFound = sal_True;
+            bFound = true;
     }
     if( bFound )
         SelectEntryPos( (sal_uInt16) ( i - 1 + nDist ) );

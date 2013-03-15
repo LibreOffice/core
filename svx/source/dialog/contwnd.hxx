@@ -59,7 +59,7 @@ public:
     const Color&        GetPipetteColor() const { return aPipetteColor; }
 
     sal_Bool                IsClickValid() const { return bClickValid; }
-    sal_Bool                IsContourChanged() const;
+    bool                IsContourChanged() const;
 
     void                SetWorkplaceMode( const sal_Bool bWorkplace ) { bWorkplaceMode = bWorkplace; }
     sal_Bool                IsWorkplaceMode() const { return bWorkplaceMode; }

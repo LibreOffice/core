@@ -246,7 +246,7 @@ Point EnhancedCustomShape3d::Transformation2D::Transform2D( const basegfx::B3DPo
     return aPoint2D;
 }
 
-sal_Bool EnhancedCustomShape3d::Transformation2D::IsParallel() const
+bool EnhancedCustomShape3d::Transformation2D::IsParallel() const
 {
     return eProjectionMode == com::sun::star::drawing::ProjectionMode_PARALLEL;
 }
@@ -328,8 +328,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
         E3dScene* pScene = new E3dPolyScene( a3DDefaultAttr );
 
-        sal_Bool bSceneHasObjects ( sal_False );
-        sal_Bool bUseTwoFillStyles( sal_False );
+        bool bSceneHasObjects ( false );
+        bool bUseTwoFillStyles( false );
 
         drawing::ShadeMode eShadeMode( GetShadeMode( rGeometryItem, drawing::ShadeMode_FLAT ) );
         const rtl::OUString aExtrusionColor( "Color" );
@@ -353,7 +353,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             if ( eFillStyle == XFILL_NONE )
                 aSet.Put( XFillStyleItem( XFILL_SOLID ) );
             else if ( ( eFillStyle == XFILL_BITMAP ) || ( eFillStyle == XFILL_GRADIENT ) || bUseExtrusionColor )
-                bUseTwoFillStyles = sal_True;
+                bUseTwoFillStyles = true;
 
             // #116336#
             // If shapes are mirrored once (mirroring two times correct geometry again)
@@ -370,7 +370,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         while( aIter.IsMore() )
         {
             const SdrObject* pNext = aIter.Next();
-            sal_Bool bIsPlaceholderObject = (((XFillStyleItem&)pNext->GetMergedItem( XATTR_FILLSTYLE )).GetValue() == XFILL_NONE )
+            bool bIsPlaceholderObject = (((XFillStyleItem&)pNext->GetMergedItem( XATTR_FILLSTYLE )).GetValue() == XFILL_NONE )
                                         && (((XLineStyleItem&)pNext->GetMergedItem( XATTR_LINESTYLE )).GetValue() == XLINE_NONE );
             basegfx::B2DPolyPolygon aPolyPoly;
 
@@ -473,7 +473,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
                 }
                 pScene->Insert3DObj( p3DObj );
-                bSceneHasObjects = sal_True;
+                bSceneHasObjects = true;
             }
         }
 

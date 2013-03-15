@@ -54,7 +54,7 @@ class EnhancedCustomShape3d
 
             basegfx::B3DPolygon ApplySkewSettings( const basegfx::B3DPolygon& rPolygon3D ) const;
             Point       Transform2D( const basegfx::B3DPoint& rPoint ) const;
-            sal_Bool    IsParallel() const;
+            bool    IsParallel() const;
     };
 
     friend class Transformation2D;

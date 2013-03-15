@@ -148,7 +148,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void SetShowForm_Impl(const XFormTextHideFormItem*);
     void SetOutline_Impl(const XFormTextOutlineItem*);
     void SetShadow_Impl(const XFormTextShadowItem*,
-                        sal_Bool bRestoreValues = sal_False);
+                        bool bRestoreValues = false);
     void SetShadowColor_Impl(const XFormTextShadowColorItem*);
     void SetShadowXVal_Impl(const XFormTextShadowXValItem*);
     void SetShadowYVal_Impl(const XFormTextShadowYValItem*);
@@ -170,7 +170,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     ~SvxFontWorkDialog();
 
     void SetColorList(const XColorListRef &pTable);
-    void SetActive(sal_Bool bActivate = sal_True);
+    void SetActive(bool bActivate = true);
 
     void CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
                           const SfxItemSet& rAttr, SdrObject& rOldObj,

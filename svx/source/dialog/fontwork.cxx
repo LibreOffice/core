@@ -486,7 +486,7 @@ void SvxFontWorkDialog::SetOutline_Impl(const XFormTextOutlineItem* pItem)
 // Set shadow buttons
 
 void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
-                                        sal_Bool bRestoreValues)
+                                        bool bRestoreValues)
 {
     if ( pItem )
     {
@@ -742,7 +742,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl)
 
         XFormTextShadowItem aItem(eShadow);
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHADOW, SFX_CALLMODE_RECORD, &aItem, 0L );
-        SetShadow_Impl(&aItem, sal_True);
+        SetShadow_Impl(&aItem, true);
     }
     return 0;
 }
@@ -839,7 +839,7 @@ void SvxFontWorkDialog::SetColorList(const XColorListRef &pList)
     }
 }
 
-void SvxFontWorkDialog::SetActive(sal_Bool /*bActivate*/)
+void SvxFontWorkDialog::SetActive(bool /*bActivate*/)
 {
 }
 

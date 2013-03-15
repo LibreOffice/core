@@ -59,7 +59,7 @@ void SvxXConnectionPreview::Construct()
 
     if( nMarkCount >= 1 )
     {
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
 
@@ -70,7 +70,7 @@ void SvxXConnectionPreview::Construct()
             sal_uInt16 nId = pObj->GetObjIdentifier();
             if( nInv == SdrInventor && nId == OBJ_EDGE )
             {
-                bFound = sal_True;
+                bFound = true;
                 SdrEdgeObj* pTmpEdgeObj = (SdrEdgeObj*) pObj;
                 pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->Clone();
 
@@ -222,9 +222,9 @@ sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
 
 void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    sal_Bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
-    sal_Bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
-    sal_Bool bCtrl    = rMEvt.IsMod1();
+    bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
+    bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
+    bool bCtrl    = rMEvt.IsMod1();
 
     if( bZoomIn || bZoomOut )
     {

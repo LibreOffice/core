@@ -80,17 +80,17 @@ struct FWData                           // representing the whole text
     double                              fHorizontalTextScaling;
     sal_uInt32                          nMaxParagraphsPerTextArea;
     sal_Int32                           nSingleLineHeight;
-    sal_Bool                            bSingleLineMode;
+    bool                            bSingleLineMode;
 };
 
 
-static sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16 nOutlinesCount2d, FWData& rFWData )
+static bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16 nOutlinesCount2d, FWData& rFWData )
 {
-    sal_Bool bNoErr = sal_False;
-    sal_Bool bSingleLineMode = sal_False;
+    bool bNoErr = false;
+    bool bSingleLineMode = false;
     sal_uInt16 nTextAreaCount = nOutlinesCount2d;
     if ( nOutlinesCount2d & 1 )
-        bSingleLineMode = sal_True;
+        bSingleLineMode = true;
     else
         nTextAreaCount >>= 1;
 
@@ -124,7 +124,7 @@ static sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal
                 nParagraphsLeft -= nParagraphs;
                 nTextAreaCount--;
             }
-            bNoErr = sal_True;
+            bNoErr = true;
         }
     }
     return bNoErr;
@@ -149,10 +149,10 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
                                         FWData& rFWData, const PolyPolygon& rOutline2d )
 {
     double fScalingFactor = 1.0;
-    sal_Bool bScalingFactorDefined = sal_False;
+    bool bScalingFactorDefined = false;
 
     sal_uInt16 i = 0;
-    sal_Bool bSingleLineMode = sal_False;
+    bool bSingleLineMode = false;
     sal_uInt16 nOutlinesCount2d = rOutline2d.Count();
 
     Font aFont;
@@ -170,7 +170,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     aVirDev.SetFont( aFont );
 
     if ( nOutlinesCount2d & 1 )
-        bSingleLineMode = sal_True;
+        bSingleLineMode = true;
 
     std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
     std::vector< FWTextArea >::iterator aTextAreaIEnd = rFWData.vTextAreas.end();
@@ -194,7 +194,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
                 if ( !bScalingFactorDefined )
                 {
                     fScalingFactor = fScale;
-                    bScalingFactorDefined = sal_True;
+                    bScalingFactorDefined = true;
                 }
                 else
                 {

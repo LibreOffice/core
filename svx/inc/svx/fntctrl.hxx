@@ -66,11 +66,11 @@ public:
     void                SetColor( const Color& rColor );
     void                ResetColor();
     void                SetBackColor( const Color& rColor );
-    void                UseResourceText( sal_Bool bUse = sal_True );
+    void                UseResourceText( bool bUse = true );
     void                Paint( const Rectangle& );
 
-    sal_Bool            IsTwoLines() const;
-    void                SetTwoLines(sal_Bool bSet);
+    bool            IsTwoLines() const;
+    void                SetTwoLines(bool bSet);
 
     void                SetBrackets(sal_Unicode cStart, sal_Unicode cEnd);
 

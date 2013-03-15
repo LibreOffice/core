@@ -583,8 +583,8 @@ public:
                 }
                 else
                 {
-                    sal_Bool bFirstIsEmpty = mpFirstArg->isConstant() && ( (*mpFirstArg)() == 0 );
-                    sal_Bool bSecondIsEmpty = mpSecondArg->isConstant() && ( (*mpSecondArg)() == 0 );
+                    bool bFirstIsEmpty = mpFirstArg->isConstant() && ( (*mpFirstArg)() == 0 );
+                    bool bSecondIsEmpty = mpSecondArg->isConstant() && ( (*mpSecondArg)() == 0 );
 
                     if ( bFirstIsEmpty )
                         aRet = mpSecondArg->fillNode( rEquations, NULL, nFlags );

@@ -135,7 +135,7 @@ class FontPrevWin_Impl
 
     SvxFont                         aFont;
     Printer*                        pPrinter;
-    sal_Bool                        bDelPrinter;
+    bool                        bDelPrinter;
 
     Reference < XBreakIterator >    xBreak;
     std::vector<sal_uIntPtr>        aTextWidth;
@@ -156,7 +156,7 @@ class FontPrevWin_Impl
     long                            n100PercentFontWidthCTL;
     sal_uInt16                      nFontWidthScale;
 
-    sal_Bool                        bSelection      : 1,
+    bool                        bSelection      : 1,
                                     bGetSelection   : 1,
                                     bUseResText     : 1,
                                     bPreviewBackgroundToCharacter : 1,
@@ -170,12 +170,12 @@ class FontPrevWin_Impl
 
 public:
     inline FontPrevWin_Impl() :
-        pPrinter( NULL ), bDelPrinter( sal_False ),
+        pPrinter( NULL ), bDelPrinter( false ),
         pColor( NULL ), pBackColor( 0 ), nAscent( 0 ),
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
-        bSelection( sal_False ), bGetSelection( sal_False ), bUseResText( sal_False ),
-        bPreviewBackgroundToCharacter( sal_False ), bTwoLines( sal_False ),
-        bUseFontNameAsText( sal_False ), bTextInited( sal_False )
+        bSelection( false ), bGetSelection( false ), bUseResText( false ),
+        bPreviewBackgroundToCharacter( false ), bTwoLines( false ),
+        bUseFontNameAsText( false ), bTextInited( false )
     {
         SvtLanguageOptions aLanguageOptions;
         m_bCJKEnabled = aLanguageOptions.IsAnyEnabled();
@@ -489,7 +489,7 @@ void SvxFontPrevWindow::Init()
     if ( !pImpl->pPrinter )
     {
         pImpl->pPrinter = new Printer;
-        pImpl->bDelPrinter = sal_True;
+        pImpl->bDelPrinter = true;
     }
     SetMapMode( MapMode( MAP_TWIP ) );
     initFont(pImpl->aFont);
@@ -575,7 +575,7 @@ const SvxFont& SvxFontPrevWindow::GetFont() const
 void SvxFontPrevWindow::SetPreviewText( const ::rtl::OUString& rString )
 {
     pImpl->aText = rString;
-    pImpl->bTextInited = sal_True;
+    pImpl->bTextInited = true;
 }
 
 // -----------------------------------------------------------------------
@@ -626,7 +626,7 @@ void SvxFontPrevWindow::SetBackColor(const Color &rColor)
 
 // -----------------------------------------------------------------------
 
-void SvxFontPrevWindow::UseResourceText( sal_Bool bUse )
+void SvxFontPrevWindow::UseResourceText( bool bUse )
 {
     pImpl->bUseResText = bUse;
 }
@@ -663,7 +663,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             if ( pSh && !pImpl->bGetSelection && !pImpl->bUseFontNameAsText )
             {
                 pImpl->aText = pSh->GetSelectionText();
-                pImpl->bGetSelection = sal_True;
+                pImpl->bGetSelection = true;
                 pImpl->bSelection = pImpl->aText.Len() != 0;
 
             }
@@ -827,12 +827,12 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
     }
 }
 
-sal_Bool SvxFontPrevWindow::IsTwoLines() const
+bool SvxFontPrevWindow::IsTwoLines() const
 {
     return pImpl->bTwoLines;
 }
 
-void SvxFontPrevWindow::SetTwoLines(sal_Bool bSet)
+void SvxFontPrevWindow::SetTwoLines(bool bSet)
 {
     pImpl->bTwoLines = bSet;
 }
