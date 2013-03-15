@@ -1,0 +1,14 @@
+--- a/src/lib/VSDContentCollector.cpp
++++ b/src/lib/VSDContentCollector.cpp
+@@ -2920,10 +2920,8 @@ void libvisio::VSDContentCollector::appendCharacters(WPXString &text, const std:
+     while (true)
+     {
+       if (iter == characters.end())
+-      {
+-        fail = true;
+         break;
+-      }
++
+       uint16_t character = *iter++;
+       character |= (uint16_t)(*iter++) << 8;
+       if (character == 0xfffc)
