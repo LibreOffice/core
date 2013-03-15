@@ -142,16 +142,14 @@ IMPL_STATIC_LINK_NOINSTANCE( AsyncCallback, Notify_Impl, CallbackData*, pCallbac
 // component helper namespace
 namespace comp_AsyncCallback {
 
-::rtl::OUString SAL_CALL _getImplementationName() {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.awt.comp.AsyncCallback"));
+OUString SAL_CALL _getImplementationName() {
+    return OUString("com.sun.star.awt.comp.AsyncCallback");
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > s(1);
-    s[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.awt.AsyncCallback"));
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.awt.AsyncCallback";
     return s;
 }
 

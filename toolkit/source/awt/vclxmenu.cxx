@@ -39,18 +39,18 @@
     #define THROW_MENUITEM_NOT_FOUND( Func, nItemId ) \
         if ( MENU_ITEM_NOTFOUND == mpMenu->GetItemPos( nItemId ) ) \
             throw  ::com::sun::star::container::NoSuchElementException( \
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( Func ) ) \
-                += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": There is no menu item with " ) ) \
-                += ::rtl::OUString::valueOf( sal_Int32( nItemId ) ) \
-                += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " as identifier" ) ), \
+                OUString( Func ) \
+                += OUString( ": There is no menu item with " ) \
+                += OUString::valueOf( sal_Int32( nItemId ) ) \
+                += OUString( " as identifier" ), \
                 *this \
             );
     #define THROW_MENUPOS_NOT_FOUND( Func, nPos ) \
         if ( MENU_ITEM_NOTFOUND == sal_uInt16( nPos ) ) \
             throw  ::com::sun::star::container::NoSuchElementException( \
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( Func ) ) \
-                += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": There is no menu item at position " ) ) \
-                += ::rtl::OUString::valueOf( sal_Int32( nPos ) ), \
+                OUString( Func ) \
+                += OUString( ": There is no menu item at position " ) \
+                += OUString::valueOf( sal_Int32( nPos ) ), \
                 *this \
             );
 #else
@@ -203,18 +203,18 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
 
 
 // ::com::sun::star::lang::XServiceInfo
-::rtl::OUString SAL_CALL VCLXMenu::getImplementationName(  )
+OUString SAL_CALL VCLXMenu::getImplementationName(  )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const sal_Bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
-    ::rtl::OUString implName( RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." ) );
+    OUString implName( "stardiv.Toolkit." );
     if ( bIsPopupMenu )
-        implName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VCLXPopupMenu" ) );
+        implName += "VCLXPopupMenu";
     else
-        implName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VCLXMenuBar" ) );
+        implName += "VCLXMenuBar";
 
     return implName;
 }
