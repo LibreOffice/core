@@ -28,6 +28,7 @@
  * instead of those above.
  */
 #include <string.h>
+#include <gmodule.h>
 #include <gtk/gtk.h>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtksys.hxx>
