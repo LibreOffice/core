@@ -778,7 +778,10 @@ sal_Bool SwScanner::NextWord()
         OSL_ENSURE( aBound.endPos >= aBound.startPos, "broken aBound result" );
 
         // we don't want to include preceeding text
-        if (aBound.startPos < nBegin)
+        // to count words in text with mixed script punctuation correctly,
+        // but we want to include preceeding symbols (eg. percent sign, section sign,
+        // degree sign defined by dict_word_hu to spell check their affixed forms).
+        if (nWordType == i18n::WordType::WORD_COUNT && aBound.startPos < nBegin)
             aBound.startPos = nBegin;
 
         //no word boundaries could be found
