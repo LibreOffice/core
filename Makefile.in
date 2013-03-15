@@ -288,7 +288,7 @@ ifeq ($(OS),IOS)
 	cd ios && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 endif
 
-build-nocheck : export SKIP_TESTS := YES
+build-nocheck : export gb_Module_SKIPTARGETS := check slowcheck subsequentcheck
 build-nocheck : build
 
 # Ideally solenv would be also in Module_cross_toolset.mk
@@ -398,7 +398,7 @@ else ifeq ($(OS),MACOSX)
 	@echo "To debug: gdb install/LibreOffice.app/Contents/MacOS/soffice"
 endif
 
-dev-install-nocheck : export SKIP_TESTS := YES
+dev-install-nocheck : export SKIP_TESTS := check slowcheck subsequentcheck
 dev-install-nocheck : dev-install
 
 dev-update:
