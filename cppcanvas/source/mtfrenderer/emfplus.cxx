@@ -1096,6 +1096,41 @@ namespace cppcanvas
             }
         }
 
+        void ImplRenderer::EMFPPlusDrawPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
+                                                OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex)
+        {
+            EMFPPen* pen = (EMFPPen*) aObjects [penIndex & 0xff];
+
+            SAL_WARN_IF( !pen, "cppcanvas", "emf+ missing pen" );
+
+            if (pen)
+            {
+                rState.isFillColorSet = false;
+                rState.isLineColorSet = true;
+                rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
+                                                                           rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
+
+                polygon.transform( rState.mapModeTransform );
+                rendering::StrokeAttributes aStrokeAttributes;
+
+                pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
+
+                ActionSharedPtr pPolyAction(
+                                            internal::PolyPolyActionFactory::createPolyPolyAction(
+                                                                                                  polygon, rParms.mrCanvas, rState, aStrokeAttributes ) );
+
+                if( pPolyAction )
+                {
+                    maActions.push_back(
+                                        MtfAction(
+                                                  pPolyAction,
+                                                  rParms.mrCurrActionIndex ) );
+
+                    rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
+                }
+            }
+        }
+
         void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, sal_Bool bUseWholeStream)
         {
             sal_uInt32 index;
@@ -1298,13 +1333,15 @@ namespace cppcanvas
                             EMFPPlusFillPolygon (((EMFPPath*) aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                         }
                         break;
+                    case EmfPlusRecordTypeDrawEllipse:
                     case EmfPlusRecordTypeFillEllipse:
                         {
                             sal_uInt32 brushIndexOrColor;
 
-                            rMF >> brushIndexOrColor;
+                            if ( type == EmfPlusRecordTypeFillEllipse )
+                                rMF >> brushIndexOrColorOrPen;
 
-                            EMFP_DEBUG (printf ("EMF+ FillEllipse slot: %u\n", static_cast<unsigned>(flags && 0xff)));
+                            EMFP_DEBUG (printf ("EMF+ %sEllipse slot: %u\n", type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw", static_cast<unsigned>(flags & 0xff)));
 
                             float dx, dy, dw, dh;
 
@@ -1317,8 +1354,12 @@ namespace cppcanvas
 
                             ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::tools::createPolygonFromEllipse( mappedCenter, mappedSize.getX (), mappedSize.getY () ) ) );
 
-                            EMFPPlusFillPolygon( polyPolygon,
-                                                 rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor );
+                            if ( type == EmfPlusRecordTypeFillEllipse )
+                                EMFPPlusFillPolygon( polyPolygon,
+                                                     rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor );
+                            else
+                                EMFPPlusDrawPolygon( polyPolygon,
+                                                     rFactoryParms, rState, rCanvas, flags & 0xff );
                         }
                         break;
                     case EmfPlusRecordTypeFillRects:
@@ -1438,38 +1479,10 @@ namespace cppcanvas
                             EMFP_DEBUG (printf ("EMF+\tpen: %u\n", (unsigned int)penIndex));
 
                             EMFPPath* path = (EMFPPath*) aObjects [flags & 0xff];
-                            EMFPPen* pen = (EMFPPen*) aObjects [penIndex & 0xff];
-
-                            SAL_WARN_IF( !pen, "cppcanvas", "EmfPlusRecordTypeDrawPath missing pen" );
                             SAL_WARN_IF( !path, "cppcanvas", "EmfPlusRecordTypeDrawPath missing path" );
 
-                            if (pen && path)
-                            {
-                                rState.isFillColorSet = false;
-                                rState.isLineColorSet = true;
-                                rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
-                                                                                           rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace());
-                                ::basegfx::B2DPolyPolygon& polygon (path->GetPolygon (*this));
+                            EMFPPlusDrawPolygon (path->GetPolygon (*this), rFactoryParms, rState, rCanvas, penIndex);
 
-                                polygon.transform( rState.mapModeTransform );
-                                rendering::StrokeAttributes aStrokeAttributes;
-
-                                pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
-
-                                ActionSharedPtr pPolyAction(
-                                    internal::PolyPolyActionFactory::createPolyPolyAction(
-                                        polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
-
-                                if( pPolyAction )
-                                {
-                                    maActions.push_back(
-                                        MtfAction(
-                                            pPolyAction,
-                                            rFactoryParms.mrCurrActionIndex ) );
-
-                                    rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
-                                }
-                            }
                             break;
                         }
                     case EmfPlusRecordTypeDrawImage:
