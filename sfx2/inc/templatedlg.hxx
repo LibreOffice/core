@@ -15,6 +15,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
 
 class Edit;
 class PopupMenu;
@@ -126,6 +127,7 @@ private:
 private:
 
     TabControl maTabControl;
+    TabPage maTabPage;
     Control *mpToolbars;
 
     Edit *mpSearchEdit;
