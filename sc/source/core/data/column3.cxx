@@ -330,9 +330,10 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
 
     for ( SCSIZE nIdx = nStartIndex; nIdx <= nEndIndex; ++nIdx )
     {
-        // all content is deleted and cell does not contain broadcaster
         if (((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS) && !maItems[ nIdx ].pCell->GetBroadcaster())
         {
+            // all content is deleted and cell does not contain broadcaster
+
             ScBaseCell* pOldCell = maItems[ nIdx ].pCell;
             if (pOldCell->GetCellType() == CELLTYPE_FORMULA)
             {
@@ -348,110 +349,105 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
                 pDocument->Broadcast( aHint );
                 pOldCell->Delete();
             }
+            continue;
         }
+
         // delete some contents of the cells, or cells with broadcaster
+        bool bDelete = false;
+        ScBaseCell* pOldCell = maItems[nIdx].pCell;
+        CellType eCellType = pOldCell->GetCellType();
+        if ((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS)
+            bDelete = true;
         else
         {
-            bool bDelete = false;
-            ScBaseCell* pOldCell = maItems[nIdx].pCell;
-            CellType eCellType = pOldCell->GetCellType();
-            if ((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS)
-                bDelete = true;
-            else
+            // decide whether to delete the cell object according to passed
+            // flags
+            switch ( eCellType )
             {
-                // decide whether to delete the cell object according to passed
-                // flags
-                switch ( eCellType )
+                case CELLTYPE_VALUE:
                 {
-                    case CELLTYPE_VALUE:
-                        {
-                            sal_uInt16 nValFlags = nDelFlag & (IDF_DATETIME|IDF_VALUE);
-                            // delete values and dates?
-                            bDelete = nValFlags == (IDF_DATETIME|IDF_VALUE);
-                            // if not, decide according to cell number format
-                            if( !bDelete && (nValFlags != 0) )
-                            {
-                                sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)GetAttr(
-                                            maItems[nIdx].nRow, ATTR_VALUE_FORMAT ))->GetValue();
-                                short nType = pDocument->GetFormatTable()->GetType(nIndex);
-                                bool bIsDate = (nType == NUMBERFORMAT_DATE) ||
-                                    (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
-                                bDelete = nValFlags == (bIsDate ? IDF_DATETIME : IDF_VALUE);
-                            }
-                        }
-                        break;
-
-                    case CELLTYPE_STRING:
-                    case CELLTYPE_EDIT:
-                        bDelete = (nDelFlag & IDF_STRING) != 0;
-                        break;
-
-                    case CELLTYPE_FORMULA:
-                        bDelete = (nDelFlag & IDF_FORMULA) != 0;
-                        break;
-
-                    case CELLTYPE_NOTE:
-                        // do note delete note cell with broadcaster
-                        bDelete = !pOldCell->GetBroadcaster();
-                        break;
-
-                    default:; // added to avoid warnings
-                }
-            }
-
-            if (bDelete)
-            {
-                // try to create a replacement note cell, if note or broadcaster exists
-                ScNoteCell* pNoteCell = NULL;
-                SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
-                if (pBC && pBC->HasListeners())
-                {
-                    pNoteCell = new ScNoteCell( pBC );
-                    // NOTE: the broadcaster here is transferred and released
-                    // only if it has listeners! If it does not, it will simply
-                    // be deleted when the cell is deleted and no replacement
-                    // cell is created.
-                    pOldCell->ReleaseBroadcaster();
-                }
-
-                // remove cell entry in cell item list
-                SCROW nOldRow = maItems[nIdx].nRow;
-                if (pNoteCell)
-                {
-                    // replace old cell with the replacement note cell
-                    maItems[nIdx].pCell = pNoteCell;
-                    // ... so it's not really deleted
-                    bDelete = false;
-                }
-                else
-                    maItems[nIdx].pCell = pDummyCell.get();
-
-                // cache formula cells (will be deleted later), delete cell of other type
-                if (eCellType == CELLTYPE_FORMULA)
-                {
-                    aDelCells.push_back( static_cast< ScFormulaCell* >( pOldCell ) );
-                }
-                else
-                {
-                    aHint.GetAddress().SetRow( nOldRow );
-                    aHint.SetCell( pNoteCell ? pNoteCell : pOldCell );
-                    pDocument->Broadcast( aHint );
-                    if (pNoteCell != pOldCell)
+                    sal_uInt16 nValFlags = nDelFlag & (IDF_DATETIME|IDF_VALUE);
+                    // delete values and dates?
+                    bDelete = nValFlags == (IDF_DATETIME|IDF_VALUE);
+                    // if not, decide according to cell number format
+                    if (!bDelete && (nValFlags != 0))
                     {
-                        pOldCell->Delete();
+                        sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)GetAttr(
+                                    maItems[nIdx].nRow, ATTR_VALUE_FORMAT))->GetValue();
+                        short nType = pDocument->GetFormatTable()->GetType(nIndex);
+                        bool bIsDate = (nType == NUMBERFORMAT_DATE) ||
+                            (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
+                        bDelete = nValFlags == (bIsDate ? IDF_DATETIME : IDF_VALUE);
                     }
                 }
+                break;
+                case CELLTYPE_STRING:
+                case CELLTYPE_EDIT:
+                    bDelete = (nDelFlag & IDF_STRING) != 0;
+                break;
+                case CELLTYPE_FORMULA:
+                    bDelete = (nDelFlag & IDF_FORMULA) != 0;
+                break;
+                case CELLTYPE_NOTE:
+                    // do note delete note cell with broadcaster
+                    bDelete = !pOldCell->GetBroadcaster();
+                break;
+                default:; // added to avoid warnings
+            }
+        }
+
+        if (bDelete)
+        {
+            // try to create a replacement note cell, if note or broadcaster exists
+            ScNoteCell* pNoteCell = NULL;
+            SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
+            if (pBC && pBC->HasListeners())
+            {
+                pNoteCell = new ScNoteCell( pBC );
+                // NOTE: the broadcaster here is transferred and released
+                // only if it has listeners! If it does not, it will simply
+                // be deleted when the cell is deleted and no replacement
+                // cell is created.
+                pOldCell->ReleaseBroadcaster();
             }
 
-            if (!bDelete)
+            // remove cell entry in cell item list
+            SCROW nOldRow = maItems[nIdx].nRow;
+            if (pNoteCell)
             {
-                // We just came to a non-deleted cell after a segment of
-                // deleted ones. So we need to remember the segment
-                // before moving on.
-                if (nFirst < nIdx)
-                    aRemovedSegments.insert_back(nFirst, nIdx, true);
-                nFirst = nIdx + 1;
+                // replace old cell with the replacement note cell
+                maItems[nIdx].pCell = pNoteCell;
+                // ... so it's not really deleted
+                bDelete = false;
             }
+            else
+                maItems[nIdx].pCell = pDummyCell.get();
+
+            // cache formula cells (will be deleted later), delete cell of other type
+            if (eCellType == CELLTYPE_FORMULA)
+            {
+                aDelCells.push_back( static_cast< ScFormulaCell* >( pOldCell ) );
+            }
+            else
+            {
+                aHint.GetAddress().SetRow( nOldRow );
+                aHint.SetCell( pNoteCell ? pNoteCell : pOldCell );
+                pDocument->Broadcast( aHint );
+                if (pNoteCell != pOldCell)
+                {
+                    pOldCell->Delete();
+                }
+            }
+        }
+
+        if (!bDelete)
+        {
+            // We just came to a non-deleted cell after a segment of
+            // deleted ones. So we need to remember the segment
+            // before moving on.
+            if (nFirst < nIdx)
+                aRemovedSegments.insert_back(nFirst, nIdx, true);
+            nFirst = nIdx + 1;
         }
     }
     // there is a segment of deleted cells at the end
@@ -470,30 +466,30 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         SCSIZE nShift(0);
         SCSIZE nStartSegment(nStartIndex);
         bool bRemoved = false;
-        while (aIt != aEnd)
+        for (;aIt != aEnd; ++aIt)
         {
             if (aIt->second)
-            { // this segment removed
+            {
+                // this segment removed
                 if (!bRemoved)
                     nStartSegment = aIt->first;
                     // The first of removes in a row sets start (they should be
                     // alternating removed/notremoved anyway).
                 bRemoved = true;
+                continue;
             }
-            else
-            { // this segment not removed
-                if (bRemoved)
-                { // previous segment(s) removed, move tail
-                    SCSIZE const nEndSegment(aIt->first);
-                    memmove(
-                            &maItems[nStartSegment - nShift],
-                            &maItems[nEndSegment - nShift],
-                            (maItems.size() - nEndSegment) * sizeof(ColEntry));
-                    nShift += nEndSegment - nStartSegment;
-                    bRemoved = false;
-                }
+
+            if (bRemoved)
+            {
+                // this segment not removed, but previous segment(s) removed, move tail.
+                SCSIZE const nEndSegment(aIt->first);
+                memmove(
+                        &maItems[nStartSegment - nShift],
+                        &maItems[nEndSegment - nShift],
+                        (maItems.size() - nEndSegment) * sizeof(ColEntry));
+                nShift += nEndSegment - nStartSegment;
+                bRemoved = false;
             }
-            ++aIt;
         }
         // The last removed segment up to aItems.size() is discarded, there's
         // nothing following to be moved.
