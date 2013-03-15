@@ -132,8 +132,8 @@ String DirEntry::GetVolume() const
     if ( ( pTop->eFlag == FSYS_FLAG_ABSROOT ||
            pTop->eFlag == FSYS_FLAG_RELROOT ||
            pTop->eFlag == FSYS_FLAG_VOLUME )
-         && !aTopName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:"))
-         && !aTopName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) && Exists() )
+         && aTopName != "a:"
+         && aTopName != "b:" && Exists() )
     {
         char sFileSysName[256];
         char sVolumeName[256];
@@ -151,7 +151,7 @@ String DirEntry::GetVolume() const
         // Append volume name for local drives
         if ( aRet.Len() == 0 )
         {
-            aRootDir += rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\"));
+            aRootDir += "\\";
             if ( GetVolumeInformation( aRootDir.getStr(),
                                        sVolumeName, 256,
                                        (LPDWORD) &nSerial, (LPDWORD) &nMaxCompLen,
@@ -604,14 +604,12 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
                 pTop->eFlag == FSYS_FLAG_RELROOT ||
                 pTop->eFlag == FSYS_FLAG_VOLUME ) )
         {
-            if ( aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:")) ||
-                 aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) )
+            if ( aName == "a:" || aName == "b:" )
                 bAccess = sal_False;
             else
                 OSL_TRACE( "FSys: will access removable device!" );
         }
-        if ( bAccess && ( aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:")) ||
-                          aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) ) )
+        if ( bAccess && ( aName == "a:" || aName == "b:" ) )
         {
             DBG_WARNING( "floppy will clatter" );
         }
@@ -637,7 +635,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
             }
 
             rtl::OString aRootDir = aDirEntry.aName;
-            aRootDir += rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\"));
+            aRootDir += "\\";
             UINT nType = GetDriveType( aRootDir.getStr() );       //TPF: 2i
             if ( nType == 1 || nType == 0 )
             {

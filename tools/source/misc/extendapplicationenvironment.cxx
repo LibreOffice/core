@@ -52,12 +52,11 @@ void extendApplicationEnvironment() {
 
     // Make sure URE_BOOTSTRAP environment variable is set (failure is fatal):
     rtl::OUStringBuffer env;
-    rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP"));
+    rtl::OUString envVar("URE_BOOTSTRAP");
     rtl::OUString uri;
     if (rtl::Bootstrap::get(envVar, uri))
     {
-        if (!uri.matchIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pathname:")))
+        if (!uri.matchIgnoreAsciiCase("vnd.sun.star.pathname:"))
         {
             uri = rtl::Bootstrap::encode(uri);
         }
@@ -71,8 +70,7 @@ void extendApplicationEnvironment() {
             uri = uri.copy(0, i + 1);
         }
         env.append(rtl::Bootstrap::encode(uri));
-        env.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM(SAL_CONFIGFILE("fundamental")));
+        env.append(SAL_CONFIGFILE("fundamental"));
     }
     rtl::OUString envValue(env.makeStringAndClear());
     if (osl_setEnvironment(envVar.pData, envValue.pData) != osl_Process_E_None) {

@@ -849,7 +849,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
-                aSynAbsURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                aSynAbsURIRef.append("//");
                 rtl::OUStringBuffer aSynAuthority;
                 while (pPos < pEnd
                        && *pPos != '/' && *pPos != '?'
@@ -875,8 +875,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                 if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                 {
                     pPos += 2;
-                    aSynAbsURIRef.
-                        appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                    aSynAbsURIRef.append("//");
                     rtl::OUStringBuffer aSynAuthority;
                     while (pPos < pEnd
                            && *pPos != '/' && *pPos != '?'
@@ -920,7 +919,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
-                aSynAbsURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                aSynAbsURIRef.append("//");
                 rtl::OUStringBuffer aSynUser;
 
                 bool bHasUser = false;
@@ -949,7 +948,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     m_aUser.set(aSynAbsURIRef,
                             aSynUser.makeStringAndClear(),
                             aSynAbsURIRef.getLength());
-                    aSynAbsURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("@"));
+                    aSynAbsURIRef.append("@");
                     ++pPos;
 
                     while (pPos < pEnd
@@ -1015,8 +1014,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                                 pPos + 2, p1, bOctets, ENCODE_ALL,
                                 RTL_TEXTENCODING_DONTKNOW, true, NULL))
                         {
-                            aSynAbsURIRef.
-                                appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                            aSynAbsURIRef.append("//");
                             pHostPortBegin = pPos + 2;
                             pHostPortEnd = p1;
                             pPos = p1;
@@ -1040,8 +1038,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     //    "file:///" *path ["#" *UCS4]
                     if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     {
-                        aSynAbsURIRef.
-                            appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                        aSynAbsURIRef.append("//");
                         pPos += 2;
                         bSkippedInitialSlash = true;
                         if ((eStyle & FSYS_DOS) != 0
@@ -1060,8 +1057,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     //    "file:///" *path ["#" *UCS4]
                     if (pPos < pEnd && *pPos == '/')
                     {
-                        aSynAbsURIRef.
-                            appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                        aSynAbsURIRef.append("//");
                         break;
                     }
 
@@ -1089,8 +1085,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                              (scanDomain(p1, pe) > 0 && p1 == pe)
                            )
                         {
-                            aSynAbsURIRef.
-                                appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                            aSynAbsURIRef.append("//");
                             pHostPortBegin = pPos + 2;
                             pHostPortEnd = pe;
                             pPos = pe;
@@ -1117,8 +1112,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                             || pPos[2] == '/'
                             || pPos[2] == '\\'))
                     {
-                        aSynAbsURIRef.
-                            appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                        aSynAbsURIRef.append("//");
                         nAltSegmentDelimiter = '\\';
                         bSkippedInitialSlash = true;
                         break;
@@ -1141,8 +1135,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     //  character is not copied.
                     if (eStyle & (FSYS_UNX | FSYS_DOS | FSYS_MAC))
                     {
-                        aSynAbsURIRef.
-                            appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                        aSynAbsURIRef.appendAscii("//");
                         switch (guessFSysStyleByCounting(pPos, pEnd, eStyle))
                         {
                             case FSYS_UNX:
@@ -1183,7 +1176,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                     setInvalid();
                     return false;
                 }
-                aSynAbsURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+                aSynAbsURIRef.append("//");
 
                 sal_Unicode const * pAuthority = pPos;
                 sal_uInt32 c = getSchemeInfo().m_bQuery ? '?' : 0x80000000;
@@ -1293,8 +1286,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                 }
                 else
                 {
-                    aSynAbsURIRef.
-                        appendAscii(RTL_CONSTASCII_STRINGPARAM(";AUTH="));
+                    aSynAbsURIRef.append(";AUTH=");
                     rtl::OUStringBuffer aSynAuth;
                     while (p1 < pUserInfoEnd)
                     {
@@ -1653,7 +1645,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
     {
         if (pEnd - p >= 2 && p[0] == '/' && p[1] == '/')
         {
-            aSynAbsURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+            aSynAbsURIRef.append("//");
             p += 2;
             eState = STATE_ABS_PATH;
             bSameDoc = false;
@@ -1986,7 +1978,7 @@ bool INetURLObject::convertAbsToRel(rtl::OUString const & rTheAbsURIRef,
          ++p)
     {
         if (*p == '/')
-            aSynRelURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("../"));
+            aSynRelURIRef.append("../");
     }
 
     // If the new relative URL would start with "//" (i.e., it would be
@@ -2000,7 +1992,7 @@ bool INetURLObject::convertAbsToRel(rtl::OUString const & rTheAbsURIRef,
             && pSubjectPathBegin[nMatch] == '/'
             && pSubjectPathBegin[nMatch + 1] == '/')
         {
-            aSynRelURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("./"));
+            aSynRelURIRef.append("./");
         }
         else
         {
@@ -2009,8 +2001,7 @@ bool INetURLObject::convertAbsToRel(rtl::OUString const & rTheAbsURIRef,
             {
                 if (mustEncode(*p, PART_REL_SEGMENT_EXTRA))
                 {
-                    aSynRelURIRef.
-                        appendAscii(RTL_CONSTASCII_STRINGPARAM("./"));
+                    aSynRelURIRef.append("./");
                     break;
                 }
             }
@@ -2354,7 +2345,7 @@ bool INetURLObject::setPassword(rtl::OUString const & rThePassword,
     else if (m_aHost.isPresent())
     {
         m_aAbsURIRef.insert(m_aHost.getBegin(),
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":@" )));
+            rtl::OUString( ":@" ));
         m_aUser.set(m_aAbsURIRef, rtl::OUString(), m_aHost.getBegin());
         nDelta
             = m_aAuth.set(m_aAbsURIRef, aNewAuth, m_aHost.getBegin() + 1) + 2;
@@ -2527,7 +2518,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
             case STATE_IP6_COLON:
                 if (*p == ':')
                 {
-                    aTheCanonic.appendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
+                    aTheCanonic.append("::");
                     eState = STATE_IP6_2COLON;
                 }
                 else
@@ -2886,8 +2877,7 @@ bool INetURLObject::setHost(rtl::OUString const & rTheHost, bool bOctets,
         case INET_PROT_FILE:
             {
                 rtl::OUString sTemp(aSynHost.toString());
-                if (sTemp.equalsIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("localhost")))
+                if (sTemp.equalsIgnoreAsciiCase("localhost"))
                 {
                     aSynHost.setLength(0);
                 }
@@ -3176,7 +3166,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INET_PROT_OUT:
             if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '~')
                 return false;
-            aTheSynPath.appendAscii(RTL_CONSTASCII_STRINGPARAM("/~"));
+            aTheSynPath.append("/~");
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
@@ -3766,9 +3756,9 @@ INetURLObject::getAbbreviated(
     {
         rtl::OUString aRest;
         if (m_aQuery.isPresent())
-            aRest = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?..."));
+            aRest = "?...";
         else if (m_aFragment.isPresent())
-            aRest = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#..."));
+            aRest = "#...";
         rtl::OUStringBuffer aTrailer;
         sal_Unicode const * pBegin = pCoreBegin;
         sal_Unicode const * pEnd = pCoreEnd;
@@ -3797,7 +3787,7 @@ INetURLObject::getAbbreviated(
                 pSuffixEnd = p;
                 rtl::OUStringBuffer aResult(aBuffer);
                 if (pSuffixEnd != pBegin)
-                    aResult.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
+                    aResult.append("...");
                 aResult.append(aSegment);
                 aResult.append(aTrailer.toString());
                 aResult.append(aRest);
@@ -3839,7 +3829,7 @@ INetURLObject::getAbbreviated(
                 rtl::OUStringBuffer aResult(aBuffer);
                 aResult.append(aSegment);
                 if (pPrefixBegin != pEnd)
-                    aResult.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
+                    aResult.append("...");
                 aResult.append(aTrailer.toString());
                 aResult.append(aRest);
                 if (rStringWidth->
@@ -3862,7 +3852,7 @@ INetURLObject::getAbbreviated(
         if (bSegment)
         {
             if (pPrefixBegin != pBegin || pSuffixEnd != pEnd)
-                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
+                aBuffer.append("...");
             aBuffer.append(aTrailer.toString());
         }
     }
@@ -3899,7 +3889,7 @@ INetURLObject::getAbbreviated(
                 else
                 {
                     aBuffer.setLength(--i);
-                    aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("..."));
+                    aBuffer.append("...");
                 }
                 aResult = aBuffer;
                 if (rStringWidth->
@@ -4028,7 +4018,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
     m_aAbsURIRef.append(sal_Unicode(':'));
     if (getSchemeInfo().m_bAuthority)
     {
-        m_aAbsURIRef.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+        m_aAbsURIRef.append("//");
         bool bUserInfo = false;
         if (getSchemeInfo().m_bUser)
         {
@@ -4088,8 +4078,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 case INET_PROT_FILE:
                     {
                         rtl::OUString sTemp(aSynHost.toString());
-                        if (sTemp.equalsIgnoreAsciiCaseAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM("localhost")))
+                        if (sTemp.equalsIgnoreAsciiCase( "localhost" ))
                         {
                             aSynHost.setLength(0);
                         }
@@ -4657,7 +4646,7 @@ bool INetURLObject::setFSysPath(rtl::OUString const & rFSysPath,
             break;
     }
 
-    rtl::OUStringBuffer aSynAbsURIRef(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://")));
+    rtl::OUStringBuffer aSynAbsURIRef(rtl::OUString("file://"));
 
     switch (eStyle)
     {
@@ -4812,7 +4801,7 @@ rtl::OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                 *pDelimiter = '/';
 
             rtl::OUStringBuffer aSynFSysPath;
-            aSynFSysPath.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+            aSynFSysPath.append("//");
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
                 aSynFSysPath.append(decode(m_aHost, '%', DECODE_WITH_CHARSET,
                                        RTL_TEXTENCODING_UTF8));
@@ -4843,7 +4832,7 @@ rtl::OUString INetURLObject::getFSysPath(FSysStyle eStyle,
             rtl::OUStringBuffer aSynFSysPath;
             if (m_aHost.isPresent() && m_aHost.getLength() > 0)
             {
-                aSynFSysPath.appendAscii(RTL_CONSTASCII_STRINGPARAM("\\\\"));
+                aSynFSysPath.append("\\\\");
                 aSynFSysPath.append(decode(m_aHost, '%', DECODE_WITH_CHARSET,
                                        RTL_TEXTENCODING_UTF8));
                 aSynFSysPath.append(sal_Unicode('\\'));

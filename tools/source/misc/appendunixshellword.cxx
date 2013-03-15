@@ -37,7 +37,7 @@ void appendUnixShellWord(
 {
     OSL_ASSERT(accumulator != NULL);
     if (text.isEmpty()) {
-        accumulator->append(RTL_CONSTASCII_STRINGPARAM("''"));
+        accumulator->append("''");
     } else {
         bool quoted = false;
         for (sal_Int32 i = 0; i < text.getLength(); ++i) {
@@ -47,7 +47,7 @@ void appendUnixShellWord(
                     accumulator->append('\'');
                     quoted = false;
                 }
-                accumulator->append(RTL_CONSTASCII_STRINGPARAM("\\'"));
+                accumulator->append("\\'");
             } else {
                 if (!quoted) {
                     accumulator->append('\'');
