@@ -72,6 +72,7 @@
 #define EmfPlusRecordTypeResetWorldTransform 16427
 #define EmfPlusRecordTypeMultiplyWorldTransform 16428
 #define EmfPlusRecordTypeSetPageTransform 16432
+#define EmfPlusRecordTypeSetClipRect 16434
 #define EmfPlusRecordTypeSetClipPath 16435
 #define EmfPlusRecordTypeSetClipRegion 16436
 #define EmfPlusRecordTypeDrawDriverString 16438
@@ -1701,27 +1702,55 @@ namespace cppcanvas
                                 aWorldTransform.eDx, aWorldTransform.eDy));
                         break;
                     }
+                    case EmfPlusRecordTypeSetClipRect:
+                        {
+                            int combineMode = (flags >> 8) & 0xf;
+
+                            EMFP_DEBUG (printf ("EMF+ SetClipRect combine mode: %d\n", combineMode));
+                            EMFP_DEBUG (if ( combineMode > 1 ) printf ("EMF+ TODO combine mode > 1\n"));
+
+                            float dx, dy, dw, dh;
+
+                            ReadRectangle (rMF, dx, dy, dw, dh, false);
+
+                            EMFP_DEBUG (printf ("EMF+ RectData: %f,%f %fx%f\n", dx, dy, dw, dh));
+
+                            B2DPoint mappedPoint (Map (dx, dy));
+                            B2DSize mappedSize( MapSize (dw, dh));
+
+                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::tools::createPolygonFromRect( ::basegfx::B2DRectangle( mappedPoint.getX(), mappedPoint.getY(),
+                                                                                                                                                            mappedPoint.getX() + mappedSize.getX(),
+                                                                                                                                                            mappedPoint.getY() + mappedSize.getY() ) ) ) );
+
+                            updateClipping (polyPolygon, rFactoryParms, combineMode == 1);
+
+                            break;
+                        }
                     case EmfPlusRecordTypeSetClipPath:
                         {
-                            EMFP_DEBUG (printf ("EMF+ SetClipPath\n"));
+                            int combineMode = (flags >> 8) & 0xf;
+
+                            EMFP_DEBUG (printf ("EMF+ SetClipPath combine mode: %d\n", combineMode));
                             EMFP_DEBUG (printf ("EMF+\tpath in slot: %d\n", flags & 0xff));
 
                             EMFPPath& path = *(EMFPPath*) aObjects [flags & 0xff];
                             ::basegfx::B2DPolyPolygon& clipPoly (path.GetPolygon (*this));
 
                             clipPoly.transform (rState.mapModeTransform);
-                            updateClipping (clipPoly, rFactoryParms, false);
+                            updateClipping (clipPoly, rFactoryParms, combineMode == 1);
 
                             break;
                         }
                     case EmfPlusRecordTypeSetClipRegion: {
+                        int combineMode = (flags >> 8) & 0xf;
+
                         EMFP_DEBUG (printf ("EMF+ SetClipRegion\n"));
-                        EMFP_DEBUG (printf ("EMF+\tregion in slot: %d combine mode: %d\n", flags & 0xff, (flags & 0xff00) >> 8));
+                        EMFP_DEBUG (printf ("EMF+\tregion in slot: %d combine mode: %d\n", flags & 0xff, combineMode));
                         EMFPRegion *region = (EMFPRegion*)aObjects [flags & 0xff];
 
                         // reset clip
                         if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
-                            updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, false);
+                            updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, combineMode == 1);
                         } else {
                             EMFP_DEBUG (printf ("EMF+\tTODO\n"));
                         }
