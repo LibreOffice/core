@@ -179,14 +179,14 @@ namespace {
 static int _fallback_get_primary_monitor (GdkScreen *pScreen)
 {
     // Use monitor name as primacy heuristic
-    int ret = -1;
     int max = gdk_screen_get_n_monitors (pScreen);
-    for (int i = 0; i < max && ret < 0; i++)
+    for (int i = 0; i < max; ++i)
     {
         char *name = gdk_screen_get_monitor_plug_name (pScreen, i);
-        if (name && !g_ascii_strncasecmp (name, "LVDS", 4))
-            ret = i;
+        bool bLaptop = (name && !g_ascii_strncasecmp (name, "LVDS", 4));
         g_free (name);
+        if (bLaptop)
+            return i;
     }
     return 0;
 }
