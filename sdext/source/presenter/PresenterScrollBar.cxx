@@ -27,7 +27,6 @@
 #include "PresenterScrollBar.hxx"
 #include "PresenterBitmapContainer.hxx"
 #include "PresenterCanvasHelper.hxx"
-#include "PresenterComponent.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
 #include "PresenterTimer.hxx"
@@ -329,8 +328,7 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
                             OUString::createFromAscii("PresenterScreenSettings/ScrollBar/Bitmaps"),
                             ::boost::shared_ptr<PresenterBitmapContainer>(),
                             mxComponentContext,
-                            mxCanvas,
-                            PresenterComponent::GetBasePath(mxComponentContext)));
+                            mxCanvas));
                         mpSharedBitmaps = mpBitmaps;
                     }
                     catch(Exception&)

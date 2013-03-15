@@ -41,24 +41,25 @@ XCUFILES= \
     Embedding.xcu \
     ExtensionDependencies.xcu \
     ExtensionManager.xcu \
+    FormWizard.xcu \
+    Histories.xcu \
     Impress.xcu	\
     Jobs.xcu \
     Labels.xcu \
     Linguistic.xcu \
     Logging.xcu \
     Math.xcu \
+    Paths.xcu \
+    PresenterScreen.xcu \
     ProtocolHandler.xcu \
-    Security.xcu \
-    Scripting.xcu \
     SFX.xcu \
+    Scripting.xcu \
+    Security.xcu \
     TableWizard.xcu \
     UI.xcu \
     Views.xcu \
     WebWizard.xcu \
-    FormWizard.xcu \
     Writer.xcu \
-    Paths.xcu \
-    Histories.xcu
 
 MODULEFILES= \
     Accelerators-macosx.xcu \
