@@ -705,7 +705,8 @@ void NeonSession::Init()
                            // | NE_DBG_HTTPAUTH
                            // | NE_DBG_XML
                            // | NE_DBG_XMLPARSE
-                           // | NE_DBG_LOCKS
+                           | NE_DBG_LOCKS
+                           | NE_DBG_SSL
                          );
 #endif
             m_bGlobalsInited = true;
