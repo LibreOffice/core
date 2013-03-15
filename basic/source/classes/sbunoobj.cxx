@@ -296,6 +296,10 @@ SbUnoObject* createOLEObject_Impl( const OUString& aType )
             Any aAny;
             aAny <<= xOLEObject;
             pUnoObj = new SbUnoObject( aType, aAny );
+            ::rtl::OUString sDfltPropName;
+
+            if ( SbUnoObject::getDefaultPropName( pUnoObj, sDfltPropName ) )
+                pUnoObj->SetDfltProperty( sDfltPropName );
         }
     }
     return pUnoObj;
