@@ -64,18 +64,10 @@ void XMLPageExport::collectPageMasterAutoStyle(
         const Reference < XPropertySet > & rPropSet,
         OUString& rPageMasterName )
 {
-    DBG_ASSERT( xPageMasterPropSetMapper.is(), "page master family/XMLPageMasterPropSetMapper not found" );
-    if( xPageMasterPropSetMapper.is() )
-    {
-        ::std::vector<XMLPropertyState> xPropStates = xPageMasterExportPropMapper->Filter( rPropSet );
-        if( !xPropStates.empty())
-        {
-            OUString sParent;
-            rPageMasterName = rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates );
-            if (rPageMasterName.isEmpty())
-                rPageMasterName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates);
-        }
-    }
+    SvXMLAutoFilteredSet xPropStates( rExport.GetAutoStylePool(), XML_STYLE_FAMILY_PAGE_MASTER );
+    xPropStates.filter( rPropSet );
+    if( !xPropStates.empty())
+        rPageMasterName = xPropStates.add( "" );
 }
 
 void XMLPageExport::exportMasterPageContent(

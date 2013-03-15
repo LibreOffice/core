@@ -626,7 +626,8 @@ namespace xmloff
                 // determine a number style, if needed
                 xColumnPropertiesMeta = xColumnProperties->getPropertySetInfo();
                 // get the styles of the column
-                ::std::vector< XMLPropertyState > aPropertyStates = m_xStyleExportMapper->Filter( xColumnProperties );
+                SvXMLAutoFilteredSet aPropertyStates( m_rContext.GetAutoStylePool(), XML_STYLE_FAMILY_CONTROL_ID );
+                aPropertyStates.filter( xColumnProperties );
 
                 // care for the number format, additionally
                 ::rtl::OUString sColumnNumberStyle;
@@ -643,20 +644,11 @@ namespace xmloff
                     aPropertyStates.push_back( aNumberStyleState );
                 }
 
-#if OSL_DEBUG_LEVEL > 0
-                ::std::vector< XMLPropertyState >::const_iterator aHaveALook = aPropertyStates.begin();
-                for ( ; aHaveALook != aPropertyStates.end(); ++aHaveALook )
-                {
-                    (void)aHaveALook;
-                }
-#endif
-
                 // ----------------------------------
                 // determine the column style
-
                 if ( !aPropertyStates.empty() )
                 {   // add to the style pool
-                    ::rtl::OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XML_STYLE_FAMILY_CONTROL_ID, aPropertyStates );
+                    ::rtl::OUString sColumnStyleName = aPropertyStates.add( "" );
 
                     OSL_ENSURE( m_aGridColumnStyles.end() == m_aGridColumnStyles.find( xColumnProperties ),
                         "OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds: already have a style for this column!" );

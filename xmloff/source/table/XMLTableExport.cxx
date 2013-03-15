@@ -187,24 +187,6 @@ XMLTableExport::~XMLTableExport ()
 
 // --------------------------------------------------------------------
 
-static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
-{
-    if( !xPropStates.empty() )
-    {
-        std::vector< XMLPropertyState >::const_iterator aIter( xPropStates.begin() );
-        std::vector< XMLPropertyState >::const_iterator aEnd( xPropStates.end() );
-        while( aIter != aEnd )
-        {
-            if( aIter->mnIndex != -1 )
-                return true;
-            ++aIter;
-        }
-    }
-    return false;
-}
-
-// --------------------------------------------------------------------
-
  void XMLTableExport::collectTableAutoStyles(const Reference < XColumnRowRange >& xColumnRowRange)
  {
      if( !mbExportTables )
@@ -217,17 +199,17 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     {
         Reference< XIndexAccess > xIndexAccessCols( xColumnRowRange->getColumns(), UNO_QUERY_THROW );
         const sal_Int32 nColumnCount = xIndexAccessCols->getCount();
-         for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn ) try
+        for( sal_Int32 nColumn = 0; nColumn < nColumnCount; ++nColumn ) try
         {
              Reference< XPropertySet > xPropSet( xIndexAccessCols->getByIndex(nColumn) , UNO_QUERY_THROW );
-            std::vector< XMLPropertyState > xPropStates( mxColumnExportPropertySetMapper->Filter( xPropSet ) );
+             SvXMLAutoFilteredSet xPropStates( mrExport.GetAutoStylePool(), XML_STYLE_FAMILY_TABLE_COLUMN );
+             xPropStates.filter( xPropSet );
 
-            if( has_states( xPropStates ) )
-            {
-                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_COLUMN, xPropStates) );
-                Reference< XInterface > xKey( xPropSet, UNO_QUERY );
-                pTableInfo->maColumnStyleMap[xKey] = sStyleName;
-            }
+             if( xPropStates.hasValidContent() )
+             {
+                 Reference< XInterface > xKey( xPropSet, UNO_QUERY );
+                 pTableInfo->maColumnStyleMap[xKey] = xPropStates.add( "" );
+             }
         }
         catch(const Exception&)
         {
@@ -240,16 +222,16 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
         StringStatisticHelper aStringStatistic;
 
-         for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow ) try
+        for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow ) try
         {
-             Reference< XPropertySet > xPropSet( xIndexAccessRows->getByIndex(nRow) , UNO_QUERY_THROW );
-            std::vector< XMLPropertyState > xRowPropStates( mxRowExportPropertySetMapper->Filter( xPropSet ) );
+            Reference< XPropertySet > xPropSet( xIndexAccessRows->getByIndex(nRow) , UNO_QUERY_THROW );
+            SvXMLAutoFilteredSet xPropStates( mrExport.GetAutoStylePool(), XML_STYLE_FAMILY_TABLE_ROW );
+            xPropStates.filter( xPropSet );
 
-            if( has_states( xRowPropStates ) )
+            if( xPropStates.hasValidContent() )
             {
-                const OUString sStyleName( mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_ROW, xRowPropStates) );
                 Reference< XInterface > xKey( xPropSet, UNO_QUERY );
-                pTableInfo->maRowStyleMap[xKey] = sStyleName;
+                pTableInfo->maRowStyleMap[xKey] = xPropStates.add( "" );
             }
 
             // get the current row
@@ -271,9 +253,11 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
                 // create auto style, if needed
                 OUString sStyleName;
-                std::vector< XMLPropertyState > xCellPropStates( mxCellExportPropertySetMapper->Filter( xCellSet ) );
-                if( has_states( xCellPropStates ) )
-                    sStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TABLE_CELL, xCellPropStates);
+                SvXMLAutoFilteredSet xCellPropStates( mrExport.GetAutoStylePool(), XML_STYLE_FAMILY_TABLE_CELL );
+                xCellPropStates.filter( xCellSet );
+
+                if( xCellPropStates.hasValidContent() )
+                    sStyleName = xCellPropStates.add( "" );
                 else
                     sStyleName = sParentStyleName;
 
