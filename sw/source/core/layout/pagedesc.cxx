@@ -345,6 +345,20 @@ sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
     return bRet;
 }
 
+SwFrmFmt *SwPageDesc::GetLeftFmt(bool const bFirst)
+{
+    return (nsUseOnPage::PD_LEFT & eUse)
+            ? (bFirst && !IsFirstShared()) ? &aFirst : &aLeft
+            : 0;
+}
+
+SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst)
+{
+    return (nsUseOnPage::PD_RIGHT & eUse)
+            ? (bFirst && !IsFirstShared()) ? &aFirst : &aMaster
+            : 0;
+}
+
 sal_Bool SwPageDesc::IsFirstShared() const
 {
     return eUse & nsUseOnPage::PD_FIRSTSHARE ? sal_True : sal_False;
