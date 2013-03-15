@@ -157,7 +157,11 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, S
         {
             // Kashida glyph looks suspicious, skip Kashida justification
             if ( rInf.GetOut()->GetMinKashida() <= 0 )
+            {
+                delete[] pKashidaPos;
+                delete[] pKashidaPosDropped;
                 return false;
+            }
 
             xub_StrLen nKashidasDropped = 0;
             if ( !SwScriptInfo::IsArabicText( rInf.GetTxt(), nIdx, nNext - nIdx ) )
