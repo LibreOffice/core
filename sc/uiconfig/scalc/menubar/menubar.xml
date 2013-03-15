@@ -206,7 +206,6 @@
                     <menu:menuitem menu:id=".uno:InsertGraphic"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertAVMedia"/>
             <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertObject"/>
@@ -218,6 +217,7 @@
                     <menu:menuitem menu:id=".uno:InsertObjectChartFromFile"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:InsertAVMedia"/>
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
         </menu:menupopup>
     </menu:menu>
