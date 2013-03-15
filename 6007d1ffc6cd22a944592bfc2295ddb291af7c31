@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///gA\u003d",
+        "filename": "sd/source/ui/dlg/PhotoAlbumDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-15T19:03:42Z",
+      "side": 1,
+      "message": "This is wrong. Here the Any is supposed to contain a Bitmap data stream, not and URL. \nhttp://opengrok.libreoffice.org/xref/core/sfx2/source/dialog/filedlghelper.cxx#693\nHere first we get a Graphic, then we get a Bitmap from the Graphic. A bit more complicated.",
+      "revId": "6007d1ffc6cd22a944592bfc2295ddb291af7c31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
