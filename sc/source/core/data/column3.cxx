@@ -262,7 +262,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     // There are cells below the deletion point.  Shift their row positions.
 
     // Shift the text width array too (before the broadcast).
-    maTextWidths.erase(nStartRow, nSize);
+    maTextWidths.erase(nStartRow, nEndRow);
     maTextWidths.resize(MAXROW);
 
     ScAddress aAdr( nCol, 0, nTab );
