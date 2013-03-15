@@ -879,12 +879,12 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             {
                 // remove ColEntry at old position
                 maItems.erase( maItems.begin() + nIndex1 );
+                maTextWidths.set_empty(nRow1, nRow1);
             }
 
             // Empty text width at the cell 1 position.  For now, we don't
             // transfer the old value to the cell 2 position since Insert() is
             // quite complicated.
-            maTextWidths.set_empty(nRow1, nRow1);
             CellStorageModified();
 
             // insert ColEntry at new position.
@@ -1284,6 +1284,7 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
         itEnd = std::find_if(it, rDestCol.maItems.end(), FindAboveRow(nRow2));
         std::for_each(it, itEnd, DeleteCell());
         rDestCol.maItems.erase(it, itEnd);
+        rDestCol.maTextWidths.set_empty(nRow1, nRow2);
     }
 
     // Determine the range of cells in the original column that need to be copied.
@@ -1351,6 +1352,10 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
     // destination column shouldn't have any cells within the specified range.
     it = std::find_if(rDestCol.maItems.begin(), rDestCol.maItems.end(), FindAboveRow(nRow2));
     rDestCol.maItems.insert(it, aCopied.begin(), aCopied.end());
+    it = aCopied.begin();
+    itEnd = aCopied.end();
+    for (; it != itEnd; ++it)
+        rDestCol.maTextWidths.set<unsigned short>(it->nRow, TEXTWIDTH_DIRTY);
 }
 
 void ScColumn::CopyToColumn(
