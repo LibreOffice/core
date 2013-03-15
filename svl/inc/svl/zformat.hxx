@@ -328,12 +328,11 @@ public:
     bool IsFirstSubformatRealNegative() const
         {
             return fLimit1 == 0.0 && fLimit2 == 0.0 &&
-            ( (eOp2 == NUMBERFORMAT_OP_GT && eOp1 == NUMBERFORMAT_OP_LT) ||
-              (eOp2 == NUMBERFORMAT_OP_EQ && eOp1 == NUMBERFORMAT_OP_LT) ||
-              (eOp2 == NUMBERFORMAT_OP_GE && eOp1 == NUMBERFORMAT_OP_LT) ||
-              (eOp2 == NUMBERFORMAT_OP_NO && eOp1 == NUMBERFORMAT_OP_LT) ||
-              (eOp2 == NUMBERFORMAT_OP_NO && eOp1 == NUMBERFORMAT_OP_LE) ||
-              (eOp2 == NUMBERFORMAT_OP_GT && eOp1 == NUMBERFORMAT_OP_LE));
+                ((eOp1 == NUMBERFORMAT_OP_LT &&
+                  (eOp2 == NUMBERFORMAT_OP_GT || eOp2 == NUMBERFORMAT_OP_EQ ||
+                   eOp2 == NUMBERFORMAT_OP_GE || eOp2 == NUMBERFORMAT_OP_NO)) ||
+                 (eOp1 == NUMBERFORMAT_OP_LE &&
+                  (eOp2 == NUMBERFORMAT_OP_NO || eOp2 == NUMBERFORMAT_OP_GT)));
         }
 
     // Whether the negative format is without a sign or not
