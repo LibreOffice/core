@@ -96,6 +96,9 @@
     <glade-widget-class title="Ruby Preview" name="svxlo-RubyPreview"
                         generic-name="Ruby Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Print Preview" name="vcllo-PrintPreviewWindow"
+                        generic-name="Print Preview" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Text Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
