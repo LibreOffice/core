@@ -385,7 +385,7 @@ void ZipPackage::parseManifest()
             if ( !bManifestParsed )
             {
                 // the manifest.xml could not be successfully parsed, this is an inconsistent package
-                if ( aPackageMediatype.compareToAscii("application/vnd.") == 0 )
+                if ( aPackageMediatype.startsWith("application/vnd.") )
                 {
                     // accept only types that look similar to own mediatypes
                     m_pRootFolder->SetMediaType( aPackageMediatype );
