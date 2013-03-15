@@ -831,7 +831,7 @@ void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescap
 {
     if ( IsQuoted( rString, cQuote ) )
     {
-        rString = rString.copy( 0, rString.getLength() - 1 ).copy( 1 );
+        rString = rString.copy( 1, rString.getLength() - 1 );
         if (bUnescapeEmbedded)
         {
             sal_Unicode pQ[3];
