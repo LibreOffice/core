@@ -50,6 +50,7 @@ class XMLOFF_DLLPUBLIC SvXMLAutoFilteredSet
     ::std::vector< XMLPropertyState >   maProperties;
  public:
     SvXMLAutoFilteredSet( const UniReference< SvXMLAutoStylePoolP > &xPool, sal_Int32 nFamily );
+    explicit SvXMLAutoFilteredSet( const SvXMLAutoFilteredSet &xRef );
     ~SvXMLAutoFilteredSet();
 
     /// return the relevant family's property mapper

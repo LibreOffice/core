@@ -304,12 +304,12 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         }
 
         // filter propset
-        std::vector< XMLPropertyState > xPropStates;
+        SvXMLAutoFilteredSet xPropStates( mrExport.GetAutoStylePool(), aShapeInfo.mnFamily );
 
         sal_Int32 nCount = 0;
         if( (!bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape)) )
         {
-            xPropStates = GetPropertySetMapper()->Filter( xPropSet );
+            xPropStates.filter( xPropSet );
 
             if (XmlShapeTypeDrawControlShape == aShapeInfo.meShapeType)
             {
@@ -334,18 +334,9 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     }
                 }
             }
-
-            std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin();
-            std::vector< XMLPropertyState >::iterator aEnd = xPropStates.end();
-            while( aIter != aEnd )
-            {
-                if( aIter->mnIndex != -1 )
-                    nCount++;
-                ++aIter;
-            }
         }
 
-        if(nCount == 0)
+        if(!xPropStates.hasValidContent())
         {
             // no hard attributes, use parent style name for export
             aShapeInfo.msStyleName = aParentName;
@@ -353,20 +344,16 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         else
         {
             // there are filtered properties -> hard attributes
-            // try to find this style in AutoStylePool
-            aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Find(aShapeInfo.mnFamily, aParentName, xPropStates);
-
-            if(aShapeInfo.msStyleName.isEmpty())
-            {
-                // Style did not exist, add it to AutoStalePool
-                aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Add(aShapeInfo.mnFamily, aParentName, xPropStates);
-            }
+            aShapeInfo.msStyleName = xPropStates.add( aParentName );
         }
+
 
         // optionaly generate auto style for text attributes
         if( (!bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape)) && bObjSupportsText )
         {
-            xPropStates = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter( xPropSet );
+            SvXMLAutoFilteredSet xTextPropStates( mrExport.GetAutoStylePool(),
+                                                  XML_STYLE_FAMILY_TEXT_PARAGRAPH );
+            xTextPropStates.filter( xPropSet );
 
             // ----------------------------------------------------------------------
             // yet more additionally, we need to care for the ParaAdjust property
@@ -396,32 +383,14 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                         uno::Any aParaAdjustValue = xPropSet->getPropertyValue( s_sParaAdjustPropertyName );
                         XMLPropertyState aAlignDefaultState( nIndex, aParaAdjustValue );
 
-                        xPropStates.push_back( aAlignDefaultState );
+                        xTextPropStates.push_back( aAlignDefaultState );
                     }
                 }
             }
             // ----------------------------------------------------------------------
 
-            nCount = 0;
-            std::vector< XMLPropertyState >::iterator aIter = xPropStates.begin();
-            std::vector< XMLPropertyState >::iterator aEnd = xPropStates.end();
-            while( aIter != aEnd )
-            {
-                if( aIter->mnIndex != -1 )
-                    nCount++;
-                ++aIter;
-            }
-
-            if( nCount )
-            {
-                const OUString aEmpty;
-                aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates );
-                if(aShapeInfo.msTextStyleName.isEmpty())
-                {
-                    // Style did not exist, add it to AutoStalePool
-                    aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates);
-                }
-            }
+            if( xTextPropStates.hasValidContent() )
+                aShapeInfo.msTextStyleName = xTextPropStates.add( "" );
         }
     }
 

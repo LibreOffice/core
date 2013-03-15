@@ -483,6 +483,14 @@ SvXMLAutoFilteredSet::SvXMLAutoFilteredSet( const UniReference< SvXMLAutoStylePo
     OSL_ASSERT( mpFamily != NULL );
 }
 
+SvXMLAutoFilteredSet::SvXMLAutoFilteredSet( const SvXMLAutoFilteredSet &xRef )
+    : mxPool( xRef.mxPool )
+    , mpFamily( xRef.mpFamily )
+    , maProperties( xRef.maProperties )
+{
+}
+
+
 SvXMLAutoFilteredSet::~SvXMLAutoFilteredSet()
 {
 }
