@@ -1577,7 +1577,9 @@ void BorderLineModel::setBiffStyle( sal_Int32 nLineStyle )
 // ----------------------------------------------------------------------------
 
 BorderModel::BorderModel( bool bDxf ) :
+    maStart( bDxf ),
     maLeft( bDxf ),
+    maEnd( bDxf ),
     maRight( bDxf ),
     maTop( bDxf ),
     maBottom( bDxf ),
@@ -1703,8 +1705,26 @@ void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
     }
 }
 
-void Border::finalizeImport()
+void Border::finalizeImport( bool bRTL )
 {
+    // Swap left/right <-> start/end borders based on RTL
+    if ( maModel.maStart.mbUsed || maModel.maEnd.mbUsed )
+    {
+        if ( bRTL )
+        {
+            if ( maModel.maStart.mbUsed )
+                maModel.maRight = maModel.maStart;
+            if ( maModel.maEnd.mbUsed )
+                maModel.maLeft = maModel.maEnd;
+        }
+        else
+        {
+            if ( maModel.maStart.mbUsed )
+                maModel.maLeft = maModel.maStart;
+            if ( maModel.maEnd.mbUsed )
+                maModel.maRight = maModel.maEnd;
+        }
+    }
     maApiData.mbBorderUsed = maModel.maLeft.mbUsed || maModel.maRight.mbUsed || maModel.maTop.mbUsed || maModel.maBottom.mbUsed;
     maApiData.mbDiagUsed   = maModel.maDiagonal.mbUsed;
 
@@ -1800,9 +1820,9 @@ BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
     switch( nElement )
     {
         case XLS_TOKEN( left ):     return &maModel.maLeft;
-        case XLS_TOKEN( start ):     return &maModel.maLeft;
+        case XLS_TOKEN( start ):     return &maModel.maStart;
         case XLS_TOKEN( right ):    return &maModel.maRight;
-        case XLS_TOKEN( end ):    return &maModel.maRight;
+        case XLS_TOKEN( end ):    return &maModel.maEnd;
         case XLS_TOKEN( top ):      return &maModel.maTop;
         case XLS_TOKEN( bottom ):   return &maModel.maBottom;
         case XLS_TOKEN( diagonal ): return &maModel.maDiagonal;
@@ -2519,13 +2539,22 @@ void Dxf::finalizeImport()
 {
     if( mxFont.get() )
         mxFont->finalizeImport();
+    bool bRTL = false;
     // number format already finalized by the number formats buffer
     if( mxAlignment.get() )
+    {
         mxAlignment->finalizeImport();
+        // how do we detect RTL when text dir is OOX_XF_CONTEXT? ( seems you
+        // would need access to the cell content, which we don't here )
+        if ( mxAlignment->getModel().mnTextDir == OOX_XF_TEXTDIR_RTL )
+            bRTL = true;
+    }
     if( mxProtection.get() )
         mxProtection->finalizeImport();
     if( mxBorder.get() )
-        mxBorder->finalizeImport();
+    {
+        mxBorder->finalizeImport( bRTL );
+    }
     if( mxFill.get() )
         mxFill->finalizeImport();
 }
@@ -3057,7 +3086,9 @@ void StylesBuffer::finalizeImport()
     // number formats
     maNumFmts.finalizeImport();
     // borders and fills
-    maBorders.forEachMem( &Border::finalizeImport );
+    // is there a document wide RTL setting that we
+    // would/could need to pass to finalizeImport here ?
+    maBorders.forEachMem( &Border::finalizeImport, false );
     maFills.forEachMem( &Fill::finalizeImport );
     // style XFs and cell XFs
     maStyleXfs.forEachMem( &Xf::finalizeImport );
