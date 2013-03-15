@@ -927,9 +927,10 @@ sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
     const SwPageDesc *pNewDesc= ( pNewFlow && !pNewFlow->IsFollow() )
             ? pNewFlow->GetFrm()->GetAttrSet()->GetPageDesc().GetPageDesc() : 0;
 
-    return ( pNew->GetPageDesc() != pDesc ||   //  own desc ?
-        pNew->GetFmt() != (bFirst ? pDesc->GetFirstFmt() : (bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt())) ||
-        ( pNewDesc && pNewDesc == pDesc ) );
+    return (pNew->GetPageDesc() != pDesc)   //  own desc ?
+        || (pNew->GetFmt() !=
+              (bOdd ? pDesc->GetRightFmt(bFirst) : pDesc->GetLeftFmt(bFirst)))
+        || (pNewDesc && pNewDesc == pDesc);
 }
 
 

@@ -1094,11 +1094,8 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
         sal_Bool bActOdd = pPage->OnRightPage();
         sal_Bool bOdd = pPage->WannaRightPage();
         bool bFirst = pPage->OnFirstPage();
-        SwFrmFmt *pFmtWish = 0;
-        if (bFirst)
-            pFmtWish = pDesc->GetFirstFmt();
-        else
-            pFmtWish = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
+        SwFrmFmt *pFmtWish = (bOdd)
+            ? pDesc->GetRightFmt(bFirst) : pDesc->GetLeftFmt(bFirst);
 
         if ( bActOdd != bOdd ||
              pDesc != pPage->GetPageDesc() ||       //falscher Desc
@@ -1191,8 +1188,6 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
             else if ( !pFmtWish )                                       //6.
             {
                 //Format mit verdrehter Logic besorgen.
-                if (bFirst)
-                    pFmtWish = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
                 if (!pFmtWish)
                     pFmtWish = bOdd ? pDesc->GetLeftFmt() : pDesc->GetRightFmt();
                 if ( pPage->GetFmt() != pFmtWish )
@@ -1310,19 +1305,17 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
     OSL_ENSURE( pDesc, "Missing PageDesc" );
     if( !(bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
         bWishedOdd = !bWishedOdd;
-    bool bWishedFirst = pDesc != pPrevPage->GetPageDesc();
-    if (bWishedFirst && !pDesc->GetFirstFmt())
-        bWishedFirst = false;
+    bool const bWishedFirst = pDesc != pPrevPage->GetPageDesc();
 
     SwDoc *pDoc = pPrevPage->GetFmt()->GetDoc();
-    SwFrmFmt *pFmt;
     bool bCheckPages = false;
     //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben eine
     //Leerseite einfuegen.
     if( bWishedOdd != bNextOdd )
-    {   pFmt = pDoc->GetEmptyPageFmt();
+    {
+        SwFrmFmt *const pEmptyFmt = pDoc->GetEmptyPageFmt();
         SwPageDesc *pTmpDesc = pPrevPage->GetPageDesc();
-        SwPageFrm *pPage = new SwPageFrm( pFmt, pRoot, pTmpDesc );
+        SwPageFrm *pPage = new SwPageFrm(pEmptyFmt, pRoot, pTmpDesc);
         pPage->Paste( pRoot, pSibling );
         pPage->PreparePage( bFtn );
         //Wenn der Sibling keinen Bodytext enthaelt kann ich ihn vernichten
@@ -1340,11 +1333,10 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
         else
             bCheckPages = true;
     }
-    if (bWishedFirst && !pDesc->IsFirstShared())
-        pFmt = pDesc->GetFirstFmt();
-    else
-        pFmt = bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
-    OSL_ENSURE( pFmt, "Descriptor without format." );
+    SwFrmFmt *const pFmt( (bWishedOdd)
+            ? pDesc->GetRightFmt(bWishedFirst)
+            : pDesc->GetLeftFmt(bWishedFirst) );
+    assert(pFmt);
     SwPageFrm *pPage = new SwPageFrm( pFmt, pRoot, pDesc );
     pPage->Paste( pRoot, pSibling );
     pPage->PreparePage( bFtn );
