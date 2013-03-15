@@ -9,8 +9,38 @@
  	$(AM_V_GEN) $(builddir)/reg2xml $(srcdir)/language-subtag-registry $@.tmp;	\
  	head -1 $@.tmp | grep -E '^<\?xml version'>/dev/null 2>&1 && mv $@.tmp $@ || (echo "E: $@ isn't an expected result"; rm $@.tmp)
  stamp-core-zip:
+--- misc/liblangtag-0.4.0/Makefile.in	2012-10-22 04:47:24.000000000 +0100
++++ misc/build/liblangtag-0.4.0/Makefile.in	2012-11-06 20:03:08.906250000 +0000
+@@ -136,8 +136,7 @@
+ 	distdir dist dist-all distcheck
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = liblangtag extensions data docs liblangtag-gobject \
+-	tests
++DIST_SUBDIRS = liblangtag extensions data docs liblangtag-gobject
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ distdir = $(PACKAGE)-$(VERSION)
+ top_distdir = $(distdir)
+@@ -339,7 +338,7 @@
+ NULL = 
+ AUTOMAKE_OPTIONS = dist-bzip2
+ #SUBDIRS += docs tests
+-SUBDIRS = liblangtag extensions data docs $(am__append_1) tests
++SUBDIRS = liblangtag extensions data docs $(am__append_1)
+ CONFIGURE_DEPENDENCIES = \
+ 	requires			\
+ 	$(NULL)
 --- misc/liblangtag-0.4.0/data/Makefile.in	2012-10-22 05:47:23.000000000 +0200
 +++ misc/build/liblangtag-0.4.0/data/Makefile.in	2012-11-06 14:26:06.487085669 +0100
+@@ -52,7 +52,7 @@
+ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
+-noinst_PROGRAMS = reg2xml$(EXEEXT) $(am__EXEEXT_1)
++noinst_PROGRAMS = $(am__EXEEXT_1)
+ subdir = data
+ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 @@ -780,7 +780,7 @@
  language-subtag-registry:
  	$(AM_V_DL) wget -O $@ http://www.iana.org/assignments/language-subtag-registry || \
