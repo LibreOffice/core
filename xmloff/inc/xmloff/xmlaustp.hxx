@@ -46,10 +46,14 @@ class XMLOFF_DLLPUBLIC SvXMLAutoFilteredSet
 {
     UniReference< SvXMLAutoStylePoolP > mxPool;
     XMLFamilyData_Impl                 *mpFamily;
+ protected:
     ::std::vector< XMLPropertyState >   maProperties;
  public:
     SvXMLAutoFilteredSet( const UniReference< SvXMLAutoStylePoolP > &xPool, sal_Int32 nFamily );
     ~SvXMLAutoFilteredSet();
+
+    /// return the relevant family's property mapper
+    const UniReference < SvXMLExportPropertyMapper > & getMapper();
     /// filter properties
     SvXMLAutoFilteredSet &filter( const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::beans::XPropertySet > &xPropSet );
@@ -61,7 +65,15 @@ class XMLOFF_DLLPUBLIC SvXMLAutoFilteredSet
     sal_Int32 countValidProperties();
     /// Insert into the auto style pool and return the name of the new auto-style
     OUString  add( const OUString &rParent,  bool bCache = false, bool bDontSeek = false );
-    bool      empty() { return maProperties.empty(); }
+    /// Find the auto name of this style in the pool
+    OUString  findInPool( const OUString &rParent );
+
+    bool      empty()
+        { return maProperties.empty(); }
+    void      push_back( const XMLPropertyState &rState )
+        { maProperties.push_back( rState ); }
+    size_t    size()
+        { return maProperties.size(); }
 };
 
 class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public UniRefBase

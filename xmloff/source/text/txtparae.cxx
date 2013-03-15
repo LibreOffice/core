@@ -451,48 +451,78 @@ void FieldParamExporter::ExportParameter(const OUString& sKey, const OUString& s
     m_pExport->EndElement(XML_NAMESPACE_FIELD, XML_PARAM, sal_False);
 }
 
+namespace {
+    /// Text specific tweaking of the std vector
+    class TxtAutoFilteredSet : public SvXMLAutoFilteredSet
+    {
+    public:
+        void addStates( const XMLPropertyState** ppAddStates )
+        {
+            if( ppAddStates )
+            {
+                while( *ppAddStates )
+                {
+                    maProperties.push_back( **ppAddStates );
+                    ppAddStates++;
+                }
+            }
+        }
+        TxtAutoFilteredSet( const SvXMLAutoStylePoolP &rPool,
+                            sal_Int32 nFamily,
+                            const XMLPropertyState** ppAddStates = NULL )
+            : SvXMLAutoFilteredSet(
+                UniReference< SvXMLAutoStylePoolP >(
+                        const_cast< SvXMLAutoStylePoolP *>( &rPool ) ), nFamily )
+        {
+            addStates( ppAddStates );
+        }
+        sal_uInt32 getParentRemoveHyperlinks()
+        {
+            sal_uInt32 nIgnoreProps;
+            // Get parent and remove hyperlinks (they aren't of interest)
+            UniReference< XMLPropertySetMapper > xPM = getMapper()->getPropertySetMapper();
+            for( ::std::vector< XMLPropertyState >::iterator i(maProperties.begin());
+                 nIgnoreProps < 2 && i != maProperties.end(); )
+            {
+                if( i->mnIndex == -1 )
+                {
+                    ++i;
+                    continue;
+                }
+                switch( xPM->GetEntryContextId(i->mnIndex) )
+                {
+                case CTF_CHAR_STYLE_NAME:
+                case CTF_HYPERLINK_URL:
+                    i->mnIndex = -1;
+                    nIgnoreProps++;
+                    i = maProperties.erase( i );
+                    break;
+                default:
+                    ++i;
+                    break;
+                }
+            }
+            return nIgnoreProps;
+        }
+        OUString findTextStyleAndHyperlink( sal_Bool& rbHyperlink,
+                                            sal_Bool& rbHasCharStyle,
+                                            sal_Bool& rbHasAutoStyle,
+                                            const XMLPropertyState** ppAddStates );
+    };
+}
+
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
                                   const XMLPropertyState** ppAddStates, bool bDontSeek )
 {
-    UniReference < SvXMLExportPropertyMapper > xPropMapper;
-    switch( nFamily )
-    {
-    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-        xPropMapper = GetParaPropMapper();
-        break;
-    case XML_STYLE_FAMILY_TEXT_TEXT:
-        xPropMapper = GetTextPropMapper();
-        break;
-    case XML_STYLE_FAMILY_TEXT_FRAME:
-        xPropMapper = GetAutoFramePropMapper();
-        break;
-    case XML_STYLE_FAMILY_TEXT_SECTION:
-        xPropMapper = GetSectionPropMapper();
-        break;
-    case XML_STYLE_FAMILY_TEXT_RUBY:
-        xPropMapper = GetRubyPropMapper();
-        break;
-    }
-    DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
-
-    vector< XMLPropertyState > xPropStates =
-            xPropMapper->Filter( rPropSet );
-
-    if( ppAddStates )
-    {
-        while( *ppAddStates )
-        {
-            xPropStates.push_back( **ppAddStates );
-            ppAddStates++;
-        }
-    }
+    TxtAutoFilteredSet xPropStates( GetAutoStylePool(), (sal_Int32) nFamily, ppAddStates );
+    xPropStates.filter( rPropSet );
 
     if( !xPropStates.empty() )
     {
         Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
         OUString sParent, sCondParent;
-        sal_uInt16 nIgnoreProps = 0;
+        sal_uInt32 nIgnoreProps = 0;
         switch( nFamily )
         {
         case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
@@ -544,38 +574,11 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             }
             break;
         case XML_STYLE_FAMILY_TEXT_TEXT:
-            {
-                // Get parent and remove hyperlinks (they aren't of interest)
-                UniReference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
-                for( ::std::vector< XMLPropertyState >::iterator i(xPropStates.begin());
-                      nIgnoreProps < 2 && i != xPropStates.end(); )
-                {
-                    if( i->mnIndex == -1 )
-                    {
-                        ++i;
-                        continue;
-                    }
-
-                    switch( xPM->GetEntryContextId(i->mnIndex) )
-                    {
-                    case CTF_CHAR_STYLE_NAME:
-                    case CTF_HYPERLINK_URL:
-                        i->mnIndex = -1;
-                        nIgnoreProps++;
-                        i = xPropStates.erase( i );
-                        break;
-                    default:
-                        ++i;
-                        break;
-                    }
-                }
-            }
+            nIgnoreProps = xPropStates.getParentRemoveHyperlinks();
             break;
         case XML_STYLE_FAMILY_TEXT_FRAME:
             if( xPropSetInfo->hasPropertyByName( sFrameStyleName ) )
-            {
                 rPropSet->getPropertyValue( sFrameStyleName ) >>= sParent;
-            }
             break;
         case XML_STYLE_FAMILY_TEXT_SECTION:
         case XML_STYLE_FAMILY_TEXT_RUBY:
@@ -584,16 +587,11 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
         if( (xPropStates.size() - nIgnoreProps) > 0 )
         {
-            GetAutoStylePool().Add( nFamily, sParent, xPropStates, bDontSeek );
+            xPropStates.add( sParent, bDontSeek );
             if( !sCondParent.isEmpty() && sParent != sCondParent )
-                GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
+                xPropStates.add( sCondParent );
         }
     }
-}
-
-static bool lcl_validPropState( const XMLPropertyState& rState )
-{
-    return rState.mnIndex != -1;
 }
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
@@ -601,24 +599,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
                                   const XMLPropertyState** ppAddStates)
 {
-    UniReference < SvXMLExportPropertyMapper > xPropMapper;
-    switch( nFamily )
-    {
-    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-        xPropMapper = GetParaPropMapper();
-        break;
-    }
-    DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
-
-    vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
-    if( ppAddStates )
-    {
-        while( *ppAddStates )
-        {
-            xPropStates.push_back( **ppAddStates );
-            ++ppAddStates;
-        }
-    }
+    TxtAutoFilteredSet xPropStates( GetAutoStylePool(), nFamily, ppAddStates );
 
     if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
     {
@@ -680,11 +661,11 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             break;
         }
 
-        if( find_if( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) != xPropStates.end() )
+        if( xPropStates.hasValidContent() )
         {
-            GetAutoStylePool().Add( nFamily, sParent, xPropStates );
+            xPropStates.add( sParent );
             if( !sCondParent.isEmpty() && sParent != sCondParent )
-                GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
+                xPropStates.add( sCondParent );
         }
     }
 }
@@ -695,39 +676,12 @@ OUString XMLTextParagraphExport::Find(
         const OUString& rParent,
         const XMLPropertyState** ppAddStates) const
 {
-    OUString sName( rParent );
-    UniReference < SvXMLExportPropertyMapper > xPropMapper;
-    switch( nFamily )
-    {
-    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-        xPropMapper = GetParaPropMapper();
-        break;
-    case XML_STYLE_FAMILY_TEXT_FRAME:
-        xPropMapper = GetAutoFramePropMapper();
-        break;
-    case XML_STYLE_FAMILY_TEXT_SECTION:
-        xPropMapper = GetSectionPropMapper();
-        break;
-    case XML_STYLE_FAMILY_TEXT_RUBY:
-        xPropMapper = GetRubyPropMapper();
-        break;
-    }
-    DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
-    if( !xPropMapper.is() )
-        return sName;
-    vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
-    if( ppAddStates )
-    {
-        while( *ppAddStates )
-        {
-            xPropStates.push_back( **ppAddStates );
-            ++ppAddStates;
-        }
-    }
-    if( find_if( xPropStates.begin(), xPropStates.end(), lcl_validPropState ) != xPropStates.end() )
-        sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
-
-    return sName;
+    TxtAutoFilteredSet xPropStates( GetAutoStylePool(), nFamily );
+    xPropStates.filter( rPropSet );
+    // These adds appeared originally to be after the filter,
+    // unclear if that is/was deliberate.
+    xPropStates.addStates( ppAddStates );
+    return xPropStates.findInPool( rParent );
 }
 
 OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
@@ -737,20 +691,29 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
         sal_Bool& rbHasAutoStyle,
         const XMLPropertyState** ppAddStates ) const
 {
-    UniReference < SvXMLExportPropertyMapper > xPropMapper(GetTextPropMapper());
-    vector< XMLPropertyState > xPropStates(xPropMapper->Filter( rPropSet ));
+    TxtAutoFilteredSet xPropStates( GetAutoStylePool(),
+                                    XML_STYLE_FAMILY_TEXT_TEXT );
+    xPropStates.filter( rPropSet );
+    return xPropStates.findTextStyleAndHyperlink(
+                rbHyperlink, rbHasCharStyle, rbHasAutoStyle, ppAddStates );
+}
 
+OUString TxtAutoFilteredSet::findTextStyleAndHyperlink( sal_Bool& rbHyperlink,
+                                                        sal_Bool& rbHasCharStyle,
+                                                        sal_Bool& rbHasAutoStyle,
+                                                        const XMLPropertyState** ppAddStates )
+{
     // Get parent and remove hyperlinks (they aren't of interest)
     OUString sName;
     rbHyperlink = rbHasCharStyle = rbHasAutoStyle = sal_False;
     sal_uInt16 nIgnoreProps = 0;
-    UniReference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
-    ::std::vector< XMLPropertyState >::iterator aFirstDel = xPropStates.end();
-    ::std::vector< XMLPropertyState >::iterator aSecondDel = xPropStates.end();
+    UniReference< XMLPropertySetMapper > xPM( getMapper()->getPropertySetMapper() );
+    ::std::vector< XMLPropertyState >::iterator aFirstDel = maProperties.end();
+    ::std::vector< XMLPropertyState >::iterator aSecondDel = maProperties.end();
 
     for( ::std::vector< XMLPropertyState >::iterator
-            i = xPropStates.begin();
-         nIgnoreProps < 2 && i != xPropStates.end();
+            i = maProperties.begin();
+         nIgnoreProps < 2 && i != maProperties.end();
          ++i )
     {
         if( i->mnIndex == -1 )
@@ -779,15 +742,10 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
             break;
         }
     }
-    if( ppAddStates )
-    {
-        while( *ppAddStates )
-        {
-            xPropStates.push_back( **ppAddStates );
-            ppAddStates++;
-        }
-    }
-    if( (xPropStates.size() - nIgnoreProps) > 0L )
+
+    addStates( ppAddStates );
+
+    if( (maProperties.size() - nIgnoreProps) > 0L )
     {
         // erase the character style, otherwise the autostyle cannot be found!
         // erase the hyperlink, otherwise the autostyle cannot be found!
@@ -796,11 +754,11 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
             // If two elements of a vector have to be deleted,
             // we should delete the second one first.
             if( --nIgnoreProps )
-                xPropStates.erase( aSecondDel );
-            xPropStates.erase( aFirstDel );
+                maProperties.erase( aSecondDel );
+            maProperties.erase( aFirstDel );
         }
         OUString sParent; // AutoStyles should not have parents!
-        sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sParent, xPropStates );
+        sName = findInPool( sParent );
         DBG_ASSERT( !sName.isEmpty(), "AutoStyle could not be found" );
         rbHasAutoStyle = sal_True;
     }

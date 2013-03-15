@@ -187,12 +187,15 @@ public:
         com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
         com::sun::star::uno::Sequence<rtl::OUString>& aNames );
 
-    XMLFamilyData_Impl *LookupFamily( sal_Int32 nFamily );
+    XMLFamilyData_Impl *LookupFamily( sal_Int32 nFamily ) const;
     sal_Bool Add( ::rtl::OUString& rName, XMLFamilyData_Impl &rFamily,
                 const ::rtl::OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,
                 sal_Bool bCache = sal_False,
                 bool bDontSeek = false );
+
+    OUString Find( XMLFamilyData_Impl &rFamily, const ::rtl::OUString& rParent,
+                   const ::std::vector< XMLPropertyState >& rProperties ) const;
 
     sal_Bool Add( ::rtl::OUString& rName, sal_Int32 nFamily,
                 const ::rtl::OUString& rParent,
