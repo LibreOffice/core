@@ -23,6 +23,7 @@
 #include "common.hxx"
 #include "export.hxx"
 #include "tokens.h"
+#include "po.hxx"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -32,18 +33,29 @@ rtl::OString sPrjRoot;
 rtl::OString sInputFileName;
 rtl::OString sOutputFile;
 
+namespace
+{
+    //Convert xmlChar* to OString
+    static OString lcl_xmlStrToOString( const xmlChar* pString )
+    {
+        xmlChar* pTemp = xmlStrdup( pString );
+        OString sResult =
+            static_cast<OString>(reinterpret_cast<sal_Char*>( pTemp ));
+        xmlFree( pTemp );
+        return sResult;
+    }
+}
+
 int extractTranslations()
 {
-    FILE *pOutFile = fopen(sOutputFile.getStr(), "w");
-    if (!pOutFile)
+    PoOfstream aPOStream( sOutputFile, PoOfstream::APP);
+    if (!aPOStream.isOpen())
     {
         fprintf(stderr, "cannot open %s\n", sOutputFile.getStr());
         return 1;
     }
 
     exsltRegisterAll();
-
-    rtl::OString sActFileName = common::pathnameToken(sInputFileName.getStr(), sPrjRoot.getStr());
 
     rtl::OString sStyleSheet = rtl::OString(getenv("SRC_ROOT"))  + rtl::OString("/solenv/bin/uilangfilter.xslt");
 
@@ -59,14 +71,19 @@ int extractTranslations()
         {
             if (nodeLevel2->type == XML_ELEMENT_NODE)
             {
-                fprintf(pOutFile, "%s\t%s\t0\t",sPrj.getStr(), sActFileName.getStr());
+                std::vector<OString> vIDs;
                 for(xmlAttrPtr attribute = nodeLevel2->properties; attribute != NULL; attribute = attribute->next)
                 {
                     xmlChar *content = xmlNodeListGetString(res, attribute->children, 1);
-                    fprintf(pOutFile, "%s\t", content);
+                    vIDs.push_back(lcl_xmlStrToOString(content));
                     xmlFree(content);
                 }
-                fprintf(pOutFile, "\t\t0\ten-US\t%s\t\t\t\t\n", xmlNodeGetContent(nodeLevel2));
+                OString sText = lcl_xmlStrToOString(xmlNodeGetContent(nodeLevel2));
+                Export::writePoEntry(
+                    "Uiex", aPOStream, sInputFileName, vIDs[0],
+                    (vIDs.size()>=2) ? vIDs[1] : OString(),
+                    (vIDs.size()>=3) ? vIDs[2] : OString(),
+                    OString(), sText);
             }
         }
     }
@@ -77,7 +94,7 @@ int extractTranslations()
 
     xsltFreeStylesheet(stylesheet);
 
-    fclose(pOutFile);
+    aPOStream.close();
 
     return 0;
 }

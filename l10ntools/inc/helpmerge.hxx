@@ -42,14 +42,14 @@ public:
     HelpParser( const rtl::OString &rHelpFile );
     ~HelpParser(){};
 
-/// Method creates/append a SDF file with the content of a parsed XML file
+/// Method append a PO file with the content of a parsed XML file
 /// @PRECOND rHelpFile is valid
-    static bool CreateSDF( const rtl::OString &rSDFFile_in, const rtl::OString &rPrj_in, const rtl::OString &rRoot_in,
-                           const rtl::OString &sHelpFile, XMLFile *pXmlFile, const rtl::OString &rGsi1 );
+    static bool CreatePO( const rtl::OString &rPOFile_in, const rtl::OString &sHelpFile,
+                          XMLFile *pXmlFile, const rtl::OString &rGsi1 );
 
-/// Method merges the String from the SDFfile into XMLfile. Both Strings must
+/// Method merges the String from the POfile into XMLfile. Both Strings must
 /// point to existing files.
-    bool Merge( const rtl::OString &rSDFFile_in, const rtl::OString &rDestinationFile_in ,
+    bool Merge( const rtl::OString &rPOFile_in, const rtl::OString &rDestinationFile_in ,
         const rtl::OString& sLanguage , MergeDataFile& aMergeDataFile );
 
 private:

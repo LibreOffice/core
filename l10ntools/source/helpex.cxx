@@ -116,9 +116,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     {
         HelpParser aParser( aArgs.m_sInputFile );
         hasNoError =
-            aParser.CreateSDF(
-                aArgs.m_sOutputFile, aArgs.m_sPrj, aArgs.m_sPrjRoot,
-                aArgs.m_sInputFile, new XMLFile( OUString('0') ), "help" );
+            aParser.CreatePO(
+                aArgs.m_sOutputFile, aArgs.m_sInputFile,
+                new XMLFile( OUString('0') ), "help" );
     }
 
     if( hasNoError )

@@ -199,14 +199,14 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
 void GenPoEntry::readFromFile(std::ifstream& rIFStream)
 {
     *this = GenPoEntry();
-    if( rIFStream.eof() )
+    OString* pLastMsg = 0;
+    std::string sTemp;
+    getline(rIFStream,sTemp);
+    if( rIFStream.eof() || sTemp.empty() )
     {
         m_bNull = true;
         return;
     }
-    OString* pLastMsg = 0;
-    std::string sTemp;
-    getline(rIFStream,sTemp);
     while(!rIFStream.eof())
     {
         OString sLine = OString(sTemp.data(),sTemp.length());
@@ -277,28 +277,8 @@ namespace
         return OString(sKeyId);
     }
 
-    //Split string at the delimiter character
-    static void lcl_SplitAt(const OString& rSource, const sal_Char nDelimiter,
-                     std::vector<OString>& o_vParts)
-    {
-        o_vParts.resize( 0 );
-        sal_Int32 nActIndex = 0;
-        sal_Int32 nLastSplit = 0;
-        while( nActIndex < rSource.getLength() )
-        {
-            if ( rSource[nActIndex] == nDelimiter )
-            {
-                o_vParts.push_back(
-                    rSource.copy(nLastSplit,nActIndex-nLastSplit));
-                nLastSplit = nActIndex+1;
-            }
-            ++nActIndex;
-        }
-        o_vParts.push_back(rSource.copy(nLastSplit));
-    }
-
-    //Unescape sdf string
-    static OString lcl_UnEscapeSDFText(
+    //Unescape merge string
+    static OString lcl_UnEscapeMergeText(
         const OString& rText,const bool bHelpText = false )
     {
         if ( bHelpText )
@@ -382,8 +362,8 @@ namespace
         return sResult;
     }
 
-    //Escape to get sdf/merge string
-    static OString lcl_EscapeSDFText(
+    //Escape to get merge string
+    static OString lcl_EscapeMergeText(
         const OString& rText,const bool bHelpText = false )
     {
         if ( bHelpText )
@@ -400,31 +380,31 @@ PoEntry::PoEntry()
 {
 }
 
-//Construct PoEntry from sdfline
-PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
+PoEntry::PoEntry(
+    const OString& rSourceFile, const OString& rResType, const OString& rGroupId,
+    const OString& rLocalId, const OString& rHelpText,
+    const OString& rText, const TYPE eType )
     : m_pGenPo( 0 )
     , m_bIsInitialized( false )
 {
-    std::vector<OString> vParts;
-    lcl_SplitAt(rSDFLine,'\t',vParts);
-    if( vParts.size()!=15 ||
-        vParts[SOURCEFILE].isEmpty() ||
-        vParts[GROUPID].isEmpty() ||
-        vParts[RESOURCETYPE].isEmpty() ||
-        vParts[eType].isEmpty() ||
-        vParts[HELPTEXT].getLength() == 4 )
-    {
-        throw INVALIDSDFLINE;
-    }
+    if( rSourceFile.isEmpty() )
+        throw NOSOURCFILE;
+    else if ( rResType.isEmpty() )
+        throw NORESTYPE;
+    else if ( rGroupId.isEmpty() )
+        throw NOGROUPID;
+    else if ( rText.isEmpty() )
+        throw NOSTRING;
+    else if ( rHelpText.getLength() == 5 )
+        throw WRONGHELPTEXT;
 
     m_pGenPo = new GenPoEntry();
-    m_pGenPo->setReference(vParts[SOURCEFILE].
-        copy(vParts[SOURCEFILE].lastIndexOf("\\")+1));
+    m_pGenPo->setReference(rSourceFile.copy(rSourceFile.lastIndexOf("/")+1));
 
     OString sMsgCtxt =
-        vParts[GROUPID] + "\n" +
-        (vParts[LOCALID].isEmpty() ? OString( "" ) : vParts[LOCALID] + "\n") +
-        vParts[RESOURCETYPE];
+        rGroupId + "\n" +
+        (rLocalId.isEmpty() ? OString( "" ) : rLocalId + "\n") +
+        rResType;
     switch(eType){
     case TTEXT:
         sMsgCtxt += ".text"; break;
@@ -437,13 +417,14 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     }
     m_pGenPo->setMsgCtxt(sMsgCtxt);
     m_pGenPo->setMsgId(
-        lcl_UnEscapeSDFText(
-            vParts[eType],vParts[SOURCEFILE].endsWith(".xhp")));
+        lcl_UnEscapeMergeText(
+            rText,rSourceFile.endsWith(".xhp")));
     m_pGenPo->setExtractCom(
-        ( !vParts[HELPTEXT].isEmpty() ?  vParts[HELPTEXT] + "\n" : OString( "" )) +
+        ( !rHelpText.isEmpty() ?  rHelpText + "\n" : OString( "" )) +
         lcl_GenKeyId(
             m_pGenPo->getReference() + sMsgCtxt + m_pGenPo->getMsgId() ) );
     m_bIsInitialized = true;
+
 }
 
 //Destructor
@@ -561,31 +542,31 @@ OString PoEntry::getKeyId() const
 }
 
 
-//Get translation string in sdf/merge format
+//Get translation string in merge format
 OString PoEntry::getMsgId() const
 {
     assert( m_bIsInitialized );
     return
-        lcl_EscapeSDFText(
+        lcl_EscapeMergeText(
             m_pGenPo->getMsgId(), getSourceFile().endsWith(".xhp") );
 }
 
-//Get translated string in sdf/merge format
+//Get translated string in merge format
 OString PoEntry::getMsgStr() const
 {
     assert( m_bIsInitialized );
     return
-        lcl_EscapeSDFText(
+        lcl_EscapeMergeText(
             m_pGenPo->getMsgStr(), getSourceFile().endsWith(".xhp") );
 
 }
 
-//Set translated string when input is in sdf format
+//Set translated string when input is in merge format
 void PoEntry::setMsgStr(const OString& rMsgStr)
 {
     assert( m_bIsInitialized );
     m_pGenPo->setMsgStr(
-                lcl_UnEscapeSDFText(
+                lcl_UnEscapeMergeText(
                     rMsgStr,getSourceFile().endsWith(".xhp")));
 }
 
@@ -656,6 +637,13 @@ PoOfstream::PoOfstream()
 {
 }
 
+PoOfstream::PoOfstream(const OString& rFileName, OpenMode aMode )
+    : m_aOutPut()
+    , m_bIsAfterHeader( false )
+{
+    open( rFileName, aMode );
+}
+
 PoOfstream::~PoOfstream()
 {
     if( isOpen() )
@@ -664,12 +652,21 @@ PoOfstream::~PoOfstream()
     }
 }
 
-void PoOfstream::open(const OString& rFileName)
+void PoOfstream::open(const OString& rFileName, OpenMode aMode )
 {
     assert( !isOpen() );
-    m_aOutPut.open( rFileName.getStr(),
-        std::ios_base::out | std::ios_base::trunc );
-    m_bIsAfterHeader = false;
+    if( aMode == TRUNC )
+    {
+        m_aOutPut.open( rFileName.getStr(),
+            std::ios_base::out | std::ios_base::trunc );
+        m_bIsAfterHeader = false;
+    }
+    else if( aMode == APP )
+    {
+        m_aOutPut.open( rFileName.getStr(),
+            std::ios_base::out | std::ios_base::app );
+        m_bIsAfterHeader = m_aOutPut.tellp() != std::ofstream::pos_type( 0 );
+    }
 }
 
 void PoOfstream::close()
@@ -697,6 +694,13 @@ PoIfstream::PoIfstream()
     : m_aInPut()
     , m_bEof( false )
 {
+}
+
+PoIfstream::PoIfstream(const OString& rFileName)
+    : m_aInPut()
+    , m_bEof( false )
+{
+    open( rFileName );
 }
 
 PoIfstream::~PoIfstream()

@@ -73,8 +73,7 @@ FILE * init(int argc, char ** argv) {
         global::parser.reset(
             new CfgExport(
                 aArgs.m_sOutputFile.getStr(), aArgs.m_sPrj.getStr(),
-                common::pathnameToken(global::inputPathname.getStr(),
-                aArgs.m_sPrjRoot.getStr())));
+                global::inputPathname ));
     }
 
     return pFile;
@@ -355,30 +354,6 @@ void CfgParser::Error(const rtl::OString& rError)
 }
 
 //
-// class CfgOutputParser
-//
-
-CfgOutputParser::CfgOutputParser(const rtl::OString &rOutputFile)
-{
-    pOutputStream.open(
-        rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
-    if (!pOutputStream.is_open())
-    {
-        rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("ERROR: Unable to open output file: "));
-        sError.append(rOutputFile);
-        Error(sError.makeStringAndClear());
-        std::exit(EXIT_FAILURE);
-    }
-}
-
-/*****************************************************************************/
-CfgOutputParser::~CfgOutputParser()
-/*****************************************************************************/
-{
-    pOutputStream.close();
-}
-
-//
 // class CfgExport
 //
 
@@ -389,10 +364,15 @@ CfgExport::CfgExport(
         const rtl::OString &rFilePath
 )
 /*****************************************************************************/
-                : CfgOutputParser( rOutputFile ),
-                sPrj( rProject ),
+                : sPrj( rProject ),
                 sPath( rFilePath )
 {
+    pOutputStream.open( rOutputFile, PoOfstream::APP );
+    if (!pOutputStream.isOpen())
+    {
+        std::cerr << "ERROR: Unable to open output file: " << rOutputFile << "\n";
+        std::exit(EXIT_FAILURE);
+    }
     Export::InitLanguages( false );
     aLanguages = Export::GetLanguages();
 }
@@ -401,6 +381,7 @@ CfgExport::CfgExport(
 CfgExport::~CfgExport()
 /*****************************************************************************/
 {
+    pOutputStream.close();
 }
 
 /*****************************************************************************/
@@ -432,19 +413,9 @@ void CfgExport::WorkOnResourceEnd()
 
                 sText = Export::UnquoteHTML( sText );
 
-                rtl::OString sOutput( sPrj ); sOutput += "\t";
-                sOutput += sPath;
-                sOutput += "\t0\t";
-                sOutput += pStackData->sResTyp; sOutput += "\t";
-                sOutput += sGroupId; sOutput += "\t";
-                sOutput += sLocalId; sOutput += "\t\t\t0\t";
-                sOutput += sCur;
-                sOutput += "\t";
-
-                sOutput += sText; sOutput += "\t";
-                sOutput += sXComment; sOutput += "\t\t\t";
-
-                pOutputStream << sOutput.getStr() << '\n';
+                Export::writePoEntry(
+                    "Cfgex", pOutputStream, sPath, pStackData->sResTyp,
+                    sGroupId, sLocalId, sXComment, sText);
             }
         }
     }
@@ -466,12 +437,19 @@ void CfgExport::WorkOnText(
 CfgMerge::CfgMerge(
     const rtl::OString &rMergeSource, const rtl::OString &rOutputFile,
     const rtl::OString &rFilename)
-                : CfgOutputParser( rOutputFile ),
-                pMergeDataFile( NULL ),
+                : pMergeDataFile( NULL ),
                 pResData( NULL ),
                 sFilename( rFilename ),
                 bEnglish( sal_False )
 {
+    pOutputStream.open(
+        rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!pOutputStream.is_open())
+    {
+        std::cerr << "ERROR: Unable to open output file: " << rOutputFile << "\n";
+        std::exit(EXIT_FAILURE);
+    }
+
     if (rMergeSource.getLength())
     {
         pMergeDataFile = new MergeDataFile(
@@ -491,6 +469,7 @@ CfgMerge::CfgMerge(
 CfgMerge::~CfgMerge()
 /*****************************************************************************/
 {
+    pOutputStream.close();
     delete pMergeDataFile;
     delete pResData;
 }

@@ -24,20 +24,6 @@
 
 namespace
 {
-    //Write out an sdf line
-    static void lcl_WriteSDF(
-        std::ofstream &aSDFStream, const OString& rText, const OString& rPrj,
-        const OString& rActFileName, const OString& rID, const OString& rType )
-    {
-           OString sOutput( rPrj ); sOutput += "\t";
-           sOutput += rActFileName;
-           sOutput += "\t0\t";
-           sOutput += rType; sOutput += "\t";
-           sOutput += rID; sOutput += "\t\t\t\t0\ten-US\t";
-           sOutput += rText; sOutput += "\t\t\t\t";
-           aSDFStream << sOutput.getStr() << std::endl;
-    }
-
     //Convert xmlChar* to OString
     static OString lcl_xmlStrToOString( const xmlChar* pString )
     {
@@ -51,8 +37,7 @@ namespace
     //Extract strings from nodes on all level recursively
     static void lcl_ExtractLevel(
         const xmlDocPtr pSource, const xmlNodePtr pRoot,
-        const xmlChar* pNodeName, std::ofstream& rSDFStream,
-        const OString& rPrj, const OString& rRoot )
+        const xmlChar* pNodeName, PoOfstream& rPOStream )
     {
         if( !pRoot->children )
         {
@@ -66,21 +51,17 @@ namespace
                 xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("id"));
                 xmlChar* pText =
                     xmlGetProp(pCurrent, (const xmlChar*)("title"));
-                lcl_WriteSDF(
-                    rSDFStream,
-                    lcl_xmlStrToOString( pText ),
-                    rPrj,
-                    common::pathnameToken(
-                    pSource->name, rRoot.getStr()),
-                    lcl_xmlStrToOString( pID ),
-                    lcl_xmlStrToOString( pNodeName ));
+
+                Export::writePoEntry(
+                    "Treex", rPOStream, pSource->name, lcl_xmlStrToOString( pNodeName ),
+                    lcl_xmlStrToOString( pID ), OString(), OString(), lcl_xmlStrToOString( pText ));
 
                 xmlFree( pID );
                 xmlFree( pText );
 
                 lcl_ExtractLevel(
                     pSource, pCurrent, (const xmlChar *)("node"),
-                    rSDFStream, rPrj, rRoot );
+                    rPOStream );
             }
         }
     }
@@ -238,28 +219,26 @@ TreeParser::~TreeParser()
 }
 
 //Extract strings form source file
-void TreeParser::Extract(
-    const OString& rSDFFile, const OString& rPrj, const OString& rRoot )
+void TreeParser::Extract( const OString& rPOFile )
 {
     assert( m_bIsInitialized );
-    std::ofstream aSDFStream(
-        rSDFFile.getStr(), std::ios_base::out | std::ios_base::trunc );
-    if( !aSDFStream.is_open() )
+    PoOfstream aPOStream( rPOFile, PoOfstream::APP );
+    if( !aPOStream.isOpen() )
     {
         std::cerr
-            << "Treex error: Cannot open sdffile for extract: "
-            << rSDFFile.getStr() << std::endl;
+            << "Treex error: Cannot open po file for extract: "
+            << rPOFile.getStr() << std::endl;
         return;
     }
 
     xmlNodePtr pRootNode = xmlDocGetRootElement( m_pSource );
     lcl_ExtractLevel(
         m_pSource, pRootNode, (const xmlChar *)("help_section"),
-        aSDFStream, rPrj, rRoot );
+        aPOStream );
 
     xmlFreeDoc( m_pSource );
     xmlCleanupParser();
-    aSDFStream.close();
+    aPOStream.close();
     m_bIsInitialized = false;
 }
 

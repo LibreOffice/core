@@ -42,6 +42,7 @@
 
 #include "common.hxx"
 #include "helper.hxx"
+#include "po.hxx"
 
 #if OSL_DEBUG_LEVEL > 2
 void HelpParser::Dump(XMLHashMap* rElem_in)
@@ -72,10 +73,10 @@ HelpParser::HelpParser( const rtl::OString &rHelpFile )
           {};
 
 /*****************************************************************************/
-bool HelpParser::CreateSDF(
+bool HelpParser::CreatePO(
 /*****************************************************************************/
-    const rtl::OString &rSDFFile_in, const rtl::OString &rPrj_in,const rtl::OString &rRoot_in,
-    const rtl::OString &sHelpFile, XMLFile *pXmlFile, const rtl::OString &rGsi1){
+    const rtl::OString &rPOFile_in, const rtl::OString &sHelpFile,
+    XMLFile *pXmlFile, const rtl::OString &rGsi1){
     SimpleXMLParser aParser;
     rtl::OUString sXmlFile(
         rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
@@ -97,25 +98,17 @@ bool HelpParser::CreateSDF(
     if( !file->CheckExportStatus() ){
         return true;
     }
-    std::ofstream aSDFStream(
-        rSDFFile_in.getStr(), std::ios_base::out | std::ios_base::trunc);
 
-    if (!aSDFStream.is_open()) {
-        fprintf(stdout,"Can't open file %s\n",rSDFFile_in.getStr());
+    PoOfstream aPoOutput( rPOFile_in, PoOfstream::APP );
+
+    if (!aPoOutput.isOpen()) {
+        fprintf(stdout,"Can't open file %s\n",rPOFile_in.getStr());
         return false;
     }
-
-    rtl::OString sActFileName(
-        common::pathnameToken(sHelpFile.getStr(), rRoot_in.getStr()));
 
     XMLHashMap*  aXMLStrHM   = file->GetStrings();
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
-
-    OUStringBuffer sBuffer;
-    const OUString sOUPrj( rPrj_in.getStr() , rPrj_in.getLength() , RTL_TEXTENCODING_ASCII_US );
-    const OUString sOUActFileName(sActFileName.getStr() , sActFileName.getLength() , RTL_TEXTENCODING_ASCII_US );
-    const OUString sOUGsi1( rGsi1.getStr() , rGsi1.getLength() , RTL_TEXTENCODING_ASCII_US );
 
     Export::InitLanguages( false );
     std::vector<rtl::OString> aLanguages = Export::GetLanguages();
@@ -137,52 +130,33 @@ bool HelpParser::CreateSDF(
 
             if( pXMLElement != NULL )
             {
-                OUString data(
-                    pXMLElement->ToOUString().
-                    replaceAll(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")),
-                        rtl::OUString()).
-                    replaceAll(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\t")),
-                        rtl::OUString()).trim());
-                sBuffer.append( sOUPrj );
-                sBuffer.append('\t');
-                if ( !rRoot_in.isEmpty())
-                    sBuffer.append( sOUActFileName );
-                   sBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\t0\t"));
-                   sBuffer.append( sOUGsi1 );               //"help";
-                   sBuffer.append('\t');
-                   rtl::OString sID = posm->first;           // ID
-                   sBuffer.append( rtl::OStringToOUString( sID, RTL_TEXTENCODING_UTF8 ) );
-                   sBuffer.append('\t');
-                rtl::OString sOldRef = pXMLElement->GetOldref(); // oldref
-                sBuffer.append( rtl::OStringToOUString(sOldRef, RTL_TEXTENCODING_UTF8 ) );
-                sBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\t\t\t0\t"));
-                   sBuffer.append( rtl::OStringToOUString( sCur, RTL_TEXTENCODING_UTF8 ) );
-                   sBuffer.append('\t');
-                sBuffer.append( data );
-                sBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\t\t\t\t"));
-                rtl::OString sOut(rtl::OUStringToOString(sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8));
-                if( !data.isEmpty() )
-                    aSDFStream << sOut.getStr() << '\n';
+                OString data(
+                    OUStringToOString( pXMLElement->ToOUString(), RTL_TEXTENCODING_UTF8 ).
+                        replaceAll("\n",OString()).
+                        replaceAll("\t",OString()).trim());
+
+                Export::writePoEntry(
+                    "Helpex", aPoOutput, sHelpFile, rGsi1,
+                    posm->first, pXMLElement->GetOldref(), OString(), data);
+
                 pXMLElement=NULL;
             }
             else
             {
-                fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF, Language %s, File %s\n", sCur.getStr(), sHelpFile.getStr());
+                fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreatePO, Language %s, File %s\n", sCur.getStr(), sHelpFile.getStr());
             }
         }
     }
-    aSDFStream.close();
+    aPoOutput.close();
 
     return sal_True;
 }
 
-bool HelpParser::Merge( const rtl::OString &rSDFFile, const rtl::OString &rDestinationFile  ,
+bool HelpParser::Merge( const rtl::OString &rPOFile, const rtl::OString &rDestinationFile  ,
     const rtl::OString& rLanguage , MergeDataFile& aMergeDataFile )
 {
 
-    (void) rSDFFile;
+    (void) rPOFile;
 
     SimpleXMLParser aParser;
 

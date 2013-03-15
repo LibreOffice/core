@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <fstream>
+#include "po.hxx"
 
 //
 // XRMResParser
@@ -37,9 +38,8 @@ private:
     rtl::OString sCurrentOpenTag;
     rtl::OString sCurrentCloseTag;
     rtl::OString sCurrentText;
-    std::vector<rtl::OString> aLanguages;
-
 protected:
+    std::vector<rtl::OString> aLanguages;
     rtl::OString GetAttribute( const rtl::OString &rToken, const rtl::OString &rAttribute );
     void Error( const rtl::OString &rError );
 
@@ -74,32 +74,16 @@ public:
 };
 
 //
-// class XRMResOutputParser
-//
-
-class XRMResOutputParser : public XRMResParser
-{
-private:
-    std::vector<rtl::OString> aLanguages;
-protected:
-    std::ofstream pOutputStream;
-public:
-    XRMResOutputParser ( const rtl::OString &rOutputFile );
-    virtual ~XRMResOutputParser();
-};
-
-//
 // XRMResExport
 //
 
-class XRMResExport : public XRMResOutputParser
+class XRMResExport : public XRMResParser
 {
 private:
     ResData *pResData;
     rtl::OString sPrj;
     rtl::OString sPath;
-    std::vector<rtl::OString> aLanguages;
-
+    PoOfstream pOutputStream;
 protected:
     void WorkOnDesc(
         const rtl::OString &rOpenTag,
@@ -128,13 +112,13 @@ public:
 // class XRMResMerge
 //
 
-class XRMResMerge : public XRMResOutputParser
+class XRMResMerge : public XRMResParser
 {
 private:
     MergeDataFile *pMergeDataFile;
     rtl::OString sFilename;
     ResData *pResData;
-    std::vector<rtl::OString> aLanguages;
+    std::ofstream pOutputStream;
 
 protected:
     void WorkOnDesc(

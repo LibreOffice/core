@@ -50,8 +50,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else
         {
-            aParser.Extract(
-                aArgs.m_sOutputFile, aArgs.m_sPrj, aArgs.m_sPrjRoot );
+            aParser.Extract( aArgs.m_sOutputFile );
         }
     return 0;
 }

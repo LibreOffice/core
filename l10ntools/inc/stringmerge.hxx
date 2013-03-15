@@ -32,8 +32,7 @@ public:
     ~StringParser();
 
     bool isInitialized() const { return m_bIsInitialized; }
-    void Extract(
-        const OString& rSDFFile, const OString& rPrj, const OString& rRoot );
+    void Extract( const OString& rPOFile );
     void Merge(
         const OString &rMergeSrc, const OString &rDestinationFile );
 };

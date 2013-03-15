@@ -21,11 +21,9 @@
 
 #include <cstddef>
 #include <cstdlib>
-#include <fstream>
 #include <iostream>
 #include <string>
 
-#include "boost/noncopyable.hpp"
 #include "osl/file.h"
 #include "osl/file.hxx"
 #include "osl/thread.h"
@@ -45,46 +43,24 @@ using namespace std;
 
 namespace {
 
-class TempFile: private boost::noncopyable {
-public:
-    TempFile() {
-        if (osl::FileBase::createTempFile(0, 0, &url_) != osl::FileBase::E_None)
-        {
-            cerr << "osl::FileBase::createTempFile() failed\n";
-            throw false; //TODO
-        }
-    }
-
-    ~TempFile() {
-        if (osl::File::remove(url_) != osl::FileBase::E_None) {
-            cerr << "Warning: failure removing temporary " << url_ << '\n';
-        }
-    }
-
-    OUString getUrl() const { return url_; }
-
-private:
-    OUString url_;
-};
-
 struct AsciiString {
     char const * string;
     sal_Int32 length;
 };
 
 bool matchList(
-    OUString const & url, AsciiString const * list, size_t length)
+    const OUString& rUrl, const AsciiString* pList, size_t nLength)
 {
-    for (size_t i = 0; i != length; ++i) {
-        if (url.endsWithAsciiL(list[i].string, list[i].length)) {
+    for (size_t i = 0; i != nLength; ++i) {
+        if (rUrl.endsWithAsciiL(pList[i].string, pList[i].length)) {
             return true;
         }
     }
     return false;
 }
 
-bool passesNegativeList(OUString const & url) {
-    static AsciiString const list[] = {
+bool passesNegativeList(const OUString& rUrl) {
+    static const AsciiString list[] = {
         { RTL_CONSTASCII_STRINGPARAM("/dictionaries.xcu") },
         { RTL_CONSTASCII_STRINGPARAM(
             "/dictionaries/da_DK/help/da/help.tree") },
@@ -105,11 +81,11 @@ bool passesNegativeList(OUString const & url) {
         { RTL_CONSTASCII_STRINGPARAM(
             "/officecfg/registry/data/org/openoffice/Office/SFX.xcu") }
     };
-    return !matchList(url, list, SAL_N_ELEMENTS(list));
+    return !matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
 
-bool passesPositiveList(OUString const & url) {
-    static AsciiString const list[] = {
+bool passesPositiveList(const OUString& rUrl) {
+    static const AsciiString list[] = {
         { RTL_CONSTASCII_STRINGPARAM(
             "/chart2/source/controller/dialogs/res_DataLabel_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM(
@@ -145,155 +121,81 @@ bool passesPositiveList(OUString const & url) {
         { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/swmn_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/toolbox_tmpl.hrc") }
     };
-    return matchList(url, list, SAL_N_ELEMENTS(list));
+    return matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
 
 void handleCommand(
-    OString const & project, OString const & projectRoot,
-    OUString const & url, OString const & actualPotDir,
-    PoOfstream & rPoOutPut, OString const & executable, bool positive)
+    const OString& rProject, const OString& rProjectRoot,
+    const OString& rInPath, const OString& rOutPath,
+    const OString& rExecutable)
 {
-    if (positive ? passesPositiveList(url) : passesNegativeList(url)) {
+    OStringBuffer buf(OString(getenv("SOLARVER")));
+    buf.append('/');
+    buf.append(OString(getenv("INPATH_FOR_BUILD")));
+    buf.append("/bin/");
+    buf.append(rExecutable);
+    buf.append(" -p ");
+    buf.append(rProject);
+    buf.append(" -r ");
+    buf.append(rProjectRoot);
+    buf.append(" -i ");
+    buf.append(rInPath);
+    buf.append(" -o ");
+    buf.append(rOutPath);
+    buf.append(" -l en-US");
 
-        //Get input file path
-        OString inPath;
-        {
-            OUString inPathTmp;
-            if (osl::FileBase::getSystemPathFromFileURL(url, inPathTmp) !=
-                osl::FileBase::E_None)
-            {
-                cerr
-                    << "osl::FileBase::getSystemPathFromFileURL(" << url
-                    << ") failed\n";
-                throw false; //TODO
-            }
-            inPath = OUStringToOString( inPathTmp, RTL_TEXTENCODING_UTF8 );
-        }
-
-        //Get output file path
-        TempFile temp;
-        OString outPath;
-        {
-            OUString outPathTmp;
-            if (osl::FileBase::getSystemPathFromFileURL(temp.getUrl(),outPathTmp)
-                != osl::FileBase::E_None)
-            {
-                cerr
-                    << "osl::FileBase::getSystemPathFromFileURL("
-                    << temp.getUrl() << ") failed\n";
-                throw false; //TODO
-            }
-            outPath = OUStringToOString( outPathTmp, RTL_TEXTENCODING_UTF8 );
-        }
-
-        //Call the executable
-        {
-            OStringBuffer buf(OString(getenv("SOLARVER")));
-            buf.append('/');
-            buf.append(OString(getenv("INPATH_FOR_BUILD")));
-            buf.append("/bin/");
-            buf.append(executable);
-            buf.append(" -p ");
-            buf.append(project);
-            buf.append(" -r ");
-            buf.append(projectRoot);
-            buf.append(" -i ");
-            buf.append(inPath);
-            buf.append(" -o ");
-            buf.append(outPath);
-            buf.append(" -l en-US");
-
-            const OString cmd = buf.makeStringAndClear();
-            if (system(cmd.getStr()) != 0) {
-                cerr << "Error: Failed to execute " << cmd.getStr() << '\n';
-                throw false; //TODO
-            }
-        }
-
-        ifstream in(outPath.getStr());
-        if (!in.is_open()) {
-            cerr << "Error: Cannot open " << outPath.getStr() << "\n";
-            throw false; //TODO
-        }
-
-        string s;
-        getline(in, s);
-        if (!in.eof() && !rPoOutPut.isOpen())
-        {
-            //Create directory for po file
-            {
-                OUString outDir =
-                    OStringToOUString(
-                        actualPotDir.copy(0,actualPotDir.lastIndexOf('/')),
-                        RTL_TEXTENCODING_UTF8);
-                OUString outDirUrl;
-                if (osl::FileBase::getFileURLFromSystemPath(outDir, outDirUrl)
-                    != osl::FileBase::E_None)
-                {
-                    cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
-                         << "       outDir: " << OUStringToOString(outDir, RTL_TEXTENCODING_ASCII_US).getStr() << "\n";
-                    throw false; //TODO
-                }
-                osl::Directory::createPath(outDirUrl);
-            }
-
-            //Open po file
-            {
-                OString outFilePath = actualPotDir.concat(".pot");
-                rPoOutPut.open(outFilePath.getStr());
-                if (!rPoOutPut.isOpen())
-                {
-                    cerr
-                        << "Error: Cannot open po file "
-                        << outFilePath.getStr() << "\n";
-                    throw false; //TODO
-                }
-            }
-
-            //Add header to po file
-            {
-                const sal_Int32 nProjectInd = inPath.indexOf(project);
-                const OString relativPath =
-                    inPath.copy(
-                        nProjectInd, inPath.lastIndexOf('/')- nProjectInd);
-
-                PoHeader aTmp(relativPath);
-                rPoOutPut.writeHeader(aTmp);
-            }
-        }
-        while (!in.eof())
-        {
-            OString sLine = OString(s.data(),s.length());
-            try
-            {
-                if (!sLine.getToken(PoEntry::TEXT,'\t').isEmpty())
-                    rPoOutPut.writeEntry(PoEntry(sLine));
-                if (!sLine.getToken(PoEntry::QUICKHELPTEXT,'\t').isEmpty())
-                    rPoOutPut.writeEntry(PoEntry(sLine,PoEntry::TQUICKHELPTEXT));
-                if (!sLine.getToken(PoEntry::TITLE,'\t').isEmpty())
-                    rPoOutPut.writeEntry(PoEntry(sLine,PoEntry::TTITLE));
-            }
-            catch(PoEntry::Exception& aException)
-            {
-                if(aException == PoEntry::INVALIDSDFLINE)
-                {
-                    cerr
-                        << executable.getStr()
-                        << "'s output is invalid:\n"
-                        << sLine.replaceAll("\t","\\t").getStr()
-                        << endl;
-                }
-            }
-            getline(in, s);
-        };
-        in.close();
+    const OString cmd = buf.makeStringAndClear();
+    if (system(cmd.getStr()) != 0)
+    {
+        cerr << "Error: Failed to execute " << cmd.getStr() << '\n';
+        throw false; //TODO
     }
 }
 
-void handleFile(
-    OString const & project, OString const & projectRoot,
-    OUString const & url, OString const & actualPotDir,
-    PoOfstream & rPoOutPut)
+void InitPoFile(
+    const OString& rProject, const OString& rInPath,
+    const OString& rPotDir, const OString& rOutPath )
+{
+    //Create directory for po file
+    {
+        OUString outDir =
+            OStringToOUString(
+                rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+        OUString outDirUrl;
+        if (osl::FileBase::getFileURLFromSystemPath(outDir, outDirUrl)
+            != osl::FileBase::E_None)
+        {
+            cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
+            << "       outDir: " << OUStringToOString(outDir, RTL_TEXTENCODING_ASCII_US).getStr() << "\n";
+            throw false; //TODO
+        }
+        osl::Directory::createPath(outDirUrl);
+    }
+
+    //Add header to the po file
+    PoOfstream aPoOutPut;
+    aPoOutPut.open(rOutPath.getStr());
+    if (!aPoOutPut.isOpen())
+    {
+        cerr
+            << "Error: Cannot open po file "
+            << rOutPath.getStr() << "\n";
+        throw false; //TODO
+    }
+
+    const sal_Int32 nProjectInd = rInPath.indexOf(rProject);
+    const OString relativPath =
+        rInPath.copy(nProjectInd, rInPath.lastIndexOf('/')- nProjectInd);
+
+    PoHeader aTmp(relativPath);
+    aPoOutPut.writeHeader(aTmp);
+    aPoOutPut.close();
+}
+
+bool handleFile(
+    const OString& rProject, const OString& rProjectRoot,
+    const OUString& rUrl, const OString& rPotDir,
+    bool bInitPoFile )
 {
     struct Command {
         char const * extension;
@@ -315,20 +217,42 @@ void handleFile(
         { RTL_CONSTASCII_STRINGPARAM(".tree"), "treex", false } };
     for (size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i)
     {
-        if (url.endsWithAsciiL(
+        if (rUrl.endsWithAsciiL(
                 commands[i].extension, commands[i].extensionLength) &&
-            (commands[i].executable != "propex" || url.indexOf("en_US") != -1)
-)
+            (commands[i].executable != "propex" || rUrl.indexOf("en_US") != -1))
         {
-            handleCommand(
-                project, projectRoot, url, actualPotDir, rPoOutPut,
-                commands[i].executable, commands[i].positive);
+            if (commands[i].positive ? passesPositiveList(rUrl) : passesNegativeList(rUrl))
+            {
+                //Get input file path
+                OString sInPath;
+                {
+                    OUString sInPathTmp;
+                    if (osl::FileBase::getSystemPathFromFileURL(rUrl, sInPathTmp) !=
+                        osl::FileBase::E_None)
+                    {
+                        cerr << "osl::FileBase::getSystemPathFromFileURL(" << rUrl << ") failed\n";
+                        throw false; //TODO
+                    }
+                    sInPath = OUStringToOString( sInPathTmp, RTL_TEXTENCODING_UTF8 );
+                }
+                OString sOutPath = rPotDir.concat(".pot");
+
+                if ( bInitPoFile )
+                {
+                    InitPoFile(rProject, sInPath, rPotDir, sOutPath);
+                }
+                handleCommand(
+                    rProject, rProjectRoot, sInPath,
+                    sOutPath, commands[i].executable);
+                return true;
+            }
             break;
         }
     }
+    return false;
 }
 
-bool includeProject(OString const & project) {
+bool includeProject(const OString& rProject) {
     static OString projects[] = {
         "accessibility",
         "android",
@@ -380,7 +304,7 @@ bool includeProject(OString const & project) {
         "wizards",
         "xmlsecurity" };
     for (size_t i = 0; i != SAL_N_ELEMENTS(projects); ++i) {
-        if (project == projects[i]) {
+        if (rProject == projects[i]) {
             return true;
         }
     }
@@ -392,29 +316,29 @@ bool includeProject(OString const & project) {
 /// Ignores symlinks and instead explicitly descends into clone/* or src/*,
 /// as the Cygwin symlinks are not supported by osl::Directory on Windows.
 ///
-/// @param url the absolute file URL of this directory
+/// @param rUrl the absolute file URL of this directory
 ///
-/// @param level 0 if this is either the root directory that contains the
+/// @param nLevel 0 if this is either the root directory that contains the
 /// projects or one of the clone/* or src/* directories that contain the
 /// additional projects; -1 if this is the clone directory; 1 if this
 /// is a project directory; 2 if this is a directory inside a project
 ///
-/// @param project the name of the project (empty and ignored if level <= 0)
+/// @param rProject the name of the project (empty and ignored if nLevel <= 0)
 ///
-/// @param the relative path back to the project root (empty and ignored if
-/// level <= 0)
-/// @param actualPotDir the path of pot directory
+/// @param rProjectRoo the relative path back to the project root (empty and ignored if
+/// nLevel <= 0)
+/// @param rPotDir the path of pot directory
 void handleDirectory(
-    OUString const & url, int level, OString const & project,
-    OString const & projectRoot, OString const & actualPotDir)
+    const OUString& rUrl, int nLevel, const OString& rProject,
+    const OString& rProjectRoot, const OString& rPotDir)
 {
-    PoOfstream aPoOutPut;
-    osl::Directory dir(url);
+    osl::Directory dir(rUrl);
     if (dir.open() != osl::FileBase::E_None) {
         cerr
-            << "Error: Cannot open directory: " << url << '\n';
+            << "Error: Cannot open directory: " << rUrl << '\n';
         throw false; //TODO
     }
+    bool bFirstLocFile = true;
     for (;;) {
         osl::DirectoryItem item;
         osl::FileBase::RC e = dir.getNextItem(item);
@@ -434,12 +358,12 @@ void handleDirectory(
         }
         const OString sFileName =
             OUStringToOString(stat.getFileName(),RTL_TEXTENCODING_UTF8);
-        switch (level) {
+        switch (nLevel) {
         case -1: // the clone or src directory
             if (stat.getFileType() == osl::FileStatus::Directory) {
                 handleDirectory(
                     stat.getFileURL(), 0, OString(),
-                    OString(), actualPotDir);
+                    OString(), rPotDir);
             }
             break;
         case 0: // a root directory
@@ -447,46 +371,71 @@ void handleDirectory(
                 if (includeProject(sFileName)) {
                     handleDirectory(
                         stat.getFileURL(), 1, sFileName,
-                        OString(), actualPotDir.concat("/").
-                        concat(sFileName));
+                        OString(), rPotDir.concat("/").concat(sFileName));
                 } else if ( sFileName == "clone" ||
                             sFileName == "src" )
                 {
                     handleDirectory(
-                        stat.getFileURL(), -1, OString(),
-                        OString(), actualPotDir);
+                        stat.getFileURL(), -1, OString(), OString(), rPotDir);
                 }
             }
             break;
         default:
             if (stat.getFileType() == osl::FileStatus::Directory) {
-                OString pr(projectRoot);
+                OString pr(rProjectRoot);
                 if (!pr.isEmpty()) {
                     pr += OString('/');
                 }
                 pr += OString("..");
-                handleDirectory(stat.getFileURL(), 2, project, pr,
-                                actualPotDir.concat("/").concat(sFileName));
+                handleDirectory(
+                    stat.getFileURL(), 2, rProject, pr, rPotDir.concat("/").concat(sFileName));
             } else {
-                handleFile(project, projectRoot,
-                           stat.getFileURL(), actualPotDir, aPoOutPut);
+                if( handleFile( rProject, rProjectRoot, stat.getFileURL(),
+                                rPotDir, bFirstLocFile) )
+                    bFirstLocFile = false;
             }
             break;
         }
     }
-    if (aPoOutPut.isOpen())
-        aPoOutPut.close();
+
     if (dir.close() != osl::FileBase::E_None) {
         cerr << "Error: Cannot close directory\n";
         throw false; //TODO
     }
+    if( bFirstLocFile == false )
+    {
+        //Delete pot file if it contain only the header
+        OString sPotFile = rPotDir.concat(".pot");
+        PoIfstream aPOStream( sPotFile );
+        PoEntry aPO;
+        aPOStream.readEntry( aPO );
+        bool bDel = aPOStream.eof();
+        aPOStream.close();
+        if( bDel )
+        {
+            system(OString("rm " + sPotFile).getStr());
+        }
+    }
+    //Remove empty pot directories
+    OUString sPoPath =
+        OStringToOUString(
+            rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+    OUString sPoUrl;
+    if (osl::FileBase::getFileURLFromSystemPath(sPoPath, sPoUrl)
+        != osl::FileBase::E_None)
+    {
+        cerr << "Error: Cannot convert pathname to URL in " << __FILE__ << ", in line " << __LINE__ << "\n"
+             << OUStringToOString(sPoPath, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+        throw false; //TODO
+    }
+    osl::Directory::remove(sPoUrl);
 }
 
-void handleProjects(char * sourceRoot, char const * destRoot)
+void handleProjects(char * sSourceRoot, char const * sDestRoot)
 {
     OUString root16;
     if (!rtl_convertStringToUString(
-            &root16.pData, sourceRoot, rtl_str_getLength(sourceRoot),
+            &root16.pData, sSourceRoot, rtl_str_getLength(sSourceRoot),
             osl_getThreadTextEncoding(),
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
@@ -503,7 +452,7 @@ void handleProjects(char * sourceRoot, char const * destRoot)
              << "       root16: " << OUStringToOString(root16, RTL_TEXTENCODING_ASCII_US).getStr() << "\n";
         throw false; //TODO
     }
-    handleDirectory(rootUrl, 0, OString(), OString(), OString(destRoot));
+    handleDirectory(rootUrl, 0, OString(), OString(), OString(sDestRoot));
 }
 }
 

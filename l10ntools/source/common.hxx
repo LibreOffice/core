@@ -69,55 +69,6 @@ inline rtl::OUString pathnameToAbsoluteUrl(rtl::OUString const & pathname) {
     return url;
 }
 
-inline rtl::OString pathnameToken(char const * pathname, char const * root) {
-    rtl::OUString full;
-    if (!rtl_convertStringToUString(
-            &full.pData, pathname, rtl_str_getLength(pathname),
-            osl_getThreadTextEncoding(),
-            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
-    {
-        std::cerr << "Error: Cannot convert input pathname to UTF-16\n";
-        std::exit(EXIT_FAILURE);
-    }
-    full = pathnameToAbsoluteUrl(full);
-    if (root == 0) {
-        std::cerr << "Error: No project root argument\n";
-        std::exit(EXIT_FAILURE);
-    }
-    rtl::OUString base;
-    if (!rtl_convertStringToUString(
-            &base.pData, root, rtl_str_getLength(root),
-            osl_getThreadTextEncoding(),
-            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
-             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
-             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
-    {
-        std::cerr << "Error: Cannot convert project root to UTF-16\n";
-        std::exit(EXIT_FAILURE);
-    }
-    base = rtl::Uri::convertRelToAbs(full, base);
-    if (full.getLength() <= base.getLength() || base.isEmpty()
-        || base[base.getLength() - 1] != '/'
-        || full[base.getLength() - 1] != '/')
-    {
-        std::cerr << "Error: Cannot extract suffix from input pathname\n";
-        std::exit(EXIT_FAILURE);
-    }
-    full = full.copy(base.getLength()).replace('/', '\\');
-    rtl::OString suffix;
-    if (!full.convertToString(
-            &suffix, osl_getThreadTextEncoding(),
-            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
-    {
-        std::cerr << "Error: Cannot convert suffix from UTF-16\n";
-        std::exit(EXIT_FAILURE);
-    }
-    return suffix;
-}
-
 }
 
 #endif

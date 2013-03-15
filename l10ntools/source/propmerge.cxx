@@ -19,19 +19,6 @@
 
 namespace
 {
-    //Write out an sdf line
-    static void lcl_WriteSDF(
-        std::ofstream &aSDFStream, const OString& rText, const OString& rPrj,
-        const OString& rActFileName, const OString& rID )
-    {
-           OString sOutput( rPrj ); sOutput += "\t";
-           sOutput += rActFileName;
-           sOutput += "\t0\tproperty\t";
-           sOutput += rID; sOutput += "\t\t\t\t0\ten-US\t";
-           sOutput += rText; sOutput += "\t\t\t\t";
-           aSDFStream << sOutput.getStr() << std::endl;
-    }
-
     //Find ascii escaped unicode
     static sal_Int32 lcl_IndexOfUnicode(
         const OString& rSource, const sal_Int32 nFrom = 0 )
@@ -136,17 +123,15 @@ PropParser::~PropParser()
 }
 
 //Extract strings form source file
-void PropParser::Extract(
-    const OString& rSDFFile, const OString& rPrj, const OString& rRoot )
+void PropParser::Extract( const OString& rPOFile )
 {
     assert( m_bIsInitialized );
-    std::ofstream aSDFStream(
-        rSDFFile.getStr(), std::ios_base::out | std::ios_base::trunc );
-    if( !aSDFStream.is_open() )
+    PoOfstream aPOStream( rPOFile, PoOfstream::APP );
+    if( !aPOStream.isOpen() )
     {
         std::cerr
-            << "Propex error: Cannot open sdffile for extract: "
-            << rSDFFile.getStr() << std::endl;
+            << "Propex error: Cannot open pofile for extract: "
+            << rPOFile.getStr() << std::endl;
         return;
     }
 
@@ -156,17 +141,16 @@ void PropParser::Extract(
         const sal_Int32 nEqualSign = sLine.indexOf('=');
         if( nEqualSign != -1 )
         {
-            lcl_WriteSDF(
-                aSDFStream,
-                lcl_ConvertToUTF8( sLine.copy( nEqualSign + 1 ).trim() ),//Text
-                rPrj,
-                common::pathnameToken(
-                    m_sSource.getStr(), rRoot.getStr()), //FileName
-                sLine.copy( 0, nEqualSign ).trim() );   //ID
+            OString sID = sLine.copy( 0, nEqualSign ).trim();
+            OString sText = lcl_ConvertToUTF8( sLine.copy( nEqualSign + 1 ).trim() );
+
+            Export::writePoEntry(
+                "Propex", aPOStream, m_sSource, "property",
+                sID, OString(), OString(), sText);
         }
     }
 
-    aSDFStream.close();
+    aPOStream.close();
 }
 
 //Merge strings to source file

@@ -23,13 +23,12 @@
 #include <vector>
 
 #include "export.hxx"
+#include "po.hxx"
 
 typedef std::vector< rtl::OString* > LngLineList;
 
 #define LNG_OK              0x0000
 #define LNG_COULD_NOT_OPEN  0x0001
-#define SDF_OK              0x0002
-#define SDF_COULD_NOT_OPEN  0x0003
 
 //
 // class LngParser
@@ -47,18 +46,15 @@ private:
     bool isNextGroup(rtl::OString &sGroup_out, const rtl::OString &sLine_in);
     void ReadLine(const rtl::OString &rLine_in,
         OStringHashMap &rText_inout);
-    void WriteSDF(std::ofstream &aSDFStream, OStringHashMap &rText_inout,
-        const rtl::OString &rPrj, const rtl::OString &rRoot,
+    void WritePO(PoOfstream &aPOStream, OStringHashMap &rText_inout,
         const rtl::OString &rActFileName, const rtl::OString &rID);
 public:
     LngParser(const rtl::OString &rLngFile,
         sal_Bool bULFFormat);
     ~LngParser();
 
-    sal_Bool CreateSDF(const rtl::OString &rSDFFile,
-        const rtl::OString &rPrj,
-        const rtl::OString &rRoot);
-    sal_Bool Merge(const rtl::OString &rSDFFile,
+    sal_Bool CreatePO( const rtl::OString &rPOFile );
+    sal_Bool Merge(const rtl::OString &rPOFile,
         const rtl::OString &rDestinationFile);
 };
 

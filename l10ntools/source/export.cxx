@@ -37,7 +37,6 @@ void YYWarning( const char * );
 
 namespace {
 
-rtl::OString sActFileName; //TODO
 MergeDataFile * pMergeDataFile = 0; //TODO
 
 namespace global {
@@ -77,9 +76,6 @@ FILE * init(int argc, char ** argv) {
         global::exporter.reset(
             new Export(aArgs.m_sMergeSrc.getStr(), aArgs.m_sOutputFile.getStr()));
     } else {
-        sActFileName =
-            common::pathnameToken(
-                global::inputPathname.getStr(), global::prjRoot.getStr());
         global::exporter.reset(new Export(aArgs.m_sOutputFile.getStr()));
     }
 
@@ -190,8 +186,8 @@ Export::Export(const rtl::OString &rOutput)
     // used when export is enabled
 
     // open output stream
-    aOutput.open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
-    if (!aOutput.is_open()) {
+    aOutput.mPo = new PoOfstream( rOutput, PoOfstream::APP );
+    if (!aOutput.mPo->isOpen()) {
         fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
         exit ( -1 );
     }
@@ -221,7 +217,8 @@ Export::Export(const rtl::OString &rMergeSource, const rtl::OString &rOutput)
     // used when merge is enabled
 
     // open output stream
-    aOutput.open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
+    aOutput.mSimple = new std::ofstream();
+    aOutput.mSimple->open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
 }
 
 /*****************************************************************************/
@@ -247,7 +244,16 @@ Export::~Export()
 {
     if( pParseQueue )
         delete pParseQueue;
-    aOutput.close();
+    if ( bMergeMode )
+    {
+        aOutput.mSimple->close();
+        delete aOutput.mSimple;
+    }
+    else
+    {
+        aOutput.mPo->close();
+        delete aOutput.mPo;
+    }
     for ( size_t i = 0, n = aResStack.size(); i < n;  ++i )
         delete aResStack[ i ];
     aResStack.clear();
@@ -936,25 +942,18 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         if (sXText.isEmpty())
             sXText = "-";
 
-        rtl::OString sOutput( sProject ); sOutput += "\t";
-        if ( !sRoot.isEmpty())
-            sOutput += sActFileName;
-        sOutput += "\t0\t";
-        sOutput += pResData->sResTyp; sOutput += "\t";
-        sOutput += sGID; sOutput += "\t";
-        sOutput += sLID; sOutput += "\t";
-        sOutput += pResData->sHelpId; sOutput   += "\t";
-        sOutput += pResData->sPForm; sOutput    += "\t";
-        sOutput += rtl::OString::valueOf(pResData->nWidth); sOutput += "\t";
-        sOutput += "en-US"; sOutput += "\t";
+        writePoEntry(
+            "Transex3", *aOutput.mPo, global::inputPathname,
+            pResData->sResTyp, sGID, sLID, sXHText, sXText);
+        if( !sXQHText.isEmpty() )
+            writePoEntry(
+                "Transex3", *aOutput.mPo, global::inputPathname, pResData->sResTyp,
+                sGID, sLID, OString(), sXQHText, PoEntry::TQUICKHELPTEXT );
 
-
-        sOutput += sXText; sOutput  += "\t";
-        sOutput += sXHText; sOutput += "\t";
-        sOutput += sXQHText; sOutput+= "\t";
-        sOutput += sXTitle; sOutput += "\t";
-
-        aOutput << sOutput.getStr() << '\n';
+        if( !sXTitle.isEmpty() )
+            writePoEntry(
+                "Transex3", *aOutput.mPo, global::inputPathname, pResData->sResTyp,
+                sGID, sLID, OString(), sXTitle, PoEntry::TTITLE );
 
         if ( bCreateNew ) {
             pResData->sText[ SOURCE_LANGUAGE ]         = "";
@@ -1059,21 +1058,9 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
                     if( sText == "\\\"" )
                         sText = "\"";
                 }
-
-                rtl::OStringBuffer sOutput(sProject);
-                sOutput.append('\t');
-                if ( !sRoot.isEmpty())
-                    sOutput.append(sActFileName);
-                sOutput.append("\t0\t");
-                sOutput.append(rTyp).append('\t');
-                sOutput.append(sGID).append('\t');
-                sOutput.append(sLID).append("\t\t");
-                sOutput.append(pResData->sPForm).append("\t0\t");
-                sOutput.append(sCur).append('\t');
-
-                sOutput.append(sText).append("\t\t\t\t");
-
-                aOutput << sOutput.makeStringAndClear().getStr() << '\n';
+                writePoEntry(
+                    "Transex3", *aOutput.mPo, global::inputPathname,
+                    rTyp, sGID, sLID, OString(), sText);
             }
         }
         if ( bCreateNew )
@@ -1305,10 +1292,10 @@ void Export::WriteToMerged(const rtl::OString &rText , bool bSDFContent)
         }
     } for (sal_Int32 i = 0; i < sText.getLength(); ++i) {
         if (sText[i] == '\n') {
-            aOutput << '\n';
+            *aOutput.mSimple << '\n';
         } else {
             char cChar = sText[i];
-            aOutput << cChar;
+            *aOutput.mSimple << cChar;
         }
     }
 }

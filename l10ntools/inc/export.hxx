@@ -21,6 +21,7 @@
 #define _EXPORT_HXX
 
 #include "sal/config.h"
+#include "po.hxx"
 
 #include <cstddef>
 #include <fstream>
@@ -274,7 +275,12 @@ class Export
 private:
     WordTransformer *pWordTransformer;
 
-    std::ofstream aOutput;
+    union
+    {
+        std::ofstream* mSimple;
+        PoOfstream* mPo;
+
+    } aOutput;
 
     ResStack aResStack;                 // stack for parsing recursive
 
@@ -307,6 +313,10 @@ public:
 
     static bool handleArguments(int argc, char * argv[], HandledArgs& o_aHandledArgs);
     static void writeUsage(const OString& rName, const OString& rFileType);
+    static void writePoEntry(const OString& rExecutable, PoOfstream& rPoStream, const OString& rSourceFile,
+                             const OString& rResType, const OString& rGroupId, const OString& rLocalId,
+                             const OString& rHelpText, const OString& rText,
+                             const PoEntry::TYPE eType = PoEntry::TTEXT);
 
     static void InitLanguages( bool bMergeMode = false );
     static void InitForcedLanguages( bool bMergeMode = false );

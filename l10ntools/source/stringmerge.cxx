@@ -19,25 +19,12 @@
 
 #include "export.hxx"
 #include "common.hxx"
+#include "po.hxx"
 #include "stringmerge.hxx"
 
 
 namespace
 {
-    //Write out an sdf line
-    static void lcl_WriteSDF(
-        std::ofstream &aSDFStream, const OString& rText, const OString& rPrj,
-        const OString& rActFileName, const OString& rID, const OString& rType )
-    {
-           OString sOutput( rPrj ); sOutput += "\t";
-           sOutput += rActFileName;
-           sOutput += "\t0\t";
-           sOutput += rType; sOutput += "\t";
-           sOutput += rID; sOutput += "\t\t\t\t0\ten-US\t";
-           sOutput += rText; sOutput += "\t\t\t\t";
-           aSDFStream << sOutput.getStr() << std::endl;
-    }
-
     //Convert xmlChar* to OString
     static OString lcl_xmlStrToOString( const xmlChar* pString )
     {
@@ -76,17 +63,15 @@ StringParser::~StringParser()
 }
 
 //Extract strings form source file
-void StringParser::Extract(
-    const OString& rSDFFile, const OString& rPrj, const OString& rRoot )
+void StringParser::Extract( const OString& rPOFile )
 {
     assert( m_bIsInitialized );
-    std::ofstream aSDFStream(
-        rSDFFile.getStr(), std::ios_base::out | std::ios_base::trunc );
-    if( !aSDFStream.is_open() )
+    PoOfstream aPOStream( rPOFile, PoOfstream::APP );
+    if( !aPOStream.isOpen() )
     {
         std::cerr
-            << "stringex error: Cannot open sdffile for extract: "
-            << rSDFFile.getStr() << std::endl;
+            << "stringex error: Cannot open po file for extract: "
+            << rPOFile.getStr() << std::endl;
         return;
     }
 
@@ -98,14 +83,11 @@ void StringParser::Extract(
         {
             xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("name"));
             xmlChar* pText = xmlNodeGetContent(pCurrent);
-            lcl_WriteSDF(
-                aSDFStream,
-                lcl_xmlStrToOString( pText ),
-                rPrj,
-                common::pathnameToken(
-                m_pSource->name, rRoot.getStr()),
-                lcl_xmlStrToOString( pID ),
-                OString( "string" ));
+
+            Export::writePoEntry(
+                "Stringex", aPOStream, m_pSource->name, "string",
+                lcl_xmlStrToOString( pID ), OString(), OString(),
+                lcl_xmlStrToOString( pText ));
 
             xmlFree( pID );
             xmlFree( pText );
@@ -114,7 +96,7 @@ void StringParser::Extract(
 
     xmlFreeDoc( m_pSource );
     xmlCleanupParser();
-    aSDFStream.close();
+    aPOStream.close();
     m_bIsInitialized = false;
 }
 

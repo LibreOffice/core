@@ -40,15 +40,13 @@ public:
     friend class PoOfstream;
     friend class PoIfstream;
 
-    enum SDFPART { PROJECT, SOURCEFILE, DUMMY, RESOURCETYPE, GROUPID,
-                    LOCALID, HELPID, PLATFORM, WIDTH, LANGUAGEID,
-                    TEXT, HELPTEXT, QUICKHELPTEXT, TITLE, TIMESTAMP };
-    enum TYPE { TTEXT=TEXT, TQUICKHELPTEXT=QUICKHELPTEXT, TTITLE=TITLE };
-    enum Exception { INVALIDSDFLINE };
+    enum TYPE { TTEXT, TQUICKHELPTEXT, TTITLE };
+    enum Exception { NOSOURCFILE, NORESTYPE, NOGROUPID, NOSTRING, WRONGHELPTEXT };
 
                     PoEntry();
-                    PoEntry(const OString& rSDFLine,
-                            const TYPE eType = TTEXT);
+                    PoEntry( const OString& rSourceFile, const OString& rResType, const OString& rGroupId,
+                             const OString& rLocalId, const OString& rHelpText, const OString& rText,
+                             const TYPE eType = TTEXT );
                     ~PoEntry();
 
                     PoEntry( const PoEntry& rPo );
@@ -63,8 +61,8 @@ public:
     OString         getMsgStr() const;
     bool            isFuzzy() const;
     OString         getKeyId() const;
-    void            setMsgId(const OString& rUnTransStr);
-    void            setMsgStr(const OString& rTransStr);
+    void            setMsgId(const OString& rMsgId);
+    void            setMsgStr(const OString& rMsgStr);
     void            setFuzzy(const bool bFuzzy);
 
     static bool     IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2);
@@ -93,8 +91,7 @@ public:
                     ~PoHeader();
 };
 
-/** Interface to write po entry to files as output streams
-*/
+/// Interface to write po entry to files as output streams
 class PoOfstream: private boost::noncopyable
 {
 private:
@@ -103,18 +100,21 @@ private:
     bool            m_bIsAfterHeader;
 
 public:
+
+    enum OpenMode { TRUNC, APP };
+
             PoOfstream();
+            PoOfstream(const OString& rFileName, OpenMode aMode = TRUNC );
             ~PoOfstream();
     bool    isOpen() const  { return m_aOutPut.is_open(); }
 
-    void    open(const OString& rFileName);
+    void    open(const OString& rFileName, OpenMode aMode = TRUNC );
     void    close();
     void    writeHeader(const PoHeader& rHeader);
     void    writeEntry(const PoEntry& rPo);
 };
 
-/** Interface to read po entry from files as input streams
-*/
+/// Interface to read po entry from files as input streams
 class PoIfstream: private boost::noncopyable
 {
 private:
@@ -127,6 +127,7 @@ public:
     enum Exception { INVALIDENTRY };
 
             PoIfstream();
+            PoIfstream( const OString& rFileName );
             ~PoIfstream();
     bool    isOpen() const  { return m_aInPut.is_open(); }
     bool    eof() const     { return m_bEof; }

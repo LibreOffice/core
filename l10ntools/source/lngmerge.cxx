@@ -80,20 +80,15 @@ LngParser::~LngParser()
     delete pLines;
 }
 
-sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
-    const rtl::OString &rPrj, const rtl::OString &rRoot)
+sal_Bool LngParser::CreatePO( const rtl::OString &rPOFile )
 {
 
     Export::InitLanguages( false );
     aLanguages = Export::GetLanguages();
-    std::ofstream aSDFStream(
-        rSDFFile.getStr(), std::ios_base::out | std::ios_base::trunc);
-    if (!aSDFStream.is_open()) {
-        nError = SDF_COULD_NOT_OPEN;
+    PoOfstream aPOStream( rPOFile, PoOfstream::APP );
+    if (!aPOStream.isOpen()) {
+        std::cerr << "Ulfex error: Can't open po file:" << rPOFile.getStr() << "\n";
     }
-    nError = SDF_OK;
-    rtl::OString sActFileName(
-        common::pathnameToken(sSource.getStr(), rRoot.getStr()));
 
     size_t nPos  = 0;
     sal_Bool bStart = true;
@@ -113,16 +108,15 @@ sal_Bool LngParser::CreateSDF(const rtl::OString &rSDFFile,
             sID = sGroup;
         }
         else {
-            WriteSDF( aSDFStream , Text , rPrj , rRoot , sActFileName , sID );
+            WritePO( aPOStream , Text , sSource , sID );
         }
     }
-    aSDFStream.close();
+    aPOStream.close();
     return true;
 }
 
-void LngParser::WriteSDF(std::ofstream &aSDFStream,
-    OStringHashMap &rText_inout, const rtl::OString &rPrj,
-    const rtl::OString &rRoot, const rtl::OString &rActFileName,
+void LngParser::WritePO(PoOfstream &aPOStream,
+    OStringHashMap &rText_inout, const rtl::OString &rActFileName,
     const rtl::OString &rID)
 {
 
@@ -135,15 +129,9 @@ void LngParser::WriteSDF(std::ofstream &aSDFStream,
            if ( sAct.isEmpty() && !sCur.isEmpty() )
                sAct = rText_inout[ rtl::OString("en-US") ];
 
-           rtl::OString sOutput( rPrj ); sOutput += "\t";
-           if (rRoot.getLength())
-               sOutput += rActFileName;
-           sOutput += "\t0\t";
-           sOutput += "LngText\t";
-           sOutput += rID; sOutput += "\t\t\t\t0\t";
-           sOutput += sCur; sOutput += "\t";
-           sOutput += sAct; sOutput += "\t\t\t\t";
-           aSDFStream << sOutput.getStr() << '\n';
+           Export::writePoEntry(
+                "Ulfex", aPOStream, rActFileName, "LngText",
+                rID, OString(), OString(), sAct);
        }
    }
 }
@@ -173,7 +161,7 @@ void LngParser::ReadLine(const rtl::OString &rLine_in,
 }
 
 sal_Bool LngParser::Merge(
-    const rtl::OString &rSDFFile,
+    const rtl::OString &rPOFile,
     const rtl::OString &rDestinationFile)
 {
     Export::InitLanguages( true );
@@ -184,7 +172,7 @@ sal_Bool LngParser::Merge(
     }
     nError = LNG_OK;
 
-    MergeDataFile aMergeDataFile( rSDFFile, sSource, false, true );
+    MergeDataFile aMergeDataFile( rPOFile, sSource, false, true );
     rtl::OString sTmp( Export::sLanguages );
     if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
         Export::SetLanguages( aMergeDataFile.GetLanguages() );

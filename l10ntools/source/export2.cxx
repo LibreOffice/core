@@ -192,6 +192,56 @@ void Export::writeUsage(const OString& rName, const OString& rFileType)
         << " (de, en-US, ...)\n";
 }
 
+void Export::writePoEntry(
+    const OString& rExecutable, PoOfstream& rPoStream, const OString& rSourceFile,
+    const OString& rResType, const OString& rGroupId, const OString& rLocalId,
+    const OString& rHelpText, const OString& rText, const PoEntry::TYPE eType )
+{
+    try
+    {
+        PoEntry aPO(rSourceFile, rResType, rGroupId, rLocalId, rHelpText, rText, eType);
+        rPoStream.writeEntry( aPO );
+    }
+    catch( PoEntry::Exception& aException )
+    {
+        if(aException == PoEntry::NOSOURCFILE)
+        {
+            std::cerr << rExecutable << " warning: no sourcefile specified for po entry\n";
+        }
+        else
+        {
+            std::cerr << rExecutable << " warning: inavlid po attributes extracted from " <<  rSourceFile << "\n";
+            if(aException == PoEntry::NOGROUPID)
+            {
+                std::cerr << "No groupID specified!\n";
+                std::cerr << "String: " << rText << "\n";
+            }
+            else if (aException == PoEntry::NOSTRING)
+            {
+                std::cerr << "No string specified!\n";
+                std::cerr << "GroupID: " << rGroupId << "\n";
+                if( !rLocalId.isEmpty() ) std::cerr << "LocalID: " << rLocalId << "\n";
+            }
+            else
+            {
+                if (aException == PoEntry::NORESTYPE)
+                {
+                    std::cerr << "No resource type specified!\n";
+                }
+                else if (aException == PoEntry::WRONGHELPTEXT)
+                {
+                    std::cerr << "x-comment length is 5 characters:" << rHelpText << "\n";
+                }
+
+                std::cerr << "GroupID: " << rGroupId << "\n";
+                if( !rLocalId.isEmpty() ) std::cerr << "LocalID: " << rLocalId << "\n";
+                std::cerr << "String: " << rText << "\n";
+            }
+        }
+    }
+}
+
+
 /*****************************************************************************/
 void Export::SetLanguages( std::vector<rtl::OString> val ){
 /*****************************************************************************/

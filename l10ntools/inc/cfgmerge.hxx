@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "boost/unordered_map.hpp"
+#include "po.hxx"
 
 typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> OStringHashMap;
 
@@ -137,28 +138,18 @@ public:
 };
 
 //
-// class CfgOutputParser
-//
-
-class CfgOutputParser : public CfgParser
-{
-protected:
-    std::ofstream pOutputStream;
-public:
-    CfgOutputParser(const rtl::OString &rOutputFile);
-    virtual ~CfgOutputParser();
-};
-
-//
 // class CfgExport
 //
 
-class CfgExport : public CfgOutputParser
+class CfgExport : public CfgParser
 {
 private:
     rtl::OString sPrj;
     rtl::OString sPath;
     std::vector<rtl::OString> aLanguages;
+
+    PoOfstream pOutputStream;
+
 protected:
     virtual void WorkOnText(
         rtl::OString &rText,
@@ -180,7 +171,7 @@ public:
 // class CfgMerge
 //
 
-class CfgMerge : public CfgOutputParser
+class CfgMerge : public CfgParser
 {
 private:
     MergeDataFile *pMergeDataFile;
@@ -189,6 +180,8 @@ private:
 
     rtl::OString sFilename;
     sal_Bool bEnglish;
+
+    std::ofstream pOutputStream;
 
 protected:
     virtual void WorkOnText(rtl::OString &rText, const rtl::OString &rLangIndex);

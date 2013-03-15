@@ -44,7 +44,6 @@ sal_Bool bExtensionDescription;
 rtl::OString sPrj;
 rtl::OString sPrjRoot;
 rtl::OString sInputFileName;
-rtl::OString sActFileName;
 rtl::OString sOutputFile;
 rtl::OString sMergeSrc;
 rtl::OString sLangAttribute;
@@ -60,7 +59,6 @@ extern char *GetOutputFile( int argc, char* argv[])
 {
     bDisplayName = sal_False;
     bExtensionDescription = sal_False;
-    sActFileName = "";
 
     HandledArgs aArgs;
     if ( Export::handleArguments(argc, argv, aArgs) )
@@ -95,7 +93,7 @@ int InitXrmExport( char*, char* pFilename)
     if ( bMergeMode )
         pParser = new XRMResMerge( sMergeSrc, sOutputFile, sFilename );
       else if (!sOutputFile.isEmpty()) {
-        pParser = new XRMResExport( sOutputFile, sPrj, sActFileName );
+        pParser = new XRMResExport( sOutputFile, sPrj, sInputFileName );
     }
 
     return 1;
@@ -125,10 +123,6 @@ extern FILE *GetXrmFile()
                 sInputFileName.getStr());
         }
         else {
-            if (!bMergeMode) {
-                sActFileName = common::pathnameToken(
-                    sInputFileName.getStr(), sPrjRoot.getStr());
-            }
             return pFile;
         }
     }
@@ -175,7 +169,6 @@ XRMResParser::XRMResParser()
                 : bError( sal_False ),
                 bText( sal_False )
 {
-    aLanguages = Export::GetLanguages();
 }
 
 /*****************************************************************************/
@@ -336,33 +329,6 @@ void XRMResParser::ConvertStringToXMLFormat( rtl::OString &rString )
     rString = rString.replaceAll("\\t", "\t");
 }
 
-
-
-//
-// class XRMResOutputParser
-//
-
-/*****************************************************************************/
-XRMResOutputParser::XRMResOutputParser ( const rtl::OString &rOutputFile )
-/*****************************************************************************/
-{
-    aLanguages = Export::GetLanguages();
-    pOutputStream.open(
-        rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
-    if (!pOutputStream.is_open()) {
-        rtl::OString sError( "Unable to open output file: " );
-        sError += rOutputFile;
-        Error( sError );
-    }
-}
-
-/*****************************************************************************/
-XRMResOutputParser::~XRMResOutputParser()
-/*****************************************************************************/
-{
-    pOutputStream.close();
-}
-
 //
 // class XMLResExport
 //
@@ -372,18 +338,26 @@ XRMResExport::XRMResExport(
     const rtl::OString &rOutputFile, const rtl::OString &rProject,
     const rtl::OString &rFilePath )
 /*****************************************************************************/
-                : XRMResOutputParser( rOutputFile ),
+                : XRMResParser(),
                 pResData( NULL ),
                 sPrj( rProject ),
                 sPath( rFilePath )
 {
     aLanguages = Export::GetLanguages();
+    pOutputStream.open( rOutputFile, PoOfstream::APP );
+    if (!pOutputStream.isOpen())
+    {
+        rtl::OString sError( "Unable to open output file: " );
+        sError += rOutputFile;
+        Error( sError );
+    }
 }
 
 /*****************************************************************************/
 XRMResExport::~XRMResExport()
 /*****************************************************************************/
 {
+    pOutputStream.close();
     delete pResData;
 }
 
@@ -451,22 +425,10 @@ void XRMResExport::EndOfText(
             rtl::OString sAct(
                 pResData->sText[sCur].replaceAll("\x0A", rtl::OString()));
 
-            rtl::OString sOutput( sPrj ); sOutput += "\t";
-            sOutput += sPath;
-            sOutput += "\t0\t";
-            sOutput += sResourceType;
-            sOutput += "\t";
-            sOutput += pResData->sGId;
-            sOutput += "\t\t\t\t0\t";
-            sOutput += sCur;
-            sOutput += "\t";
-
-            sOutput += sAct;
-            sOutput += "\t\t\t\t";
-
-            sOutput = sOutput.replace('\0', '_');
-            if( sAct.getLength() > 1 )
-                pOutputStream << sOutput.getStr() << '\n';
+            if( !sAct.isEmpty() )
+                Export::writePoEntry(
+                    "Xrmex", pOutputStream, sPath, sResourceType,
+                    pResData->sGId, OString(), OString(), sAct );
         }
     }
     delete pResData;
@@ -482,7 +444,7 @@ XRMResMerge::XRMResMerge(
     const rtl::OString &rMergeSource, const rtl::OString &rOutputFile,
     const rtl::OString &rFilename)
 /*****************************************************************************/
-                : XRMResOutputParser( rOutputFile ),
+                : XRMResParser(),
                 pMergeDataFile( NULL ),
                 sFilename( rFilename ) ,
                 pResData( NULL )
@@ -497,12 +459,20 @@ XRMResMerge::XRMResMerge(
     }
     else
         aLanguages = Export::GetLanguages();
+    pOutputStream.open(
+        rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!pOutputStream.is_open()) {
+        rtl::OString sError( "Unable to open output file: " );
+        sError += rOutputFile;
+        Error( sError );
+    }
 }
 
 /*****************************************************************************/
 XRMResMerge::~XRMResMerge()
 /*****************************************************************************/
 {
+    pOutputStream.close();
     delete pMergeDataFile;
     delete pResData;
 }
