@@ -45,6 +45,7 @@ enum XFormTextStdForm   { XFTFORM_NONE = 0, XFTFORM_TOPCIRC, XFTFORM_BOTCIRC,
                           XFTFORM_BOTARC, XFTFORM_LFTARC, XFTFORM_RGTARC,
                           XFTFORM_BUTTON1, XFTFORM_BUTTON2,
                           XFTFORM_BUTTON3, XFTFORM_BUTTON4};
+enum XBitmapType        { XBITMAP_IMPORT, XBITMAP_8X8 };
 
 
 #endif      // _XENUM_HXX

@@ -131,6 +131,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include "svx/EnhancedCustomShape2d.hxx"
+#include <svx/xbitmap.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <boost/scoped_array.hpp>
@@ -1371,13 +1372,36 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                 {
                     if ( eMSO_FillType == mso_fillPattern )
                     {
-                        Color aCol1( COL_WHITE ), aCol2( COL_WHITE );
+                        Bitmap aBmp( aGraf.GetBitmap() );
+                        if( aBmp.GetSizePixel().Width() == 8 && aBmp.GetSizePixel().Height() == 8 && aBmp.GetColorCount() == 2)
+                        {
+                            Color aCol1( COL_WHITE ), aCol2( COL_WHITE );
 
-                        if ( IsProperty( DFF_Prop_fillColor ) )
-                            aCol1 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor ), DFF_Prop_fillColor );
+                            if ( IsProperty( DFF_Prop_fillColor ) )
+                                aCol1 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor ), DFF_Prop_fillColor );
 
-                        if ( IsProperty( DFF_Prop_fillBackColor ) )
-                            aCol2 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor ), DFF_Prop_fillBackColor );
+                            if ( IsProperty( DFF_Prop_fillBackColor ) )
+                                aCol2 = rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillBackColor ), DFF_Prop_fillBackColor );
+
+                            XOBitmap aXOBitmap( aBmp );
+                            aXOBitmap.Bitmap2Array();
+                            aXOBitmap.SetBitmapType( XBITMAP_8X8 );
+                            aXOBitmap.SetPixelSize( aBmp.GetSizePixel() );
+
+                            if( aXOBitmap.GetBackgroundColor() == COL_BLACK )
+                            {
+                                aXOBitmap.SetPixelColor( aCol1 );
+                                aXOBitmap.SetBackgroundColor( aCol2 );
+                            }
+                            else
+                            {
+                                aXOBitmap.SetPixelColor( aCol2 );
+                                aXOBitmap.SetBackgroundColor( aCol1 );
+                            }
+
+                            aXOBitmap.Array2Bitmap();
+                            aGraf = Graphic( aXOBitmap.GetBitmap()  );
+                        }
 
                         rSet.Put(XFillBitmapItem(OUString(), aGraf));
                     }

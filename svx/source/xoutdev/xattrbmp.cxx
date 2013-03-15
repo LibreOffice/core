@@ -34,11 +34,227 @@
 #include <editeng/unoprnms.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/xbitmap.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 
 using namespace ::com::sun::star;
+
+/*************************************************************************
+|*
+|*    XOBitmap::XOBitmap( Bitmap aBitmap )
+|*
+*************************************************************************/
+
+XOBitmap::XOBitmap( const Bitmap& rBmp ) :
+    eType           ( XBITMAP_IMPORT ),
+    aGraphicObject  ( rBmp ),
+    pPixelArray     ( NULL ),
+    bGraphicDirty   ( sal_False )
+{
+}
+
+/*************************************************************************
+|*
+|*    XOBitmap::XOBitmap( const XOBitmap& rXBmp )
+|*
+*************************************************************************/
+
+XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
+    pPixelArray ( NULL )
+{
+    eType = rXBmp.eType;
+    aGraphicObject = rXBmp.aGraphicObject;
+    aArraySize = rXBmp.aArraySize;
+    aPixelColor = rXBmp.aPixelColor;
+    aBckgrColor = rXBmp.aBckgrColor;
+    bGraphicDirty = rXBmp.bGraphicDirty;
+
+    if( rXBmp.pPixelArray )
+    {
+        if( eType == XBITMAP_8X8 )
+        {
+            pPixelArray = new sal_uInt16[ 64 ];
+
+            for( sal_uInt16 i = 0; i < 64; i++ )
+                *( pPixelArray + i ) = *( rXBmp.pPixelArray + i );
+        }
+    }
+}
+
+/*************************************************************************
+|*
+|*    XOBitmap::XOBitmap( Bitmap aBitmap )
+|*
+*************************************************************************/
+
+XOBitmap::~XOBitmap()
+{
+    delete [] pPixelArray;
+}
+
+/*************************************************************************
+|*
+|*    XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
+|*
+*************************************************************************/
+
+XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
+{
+    eType = rXBmp.eType;
+    aGraphicObject = rXBmp.aGraphicObject;
+    aArraySize = rXBmp.aArraySize;
+    aPixelColor = rXBmp.aPixelColor;
+    aBckgrColor = rXBmp.aBckgrColor;
+    bGraphicDirty = rXBmp.bGraphicDirty;
+
+    if( rXBmp.pPixelArray )
+    {
+        if( eType == XBITMAP_8X8 )
+        {
+            pPixelArray = new sal_uInt16[ 64 ];
+
+            for( sal_uInt16 i = 0; i < 64; i++ )
+                *( pPixelArray + i ) = *( rXBmp.pPixelArray + i );
+        }
+    }
+    return( *this );
+}
+
+/*************************************************************************
+|*
+|*    int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
+|*
+*************************************************************************/
+
+int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
+{
+    if( eType != rXOBitmap.eType      ||
+        aGraphicObject != rXOBitmap.aGraphicObject ||
+        aArraySize != rXOBitmap.aArraySize     ||
+        aPixelColor != rXOBitmap.aPixelColor ||
+        aBckgrColor != rXOBitmap.aBckgrColor ||
+        bGraphicDirty != rXOBitmap.bGraphicDirty )
+    {
+        return( sal_False );
+    }
+
+    if( pPixelArray && rXOBitmap.pPixelArray )
+    {
+        sal_uInt16 nCount = (sal_uInt16) ( aArraySize.Width() * aArraySize.Height() );
+        for( sal_uInt16 i = 0; i < nCount; i++ )
+        {
+            if( *( pPixelArray + i ) != *( rXOBitmap.pPixelArray + i ) )
+                return( sal_False );
+        }
+    }
+    return( sal_True );
+}
+
+/*************************************************************************
+|*
+|*    Bitmap XOBitmap::GetBitmap()
+|*
+*************************************************************************/
+
+Bitmap XOBitmap::GetBitmap() const
+{
+    return GetGraphicObject().GetGraphic().GetBitmap();
+}
+
+/*************************************************************************
+|*
+|*    Bitmap XOBitmap::GetGraphicObject()
+|*
+*************************************************************************/
+
+const GraphicObject& XOBitmap::GetGraphicObject() const
+{
+    if( bGraphicDirty )
+        ( (XOBitmap*) this )->Array2Bitmap();
+
+    return aGraphicObject;
+}
+
+/*************************************************************************
+|*
+|*    void XOBitmap::Bitmap2Array()
+|*
+|*    Beschreibung      Umwandlung der Bitmap in Array, Hinter- u.
+|*                      Vordergrundfarbe
+|*
+*************************************************************************/
+
+void XOBitmap::Bitmap2Array()
+{
+    VirtualDevice   aVD;
+    sal_Bool            bPixelColor = sal_False;
+    const Bitmap    aBitmap( GetBitmap() );
+    const sal_uInt16    nLines = 8; // von Type abhaengig
+
+    if( !pPixelArray )
+        pPixelArray = new sal_uInt16[ nLines * nLines ];
+
+    aVD.SetOutputSizePixel( aBitmap.GetSizePixel() );
+    aVD.DrawBitmap( Point(), aBitmap );
+    aPixelColor = aBckgrColor = aVD.GetPixel( Point() );
+
+    // Aufbau des Arrays und Ermittlung der Vorder-, bzw.
+    // Hintergrundfarbe
+    for( sal_uInt16 i = 0; i < nLines; i++ )
+    {
+        for( sal_uInt16 j = 0; j < nLines; j++ )
+        {
+            if ( aVD.GetPixel( Point( j, i ) ) == aBckgrColor )
+                *( pPixelArray + j + i * nLines ) = 0;
+            else
+            {
+                *( pPixelArray + j + i * nLines ) = 1;
+                if( !bPixelColor )
+                {
+                    aPixelColor = aVD.GetPixel( Point( j, i ) );
+                    bPixelColor = sal_True;
+                }
+            }
+        }
+    }
+}
+
+/*************************************************************************
+|*
+|*    void XOBitmap::Array2Bitmap()
+|*
+|*    Beschreibung      Umwandlung des Arrays, Hinter- u.
+|*                      Vordergrundfarbe in eine Bitmap
+|*
+*************************************************************************/
+
+void XOBitmap::Array2Bitmap()
+{
+    VirtualDevice   aVD;
+    sal_uInt16          nLines = 8; // von Type abhaengig
+
+    if( !pPixelArray )
+        return;
+
+    aVD.SetOutputSizePixel( Size( nLines, nLines ) );
+
+    // Aufbau der Bitmap
+    for( sal_uInt16 i = 0; i < nLines; i++ )
+    {
+        for( sal_uInt16 j = 0; j < nLines; j++ )
+        {
+            if( *( pPixelArray + j + i * nLines ) == 0 )
+                aVD.DrawPixel( Point( j, i ), aBckgrColor );
+            else
+                aVD.DrawPixel( Point( j, i ), aPixelColor );
+        }
+    }
+
+    aGraphicObject = GraphicObject( aVD.GetBitmap( Point(), Size( nLines, nLines ) ) );
+    bGraphicDirty = sal_False;
+}
 
 // -----------------------
 // class XFillBitmapItem
@@ -146,12 +362,6 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
         }
         else if(1 == nVer)
         {
-            enum XBitmapType
-            {
-                XBITMAP_IMPORT,
-                XBITMAP_8X8
-            };
-
             sal_Int16 iTmp;
 
             rIn >> iTmp; // former XBitmapStyle
