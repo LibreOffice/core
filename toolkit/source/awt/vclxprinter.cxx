@@ -84,7 +84,7 @@ IMPL_XTYPEPROVIDER_START( VCLXPrinterPropertySet )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinterPropertySet>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
-VCLXPrinterPropertySet::VCLXPrinterPropertySet( const String& rPrinterName )
+VCLXPrinterPropertySet::VCLXPrinterPropertySet( const OUString& rPrinterName )
     : OPropertySetHelper( BrdcstHelper )
     , mpPrinter( new Printer( rPrinterName ) )
 {
@@ -222,22 +222,22 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
     setFastPropertyValue( PROPERTY_Horizontal, aValue );
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > VCLXPrinterPropertySet::getFormDescriptions(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > VCLXPrinterPropertySet::getFormDescriptions(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( Mutex );
 
     sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aDescriptions( nPaperBinCount );
+    ::com::sun::star::uno::Sequence< OUString >  aDescriptions( nPaperBinCount );
     for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ )
     {
         // Format: <DisplayFormName;FormNameId;DisplayPaperBinName;PaperBinNameId;DisplayPaperName;PaperNameId>
-        String aDescr( RTL_CONSTASCII_USTRINGPARAM( "*;*;" ) );
-        aDescr += GetPrinter()->GetPaperBinName( n );
-        aDescr += ';';
-        aDescr += n;
-        aDescr.AppendAscii( ";*;*", 4 );
+        OUStringBuffer aDescr( "*;*;" );
+        aDescr.append(GetPrinter()->GetPaperBinName( n ));
+        aDescr.append(';');
+        aDescr.append(OUString::number(n));
+        aDescr.append(";*;*");
 
-        aDescriptions.getArray()[n] = aDescr;
+        aDescriptions.getArray()[n] = aDescr.makeStringAndClear();
     }
     return aDescriptions;
 }
@@ -282,7 +282,7 @@ void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequen
 //  ----------------------------------------------------
 //  class VCLXPrinter
 //  ----------------------------------------------------
-VCLXPrinter::VCLXPrinter( const String& rPrinterName )
+VCLXPrinter::VCLXPrinter( const OUString& rPrinterName )
     : VCLXPrinterPropertySet( rPrinterName )
 {
 }
@@ -367,7 +367,7 @@ void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::c
 //  class VCLXInfoPrinter
 //  ----------------------------------------------------
 
-VCLXInfoPrinter::VCLXInfoPrinter( const String& rPrinterName )
+VCLXInfoPrinter::VCLXInfoPrinter( const OUString& rPrinterName )
     : VCLXPrinterPropertySet( rPrinterName )
 {
 }

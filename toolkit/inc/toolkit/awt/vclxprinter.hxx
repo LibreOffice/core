@@ -59,7 +59,7 @@ protected:
     sal_Int16                   mnOrientation;
     sal_Bool                    mbHorizontal;
 public:
-    VCLXPrinterPropertySet( const String& rPrinterName );
+    VCLXPrinterPropertySet( const OUString& rPrinterName );
     virtual ~VCLXPrinterPropertySet();
 
     Printer*                    GetPrinter() const { return mpPrinter.get(); }
@@ -107,7 +107,7 @@ class VCLXPrinter:  public ::com::sun::star::awt::XPrinter,
     boost::shared_ptr<vcl::OldStylePrintAdaptor>    mpListener;
     JobSetup                                        maInitJobSetup;
 public:
-                    VCLXPrinter( const String& rPrinterName );
+                    VCLXPrinter( const OUString& rPrinterName );
                     ~VCLXPrinter();
 
     // ::com::sun::star::uno::XInterface
@@ -153,7 +153,7 @@ class VCLXInfoPrinter:  public ::com::sun::star::awt::XInfoPrinter,
                         public ::cppu::OWeakObject
 {
 public:
-                        VCLXInfoPrinter( const String& rPrinterName );
+                        VCLXInfoPrinter( const OUString& rPrinterName );
                         ~VCLXInfoPrinter();
 
     // ::com::sun::star::uno::XInterface
