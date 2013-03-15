@@ -62,6 +62,7 @@ $(eval $(call gb_Library_add_generated_cobjects,neon,\
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,neon,\
 	ws2_32 \
+	crypt32 \
 ))
 
 ifeq ($(COM),MSC)
