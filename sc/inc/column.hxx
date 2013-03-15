@@ -418,6 +418,8 @@ private:
      * Call this only from those methods where maItems is modified directly.
      */
     void CellStorageModified();
+
+    void CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
 };
 
 

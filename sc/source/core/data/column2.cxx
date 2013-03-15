@@ -1433,6 +1433,69 @@ void ScColumn::CellStorageModified()
 #endif
 }
 
+void ScColumn::CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const
+{
+    rDestCol.maScriptTypes.set_empty(nRow1, nRow2); // Empty the destination range first.
+
+    ScriptType::const_iterator itBlk = maScriptTypes.begin(), itBlkEnd = maScriptTypes.end();
+
+    // Locate the top row position.
+    size_t nOffsetInBlock = 0;
+    size_t nBlockStart = 0, nBlockEnd = 0, nRowPos = static_cast<size_t>(nRow1);
+    for (; itBlk != itBlkEnd; ++itBlk)
+    {
+        nBlockEnd = nBlockStart + itBlk->size;
+        if (nBlockStart <= nRowPos && nRowPos <= nBlockEnd)
+        {
+            // Found.
+            nOffsetInBlock = nRowPos - nBlockStart;
+            break;
+        }
+    }
+
+    if (itBlk == itBlkEnd)
+        // Specified range not found. Bail out.
+        return;
+
+    nRowPos = static_cast<size_t>(nRow2); // End row position.
+
+    // Keep copying until we hit the end row position.
+    mdds::mtv::ushort_element_block::const_iterator itData, itDataEnd;
+    for (; itBlk != itBlkEnd; ++itBlk, nBlockStart = nBlockEnd, nOffsetInBlock = 0)
+    {
+        nBlockEnd = nBlockStart + itBlk->size;
+        if (!itBlk->data)
+        {
+            // Empty block.
+            if (nBlockStart <= nRowPos && nRowPos <= nBlockEnd)
+                // This block contains the end row.
+                rDestCol.maScriptTypes.set_empty(nBlockStart + nOffsetInBlock, nRowPos);
+            else
+                rDestCol.maScriptTypes.set_empty(nBlockStart + nOffsetInBlock, nBlockEnd-1);
+
+            continue;
+        }
+
+        // Non-empty block.
+        itData = mdds::mtv::ushort_element_block::begin(*itBlk->data);
+        itDataEnd = mdds::mtv::ushort_element_block::end(*itBlk->data);
+        std::advance(itData, nOffsetInBlock);
+
+        if (nBlockStart <= nRowPos && nRowPos <= nBlockEnd)
+        {
+            // This block contains the end row. Only copy partially.
+            size_t nOffset = nRowPos - nBlockStart + 1;
+            itDataEnd = mdds::mtv::ushort_element_block::begin(*itBlk->data);
+            std::advance(itDataEnd, nOffset);
+
+            rDestCol.maScriptTypes.set(nBlockStart + nOffsetInBlock, itData, itDataEnd);
+            break;
+        }
+
+        rDestCol.maScriptTypes.set(nBlockStart + nOffsetInBlock, itData, itDataEnd);
+    }
+}
+
 unsigned short ScColumn::GetTextWidth(SCROW nRow) const
 {
     return maTextWidths.get<unsigned short>(nRow);
