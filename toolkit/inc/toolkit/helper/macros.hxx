@@ -274,23 +274,23 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 // -------------------------------------------------------------------------------------
 
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." #ImplName )); } \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return OUString("stardiv.Toolkit." #ImplName ); } \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
                             { \
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \
-                                aNames[ aNames.getLength() - 1 ] = ::rtl::OUString::createFromAscii( ServiceName ); \
+                                aNames[ aNames.getLength() - 1 ] = OUString::createFromAscii( ServiceName ); \
                                 return aNames; \
                             } \
 
 // -------------------------------------------------------------------------------------
 
 #define DECLIMPL_SERVICEINFO( ImplName, ServiceName ) \
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." #ImplName )); } \
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return OUString("stardiv.Toolkit." #ImplName ); } \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
                             { \
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames( 1 ); \
-                                aNames[ 0 ] = ::rtl::OUString::createFromAscii( ServiceName ); \
+                                aNames[ 0 ] = OUString::createFromAscii( ServiceName ); \
                                 return aNames; \
                             } \
     DECLIMPL_SUPPORTS_SERVICE( )
