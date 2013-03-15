@@ -315,16 +315,17 @@ public:
 
     // Whether the second subformat code is really for negative numbers
     // or another limit set.
-    bool IsNegativeRealNegative() const
+    bool IsSecondSubformatRealNegative() const
         {
             return fLimit1 == 0.0 && fLimit2 == 0.0 &&
             ( (eOp1 == NUMBERFORMAT_OP_GE && eOp2 == NUMBERFORMAT_OP_NO) ||
               (eOp1 == NUMBERFORMAT_OP_GT && eOp2 == NUMBERFORMAT_OP_LT) ||
               (eOp1 == NUMBERFORMAT_OP_NO && eOp2 == NUMBERFORMAT_OP_NO) );
         }
+
     // Whether the first subformat code is really for negative numbers
     // or another limit set.
-    sal_Bool IsNegativeRealNegative2() const
+    bool IsFirstSubformatRealNegative() const
         {
             return fLimit1 == 0.0 && fLimit2 == 0.0 &&
             ( (eOp2 == NUMBERFORMAT_OP_GT && eOp1 == NUMBERFORMAT_OP_LT) ||

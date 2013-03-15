@@ -2826,7 +2826,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,          /
     if ( !bFound )
     {
         if ( !bDontDetectNegation && (nString == 0) &&
-             !bFirst && (nSign < 0) && pFormat->IsNegativeRealNegative() )
+             !bFirst && (nSign < 0) && pFormat->IsSecondSubformatRealNegative() )
         {
             // simply negated twice? --1
             aString = comphelper::string::remove(aString, ' ');
@@ -2843,7 +2843,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,          /
         }
     }
     else if ( !bDontDetectNegation && (nSub == 1) &&
-              pFormat->IsNegativeRealNegative() )
+              pFormat->IsSecondSubformatRealNegative() )
     {
         // negative
         if ( nStringScanSign < 0 )

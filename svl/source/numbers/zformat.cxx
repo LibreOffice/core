@@ -2522,8 +2522,8 @@ bool SvNumberformat::GetOutputString(double fNumber,
             }
         }
         if (fNumber < 0.0 &&
-                ((nIx == 0 && IsNegativeRealNegative2()) ||     // 1st, usually positive subformat
-                 (nIx == 1 && IsNegativeRealNegative())))       // 2nd, usually negative subformat
+                ((nIx == 0 && IsFirstSubformatRealNegative()) ||    // 1st, usually positive subformat
+                 (nIx == 1 && IsSecondSubformatRealNegative())))    // 2nd, usually negative subformat
         {
             fNumber = -fNumber;                 // eliminate sign
         }
@@ -4874,7 +4874,7 @@ short SvNumberformat::GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos,
 
 bool SvNumberformat::IsNegativeWithoutSign() const
 {
-    if ( IsNegativeRealNegative() )
+    if ( IsSecondSubformatRealNegative() )
     {
         const OUString* pStr = GetNumForString( 1, 0, true );
         if ( pStr )
