@@ -118,9 +118,8 @@ namespace nsUseOnPage
     const UseOnPage PD_NONE           = 0x0000; ///< For internal use only.
     const UseOnPage PD_LEFT           = 0x0001;
     const UseOnPage PD_RIGHT          = 0x0002;
-    const UseOnPage PD_FIRST          = 0x0004;
-    const UseOnPage PD_ALL            = 0x0007;
-    const UseOnPage PD_MIRROR         = 0x000F;
+    const UseOnPage PD_ALL            = 0x0003;
+    const UseOnPage PD_MIRROR         = 0x0007;
     const UseOnPage PD_HEADERSHARE    = 0x0040;
     const UseOnPage PD_FOOTERSHARE    = 0x0080;
     const UseOnPage PD_NOHEADERSHARE  = 0xFFBF; ///< For internal use only.
@@ -204,12 +203,10 @@ public:
 
     /** Layout uses the following methods to obtain a format in order
        to be able to create a page. */
-    inline SwFrmFmt *GetRightFmt();
-    inline const SwFrmFmt *GetRightFmt() const;
-    inline SwFrmFmt *GetLeftFmt();
-    inline const SwFrmFmt *GetLeftFmt() const;
-    inline SwFrmFmt *GetFirstFmt();
-    inline const SwFrmFmt *GetFirstFmt() const;
+           SwFrmFmt *GetRightFmt(bool const bFirst = false);
+    inline const SwFrmFmt *GetRightFmt(bool const bFirst = false) const;
+           SwFrmFmt *GetLeftFmt(bool const bFirst = false);
+    inline const SwFrmFmt *GetLeftFmt(bool const bFirst = false) const;
 
     sal_uInt16 GetRegHeight() const { return nRegHeight; }
     sal_uInt16 GetRegAscent() const { return nRegAscent; }
@@ -306,29 +303,13 @@ inline void SwPageDesc::ResetAllLeftAttr()
     ResetAllAttr( sal_True );
 }
 
-inline SwFrmFmt *SwPageDesc::GetRightFmt()
+inline const SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst) const
 {
-    return nsUseOnPage::PD_RIGHT & eUse ? &aMaster : 0;
+    return const_cast<SwPageDesc*>(this)->GetRightFmt(bFirst);
 }
-inline const SwFrmFmt *SwPageDesc::GetRightFmt() const
+inline const SwFrmFmt *SwPageDesc::GetLeftFmt(bool const bFirst) const
 {
-    return nsUseOnPage::PD_RIGHT & eUse ? &aMaster : 0;
-}
-inline SwFrmFmt *SwPageDesc::GetLeftFmt()
-{
-    return nsUseOnPage::PD_LEFT & eUse ? &aLeft : 0;
-}
-inline const SwFrmFmt *SwPageDesc::GetLeftFmt() const
-{
-    return nsUseOnPage::PD_LEFT & eUse ? &aLeft : 0;
-}
-inline SwFrmFmt *SwPageDesc::GetFirstFmt()
-{
-    return nsUseOnPage::PD_FIRST & eUse ? &aFirst : 0;
-}
-inline const SwFrmFmt *SwPageDesc::GetFirstFmt() const
-{
-    return nsUseOnPage::PD_FIRST & eUse ? &aFirst : 0;
+    return const_cast<SwPageDesc*>(this)->GetLeftFmt(bFirst);
 }
 
 class SwPageDescExt
