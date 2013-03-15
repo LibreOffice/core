@@ -35,7 +35,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		LIBS="$(if $(filter YES,$(MINGW_SHARED_GXXLIB)),$(MINGW_SHARED_LIBSTDCPP))" \
 		LDFLAGS="-L$(COMPATH)/lib -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 \
 				$(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
-		./configure
+		./configure \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			--with-cross-build=$(subst $(INPATH),$(INPATH_FOR_BUILD),$(call gb_UnpackedTarball_get_dir,icu))/source) \
 			--enable-layout --disable-static --enable-shared --disable-samples \
