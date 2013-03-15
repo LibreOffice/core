@@ -43,6 +43,7 @@ using com::sun::star::uno::Reference;
 
 SbxVariable* getVBAConstant( const OUString& rName );
 
+SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 // the bits in the String-ID:
 // 0x8000 - Argv is reserved
@@ -606,6 +607,30 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                         }
                         else
                         {
+                            // check if there isn't a default member between the current variable
+                            // and the params, e.g.
+                            //   Dim rst1 As New ADODB.Recordset
+                            //      "
+                            //   val = rst1("FirstName")
+                            // has the default 'Fields' member between rst1 and '("FirstName")'
+                            SbxVariable* pDflt = getDefaultProp( pElem );
+                            if ( pDflt )
+                            {
+                                pDflt->Broadcast( SBX_HINT_DATAWANTED );
+                                SbxBaseRef pObj = (SbxBase*)pDflt->GetObject();
+                                if( pObj )
+                                {
+                                    if( pObj->ISA(SbUnoObject) )
+                                    {
+                                        pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
+                                        Any aAny = pUnoObj->getUnoAny();
+
+                                        if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                                            x = *(Reference< XInterface >*)aAny.getValue();
+                                        pElem = pDflt;
+                                    }
+                                }
+                            }
                             OUString sDefaultMethod;
 
                             Reference< XDefaultMethod > xDfltMethod( x, UNO_QUERY );
