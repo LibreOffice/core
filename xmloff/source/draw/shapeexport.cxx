@@ -306,7 +306,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         // filter propset
         SvXMLAutoFilteredSet xPropStates( mrExport.GetAutoStylePool(), aShapeInfo.mnFamily );
 
-        sal_Int32 nCount = 0;
         if( (!bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape)) )
         {
             xPropStates.filter( xPropSet );
@@ -351,6 +350,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         // optionaly generate auto style for text attributes
         if( (!bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape)) && bObjSupportsText )
         {
+            GetExport().GetTextParagraphExport(); // creates & registers text-paragraph family
             SvXMLAutoFilteredSet xTextPropStates( mrExport.GetAutoStylePool(),
                                                   XML_STYLE_FAMILY_TEXT_PARAGRAPH );
             xTextPropStates.filter( xPropSet );
