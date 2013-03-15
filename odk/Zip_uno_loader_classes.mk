@@ -16,4 +16,6 @@ $(eval $(call gb_Zip_add_files,uno_loader_classes,\
 		win/unowinreg.dll \
 ))
 
+$(call gb_Zip_get_target,uno_loader_classes) : $(call gb_CustomTarget_get_target,odk/odkcommon/classes)
+
 # vim: set noet sw=4 ts=4:
