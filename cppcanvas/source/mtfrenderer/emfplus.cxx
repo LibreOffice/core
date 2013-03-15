@@ -53,6 +53,8 @@
 #define EmfPlusRecordTypeFillRects 16394
 #define EmfPlusRecordTypeFillPolygon 16396
 #define EmfPlusRecordTypeDrawLines 16397
+#define EmfPlusRecordTypeFillEllipse 16398
+#define EmfPlusRecordTypeDrawEllipse 16399
 #define EmfPlusRecordTypeFillPie 16400
 #define EmfPlusRecordTypeFillPath 16404
 #define EmfPlusRecordTypeDrawPath 16405
@@ -1294,6 +1296,30 @@ namespace cppcanvas
                             EMFP_DEBUG (printf ("EMF+ FillPath slot: %u\n", (unsigned int)index));
 
                             EMFPPlusFillPolygon (((EMFPPath*) aObjects [index])->GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
+                        }
+                        break;
+                    case EmfPlusRecordTypeFillEllipse:
+                        {
+                            sal_uInt32 index = flags & 0xff;
+                            sal_uInt32 brushIndexOrColor;
+
+                            rMF >> brushIndexOrColor;
+
+                            EMFP_DEBUG (printf ("EMF+ FillEllipse slot: %u\n", (unsigned int)index));
+
+                            float dx, dy, dw, dh;
+
+                            ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
+
+                            EMFP_DEBUG (printf ("EMF+ RectData: %f,%f %fx%f\n", dx, dy, dw, dh));
+
+                            B2DPoint mappedCenter (Map (dx + dw/2, dy + dh/2));
+                            B2DSize mappedSize( MapSize (dw/2, dh/2));
+
+                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::tools::createPolygonFromEllipse( mappedCenter, mappedSize.getX (), mappedSize.getY () ) ) );
+
+                            EMFPPlusFillPolygon( polyPolygon,
+                                                 rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor );
                         }
                         break;
                     case EmfPlusRecordTypeFillRects:
