@@ -774,6 +774,11 @@ void NeonSession::Init()
             // Set a failure callback for certificate check
             ne_ssl_set_verify(
                 m_pHttpSession, NeonSession_CertificationNotify, this);
+
+            // Tell Neon to tell the SSL library used (OpenSSL or
+            // GnuTLS, I guess) to use a default set of root
+            // certificates.
+            ne_ssl_trust_default_ca(m_pHttpSession);
         }
 
         // Add hooks (i.e. for adding additional headers to the request)
