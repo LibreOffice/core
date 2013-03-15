@@ -100,22 +100,38 @@ private:
     OUString maKeyword;
 };
 
+class TemplateManagerPage : public TabPage
+{
+    private:
+        FixedText maFixedText;
+
+    public:
+        TemplateManagerPage( Window* pParent );
+        ~TemplateManagerPage( ) { };
+};
+
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     : ModelessDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
       maTabControl(this,SfxResId(TAB_CONTROL)),
-      mpToolbars( new Control(&maTabControl,SfxResId(TOOLBARS))),
+      maTabPage(&maTabControl, SfxResId(TAB_TEMPLATE_MANAGER)),
+      mpToolbars( new Control(&maTabPage,SfxResId(TOOLBARS))),
       mpSearchEdit(new Edit(this,WB_HIDE | WB_BORDER)),
       mpViewBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_VIEW))),
       mpActionBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_ACTION))),
       mpTemplateBar( new ToolBox(mpToolbars, SfxResId(TBX_ACTION_TEMPLATES))),
-      mpSearchView(new TemplateSearchView(this)),
-      maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
-      mpOnlineView(new TemplateRemoteView(this, WB_VSCROLL,false)),
+      mpSearchView(new TemplateSearchView(&maTabPage)),
+      maView(new TemplateLocalView(&maTabPage,SfxResId(TEMPLATE_VIEW))),
+      mpOnlineView(new TemplateRemoteView(&maTabPage, WB_VSCROLL,false)),
       mbIsSaveMode(false),
       mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
       mbIsSynced(false),
       maRepositories()
 {
+    maTabControl.SetTabPage( FILTER_DOCS, &maTabPage );
+    maTabControl.SetTabPage( FILTER_SHEETS, &maTabPage );
+    maTabControl.SetTabPage( FILTER_PRESENTATIONS, &maTabPage );
+    maTabControl.SetTabPage( FILTER_DRAWS, &maTabPage );
+
     // Create popup menus
     mpActionMenu = new PopupMenu;
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString(),SfxResId(IMG_ACTION_SORT));
@@ -294,20 +310,17 @@ void SfxTemplateManagerDlg::Resize()
     Size aTabSize = maTabControl.GetSizePixel();
     aTabSize.setWidth(aWinSize.getWidth());
     maTabControl.SetSizePixel(aTabSize);
-    Size aTabPageSize = maTabControl.GetTabPageSizePixel();
-    Point aToolbarsPos(0, aTabSize.getHeight() - aTabPageSize.getHeight());
-    mpToolbars->SetPosPixel(aToolbarsPos);
-    aTabPageSize.setHeight(mpToolbars->GetSizePixel().getHeight() + 3);
-    maTabControl.SetTabPageSizePixel(aTabPageSize);
-
-    Size aToolbarsSize = mpToolbars->GetSizePixel();
-    aToolbarsSize.setWidth(aWinSize.getWidth());
-    mpToolbars->SetSizePixel(aToolbarsSize);
+    maTabControl.SetTabPageSizePixel(aWinSize);
 
     // Calculate toolboxes size and positions
     Size aViewSize = mpViewBar->CalcMinimumWindowSizePixel();
     Size aActionSize = mpActionBar->CalcMinimumWindowSizePixel();
     Size aTemplateSize = mpTemplateBar->CalcMinimumWindowSizePixel();
+
+    long nToolbarsHeight = std::max(std::max(aViewSize.getHeight(), aActionSize.getHeight()), aTemplateSize.getHeight());
+
+    Size aToolbarsSize (aWinSize.getWidth(), nToolbarsHeight);
+    mpToolbars->SetSizePixel(aToolbarsSize);
 
     aActionSize.setWidth(3*aActionSize.getWidth());
     aViewSize.setWidth(aWinSize.getWidth()-aActionSize.getWidth()-mpViewBar->GetPosPixel().X());
@@ -322,9 +335,9 @@ void SfxTemplateManagerDlg::Resize()
 
     // Set view position below toolbox
     Point aViewPos = maView->GetPosPixel();
-    aViewPos.setY(maTabControl.GetPosPixel().Y() + maTabControl.GetSizePixel().getHeight());
+    aViewPos.setY(aToolbarsSize.getHeight());
     aViewPos.setX(0);
-    Size aThumbSize(aWinSize.getWidth(), aWinSize.getHeight() - aViewPos.getY());
+    Size aThumbSize(aWinSize.getWidth(), maTabControl.GetTabPageSizePixel().getWidth() - aViewPos.getY());
     maView->SetPosSizePixel(aViewPos, aThumbSize);
 
     if (aWinSize.getHeight() < aViewPos.getY() + aThumbSize.getHeight() + PADDING_DLG_BORDER)

@@ -12,7 +12,6 @@
 Control CONTROL_BUTTONS
 {
     Size = MAP_APPFONT( 290, 17 );
-    Border = True;
     TabStop = False;
 };
 
@@ -21,6 +20,7 @@ PushButton BTN_ALL_TEMPLATES
     Pos = MAP_APPFONT( 1, 1 );
     Size = MAP_APPFONT( 50, 14 );
     Text [ en-US ] = "All Templates";
+    TabStop = True;
 };
 
 FixedText FT_NAME

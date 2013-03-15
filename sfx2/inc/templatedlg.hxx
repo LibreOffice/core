@@ -15,6 +15,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 
 class Edit;
@@ -128,6 +129,7 @@ private:
 private:
 
     TabControl maTabControl;
+    TabPage maTabPage;
     Control *mpToolbars;
 
     Edit *mpSearchEdit;

@@ -107,73 +107,22 @@ String STR_QMSG_SEL_TEMPLATE_DELETE
     Text [ en-US ] = "Do you want to delete the selected templates?";
 };
 
-ModelessDialog DLG_TEMPLATE_MANAGER
+TabPage TAB_TEMPLATE_MANAGER
 {
-    OutputSize = TRUE;
-    SVLook = TRUE;
-    Moveable = TRUE;
-    Closeable = TRUE;
-    Sizeable = TRUE;
+    Size = MAP_APPFONT( 290, 220 );
     Hide = TRUE;
-    Size = MAP_APPFONT ( 290 , 250 );
-    Text [en-US] = "Template Manager";
 
-    TabControl TAB_CONTROL
+    Control TOOLBARS
     {
-        OutputSize = TRUE;
-        Size = MAP_APPFONT( 290, 22 );
-        Pos = MAP_APPFONT( 0, 0 );
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = FILTER_DOCS;
-                Text [ en-US ] = "Documents";
-            };
-            PageItem
-            {
-                Identifier = FILTER_SHEETS;
-                Text [ en-US ] = "Spreadsheets";
-            };
-            PageItem
-            {
-                Identifier = FILTER_PRESENTATIONS;
-                Text [ en-US ] = "Presentations";
-            };
-            PageItem
-            {
-                Identifier = FILTER_DRAWS;
-                Text [ en-US ] = "Drawings";
-            };
-        };
+        Size = MAP_APPFONT( 290 , 20 );
+        TabStop = False;
     };
 
     Control TEMPLATE_VIEW
     {
-        Size = MAP_APPFONT(280,220);
+        Pos = MAP_APPFONT( 0, 20 );
+        Size = MAP_APPFONT( 290, 200 );
         TabStop = TRUE;
-    };
-
-    Image IMG_ACTION_SORT
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "sortascending.png";
-        };
-    };
-
-    Image IMG_ACTION_REFRESH
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "reload.png";
-        };
-    };
-
-    Control TOOLBARS
-    {
-        Size = MAP_APPFONT( 290 , 16 );
-        TabStop = False;
     };
 
     ToolBox TBX_ACTION_VIEW
@@ -351,6 +300,65 @@ ModelessDialog DLG_TEMPLATE_MANAGER
             };
         };
     };
+
+    Image IMG_ACTION_SORT
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "sortascending.png";
+        };
+    };
+
+    Image IMG_ACTION_REFRESH
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "reload.png";
+        };
+    };
+};
+
+ModelessDialog DLG_TEMPLATE_MANAGER
+{
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Sizeable = TRUE;
+    Hide = TRUE;
+    Size = MAP_APPFONT ( 290 , 250 );
+    Text [en-US] = "Template Manager";
+
+    TabControl TAB_CONTROL
+    {
+        OutputSize = TRUE;
+        Size = MAP_APPFONT( 290, 250 );
+        Pos = MAP_APPFONT( 0, 0 );
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = FILTER_DOCS;
+                Text [ en-US ] = "Documents";
+            };
+            PageItem
+            {
+                Identifier = FILTER_SHEETS;
+                Text [ en-US ] = "Spreadsheets";
+            };
+            PageItem
+            {
+                Identifier = FILTER_PRESENTATIONS;
+                Text [ en-US ] = "Presentations";
+            };
+            PageItem
+            {
+                Identifier = FILTER_DRAWS;
+                Text [ en-US ] = "Drawings";
+            };
+        };
+    };
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

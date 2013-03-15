@@ -40,6 +40,7 @@
 #define DLG_DOC_TEMPLATE                    (RID_SFX_DOC_START+2)
 
 #define DLG_TEMPLATE_MANAGER                (RID_SFX_DOC_START+4)
+#define TAB_TEMPLATE_MANAGER                (RID_SFX_DOC_START+5)
 
 #define BMP_STYLES_CLOSED                   (RID_SFX_DOC_START+ 0)
 #define BMP_STYLES_OPENED                   (RID_SFX_DOC_START+ 1)
