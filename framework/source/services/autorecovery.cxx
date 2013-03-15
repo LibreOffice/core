@@ -88,8 +88,6 @@
 
 #include <fwkdllapi.h>
 
-#include <sfx2/objsh.hxx>
-
 //_______________________________________________
 // namespaces
 
