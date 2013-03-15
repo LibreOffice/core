@@ -923,6 +923,73 @@ throw( com::sun::star::uno::RuntimeException )
 
     if ((confidence == MWAW_CONFIDENCE_EXCELLENT) || (confidence == MWAW_CONFIDENCE_GOOD))
     {
+        if ( docKind == MWAWDocument::K_TEXT )
+        {
+            switch (docType)
+            {
+            case MWAWDocument::ACT: // Acta (nothing done )
+                break;
+            case MWAWDocument::CW: // ClarisWorks/AppleWorks document (basic)
+                sTypeName = "writer_ClarisWorks";
+                break;
+            case MWAWDocument::DM: // DocMaker (v4)
+                sTypeName = "writer_DocMaker";
+                break;
+            case MWAWDocument::ED: // eDOC (v2)
+                sTypeName = "writer_eDoc_Document";
+                break;
+            case MWAWDocument::FULLW: // FullWrite Professional (basic)
+                sTypeName = "writer_FullWrite_Professional";
+                break;
+            case MWAWDocument::HMAC: // HanMac Word-K (basic done)
+                sTypeName = "writer_HanMac_Word_K";
+                break;
+            case MWAWDocument::HMACJ: // HanMac Word-J ( almost nothing done for J document)
+                sTypeName = "writer_HanMac_Word_J";
+                break;
+            case MWAWDocument::LWTEXT: // LightWayText ( only v4.5 Mac format )
+                sTypeName = "writer_LightWayText";
+                break;
+            case MWAWDocument::MARIW: // Mariner Write ( only v1.6-v3.5 Mac Classic)
+                sTypeName = "writer_Mariner_Write";
+                break;
+            case MWAWDocument::MINDW: // MindWrite
+                sTypeName = "writer_MindWrite";
+                break;
+            case MWAWDocument::MW: // MacWrite document
+                sTypeName = "writer_MacWrite";
+                break;
+            case MWAWDocument::MWPRO: // MacWriteII or MacWritePro document
+                sTypeName = "writer_MacWritePro";
+                break;
+            case MWAWDocument::MSWORD: // MSWord document (v4 v5: basic done)
+                sTypeName = "writer_Mac_Word";
+                break;
+            case MWAWDocument::MSWORKS: // MSWorks document (v1 v2)
+                sTypeName = "writer_Mac_Works";
+                break;
+            case MWAWDocument::NISUSW: // Nisus Writer document: v3.4-v6.5
+                sTypeName = "writer_Nisus_Writer";
+                break;
+            case MWAWDocument::TEACH: // TeachText or SimpleText: v1
+                sTypeName = "writer_TeachText";
+                break;
+            case MWAWDocument::TEDIT: // Tex-Edit v2
+                sTypeName = "writer_TexEDit";
+                break;
+            case MWAWDocument::WNOW: // WriteNow
+                sTypeName = "writer_WriteNow";
+                break;
+            case MWAWDocument::WPLUS: // writerplus document
+                sTypeName = "writer_WritePlus";
+                break;
+            case MWAWDocument::ZWRT: // Z-Write : v1.3
+                sTypeName = "writer_ZWrite";
+                break;
+            default:
+                break;
+            }
+        }
     }
 
     if (!sTypeName.isEmpty())

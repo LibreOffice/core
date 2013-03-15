@@ -322,6 +322,23 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_StarOffice_XML_Writer \
 	writer_WordPerfect_Document \
 	writer_MS_Works_Document \
+	writer_ClarisWorks \
+	writer_DocMaker \
+	writer_eDoc_Document \
+	writer_FullWrite_Professional \
+	writer_HanMac_Word_J \
+	writer_HanMac_Word_K \
+	writer_LightWayText \
+	writer_Mac_Word \
+	writer_Mac_Works \
+	writer_MacWrite \
+	writer_MacWritePro \
+	writer_Mariner_Write \
+	writer_MindWrite \
+	writer_Nisus_Writer \
+	writer_TeachText \
+	writer_WriteNow \
+	writer_ZWrite \
 	writer_T602_Document \
 	writer_LotusWordPro_Document \
 	generic_Text \
@@ -350,6 +367,23 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	StarOffice_XML__Writer_ \
 	WordPerfect \
 	MS_Works \
+	ClarisWorks \
+	DocMaker \
+	eDoc_Document \
+	FullWrite_Professional \
+	HanMac_Word_J \
+	HanMac_Word_K \
+	LightWayText \
+	Mac_Word \
+	Mac_Works \
+	MacWrite \
+	MacWritePro \
+	Mariner_Write \
+	MindWrite \
+	Nisus_Writer \
+	TeachText \
+	WriteNow \
+	ZWrite \
 	T602Document \
 	LotusWordPro \
 	Text \
