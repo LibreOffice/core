@@ -17,8 +17,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libmspub,inc/external/libmsp
 
 $(eval $(call gb_ExternalPackage_use_external_project,libmspub,libmspub))
 
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_ExternalPackage_add_file,libmspub,lib/mspub-0.0.lib,build/win32/Release/lib/libmspub-0.0.lib))
+ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalPackage_add_file,libmspub,lib/mspub-0.0.lib,src/lib/.libs/libmspub-0.0.lib))
 else
 $(eval $(call gb_ExternalPackage_add_file,libmspub,lib/libmspub-0.0.a,src/lib/.libs/libmspub-0.0.a))
 endif

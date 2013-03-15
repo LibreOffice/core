@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,libmspub))
 
 $(eval $(call gb_ExternalProject_use_unpacked,libmspub,mspub))
 
+$(eval $(call gb_ExternalProject_use_autoconf,libmspub,build))
+
 $(eval $(call gb_ExternalProject_register_targets,libmspub,\
 	build \
 ))
@@ -21,42 +23,6 @@ $(eval $(call gb_ExternalProject_use_externals,libmspub,\
 	wpd \
 	wpg \
 ))
-
-ifeq ($(OS)$(COM),WNTMSC)
-
-ifeq ($(VCVER),90)
-$(call gb_ExternalProject_get_state_target,libmspub,build) :
-	$(call gb_ExternalProject_run,build,\
-		export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
-		&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-		&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& $(COMPATH)/vcpackages/vcbuild.exe libmspub.vcproj "Release|Win32" \
-	,build/win32)
-else ifeq ($(VCVER),100)
-$(call gb_ExternalProject_get_state_target,libmspub,build) :
-	$(call gb_ExternalProject_run,build,\
-		export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
-		&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-		&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& msbuild.exe libmspub.vcxproj /p:Configuration=Release \
-	,build/win32)
-else
-$(call gb_ExternalProject_get_state_target,libmspub,build) :
-	$(call gb_ExternalProject_run,build,\
-		export BOOST_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,boost) \
-		&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
-		&& export ICU_INCLUDE_DIR=$(OUTDIR)/inc/external \
-		&& msbuild.exe libmspub.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:Configuration=Release \
-	,build/win32)
-endif
-
-else
 
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
 	$(call gb_ExternalProject_run,build,\
@@ -76,7 +42,5 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	)
-
-endif
 
 # vim: set noet sw=4 ts=4:
