@@ -10,7 +10,7 @@
 # Usage: update_pch.sh [precompiled_xxx.hxx]
 
 root=`dirname $0`
-root=`cd $root/../.. && pwd`
+root=`cd $root/.. && pwd`
 
 if test -z "$1"; then
     headers=`ls $root/*/inc/pch/precompiled_*.hxx`
