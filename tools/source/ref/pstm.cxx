@@ -110,10 +110,9 @@ void TOOLS_DLLPUBLIC ReadObjects( SvPersistListReadable& rLst, SvPersistStream &
 #ifdef DBG_UTIL
             if( nObjLen + nObjPos != rStm.Tell() )
             {
-                rtl::OStringBuffer aStr(
-                    RTL_CONSTASCII_STRINGPARAM("false list len: read = "));
+                rtl::OStringBuffer aStr("false list len: read = ");
                 aStr.append(static_cast<sal_Int64>(rStm.Tell() - nObjPos));
-                aStr.append(RTL_CONSTASCII_STRINGPARAM(", should = "));
+                aStr.append(", should = ");
                 aStr.append(static_cast<sal_Int64>(nObjLen));
                 OSL_FAIL(aStr.getStr());
             }
@@ -587,10 +586,9 @@ sal_uInt32 SvPersistStream::ReadObj
             if( !pFunc )
             {
 #ifdef DBG_UTIL
-                rtl::OStringBuffer aStr(
-                    RTL_CONSTASCII_STRINGPARAM("no class with id: " ));
+                rtl::OStringBuffer aStr("no class with id: " );
                 aStr.append(static_cast<sal_Int32>(nClassId));
-                aStr.append(RTL_CONSTASCII_STRINGPARAM(" registered"));
+                aStr.append(" registered");
                 DBG_WARNING(aStr.getStr());
 #else
                 (void)nObjLen;
@@ -615,10 +613,9 @@ sal_uInt32 SvPersistStream::ReadObj
 #ifdef DBG_UTIL
             if( nObjLen + nObjPos != Tell() )
             {
-                rtl::OStringBuffer aStr(
-                    RTL_CONSTASCII_STRINGPARAM("false object len: read = "));
+                rtl::OStringBuffer aStr("false object len: read = ");
                 aStr.append(static_cast<sal_Int64>((long)(Tell() - nObjPos)));
-                aStr.append(RTL_CONSTASCII_STRINGPARAM(", should = "));
+                aStr.append(", should = ");
                 aStr.append(static_cast<sal_Int32>(nObjLen));
                 OSL_FAIL(aStr.getStr());
             }

@@ -221,7 +221,7 @@ rtl::OString ImplCutPath( const rtl::OString& rStr, sal_Int32 nMax, char cAccDel
             if (!comphelper::string::isalnumAscii(aCutPath[n]))
             {
                 comphelper::string::truncateToLength(aCutPath, n);
-                aCutPath.append(RTL_CONSTASCII_STRINGPARAM("..."));
+                aCutPath.append("...");
                 break;
             }
         }
@@ -230,7 +230,7 @@ rtl::OString ImplCutPath( const rtl::OString& rStr, sal_Int32 nMax, char cAccDel
     if ( bInsertPrefix )
     {
         rtl::OStringBuffer aIns;
-        aIns.append(cAccDel).append(RTL_CONSTASCII_STRINGPARAM("..."));
+        aIns.append(cAccDel).append("...");
         aCutPath.insert(nBegin, aIns.makeStringAndClear());
     }
 
@@ -596,7 +596,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle ) :
     }
 
     rtl::OString aTmpName(rtl::OUStringToOString(rInitName, osl_getThreadTextEncoding()));
-    if (aTmpName.matchIgnoreAsciiCase(rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:"))))
+    if (aTmpName.matchIgnoreAsciiCase(rtl::OString("file:")))
     {
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
@@ -617,7 +617,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle ) :
 #ifdef DBG_UTIL
         if (eStyle == FSYS_STYLE_HOST && aTmpName.indexOf( "://" ) != -1)
         {
-            rtl::OStringBuffer aErr(RTL_CONSTASCII_STRINGPARAM("DirEntries akzeptieren nur File URLS: "));
+            rtl::OStringBuffer aErr("DirEntries akzeptieren nur File URLS: ");
             aErr.append(aTmpName);
             DBG_WARNING(aErr.getStr());
         }
@@ -648,7 +648,7 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle ) :
     }
 
     rtl::OString aTmpName( rInitName );
-    if (aTmpName.matchIgnoreAsciiCase(rtl::OString(RTL_CONSTASCII_STRINGPARAM("file:"))))
+    if (aTmpName.matchIgnoreAsciiCase(rtl::OString("file:")))
     {
         DBG_WARNING( "File URLs are not permitted but accepted" );
         aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
@@ -661,7 +661,7 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle ) :
     {
         if( eStyle == FSYS_STYLE_HOST && rInitName.indexOf("://") != -1 )
         {
-            rtl::OStringBuffer aErr(RTL_CONSTASCII_STRINGPARAM("DirEntries akzeptieren nur File URLS: "));
+            rtl::OStringBuffer aErr("DirEntries akzeptieren nur File URLS: ");
             aErr.append(rInitName);
             DBG_WARNING(aErr.getStr());
         }
@@ -741,18 +741,18 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
 
 #if defined WNT
     // get special file names from system
-    if ( aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("CLOCK$")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("CON")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("AUX")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("COM1")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("COM2")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("COM3")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("COM4")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("LPT1")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("LPT2")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("LPT3")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("NUL")) ||
-           aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("PRN")) )
+    if ( aName.equalsIgnoreAsciiCase("CLOCK$") ||
+           aName.equalsIgnoreAsciiCase("CON") ||
+           aName.equalsIgnoreAsciiCase("AUX") ||
+           aName.equalsIgnoreAsciiCase("COM1") ||
+           aName.equalsIgnoreAsciiCase("COM2") ||
+           aName.equalsIgnoreAsciiCase("COM3") ||
+           aName.equalsIgnoreAsciiCase("COM4") ||
+           aName.equalsIgnoreAsciiCase("LPT1") ||
+           aName.equalsIgnoreAsciiCase("LPT2") ||
+           aName.equalsIgnoreAsciiCase("LPT3") ||
+           aName.equalsIgnoreAsciiCase("NUL") ||
+           aName.equalsIgnoreAsciiCase("PRN") )
         return sal_True;
 #endif
 

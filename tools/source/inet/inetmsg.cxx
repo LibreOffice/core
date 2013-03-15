@@ -47,8 +47,6 @@ inline sal_Unicode ascii_toLowerCase( sal_Unicode ch )
         return ch;
 }
 
-#define CONSTASCII_STRINGPARAM(a) (a), RTL_TEXTENCODING_ASCII_US
-
 INetMessage::~INetMessage()
 {
     ListCleanup_Impl();
@@ -152,22 +150,22 @@ namespace
         {
             static const OString _ImplINetRFC822MessageHeaderData[] =
             {
-                OString(RTL_CONSTASCII_STRINGPARAM("BCC")),
-                OString(RTL_CONSTASCII_STRINGPARAM("CC")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Comments")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Date")),
-                OString(RTL_CONSTASCII_STRINGPARAM("From")),
-                OString(RTL_CONSTASCII_STRINGPARAM("In-Reply-To")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Keywords")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Message-ID")),
-                OString(RTL_CONSTASCII_STRINGPARAM("References")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Reply-To")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Return-Path")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Subject")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Sender")),
-                OString(RTL_CONSTASCII_STRINGPARAM("To")),
-                OString(RTL_CONSTASCII_STRINGPARAM("X-Mailer")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Return-Receipt-To"))
+                OString("BCC"),
+                OString("CC"),
+                OString("Comments"),
+                OString("Date"),
+                OString("From"),
+                OString("In-Reply-To"),
+                OString("Keywords"),
+                OString("Message-ID"),
+                OString("References"),
+                OString("Reply-To"),
+                OString("Return-Path"),
+                OString("Subject"),
+                OString("Sender"),
+                OString("To"),
+                OString("X-Mailer"),
+                OString("Return-Receipt-To")
             };
             return &_ImplINetRFC822MessageHeaderData[0];
         }
@@ -639,12 +637,12 @@ namespace
         {
             static const OString _ImplINetMIMEMessageHeaderData[] =
             {
-                OString(RTL_CONSTASCII_STRINGPARAM("MIME-Version")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Content-Description")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Content-Disposition")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Content-ID")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Content-Type")),
-                OString(RTL_CONSTASCII_STRINGPARAM("Content-Transfer-Encoding"))
+                OString("MIME-Version"),
+                OString("Content-Description"),
+                OString("Content-Disposition"),
+                OString("Content-ID"),
+                OString("Content-Type"),
+                OString("Content-Transfer-Encoding")
             };
             return &_ImplINetMIMEMessageHeaderData[0];
         }
@@ -944,36 +942,36 @@ bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
     switch (eType)
     {
         case INETMSG_MESSAGE_RFC822:
-            aContentType.append(RTL_CONSTASCII_STRINGPARAM("message/rfc822"));
+            aContentType.append("message/rfc822");
             break;
 
         case INETMSG_MULTIPART_ALTERNATIVE:
-            aContentType.append(RTL_CONSTASCII_STRINGPARAM("multipart/alternative"));
+            aContentType.append("multipart/alternative");
             break;
 
         case INETMSG_MULTIPART_DIGEST:
-            aContentType.append(RTL_CONSTASCII_STRINGPARAM("multipart/digest"));
+            aContentType.append("multipart/digest");
             break;
 
         case INETMSG_MULTIPART_PARALLEL:
-            aContentType.append(RTL_CONSTASCII_STRINGPARAM("multipart/parallel"));
+            aContentType.append("multipart/parallel");
             break;
 
         case INETMSG_MULTIPART_RELATED:
-            aContentType.append(RTL_CONSTASCII_STRINGPARAM("multipart/related"));
+            aContentType.append("multipart/related");
             break;
 
         case INETMSG_MULTIPART_FORM_DATA:
-            aContentType.append(RTL_CONSTASCII_STRINGPARAM("multipart/form-data"));
+            aContentType.append("multipart/form-data");
             break;
 
         default:
-            aContentType.append(RTL_CONSTASCII_STRINGPARAM("multipart/mixed"));
+            aContentType.append("multipart/mixed");
             break;
     }
 
     // Setup boundary for multipart types.
-    if (aContentType.toString().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("multipart/")))
+    if (aContentType.toString().equalsIgnoreAsciiCase("multipart/"))
     {
         // Generate a unique boundary from current time.
         sal_Char sTail[16 + 1];
@@ -987,7 +985,7 @@ bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
         m_aBoundary += sTail;
 
         // Append boundary as ContentType parameter.
-        aContentType.append(RTL_CONSTASCII_STRINGPARAM("; boundary="));
+        aContentType.append("; boundary=");
         aContentType.append(m_aBoundary);
     }
 

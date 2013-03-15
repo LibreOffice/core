@@ -349,10 +349,9 @@ sal_uInt16 SvFileStream::IsA() const
 sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr(
-        RTL_CONSTASCII_STRINGPARAM("SvFileStream::GetData(): "));
+    rtl::OStringBuffer aTraceStr("SvFileStream::GetData(): ");
     aTraceStr.append(static_cast<sal_Int64>(nSize));
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" Bytes from "));
+    aTraceStr.append(" Bytes from ");
     aTraceStr.append(rtl::OUStringToOString(aFilename,
         osl_getThreadTextEncoding()));
     OSL_TRACE("%s", aTraceStr.getStr());
@@ -374,10 +373,9 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr(
-        RTL_CONSTASCII_STRINGPARAM("SvFileStream::PutData(): "));
+    rtl::OStringBuffer aTraceStr("SvFileStream::PutData(): ");
     aTraceStr.append(static_cast<sal_Int64>(nSize));
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" Bytes to "));
+    aTraceStr.append(" Bytes to ");
     aTraceStr.append(rtl::OUStringToOString(aFilename,
         osl_getThreadTextEncoding()));
     OSL_TRACE("%s", aTraceStr.getStr());
@@ -512,8 +510,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     rtl::OString aLocalFilename(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
 
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr(RTL_CONSTASCII_STRINGPARAM(
-        "SvFileStream::Open(): "));
+    rtl::OStringBuffer aTraceStr("SvFileStream::Open(): ");
     aTraceStr.append(aLocalFilename);
     OSL_TRACE( "%s", aTraceStr.getStr() );
 #endif
@@ -611,8 +608,7 @@ void SvFileStream::Close()
     if ( IsOpen() )
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer aTraceStr(
-            RTL_CONSTASCII_STRINGPARAM("SvFileStream::Close(): "));
+        rtl::OStringBuffer aTraceStr("SvFileStream::Close(): ");
         aTraceStr.append(rtl::OUStringToOString(aFilename,
             osl_getThreadTextEncoding()));
         OSL_TRACE("%s", aTraceStr.getStr());

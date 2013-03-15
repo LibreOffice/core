@@ -672,10 +672,9 @@ Config::Config( const rtl::OUString& rFileName )
     mbPersistence   = sal_True;
 
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr(
-        RTL_CONSTASCII_STRINGPARAM("Config::Config( "));
+    rtl::OStringBuffer aTraceStr("Config::Config( ");
     aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" )"));
+    aTraceStr.append(" )");
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 }
@@ -831,12 +830,11 @@ rtl::OUString Config::ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncodi
 rtl::OString Config::ReadKey(const rtl::OString& rKey, const rtl::OString& rDefault) const
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr(
-        RTL_CONSTASCII_STRINGPARAM("Config::ReadKey( "));
+    rtl::OStringBuffer aTraceStr("Config::ReadKey( ");
     aTraceStr.append(rKey);
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" ) from "));
+    aTraceStr.append(" ) from ");
     aTraceStr.append(GetGroup());
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(" in ");
     aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
@@ -865,13 +863,13 @@ rtl::OString Config::ReadKey(const rtl::OString& rKey, const rtl::OString& rDefa
 void Config::WriteKey(const rtl::OString& rKey, const rtl::OString& rStr)
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr(RTL_CONSTASCII_STRINGPARAM("Config::WriteKey( "));
+    rtl::OStringBuffer aTraceStr("Config::WriteKey( ");
     aTraceStr.append(rKey);
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(", "));
+    aTraceStr.append(", ");
     aTraceStr.append(rStr);
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" ) to "));
+    aTraceStr.append(" ) to ");
     aTraceStr.append(GetGroup());
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(" in ");
     aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
@@ -975,11 +973,10 @@ void Config::DeleteKey(const rtl::OString& rKey)
 sal_uInt16 Config::GetKeyCount() const
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr(
-        RTL_CONSTASCII_STRINGPARAM("Config::GetKeyCount()"));
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" from "));
+    rtl::OStringBuffer aTraceStr("Config::GetKeyCount()");
+    aTraceStr.append(" from ");
     aTraceStr.append(GetGroup());
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(" in ");
     aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
@@ -1009,12 +1006,11 @@ sal_uInt16 Config::GetKeyCount() const
 rtl::OString Config::GetKeyName(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr(
-        RTL_CONSTASCII_STRINGPARAM("Config::GetKeyName( "));
+    rtl::OStringBuffer aTraceStr("Config::GetKeyName( ");
     aTraceStr.append(static_cast<sal_Int32>(nKey));
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" ) from "));
+    aTraceStr.append(" ) from ");
     aTraceStr.append(GetGroup());
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(" in ");
     aTraceStr.append(rtl::OUStringToOString(
         maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
@@ -1044,12 +1040,11 @@ rtl::OString Config::GetKeyName(sal_uInt16 nKey) const
 rtl::OString Config::ReadKey(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr(
-        RTL_CONSTASCII_STRINGPARAM("Config::ReadKey( "));
+    rtl::OStringBuffer aTraceStr("Config::ReadKey( ");
     aTraceStr.append(static_cast<sal_Int32>(nKey));
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" ) from "));
+    aTraceStr.append(" ) from ");
     aTraceStr.append(GetGroup());
-    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(" in ");
     aTraceStr.append(rtl::OUStringToOString(maFileName,
         RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());

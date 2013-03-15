@@ -122,9 +122,9 @@ rtl::OUString ResId::toString() const
 
 #if OSL_DEBUG_LEVEL > 0
         sRet = rtl::OUStringBuffer().
-            appendAscii(RTL_CONSTASCII_STRINGPARAM("<resource id ")).
+            append("<resource id ").
             append(static_cast<sal_Int32>(GetId())).
-            appendAscii(RTL_CONSTASCII_STRINGPARAM(" not found>")).
+            append(" not found>").
             makeStringAndClear();
 #endif
 
