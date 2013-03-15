@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			--enable-layout --disable-static --enable-shared --disable-samples \
 		&& $(MAKE) \
 		&&  for lib in icudata icuin icuuc icule icutu; do \
-			@touch $$lib; \
+			touch $$lib; \
 			done \
 	,source)
 endif
