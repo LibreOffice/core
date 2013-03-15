@@ -23,15 +23,28 @@
     (void) launchOptions;
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
+
     self.window.backgroundColor = [UIColor whiteColor];
+
+    [self.window makeKeyAndVisible];
+
+    NSThread* thread = [[NSThread alloc] initWithTarget:self
+                                               selector:@selector(threadMainMethod:)
+                                                 object:nil];
+    [thread start];
+
+    return YES;
+}
+
+- (void)threadMainMethod:(id)argument
+{
+    (void) argument;
+
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
     lo_initialize();
 
-    // Do something here
-
-    [self.window makeKeyAndVisible];
-    return YES;
+    [pool release];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
