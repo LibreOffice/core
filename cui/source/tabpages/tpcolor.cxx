@@ -109,8 +109,8 @@ void SvxColorTabPage::HideLoadSaveEmbed()
 void SvxColorTabPage::UpdateTableName()
 {
     // Truncate the name if necessary ...
-    String aString( CUI_RES( RID_SVXSTR_TABLE ) );
-    aString.AppendAscii( ": " );
+    OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
+    aString += ": ";
 
     XPropertyListRef pList = GetList();
     if( !pList.is() )
@@ -121,11 +121,11 @@ void SvxColorTabPage::UpdateTableName()
 
     if ( aURL.getBase().getLength() > 18 )
     {
-        aString += String(aURL.getBase()).Copy( 0, 15 );
-        aString.AppendAscii( "..." );
+        aString += aURL.getBase().copy( 0, 15 );
+        aString += "...";
     }
     else
-        aString += String (aURL.getBase());
+        aString += aURL.getBase();
 
     m_pTableName->SetText( aString );
 }

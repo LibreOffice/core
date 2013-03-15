@@ -189,7 +189,8 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
             // determining (possibly cutting) the name
             // and displaying it in the GroupBox
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( ": " );
+            OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
+            aString         += ": ";
             INetURLObject   aURL( pHatchingList->GetPath() );
 
             aURL.Append( pHatchingList->GetName() );
@@ -197,11 +198,11 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
             if ( aURL.getBase().getLength() > 18 )
             {
-                aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( "..." );
+                aString += aURL.getBase().copy( 0, 15 );
+                aString += "...";
             }
             else
-                aString += String(aURL.getBase());
+                aString += aURL.getBase();
 
             if( *pPageType == PT_HATCH && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -713,16 +714,16 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 
                 // determining (and possibly cutting) the name
                 // and displaying it in the GroupBox
-                String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                aString.AppendAscii( ": " );
+                OUString aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
+                aString += ": ";
 
                 if ( aURL.getBase().getLength() > 18 )
                 {
-                    aString += String(aURL.getBase()).Copy( 0, 15 );
-                    aString.AppendAscii( "..." );
+                    aString += aURL.getBase().copy( 0, 15 );
+                    aString += "...";
                 }
                 else
-                    aString += String(aURL.getBase());
+                    aString += aURL.getBase();
 
                 *pnHatchingListState |= CT_CHANGED;
                 *pnHatchingListState &= ~CT_MODIFIED;
@@ -785,16 +786,16 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickSaveHdl_Impl)
         {
             // determining (and possibly cutting) the name
             // and displaying it in the GroupBox
-            String aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString.AppendAscii( ": " );
+            OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
+            aString += ": ";
 
             if ( aURL.getBase().getLength() > 18 )
             {
-                aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( "..." );
+                aString += aURL.getBase().copy( 0, 15 );
+                aString += "...";
             }
             else
-                aString += String(aURL.getBase());
+                aString += aURL.getBase();
 
             *pnHatchingListState |= CT_SAVED;
             *pnHatchingListState &= ~CT_MODIFIED;

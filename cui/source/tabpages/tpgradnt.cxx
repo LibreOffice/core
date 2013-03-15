@@ -200,7 +200,8 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
             // determining (and possibly cutting) the name and
             // displaying it in the GroupBox
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( ": " );
+            OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
+            aString         += ": ";
             INetURLObject   aURL( pGradientList->GetPath() );
 
             aURL.Append( pGradientList->GetName() );
@@ -208,11 +209,11 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 
             if ( aURL.getBase().getLength() > 18 )
             {
-                aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( "..." );
+                aString += aURL.getBase().copy( 0, 15 );
+                aString += "...";
             }
             else
-                aString += String(aURL.getBase());
+                aString += aURL.getBase();
 
             if ( *pPageType == PT_GRADIENT && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -669,16 +670,16 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
 
                 // determining (possibly cutting) the name
                 // and displaying it in the GroupBox
-                String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                aString.AppendAscii( ": " );
+                OUString aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
+                aString += ": ";
 
                 if ( aURL.getBase().getLength() > 18 )
                 {
-                    aString += String(aURL.getBase()).Copy( 0, 15 );
-                    aString.AppendAscii( "..." );
+                    aString += aURL.getBase().copy( 0, 15 );
+                    aString += "...";
                 }
                 else
-                    aString += String(aURL.getBase());
+                    aString += aURL.getBase();
 
                 *pnGradientListState |= CT_CHANGED;
                 *pnGradientListState &= ~CT_MODIFIED;
@@ -745,16 +746,16 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickSaveHdl_Impl)
         {
             // determining (possibly cutting) the name
             // and displaying it in the GroupBox
-            String aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString.AppendAscii( ": " );
+            OUString aString( CUI_RES( RID_SVXSTR_TABLE ) );
+            aString  += ": ";
 
             if ( aURL.getBase().getLength() > 18 )
             {
-                aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( "..." );
+                aString += aURL.getBase().copy( 0, 15 );
+                aString += "...";
             }
             else
-                aString += String(aURL.getBase());
+                aString += aURL.getBase();
 
             *pnGradientListState |= CT_SAVED;
             *pnGradientListState &= ~CT_MODIFIED;
