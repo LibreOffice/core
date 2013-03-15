@@ -23,6 +23,7 @@
 #include <tools/solar.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 
 class ScDocument;
 class SfxMedium;
@@ -69,6 +70,18 @@ public:
     ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >&);
     sal_Bool Import(sal_Bool bStylesOnly, ErrCode& );
     sal_Bool Export(sal_Bool bStylesOnly);
+};
+
+class ScXMLChartExportWrapper
+{
+public:
+    ScXMLChartExportWrapper( com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel, SfxMedium& rMed );
+    bool Export();
+
+private:
+    com::sun::star::uno::Reference< com::sun::star::frame::XModel > mxModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > mxStorage;
+    SfxMedium& mrMedium;
 };
 
 #endif

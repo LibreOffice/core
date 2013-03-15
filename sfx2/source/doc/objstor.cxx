@@ -305,10 +305,38 @@ SvGlobalName SfxObjectShell::GetClassName() const
     return GetFactory().GetClassId();
 }
 
+namespace {
+
+/**
+ * Chart2 does not have an Object shell, so handle this here for now
+ * If we ever implement a full scale object shell in chart2 move it there
+ */
+sal_uInt32 GetChartVersion( sal_Int32 nVersion, bool bTemplate )
+{
+    if( nVersion == SOFFICE_FILEFORMAT_60)
+    {
+        return SOT_FORMATSTR_ID_STARCHART_60;
+    }
+    else if( nVersion == SOFFICE_FILEFORMAT_8)
+    {
+        if (bTemplate)
+        {
+            SAL_WARN("sfx2", "no chart template support yet");
+            return SOT_FORMATSTR_ID_STARCHART_8;
+        }
+        else
+            return SOT_FORMATSTR_ID_STARCHART_8;
+    }
+
+    SAL_WARN("sfx2", "unsupported version");
+    return 0;
+}
+
+}
+
 //-------------------------------------------------------------------------
 void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xStorage,
-                                   sal_Int32 nVersion,
-                                   sal_Bool bTemplate ) const
+                                   sal_Int32 nVersion, sal_Bool bTemplate, bool bChart ) const
 {
     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
 
@@ -318,7 +346,11 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         OUString aFullTypeName, aShortTypeName, aAppName;
         sal_uInt32 nClipFormat=0;
 
-        FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
+        if(!bChart)
+            FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
+        else
+            nClipFormat = GetChartVersion(nVersion, bTemplate);
+
         if ( nClipFormat )
         {
             // basic doesn't have a ClipFormat
@@ -421,7 +453,7 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
                     return sal_False;
                 }
 
-                SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False );
+                SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
             }
         }
         catch ( uno::Exception& )
@@ -1874,7 +1906,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
             if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
             {
                 OSL_FAIL( "The mediatype must be set already!\n" );
-                SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False );
+                SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
             }
 
             pImp->bIsSaving = sal_False;
@@ -3017,7 +3049,12 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
         // OASIS templates have own mediatypes ( SO7 also actually, but it is to late to use them here )
         sal_Bool bTemplate = ( rMedium.GetFilter()->IsOwnTemplateFormat() && nVersion > SOFFICE_FILEFORMAT_60 );
 
-        SetupStorage( xStorage, nVersion, bTemplate );
+        const SfxFilter* pFilter = rMedium.GetFilter();
+        bool bChart = false;
+        if(pFilter->GetName() == OUString("chart8"))
+            bChart = true;
+
+        SetupStorage( xStorage, nVersion, bTemplate, bChart );
 #ifndef DISABLE_SCRIPTING
         if ( HasBasic() )
         {
@@ -3043,7 +3080,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
             pImp->m_xDocStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
             OSL_ENSURE( pImp->m_xDocStorage.is(), "The method must either return storage or throw an exception!" );
 
-            SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False );
+            SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
             pImp->m_bCreateTempStor = sal_False;
             SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(STR_EVENT_STORAGECHANGED), this ) );
         }

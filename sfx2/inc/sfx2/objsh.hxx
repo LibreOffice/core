@@ -569,10 +569,12 @@ public:
     virtual void    SetModified( sal_Bool bModified = sal_True );
     sal_Bool        IsModified();
 
+    /**
+     * @param bChart true if the file is a chart doc and FillClass should not be called
+     */
     void            SetupStorage(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                        sal_Int32 nVersion,
-                        sal_Bool bTemplate ) const;
+                        sal_Int32 nVersion, sal_Bool bTemplate, bool bChart = false ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage();
 

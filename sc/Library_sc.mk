@@ -298,6 +298,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/filter/xml/xmlsubti \
 	sc/source/filter/xml/xmltabi \
 	sc/source/filter/xml/xmlwrap \
+	sc/source/filter/chart/chart_imp \
 	sc/source/ui/Accessibility/AccessibilityHints \
 	sc/source/ui/Accessibility/AccessibleCell \
 	sc/source/ui/Accessibility/AccessibleCellBase \

@@ -87,6 +87,10 @@
 #include <svtools/sfxecode.hxx>
 #include "../appl/app.hrc"
 
+#include <boost/scoped_ptr.hpp>
+
+#include <com/sun/star/frame/Desktop.hpp>
+
 // flags that specify requested operation
 #define EXPORT_REQUESTED            1
 #define PDFEXPORT_REQUESTED         2
@@ -322,6 +326,29 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 , m_bRecommendReadOnly( sal_False )
 {
     CheckInteractionHandler();
+    rtl::OUString sModuleName;
+    try
+    {
+        uno::Reference< lang::XComponent > xCurrentComponent = frame::Desktop::create( comphelper::getProcessComponentContext() )->getCurrentComponent();
+        sModuleName = aOwner.GetModuleManager()->identify(xCurrentComponent);
+        if(sModuleName == "com.sun.star.chart2.ChartDocument")
+        {
+            // let us switch the model and set the xStorable and
+            // XStorable2 to the old model.
+            // This is an ugly hack because we have no SfxObjectShell for chart2 yet.
+            // We need SfxObjectShell for the heavy work around ODF document creation
+            // because chart2 only writes the basic stream out.
+            // In future in might make sense to implement a full scale object shell in
+            // chart2 and make chart2 an own program.
+            m_xModel = uno::Reference< frame::XModel >(xCurrentComponent, uno::UNO_QUERY_THROW );
+            m_xStorable = uno::Reference< frame::XStorable >(xModel, uno::UNO_QUERY_THROW );
+            m_xStorable2 = uno::Reference< frame::XStorable2 >(xModel, uno::UNO_QUERY_THROW );
+        }
+    }
+    catch(...)
+    {
+        // we don't want to pass on any errors;
+    }
 }
 
 //-------------------------------------------------------------------------

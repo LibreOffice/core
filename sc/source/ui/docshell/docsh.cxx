@@ -47,6 +47,16 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/table/XTableChartsSupplier.hpp>
+#include <com/sun/star/table/XTableCharts.hpp>
+#include <com/sun/star/table/XTableChart.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#include <com/sun/star/frame/XStorable2.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include "scabstdlg.hxx"
 #include <sot/formats.hxx>
@@ -490,6 +500,29 @@ sal_Bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::un
 
     aDocument.EnableIdle(true);
 
+    return bRet;
+}
+
+bool ScDocShell::SaveCurrentChart( SfxMedium& rMedium )
+{
+    bool bRet = false;
+
+    try
+    {
+
+        uno::Reference< lang::XComponent > xCurrentComponent = frame::Desktop::create( comphelper::getProcessComponentContext() )->getCurrentComponent();
+
+        uno::Reference< frame::XStorable2 > xStorable( xCurrentComponent, uno::UNO_QUERY_THROW );
+
+        uno::Reference< frame::XModel > xChartDoc ( xCurrentComponent, uno::UNO_QUERY_THROW );
+
+        ScXMLChartExportWrapper aExport( xChartDoc, rMedium );
+        bRet = aExport.Export();
+    }
+    catch(...)
+    {
+        SAL_WARN("sc", "exception thrown while saving chart. Bug!!!");
+    }
     return bRet;
 }
 
@@ -1584,10 +1617,20 @@ sal_Bool ScDocShell::SaveAs( SfxMedium& rMedium )
 
     PrepareSaveGuard aPrepareGuard( *this);
 
+    OUString aFltName = rMedium.GetFilter()->GetFilterName();
+    bool bChartExport = aFltName.indexOf("chart8") != -1;
+
     //  wait cursor is handled with progress bar
-    sal_Bool bRet = SfxObjectShell::SaveAs( rMedium );
-    if( bRet )
+    sal_Bool bRet = false;
+    if(!bChartExport)
+    {
+        bRet = SfxObjectShell::SaveAs( rMedium );
         bRet = SaveXML( &rMedium, NULL );
+    }
+    else
+    {
+        bRet = SaveCurrentChart( rMedium );
+    }
 
     return bRet;
 }
