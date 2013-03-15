@@ -604,11 +604,11 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
             if( pEntry->bDummy )
             {
                 Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
+                Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uLong >( pEntry ) ) );
                 GalleryObjectList::iterator it = aObjectList.begin();
                 ::std::advance( it, i );
                 aObjectList.erase( it );
                 delete pEntry;
-                Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uLong >( pEntry ) ) );
             }
             else ++i;
         }
