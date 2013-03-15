@@ -74,9 +74,7 @@ namespace tools_urlobj
         // this is only demonstration code
         void urlobjTest_001(  )
         {
-            INetURLObject aUrl( rtl::
-                                OUString( RTL_CONSTASCII_USTRINGPARAM
-                                          ( "file://10.10.1.1/sampledir/sample.file" ) ) );
+            INetURLObject aUrl( OUString( "file://10.10.1.1/sampledir/sample.file" ) );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             compareToAscii
@@ -107,9 +105,7 @@ namespace tools_urlobj
         {
             INetURLObject aUrl;
             aUrl.
-                setFSysPath( rtl::
-                             OUString( RTL_CONSTASCII_USTRINGPARAM
-                                       ( "\\\\137.65.170.24\\c$\\Img0001.jpg" ) ),
+                setFSysPath( OUString( "\\\\137.65.170.24\\c$\\Img0001.jpg" ),
                              INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
@@ -140,9 +136,7 @@ namespace tools_urlobj
         {
             INetURLObject aUrl;
             aUrl.
-                setFSysPath( rtl::
-                             OUString( RTL_CONSTASCII_USTRINGPARAM
-                                       ( "\\\\hive-winxp-x86\\pmladek\\test2.odt" ) ),
+                setFSysPath( OUString( "\\\\hive-winxp-x86\\pmladek\\test2.odt" ),
                              INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
@@ -166,9 +160,7 @@ namespace tools_urlobj
 
         void urlobjTest_004(  )
         {
-            INetURLObject aUrl( rtl::
-                                OUString( RTL_CONSTASCII_USTRINGPARAM
-                                          ( "smb://10.10.1.1/sampledir/sample.file" ) ) );
+            INetURLObject aUrl( OUString( "smb://10.10.1.1/sampledir/sample.file" ) );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             compareToAscii
@@ -198,7 +190,7 @@ namespace tools_urlobj
         void urlobjTest_005(  )
         {
             INetURLObject aUrl;
-            aUrl.setFSysPath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "//137.65.170.24/c$/Img0001.jpg" ) ),
+            aUrl.setFSysPath( OUString( "//137.65.170.24/c$/Img0001.jpg" ),
                               INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
@@ -223,7 +215,7 @@ namespace tools_urlobj
         void urlobjTest_006(  )
         {
             INetURLObject aUrl;
-            aUrl.setFSysPath( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "//hive-winxp-x86/pmladek/test2.odt" ) ),
+            aUrl.setFSysPath( OUString( "//hive-winxp-x86/pmladek/test2.odt" ),
                               INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
@@ -245,8 +237,7 @@ namespace tools_urlobj
         {
             // Test with a username part
             {
-                INetURLObject aUrl( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "vnd.libreoffice.cmis://username@http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" ) ) );
+                INetURLObject aUrl( OUString( "vnd.libreoffice.cmis://username@http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" ) );
                 CPPUNIT_ASSERT_EQUAL( std::string( "http://foo.bar.com:8080/my/cmis/atom#repo-id-encoded" ),
                         OUSTR_TO_STDSTR( aUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET ) ) );
                 CPPUNIT_ASSERT_EQUAL( std::string( "username" ), OUSTR_TO_STDSTR( aUrl.GetUser( ) ) );
@@ -257,8 +248,8 @@ namespace tools_urlobj
 
             // Test without a username part
             {
-                INetURLObject aUrl( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "vnd.libreoffice.cmis://http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" ) ) );
+                INetURLObject aUrl( OUString(
+                                "vnd.libreoffice.cmis://http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" ) );
                 CPPUNIT_ASSERT_EQUAL( std::string( "http://foo.bar.com:8080/my/cmis/atom#repo-id-encoded" ),
                         OUSTR_TO_STDSTR( aUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET ) ) );
                 CPPUNIT_ASSERT( !aUrl.HasUserData() );
