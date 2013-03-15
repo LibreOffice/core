@@ -740,16 +740,16 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
     {
         if( !pCurr->GetPortion() )
             pCurr->SetPortion( new SwTxtPortion( *pCurr ) );
-        SwMarginPortion *pMarg = new SwMarginPortion( 0 );
         if( nLeft )
         {
+            SwMarginPortion *pMarg = new SwMarginPortion( 0 );
             pMarg->AddPrtWidth( nLeft );
             pMarg->SetPortion( pCurr->GetPortion() );
             pCurr->SetPortion( pMarg );
         }
         if( nRight )
         {
-            pMarg = new SwMarginPortion( 0 );
+            SwMarginPortion *pMarg = new SwMarginPortion( 0 );
             pMarg->AddPrtWidth( nRight );
             pCurr->FindLastPortion()->Append( pMarg );
         }
