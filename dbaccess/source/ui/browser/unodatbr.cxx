@@ -1170,7 +1170,7 @@ OUString SbaTableQueryBrowser::getDataSourceAcessor( SvTreeListEntry* _pDataSour
     DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( _pDataSourceEntry->GetUserData() );
     OSL_ENSURE( pData, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry data!" );
     OSL_ENSURE( pData->eType == etDatasource, "SbaTableQueryBrowser::getDataSourceAcessor: entry does not denote a data source!" );
-    return OUString( pData->sAccessor.Len() ? pData->sAccessor : GetEntryText( _pDataSourceEntry ));
+    return pData->sAccessor.Len() ? OUString(pData->sAccessor) : GetEntryText( _pDataSourceEntry );
 }
 
 // -------------------------------------------------------------------------
