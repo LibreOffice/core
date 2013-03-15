@@ -73,7 +73,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace toolkit;
 
-#define PROPERTY_RESOURCERESOLVER ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ))
+#define PROPERTY_RESOURCERESOLVER OUString( "ResourceResolver" )
 
 //HELPER
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
@@ -87,17 +87,17 @@ struct LanguageDependentProp
 // ----------------------------------------------------------------------------
 namespace
 {
-    static const Sequence< ::rtl::OUString >& lcl_getLanguageDependentProperties()
+    static const Sequence< OUString >& lcl_getLanguageDependentProperties()
     {
-        static Sequence< ::rtl::OUString > s_aLanguageDependentProperties;
+        static Sequence< OUString > s_aLanguageDependentProperties;
         if ( s_aLanguageDependentProperties.getLength() == 0 )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( s_aLanguageDependentProperties.getLength() == 0 )
             {
                 s_aLanguageDependentProperties.realloc( 2 );
-                s_aLanguageDependentProperties[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpText" ) );
-                s_aLanguageDependentProperties[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+                s_aLanguageDependentProperties[0] = "HelpText";
+                s_aLanguageDependentProperties[1] = "Title";
                 // note: properties must be sorted
             }
         }
@@ -197,14 +197,14 @@ static void lcl_throwElementExistException( )
 // ----------------------------------------------------------------------------
 static const ::rtl::OUString& getTabIndexPropertyName( )
 {
-    static const ::rtl::OUString s_sTabIndexProperty( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) );
+    static const ::rtl::OUString s_sTabIndexProperty( "TabIndex" );
     return s_sTabIndexProperty;
 }
 
 // ----------------------------------------------------------------------------
 static const ::rtl::OUString& getStepPropertyName( )
 {
-    static const ::rtl::OUString s_sStepProperty( RTL_CONSTASCII_USTRINGPARAM( "Step" ) );
+    static const ::rtl::OUString s_sStepProperty( "Step" );
     return s_sStepProperty;
 }
 
@@ -396,7 +396,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const ::rtl::
         Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
         if ( xAgg.is() )
         {
-            if ( xSI->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlModel"))) )
+            if ( xSI->supportsService(OUString("com.sun.star.awt.UnoControlModel")) )
             {
                 // release 3 of the 4 references we have to the object
                 xAgg.clear();
@@ -992,8 +992,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 ::rtl::OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) )
-                    xModelProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString("Label") ) )
+                    xModelProps->getPropertyValue( ::rtl::OUString("Label") ) >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1025,8 +1025,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                     Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                     ::rtl::OUString sLabel;
-                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) )
-                        xModelProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sLabel;
+                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString("Label") ) )
+                        xModelProps->getPropertyValue( ::rtl::OUString("Label") ) >>= sLabel;
                     aCurrentGroupLabels.push_back( sLabel );
 #endif
                     continue;
@@ -1055,8 +1055,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 ::rtl::OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) )
-                    xModelProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString("Label") ) )
+                    xModelProps->getPropertyValue( ::rtl::OUString("Label") ) >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1420,10 +1420,10 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
     Reference< XPropertySet > xP( rxCtrl->getModel(), UNO_QUERY );
 
     sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ) >>= nX;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ) >>= nY;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
-    xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
+    xP->getPropertyValue( ::rtl::OUString( "PositionX" ) ) >>= nX;
+    xP->getPropertyValue( ::rtl::OUString( "PositionY" ) ) >>= nY;
+    xP->getPropertyValue( ::rtl::OUString( "Width" ) ) >>= nWidth;
+    xP->getPropertyValue( ::rtl::OUString( "Height" ) ) >>= nHeight;
     MapMode aMode( MAP_APPFONT );
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     if ( pOutDev )
@@ -1679,10 +1679,10 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
 {
     if( !isDesignMode() && !mbCreatingCompatiblePeer )
     {
-        ::rtl::OUString s1( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) );
-        ::rtl::OUString s2( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) );
-        ::rtl::OUString s3( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
-        ::rtl::OUString s4( RTL_CONSTASCII_USTRINGPARAM( "Height" ) );
+        ::rtl::OUString s1( "PositionX" );
+        ::rtl::OUString s2( "PositionY" );
+        ::rtl::OUString s3( "Width" );
+        ::rtl::OUString s4( "Height" );
 
         sal_Int32 nLen = rEvents.getLength();
         for( sal_Int32 i = 0; i < nLen; i++ )
@@ -1730,10 +1730,10 @@ void ControlContainerBase::addingControl( const Reference< XControl >& _rxContro
         {
             Sequence< ::rtl::OUString > aNames( 4 );
             ::rtl::OUString* pNames = aNames.getArray();
-            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX") );
-            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY") );
-            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"));
-            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"));
+            *pNames++ = "PositionX";
+            *pNames++ = "PositionY";
+            *pNames++ = "Width";
+            *pNames++ = "Height";
 
             xProps->addPropertiesChangeListener( aNames, this );
         }

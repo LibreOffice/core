@@ -261,7 +261,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL GridColumn::getImplementationName(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.toolkit.GridColumn" ) );
+        return ::rtl::OUString( "org.openoffice.comp.toolkit.GridColumn" );
     }
 
     //------------------------------------------------------------------------------------------------------------------

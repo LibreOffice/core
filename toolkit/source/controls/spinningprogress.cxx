@@ -110,18 +110,18 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL SpinningProgressControlModel::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL SpinningProgressControlModel::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.toolkit.SpinningProgressControlModel"));
+        return OUString("org.openoffice.comp.toolkit.SpinningProgressControlModel");
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames() throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServiceNames(3);
+        Sequence< OUString > aServiceNames(3);
         aServiceNames[0] = ::rtl::OUString::createFromAscii( szServiceName_SpinningProgressControlModel );
         aServiceNames[1] = ::rtl::OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
-        aServiceNames[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlModel"));
+        aServiceNames[2] = "com.sun.star.awt.UnoControlModel";
         return aServiceNames;
     }
 
