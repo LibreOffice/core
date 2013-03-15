@@ -2521,14 +2521,12 @@ bool SvNumberformat::GetOutputString(double fNumber,
                 nIx = 2;
             }
         }
-        if (nIx == 1 && fNumber < 0.0 &&        // negatives Format
-            IsNegativeRealNegative() )      // ohne Vorzeichen
+        if (fNumber < 0.0 &&
+                ((nIx == 0 && IsNegativeRealNegative2()) ||     // 1st, usually positive subformat
+                 (nIx == 1 && IsNegativeRealNegative())))       // 2nd, usually negative subformat
         {
-            fNumber = -fNumber;                 // Vorzeichen eliminieren
+            fNumber = -fNumber;                 // eliminate sign
         }
-        if(nIx == 0 &&
-                IsNegativeRealNegative2() && fNumber < 0.0)
-            fNumber = -fNumber;
         *ppColor = NumFor[nIx].GetColor();
         const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
         const sal_uInt16 nAnz = NumFor[nIx].GetCount();
