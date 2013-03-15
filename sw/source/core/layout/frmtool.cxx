@@ -2732,7 +2732,6 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
 {
     SwPageFrm *pRet;
     SwDoc *pDoc = ((SwLayoutFrm*)pUpper)->GetFmt()->GetDoc();
-    SwFrmFmt *pFmt = 0;
     if (bFirst)
     {
         if (rDesc.IsFirstShared())
@@ -2752,14 +2751,8 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
                 rDesc.GetFirst().SetFmtAttr( rDesc.GetLeft().GetLRSpace() );
             }
         }
-        pFmt = rDesc.GetFirstFmt();
-        if (!pFmt)
-        {
-            pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
-        }
     }
-    else
-        pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
+    SwFrmFmt *pFmt(bOdd ? rDesc.GetRightFmt(bFirst) : rDesc.GetLeftFmt(bFirst));
     //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben
     //eine Leerseite einfuegen.
     if ( !pFmt )

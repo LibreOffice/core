@@ -394,11 +394,10 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( )
     // Actually check it
     const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
 
-    const SwFrmFmt* pFmt = pDesc->GetLeftFmt();
-    if ( GetPageFrame()->OnRightPage() )
-         pFmt = pDesc->GetRightFmt();
-    if ( GetPageFrame()->OnFirstPage() )
-         pFmt = pDesc->GetFirstFmt();
+    bool const bFirst(GetPageFrame()->OnFirstPage());
+    const SwFrmFmt *const pFmt = (GetPageFrame()->OnRightPage())
+        ? pDesc->GetRightFmt(bFirst)
+        : pDesc->GetLeftFmt(bFirst);
 
     if ( pFmt )
     {
