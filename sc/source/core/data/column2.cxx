@@ -1392,18 +1392,42 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
 void ScColumn::CellStorageModified()
 {
 #if DEBUG_COLUMN_STORAGE
+    if (maItems.empty())
+    {
+        if (maTextWidths.empty())
+        {
+            cout << "ScColumn::CellStorageModified: Text width array is empty, but shouldn't." << endl;
+            abort();
+        }
+
+        if (maTextWidths.block_size() != 1 || maTextWidths.begin()->type != mdds::mtv::element_type_empty)
+        {
+            cout << "ScColumn::CellStorageModified: When the cell array is empty, the text with array should consist of one empty block." << endl;
+            abort();
+        }
+
+        return;
+    }
+
+    cout << "-- begin" << endl;
+    std::vector<ColEntry>::const_iterator it = maItems.begin(), itEnd = maItems.end();
+    for (; it != itEnd; ++it)
+        cout << "ScColumn::CellStorageModified: entry: row = " << it->nRow << "; cell = " << it->pCell << endl;
+
     ScColumnTextWidthIterator aIter(*this, 0, MAXROW);
     for (; aIter.hasCell(); aIter.next())
     {
         SCROW nRow = aIter.getPos();
         ScBaseCell* pCell = GetCell(nRow);
+        cout << "ScColumn::CellStorageModified: row = " << nRow << "; cell = " << pCell << endl;
         if (!pCell)
         {
-            cout << "Cell and text width storages are out of sync!" << endl;
+            cout << "ScColumn::CellStorageModified: Cell and text width storages are out of sync!" << endl;
             cout.flush();
             abort();
         }
     }
+    cout << "-- end" << endl;
 #endif
 }
 
