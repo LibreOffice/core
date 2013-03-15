@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalPackage_add_file,cppunit,lib/icppunit_dll.lib,src/cppun
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester_dll.exe,src/DllPlugInTester/ReleaseDll/DllPlugInTester_dll.exe))
 else
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/libcppunit-1-13-0.dll,src/cppunit/.libs/libcppunit-1-13-0.dll))
-$(eval $(call gb_ExternalPackage_add_file,cppunit,lib/cppunit.dll.a,src/cppunit/.libs/cppunit.dll.a))
+$(eval $(call gb_ExternalPackage_add_file,cppunit,lib/libcppunit.dll.a,src/cppunit/.libs/libcppunit.dll.a))
 $(eval $(call gb_ExternalPackage_add_file,cppunit,bin/DllPlugInTester.exe,src/DllPlugInTester/.libs/DllPlugInTester.exe))
 endif
 else
