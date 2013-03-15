@@ -61,6 +61,7 @@ ScNeededSizeOptions::ScNeededSizeOptions() :
 
 ScColumn::ScColumn() :
     maTextWidths(MAXROWCOUNT),
+    maScriptTypes(MAXROWCOUNT),
     nCol( 0 ),
     pAttrArray( NULL ),
     pDocument( NULL )

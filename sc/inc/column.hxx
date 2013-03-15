@@ -91,11 +91,18 @@ struct ColEntry
 class ScColumn
 {
     typedef mdds::multi_type_vector<mdds::mtv::element_block_func> TextWidthType;
+    typedef mdds::multi_type_vector<mdds::mtv::element_block_func> ScriptType;
 
     // Only stores empty or unsigned short values.  Empty values correspond
     // with empty cells. All non-empty cell positions must have unsigned short
     // values; either the reall text widths or TEXTWIDTH_DIRTY.
     TextWidthType maTextWidths;
+
+    // Empty elements represent unknown script types. For now, we store script
+    // type values as unsigned shorts. Once multi_type_vector supports char
+    // and unsigned char (due in 0.7.2), we can switch to that to save storage
+    // space.
+    ScriptType maScriptTypes;
 
     SCCOL           nCol;
     SCTAB           nTab;
