@@ -165,12 +165,12 @@ void ScColumn::Delete( SCROW nRow )
         {
             pNoteCell->Delete();
             maItems.erase( maItems.begin() + nIndex);
+            maTextWidths.set_empty(nRow, nRow);
             // Should we free memory here (delta)? It'll be slower!
         }
         pCell->EndListeningTo( pDocument );
         pCell->Delete();
 
-        maTextWidths.set_empty(nRow, nRow);
         CellStorageModified();
     }
 }
@@ -360,9 +360,6 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
 
     ScHint aHint( SC_HINT_DYING, ScAddress( nCol, 0, nTab ), 0 );
 
-    SCROW nStartRow = maItems[nStartIndex].nRow;
-    SCROW nEndRow = maItems[nEndIndex].nRow;
-
     // cache all formula cells, they will be deleted at end of this function
     typedef ::std::vector< ScFormulaCell* > FormulaCellVector;
     FormulaCellVector aDelCells;
@@ -471,50 +468,40 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
     if (nFirst <= nEndIndex)
         aRemovedSegments.insert_back(nFirst, nEndIndex + 1, true);
 
-    // Remove segments from the column array, containing pDummyCell and formula
-    // cell pointers to be deleted.
-    { // own scope for variables
-        RemovedSegments_t::const_iterator aIt(aRemovedSegments.begin());
-        RemovedSegments_t::const_iterator aEnd(aRemovedSegments.end());
-        // The indexes in aRemovedSegments denote cell positions in the
-        // original array. But as we are shifting it from the left, we have
-        // to compensate for already performed shifts for latter segments.
-        // TODO: use reverse iterators instead
-        SCSIZE nShift(0);
-        SCSIZE nStartSegment(nStartIndex);
-        bool bRemoved = false;
-        for (;aIt != aEnd; ++aIt)
+    {
+        // Remove segments from the column array, containing pDummyCell and
+        // formula cell pointers to be deleted.
+
+        RemovedSegments_t::const_reverse_iterator it = aRemovedSegments.rbegin();
+        RemovedSegments_t::const_reverse_iterator itEnd = aRemovedSegments.rend();
+
+        std::vector<ColEntry>::iterator itErase, itEraseEnd;
+        SCSIZE nEndSegment = it->first; // should equal maItems.size(). Non-inclusive.
+        // Skip the first node.
+        for (++it; it != itEnd; ++it)
         {
-            if (aIt->second)
+            if (!it->second)
             {
-                // this segment removed
-                if (!bRemoved)
-                    nStartSegment = aIt->first;
-                    // The first of removes in a row sets start (they should be
-                    // alternating removed/notremoved anyway).
-                bRemoved = true;
+                // Don't remove this segment.
+                nEndSegment = it->first;
                 continue;
             }
 
-            if (bRemoved)
-            {
-                // this segment not removed, but previous segment(s) removed, move tail.
-                SCSIZE const nEndSegment(aIt->first);
-                memmove(
-                        &maItems[nStartSegment - nShift],
-                        &maItems[nEndSegment - nShift],
-                        (maItems.size() - nEndSegment) * sizeof(ColEntry));
-                nShift += nEndSegment - nStartSegment;
-                bRemoved = false;
-            }
+            // Remove this segment.
+            SCSIZE nStartSegment = it->first;
+            SCROW nStartRow = maItems[nStartSegment].nRow;
+            SCROW nEndRow = maItems[nEndSegment-1].nRow;
+
+            itErase = maItems.begin();
+            std::advance(itErase, nStartSegment);
+            itEraseEnd = maItems.begin();
+            std::advance(itEraseEnd, nEndSegment);
+            maItems.erase(itErase, itEraseEnd);
+
+            maTextWidths.set_empty(nStartRow, nEndRow);
+
+            nEndSegment = nStartSegment;
         }
-        // The last removed segment up to aItems.size() is discarded, there's
-        // nothing following to be moved.
-        if (bRemoved)
-            nShift += maItems.size() - nStartSegment;
-        maItems.erase(maItems.end() - nShift, maItems.end());
-        maTextWidths.set_empty(nStartRow, nEndRow);
-        CellStorageModified();
     }
 
     // *** delete all formula cells ***
@@ -1666,8 +1653,8 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
                     }
                     delete pFormula;
 
-                    CellStorageModified();
                     SetTextWidth(maItems[nIndex].nRow, TEXTWIDTH_DIRTY);
+                    CellStorageModified();
                 }
                 ++nIndex;
             }
