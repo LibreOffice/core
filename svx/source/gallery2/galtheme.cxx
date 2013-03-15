@@ -87,8 +87,8 @@ GalleryTheme::~GalleryTheme()
     {
         GalleryObject* pEntry = aObjectList[ i ];
         Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
-        delete pEntry;
         Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
+        delete pEntry;
     }
     aObjectList.clear();
 
