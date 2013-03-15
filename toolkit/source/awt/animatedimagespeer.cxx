@@ -113,7 +113,7 @@ namespace toolkit
             INetURLObject aURL( i_imageURL );
             if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
             {
-                OSL_VERIFY( aURL.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hicontrast" ) ), false, 0 ) );
+                OSL_VERIFY( aURL.insertName( OUString( "hicontrast" ), false, 0 ) );
                 return aURL.GetMainURL( INetURLObject::NO_DECODE );
             }
             // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
@@ -158,7 +158,7 @@ namespace toolkit
                 if ( i_graphic.is() )
                 {
                     const Reference< XPropertySet > xGraphicProps( i_graphic, UNO_QUERY_THROW );
-                    OSL_VERIFY( xGraphicProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SizePixel" ) ) ) >>= aSizePixel );
+                    OSL_VERIFY( xGraphicProps->getPropertyValue( OUString( "SizePixel" ) ) >>= aSizePixel );
                 }
             }
             catch( const Exception& )
