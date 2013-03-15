@@ -177,9 +177,9 @@ public:
 
 static void aDspFunc(const OUString &rErr, const OUString &rAction)
 {
-    rtl::OStringBuffer aErr(RTL_CONSTASCII_STRINGPARAM("Aktion: "));
+    rtl::OStringBuffer aErr("Aktion: ");
     aErr.append(rtl::OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US));
-    aErr.append(RTL_CONSTASCII_STRINGPARAM(" Fehler: "));
+    aErr.append(" Fehler: ");
     aErr.append(rtl::OUStringToOString(rErr, RTL_TEXTENCODING_ASCII_US));
     OSL_FAIL(aErr.getStr());
 }
@@ -307,9 +307,9 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         {
             if(!pData->pDsp)
             {
-                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Action: "));
+                rtl::OStringBuffer aStr("Action: ");
                 aStr.append(rtl::OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
-                aStr.append(RTL_CONSTASCII_STRINGPARAM("\nFehler: "));
+                aStr.append("\nFehler: ");
                 aStr.append(rtl::OUStringToOString(aErr, RTL_TEXTENCODING_ASCII_US));
                 OSL_FAIL(aStr.getStr());
             }
@@ -377,23 +377,22 @@ sal_Bool SimpleErrorHandler::CreateString(
     const ErrorInfo *pInfo, OUString &rStr, sal_uInt16 &) const
 {
     sal_uIntPtr nId = pInfo->GetErrorCode();
-    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Id "));
+    rtl::OStringBuffer aStr("Id ");
     aStr.append(static_cast<sal_Int32>(nId));
-    aStr.append(RTL_CONSTASCII_STRINGPARAM(
-        " only handled by SimpleErrorHandler"));
-    aStr.append(RTL_CONSTASCII_STRINGPARAM("\nErrorCode: "));
+    aStr.append(" only handled by SimpleErrorHandler");
+    aStr.append("\nErrorCode: ");
     aStr.append(static_cast<sal_Int32>(
         nId & ((1L <<  ERRCODE_CLASS_SHIFT)  - 1 )));
-    aStr.append(RTL_CONSTASCII_STRINGPARAM("\nErrorClass: "));
+    aStr.append("\nErrorClass: ");
     aStr.append(static_cast<sal_Int32>(
         (nId & ERRCODE_CLASS_MASK) >> ERRCODE_CLASS_SHIFT));
-    aStr.append(RTL_CONSTASCII_STRINGPARAM("\nErrorArea: "));
+    aStr.append("\nErrorArea: ");
     aStr.append(static_cast<sal_Int32>((nId & ERRCODE_ERROR_MASK &
             ~((1 << ERRCODE_AREA_SHIFT ) -1 ) ) >> ERRCODE_AREA_SHIFT));
     DynamicErrorInfo *pDyn=PTR_CAST(DynamicErrorInfo,pInfo);
     if(pDyn)
     {
-        aStr.append(RTL_CONSTASCII_STRINGPARAM("\nDId "));
+        aStr.append("\nDId ");
         aStr.append(static_cast<sal_Int32>(*pDyn));
     }
     rStr = rtl::OStringToOUString(aStr.makeStringAndClear(),

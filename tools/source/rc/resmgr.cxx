@@ -183,8 +183,7 @@ void ResMgrContainer::init()
     assert( m_aResFiles.empty() );
 
     // get resource path
-    rtl::OUString uri(
-        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/resource/"));
+    rtl::OUString uri("$BRAND_BASE_DIR/program/resource/");
     rtl::Bootstrap::expandMacros(uri); //TODO: detect failure
 
     // collect all possible resource files
@@ -284,9 +283,9 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             // locale fallback failed
             // fallback to en-US locale
             nTries = 2;
-            aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
-            aLocale.Country  = OUString( RTL_CONSTASCII_USTRINGPARAM( "US" ) );
-            aLocale.Variant = OUString();
+            aLocale.Language = "en";
+            aLocale.Country  = "US";
+            aLocale.Variant = "";
         }
     }
     // try if there is anything with this prefix at all
@@ -343,8 +342,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             sKey.append( sal_Unicode('-') );
             sKey.append( rLocale.Variant );
         } // if( !aLocale.Variant.isEmpty() )
-        ::rtl::OUString sURL = sKey.makeStringAndClear();
-        sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".res"));
+        OUString sURL = sKey.makeStringAndClear() + ".res";
         if ( m_aResFiles.find(sURL) == m_aResFiles.end() )
         {
             m_aResFiles[ sURL ].aFileURL = sURL;
@@ -400,8 +398,8 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
         aLocale.Country = OUString();
     else if( !isAlreadyPureenUS(aLocale) )
     {
-        aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
-        aLocale.Country = OUString( RTL_CONSTASCII_USTRINGPARAM( "US" ) );
+        aLocale.Language = "en";
+        aLocale.Country = "US";
     }
     InternalResMgr* pNext = getResMgr( pMgr->aPrefix, aLocale, pMgr->bSingular );
     // prevent recursion
@@ -490,7 +488,7 @@ InternalResMgr::~InternalResMgr()
         {
             SvFileStream aStm( OUString::createFromAscii( pLogFile ), STREAM_WRITE );
             aStm.Seek( STREAM_SEEK_TO_END );
-            rtl::OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("FileName: "));
+            rtl::OStringBuffer aLine("FileName: ");
             aLine.append(rtl::OUStringToOString(aFileName,
                 RTL_TEXTENCODING_UTF8));
             aStm.WriteLine(aLine.makeStringAndClear());
@@ -499,7 +497,7 @@ InternalResMgr::~InternalResMgr()
                  it != pResUseDump->end(); ++it )
             {
                 sal_uInt64 nKeyId = it->first;
-                aLine.append(RTL_CONSTASCII_STRINGPARAM("Type/Id: "));
+                aLine.append("Type/Id: ");
                 aLine.append(sal::static_int_cast< sal_Int32 >((nKeyId >> 32) & 0xFFFFFFFF));
                 aLine.append('/');
                 aLine.append(sal::static_int_cast< sal_Int32 >(nKeyId & 0xFFFFFFFF));
@@ -713,22 +711,22 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
     if (aStr.getLength())
         aStr.append('\n');
 
-    aStr.append(RTL_CONSTASCII_STRINGPARAM("Class: "));
+    aStr.append("Class: ");
     aStr.append(rtl::OUStringToOString(GetTypeRes_Impl(ResId(nRT, *pNewResMgr)),
         RTL_TEXTENCODING_UTF8));
-    aStr.append(RTL_CONSTASCII_STRINGPARAM(", Id: "));
+    aStr.append(", Id: ");
     aStr.append(static_cast<sal_Int32>(nId));
-    aStr.append(RTL_CONSTASCII_STRINGPARAM(". "));
+    aStr.append(". ");
     aStr.append(pMessage);
 
-    aStr.append(RTL_CONSTASCII_STRINGPARAM("\nResource Stack\n"));
+    aStr.append("\nResource Stack\n");
     while( nDepth > 0 )
     {
-        aStr.append(RTL_CONSTASCII_STRINGPARAM("Class: "));
+        aStr.append("Class: ");
         aStr.append(rtl::OUStringToOString(GetTypeRes_Impl(
             ResId(rResStack[nDepth].pResource->GetRT(), *pNewResMgr)),
             RTL_TEXTENCODING_UTF8));
-        aStr.append(RTL_CONSTASCII_STRINGPARAM(", Id: "));
+        aStr.append(", Id: ");
         aStr.append(static_cast<sal_Int32>(
             rResStack[nDepth].pResource->GetId()));
         nDepth--;
@@ -842,8 +840,7 @@ void ResMgr::Init( const OUString& rFileName )
     if ( !pImpRes )
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer aStr(
-            RTL_CONSTASCII_STRINGPARAM("Resourcefile not found:\n"));
+        rtl::OStringBuffer aStr("Resourcefile not found:\n");
         aStr.append(OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8));
         OSL_FAIL(aStr.getStr());
 #endif
@@ -1090,10 +1087,9 @@ sal_Bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
             {
                 pTop->Flags |= RC_FALLBACK_DOWN;
 #ifdef DBG_UTIL
-                rtl::OStringBuffer aMess(
-                    RTL_CONSTASCII_STRINGPARAM("found resource "));
+                rtl::OStringBuffer aMess("found resource ");
                 aMess.append(static_cast<sal_Int32>(nId));
-                aMess.append(RTL_CONSTASCII_STRINGPARAM(" in fallback "));
+                aMess.append(" in fallback ");
                 aMess.append(rtl::OUStringToOString(
                     pFallbackResMgr->GetFileName(),
                     osl_getThreadTextEncoding()));

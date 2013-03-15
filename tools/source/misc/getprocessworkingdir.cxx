@@ -34,7 +34,7 @@ namespace tools {
 bool getProcessWorkingDir(rtl::OUString &rUrl)
 {
     rUrl = rtl::OUString();
-    rtl::OUString s(RTL_CONSTASCII_USTRINGPARAM("$OOO_CWD"));
+    rtl::OUString s("$OOO_CWD");
     rtl::Bootstrap::expandMacros(s);
     if (s.isEmpty())
     {
