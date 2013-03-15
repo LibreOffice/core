@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libmwaw,inc/external/libmwaw
 $(eval $(call gb_ExternalPackage_use_external_project,libmwaw,libmwaw))
 
 ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_ExternalPackage_add_file,libmwaw,lib/mwaw-0.1.lib,build/win32/Release/lib/libmwaw-0.1.lib))
+$(eval $(call gb_ExternalPackage_add_file,libmwaw,lib/mwaw-0.1.lib,src/lib/.libs/libmwaw-0.1.lib))
 else
 $(eval $(call gb_ExternalPackage_add_file,libmwaw,lib/libmwaw-0.1.a,src/lib/.libs/libmwaw-0.1.a))
 endif
