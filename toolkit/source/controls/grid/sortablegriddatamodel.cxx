@@ -830,9 +830,9 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL SortableGridDataModel::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL SortableGridDataModel::getImplementationName(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.toolkit.SortableGridDataModel" ) );
+        return OUString( "org.openoffice.comp.toolkit.SortableGridDataModel" );
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -104,7 +104,7 @@ namespace
         {
             Reference< XPropertySet > const xParentDelegator( i_parentModel, UNO_QUERY_THROW );
             Reference< XPropertySetInfo > const xPSI( xParentDelegator->getPropertySetInfo() );
-            bool const isGeometryControlModel = xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) );
+            bool const isGeometryControlModel = xPSI.is() && xPSI->hasPropertyByName( OUString( "PositionX" ) );
 
             Reference< XInterface > xInstance;
             if ( isGeometryControlModel )
@@ -168,7 +168,7 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
         maContainerListeners.elementInserted( aEvent );
     }
     else
-        throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( WRONG_TYPE_EXCEPTION )),
+        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
             (OWeakObject *)this, 2 );
 }
 // -----------------------------------------------------------------------------
@@ -228,7 +228,7 @@ UnoControlTabPageContainer::UnoControlTabPageContainer( const uno::Reference< un
 
 OUString UnoControlTabPageContainer::GetComponentServiceName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("TabPageContainer"));
+    return OUString("TabPageContainer");
 }
 
 void SAL_CALL UnoControlTabPageContainer::dispose(  ) throw(RuntimeException)

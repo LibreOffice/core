@@ -40,15 +40,15 @@
 #define GCM_PROPERTY_ID_TAG                 8
 #define GCM_PROPERTY_ID_RESOURCERESOLVER    9
 
-#define GCM_PROPERTY_POS_X              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
-#define GCM_PROPERTY_POS_Y              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
-#define GCM_PROPERTY_WIDTH              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))
-#define GCM_PROPERTY_HEIGHT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))
-#define GCM_PROPERTY_NAME               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))
-#define GCM_PROPERTY_TABINDEX           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex"))
-#define GCM_PROPERTY_STEP               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Step"))
-#define GCM_PROPERTY_TAG                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tag"))
-#define GCM_PROPERTY_RESOURCERESOLVER   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceResolver"))
+#define GCM_PROPERTY_POS_X              ::rtl::OUString("PositionX")
+#define GCM_PROPERTY_POS_Y              ::rtl::OUString("PositionY")
+#define GCM_PROPERTY_WIDTH              ::rtl::OUString("Width")
+#define GCM_PROPERTY_HEIGHT             ::rtl::OUString("Height")
+#define GCM_PROPERTY_NAME               ::rtl::OUString("Name")
+#define GCM_PROPERTY_TABINDEX           ::rtl::OUString("TabIndex")
+#define GCM_PROPERTY_STEP               ::rtl::OUString("Step")
+#define GCM_PROPERTY_TAG                ::rtl::OUString("Tag")
+#define GCM_PROPERTY_RESOURCERESOLVER   ::rtl::OUString("ResourceResolver")
 
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
