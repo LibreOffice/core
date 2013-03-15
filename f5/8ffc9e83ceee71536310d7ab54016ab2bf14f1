@@ -1,0 +1,1 @@
+reject: this breaks import of lines that follow the CSV quote rules and needs to be fixed differently
