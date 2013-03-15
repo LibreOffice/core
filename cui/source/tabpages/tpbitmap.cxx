@@ -191,7 +191,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 
             // determining (possibly cutting) the name and
             // displaying it in the GroupBox
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( ": " );
+            OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
             INetURLObject   aURL( pBitmapList->GetPath() );
 
             aURL.Append( pBitmapList->GetName() );
@@ -199,11 +199,11 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 
             if( aURL.getBase().getLength() > 18 )
             {
-                aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( "..." );
+                aString += aURL.getBase().copy( 0, 15 );
+                aString += "...";
             }
             else
-                aString += String(aURL.getBase());
+                aString += aURL.getBase();
 
             if( *pPageType == PT_BITMAP && *pPos != LISTBOX_ENTRY_NOTFOUND )
             {
@@ -933,16 +933,15 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 
                 // determining (possibly cutting) the name
                 // displaying it in the GroupBox
-                String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                aString.AppendAscii( ": " );
+                OUString aString( ResId( RID_SVXSTR_TABLE, rMgr ) ); aString += ": ";
 
                 if ( aURL.getBase().getLength() > 18 )
                 {
-                    aString += String(aURL.getBase()).Copy( 0, 15 );
-                    aString.AppendAscii( "..." );
+                    aString += aURL.getBase().copy( 0, 15 );
+                    aString += "...";
                 }
                 else
-                    aString += String(aURL.getBase());
+                    aString += aURL.getBase();
 
                 *pnBitmapListState |= CT_CHANGED;
                 *pnBitmapListState &= ~CT_MODIFIED;
@@ -1009,16 +1008,15 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickSaveHdl_Impl)
         {
             // determining (possibly cutting) the name
             // displaying it in the GroupBox
-            String aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString.AppendAscii( ": " );
+            OUString aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString += ": ";
 
             if ( aURL.getBase().getLength() > 18 )
             {
-                aString += String(aURL.getBase()).Copy( 0, 15 );
-                aString.AppendAscii( "..." );
+                aString += aURL.getBase().copy( 0, 15 );
+                aString += "...";
             }
             else
-                aString += String(aURL.getBase());
+                aString += aURL.getBase();
 
             *pnBitmapListState |= CT_SAVED;
             *pnBitmapListState &= ~CT_MODIFIED;
