@@ -140,9 +140,10 @@ XUnbufferedStream::XUnbufferedStream(
     try {
         if ( mxZipSeek.is() )
             mnZipSize = mxZipSeek->getLength();
-    } catch( Exception& )
+    } catch( Exception& e )
     {
         // in case of problem the size will stay set to 0
+        SAL_WARN("package", "ignoring Exception " + e.Message);
     }
 
     mnZipEnd = mnZipCurrent + mnZipSize;

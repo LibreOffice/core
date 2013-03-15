@@ -397,7 +397,10 @@ void ZipPackage::parseManifest()
                 // the mimetype stream should contain the information from manifest.xml
                 if ( !m_pRootFolder->GetMediaType().equals( aPackageMediatype ) )
                     throw ZipIOException(
-                        OSL_LOG_PREFIX "mimetype conflicts with manifest.xml\n",
+                        (OSL_LOG_PREFIX
+                         "mimetype conflicts with manifest.xml, \""
+                         + m_pRootFolder->GetMediaType() + "\" vs. \""
+                         + aPackageMediatype + "\""),
                         uno::Reference< uno::XInterface >() );
             }
 
@@ -580,7 +583,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         throw( Exception, RuntimeException )
 {
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::initialize" );
-    sal_Bool bBadZipFile = sal_False, bHaveZipFile = sal_True;
+    sal_Bool bHaveZipFile = sal_True;
     uno::Reference< XProgressHandler > xProgressHandler;
     beans::NamedValue aNamedValue;
 
@@ -750,18 +753,22 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         }
         if ( bHaveZipFile )
         {
+            bool bBadZipFile = false;
+            OUString message;
             try
             {
                 m_pZipFile = new ZipFile ( m_xContentStream, m_xContext, sal_True, m_bForceRecovery, xProgressHandler );
                 getZipFileContents();
             }
-            catch ( IOException & )
+            catch ( IOException & e )
             {
-                bBadZipFile = sal_True;
+                bBadZipFile = true;
+                message = "IOException: " + e.Message;
             }
-            catch ( ZipException & )
+            catch ( ZipException & e )
             {
-                bBadZipFile = sal_True;
+                bBadZipFile = true;
+                message = "ZipException: " + e.Message;
             }
             catch ( Exception & )
             {
@@ -775,7 +782,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                 if( m_pZipFile ) { delete m_pZipFile; m_pZipFile = NULL; }
 
                 throw com::sun::star::packages::zip::ZipIOException (
-                    OSL_LOG_PREFIX "Bad Zip File.",
+                    OSL_LOG_PREFIX "Bad Zip File, " + message,
                     static_cast < ::cppu::OWeakObject * > ( this ) );
             }
         }
