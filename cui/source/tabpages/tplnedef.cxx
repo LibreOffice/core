@@ -192,7 +192,8 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 
             // determining (and possibly cutting) the name
             // and displaying it in the GroupBox
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( ": " );
+            OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
+            aString         += ": ";
             INetURLObject   aURL( pDashList->GetPath() );
 
             aURL.Append( pDashList->GetName() );
