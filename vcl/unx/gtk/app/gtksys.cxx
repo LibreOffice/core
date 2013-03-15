@@ -18,7 +18,6 @@
  */
 
 #include <string.h>
-#include <gmodule.h>
 #include <gtk/gtk.h>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtksys.hxx>
@@ -201,11 +200,8 @@ static int _get_primary_monitor (GdkScreen *pScreen)
     // Perhaps we have a newer gtk+ with this symbol:
     if (!get_fn)
     {
-        GModule *module = g_module_open (NULL, (GModuleFlags) 0);
-        if (!g_module_symbol (module, "gdk_screen_get_primary_monitor",
-                              (gpointer *)&get_fn))
-            get_fn = NULL;
-        g_module_close (module);
+        get_fn = (int(*)(GdkScreen*))osl_getAsciiFunctionSymbol(NULL,
+            "gdk_screen_get_primary_monitor");
     }
 #if GTK_CHECK_VERSION(2,14,0)
     if (!get_fn)
