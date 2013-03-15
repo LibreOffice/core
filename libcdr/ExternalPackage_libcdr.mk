@@ -18,8 +18,8 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr,inc/external/libcdr,\
 
 $(eval $(call gb_ExternalPackage_use_external_project,libcdr,libcdr))
 
-ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_ExternalPackage_add_file,libcdr,lib/cdr-0.0.lib,build/win32/Release/lib/libcdr-0.0.lib))
+ifeq ($(COM),MSC)
+$(eval $(call gb_ExternalPackage_add_file,libcdr,lib/cdr-0.0.lib,src/lib/.libs/libcdr-0.0.lib))
 else
 $(eval $(call gb_ExternalPackage_add_file,libcdr,lib/libcdr-0.0.a,src/lib/.libs/libcdr-0.0.a))
 endif
