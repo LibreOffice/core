@@ -1,0 +1,1 @@
+reject: instead, a) never strip in import  b) teach compiler and interpreter to handle that
