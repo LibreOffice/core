@@ -9,6 +9,7 @@
 
 odk_WORKDIR := $(call gb_CustomTarget_get_workdir,odk/odkcommon)
 odkcommon_ZIPLIST :=
+odkcommon_ZIPDEPS :=
 
 $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon))
 

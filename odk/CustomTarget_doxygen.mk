@@ -10,6 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/cpp/ref))
 
 odkcommon_ZIPLIST += docs/cpp/ref
+odkcommon_ZIPDEPS += $(odk_WORKDIR)/docs/cpp/ref/index.html
 
 CPPDOCREFNAME := "$(PRODUCTNAME) $(PRODUCTVERSION) SDK C/C++ API Reference"
 

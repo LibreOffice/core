@@ -15,6 +15,11 @@ $(eval $(call gb_Zip_add_files,odkcommon,\
 
 $(eval $(call gb_Zip_add_commandoptions,odkcommon,-r))
 
+# Additional dependencies for the zip. Because we are zipping whole
+# directories, we cannot just depend on make to figure out from file
+# dependencies which custom targets need to be built.
+$(call gb_Zip_get_target,odkcommon) : $(odkcommon_ZIPDEPS)
+
 #FIXME: scp2 seems to require the zip to be in bin
 $(call gb_Zip_get_final_target,odkcommon) : $(OUTDIR)/bin/odkcommon.zip
 $(call gb_Zip_get_clean_target,odkcommon) : clean_odkcommon_zip

@@ -10,6 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/java/ref))
 
 odkcommon_ZIPLIST += docs/java/ref
+odkcommon_ZIPDEPS += $(odk_WORKDIR)/docs/java/ref/index.html
 
 odk_JAVAPACKAGES := com.sun.star.comp.helper \
 	com.sun.star.lib.uno.helper \

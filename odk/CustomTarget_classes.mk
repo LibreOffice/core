@@ -19,6 +19,8 @@ $(eval $(call gb_JavaClassSet_add_sourcefiles,loader,\
 ))
 
 odkcommon_ZIPLIST += classes/com/sun/star/lib/loader
+odkcommon_ZIPDEPS += $(odk_WORKDIR)/classes/java.done
+
 $(call gb_CustomTarget_get_target,odk/odkcommon/classes): $(odk_WORKDIR)/classes/java.done
 $(odk_WORKDIR)/classes/java.done: $(call gb_JavaClassSet_get_target,loader)
 	mkdir -p $(dir $@)

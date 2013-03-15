@@ -10,6 +10,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,odk/odkcommon/docs/common/ref))
 
 odkcommon_ZIPLIST += docs/common/ref
+odkcommon_ZIPDEPS += $(odk_WORKDIR)/docs/common/ref/module-ix.html
 
 $(eval $(call gb_CustomTarget_register_target,odk/odkcommon/docs/common/ref,module-ix.html))
 $(odk_WORKDIR)/docs/common/ref/module-ix.html: $(SRCDIR)/odk/pack/copying/idl_chapter_refs.txt \
