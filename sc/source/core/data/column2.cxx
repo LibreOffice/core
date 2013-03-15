@@ -56,6 +56,13 @@
 
 #include <math.h>
 
+#if DEBUG_COLUMN_STORAGE
+#include "columniterator.hxx"
+#include <iostream>
+using std::cout;
+using std::endl;
+#endif
+
 // -----------------------------------------------------------------------
 
 // factor from font size to optimal cell height (text width)
@@ -1384,6 +1391,20 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
 
 void ScColumn::CellStorageModified()
 {
+#if DEBUG_COLUMN_STORAGE
+    ScColumnTextWidthIterator aIter(*this, 0, MAXROW);
+    for (; aIter.hasCell(); aIter.next())
+    {
+        SCROW nRow = aIter.getPos();
+        ScBaseCell* pCell = GetCell(nRow);
+        if (!pCell)
+        {
+            cout << "Cell and text width storages are out of sync!" << endl;
+            cout.flush();
+            abort();
+        }
+    }
+#endif
 }
 
 unsigned short ScColumn::GetTextWidth(SCROW nRow) const

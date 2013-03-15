@@ -28,6 +28,14 @@
 #include <set>
 #include <vector>
 
+#define DEBUG_COLUMN_STORAGE 1
+
+#if DEBUG_COLUMN_STORAGE
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
+#endif
+
 #include <mdds/multi_type_vector.hpp>
 #include <mdds/multi_type_vector_trait.hpp>
 
