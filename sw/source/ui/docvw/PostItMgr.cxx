@@ -106,13 +106,15 @@ bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
     // if AnchorA is in footnote, and AnchorB isn't
     // we do not want to change over the position
     if( aAnchorAInFooter && !aAnchorBInFooter )
-        return 0;
+        return false;
     // if aAnchorA is not placed in a footnote, and aAnchorB is
     // force a change over
     else if( !aAnchorAInFooter && aAnchorBInFooter )
-        return 1;
-    // if none of both, or both are in the footer
-    // arrange them depending on the position
+        return true;
+    // If neither or both are in the footer, compare the positions.
+    // Since footnotes are in Inserts section of nodes array and footers
+    // in Autotext section, all footnotes precede any footers so no need
+    // to check that.
     else
         return aPosAnchorA < aPosAnchorB;
 }
