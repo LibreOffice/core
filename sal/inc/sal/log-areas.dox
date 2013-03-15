@@ -202,6 +202,7 @@ certain functionality.
 
 @li @c cmisucp
 @li @c ucb.ucp
+@li @c ucb.ucp.gio
 @li @c ucb.ucp.webdav
 
 @section unotools

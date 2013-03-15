@@ -490,13 +490,12 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         {
             xRow->appendObject( rProp, uno::makeAny( queryCreatableContentsInfo( xEnv ) ) );
         }
-#ifdef DEBUG
         else
         {
-            fprintf(stderr, "Looking for unsupported property %s\n",
-                rtl::OUStringToOString(rProp.Name, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN(
+                "ucb.ucp.gio",
+                "Looking for unsupported property " << rProp.Name);
         }
-#endif
     }
 
     return uno::Reference< sdbc::XRow >( xRow.get() );
