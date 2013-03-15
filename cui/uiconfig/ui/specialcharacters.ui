@@ -3,14 +3,14 @@
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="SpecialCharactersDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Special Characters</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -100,12 +100,14 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="column_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="fontft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Font</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">fontlb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -119,6 +121,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Subset</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">subsetlb</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -235,7 +239,7 @@
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="symboltext">
                     <property name="visible">True</property>

@@ -21,7 +21,7 @@
 
 String STR_IMAGE_ORIGINAL_SIZE
 {
-    Text [ en-US ] = "$(WIDTH) x $(HEIGHT) ( $(WIDTH_IN_PX) x $(HEIGHT_IN_PX) px )" ;
+    Text [ en-US ] = "$(WIDTH) x $(HEIGHT) ($(WIDTH_IN_PX) x $(HEIGHT_IN_PX) px)" ;
 };
 
 String STR_IMAGE_VIEW_SIZE

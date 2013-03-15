@@ -3,14 +3,14 @@
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="ObjectNameDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Name</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area3">
             <property name="can_focus">False</property>
@@ -72,7 +72,6 @@
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="border_width">5</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
@@ -82,6 +81,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Name</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">object_name_entry</property>
               </object>
               <packing>
                 <property name="expand">False</property>

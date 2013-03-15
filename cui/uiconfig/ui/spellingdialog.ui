@@ -4,14 +4,14 @@
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="SpellingDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Spelling and Grammar: $LANGUAGE ($LOCATION)</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -112,6 +112,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Not in dictionary</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">sentence</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -157,6 +158,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Suggestions</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">suggestionslb</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -269,6 +271,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Text languag_e</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">languagelb</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
