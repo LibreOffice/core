@@ -10,6 +10,7 @@
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkFrame" id="frame1">
@@ -283,36 +284,6 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="anglemtrdegrees">
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes"> degrees</property>
@@ -323,6 +294,36 @@
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -385,11 +386,9 @@
                     <child>
                       <object class="GtkButton" id="add">
                         <property name="label">gtk-add</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_stock">True</property>
                       </object>
                       <packing>
@@ -401,11 +400,9 @@
                     <child>
                       <object class="GtkButton" id="modify">
                         <property name="label" translatable="yes">_Modify</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -417,11 +414,9 @@
                     <child>
                       <object class="GtkButton" id="delete">
                         <property name="label">gtk-delete</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_stock">True</property>
                       </object>
                       <packing>
@@ -438,7 +433,6 @@
                         <property name="column_spacing">6</property>
                         <child>
                           <object class="GtkButton" id="load">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -447,7 +441,6 @@
                             <property name="tooltip_text" translatable="yes">Load Gradient List</property>
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="image">image1</property>
                           </object>
                           <packing>
@@ -459,7 +452,6 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="save">
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -468,7 +460,6 @@
                             <property name="tooltip_text" translatable="yes">Save Gradient List</property>
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="image">image2</property>
                           </object>
                           <packing>
