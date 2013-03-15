@@ -283,7 +283,7 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
     {
         OUString aToken( ScStringUtil::GetQuotedToken(rFmlaStr, 0, aQuotes, cFmlaSep, nStringIx ) );
         aToken = comphelper::string::strip(aToken, ' ');
-        if( aToken.getLength() )      // ignore empty tokens, i.e. "a";;"b"
+        if( !aToken.isEmpty() )      // ignore empty tokens, i.e. "a";;"b"
         {
             bIsStringList = ScGlobal::IsQuoted( aToken, '"' );
             if( bIsStringList )

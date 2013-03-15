@@ -955,7 +955,7 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
             else
             {
                 ScGlobal::EraseQuotes( aToken, '"', false );
-                if( aToken.getLength() )
+                if( !aToken.isEmpty() )
                     maTables = ScGlobal::addToken( maTables, ScfTools::GetNameFromHTMLName( aToken ), cSep );
             }
         }

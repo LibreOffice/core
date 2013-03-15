@@ -238,7 +238,7 @@ sal_Int32 ScStringUtil::GetQuotedTokenCount(const OUString &rIn, const OUString&
 OUString ScStringUtil::GetQuotedToken(const OUString &rIn, sal_Int32 nToken, const OUString& rQuotedPairs,
                                sal_Unicode cTok, sal_Int32& rIndex )
 {
-    assert( !(rQuotedPairs.Len()%2) );
+    assert( !(rQuotedPairs.getLength()%2) );
     assert( rQuotedPairs.indexOf(cTok) == -1 );
 
     const sal_Unicode*  pStr            = rIn.getStr();

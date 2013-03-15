@@ -340,7 +340,7 @@ bool ScfTools::GetHTMLNameFromName( const String& rSource, OUString& rName )
         if( CharClass::isAsciiNumeric( aIndex ) && (aIndex.toInt32() > 0) )
             rName = aIndex;
     }
-    return rName.getLength() > 0;
+    return !rName.isEmpty();
 }
 
 ScFormatFilterPluginImpl::ScFormatFilterPluginImpl() {}
