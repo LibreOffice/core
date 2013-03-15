@@ -332,7 +332,7 @@ endef
 # JunitTest class
 
 ifneq ($(OOO_TEST_SOFFICE),)
-gb_JunitTest_SOFFICEARG:=$(OOO_TEST_SOFFICE) 
+gb_JunitTest_SOFFICEARG:=$(OOO_TEST_SOFFICE)
 else
 ifneq ($(gb_JunitTest_DEBUGRUN),)
 gb_JunitTest_SOFFICEARG:=connect:pipe,name=$(USER)
