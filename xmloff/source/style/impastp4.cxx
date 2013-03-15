@@ -161,6 +161,18 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     std::copy( aNames.begin(), aNames.end(), rNames.getArray() );
 }
 
+XMLFamilyData_Impl *SvXMLAutoStylePoolP_Impl::LookupFamily( sal_Int32 nFamily )
+{
+    XMLFamilyData_Impl aTemporary( nFamily );
+    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find( aTemporary );
+    DBG_ASSERT( aFind != maFamilyList.end(), "SvXMLAutoStylePool_Impl::LookupFamily: unknown family" );
+
+    if ( aFind != maFamilyList.end() )
+        return &(*aFind);
+    else
+        return NULL;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
@@ -173,16 +185,25 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 sal_Bool bCache,
                 bool bDontSeek )
 {
-    sal_Bool bRet(sal_False);
 
-    XMLFamilyData_Impl aTemporary( nFamily );
-    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTemporary);
-    DBG_ASSERT(aFind != maFamilyList.end(), "SvXMLAutoStylePool_Impl::Add: unknown family");
+    XMLFamilyData_Impl *pFamily = LookupFamily( nFamily );
+    if ( pFamily )
+        return Add( rName, *pFamily, rParent, rProperties, bCache, bDontSeek );
+    else {
+        OSL_FAIL( "SvXMLAutoStylePool_Impl::Add: unknown family");
+        return sal_False;
+    }
+}
 
-    if (aFind != maFamilyList.end())
+sal_Bool SvXMLAutoStylePoolP_Impl::Add( ::rtl::OUString& rName,
+                                        XMLFamilyData_Impl &rFamily,
+                                        const ::rtl::OUString& rParent,
+                                        const ::std::vector< XMLPropertyState >& rProperties,
+                                        sal_Bool bCache,
+                                        bool bDontSeek )
+{
+    sal_Bool bRet = sal_False;
     {
-        XMLFamilyData_Impl &rFamily = *aFind;
-
         SvXMLAutoStylePoolParentP_Impl aTmp( rParent );
         SvXMLAutoStylePoolParentP_Impl *pParent = 0;
 
@@ -449,6 +470,52 @@ void SvXMLAutoStylePoolP_Impl::ClearEntries()
 {
     for(XMLFamilyDataList_Impl::iterator aI = maFamilyList.begin(); aI != maFamilyList.end(); ++aI)
         aI->ClearEntries();
+}
+
+SvXMLAutoFilteredSet::SvXMLAutoFilteredSet( const UniReference< SvXMLAutoStylePoolP > &xPool,
+                                            sal_Int32 nFamily )
+
+    : mxPool( xPool )
+    , mpFamily( xPool->pImpl->LookupFamily( nFamily ) )
+{
+    OSL_ASSERT( mpFamily != NULL );
+}
+
+SvXMLAutoFilteredSet::~SvXMLAutoFilteredSet()
+{
+}
+
+SvXMLAutoFilteredSet &SvXMLAutoFilteredSet::filter( const ::com::sun::star::uno::Reference<
+                                                        ::com::sun::star::beans::XPropertySet > &xPropSet )
+{
+    maProperties = mpFamily->mxMapper->Filter( xPropSet );
+    return *this;
+}
+
+bool SvXMLAutoFilteredSet::hasValidContent()
+{
+    return countValidProperties() > 0;
+}
+
+sal_Int32 SvXMLAutoFilteredSet::countValidProperties()
+{
+    std::vector< XMLPropertyState >::iterator it = maProperties.begin();
+    std::vector< XMLPropertyState >::iterator aEnd = maProperties.end();
+    sal_Int32 nCount = 0;
+    for( ;it != aEnd; ++it )
+    {
+        if( it->mnIndex != -1 )
+            nCount++;
+    }
+    return nCount;
+}
+
+/// Insert into the auto style pool and return the name of the (new or re-used) auto-style
+OUString SvXMLAutoFilteredSet::add( const OUString &rParent, bool bCache, bool bDontSeek )
+{
+    OUString aStyleName;
+    mxPool->pImpl->Add( aStyleName, *mpFamily, rParent, maProperties, bCache, bDontSeek );
+    return aStyleName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

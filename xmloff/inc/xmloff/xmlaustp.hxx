@@ -27,6 +27,7 @@
 #include <xmloff/uniref.hxx>
 
 class SvXMLExportPropertyMapper;
+class SvXMLAutoStylePoolP;
 class SvXMLNamespaceMap;
 class SvXMLAutoStylePoolP_Impl;
 class SvXMLAttributeList;
@@ -35,9 +36,33 @@ namespace com { namespace sun { namespace star { namespace uno
     { template<typename A> class Sequence; }
 } } }
 
+class XMLFamilyData_Impl;
+
+/**
+ * Encapsulates the process of filtering properties and
+ * creating automatic styles for various families.
+ */
+class XMLOFF_DLLPUBLIC SvXMLAutoFilteredSet
+{
+    UniReference< SvXMLAutoStylePoolP > mxPool;
+    XMLFamilyData_Impl                 *mpFamily;
+    ::std::vector< XMLPropertyState >   maProperties;
+ public:
+    SvXMLAutoFilteredSet( const UniReference< SvXMLAutoStylePoolP > &xPool, sal_Int32 nFamily );
+    ~SvXMLAutoFilteredSet();
+    SvXMLAutoFilteredSet &filter( const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::beans::XPropertySet > &xPropSet );
+    bool      hasValidContent();
+    sal_Int32 countValidProperties();
+
+    /// Insert into the auto style pool and return the name of the new auto-style
+    OUString add( const OUString &rParent,  bool bCache = false, bool bDontSeek = false );
+};
+
 class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public UniRefBase
 {
     friend class Test;
+    friend class SvXMLAutoFilteredSet;
     friend class SvXMLAutoStylePoolP_Impl;
 
     SvXMLAutoStylePoolP_Impl    *pImpl;
