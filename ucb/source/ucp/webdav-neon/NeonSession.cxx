@@ -695,20 +695,20 @@ void NeonSession::Init()
             // #122205# - libxml2 needs to be initialized once if used by
             // multithreaded programs like OOo.
             xmlInitParser();
-#if OSL_DEBUG_LEVEL > 0
+
             // for more debug flags see ne_utils.h; NE_DEBUGGING must be defined
             // while compiling neon in order to actually activate neon debug
             // output.
-            ne_debug_init( stderr, NE_DBG_FLUSH
-                           | NE_DBG_HTTP
-                           // | NE_DBG_HTTPBODY
-                           // | NE_DBG_HTTPAUTH
-                           // | NE_DBG_XML
-                           // | NE_DBG_XMLPARSE
-                           | NE_DBG_LOCKS
-                           | NE_DBG_SSL
-                         );
-#endif
+            SAL_INFO("ucb.ucp.webdav", "Turning on Neon debug output (if enabled when building Neon)" <<
+                     (ne_debug_init( stderr, NE_DBG_FLUSH
+                                     | NE_DBG_HTTP
+                                     // | NE_DBG_HTTPBODY
+                                     // | NE_DBG_HTTPAUTH
+                                     // | NE_DBG_XML
+                                     // | NE_DBG_XMLPARSE
+                                     | NE_DBG_LOCKS
+                                     | NE_DBG_SSL
+                                     ), ""));
             m_bGlobalsInited = true;
         }
 
