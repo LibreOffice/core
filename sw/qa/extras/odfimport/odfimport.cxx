@@ -42,6 +42,7 @@ public:
     void testOdtBorders();
     void testPageStyleLayoutDefault();
     void testPageStyleLayoutRight();
+    void testFdo61952();
     void testFdo60842();
     void testFdo56272();
 
@@ -63,6 +64,7 @@ void Test::run()
         {"borders_ooo33.odt", &Test::testOdtBorders},
         {"hello.odt", &Test::testPageStyleLayoutDefault},
         {"hello.odt", &Test::testPageStyleLayoutRight},
+        {"hello.odt", &Test::testFdo61952},
         {"fdo60842.odt", &Test::testFdo60842},
         {"fdo56272.odt", &Test::testFdo56272},
     };
@@ -293,6 +295,15 @@ void Test::testPageStyleLayoutRight()
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
     // This caused a crash.
     xPropertySet->setPropertyValue("PageStyleLayout", uno::makeAny(style::PageStyleLayout_RIGHT));
+}
+
+void Test::testFdo61952()
+{
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(0), uno::UNO_QUERY);
+    xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Left Page")));
+    xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Right Page")));
+    xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Left Page")));
+    xPara->setPropertyValue("PageDescName", uno::makeAny(OUString("Right Page")));
 }
 
 void Test::testFdo60842()
