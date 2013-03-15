@@ -1449,10 +1449,12 @@ sal_uInt8 ScColumn::GetScriptType( SCROW nRow ) const
     return SC_SCRIPTTYPE_UNKNOWN;
 }
 
-void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
+void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 /*nType*/ )
 {
     if (!ValidRow(nRow))
         return;
+
+    // TODO: Implement this.
 }
 
 void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const

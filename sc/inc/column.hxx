@@ -28,7 +28,7 @@
 #include <set>
 #include <vector>
 
-#define DEBUG_COLUMN_STORAGE 1
+#define DEBUG_COLUMN_STORAGE 0
 
 #if DEBUG_COLUMN_STORAGE
 #ifdef NDEBUG
