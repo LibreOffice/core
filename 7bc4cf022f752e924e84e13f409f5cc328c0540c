@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///gU\u003d",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-03-15T16:54:58Z",
+      "side": 1,
+      "message": "Please do not do this, keep statements each on its own line for readability.",
+      "revId": "7bc4cf022f752e924e84e13f409f5cc328c0540c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
