@@ -191,7 +191,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ../.. && /opt/lo/bin/make -r";
+			shellScript = "cd ../../.. && /opt/lo/bin/make ios";
 		};
 /* End PBXShellScriptBuildPhase section */
 

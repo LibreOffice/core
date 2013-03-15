@@ -47,6 +47,7 @@ endif
 endif
 
 ifneq ($(SCRIPT_OUTPUT_FILE_0),)
+ifeq ($(EXECUTABLE_NAME),Viewer)
 # When run from Xcode, we move the Viewer executable from solver into
 # the Viewer.app directory that Xcode uses. We also set up/copy all
 # the run-time configuration etc files that the app needs.
@@ -130,11 +131,17 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,Viewer)
 # Copy a sample document... good old test1.odt...
 #
 	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt $(appdir)
-
+endif
 else
 # When run just from the command line, we don't have any app bundle to
-# copy or move the executable to. So do nothing.
-$(call gb_CustomTarget_get_target,ios/Viewer_app) : $(call gb_Executable_get_target,Viewer)
+# copy or move the executable to. So do nothing. Except one trick:
+# Copy the Xcode project to BUILDDIR if SRCDIR!=BUILDDIR, so that one
+# can then open it from there in Xcode.
+$(call gb_CustomTarget_get_target,ios/Viewer_app) : $(gb_Helper_PHONY)
+	if test $(SRCDIR) != $(BUILDDIR); then \
+		rm -rf $(BUILDDIR)/ios/experimental/Viewer; \
+		(cd $(SRCDIR) && tar cf - ios/experimental/Viewer) | (cd $(BUILDDIR) && tar xf -); \
+	fi
 
 $(call gb_CustomTarget_get_clean_target,ios/Viewer_app) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),APP,2)
