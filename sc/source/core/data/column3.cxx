@@ -97,6 +97,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
         }
 
         maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
+        maScriptTypes.set_empty(nRow, nRow); // empty element represents unknown script state.
         CellStorageModified();
     }
     // When we insert from the Clipboard we still have wrong (old) References!
@@ -142,6 +143,7 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
     maItems.back().nRow  = nRow;
 
     maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
+    maScriptTypes.set_empty(nRow, nRow); // empty element represents unknown script state.
     CellStorageModified();
 }
 
@@ -166,6 +168,7 @@ void ScColumn::Delete( SCROW nRow )
             pNoteCell->Delete();
             maItems.erase( maItems.begin() + nIndex);
             maTextWidths.set_empty(nRow, nRow);
+            maScriptTypes.set_empty(nRow, nRow);
             // Should we free memory here (delta)? It'll be slower!
         }
         pCell->EndListeningTo( pDocument );
@@ -190,6 +193,7 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
     pCell->Delete();
 
     maTextWidths.set_empty(nRow, nRow);
+    maScriptTypes.set_empty(nRow, nRow);
     CellStorageModified();
 }
 
@@ -203,6 +207,8 @@ void ScColumn::FreeAll()
     // Text width should keep a logical empty range of 0-MAXROW when the cell array is empty.
     maTextWidths.clear();
     maTextWidths.resize(MAXROWCOUNT);
+    maScriptTypes.clear();
+    maScriptTypes.resize(MAXROWCOUNT);
     CellStorageModified();
 }
 
@@ -264,6 +270,8 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     // Shift the text width array too (before the broadcast).
     maTextWidths.erase(nStartRow, nEndRow);
     maTextWidths.resize(MAXROWCOUNT);
+    maScriptTypes.erase(nStartRow, nEndRow);
+    maScriptTypes.resize(MAXROWCOUNT);
 
     ScAddress aAdr( nCol, 0, nTab );
     ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL ); // only areas (ScBaseCell* == NULL)
@@ -508,6 +516,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             maItems.erase(itErase, itEraseEnd);
 
             maTextWidths.set_empty(nStartRow, nEndRow);
+            maScriptTypes.set_empty(nStartRow, nEndRow);
 
             nEndSegment = nStartSegment;
         }
@@ -1438,6 +1447,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 pOldCell->Delete();
                 maItems[i].pCell = pNewCell; // Replace
                 maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
+                maScriptTypes.set_empty(nRow, nRow); // empty element represents unknown script state.
                 CellStorageModified();
 
                 if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )

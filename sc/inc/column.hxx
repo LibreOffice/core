@@ -128,6 +128,8 @@ friend class ScColumnTextWidthIterator;
     ScColumn(const ScColumn&); // disabled
     ScColumn& operator= (const ScColumn&); // disabled
 
+    static void SwapScriptTypes( ScriptType& rSrc, SCROW nSrcRow, ScriptType& rDest, SCROW nDestRow );
+
 public:
                 ScColumn();
                 ~ScColumn();

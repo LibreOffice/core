@@ -59,6 +59,27 @@ ScNeededSizeOptions::ScNeededSizeOptions() :
 {
 }
 
+void ScColumn::SwapScriptTypes( ScriptType& rSrc, SCROW nSrcRow, ScriptType& rDest, SCROW nDestRow )
+{
+    unsigned short nSrcVal = SC_SCRIPTTYPE_UNKNOWN;
+    unsigned short nDestVal = SC_SCRIPTTYPE_UNKNOWN;
+
+    if (!rSrc.is_empty(nSrcRow))
+        nSrcVal = rSrc.get<unsigned short>(nSrcRow);
+    if (!rDest.is_empty(nDestRow))
+        nDestVal = rDest.get<unsigned short>(nDestRow);
+
+    if (nDestVal == SC_SCRIPTTYPE_UNKNOWN)
+        rSrc.set_empty(nSrcRow, nSrcRow);
+    else
+        rSrc.set(nSrcRow, nDestVal);
+
+    if (nSrcVal == SC_SCRIPTTYPE_UNKNOWN)
+        rDest.set_empty(nDestRow, nDestRow);
+    else
+        rDest.set(nDestRow, nSrcVal);
+}
+
 ScColumn::ScColumn() :
     maTextWidths(MAXROWCOUNT),
     maScriptTypes(MAXROWCOUNT),
@@ -865,10 +886,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             maTextWidths.set<unsigned short>(nRow2, nVal1);
 
             // Swap script types.
-            nVal1 = maScriptTypes.get<unsigned short>(nRow1);
-            nVal2 = maScriptTypes.get<unsigned short>(nRow2);
-            maScriptTypes.set(nRow1, nVal2);
-            maScriptTypes.set(nRow2, nVal1);
+            SwapScriptTypes(maScriptTypes, nRow1, maScriptTypes, nRow2);
 
             CellStorageModified();
         }
@@ -1028,10 +1046,7 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
         rCol.maTextWidths.set<unsigned short>(nRow, nVal1);
 
         // Swap script types.
-        nVal1 = maScriptTypes.get<unsigned short>(nRow);
-        nVal2 = rCol.maScriptTypes.get<unsigned short>(nRow);
-        maScriptTypes.set(nRow, nVal2);
-        rCol.maScriptTypes.set(nRow, nVal1);
+        SwapScriptTypes(maScriptTypes, nRow, rCol.maScriptTypes, nRow);
 
         CellStorageModified();
         rCol.CellStorageModified();
@@ -1206,7 +1221,10 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     pDocument->SetAutoCalc( bOldAutoCalc );
 
     maTextWidths.insert_empty(nStartRow, nSize);
+    maTextWidths.resize(MAXROWCOUNT);
     maScriptTypes.insert_empty(nStartRow, nSize);
+    maScriptTypes.resize(MAXROWCOUNT);
+
     CellStorageModified();
 }
 
@@ -1615,6 +1633,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
 {
     maItems.swap(rCol.maItems);
     maTextWidths.swap(rCol.maTextWidths);
+    maScriptTypes.swap(rCol.maScriptTypes);
 
     CellStorageModified();
     rCol.CellStorageModified();
@@ -1718,6 +1737,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         if (bErased)
         {
             maTextWidths.set_empty(nStartRow, nEndRow);
+            maScriptTypes.set_empty(nStartRow, nEndRow);
             CellStorageModified();
         }
     }
