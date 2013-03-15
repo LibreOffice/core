@@ -303,6 +303,53 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
+namespace {
+
+bool isDate(const ScDocument& rDoc, const ScColumn& rCol, SCROW nRow)
+{
+    sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)rCol.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
+    short nType = rDoc.GetFormatTable()->GetType(nIndex);
+    return (nType == NUMBERFORMAT_DATE) || (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
+}
+
+bool checkDeleteCellByFlag(
+    CellType eCellType, sal_uInt16 nDelFlag, const ScDocument& rDoc, const ScColumn& rCol, const ColEntry& rEntry)
+{
+    bool bDelete = false;
+
+    switch (eCellType)
+    {
+        case CELLTYPE_VALUE:
+        {
+            sal_uInt16 nValFlags = nDelFlag & (IDF_DATETIME|IDF_VALUE);
+            // delete values and dates?
+            bDelete = nValFlags == (IDF_DATETIME|IDF_VALUE);
+            // if not, decide according to cell number format
+            if (!bDelete && (nValFlags != 0))
+            {
+                bool bIsDate = isDate(rDoc, rCol, rEntry.nRow);
+                bDelete = nValFlags == (bIsDate ? IDF_DATETIME : IDF_VALUE);
+            }
+        }
+        break;
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            bDelete = (nDelFlag & IDF_STRING) != 0;
+        break;
+        case CELLTYPE_FORMULA:
+            bDelete = (nDelFlag & IDF_FORMULA) != 0;
+        break;
+        case CELLTYPE_NOTE:
+            // do note delete note cell with broadcaster
+            bDelete = !rEntry.pCell->GetBroadcaster();
+        break;
+        default:; // added to avoid warnings
+    }
+
+    return bDelete;
+}
+
+}
 
 void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDelFlag )
 {
@@ -323,7 +370,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
 
     typedef mdds::flat_segment_tree<SCSIZE, bool> RemovedSegments_t;
     RemovedSegments_t aRemovedSegments(nStartIndex, maItems.size(), false);
-    SCSIZE nFirst(nStartIndex);
+    SCSIZE nFirst = nStartIndex;
 
     // dummy replacement for old cells, to prevent that interpreter uses old cell
     boost::scoped_ptr<ScNoteCell> pDummyCell(new ScNoteCell);
@@ -357,57 +404,27 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         ScBaseCell* pOldCell = maItems[nIdx].pCell;
         CellType eCellType = pOldCell->GetCellType();
         if ((nDelFlag & IDF_CONTENTS) == IDF_CONTENTS)
+            // All cell types to be deleted.
             bDelete = true;
         else
         {
-            // decide whether to delete the cell object according to passed
-            // flags
-            switch ( eCellType )
-            {
-                case CELLTYPE_VALUE:
-                {
-                    sal_uInt16 nValFlags = nDelFlag & (IDF_DATETIME|IDF_VALUE);
-                    // delete values and dates?
-                    bDelete = nValFlags == (IDF_DATETIME|IDF_VALUE);
-                    // if not, decide according to cell number format
-                    if (!bDelete && (nValFlags != 0))
-                    {
-                        sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)GetAttr(
-                                    maItems[nIdx].nRow, ATTR_VALUE_FORMAT))->GetValue();
-                        short nType = pDocument->GetFormatTable()->GetType(nIndex);
-                        bool bIsDate = (nType == NUMBERFORMAT_DATE) ||
-                            (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
-                        bDelete = nValFlags == (bIsDate ? IDF_DATETIME : IDF_VALUE);
-                    }
-                }
-                break;
-                case CELLTYPE_STRING:
-                case CELLTYPE_EDIT:
-                    bDelete = (nDelFlag & IDF_STRING) != 0;
-                break;
-                case CELLTYPE_FORMULA:
-                    bDelete = (nDelFlag & IDF_FORMULA) != 0;
-                break;
-                case CELLTYPE_NOTE:
-                    // do note delete note cell with broadcaster
-                    bDelete = !pOldCell->GetBroadcaster();
-                break;
-                default:; // added to avoid warnings
-            }
+            // Decide whether to delete the cell object according to passed
+            // flags.
+            bDelete = checkDeleteCellByFlag(eCellType, nDelFlag, *pDocument, *this, maItems[nIdx]);
         }
 
         if (bDelete)
         {
-            // try to create a replacement note cell, if note or broadcaster exists
+            // Try to create a replacement "note" cell if broadcaster exists.
             ScNoteCell* pNoteCell = NULL;
             SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
             if (pBC && pBC->HasListeners())
             {
-                pNoteCell = new ScNoteCell( pBC );
-                // NOTE: the broadcaster here is transferred and released
-                // only if it has listeners! If it does not, it will simply
-                // be deleted when the cell is deleted and no replacement
-                // cell is created.
+                // NOTE: the broadcaster here is transferred and released only
+                // if it has listeners! If it does not, it will simply be
+                // deleted when the cell is deleted and no replacement cell is
+                // created.
+                pNoteCell = new ScNoteCell(pBC);
                 pOldCell->ReleaseBroadcaster();
             }
 
@@ -423,16 +440,16 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             else
                 maItems[nIdx].pCell = pDummyCell.get();
 
-            // cache formula cells (will be deleted later), delete cell of other type
             if (eCellType == CELLTYPE_FORMULA)
             {
-                aDelCells.push_back( static_cast< ScFormulaCell* >( pOldCell ) );
+                // Cache formula cells (will be deleted later), delete cell of other type.
+                aDelCells.push_back(static_cast<ScFormulaCell*>(pOldCell));
             }
             else
             {
-                aHint.GetAddress().SetRow( nOldRow );
-                aHint.SetCell( pNoteCell ? pNoteCell : pOldCell );
-                pDocument->Broadcast( aHint );
+                aHint.GetAddress().SetRow(nOldRow);
+                aHint.SetCell(pNoteCell ? pNoteCell : pOldCell);
+                pDocument->Broadcast(aHint);
                 if (pNoteCell != pOldCell)
                 {
                     pOldCell->Delete();
