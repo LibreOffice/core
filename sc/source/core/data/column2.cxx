@@ -1397,12 +1397,14 @@ void ScColumn::CellStorageModified()
         if (maTextWidths.empty())
         {
             cout << "ScColumn::CellStorageModified: Text width array is empty, but shouldn't." << endl;
+            cout.flush();
             abort();
         }
 
         if (maTextWidths.block_size() != 1 || maTextWidths.begin()->type != mdds::mtv::element_type_empty)
         {
             cout << "ScColumn::CellStorageModified: When the cell array is empty, the text with array should consist of one empty block." << endl;
+            cout.flush();
             abort();
         }
 
