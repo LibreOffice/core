@@ -1195,6 +1195,10 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
             SCROW nRow = aIter.getPos();
             aIter.setValue(TEXTWIDTH_DIRTY);
             ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
+            if (pCell == 0)
+            {
+                continue;
+            }
 
             if ( bNumFormatChanged )
                 pCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
