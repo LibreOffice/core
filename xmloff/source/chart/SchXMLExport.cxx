@@ -178,10 +178,8 @@ public:
         second parseDocument: export content and use names from this queue
      */
     ::std::queue< ::rtl::OUString > maAutoStyleNameQueue;
-    void CollectAutoStyle(
-        const std::vector< XMLPropertyState >& aStates );
-    void AddAutoStyleAttribute(
-        const std::vector< XMLPropertyState >& aStates );
+    void CollectAutoStyle( SvXMLAutoFilteredSet &rSet );
+    void AddAutoStyleAttribute( SvXMLAutoFilteredSet &rSet );
 
     SvXMLAutoStylePoolP& GetAutoStylePoolP()
     { return mrAutoStylePool; }
@@ -1186,7 +1184,8 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     sal_Bool bHasLegend = sal_False;
     util::DateTime aNullDate(0,0,0,0,30,12,1899);
 
-    std::vector< XMLPropertyState > aPropertyStates;
+    SvXMLAutoFilteredSet aPropertyStates( mrExport.GetAutoStylePool(),
+                                          XML_STYLE_FAMILY_SCH_CHART_ID );
 
     Reference< beans::XPropertySet > xDocPropSet( rChartDoc, uno::UNO_QUERY );
     if( xDocPropSet.is())
@@ -1242,11 +1241,10 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
 
     SvXMLElementExport* pElChart = 0;
     // get property states for autostyles
-    if( mxExpPropMapper.is())
     {
         Reference< beans::XPropertySet > xPropSet( rChartDoc->getArea(), uno::UNO_QUERY );
         if( xPropSet.is())
-            aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+            aPropertyStates.filter( xPropSet );
     }
 
     if( bExportContent )
@@ -1327,12 +1325,12 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     if( bHasMainTitle )
     {
         // get property states for autostyles
-        if( mxExpPropMapper.is())
         {
             Reference< beans::XPropertySet > xPropSet( rChartDoc->getTitle(), uno::UNO_QUERY );
             if( xPropSet.is())
-                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                aPropertyStates.filter( xPropSet );
         }
+
         if( bExportContent )
         {
             Reference< drawing::XShape > xShape = rChartDoc->getTitle();
@@ -1370,11 +1368,10 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     if( bHasSubTitle )
     {
         // get property states for autostyles
-        if( mxExpPropMapper.is())
         {
             Reference< beans::XPropertySet > xPropSet( rChartDoc->getSubTitle(), uno::UNO_QUERY );
             if( xPropSet.is())
-                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                aPropertyStates.filter( xPropSet );
         }
 
         if( bExportContent )
@@ -1413,12 +1410,9 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     if( bHasLegend )
     {
         // get property states for autostyles
-        if( mxExpPropMapper.is())
-        {
-            Reference< beans::XPropertySet > xPropSet( rChartDoc->getLegend(), uno::UNO_QUERY );
-            if( xPropSet.is())
-                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-        }
+        Reference< beans::XPropertySet > xPropSet( rChartDoc->getLegend(), uno::UNO_QUERY );
+        if( xPropSet.is())
+            aPropertyStates.filter( xPropSet );
 
         if( bExportContent )
         {
@@ -1900,7 +1894,9 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
     // variables for autostyles
     Reference< beans::XPropertySet > xPropSet;
-    std::vector< XMLPropertyState > aPropertyStates;
+    SvXMLAutoFilteredSet aPropertyStates( mrExport.GetAutoStylePool(),
+                                          XML_STYLE_FAMILY_SCH_CHART_ID );
+
 
     sal_Bool bIs3DChart = sal_False;
     drawing::HomogenMatrix aTransMatrix;
@@ -1914,10 +1910,8 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     // get property states for autostyles
     xPropSet = Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY );
     if( xPropSet.is())
-    {
-        if( mxExpPropMapper.is())
-            aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-    }
+        aPropertyStates.filter( xPropSet );
+
     if( bExportContent )
     {
         UniReference< XMLShapeExport > rShapeExport;
@@ -2071,7 +2065,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             if( xStockPropSet.is())
             {
                 aPropertyStates.clear();
-                aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
+                aPropertyStates.filter( xStockPropSet );
 
                 if( !aPropertyStates.empty() )
                 {
@@ -2092,8 +2086,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             xStockPropSet = xStockPropProvider->getDownBar();
             if( xStockPropSet.is())
             {
-                aPropertyStates.clear();
-                aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
+                aPropertyStates.filter( xStockPropSet );
 
                 if( !aPropertyStates.empty() )
                 {
@@ -2114,8 +2107,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             xStockPropSet = xStockPropProvider->getMinMaxLine();
             if( xStockPropSet.is())
             {
-                aPropertyStates.clear();
-                aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
+                aPropertyStates.filter( xStockPropSet );
 
                 if( !aPropertyStates.empty() )
                 {
@@ -2147,8 +2139,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
         if( xWallPropSet.is())
         {
-            aPropertyStates = mxExpPropMapper->Filter( xWallPropSet );
-
+            aPropertyStates.filter( xWallPropSet );
             if( !aPropertyStates.empty() )
             {
                 // write element
@@ -2175,8 +2166,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         Reference< beans::XPropertySet > xFloorPropSet( xWallFloorSupplier->getFloor(), uno::UNO_QUERY );
         if( xFloorPropSet.is())
         {
-            aPropertyStates = mxExpPropMapper->Filter( xFloorPropSet );
-
+            aPropertyStates.filter( xFloorPropSet );
             if( !aPropertyStates.empty() )
             {
                 // write element
@@ -2272,7 +2262,9 @@ void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XProperty
 {
     if( !xTitleProps.is() )
         return;
-    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xTitleProps );
+    SvXMLAutoFilteredSet aPropertyStates( mrExport.GetAutoStylePool(),
+                                          XML_STYLE_FAMILY_SCH_CHART_ID );
+    aPropertyStates.filter( xTitleProps );
     if( bExportContent )
     {
         OUString aText;
@@ -2294,14 +2286,15 @@ void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XProperty
     {
         CollectAutoStyle( aPropertyStates );
     }
-    aPropertyStates.clear();
 }
 
 void SchXMLExportHelper_Impl::exportGrid( const Reference< beans::XPropertySet > xGridProperties, bool bMajor, bool bExportContent )
 {
     if( !xGridProperties.is() )
         return;
-    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xGridProperties );
+    SvXMLAutoFilteredSet aPropertyStates( mrExport.GetAutoStylePool(),
+                                          XML_STYLE_FAMILY_SCH_CHART_ID );
+    aPropertyStates.filter( xGridProperties );
     if( bExportContent )
     {
         AddAutoStyleAttribute( aPropertyStates );
@@ -2312,7 +2305,6 @@ void SchXMLExportHelper_Impl::exportGrid( const Reference< beans::XPropertySet >
     {
         CollectAutoStyle( aPropertyStates );
     }
-    aPropertyStates.clear();
 }
 
 namespace
@@ -2368,14 +2360,15 @@ void SchXMLExportHelper_Impl::exportAxis(
     bool bExportContent )
 {
     static const OUString sNumFormat( OUString( "NumberFormat" ));
-    std::vector< XMLPropertyState > aPropertyStates;
+    SvXMLAutoFilteredSet aPropertyStates( mrExport.GetAutoStylePool(),
+                                          XML_STYLE_FAMILY_SCH_CHART_ID );
     SvXMLElementExport* pAxis = NULL;
 
     // get property states for autostyles
     if( xAxisProps.is() && mxExpPropMapper.is() )
     {
         lcl_exportNumberFormat( sNumFormat, xAxisProps, mrExport );
-        aPropertyStates = mxExpPropMapper->Filter( xAxisProps );
+        aPropertyStates.filter( xAxisProps );
     }
 
     bool bExportDateScale = false;
@@ -2396,7 +2389,7 @@ void SchXMLExportHelper_Impl::exportAxis(
     }
     aPropertyStates.clear();
 
-    //date scale
+    // date scale
     if( bExportDateScale )
         exportDateScale( xAxisProps );
 
@@ -2649,7 +2642,8 @@ void SchXMLExportHelper_Impl::exportSeries(
     OUString aFirstXDomainRange;
     OUString aFirstYDomainRange;
 
-    std::vector< XMLPropertyState > aPropertyStates;
+    SvXMLAutoFilteredSet aPropertyStates( mrExport.GetAutoStylePool(),
+                                          XML_STYLE_FAMILY_SCH_CHART_ID );
 
     const OUString sNumFormat("NumberFormat");
     const OUString sPercentageNumFormat( "PercentageNumberFormat");
@@ -2782,8 +2776,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
                                 }
 
-                                if( mxExpPropMapper.is())
-                                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                                aPropertyStates.filter( xPropSet );
                             }
 
                             if( bExportContent )
@@ -2911,8 +2904,7 @@ void SchXMLExportHelper_Impl::exportSeries(
 
                         if( xStatProp.is() )
                         {
-                            aPropertyStates = mxExpPropMapper->Filter( xStatProp );
-
+                            aPropertyStates.filter( xStatProp );
                             if( !aPropertyStates.empty() )
                             {
                                 // write element
@@ -2963,8 +2955,10 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 {
     OSL_ASSERT( mxExpPropMapper.is());
 
-    std::vector< XMLPropertyState > aPropertyStates;
-    std::vector< XMLPropertyState > aEquationPropertyStates;
+    SvXMLAutoFilteredSet aPropertyStates( mrExport.GetAutoStylePool(),
+                                          XML_STYLE_FAMILY_SCH_CHART_ID );
+    SvXMLAutoFilteredSet aEquationPropertyStates( mrExport.GetAutoStylePool(),
+                                                  XML_STYLE_FAMILY_SCH_CHART_ID );
     Reference< beans::XPropertySet > xStatProp;
     try
     {
@@ -2989,7 +2983,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
         bool bShowEquation = false;
         bool bShowRSquared = false;
         bool bExportEquation = false;
-        aPropertyStates = mxExpPropMapper->Filter( xStatProp );
+        aPropertyStates.filter( xStatProp );
         if( xEquationProperties.is())
         {
             xEquationProperties->getPropertyValue( OUString(  "ShowEquation" ))
@@ -3010,7 +3004,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
                 {
                     mrExport.addDataStyle( nNumberFormat );
                 }
-                aEquationPropertyStates = mxExpPropMapper->Filter( xEquationProperties );
+                aEquationPropertyStates.filter( xEquationProperties );
             }
         }
 
@@ -3144,7 +3138,9 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                 }
             }
 
-            std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xErrorBarProp );
+            SvXMLAutoFilteredSet aPropertyStates( mrExport.GetAutoStylePool(),
+                                                  XML_STYLE_FAMILY_SCH_CHART_ID );
+            aPropertyStates.filter( xErrorBarProp );
 
             if( !aPropertyStates.empty() )
             {
@@ -3297,9 +3293,9 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     // more performant version for #93600#
     if( mxExpPropMapper.is())
     {
+        SvXMLAutoFilteredSet aPropertyStates( mrExport.GetAutoStylePool(),
+                                              XML_STYLE_FAMILY_SCH_CHART_ID );
         uno::Reference< chart2::XDataSeries > xSeries( xSeriesProperties, uno::UNO_QUERY );
-
-        std::vector< XMLPropertyState > aPropertyStates;
 
         const OUString sNumFormat("NumberFormat");
         const OUString sPercentageNumFormat( "PercentageNumberFormat");
@@ -3374,7 +3370,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
                     }
 
-                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                    aPropertyStates.filter( xPropSet );
                     if( !aPropertyStates.empty() )
                     {
                         if( bExportContent )
@@ -3438,7 +3434,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                         lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
                     }
 
-                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                    aPropertyStates.filter( xPropSet );
                     if( !aPropertyStates.empty() )
                     {
                         if( bExportContent )
@@ -3573,19 +3569,19 @@ awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartD
     return aSize;
 }
 
-void SchXMLExportHelper_Impl::CollectAutoStyle( const std::vector< XMLPropertyState >& aStates )
+void SchXMLExportHelper_Impl::CollectAutoStyle( SvXMLAutoFilteredSet &rSet )
 {
-    if( !aStates.empty() )
-        maAutoStyleNameQueue.push( GetAutoStylePoolP().Add( XML_STYLE_FAMILY_SCH_CHART_ID, aStates ));
+    if( !rSet.empty() )
+        maAutoStyleNameQueue.push( rSet.add( "" ) );
 }
 
-void SchXMLExportHelper_Impl::AddAutoStyleAttribute( const std::vector< XMLPropertyState >& aStates )
+void SchXMLExportHelper_Impl::AddAutoStyleAttribute( SvXMLAutoFilteredSet &rSet )
 {
-    if( !aStates.empty() )
+    if( !rSet.empty() )
     {
         DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
 
-        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME,  maAutoStyleNameQueue.front() );
+        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_STYLE_NAME, maAutoStyleNameQueue.front() );
         maAutoStyleNameQueue.pop();
     }
 }

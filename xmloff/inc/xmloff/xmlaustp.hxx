@@ -61,6 +61,7 @@ class XMLOFF_DLLPUBLIC SvXMLAutoFilteredSet
     sal_Int32 countValidProperties();
     /// Insert into the auto style pool and return the name of the new auto-style
     OUString  add( const OUString &rParent,  bool bCache = false, bool bDontSeek = false );
+    bool      empty() { return maProperties.empty(); }
 };
 
 class XMLOFF_DLLPUBLIC SvXMLAutoStylePoolP : public UniRefBase
