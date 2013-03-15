@@ -852,7 +852,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 be performed (but keep broadcasters and notes at old position). */
             maItems[nIndex1].pCell = pCell2;
             maItems[nIndex2].pCell = pCell1;
-            CellStorageModified();
 
             SvtBroadcaster* pBC2 = pCell2->ReleaseBroadcaster();
             pCell1->TakeBroadcaster( pBC2 );
@@ -863,6 +862,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             unsigned short nVal2 = maTextWidths.get<unsigned short>(nRow2);
             maTextWidths.set<unsigned short>(nRow1, nVal2);
             maTextWidths.set<unsigned short>(nRow2, nVal1);
+            CellStorageModified();
         }
         else
         {
@@ -874,19 +874,18 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             {
                 // insert dummy note cell (without note) containing old broadcaster
                 maItems[nIndex1].pCell = pDummyCell;
-                CellStorageModified();
             }
             else
             {
                 // remove ColEntry at old position
                 maItems.erase( maItems.begin() + nIndex1 );
-                CellStorageModified();
             }
 
             // Empty text width at the cell 1 position.  For now, we don't
             // transfer the old value to the cell 2 position since Insert() is
             // quite complicated.
             maTextWidths.set_empty(nRow1, nRow1);
+            CellStorageModified();
 
             // insert ColEntry at new position.
             Insert( nRow2, pCell1 );
@@ -1013,14 +1012,14 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
             pFmlaCell2->UpdateReference(URM_MOVE, aRange, -dx, 0, 0);
         }
 
-        CellStorageModified();
-        rCol.CellStorageModified();
-
         // Swap the text widths.
         unsigned short nVal1 = maTextWidths.get<unsigned short>(nRow);
         unsigned short nVal2 = rCol.maTextWidths.get<unsigned short>(nRow);
         maTextWidths.set<unsigned short>(nRow, nVal2);
         rCol.maTextWidths.set<unsigned short>(nRow, nVal1);
+
+        CellStorageModified();
+        rCol.CellStorageModified();
     }
     else
     {
@@ -1037,8 +1036,9 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
             pFmlaCell1->UpdateReference(URM_MOVE, aRange, dx, 0, 0);
         }
 
-        CellStorageModified();
         maTextWidths.set_empty(nRow, nRow);
+        CellStorageModified();
+
         // We don't transfer the text width to the destination column because
         // of Insert()'s complexity.
 
@@ -1189,8 +1189,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
     pDocument->SetAutoCalc( bOldAutoCalc );
 
-    CellStorageModified();
     maTextWidths.insert_empty(nStartRow, nSize);
+    CellStorageModified();
 }
 
 
@@ -1691,8 +1691,8 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
         if (bErased)
         {
-            CellStorageModified();
             maTextWidths.set_empty(nStartRow, nEndRow);
+            CellStorageModified();
         }
     }
 }
