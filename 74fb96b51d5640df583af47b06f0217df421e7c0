@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///iA\u003d",
+        "filename": "Makefile.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-03-15T10:52:42Z",
+      "side": 1,
+      "message": "so what\u0027s the difference anyway? Interface still remains the same:\n \n make dev-install-nocheck\n\nor am i missing something?",
+      "revId": "74fb96b51d5640df583af47b06f0217df421e7c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
