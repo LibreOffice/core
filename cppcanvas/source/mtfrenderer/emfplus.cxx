@@ -1339,7 +1339,7 @@ namespace cppcanvas
                             sal_uInt32 brushIndexOrColor;
 
                             if ( type == EmfPlusRecordTypeFillEllipse )
-                                rMF >> brushIndexOrColorOrPen;
+                                rMF >> brushIndexOrColor;
 
                             EMFP_DEBUG (printf ("EMF+ %sEllipse slot: %u\n", type == EmfPlusRecordTypeFillEllipse ? "Fill" : "Draw", static_cast<unsigned>(flags & 0xff)));
 
