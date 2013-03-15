@@ -18,7 +18,6 @@
  */
 
 #include <string.h>
-#include <gmodule.h>
 #include <gtk/gtk.h>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtksys.hxx>
@@ -179,14 +178,14 @@ namespace {
 static int _fallback_get_primary_monitor (GdkScreen *pScreen)
 {
     // Use monitor name as primacy heuristic
-    int ret = -1;
     int max = gdk_screen_get_n_monitors (pScreen);
-    for (int i = 0; i < max && ret < 0; i++)
+    for (int i = 0; i < max; ++i)
     {
         char *name = gdk_screen_get_monitor_plug_name (pScreen, i);
-        if (name && !g_ascii_strncasecmp (name, "LVDS", 4))
-            ret = i;
+        bool bLaptop = (name && !g_ascii_strncasecmp (name, "LVDS", 4));
         g_free (name);
+        if (bLaptop)
+            return i;
     }
     return 0;
 }
@@ -201,11 +200,8 @@ static int _get_primary_monitor (GdkScreen *pScreen)
     // Perhaps we have a newer gtk+ with this symbol:
     if (!get_fn)
     {
-        GModule *module = g_module_open (NULL, (GModuleFlags) 0);
-        if (!g_module_symbol (module, "gdk_screen_get_primary_monitor",
-                              (gpointer *)&get_fn))
-            get_fn = NULL;
-        g_module_close (module);
+        get_fn = (int(*)(GdkScreen*))osl_getAsciiFunctionSymbol(NULL,
+            "gdk_screen_get_primary_monitor");
     }
 #if GTK_CHECK_VERSION(2,14,0)
     if (!get_fn)
