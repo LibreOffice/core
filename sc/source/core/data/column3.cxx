@@ -202,7 +202,7 @@ void ScColumn::FreeAll()
 
     // Text width should keep a logical empty range of 0-MAXROW when the cell array is empty.
     maTextWidths.clear();
-    maTextWidths.resize(MAXROW);
+    maTextWidths.resize(MAXROWCOUNT);
     CellStorageModified();
 }
 
@@ -263,7 +263,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     // Shift the text width array too (before the broadcast).
     maTextWidths.erase(nStartRow, nEndRow);
-    maTextWidths.resize(MAXROW);
+    maTextWidths.resize(MAXROWCOUNT);
 
     ScAddress aAdr( nCol, 0, nTab );
     ScHint aHint( SC_HINT_DATACHANGED, aAdr, NULL ); // only areas (ScBaseCell* == NULL)
