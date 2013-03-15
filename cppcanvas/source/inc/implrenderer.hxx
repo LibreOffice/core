@@ -264,6 +264,7 @@ static float GetSwapFloat( SvStream& rSt )
             /* EMF+ */
             void processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms, OutDevState& rState, const CanvasSharedPtr& rCanvas );
             double setFont( sal_uInt8 objectId, const ActionFactoryParameters& rParms, OutDevState& rState );
+            void EMFPPlusDrawPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex);
             void EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor);
 
             ActionVector maActions;
