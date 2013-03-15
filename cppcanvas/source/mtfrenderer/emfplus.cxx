@@ -1300,12 +1300,11 @@ namespace cppcanvas
                         break;
                     case EmfPlusRecordTypeFillEllipse:
                         {
-                            sal_uInt32 index = flags & 0xff;
                             sal_uInt32 brushIndexOrColor;
 
                             rMF >> brushIndexOrColor;
 
-                            EMFP_DEBUG (printf ("EMF+ FillEllipse slot: %u\n", (unsigned int)index));
+                            EMFP_DEBUG (printf ("EMF+ FillEllipse slot: %u\n", static_cast<unsigned>(flags && 0xff)));
 
                             float dx, dy, dw, dh;
 
