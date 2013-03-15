@@ -62,4 +62,28 @@ endif
 
 endif
 
+ifeq ($(strip $(MAKECMDGOALS)),build-nocheck)
+gb_Module_SKIPTARGETS:=check subsequentcheck slowcheck
+endif
+
+ifeq ($(strip $(MAKECMDGOALS)),dev-install-nocheck)
+gb_Module_SKIPTARGETS:=check subsequentcheck slowcheck
+endif
+
+ifneq (,$(filter build,$(gb_Module_SKIPTARGETS)))
+gb_Module_add_target=
+endif
+
+ifneq (,$(filter check,$(gb_Module_SKIPTARGETS)))
+gb_Module_add_check_target=
+endif
+
+ifneq (,$(filter slowcheck,$(gb_Module_SKIPTARGETS)))
+gb_Module_add_slowcheck_target=
+endif
+
+ifneq (,$(filter subsequentcheck,$(gb_Module_SKIPTARGETS)))
+gb_Module_add_subsequentcheck_target=
+endif
+
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:
