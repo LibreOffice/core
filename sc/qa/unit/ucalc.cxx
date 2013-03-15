@@ -6102,6 +6102,22 @@ void Test::testCellTextWidth()
         CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
     }
 
+    // Delete row 2 which shifts all cells below row 2 upward. After this, we
+    // should only have cells at rows 0 and 17.
+    m_pDoc->DeleteRow(0, 0, MAXCOL, MAXTAB, 2, 1);
+    {
+        // Full range again.
+        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+        SCROW aRows[] = { 0, 17 };
+        size_t n = SAL_N_ELEMENTS(aRows);
+        for (size_t i = 0; i < n; ++i, pIter->next())
+        {
+            CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pIter->hasCell());
+            CPPUNIT_ASSERT_EQUAL(aRows[i], pIter->getPos());
+        }
+        CPPUNIT_ASSERT_MESSAGE("Iterator should have ended.", !pIter->hasCell());
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
