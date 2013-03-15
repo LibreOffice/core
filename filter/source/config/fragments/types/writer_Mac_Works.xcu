@@ -23,7 +23,7 @@
         <prop oor:name="Preferred"><value>true</value></prop>
         <prop oor:name="PreferredFilter"><value>Mac_Works</value></prop>
         <prop oor:name="UIName">
-            <value>Microsoft Works for Mac Document (v1 and v2)</value>
+            <value>Microsoft Works for Mac Document (v1 - v4)</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

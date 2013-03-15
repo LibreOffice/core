@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.MWAWImportFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Microsoft Works for Mac Document (v1 and v2)</value>
+            <value xml:lang="x-default">Microsoft Works for Mac Document (v1 - v4)</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_Mac_Works</value></prop>
