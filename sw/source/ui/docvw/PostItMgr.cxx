@@ -87,9 +87,9 @@
 
 using namespace sw::sidebarwindows;
 
+// sort depending on position
 bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
 {
-    // sort by anchor position
     SwPosition aPosAnchorA = a->GetAnchorPosition();
     SwPosition aPosAnchorB = b->GetAnchorPosition();
 
@@ -106,11 +106,11 @@ bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
     // if AnchorA is in footnote, and AnchorB isn't
     // we do not want to change over the position
     if( aAnchorAInFooter && !aAnchorBInFooter )
-        return 0;
+        return false;
     // if aAnchorA is not placed in a footnote, and aAnchorB is
     // force a change over
     else if( !aAnchorAInFooter && aAnchorBInFooter )
-        return 1;
+        return true;
     // if none of both, or both are in the footer
     // arrange them depending on the position
     else
