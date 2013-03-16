@@ -162,7 +162,7 @@ public:
     sal_uInt32 DoImport(
         const GDIMetaFile& rMtf,
         SdrObjList& rDestList,
-        sal_uInt32 nInsPos = CONTAINER_APPEND,
+        sal_uLong nInsPos = CONTAINER_APPEND,
         SvdProgressInfo* pProgrInfo = 0);
 };
 

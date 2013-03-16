@@ -201,7 +201,7 @@ void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* 
 sal_uInt32 ImpSdrGDIMetaFileImport::DoImport(
     const GDIMetaFile& rMtf,
     SdrObjList& rOL,
-    sal_uInt32 nInsPos,
+    sal_uLong nInsPos,
     SvdProgressInfo* pProgrInfo)
 {
     // setup some global scale parameter
