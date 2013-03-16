@@ -39,6 +39,7 @@ PROP_FCFG            = "fcfg"                     # // <= cmdline
 PROP_LCFG            = "lcfg"                     # // <= cmdline
 PROP_CCFG            = "ccfg"                     # // <= cmdline
 PROP_LANGUAGEPACK    = "languagepack"             # // <= cmdline
+PROP_VERBOSE         = "verbose"                  # // <= cmdline
 PROP_ITEMS           = "items"                    # // <= pkg cfg files!
 
 #---begin java.util.Properties copy---#
@@ -275,9 +276,11 @@ def readprops(buff):
 #  @author  Andreas Schluens
 # 
 def run(sCmdLine):
-    printCopyright()
-
     aCfg = ConfigHelper(CFGFILE, sCmdLine)
+    if aCfg.getValueWithDefault(PROP_VERBOSE,None) == None:
+	    sys.stdout=None
+
+    printCopyright()
 
     # help requested?
     if aCfg.isHelp():
@@ -349,7 +352,7 @@ class ConfigHelper:
             count = len(lCommandLineArgs)
         self.m_bEmpty = (count < 1)
 
-        print(lCommandLineArgs, "and len is", count)
+        # print(lCommandLineArgs, "and len is", count)
         for arg in range(count):
             # is it a named-value argument?
             # Note: We ignores double "=" signs! => search from left to right

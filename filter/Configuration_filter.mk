@@ -24,7 +24,8 @@
 filter_MERGE_TARGET := $(call gb_ExternalExecutable_get_dependencies,python) \
 	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
 filter_MERGE := $(call gb_ExternalExecutable_get_command,python) \
-	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge
+	$(SRCDIR)/filter/source/config/tools/merge/pyAltFCFGMerge \
+	$(if $(VERBOSE)$(verbose),-verbose)
 
 ### filter configuration rules: generic stuff #######################
 
