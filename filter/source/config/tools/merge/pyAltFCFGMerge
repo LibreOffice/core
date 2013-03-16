@@ -278,7 +278,7 @@ def readprops(buff):
 def run(sCmdLine):
     aCfg = ConfigHelper(CFGFILE, sCmdLine)
     if aCfg.getValueWithDefault(PROP_VERBOSE,None) == None:
-	    sys.stdout=None
+        sys.stdout=None
 
     printCopyright()
 
@@ -293,23 +293,28 @@ def run(sCmdLine):
 
     sys.exit(0)
 
+def printOut(s):
+    if sys.stdout is None:
+        return
+    print(s)
+
 #prints out a copyright message on stdout.
 def printCopyright():
-    print("FCFGMerge")
-    print("Copyright: 2003 by Red Hat, Inc., based on FCFGMerge.java` by Sun")
-    print("All Rights Reserved.")
+    printOut("FCFGMerge")
+    printOut("Copyright: 2003 by Red Hat, Inc., based on FCFGMerge.java` by Sun")
+    printOut("All Rights Reserved.")
 
 # Prints out a help message on stdout.
 def printHelp():
-    print("____________________________________________________________")
-    print("usage: FCFGMerge cfg=<file name>"                            )
-    print("parameters:"                                                 )
-    print("\tcfg=<file name>"                                           )
-    print("\t\tmust point to a system file, which contains"             )
-    print("\t\tall neccessary configuration data for the merge process.")
-    print("\tFurther cou can specify every parameter allowed in the"    )
-    print("\tconfig file as command line parameter too, to overwrite"   )
-    print("\tthe value from the file."                                  )
+    printOut("____________________________________________________________")
+    printOut("usage: FCFGMerge cfg=<file name>"                            )
+    printOut("parameters:"                                                 )
+    printOut("\tcfg=<file name>"                                           )
+    printOut("\t\tmust point to a system file, which contains"             )
+    printOut("\t\tall neccessary configuration data for the merge process.")
+    printOut("\tFurther cou can specify every parameter allowed in the"    )
+    printOut("\tconfig file as command line parameter too, to overwrite"   )
+    printOut("\tthe value from the file."                                  )
 
 # Return a list of tokens given a base string and a string of
 # separators, optionally including the separators if asked for"""
@@ -352,7 +357,7 @@ class ConfigHelper:
             count = len(lCommandLineArgs)
         self.m_bEmpty = (count < 1)
 
-        # print(lCommandLineArgs, "and len is", count)
+        # printOut(lCommandLineArgs, "and len is", count)
         for arg in range(count):
             # is it a named-value argument?
             # Note: We ignores double "=" signs! => search from left to right
@@ -478,8 +483,8 @@ class Merger:
     def merge(self):
         sPackage = self.m_aCfg.getValue(PROP_PKG)
 
-        print("create package \"" + sPackage + "\" ...")
-        print("generate package header ... ")
+        printOut("create package \"" + sPackage + "\" ...")
+        printOut("generate package header ... ")
 
         sBuffer = generateHeader(\
                 self.m_aCfg.getValue(PROP_XMLVERSION ),\
@@ -500,22 +505,22 @@ class Merger:
 
             try:
                 if i == 0: # types
-                    print("generate set for types ... ")
+                    printOut("generate set for types ... ")
                     sSetName = self.m_aCfg.getValue(PROP_SETNAME_TYPES)
                     sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_TYPES)
                     lFragments = self.m_lTypes
                 elif i == 1: # filters
-                    print("generate set for filter ... ")
+                    printOut("generate set for filter ... ")
                     sSetName = self.m_aCfg.getValue(PROP_SETNAME_FILTERS)
                     sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_FILTERS)
                     lFragments = self.m_lFilters
                 elif i == 2: # loaders
-                    print("generate set for frame loader ... ")
+                    printOut("generate set for frame loader ... ")
                     sSetName = self.m_aCfg.getValue(PROP_SETNAME_LOADERS)
                     sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_LOADERS)
                     lFragments = self.m_lLoaders
                 elif i == 3: # handlers
-                    print("generate set for content handler ... ")
+                    printOut("generate set for content handler ... ")
                     sSetName = self.m_aCfg.getValue(PROP_SETNAME_HANDLERS)
                     sSubDir = self.m_aCfg.getValue(PROP_SUBDIR_HANDLERS)
                     lFragments = self.m_lHandlers
@@ -528,7 +533,7 @@ class Merger:
                 os.path.join(self.m_aFragmentsDir, sSubDir), \
                 sSetName, lFragments, 1)
 
-        print("generate package footer ... ")
+        printOut("generate package footer ... ")
         sBuffer = sBuffer + generateFooter()
 
         # Attention!
@@ -536,13 +541,13 @@ class Merger:
         # corresponding xml file. We should suppress writing of this file on 
         # disk completly ...
         if nItemCount < 1:
-            print("Package is empty and will not result into a xml file on "\
+            printOut("Package is empty and will not result into a xml file on "\
                 "disk!? Please check configuration file.")
             return
-        print("package contains " + str(nItemCount) + " items")
+        printOut("package contains " + str(nItemCount) + " items")
 
         aPackage = codecs.open(sPackage, 'w', "utf-8")
-        print("write temp package \"" + sPackage)
+        printOut("write temp package \"" + sPackage)
         aPackage.write(sBuffer)
 
     # Reads the fragment files with the file names lFragments in directory aDir,
@@ -566,7 +571,7 @@ class Merger:
             except:
                 # handle simple files only and check for existence!
                 raise Exception("fragment \"" + sFragPath + "\" does not exists.")
-            print("merge fragment \"" + sFragPath + "\" ...")
+            printOut("merge fragment \"" + sFragPath + "\" ...")
             sBuffer = sBuffer + aFragmentFile.read()
             sBuffer = sBuffer + "\n"
 
