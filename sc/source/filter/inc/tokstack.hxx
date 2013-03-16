@@ -269,7 +269,7 @@ inline const TokenId TokenStack::Get( void )
 
 inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
 {// Element auf Stack
-    OSL_ENSURE( nPos < nSize, "*TokenStack::<<(): Stackueberlauf" );
+    OSL_ENSURE( nPos < nSize, "*TokenStack::<<(): Stack overflow" );
     if( nPos < nSize )
     {
         pStack[ nPos ] = nNewId;

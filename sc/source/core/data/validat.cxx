@@ -515,7 +515,7 @@ sal_Bool ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos
             break;
 
         default:
-            OSL_FAIL("hammanochnich");
+            OSL_FAIL("not yet done");
             break;
     }
 
@@ -904,7 +904,7 @@ ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
         if( (*it)->GetKey() == nKey )
             return *it;
 
-    OSL_FAIL("ScValidationDataList: Eintrag nicht gefunden");
+    OSL_FAIL("ScValidationDataList: Entry not found");
     return NULL;
 }
 

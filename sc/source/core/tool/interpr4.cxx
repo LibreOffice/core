@@ -3215,7 +3215,7 @@ void ScInterpreter::ScMacro()
     SbModule* pModule = pMethod->GetModule();
     bool bUseVBAObjects = pModule->IsVBACompat();
     SbxObject* pObject = pModule->GetParent();
-    OSL_ENSURE(pObject->IsA(TYPE(StarBASIC)), "Kein Basic gefunden!");
+    OSL_ENSURE(pObject->IsA(TYPE(StarBASIC)), "No Basic found!");
     String aMacroStr = pObject->GetName();
     aMacroStr += '.';
     aMacroStr += pModule->GetName();
@@ -3800,7 +3800,7 @@ const ScCalcConfig& ScInterpreter::GetGlobalConfig()
 void ScInterpreter::GlobalExit()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GlobalExit" );
-    OSL_ENSURE(!bGlobalStackInUse, "wer benutzt noch den TokenStack?");
+    OSL_ENSURE(!bGlobalStackInUse, "who is still using the TokenStack?");
     DELETEZ(pGlobalStack);
 }
 

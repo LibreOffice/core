@@ -910,7 +910,7 @@ size_t ScSubOutlineIterator::LastEntry() const
 {
     if (nSubEntry == 0)
     {
-        OSL_FAIL("ScSubOutlineIterator::LastEntry vor GetNext");
+        OSL_FAIL("ScSubOutlineIterator::LastEntry before GetNext");
         return 0;
     }
     return nSubEntry-1;
@@ -920,12 +920,12 @@ void ScSubOutlineIterator::DeleteLast()
 {
     if (nSubLevel >= nDepth)
     {
-        OSL_FAIL("ScSubOutlineIterator::DeleteLast nach Ende");
+        OSL_FAIL("ScSubOutlineIterator::DeleteLast after End");
         return;
     }
     if (nSubEntry == 0)
     {
-        OSL_FAIL("ScSubOutlineIterator::DeleteLast vor GetNext");
+        OSL_FAIL("ScSubOutlineIterator::DeleteLast before GetNext");
         return;
     }
 

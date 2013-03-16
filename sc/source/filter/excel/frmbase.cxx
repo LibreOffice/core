@@ -44,7 +44,7 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, const bool b )
     }
     else
     {
-        OSL_ENSURE( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
+        OSL_ENSURE( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): A lie has no crash!" );
     }
 
     if( nTab == SCTAB_MAX)
@@ -146,7 +146,7 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCTAB nTab, bool b )
 
 const ScRange* _ScRangeListTabs::First( SCTAB n )
 {
-    OSL_ENSURE( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
+    OSL_ENSURE( ValidTab(n), "-_ScRangeListTabs::First(): Good bye!" );
 
     TabRangeType::iterator itr = maTabRanges.find(n);
     if (itr == maTabRanges.end())

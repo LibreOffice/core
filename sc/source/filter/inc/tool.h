@@ -135,14 +135,14 @@ inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt
 
     aCompareIdent.SetStamp( nFormat, nSt );
     nIndex = aCompareIdent.GetStamp();
-    OSL_ENSURE( nIndex < __nSize, "FormCache::GetAttr(): Uuuuuuups... so nicht!" );
+    OSL_ENSURE( nIndex < __nSize, "FormCache::GetAttr(): Oups... not this way!" );
     if( bValid[ nIndex ] )
         pRet = aIdents[ nIndex ].GetAttr();
     else
     {
         // neues Attribut anlegen
         pAttr = NewAttr( nFormat, nSt );
-        OSL_ENSURE( pAttr, "FormCache::GetAttr(): Nix Speicherus" );
+        OSL_ENSURE( pAttr, "FormCache::GetAttr(): Nothing to save" );
 
         aIdents[ nIndex ] = FormIdent( nFormat, nSt, *pAttr );
         bValid[ nIndex ] = sal_True;

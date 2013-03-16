@@ -476,7 +476,7 @@ static double lcl_CalcData( ScSubTotalFunc eFunc,
             break;
         default:
         {
-            OSL_FAIL("unbekannte Funktion bei Consoli::CalcData");
+            OSL_FAIL("Consoli::CalcData: unknown function");
             fCount = -MAXDOUBLE;
         }
             break;
@@ -491,12 +491,12 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
     PutInOrder(nRow1,nRow2);
     if ( nCol2 >= sal::static_int_cast<SCCOL>(nCol1 + nColCount) && !bColByName )
     {
-        OSL_FAIL("Bereich zu gross");
+        OSL_FAIL("range too big");
         nCol2 = sal::static_int_cast<SCCOL>( nCol1 + nColCount - 1 );
     }
     if ( nRow2 >= sal::static_int_cast<SCROW>(nRow1 + nRowCount) && !bRowByName )
     {
-        OSL_FAIL("Bereich zu gross");
+        OSL_FAIL("range too big");
         nRow2 = sal::static_int_cast<SCROW>( nRow1 + nRowCount - 1 );
     }
 
@@ -545,7 +545,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
                         nPos = static_cast<SCCOL>(i);
                         bFound = sal_True;
                     }
-                OSL_ENSURE(bFound, "Spalte nicht gefunden");
+                OSL_ENSURE(bFound, "column not found");
             }
             pDestCols[nCol-nStartCol] = nPos;
         }
@@ -566,7 +566,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
                         nPos = static_cast<SCROW>(i);
                         bFound = sal_True;
                     }
-                OSL_ENSURE(bFound, "Zeile nicht gefunden");
+                OSL_ENSURE(bFound, "row not found");
             }
             pDestRows[nRow-nStartRow] = nPos;
         }

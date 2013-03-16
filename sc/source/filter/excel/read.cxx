@@ -77,7 +77,7 @@ FltError ImportExcel::Read( void )
     sal_uInt16      nOpcode;
     sal_uInt16      nBofLevel = 0;
 
-    OSL_ENSURE( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
+    OSL_ENSURE( &aIn != NULL, "-ImportExcel::Read(): No Stream - what happend?!" );
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
@@ -739,7 +739,7 @@ FltError ImportExcel::Read( void )
             case Z_Ende:        // ----------------------------------- Z_Ende -
                 OSL_FAIL( "*ImportExcel::Read(): Not possible state!" );
                 break;
-            default: OSL_FAIL( "-ImportExcel::Read(): Zustand vergessen!" );
+            default: OSL_FAIL( "-ImportExcel::Read(): state forgotten!" );
         }
     }
 

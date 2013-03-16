@@ -1304,7 +1304,7 @@ sal_Bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
                         bDoThis = !bCaption && !bCircle;    // don't include circles
                     else
                     {
-                        OSL_FAIL("wat?");
+                        OSL_FAIL("what?");
                     }
                 }
                 if ( bDoThis )

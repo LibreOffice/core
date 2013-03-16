@@ -333,7 +333,7 @@ SCROW ScMarkArray::GetMarkEnd( SCROW nRow, sal_Bool bUp ) const
     SCROW nRet;
     SCSIZE nIndex;
     Search(nRow, nIndex);
-    OSL_ENSURE( pData[nIndex].bMarked, "GetMarkEnd ohne bMarked" );
+    OSL_ENSURE( pData[nIndex].bMarked, "GetMarkEnd without bMarked" );
     if (bUp)
     {
         if (nIndex>0)

@@ -90,13 +90,13 @@ ScPrintRangeSaver::~ScPrintRangeSaver()
 
 ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab)
 {
-    OSL_ENSURE(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
+    OSL_ENSURE(nTab<nTabCount,"ScPrintRangeSaver Tab too big");
     return pData[nTab];
 }
 
 const ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab) const
 {
-    OSL_ENSURE(nTab<nTabCount,"ScPrintRangeSaver Tab zu gross");
+    OSL_ENSURE(nTab<nTabCount,"ScPrintRangeSaver Tab too big");
     return pData[nTab];
 }
 

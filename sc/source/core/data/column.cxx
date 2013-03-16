@@ -1204,7 +1204,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
         for (i = 0; i < nDelCount; i++)
         {
             ScBaseCell* pCell = ppDelCells[i];
-            OSL_ENSURE( pCell->IsBlank(), "sichtbare Zelle weggeschoben" );
+            OSL_ENSURE( pCell->IsBlank(), "visible cell moved away" );
             SvtBroadcaster* pBC = pCell->GetBroadcaster();
             if (pBC)
             {
@@ -1417,7 +1417,7 @@ void ScColumn::CopyToColumn(
         }
         else
         {
-            OSL_FAIL("CopyToColumn: bMarked, aber keine Markierung");
+            OSL_FAIL("CopyToColumn: bMarked, but no mark");
         }
         return;
     }

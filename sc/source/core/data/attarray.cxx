@@ -1091,7 +1091,7 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
                               SCROW nStartRow, SCROW nEndRow,
                               bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom )
 {
-    OSL_ENSURE( pBoxItem && pBoxInfoItem, "Linienattribute fehlen!" );
+    OSL_ENSURE( pBoxItem && pBoxInfoItem, "Missing line attributes!" );
 
     const ScPatternAttr* pPattern = GetPattern( nStartRow );
     const SvxBoxItem* pOldFrame = (const SvxBoxItem*)

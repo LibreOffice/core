@@ -993,7 +993,7 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
         CloseEntry( pInfo );
     if ( !nTableLevel )
     {
-        OSL_FAIL( "Dummbatz-Dok! <TH> oder <TD> ohne vorheriges <TABLE>" );
+        OSL_FAIL( "dumbo doc! <TH> or <TD> without previous <TABLE>" );
         TableOn( pInfo );
     }
     bInCell = true;
@@ -1221,7 +1221,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
         TableRowOff( pInfo );      // das optionale TableRowOff war nicht
     if ( !nTableLevel )
     {
-        OSL_FAIL( "Dummbatz-Dok! </TABLE> ohne oeffnendes <TABLE>" );
+        OSL_FAIL( "dumbo doc! </TABLE> without opening <TABLE>" );
         return ;
     }
     if ( --nTableLevel > 0 )
@@ -1428,7 +1428,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     }
     if (pImage->aURL.isEmpty())
     {
-        OSL_FAIL( "Image: Grafik ohne URL ?!?" );
+        OSL_FAIL( "Image: graphic without URL ?!?" );
         return ;
     }
 

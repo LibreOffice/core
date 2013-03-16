@@ -530,7 +530,7 @@ void ImportExcel::Array25( void )
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
         pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
-        OSL_ENSURE( pErgebnis, "*ImportExcel::Array25(): ScTokenArray ist NULL!" );
+        OSL_ENSURE( pErgebnis, "*ImportExcel::Array25(): ScTokenArray is NULL!" );
 
         ScMarkData          aMarkData;
         aMarkData.SelectOneTable( GetCurrScTab() );
@@ -829,7 +829,7 @@ void ImportExcel::Shrfmla( void )
     pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
 
 
-    OSL_ENSURE( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray ist NULL!" );
+    OSL_ENSURE( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray is NULL!" );
 
     pExcRoot->pShrfmlaBuff->Store( ScRange( static_cast<SCCOL>(nFirstCol),
                 static_cast<SCROW>(nFirstRow), GetCurrScTab(),
@@ -974,7 +974,7 @@ void ImportExcel::Bof3( void )
     maStrm.Ignore( 2 );
     maStrm >> nSubType;
 
-    OSL_ENSURE( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 als Workbook?!" );
+    OSL_ENSURE( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 as Workbook?!" );
     if( nSubType == 0x0100 )        // Book
         pExcRoot->eDateiTyp = Biff3W;
     else if( nSubType == 0x0020 )   // Chart
@@ -1004,7 +1004,7 @@ void ImportExcel::Array34( void )
                     static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
         pFormConv->Convert( pErgebnis, maStrm, nFormLen, true, FT_CellFormula);
 
-        OSL_ENSURE( pErgebnis, "+ImportExcel::Array34(): ScTokenArray ist NULL!" );
+        OSL_ENSURE( pErgebnis, "+ImportExcel::Array34(): ScTokenArray is NULL!" );
 
         ScMarkData          aMarkData;
         aMarkData.SelectOneTable( GetCurrScTab() );

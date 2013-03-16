@@ -107,7 +107,7 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 {
     String          aName( CreateName( rRange.aStart ) );
 
-    OSL_ENSURE( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
+    OSL_ENSURE( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): I'm getting sick...!" );
 
     ScRangeData* pData = new ScRangeData( pExcRoot->pIR->GetDocPtr(), aName, rToken, rRange.aStart, RT_SHARED );
     const ScAddress& rMaxPos = pExcRoot->pIR->GetMaxPos();
@@ -216,7 +216,7 @@ sal_Bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScInd
 
 sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 {
-    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index muss >0 sein!" );
+    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::IsLink(): Index has to be >0!" );
 
     if (!nExcIndex || nExcIndex > maEntries.size() )
         return false;
@@ -227,7 +227,7 @@ sal_Bool ExtSheetBuffer::IsLink( const sal_uInt16 nExcIndex ) const
 
 sal_Bool ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, String& rAppl, String& rDoc ) const
 {
-    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index muss >0 sein!" );
+    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index has to be >0!" );
 
     if (!nExcIndex || nExcIndex > maEntries.size() )
         return false;

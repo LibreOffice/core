@@ -1724,7 +1724,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     }
                     else
                     {
-                        OSL_FAIL( "TopTenQuery: pCell kein ValueData" );
+                        OSL_FAIL( "TopTenQuery: pCell no ValueData" );
                         rEntry.eOp = SC_GREATER_EQUAL;
                         rItem.mfVal = 0;
                     }
@@ -1982,7 +1982,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
 
         if ( nVisible > SCSIZE_MAX / sizeof(void*) )
         {
-            OSL_FAIL("zu viele Filterkritierien");
+            OSL_FAIL("too many filter criteria");
             nVisible = 0;
         }
 

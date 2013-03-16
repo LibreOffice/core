@@ -1401,7 +1401,7 @@ ScBaseCell* ScTable::GetCell( SCCOL nCol, SCROW nRow ) const
     if (ValidColRow( nCol, nRow ))
         return aCol[nCol].GetCell( nRow );
 
-    OSL_FAIL("GetCell ausserhalb");
+    OSL_FAIL("GetCell: out of range");
     return NULL;
 }
 
@@ -1749,7 +1749,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
 
                         SCCOL nTouchedCol = nCol;
                         long nWidth = static_cast<long>(mpRowHeights->getValue(nRow) * nFactor);
-                        OSL_ENSURE(nWidth <= 0, "Richtung falsch");
+                        OSL_ENSURE(nWidth <= 0, "Wrong direction");
                         while ( nWidth < 0 && nTouchedCol > 0 )
                         {
                             --nTouchedCol;
@@ -1778,7 +1778,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
 {
     if ( !pColWidth || !mpRowHeights || !pColFlags || !pRowFlags )
     {
-        OSL_FAIL( "Spalten-/Zeileninfo fehlt" );
+        OSL_FAIL( "Row/column info missing" );
         return;
     }
 
@@ -2108,7 +2108,7 @@ void ScTable::UnlockTable()
         --nLockCount;
     else
     {
-        OSL_FAIL("UnlockTable ohne LockTable");
+        OSL_FAIL("UnlockTable without LockTable");
     }
 }
 
@@ -2450,7 +2450,7 @@ void ScTable::SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth )
     }
     else
     {
-        OSL_FAIL("Falsche Spaltennummer oder keine Breiten");
+        OSL_FAIL("Invalid column number or no widths");
     }
 }
 
@@ -2472,7 +2472,7 @@ void ScTable::SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight )
     {
         if (!nNewHeight)
         {
-            OSL_FAIL("Zeilenhoehe 0 in SetRowHeight");
+            OSL_FAIL("SetRowHeight: Row height zero");
             nNewHeight = ScGlobal::nStdRowHeight;
         }
 
@@ -2485,7 +2485,7 @@ void ScTable::SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight )
     }
     else
     {
-        OSL_FAIL("Falsche Zeilennummer oder keine Hoehen");
+        OSL_FAIL("Invalid row number or no heights");
     }
 }
 
@@ -2531,7 +2531,7 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
     {
         if (!nNewHeight)
         {
-            OSL_FAIL("Zeilenhoehe 0 in SetRowHeight");
+            OSL_FAIL("SetRowHeight: Row height zero");
             nNewHeight = ScGlobal::nStdRowHeight;
         }
 
@@ -2579,7 +2579,7 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
     }
     else
     {
-        OSL_FAIL("Falsche Zeilennummer oder keine Hoehen");
+        OSL_FAIL("Invalid row number or no heights");
     }
 
     return bChanged;
@@ -2607,14 +2607,14 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual )
     }
     else
     {
-        OSL_FAIL("Falsche Zeilennummer oder keine Zeilenflags");
+        OSL_FAIL("Invalid row number or no column flags");
     }
 }
 
 
 sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
 {
-    OSL_ENSURE(ValidCol(nCol),"Falsche Spaltennummer");
+    OSL_ENSURE(ValidCol(nCol),"wrong column number");
 
     if (ValidCol(nCol) && pColFlags && pColWidth)
     {
@@ -2630,7 +2630,7 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
 
 sal_uInt16 ScTable::GetOriginalWidth( SCCOL nCol ) const        // immer die eingestellte
 {
-    OSL_ENSURE(ValidCol(nCol),"Falsche Spaltennummer");
+    OSL_ENSURE(ValidCol(nCol),"wrong column number");
 
     if (ValidCol(nCol) && pColWidth)
         return pColWidth[nCol];
@@ -2731,7 +2731,7 @@ sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, 
 
 sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero ) const
 {
-    OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"Falsche Zeilennummer");
+    OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"wrong row number");
 
     if (ValidRow(nStartRow) && ValidRow(nEndRow) && mpRowHeights)
     {
@@ -2757,7 +2757,7 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZ
 
 sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
 {
-    OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"Falsche Zeilennummer");
+    OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"wrong row number");
 
     if (ValidRow(nStartRow) && ValidRow(nEndRow) && mpRowHeights)
     {
@@ -2841,7 +2841,7 @@ void ScTable::ShowCol(SCCOL nCol, bool bShow)
     }
     else
     {
-        OSL_FAIL("Falsche Spaltennummer oder keine Flags");
+        OSL_FAIL("Invalid column number or no flags");
     }
 }
 
@@ -2865,7 +2865,7 @@ void ScTable::ShowRow(SCROW nRow, bool bShow)
     }
     else
     {
-        OSL_FAIL("Falsche Zeilennummer oder keine Flags");
+        OSL_FAIL("Invalid row number or no flags");
     }
 }
 
@@ -2892,7 +2892,7 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
     }
     else
     {
-        OSL_FAIL("Falsche Zeilennummer oder keine Flags");
+        OSL_FAIL("Invalid row number or no flags");
     }
 }
 
@@ -2999,7 +2999,7 @@ void ScTable::SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags )
         pRowFlags->SetValue( nRow, nNewFlags);
     else
     {
-        OSL_FAIL("Falsche Zeilennummer oder keine Flags");
+        OSL_FAIL("Invalid row number or no flags");
     }
 }
 
@@ -3010,7 +3010,7 @@ void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, sal_uInt8 nNewFlags )
         pRowFlags->SetValue( nStartRow, nEndRow, nNewFlags);
     else
     {
-        OSL_FAIL("Falsche Zeilennummer(n) oder keine Flags");
+        OSL_FAIL("Invalid row number(s) or no flags");
     }
 }
 
@@ -3409,7 +3409,7 @@ sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
     }
     else
     {
-        OSL_FAIL("GetRowOffset: Daten fehlen");
+        OSL_FAIL("GetRowOffset: Data missing");
     }
     return n;
 }
@@ -3453,7 +3453,7 @@ sal_uLong ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
     }
     else
     {
-        OSL_FAIL("GetColumnOffset: Daten fehlen");
+        OSL_FAIL("GetColumnOffset: Data missing");
     }
     return n;
 }

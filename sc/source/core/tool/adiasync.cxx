@@ -118,7 +118,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
                 p->pStr = new String( (sal_Char*)pData, osl_getThreadTextEncoding() );
             break;
         default :
-            OSL_FAIL( "unbekannter AsyncType" );
+            OSL_FAIL( "unknown AsyncType" );
             return;
     }
     p->bValid = sal_True;

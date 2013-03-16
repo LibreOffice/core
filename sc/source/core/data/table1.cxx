@@ -453,7 +453,7 @@ bool ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtr
                                 const Fraction& rZoomX, const Fraction& rZoomY,
                                 bool bForce, ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
-    OSL_ENSURE( nExtra==0 || bForce, "autom. OptimalHeight mit Extra" );
+    OSL_ENSURE( nExtra==0 || bForce, "automatic OptimalHeight with Extra" );
 
     if ( !pDocument->IsAdjustHeightEnabled() )
     {
@@ -486,7 +486,7 @@ void ScTable::SetOptimalHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 n
                                 const Fraction& rZoomX, const Fraction& rZoomY,
                                 bool bForce, ScProgress* pOuterProgress, sal_uLong nProgressStart )
 {
-    OSL_ENSURE( nExtra==0 || bForce, "autom. OptimalHeight mit Extra" );
+    OSL_ENSURE( nExtra==0 || bForce, "automatic OptimalHeight with Extra" );
 
     if ( !pDocument->IsAdjustHeightEnabled() )
         return;
@@ -1369,7 +1369,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
 bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const
 {
     const ScMarkArray* pMarkArray = rMark.GetArray();
-    OSL_ENSURE(pMarkArray,"GetNextMarkedCell ohne MarkArray");
+    OSL_ENSURE(pMarkArray,"GetNextMarkedCell without MarkArray");
     if ( !pMarkArray )
         return false;
 
@@ -1666,7 +1666,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
 {
     if ( !pColFlags || !pRowFlags )
     {
-        OSL_FAIL("keine ColInfo oder RowInfo in ExtendPrintArea");
+        OSL_FAIL("ExtendPrintArea: No ColInfo or RowInfo");
         return;
     }
 

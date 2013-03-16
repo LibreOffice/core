@@ -828,11 +828,11 @@ DifColumn::DifColumn ()
 
 void DifColumn::SetLogical( SCROW nRow )
 {
-    OSL_ENSURE( ValidRow(nRow), "*DifColumn::SetLogical(): Row zu gross!" );
+    OSL_ENSURE( ValidRow(nRow), "*DifColumn::SetLogical(): Row too big!" );
 
     if( pAkt )
     {
-        OSL_ENSURE( nRow > 0, "*DifColumn::SetLogical(): weitere koennen nicht 0 sein!" );
+        OSL_ENSURE( nRow > 0, "*DifColumn::SetLogical(): more cannot be zero!" );
 
         nRow--;
 
@@ -853,16 +853,16 @@ void DifColumn::SetLogical( SCROW nRow )
 
 void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
 {
-    OSL_ENSURE( ValidRow(nRow), "*DifColumn::SetNumFormat(): Row zu gross!" );
+    OSL_ENSURE( ValidRow(nRow), "*DifColumn::SetNumFormat(): Row too big!" );
 
     if( nNumFormat > 0 )
     {
         if(pAkt)
         {
             OSL_ENSURE( nRow > 0,
-                "*DifColumn::SetNumFormat(): weitere koennen nicht 0 sein!" );
+                "*DifColumn::SetNumFormat(): more cannot be zero!" );
             OSL_ENSURE( nRow > pAkt->nEnd,
-                "*DifColumn::SetNumFormat(): Noch 'mal von vorne?" );
+                "*DifColumn::SetNumFormat(): start from scratch?" );
 
             if( pAkt->nNumFormat == nNumFormat && pAkt->nEnd == nRow - 1 )
                 pAkt->nEnd = nRow;
@@ -935,8 +935,8 @@ DifAttrCache::~DifAttrCache()
 
 void DifAttrCache::SetLogical( const SCCOL nCol, const SCROW nRow )
 {
-    OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetLogical(): Col zu gross!" );
-    OSL_ENSURE( bPlain, "*DifAttrCache::SetLogical(): muss Plain sein!" );
+    OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetLogical(): Col too big!" );
+    OSL_ENSURE( bPlain, "*DifAttrCache::SetLogical(): has to be Plain!" );
 
     if( !ppCols[ nCol ] )
         ppCols[ nCol ] = new DifColumn;
@@ -946,8 +946,8 @@ void DifAttrCache::SetLogical( const SCCOL nCol, const SCROW nRow )
 
 void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat )
 {
-    OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col zu gross!" );
-    OSL_ENSURE( !bPlain, "*DifAttrCache::SetNumFormat(): sollte nicht Plain sein!" );
+    OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col too big!" );
+    OSL_ENSURE( !bPlain, "*DifAttrCache::SetNumFormat(): should not be Plain!" );
 
     if( !ppCols[ nCol ] )
         ppCols[ nCol ] = new DifColumn;

@@ -150,7 +150,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             SCTAB nTab, double nScaleX, double nScaleY,
                             bool bPageMode, bool bFormulaMode, const ScMarkData* pMarkData )
 {
-    OSL_ENSURE( maTabs[nTab], "Tabelle existiert nicht" );
+    OSL_ENSURE( maTabs[nTab], "Table does not exist" );
 
     bool bLayoutRTL = IsLayoutRTL( nTab );
 
@@ -245,7 +245,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             ++nArrY;
             if (nArrY >= ROWINFO_MAX)
             {
-                OSL_FAIL("Zu grosser Bereich bei FillInfo" );
+                OSL_FAIL("FillInfo: Range too big" );
                 nYExtra = nSignedY;                                 // Ende
                 nY2 = nYExtra - 1;                                  // Bereich anpassen
             }
@@ -274,7 +274,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
     {
         //! Conditionals auch bei HASATTR_ROTATE abfragen ????
 
-        OSL_ENSURE( nArrCount>2, "nArrCount zu klein" );
+        OSL_ENSURE( nArrCount>2, "nArrCount too small" );
 //      FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-2, nX1, nX2 );
         FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-1, nX1, nX2 );
         //  FindMaxRotCol setzt nRotMaxCol
@@ -392,7 +392,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     {
                         while ( pRowInfo[nArrY].nRowNo < nThisRow )
                             ++nArrY;
-                        OSL_ENSURE( pRowInfo[nArrY].nRowNo == nThisRow, "Zeile nicht gefunden in FillInfo" );
+                        OSL_ENSURE( pRowInfo[nArrY].nRowNo == nThisRow, "FillInfo: Row not found" );
 
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                         CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
@@ -901,7 +901,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             break;
 
                         default:
-                            OSL_FAIL("falscher Shadow-Enum");
+                            OSL_FAIL("wrong Shadow-Enum");
                     }
                 }
             }

@@ -38,7 +38,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     rStream >> nID;
     if (nID != SCID_SIZES)
     {
-        OSL_FAIL("SCID_SIZES nicht gefunden");
+        OSL_FAIL("SCID_SIZES not found");
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
@@ -63,7 +63,7 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
 {
     if ( pMemStream && pMemStream->Tell() != pMemStream->GetEndOfData() )
     {
-        OSL_FAIL( "Sizes nicht vollstaendig gelesen" );
+        OSL_FAIL( "Sizes not fully read" );
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
     }
@@ -76,7 +76,7 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
 void ScMultipleReadHeader::EndEntry()
 {
     sal_uLong nPos = rStream.Tell();
-    OSL_ENSURE( nPos <= nEntryEnd, "zuviel gelesen" );
+    OSL_ENSURE( nPos <= nEntryEnd, "read too much" );
     if ( nPos != nEntryEnd )
     {
         if ( rStream.GetError() == SVSTREAM_OK )
@@ -94,7 +94,7 @@ void ScMultipleReadHeader::StartEntry()
     (*pMemStream) >> nEntrySize;
 
     nEntryEnd = nPos + nEntrySize;
-    OSL_ENSURE( nEntryEnd <= nTotalEnd, "zuviele Eintraege gelesen" );
+    OSL_ENSURE( nEntryEnd <= nTotalEnd, "read too many entries" );
 }
 
 sal_uLong ScMultipleReadHeader::BytesLeft() const
@@ -103,7 +103,7 @@ sal_uLong ScMultipleReadHeader::BytesLeft() const
     if (nReadEnd <= nEntryEnd)
         return nEntryEnd-nReadEnd;
 
-    OSL_FAIL("Fehler bei ScMultipleReadHeader::BytesLeft");
+    OSL_FAIL("ScMultipleReadHeader::BytesLeft: Error");
     return 0;
 }
 

@@ -740,7 +740,7 @@ const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 
 const ScFuncDesc* ScFunctionMgr::First( sal_uInt16 nCategory ) const
 {
-    OSL_ENSURE( nCategory < MAX_FUNCCAT, "Unbekannte Kategorie" );
+    OSL_ENSURE( nCategory < MAX_FUNCCAT, "Unknown category" );
     const ScFuncDesc* pDesc = NULL;
     if ( nCategory < MAX_FUNCCAT )
     {

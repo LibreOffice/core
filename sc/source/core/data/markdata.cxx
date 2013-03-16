@@ -201,7 +201,7 @@ SCTAB ScMarkData::GetFirstSelected() const
     if (maTabMarked.size() > 0)
         return (*maTabMarked.begin());
 
-    OSL_FAIL("GetFirstSelected: keine markiert");
+    OSL_FAIL("GetFirstSelected: nothing selected");
     return 0;
 }
 
@@ -210,7 +210,7 @@ SCTAB ScMarkData::GetLastSelected() const
     if (maTabMarked.size() > 0)
         return (*maTabMarked.rbegin());
 
-    OSL_FAIL("GetLastSelected: keine markiert");
+    OSL_FAIL("GetLastSelected: nothing selected");
     return 0;
 }
 
@@ -248,7 +248,7 @@ void ScMarkData::MarkToSimple()
 
     if ( bMultiMarked )
     {
-        OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
 
         ScRange aNew = aMultiRange;
 
@@ -299,7 +299,7 @@ bool ScMarkData::IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple ) const
     {
         //! hier auf negative Markierung testen ?
 
-        OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
         return pMultiSel[nCol].GetMark( nRow );
     }
 
@@ -334,7 +334,7 @@ bool ScMarkData::IsRowMarked( SCROW nRow ) const
 
     if ( bMultiMarked )
     {
-        OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
         for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
             if (!pMultiSel[nCol].GetMark(nRow))
                 return false;
@@ -382,7 +382,7 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
 
     if ( bMultiMarked )
     {
-        OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+        OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
 
         SCTAB nTab = aMultiRange.aStart.Tab();
 
@@ -545,7 +545,7 @@ bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
     if ( !bMultiMarked )
         return false;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -564,7 +564,7 @@ SCsROW ScMarkData::GetNextMarked( SCCOL nCol, SCsROW nRow, bool bUp ) const
     if ( !bMultiMarked )
         return nRow;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
 
     return pMultiSel[nCol].GetNextMarked( nRow, bUp );
 }
@@ -574,7 +574,7 @@ bool ScMarkData::HasMultiMarks( SCCOL nCol ) const
     if ( !bMultiMarked )
         return false;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
 
     return pMultiSel[nCol].HasMarks();
 }
@@ -584,7 +584,7 @@ bool ScMarkData::HasAnyMultiMarks() const
     if ( !bMultiMarked )
         return false;
 
-    OSL_ENSURE(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
+    OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
 
     for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
         if ( pMultiSel[nCol].HasMarks() )

@@ -1043,7 +1043,7 @@ bool ScAutoFormat::Load()
                 rStream >> nCnt >> nChrSet;
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
-                    OSL_FAIL( "Der Header enthaelt mehr/neuere Daten" );
+                    OSL_FAIL( "header contains more/newer data" );
                     rStream.Seek( nPos + nCnt );
                 }
                 rStream.SetStreamCharSet( GetSOLoadTextEncoding( nChrSet ) );

@@ -78,7 +78,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
     }
     else
     {
-        OSL_FAIL("SCNumFormatAbbrev:: unbekanntes Zahlformat");
+        OSL_FAIL("SCNumFormatAbbrev:: unknown number format");
         eLnge = LANGUAGE_SYSTEM;
         eSysLnge = LANGUAGE_GERMAN;     // sonst passt "Standard" nicht
         sFormatstring.AssignAscii( RTL_CONSTASCII_STRINGPARAM( pStandardName ) );

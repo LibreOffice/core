@@ -178,7 +178,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             double& rInc, sal_uInt16& rMinDigits,
                             ScUserListData*& rListData, sal_uInt16& rListIndex)
 {
-    OSL_ENSURE( nCol1==nCol2 || nRow1==nRow2, "FillAnalyse: falscher Bereich" );
+    OSL_ENSURE( nCol1==nCol2 || nRow1==nRow2, "FillAnalyse: invalid range" );
 
     rInc = 0.0;
     rMinDigits = 0;
@@ -450,17 +450,17 @@ void ScTable::FillFormula(sal_uLong& /* nFormulaCounter */, bool /* bFirst */, S
                 }
                 else
                 {
-                    OSL_FAIL( "FillFormula: MatrixOrigin keine Formelzelle mit MM_FORMULA" );
+                    OSL_FAIL( "FillFormula: MatrixOrigin no forumla cell with MM_FORMULA" );
                 }
             }
             else
             {
-                OSL_FAIL( "FillFormula: MatrixOrigin rechts unten" );
+                OSL_FAIL( "FillFormula: MatrixOrigin bottom right" );
             }
         }
         else
         {
-            OSL_FAIL( "FillFormula: kein MatrixOrigin" );
+            OSL_FAIL( "FillFormula: no MatrixOrigin" );
         }
     }
     pDocument->SetNoListening( false );
@@ -1172,7 +1172,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
         }
         else
         {
-            OSL_FAIL("GetAutoFillPreview: falscher Modus");
+            OSL_FAIL("GetAutoFillPreview: invalid mode");
         }
     }
 

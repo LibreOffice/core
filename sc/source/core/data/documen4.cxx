@@ -124,7 +124,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     nRow2 = std::min<SCROW>(nRow2, MAXROW);
     if (!rMark.GetSelectCount())
     {
-        SAL_WARN("sc", "ScDocument::InsertMatrixFormula Keine Tabelle markiert");
+        SAL_WARN("sc", "ScDocument::InsertMatrixFormula: No table marked");
         return;
     }
 
@@ -220,7 +220,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     nTab1 = i;
     if (!bStop)
     {
-        OSL_FAIL("ScDocument::InsertTableOp: Keine Tabelle markiert");
+        OSL_FAIL("ScDocument::InsertTableOp: No table marked");
         return;
     }
 
@@ -432,7 +432,7 @@ void ScDocument::DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd 
         maTabs[nTab]->DoColResize( nCol1, nCol2, nAdd );
     else
     {
-        OSL_FAIL("DoColResize: falsche Tabelle");
+        OSL_FAIL("DoColResize: wrong table");
     }
 }
 
@@ -647,7 +647,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
         }
         return &rSet.Get( nWhich );
     }
-    OSL_FAIL("kein Pattern");
+    OSL_FAIL("no pattern");
     return NULL;
 }
 
@@ -694,7 +694,7 @@ ScConditionalFormat* ScDocument::GetCondFormat(
             return pCondFormList->GetFormat( nIndex );
         else
         {
-            OSL_FAIL("pCondFormList ist 0");
+            OSL_FAIL("pCondFormList is 0");
         }
     }
 
@@ -805,7 +805,7 @@ sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
     if (nUsed > 0)
         return static_cast<sal_uInt16>((nDif*64)/nUsed);            // max.256 (SC_DOCCOMP_MAXDIFF)
 
-    OSL_ENSURE(!nDif,"Diff ohne Used");
+    OSL_ENSURE(!nDif,"Diff withoud Used");
     return 0;
 }
 
@@ -846,7 +846,7 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
     if (nUsed > 0)
         return static_cast<sal_uInt16>((nDif*64)/nUsed);    // max.256
 
-    OSL_ENSURE(!nDif,"Diff ohne Used");
+    OSL_ENSURE(!nDif,"Diff without Used");
     return 0;
 }
 

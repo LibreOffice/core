@@ -259,7 +259,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
         if( pItem )
         {
             aCId = ((const SfxStringItem *)pItem)->GetValue();
-            OSL_ENSURE( aCId.Len(), "CID ohne Laenge!" );
+            OSL_ENSURE( aCId.Len(), "CID without length!" );
         }
     }
 }
@@ -1345,7 +1345,7 @@ void ScHTMLExport::MakeCIdURL( String& rURL )
         return;
 
     String aLastName( aURLObj.GetLastName() );
-    OSL_ENSURE( aLastName.Len(), "Dateiname ohne Laenge!" );
+    OSL_ENSURE( aLastName.Len(), "filename without length!" );
     aLastName.ToLowerAscii();
 
     rURL.AssignAscii( "cid:" );

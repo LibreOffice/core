@@ -98,7 +98,7 @@ sal_Bool ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
                                 sal_Bool            /* bAcceptCellRef */,
                                 ScAddress::Details const & rDetails ) const
 {
-    OSL_ENSURE( pDoc, "Kein Dokument uebergeben!" );
+    OSL_ENSURE( pDoc, "No document given!" );
     if ( !pDoc )
         return false;
 

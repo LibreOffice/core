@@ -74,7 +74,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
                                     Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
     if ( !pStyle )
     {
-        OSL_FAIL("UpdatePageBreaks: Style nicht gefunden");
+        OSL_FAIL("UpdatePageBreaks: Style not found");
         return;
     }
     SfxItemSet* pStyleSet = &pStyle->GetItemSet();
@@ -126,7 +126,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false, &pItem ) == SFX_ITEM_SET )
     {
-        OSL_ENSURE( pItem->ISA(SfxUInt16Item), "falsches Item" );
+        OSL_ENSURE( pItem->ISA(SfxUInt16Item), "invalid Item" );
         bSkipColBreaks = bSkipRowBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
     }
 

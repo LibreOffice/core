@@ -135,7 +135,7 @@ inline sal_uInt16 NameBuffer::GetLastIndex () const
 {
     int size = maHashes.size() + nBase;
 
-    OSL_ENSURE( size <= 0xFFFF, "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
+    OSL_ENSURE( size <= 0xFFFF, "*NameBuffer::GetLastIndex(): I'm sick and tired!" );
 
     return static_cast<sal_uInt16>( size );
 }

@@ -562,7 +562,7 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 
 static String lcl_GetCharStr( sal_Int32 nNo )
 {
-    OSL_ENSURE( nNo, "0 ist eine ungueltige Nummer !!" );
+    OSL_ENSURE( nNo, "0 is an invalid number !!" );
     String aStr;
 
     const sal_Int32 coDiff = 'Z' - 'A' +1;

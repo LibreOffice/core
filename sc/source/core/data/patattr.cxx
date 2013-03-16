@@ -360,7 +360,7 @@ void ScPatternAttr::GetFont(
         eLang =
         ((const SvxLanguageItem&)rItemSet.Get( nLangId )).GetLanguage();
     }
-    OSL_ENSURE(pFontAttr,"nanu?");
+    OSL_ENSURE(pFontAttr,"Oops?");
 
     //  auswerten
 
@@ -1220,7 +1220,7 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
                                         const SfxItemSet* pCondSet ) const
 {
-    OSL_ENSURE(pFormatter,"GetNumberFormat ohne Formatter");
+    OSL_ENSURE(pFormatter,"GetNumberFormat without Formatter");
 
     const SfxPoolItem* pFormItem;
     if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SFX_ITEM_SET )

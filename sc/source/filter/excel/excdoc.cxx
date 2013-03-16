@@ -161,7 +161,7 @@ ExcTable::~ExcTable()
 
 void ExcTable::Add( XclExpRecordBase* pRec )
 {
-    OSL_ENSURE( pRec, "-ExcTable::Add(): pRec ist NULL!" );
+    OSL_ENSURE( pRec, "-ExcTable::Add(): pRec is NULL!" );
     aRecList.AppendNewRecord( pRec );
 }
 

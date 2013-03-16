@@ -50,9 +50,9 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* p
 FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     const ScRange&rRange, const CharSet eCharSet, sal_uInt32 nDifOption )
 {
-    OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range unsortiert!" );
+    OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range not sorted!" );
     OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
-        "ScExportDif(): nur eine Tabelle bidde!" );
+        "ScExportDif(): only one table please!" );
 
     const CharSet eStreamCharSet = rOut.GetStreamCharSet();
     if ( eStreamCharSet != eCharSet )
@@ -109,7 +109,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aPrgrsBar.SetState( 0 );
 
     // TABLE
-    OSL_ENSURE( pDoc->HasTable( nTab ), "*ScExportDif(): Tabelle nicht vorhanden!" );
+    OSL_ENSURE( pDoc->HasTable( nTab ), "*ScExportDif(): Table not existent!" );
 
     aOS.append(pKeyTABLE);
     aOS.appendAscii("\n0,1\n\"");

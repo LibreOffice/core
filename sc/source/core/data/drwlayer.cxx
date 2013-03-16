@@ -113,7 +113,7 @@ ScUndoObjData::~ScUndoObjData()
 void ScUndoObjData::Undo()
 {
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
-    OSL_ENSURE(pData,"ScUndoObjData: Daten nicht da");
+    OSL_ENSURE(pData,"ScUndoObjData: Data missing");
     if (pData)
     {
         pData->maStart = aOldStt;
@@ -124,7 +124,7 @@ void ScUndoObjData::Undo()
 void ScUndoObjData::Redo()
 {
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
-    OSL_ENSURE(pData,"ScUndoObjData: Daten nicht da");
+    OSL_ENSURE(pData,"ScUndoObjData: Data missing");
     if (pData)
     {
         pData->maStart = aNewStt;
@@ -488,7 +488,7 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                                 SCsCOL nDx,SCsROW nDy, bool bUpdateNoteCaptionPos )
 {
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-    OSL_ENSURE(pPage,"Page nicht gefunden");
+    OSL_ENSURE(pPage,"Page not found");
     if (!pPage)
         return;
 
@@ -893,7 +893,7 @@ sal_Bool ScDrawLayer::GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool 
         return false;
 
     SCTAB nTab = rRange.aStart.Tab();
-    OSL_ENSURE( rRange.aEnd.Tab() == nTab, "GetPrintArea: Tab unterschiedlich" );
+    OSL_ENSURE( rRange.aEnd.Tab() == nTab, "GetPrintArea: Tab differ" );
 
     sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
 
@@ -936,7 +936,7 @@ sal_Bool ScDrawLayer::GetPrintArea( ScRange& rRange, sal_Bool bSetHor, sal_Bool 
     }
 
     const SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-    OSL_ENSURE(pPage,"Page nicht gefunden");
+    OSL_ENSURE(pPage,"Page not found");
     if (pPage)
     {
         SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -2045,7 +2045,7 @@ ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, sal_Bool bCreate )
 
 void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)
 {
-    OSL_ENSURE(!pGlobalDrawPersist,"SetGlobalDrawPersist mehrfach");
+    OSL_ENSURE(!pGlobalDrawPersist,"Multiple SetGlobalDrawPersist");
     pGlobalDrawPersist = pPersist;
 }
 

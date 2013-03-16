@@ -1761,7 +1761,7 @@ bool ScDocument::IsCutMode()
         return GetClipParam().mbCutMode;
     else
     {
-        OSL_FAIL("IsCutMode ohne bIsClip");
+        OSL_FAIL("IsCutMode without bIsClip");
         return false;
     }
 }
@@ -2658,7 +2658,7 @@ void ScDocument::SetClipArea( const ScRange& rArea, bool bCut )
     }
     else
     {
-        OSL_FAIL("SetClipArea: kein Clip");
+        OSL_FAIL("SetClipArea: No Clip");
     }
 }
 
@@ -2667,7 +2667,7 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, bool bIncludeFiltered
 {
     if (!bIsClip)
     {
-        OSL_FAIL("GetClipArea: kein Clip");
+        OSL_FAIL("GetClipArea: No Clip");
         return;
     }
 
@@ -2729,7 +2729,7 @@ void ScDocument::GetClipStart(SCCOL& nClipX, SCROW& nClipY)
     }
     else
     {
-        OSL_FAIL("GetClipStart: kein Clip");
+        OSL_FAIL("GetClipStart: No Clip");
     }
 }
 
@@ -2824,7 +2824,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
     }
     else
     {
-        OSL_FAIL("falsche Tabelle");
+        OSL_FAIL("wrong table");
     }
 }
 
@@ -2885,7 +2885,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
     }
     else
     {
-        OSL_FAIL("falsche Tabelle");
+        OSL_FAIL("wrong table");
     }
 }
 
@@ -3166,7 +3166,7 @@ void ScDocument::GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         rpCell = maTabs[nTab]->GetCell( nCol, nRow );
     else
     {
-        OSL_FAIL("GetCell ohne Tabelle");
+        OSL_FAIL("GetCell without a table");
         rpCell = NULL;
     }
 }
@@ -3178,7 +3178,7 @@ ScBaseCell* ScDocument::GetCell( const ScAddress& rPos ) const
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetCell( rPos );
 
-    OSL_FAIL("GetCell ohne Tabelle");
+    OSL_FAIL("GetCell without a table");
     return NULL;
 }
 
@@ -3499,7 +3499,7 @@ sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetColWidth( nCol, bHiddenAsZero );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return 0;
 }
 
@@ -3508,7 +3508,7 @@ sal_uInt16 ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetOriginalWidth( nCol );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return 0;
 }
 
@@ -3592,7 +3592,7 @@ SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetHiddenRowCount( nRow );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return 0;
 }
 
@@ -3601,7 +3601,7 @@ sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetColOffset( nCol, bHiddenAsZero );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return 0;
 }
 
@@ -3610,7 +3610,7 @@ sal_uLong ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetRowOffset( nRow, bHiddenAsZero );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return 0;
 }
 
@@ -3624,7 +3624,7 @@ sal_uInt16 ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice*
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetOptimalColWidth( nCol, pDev, nPPTX, nPPTY,
             rZoomX, rZoomY, bFormula, pMarkData, pParam );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return 0;
 }
 
@@ -3638,7 +3638,7 @@ long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetNeededSize
                 ( nCol, nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, bTotalSize );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return 0;
 }
 
@@ -3653,7 +3653,7 @@ bool ScDocument::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, s
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->SetOptimalHeight( nStartRow, nEndRow, nExtra,
                                                 pDev, nPPTX, nPPTY, rZoomX, rZoomY, bShrink );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return false;
 }
 
@@ -3725,7 +3725,7 @@ sal_uInt8 ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetColFlags( nCol );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return 0;
 }
 
@@ -3733,7 +3733,7 @@ sal_uInt8 ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetRowFlags( nRow );
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return 0;
 }
 
@@ -4442,7 +4442,7 @@ bool ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
         if (maTabs[nTab])
             return maTabs[nTab]->ApplyFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
 
-    OSL_FAIL("ApplyFlags: falsche Tabelle");
+    OSL_FAIL("ApplyFlags: wrong table");
     return false;
 }
 
@@ -4454,7 +4454,7 @@ bool ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
         if (maTabs[nTab])
             return maTabs[nTab]->RemoveFlags( nStartCol, nStartRow, nEndCol, nEndRow, nFlags );
 
-    OSL_FAIL("RemoveFlags: falsche Tabelle");
+    OSL_FAIL("RemoveFlags: wrong table");
     return false;
 }
 
@@ -4658,7 +4658,7 @@ void ScDocument::FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
         maTabs[nTab]->FindMaxRotCol( pRowInfo, nArrCount, nX1, nX2 );
     else
     {
-        OSL_FAIL("FindMaxRotCol: falsche Tabelle");
+        OSL_FAIL("FindMaxRotCol: wrong table");
     }
 }
 
@@ -4669,7 +4669,7 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
     //! Seitengrenzen fuer Druck beruecksichtigen !!!!!
 
     const SvxBoxItem* pThisAttr = (const SvxBoxItem*) GetEffItem( nCol, nRow, nTab, ATTR_BORDER );
-    OSL_ENSURE(pThisAttr,"wo ist das Attribut?");
+    OSL_ENSURE(pThisAttr,"where is the attribute?");
 
     const SvxBorderLine* pLeftLine   = pThisAttr->GetLeft();
     const SvxBorderLine* pTopLine    = pThisAttr->GetTop();
@@ -4722,7 +4722,7 @@ bool ScDocument::IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         if (maTabs[nTab])
             return maTabs[nTab]->IsBlockEmpty( nStartCol, nStartRow, nEndCol, nEndRow, bIgnoreNotes );
 
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     return false;
 }
 
@@ -4733,7 +4733,7 @@ void ScDocument::LockTable(SCTAB nTab)
         maTabs[nTab]->LockTable();
     else
     {
-        OSL_FAIL("Falsche Tabellennummer");
+        OSL_FAIL("wrong table number");
     }
 }
 
@@ -4744,7 +4744,7 @@ void ScDocument::UnlockTable(SCTAB nTab)
         maTabs[nTab]->UnlockTable();
     else
     {
-        OSL_FAIL("Falsche Tabellennummer");
+        OSL_FAIL("wrong table number");
     }
 }
 
@@ -4766,7 +4766,7 @@ bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
             return maTabs[nTab]->IsBlockEditable( nStartCol, nStartRow, nEndCol,
                 nEndRow, pOnlyNotBecauseOfMatrix );
 
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("wrong table number");
     if ( pOnlyNotBecauseOfMatrix )
         *pOnlyNotBecauseOfMatrix = false;
     return false;
@@ -4909,7 +4909,7 @@ bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
             SCROW nAttrPos = nOldRow;
             while (nAttrPos<=nEndRow)
             {
-                OSL_ENSURE( nIndex < pAttrArray->nCount, "Falscher Index im AttrArray" );
+                OSL_ENSURE( nIndex < pAttrArray->nCount, "Wrong index in AttrArray" );
 
                 if (((ScMergeFlagAttr&)pAttrArray->pData[nIndex].pPattern->
                         GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped())
@@ -4933,7 +4933,7 @@ bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
     }
     else
     {
-        OSL_FAIL("ExtendOverlapped: falscher Bereich");
+        OSL_FAIL("ExtendOverlapped: invalid range");
     }
 
     return bFound;
@@ -4984,7 +4984,7 @@ bool ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
     }
     else
     {
-        OSL_FAIL("ExtendMerge: falscher Bereich");
+        OSL_FAIL("ExtendMerge: invalid range");
     }
 
     return bFound;
@@ -5280,7 +5280,7 @@ void ScDocument::DeleteSelectionTab( SCTAB nTab, sal_uInt16 nDelFlag, const ScMa
         maTabs[nTab]->DeleteSelection( nDelFlag, rMark );
     else
     {
-        OSL_FAIL("Falsche Tabelle");
+        OSL_FAIL("wrong table");
     }
 }
 
@@ -5332,7 +5332,7 @@ void ScDocument::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirect
 void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const
 {
-    OSL_ENSURE( !nMovX || !nMovY, "GetNextPos: nur X oder Y" );
+    OSL_ENSURE( !nMovX || !nMovY, "GetNextPos: only X or Y" );
 
     ScMarkData aCopyMark = rMark;
     aCopyMark.SetMarking(false);
@@ -5450,7 +5450,7 @@ Size ScDocument::GetPageSize( SCTAB nTab ) const
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetPageSize();
 
-    OSL_FAIL("falsche Tab");
+    OSL_FAIL("invalid tab");
     return Size();
 }
 
@@ -5484,7 +5484,7 @@ bool ScDocument::HasManualBreaks( SCTAB nTab ) const
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->HasManualBreaks();
 
-    OSL_FAIL("falsche Tab");
+    OSL_FAIL("invalid tab");
     return false;
 }
 

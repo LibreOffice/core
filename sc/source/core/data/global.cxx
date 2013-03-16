@@ -601,14 +601,14 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
 {
     if (!pPool)
     {
-        OSL_FAIL("kein Pool bei ScGlobal::InitTextHeight");
+        OSL_FAIL("ScGlobal::InitTextHeight: No Pool");
         return;
     }
 
     const ScPatternAttr* pPattern = (const ScPatternAttr*)&pPool->GetDefaultItem(ATTR_PATTERN);
     if (!pPattern)
     {
-        OSL_FAIL("kein Default-Pattern bei ScGlobal::InitTextHeight");
+        OSL_FAIL("ScGlobal::InitTextHeight: No default pattern");
         return;
     }
 

@@ -438,7 +438,7 @@ ScDocument::~ScDocument()
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 {
-    OSL_ENSURE(bIsClip, "InitClipPtrs und nicht bIsClip");
+    OSL_ENSURE(bIsClip, "InitClipPtrs and not bIsClip");
 
     if (pValidationList)
     {
@@ -771,7 +771,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     //  vorneweg testen, ob der Prefix als gueltig erkannt wird
     //  wenn nicht, nur doppelte vermeiden
     bool bPrefix = ValidTabName( aName );
-    OSL_ENSURE(bPrefix, "ungueltiger Tabellenname");
+    OSL_ENSURE(bPrefix, "invalid table name");
     SCTAB nDummy;
 
     CreateValidTabName(aName);

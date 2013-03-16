@@ -851,7 +851,7 @@ bool ScDocument::TestCopyScenario( SCTAB nSrcTab, SCTAB nDestTab ) const
                 && nDestTab < static_cast<SCTAB>(maTabs.size())&& ValidTab(nDestTab))
         return maTabs[nSrcTab]->TestCopyScenarioTo( maTabs[nDestTab] );
 
-    OSL_FAIL("falsche Tabelle bei TestCopyScenario");
+    OSL_FAIL("wrong table at TestCopyScenario");
     return false;
 }
 
@@ -1056,7 +1056,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
 void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
                                         const ScMarkData& rMark, ScDocument* pUndoDoc )
 {
-    OSL_ENSURE(pClipDoc->bIsClip, "UpdateTranspose: kein Clip");
+    OSL_ENSURE(pClipDoc->bIsClip, "UpdateTranspose: No Clip");
 
     ScRange aSource;
     ScClipParam& rClipParam = GetClipParam();
@@ -1615,7 +1615,7 @@ Rectangle ScDocument::GetEmbeddedRect() const                       // 1/100 mm
         OSL_FAIL("table out of range");
     if (!pTable)
     {
-        OSL_FAIL("GetEmbeddedRect ohne Tabelle");
+        OSL_FAIL("GetEmbeddedRect without a table");
     }
     else
     {
@@ -1707,7 +1707,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHidden
         OSL_FAIL("table out of range");
     if (!pTable)
     {
-        OSL_FAIL("GetRange ohne Tabelle");
+        OSL_FAIL("GetRange without a table");
         return ScRange();
     }
 
@@ -1807,7 +1807,7 @@ bool ScDocument::IsTabProtected( SCTAB nTab ) const
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->IsProtected();
 
-    OSL_FAIL("Falsche Tabellennummer");
+    OSL_FAIL("Wrong table number");
     return false;
 }
 
@@ -1894,7 +1894,7 @@ Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
     {
-        OSL_FAIL("GetMMRect: falsche Tabelle");
+        OSL_FAIL("GetMMRect: wrong table");
         return Rectangle(0,0,0,0);
     }
 

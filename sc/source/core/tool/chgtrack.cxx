@@ -4335,7 +4335,7 @@ bool ScChangeTrack::Reject(
     {
         if ( pAct->HasDependent() && !bRecursion )
         {
-            OSL_ENSURE( pMap, "ScChangeTrack::Reject: Insert ohne map" );
+            OSL_ENSURE( pMap, "ScChangeTrack::Reject: Insert without map" );
             ScChangeActionMap::reverse_iterator itChangeAction;
             for (itChangeAction = pMap->rbegin();
                  itChangeAction != pMap->rend() && bOk; ++itChangeAction)
@@ -4358,7 +4358,7 @@ bool ScChangeTrack::Reject(
     }
     else if ( pAct->IsDeleteType() )
     {
-        OSL_ENSURE( !pMap, "ScChangeTrack::Reject: Delete mit map" );
+        OSL_ENSURE( !pMap, "ScChangeTrack::Reject: Delete with map" );
         ScBigRange aDelRange;
         sal_uLong nRejectAction = pAct->GetActionNumber();
         bool bTabDel, bTabDelOk;
@@ -4454,7 +4454,7 @@ bool ScChangeTrack::Reject(
     {
         if ( pAct->HasDependent() && !bRecursion )
         {
-            OSL_ENSURE( pMap, "ScChangeTrack::Reject: Move ohne Map" );
+            OSL_ENSURE( pMap, "ScChangeTrack::Reject: Move without Map" );
             ScChangeActionMap::reverse_iterator itChangeAction;
 
             for( itChangeAction = pMap->rbegin(); itChangeAction != pMap->rend() && bOk; ++itChangeAction )

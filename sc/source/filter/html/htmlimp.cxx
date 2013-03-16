@@ -91,7 +91,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScR
     }
     else
     {
-        OSL_FAIL("kein StyleSheet?!?");
+        OSL_FAIL("no StyleSheet?!?");
         aPageSize = pDefaultDev->LogicToPixel(
             SvxPaperInfo::GetPaperSize( PAPER_A4 ), MapMode( MAP_TWIP ) );
     }

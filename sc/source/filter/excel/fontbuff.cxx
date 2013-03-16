@@ -83,7 +83,7 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
 
 void LotusFontBuffer::SetName( const sal_uInt16 nIndex, const String& rName )
 {
-    OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetName(): Array zu klein!" );
+    OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetName(): Array too small!" );
     if( nIndex < nSize )
     {
         register ENTRY* pEntry = pData + nIndex;
@@ -97,7 +97,7 @@ void LotusFontBuffer::SetName( const sal_uInt16 nIndex, const String& rName )
 
 void LotusFontBuffer::SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeight )
 {
-    OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetHeight(): Array zu klein!" );
+    OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetHeight(): Array too small!" );
     if( nIndex < nSize )
         pData[ nIndex ].Height( *( new SvxFontHeightItem( ( sal_uLong ) nHeight * 20, 100, ATTR_FONT_HEIGHT ) ) );
 }
@@ -105,7 +105,7 @@ void LotusFontBuffer::SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeig
 
 void LotusFontBuffer::SetType( const sal_uInt16 nIndex, const sal_uInt16 nType )
 {
-    OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetType(): Array zu klein!" );
+    OSL_ENSURE( nIndex < nSize, "*LotusFontBuffer::SetType(): Array too small!" );
     if( nIndex < nSize )
     {
         register ENTRY* pEntry = pData + nIndex;

@@ -628,7 +628,7 @@ void ScDocumentPool::Remove( const SfxPoolItem& rItem )
         {
             if ( nRef != (sal_uLong) SC_SAFE_POOLREF )
             {
-                OSL_FAIL("Wer fummelt da an meinen Ref-Counts herum");
+                OSL_FAIL("Who fiddles with my ref counts?");
                 SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
             }
             return;                 // nicht herunterzaehlen

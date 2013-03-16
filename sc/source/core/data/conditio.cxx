@@ -1139,7 +1139,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
                 bValid = !bValid;
             break;
         default:
-            SAL_WARN("sc", "unbekannte Operation bei ScConditionEntry");
+            SAL_WARN("sc", "unknown operation at ScConditionEntry");
             break;
     }
     return bValid;
@@ -2134,7 +2134,7 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
         if (itr->GetKey() == nKey)
             return &(*itr);
 
-    SAL_WARN("sc", "ScConditionalFormatList: Eintrag nicht gefunden");
+    SAL_WARN("sc", "ScConditionalFormatList: Entry not found");
     return NULL;
 }
 

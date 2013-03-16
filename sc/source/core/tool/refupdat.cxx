@@ -360,7 +360,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     else if (eUpdateRefMode == URM_REORDER)
     {
         //  bisher nur fuer nDz (MoveTab)
-        OSL_ENSURE ( !nDx && !nDy, "URM_REORDER fuer x und y noch nicht implementiert" );
+        OSL_ENSURE ( !nDx && !nDy, "URM_REORDER for x and y not yet implemented" );
 
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) )
