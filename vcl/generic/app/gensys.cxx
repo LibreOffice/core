@@ -146,9 +146,9 @@ int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUStri
     return nResult != -1 ? nButtonIds[ nResult ] : 0;
 }
 
-// ------------------------------------------------------------------------
-//           Helpers primarily for X Windowing derivatives
-// ------------------------------------------------------------------------
+#if !defined(ANDROID) && !defined(IOS)
+
+// X11-specific
 
 const char* SalGenericSystem::getFrameResName()
 {
@@ -212,5 +212,7 @@ OString SalGenericSystem::getFrameResName( SalExtStyle nStyle )
 
     return aBuf.makeStringAndClear();
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

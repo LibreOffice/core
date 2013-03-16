@@ -43,10 +43,12 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
                                       int nButtonCombination,
                                       int nDefaultButton, bool bUseResources);
 
-    // simple helpers primarily for X Windowing W_CLASS hints
+#if !defined(ANDROID) && !defined(IOS)
+    // Simple helpers for X11 WM_CLASS hints
     static const char *getFrameResName();
     static const char *getFrameClassName();
     static rtl::OString getFrameResName( SalExtStyle nStyle );
+#endif
 };
 
 #endif // _SV_GENSYS_H
