@@ -1747,7 +1747,7 @@ void ImplDbgTestSolarMutex()
     bool bCheck = ImplGetSVData()->mpDefInst->CheckYieldMutex();
     (void)bCheck;
     OSL_ENSURE( bCheck, "SolarMutex not locked" );
-    //assert(bCheck);
+    assert(bCheck);
 }
 
 // =======================================================================
