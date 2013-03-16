@@ -191,7 +191,6 @@ public:
     bool HasLink(const Link& rLink) const { return FindEntry(rLink)!=0xFFFF; }
 };
 
-// Fuer die Factory in SvdObj.CXX
 SdrLinkList& ImpGetUserMakeObjHdl();
 SdrLinkList& ImpGetUserMakeObjUserDataHdl();
 

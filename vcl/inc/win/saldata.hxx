@@ -183,23 +183,13 @@ void ImplReleaseCachedDC( sal_uLong nID );
 bool ImplAddTempFont( SalData&, const rtl::OUString& rFontFileURL );
 void ImplReleaseTempFonts( SalData& );
 
-// --------------------------------------------
-// - SALSHL.CXX - for accessing DLL resources -
-// --------------------------------------------
-
 HCURSOR ImplLoadSalCursor( int nId );
 HBITMAP ImplLoadSalBitmap( int nId );
 sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon );
 
-// SALGDI.CXX
 void ImplInitSalGDI();
 void ImplFreeSalGDI();
 
-// --------------
-// - Prototypes -
-// --------------
-
-// \\WIN\SOURCE\APP\SALINST.CXX
 void ImplSalYieldMutexAcquireWithWait();
 sal_Bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
@@ -207,30 +197,24 @@ void ImplSalYieldMutexRelease();
 sal_uLong ImplSalReleaseYieldMutex();
 void ImplSalAcquireYieldMutex( sal_uLong nCount );
 
-// \\WIN\SOURCE\WINDOW\SALFRAME.CXX
 LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
-// \SV\WIN\SOURCE\APP\SALTIMER.CXX
+
 #define SALTIMERPROC_RECURSIVE 0xffffffff
 void    CALLBACK SalTimerProc( HWND hWnd, UINT nMsg, UINT_PTR nId, DWORD nTime );
 
-// \WIN\SOURCE\WINDOW\SALFRAME.CXX
 void SalTestMouseLeave();
 sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall );
 
-// \WIN\SOURCE\WINDOW\SALFRAME.CXX
 long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam );
 sal_Bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
 
-// \WIN\SOURCE\WINDOW\SALOBJ.CXX
 WinSalObject* ImplFindSalObject( HWND hWndChild );
 sal_Bool ImplSalPreDispatchMsg( MSG* pMsg );
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
 
-// \WIN\SOURCE\GDI\SALGDI3.CXX
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont );
 
-// \WIN\SOURCE\APP\SALDATA.CXX
 rtl_TextEncoding ImplSalGetSystemEncoding();
 OUString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen = STRING_LEN );
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );

@@ -274,7 +274,7 @@ public:
     // Copy selected boxes to another document.
     bool MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
                     bool bCpyNds = true, bool bCpyName = false ) const;
-    // Copy table in this (implemented in TBLRWCL.CXX).
+    // Copy table in this
     sal_Bool InsTable( const SwTable& rCpyTbl, const SwNodeIndex&,
                     SwUndoTblCpyTbl* pUndo = 0 );
     sal_Bool InsTable( const SwTable& rCpyTbl, const SwSelBoxes&,

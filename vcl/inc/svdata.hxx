@@ -358,12 +358,10 @@ void        ImplWindowAutoMnemonic( Window* pWindow );
 void        ImplUpdateSystemProcessWindow();
 Window*     ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 
-// SVAPP.CXX
 sal_Bool        ImplCallHotKey( const KeyCode& rKeyCode );
 void        ImplFreeHotKeyData();
 void        ImplFreeEventHookData();
 
-// WINPROC.CXX
 long        ImplCallPreNotify( NotifyEvent& rEvt );
 long        ImplCallEvent( NotifyEvent& rEvt );
 

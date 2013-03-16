@@ -27,10 +27,6 @@
 
 class Accelerator;
 
-// ------------------
-// - ImplAccelEntry -
-// ------------------
-
 class ImplAccelEntry
 {
 public:
@@ -41,11 +37,6 @@ public:
     sal_Bool            mbEnabled;
 };
 
-// -----------------
-// - Hilfemethoden -
-// -----------------
-
-// in KEYCOD.CXX
 void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 );
 
 #endif  // _SV_ACCEL_H
