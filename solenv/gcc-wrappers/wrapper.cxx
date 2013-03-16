@@ -71,13 +71,20 @@ string processccargs(vector<string> rawargs) {
     // TODO: should these options be enabled globally?
     args.append(" -EHsc");
     args.append(" -MD");
+    args.append(" -Gy");
+    args.append(" -Zc:wchar_t-");
+    args.append(" -Ob1 -Oxs -Oy-");
 
     for(vector<string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         args.append(" ");
         if(*i == "-o") {
             // TODO: handle more than just exe output
-            args.append("-Fe");
             ++i;
+            size_t dot=(*i).find_last_of(".");
+            if(!(*i).compare(dot+1,3,"obj"))
+                args.append("-Fo");
+            else if(!(*i).compare(dot+1,3,"exe"))
+                args.append("-Fe");
             args.append(*i);
         }
         else if(*i == "-g")
@@ -90,6 +97,17 @@ string processccargs(vector<string> rawargs) {
             }
             args.append(*i);
         }
+        else if(!(*i).compare(0,2,"-L")) {
+            args.append("-link -LIBPATH:"+(*i).substr(2));
+        }
+        else if(!(*i).compare(0,2,"-l")) {
+            args.append((*i).substr(2)+"lib.lib");
+        }
+        else if(!(*i).compare(0,12,"-fvisibility")) {
+            //TODO: drop other gcc-specific options
+        }
+        else if(*i == "-Werror")
+            args.append("-WX");
         else
             args.append(*i);
     }
@@ -156,7 +174,7 @@ int startprocess(string command, string args) {
             exit(1);
         }
         if(readlen!=0) {
-                WriteFile(stdout_handle,buffer,readlen,&writelen,NULL);
+            WriteFile(stdout_handle,buffer,readlen,&writelen,NULL);
         }
     }
     GetExitCodeProcess(pi.hProcess, &ret);
