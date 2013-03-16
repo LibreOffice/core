@@ -44,10 +44,6 @@
 
 #include <algorithm>
 
-// -----------
-// - Defines -
-// -----------
-
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -56,10 +52,6 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 
 #define XML_GRAPHICSTORAGE_NAME     "Pictures"
 #define XML_GRAPHICOBJECT_URL_BASE  "vnd.sun.star.GraphicObject:"
-
-// ---------------------------
-// - SvXMLGraphicInputStream -
-// ---------------------------
 
 const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
 {
@@ -101,8 +93,6 @@ public:
 
     sal_Bool                        Exists() const { return mxStmWrapper.is(); }
 };
-
-// -----------------------------------------------------------------------------
 
 SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphicId )
 {
@@ -159,13 +149,9 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
     }
 }
 
-// -----------------------------------------------------------------------------
-
 SvXMLGraphicInputStream::~SvXMLGraphicInputStream()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL SvXMLGraphicInputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
     throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
@@ -176,8 +162,6 @@ sal_Int32 SAL_CALL SvXMLGraphicInputStream::readBytes( Sequence< sal_Int8 >& rDa
     return mxStmWrapper->readBytes( rData, nBytesToRead );
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Int32 SAL_CALL SvXMLGraphicInputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
     throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
@@ -186,8 +170,6 @@ sal_Int32 SAL_CALL SvXMLGraphicInputStream::readSomeBytes( Sequence< sal_Int8 >&
 
     return mxStmWrapper->readSomeBytes( rData, nMaxBytesToRead );
 }
-
-// -----------------------------------------------------------------------------
 
 void SAL_CALL SvXMLGraphicInputStream::skipBytes( sal_Int32 nBytesToSkip )
     throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
@@ -198,8 +180,6 @@ void SAL_CALL SvXMLGraphicInputStream::skipBytes( sal_Int32 nBytesToSkip )
     mxStmWrapper->skipBytes( nBytesToSkip );
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Int32 SAL_CALL SvXMLGraphicInputStream::available() throw( NotConnectedException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
@@ -208,8 +188,6 @@ sal_Int32 SAL_CALL SvXMLGraphicInputStream::available() throw( NotConnectedExcep
     return mxStmWrapper->available();
 }
 
-// -----------------------------------------------------------------------------
-
 void SAL_CALL SvXMLGraphicInputStream::closeInput() throw( NotConnectedException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
@@ -217,10 +195,6 @@ void SAL_CALL SvXMLGraphicInputStream::closeInput() throw( NotConnectedException
 
     mxStmWrapper->closeInput();
 }
-
-// ----------------------------
-// - SvXMLGraphicOutputStream -
-// ----------------------------
 
 class SvXMLGraphicOutputStream : public::cppu::WeakImplHelper1< XOutputStream >
 {
@@ -252,8 +226,6 @@ public:
     const GraphicObject&            GetGraphicObject();
 };
 
-// -----------------------------------------------------------------------------
-
 SvXMLGraphicOutputStream::SvXMLGraphicOutputStream() :
     mpTmp( new ::utl::TempFile ),
     mbClosed( sal_False )
@@ -266,15 +238,11 @@ SvXMLGraphicOutputStream::SvXMLGraphicOutputStream() :
         mxStmWrapper = new ::utl::OOutputStreamWrapper( *mpOStm );
 }
 
-// -----------------------------------------------------------------------------
-
 SvXMLGraphicOutputStream::~SvXMLGraphicOutputStream()
 {
     delete mpTmp;
     delete mpOStm;
 }
-
-// -----------------------------------------------------------------------------
 
 void SAL_CALL SvXMLGraphicOutputStream::writeBytes( const Sequence< sal_Int8 >& rData )
     throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
@@ -285,8 +253,6 @@ void SAL_CALL SvXMLGraphicOutputStream::writeBytes( const Sequence< sal_Int8 >& 
     mxStmWrapper->writeBytes( rData );
 }
 
-// -----------------------------------------------------------------------------
-
 void SAL_CALL SvXMLGraphicOutputStream::flush()
     throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
 {
@@ -295,8 +261,6 @@ void SAL_CALL SvXMLGraphicOutputStream::flush()
 
     mxStmWrapper->flush();
 }
-
-// -----------------------------------------------------------------------------
 
 void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
     throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
@@ -309,8 +273,6 @@ void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
 
     mbClosed = sal_True;
 }
-
-// ------------------------------------------------------------------------------
 
 const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 {
@@ -383,10 +345,6 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
     return maGrfObj;
 }
 
-// ----------------------
-// - SvXMLGraphicHelper -
-// ----------------------
-
 SvXMLGraphicHelper::SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode ) :
     ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
                                       ::com::sun::star::document::XBinaryStreamResolver >( maMutex )
@@ -400,19 +358,13 @@ SvXMLGraphicHelper::SvXMLGraphicHelper() :
 {
 }
 
-// -----------------------------------------------------------------------------
-
 SvXMLGraphicHelper::~SvXMLGraphicHelper()
 {
 }
 
-// -----------------------------------------------------------------------------
-
 void SAL_CALL SvXMLGraphicHelper::disposing()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
                                                  ::rtl::OUString& rPictureStorageName,
@@ -441,8 +393,6 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( const ::rtl::OUString& rStorageName )
 {
@@ -476,8 +426,6 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
     return xRetStorage;
 }
 
-// -----------------------------------------------------------------------------
-
 SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                               const ::rtl::OUString& rPictureStreamName,
                                                               sal_Bool bTruncate )
@@ -506,8 +454,6 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const ::rt
 
     return aRet;
 }
-
-// -----------------------------------------------------------------------------
 
 String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) const
 {
@@ -541,8 +487,6 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
     return aMimeType;
 }
 
-// -----------------------------------------------------------------------------
-
 Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
                                              const ::rtl::OUString& rPictureStreamName )
 {
@@ -557,8 +501,6 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
 
     return aGraphic;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
                                                const ::rtl::OUString& rPictureStreamName,
@@ -645,8 +587,6 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos, rtl::OUString& rRequestedFileName )
 {
@@ -795,8 +735,6 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLStorage,
                                SvXMLGraphicHelperMode eCreateMode,
                                sal_Bool bDirect )
@@ -805,8 +743,6 @@ void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLSto
     meCreateMode = eCreateMode;
     mbDirect = ( ( GRAPHICHELPER_MODE_READ == meCreateMode ) ? bDirect : sal_True );
 }
-
-// -----------------------------------------------------------------------------
 
 SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
                                                 SvXMLGraphicHelperMode eCreateMode,
@@ -820,8 +756,6 @@ SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XS
     return pThis;
 }
 
-// -----------------------------------------------------------------------------
-
 SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMode )
 {
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
@@ -832,8 +766,6 @@ SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMo
     return pThis;
 }
 
-// -----------------------------------------------------------------------------
-
 void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
 {
     if( pSvXMLGraphicHelper )
@@ -842,8 +774,6 @@ void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
         pSvXMLGraphicHelper->release();
     }
 }
-
-// -----------------------------------------------------------------------------
 
 // XGraphicObjectResolver
 ::rtl::OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const ::rtl::OUString& rURL )
@@ -889,8 +819,6 @@ void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
     return maGrfURLs[ nIndex ].second;
 }
 
-// -----------------------------------------------------------------------------
-
 // XBinaryStreamResolver
 Reference< XInputStream > SAL_CALL SvXMLGraphicHelper::getInputStream( const ::rtl::OUString& rURL )
     throw( RuntimeException )
@@ -913,8 +841,6 @@ Reference< XInputStream > SAL_CALL SvXMLGraphicHelper::getInputStream( const ::r
     return xRet;
 }
 
-// -----------------------------------------------------------------------------
-
 Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
     throw( RuntimeException )
 {
@@ -932,8 +858,6 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
     return xRet;
 }
-
-// -----------------------------------------------------------------------------
 
 ::rtl::OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOutputStream >& rxBinaryStream )
     throw( RuntimeException )
@@ -963,9 +887,6 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
     return aRet;
 }
-
-
-// --------------------------------------------------------------------------------
 
 // for instantiation via service manager
 namespace svx

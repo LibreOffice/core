@@ -28,22 +28,10 @@
 #include <rtl/crc.h>
 #include <memory>
 
-// -----------
-// - Defines -
-// -----------
-
 #define RELEASE_TIMEOUT 10000
 #define MAX_BMP_EXTENT  4096
 
-// -----------
-// - statics -
-// -----------
-
 static const char aHexData[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-
-// -------------
-// - GraphicID -
-// -------------
 
 class GraphicID
 {
@@ -71,8 +59,6 @@ public:
     rtl::OString GetIDString() const;
     sal_Bool        IsEmpty() const { return( 0 == mnID4 ); }
 };
-
-// -----------------------------------------------------------------------------
 
 GraphicID::GraphicID( const GraphicObject& rObj )
 {
@@ -132,8 +118,6 @@ GraphicID::GraphicID( const GraphicObject& rObj )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 rtl::OString GraphicID::GetIDString() const
 {
     rtl::OStringBuffer aHexStr;
@@ -154,10 +138,6 @@ rtl::OString GraphicID::GetIDString() const
 
     return aHexStr.makeStringAndClear();
 }
-
-// ---------------------
-// - GraphicCacheEntry -
-// ---------------------
 
 class GraphicCacheEntry
 {
@@ -197,8 +177,6 @@ public:
     void                GraphicObjectWasSwappedIn( const GraphicObject& rObj );
 };
 
-// -----------------------------------------------------------------------------
-
 GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     maID            ( rObj ),
     mpBmpEx         ( NULL ),
@@ -209,8 +187,6 @@ GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     mbSwappedAll = !ImplInit( rObj );
     maGraphicObjectList.push_back( (GraphicObject*)&rObj );
 }
-
-// -----------------------------------------------------------------------------
 
 GraphicCacheEntry::~GraphicCacheEntry()
 {
@@ -223,8 +199,6 @@ GraphicCacheEntry::~GraphicCacheEntry()
     delete mpMtf;
     delete mpAnimation;
 }
-
-// -----------------------------------------------------------------------------
 
 bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
 {
@@ -284,8 +258,6 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
 {
     // create substitute for graphic;
@@ -340,8 +312,6 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Graphic& rSubstitute )
 {
     if( mbSwappedAll )
@@ -350,8 +320,6 @@ void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Gr
     ImplFillSubstitute( rSubstitute );
     maGraphicObjectList.push_back( (GraphicObject*) &rObj );
 }
-
-// -----------------------------------------------------------------------------
 
 bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj )
 {
@@ -370,8 +338,6 @@ bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj
     return false;
 }
 
-// -----------------------------------------------------------------------------
-
 bool GraphicCacheEntry::HasGraphicObjectReference( const GraphicObject& rObj )
 {
     bool bRet = false;
@@ -383,15 +349,11 @@ bool GraphicCacheEntry::HasGraphicObjectReference( const GraphicObject& rObj )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicCacheEntry::TryToSwapIn()
 {
     if( mbSwappedAll && !maGraphicObjectList.empty() )
         maGraphicObjectList.front()->FireSwapInRequest();
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*/ )
 {
@@ -412,8 +374,6 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
     }
 }
 
-// -----------------------------------------------------------------------------
-
 bool GraphicCacheEntry::FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
 {
     bool bRet = false;
@@ -427,17 +387,11 @@ bool GraphicCacheEntry::FillSwappedGraphicObject( const GraphicObject& rObj, Gra
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicCacheEntry::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
 {
     if( mbSwappedAll )
         mbSwappedAll = !ImplInit( rObj );
 }
-
-// ----------------------------
-// - GraphicDisplayCacheEntry -
-// ----------------------------
 
 class GraphicDisplayCacheEntry
 {
@@ -519,8 +473,6 @@ public:
 
     void                        Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz ) const;
 };
-
-// -----------------------------------------------------------------------------
 
 // This whole function is based on checkMetadataBitmap() from grfmgr2.cxx, see that one for details.
 // If you do changes here, change the original function too.
@@ -845,8 +797,6 @@ sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Poi
         return rGraphic.GetSizeBytes();
 }
 
-// -----------------------------------------------------------------------------
-
 GraphicDisplayCacheEntry::~GraphicDisplayCacheEntry()
 {
     if( mpMtf )
@@ -855,8 +805,6 @@ GraphicDisplayCacheEntry::~GraphicDisplayCacheEntry()
     if( mpBmpEx )
         delete mpBmpEx;
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz ) const
 {
@@ -877,10 +825,6 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
     }
 }
 
-// -----------------------
-// - GraphicCache -
-// -----------------------
-
 GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDisplayCacheSize ) :
     mnReleaseTimeoutSeconds ( 0UL ),
     mnMaxDisplaySize        ( nDisplayCacheSize ),
@@ -892,15 +836,11 @@ GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDispla
     maReleaseTimer.Start();
 }
 
-// -----------------------------------------------------------------------------
-
 GraphicCache::~GraphicCache()
 {
     DBG_ASSERT( !maGraphicCache.size(), "GraphicCache::~GraphicCache(): there are some GraphicObjects in cache" );
     DBG_ASSERT( maDisplayCache.empty(), "GraphicCache::~GraphicCache(): there are some GraphicObjects in display cache" );
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicCache::AddGraphicObject(
     const GraphicObject& rObj,
@@ -1006,8 +946,6 @@ void GraphicCache::AddGraphicObject(
         maGraphicCache.push_back( new GraphicCacheEntry( rObj ) );
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
 {
     // Release cached object
@@ -1049,8 +987,6 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
     DBG_ASSERT( bRemoved, "GraphicCache::ReleaseGraphicObject(...): GraphicObject not found in cache" );
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicCache::GraphicObjectWasSwappedOut( const GraphicObject& rObj )
 {
     // notify cache that rObj is swapped out (and can thus be pruned
@@ -1061,8 +997,6 @@ void GraphicCache::GraphicObjectWasSwappedOut( const GraphicObject& rObj )
         pEntry->GraphicObjectWasSwappedOut( rObj );
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool GraphicCache::FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
 {
     GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
@@ -1072,8 +1006,6 @@ sal_Bool GraphicCache::FillSwappedGraphicObject( const GraphicObject& rObj, Grap
 
     return pEntry->FillSwappedGraphicObject( rObj, rSubstitute );
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
 {
@@ -1091,8 +1023,6 @@ void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicCache::SetMaxDisplayCacheSize( sal_uLong nNewCacheSize )
 {
     mnMaxDisplaySize = nNewCacheSize;
@@ -1100,8 +1030,6 @@ void GraphicCache::SetMaxDisplayCacheSize( sal_uLong nNewCacheSize )
     if( GetMaxDisplayCacheSize() < GetUsedDisplayCacheSize() )
         ImplFreeDisplayCacheSpace( GetUsedDisplayCacheSize() - GetMaxDisplayCacheSize() );
 }
-
-// -----------------------------------------------------------------------------
 
 void GraphicCache::SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
 {
@@ -1127,8 +1055,6 @@ void GraphicCache::SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize, sal_Bool
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 {
     if( mnReleaseTimeoutSeconds != nTimeoutSeconds )
@@ -1149,16 +1075,12 @@ void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool GraphicCache::IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                        const GraphicObject& rObj, const GraphicAttr& rAttr ) const
 {
     return( GraphicDisplayCacheEntry::GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) <=
             GetMaxObjDisplayCacheSize() );
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                      const GraphicObject& rObj, const GraphicAttr& rAttr ) const
@@ -1181,8 +1103,6 @@ sal_Bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, c
     return bFound;
 }
 
-// -----------------------------------------------------------------------------
-
 rtl::OString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
 {
     rtl::OString aRet;
@@ -1200,8 +1120,6 @@ rtl::OString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
 
     return aRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
@@ -1235,8 +1153,6 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                           const GDIMetaFile& rMtf )
@@ -1268,8 +1184,6 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                         const GraphicObject& rObj, const GraphicAttr& rAttr )
@@ -1311,8 +1225,6 @@ sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree )
 {
     sal_uLong nFreedSize = 0UL;
@@ -1341,8 +1253,6 @@ sal_Bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree )
     return( nFreedSize >= nSizeToFree );
 }
 
-// -----------------------------------------------------------------------------
-
 GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
 {
     GraphicCacheEntry* pRet = NULL;
@@ -1359,8 +1269,6 @@ GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
 
     return pRet;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
 {

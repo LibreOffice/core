@@ -24,13 +24,8 @@
 #include <vcl/graph.hxx>
 #include "svx/galmisc.hxx"
 
-// -----------
-// - Defines -
-// -----------
-
 #define S_THUMB 80
 
-// -----------------------------------------------------------------------------
 
 #define SGA_FORMAT_NONE                 0x00000000L
 #define SGA_FORMAT_STRING               0x00000001L
@@ -39,10 +34,6 @@
 #define SGA_FORMAT_OLE                  0x00001000L
 #define SGA_FORMAT_SVDRAW               0x00010000L
 #define SGA_FORMAT_ALL                  0xFFFFFFFFL
-
-// ----------------
-// - GalSoundType -
-// ----------------
 
 enum GalSoundType
 {
@@ -55,10 +46,6 @@ enum GalSoundType
     SOUND_TECHNIC = 6,
     SOUND_ANIMAL = 7
 };
-
-// -------------
-// - SgaObject -
-// -------------
 
 class SVX_DLLPUBLIC SgaObject
 {
@@ -104,10 +91,6 @@ public:
     friend SvStream&        operator>>( SvStream& rIn, SgaObject& rObj );
 };
 
-// ------------------
-// - SgaObjectSound -
-// ------------------
-
 class SgaObjectSound : public SgaObject
 {
 private:
@@ -129,10 +112,6 @@ public:
     virtual Bitmap      GetThumbBmp() const;
     GalSoundType        GetSoundType() const { return eSoundType; }
 };
-
-// -------------------
-// - SgaObjectSvDraw -
-// -------------------
 
 class FmFormModel;
 
@@ -163,10 +142,6 @@ public:
     static sal_Bool         DrawCentered( OutputDevice* pOut, const FmFormModel& rModel );
 };
 
-// ----------------
-// - SgaObjectBmp -
-// ----------------
-
 class SgaObjectBmp: public SgaObject
 {
 private:
@@ -188,10 +163,6 @@ public:
     virtual SgaObjKind  GetObjKind() const { return SGA_OBJ_BMP; }
 };
 
-// -----------------
-// - SgaObjectAnim -
-// -----------------
-
 class SgaObjectAnim : public SgaObjectBmp
 {
 private:
@@ -207,10 +178,6 @@ public:
 
     virtual SgaObjKind  GetObjKind() const { return SGA_OBJ_ANIM; }
 };
-
-// -----------------
-// - SgaObjectINet -
-// -----------------
 
 class SgaObjectINet : public SgaObjectAnim
 {

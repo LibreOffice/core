@@ -21,16 +21,10 @@
 #include <vcl/salbtype.hxx>
 #include <bmpfast.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define IMPL_CASE_GET_FORMAT( Format )                          \
 case( BMP_FORMAT##Format ):                                 \
     pFncGetPixel = BitmapReadAccess::GetPixelFor##Format;       \
 break
-
-// -----------------------------------------------------------------------------
 
 #define IMPL_CASE_SET_FORMAT( Format, BitCount )                \
 case( BMP_FORMAT##Format ):                                 \
@@ -40,18 +34,12 @@ case( BMP_FORMAT##Format ):                                 \
 }                                                               \
 break
 
-// -----------------------------------------------------------------------------
-
 #define DOUBLE_SCANLINES()                                                      \
 while( ( nActY < nHeight1 ) && ( pMapY[ nActY + 1 ] == nMapY ) )                \
 {                                                                               \
     memcpy( pDstScanMap[ nActY + 1L ], pDstScan, rDstBuffer.mnScanlineSize );   \
     nActY++;                                                                    \
 }
-
-// -----------
-// - Inlines -
-// -----------
 
 #define TC_TO_PAL_COLORS    4096
 
@@ -71,10 +59,6 @@ static long ImplIndexFromColor( const BitmapColor& rCol )
 
 #endif
 }
-
-// ------------------------
-// - conversion functions -
-// ------------------------
 
 static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                           FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
@@ -107,8 +91,6 @@ static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuff
         DOUBLE_SCANLINES();
     }
 }
-
-// -----------------------------------------------------------------------------
 
 static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                          FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
@@ -185,8 +167,6 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
     }
 }
 
-// -----------------------------------------------------------------------------
-
 static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                         FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
                         Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
@@ -229,8 +209,6 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
     }
 }
 
-// -----------------------------------------------------------------------------
-
 static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                          FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
                          Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
@@ -271,12 +249,6 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
 
     delete[] pColToPalMap;
 }
-
-// -----------------------------------------------------------------------------
-
-// ---------------------
-// - StretchAndConvert -
-// ---------------------
 
 BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
                                  sal_uLong nDstBitmapFormat, BitmapPalette* pDstPal, ColorMask* pDstMask )

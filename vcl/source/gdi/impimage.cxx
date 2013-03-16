@@ -28,14 +28,8 @@
 
 #include <image.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define IMPSYSIMAGEITEM_MASK        ( 0x01 )
 #define IMPSYSIMAGEITEM_ALPHA       ( 0x02 )
-
-// -----------------------------------------------------------------------
 
 ImageAryData::ImageAryData( const ImageAryData& rData ) :
     maName( rData.maName ),
@@ -50,13 +44,9 @@ ImageAryData::ImageAryData( const rtl::OUString &aName,
 {
 }
 
-// -----------------------------------------------------------------------
-
 ImageAryData::~ImageAryData()
 {
 }
-
-// -----------------------------------------------------------------------
 
 ImageAryData& ImageAryData::operator=( const ImageAryData& rData )
 {
@@ -66,10 +56,6 @@ ImageAryData& ImageAryData::operator=( const ImageAryData& rData )
 
     return *this;
 }
-
-// -----------------
-// - ImplImageList -
-// -----------------
 
 ImplImageList::ImplImageList()
 {
@@ -113,41 +99,25 @@ void ImplImageList::RemoveImage( sal_uInt16 nPos )
     maImages.erase( maImages.begin() + nPos );
 }
 
-// -----------------
-// - ImplImageData -
-// -----------------
-
 ImplImageData::ImplImageData( const BitmapEx& rBmpEx ) :
     mpImageBitmap( NULL ),
     maBmpEx( rBmpEx )
 {
 }
 
-// -----------------------------------------------------------------------
-
 ImplImageData::~ImplImageData()
 {
     delete mpImageBitmap;
 }
-
-// -----------------
-// - ImplImageData -
-// -----------------
 
 sal_Bool ImplImageData::IsEqual( const ImplImageData& rData )
 {
     return( maBmpEx == rData.maBmpEx );
 }
 
-// -------------
-// - ImplImage -
-// -------------
-
 ImplImage::ImplImage()
 {
 }
-
-// ------------------------------------------------------------------------------
 
 ImplImage::~ImplImage()
 {
@@ -163,10 +133,6 @@ ImplImage::~ImplImage()
     }
 }
 
-// ----------------
-// - ImplImageBmp -
-// ----------------
-
 ImplImageBmp::ImplImageBmp() :
     mpDisplayBmp( NULL ),
     mpInfoAry( NULL ),
@@ -174,17 +140,11 @@ ImplImageBmp::ImplImageBmp() :
 {
 }
 
-// -------------
-// - ImplImage -
-// -------------
-
 ImplImageBmp::~ImplImageBmp()
 {
     delete[] mpInfoAry;
     delete mpDisplayBmp;
 }
-
-// -----------------------------------------------------------------------
 
 void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight, sal_uInt16 nInitSize )
 {
@@ -203,8 +163,6 @@ void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHe
             rBmpEx.IsAlpha() ? IMPSYSIMAGEITEM_ALPHA : ( rBmpEx.IsTransparent() ? IMPSYSIMAGEITEM_MASK : 0 ),
             mnSize );
 }
-
-// -----------------------------------------------------------------------
 
 void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                          const Point& rPos, sal_uInt16 nStyle,
@@ -362,8 +320,6 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
     }
 }
 
-// -----------------------------------------------------------------------
-
 void ImplImageBmp::ImplUpdateDisplayBmp( OutputDevice*
 #if defined WNT
 pOutDev
@@ -389,8 +345,6 @@ pOutDev
 #endif
     }
 }
-
-// -----------------------------------------------------------------------
 
 void ImplImageBmp::ImplUpdateDisabledBmpEx( int nPos )
 {

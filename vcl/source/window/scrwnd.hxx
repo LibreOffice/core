@@ -21,10 +21,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define WHEELMODE_NONE      0x00000000UL
 #define WHEELMODE_VH        0x00000001UL
 #define WHEELMODE_V         0x00000002UL
@@ -32,10 +28,6 @@
 #define WHEELMODE_SCROLL_VH 0x00000008UL
 #define WHEELMODE_SCROLL_V  0x00000010UL
 #define WHEELMODE_SCROLL_H  0x00000020UL
-
-// -------------------
-// - ImplWheelWindow -
-// -------------------
 
 class Timer;
 

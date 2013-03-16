@@ -26,9 +26,6 @@
 #include <svtools/grfmgr.hxx>
 #include "svx/svxdllapi.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// predeclarations
-
 namespace sdr
 {
     namespace properties
@@ -41,21 +38,12 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-// -----------
-// - Defines -
-// -----------
-
 #define SDRGRAFOBJ_TRANSFORMATTR_NONE       0x00000000UL
 #define SDRGRAFOBJ_TRANSFORMATTR_COLOR      0x00000001UL
 #define SDRGRAFOBJ_TRANSFORMATTR_MIRROR     0x00000002UL
 #define SDRGRAFOBJ_TRANSFORMATTR_ROTATE     0x00000004UL
 #define SDRGRAFOBJ_TRANSFORMATTR_ALL        0xffffffffUL
 
-// ---------------------
-// - SdrGrafObjGeoData -
-// ---------------------
-
-// #109872#
 class SdrGrafObjGeoData : public SdrTextObjGeoData
 {
 public:
@@ -66,10 +54,6 @@ public:
     {
     }
 };
-
-// --------------
-// - SdrGrafObj -
-// --------------
 
 class GraphicObject;
 class SdrGraphicLink;

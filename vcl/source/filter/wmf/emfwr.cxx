@@ -24,10 +24,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/lineinfo.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define WIN_EMR_HEADER                      1
 #define WIN_EMR_POLYBEZIER                  2
 #define WIN_EMR_POLYGON                     3
@@ -219,11 +215,6 @@ typedef enum
   EmfPlusSetTSClip                  = 0x403A
 } EmfPlusRecordType;
 
-
-// -------------
-// - EMFWriter -
-// -------------
-
 void EMFWriter::ImplBeginCommentRecord( sal_Int32 nCommentType )
 {
     ImplBeginRecord( WIN_EMR_GDICOMMENT );
@@ -256,8 +247,6 @@ void EMFWriter::ImplBeginPlusRecord( sal_uInt16 nType, sal_uInt16 nFlags )
         m_rStm.SeekRel( 8 );
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplEndPlusRecord()
 {
@@ -446,8 +435,6 @@ sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilter
     return( m_rStm.GetError() == ERRCODE_NONE );
 }
 
-// -----------------------------------------------------------------------------
-
 sal_uLong EMFWriter::ImplAcquireHandle()
 {
     sal_uLong nHandle = HANDLE_INVALID;
@@ -467,15 +454,11 @@ sal_uLong EMFWriter::ImplAcquireHandle()
     return( nHandle != HANDLE_INVALID ? nHandle + 1 : HANDLE_INVALID );
 }
 
-// -----------------------------------------------------------------------------
-
 void EMFWriter::ImplReleaseHandle( sal_uLong nHandle )
 {
     DBG_ASSERT( nHandle && ( nHandle < MAXHANDLES ), "Handle out of range" );
     mpHandlesUsed[ nHandle - 1 ] = sal_False;
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplBeginRecord( sal_uInt32 nType )
 {
@@ -490,8 +473,6 @@ void EMFWriter::ImplBeginRecord( sal_uInt32 nType )
         m_rStm.SeekRel( 4 );
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplEndRecord()
 {
@@ -513,8 +494,6 @@ void EMFWriter::ImplEndRecord()
         mbRecordOpen = sal_False;
     }
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType )
 {
@@ -548,8 +527,6 @@ sal_Bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSel
     return( HANDLE_INVALID != rHandle );
 }
 
-// -----------------------------------------------------------------------------
-
 void EMFWriter::ImplCheckLineAttr()
 {
     if( mbLineChanged && ImplPrepareHandleSelect( mnLineHandle, LINE_SELECT ) )
@@ -567,8 +544,6 @@ void EMFWriter::ImplCheckLineAttr()
         ImplEndRecord();
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplCheckFillAttr()
 {
@@ -588,8 +563,6 @@ void EMFWriter::ImplCheckFillAttr()
         ImplEndRecord();
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplCheckTextAttr()
 {
@@ -702,8 +675,6 @@ void EMFWriter::ImplCheckTextAttr()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void EMFWriter::ImplWriteColor( const Color& rColor )
 {
     sal_uInt32 nCol = rColor.GetRed();
@@ -713,8 +684,6 @@ void EMFWriter::ImplWriteColor( const Color& rColor )
 
     m_rStm << nCol;
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
 {
@@ -732,15 +701,11 @@ void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
     ImplEndRecord();
 }
 
-// -----------------------------------------------------------------------------
-
 void EMFWriter::ImplWriteExtent( long nExtent )
 {
     nExtent = maVDev.LogicToLogic( Size( nExtent, 0 ), maVDev.GetMapMode(), maDestMapMode ).Width();
     m_rStm << (sal_Int32) nExtent;
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWritePoint( const Point& rPoint )
 {
@@ -748,15 +713,11 @@ void EMFWriter::ImplWritePoint( const Point& rPoint )
      m_rStm << (sal_Int32) aPoint.X() << (sal_Int32) aPoint.Y();
 }
 
-// -----------------------------------------------------------------------------
-
 void EMFWriter::ImplWriteSize( const Size& rSize)
 {
     const Size aSize( maVDev.LogicToLogic( rSize, maVDev.GetMapMode(), maDestMapMode ));
      m_rStm << (sal_Int32) aSize.Width() << (sal_Int32) aSize.Height();
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWriteRect( const Rectangle& rRect )
 {
@@ -767,8 +728,6 @@ void EMFWriter::ImplWriteRect( const Rectangle& rRect )
         << static_cast<sal_Int32>(aRect.Right())
         << static_cast<sal_Int32>(aRect.Bottom());
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, sal_Bool bClose )
 {
@@ -794,8 +753,6 @@ void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, sal_Bool bClose )
         }
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
 {
@@ -845,8 +802,6 @@ void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
         }
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
 {
@@ -933,8 +888,6 @@ void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
     ImplEndRecord();
 }
 
-// -----------------------------------------------------------------------------
-
 void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
                                     const Size& rSz, sal_uInt32 nROP )
 {
@@ -982,8 +935,6 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         ImplEndRecord();
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth )
 {
@@ -1057,8 +1008,6 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
 {
     if(rLinePolygon.count())
@@ -1096,8 +1045,6 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
         }
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 {

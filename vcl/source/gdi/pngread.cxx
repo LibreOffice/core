@@ -30,10 +30,6 @@
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define PNGCHUNK_IHDR       0x49484452
 #define PNGCHUNK_PLTE       0x504c5445
 #define PNGCHUNK_IDAT       0x49444154
@@ -48,11 +44,6 @@
 
 namespace vcl
 {
-// -----------
-// - statics -
-// -----------
-
-// ------------------------------------------------------------------------------
 
 static const sal_uInt8 mpDefaultColorTable[ 256 ] =
 {   0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
@@ -72,10 +63,6 @@ static const sal_uInt8 mpDefaultColorTable[ 256 ] =
     0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 0xea, 0xeb, 0xec, 0xed, 0xee, 0xef,
     0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff
 };
-
-// -------------
-// - PNGReaderImpl -
-// -------------
 
 class PNGReaderImpl
 {
@@ -167,8 +154,6 @@ public:
     void                SetIgnoreGammaChunk( sal_Bool bIgnore ){ mbIgnoreGammaChunk = bIgnore; };
 };
 
-// ------------------------------------------------------------------------------
-
 PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
 :   mrPNGStream( rPNGStream ),
     mpBmp           ( NULL ),
@@ -216,8 +201,6 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mnPreviewMask = (1 << mnPreviewShift) - 1;
 }
 
-// ------------------------------------------------------------------------
-
 PNGReaderImpl::~PNGReaderImpl()
 {
     mrPNGStream.SetNumberFormatInt( mnOrigStreamMode );
@@ -236,8 +219,6 @@ PNGReaderImpl::~PNGReaderImpl()
     delete[] mpScanPrior;
     delete mpZCodec;
 }
-
-// ------------------------------------------------------------------------
 
 bool PNGReaderImpl::ReadNextChunk()
 {
@@ -304,23 +285,17 @@ bool PNGReaderImpl::ReadNextChunk()
     return true;
 }
 
-// ------------------------------------------------------------------------
-
 // read the remaining chunks from mrPNGStream
 void PNGReaderImpl::ReadRemainingChunks()
 {
     while( ReadNextChunk() ) ;
 }
 
-// ------------------------------------------------------------------------
-
 const std::vector< vcl::PNGReader::ChunkData >& PNGReaderImpl::GetAllChunks()
 {
     ReadRemainingChunks();
     return maChunkSeq;
 }
-
-// ------------------------------------------------------------------------
 
 BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 {
@@ -447,8 +422,6 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
     }
     return aRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
 {
@@ -676,8 +649,6 @@ sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     return sal_True;
 }
 
-// ------------------------------------------------------------------------
-
 void PNGReaderImpl::ImplGetGrayPalette( sal_uInt16 nBitDepth )
 {
     if( nBitDepth > 8 )
@@ -696,8 +667,6 @@ void PNGReaderImpl::ImplGetGrayPalette( sal_uInt16 nBitDepth )
         mpAcc->SetPaletteColor( (sal_uInt16)i, BitmapColor( mpColorTable[ nStart ],
             mpColorTable[ nStart ], mpColorTable[ nStart ] ) );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool PNGReaderImpl::ImplReadPalette()
 {
@@ -721,8 +690,6 @@ sal_Bool PNGReaderImpl::ImplReadPalette()
 
     return mbStatus;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool PNGReaderImpl::ImplReadTransparent()
 {
@@ -803,8 +770,6 @@ sal_Bool PNGReaderImpl::ImplReadTransparent()
     return sal_True;
 }
 
-// ------------------------------------------------------------------------
-
 void PNGReaderImpl::ImplGetGamma()
 {
     if( mnChunkLen < 4 )
@@ -828,8 +793,6 @@ void PNGReaderImpl::ImplGetGamma()
             ImplGetGrayPalette( mnPngDepth );
     }
 }
-
-// ------------------------------------------------------------------------
 
 void PNGReaderImpl::ImplGetBackground()
 {
@@ -877,8 +840,6 @@ void PNGReaderImpl::ImplGetBackground()
     }
 }
 
-// ------------------------------------------------------------------------
-
 // for color type 0 and 4 (greyscale) the return value is always index to the color
 //                2 and 6 (RGB)       the return value is always the 8 bit color component
 sal_uInt8 PNGReaderImpl::ImplScaleColor()
@@ -894,7 +855,6 @@ sal_uInt8 PNGReaderImpl::ImplScaleColor()
     return (sal_uInt8) nCol;
 }
 
-// ------------------------------------------------------------------------
 // ImplReadIDAT reads as much image data as needed
 
 void PNGReaderImpl::ImplReadIDAT()
@@ -950,8 +910,6 @@ void PNGReaderImpl::ImplReadIDAT()
         mbzCodecInUse = sal_False;
     }
 }
-
-// ---------------------------------------------------------------------------------------------------
 
 bool PNGReaderImpl::ImplPreparePass()
 {
@@ -1015,7 +973,6 @@ bool PNGReaderImpl::ImplPreparePass()
     return true;
 }
 
-// ----------------------------------------------------------------------------
 // ImplApplyFilter writes the complete Scanline (nY)
 // in interlace mode the parameter nXStart and nXAdd are non-zero
 
@@ -1122,7 +1079,6 @@ void PNGReaderImpl::ImplApplyFilter()
     memcpy( mpScanPrior, mpInflateInBuf, mnScansize );
 }
 
-// ---------------------------------------------------------------------------------------------------
 // ImplDrawScanlines draws the complete Scanline (nY) into the target bitmap
 // In interlace mode the parameter nXStart and nXAdd append to the currently used pass
 
@@ -1436,8 +1392,6 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor )
 {
     // TODO: get preview mode checks out of inner loop
@@ -1448,8 +1402,6 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColo
     mpAcc->SetPixel( nY, nX, rBitmapColor );
 }
 
-// ------------------------------------------------------------------------
-
 void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIndex )
 {
     // TODO: get preview mode checks out of inner loop
@@ -1459,8 +1411,6 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIn
 
     mpAcc->SetPixel( nY, nX, nPalIndex );
 }
-
-// ------------------------------------------------------------------------
 
 void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor, sal_Bool bTrans )
 {
@@ -1477,8 +1427,6 @@ void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const Bitm
         mpMaskAcc->SetPixel( nY, nX, mcOpaqueColor );
 }
 
-// ------------------------------------------------------------------------
-
 void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
     sal_uInt8 nPalIndex, sal_uInt8 nAlpha )
 {
@@ -1491,8 +1439,6 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
     mpMaskAcc->SetPixel( nY, nX, ~nAlpha );
 }
 
-// ------------------------------------------------------------------------
-
 void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
     const BitmapColor& rBitmapColor, sal_uInt8 nAlpha )
 {
@@ -1504,8 +1450,6 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
     mpAcc->SetPixel( nY, nX, rBitmapColor );
     mpMaskAcc->SetPixel( nY, nX, ~nAlpha );
 }
-
-// ------------------------------------------------------------------------
 
 sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()
 {
@@ -1520,39 +1464,25 @@ sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()
     return nRet;
 }
 
-// ------------------------------------------------------------------------
-
-// -------------
-// - PNGReader -
-// -------------
-
 PNGReader::PNGReader( SvStream& rIStm ) :
     mpImpl( new ::vcl::PNGReaderImpl( rIStm ) )
 {
 }
-
-// ------------------------------------------------------------------------
 
 PNGReader::~PNGReader()
 {
     delete mpImpl;
 }
 
-// ------------------------------------------------------------------------
-
 BitmapEx PNGReader::Read( const Size& i_rPreviewSizeHint )
 {
     return mpImpl->GetBitmapEx( i_rPreviewSizeHint );
 }
 
-// ------------------------------------------------------------------------
-
 const std::vector< vcl::PNGReader::ChunkData >& PNGReader::GetChunks() const
 {
     return mpImpl->GetAllChunks();
 }
-
-// ------------------------------------------------------------------------
 
 void PNGReader::SetIgnoreGammaChunk( sal_Bool b )
 {

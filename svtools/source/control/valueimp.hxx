@@ -34,15 +34,7 @@
 
 #include <vector>
 
-// -----------
-// - Defines -
-// -----------
-
 #define VALUESET_ITEM_NONEITEM      0xFFFE
-
-// --------------------
-// - ValueSetItemType -
-// --------------------
 
 enum ValueSetItemType
 {
@@ -51,10 +43,6 @@ enum ValueSetItemType
     VALUESETITEM_COLOR,
     VALUESETITEM_USERDRAW
 };
-
-// ----------------
-// - ValueSetItem -
-// ----------------
 
 class ValueSet;
 
@@ -76,10 +64,6 @@ struct ValueSetItem
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
-
-// ---------------
-// - ValueSetAcc -
-// ---------------
 
 typedef ::cppu::PartialWeakComponentImplHelper6<
     ::com::sun::star::accessibility::XAccessible,
@@ -213,10 +197,6 @@ private:
     */
     bool HasNoneField (void) const;
 };
-
-// ----------------
-// - ValueItemAcc -
-// ----------------
 
 class ValueItemAcc : public ::cppu::WeakImplHelper5< ::com::sun::star::accessibility::XAccessible,
                                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,

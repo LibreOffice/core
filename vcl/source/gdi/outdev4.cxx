@@ -43,16 +43,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define HATCH_MAXPOINTS             1024
 #define GRADIENT_DEFAULT_STEPCOUNT  0
-
-// ----------------
-// - Cmp-Function -
-// ----------------
 
 extern "C" int SAL_CALL ImplHatchCmpFnc( const void* p1, const void* p2 )
 {
@@ -64,12 +56,8 @@ extern "C" int SAL_CALL ImplHatchCmpFnc( const void* p1, const void* p2 )
     return ( nX1 > nX2 ? 1 : nX1 == nX2 ? nY1 > nY2 ? 1: nY1 == nY2 ? 0 : -1 : -1 );
 }
 
-// =======================================================================
-
 DBG_NAMEEX( OutputDevice )
 DBG_NAMEEX( Gradient )
-
-// =======================================================================
 
 void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly )
 {
@@ -86,8 +74,6 @@ void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pCl
         mpGraphics->DrawPolygon( nPoints, pPtAry, this );
     }
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly )
 {
@@ -146,8 +132,6 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
         delete pPolyPoly;
 }
 
-// -----------------------------------------------------------------------
-
 inline sal_uInt8 ImplGetGradientColorValue( long nValue )
 {
     if ( nValue < 0 )
@@ -157,8 +141,6 @@ inline sal_uInt8 ImplGetGradientColorValue( long nValue )
     else
         return (sal_uInt8)nValue;
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
                                            const Gradient& rGradient,
@@ -400,8 +382,6 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     }
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
                                             const Gradient& rGradient,
                                             sal_Bool bMtf, const PolyPolygon* pClipPolyPoly )
@@ -614,8 +594,6 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     }
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::DrawGradient( const Rectangle& rRect,
                                  const Gradient& rGradient )
 {
@@ -743,8 +721,6 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
         mpAlphaVDev->ImplFillOpaqueRectangle( rRect );
     }
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
@@ -967,8 +943,6 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& rGradient,
                                        GDIMetaFile& rMtf )
 {
@@ -1010,8 +984,6 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
         mpMetaFile = pOldMtf;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
@@ -1088,8 +1060,6 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         mpAlphaVDev->DrawHatch( rPolyPoly, rHatch );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::AddHatchActions( const PolyPolygon& rPolyPoly, const Hatch& rHatch,
                                     GDIMetaFile& rMtf )
 {
@@ -1110,8 +1080,6 @@ void OutputDevice::AddHatchActions( const PolyPolygon& rPolyPoly, const Hatch& r
         mpMetaFile = pOldMtf;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch, sal_Bool bMtf )
 {
@@ -1161,8 +1129,6 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
 
     delete[] pPtBuffer;
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, sal_uInt16 nAngle10,
                                         Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 )
@@ -1271,8 +1237,6 @@ void OutputDevice::ImplCalcHatchValues( const Rectangle& rRect, long nDist, sal_
         rPt2.X() -= nOffset;
     }
 }
-
-// ------------------------------------------------------------------------
 
 void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPolyPoly,
                                       Point* pPtBuffer, sal_Bool bMtf )

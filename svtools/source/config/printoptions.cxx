@@ -36,17 +36,10 @@
 #include <itemholder2.hxx>
 
 #include <sal/macros.h>
-// -----------
-// - statics -
-// -----------
 
 static sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
 #define DPI_COUNT (SAL_N_ELEMENTS(aDPIArray))
-
-// -----------
-// - Defines -
-// -----------
 
 #define ROOTNODE_START                                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print/Option"))
 #define ROOTNODE_PRINTOPTION                            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Print/Option"))
@@ -63,18 +56,10 @@ static sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 #define PROPERTYNAME_CONVERTTOGREYSCALES                OUString(RTL_CONSTASCII_USTRINGPARAM("ConvertToGreyscales"))
 #define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        OUString(RTL_CONSTASCII_USTRINGPARAM("PDFAsStandardPrintJobFormat"))
 
-// --------------
-// - Namespaces -
-// --------------
-
 using namespace ::utl;
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
-
-// -----------
-// - statics -
-// -----------
 
 static SvtPrintOptions_Impl*   pPrinterOptionsDataContainer = NULL;
 static SvtPrintOptions_Impl*   pPrintFileOptionsDataContainer = NULL;
@@ -85,24 +70,11 @@ sal_Int32               SvtPrinterOptions::m_nRefCount = 0;
 SvtPrintOptions_Impl*   SvtPrintFileOptions::m_pStaticDataContainer = NULL;
 sal_Int32               SvtPrintFileOptions::m_nRefCount = 0;
 
-// ------------------------
-// - SvtPrintOptions_Impl -
-// ------------------------
-
 class SvtPrintOptions_Impl
 {
 public:
-
-//---------------------------------------------------------------------------------------------------------
-//  constructor / destructor
-//---------------------------------------------------------------------------------------------------------
-
      SvtPrintOptions_Impl( const OUString& rConfigRoot );
     ~SvtPrintOptions_Impl();
-
-//---------------------------------------------------------------------------------------------------------
-//  public interface
-//---------------------------------------------------------------------------------------------------------
 
     sal_Bool    IsReduceTransparency() const ;
     sal_Int16   GetReducedTransparencyMode() const ;
@@ -531,24 +503,13 @@ void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
     }
 }
 
-// -----------------------------------------------------------------------------
-
-
-// -----------------------
-// - SvtBasePrintOptions -
-// -----------------------
-
 SvtBasePrintOptions::SvtBasePrintOptions()
 {
 }
 
-// -----------------------------------------------------------------------------
-
 SvtBasePrintOptions::~SvtBasePrintOptions()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 Mutex& SvtBasePrintOptions::GetOwnStaticMutex()
 {
@@ -572,15 +533,11 @@ Mutex& SvtBasePrintOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool SvtBasePrintOptions::IsReduceTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsReduceTransparency();
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Int16 SvtBasePrintOptions::GetReducedTransparencyMode() const
 {
@@ -588,15 +545,11 @@ sal_Int16 SvtBasePrintOptions::GetReducedTransparencyMode() const
     return m_pDataContainer->GetReducedTransparencyMode();
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool SvtBasePrintOptions::IsReduceGradients() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsReduceGradients();
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Int16 SvtBasePrintOptions::GetReducedGradientMode() const
 {
@@ -604,15 +557,11 @@ sal_Int16 SvtBasePrintOptions::GetReducedGradientMode() const
     return m_pDataContainer->GetReducedGradientMode();
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Int16 SvtBasePrintOptions::GetReducedGradientStepCount() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetReducedGradientStepCount();
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SvtBasePrintOptions::IsReduceBitmaps() const
 {
@@ -620,15 +569,11 @@ sal_Bool SvtBasePrintOptions::IsReduceBitmaps() const
     return m_pDataContainer->IsReduceBitmaps();
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Int16 SvtBasePrintOptions::GetReducedBitmapMode() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetReducedBitmapMode();
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Int16 SvtBasePrintOptions::GetReducedBitmapResolution() const
 {
@@ -636,15 +581,11 @@ sal_Int16 SvtBasePrintOptions::GetReducedBitmapResolution() const
     return m_pDataContainer->GetReducedBitmapResolution();
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool SvtBasePrintOptions::IsReducedBitmapIncludesTransparency() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsReducedBitmapIncludesTransparency();
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SvtBasePrintOptions::IsConvertToGreyscales() const
 {
@@ -652,15 +593,11 @@ sal_Bool SvtBasePrintOptions::IsConvertToGreyscales() const
     return m_pDataContainer->IsConvertToGreyscales();
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool SvtBasePrintOptions::IsPDFAsStandardPrintJobFormat() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsPDFAsStandardPrintJobFormat();
 }
-
-// -----------------------------------------------------------------------------
 
 void SvtBasePrintOptions::SetReduceTransparency( sal_Bool bState )
 {
@@ -668,15 +605,11 @@ void SvtBasePrintOptions::SetReduceTransparency( sal_Bool bState )
     m_pDataContainer->SetReduceTransparency( bState ) ;
 }
 
-// -----------------------------------------------------------------------------
-
 void SvtBasePrintOptions::SetReducedTransparencyMode( sal_Int16 nMode )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetReducedTransparencyMode( nMode );
 }
-
-// -----------------------------------------------------------------------------
 
 void SvtBasePrintOptions::SetReduceGradients( sal_Bool bState )
 {
@@ -684,15 +617,11 @@ void SvtBasePrintOptions::SetReduceGradients( sal_Bool bState )
     m_pDataContainer->SetReduceGradients( bState );
 }
 
-// -----------------------------------------------------------------------------
-
 void SvtBasePrintOptions::SetReducedGradientMode( sal_Int16 nMode )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetReducedGradientMode( nMode );
 }
-
-// -----------------------------------------------------------------------------
 
 void SvtBasePrintOptions::SetReducedGradientStepCount( sal_Int16 nStepCount )
 {
@@ -700,15 +629,11 @@ void SvtBasePrintOptions::SetReducedGradientStepCount( sal_Int16 nStepCount )
     m_pDataContainer->SetReducedGradientStepCount( nStepCount );
 }
 
-// -----------------------------------------------------------------------------
-
 void SvtBasePrintOptions::SetReduceBitmaps( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetReduceBitmaps( bState );
 }
-
-// -----------------------------------------------------------------------------
 
 void SvtBasePrintOptions::SetReducedBitmapMode( sal_Int16 nMode )
 {
@@ -716,15 +641,11 @@ void SvtBasePrintOptions::SetReducedBitmapMode( sal_Int16 nMode )
     m_pDataContainer->SetReducedBitmapMode( nMode );
 }
 
-// -----------------------------------------------------------------------------
-
 void SvtBasePrintOptions::SetReducedBitmapResolution( sal_Int16 nResolution )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetReducedBitmapResolution( nResolution );
 }
-
-// -----------------------------------------------------------------------------
 
 void SvtBasePrintOptions::SetReducedBitmapIncludesTransparency( sal_Bool bState )
 {
@@ -732,23 +653,17 @@ void SvtBasePrintOptions::SetReducedBitmapIncludesTransparency( sal_Bool bState 
     m_pDataContainer->SetReducedBitmapIncludesTransparency( bState );
 }
 
-// -----------------------------------------------------------------------------
-
 void SvtBasePrintOptions::SetConvertToGreyscales( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetConvertToGreyscales( bState );
 }
 
-// -----------------------------------------------------------------------------
-
 void SvtBasePrintOptions::SetPDFAsStandardPrintJobFormat( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetPDFAsStandardPrintJobFormat( bState );
 }
-
-// -----------------------------------------------------------------------------
 
 void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
 {
@@ -764,8 +679,6 @@ void SvtBasePrintOptions::GetPrinterOptions( PrinterOptions& rOptions ) const
     rOptions.SetConvertToGreyscales( IsConvertToGreyscales() );
     rOptions.SetPDFAsStandardPrintJobFormat( IsPDFAsStandardPrintJobFormat() );
 }
-
-// -----------------------------------------------------------------------------
 
 void SvtBasePrintOptions::SetPrinterOptions( const PrinterOptions& rOptions )
 {
@@ -801,10 +714,6 @@ void SvtBasePrintOptions::SetPrinterOptions( const PrinterOptions& rOptions )
     }
 }
 
-// ---------------------
-// - SvtPrinterOptions -
-// ---------------------
-
 SvtPrinterOptions::SvtPrinterOptions()
 {
     // Global access, must be guarded (multithreading!).
@@ -823,8 +732,6 @@ SvtPrinterOptions::SvtPrinterOptions()
     SetDataContainer( m_pStaticDataContainer );
 }
 
-// -----------------------------------------------------------------------------
-
 SvtPrinterOptions::~SvtPrinterOptions()
 {
     // Global access, must be guarded (multithreading!)
@@ -840,10 +747,6 @@ SvtPrinterOptions::~SvtPrinterOptions()
         pPrinterOptionsDataContainer = NULL;
     }
 }
-
-// ---------------------
-// - SvtPrintFileOptions -
-// ---------------------
 
 SvtPrintFileOptions::SvtPrintFileOptions()
 {
@@ -863,8 +766,6 @@ SvtPrintFileOptions::SvtPrintFileOptions()
 
     SetDataContainer( m_pStaticDataContainer );
 }
-
-// -----------------------------------------------------------------------------
 
 SvtPrintFileOptions::~SvtPrintFileOptions()
 {

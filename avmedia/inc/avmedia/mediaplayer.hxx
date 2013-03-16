@@ -24,10 +24,6 @@
 #include <sfx2/dockwin.hxx>
 #include <avmedia/avmediadllapi.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define AVMEDIA_MEDIAWINDOW()                                                                                           \
 (static_cast< ::avmedia::MediaFloater* >( (                                                                             \
 SfxViewFrame::Current() && SfxViewFrame::Current()->GetChildWindow(::avmedia::MediaPlayer::GetChildWindowId())) ?   \
@@ -37,10 +33,6 @@ NULL))
 namespace avmedia
 {
 
-// ---------------
-// - MediaPlayer -
-// ---------------
-
 class AVMEDIA_DLLPUBLIC MediaPlayer : public SfxChildWindow
 {
 public:
@@ -49,10 +41,6 @@ public:
 
                         SFX_DECL_CHILDWINDOW_WITHID( MediaPlayer );
 };
-
-// ----------------
-// - MediaFloater -
-// ----------------
 
 class MediaWindow;
 

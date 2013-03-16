@@ -42,10 +42,6 @@
 #include <svtools/dialogclosedlistener.hxx>
 #include <vector>
 
-// ------------
-// - Forwards -
-// ------------
-
 class GalleryTheme;
 class SearchProgress;
 class TakeProgress;
@@ -54,18 +50,10 @@ class TPGalleryThemeProperties;
 typedef ::std::vector< OUString > StringList;
 typedef ::std::vector< sal_uLong > TokenList_impl;
 
-// ---------------
-// - FilterEntry -
-// ---------------
-
 struct FilterEntry
 {
     String  aFilterName;
 };
-
-// ----------------
-// - SearchThread -
-// ----------------
 
 class SearchThread: public salhelper::Thread
 {
@@ -88,10 +76,6 @@ public:
                                               TPGalleryThemeProperties* pBrowser,
                                               const INetURLObject& rStartURL );
 };
-
-// ------------------
-// - SearchProgress -
-// ------------------
 
 class SearchProgress : public ModalDialog
 {
@@ -121,10 +105,6 @@ public:
     void                SetDirectory( const INetURLObject& rURL ) { aFtSearchDir.SetText( GetReducedString( rURL, 30 ) ); }
 };
 
-// --------------
-// - TakeThread -
-// --------------
-
 class TakeThread: public salhelper::Thread
 {
 private:
@@ -144,10 +124,6 @@ public:
                                     TokenList_impl& rTakenList
                                 );
 };
-
-// ----------------
-// - TakeProgress -
-// ----------------
 
 class TakeProgress : public ModalDialog
 {
@@ -175,10 +151,6 @@ public:
     virtual void        StartExecuteModal( const Link& rEndDialogHdl );
 };
 
-// ---------------------
-// - ActualizeProgress -
-// ---------------------
-
 class ActualizeProgress : public ModalDialog
 {
 private:
@@ -201,10 +173,6 @@ public:
     virtual short       Execute();
 };
 
-// ---------------
-// - TitleDialog -
-// ---------------
-
 class TitleDialog : public ModalDialog
 {
 private:
@@ -220,10 +188,6 @@ public:
                         TitleDialog( Window* pParent, const String& rOldText );
     String              GetTitle() const { return maEdit.GetText(); }
 };
-
-// -------------------
-// - GalleryIdDialog -
-// -------------------
 
 class GalleryIdDialog : public ModalDialog
 {
@@ -246,10 +210,6 @@ public:
     sal_uLong           GetId() const { return aLbResName.GetSelectEntryPos(); }
 };
 
-// --------------------------
-// - GalleryThemeProperties -
-// --------------------------
-
 class GalleryThemeProperties : public SfxTabDialog
 {
     ExchangeData*   pData;
@@ -261,10 +221,6 @@ public:
                     GalleryThemeProperties( Window* pParent, ExchangeData* pData, SfxItemSet* pItemSet  );
                     ~GalleryThemeProperties() {}
 };
-
-// -------------------------
-// - TPGalleryThemeGeneral -
-// -------------------------
 
 class TPGalleryThemeGeneral : public SfxTabPage
 {
@@ -299,9 +255,6 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
 };
 
-// ----------------------------
-// - TPGalleryThemeProperties -
-// ----------------------------
 typedef ::std::vector< FilterEntry* > FilterEntryList_impl;
 
 class TPGalleryThemeProperties : public SfxTabPage

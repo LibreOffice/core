@@ -35,15 +35,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define VECTORIZE_MAX_EXTENT 512
-
-// ------------------
-// - SdVectorizeDlg -
-// ------------------
 
 SdVectorizeDlg::SdVectorizeDlg(
     Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell ) :
@@ -86,13 +78,9 @@ SdVectorizeDlg::SdVectorizeDlg(
     InitPreviewBmp();
 }
 
-// -----------------------------------------------------------------------------
-
 SdVectorizeDlg::~SdVectorizeDlg()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize ) const
 {
@@ -124,8 +112,6 @@ Rectangle SdVectorizeDlg::GetRect( const Size& rDispSize, const Size& rBmpSize )
     return aRect;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdVectorizeDlg::InitPreviewBmp()
 {
     const Rectangle aRect( GetRect( aBmpWin.GetSizePixel(), aBmp.GetSizePixel() ) );
@@ -134,8 +120,6 @@ void SdVectorizeDlg::InitPreviewBmp()
     aPreviewBmp.Scale( aRect.GetSize() );
     aBmpWin.SetGraphic( aPreviewBmp );
 }
-
-// -----------------------------------------------------------------------------
 
 Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 {
@@ -155,8 +139,6 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 
     return aNew;
 }
-
-// -----------------------------------------------------------------------------
 
 void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 {
@@ -231,8 +213,6 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     mpDocSh->SetWaitCursor( sal_False );
 }
 
-// -----------------------------------------------------------------------------
-
 void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
                               long nPosX, long nPosY, long nWidth, long nHeight )
 {
@@ -273,15 +253,11 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
     rMtf.AddAction( new MetaRectAction( aRect ) );
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK( SdVectorizeDlg, ProgressHdl, void*, pData )
 {
     aPrgs.SetValue( (sal_uInt16)(sal_uLong) pData );
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl)
 {
@@ -291,8 +267,6 @@ IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl)
 
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SdVectorizeDlg, ClickOKHdl)
 {
@@ -304,8 +278,6 @@ IMPL_LINK_NOARG(SdVectorizeDlg, ClickOKHdl)
 
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox*, pCb )
 {
@@ -325,15 +297,11 @@ IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox*, pCb )
     return 0L;
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK_NOARG(SdVectorizeDlg, ModifyHdl)
 {
     aBtnPreview.Enable();
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 void SdVectorizeDlg::LoadSettings()
 {
@@ -365,8 +333,6 @@ void SdVectorizeDlg::LoadSettings()
 
     ToggleHdl( &aCbFillHoles );
 }
-
-// -----------------------------------------------------------------------------
 
 void SdVectorizeDlg::SaveSettings() const
 {

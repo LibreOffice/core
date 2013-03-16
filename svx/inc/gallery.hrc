@@ -23,10 +23,6 @@
 #include <svx/dialogs.hrc>
 #include "galtheme.hrc"
 
-// -----------
-// - Defines -
-// -----------
-
 // Dialoge
 #define RID_SVXDLG_GALLERYBROWSER               (RID_SVX_GALLERY_START + 5)
 

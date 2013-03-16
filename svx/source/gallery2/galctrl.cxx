@@ -34,16 +34,9 @@
 #include "gallery.hrc"
 #include <vcl/graphicfilter.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define GALLERY_BRWBOX_TITLE    1
 #define GALLERY_BRWBOX_PATH     2
 
-// ------------------
-// - GalleryPreview -
-// ------------------
 DBG_NAME(GalleryPreview)
 
 GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
@@ -58,8 +51,6 @@ GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme )
     InitSettings();
 }
 
-// ------------------------------------------------------------------------
-
 GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
     Window( pParent, rResId ),
     DropTargetHelper( this ),
@@ -71,8 +62,6 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
     SetHelpId( HID_GALLERY_PREVIEW );
     InitSettings();
 }
-
-// ------------------------------------------------------------------------
 
 GalleryPreview::~GalleryPreview()
 {
@@ -101,16 +90,12 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryPreview::InitSettings()
 {
     SetBackground( Wallpaper( GALLERY_BG_COLOR ) );
     SetControlBackground( GALLERY_BG_COLOR );
     SetControlForeground( GALLERY_FG_COLOR );
 }
-
-// -----------------------------------------------------------------------
 
 void GalleryPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -119,8 +104,6 @@ void GalleryPreview::DataChanged( const DataChangedEvent& rDCEvt )
     else
         Window::DataChanged( rDCEvt );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
 {
@@ -155,8 +138,6 @@ sal_Bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rect
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryPreview::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
@@ -173,15 +154,11 @@ void GalleryPreview::Paint( const Rectangle& rRect )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( mpTheme && ( rMEvt.GetClicks() == 2 ) )
         ( (GalleryBrowser2*) GetParent() )->TogglePreview( this );
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryPreview::Command(const CommandEvent& rCEvt )
 {
@@ -191,8 +168,6 @@ void GalleryPreview::Command(const CommandEvent& rCEvt )
         ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this,
             ( rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL ) );
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryPreview::KeyInput( const KeyEvent& rKEvt )
 {
@@ -236,8 +211,6 @@ void GalleryPreview::KeyInput( const KeyEvent& rKEvt )
         Window::KeyInput( rKEvt );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Int8 GalleryPreview::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet;
@@ -249,8 +222,6 @@ sal_Int8 GalleryPreview::AcceptDrop( const AcceptDropEvent& rEvt )
 
     return nRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Int8 GalleryPreview::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
@@ -264,15 +235,11 @@ sal_Int8 GalleryPreview::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryPreview::StartDrag( sal_Int8, const Point& )
 {
     if( mpTheme )
         ( (GalleryBrowser2*) GetParent() )->StartDrag( this );
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 {
@@ -291,11 +258,6 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
     }
 }
 
-// ------------------------------------------------------------------------
-
-// -------------------
-// - GalleryIconView -
-// -------------------
 DBG_NAME(GalleryIconView)
 
 GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
@@ -315,14 +277,10 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
     SetItemHeight( S_THUMB + 6 );
 }
 
-// ------------------------------------------------------------------------
-
 GalleryIconView::~GalleryIconView()
 {
     DBG_DTOR(GalleryIconView,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryIconView::InitSettings()
 {
@@ -332,8 +290,6 @@ void GalleryIconView::InitSettings()
     SetColor( GALLERY_BG_COLOR );
 }
 
-// -----------------------------------------------------------------------
-
 void GalleryIconView::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
@@ -341,8 +297,6 @@ void GalleryIconView::DataChanged( const DataChangedEvent& rDCEvt )
     else
         ValueSet::DataChanged( rDCEvt );
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
 {
@@ -407,8 +361,6 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryIconView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     ValueSet::MouseButtonDown( rMEvt );
@@ -416,8 +368,6 @@ void GalleryIconView::MouseButtonDown( const MouseEvent& rMEvt )
     if( rMEvt.GetClicks() == 2 )
         ( (GalleryBrowser2*) GetParent() )->TogglePreview( this, &rMEvt.GetPosPixel() );
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryIconView::Command( const CommandEvent& rCEvt )
 {
@@ -430,29 +380,21 @@ void GalleryIconView::Command( const CommandEvent& rCEvt )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryIconView::KeyInput( const KeyEvent& rKEvt )
 {
     if( !mpTheme || !static_cast< GalleryBrowser2* >( GetParent() )->KeyInput( rKEvt, this ) )
         ValueSet::KeyInput( rKEvt );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Int8 GalleryIconView::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     return( static_cast< GalleryBrowser2* >( GetParent() )->AcceptDrop( *this, rEvt ) );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Int8 GalleryIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     return( static_cast< GalleryBrowser2* >( GetParent() )->ExecuteDrop( *this, rEvt ) );
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryIconView::StartDrag( sal_Int8, const Point& )
 {
@@ -464,9 +406,6 @@ void GalleryIconView::StartDrag( sal_Int8, const Point& )
     static_cast< GalleryBrowser2* >( GetParent() )->StartDrag( this );
 }
 
-// -------------------
-// - GalleryListView -
-// -------------------
 DBG_NAME(GalleryListView)
 
 GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
@@ -486,14 +425,10 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
     InsertDataColumn( GALLERY_BRWBOX_PATH, GAL_RESSTR(RID_SVXSTR_GALLERY_PATH), 256 );
 }
 
-// ------------------------------------------------------------------------
-
 GalleryListView::~GalleryListView()
 {
     DBG_DTOR(GalleryListView,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryListView::InitSettings()
 {
@@ -501,8 +436,6 @@ void GalleryListView::InitSettings()
     SetControlBackground( GALLERY_BG_COLOR );
     SetControlForeground( GALLERY_FG_COLOR );
 }
-
-// -----------------------------------------------------------------------
 
 void GalleryListView::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -512,15 +445,11 @@ void GalleryListView::DataChanged( const DataChangedEvent& rDCEvt )
         BrowseBox::DataChanged( rDCEvt );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool GalleryListView::SeekRow( long nRow )
 {
     mnCurRow = nRow;
     return sal_True;
 }
-
-// -----------------------------------------------------------------------------
 
 String GalleryListView::GetCellText(long _nRow, sal_uInt16 nColumnId) const
 {
@@ -541,8 +470,6 @@ String GalleryListView::GetCellText(long _nRow, sal_uInt16 nColumnId) const
     return sRet;
 }
 
-// -----------------------------------------------------------------------------
-
 Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
 {
     DBG_ASSERT(_nColumnPos >= 0 && _nColumnPos <= USHRT_MAX, "GalleryListView::GetFieldCharacterBounds: _nColumnId overflow");
@@ -560,8 +487,6 @@ Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nC
     return aRect;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
     DBG_ASSERT(_nColumnPos >= 0 && _nColumnPos <= USHRT_MAX, "GalleryListView::GetFieldIndexAtPoint: _nColumnId overflow");
@@ -574,8 +499,6 @@ sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColu
     }
     return nRet;
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
@@ -645,8 +568,6 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
     rDev.Pop();
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryListView::Command( const CommandEvent& rCEvt )
 {
     BrowseBox::Command( rCEvt );
@@ -662,15 +583,11 @@ void GalleryListView::Command( const CommandEvent& rCEvt )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryListView::KeyInput( const KeyEvent& rKEvt )
 {
     if( !mpTheme || !static_cast< GalleryBrowser2* >( GetParent() )->KeyInput( rKEvt, this ) )
         BrowseBox::KeyInput( rKEvt );
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryListView::DoubleClick( const BrowserMouseEvent& rEvt )
 {
@@ -680,15 +597,11 @@ void GalleryListView::DoubleClick( const BrowserMouseEvent& rEvt )
         ( (GalleryBrowser2*) GetParent() )->TogglePreview( this, &rEvt.GetPosPixel() );
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryListView::Select()
 {
     if( maSelectHdl.IsSet() )
         maSelectHdl.Call( this );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Int8 GalleryListView::AcceptDrop( const BrowserAcceptDropEvent& )
 {
@@ -700,8 +613,6 @@ sal_Int8 GalleryListView::AcceptDrop( const BrowserAcceptDropEvent& )
     return nRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Int8 GalleryListView::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 {
     ExecuteDropEvent aEvt( rEvt );
@@ -710,8 +621,6 @@ sal_Int8 GalleryListView::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
     return( ( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, aEvt ) );
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryListView::StartDrag( sal_Int8, const Point& rPosPixel )
 {

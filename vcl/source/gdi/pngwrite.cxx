@@ -31,10 +31,6 @@
 #include <vcl/alpha.hxx>
 #include <osl/endian.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define PNG_DEF_COMPRESSION 6
 
 #define PNGCHUNK_IHDR 0x49484452
@@ -48,9 +44,6 @@
 
 namespace vcl
 {
-// -----------------
-// - PNGWriterImplImpl -
-// -----------------
 
 class PNGWriterImpl
 {
@@ -102,8 +95,6 @@ private:
     void                ImplWriteChunk( unsigned char* pSource, sal_uInt32 nDatSize );
     void                ImplCloseChunk( void ) const;
 };
-
-// ------------------------------------------------------------------------
 
 PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData ) :
@@ -239,14 +230,10 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     }
 }
 
-// ------------------------------------------------------------------------
-
 PNGWriterImpl::~PNGWriterImpl()
 {
     delete mpZCodec;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool PNGWriterImpl::Write( SvStream& rOStm )
 {
@@ -279,14 +266,10 @@ sal_Bool PNGWriterImpl::Write( SvStream& rOStm )
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
-
 std::vector< vcl::PNGWriter::ChunkData >& PNGWriterImpl::GetChunks()
 {
     return maChunkSeq;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool PNGWriterImpl::ImplWriteHeader()
 {
@@ -324,8 +307,6 @@ sal_Bool PNGWriterImpl::ImplWriteHeader()
     return mbStatus;
 }
 
-// ------------------------------------------------------------------------
-
 void PNGWriterImpl::ImplWritePalette()
 {
     const sal_uLong nCount = mpAccess->GetPaletteEntryCount();
@@ -346,8 +327,6 @@ void PNGWriterImpl::ImplWritePalette()
     delete[] pTempBuf;
 }
 
-// ------------------------------------------------------------------------
-
 void PNGWriterImpl::ImplWriteTransparent ()
 {
     const sal_uLong nTransIndex = mpAccess->GetBestMatchingColor( BMP_COL_TRANS );
@@ -359,8 +338,6 @@ void PNGWriterImpl::ImplWriteTransparent ()
 
     ImplCloseChunk();
 }
-
-// ------------------------------------------------------------------------
 
 void PNGWriterImpl::ImplWritepHYs( const BitmapEx& rBmpEx )
 {
@@ -380,8 +357,6 @@ void PNGWriterImpl::ImplWritepHYs( const BitmapEx& rBmpEx )
         }
     }
 }
-
-// ------------------------------------------------------------------------
 
 void PNGWriterImpl::ImplWriteIDAT ()
 {
@@ -472,7 +447,6 @@ void PNGWriterImpl::ImplWriteIDAT ()
     }
 }
 
-// ---------------------------------------------------------------------------------------------------
 // ImplGetFilter writes the complete Scanline (nY) - in interlace mode the parameter nXStart and nXAdd
 // appends to the currently used pass
 // the complete size of scanline will be returned - in interlace mode zero is possible!
@@ -633,23 +607,17 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
     return ( mnDeflateInSize );
 }
 
-// ------------------------------------------------------------------------
-
 void PNGWriterImpl::ImplClearFirstScanline()
 {
     if ( mnFilterType )
         memset( mpPreviousScan, 0, mnDeflateInSize );
 }
 
-// ------------------------------------------------------------------------
-
 void PNGWriterImpl::ImplOpenChunk ( sal_uLong nChunkType )
 {
     maChunkSeq.resize( maChunkSeq.size() + 1 );
     maChunkSeq.back().nType = nChunkType;
 }
-
-// ------------------------------------------------------------------------
 
 void PNGWriterImpl::ImplWriteChunk ( sal_uInt8 nSource )
 {
@@ -676,15 +644,10 @@ void PNGWriterImpl::ImplWriteChunk ( unsigned char* pSource, sal_uInt32 nDatSize
     }
 }
 
-// ------------------------------------------------------------------------
 // nothing to do
 void PNGWriterImpl::ImplCloseChunk ( void ) const
 {
 }
-
-// -------------
-// - PNGWriter -
-// -------------
 
 PNGWriter::PNGWriter( const BitmapEx& rBmpEx,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData ) :
@@ -692,21 +655,15 @@ PNGWriter::PNGWriter( const BitmapEx& rBmpEx,
 {
 }
 
-// ------------------------------------------------------------------------
-
 PNGWriter::~PNGWriter()
 {
     delete mpImpl;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool PNGWriter::Write( SvStream& rIStm )
 {
     return mpImpl->Write( rIStm );
 }
-
-// ------------------------------------------------------------------------
 
 std::vector< vcl::PNGWriter::ChunkData >& PNGWriter::GetChunks()
 {

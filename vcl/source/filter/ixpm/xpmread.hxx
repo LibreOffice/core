@@ -44,20 +44,12 @@
 #define XPMCASESENSITIVE    0x00000001
 #define XPMCASENONSENSITIVE 0x00000002
 
-// ---------
-// - Enums -
-// ---------
-
 enum ReadState
 {
     XPMREAD_OK,
     XPMREAD_ERROR,
     XPMREAD_NEED_MORE
 };
-
-// -------------
-// - XPMReader -
-// -------------
 
 class BitmapWriteAccess;
 class Graphic;
@@ -111,10 +103,6 @@ public:
 };
 
 #endif // _XPMPRIVATE
-
-// -------------
-// - ImportXPM -
-// -------------
 
 sal_Bool ImportXPM( SvStream& rStream, Graphic& rGraphic );
 

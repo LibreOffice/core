@@ -31,29 +31,17 @@
 #include <valgrind/memcheck.h>
 #endif
 
-
-// -----------
-// - Defines -
-// -----------
-
 #define DIBCOREHEADERSIZE           ( 12UL )
 #define DIBINFOHEADERSIZE           ( sizeof( DIBInfoHeader ) )
 #define BITMAPINFOHEADER                        0x28
 
-// ----------------------
-// - Compression defines
-// ----------------------
-
+// Compression defines
 #define COMPRESS_OWN                ('S'|('D'<<8UL))
 #define COMPRESS_NONE               ( 0UL )
 #define RLE_8                       ( 1UL )
 #define RLE_4                       ( 2UL )
 #define BITFIELDS                   ( 3UL )
 #define ZCOMPRESS                   ( COMPRESS_OWN | 0x01000000UL ) /* == 'SD01' (binary) */
-
-// -----------------
-// - DIBInfoHeader -
-// -----------------
 
 struct DIBInfoHeader
 {
@@ -101,25 +89,17 @@ namespace
     }
 }
 
-// ----------
-// - Bitmap -
-// ----------
-
 SvStream& operator>>( SvStream& rIStm, Bitmap& rBitmap )
 {
     rBitmap.Read( rIStm, sal_True );
     return rIStm;
 }
 
-// ------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStm, const Bitmap& rBitmap )
 {
     rBitmap.Write( rOStm, sal_False, sal_True );
     return rOStm;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::Read( SvStream& rIStm, sal_Bool bFileHeader, sal_Bool bIsMSOFormat )
 {
@@ -150,8 +130,6 @@ sal_Bool Bitmap::Read( SvStream& rIStm, sal_Bool bFileHeader, sal_Bool bIsMSOFor
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset, sal_Bool bIsMSOFormat )
 {
@@ -255,8 +233,6 @@ sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset, 
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
 {
     sal_uInt32  nTmp32;
@@ -289,8 +265,6 @@ sal_Bool Bitmap::ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown, sal_Bool bIsMSOFormat )
 {
@@ -407,8 +381,6 @@ sal_Bool Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader,
     return( ( rHeader.nPlanes == 1 ) && ( rIStm.GetError() == 0UL ) );
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, sal_Bool bQuad )
 {
     const sal_uInt16    nColors = rAcc.GetPaletteEntryCount();
@@ -435,8 +407,6 @@ sal_Bool Bitmap::ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, s
 
     return( rIStm.GetError() == 0UL );
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown )
 {
@@ -659,8 +629,6 @@ sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, Bitma
     return( rIStm.GetError() == 0UL );
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::Write( SvStream& rOStm, sal_Bool bCompressed, sal_Bool bFileHeader ) const
 {
     DBG_ASSERT( mpImpBmp, "Empty Bitmaps can't be saved" );
@@ -700,8 +668,6 @@ sal_Bool Bitmap::Write( SvStream& rOStm, sal_Bool bCompressed, sal_Bool bFileHea
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bCompressed ) const
 {
@@ -851,8 +817,6 @@ sal_Bool Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc )
 {
     sal_uInt32  nPalCount = ( rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() :
@@ -867,8 +831,6 @@ sal_Bool Bitmap::ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc
 
     return( rOStm.GetError() == 0UL );
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
 {
@@ -893,8 +855,6 @@ sal_Bool Bitmap::ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
 
     return( rOStm.GetError() == 0UL );
 }
-
-// ------------------------------------------------------------------
 
 #if defined HAVE_VALGRIND_HEADERS
 namespace
@@ -1086,8 +1046,6 @@ sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
     return( rOStm.GetError() == 0UL );
 }
 
-// ------------------------------------------------------------------
-
 void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
                             BitmapWriteAccess& rAcc, sal_Bool bRLE4 )
 {
@@ -1190,8 +1148,6 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
     }
     while ( !bEndDecoding && ( nY >= 0L ) );
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 )
 {

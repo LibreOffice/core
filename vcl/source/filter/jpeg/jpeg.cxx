@@ -34,33 +34,19 @@ extern "C"
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 using namespace ::com::sun::star;
 
 #define JPEGMINREAD 512
-
-// -------------
-// - (C-Calls) -
-// -------------
-
-// ------------------------------------------------------------------------
 
 extern "C" void* CreateBitmap( void* pJPEGReader, void* pJPEGCreateBitmapParam )
 {
     return ( (JPEGReader*) pJPEGReader )->CreateBitmap( pJPEGCreateBitmapParam );
 }
 
-// ------------------------------------------------------------------------
-
 extern "C" void* GetScanline( void* pJPEGWriter, long nY )
 {
     return ( (JPEGWriter*) pJPEGWriter )->GetScanline( nY );
 }
-
-// ------------------------------------------------------------------------
 
 struct JPEGCallbackStruct
 {
@@ -286,10 +272,6 @@ extern "C" void jpeg_svstream_src (j_decompress_ptr cinfo, void * in)
   src->pub.next_input_byte = NULL; /* until buffer loaded */
 }
 
-// --------------
-// - JPEGReader -
-// --------------
-
 JPEGReader::JPEGReader( SvStream& rStm, void* /*pCallData*/, sal_Bool bSetLS ) :
         rIStm           ( rStm ),
         pAcc            ( NULL ),
@@ -303,8 +285,6 @@ JPEGReader::JPEGReader( SvStream& rStm, void* /*pCallData*/, sal_Bool bSetLS ) :
     nFormerPos = nLastPos;
 }
 
-// ------------------------------------------------------------------------
-
 JPEGReader::~JPEGReader()
 {
     if( pBuffer )
@@ -316,8 +296,6 @@ JPEGReader::~JPEGReader()
     if( pAcc1 )
         aBmp1.ReleaseAccess( pAcc1 );
 }
-
-// ------------------------------------------------------------------------
 
 void* JPEGReader::CreateBitmap( void* _pParam )
 {
@@ -405,8 +383,6 @@ void* JPEGReader::CreateBitmap( void* _pParam )
     return pBmpBuf;
 }
 
-// ------------------------------------------------------------------------
-
 void JPEGReader::FillBitmap()
 {
     if( pBuffer && pAcc )
@@ -459,8 +435,6 @@ void JPEGReader::FillBitmap()
     }
 }
 
-// ------------------------------------------------------------------------
-
 Graphic JPEGReader::CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines )
 {
     Graphic     aGraphic;
@@ -503,8 +477,6 @@ Graphic JPEGReader::CreateIntermediateGraphic( const Bitmap& rBitmap, long nLine
 
     return aGraphic;
 }
-
-// ------------------------------------------------------------------------
 
 ReadState JPEGReader::Read( Graphic& rGraphic )
 {
@@ -581,11 +553,6 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     return eReadState;
 }
 
-
-// --------------
-// - JPEGWriter -
-// --------------
-
 JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
         rOStm       ( rStm ),
         pAcc        ( NULL ),
@@ -610,8 +577,6 @@ JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValu
         }
     }
 }
-
-// ------------------------------------------------------------------------
 
 void* JPEGWriter::GetScanline( long nY )
 {
@@ -658,8 +623,6 @@ void* JPEGWriter::GetScanline( long nY )
 
     return pScanline;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
 {
@@ -726,10 +689,6 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
 
     return bRet;
 }
-
-// --------------
-// - ImportJPEG -
-// --------------
 
 sal_Bool ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags )
 {

@@ -23,15 +23,7 @@
 #include "decode.hxx"
 #include "gifread.hxx"
 
-// -----------
-// - Defines -
-// -----------
-
 #define NO_PENDING( rStm ) ( ( rStm ).GetError() != ERRCODE_IO_PENDING )
-
-// -------------
-// - GIFReader -
-// -------------
 
 GIFReader::GIFReader( SvStream& rStm ) :
             aGPalette       ( 256 ),
@@ -58,7 +50,6 @@ GIFReader::GIFReader( SvStream& rStm ) :
     ClearImageExtensions();
 }
 
-// ------------------------------------------------------------------------
 
 GIFReader::~GIFReader()
 {
@@ -73,16 +64,12 @@ GIFReader::~GIFReader()
     delete[] pSrcBuf;
 }
 
-// ------------------------------------------------------------------------
-
 void GIFReader::ClearImageExtensions()
 {
     nGCDisposalMethod = 0;
     bGCTransparent = sal_False;
     nTimer = 0;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
                                sal_Bool bWatchForBackgroundColor )
@@ -139,8 +126,6 @@ sal_Bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPa
     return bStatus;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool GIFReader::ReadGlobalHeader()
 {
     char    pBuf[ 7 ];
@@ -184,8 +169,6 @@ sal_Bool GIFReader::ReadGlobalHeader()
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 {
     const sal_uLong nLen = 3UL * nCount;
@@ -217,8 +200,6 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 
     delete[] pBuf;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GIFReader::ReadExtension()
 {
@@ -355,8 +336,6 @@ sal_Bool GIFReader::ReadExtension()
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool GIFReader::ReadLocalHeader()
 {
     sal_uInt8   pBuf[ 9 ];
@@ -404,8 +383,6 @@ sal_Bool GIFReader::ReadLocalHeader()
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_uLong GIFReader::ReadNextBlock()
 {
     sal_uLong   nRet = 0UL;
@@ -446,8 +423,6 @@ sal_uLong GIFReader::ReadNextBlock()
 
     return nRet;
 }
-
-// ------------------------------------------------------------------------
 
 void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
 {
@@ -552,8 +527,6 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GIFReader::CreateNewBitmaps()
 {
     AnimationBitmap aAnimBmp;
@@ -591,8 +564,6 @@ void GIFReader::CreateNewBitmaps()
     }
 }
 
-// ------------------------------------------------------------------------
-
 const Graphic& GIFReader::GetIntermediateGraphic()
 {
     // Intermediate-Graphic nur erzeugen, wenn schon
@@ -621,8 +592,6 @@ const Graphic& GIFReader::GetIntermediateGraphic()
 
     return aImGraphic;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GIFReader::ProcessGIF()
 {
@@ -788,8 +757,6 @@ sal_Bool GIFReader::ProcessGIF()
     return bRead;
 }
 
-// ------------------------------------------------------------------------
-
 ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 {
     ReadState eReadState;
@@ -825,11 +792,6 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 
     return eReadState;
 }
-
-
-// -------------
-// - ImportGIF -
-// -------------
 
 sal_Bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
 {

@@ -44,10 +44,6 @@
 #include <map>
 #include "svx/xmleohlp.hxx"
 
-// -----------
-// - Defines -
-// -----------
-
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::utl;
@@ -62,8 +58,6 @@ using namespace ::com::sun::star::lang;
 #define XML_CONTAINERSTORAGE_NAME       "ObjectReplacements"
 #define XML_EMBEDDEDOBJECT_URL_BASE     "vnd.sun.star.EmbeddedObject:"
 #define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE      "vnd.sun.star.GraphicObject:"
-
-// -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
 
@@ -130,8 +124,6 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
     bStreamClosed = sal_True;
 }
 
-// -----------------------------------------------------------------------------
-
 struct OUStringLess
 {
     bool operator() ( const ::rtl::OUString& r1, const ::rtl::OUString& r2 ) const
@@ -140,11 +132,6 @@ struct OUStringLess
     }
 };
 
-// -----------------------------------------------------------------------------
-
-// -----------------------------
-// - SvXMLEmbeddedObjectHelper -
-// -----------------------------
 DBG_NAME(SvXMLEmbeddedObjectHelper)
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
@@ -169,9 +156,6 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( ::comphelper::IEmbeddedHel
     Init( 0, rDocPersist, eCreateMode );
 }
 
-
-// -----------------------------------------------------------------------------
-
 SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
 {
     DBG_DTOR(SvXMLEmbeddedObjectHelper,NULL);
@@ -190,8 +174,6 @@ SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
         delete mpStreamMap;
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void SAL_CALL SvXMLEmbeddedObjectHelper::disposing()
 {
@@ -239,8 +221,6 @@ void SvXMLEmbeddedObjectHelper::splitObjectURL(::rtl::OUString aURLNoPar,
         rObjectStorageName = aURLNoPar.copy( _nPos+1 );
     }
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         const ::rtl::OUString& rURLStr,
@@ -354,9 +334,6 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     return sal_True;
 }
 
-
-// -----------------------------------------------------------------------------
-
 uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerStorage(
         const ::rtl::OUString& rStorageName )
 {
@@ -392,8 +369,6 @@ uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerSt
 
     return mxContainerStorage;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
         const ::rtl::OUString& rContainerStorageName,
@@ -478,8 +453,6 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
-
 ::rtl::OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
         const ::rtl::OUString& rURLStr )
 {
@@ -536,8 +509,6 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     return sRetURL;
 }
 
-// -----------------------------------------------------------------------------
-
 uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacementImage(
                                             const uno::Reference< embed::XEmbeddedObject >& xObj )
 {
@@ -582,8 +553,6 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
     return xStream;
 }
 
-// -----------------------------------------------------------------------------
-
 void SvXMLEmbeddedObjectHelper::Init(
         const uno::Reference < embed::XStorage >& rRootStorage,
         ::comphelper::IEmbeddedHelper& rPersist,
@@ -593,8 +562,6 @@ void SvXMLEmbeddedObjectHelper::Init(
     mpDocPersist = &rPersist;
     meCreateMode = eCreateMode;
 }
-
-// -----------------------------------------------------------------------------
 
 SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
         const uno::Reference < embed::XStorage >& rRootStorage,
@@ -624,8 +591,6 @@ SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
     return pThis;
 }
 
-// -----------------------------------------------------------------------------
-
 void SvXMLEmbeddedObjectHelper::Destroy(
         SvXMLEmbeddedObjectHelper* pSvXMLEmbeddedObjectHelper )
 {
@@ -635,8 +600,6 @@ void SvXMLEmbeddedObjectHelper::Destroy(
         pSvXMLEmbeddedObjectHelper->release();
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void SvXMLEmbeddedObjectHelper::Flush()
 {

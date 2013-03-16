@@ -42,12 +42,6 @@
 
 DBG_NAMEEX( OutputDevice )
 
-// =======================================================================
-
-// -----------
-// - Defines -
-// -----------
-
 #define OUTDEV_INIT()                       \
 {                                           \
     if ( !IsDeviceOutputNecessary() )       \
@@ -64,17 +58,11 @@ DBG_NAMEEX( OutputDevice )
         return;                             \
 }
 
-// -------------
-// - externals -
-// -------------
-
 extern const sal_uLong nVCLRLut[ 6 ];
 extern const sal_uLong nVCLGLut[ 6 ];
 extern const sal_uLong nVCLBLut[ 6 ];
 extern const sal_uLong nVCLDitherLut[ 256 ];
 extern const sal_uLong nVCLLut[ 256 ];
-
-// =======================================================================
 
 sal_uLong ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
 {
@@ -133,8 +121,6 @@ sal_uLong ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )
     return nMirrFlags;
 }
 
-// =======================================================================
-
 void ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect )
 {
     if( ( rTwoRect.mnSrcX < rValidSrcRect.Left() ) || ( rTwoRect.mnSrcX >= rValidSrcRect.Right() ) ||
@@ -171,8 +157,6 @@ void ImplAdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect )
         }
     }
 }
-
-// =======================================================================
 
 void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoidPosAry )
 {

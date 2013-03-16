@@ -28,9 +28,7 @@
 #include <svx/dlgutil.hxx>
 #include "sddllapi.h"
 
-// -----------------
-// - Option ranges -
-// -----------------
+// Option ranges
 
 #define SD_OPTIONS_NONE     0x00000000
 #define SD_OPTIONS_ALL      0xffffffff
@@ -43,19 +41,11 @@
 #define SD_OPTIONS_GRID     0x00000020
 #define SD_OPTIONS_PRINT    0x00000040
 
-// ------------
-// - Forwards -
-// ------------
-
 class SdOptions;
 
 namespace sd {
 class FrameView;
 }
-
-// -----------------
-// - SdOptionsItem -
-// -----------------
 
 class SdOptionsGeneric;
 
@@ -81,10 +71,6 @@ public:
                                            const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues );
     void                    SetModified();
 };
-
-// --------------------
-// - SdOptionsGeneric -
-// --------------------
 
 class SD_DLLPUBLIC SdOptionsGeneric
 {
@@ -128,10 +114,6 @@ public:
     static bool             isMetricSystem();
 };
 
-// -------------------
-// - SdOptionsLayout -
-// -------------------
-
 class SD_DLLPUBLIC SdOptionsLayout : public SdOptionsGeneric
 {
 private:
@@ -173,8 +155,6 @@ public:
     void    SetDefTab( sal_uInt16 nTab ) { if( nDefTab != nTab ) { OptionsChanged(); nDefTab = nTab; } }
 };
 
-// -----------------------------------------------------------------------------
-
 class SD_DLLPUBLIC SdOptionsLayoutItem : public SfxPoolItem
 {
 public:
@@ -191,10 +171,6 @@ public:
 private:
     SdOptionsLayout maOptionsLayout;
 };
-
-// ---------------------
-// - SdOptionsContents -
-// ---------------------
 
 class SD_DLLPUBLIC SdOptionsContents : public SdOptionsGeneric
 {
@@ -213,8 +189,6 @@ public:
     sal_Bool    operator==( const SdOptionsContents& rOpt ) const;
 };
 
-// -----------------------------------------------------------------------------
-
 class SD_DLLPUBLIC SdOptionsContentsItem : public SfxPoolItem
 {
 public:
@@ -230,10 +204,6 @@ public:
 private:
     SdOptionsContents       maOptionsContents;
 };
-
-// -----------------
-// - SdOptionsMisc -
-// -----------------
 
 class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
 {
@@ -364,8 +334,6 @@ public:
     void    SetShowComments( sal_Bool bShow )  { if( bShowComments != bShow ) { OptionsChanged(); bShowComments = bShow; } }
 };
 
-// -----------------------------------------------------------------------------
-
 class SD_DLLPUBLIC SdOptionsMiscItem : public SfxPoolItem
 {
 public:
@@ -383,10 +351,6 @@ public:
 private:
     SdOptionsMisc           maOptionsMisc;
 };
-
-// -----------------
-// - SdOptionsSnap -
-// -----------------
 
 class SD_DLLPUBLIC SdOptionsSnap : public SdOptionsGeneric
 {
@@ -439,8 +403,6 @@ public:
     void    SetEliminatePolyPointLimitAngle( sal_Int16 nIn ) { if( nBezAngle != nIn ) { OptionsChanged(); nBezAngle = nIn; } }
 };
 
-// -----------------------------------------------------------------------------
-
 class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem
 {
 public:
@@ -457,10 +419,6 @@ public:
 private:
     SdOptionsSnap           maOptionsSnap;
 };
-
-// -----------------
-// - SdOptionsZoom -
-// -----------------
 
 class SdOptionsZoom : public SdOptionsGeneric
 {
@@ -485,12 +443,6 @@ public:
     void    GetScale( sal_Int32& rX, sal_Int32& rY ) const { Init(); rX = nX; rY = nY; }
     void    SetScale( sal_Int32 nInX, sal_Int32 nInY ) { if( nX != nInX || nY != nInY ) { OptionsChanged(); nX = nInX; nY = nInY; } }
 };
-
-// -----------------------------------------------------------------------------
-
-// -----------------
-// - SdOptionsGrid -
-// -----------------
 
 class SdOptionsGrid : public SdOptionsGeneric, public SvxOptionsGrid
 {
@@ -531,8 +483,6 @@ public:
     void    SetEqualGrid( sal_Bool bSet ) { if( bSet != SvxOptionsGrid::GetEqualGrid() ) { OptionsChanged(); SvxOptionsGrid::SetEqualGrid( bSet ); } }
 };
 
-// -----------------------------------------------
-
 class SdOptionsGridItem : public SvxGridItem
 {
 
@@ -541,10 +491,6 @@ public:
 
     void                    SetOptions( SdOptions* pOpts ) const;
 };
-
-// ------------------
-// - SdOptionsPrint -
-// ------------------
 
 class SD_DLLPUBLIC SdOptionsPrint : public SdOptionsGeneric
 {
@@ -630,8 +576,6 @@ public:
     void    SetHandoutPages( sal_uInt16 nHandoutPages ) { if( nHandoutPages != mnHandoutPages ) { OptionsChanged(); mnHandoutPages = nHandoutPages; } }
 };
 
-// -----------------------------------------------------------------------------
-
 class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem
 {
 public:
@@ -649,10 +593,6 @@ public:
 private:
     SdOptionsPrint  maOptionsPrint;
 };
-
-// -------------
-// - SdOptions -
-// -------------
 
 class SdOptions : public SdOptionsLayout, public SdOptionsContents,
                   public SdOptionsMisc, public SdOptionsSnap,

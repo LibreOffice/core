@@ -39,18 +39,10 @@ using namespace com::sun::star::scanner;
 
 using ::rtl::OUString;
 
-// -----------
-// - Defines -
-// -----------
-
 #define REF( _def_Obj )                     Reference< _def_Obj >
 #define SEQ( _def_Obj )                     Sequence< _def_Obj >
 #define ANY                                 Any
 #define AWT                                 com::sun::star::awt
-
-// ------------------
-// - ScannerManager -
-// ------------------
 
 class ScannerManager : public OWeakObject, XScannerManager2, AWT::XBitmap
 {
@@ -95,8 +87,6 @@ public:
     void*                                   GetData() const { return mpData; }
     void                                    SetData( void* pData ) { ReleaseData(); mpData = pData; }
 };
-
-// -----------------------------------------------------------------------------
 
 REF( XInterface ) SAL_CALL ScannerManager_CreateInstance( const REF( com::sun::star::lang::XMultiServiceFactory )& rxFactory ) throw( Exception );
 

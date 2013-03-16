@@ -39,16 +39,8 @@
 
 #include "pdfwriter_impl.hxx"
 
-// -----------
-// - Defines -
-// -----------
-
 #define MAX_TILE_WIDTH  1024
 #define MAX_TILE_HEIGHT 1024
-
-// ---------
-// - Types -
-// ---------
 
 typedef ::std::pair< MetaAction*, int > Component; // MetaAction plus index in metafile
 
@@ -73,11 +65,6 @@ struct ConnectedComponents
 };
 
 typedef ::std::list< ConnectedComponents > ConnectedComponentsList;
-
-
-// -----------
-// - Printer -
-// -----------
 
 /** #i10613# Extracted from Printer::GetPreparedMetaFile. Returns true
     if given action requires special handling (usually because of
@@ -1358,8 +1345,6 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
     return bTransparent;
 }
 
-// -----------------------------------------------------------------------------
-
 Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
                                            const Point& rSrcPt, const Size& rSrcSz,
                                            const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY )
@@ -1426,8 +1411,6 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
 
     return aBmp;
 }
-
-// -----------------------------------------------------------------------------
 
 void Printer::DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const Gradient& rGradient )
 {

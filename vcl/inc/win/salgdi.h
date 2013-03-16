@@ -38,10 +38,6 @@ class FontSelectPattern;
 class ImplWinFontEntry;
 class ImplFontAttrCache;
 
-// -----------
-// - Defines -
-// -----------
-
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
 
@@ -141,10 +137,6 @@ public:
     bool                    HasGSUBstitutions( HDC ) const;
     bool                    IsGSUBstituted( sal_UCS4 ) const;
 };
-
-// ------------------
-// - WinSalGraphics -
-// ------------------
 
 class WinSalGraphics : public SalGraphics
 {
@@ -383,15 +375,7 @@ int     ImplIsSysColorEntry( SalColor nSalColor );
 void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
             LOGFONTW&, bool bTestVerticalAvail );
 
-// -----------
-// - Defines -
-// -----------
-
 #define MAX_64KSALPOINTS    ((((sal_uInt16)0xFFFF)-8)/sizeof(POINTS))
-
-// -----------
-// - Inlines -
-// -----------
 
 // #102411# Win's GCP mishandles kerning => we need to do it ourselves
 // SalGraphicsData::mpFontKernPairs is sorted by

@@ -95,26 +95,12 @@ using namespace ::com::sun::star::xml::sax;
 
 using namespace ::std;
 
-// -----------
-// - Defines -
-// -----------
-
 #define SVG_EXPORT_ALLPAGES ((sal_Int32)-1)
 
-
-// -----------
-// - statics -
-// -----------
 
 // Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
 static const ::rtl::OUString sPlaceholderTag = ::rtl::OUString::createFromAscii( "<[:isPlaceholder:]>" );
 
-
-// -------------
-// - SVGExport -
-// -------------
-
-// #110680#
 class SVGExport : public SvXMLExport
 {
     typedef ::std::list< ::basegfx::B2DPolyPolygon > B2DPolyPolygonList;
@@ -148,10 +134,6 @@ private:
     SVGExport();
 };
 
-// ------------------------
-// - ObjectRepresentation -
-// ------------------------
-
 class ObjectRepresentation
 {
 private:
@@ -175,10 +157,6 @@ public:
     const GDIMetaFile&                GetRepresentation() const { return *mpMtf; }
 };
 
-// -------------------
-// - PagePropertySet -
-// -------------------
-
 struct PagePropertySet
 {
     sal_Bool               bIsBackgroundVisible;
@@ -196,12 +174,6 @@ struct PagePropertySet
     ::rtl::OUString        sHeaderText;
 };
 
-
-
-// ---------------------------
-// - HashReferenceXInterface -
-// ---------------------------
-
 struct HashReferenceXInterface
 {
     size_t operator()( const Reference< XInterface >& rxIf ) const
@@ -210,47 +182,26 @@ struct HashReferenceXInterface
     }
 };
 
-// ---------------------------
-// - HashOUString -
-// ---------------------------
-
 struct HashOUString
 {
     size_t operator()( const ::rtl::OUString& oustr ) const { return static_cast< size_t >( oustr.hashCode() ); }
 };
-
-// ---------------------------
-// - HashUChar -
-// ---------------------------
 
 struct HashUChar
 {
     size_t operator()( const sal_Unicode uchar ) const { return static_cast< size_t >( uchar ); }
 };
 
-// ---------------------------
-// - HashBitmap -
-// ---------------------------
-
 struct HashBitmap
 {
     size_t operator()( const ObjectRepresentation& rObjRep ) const;
 };
-
-// ---------------------------
-// - EqualityBitmap -
-// ---------------------------
 
 struct EqualityBitmap
 {
     bool operator()( const ObjectRepresentation& rObjRep1,
                      const ObjectRepresentation& rObjRep2 ) const;
 };
-
-
-// -------------
-// - SVGFilter -
-// -------------
 
 class SVGFontExport;
 class SVGActionWriter;

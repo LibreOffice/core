@@ -25,10 +25,6 @@
 
 #ifdef _GIFPRIVATE
 
-// ---------
-// - Enums -
-// ---------
-
 enum GIFAction
 {
     GLOBAL_HEADER_READING,
@@ -41,18 +37,12 @@ enum GIFAction
     END_READING
 };
 
-// ------------------------------------------------------------------------
-
 enum ReadState
 {
     GIFREAD_OK,
     GIFREAD_ERROR,
     GIFREAD_NEED_MORE
 };
-
-// -------------
-// - GIFReader -
-// -------------
 
 class GIFLZWDecompressor;
 
@@ -122,11 +112,7 @@ public:
 
 #endif // _GIFPRIVATE
 
-// -------------
-// - ImportGIF -
-// -------------
-
- sal_Bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
+sal_Bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _GIFREAD_HXX
 

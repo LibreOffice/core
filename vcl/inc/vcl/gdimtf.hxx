@@ -51,17 +51,9 @@ class Gradient;
 #define METAFILE_LABEL_NOTFOUND         GDI_METAFILE_LABEL_NOTFOUND
 #endif
 
-// -----------
-// - Defines -
-// -----------
-
 #define MTF_MIRROR_NONE             0x00000000UL
 #define MTF_MIRROR_HORZ             0x00000001UL
 #define MTF_MIRROR_VERT             0x00000002UL
-
-// ---------
-// - Enums -
-// ---------
 
 enum MtfConversion
 {
@@ -76,11 +68,6 @@ enum MtfConversion
 
 typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );
 typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpParam );
-
-
-// ---------------
-// - GDIMetaFile -
-// ---------------
 
 class VCL_DLLPUBLIC GDIMetaFile
 {

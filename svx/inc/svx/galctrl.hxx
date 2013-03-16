@@ -37,16 +37,8 @@
 #include "svx/galmisc.hxx"
 #include "svx/svxdllapi.h"
 
-// ------------
-// - Forwards -
-// ------------
-
 class GalleryTheme;
 class GalleryBrowser2;
-
-// ------------------
-// - GalleryPreview -
-// ------------------
 
 class SVX_DLLPUBLIC GalleryPreview : public Window, public DropTargetHelper, public DragSourceHelper
 {
@@ -87,10 +79,6 @@ public:
     void                PreviewMedia( const INetURLObject& rURL );
 };
 
-// -------------------
-// - GalleryIconView -
-// -------------------
-
 class GalleryIconView : public ValueSet, public DropTargetHelper, public DragSourceHelper
 {
     using ValueSet::StartDrag;
@@ -122,10 +110,6 @@ public:
                         GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme );
                         ~GalleryIconView();
 };
-
-// -------------------
-// - GalleryListView -
-// -------------------
 
 class GalleryListView : public BrowseBox
 {

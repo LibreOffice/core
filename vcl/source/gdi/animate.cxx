@@ -27,22 +27,10 @@
 #include <impanmvw.hxx>
 DBG_NAME( Animation )
 
-// -----------
-// - Defines -
-// -----------
-
 #define MIN_TIMEOUT 2L
 #define INC_TIMEOUT 0L
 
-// -----------
-// - statics -
-// -----------
-
 sal_uLong Animation::mnAnimCount = 0UL;
-
-// -------------------
-// - AnimationBitmap -
-// -------------------
 
 sal_uLong AnimationBitmap::GetChecksum() const
 {
@@ -73,10 +61,6 @@ sal_uLong AnimationBitmap::GetChecksum() const
     return nCrc;
 }
 
-// -------------
-// - Animation -
-// -------------
-
 Animation::Animation() :
     mnLoopCount         ( 0 ),
     mnLoops             ( 0 ),
@@ -89,8 +73,6 @@ Animation::Animation() :
     DBG_CTOR( Animation, NULL );
     maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
 }
-
-// -----------------------------------------------------------------------
 
 Animation::Animation( const Animation& rAnimation ) :
     maBitmapEx          ( rAnimation.maBitmapEx ),
@@ -111,8 +93,6 @@ Animation::Animation( const Animation& rAnimation ) :
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
 }
 
-// -----------------------------------------------------------------------
-
 Animation::~Animation()
 {
     DBG_DTOR( Animation, NULL );
@@ -126,8 +106,6 @@ Animation::~Animation()
     for( size_t i = 0, n = maViewList.size(); i < n; ++i )
         delete maViewList[ i ];
 }
-
-// -----------------------------------------------------------------------
 
 Animation& Animation::operator=( const Animation& rAnimation )
 {
@@ -147,8 +125,6 @@ Animation& Animation::operator=( const Animation& rAnimation )
 
     return *this;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool Animation::operator==( const Animation& rAnimation ) const
 {
@@ -192,8 +168,6 @@ void Animation::Clear()
     maViewList.clear();
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Animation::IsTransparent() const
 {
     Point       aPoint;
@@ -223,8 +197,6 @@ sal_Bool Animation::IsTransparent() const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 sal_uLong Animation::GetSizeBytes() const
 {
     sal_uLong nSizeBytes = GetBitmapEx().GetSizeBytes();
@@ -237,8 +209,6 @@ sal_uLong Animation::GetSizeBytes() const
 
     return nSizeBytes;
 }
-
-// -----------------------------------------------------------------------
 
 sal_uLong Animation::GetChecksum() const
 {
@@ -265,8 +235,6 @@ sal_uLong Animation::GetChecksum() const
 
     return nCrc;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz, long nExtraData,
                        OutputDevice* pFirstFrameOutDev )
@@ -330,8 +298,6 @@ sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size&
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 void Animation::Stop( OutputDevice* pOut, long nExtraData )
 {
     for( size_t i = 0; i < maViewList.size(); )
@@ -355,14 +321,10 @@ void Animation::Stop( OutputDevice* pOut, long nExtraData )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Animation::Draw( OutputDevice* pOut, const Point& rDestPt ) const
 {
     Draw( pOut, rDestPt, pOut->PixelToLogic( maGlobalSize ) );
 }
-
-// -----------------------------------------------------------------------
 
 void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz ) const
 {
@@ -388,15 +350,12 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Animation::ImplRestartTimer( sal_uLong nTimeout )
 {
     maTimer.SetTimeout( Max( nTimeout, (sal_uLong)(MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT) ) * 10L );
     maTimer.Start();
 }
 
-// -----------------------------------------------------------------------
 typedef ::std::vector< AInfo* > AInfoList_impl;
 
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
@@ -523,8 +482,6 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Animation::Insert( const AnimationBitmap& rStepBmp )
 {
     sal_Bool bRet = sal_False;
@@ -547,15 +504,11 @@ sal_Bool Animation::Insert( const AnimationBitmap& rStepBmp )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 const AnimationBitmap& Animation::Get( sal_uInt16 nAnimation ) const
 {
     DBG_ASSERT( ( nAnimation < maList.size() ), "No object at this position" );
     return *maList[ nAnimation ];
 }
-
-// -----------------------------------------------------------------------
 
 void Animation::Replace( const AnimationBitmap& rNewAnimationBitmap, sal_uInt16 nAnimation )
 {
@@ -583,23 +536,17 @@ void Animation::Replace( const AnimationBitmap& rNewAnimationBitmap, sal_uInt16 
     }
 }
 
-// -----------------------------------------------------------------------
-
 void Animation::SetLoopCount( const sal_uLong nLoopCount )
 {
     mnLoopCount = nLoopCount;
     ResetLoopCount();
 }
 
-// -----------------------------------------------------------------------
-
 void Animation::ResetLoopCount()
 {
     mnLoops = mnLoopCount;
     mbLoopTerminated = sal_False;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool Animation::Convert( BmpConversion eConversion )
 {
@@ -622,8 +569,6 @@ sal_Bool Animation::Convert( BmpConversion eConversion )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Animation::ReduceColors( sal_uInt16 nNewColorCount, BmpReduce eReduce )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
@@ -645,8 +590,6 @@ sal_Bool Animation::ReduceColors( sal_uInt16 nNewColorCount, BmpReduce eReduce )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Animation::Invert()
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
@@ -667,8 +610,6 @@ sal_Bool Animation::Invert()
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------
 
 sal_Bool Animation::Mirror( sal_uLong nMirrorFlags )
 {
@@ -704,8 +645,6 @@ sal_Bool Animation::Mirror( sal_uLong nMirrorFlags )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Animation::Adjust( short nLuminancePercent, short nContrastPercent,
              short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
              double fGamma, sal_Bool bInvert )
@@ -739,8 +678,6 @@ sal_Bool Animation::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
@@ -761,8 +698,6 @@ sal_Bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterPara
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
 {
@@ -806,8 +741,6 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
 
     return rOStm;
 }
-
-// -----------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
 {

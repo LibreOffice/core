@@ -19,10 +19,6 @@
 #include "sfx2/sfx.hrc"
 #include "cfgids.hxx"
 
-// -----------
-// - Defines -
-// -----------
-
 #define IMAGE_MASK_STDCOLOR Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
 
 // Bitmaps for Tree-ListBox in Effects-TabDialog
@@ -41,13 +37,10 @@
 
 // Bitmaps for ValueSet in EffectWindow
 
-// -----------------------------------------------------------------------------
-
 #define BMP_FOIL_NONE                       RID_APP_START+120
 #define BMP_GROUP                           RID_APP_START+121
 #define BMP_WAIT_ICON                       RID_APP_START+124
 
-// -----------------------------------------------------------------------------
 // additional effects
 
 #define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
@@ -191,8 +184,6 @@
 #define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_MOUSE_OVER (RID_SD_START+588)
 #define BMP_PRESENTERSCREEN_SCROLLBAR_THUMB_TOP_NORMAL (RID_SD_START+589)
 #define BMP_PRESENTERSCREEN_VIEW_BACKGROUND (RID_SD_START+590)
-
-// -----------------------------------------------------------------------------
 
 // ResourceIDs for Popup-Menus do not need a dummy string!!!
 

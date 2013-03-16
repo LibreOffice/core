@@ -25,10 +25,6 @@
 
 #include <vcl/graph.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define CVT_UNKNOWN (0x00000000UL)
 #define CVT_BMP     (0x00000001UL)
 #define CVT_GIF     (0x00000002UL)
@@ -41,10 +37,6 @@
 #define CVT_WMF     (0x00000009UL)
 #define CVT_EMF     (0x0000000aUL)
 #define CVT_SVG     (0x0000000bUL)
-
-// ---------------
-// - ConvertData -
-// ---------------
 
 class SvStream;
 
@@ -65,17 +57,9 @@ public:
                         ~ConvertData() {}
 };
 
-// ------------
-// - Callback -
-// ------------
-
 typedef sal_uLong (*SALGRFCVTPROC)( void* pInst,
                                 sal_uLong nInFormat, void* pInBuffer, sal_uLong nInBufSize,
                                 sal_uLong nOutFormat, void** ppOutBuffer );
-
-// -------------------
-// - BitmapConverter -
-// -------------------
 
 namespace vcl
 {

@@ -25,10 +25,6 @@
 
 #ifdef _XBMPRIVATE
 
-// ---------
-// - Enums -
-// ---------
-
 enum XBMFormat
 {
     XBM10,
@@ -41,10 +37,6 @@ enum ReadState
     XBMREAD_ERROR,
     XBMREAD_NEED_MORE
 };
-
-// -------------
-// - XBMReader -
-// -------------
 
 class XBMReader : public GraphicReader
 {
@@ -75,10 +67,6 @@ public:
 };
 
 #endif // _XBMPRIVATE
-
-// -------------
-// - ImportXBM -
-// -------------
 
 sal_Bool ImportXBM( SvStream& rStream, Graphic& rGraphic );
 

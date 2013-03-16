@@ -52,10 +52,6 @@
 
 using namespace ::com::sun::star;
 
-// -----------
-// - Defines -
-// -----------
-
 #define TWAIN_SELECT            0x00000001UL
 #define TWAIN_ACQUIRE           0x00000002UL
 #define TWAIN_TERMINATE         0xFFFFFFFFUL
@@ -75,10 +71,6 @@ using namespace ::com::sun::star;
 #define TWAIN_FUNCNAME          "DSM_Entry"
 #endif
 
-// --------------
-// - TwainState -
-// --------------
-
 enum TwainState
 {
     TWAIN_STATE_NONE = 0,
@@ -86,10 +78,6 @@ enum TwainState
     TWAIN_STATE_DONE = 2,
     TWAIN_STATE_CANCELED = 3
 };
-
-// ------------
-// - ImpTwain -
-// ------------
 
 class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
 {
@@ -142,20 +130,12 @@ public:
     bool                                        InitXfer();
 };
 
-// ---------
-// - Procs -
-// ---------
-
 static ImpTwain* pImpTwainInstance = NULL;
-
-// -------------------------------------------------------------------------
 
 LRESULT CALLBACK TwainWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
     return DefWindowProc( hWnd, nMsg, nPar1, nPar2 );
 }
-
-// -------------------------------------------------------------------------
 
 LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 {
@@ -173,8 +153,6 @@ LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
         return 0;
     }
 }
-
-// -----------------------------------------------------------------------------
 
 // #107835# hold reference to ScannerManager, to prevent premature death
 ImpTwain::ImpTwain( ScannerManager& rMgr, const Link& rNotifyLink ) :
@@ -218,8 +196,6 @@ ImpTwain::ImpTwain( ScannerManager& rMgr, const Link& rNotifyLink ) :
     mxSelfRef = static_cast< ::cppu::OWeakObject* >( this );
 }
 
-// -----------------------------------------------------------------------------
-
 ImpTwain::~ImpTwain()
 {
     // are we responsible for application shutdown?
@@ -227,15 +203,11 @@ ImpTwain::~ImpTwain()
         ImplSendCloseEvent();
 }
 
-// -----------------------------------------------------------------------------
-
 void ImpTwain::Destroy()
 {
     ImplFallback( TWAIN_EVENT_NONE );
     Application::PostUserEvent( LINK( this, ImpTwain, ImplDestroyHdl ), NULL );
 }
-
-// -----------------------------------------------------------------------------
 
 bool ImpTwain::SelectSource()
 {
@@ -257,8 +229,6 @@ bool ImpTwain::SelectSource()
     return( TWRC_SUCCESS == nRet );
 }
 
-// -----------------------------------------------------------------------------
-
 bool ImpTwain::InitXfer()
 {
     bool bRet = false;
@@ -278,8 +248,6 @@ bool ImpTwain::InitXfer()
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 void ImpTwain::ImplOpenSourceManager()
 {
@@ -305,8 +273,6 @@ void ImpTwain::ImplOpenSourceManager()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void ImpTwain::ImplOpenSource()
 {
     if( 3 == nCurState )
@@ -325,8 +291,6 @@ void ImpTwain::ImplOpenSource()
         }
     }
 }
-
-// -----------------------------------------------------------------------------
 
 bool ImpTwain::ImplEnableSource()
 {
@@ -357,8 +321,6 @@ bool ImpTwain::ImplEnableSource()
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 bool ImpTwain::ImplHandleMsg( void* pMsg )
 {
@@ -402,8 +364,6 @@ bool ImpTwain::ImplHandleMsg( void* pMsg )
 
     return( TWRC_DSEVENT == nRet );
 }
-
-// -----------------------------------------------------------------------------
 
 void ImpTwain::ImplXfer()
 {
@@ -460,14 +420,10 @@ void ImpTwain::ImplXfer()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void ImpTwain::ImplFallback( ULONG nEvent )
 {
     Application::PostUserEvent( LINK( this, ImpTwain, ImplFallbackHdl ), (void*) nEvent );
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
 {
@@ -541,8 +497,6 @@ IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
     return 0L;
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK( ImpTwain, ImplDestroyHdl, void*, /*p*/ )
 {
     if( hTwainWnd )
@@ -558,8 +512,6 @@ IMPL_LINK( ImpTwain, ImplDestroyHdl, void*, /*p*/ )
 
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
 {
@@ -583,8 +535,6 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
     return uno::Reference< frame::XFrame >();
 }
 
-// -----------------------------------------------------------------------------
-
 uno::Reference< util::XCloseBroadcaster > ImpTwain::ImplGetActiveFrameCloseBroadcaster()
 {
     try
@@ -598,8 +548,6 @@ uno::Reference< util::XCloseBroadcaster > ImpTwain::ImplGetActiveFrameCloseBroad
     OSL_FAIL("ImpTwain::ImplGetActiveFrameCloseBroadcaster: Could determine close broadcaster on active frame!");
     return uno::Reference< util::XCloseBroadcaster >();
 }
-
-// -----------------------------------------------------------------------------
 
 void ImpTwain::ImplRegisterCloseListener()
 {
@@ -625,8 +573,6 @@ void ImpTwain::ImplRegisterCloseListener()
 
     OSL_FAIL("ImpTwain::ImplRegisterCloseListener: Could not register as close listener!");
 }
-
-// -----------------------------------------------------------------------------
 
 void ImpTwain::ImplDeregisterCloseListener()
 {
@@ -654,8 +600,6 @@ void ImpTwain::ImplDeregisterCloseListener()
     OSL_FAIL("ImpTwain::ImplDeregisterCloseListener: Could not deregister as close listener!");
 }
 
-// -----------------------------------------------------------------------------
-
 void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& /*Source*/, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
 {
     // shall we re-send the close query later on?
@@ -665,22 +609,16 @@ void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& /*Source*/, sal_B
     throw util::CloseVetoException();
 }
 
-// -----------------------------------------------------------------------------
-
 void SAL_CALL ImpTwain::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     // should not happen
     OSL_FAIL("ImpTwain::notifyClosing called, but we vetoed the closing before!");
 }
 
-// -----------------------------------------------------------------------------
-
 void SAL_CALL ImpTwain::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     // we're not holding any references to the frame, thus noop
 }
-
-// -----------------------------------------------------------------------------
 
 void ImpTwain::ImplSendCloseEvent()
 {
@@ -698,10 +636,6 @@ void ImpTwain::ImplSendCloseEvent()
     OSL_FAIL("ImpTwain::ImplSendCloseEvent: Could not send required close broadcast!");
 }
 
-
-// ---------
-// - Twain -
-// ---------
 
 class Twain
 {
@@ -724,8 +658,6 @@ public:
     TwainState                      GetState() const { return meState; }
 };
 
-// ------------------------------------------------------------------------
-
 Twain::Twain() :
         mpCurMgr( NULL ),
         mpImpTwain( NULL ),
@@ -733,15 +665,11 @@ Twain::Twain() :
 {
 }
 
-// ------------------------------------------------------------------------
-
 Twain::~Twain()
 {
     if( mpImpTwain )
         mpImpTwain->Destroy();
 }
-
-// ------------------------------------------------------------------------
 
 bool Twain::SelectSource( ScannerManager& rMgr )
 {
@@ -763,8 +691,6 @@ bool Twain::SelectSource( ScannerManager& rMgr )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 bool Twain::PerformTransfer( ScannerManager& rMgr, const uno::Reference< lang::XEventListener >& rxListener )
 {
     bool bRet;
@@ -785,8 +711,6 @@ bool Twain::PerformTransfer( ScannerManager& rMgr, const uno::Reference< lang::X
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 IMPL_LINK( Twain, ImpNotifyHdl, ImpTwain*, nEvent )
 {
@@ -840,15 +764,7 @@ IMPL_LINK( Twain, ImpNotifyHdl, ImpTwain*, nEvent )
     return 0L;
 }
 
-// -----------
-// - statics -
-// -----------
-
 static Twain aTwain;
-
-// ------------------
-// - ScannerManager -
-// ------------------
 
 void ScannerManager::AcquireData()
 {
@@ -862,8 +778,6 @@ void ScannerManager::ReleaseData()
         mpData = NULL;
     }
 }
-
-// -----------------------------------------------------------------------------
 
 AWT::Size ScannerManager::getSize() throw()
 {
@@ -889,8 +803,6 @@ AWT::Size ScannerManager::getSize() throw()
 
     return aRet;
 }
-
-// -----------------------------------------------------------------------------
 
 SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
 {
@@ -952,8 +864,6 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
-
 SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 {
     osl::MutexGuard aGuard( maProtector );
@@ -964,8 +874,6 @@ SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 
     return aRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rContext, const uno::Reference< lang::XEventListener >& )
     throw( ScannerException )
@@ -981,8 +889,6 @@ sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rCont
     return aTwain.SelectSource( *this );
 }
 
-// -----------------------------------------------------------------------------
-
 void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const uno::Reference< lang::XEventListener >& rxListener )
     throw( ScannerException )
 {
@@ -996,8 +902,6 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
     aTwain.PerformTransfer( *this, rxListener );
 }
 
-// -----------------------------------------------------------------------------
-
 ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
     throw( ScannerException )
 {
@@ -1009,8 +913,6 @@ ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
 
     return( ( aTwain.GetState() == TWAIN_STATE_CANCELED ) ? ScanError_ScanCanceled : ScanError_ScanErrorNone );
 }
-
-// -----------------------------------------------------------------------------
 
 uno::Reference< awt::XBitmap > SAL_CALL ScannerManager::getBitmap( const ScannerContext& /*rContext*/ )
     throw( ScannerException )

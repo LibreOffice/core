@@ -26,15 +26,7 @@
 #include <tools/urlobj.hxx>
 #include "svx/svxdllapi.h"
 
-// -----------
-// - Defines -
-// -----------
-
 #define GALLERYBROWSER() ((GalleryBrowser*)( SfxViewFrame::Current()->GetChildWindow(GalleryChildWindow::GetChildWindowId())->GetWindow()))
-
-// -------------------------
-// - SvxGalleryChildWindow -
-// -------------------------
 
 class SVX_DLLPUBLIC GalleryChildWindow : public SfxChildWindow
 {
@@ -45,16 +37,7 @@ public:
                         SFX_DECL_CHILDWINDOW_WITHID( GalleryChildWindow );
 };
 
-// ------------------
-// - FormModel -
-// ------------------
-
 class FmFormModel;
-
-// ------------------
-// - GalleryBrowser -
-// ------------------
-
 class GalleryBrowser1;
 class GalleryBrowser2;
 class GallerySplitter;

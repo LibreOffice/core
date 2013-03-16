@@ -65,17 +65,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-// -----------
-// - Defines -
-// -----------
-
 #define SWAPGRAPHIC_TIMEOUT     5000
-
-
-// ------------------
-// - SdrGraphicLink -
-// ------------------
-
 
 const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilterName )
 {
@@ -194,8 +184,6 @@ void SAL_CALL SdrGraphicUpdater::run(void)
     }
 }
 
-// -----------------------------------------------------------------------------
-
 SdrGraphicLink::SdrGraphicLink(SdrGrafObj* pObj)
 : ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB )
 , pGrafObj( pObj )
@@ -204,29 +192,21 @@ SdrGraphicLink::SdrGraphicLink(SdrGrafObj* pObj)
     SetSynchron( false );
 }
 
-// -----------------------------------------------------------------------------
-
 SdrGraphicLink::~SdrGraphicLink()
 {
     if ( pGraphicUpdater )
         pGraphicUpdater->Terminate();
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGraphicLink::DataChanged( const Graphic& rGraphic )
 {
     pGrafObj->ImpSetLinkedGraphic( rGraphic );
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGraphicLink::RemoveGraphicUpdater()
 {
     pGraphicUpdater = NULL;
 }
-
-// -----------------------------------------------------------------------------
 
 ::sfx2::SvBaseLink::UpdateResult SdrGraphicLink::DataChanged(
     const String& rMimeType, const ::com::sun::star::uno::Any & rValue )
@@ -253,8 +233,6 @@ void SdrGraphicLink::RemoveGraphicUpdater()
     return SUCCESS;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGraphicLink::Closed()
 {
     // close connection; set pLink of the object to NULL, as link instance is just about getting destructed.
@@ -263,8 +241,6 @@ void SdrGraphicLink::Closed()
     pGrafObj->ReleaseGraphicLink();
     SvBaseLink::Closed();
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGraphicLink::UpdateAsynchron()
 {
@@ -282,13 +258,6 @@ void SdrGraphicLink::UpdateAsynchron()
             pGraphicUpdater = new SdrGraphicUpdater( pGrafObj->GetFileName(), pGrafObj->GetFilterName(), *this );
     }
 }
-
-// --------------
-// - SdrGrafObj -
-// --------------
-
-//////////////////////////////////////////////////////////////////////////////
-// BaseProperties section
 
 sdr::properties::BaseProperties* SdrGrafObj::CreateObjectSpecificProperties()
 {
@@ -355,11 +324,7 @@ void SdrGrafObj::onGraphicChanged()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
 TYPEINIT1(SdrGrafObj,SdrRectObj);
-
-// -----------------------------------------------------------------------------
 
 SdrGrafObj::SdrGrafObj()
 :   SdrRectObj(),
@@ -385,8 +350,6 @@ SdrGrafObj::SdrGrafObj()
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
-// -----------------------------------------------------------------------------
-
 SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
 :   SdrRectObj      ( rRect ),
     pGraphicLink    ( NULL ),
@@ -410,8 +373,6 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect)
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = false;
 }
-
-// -----------------------------------------------------------------------------
 
 SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
 :   SdrRectObj(),
@@ -437,16 +398,12 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf )
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
-// -----------------------------------------------------------------------------
-
 SdrGrafObj::~SdrGrafObj()
 {
     delete pGraphic;
     delete mpReplacementGraphic;
     ImpLinkAbmeldung();
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
 {
@@ -460,8 +417,6 @@ void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
     BroadcastObjectChange();
     onGraphicChanged();
 }
-
-// -----------------------------------------------------------------------------
 
 const GraphicObject& SdrGrafObj::GetGraphicObject(bool bForceSwapIn) const
 {
@@ -488,8 +443,6 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
     return mpReplacementGraphic;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::NbcSetGraphic( const Graphic& rGrf )
 {
     pGraphic->SetGraphic( rGrf );
@@ -507,15 +460,11 @@ void SdrGrafObj::SetGraphic( const Graphic& rGrf )
     BroadcastObjectChange();
 }
 
-// -----------------------------------------------------------------------------
-
 const Graphic& SdrGrafObj::GetGraphic() const
 {
     ForceSwapIn();
     return pGraphic->GetGraphic();
 }
-
-// -----------------------------------------------------------------------------
 
 Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
 {
@@ -557,8 +506,6 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
     return GetGraphicObject().GetTransformedGraphic( aDestSize, aDestMap, aActAttr );
 }
 
-// -----------------------------------------------------------------------------
-
 GraphicType SdrGrafObj::GetGraphicType() const
 {
     return pGraphic->GetType();
@@ -589,8 +536,6 @@ const Size& SdrGrafObj::GetGrafPrefSize() const
     return pGraphic->GetPrefSize();
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
 {
     mbIsPreview = false;
@@ -608,14 +553,10 @@ void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 String SdrGrafObj::GetGrafStreamURL() const
 {
     return pGraphic->GetUserData();
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::ForceSwapIn() const
 {
@@ -646,14 +587,10 @@ void SdrGrafObj::ForceSwapIn() const
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::ForceSwapOut() const
 {
     pGraphic->FireSwapOutRequest();
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::ImpLinkAnmeldung()
 {
@@ -671,8 +608,6 @@ void SdrGrafObj::ImpLinkAnmeldung()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::ImpLinkAbmeldung()
 {
     sfx2::LinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
@@ -685,8 +620,6 @@ void SdrGrafObj::ImpLinkAbmeldung()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::SetGraphicLink(const rtl::OUString& rFileName, const String& rFilterName)
 {
     ImpLinkAbmeldung();
@@ -698,8 +631,6 @@ void SdrGrafObj::SetGraphicLink(const rtl::OUString& rFileName, const String& rF
     // A linked graphic is per definition swapped out (has to be loaded)
     pGraphic->SetSwapState();
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::ReleaseGraphicLink()
 {
@@ -722,8 +653,6 @@ const rtl::OUString& SdrGrafObj::GetFilterName() const
 {
     return aFilterName;
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
@@ -754,14 +683,10 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-// -----------------------------------------------------------------------------
-
 sal_uInt16 SdrGrafObj::GetObjIdentifier() const
 {
     return sal_uInt16( OBJ_GRAF );
 }
-
-// -----------------------------------------------------------------------------
 
 /* The graphic of the GraphicLink will be loaded. If it is called with
    bAsynchron = true then the graphic will be set later via DataChanged
@@ -780,8 +705,6 @@ bool SdrGrafObj::ImpUpdateGraphicLink( bool bAsynchron ) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::ImpSetLinkedGraphic( const Graphic& rGraphic )
 {
     const sal_Bool bIsChanged = GetModel()->IsChanged();
@@ -790,8 +713,6 @@ void SdrGrafObj::ImpSetLinkedGraphic( const Graphic& rGraphic )
     BroadcastObjectChange();
     GetModel()->SetChanged( bIsChanged );
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::TakeObjNameSingul(XubString& rName) const
 {
@@ -842,8 +763,6 @@ void SdrGrafObj::TakeObjNameSingul(XubString& rName) const
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::TakeObjNamePlural( XubString& rName ) const
 {
     if(pGraphic)
@@ -893,8 +812,6 @@ void SdrGrafObj::TakeObjNamePlural( XubString& rName ) const
     }
 }
 
-// -----------------------------------------------------------------------------
-
 SdrObject* SdrGrafObj::getFullDragClone() const
 {
     // call parent
@@ -937,9 +854,6 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     return *this;
 }
 
-// -----------------------------------------------------------------------------
-// #i25616#
-
 basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly() const
 {
     if(mbInsidePaint)
@@ -966,21 +880,15 @@ basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly() const
     }
 }
 
-// -----------------------------------------------------------------------------
-
 sal_uInt32 SdrGrafObj::GetHdlCount() const
 {
     return 8L;
 }
 
-// -----------------------------------------------------------------------------
-
 SdrHdl* SdrGrafObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     return SdrRectObj::GetHdl( nHdlNum + 1L );
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
@@ -993,14 +901,10 @@ void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         bMirrored = !bMirrored;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
     SdrRectObj::NbcRotate(rRef,nWink,sn,cs);
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
@@ -1008,36 +912,26 @@ void SdrGrafObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     bMirrored = !bMirrored;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
     // #i118485# Call Shear now, old version redirected to rotate
     SdrRectObj::NbcShear(rRef, nWink, tn, bVShear);
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::NbcSetSnapRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetSnapRect(rRect);
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::NbcSetLogicRect( const Rectangle& rRect)
 {
     SdrRectObj::NbcSetLogicRect(rRect);
 }
 
-// -----------------------------------------------------------------------------
-
 SdrObjGeoData* SdrGrafObj::NewGeoData() const
 {
     return new SdrGrafObjGeoData;
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
@@ -1046,16 +940,12 @@ void SdrGrafObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rGGeo.bMirrored=bMirrored;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::RestGeoData(rGeo);
     SdrGrafObjGeoData& rGGeo=(SdrGrafObjGeoData&)rGeo;
     bMirrored=rGGeo.bMirrored;
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::SetPage( SdrPage* pNewPage )
 {
@@ -1077,8 +967,6 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
     if (!aFileName.isEmpty() && bInsert)
         ImpLinkAnmeldung();
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::SetModel( SdrModel* pNewModel )
 {
@@ -1103,21 +991,15 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
         ImpLinkAnmeldung();
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::StartAnimation( OutputDevice* /*pOutDev*/, const Point& /*rPoint*/, const Size& /*rSize*/, long /*nExtraData*/)
 {
     SetGrafAnimationAllowed(true);
 }
 
-// -----------------------------------------------------------------------------
-
 bool SdrGrafObj::HasGDIMetaFile() const
 {
     return( pGraphic->GetType() == GRAPHIC_GDIMETAFILE );
 }
-
-// -----------------------------------------------------------------------------
 
 bool SdrGrafObj::isEmbeddedSvg() const
 {
@@ -1289,8 +1171,6 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText ) cons
     return pRetval;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdrGrafObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     SetXPolyDirty();
@@ -1328,8 +1208,6 @@ void SdrGrafObj::ImpSetAttrToGrafInfo()
     SetXPolyDirty();
     SetRectsDirty();
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
 {
@@ -1380,8 +1258,6 @@ void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
         SetLogicRect( Rectangle( aPos, aSize ) );
     }
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 {
@@ -1489,8 +1365,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
 
     return (long)(void*) pRet;
 }
-
-// -----------------------------------------------------------------------------
 
 void SdrGrafObj::SetGrafAnimationAllowed(bool bNew)
 {

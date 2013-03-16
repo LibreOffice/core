@@ -40,10 +40,6 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-// ------------------------
-// - Forward declarations -
-// ------------------------
-
 class Bitmap;
 class GDIMetaFile;
 class Graphic;
@@ -55,9 +51,7 @@ class FileList;
 class Window;
 class Link;
 
-// ---------------------
-// - Drag&Drop defines -
-// ---------------------
+// Drag&Drop defines
 
 #define DND_ACTION_NONE     ::com::sun::star::datatransfer::dnd::DNDConstants::ACTION_NONE
 #define DND_ACTION_COPY     ::com::sun::star::datatransfer::dnd::DNDConstants::ACTION_COPY
@@ -67,10 +61,6 @@ class Link;
 
 #define DND_POINTER_NONE    0
 #define DND_IMAGE_NONE      0
-
-// --------------------------------
-// - TransferableObjectDescriptor -
-// --------------------------------
 
 struct TransferableObjectDescriptor
 {
@@ -92,10 +82,6 @@ struct TransferableObjectDescriptor
     SVT_DLLPUBLIC friend SvStream&  operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc );
     SVT_DLLPUBLIC friend SvStream&  operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );
 };
-
-// -------------------
-// - AcceptDragEvent -
-// -------------------
 
 struct AcceptDropEvent
 {
@@ -121,10 +107,6 @@ struct AcceptDropEvent
         mbDefault( sal_False ) {}
 };
 
-// --------------------
-// - ExecuteDropEvent -
-// --------------------
-
 struct ExecuteDropEvent
 {
     sal_Int8                                                        mnAction;
@@ -144,10 +126,6 @@ struct ExecuteDropEvent
         maDropEvent( rDropEvent ),
         mbDefault( sal_False ) {}
 };
-
-// ----------------------
-// - TransferableHelper -
-// ----------------------
 
 class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< ::com::sun::star::datatransfer::XTransferable,
                                                            ::com::sun::star::datatransfer::clipboard::XClipboardOwner,
@@ -285,10 +263,6 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
 };
 
-// --------------------------
-// - TransferableDataHelper -
-// --------------------------
-
 struct TransferableDataHelper_Impl;
 
 class SVT_DLLPUBLIC TransferableDataHelper
@@ -391,10 +365,6 @@ public:
                                              sal_Bool bCompareParameters = sal_False );
 };
 
-// --------------------
-// - DragSourceHelper -
-// --------------------
-
 class SVT_DLLPUBLIC DragSourceHelper
 {
 private:
@@ -440,10 +410,6 @@ public:
                         DragSourceHelper( Window* pWindow );
     virtual             ~DragSourceHelper();
 };
-
-// --------------------
-// - DropTargetHelper -
-// --------------------
 
 class SVT_DLLPUBLIC DropTargetHelper
 {
@@ -512,11 +478,6 @@ public:
     DataFlavorExVector& GetDataFlavorExVector() const {return *mpFormats; }
 
 };
-
-
-//------------------------
-// TransferDataContainer
-//------------------------
 
 struct TransferDataContainer_Impl;
 

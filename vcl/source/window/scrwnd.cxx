@@ -31,19 +31,11 @@
 
 #include <math.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define WHEEL_WIDTH     25
 #define WHEEL_RADIUS    ((WHEEL_WIDTH) >> 1 )
 #define MAX_TIME        300
 #define MIN_TIME        20
 #define DEF_TIMEOUT     50
-
-// -------------------
-// - ImplWheelWindow -
-// -------------------
 
 ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
             FloatingWindow  ( pParent, 0 ),
@@ -91,15 +83,11 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
     CaptureMouse();
 }
 
-// ------------------------------------------------------------------------
-
 ImplWheelWindow::~ImplWheelWindow()
 {
     ImplStop();
     delete mpTimer;
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWheelWindow::ImplStop()
 {
@@ -107,8 +95,6 @@ void ImplWheelWindow::ImplStop()
     mpTimer->Stop();
     Show(sal_False);
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWheelWindow::ImplSetRegion( const Bitmap& rRegionBmp )
 {
@@ -125,8 +111,6 @@ void ImplWheelWindow::ImplSetRegion( const Bitmap& rRegionBmp )
     SetWindowRegionPixel( rRegionBmp.CreateRegion( COL_BLACK, aRect ) );
 }
 
-// ------------------------------------------------------------------------
-
 void ImplWheelWindow::ImplCreateImageList()
 {
     ResMgr* pResMgr = ImplGetResMgr();
@@ -134,8 +118,6 @@ void ImplWheelWindow::ImplCreateImageList()
         maImgList.InsertFromHorizontalBitmap
             ( ResId( SV_RESID_BITMAP_SCROLLBMP, *pResMgr ), 6, NULL );
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWheelWindow::ImplSetWheelMode( sal_uLong nWheelMode )
 {
@@ -158,8 +140,6 @@ void ImplWheelWindow::ImplSetWheelMode( sal_uLong nWheelMode )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void ImplWheelWindow::ImplDrawWheel()
 {
     sal_uInt16 nId;
@@ -178,8 +158,6 @@ void ImplWheelWindow::ImplDrawWheel()
     if( nId )
         DrawImage( Point(), maImgList.GetImage( nId ) );
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWheelWindow::ImplRecalcScrollValues()
 {
@@ -234,8 +212,6 @@ void ImplWheelWindow::ImplRecalcScrollValues()
         }
     }
 }
-
-// ------------------------------------------------------------------------
 
 PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
 {
@@ -303,14 +279,10 @@ PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
     return eStyle;
 }
 
-// ------------------------------------------------------------------------
-
 void ImplWheelWindow::Paint( const Rectangle& )
 {
     ImplDrawWheel();
 }
-
-// ------------------------------------------------------------------------
 
 void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -358,8 +330,6 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
         ImplSetWheelMode( bOuter ? WHEELMODE_SCROLL_V : WHEELMODE_V );
 }
 
-// ------------------------------------------------------------------------
-
 void ImplWheelWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if( mnActDist > WHEEL_RADIUS )
@@ -367,8 +337,6 @@ void ImplWheelWindow::MouseButtonUp( const MouseEvent& rMEvt )
     else
         FloatingWindow::MouseButtonUp( rMEvt );
 }
-
-// ------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
 {

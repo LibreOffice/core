@@ -26,10 +26,6 @@
 #include <vector>
 #include "svx/svxdllapi.h"
 
-// -----------
-// - Defines -
-// -----------
-
 #define SGA_FORMAT_NONE     0x00000000L
 #define SGA_FORMAT_STRING   0x00000001L
 #define SGA_FORMAT_GRAPHIC  0x00000010L
@@ -50,10 +46,6 @@
 
 #define GALLERY_THEME_FONTWORK          37
 #define GALLERY_THEME_FONTWORK_VERTICAL 38
-
-// -------------------
-// - GalleryExplorer -
-// -------------------
 
 class Gallery;
 class VCDrawModel;

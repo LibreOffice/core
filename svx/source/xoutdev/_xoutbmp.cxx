@@ -30,22 +30,12 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define FORMAT_BMP  String(RTL_CONSTASCII_USTRINGPARAM("bmp"))
 #define FORMAT_GIF  String(RTL_CONSTASCII_USTRINGPARAM("gif"))
 #define FORMAT_JPG  String(RTL_CONSTASCII_USTRINGPARAM("jpg"))
 #define FORMAT_PNG  String(RTL_CONSTASCII_USTRINGPARAM("png"))
 
-// --------------
-// - XOutBitmap -
-// --------------
-
 GraphicFilter* XOutBitmap::pGrfFilter = NULL;
-
-// ------------------------------------------------------------------------
 
 Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, sal_Bool bHMirr, sal_Bool bVMirr )
 {
@@ -86,8 +76,6 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, sal_Bool bHM
     return aNewAnim;
 }
 
-// ------------------------------------------------------------------------
-
 Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nMirrorFlags )
 {
     Graphic aRetGraphic;
@@ -123,8 +111,6 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nM
 
     return aRetGraphic;
 }
-
-// ------------------------------------------------------------------------
 
 sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                                  const String& rFilterName, const sal_uIntPtr nFlags,
@@ -297,8 +283,6 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
     }
 }
 
-// ------------------------------------------------------------------------
-
 sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const sal_uInt16 nFormat,
                                   const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
@@ -324,8 +308,6 @@ sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObje
 
     return nRet;
 }
-
-// ------------------------------------------------------------------------
 
 Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 {
@@ -411,8 +393,6 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 
     return aRetBmp;
 };
-
-// ------------------------------------------------------------------------
 
 Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                                  const sal_uInt8 cEdgeDetectThreshold, const Rectangle* pWorkRectPixel )
@@ -552,10 +532,6 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
 
     return aRetPoly;
 };
-
-// ----------------
-// - DitherBitmap -
-// ----------------
 
 sal_Bool DitherBitmap( Bitmap& rBitmap )
 {

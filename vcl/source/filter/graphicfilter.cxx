@@ -67,10 +67,6 @@
 #define IMPORT_FUNCTION_NAME    "GraphicImport"
 #define EXPORT_FUNCTION_NAME    "GraphicExport"
 
-// -----------
-// - statics -
-// -----------
-
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -85,10 +81,6 @@ static ::osl::Mutex& getListMutex()
     static ::osl::Mutex s_aListProtection;
     return s_aListProtection;
 }
-
-// -------------------------
-// - ImpFilterOutputStream -
-// -------------------------
 
 class ImpFilterOutputStream : public ::cppu::WeakImplHelper1< ::com::sun::star::io::XOutputStream >
 {
@@ -135,8 +127,6 @@ static sal_Bool DirEntryExists( const INetURLObject& rObj )
     return bExists;
 }
 
-// -----------------------------------------------------------------------------
-
 static void KillDirEntry( const String& rMainUrl )
 {
     try
@@ -160,11 +150,7 @@ static void KillDirEntry( const String& rMainUrl )
 
 #endif // !DISABLE_EXPORT
 
-// --------------------
-// - Helper functions -
-// --------------------
-
-//--------------------------------------------------------------------------
+// Helper functions
 
 sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
 {
@@ -949,11 +935,6 @@ static String ImpCreateFullFilterPath( const String& rPath, const String& rFilte
     return String( aSystemPath );
 }
 
-
-// --------------------------
-// - ImpFilterLibCacheEntry -
-// --------------------------
-
 class ImpFilterLibCache;
 
 struct ImpFilterLibCacheEntry
@@ -972,8 +953,6 @@ struct ImpFilterLibCacheEntry
     PFilterCall             GetImportFunction();
 };
 
-// ------------------------------------------------------------------------
-
 ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const String& rPathname, const String& rFiltername ) :
         mpNext          ( NULL ),
 #ifndef DISABLE_DYNLOADING
@@ -987,8 +966,6 @@ ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const String& rPathname, const S
     (void) rPathname;
 #endif
 }
-
-// ------------------------------------------------------------------------
 
 #ifdef DISABLE_DYNLOADING
 
@@ -1041,12 +1018,6 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
     return mpfnImport;
 }
 
-// ------------------------------------------------------------------------
-
-// ---------------------
-// - ImpFilterLibCache -
-// ---------------------
-
 class ImpFilterLibCache
 {
     ImpFilterLibCacheEntry* mpFirst;
@@ -1059,15 +1030,11 @@ public:
     ImpFilterLibCacheEntry* GetFilter( const String& rFilterPath, const String& rFiltername );
 };
 
-// ------------------------------------------------------------------------
-
 ImpFilterLibCache::ImpFilterLibCache() :
     mpFirst     ( NULL ),
     mpLast      ( NULL )
 {
 }
-
-// ------------------------------------------------------------------------
 
 ImpFilterLibCache::~ImpFilterLibCache()
 {
@@ -1079,8 +1046,6 @@ ImpFilterLibCache::~ImpFilterLibCache()
         pEntry = pNext;
     }
 }
-
-// ------------------------------------------------------------------------
 
 ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const String& rFilterPath, const String& rFilterName )
 {
@@ -1117,13 +1082,7 @@ ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const String& rFilterPath,
     return pEntry;
 };
 
-// ------------------------------------------------------------------------
-
 namespace { struct Cache : public rtl::Static<ImpFilterLibCache, Cache> {}; }
-
-// -----------------
-// - GraphicFilter -
-// -----------------
 
 GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
     bUseConfig        ( bConfig ),
@@ -1131,8 +1090,6 @@ GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
 {
     ImplInit();
 }
-
-// ------------------------------------------------------------------------
 
 GraphicFilter::~GraphicFilter()
 {
@@ -1158,8 +1115,6 @@ GraphicFilter::~GraphicFilter()
 
     delete pErrorEx;
 }
-
-// ------------------------------------------------------------------------
 
 void GraphicFilter::ImplInit()
 {
@@ -1188,78 +1143,57 @@ void GraphicFilter::ImplInit()
     bAbort = sal_False;
 }
 
-// ------------------------------------------------------------------------
-
 sal_uLong GraphicFilter::ImplSetError( sal_uLong nError, const SvStream* pStm )
 {
     pErrorEx->nFilterError = nError;
     pErrorEx->nStreamError = pStm ? pStm->GetError() : ERRCODE_NONE;
     return nError;
 }
-// ------------------------------------------------------------------------
 
 sal_uInt16 GraphicFilter::GetImportFormatCount()
 {
     return pConfig->GetImportFormatCount();
 }
 
-// ------------------------------------------------------------------------
-
 sal_uInt16 GraphicFilter::GetImportFormatNumber( const String& rFormatName )
 {
     return pConfig->GetImportFormatNumber( rFormatName );
 }
-
-// ------------------------------------------------------------------------
 
 sal_uInt16 GraphicFilter::GetImportFormatNumberForMediaType( const String& rMediaType )
 {
     return pConfig->GetImportFormatNumberForMediaType( rMediaType );
 }
 
-// ------------------------------------------------------------------------
-
 sal_uInt16 GraphicFilter::GetImportFormatNumberForShortName( const String& rShortName )
 {
     return pConfig->GetImportFormatNumberForShortName( rShortName );
 }
-
-// ------------------------------------------------------------------------
 
 sal_uInt16 GraphicFilter::GetImportFormatNumberForTypeName( const String& rType )
 {
     return pConfig->GetImportFormatNumberForTypeName( rType );
 }
 
-// ------------------------------------------------------------------------
-
 String GraphicFilter::GetImportFormatName( sal_uInt16 nFormat )
 {
     return pConfig->GetImportFormatName( nFormat );
 }
-
-// ------------------------------------------------------------------------
 
 String GraphicFilter::GetImportFormatTypeName( sal_uInt16 nFormat )
 {
     return pConfig->GetImportFilterTypeName( nFormat );
 }
 
-// ------------------------------------------------------------------------
-
 String GraphicFilter::GetImportFormatMediaType( sal_uInt16 nFormat )
 {
     return pConfig->GetImportFormatMediaType( nFormat );
 }
 
-// ------------------------------------------------------------------------
-
 String GraphicFilter::GetImportFormatShortName( sal_uInt16 nFormat )
 {
     return pConfig->GetImportFormatShortName( nFormat );
 }
-
-// ------------------------------------------------------------------------
 
 String GraphicFilter::GetImportOSFileType( sal_uInt16 )
 {
@@ -1267,91 +1201,65 @@ String GraphicFilter::GetImportOSFileType( sal_uInt16 )
     return aOSFileType;
 }
 
-// ------------------------------------------------------------------------
-
 String GraphicFilter::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
     return pConfig->GetImportWildcard( nFormat, nEntry );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GraphicFilter::IsImportPixelFormat( sal_uInt16 nFormat )
 {
     return pConfig->IsImportPixelFormat( nFormat );
 }
 
-// ------------------------------------------------------------------------
-
 sal_uInt16 GraphicFilter::GetExportFormatCount()
 {
     return pConfig->GetExportFormatCount();
 }
-
-// ------------------------------------------------------------------------
 
 sal_uInt16 GraphicFilter::GetExportFormatNumber( const String& rFormatName )
 {
     return pConfig->GetExportFormatNumber( rFormatName );
 }
 
-// ------------------------------------------------------------------------
-
 sal_uInt16 GraphicFilter::GetExportFormatNumberForMediaType( const String& rMediaType )
 {
     return pConfig->GetExportFormatNumberForMediaType( rMediaType );
 }
-
-// ------------------------------------------------------------------------
 
 sal_uInt16 GraphicFilter::GetExportFormatNumberForShortName( const String& rShortName )
 {
     return pConfig->GetExportFormatNumberForShortName( rShortName );
 }
 
-// ------------------------------------------------------------------------
-
 String GraphicFilter::GetExportInternalFilterName( sal_uInt16 nFormat )
 {
     return pConfig->GetExportInternalFilterName( nFormat );
 }
-
-// ------------------------------------------------------------------------
 
 sal_uInt16 GraphicFilter::GetExportFormatNumberForTypeName( const String& rType )
 {
     return pConfig->GetExportFormatNumberForTypeName( rType );
 }
 
-// ------------------------------------------------------------------------
-
 String GraphicFilter::GetExportFormatName( sal_uInt16 nFormat )
 {
     return pConfig->GetExportFormatName( nFormat );
 }
-
-// ------------------------------------------------------------------------
 
 String GraphicFilter::GetExportFormatTypeName( sal_uInt16 nFormat )
 {
     return pConfig->GetExportFilterTypeName( nFormat );
 }
 
-// ------------------------------------------------------------------------
-
 String GraphicFilter::GetExportFormatMediaType( sal_uInt16 nFormat )
 {
     return pConfig->GetExportFormatMediaType( nFormat );
 }
 
-// ------------------------------------------------------------------------
-
 String GraphicFilter::GetExportFormatShortName( sal_uInt16 nFormat )
 {
     return pConfig->GetExportFormatShortName( nFormat );
 }
-
-// ------------------------------------------------------------------------
 
 String GraphicFilter::GetExportOSFileType( sal_uInt16 )
 {
@@ -1359,21 +1267,15 @@ String GraphicFilter::GetExportOSFileType( sal_uInt16 )
     return aOSFileType;
 }
 
-// ------------------------------------------------------------------------
-
 String GraphicFilter::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
     return pConfig->GetExportWildcard( nFormat, nEntry );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool GraphicFilter::IsExportPixelFormat( sal_uInt16 nFormat )
 {
     return pConfig->IsExportPixelFormat( nFormat );
 }
-
-// ------------------------------------------------------------------------
 
 sal_uInt16 GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
                                         sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat )
@@ -1391,8 +1293,6 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
     return nRetValue;
 }
 
-// ------------------------------------------------------------------------
-
 sal_uInt16 GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rIStream,
                                         sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat )
 {
@@ -1407,7 +1307,6 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rI
     return (sal_uInt16) ImplSetError( nRes, &rIStream );
 }
 
-// ------------------------------------------------------------------------
 //SJ: TODO, we need to create a GraphicImporter component
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
                                      sal_uInt16 nFormat, sal_uInt16 * pDeterminedFormat, sal_uInt32 nImportFlags )
@@ -1833,9 +1732,6 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
     return nStatus;
 }
 
-
-// ------------------------------------------------------------------------
-
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
     sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
@@ -1865,8 +1761,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
     return nRetValue;
 #endif
 }
-
-// ------------------------------------------------------------------------
 
 #ifdef DISABLE_DYNLOADING
 
@@ -2259,29 +2153,21 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
 #endif
 }
 
-// ------------------------------------------------------------------------
-
 const FilterErrorEx& GraphicFilter::GetLastError() const
 {
     return *pErrorEx;
 }
-
-// ------------------------------------------------------------------------
 
 void GraphicFilter::ResetLastError()
 {
     pErrorEx->nFilterError = pErrorEx->nStreamError = 0UL;
 }
 
-// ------------------------------------------------------------------------
-
 const Link GraphicFilter::GetFilterCallback() const
 {
     const Link aLink( LINK( this, GraphicFilter, FilterCallback ) );
     return aLink;
 }
-
-// ------------------------------------------------------------------------
 
 IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
 {

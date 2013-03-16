@@ -29,24 +29,11 @@
 
 #include "slideshowimpl.hxx"
 
-// ----------------
-// - SdShowWindow -
-// ----------------
-
-
 namespace sd {
 
 class SlideshowImpl;
 
-// -----------
-// - Defines -
-// -----------
-
 #define SLIDE_NO_TIMEOUT SAL_MAX_INT32
-
-// ---------
-// - Enums -
-// ---------
 
 enum ShowWindowMode
 {

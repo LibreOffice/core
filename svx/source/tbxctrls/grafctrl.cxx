@@ -52,7 +52,6 @@
 #include "svx/grafctrl.hxx"
 #include "svx/tbxcolor.hxx"
 
-// namespaces
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -61,44 +60,28 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
 #include <svx/svxdlg.hxx>
-// -----------
-// - Defines -
-// -----------
 
 #define SYMBOL_TO_FIELD_OFFSET      4
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 #define TOOLBOX_NAME                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "colorbar" ) )
 
-// ----------------
-// - TbxImageItem -
-// ----------------
-
 TYPEINIT1_AUTOFACTORY( TbxImageItem, SfxUInt16Item );
-
-//---------------------------------------------------------
 
 TbxImageItem::TbxImageItem( sal_uInt16 _nWhich, sal_uInt16 nImage ) :
     SfxUInt16Item( _nWhich, nImage )
 {
 }
 
-//---------------------------------------------------------
 
 SfxPoolItem* TbxImageItem::Clone( SfxItemPool* ) const
 {
     return new TbxImageItem( *this );
 }
 
-//---------------------------------------------------------
-
 int TbxImageItem::operator==( const SfxPoolItem& rItem ) const
 {
     return( ( (TbxImageItem&) rItem ).GetValue() == GetValue() );
 }
-
-// -----------------------
-// - ImplGrafMetricField -
-// -----------------------
 
 class ImplGrafMetricField : public MetricField
 {
@@ -123,8 +106,6 @@ public:
     void            Update( const SfxPoolItem* pItem );
     const OUString& GetCommand() const { return maCommand; }
 };
-
-// -----------------------------------------------------------------------------
 
 ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
     MetricField( pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_3DLOOK ),
@@ -165,20 +146,14 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& 
     maTimer.SetTimeoutHdl( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
 }
 
-// -----------------------------------------------------------------------------
-
 ImplGrafMetricField::~ImplGrafMetricField()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 void ImplGrafMetricField::Modify()
 {
     maTimer.Start();
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl)
 {
@@ -212,8 +187,6 @@ IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl)
     return 0L;
 }
 
-// -----------------------------------------------------------------------------
-
 void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
 {
     if( pItem )
@@ -232,10 +205,6 @@ void ImplGrafMetricField::Update( const SfxPoolItem* pItem )
     else
         SetText( OUString() );
 }
-
-// --------------------
-// - ImplGrafControl  -
-// --------------------
 
 struct CommandToRID
 {
@@ -273,8 +242,6 @@ static sal_uInt16 ImplGetRID( const OUString& aCommand )
     return nRID;
 }
 
-// -----------------------------------------------------------------------------
-
 class ImplGrafControl : public Control
 {
     using Window::Update;
@@ -294,8 +261,6 @@ public:
     void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
     void                    SetText( const OUString& rStr ) { maField.SetText( rStr ); }
 };
-
-// -----------------------------------------------------------------------------
 
 ImplGrafControl::ImplGrafControl(
     Window* pParent,
@@ -337,22 +302,14 @@ ImplGrafControl::ImplGrafControl(
     maField.Show();
 }
 
-// -----------------------------------------------------------------------------
-
 ImplGrafControl::~ImplGrafControl()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 void ImplGrafControl::GetFocus()
 {
     maField.GrabFocus();
 }
-
-// -----------------------
-// - ImplGrafModeControl -
-// -----------------------
 
 class ImplGrafModeControl : public ListBox
 {
@@ -374,8 +331,6 @@ public:
     void            Update( const SfxPoolItem* pItem );
 };
 
-// -----------------------------------------------------------------------------
-
 ImplGrafModeControl::ImplGrafModeControl( Window* pParent, const Reference< XFrame >& rFrame ) :
     ListBox( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL ),
     mnCurPos( 0 ),
@@ -391,13 +346,9 @@ ImplGrafModeControl::ImplGrafModeControl( Window* pParent, const Reference< XFra
     Show();
 }
 
-// -----------------------------------------------------------------------
-
 ImplGrafModeControl::~ImplGrafModeControl()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void ImplGrafModeControl::Select()
 {
@@ -419,8 +370,6 @@ void ImplGrafModeControl::Select()
     }
 }
 
-// -----------------------------------------------------------------------
-
 long ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
@@ -430,8 +379,6 @@ long ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
 
     return ListBox::PreNotify( rNEvt );
 }
-
-// -----------------------------------------------------------------------
 
 long ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
 {
@@ -463,8 +410,6 @@ long ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-// -----------------------------------------------------------------------
-
 void ImplGrafModeControl::ImplReleaseFocus()
 {
     if( SfxViewShell::Current() )
@@ -476,8 +421,6 @@ void ImplGrafModeControl::ImplReleaseFocus()
     }
 }
 
-// -----------------------------------------------------------------------
-
 void ImplGrafModeControl::Update( const SfxPoolItem* pItem )
 {
     if( pItem )
@@ -486,13 +429,7 @@ void ImplGrafModeControl::Update( const SfxPoolItem* pItem )
         SetNoSelection();
 }
 
-// -------------------------------
-// - SvxGrafFilterToolBoxControl -
-// -------------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafFilterToolBoxControl, TbxImageItem );
-
-// -----------------------------------------------------------------------------
 
 SvxGrafFilterToolBoxControl::SvxGrafFilterToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
@@ -501,27 +438,19 @@ SvxGrafFilterToolBoxControl::SvxGrafFilterToolBoxControl( sal_uInt16 nSlotId, sa
     rTbx.Invalidate();
 }
 
-// -----------------------------------------------------------------------------
-
 SvxGrafFilterToolBoxControl::~SvxGrafFilterToolBoxControl()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 void SvxGrafFilterToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* )
 {
     GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
 }
 
-// -----------------------------------------------------------------------------
-
 SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
-
-// -----------------------------------------------------------------------------
 
 SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
 {
@@ -532,12 +461,6 @@ SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
     return NULL;
 }
 
-// -------------------------
-// - SvxGrafToolBoxControl -
-// -------------------------
-
-// -----------------------------------------------------------------------------
-
 SvxGrafToolBoxControl::SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
@@ -545,13 +468,9 @@ SvxGrafToolBoxControl::SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId
     rTbx.Invalidate();
 }
 
-// -----------------------------------------------------------------------------
-
 SvxGrafToolBoxControl::~SvxGrafToolBoxControl()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
@@ -575,124 +494,70 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
     }
 }
 
-// -----------------------------------------------------------------------------
-
 Window* SvxGrafToolBoxControl::CreateItemWindow( Window *pParent )
 {
     return( new ImplGrafControl( pParent, m_aCommandURL, m_xFrame ) );
 }
 
-// ----------------------------
-// - SvxGrafRedToolBoxControl -
-// ----------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafRedToolBoxControl, SfxInt16Item );
-
-// -----------------------------------------------------------------------------
 
 SvxGrafRedToolBoxControl::SvxGrafRedToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-// ------------------------------
-// - SvxGrafGreenToolBoxControl -
-// ------------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafGreenToolBoxControl, SfxInt16Item );
-
-// -----------------------------------------------------------------------------
 
 SvxGrafGreenToolBoxControl::SvxGrafGreenToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-// -----------------------------
-// - SvxGrafBlueToolBoxControl -
-// -----------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafBlueToolBoxControl, SfxInt16Item );
-
-// -----------------------------------------------------------------------------
 
 SvxGrafBlueToolBoxControl::SvxGrafBlueToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-// ----------------------------------
-// - SvxGrafLuminanceToolBoxControl -
-// ----------------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafLuminanceToolBoxControl, SfxInt16Item );
-
-// -----------------------------------------------------------------------------
 
 SvxGrafLuminanceToolBoxControl::SvxGrafLuminanceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-// ----------------------------------
-// - SvxGrafContrastToolBoxControl -
-// ----------------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafContrastToolBoxControl, SfxInt16Item );
-
-// -----------------------------------------------------------------------------
 
 SvxGrafContrastToolBoxControl::SvxGrafContrastToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-// ------------------------------
-// - SvxGrafGammaToolBoxControl -
-// ------------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafGammaToolBoxControl, SfxUInt32Item );
-
-// -----------------------------------------------------------------------------
 
 SvxGrafGammaToolBoxControl::SvxGrafGammaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-// -------------------------------------
-// - SvxGrafTransparenceToolBoxControl -
-// -------------------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafTransparenceToolBoxControl, SfxUInt16Item );
-
-// -----------------------------------------------------------------------------
 
 SvxGrafTransparenceToolBoxControl::SvxGrafTransparenceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxGrafToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-// -----------------------------
-// - SvxGrafModeToolBoxControl -
-// -----------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxGrafModeToolBoxControl, SfxUInt16Item );
-
-// -----------------------------------------------------------------------------
 
 SvxGrafModeToolBoxControl::SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-// -----------------------------------------------------------------------------
-
 SvxGrafModeToolBoxControl::~SvxGrafModeToolBoxControl()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
@@ -716,16 +581,10 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
     }
 }
 
-// -----------------------------------------------------------------------------
-
 Window* SvxGrafModeToolBoxControl::CreateItemWindow( Window *pParent )
 {
     return( new ImplGrafModeControl( pParent, m_xFrame ) );
 }
-
-// ---------------------
-// - SvxGrafAttrHelper -
-// ---------------------
 
 void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 {
@@ -1004,8 +863,6 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             rView.EndUndo();
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 {

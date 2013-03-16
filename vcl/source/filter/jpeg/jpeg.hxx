@@ -28,20 +28,12 @@
 
 #ifdef _JPEGPRIVATE
 
-// --------
-// - Enum -
-// --------
-
 enum ReadState
 {
     JPEGREAD_OK,
     JPEGREAD_ERROR,
     JPEGREAD_NEED_MORE
 };
-
-// --------------
-// - JPEGReader -
-// --------------
 
 class JPEGReader : public GraphicReader
 {
@@ -74,10 +66,6 @@ public:
     ReadState           Read( Graphic& rGraphic );
 };
 
-// --------------
-// - JPEGWriter -
-// --------------
-
 class JPEGWriter
 {
     SvStream&           rOStm;
@@ -105,10 +93,6 @@ public:
 };
 
 #endif // _JPEGPRIVATE
-
-// ---------------------
-// - Import/ExportJPEG -
-// ---------------------
 
 sal_Bool ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
 

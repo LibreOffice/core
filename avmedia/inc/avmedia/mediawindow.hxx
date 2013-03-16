@@ -29,15 +29,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <avmedia/avmediadllapi.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME -1.0
-
-// ------------------------
-// - Forward Declarations -
-// ------------------------
 
 class Window;
 class KeyEvent;
@@ -50,8 +42,6 @@ struct ExecuteDropEvent;
 
 namespace rtl { class OUString; }
 
-/* Declaration of MediaWindow class */
-
 namespace avmedia
 {
     typedef ::std::vector< ::std::pair< OUString, OUString > > FilterNameVector;
@@ -59,10 +49,6 @@ namespace avmedia
     class MediaItem;
 
     namespace priv { class MediaWindowImpl; }
-
-    // ---------------
-    // - MediaWindow -
-    // ---------------
 
     class AVMEDIA_DLLPUBLIC MediaWindow
     {

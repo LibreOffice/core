@@ -30,7 +30,6 @@
 #include <vcl/print.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
-// declare system types in sysdata.hxx
 #include <svsys.h>
 #include <vcl/sysdata.hxx>
 
@@ -78,8 +77,6 @@ DBG_NAME( PolyPolygon )
 #endif
 DBG_NAMEEX( Region )
 
-// -----------------------------------------------------------------------
-
 #ifdef DBG_UTIL
 const char* ImplDbgCheckOutputDevice( const void* pObj )
 {
@@ -122,8 +119,6 @@ struct ImplObjStack
     LanguageType    meTextLanguage;
     sal_uInt16          mnFlags;
 };
-
-// -----------------------------------------------------------------------
 
 static void ImplDeleteObjStack( ImplObjStack* pObjStack )
 {
@@ -175,8 +170,6 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
     delete pObjStack;
 }
 
-// -----------------------------------------------------------------------
-
 bool OutputDevice::ImplIsAntiparallel() const
 {
     bool bRet = false;
@@ -190,9 +183,6 @@ bool OutputDevice::ImplIsAntiparallel() const
     }
     return bRet;
 }
-
-// -----------------------------------------------------------------------
-
 
 bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGraphics )
 {
@@ -414,8 +404,6 @@ OutputDevice::OutputDevice() :
     maThresRes.mnThresPixToLogY = 0;
 }
 
-// -----------------------------------------------------------------------
-
 OutputDevice::~OutputDevice()
 {
     DBG_DTOR( OutputDevice, ImplDbgCheckOutputDevice );
@@ -486,8 +474,6 @@ bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
     const bool bHasSupport = mpGraphics->supportsOperation( eType );
     return bHasSupport;
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::EnableRTL( sal_Bool bEnable )
 {
@@ -560,9 +546,6 @@ void    OutputDevice::ImplReMirror( Region &rRegion ) const
     }
     rRegion = aMirroredRegion;
 }
-
-
-// -----------------------------------------------------------------------
 
 SalGraphics* OutputDevice::ImplGetGraphics() const
 {
@@ -714,8 +697,6 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
     return mpGraphics;
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::ImplReleaseGraphics( sal_Bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
@@ -833,8 +814,6 @@ void OutputDevice::ImplReleaseGraphics( sal_Bool bRelease )
     mpNextGraphics  = NULL;
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::ImplInitOutDevData()
 {
     if ( !mpOutDevData )
@@ -848,8 +827,6 @@ void OutputDevice::ImplInitOutDevData()
         mpOutDevData->mpInverseViewTransform = NULL;
     }
 }
-
-// -----------------------------------------------------------------------
 
 // #i75163#
 void OutputDevice::ImplInvalidateViewTransform()
@@ -870,14 +847,10 @@ void OutputDevice::ImplInvalidateViewTransform()
     }
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool OutputDevice::ImplIsRecordLayout() const
 {
     return mpOutDevData && mpOutDevData->mpRecordLayout;
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::ImplDeInitOutDevData()
 {
@@ -892,8 +865,6 @@ void OutputDevice::ImplDeInitOutDevData()
         delete mpOutDevData;
     }
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::ImplInitLineColor()
 {
@@ -916,8 +887,6 @@ void OutputDevice::ImplInitLineColor()
     mbInitLineColor = sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::ImplInitFillColor()
 {
     DBG_TESTSOLARMUTEX();
@@ -938,8 +907,6 @@ void OutputDevice::ImplInitFillColor()
 
     mbInitFillColor = sal_False;
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::ImplInitClipRegion()
 {
@@ -1027,8 +994,6 @@ void OutputDevice::ImplInitClipRegion()
     mbInitClipRegion = sal_False;
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::ImplSetClipRegion( const Region* pRegion )
 {
     DBG_TESTSOLARMUTEX();
@@ -1050,8 +1015,6 @@ void OutputDevice::ImplSetClipRegion( const Region* pRegion )
     }
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::SetClipRegion()
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1064,8 +1027,6 @@ void OutputDevice::SetClipRegion()
     if( mpAlphaVDev )
         mpAlphaVDev->SetClipRegion();
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::SetClipRegion( const Region& rRegion )
 {
@@ -1087,16 +1048,12 @@ void OutputDevice::SetClipRegion( const Region& rRegion )
         mpAlphaVDev->SetClipRegion( rRegion );
 }
 
-// -----------------------------------------------------------------------
-
 Region OutputDevice::GetClipRegion() const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     return PixelToLogic( maRegion );
 }
-
-// -----------------------------------------------------------------------
 
 Region OutputDevice::GetActiveClipRegion() const
 {
@@ -1119,8 +1076,6 @@ Region OutputDevice::GetActiveClipRegion() const
         return GetClipRegion();
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1139,8 +1094,6 @@ void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
         mpAlphaVDev->MoveClipRegion( nHorzMove, nVertMove );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1156,8 +1109,6 @@ void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
     if( mpAlphaVDev )
         mpAlphaVDev->IntersectClipRegion( rRect );
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::IntersectClipRegion( const Region& rRegion )
 {
@@ -1181,8 +1132,6 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
         mpAlphaVDev->IntersectClipRegion( rRegion );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1192,8 +1141,6 @@ void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
     if( mpAlphaVDev )
         mpAlphaVDev->SetDrawMode( nDrawMode );
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::SetRasterOp( RasterOp eRasterOp )
 {
@@ -1215,8 +1162,6 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
         mpAlphaVDev->SetRasterOp( eRasterOp );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::SetLineColor()
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1234,8 +1179,6 @@ void OutputDevice::SetLineColor()
     if( mpAlphaVDev )
         mpAlphaVDev->SetLineColor();
 }
-
-// -----------------------------------------------------------------------
 
 Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
 {
@@ -1310,8 +1253,6 @@ void OutputDevice::SetLineColor( const Color& rColor )
         mpAlphaVDev->SetLineColor( COL_BLACK );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::SetFillColor()
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1329,8 +1270,6 @@ void OutputDevice::SetFillColor()
     if( mpAlphaVDev )
         mpAlphaVDev->SetFillColor();
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::SetFillColor( const Color& rColor )
 {
@@ -1401,8 +1340,6 @@ void OutputDevice::SetFillColor( const Color& rColor )
         mpAlphaVDev->SetFillColor( COL_BLACK );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::SetBackground()
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1413,8 +1350,6 @@ void OutputDevice::SetBackground()
     if( mpAlphaVDev )
         mpAlphaVDev->SetBackground();
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::SetBackground( const Wallpaper& rBackground )
 {
@@ -1431,8 +1366,6 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
         mpAlphaVDev->SetBackground( rBackground );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::SetRefPoint()
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1447,8 +1380,6 @@ void OutputDevice::SetRefPoint()
         mpAlphaVDev->SetRefPoint();
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::SetRefPoint( const Point& rRefPoint )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1462,8 +1393,6 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
     if( mpAlphaVDev )
         mpAlphaVDev->SetRefPoint( rRefPoint );
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 {
@@ -1524,8 +1453,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if( mpAlphaVDev )
         mpAlphaVDev->DrawLine( rStartPt, rEndPt );
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::impPaintLineGeometryWithEvtlExpand(
     const LineInfo& rInfo,
@@ -1663,8 +1590,6 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
     mpMetaFile = pOldMetaFile;
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                              const LineInfo& rLineInfo )
 {
@@ -1717,8 +1642,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
         mpAlphaVDev->DrawLine( rStartPt, rEndPt, rLineInfo );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::DrawRect( const Rectangle& rRect )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1756,8 +1679,6 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
     if( mpAlphaVDev )
         mpAlphaVDev->DrawRect( rRect );
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 {
@@ -1833,8 +1754,6 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyLine( rPoly );
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo )
 {
@@ -1924,8 +1843,6 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::DrawPolygon( const Polygon& rPoly )
 {
@@ -2019,8 +1936,6 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolygon( rPoly );
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 {
@@ -2121,8 +2036,6 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::DrawPolygon( const ::basegfx::B2DPolygon& rB2DPolygon)
 {
     // AW: Do NOT paint empty polygons
@@ -2220,8 +2133,6 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
     const PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel( aToolsPolyPolygon );
     ImplDrawPolyPolygon( aPixelPolyPolygon.Count(), aPixelPolyPolygon );
 }
-
-// -----------------------------------------------------------------------
 
 bool OutputDevice::ImpTryDrawPolyLineDirect(
     const basegfx::B2DPolygon& rB2DPolygon,
@@ -2366,8 +2277,6 @@ void OutputDevice::DrawPolyLine(
     }
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt32 OutputDevice::GetGCStackDepth() const
 {
     const ImplObjStack* pData = mpObjStack;
@@ -2379,8 +2288,6 @@ sal_uInt32 OutputDevice::GetGCStackDepth() const
     }
     return nDepth;
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::Push( sal_uInt16 nFlags )
 {
@@ -2467,8 +2374,6 @@ void OutputDevice::Push( sal_uInt16 nFlags )
     if( mpAlphaVDev )
         mpAlphaVDev->Push();
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::Pop()
 {
@@ -2561,14 +2466,10 @@ void OutputDevice::Pop()
     mpMetaFile = pOldMetaFile;
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
 {
     mpMetaFile = pMtf;
 }
-
-// -----------------------------------------------------------------------
 
 void OutputDevice::EnableOutput( sal_Bool bEnable )
 {
@@ -2578,8 +2479,6 @@ void OutputDevice::EnableOutput( sal_Bool bEnable )
         mpAlphaVDev->EnableOutput( bEnable );
 }
 
-// -----------------------------------------------------------------------
-
 void OutputDevice::SetSettings( const AllSettings& rSettings )
 {
     maSettings = rSettings;
@@ -2587,8 +2486,6 @@ void OutputDevice::SetSettings( const AllSettings& rSettings )
     if( mpAlphaVDev )
         mpAlphaVDev->SetSettings( rSettings );
 }
-
-// -----------------------------------------------------------------------
 
 sal_uInt16 OutputDevice::GetBitCount() const
 {
@@ -2607,8 +2504,6 @@ sal_uInt16 OutputDevice::GetBitCount() const
     return (sal_uInt16)mpGraphics->GetBitCount();
 }
 
-// -----------------------------------------------------------------------
-
 sal_uInt16 OutputDevice::GetAlphaBitCount() const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -2622,8 +2517,6 @@ sal_uInt16 OutputDevice::GetAlphaBitCount() const
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
 sal_uLong OutputDevice::GetColorCount() const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -2632,22 +2525,16 @@ sal_uLong OutputDevice::GetColorCount() const
     return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (sal_uLong) 1 ) << nBitCount) );
 }
 
-// -----------------------------------------------------------------------
-
 sal_Bool OutputDevice::HasAlpha()
 {
     return mpAlphaVDev != NULL;
 }
-
-// -----------------------------------------------------------------------
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > OutputDevice::CreateUnoGraphics()
 {
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
     return pWrapper ? pWrapper->CreateGraphics( this ) : ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >();
 }
-
-// -----------------------------------------------------------------------
 
 SystemGraphicsData OutputDevice::GetSystemGfxData() const
 {
@@ -2660,8 +2547,6 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
     return mpGraphics->GetGraphicsData();
 }
 
-// -----------------------------------------------------------------------
-
 ::com::sun::star::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     ::com::sun::star::uno::Any aRet;
@@ -2671,8 +2556,6 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
 
     return uno::makeAny(aSeq);
 }
-
-// -----------------------------------------------------------------------
 
 ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > OutputDevice::GetCanvas() const
 {
@@ -2702,7 +2585,5 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
 
     return xCanvas;
 }
-
-// -----------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

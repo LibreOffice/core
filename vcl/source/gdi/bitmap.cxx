@@ -33,16 +33,10 @@
 #include <impbmp.hxx>
 #include <salbmp.hxx>
 
-// ----------
-// - Bitmap -
-// ----------
-
 Bitmap::Bitmap() :
     mpImpBmp( NULL )
 {
 }
-
-// ------------------------------------------------------------------
 
 Bitmap::Bitmap( const ResId& rResId ) :
     mpImpBmp( NULL )
@@ -52,8 +46,6 @@ Bitmap::Bitmap( const ResId& rResId ) :
     if( !aBmpEx.IsEmpty() )
         *this = aBmpEx.GetBitmap();
 }
-
-// ------------------------------------------------------------------
 
 Bitmap::Bitmap( const Bitmap& rBitmap ) :
     maPrefMapMode   ( rBitmap.maPrefMapMode ),
@@ -65,8 +57,6 @@ Bitmap::Bitmap( const Bitmap& rBitmap ) :
         mpImpBmp->ImplIncRefCount();
 }
 
-// ------------------------------------------------------------------
-
 Bitmap::Bitmap( SalBitmap* pSalBitmap )
 {
     mpImpBmp = new ImpBitmap();
@@ -74,8 +64,6 @@ Bitmap::Bitmap( SalBitmap* pSalBitmap )
     maPrefMapMode = MapMode( MAP_PIXEL );
     maPrefSize = mpImpBmp->ImplGetSize();
 }
-
-// ------------------------------------------------------------------
 
 Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalette* pPal )
 {
@@ -140,14 +128,10 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
         mpImpBmp = NULL;
 }
 
-// ------------------------------------------------------------------
-
 Bitmap::~Bitmap()
 {
     ImplReleaseRef();
 }
-
-// ------------------------------------------------------------------
 
 const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
 {
@@ -217,8 +201,6 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     }
 }
 
-// ------------------------------------------------------------------
-
 bool BitmapPalette::IsGreyPalette() const
 {
     const int nEntryCount = GetEntryCount();
@@ -244,8 +226,6 @@ bool BitmapPalette::IsGreyPalette() const
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
 Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 {
     maPrefSize = rBitmap.maPrefSize;
@@ -260,8 +240,6 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
     return *this;
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::IsEqual( const Bitmap& rBmp ) const
 {
     return( IsSameInstance( rBmp ) ||
@@ -269,8 +247,6 @@ sal_Bool Bitmap::IsEqual( const Bitmap& rBmp ) const
               rBmp.GetBitCount() == GetBitCount() &&
               rBmp.GetChecksum() == GetChecksum() ) );
 }
-
-// ------------------------------------------------------------------
 
 void Bitmap::SetEmpty()
 {
@@ -281,13 +257,10 @@ void Bitmap::SetEmpty()
     mpImpBmp = NULL;
 }
 
-// ------------------------------------------------------------------
-
 Size Bitmap::GetSizePixel() const
 {
     return( mpImpBmp ? mpImpBmp->ImplGetSize() : Size() );
 }
-// ------------------------------------------------------------------
 
 void Bitmap::SetSourceSizePixel( const Size& rSize)
 {
@@ -295,14 +268,10 @@ void Bitmap::SetSourceSizePixel( const Size& rSize)
         mpImpBmp->ImplSetSourceSize( rSize);
 }
 
-// ------------------------------------------------------------------
-
 sal_uInt16 Bitmap::GetBitCount() const
 {
     return( mpImpBmp ? mpImpBmp->ImplGetBitCount() : 0 );
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::HasGreyPalette() const
 {
@@ -319,8 +288,6 @@ sal_Bool Bitmap::HasGreyPalette() const
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 sal_uLong Bitmap::GetChecksum() const
 {
@@ -377,8 +344,6 @@ sal_uLong Bitmap::GetChecksum() const
     return nRet;
 }
 
-// ------------------------------------------------------------------
-
 void Bitmap::ImplReleaseRef()
 {
     if( mpImpBmp )
@@ -393,8 +358,6 @@ void Bitmap::ImplReleaseRef()
     }
 }
 
-// ------------------------------------------------------------------
-
 void Bitmap::ImplMakeUnique()
 {
     if( mpImpBmp && mpImpBmp->ImplGetRefCount() > 1UL )
@@ -407,8 +370,6 @@ void Bitmap::ImplMakeUnique()
         mpImpBmp->ImplCreate( *pOldImpBmp );
     }
 }
-
-// ------------------------------------------------------------------
 
 void Bitmap::ImplAssignWithSize( const Bitmap& rBitmap )
 {
@@ -431,14 +392,10 @@ void Bitmap::ImplAssignWithSize( const Bitmap& rBitmap )
     maPrefMapMode = aOldMapMode;
 }
 
-// ------------------------------------------------------------------
-
 ImpBitmap* Bitmap::ImplGetImpBitmap() const
 {
     return mpImpBmp;
 }
-
-// ------------------------------------------------------------------
 
 void Bitmap::ImplSetImpBitmap( ImpBitmap* pImpBmp )
 {
@@ -448,8 +405,6 @@ void Bitmap::ImplSetImpBitmap( ImpBitmap* pImpBmp )
         mpImpBmp = pImpBmp;
     }
 }
-
-// ------------------------------------------------------------------
 
 BitmapReadAccess* Bitmap::AcquireReadAccess()
 {
@@ -464,8 +419,6 @@ BitmapReadAccess* Bitmap::AcquireReadAccess()
     return pReadAccess;
 }
 
-// ------------------------------------------------------------------
-
 BitmapWriteAccess* Bitmap::AcquireWriteAccess()
 {
     BitmapWriteAccess* pWriteAccess = new BitmapWriteAccess( *this );
@@ -479,14 +432,10 @@ BitmapWriteAccess* Bitmap::AcquireWriteAccess()
     return pWriteAccess;
 }
 
-// ------------------------------------------------------------------
-
 void Bitmap::ReleaseAccess( BitmapReadAccess* pBitmapAccess )
 {
     delete pBitmapAccess;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::Erase( const Color& rFillColor )
 {
@@ -568,8 +517,6 @@ sal_Bool Bitmap::Erase( const Color& rFillColor )
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::Invert()
 {
     BitmapWriteAccess*  pAcc = AcquireWriteAccess();
@@ -603,8 +550,6 @@ sal_Bool Bitmap::Invert()
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::Mirror( sal_uLong nMirrorFlags )
 {
@@ -704,8 +649,6 @@ sal_Bool Bitmap::Mirror( sal_uLong nMirrorFlags )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
 {
@@ -848,8 +791,6 @@ sal_Bool Bitmap::Rotate( long nAngle10, const Color& rFillColor )
     return bRet;
 };
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::Crop( const Rectangle& rRectPixel )
 {
     const Size          aSizePix( GetSizePixel() );
@@ -893,8 +834,6 @@ sal_Bool Bitmap::Crop( const Rectangle& rRectPixel )
 
     return bRet;
 };
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                         const Rectangle& rRectSrc, const Bitmap* pBmpSrc )
@@ -1083,8 +1022,6 @@ sal_Bool Bitmap::CopyPixel( const Rectangle& rRectDst,
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
 {
     sal_Bool bRet = sal_False;
@@ -1143,8 +1080,6 @@ sal_Bool Bitmap::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
 {
@@ -1336,8 +1271,6 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
     return aNewBmp;
 }
 
-// ------------------------------------------------------------------
-
 Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
 {
     Region              aRegion;
@@ -1388,8 +1321,6 @@ Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
 
     return aRegion;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
 {
@@ -1467,8 +1398,6 @@ sal_Bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
 {
     Bitmap              aNewBmp( GetSizePixel(), 24 );
@@ -1512,8 +1441,6 @@ sal_Bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
@@ -1575,8 +1502,6 @@ sal_Bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor,
 
     return bRet;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
                       sal_uLong nColorCount, sal_uLong* _pTols )
@@ -1685,8 +1610,6 @@ sal_Bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColor
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
 Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 {
     Bitmap aDispBmp( *this );
@@ -1703,8 +1626,6 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 
     return aDispBmp;
 }
-
-// ------------------------------------------------------------------
 
 sal_Bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
 {
@@ -1843,8 +1764,6 @@ sal_Bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
 {
     // TODO: Have a look at OutputDevice::ImplDrawAlpha() for some
@@ -1879,14 +1798,10 @@ sal_Bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
     return bRet;
 }
 
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::MakeMono( sal_uInt8 cThreshold )
 {
     return ImplMakeMono( cThreshold );
 }
-
-// ------------------------------------------------------------------
 
 bool Bitmap::GetSystemData( BitmapSystemData& rData ) const
 {

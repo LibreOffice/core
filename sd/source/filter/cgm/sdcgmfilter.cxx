@@ -30,10 +30,6 @@
 #include "drawdoc.hxx"
 #include "sdcgmfilter.hxx"
 
-// -----------
-// - Defines -
-// -----------
-
 #define CGM_IMPORT_CGM      0x00000001
 #define CGM_IMPORT_IM       0x00000002
 
@@ -45,18 +41,9 @@
 #define CGM_BIG_ENDIAN      0x00020000
 #define CGM_LITTLE_ENDIAN   0x00040000
 
-// --------------
-// - Namespaces -
-// --------------
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
-
-// ------------
-// - Typedefs -
-// ------------
-
 
 typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
 typedef sal_Bool ( SAL_CALL *ExportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
@@ -67,22 +54,14 @@ extern "C" sal_uInt32 ImportCGM( ::rtl::OUString&, Reference< XModel >&, sal_uIn
 
 #endif
 
-// ---------------
-// - SdPPTFilter -
-// ---------------
-
 SdCGMFilter::SdCGMFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
 }
 
-// -----------------------------------------------------------------------------
-
 SdCGMFilter::~SdCGMFilter()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SdCGMFilter::Import()
 {
@@ -135,8 +114,6 @@ sal_Bool SdCGMFilter::Import()
 #endif
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SdCGMFilter::Export()
 {

@@ -32,15 +32,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
-// ------------
-// - Forwards -
-// ------------
-
 class GalleryTheme;
-
-// ----------------
-// - ExchangeData -
-// ----------------
 
 struct ExchangeData
 {
@@ -66,10 +58,6 @@ enum SgaObjKind
     SGA_OBJ_INET = 6    // graphics from the internet
 };
 
-// -----------
-// - Defines -
-// -----------
-
 #define IV_IMAPINFO             (sal_uInt32('S')*0x00000001+sal_uInt32('D')*0x00000100+sal_uInt32('U')*0x00010000+sal_uInt32('D')*0x01000000)
 #define ID_IMAPINFO             2
 
@@ -88,10 +76,6 @@ enum SgaObjKind
 #define GALLERY_FG_COLOR        Application::GetSettings().GetStyleSettings().GetWindowTextColor()
 #define GALLERY_BG_COLOR        Application::GetSettings().GetStyleSettings().GetWindowColor()
 #define GALLERY_DLG_COLOR       Application::GetSettings().GetStyleSettings().GetDialogColor()
-
-// -------------
-// - Functions -
-// -------------
 
 class ResMgr;
 class String;
@@ -113,11 +97,6 @@ sal_Bool            CreateDir(  const INetURLObject& rURL );
 sal_Bool            CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
 sal_Bool            KillFile( const INetURLObject& rURL );
 BitmapEx        GalleryResGetBitmapEx( sal_uInt32 nId );
-
-
-// ---------------
-// - SgaIMapInfo -
-// ---------------
 
 class SgaIMapInfo : public SdrObjUserData, public SfxListener
 {
@@ -142,10 +121,6 @@ public:
     const ImageMap&         GetImageMap() const { return aImageMap; }
 };
 
-// ----------------------
-// - SgaUserDataFactory -
-// ----------------------
-
 class SgaUserDataFactory
 {
 public:
@@ -154,10 +129,6 @@ public:
 
         DECL_LINK( MakeUserData, SdrObjFactory* );
 };
-
-// -------------------
-// - GalleryProgress -
-// -------------------
 
 class GraphicFilter;
 
@@ -173,10 +144,6 @@ class SVX_DLLPUBLIC GalleryProgress
 
     void                            Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal );
 };
-
-// -----------------------
-// - GalleryTransferable -
-// -----------------------
 
 class Gallery;
 class GalleryTheme;
@@ -217,10 +184,6 @@ protected:
                                                sal_Int32 nDragImage = DND_IMAGE_NONE );
 };
 
-// ---------------
-// - GalleryHint -
-// ---------------
-
 #define GALLERY_HINT_NONE               0x00000000
 #define GALLERY_HINT_CLOSE_THEME        0x00000001
 #define GALLERY_HINT_THEME_REMOVED      0x00000002
@@ -229,8 +192,6 @@ protected:
 #define GALLERY_HINT_THEME_UPDATEVIEW   0x00000010
 #define GALLERY_HINT_CLOSE_OBJECT       0x00000020
 #define GALLERY_HINT_OBJECT_REMOVED     0x00000040
-
-// -----------------------------------------------------------------------------
 
 class GalleryHint : public SfxHint
 {

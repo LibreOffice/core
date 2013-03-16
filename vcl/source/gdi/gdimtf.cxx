@@ -49,15 +49,7 @@
 
 using namespace com::sun::star;
 
-// -----------
-// - Defines -
-// -----------
-
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
-
-// --------------------------
-// - Color exchange structs -
-// --------------------------
 
 struct ImplColAdjustParam
 {
@@ -77,8 +69,6 @@ struct ImplBmpAdjustParam
     sal_Bool    bInvert;
 };
 
-// -----------------------------------------------------------------------------
-
 struct ImplColConvertParam
 {
     MtfConversion   eConversion;
@@ -89,8 +79,6 @@ struct ImplBmpConvertParam
     BmpConversion   eConversion;
 };
 
-// -----------------------------------------------------------------------------
-
 struct ImplColMonoParam
 {
     Color aColor;
@@ -100,8 +88,6 @@ struct ImplBmpMonoParam
 {
     Color aColor;
 };
-
-// -----------------------------------------------------------------------------
 
 struct ImplColReplaceParam
 {
@@ -123,10 +109,6 @@ struct ImplBmpReplaceParam
     const sal_uLong*    pTols;
 };
 
-// ---------------
-// - GDIMetaFile -
-// ---------------
-
 GDIMetaFile::GDIMetaFile() :
     nCurrentActionElement( 0 ),
     aPrefSize   ( 1, 1 ),
@@ -138,8 +120,6 @@ GDIMetaFile::GDIMetaFile() :
     bUseCanvas  ( sal_False )
 {
 }
-
-// ------------------------------------------------------------------------
 
 GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
     aPrefMapMode    ( rMtf.aPrefMapMode ),
@@ -168,28 +148,20 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
     }
 }
 
-// ------------------------------------------------------------------------
-
 GDIMetaFile::~GDIMetaFile()
 {
     Clear();
 }
-
-// ------------------------------------------------------------------------
 
 size_t GDIMetaFile::GetActionSize() const
 {
     return aList.size();
 }
 
-// ------------------------------------------------------------------------
-
 MetaAction* GDIMetaFile::GetAction( size_t nAction ) const
 {
     return (nAction < aList.size()) ? aList[ nAction ] : NULL;
 }
-
-// ------------------------------------------------------------------------
 
 MetaAction* GDIMetaFile::FirstAction()
 {
@@ -197,14 +169,10 @@ MetaAction* GDIMetaFile::FirstAction()
     return aList.empty() ? NULL : aList[ 0 ];
 }
 
-// ------------------------------------------------------------------------
-
 MetaAction* GDIMetaFile::NextAction()
 {
     return ( nCurrentActionElement + 1 < aList.size() ) ? aList[ ++nCurrentActionElement ] : NULL;
 }
-
-// ------------------------------------------------------------------------
 
 MetaAction* GDIMetaFile::ReplaceAction( MetaAction* pAction, size_t nAction )
 {
@@ -220,8 +188,6 @@ MetaAction* GDIMetaFile::ReplaceAction( MetaAction* pAction, size_t nAction )
     std::swap(pAction, aList[nAction]);
     return pAction;
 }
-
-// ------------------------------------------------------------------------
 
 GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
 {
@@ -258,8 +224,6 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
     return *this;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
 {
     const size_t    nObjCount = aList.size();
@@ -286,8 +250,6 @@ sal_Bool GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::Clear()
 {
     if( bRecord )
@@ -297,8 +259,6 @@ void GDIMetaFile::Clear()
         aList[ i ]->Delete();
     aList.clear();
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::Linker( OutputDevice* pOut, sal_Bool bLink )
 {
@@ -333,14 +293,10 @@ void GDIMetaFile::Linker( OutputDevice* pOut, sal_Bool bLink )
     }
 }
 
-// ------------------------------------------------------------------------
-
 long GDIMetaFile::Hook()
 {
     return aHookHdlLink.Call( this );
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::Record( OutputDevice* pOut )
 {
@@ -352,8 +308,6 @@ void GDIMetaFile::Record( OutputDevice* pOut )
     bRecord = sal_True;
     Linker( pOut, sal_True );
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
 {
@@ -379,8 +333,6 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
         }
     }
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
 {
@@ -431,8 +383,6 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         pOut->Pop();
     }
 }
-
-// ------------------------------------------------------------------------
 
 bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize )
 {
@@ -524,8 +474,6 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     return false;
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut )
 {
     OSL_ASSERT( pAct->GetComment() == "DELEGATE_PLUGGABLE_RENDERER" );
@@ -597,8 +545,6 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
                         const Size& rSize, size_t nPos )
 {
@@ -663,8 +609,6 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::Pause( sal_Bool _bPause )
 {
     if( bRecord )
@@ -684,8 +628,6 @@ void GDIMetaFile::Pause( sal_Bool _bPause )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::Stop()
 {
     if( bRecord )
@@ -699,15 +641,11 @@ void GDIMetaFile::Stop()
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::WindStart()
 {
     if( !bRecord )
         nCurrentActionElement = 0;
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::WindPrev()
 {
@@ -715,8 +653,6 @@ void GDIMetaFile::WindPrev()
         if ( nCurrentActionElement > 0 )
             --nCurrentActionElement;
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::AddAction( MetaAction* pAction )
 {
@@ -728,8 +664,6 @@ void GDIMetaFile::AddAction( MetaAction* pAction )
         pPrev->AddAction( pAction );
     }
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::AddAction( MetaAction* pAction, size_t nPos )
 {
@@ -751,14 +685,10 @@ void GDIMetaFile::AddAction( MetaAction* pAction, size_t nPos )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::push_back( MetaAction* pAction )
 {
     aList.push_back( pAction );
 }
-
-// ------------------------------------------------------------------------
 
 // @since #110496#
 void GDIMetaFile::RemoveAction( size_t nPos )
@@ -775,8 +705,6 @@ void GDIMetaFile::RemoveAction( size_t nPos )
     if( pPrev )
         pPrev->RemoveAction( nPos );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GDIMetaFile::Mirror( sal_uLong nMirrorFlags )
 {
@@ -807,8 +735,6 @@ sal_Bool GDIMetaFile::Mirror( sal_uLong nMirrorFlags )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::Move( long nX, long nY )
 {
@@ -887,8 +813,6 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::Scale( double fScaleX, double fScaleY )
 {
     for( MetaAction* pAct = FirstAction(); pAct; pAct = NextAction() )
@@ -910,14 +834,10 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
     aPrefSize.Height() = FRound( aPrefSize.Height() * fScaleY );
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
 {
     Scale( (double) rScaleX, (double) rScaleY );
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::Clip( const Rectangle& i_rClipRect )
 {
@@ -951,8 +871,6 @@ void GDIMetaFile::Clip( const Rectangle& i_rClipRect )
     }
 }
 
-// ------------------------------------------------------------------------
-
 Point GDIMetaFile::ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
                                         const Size& rOffset, double fSin, double fCos )
 {
@@ -962,8 +880,6 @@ Point GDIMetaFile::ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt
     return Point( FRound( fCos * nX + fSin * nY ) + rRotatePt.X() + rOffset.Width(),
                   -FRound( fSin * nX - fCos * nY ) + rRotatePt.Y() + rOffset.Height() );
 }
-
-// ------------------------------------------------------------------------
 
 Polygon GDIMetaFile::ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt,
                                             const Size& rOffset, double fSin, double fCos )
@@ -976,8 +892,6 @@ Polygon GDIMetaFile::ImplGetRotatedPolygon( const Polygon& rPoly, const Point& r
     return aRet;
 }
 
-// ------------------------------------------------------------------------
-
 PolyPolygon GDIMetaFile::ImplGetRotatedPolyPolygon( const PolyPolygon& rPolyPoly, const Point& rRotatePt,
                                                     const Size& rOffset, double fSin, double fCos )
 {
@@ -988,8 +902,6 @@ PolyPolygon GDIMetaFile::ImplGetRotatedPolyPolygon( const PolyPolygon& rPolyPoly
 
     return aRet;
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
                                      const OutputDevice&  rMapDev,
@@ -1014,8 +926,6 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
         rMtf.AddAction( pMetaAct );
     }
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::Rotate( long nAngle10 )
 {
@@ -1480,8 +1390,6 @@ void GDIMetaFile::Rotate( long nAngle10 )
     }
 }
 
-// ------------------------------------------------------------------------
-
 static void ImplActionBounds( Rectangle& o_rOutBounds,
                               const Rectangle& i_rInBounds,
                               const std::vector<Rectangle>& i_rClipStack,
@@ -1929,8 +1837,6 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
     return aBound;
 }
 
-// ------------------------------------------------------------------------
-
 Color GDIMetaFile::ImplColAdjustFnc( const Color& rColor, const void* pColParam )
 {
     return Color( rColor.GetTransparency(),
@@ -1939,8 +1845,6 @@ Color GDIMetaFile::ImplColAdjustFnc( const Color& rColor, const void* pColParam 
                   ( (const ImplColAdjustParam*) pColParam )->pMapB[ rColor.GetBlue() ] );
 
 }
-
-// ------------------------------------------------------------------------
 
 BitmapEx GDIMetaFile::ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
 {
@@ -1954,8 +1858,6 @@ BitmapEx GDIMetaFile::ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmp
     return aRet;
 }
 
-// ------------------------------------------------------------------------
-
 Color GDIMetaFile::ImplColConvertFnc( const Color& rColor, const void* pColParam )
 {
     sal_uInt8 cLum = rColor.GetLuminance();
@@ -1966,8 +1868,6 @@ Color GDIMetaFile::ImplColConvertFnc( const Color& rColor, const void* pColParam
     return Color( rColor.GetTransparency(), cLum, cLum, cLum );
 }
 
-// ------------------------------------------------------------------------
-
 BitmapEx GDIMetaFile::ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
 {
     BitmapEx aRet( rBmpEx );
@@ -1977,14 +1877,10 @@ BitmapEx GDIMetaFile::ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBm
     return aRet;
 }
 
-// ------------------------------------------------------------------------
-
 Color GDIMetaFile::ImplColMonoFnc( const Color&, const void* pColParam )
 {
     return( ( (const ImplColMonoParam*) pColParam )->aColor );
 }
-
-// ------------------------------------------------------------------------
 
 BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
 {
@@ -2004,8 +1900,6 @@ BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpPa
     else
         return aBmp;
 }
-
-// ------------------------------------------------------------------------
 
 Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam )
 {
@@ -2027,8 +1921,6 @@ Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam
     return rColor;
 }
 
-// ------------------------------------------------------------------------
-
 BitmapEx GDIMetaFile::ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
 {
     const ImplBmpReplaceParam*  p = (const ImplBmpReplaceParam*) pBmpParam;
@@ -2038,8 +1930,6 @@ BitmapEx GDIMetaFile::ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBm
 
     return aRet;
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam,
                                       BmpExchangeFnc pFncBmp, const void* pBmpParam )
@@ -2305,8 +2195,6 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
     *this = aMtf;
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
                           short nChannelRPercent, short nChannelGPercent,
                           short nChannelBPercent, double fGamma, sal_Bool bInvert )
@@ -2381,8 +2269,6 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GDIMetaFile::Convert( MtfConversion eConversion )
 {
     // nothing to do? => return quickly
@@ -2397,8 +2283,6 @@ void GDIMetaFile::Convert( MtfConversion eConversion )
         ImplExchangeColors( ImplColConvertFnc, &aColParam, ImplBmpConvertFnc, &aBmpParam );
     }
 }
-
-// ------------------------------------------------------------------------
 
 void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount, sal_uLong* pTols )
 {
@@ -2448,8 +2332,6 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
     delete[] aColParam.pMaxB;
 };
 
-// ------------------------------------------------------------------------
-
 GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
 {
     GDIMetaFile aRet( *this );
@@ -2464,8 +2346,6 @@ GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
 
     return aRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_uLong GDIMetaFile::GetChecksum() const
 {
@@ -2813,8 +2693,6 @@ sal_uLong GDIMetaFile::GetChecksum() const
     return nCrc;
 }
 
-// ------------------------------------------------------------------------
-
 sal_uLong GDIMetaFile::GetSizeBytes() const
 {
     sal_uLong nSizeBytes = 0;
@@ -2870,8 +2748,6 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
 
     return( nSizeBytes );
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 {
@@ -2935,8 +2811,6 @@ SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
     return rIStm;
 }
 
-// ------------------------------------------------------------------------
-
 SvStream& operator<<( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile )
 {
     if( !rOStm.GetError() )
@@ -2967,8 +2841,6 @@ Please set environment variable SAL_ENABLE_SVM1 to '1' to reenable old behavior"
     return rOStm;
 }
 
-// ------------------------------------------------------------------------
-
 SvStream& GDIMetaFile::Read( SvStream& rIStm )
 {
     Clear();
@@ -2976,8 +2848,6 @@ SvStream& GDIMetaFile::Read( SvStream& rIStm )
 
     return rIStm;
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& GDIMetaFile::Write( SvStream& rOStm )
 {
@@ -3012,8 +2882,6 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
 
     return rOStm;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool GDIMetaFile::CreateThumbnail( sal_uInt32 nMaximumExtent,
                                     BitmapEx& rBmpEx,
@@ -3135,8 +3003,6 @@ void GDIMetaFile::UseCanvas( sal_Bool _bUseCanvas )
 {
     bUseCanvas = _bUseCanvas;
 }
-
-// ------------------------------------------------------------------------
 
 MetaCommentAction* makePluggableRendererAction( const rtl::OUString& rRendererServiceName,
                                                 const rtl::OUString& rGraphicServiceName,

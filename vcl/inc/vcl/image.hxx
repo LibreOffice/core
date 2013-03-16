@@ -33,16 +33,8 @@ struct ImplImage;
 struct ImplImageList;
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
 
-// -----------
-// - Defines -
-// -----------
-
 #define IMAGE_STDBTN_COLOR          Color( 0xC0, 0xC0, 0xC0 )
 #define IMAGELIST_IMAGE_NOTFOUND    ((sal_uInt16)0xFFFF)
-
-// -----------------------
-// - ImageColorTransform -
-// -----------------------
 
 enum ImageColorTransform
 {
@@ -51,10 +43,6 @@ enum ImageColorTransform
     IMAGECOLORTRANSFORM_MONOCHROME_BLACK = 2,
     IMAGECOLORTRANSFORM_MONOCHROME_WHITE = 3
 };
-
-// ---------
-// - Image -
-// ---------
 
 class VCL_DLLPUBLIC Image
 {
@@ -90,10 +78,6 @@ private:
 
     SAL_DLLPRIVATE void    ImplInit( const BitmapEx& rBmpEx );
 };
-
-// -------------
-// - ImageList -
-// -------------
 
 class VCL_DLLPUBLIC ImageList
 {

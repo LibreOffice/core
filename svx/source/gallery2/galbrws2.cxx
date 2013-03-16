@@ -47,24 +47,12 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
-// -----------
-// - Defines -
-// -----------
-
 #undef GALLERY_USE_CLIPBOARD
 
 #define TBX_ID_ICON 1
 #define TBX_ID_LIST 2
 
-// -----------
-// - statics -
-// -----------
-
 GalleryBrowserMode GalleryBrowser2::meInitMode = GALLERYBROWSERMODE_ICON;
-
-// --------------------------
-// - GalleryBackgroundPopup -
-// --------------------------
 
 class GalleryBackgroundPopup : public PopupMenu, public SfxControllerItem
 {
@@ -80,7 +68,6 @@ public:
                     ~GalleryBackgroundPopup();
 };
 
-// ------------------------------------------------------------------------
 DBG_NAME(GalleryBackgroundPopup)
 
 GalleryBackgroundPopup::GalleryBackgroundPopup( const GalleryTheme* pTheme, sal_uIntPtr nObjectPos ) :
@@ -93,14 +80,10 @@ GalleryBackgroundPopup::GalleryBackgroundPopup( const GalleryTheme* pTheme, sal_
     RemoveDisabledEntries();
 }
 
-// ------------------------------------------------------------------------
-
 GalleryBackgroundPopup::~GalleryBackgroundPopup()
 {
     DBG_DTOR(GalleryBackgroundPopup,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryBackgroundPopup::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pItem )
 {
@@ -128,8 +111,6 @@ void GalleryBackgroundPopup::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     }
 }
 
-// ------------------------------------------------------------------------
-
 void GalleryBackgroundPopup::Select()
 {
     Menu::Select();
@@ -143,10 +124,6 @@ void GalleryBackgroundPopup::Select()
                               SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                               &aBrushItem, &aPosItem, &aPathItem, 0L );
 }
-
-// ---------------------
-// - GalleryThemePopup -
-// ---------------------
 
 class GalleryThemePopup : public PopupMenu, public SfxControllerItem
 {
@@ -163,7 +140,6 @@ public:
                             ~GalleryThemePopup();
 };
 
-// ------------------------------------------------------------------------
 DBG_NAME(GalleryThemePopup)
 
 GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, sal_uIntPtr nObjectPos, sal_Bool bPreview ) :
@@ -250,14 +226,10 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, sal_uIntPtr nO
     RemoveDisabledEntries();
 }
 
-// ------------------------------------------------------------------------
-
 GalleryThemePopup::~GalleryThemePopup()
 {
     DBG_DTOR(GalleryThemePopup,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryThemePopup::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pItem )
 {
@@ -272,9 +244,6 @@ void GalleryThemePopup::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
     }
 }
 
-// ------------------
-// - GalleryToolBox -
-// ------------------
 DBG_NAME(GalleryToolBox)
 
 GalleryToolBox::GalleryToolBox( GalleryBrowser2* pParent ) :
@@ -283,14 +252,10 @@ GalleryToolBox::GalleryToolBox( GalleryBrowser2* pParent ) :
     DBG_CTOR(GalleryToolBox,NULL);
 }
 
-// ------------------------------------------------------------------------
-
 GalleryToolBox::~GalleryToolBox()
 {
     DBG_DTOR(GalleryToolBox,NULL);
 }
-
-// ------------------------------------------------------------------------
 
 void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
 {
@@ -298,9 +263,6 @@ void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
         ToolBox::KeyInput( rKEvt );
 }
 
-// -------------------
-// - GalleryBrowser2 -
-// -------------------
 DBG_NAME(GalleryBrowser2)
 
 GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, Gallery* pGallery ) :
@@ -360,8 +322,6 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     mpIconView->SetAccessibleRelationMemberOf(mpIconView);
 }
 
-// -----------------------------------------------------------------------------
-
 GalleryBrowser2::~GalleryBrowser2()
 {
     maMiscOptions.RemoveListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
@@ -375,8 +335,6 @@ GalleryBrowser2::~GalleryBrowser2()
 
     DBG_DTOR(GalleryBrowser2,NULL);
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser2::InitSettings()
 {
@@ -394,8 +352,6 @@ void GalleryBrowser2::InitSettings()
     maSeparator.SetControlForeground( GALLERY_FG_COLOR );
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser2::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
@@ -403,8 +359,6 @@ void GalleryBrowser2::DataChanged( const DataChangedEvent& rDCEvt )
     else
         Control::DataChanged( rDCEvt );
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser2::Resize()
 {
@@ -439,8 +393,6 @@ void GalleryBrowser2::Resize()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser2::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const GalleryHint& rGalleryHint = (const GalleryHint&) rHint;
@@ -460,8 +412,6 @@ void GalleryBrowser2::Notify( SfxBroadcaster&, const SfxHint& rHint )
         break;
     }
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& )
 {
@@ -488,8 +438,6 @@ sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDro
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper&, const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
@@ -509,8 +457,6 @@ sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper&, const ExecuteDropEvent
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser2::StartDrag( Window*, const Point* pDragPoint )
 {
     if( mpCurTheme )
@@ -523,15 +469,11 @@ void GalleryBrowser2::StartDrag( Window*, const Point* pDragPoint )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser2::TogglePreview( Window*, const Point* )
 {
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
     GetViewWindow()->GrabFocus();
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser2::ShowContextMenu( Window*, const Point* pContextPoint )
 {
@@ -554,8 +496,6 @@ void GalleryBrowser2::ShowContextMenu( Window*, const Point* pContextPoint )
         }
     }
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
@@ -637,8 +577,6 @@ sal_Bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser2::SelectTheme( const String& rThemeName )
 {
     delete mpIconView, mpIconView = NULL;
@@ -679,8 +617,6 @@ void GalleryBrowser2::SelectTheme( const String& rThemeName )
         mpIconView->SetAccessibleRelationLabeledBy(&maInfoBar);
     mpIconView->SetAccessibleRelationMemberOf(mpIconView);
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 {
@@ -762,8 +698,6 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 Window* GalleryBrowser2::GetViewWindow() const
 {
     Window* pRet;
@@ -780,8 +714,6 @@ Window* GalleryBrowser2::GetViewWindow() const
 
     return pRet;
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
 {
@@ -832,8 +764,6 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
 {
     mpIconView->Hide();
@@ -867,8 +797,6 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
     ImplUpdateInfoBar();
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser2::ImplUpdateInfoBar()
 {
     String aInfoText;
@@ -899,8 +827,6 @@ void GalleryBrowser2::ImplUpdateInfoBar()
 
     maInfoBar.SetText( aInfoText );
 }
-
-// -----------------------------------------------------------------------------
 
 sal_uIntPtr GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelPos )
 {
@@ -954,8 +880,6 @@ sal_uIntPtr GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point&
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void GalleryBrowser2::ImplSelectItemId( sal_uIntPtr nItemId )
 {
     if( nItemId )
@@ -965,8 +889,6 @@ void GalleryBrowser2::ImplSelectItemId( sal_uIntPtr nItemId )
         mpListView->SelectRow( nItemId - 1 );
     }
 }
-
-// -----------------------------------------------------------------------------
 
 void GalleryBrowser2::ImplExecute( sal_uInt16 nId )
 {
@@ -1095,8 +1017,6 @@ void GalleryBrowser2::ImplExecute( sal_uInt16 nId )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags )
 {
     String          aRet;
@@ -1141,8 +1061,6 @@ String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
-
 INetURLObject GalleryBrowser2::GetURL() const
 {
     INetURLObject aURL;
@@ -1152,8 +1070,6 @@ INetURLObject GalleryBrowser2::GetURL() const
 
     return aURL;
 }
-
-// -----------------------------------------------------------------------------
 
 String GalleryBrowser2::GetFilterName() const
 {
@@ -1177,8 +1093,6 @@ String GalleryBrowser2::GetFilterName() const
     return aFilterName;
 }
 
-// -----------------------------------------------------------------------------
-
 Graphic GalleryBrowser2::GetGraphic() const
 {
     Graphic aGraphic;
@@ -1189,14 +1103,10 @@ Graphic GalleryBrowser2::GetGraphic() const
     return aGraphic;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool GalleryBrowser2::IsLinkage() const
 {
     return mbCurActionIsLinkage;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
 {
@@ -1206,15 +1116,11 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
     return 0;
 }
 
-// -----------------------------------------------------------------------------
-
 IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectHdl)
 {
     ImplUpdateInfoBar();
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 {
@@ -1225,8 +1131,6 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 
     return 0L;
 }
-
-// -----------------------------------------------------------------------------
 
 IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl)
 {

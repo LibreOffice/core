@@ -37,10 +37,6 @@
 
 class SvStream;
 
-// -----------
-// - Defines -
-// -----------
-
 #define META_NULL_ACTION                    (0)
 #define META_PIXEL_ACTION                   (100)
 #define META_POINT_ACTION                   (101)
@@ -97,8 +93,6 @@ class SvStream;
 
 #define META_COMMENT_ACTION                 (512)
 
-// ------------------------------------------------------------------------
-
 struct ImplMetaReadData
 {
     rtl_TextEncoding        meActualCharSet;
@@ -109,8 +103,6 @@ struct ImplMetaReadData
                             }
 };
 
-// ------------------------------------------------------------------------
-
 struct ImplMetaWriteData
 {
     rtl_TextEncoding        meActualCharSet;
@@ -120,8 +112,6 @@ struct ImplMetaWriteData
                             {
                             }
 };
-
-// ------------------------------------------------------------------------
 
 #define DECL_META_ACTION( Name, nType )                                     \
                         Meta##Name##Action();                               \
@@ -137,10 +127,6 @@ public:                                                                     \
 Meta##Name##Action::Meta##Name##Action() :                              \
     MetaAction( nType ) {}                                              \
 Meta##Name##Action::~Meta##Name##Action() {}
-
-// --------------
-// - MetaAction -
-// --------------
 
 class VCL_DLLPUBLIC MetaAction
 {
@@ -177,10 +163,6 @@ public:
     static MetaAction*  ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData );
 };
 
-// -------------------
-// - MetaPixelAction -
-// -------------------
-
 class VCL_DLLPUBLIC MetaPixelAction : public MetaAction
 {
 private:
@@ -201,10 +183,6 @@ public:
     const Color&        GetColor() const { return maColor; }
 };
 
-// -------------------
-// - MetaPointAction -
-// -------------------
-
 class VCL_DLLPUBLIC MetaPointAction : public MetaAction
 {
 private:
@@ -222,10 +200,6 @@ public:
 
     const Point&        GetPoint() const { return maPt; }
 };
-
-// ------------------
-// - MetaLineAction -
-// ------------------
 
 class VCL_DLLPUBLIC MetaLineAction : public MetaAction
 {
@@ -252,10 +226,6 @@ public:
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
 };
 
-// ------------------
-// - MetaRectAction -
-// ------------------
-
 class VCL_DLLPUBLIC MetaRectAction : public MetaAction
 {
 private:
@@ -273,10 +243,6 @@ public:
 
     const Rectangle&    GetRect() const { return maRect; }
 };
-
-// -----------------------
-// - MetaRoundRectAction -
-// -----------------------
 
 class VCL_DLLPUBLIC MetaRoundRectAction : public MetaAction
 {
@@ -302,10 +268,6 @@ public:
     sal_uInt32          GetVertRound() const { return mnVertRound; }
 };
 
-// ---------------------
-// - MetaEllipseAction -
-// ---------------------
-
 class VCL_DLLPUBLIC MetaEllipseAction : public MetaAction
 {
 private:
@@ -324,10 +286,6 @@ public:
 
     const Rectangle&    GetRect() const { return maRect; }
 };
-
-// -----------------
-// - MetaArcAction -
-// -----------------
 
 class VCL_DLLPUBLIC MetaArcAction : public MetaAction
 {
@@ -353,10 +311,6 @@ public:
     const Point&        GetEndPoint() const { return maEndPt; }
 };
 
-// -----------------
-// - MetaPieAction -
-// -----------------
-
 class VCL_DLLPUBLIC MetaPieAction : public MetaAction
 {
 private:
@@ -380,10 +334,6 @@ public:
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
 };
-
-// -------------------
-// - MetaChordAction -
-// -------------------
 
 class VCL_DLLPUBLIC MetaChordAction : public MetaAction
 {
@@ -409,10 +359,6 @@ public:
     const Point&        GetEndPoint() const { return maEndPt; }
 };
 
-// ----------------------
-// - MetaPolyLineAction -
-// ----------------------
-
 class VCL_DLLPUBLIC MetaPolyLineAction : public MetaAction
 {
 private:
@@ -435,10 +381,6 @@ public:
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
 };
 
-// ---------------------
-// - MetaPolygonAction -
-// ---------------------
-
 class VCL_DLLPUBLIC MetaPolygonAction : public MetaAction
 {
 private:
@@ -458,10 +400,6 @@ public:
     const Polygon&      GetPolygon() const { return maPoly; }
 };
 
-// -------------------------
-// - MetaPolyPolygonAction -
-// -------------------------
-
 class VCL_DLLPUBLIC MetaPolyPolygonAction : public MetaAction
 {
 private:
@@ -480,10 +418,6 @@ public:
 
     const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
 };
-
-// ------------------
-// - MetaTextAction -
-// ------------------
 
 class VCL_DLLPUBLIC MetaTextAction : public MetaAction
 {
@@ -510,10 +444,6 @@ public:
     sal_uInt16              GetIndex() const { return mnIndex; }
     sal_uInt16              GetLen() const { return mnLen; }
 };
-
-// -----------------------
-// - MetaTextArrayAction -
-// -----------------------
 
 class VCL_DLLPUBLIC MetaTextArrayAction : public MetaAction
 {
@@ -554,10 +484,6 @@ public:
     sal_Int32*          GetDXArray() const { return mpDXAry; }
 };
 
-// -------------------------
-// - MetaStretchTextAction -
-// -------------------------
-
 class VCL_DLLPUBLIC MetaStretchTextAction : public MetaAction
 {
 private:
@@ -587,10 +513,6 @@ public:
     sal_uInt16              GetLen() const { return mnLen; }
 };
 
-// ----------------------
-// - MetaTextRectAction -
-// ----------------------
-
 class VCL_DLLPUBLIC MetaTextRectAction : public MetaAction
 {
 private:
@@ -614,10 +536,6 @@ public:
     const rtl::OUString& GetText() const { return maStr; }
     sal_uInt16              GetStyle() const { return mnStyle; }
 };
-
-// ----------------------
-// - MetaTextLineAction -
-// ----------------------
 
 class VCL_DLLPUBLIC MetaTextLineAction : public MetaAction
 {
@@ -648,10 +566,6 @@ public:
     FontUnderline       GetOverline()  const { return meOverline; }
 };
 
-// -----------------
-// - MetaBmpAction -
-// -----------------
-
 class VCL_DLLPUBLIC MetaBmpAction : public MetaAction
 {
 private:
@@ -672,10 +586,6 @@ public:
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
 };
-
-// ----------------------
-// - MetaBmpScaleAction -
-// ----------------------
 
 class VCL_DLLPUBLIC MetaBmpScaleAction : public MetaAction
 {
@@ -700,10 +610,6 @@ public:
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
 };
-
-// --------------------------
-// - MetaBmpScalePartAction -
-// --------------------------
 
 class VCL_DLLPUBLIC MetaBmpScalePartAction : public MetaAction
 {
@@ -734,10 +640,6 @@ public:
     const Size&         GetSrcSize() const { return maSrcSz; }
 };
 
-// -----------------
-// - MetaBmpExAction -
-// -----------------
-
 class VCL_DLLPUBLIC MetaBmpExAction : public MetaAction
 {
 private:
@@ -758,10 +660,6 @@ public:
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
 };
-
-// ----------------------
-// - MetaBmpExScaleAction -
-// ----------------------
 
 class VCL_DLLPUBLIC MetaBmpExScaleAction : public MetaAction
 {
@@ -786,10 +684,6 @@ public:
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
 };
-
-// ----------------------------
-// - MetaBmpExScalePartAction -
-// ----------------------------
 
 class VCL_DLLPUBLIC MetaBmpExScalePartAction : public MetaAction
 {
@@ -820,10 +714,6 @@ public:
     const Size&         GetSrcSize() const { return maSrcSz; }
 };
 
-// ------------------
-// - MetaMaskAction -
-// ------------------
-
 class VCL_DLLPUBLIC MetaMaskAction : public MetaAction
 {
 private:
@@ -848,10 +738,6 @@ public:
     const Color&        GetColor() const { return maColor; }
     const Point&        GetPoint() const { return maPt; }
 };
-
-// -----------------------
-// - MetaMaskScaleAction -
-// -----------------------
 
 class VCL_DLLPUBLIC MetaMaskScaleAction : public MetaAction
 {
@@ -879,10 +765,6 @@ public:
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
 };
-
-// ---------------------------
-// - MetaMaskScalePartAction -
-// ---------------------------
 
 class VCL_DLLPUBLIC MetaMaskScalePartAction : public MetaAction
 {
@@ -916,10 +798,6 @@ public:
     const Size&         GetSrcSize() const { return maSrcSz; }
 };
 
-// ----------------------
-// - MetaGradientAction -
-// ----------------------
-
 class VCL_DLLPUBLIC MetaGradientAction : public MetaAction
 {
 private:
@@ -940,10 +818,6 @@ public:
     const Rectangle&    GetRect() const { return maRect; }
     const Gradient&     GetGradient() const { return maGradient; }
 };
-
-// ------------------------
-// - MetaGradientExAction -
-// ------------------------
 
 class VCL_DLLPUBLIC MetaGradientExAction : public MetaAction
 {
@@ -966,10 +840,6 @@ public:
     const Gradient&     GetGradient() const { return maGradient; }
 };
 
-// -------------------
-// - MetaHatchAction -
-// -------------------
-
 class VCL_DLLPUBLIC MetaHatchAction : public MetaAction
 {
 private:
@@ -990,10 +860,6 @@ public:
     const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Hatch&        GetHatch() const { return maHatch; }
 };
-
-// -----------------------
-// - MetaWallpaperAction -
-// -----------------------
 
 class VCL_DLLPUBLIC MetaWallpaperAction : public MetaAction
 {
@@ -1017,10 +883,6 @@ public:
     const Wallpaper&    GetWallpaper() const { return maWallpaper; }
 };
 
-// ------------------------
-// - MetaClipRegionAction -
-// ------------------------
-
 class VCL_DLLPUBLIC MetaClipRegionAction : public MetaAction
 {
 private:
@@ -1042,10 +904,6 @@ public:
     sal_Bool                IsClipping() const { return mbClip; }
 };
 
-// ---------------------------------
-// - MetaISectRectClipRegionAction -
-// ---------------------------------
-
 class VCL_DLLPUBLIC MetaISectRectClipRegionAction : public MetaAction
 {
 private:
@@ -1065,10 +923,6 @@ public:
     const Rectangle&    GetRect() const { return maRect; }
 };
 
-// -----------------------------------
-// - MetaISectRegionClipRegionAction -
-// -----------------------------------
-
 class VCL_DLLPUBLIC MetaISectRegionClipRegionAction : public MetaAction
 {
 private:
@@ -1087,10 +941,6 @@ public:
 
     const Region&       GetRegion() const { return maRegion; }
 };
-
-// ----------------------------
-// - MetaMoveClipRegionAction -
-// ----------------------------
 
 class VCL_DLLPUBLIC MetaMoveClipRegionAction : public MetaAction
 {
@@ -1112,10 +962,6 @@ public:
     long                GetVertMove() const { return mnVertMove; }
 };
 
-// -----------------------
-// - MetaLineColorAction -
-// -----------------------
-
 class VCL_DLLPUBLIC MetaLineColorAction : public MetaAction
 {
 private:
@@ -1133,10 +979,6 @@ public:
     const Color&        GetColor() const { return maColor; }
     sal_Bool                IsSetting() const { return mbSet; }
 };
-
-// -----------------------
-// - MetaFillColorAction -
-// -----------------------
 
 class VCL_DLLPUBLIC MetaFillColorAction : public MetaAction
 {
@@ -1156,10 +998,6 @@ public:
     sal_Bool                IsSetting() const { return mbSet; }
 };
 
-// -----------------------
-// - MetaTextColorAction -
-// -----------------------
-
 class VCL_DLLPUBLIC MetaTextColorAction : public MetaAction
 {
 private:
@@ -1175,10 +1013,6 @@ public:
 
     const Color&        GetColor() const { return maColor; }
 };
-
-// ---------------------------
-// - MetaTextFillColorAction -
-// ---------------------------
 
 class VCL_DLLPUBLIC MetaTextFillColorAction : public MetaAction
 {
@@ -1198,10 +1032,6 @@ public:
     sal_Bool                IsSetting() const { return mbSet; }
 };
 
-// ---------------------------
-// - MetaTextLineColorAction -
-// ---------------------------
-
 class VCL_DLLPUBLIC MetaTextLineColorAction : public MetaAction
 {
 private:
@@ -1219,10 +1049,6 @@ public:
     const Color&        GetColor() const { return maColor; }
     sal_Bool                IsSetting() const { return mbSet; }
 };
-
-// ---------------------------
-// - MetaOverlineColorAction -
-// ---------------------------
 
 class VCL_DLLPUBLIC MetaOverlineColorAction : public MetaAction
 {
@@ -1242,10 +1068,6 @@ public:
     sal_Bool                IsSetting() const { return mbSet; }
 };
 
-// -----------------------
-// - MetaTextAlignAction -
-// -----------------------
-
 class VCL_DLLPUBLIC MetaTextAlignAction : public MetaAction
 {
 private:
@@ -1261,10 +1083,6 @@ public:
 
     TextAlign           GetTextAlign() const { return maAlign; }
 };
-
-// ---------------------
-// - MetaMapModeAction -
-// ---------------------
 
 class VCL_DLLPUBLIC MetaMapModeAction : public MetaAction
 {
@@ -1284,10 +1102,6 @@ public:
     const MapMode&      GetMapMode() const { return maMapMode; }
 };
 
-// ---------------------
-// - MetaFontAction -
-// ---------------------
-
 class VCL_DLLPUBLIC MetaFontAction : public MetaAction
 {
 private:
@@ -1306,10 +1120,6 @@ public:
     const Font&         GetFont() const { return maFont; }
 };
 
-// ------------------
-// - MetaPushAction -
-// ------------------
-
 class VCL_DLLPUBLIC MetaPushAction : public MetaAction
 {
 private:
@@ -1326,20 +1136,12 @@ public:
     sal_uInt16              GetFlags() const { return mnFlags; }
 };
 
-// -----------------
-// - MetaPopAction -
-// -----------------
-
 class VCL_DLLPUBLIC MetaPopAction : public MetaAction
 {
 public:
 
         DECL_META_ACTION( Pop, META_POP_ACTION )
 };
-
-// ----------------------
-// - MetaRasterOpAction -
-// ----------------------
 
 class VCL_DLLPUBLIC MetaRasterOpAction : public MetaAction
 {
@@ -1356,10 +1158,6 @@ public:
 
     RasterOp            GetRasterOp() const { return meRasterOp; }
 };
-
-// -------------------------
-// - MetaTransparentAction -
-// -------------------------
 
 class VCL_DLLPUBLIC MetaTransparentAction : public MetaAction
 {
@@ -1381,10 +1179,6 @@ public:
     const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
 };
-
-// ------------------------------
-// - MetaFloatTransparentAction -
-// ------------------------------
 
 class VCL_DLLPUBLIC MetaFloatTransparentAction : public MetaAction
 {
@@ -1412,10 +1206,6 @@ public:
     const Gradient&     GetGradient() const { return maGradient; }
 };
 
-// ---------------------
-// - MetaDrawEPSAction -
-// ---------------------
-
 class VCL_DLLPUBLIC MetaEPSAction : public MetaAction
 {
 private:
@@ -1442,10 +1232,6 @@ public:
     const Size&         GetSize() const { return maSize; }
 };
 
-// ----------------------
-// - MetaRefPointAction -
-// ----------------------
-
 class VCL_DLLPUBLIC MetaRefPointAction : public MetaAction
 {
 private:
@@ -1463,10 +1249,6 @@ public:
     const Point&        GetRefPoint() const { return maRefPoint; }
     sal_Bool                IsSetting() const { return mbSet; }
 };
-
-// ---------------------
-// - MetaCommentAction -
-// ---------------------
 
 class VCL_DLLPUBLIC MetaCommentAction : public MetaAction
 {
@@ -1502,10 +1284,6 @@ public:
     const sal_uInt8*        GetData() const { return mpData; }
 };
 
-// ------------------------
-// - MetaLayoutModeAction -
-// ------------------------
-
 class VCL_DLLPUBLIC MetaLayoutModeAction : public MetaAction
 {
 private:
@@ -1520,10 +1298,6 @@ public:
 
     sal_uInt32          GetLayoutMode() const { return mnLayoutMode; }
 };
-
-// ------------------------
-// - MetaTextLanguageAction -
-// ------------------------
 
 class VCL_DLLPUBLIC MetaTextLanguageAction : public MetaAction
 {

@@ -25,10 +25,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "svx/svxdllapi.h"
 
-// -----------
-// - Defines -
-// -----------
-
 #define XOUTBMP_MIRROR_HORZ             0x00000001L
 #define XOUTBMP_MIRROR_VERT             0x00000010L
 
@@ -41,10 +37,6 @@
 #define XOUTBMP_USE_GIF_IF_POSSIBLE     0x20000000L
 #define XOUTBMP_USE_GIF_IF_SENSIBLE     0x40000000L
 #define XOUTBMP_USE_NATIVE_IF_POSSIBLE  0x80000000L
-
-// --------------
-// - XOutBitmap -
-// --------------
 
 class GraphicFilter;
 class VirtualDevice;
@@ -73,10 +65,6 @@ public:
                                      const sal_uInt8 cEdgeDetectThreshold = 50,
                                      const Rectangle* pWorkRect = NULL );
 };
-
-// ----------------
-// - DitherBitmap -
-// ----------------
 
 SVX_DLLPUBLIC sal_Bool DitherBitmap( Bitmap& rBitmap );
 

@@ -29,10 +29,6 @@
 #include <impvect.hxx>
 #include <math.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10UL)|((sal_uLong)(_def_cG)<<5UL)|(sal_uLong)(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
 
@@ -64,10 +60,6 @@
                         p2T[nX++] += FloydError1[nGErr];    \
                         p1T[nX] += FloydError7[nRErr];      \
                         p2T[nX] += FloydError1[nRErr];
-
-// -----------
-// - Statics -
-// -----------
 
 const extern sal_uLong nVCLRLut[ 6 ] = { 16, 17, 18, 19, 20, 21 };
 const extern sal_uLong nVCLGLut[ 6 ] = { 0, 6, 12, 18, 24, 30 };
@@ -215,10 +207,6 @@ const long FloydIndexMap[6] =
     -30,  21, 72, 123, 174, 225
 };
 
-// --------------------------
-// - ImplCreateDitherMatrix -
-// --------------------------
-
 void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
 {
     double          fVal = 3.125;
@@ -244,10 +232,6 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
         for( j = 0; j < 16; j++ )
             (*pDitherMatrix)[i][j] = (sal_uInt8) ( fVal * pMtx[i][j] );
 }
-
-// ----------
-// - Bitmap -
-// ----------
 
 sal_Bool Bitmap::Convert( BmpConversion eConversion )
 {

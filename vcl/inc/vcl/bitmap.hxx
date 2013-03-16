@@ -27,15 +27,10 @@
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define BMP_MIRROR_NONE             0x00000000UL
 #define BMP_MIRROR_HORZ             0x00000001UL
 #define BMP_MIRROR_VERT             0x00000002UL
 
-// -----------------------------------------------------------------------------
 
 #define BMP_SCALE_NONE              0x00000000UL
 #define BMP_SCALE_FAST              0x00000001UL
@@ -50,14 +45,10 @@
 #define BMP_SCALE_BEST              BMP_SCALE_LANCZOS
 #define BMP_SCALE_DEFAULT           BMP_SCALE_BOX
 
-// -----------------------------------------------------------------------------
-
 #define BMP_DITHER_NONE             0x00000000UL
 #define BMP_DITHER_MATRIX           0x00000001UL
 #define BMP_DITHER_FLOYD            0x00000002UL
 #define BMP_DITHER_FLOYD_16         0x00000004UL
-
-// -----------------------------------------------------------------------------
 
 #define BMP_VECTORIZE_NONE          BMP_VECTORIZE_OUTER
 #define BMP_VECTORIZE_INNER         0x00000001UL
@@ -65,13 +56,7 @@
 #define BMP_VECTORIZE_BOUND_ONLY    0x00000004UL
 #define BMP_VECTORIZE_REDUCE_EDGES  0x00000008UL
 
-// -----------------------------------------------------------------------------
-
 #define BMP_COL_TRANS                   Color( 252, 3, 251 )
-
-// ---------
-// - Enums -
-// ---------
 
 enum BmpConversion
 {
@@ -88,8 +73,6 @@ enum BmpConversion
     BMP_CONVERSION_GHOSTED = 10
 };
 
-// ------------------------------------------------------------------------
-
 enum BmpCombine
 {
     BMP_COMBINE_COPY = 0,
@@ -102,16 +85,12 @@ enum BmpCombine
     BMP_COMBINE_NXOR = 7
 };
 
-// ------------------------------------------------------------------------
-
 enum BmpReduce
 {
     BMP_REDUCE_SIMPLE = 0,
     BMP_REDUCE_POPULAR = 1,
     BMP_REDUCE_MEDIAN = 2
 };
-
-// ------------------------------------------------------------------------
 
 enum BmpEmboss
 {
@@ -125,8 +104,6 @@ enum BmpEmboss
     BMP_EMBOSS_BOTTOM = 7,
     BMP_EMBOSS_BOTTOMRIGHT = 8
 };
-
-// ------------------------------------------------------------------------
 
 enum BmpFilter
 {
@@ -142,12 +119,6 @@ enum BmpFilter
 
     BMP_FILTER_UNKNOWN = 65535
 };
-
-// ------------------------------------------------------------------------
-
-// --------------------
-// - FilterParameters -
-// --------------------
 
 class VCL_DLLPUBLIC BmpFilterParam
 {
@@ -217,7 +188,7 @@ public:
 };
 
 // --------------------
-// Resample Kernels
+// Resample kernels
 // --------------------
 
 class Kernel
@@ -298,10 +269,6 @@ class BoxKernel : public Kernel {
         return 0.0;
     }
 };
-
-// ----------
-// - Bitmap -
-// ----------
 
 class   BitmapReadAccess;
 class   BitmapWriteAccess;
@@ -868,79 +835,55 @@ public:
     friend VCL_DLLPUBLIC SvStream&        operator<<( SvStream& rOStm, const Bitmap& rBitmap );
 };
 
-// -----------
-// - Inlines -
-// -----------
-
 inline sal_Bool Bitmap::operator!() const
 {
     return( mpImpBmp == NULL );
 }
-
-// ------------------------------------------------------------------
 
 inline sal_Bool Bitmap::operator==( const Bitmap& rBitmap ) const
 {
     return( rBitmap.mpImpBmp == mpImpBmp );
 }
 
-// ------------------------------------------------------------------
-
 inline sal_Bool Bitmap::operator!=( const Bitmap& rBitmap ) const
 {
     return( rBitmap.mpImpBmp != mpImpBmp );
 }
-
-// ------------------------------------------------------------------
 
 inline sal_Bool Bitmap::IsSameInstance( const Bitmap& rBitmap ) const
 {
     return( rBitmap.mpImpBmp == mpImpBmp );
 }
 
-// ------------------------------------------------------------------
-
 inline sal_Bool Bitmap::IsEmpty() const
 {
     return( mpImpBmp == NULL );
 }
-
-// ------------------------------------------------------------------
 
 inline const MapMode& Bitmap::GetPrefMapMode() const
 {
     return maPrefMapMode;
 }
 
-// ------------------------------------------------------------------
-
 inline void Bitmap::SetPrefMapMode( const MapMode& rMapMode )
 {
     maPrefMapMode = rMapMode;
 }
-
-// ------------------------------------------------------------------
 
 inline const Size& Bitmap::GetPrefSize() const
 {
     return maPrefSize;
 }
 
-// ------------------------------------------------------------------
-
 inline void Bitmap::SetPrefSize( const Size& rSize )
 {
     maPrefSize = rSize;
 }
 
-// ------------------------------------------------------------------
-
 inline sal_uLong Bitmap::GetColorCount() const
 {
     return( 1UL << (sal_uLong) GetBitCount() );
 }
-
-// ------------------------------------------------------------------
 
 inline sal_uLong Bitmap::GetSizeBytes() const
 {

@@ -25,10 +25,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define CONVERT_TO_SVM1                 0x00000001UL
 #define CONVERT_FROM_SVM1               0x00000002UL
 
@@ -80,10 +76,6 @@
 #define GDI_LINEDASHDOT_ACTION          1035
 
 #define GDI_LINECAP_ACTION              1036
-
-// ----------------
-// - SVMConverter -
-// ----------------
 
 class VCL_PLUGIN_PUBLIC SVMConverter
 {

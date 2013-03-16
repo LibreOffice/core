@@ -23,10 +23,6 @@
 #include <vcl/graph.hxx>
 #include <svtools/svtdllapi.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define GRFMGR_DRAW_NOTCACHED               0x00000000UL
 #define GRFMGR_DRAW_CACHED                  0x00000001UL
 #define GRFMGR_DRAW_SMOOTHSCALE             0x00000002UL
@@ -35,18 +31,14 @@
 #define GRFMGR_DRAW_NO_SUBSTITUTE           0x00000010UL
 #define GRFMGR_DRAW_STANDARD                (GRFMGR_DRAW_CACHED|GRFMGR_DRAW_SMOOTHSCALE)
 
-// --------------------
-// - AutoSwap Defines -
-// --------------------
+// AutoSwap defines
 
 #define GRFMGR_AUTOSWAPSTREAM_LINK      ((SvStream*)0x00000000UL)
 #define GRFMGR_AUTOSWAPSTREAM_LOADED    ((SvStream*)0xfffffffdUL)
 #define GRFMGR_AUTOSWAPSTREAM_TEMP      ((SvStream*)0xfffffffeUL)
 #define GRFMGR_AUTOSWAPSTREAM_NONE      ((SvStream*)0xffffffffUL)
 
-// ----------------------
-// - Adjustment Defines -
-// ----------------------
+// Adjustment defines
 
 #define ADJUSTMENT_NONE                 0x00000000UL
 #define ADJUSTMENT_DRAWMODE             0x00000001UL
@@ -56,10 +48,6 @@
 #define ADJUSTMENT_TRANSPARENCY         0x00000010UL
 #define ADJUSTMENT_ALL                  0xFFFFFFFFUL
 
-// ---------
-// - Enums -
-// ---------
-
 enum GraphicDrawMode
 {
     GRAPHICDRAWMODE_STANDARD = 0,
@@ -68,10 +56,6 @@ enum GraphicDrawMode
     GRAPHICDRAWMODE_WATERMARK = 3
 };
 
-// ------------
-// - Forwards -
-// ------------
-
 class GraphicManager;
 class SvStream;
 class BitmapWriteAccess;
@@ -79,10 +63,6 @@ class GraphicCache;
 class VirtualDevice;
 struct GrfSimpleCacheObj;
 struct ImplTileInfo;
-
-// ---------------
-// - GraphicAttr -
-// ---------------
 
 class SVT_DLLPUBLIC GraphicAttr
 {
@@ -173,10 +153,6 @@ public:
     friend SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr );
     friend SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr );
 };
-
-// -----------------
-// - GraphicObject -
-// -----------------
 
 class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream
 {
@@ -518,10 +494,6 @@ public:
     // if they exist
     static void InspectForGraphicObjectImageURL( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIf, std::vector< rtl::OUString >& rvEmbedImgUrls );
 };
-
-// ------------------
-// - GraphicManager -
-// ------------------
 
 typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;
 

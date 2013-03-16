@@ -23,16 +23,8 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/dllapi.h>
 
-// -----------
-// - Defines -
-// -----------
-
 #define OCTREE_BITS     5
 #define OCTREE_BITS_1   10
-
-// --------------
-// - OctreeNode -
-// --------------
 
 typedef struct OctreeNode
 {
@@ -49,10 +41,6 @@ typedef struct OctreeNode
 
 typedef NODE*       PNODE;
 typedef PNODE*      PPNODE;
-
-// ----------
-// - Octree -
-// ----------
 
 class ImpNodeCache;
 class BitmapReadAccess;
@@ -91,8 +79,6 @@ public:
     inline sal_uInt16               GetBestPaletteIndex( const BitmapColor& rColor );
 };
 
-// ------------------------------------------------------------------------
-
 inline const BitmapPalette& Octree::GetPalette()
 {
     aPal.SetEntryCount( (sal_uInt16) nLeafCount );
@@ -100,8 +86,6 @@ inline const BitmapPalette& Octree::GetPalette()
     CreatePalette( pTree );
     return aPal;
 }
-
-// ------------------------------------------------------------------------
 
 inline sal_uInt16 Octree::GetBestPaletteIndex( const BitmapColor& rColor )
 {
@@ -111,10 +95,6 @@ inline sal_uInt16 Octree::GetBestPaletteIndex( const BitmapColor& rColor )
     GetPalIndex( pTree );
     return nPalIndex;
 }
-
-// -------------------
-// - InverseColorMap -
-// -------------------
 
 class VCL_PLUGIN_PUBLIC InverseColorMap
 {
@@ -134,8 +114,6 @@ public:
 
     inline sal_uInt16       GetBestPaletteIndex( const BitmapColor& rColor );
 };
-
-// ------------------------------------------------------------------------
 
 inline sal_uInt16 InverseColorMap::GetBestPaletteIndex( const BitmapColor& rColor )
 {

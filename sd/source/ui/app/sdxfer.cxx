@@ -66,10 +66,6 @@
 #include "unomodel.hxx"
 #include <vcl/virdev.hxx>
 
-// --------------
-// - Namespaces -
-// --------------
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -77,16 +73,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
-// -----------
-// - Defines -
-// -----------
-
 #define SDTRANSFER_OBJECTTYPE_DRAWMODEL         0x00000001
 #define SDTRANSFER_OBJECTTYPE_DRAWOLE           0x00000002
-
-// ------------------
-// - SdTransferable -
-// ------------------
 
 SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, sal_Bool bInitOnGetData )
 :   mpPageDocShell( NULL )
@@ -119,8 +107,6 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, 
     if( !mbLateInit )
         CreateData();
 }
-
-// -----------------------------------------------------------------------------
 
 SdTransferable::~SdTransferable()
 {
@@ -159,8 +145,6 @@ SdTransferable::~SdTransferable()
     delete mpObjDesc;
 
 }
-
-// -----------------------------------------------------------------------------
 
 void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 {
@@ -256,8 +240,6 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
     }
 }
 
-// -----------------------------------------------------------------------------
-
 void SdTransferable::CreateData()
 {
     if( mpSdDrawDocument && !mpSdViewIntern )
@@ -346,8 +328,6 @@ void SdTransferable::CreateData()
     }
 }
 
-// -----------------------------------------------------------------------------
-
 static sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
 {
     sal_Bool bOnlyControls = sal_False;         // default if there are no objects
@@ -378,8 +358,6 @@ static sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
     return bOnlyControls;
 }
 
-// -----------------------------------------------------------------------------
-
 static bool lcl_HasOnlyOneTable( SdrModel* pModel )
 {
     if ( pModel )
@@ -393,8 +371,6 @@ static bool lcl_HasOnlyOneTable( SdrModel* pModel )
     }
     return false;
 }
-
-// -----------------------------------------------------------------------------
 
 void SdTransferable::AddSupportedFormats()
 {
@@ -457,8 +433,6 @@ void SdTransferable::AddSupportedFormats()
             AddFormat( SOT_FORMATSTR_ID_SVIM );
     }
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 {
@@ -584,8 +558,6 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
     return bOK;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
 {
     sal_Bool bRet = sal_False;
@@ -668,15 +640,11 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdTransferable::DragFinished( sal_Int8 nDropAction )
 {
     if( mpSdView )
         ( (::sd::View*) mpSdView )->DragFinished( nDropAction );
 }
-
-// -----------------------------------------------------------------------------
 
 void SdTransferable::ObjectReleased()
 {
@@ -690,16 +658,12 @@ void SdTransferable::ObjectReleased()
         SD_MOD()->pTransferSelection = NULL;
 }
 
-// -----------------------------------------------------------------------------
-
 void SdTransferable::SetObjectDescriptor( const TransferableObjectDescriptor& rObjDesc )
 {
     delete mpObjDesc;
     mpObjDesc = new TransferableObjectDescriptor( rObjDesc );
     PrepareOLE( rObjDesc );
 }
-
-// -----------------------------------------------------------------------------
 
 void SdTransferable::SetPageBookmarks( const std::vector<rtl::OUString> &rPageBookmarks, sal_Bool bPersistent )
 {
@@ -743,8 +707,6 @@ void SdTransferable::SetPageBookmarks( const std::vector<rtl::OUString> &rPageBo
     }
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException )
 {
     sal_Int64 nRet;
@@ -786,8 +748,6 @@ sal_Int32 SdTransferable::GetUserDataCount (void) const
         return ::boost::shared_ptr<UserData>();
 }
 
-// -----------------------------------------------------------------------------
-
 namespace
 {
     class theSdTransferableUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSdTransferableUnoTunnelId > {};
@@ -797,8 +757,6 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdTransferable::getUnoTunnelI
 {
     return theSdTransferableUnoTunnelId::get().getSeq();
 }
-
-// -----------------------------------------------------------------------------
 
 SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >& rxData ) throw()
 {
@@ -813,9 +771,6 @@ SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >
     return NULL;
 }
 
-// -----------------------------------------------------------------------------
-
-// SfxListener
 void SdTransferable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );

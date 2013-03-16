@@ -37,10 +37,6 @@
 #include <impgraph.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 
-// -----------
-// - Defines -
-// -----------
-
 #define GRAPHIC_MAXPARTLEN          256000L
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
@@ -53,19 +49,11 @@
 #define GRAPHIC_FORMAT_50           static_cast<sal_uInt32>(COMPAT_FORMAT( 'G', 'R', 'F', '5' ))
 #define NATIVE_FORMAT_50            static_cast<sal_uInt32>(COMPAT_FORMAT( 'N', 'A', 'T', '5' ))
 
-// ---------------
-// - ImpSwapFile -
-// ---------------
-
 struct ImpSwapFile
 {
     INetURLObject   aSwapURL;
     sal_uLong           nRefCount;
 };
-
-// -----------------
-// - Graphicreader -
-// -----------------
 
 class ReaderData
 {
@@ -78,15 +66,11 @@ GraphicReader::~GraphicReader()
     delete mpReaderData;
 }
 
-// ------------------------------------------------------------------------
-
 void GraphicReader::DisablePreviewMode()
 {
     if( mpReaderData )
         mpReaderData->maPreviewSize = Size( 0, 0 );
 }
-
-// ------------------------------------------------------------------------
 
 void GraphicReader::SetPreviewSize( const Size& rSize )
 {
@@ -95,8 +79,6 @@ void GraphicReader::SetPreviewSize( const Size& rSize )
     mpReaderData->maPreviewSize = rSize;
 }
 
-// ------------------------------------------------------------------------
-
 Size GraphicReader::GetPreviewSize() const
 {
     Size aSize( 0, 0 );
@@ -104,10 +86,6 @@ Size GraphicReader::GetPreviewSize() const
         aSize = mpReaderData->maPreviewSize;
     return aSize;
 }
-
-// --------------
-// - ImpGraphic -
-// --------------
 
 ImpGraphic::ImpGraphic() :
         mpAnimation     ( NULL ),
@@ -122,8 +100,6 @@ ImpGraphic::ImpGraphic() :
         mbSwapUnderway  ( sal_False )
 {
 }
-
-// ------------------------------------------------------------------------
 
 ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         maMetaFile      ( rImpGraphic.maMetaFile ),
@@ -157,8 +133,6 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
     maSvgData = rImpGraphic.maSvgData;
 }
 
-// ------------------------------------------------------------------------
-
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
         mpAnimation     ( NULL ),
@@ -173,8 +147,6 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         mbSwapUnderway  ( sal_False )
 {
 }
-
-// ------------------------------------------------------------------------
 
 ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maEx            ( rBitmapEx ),
@@ -191,8 +163,6 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 {
 }
 
-// ------------------------------------------------------------------------
-
 ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
 :   mpAnimation( NULL ),
     mpContext( NULL ),
@@ -207,8 +177,6 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
     maSvgData(rSvgDataPtr)
 {
 }
-
-// ------------------------------------------------------------------------
 
 ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         maEx            ( rAnimation.GetBitmapEx() ),
@@ -225,8 +193,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
 {
 }
 
-// ------------------------------------------------------------------------
-
 ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         maMetaFile      ( rMtf ),
         mpAnimation     ( NULL ),
@@ -242,8 +208,6 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
 {
 }
 
-// ------------------------------------------------------------------------
-
 ImpGraphic::~ImpGraphic()
 {
     ImplClear();
@@ -251,8 +215,6 @@ ImpGraphic::~ImpGraphic()
     if( (sal_uLong) mpContext > 1UL )
         delete mpContext;
 }
-
-// ------------------------------------------------------------------------
 
 ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 {
@@ -301,8 +263,6 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 
     return *this;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
 {
@@ -367,8 +327,6 @@ sal_Bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 void ImpGraphic::ImplClearGraphics( sal_Bool bCreateSwapInfo )
 {
     if( bCreateSwapInfo && !ImplIsSwapOut() )
@@ -395,8 +353,6 @@ void ImpGraphic::ImplClearGraphics( sal_Bool bCreateSwapInfo )
 
     maSvgData.reset();
 }
-
-// ------------------------------------------------------------------------
 
 void ImpGraphic::ImplClear()
 {
@@ -444,14 +400,10 @@ void ImpGraphic::ImplClear()
     mnSizeBytes = 0;
 }
 
-// ------------------------------------------------------------------------
-
 GraphicType ImpGraphic::ImplGetType() const
 {
     return meType;
 }
-
-// ------------------------------------------------------------------------
 
 void ImpGraphic::ImplSetDefaultType()
 {
@@ -459,14 +411,10 @@ void ImpGraphic::ImplSetDefaultType()
     meType = GRAPHIC_DEFAULT;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool ImpGraphic::ImplIsSupportedGraphic() const
 {
     return( meType != GRAPHIC_NONE );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool ImpGraphic::ImplIsTransparent() const
 {
@@ -479,8 +427,6 @@ sal_Bool ImpGraphic::ImplIsTransparent() const
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool ImpGraphic::ImplIsAlpha() const
 {
@@ -498,14 +444,10 @@ sal_Bool ImpGraphic::ImplIsAlpha() const
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool ImpGraphic::ImplIsAnimated() const
 {
     return( mpAnimation != NULL );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool ImpGraphic::ImplIsEPS() const
 {
@@ -513,9 +455,6 @@ sal_Bool ImpGraphic::ImplIsEPS() const
             ( maMetaFile.GetActionSize() > 0 ) &&
             ( maMetaFile.GetAction( 0 )->GetType() == META_EPS_ACTION ) );
 }
-
-
-// ------------------------------------------------------------------------
 
 Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters) const
 {
@@ -618,8 +557,6 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
     return aRetBmp;
 }
 
-// ------------------------------------------------------------------------
-
 BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const
 {
     BitmapEx aRetBmpEx;
@@ -646,8 +583,6 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
     return aRetBmpEx;
 }
 
-// ------------------------------------------------------------------------
-
 Animation ImpGraphic::ImplGetAnimation() const
 {
     Animation aAnimation;
@@ -658,14 +593,10 @@ Animation ImpGraphic::ImplGetAnimation() const
     return aAnimation;
 }
 
-// ------------------------------------------------------------------------
-
 const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
 {
     return maMetaFile;
 }
-
-// ------------------------------------------------------------------------
 
 Size ImpGraphic::ImplGetPrefSize() const
 {
@@ -714,8 +645,6 @@ Size ImpGraphic::ImplGetPrefSize() const
     return aSize;
 }
 
-// ------------------------------------------------------------------------
-
 void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
 {
     switch( meType )
@@ -753,8 +682,6 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
         break;
     }
 }
-
-// ------------------------------------------------------------------------
 
 MapMode ImpGraphic::ImplGetPrefMapMode() const
 {
@@ -799,8 +726,6 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
     return aMapMode;
 }
 
-// ------------------------------------------------------------------------
-
 void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
 {
     switch( meType )
@@ -839,8 +764,6 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
     }
 }
 
-// ------------------------------------------------------------------------
-
 sal_uLong ImpGraphic::ImplGetSizeBytes() const
 {
     if( 0 == mnSizeBytes )
@@ -864,8 +787,6 @@ sal_uLong ImpGraphic::ImplGetSizeBytes() const
 
     return( mnSizeBytes );
 }
-
-// ------------------------------------------------------------------------
 
 void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
 {
@@ -901,8 +822,6 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
         }
     }
 }
-
-// ------------------------------------------------------------------------
 
 void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
                            const Point& rDestPt, const Size& rDestSize ) const
@@ -944,8 +863,6 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
     }
 }
 
-// ------------------------------------------------------------------------
-
 void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
                                      const Size& rDestSize, long nExtraData,
                                      OutputDevice* pFirstFrameOutDev )
@@ -954,23 +871,17 @@ void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt
         mpAnimation->Start( pOutDev, rDestPt, rDestSize, nExtraData, pFirstFrameOutDev );
 }
 
-// ------------------------------------------------------------------------
-
 void ImpGraphic::ImplStopAnimation( OutputDevice* pOutDev, long nExtraData )
 {
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() && mpAnimation )
         mpAnimation->Stop( pOutDev, nExtraData );
 }
 
-// ------------------------------------------------------------------------
-
 void ImpGraphic::ImplSetAnimationNotifyHdl( const Link& rLink )
 {
     if( mpAnimation )
         mpAnimation->SetNotifyHdl( rLink );
 }
-
-// ------------------------------------------------------------------------
 
 Link ImpGraphic::ImplGetAnimationNotifyHdl() const
 {
@@ -982,28 +893,20 @@ Link ImpGraphic::ImplGetAnimationNotifyHdl() const
     return aLink;
 }
 
-// ------------------------------------------------------------------------
-
 sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
 {
     return( mpAnimation ? mpAnimation->GetLoopCount() : 0UL );
 }
-
-// ------------------------------------------------------------------------
 
 GraphicReader* ImpGraphic::ImplGetContext()
 {
     return mpContext;
 }
 
-// ------------------------------------------------------------------------
-
 void ImpGraphic::ImplSetContext( GraphicReader* pReader )
 {
     mpContext = pReader;
 }
-
-// ------------------------------------------------------------------------
 
 void ImpGraphic::ImplSetDocFileName( const String& rName, sal_uLong nFilePos )
 {
@@ -1015,21 +918,15 @@ void ImpGraphic::ImplSetDocFileName( const String& rName, sal_uLong nFilePos )
     mnDocFilePos = nFilePos;
 }
 
-// ------------------------------------------------------------------------
-
 const String& ImpGraphic::ImplGetDocFileName() const
 {
     return maDocFileURLStr;
 }
 
-// ------------------------------------------------------------------------
-
 sal_uLong ImpGraphic::ImplGetDocFilePos() const
 {
     return mnDocFilePos;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
 {
@@ -1268,8 +1165,6 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
 {
     sal_Bool bRet = sal_False;
@@ -1349,8 +1244,6 @@ sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool ImpGraphic::ImplSwapOut()
 {
     sal_Bool bRet = sal_False;
@@ -1424,8 +1317,6 @@ sal_Bool ImpGraphic::ImplSwapOut()
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool ImpGraphic::ImplSwapOut( SvStream* pOStm )
 {
     sal_Bool bRet = sal_False;
@@ -1453,8 +1344,6 @@ sal_Bool ImpGraphic::ImplSwapOut( SvStream* pOStm )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool ImpGraphic::ImplSwapIn()
 {
@@ -1531,8 +1420,6 @@ sal_Bool ImpGraphic::ImplSwapIn()
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool ImpGraphic::ImplSwapIn( SvStream* pIStm )
 {
     sal_Bool bRet = sal_False;
@@ -1557,14 +1444,10 @@ sal_Bool ImpGraphic::ImplSwapIn( SvStream* pIStm )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool ImpGraphic::ImplIsSwapOut() const
 {
     return mbSwapOut;
 }
-
-// ------------------------------------------------------------------------
 
 void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
 {
@@ -1575,21 +1458,15 @@ void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
         mpGfxLink->SwapOut();
 }
 
-// ------------------------------------------------------------------------
-
 GfxLink ImpGraphic::ImplGetLink()
 {
     return( mpGfxLink ? *mpGfxLink : GfxLink() );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool ImpGraphic::ImplIsLink() const
 {
     return ( mpGfxLink != NULL ) ? sal_True : sal_False;
 }
-
-// ------------------------------------------------------------------------
 
 sal_uLong ImpGraphic::ImplGetChecksum() const
 {
@@ -1630,8 +1507,6 @@ sal_uLong ImpGraphic::ImplGetChecksum() const
     return nRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
 {
     sal_Bool bResult = sal_False;
@@ -1655,14 +1530,10 @@ sal_Bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
     return bResult;
 }
 
-// ------------------------------------------------------------------------
-
 const SvgDataPtr& ImpGraphic::getSvgData() const
 {
     return maSvgData;
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {
@@ -1813,8 +1684,6 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
     return rIStm;
 }
-
-// ------------------------------------------------------------------------
 
 SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 {

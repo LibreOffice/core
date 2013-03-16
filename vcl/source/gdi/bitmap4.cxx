@@ -22,10 +22,6 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmap.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
 #define S2(a,b)             { register long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }
 #define MN3(a,b,c)          S2(a,b); S2(a,c);
 #define MX3(a,b,c)          S2(b,c); S2(a,c);
@@ -33,10 +29,6 @@
 #define MNMX4(a,b,c,d)      S2(a,b); S2(c,d); S2(a,c); S2(b,d);
 #define MNMX5(a,b,c,d,e)    S2(a,b); S2(c,d); MN3(a,c,e); MX3(b,d,e);
 #define MNMX6(a,b,c,d,e,f)  S2(a,d); S2(b,e); S2(c,f); MN3(a,b,c); MX3(d,e,f);
-
-// ----------
-// - Bitmap -
-// ----------
 
 sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
 {
@@ -105,8 +97,6 @@ sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, 
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
                              const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
@@ -254,8 +244,6 @@ sal_Bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
@@ -385,8 +373,6 @@ sal_Bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
     sal_Bool bRet = ImplMakeGreyscales( 256 );
@@ -513,8 +499,6 @@ sal_Bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Li
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
     sal_Bool bRet = ImplMakeGreyscales( 256 );
@@ -627,8 +611,6 @@ sal_Bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link*
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
     sal_Bool                bRet = sal_False;
@@ -676,8 +658,6 @@ sal_Bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link* /
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
@@ -763,8 +743,6 @@ sal_Bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pP
 
     return bRet;
 }
-
-// -----------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProgress*/ )
 {
@@ -923,15 +901,11 @@ sal_Bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*p
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
 struct PopArtEntry
 {
     sal_uInt32  mnIndex;
     sal_uInt32  mnCount;
 };
-
-// ------------------------------------------------------------------------
 
 extern "C" int SAL_CALL ImplPopArtCmpFnc( const void* p1, const void* p2 )
 {
@@ -946,8 +920,6 @@ extern "C" int SAL_CALL ImplPopArtCmpFnc( const void* p1, const void* p2 )
 
     return nRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*pProgress*/ )
 {
