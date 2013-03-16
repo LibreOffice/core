@@ -7933,10 +7933,10 @@ if test "$with_system_mdds" = "yes"; then
     AC_LANG_PUSH([C++])
     save_CPPFLAGS="$CPPFLAGS"
     CPPFLAGS="$CPPFLAGS $MDDS_CPPFLAGS"
-    AC_CHECK_HEADER(mdds/flat_segment_tree.hpp, [],
-        [AC_MSG_ERROR(mdds/flat_segment_tree.hpp not found. install mdds)], [])
-    AC_CHECK_HEADER(mdds/multi_type_matrix.hpp, [],
-        [AC_MSG_ERROR(mdds/multi_type_matrix.hpp not found. install mdds >= 0.7.0)], [])
+    AC_CHECK_HEADER(mdds/multi_type_vector.hpp, [],
+        [AC_MSG_ERROR(mdds/multi_type_vector.hpp not found. Install mdds >= 0.7.0)], [])
+    AC_CHECK_TYPE(mdds::multi_type_vector<int>::iterator, [],
+        [AC_MSG_ERROR(mdds/multi_type_matrix.hpp does not define multi_type_vector::iterator. Install mdds >= 0.7.0)], [#include <mdds/multi_type_vector.hpp>])
     CPPFLAGS="$save_CPPFLAGS"
     AC_LANG_POP([C++])
 else
