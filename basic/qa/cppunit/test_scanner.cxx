@@ -317,7 +317,7 @@ namespace
     symbols = getSymbols(source9);
     CPPUNIT_ASSERT(symbols.size() == 3);
     CPPUNIT_ASSERT(symbols[0].text.isEmpty());
-    CPPUNIT_ASSERT(symbols[0].number = 19395);
+    CPPUNIT_ASSERT(symbols[0].number == 19395);
     CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[1].text == OUString("asdfa"));
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
