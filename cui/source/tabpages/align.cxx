@@ -147,97 +147,105 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const 
     rSet.Put(aItem);
 }
 
-}
+}//namespace
 
 // ============================================================================
 
 AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_ALIGNMENT ), rCoreAttrs ),
+    SfxTabPage( pParent, "CellAlignPage","cui/ui/cellalignment.ui", rCoreAttrs )
 
-    maFlAlignment   ( this, CUI_RES( FL_ALIGNMENT ) ),
-    maFtHorAlign    ( this, CUI_RES( FT_HORALIGN ) ),
-    maLbHorAlign    ( this, CUI_RES( LB_HORALIGN ) ),
-    maFtIndent      ( this, CUI_RES( FT_INDENT ) ),
-    maEdIndent      ( this, CUI_RES( ED_INDENT ) ),
-    maFtVerAlign    ( this, CUI_RES( FT_VERALIGN ) ),
-    maLbVerAlign    ( this, CUI_RES( LB_VERALIGN ) ),
-
-    maFlOrient      ( this, CUI_RES( FL_ORIENTATION ) ),
-    maCtrlDial      ( this, CUI_RES( CTR_DIAL ) ),
-    maFtRotate      ( this, CUI_RES( FT_DEGREES ) ),
-    maNfRotate      ( this, CUI_RES( NF_DEGREES ) ),
-    maFtRefEdge     ( this, CUI_RES( FT_BORDER_LOCK ) ),
-    maVsRefEdge     ( this, CUI_RES( CTR_BORDER_LOCK ) ),
-    maCbStacked     ( this, CUI_RES( BTN_TXTSTACKED ) ),
-    maCbAsianMode   ( this, CUI_RES( BTN_ASIAN_VERTICAL ) ),
-    maOrientHlp     ( maCtrlDial, maNfRotate, maCbStacked ),
-
-    maFlProperties  ( this, CUI_RES( FL_WRAP ) ),
-    maBtnWrap       ( this, CUI_RES( BTN_WRAP ) ),
-    maBtnHyphen     ( this, CUI_RES( BTN_HYPH ) ),
-    maBtnShrink     ( this, CUI_RES( BTN_SHRINK ) ),
-    maFtFrameDir    ( this, CUI_RES( FT_TEXTFLOW ) ),
-    maLbFrameDir    ( this, CUI_RES( LB_FRAMEDIR ) )
 {
+    // text alignment
+    get(m_pLbHorAlign,"comboboxHorzAlign");
+    get(m_pFtIndent,"labelIndent");
+    get(m_pEdIndent,"spinIndentFrom");
+    get(m_pLbVerAlign,"comboboxVertAlign");
+
+    //text rotation
+    get(m_pNfRotate,"spinDegrees");
+    get(m_pCtrlDial,"dialcontrol");
+    get(m_pFtRotate,"labelDegrees");
+    get(m_pFtRefEdge,"labelRefEdge");
+    get(m_pVsRefEdge,"references");
+    get(m_pBoxDirection,"boxDirection");
+
+    //Asian mode
+    get(m_pCbStacked,"checkVertStack");
+    get(m_pCbAsianMode,"checkAsianMode");
+
+    m_pOrientHlp = new OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked);
+
+    // Properties
+    get(m_pBtnWrap,"checkWrapTextAuto");
+    get(m_pBtnHyphen,"checkHyphActive");
+    get(m_pBtnShrink,"checkShrinkFitCellSize");
+    get(m_pLbFrameDir,"comboTextDirBox");
+
+    //ValueSet hover strings
+    get(m_pFtBotLock,"labelSTR_BOTTOMLOCK");
+    get(m_pFtTopLock,"labelSTR_TOPLOCK");
+    get(m_pFtCelLock,"labelSTR_CELLLOCK");
+    get(m_pFtABCD,"labelABCD");
+
+    m_pCtrlDial->SetText(m_pFtABCD->GetText());
+
     InitVsRefEgde();
 
     // windows to be disabled, if stacked text is turned ON
-    maOrientHlp.AddDependentWindow( maFtRotate,     STATE_CHECK );
-    maOrientHlp.AddDependentWindow( maFtRefEdge,    STATE_CHECK );
-    maOrientHlp.AddDependentWindow( maVsRefEdge,    STATE_CHECK );
+    m_pOrientHlp->AddDependentWindow( *m_pFtRotate,     STATE_CHECK );
+    m_pOrientHlp->AddDependentWindow( *m_pFtRefEdge,    STATE_CHECK );
+    m_pOrientHlp->AddDependentWindow( *m_pVsRefEdge,    STATE_CHECK );
     // windows to be disabled, if stacked text is turned OFF
-    maOrientHlp.AddDependentWindow( maCbAsianMode,  STATE_NOCHECK );
+    m_pOrientHlp->AddDependentWindow( *m_pCbAsianMode,  STATE_NOCHECK );
 
     Link aLink = LINK( this, AlignmentTabPage, UpdateEnableHdl );
 
-    maLbHorAlign.SetSelectHdl( aLink );
-    maBtnWrap.SetClickHdl( aLink );
+    m_pLbHorAlign->SetSelectHdl( aLink );
+    m_pBtnWrap->SetClickHdl( aLink );
 
     // Asian vertical mode
-    maCbAsianMode.Show( SvtCJKOptions().IsVerticalTextEnabled() );
+    m_pCbAsianMode->Show( SvtCJKOptions().IsVerticalTextEnabled() );
 
-    // CTL frame direction
-    maLbFrameDir.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
-    maLbFrameDir.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
-    maLbFrameDir.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+
     if( !SvtLanguageOptions().IsCTLFontEnabled() )
     {
-        maFtFrameDir.Hide();
-        maLbFrameDir.Hide();
+        m_pBoxDirection->Hide();
+    }
+    else
+    {
+       // CTL frame direction
+       m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+       m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+       m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+       m_pBoxDirection->Show();
     }
 
     // This page needs ExchangeSupport.
     SetExchangeSupport();
 
-    FreeResource();
+    AddItemConnection( new HorJustConnection( SID_ATTR_ALIGN_HOR_JUSTIFY, *m_pLbHorAlign, s_pHorJustMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_INDENT, *m_pFtIndent, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::UInt16MetricConnection( SID_ATTR_ALIGN_INDENT, *m_pEdIndent, FUNIT_TWIP, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new VerJustConnection( SID_ATTR_ALIGN_VER_JUSTIFY, *m_pLbVerAlign, s_pVerJustMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new DialControlConnection( SID_ATTR_ALIGN_DEGREES, *m_pCtrlDial, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_DEGREES, *m_pFtRotate, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_LOCKPOS, *m_pFtRefEdge, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new RotateModeConnection( SID_ATTR_ALIGN_LOCKPOS, *m_pVsRefEdge, s_pRotateModeMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new OrientStackedConnection( SID_ATTR_ALIGN_STACKED, *m_pOrientHlp ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_STACKED, *m_pCbStacked, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_ASIANVERTICAL, *m_pCbAsianMode, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_LINEBREAK, *m_pBtnWrap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_HYPHENATION, *m_pBtnHyphen, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_SHRINKTOFIT, *m_pBtnShrink, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_FRAMEDIRECTION, *m_pBoxDirection, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+    AddItemConnection( new FrameDirListBoxConnection( SID_ATTR_FRAMEDIRECTION, *m_pLbFrameDir, sfx::ITEMCONN_HIDE_UNKNOWN ) );
 
-    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_HOR_JUSTIFY, maFtHorAlign, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new HorJustConnection( SID_ATTR_ALIGN_HOR_JUSTIFY, maLbHorAlign, s_pHorJustMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_INDENT, maFtIndent, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::UInt16MetricConnection( SID_ATTR_ALIGN_INDENT, maEdIndent, FUNIT_TWIP, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_VER_JUSTIFY, maFtVerAlign, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new VerJustConnection( SID_ATTR_ALIGN_VER_JUSTIFY, maLbVerAlign, s_pVerJustMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new DialControlConnection( SID_ATTR_ALIGN_DEGREES, maCtrlDial, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_DEGREES, maFtRotate, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_LOCKPOS, maFtRefEdge, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new RotateModeConnection( SID_ATTR_ALIGN_LOCKPOS, maVsRefEdge, s_pRotateModeMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new OrientStackedConnection( SID_ATTR_ALIGN_STACKED, maOrientHlp ) );
-    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_ALIGN_STACKED, maCbStacked, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_ASIANVERTICAL, maCbAsianMode, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_LINEBREAK, maBtnWrap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_HYPHENATION, maBtnHyphen, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_SHRINKTOFIT, maBtnShrink, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_FRAMEDIRECTION, maFtFrameDir, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-    AddItemConnection( new FrameDirListBoxConnection( SID_ATTR_FRAMEDIRECTION, maLbFrameDir, sfx::ITEMCONN_HIDE_UNKNOWN ) );
-
-    maLbHorAlign.SetAccessibleRelationMemberOf( &maFlAlignment );
-    maEdIndent.SetAccessibleRelationMemberOf( &maFlAlignment );
-    maLbVerAlign.SetAccessibleRelationMemberOf( &maFlAlignment );
 }
 
 AlignmentTabPage::~AlignmentTabPage()
 {
+    delete m_pOrientHlp;
 }
 
 SfxTabPage* AlignmentTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
@@ -258,12 +266,12 @@ sal_Bool AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
     // method to 'distribute' to distinguish from the normal justification.
 
     sal_uInt16 nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
-    lcl_SetJustifyMethodToItemSet(rSet, nWhichHorJM, maLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
+    lcl_SetJustifyMethodToItemSet(rSet, nWhichHorJM, *m_pLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
     if (!bChanged)
         bChanged = HasAlignmentChanged(rSet, nWhichHorJM);
 
     sal_uInt16 nWhichVerJM = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD);
-    lcl_SetJustifyMethodToItemSet(rSet, nWhichVerJM, maLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED);
+    lcl_SetJustifyMethodToItemSet(rSet, nWhichVerJM, *m_pLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED);
     if (!bChanged)
         bChanged = HasAlignmentChanged(rSet, nWhichVerJM);
 
@@ -278,12 +286,12 @@ void AlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
     // method to 'distribute' to distinguish from the normal justification.
 
     lcl_MaybeResetAlignToDistro<SvxCellHorJustify, SvxCellHorJustify>(
-        maLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, rCoreAttrs,
+        *m_pLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, rCoreAttrs,
         GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY), GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD),
         SVX_HOR_JUSTIFY_BLOCK);
 
     lcl_MaybeResetAlignToDistro<SvxCellVerJustify, SvxCellVerJustify>(
-        maLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, rCoreAttrs,
+        *m_pLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, rCoreAttrs,
         GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY), GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD),
         SVX_VER_JUSTIFY_BLOCK);
 
@@ -310,50 +318,46 @@ void AlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 void AlignmentTabPage::InitVsRefEgde()
 {
     // remember selection - is deleted in call to ValueSet::Clear()
-    sal_uInt16 nSel = maVsRefEdge.GetSelectItemId();
+    sal_uInt16 nSel = m_pVsRefEdge->GetSelectItemId();
 
     ResId aResId( IL_LOCK_BMPS, CUI_MGR() );
     ImageList aImageList( aResId );
     Size aItemSize( aImageList.GetImage( IID_BOTTOMLOCK ).GetSizePixel() );
 
-    maVsRefEdge.Clear();
-    maVsRefEdge.SetStyle( maVsRefEdge.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
+    m_pVsRefEdge->Clear();
+    m_pVsRefEdge->SetStyle( m_pVsRefEdge->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
 
-    maVsRefEdge.SetColCount( 3 );
-    maVsRefEdge.InsertItem( IID_BOTTOMLOCK, aImageList.GetImage( IID_BOTTOMLOCK ),  String( CUI_RES( STR_BOTTOMLOCK ) ) );
-    maVsRefEdge.InsertItem( IID_TOPLOCK,    aImageList.GetImage( IID_TOPLOCK ),     String( CUI_RES( STR_TOPLOCK ) ) );
-    maVsRefEdge.InsertItem( IID_CELLLOCK,   aImageList.GetImage( IID_CELLLOCK ),    String( CUI_RES( STR_CELLLOCK ) ) );
+    m_pVsRefEdge->SetColCount( 3 );
+    m_pVsRefEdge->InsertItem( IID_BOTTOMLOCK, aImageList.GetImage( IID_BOTTOMLOCK ),  m_pFtBotLock->GetText() );
+    m_pVsRefEdge->InsertItem( IID_TOPLOCK,    aImageList.GetImage( IID_TOPLOCK ),     m_pFtTopLock->GetText() );
+    m_pVsRefEdge->InsertItem( IID_CELLLOCK,   aImageList.GetImage( IID_CELLLOCK ),    m_pFtCelLock->GetText() );
 
-    maVsRefEdge.SetSizePixel( maVsRefEdge.CalcWindowSizePixel( aItemSize ) );
+    m_pVsRefEdge->SetSizePixel( m_pVsRefEdge->CalcWindowSizePixel( aItemSize ) );
 
-    maVsRefEdge.SelectItem( nSel );
+    m_pVsRefEdge->SelectItem( nSel );
 }
 
 void AlignmentTabPage::UpdateEnableControls()
 {
-    sal_uInt16 nHorAlign = maLbHorAlign.GetSelectEntryPos();
+    sal_uInt16 nHorAlign = m_pLbHorAlign->GetSelectEntryPos();
     bool bHorLeft  = (nHorAlign == ALIGNDLG_HORALIGN_LEFT);
     bool bHorBlock = (nHorAlign == ALIGNDLG_HORALIGN_BLOCK);
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);
     bool bHorDist  = (nHorAlign == ALIGNDLG_HORALIGN_DISTRIBUTED);
 
     // indent edit field only for left alignment
-    maFtIndent.Enable( bHorLeft );
-    maEdIndent.Enable( bHorLeft );
+    m_pFtIndent->Enable( bHorLeft );
+    m_pEdIndent->Enable( bHorLeft );
 
     // rotation/stacked disabled for fill alignment
-    maOrientHlp.Enable( !bHorFill );
+    m_pOrientHlp->Enable( !bHorFill );
 
     // hyphenation only for automatic line breaks or for block alignment
-    maBtnHyphen.Enable( maBtnWrap.IsChecked() || bHorBlock );
+    m_pBtnHyphen->Enable( m_pBtnWrap->IsChecked() || bHorBlock );
 
     // shrink only without automatic line break, and not for block, fill or distribute.
-    maBtnShrink.Enable( (maBtnWrap.GetState() == STATE_NOCHECK) && !bHorBlock && !bHorFill && !bHorDist );
+    m_pBtnShrink->Enable( (m_pBtnWrap->GetState() == STATE_NOCHECK) && !bHorBlock && !bHorFill && !bHorDist );
 
-    // visibility of fixed lines
-    maFlAlignment.Show( maLbHorAlign.IsVisible() || maEdIndent.IsVisible() || maLbVerAlign.IsVisible() );
-    maFlOrient.Show( maCtrlDial.IsVisible() || maVsRefEdge.IsVisible() || maCbStacked.IsVisible() || maCbAsianMode.IsVisible() );
-    maFlProperties.Show( maBtnWrap.IsVisible() || maBtnHyphen.IsVisible() || maBtnShrink.IsVisible() || maLbFrameDir.IsVisible() );
 }
 
 bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const

@@ -17,202 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cuires.hrc>
-#include "helpid.hrc"
 #include "align.hrc"
-#include <svx/dialogs.hrc>
 
 #define MASKCOLOR \
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }
 
  // define ---------------------------------------------------------------
 #define IL_LOCK_MCOL Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
- // RID_SVXPAGE_ALIGNMENT -------------------------------------------------
-TabPage RID_SVXPAGE_ALIGNMENT
-{
-    HelpId = HID_ALIGNMENT ;
-    Hide = TRUE ;
-    Text [ en-US ] = "Alignment" ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    SVLook = TRUE ;
-    FixedLine FL_ALIGNMENT
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Text alignment";
-    };
-    FixedText FT_HORALIGN
-    {
-        Pos = MAP_APPFONT ( 12 ,14 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ en-US ] = "Hori~zontal";
-    };
-    ListBox LB_HORALIGN
-    {
-        HelpID = "cui:ListBox:RID_SVXPAGE_ALIGNMENT:LB_HORALIGN";
-        Border = TRUE;
-        Pos = MAP_APPFONT ( 12 , 25  );
-        Size = MAP_APPFONT ( 100 , 60 );
-        TabStop = TRUE;
-        DropDown = TRUE;
-        StringList [ en-US ] =
-        {
-            < "Default" ; ALIGNDLG_HORALIGN_STD ; > ;
-            < "Left" ; ALIGNDLG_HORALIGN_LEFT ; > ;
-            < "Center" ; ALIGNDLG_HORALIGN_CENTER ; > ;
-            < "Right" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
-            < "Justified" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
-            < "Filled" ; ALIGNDLG_HORALIGN_FILL ; > ;
-            < "Distributed" ; ALIGNDLG_HORALIGN_DISTRIBUTED ; > ;
-        };
-    };
-    FixedText FT_INDENT
-    {
-        Pos = MAP_APPFONT ( 118 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ en-US ] = "I~ndent" ;
-    };
-    MetricField ED_INDENT
-    {
-        HelpID = "cui:MetricField:RID_SVXPAGE_ALIGNMENT:ED_INDENT";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 25 ) ;
-        Size = MAP_APPFONT ( 36 , 12 ) ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 0 ;
-        Maximum = 990 ;
-        SpinSize = 10 ;
-        Unit = FUNIT_POINT ;
-    };
-    FixedText FT_VERALIGN
-    {
-        Pos = MAP_APPFONT ( 160 , 14 ) ;
-        Size = MAP_APPFONT ( 88 , 8 ) ;
-        Text [ en-US ] = "~Vertical";
-    };
-    ListBox LB_VERALIGN
-    {
-        HelpID = "cui:ListBox:RID_SVXPAGE_ALIGNMENT:LB_VERALIGN";
-        Border = TRUE;
-        Pos = MAP_APPFONT ( 160 , 25  );
-        Size = MAP_APPFONT ( 88 , 60 );
-        TabStop = TRUE;
-        DropDown = TRUE;
-        StringList [ en-US ] =
-        {
-            < "Default" ; ALIGNDLG_VERALIGN_STD ; > ;
-            < "Top" ; ALIGNDLG_VERALIGN_TOP ; > ;
-            < "Middle" ; ALIGNDLG_VERALIGN_MID ; > ;
-            < "Bottom" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
-            < "Justified" ; ALIGNDLG_VERALIGN_BLOCK ; > ;
-            < "Distributed" ; ALIGNDLG_VERALIGN_DISTRIBUTED ; > ;
-        };
-    };
-    FixedLine FL_ORIENTATION
-    {
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Text orientation" ;
-    };
-    TriStateBox BTN_TXTSTACKED
-    {
-        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_TXTSTACKED";
-        Pos = MAP_APPFONT ( 133 , 54 ) ;
-        Size = MAP_APPFONT ( 115 , 10 ) ;
-        TabStop = TRUE ;
-        Text[ en-US ] = "Ve~rtically stacked";
-    };
-    Control CTR_DIAL
-    {
-        HelpId = HID_ALIGNMENT_CTR_DIAL ;
-        Pos = MAP_APPFONT ( 12 , 60 ) ;
-        Size = MAP_APPFONT ( 42 , 43 ) ;
-        Text = "ABCD" ;
-    };
-    FixedText FT_DEGREES
-    {
-        Pos = MAP_APPFONT ( 72 , 54 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ en-US ] = "De~grees";
-    };
-    NumericField NF_DEGREES
-    {
-        HelpID = "cui:NumericField:RID_SVXPAGE_ALIGNMENT:NF_DEGREES";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 65 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 0 ;
-        Maximum = 359 ;
-        SpinSize = 5 ;
-        StrictFormat = TRUE ;
-    };
-    FixedText FT_BORDER_LOCK
-    {
-        Pos = MAP_APPFONT ( 72 , 83 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ en-US ] = "Re~ference edge" ;
-    };
-    Control CTR_BORDER_LOCK
-    {
-        HelpId = HID_ALIGNMENT_CTR_BORDER_LOCK ;
-        Pos = MAP_APPFONT ( 72 , 94 ) ;
-        Size = MAP_APPFONT ( 50 , 15 ) ;
-        TabStop = TRUE ;
-    };
-    TriStateBox BTN_ASIAN_VERTICAL
-    {
-        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_ASIAN_VERTICAL";
-        Pos = MAP_APPFONT ( 143 , 68 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Asian layout ~mode" ;
-    };
-    FixedLine FL_WRAP
-    {
-        Pos = MAP_APPFONT ( 6 , 115 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Properties" ;
-    };
-    TriStateBox BTN_WRAP
-    {
-        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_WRAP";
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ en-US ] = "~Wrap text automatically" ;
-    };
-    TriStateBox BTN_HYPH
-    {
-        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_HYPH";
-        Pos = MAP_APPFONT ( 22 , 139 ) ;
-        Size = MAP_APPFONT ( 226 , 10 ) ;
-        Text [ en-US ] = "Hyphenation ~active";
-    };
-    TriStateBox BTN_SHRINK
-    {
-        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_SHRINK";
-        Pos = MAP_APPFONT( 12, 152 );
-        Size = MAP_APPFONT( 236, 10 );
-        Text [ en-US ] = "~Shrink to fit cell size";
-    };
-    FixedText FT_TEXTFLOW
-    {
-        Pos = MAP_APPFONT( 12 , 170 );
-        Size = MAP_APPFONT( 64 , 8 );
-        Text [ en-US ] = "Te~xt direction";
-    };
-    ListBox LB_FRAMEDIR
-    {
-        HelpID = "cui:ListBox:RID_SVXPAGE_ALIGNMENT:LB_FRAMEDIR";
-        Pos = MAP_APPFONT( 78 , 168 );
-        Size = MAP_APPFONT( 170 , 50 );
-        Border = TRUE;
-        DropDown = TRUE;
-    };
-    ImageList IL_LOCK_BMPS
+
+ImageList IL_LOCK_BMPS
     {
         Prefix = "lo";
         MaskColor = IL_LOCK_MCOL ;
@@ -224,19 +37,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
         };
         IdCount = { 3 ; };
     };
-    String STR_BOTTOMLOCK
-    {
-        Text [ en-US ] = "Text Extension From Lower Cell Border" ;
-    };
-    String STR_TOPLOCK
-    {
-        Text [ en-US ] = "Text Extension From Upper Cell Border" ;
-    };
-    String STR_CELLLOCK
-    {
-        Text [ en-US ] = "Text Extension Inside Cell" ;
-    };
-};
  // ********************************************************************** EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

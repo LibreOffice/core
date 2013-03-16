@@ -51,6 +51,8 @@ class SVX_DLLPUBLIC DialControl : public Control
 {
 public:
     explicit            DialControl( Window* pParent, const ResId& rResId );
+    explicit            DialControl( Window* pParent, WinBits nBits );
+
     virtual             ~DialControl();
 
     virtual void        Paint( const Rectangle& rRect );

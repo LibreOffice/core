@@ -33,6 +33,7 @@ class SVX_DLLPUBLIC WrapField : public NumericField
 {
 public:
     explicit            WrapField( Window* pParent, const ResId& rResId );
+    explicit            WrapField( Window* pParent, WinBits nBits );
 
 protected:
     /** Up event with wrap-around functionality. */
