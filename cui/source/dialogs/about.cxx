@@ -20,7 +20,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <osl/process.h>
 #include <tools/stream.hxx>
 #include <rtl/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
@@ -36,13 +35,8 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/bootstrap.hxx"
-#include <com/sun/star/graphic/XPrimitive2DRenderer.hpp>
 #include <basegfx/numeric/ftools.hxx>
-#include <vcl/canvastools.hxx>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
-#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfxcommands.h>
@@ -191,87 +185,6 @@ void AboutDialog::StyleControls()
     aCancelButton.GrabFocus();
 }
 
-static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth )
-{
-    // Load from disk
-    // ---------------------------------------------------------------------
-    rtl::OUString aBaseName = ( rtl::OUString("/") +
-                                rtl::OUString::createFromAscii( pName ) );
-    rtl::OUString aSvg( ".svg" );
-
-    rtl_Locale *pLoc = NULL;
-    osl_getProcessLocale (&pLoc);
-    LanguageTag aLanguageTag( *pLoc);
-
-    rtl::OUString uri = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ) + aBaseName+aSvg;
-    rtl::Bootstrap::expandMacros( uri );
-    INetURLObject aObj( uri );
-    SvgData aSvgData(aObj.PathToFileName());
-
-    // transform into [0,0,width,width*aspect] std dimensions
-    // ---------------------------------------------------------------------
-    basegfx::B2DRange aRange(aSvgData.getRange());
-    const double fAspectRatio(aRange.getWidth()/aRange.getHeight());
-    basegfx::B2DHomMatrix aTransform(
-        basegfx::tools::createTranslateB2DHomMatrix(
-            -aRange.getMinX(),
-            -aRange.getMinY()));
-    aTransform.scale(
-        nWidth / aRange.getWidth(),
-        nWidth / fAspectRatio / aRange.getHeight());
-    const drawinglayer::primitive2d::Primitive2DReference xTransformRef(
-        new drawinglayer::primitive2d::TransformPrimitive2D(
-            aTransform,
-            aSvgData.getPrimitive2DSequence()));
-
-    // UNO dance to render from drawinglayer
-    // ---------------------------------------------------------------------
-    uno::Reference< lang::XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory());
-    const rtl::OUString aServiceName("com.sun.star.graphic.Primitive2DTools");
-
-    try
-    {
-        const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer(
-            xFactory->createInstance(aServiceName),
-            uno::UNO_QUERY_THROW);
-
-        if(xPrimitive2DRenderer.is())
-        {
-            // cancel out rasterize's mm2pixel conversion
-            const double fFakeDPI=1000.0/2.54;
-
-            geometry::RealRectangle2D aRealRect(
-                0, 0,
-                nWidth, nWidth / fAspectRatio);
-
-            const uno::Reference< rendering::XBitmap > xBitmap(
-                xPrimitive2DRenderer->rasterize(
-                    drawinglayer::primitive2d::Primitive2DSequence(&xTransformRef, 1),
-                    uno::Sequence< beans::PropertyValue >(),
-                    fFakeDPI,
-                    fFakeDPI,
-                    aRealRect,
-                    500000));
-
-            if(xBitmap.is())
-            {
-                const uno::Reference< rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-
-                if(xIntBmp.is())
-                {
-                    rBitmap = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
-                    return true;
-                }
-            }
-        }
-    }
-    catch(const uno::Exception&)
-    {
-        OSL_ENSURE(sal_False, "Got no graphic::XPrimitive2DRenderer (!)" );
-    }
-    return false;
-}
-
 void AboutDialog::LayoutControls()
 {
     // Get the size of the screen
@@ -297,7 +210,7 @@ void AboutDialog::LayoutControls()
     Point aLogoPos( 0, 0 );
 
     // load svg logo, specify desired width, scale height isotrophically
-    if( loadBrandSvg("flat_logo",
+    if( SfxApplication::loadBrandSvg("flat_logo",
                      aLogoBitmap,
                      aDialogSize.Width()) &&
         !aLogoBitmap.IsEmpty() )
@@ -364,7 +277,7 @@ void AboutDialog::LayoutControls()
 
     // Layout background image
     if ( !(Application::GetSettings().GetStyleSettings().GetHighContrastMode()) )
-        loadBrandSvg("shell/about",
+        SfxApplication::loadBrandSvg("shell/about",
                      aBackgroundBitmap,
                      aDialogSize.Width());
     SetOutputSizePixel( aDialogSize );
