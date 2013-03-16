@@ -1,8 +1,4 @@
 %token-table
-%defines
-%no-lines
-%define api.prefix SQLyy
-%file-prefix "sql"
 %{
 /*
  * This file is part of the LibreOffice project.

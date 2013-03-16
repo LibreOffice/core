@@ -1,6 +1,3 @@
-%option case-insensitive
-%option 8bit
-%option prefix="SQLyy"
 %{
 
 //
