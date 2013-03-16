@@ -1093,9 +1093,10 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
         // will be reset when the style is applied.
 
         ScBaseCell* pNewCell = new ScValueCell(fValue);
+        ScDocument* pDoc = rXMLImport.GetDocument();
         if ( rXMLImport.IsLatinDefaultStyle() )
-            pNewCell->SetScriptType( SCRIPTTYPE_LATIN );
-        rXMLImport.GetDocument()->PutCell(
+            pDoc->SetScriptType(rCurrentPos, SCRIPTTYPE_LATIN);
+        pDoc->PutCell(
             rCurrentPos.Col(), rCurrentPos.Row(),
             rCurrentPos.Tab(), pNewCell );
     }

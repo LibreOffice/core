@@ -1176,9 +1176,8 @@ public:
     SC_DLLPUBLIC const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& GetBreakIterator();
     bool            HasStringWeakCharacters( const rtl::OUString& rString );
     SC_DLLPUBLIC sal_uInt8          GetStringScriptType( const rtl::OUString& rString );
-    SC_DLLPUBLIC sal_uInt8          GetCellScriptType( ScBaseCell* pCell, sal_uLong nNumberFormat );
+    SC_DLLPUBLIC sal_uInt8 GetCellScriptType( const ScAddress& rPos, ScBaseCell* pCell, sal_uLong nNumberFormat );
     SC_DLLPUBLIC sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell );
-    sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     bool            HasDetectiveOperations() const;
     void            AddDetectiveOperation( const ScDetOpData& rData );

@@ -100,9 +100,6 @@ public:
         Returns false for formula cells returning nothing, use HasEmptyData() for that. */
     bool            IsBlank() const;
 
-    inline sal_uInt8     GetScriptType() const { return nScriptType; }
-    inline void     SetScriptType( sal_uInt8 nNew ) { nScriptType = nNew; }
-
     /** Returns true, if the cell contains a broadcaster. */
     inline bool     HasBroadcaster() const { return mpBroadcaster != 0; }
     /** Returns the pointer to the cell broadcaster. */
@@ -144,7 +141,6 @@ private:
 
 protected:
     sal_uInt8            eCellType;      // enum CellType - sal_uInt8 spart Speicher
-    sal_uInt8            nScriptType;
 };
 
 // ============================================================================

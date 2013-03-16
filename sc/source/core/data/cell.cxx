@@ -70,15 +70,13 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell )
 
 ScBaseCell::ScBaseCell( CellType eNewType ) :
     mpBroadcaster( 0 ),
-    eCellType( sal::static_int_cast<sal_uInt8>(eNewType) ),
-    nScriptType( SC_SCRIPTTYPE_UNKNOWN )
+    eCellType( sal::static_int_cast<sal_uInt8>(eNewType) )
 {
 }
 
 ScBaseCell::ScBaseCell( const ScBaseCell& rCell ) :
     mpBroadcaster( 0 ),
-    eCellType( rCell.eCellType ),
-    nScriptType( SC_SCRIPTTYPE_UNKNOWN )
+    eCellType( rCell.eCellType )
 {
 }
 
@@ -1002,7 +1000,7 @@ void ScFormulaCell::Compile( const rtl::OUString& rFormula, bool bNoListening,
     {
         bChanged = true;
         pDocument->SetTextWidth(aPos, TEXTWIDTH_DIRTY);
-        SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+        pDocument->SetScriptType(aPos, SC_SCRIPTTYPE_UNKNOWN);
     }
     if ( bWasInFormulaTree )
         pDocument->PutInFormulaTree( this );
@@ -1096,7 +1094,7 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
     {
         bChanged = true;
         pDocument->SetTextWidth(aPos, TEXTWIDTH_DIRTY);
-        SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+        pDocument->SetScriptType(aPos, SC_SCRIPTTYPE_UNKNOWN);
     }
 
     //  Same as in Load: after loading, it must be known if ocMacro is in any formula
@@ -1367,7 +1365,7 @@ void ScFormulaCell::Interpret()
                             pIterCell->aResult.SetResultError( errNoConvergence);
                             pIterCell->bChanged = true;
                             pDocument->SetTextWidth(pIterCell->aPos, TEXTWIDTH_DIRTY);
-                            pIterCell->SetScriptType( SC_SCRIPTTYPE_UNKNOWN);
+                            pDocument->SetScriptType(pIterCell->aPos, SC_SCRIPTTYPE_UNKNOWN);
                         }
                     }
                     // End this iteration and remove entries.
@@ -1662,7 +1660,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         if( bChanged )
         {
             pDocument->SetTextWidth(aPos, TEXTWIDTH_DIRTY);
-            SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+            pDocument->SetScriptType(aPos, SC_SCRIPTTYPE_UNKNOWN);
         }
         if (bContentChanged && pDocument->IsStreamValid(aPos.Tab()))
         {

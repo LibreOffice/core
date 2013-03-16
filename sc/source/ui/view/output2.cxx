@@ -1598,7 +1598,8 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     }
 
                     sal_uInt8 nScript = mpDoc->GetCellScriptType(
-                        pCell, pPattern->GetNumberFormat(mpDoc->GetFormatTable(), pCondSet));
+                        ScAddress(nCellX, nCellY, nTab), pCell,
+                        pPattern->GetNumberFormat(mpDoc->GetFormatTable(), pCondSet));
 
                     if (nScript == 0)
                         nScript = ScGlobal::GetDefaultScriptType();
