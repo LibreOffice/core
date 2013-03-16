@@ -2083,7 +2083,7 @@ sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
 sal_uInt8 ScTable::GetScriptType( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidCol(nCol))
-        return SC_SCRIPTTYPE_UNKNOWN;
+        return 0;
 
     return aCol[nCol].GetScriptType(nRow);
 }

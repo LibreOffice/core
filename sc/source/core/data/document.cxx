@@ -5717,7 +5717,7 @@ sal_uInt8 ScDocument::GetScriptType( const ScAddress& rPos ) const
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetScriptType(rPos.Col(), rPos.Row());
 
-    return SC_SCRIPTTYPE_UNKNOWN;
+    return 0;
 }
 
 void ScDocument::SetScriptType( const ScAddress& rPos, sal_uInt8 nType )

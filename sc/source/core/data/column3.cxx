@@ -97,7 +97,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
         }
 
         maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
-        maScriptTypes.set_empty(nRow, nRow); // empty element represents unknown script state.
+        maScriptTypes.set<unsigned short>(nRow, SC_SCRIPTTYPE_UNKNOWN);
         CellStorageModified();
     }
     // When we insert from the Clipboard we still have wrong (old) References!
@@ -143,7 +143,7 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
     maItems.back().nRow  = nRow;
 
     maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
-    maScriptTypes.set_empty(nRow, nRow); // empty element represents unknown script state.
+    maScriptTypes.set<unsigned short>(nRow, SC_SCRIPTTYPE_UNKNOWN);
     CellStorageModified();
 }
 
@@ -1447,7 +1447,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                 pOldCell->Delete();
                 maItems[i].pCell = pNewCell; // Replace
                 maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
-                maScriptTypes.set_empty(nRow, nRow); // empty element represents unknown script state.
+                maScriptTypes.set<unsigned short>(nRow, SC_SCRIPTTYPE_UNKNOWN);
                 CellStorageModified();
 
                 if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )

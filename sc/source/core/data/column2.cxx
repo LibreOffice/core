@@ -1509,7 +1509,7 @@ void ScColumn::SetTextWidth(SCROW nRow, unsigned short nWidth)
 sal_uInt8 ScColumn::GetScriptType( SCROW nRow ) const
 {
     if (!ValidRow(nRow) || maScriptTypes.is_empty(nRow))
-        return SC_SCRIPTTYPE_UNKNOWN;
+        return 0;
 
     return maScriptTypes.get<unsigned short>(nRow);
 }
@@ -1519,8 +1519,7 @@ void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
     if (!ValidRow(nRow))
         return;
 
-    if (nType == SC_SCRIPTTYPE_UNKNOWN)
-        // empty element represents unknown script type.
+    if (!nType)
         maScriptTypes.set_empty(nRow, nRow);
     else
         maScriptTypes.set<unsigned short>(nRow, nType);
