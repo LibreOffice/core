@@ -26,9 +26,9 @@ define gb_Postprocess_make_targets
 $(call gb_Postprocess_Postprocess,AllExecutables,All executables)
 $(call gb_Postprocess_Postprocess,AllLibraries,All libraries)
 $(call gb_Postprocess_Postprocess,AllModulesButInstsetNative,All modules but instset,$(WORKDIR)/Module/)
-$(call gb_Postprocess_Postprocess,AllPackages,All packages)
-$(call gb_Postprocess_Postprocess,AllResources,All resources)
-$(call gb_Postprocess_Postprocess,AllUIs,All UI files)
+$(call gb_Postprocess_Postprocess,AllPackages,All packages,$(WORKDIR)/Package/)
+$(call gb_Postprocess_Postprocess,AllResources,All resources,$(WORKDIR)/AllLangRes/)
+$(call gb_Postprocess_Postprocess,AllUIs,All UI files,$(WORKDIR)/UI/)
 
 endef
 
