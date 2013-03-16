@@ -42,7 +42,6 @@ SalData::SalData()
     mxGraySpace( CGColorSpaceCreateDeviceGray( ) ),
     mxP50Space( NULL ),
     mxP50Pattern( NULL ),
-    mnSystemVersion( VER_TIGER ),
     mnDPIX( 0 ),
     mnDPIY( 0 )
 {

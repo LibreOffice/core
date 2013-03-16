@@ -52,9 +52,6 @@ class SystemFontList;
 
 #define SAL_CLIPRECT_COUNT 16
 
-#define VER_TIGER   0x1040
-#define VER_LEOPARD 0x1050
-
 // -----------
 // - SalData -
 // -----------
@@ -86,8 +83,6 @@ public:
     std::vector< UIMenuItem* >                    maFallbackMenu;
 
     static oslThreadKey                           s_aAutoReleaseKey;
-
-    SInt32                                        mnSystemVersion;          // Store System Version
 
     long                                          mnDPIX;           // #i100617# read DPI only once per office life
     long                                          mnDPIY;           // #i100617# read DPI only once per office life
