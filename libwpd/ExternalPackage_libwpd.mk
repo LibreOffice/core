@@ -29,7 +29,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libwpd,inc/external/libwpd-s
 $(eval $(call gb_ExternalPackage_use_external_project,libwpd,libwpd))
 
 ifeq ($(OS)$(COM),WNTMSC)
-$(eval $(call gb_ExternalPackage_add_file,libwpd,lib/wpd-0.9.lib,build/win32/Release/lib/libwpd-0.9.lib))
+$(eval $(call gb_ExternalPackage_add_file,libwpd,lib/wpd-0.9.lib,src/lib/.libs/libwpd-0.9.lib))
 else
 $(eval $(call gb_ExternalPackage_add_file,libwpd,lib/libwpd-0.9.a,src/lib/.libs/libwpd-0.9.a))
 endif

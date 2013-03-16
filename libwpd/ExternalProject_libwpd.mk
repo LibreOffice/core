@@ -11,29 +11,11 @@ $(eval $(call gb_ExternalProject_ExternalProject,libwpd))
 
 $(eval $(call gb_ExternalProject_use_unpacked,libwpd,wpd))
 
+$(eval $(call gb_ExternalProject_use_autoconf,libwpd,build))
+
 $(eval $(call gb_ExternalProject_register_targets,libwpd,\
 	build \
 ))
-
-ifeq ($(OS)$(COM),WNTMSC)
-
-ifeq ($(VCVER),90)
-$(call gb_ExternalProject_get_state_target,libwpd,build) :
-	$(call gb_ExternalProject_run,build,\
-		$(COMPATH)/vcpackages/vcbuild.exe libwpd.vcproj "Release|Win32" \
-	,build/win32)
-else ifeq ($(VCVER),100)
-$(call gb_ExternalProject_get_state_target,libwpd,build) :
-	$(call gb_ExternalProject_run,build,\
-		msbuild.exe libwpd.vcxproj /p:Configuration=Release \
-	,build/win32)
-else
-$(call gb_ExternalProject_get_state_target,libwpd,build) :
-	$(call gb_ExternalProject_run,build,\
-		msbuild.exe libwpd.vcxproj /p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 /p:TargetName=libwpd-0.9 /p:Configuration=Release \
-	,build/win32)
-endif
-else
 
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
 	$(call gb_ExternalProject_run,build,\
@@ -49,7 +31,5 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(MAKE) \
 	)
-
-endif
 
 # vim: set noet sw=4 ts=4:
