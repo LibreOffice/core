@@ -1849,6 +1849,9 @@ public:
     sal_uInt16 GetTextWidth( const ScAddress& rPos ) const;
     void SetTextWidth( const ScAddress& rPos, sal_uInt16 nWidth );
 
+    sal_uInt8 GetScriptType( const ScAddress& rPos ) const;
+    void SetScriptType( const ScAddress& rPos, sal_uInt8 nType );
+
 private: // CLOOK-Impl-methods
 
     /**

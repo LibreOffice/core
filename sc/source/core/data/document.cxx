@@ -5711,6 +5711,22 @@ void ScDocument::SetTextWidth( const ScAddress& rPos, sal_uInt16 nWidth )
         maTabs[nTab]->SetTextWidth(rPos.Col(), rPos.Row(), nWidth);
 }
 
+sal_uInt8 ScDocument::GetScriptType( const ScAddress& rPos ) const
+{
+    SCTAB nTab = rPos.Tab();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->GetScriptType(rPos.Col(), rPos.Row());
+
+    return SC_SCRIPTTYPE_UNKNOWN;
+}
+
+void ScDocument::SetScriptType( const ScAddress& rPos, sal_uInt8 nType )
+{
+    SCTAB nTab = rPos.Tab();
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->SetScriptType(rPos.Col(), rPos.Row(), nType);
+}
+
 void ScDocument::EnableUndo( bool bVal )
 {
     // The undo manager increases lock count every time undo is disabled.
