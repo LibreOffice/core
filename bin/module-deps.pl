@@ -214,7 +214,7 @@ sub collapse_lib_to_module($)
         my $result = $tree->{$name};
         # sal has no dependencies, take care of it
         # otherwise it doesn't have target key
-        if (!defined(@{$result->{deps}})) {
+        if (!@{$result->{deps}}) {
             $digraph{$name}{target} = $result->{target};
         }
         for my $dep (@{$result->{deps}}) {
