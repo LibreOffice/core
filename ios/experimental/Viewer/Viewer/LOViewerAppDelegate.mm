@@ -40,11 +40,11 @@
 {
     (void) argument;
 
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
 
-    lo_initialize();
+        lo_initialize();
 
-    [pool release];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
