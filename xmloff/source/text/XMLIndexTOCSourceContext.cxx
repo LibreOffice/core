@@ -169,7 +169,7 @@ SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
-                                           aLevelNameTOCMap,
+                                           aSvLevelNameTOCMap,
                                            XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameTOCMap,
                                            aAllowedTokenTypesTOC, sal_True );

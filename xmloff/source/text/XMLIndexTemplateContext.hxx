@@ -40,7 +40,7 @@ struct SvXMLEnumMapEntry;
 // constants for the XMLIndexTemplateContext constructor
 
 // TOC and user defined index:
-extern const SvXMLEnumMapEntry aLevelNameTOCMap[];
+extern const SvXMLEnumMapEntry aSvLevelNameTOCMap[];
 extern const sal_Char* aLevelStylePropNameTOCMap[];
 extern const sal_Bool aAllowedTokenTypesTOC[];
 extern const sal_Bool aAllowedTokenTypesUser[];

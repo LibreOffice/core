@@ -198,7 +198,7 @@ SvXMLImportContext* XMLIndexUserSourceContext::CreateChildContext(
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
-                                           aLevelNameTOCMap,
+                                           aSvLevelNameTOCMap,
                                            XML_OUTLINE_LEVEL,
                                            aLevelStylePropNameTOCMap,
                                            aAllowedTokenTypesUser);

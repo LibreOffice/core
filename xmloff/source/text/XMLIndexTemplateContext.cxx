@@ -341,7 +341,7 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
 
 // table of content and user defined index:
 
-const SvXMLEnumMapEntry aLevelNameTOCMap[] =
+const SvXMLEnumMapEntry aSvLevelNameTOCMap[] =
 {
     { XML_1, 1 },
     { XML_2, 2 },
