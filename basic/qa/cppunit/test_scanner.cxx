@@ -766,14 +766,14 @@ namespace
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 2783);
     CPPUNIT_ASSERT(symbols[0].text == OUString());
-    CPPUNIT_ASSERT(symbols[0].type = SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[1].text == cr);
 
     symbols = getSymbols(source3);
     CPPUNIT_ASSERT(symbols.size() == 2);
     CPPUNIT_ASSERT(symbols[0].number == 16);
     CPPUNIT_ASSERT(symbols[0].text == OUString());
-    CPPUNIT_ASSERT(symbols[0].type = SbxINTEGER);
+    CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[1].text == cr);
 
     symbols = getSymbols(source4);
