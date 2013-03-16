@@ -52,7 +52,7 @@ public:
         if ( rStr.indexOf( sal_Unicode( '"' ) ) >= 0 ||
              rStr.indexOf( sal_Unicode( ';' ) ) >= 0 )
         {
-            String aQuoted( rStr );
+            rtl::OUString aQuoted( rStr );
             ScGlobal::AddQuotes( aQuoted, sal_Unicode( '"' ) );
             aMessage.append( aQuoted );
         }
@@ -166,7 +166,7 @@ public:
     {
         if (n > 0 && (size_t)n < getArgCount() )
         {
-            String aUStr( maArgs[ n ] );
+            rtl::OUString aUStr( maArgs[ n ] );
             ScGlobal::EraseQuotes( aUStr );
             return aUStr;
         } else
