@@ -347,6 +347,12 @@ $(eval $(call gb_Library_use_packages,vcl,\
 	basebmp_inc \
 ))
 
+vcl_coretext_code=\
+    vcl/coretext/salcoretextfontutils \
+    vcl/coretext/salcoretextlayout \
+    vcl/coretext/salcoretextstyle \
+    vcl/coretext/salgdi
+
 # GUIBASE specific stuff
 
 ifeq ($(OS),MACOSX)
@@ -362,10 +368,7 @@ $(eval $(call gb_Library_add_defs,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/coretext/salcoretextfontutils \
-    vcl/coretext/salcoretextlayout \
-    vcl/coretext/salcoretextstyle \
-    vcl/coretext/salgdi \
+    $(vcl_coretext_code) \
 ))
 
 ifeq ($(MACOSX_SDK_VERSION),1070)
@@ -603,11 +606,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/dtrans/iOSTransferable \
     vcl/ios/source/dtrans/ios_clipboard \
     vcl/ios/source/dtrans/service_entry \
-    vcl/coretext/salcoretextfontutils \
-    vcl/coretext//salcoretextlayout \
-    vcl/coretext//salcoretextstyle \
+    $(vcl_coretext_code) \
     vcl/quartz/salbmp \
-    vcl/coretext/salgdi \
     vcl/ios/source/gdi/salgdicommon \
     vcl/ios/source/gdi/salnativewidgets \
     vcl/ios/source/gdi/salgdiutils \
