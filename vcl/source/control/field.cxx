@@ -53,7 +53,7 @@ using namespace ::comphelper;
 
 static sal_Int64 ImplPower10( sal_uInt16 n )
 {
-    sal_uInt16 i;
+    sal_uInt16  i;
     sal_Int64   nValue = 1;
 
     for ( i=0; i < n; i++ )
@@ -1264,9 +1264,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sa
         {
             if ( (mnBaseValue <= 0) || (nValue <= 0) )
                 return nValue;
-            nDiv = 100;
-            for ( sal_uInt16 i=0; i < nDecDigits; i++ )
-                nDiv *= 10;
+            nDiv = 100 * ImplPower10(nDecDigits);
 
             nMult = mnBaseValue;
         }
@@ -1333,11 +1331,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
     }
     else
     {
-        while ( nDecDigits )
-        {
-            nValue *= 10;
-            nDecDigits--;
-        }
+        nValue *= ImplPower10(nDecDigits);
     }
 
     if ( eFieldUnit != eOutUnit )
@@ -1381,19 +1375,11 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
 
     if ( nDecDigits < 0 )
     {
-        while ( nDecDigits )
-        {
-            nValue *= 10;
-            nDecDigits++;
-        }
+        nValue *= ImplPower10(-nDecDigits);
     }
     else
     {
-        while ( nDecDigits )
-        {
-            nValue /= 10;
-            nDecDigits--;
-        }
+        nValue /= ImplPower10(nDecDigits);
     }
 
     if ( eFieldUnit != eInUnit )
