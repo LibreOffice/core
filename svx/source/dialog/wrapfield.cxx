@@ -18,12 +18,23 @@
  */
 
 #include "svx/wrapfield.hxx"
+#include <vcl/builder.hxx>
 
 namespace svx {
 
 WrapField::WrapField( Window* pParent, const ResId& rResId ) :
     NumericField( pParent, rResId )
 {
+}
+
+WrapField::WrapField( Window* pParent, WinBits nBits ) :
+    NumericField( pParent, nBits )
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeWrapField(Window *pParent, VclBuilder::stringmap &)
+{
+    return new WrapField(pParent, WB_SPIN|WB_REPEAT|WB_BORDER|WB_TABSTOP);
 }
 
 void WrapField::Up()
