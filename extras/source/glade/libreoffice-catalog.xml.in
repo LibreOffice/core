@@ -123,6 +123,12 @@
     <glade-widget-class title="Tree List" name="svtlo-SvTreeListBox"
                         generic-name="Tree List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Dial Control" name="svxlo-DialControl"
+                        generic-name="Dial Control" parent="GtkSpinner"
+                        icon-name="widget-gtk-spinner"/>
+    <glade-widget-class title="Wrap Field" name="svxlo-WrapField"
+                        generic-name="Wrap Field" parent="GtkSpinButton"
+                        icon-name="widget-gtk-spinbutton"/>
 
     <glade-widget-class title="VclComboBoxText" name="VclComboBoxText"
                         generic-name="ComboBoxText" parent="GtkComboBoxText"

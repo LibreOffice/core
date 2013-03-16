@@ -25,6 +25,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/field.hxx>
 #include <svtools/colorcfg.hxx>
+#include <vcl/builder.hxx>
 
 namespace svx {
 
@@ -289,8 +290,20 @@ DialControl::DialControl( Window* pParent, const ResId& rResId ) :
     Init( GetOutputSizePixel() );
 }
 
+DialControl::DialControl( Window* pParent, WinBits nBits ) :
+    Control( pParent, nBits ),
+     mpImpl( new DialControl_Impl( *this ) )
+{
+    Init( GetOutputSizePixel() );
+}
+
 DialControl::~DialControl()
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDialControl(Window *pParent, VclBuilder::stringmap &)
+{
+ return new DialControl(pParent, WB_BORDER | WB_TABSTOP);
 }
 
 void DialControl::Paint( const Rectangle&  )
