@@ -198,56 +198,56 @@ public:
     SwAccessibleContext( SwAccessibleMap *pMap, sal_Int16 nRole,
                          const SwFrm *pFrm );
 
-    //=====  XAccessible  =====================================================
+    // XAccessible
 
-    /// Return the XAccessibleContext.
+    // Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext (void) throw (com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleContext  ==============================================
+    // XAccessibleContext
 
-    /// Return the number of currently visible children.
+    // Return the number of currently visible children.
     virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the specified child or NULL if index is invalid.
+    // Return the specified child or NULL if index is invalid.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
-    /// Return a reference to the parent.
+    // Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return this objects index among the parents children.
+    // Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
         getAccessibleIndexInParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return this object's role.
+    // Return this object's role.
     virtual sal_Int16 SAL_CALL
         getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return this object's description.
+    // Return this object's description.
     virtual OUString SAL_CALL
         getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the object's current name.
+    // Return the object's current name.
     virtual OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return NULL to indicate that an empty relation set.
+    // Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /// Return the set of current states.
+    // Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet (void)
@@ -260,7 +260,7 @@ public:
         getLocale (void)
         throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleEventBroadcaster  =====================================
+    // XAccessibleEventBroadcaster
 
     virtual void SAL_CALL addAccessibleEventListener(
             const ::com::sun::star::uno::Reference<
@@ -271,7 +271,7 @@ public:
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleComponent  ============================================
+    // XAccessibleComponent
     virtual sal_Bool SAL_CALL containsPoint(
             const ::com::sun::star::awt::Point& aPoint )
         throw (::com::sun::star::uno::RuntimeException);
@@ -304,7 +304,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 
-    //=====  XServiceInfo  ====================================================
+    // XServiceInfo
 
     /** Returns an identifier for the implementation of this object.
     */
@@ -325,7 +325,7 @@ public:
         getSupportedServiceNames (void)
              throw (::com::sun::star::uno::RuntimeException);
 
-    //====== thread safe C++ interface ========================================
+    // thread safe C++ interface
 
     // The object is not visible an longer and should be destroyed
     virtual void Dispose( sal_Bool bRecursive = sal_False );

@@ -258,7 +258,7 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 }
 
 
-// =====  XAccessibleInterface  ===========================================
+// XAccessibleInterface
 
 uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
     throw( uno::RuntimeException )
@@ -276,7 +276,7 @@ uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
     }
 }
 
-//====== XTypeProvider ====================================================
+// XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
     throw(uno::RuntimeException)
 {
@@ -302,7 +302,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
     return theSwAccessibleCellImplementationId::get().getSeq();
 }
 
-// =====  XAccessibleValue  ===============================================
+// XAccessibleValue
 
 SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
 {

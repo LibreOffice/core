@@ -31,9 +31,7 @@ using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 
-//
 // SwAccessiblePreview
-//
 
 SwAccessiblePreview::SwAccessiblePreview( SwAccessibleMap *pMp ) :
     SwAccessibleDocumentBase( pMp )

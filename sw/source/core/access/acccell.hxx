@@ -52,30 +52,27 @@ public:
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
 
-    //=====  XAccessibleContext  ==============================================
+    // XAccessibleContext
 
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
 
-    //=====  XServiceInfo  ====================================================
+    // XServiceInfo
 
-    /** Returns an identifier for the implementation of this object.
-    */
+    // Returns an identifier for the implementation of this object.
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Return whether the specified service is supported by this class.
-    */
+    // Return whether the specified service is supported by this class.
     virtual sal_Bool SAL_CALL
         supportsService (const ::rtl::OUString& sServiceName)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Returns a list of all supported services.  In this case that is just
-        the AccessibleContext service.
-    */
+    // Returns a list of all supported services.  In this case that is just
+    // the AccessibleContext service.
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -84,7 +81,7 @@ public:
 
     virtual void InvalidatePosOrSize( const SwRect& rFrm );
 
-    //=====  XInterface  ======================================================
+    // XInterface
 
     // (XInterface methods need to be implemented to disambiguate
     // between those inherited through SwAcessibleContext and
@@ -100,11 +97,11 @@ public:
     virtual void SAL_CALL release(  ) throw ()
         { SwAccessibleContext::release(); };
 
-    //====== XTypeProvider ====================================================
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleValue  ================================================
+    // XAccessibleValue
 
 private:
     SwFrmFmt* GetTblBoxFormat() const;
