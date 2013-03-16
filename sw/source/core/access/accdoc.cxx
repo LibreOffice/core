@@ -47,12 +47,8 @@ using ::rtl::OUString;
 
 using lang::IndexOutOfBoundsException;
 
-
-
-//
 // SwAccessibleDocumentBase: base class for SwAccessibleDocument and
 // SwAccessiblePreview
-//
 
 SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *_pMap ) :
     SwAccessibleContext( _pMap, AccessibleRole::DOCUMENT,
@@ -77,7 +73,7 @@ void SwAccessibleDocumentBase::SetVisArea()
         SwAccessibleFrame::SetVisArea( GetMap()->GetVisArea() );
         // #i58139# - showing state of document view needs also be updated.
         // Thus, call method <Scrolled(..)> instead of <ChildrenScrolled(..)>
-//        ChildrenScrolled( GetFrm(), aOldVisArea );
+        // ChildrenScrolled( GetFrm(), aOldVisArea );
         Scrolled( aOldVisArea );
     }
 }
@@ -282,9 +278,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
     return SwAccessibleContext::getAccessibleAtPoint( aPoint );
 }
 
-//
 // SwAccessibeDocument
-//
 
 void SwAccessibleDocument::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
@@ -401,7 +395,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceName
     return aRet;
 }
 
-//=====  XInterface  ======================================================
+// XInterface
 
 uno::Any SwAccessibleDocument::queryInterface(
     const uno::Type& rType )
@@ -418,7 +412,7 @@ uno::Any SwAccessibleDocument::queryInterface(
     return aRet;
 }
 
-//====== XTypeProvider ====================================================
+// XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
     throw(uno::RuntimeException)
 {
@@ -444,7 +438,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
     return theSwAccessibleDocumentImplementationId::get().getSeq();
 }
 
-//=====  XAccessibleSelection  ============================================
+// XAccessibleSelection
 
 void SwAccessibleDocument::selectAccessibleChild(
     sal_Int32 nChildIndex )

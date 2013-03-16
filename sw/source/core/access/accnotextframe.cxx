@@ -181,11 +181,7 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
     return msDesc;
 }
 
-
-
-//
 // XInterface
-//
 
 uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aType )
     throw (uno::RuntimeException)
@@ -203,7 +199,8 @@ uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aTyp
 }
 
 
-//====== XTypeProvider ====================================================
+// XTypeProvider
+
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aTypes( SwAccessibleFrameBase::getTypes() );
@@ -217,14 +214,10 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(un
     return aTypes;
 }
 
-
-//
-// XAccessibleImage
-//
-
-// implementation of the XAccessibleImage methods is a no-brainer, as
-// all releveant information is already accessible through other
-// methods. So we just delegate to those.
+/// XAccessibleImage
+/** implementation of the XAccessibleImage methods is a no-brainer, as
+    all releveant information is already accessible through other
+    methods. So we just delegate to those. */
 
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageDescription()
     throw ( uno::RuntimeException )

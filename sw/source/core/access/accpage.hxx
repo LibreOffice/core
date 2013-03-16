@@ -57,18 +57,12 @@ public:
     // may only be called with SwPageFrm argument
     SwAccessiblePage( SwAccessibleMap* pInitMap, const SwFrm* pFrame );
 
-
-
-    //
     // XAccessibleContext methods that need to be overridden
-    //
 
     virtual ::rtl::OUString SAL_CALL getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //
     // XServiceInfo
-    //
 
     virtual ::rtl::OUString SAL_CALL getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
@@ -79,7 +73,7 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XTypeProvider  ====================================================
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
