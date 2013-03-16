@@ -16,6 +16,24 @@
       "revId": "6007d1ffc6cd22a944592bfc2295ddb291af7c31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///eg\u003d",
+        "filename": "sd/source/ui/dlg/PhotoAlbumDialog.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-03-16T09:33:53Z",
+      "side": 1,
+      "message": "http://opengrok.libreoffice.org/xref/core/toolkit/source/awt/vclxwindows.cxx#2055 get an Image from URL",
+      "parentUuid": "AAAAW3///gA\u003d",
+      "revId": "6007d1ffc6cd22a944592bfc2295ddb291af7c31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
