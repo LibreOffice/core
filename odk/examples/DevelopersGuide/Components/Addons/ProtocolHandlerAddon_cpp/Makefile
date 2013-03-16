@@ -50,7 +50,6 @@ OUT_COMP_SLO=$(OUT_SLO)/$(COMP_NAME)
 COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
 COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_UNOPKG_MANIFEST = $(OUT_COMP_GEN)/$(COMP_NAME)/META-INF/manifest.xml
-#COMP_MAPFILE = $(OUT_COMP_GEN)/$(COMP_NAME).uno.map
 COMP_COMPONENTS = $(OUT_COMP_GEN)/$(COMP_NAME).components
 
 REGISTERFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_register_component.flag
@@ -71,13 +70,6 @@ $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-#$(COMP_MAPFILE) : $(SLOFILES)
-#	-$(MKDIR) $(subst /,$(PS),$(@D))
-#	cat $(PRJ)/settings/component.uno.map > $(COMP_MAPFILE) 
-#ifeq "$(OS)" "MACOSX"
-#	nm -gx $(SLOFILES) | $(ADDSYMBOLS) >> $(COMP_MAPFILE)
-#endif
-
 ifeq "$(OS)" "WIN"
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -87,7 +79,6 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) msvcprt.lib msvcrt.lib kernel32.lib
 	$(LINK_MANIFEST)
 else
-#$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(COMP_MAPFILE)
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $(SLOFILES) \
