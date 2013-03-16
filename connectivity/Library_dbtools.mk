@@ -66,8 +66,6 @@ $(eval $(call gb_Library_use_libraries,dbtools,\
 ))
 endif
 
-#connectivity/source/commontools/RowFunctionParser.cxx disable optimization?
-
 $(eval $(call gb_Library_add_noexception_objects,dbtools,\
 	connectivity/source/simpledbt/refbase \
 ))
@@ -76,15 +74,9 @@ $(eval $(call gb_Library_add_grammars,dbtools,\
 	connectivity/source/parse/sqlbison \
 ))
 
-$(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison) : T_YACCFLAGS := -d -l -pSQLyy -bsql
-
 $(eval $(call gb_Library_add_scanners,dbtools,\
-connectivity/source/parse/sqlflex \
+	connectivity/source/parse/sqlflex \
 ))
-
-$(call gb_LexTarget_get_scanner_target,connectivity/source/parse/sqlflex) : T_LEXFLAGS := -i -8 -PSQLyy -L
-
-
 
 $(eval $(call gb_Library_add_exception_objects,dbtools,\
 	connectivity/source/commontools/AutoRetrievingBase \
