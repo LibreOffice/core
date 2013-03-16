@@ -105,31 +105,6 @@ void SalData::ensureThreadAutoreleasePool()
     }
 }
 
-void SalData::drainThreadAutoreleasePool()
-{
-    NSAutoreleasePool* pPool = nil;
-    if( s_aAutoReleaseKey )
-    {
-        pPool = reinterpret_cast<NSAutoreleasePool*>( osl_getThreadKeyData( s_aAutoReleaseKey ) );
-        if( pPool )
-        {
-            // osl_setThreadKeyData( s_aAutoReleaseKey, NULL );
-            // [pPool release];
-            [pPool drain];
-        }
-        else
-        {
-            pPool = [[NSAutoreleasePool alloc] init];
-            osl_setThreadKeyData( s_aAutoReleaseKey, pPool );
-        }
-    }
-    else
-    {
-        OSL_FAIL( "no autorelease key" );
-    }
-}
-
-
 struct curs_ent
 {
     const char*         pBaseName;

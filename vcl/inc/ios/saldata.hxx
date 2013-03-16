@@ -86,7 +86,6 @@ public:
     ~SalData();
 
     static void ensureThreadAutoreleasePool();
-    static void drainThreadAutoreleasePool();
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }

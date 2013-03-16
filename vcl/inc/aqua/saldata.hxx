@@ -105,7 +105,6 @@ public:
     NSCursor* getCursor( PointerStyle i_eStyle );
 
     static void ensureThreadAutoreleasePool();
-    static void drainThreadAutoreleasePool();
 
     static NSStatusItem* getStatusItem();
 };
