@@ -55,6 +55,9 @@ $(eval $(call gb_Library_add_defs,clucene,\
 $(eval $(call gb_Library_add_cxxflags,clucene,\
 	-w \
 ))
+$(eval $(call gb_Library_add_cflags,clucene,\
+	-w \
+))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,clucene,\
