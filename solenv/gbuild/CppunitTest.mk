@@ -33,7 +33,7 @@
 UNIT_FAILED_MSG := echo; echo "Error: a unit test failed, please do one of:"; echo; echo "export DEBUGCPPUNIT=TRUE            \# for exception catching"; echo "export GDBCPPUNITTRACE=\"gdb --args\" \# for interactive debugging"; echo "export VALGRIND=memcheck            \# for memory checking" ; echo "and retry."
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
-gb_CppunitTest_GDBTRACE := gdb -nx --command=$(SOLARENV)/bin/gdbtrycatchtrace-stdout -return-child-result --args
+gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(OUTDIR)/lib" --command=$(SOLARENV)/bin/gdbtrycatchtrace-stdout -return-child-result --args
 else ifneq ($(strip $(GDBCPPUNITTRACE)),)
 gb_CppunitTest_GDBTRACE := $(GDBCPPUNITTRACE)
 gb_CppunitTest__interactive := $(true)
