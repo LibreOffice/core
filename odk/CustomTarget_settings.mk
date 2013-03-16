@@ -32,17 +32,4 @@ $(odk_WORKDIR)/settings/dk.mk: $(SRCDIR)/odk/pack/copying/dk.mk
 	tr -d "\015" < $< | sed -e 's/@@RELEASE@@/$(PRODUCTVERSION)/' \
 		-e 's/@@BUILDID@@/$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)/' > $@
 
-ifneq ($(OS),WNT)
-odkcommon_ZIPLIST += settings/component.uno.map
-$(eval $(call gb_CustomTarget_register_target,odk/odkcommon/settings,component.uno.map))
-$(odk_WORKDIR)/settings/component.uno.map: $(SRCDIR)/solenv/bin/addsym.awk $(SRCDIR)/solenv/src/component.map
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,GEN,1)
-	tr -d "\015" < $(SRCDIR)/solenv/src/component.map | \
-		$(if $(filter MACOSX,$(OS)),\
-		tail -n +3 | head -3 | sed -e 's/.*component/_component/g' \
-		-e 's/;[ ]*//',\
-		awk -f $<) > $@
-	chmod 664 $@
-endif
-
 # vim: set noet sw=4 ts=4:

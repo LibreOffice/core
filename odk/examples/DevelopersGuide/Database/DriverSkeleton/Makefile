@@ -51,7 +51,6 @@ OUT_COMP_SLO=$(OUT_SLO)/$(COMP_NAME)
 COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
 COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_UNOPKG_MANIFEST = $(OUT_COMP_MISC)/$(COMP_NAME)/META-INF/manifest.xml
-#COMP_MAPFILE = $(OUT_COMP_MISC)/$(COMP_NAME).uno.map
 COMP_COMPONENTS = $(OUT_COMP_MISC)/$(COMP_NAME).components
 
 COMP_REGISTERFLAG = $(OUT_COMP_MISC)/devguide_$(COMP_NAME)_register_component.flag
@@ -78,13 +77,6 @@ include $(SETTINGS)/stdtarget.mk
 $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))	 
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) $(STL_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
-
-#$(COMP_MAPFILE) : $(SLOFILES)
-#	-$(MKDIR) $(subst /,$(PS),$(@D))	 
-#	cat $(PRJ)/settings/component.uno.map > $(COMP_MAPFILE) 
-#ifeq "$(OS)" "MACOSX"
-#	nm -gx $(SLOFILES) | $(ADDSYMBOLS) >> $(COMP_MAPFILE)
-#endif
 
 ifeq "$(OS)" "WIN"
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
