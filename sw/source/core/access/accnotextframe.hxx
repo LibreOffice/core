@@ -45,7 +45,7 @@ public:
                              sal_Int16 nInitRole,
                              const SwFlyFrm *pFlyFrm );
 
-    //=====  XAccessibleContext  ==============================================
+    // XAccessibleContext
 
     // #i73249# - Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
@@ -56,8 +56,6 @@ public:
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
-
-    //=====  XInterface  ======================================================
 
     // XInterface methods need to be implemented to disambiguate
     // between those inherited through SwAcessibleContext and
@@ -73,11 +71,10 @@ public:
     virtual void SAL_CALL release(  ) throw ()
         { SwAccessibleContext::release(); };
 
-    //====== XTypeProvider ====================================================
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleImage  ================================================
-
+    // XAccessibleImage
     virtual ::rtl::OUString SAL_CALL
         getAccessibleImageDescription(  )
         throw ( ::com::sun::star::uno::RuntimeException );

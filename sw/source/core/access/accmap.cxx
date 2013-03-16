@@ -96,7 +96,6 @@ public:
 
 };
 
-//------------------------------------------------------------------------------
 class SwDrawModellListener_Impl : public SfxListener,
     public ::cppu::WeakImplHelper1< document::XEventBroadcaster >
 {
@@ -186,7 +185,6 @@ void SwDrawModellListener_Impl::Dispose()
     mpDrawModel = 0;
 }
 
-//------------------------------------------------------------------------------
 struct SwShapeFunc
 {
     bool operator()( const SdrObject * p1,
@@ -292,7 +290,6 @@ SwAccessibleObjShape_Impl
     return pShapes;
 }
 
-//------------------------------------------------------------------------------
 struct SwAccessibleEvent_Impl
 {
 public:
@@ -446,7 +443,6 @@ public:
 
 };
 
-//------------------------------------------------------------------------------
 typedef ::std::list < SwAccessibleEvent_Impl > _SwAccessibleEventList_Impl;
 
 class SwAccessibleEventList_Impl: public _SwAccessibleEventList_Impl
@@ -469,7 +465,6 @@ public:
     }
 };
 
-//------------------------------------------------------------------------------
 // The shape list is filled if an accessible shape is destroyed. It
 // simply keeps a reference to the accessible shape's XShape. These
 // references are destroyed within the EndAction when firing events,
@@ -490,8 +485,6 @@ public:
     SwShapeList_Impl() {}
 };
 
-
-//------------------------------------------------------------------------------
 struct SwAccessibleChildFunc
 {
     bool operator()( const SwAccessibleChild& r1,
@@ -516,8 +509,6 @@ typedef ::std::map < SwAccessibleChild, SwAccessibleEventList_Impl::iterator,
 class SwAccessibleEventMap_Impl: public _SwAccessibleEventMap_Impl
 {
 };
-
-//------------------------------------------------------------------------------
 
 struct SwAccessibleParaSelection
 {
@@ -744,7 +735,6 @@ void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
         _iorLogicPgSwRect.Bottom( _iorLogicPgSwRect.Bottom() - nTmpDiff );
 }
 
-//------------------------------------------------------------------------------
 static bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,
                                   const SwFrm *pFrm )
 {
@@ -1101,7 +1091,6 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
     SwAccessibleObjShape_Impl *pSelShape = 0;
     size_t nShapes = 0;
 
-
     {
         osl::MutexGuard aGuard( maMutex );
         if( mpShapeMap )
@@ -1130,7 +1119,6 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
         delete[] pShapes;
     }
 }
-
 
 SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     mpFrmMap( 0  ),
@@ -1554,7 +1542,6 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
     return xAccImpl;
 }
 
-
 void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
 {
     osl::MutexGuard aGuard( maMutex );
@@ -1616,7 +1603,6 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
         }
     }
 }
-
 
 void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                                const SdrObject *pObj,

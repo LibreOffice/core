@@ -52,17 +52,14 @@
 #include "frmfmt.hxx"
 #include "fmtcntnt.hxx"
 
-
 using namespace ::com::sun::star;
 
 using rtl::OUString;
 using rtl::OUStringBuffer;
 using i18n::Boundary;
 
-
 // 'portion type' for terminating portions
 #define POR_TERMINATE 0
-
 
 // portion attributes
 #define PORATTR_SPECIAL     1
@@ -230,7 +227,6 @@ void SwAccessiblePortionData::Finish()
     bFinished = sal_True;
 }
 
-
 sal_Bool SwAccessiblePortionData::IsPortionAttrSet(
     size_t nPortionNo, sal_uInt8 nAttr ) const
 {
@@ -277,7 +273,6 @@ sal_Bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
     }
     return bGray;
 }
-
 
 const OUString& SwAccessiblePortionData::GetAccessibleString() const
 {
@@ -455,7 +450,6 @@ size_t SwAccessiblePortionData::FindLastBreak(
     return nResult;
 }
 
-
 void SwAccessiblePortionData::GetSentenceBoundary(
     Boundary& rBound,
     sal_Int32 nPos )
@@ -521,7 +515,6 @@ void SwAccessiblePortionData::GetAttributeBoundary(
     FillBoundary( rBound, aAccessiblePositions,
                   FindBreak( aAccessiblePositions, nPos ) );
 }
-
 
 sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_uInt16 nPos ) const
 {

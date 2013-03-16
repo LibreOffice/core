@@ -41,14 +41,14 @@ public:
                           const SwFtnFrm *pFtnFrm );
 
 
-    //=====  XAccessibleContext  ==============================================
+    // XAccessibleContext
 
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
 
-    //=====  XServiceInfo  ====================================================
+    // XServiceInfo
 
     /** Returns an identifier for the implementation of this object.
     */
@@ -69,7 +69,7 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XTypeProvider  ====================================================
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
     static sal_Bool IsEndnote( const SwFtnFrm *pFrm );

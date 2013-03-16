@@ -388,7 +388,6 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
             bIsHeading = bNewIsHeading;
     }
 
-
     if( bNewIsHeading != bOldIsHeading || rText != sOldText )
     {
         OUString sNewDesc( GetDescription() );
@@ -437,7 +436,6 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
         // The cursor's node position is sumilated by the focus!
         if( pWin && pWin->HasFocus() && -1 == nOld )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_True );
-
 
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CARET_CHANGED;
@@ -531,7 +529,6 @@ void SwAccessibleParagraph::ClearPortionData()
     pHyperTextData = 0;
 }
 
-
 void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
 {
     OSL_ENSURE( GetMap() != NULL, "no map?" );
@@ -587,10 +584,7 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
     return pPortion;
 }
 
-
-//
 // range checking for parameter
-//
 
 sal_Bool SwAccessibleParagraph::IsValidChar(
     sal_Int32 nPos, sal_Int32 nLength)
@@ -610,11 +604,7 @@ sal_Bool SwAccessibleParagraph::IsValidRange(
     return IsValidPosition(nBegin, nLength) && IsValidPosition(nEnd, nLength);
 }
 
-
-//
 // text boundaries
-//
-
 
 sal_Bool SwAccessibleParagraph::GetCharBoundary(
     i18n::Boundary& rBound,
@@ -831,7 +821,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
     return aLoc;
 }
 
-/** #i27138# - paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO */
+// #i27138# - paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO
 uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleRelationSet()
     throw ( uno::RuntimeException )
 {
@@ -896,15 +886,14 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
         // set PaM at cursor shell
         Select( aPaM );
 
-
     }
 
-    /* ->#i13955# */
+    // ->#i13955#
     Window * pWindow = GetWindow();
 
     if (pWindow != NULL)
         pWindow->GrabFocus();
-    /* <-#i13955# */
+    // <-#i13955#
 }
 
 // #i71385#
@@ -999,9 +988,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNam
     return aRet;
 }
 
-//
-//=====  XInterface  =======================================================
-//
+// XInterface
 
 uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
     throw (uno::RuntimeException)
@@ -1055,7 +1042,7 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-//====== XTypeProvider ====================================================
+// XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aTypes( SwAccessibleContext::getTypes() );
@@ -1088,10 +1075,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleParagraph::getImplementationId()
     return theSwAccessibleParagraphImplementationId::get().getSeq();
 }
 
-
-//
-//=====  XAccesibleText  ===================================================
-//
+// XAccesibleText
 
 sal_Int32 SwAccessibleParagraph::getCaretPosition()
     throw (uno::RuntimeException)
@@ -1241,7 +1225,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     // attributes are the character attributes, which are set at the paragraph style
     // of the paragraph. The character attributes set at the automatic paragraph
     // style of the paragraph are treated as run attributes.
-//    pTxtNode->SwCntntNode::GetAttr( *pSet );
+    //    pTxtNode->SwCntntNode::GetAttr( *pSet );
     // get default paragraph attributes, if needed, and merge these into <pSet>
     if ( !bOnlyCharAttrs )
     {
@@ -1468,7 +1452,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     // From the perspective of the a11y API the character attributes, which
     // are set at the automatic paragraph style of the paragraph are treated
     // as run attributes.
-//    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, sal_True, sal_True );
+    //    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, sal_True, sal_True );
     // get character attributes from automatic paragraph style and merge these into <aSet>
     {
         const SwTxtNode* pTxtNode( GetTxtNode() );
@@ -1596,13 +1580,12 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
 
-    /*  #i12332# The position after the string needs special treatment.
-        IsValidChar -> IsValidPosition
-    */
+    // #i12332# The position after the string needs special treatment.
+    // IsValidChar -> IsValidPosition
     if( ! (IsValidPosition( nIndex, GetString().getLength() ) ) )
         throw lang::IndexOutOfBoundsException();
 
-    /*  #i12332#  */
+    // #i12332#
     sal_Bool bBehindText = sal_False;
     if ( nIndex == GetString().getLength() )
         bBehindText = sal_True;
@@ -1616,7 +1599,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 
     sal_uInt16 nPos = 0;
 
-    /*  #i12332# FillSpecialPos does not accept nIndex ==
+    /**  #i12332# FillSpecialPos does not accept nIndex ==
          GetString().getLength(). In that case nPos is set to the
          length of the string in the core. This way GetCharRect
          returns the rectangle for a cursor at the end of the
@@ -1686,8 +1669,8 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     Point aCorePoint( GetMap()->PixelToCore( aPoint ) );
     if( !aLogBounds.IsInside( aCorePoint ) )
     {
-        /* #i12332# rPoint is may also be in rectangle returned by
-            getCharacterBounds(getCharacterCount() */
+        // #i12332# rPoint is may also be in rectangle returned by
+        // getCharacterBounds(getCharacterCount()
 
         awt::Rectangle aRectEndPos =
             getCharacterBounds(getCharacterCount());
@@ -1973,10 +1956,7 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
     return sal_True;
 }
 
-
-//
-//=====  XAccesibleEditableText  ==========================================
-//
+// XAccesibleEditableText
 
 sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
@@ -2080,7 +2060,6 @@ struct IndexCompare
     }
 };
 
-
 sal_Bool SwAccessibleParagraph::setAttributes(
     sal_Int32 nStartIndex,
     sal_Int32 nEndIndex,
@@ -2097,7 +2076,6 @@ sal_Bool SwAccessibleParagraph::setAttributes(
 
     if( !IsEditableState() )
         return sal_False;
-
 
     // create a (dummy) text portion for the sole purpose of calling
     // setPropertyValue on it
@@ -2147,7 +2125,7 @@ sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
     return replaceText(0, GetString().getLength(), sText);
 }
 
-//=====  XAccessibleSelection  ============================================
+// XAccessibleSelection
 
 void SwAccessibleParagraph::selectAccessibleChild(
     sal_Int32 nChildIndex )
@@ -2214,7 +2192,7 @@ void SwAccessibleParagraph::deselectAccessibleChild(
     aSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
 
-//=====  XAccessibleHypertext  ============================================
+// XAccessibleHypertext
 
 class SwHyperlinkIter_Impl
 {
