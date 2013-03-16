@@ -900,6 +900,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     m_pCurrentDefinition->GetCurrentLevel()->SetValue( nSprmId, value );
                 }
             }
+            break;
             case NS_ooxml::LN_CT_Lvl_lvlText:
             case NS_ooxml::LN_CT_Lvl_rPr : //contains LN_EG_RPrBase_rFonts
             {
