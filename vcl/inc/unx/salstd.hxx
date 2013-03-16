@@ -22,7 +22,6 @@
 
 #include <tools/solar.h>
 
-// -=-= X-Lib forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #ifndef _SVUNX_H
 typedef unsigned long       Pixel;
 typedef unsigned long       XID;

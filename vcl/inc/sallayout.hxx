@@ -56,8 +56,6 @@ class PhysicalFontFace;
 #define SAL_LAYOUT_DISABLE_GLYPH_PROCESSING 0x1000
 #define SAL_LAYOUT_FOR_FALLBACK             0x2000
 
-// -----------------
-
 // used for managing runs e.g. for BiDi, glyph and script fallback
 class VCL_PLUGIN_PUBLIC ImplLayoutRuns
 {
@@ -81,7 +79,6 @@ public:
     bool    PosIsInAnyRun( int nCharPos ) const;
 };
 
-// -----------------
 
 class ImplLayoutArgs
 {
@@ -133,10 +130,6 @@ protected:
 bool IsDiacritic( sal_UCS4 );
 int GetVerticalFlags( sal_UCS4 );
 sal_UCS4 GetVerticalChar( sal_UCS4 );
-
-// -------------
-// - SalLayout -
-// -------------
 
 typedef sal_uInt32 sal_GlyphId;
 
@@ -237,10 +230,6 @@ protected:
     Point           maDrawBase;
 };
 
-// ------------------
-// - MultiSalLayout -
-// ------------------
-
 class VCL_PLUGIN_PUBLIC MultiSalLayout : public SalLayout
 {
 public:
@@ -286,10 +275,6 @@ private:
     bool            mbInComplete;
 };
 
-// --------------------
-// - GenericSalLayout -
-// --------------------
-
 struct GlyphItem
 {
     int     mnFlags;
@@ -316,12 +301,8 @@ public:
     bool    IsDiacritic() const     { return ((mnFlags & IS_DIACRITIC) != 0); }
 };
 
-// ---------------
-
 typedef std::list<GlyphItem> GlyphList;
 typedef std::vector<GlyphItem> GlyphVector;
-
-// ---------------
 
 class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
 {

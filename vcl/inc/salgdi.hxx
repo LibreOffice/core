@@ -79,10 +79,6 @@ typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
 typedef std::map< sal_Ucs, rtl::OString > Ucs2OStrMap;
 typedef std::vector< sal_Int32 > Int32Vector;
 
-// ---------------
-// - SalGraphics -
-// ---------------
-
 // note: if you add any new methods to class SalGraphics using coordinates
 //       make sure they have a corresponding protected pure virtual method
 //       which has to be implemented by the platform dependent part.

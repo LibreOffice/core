@@ -32,7 +32,6 @@
 
 #include <deque>
 
-// -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class ImplFontMetricData;
 class FontSelectPattern;
 class SalBitmap;
@@ -50,8 +49,6 @@ class ServerFontLayout;
 namespace basegfx {
     class B2DTrapezoid;
 }
-
-// -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 typedef struct FT_FaceRec_* FT_Face;
 
@@ -369,8 +366,6 @@ inline Display *X11SalGraphics::GetXDisplay() const
 inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
 { return GetColormap().GetPixel( nSalColor ); }
 
-
-// -=-= Shortcuts =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #ifdef DBG_UTIL
 #define stderr0( s )            fprintf( stderr, s )

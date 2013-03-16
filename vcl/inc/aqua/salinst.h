@@ -35,10 +35,6 @@ class AquaSalFrame;
 class ApplicationEvent;
 class Image;
 
-// -----------------
-// - SalYieldMutex -
-// -----------------
-
 class SalYieldMutex : public vcl::SolarMutexObject
 {
     sal_uLong                                       mnCount;
@@ -55,19 +51,6 @@ public:
 
 #define YIELD_GUARD osl::SolarGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
 
-
-// -------------------
-// - SalInstanceData -
-// -------------------
-
-//struct SalInstanceData
-//{
-//public:
-//};
-
-// ------------------
-// - AquaSalInstance -
-// ------------------
 
 class AquaSalInstance : public SalInstance
 {
@@ -184,7 +167,6 @@ class YieldMutexReleaser
     ~YieldMutexReleaser();
 };
 
-// helper class
 rtl::OUString GetOUString( CFStringRef );
 rtl::OUString GetOUString( NSString* );
 CFStringRef CreateCFString( const rtl::OUString& );

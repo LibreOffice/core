@@ -37,9 +37,6 @@
 #define VIRTUAL_DESKTOP_WIDTH 1024
 #define VIRTUAL_DESKTOP_HEIGHT 768
 
-// ---------------
-// - SalTimer -
-// ---------------
 class SvpSalInstance;
 class SvpSalTimer : public SalTimer
 {
@@ -53,9 +50,6 @@ public:
     virtual void Stop();
 };
 
-// ---------------
-// - SalInstance -
-// ---------------
 class SvpSalFrame;
 class GenPspGraphics;
 class SvpSalInstance : public SalGenericInstance

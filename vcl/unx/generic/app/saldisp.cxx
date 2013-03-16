@@ -80,15 +80,9 @@ using namespace vcl_sal;
 
 using ::rtl::OUString;
 
-// -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define SALCOLOR_WHITE      MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF )
 #define SALCOLOR_BLACK      MAKE_SALCOLOR( 0x00, 0x00, 0x00 )
 
-// -=-= Prototyps =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-= static variables -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const char* const EventNames[] =
 {
     NULL,
@@ -128,8 +122,6 @@ static const char* const EventNames[] =
     "MappingNotify"
 };
 
-// -=-= global inline =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline const char *Null( const char *p ) { return p ? p : ""; }
 inline const char *GetEnv( const char *p ) { return Null( getenv( p ) ); }
 inline const char *KeyStr( KeySym n ) { return Null( XKeysymToString( n ) ); }
@@ -148,8 +140,6 @@ inline int ColorDiff( SalColor c1, int r, int g, int b )
                     (int)SALCOLOR_GREEN(c1)-g,
                     (int)SALCOLOR_BLUE (c1)-b ); }
 
-// -=-= global functions -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int sal_Shift( Pixel nMask )
 {
     int i = 24;
@@ -174,7 +164,6 @@ static int sal_significantBits( Pixel nMask )
     return nBits;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static sal_Bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
 {
     int         nInfos;
@@ -224,8 +213,6 @@ sal_GetServerVendor( Display *p_display )
     return vendor_unknown;
 }
 
-// -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
                              int          nScreen,
                              XVisualInfo &rVI )
@@ -289,8 +276,6 @@ sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
     return rVI.visualid == nDefVID;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 SalDisplay::SalDisplay( Display *display ) :
         mpInputMethod( NULL ),
         pDisp_( display ),
@@ -311,7 +296,6 @@ SalDisplay::SalDisplay( Display *display ) :
     m_nXDefaultScreen = SalX11Screen( DefaultScreen( pDisp_ ) );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalDisplay::~SalDisplay()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -584,7 +568,6 @@ SalDisplay::initScreen( SalX11Screen nXScreen ) const
     return pSD;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalDisplay::Init()
 {
     for( size_t i = 0; i < POINTER_COUNT; i++ )
@@ -663,7 +646,6 @@ void SalX11Display::SetupInput( SalI18N_InputMethod *pInputMethod )
 }
 
 // Keyboard
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace {
 
@@ -802,7 +784,6 @@ void SalDisplay::ModifierMapping()
     XFreeModifiermap( pXModMap );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 rtl::OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
 {
     String aStrMap;
@@ -999,7 +980,6 @@ rtl::OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
     return aStrMap;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #ifndef IsISOKey
 #define IsISOKey( n ) (0x0000FE00==((n)&0xFFFFFF00))
 #endif
@@ -1390,7 +1370,6 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
     return nKey;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
                                     unsigned char    *pPrintable,
                                     int              *pLen,
@@ -1475,7 +1454,6 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 }
 
 // Pointer
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define MAKE_BITMAP( name ) \
     XCreateBitmapFromData( pDisp_, \
                            DefaultRootWindow( pDisp_ ), \
@@ -1878,7 +1856,6 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 }
 
 // Events
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 sal_Bool SalX11Display::IsEvent()
 {
@@ -2160,7 +2137,6 @@ void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) cons
 }
 #endif
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalDisplay::PrintInfo() const
 {
     if( IsDisplay() )
@@ -2358,8 +2334,6 @@ bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateDat
     return bRet;
 }
 
-// -=-= SalVisual -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalVisual::SalVisual()
 {
     memset( this, 0, sizeof( SalVisual ) );
@@ -2425,7 +2399,6 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalVisual::~SalVisual()
 {
     if( -1 == screen && VisualID(-1) == visualid ) delete visual;
@@ -2433,13 +2406,12 @@ SalVisual::~SalVisual()
 
 // Konvertiert die Reihenfolge der Bytes eines Pixel in Bytes eines SalColors
 // fuer die 6 XXXA ist das nicht reversibel
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 // SalColor is RGB (ABGR) a=0xFF000000, r=0xFF0000, g=0xFF00, b=0xFF
 
 #define SALCOLOR        RGB
 #define SALCOLORREVERSE BGR
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalColor SalVisual::GetTCColor( Pixel nPixel ) const
 {
     if( SALCOLOR == eRGBMode_ )
@@ -2495,8 +2467,6 @@ Pixel SalVisual::GetTCPixel( SalColor nSalColor ) const
     return (r&red_mask) | (g&green_mask) | (b&blue_mask);
 }
 
-// -=-= SalColormap -=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap,
                           SalX11Screen nXScreen )
     : m_pDisplay( pDisplay ),
@@ -2697,7 +2667,6 @@ void SalColormap::GetPalette()
     delete [] aColor;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static sal_uInt16 sal_Lookup( const std::vector<SalColor>& rPalette,
                                 int r, int g, int b,
                                 Pixel nUsed )
@@ -2732,7 +2701,6 @@ void SalColormap::GetLookupTable()
                 m_aLookupTable[i++] = sal_Lookup( m_aPalette, r, g, b, m_nUsed );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalColor SalColormap::GetColor( Pixel nPixel ) const
 {
     if( m_nBlackPixel == nPixel ) return SALCOLOR_BLACK;

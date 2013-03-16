@@ -168,8 +168,6 @@ ModuleCollection aModuleCollection;
 
 }
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 bool InitExternalFunc(const OUString& rModuleName)
 {
 #ifdef DISABLE_DYNLOADING

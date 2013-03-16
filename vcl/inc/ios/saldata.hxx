@@ -46,15 +46,7 @@ class SalVirtualDevice;
 class SalPrinter;
 class SystemFontList;
 
-// ------------------
-// - Some constants -
-// ------------------
-
 #define SAL_CLIPRECT_COUNT 16
-
-// -----------
-// - SalData -
-// -----------
 
 class IosSalFrame;
 struct FrameHash : public boost::hash<sal_IntPtr>
@@ -99,8 +91,6 @@ public:
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
 inline SalData *GetSalData() { return ImplGetSVData()->mpSalData; }
-
-// --- Prototypes ---
 
 sal_Bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();

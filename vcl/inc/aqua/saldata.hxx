@@ -48,18 +48,10 @@ class SalVirtualDevice;
 class SalPrinter;
 class SystemFontList;
 
-// ------------------
-// - Some constants -
-// ------------------
-
 #define SAL_CLIPRECT_COUNT 16
 
 #define VER_TIGER   0x1040
 #define VER_LEOPARD 0x1050
-
-// -----------
-// - SalData -
-// -----------
 
 class AquaSalFrame;
 struct FrameHash : public boost::hash<sal_IntPtr>
@@ -120,8 +112,6 @@ public:
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
 inline SalData *GetSalData() { return ImplGetSVData()->mpSalData; }
-
-// --- Prototypes ---
 
 sal_Bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();

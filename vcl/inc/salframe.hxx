@@ -115,10 +115,6 @@ typedef sal_uInt64 SalExtStyle;
 using ::rtl::OUString;
 using ::rtl::OString;
 
-// ------------
-// - SalFrame -
-// ------------
-
 struct SystemParentData;
 
 class VCL_PLUGIN_PUBLIC SalFrame : public vcl::DeletionNotifier
@@ -262,8 +258,6 @@ public:
     long                        CallCallback( sal_uInt16 nEvent, const void* pEvent ) const
     { return m_pProc ? m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent ) : 0; }
 };
-
-
 
 #endif // __cplusplus
 

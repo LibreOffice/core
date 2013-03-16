@@ -42,7 +42,6 @@ public:
     virtual ~SalData();
 };
 
-// -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline void SetSalData( SalData* pData )
 { ImplGetSVData()->mpSalData = pData; }
 

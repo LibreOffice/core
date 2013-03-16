@@ -59,7 +59,6 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
-// -=-= <signal.h> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #ifndef UNX
 #ifndef SIGBUS
 #define SIGBUS 10
@@ -81,7 +80,6 @@ X11SalData* GetX11SalData()
     return p2;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const struct timeval noyield__ = { 0, 0 };
 static const struct timeval yield__   = { 0, 10000 };
 
@@ -217,9 +215,6 @@ static const char* XRequest[] = {
     "X_NoOperation"
 };
 
-// -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 X11SalData::X11SalData( SalGenericDataType t, SalInstance *pInstance )
     : SalGenericData( t, pInstance )
 {
@@ -301,9 +296,6 @@ void X11SalData::PopXErrorLevel()
     }
 }
 
-// -=-= C statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 int X11SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 {
     GetX11SalData()->XError( pDisplay, pEvent );
@@ -341,9 +333,6 @@ int X11SalData::XIOErrorHdl( Display * )
 }
 
 
-
-// -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalXLib::SalXLib()
 {
     m_aTimeout.tv_sec       = 0;

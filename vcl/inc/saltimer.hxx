@@ -24,10 +24,6 @@
 #include <vcl/dllapi.h>
 #include <salwtype.hxx>
 
-// ------------
-// - SalTimer -
-// ------------
-
 /*
  * note: there will be only a single instance of SalTimer
  * SalTimer originally had only static methods, but

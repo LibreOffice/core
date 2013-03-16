@@ -51,8 +51,6 @@
 
 #include <config_graphite.h>
 
-// -=-= SalPolyLine =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define STATIC_POINTS 64
 
 class SalPolyLine
@@ -86,8 +84,7 @@ inline SalPolyLine::~SalPolyLine()
 { if( pFirst_ != Points_ ) delete [] pFirst_; }
 
 #undef STATIC_POINTS
-// -=-= X11SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 X11SalGraphics::X11SalGraphics()
     : m_nXScreen( 0 )
 {
@@ -147,14 +144,11 @@ X11SalGraphics::X11SalGraphics()
     bDitherBrush_       = sal_False;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 X11SalGraphics::~X11SalGraphics()
 {
     ReleaseFonts();
     freeResources();
 }
-
-// -=-= SalGraphics / X11SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalGraphics::freeResources()
 {
@@ -225,13 +219,11 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
     m_pVDev     = NULL;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::DeInit()
 {
     SetDrawable( None, m_nXScreen );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
 {
     Display *pDisplay = GetXDisplay();
@@ -259,7 +251,6 @@ void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 GC X11SalGraphics::SelectPen()
 {
     Display *pDisplay = GetXDisplay();
@@ -288,7 +279,6 @@ GC X11SalGraphics::SelectPen()
     return pPenGC_;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 GC X11SalGraphics::SelectBrush()
 {
     Display *pDisplay = GetXDisplay();
@@ -335,7 +325,6 @@ GC X11SalGraphics::SelectBrush()
     return pBrushGC_;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 GC X11SalGraphics::GetTrackingGC()
 {
     const char    dash_list[2] = {2, 2};
@@ -367,7 +356,6 @@ GC X11SalGraphics::GetTrackingGC()
     return pTrackingGC_;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::DrawLines( sal_uLong              nPoints,
                                 const SalPolyLine &rPoints,
                                 GC                 pGC,
@@ -403,7 +391,6 @@ void X11SalGraphics::DrawLines( sal_uLong              nPoints,
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Dithern: Calculate a dither-pixmap and make a brush of it
 #define P_DELTA         51
 #define DMAP( v, m )    ((v % P_DELTA) > m ? (v / P_DELTA) + 1 : (v / P_DELTA))
@@ -483,7 +470,6 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
     return sal_True;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
     const SalDisplay *pDisplay = GetDisplay();
@@ -520,13 +506,11 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sal_uInt16 X11SalGraphics::GetBitCount() const
 {
     return GetVisual().GetDepth();
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalGraphics::GetGraphicsWidth() const
 {
     if( m_pFrame )
@@ -537,7 +521,6 @@ long X11SalGraphics::GetGraphicsWidth() const
         return 0;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalGraphics::GetGraphicsHeight() const
 {
     if( m_pFrame )
@@ -548,7 +531,6 @@ long X11SalGraphics::GetGraphicsHeight() const
         return 0;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::ResetClipRegion()
 {
     if( mpClipRegion )
@@ -611,7 +593,6 @@ bool X11SalGraphics::setClipRegion( const Region& i_rClip )
     return true;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetLineColor()
 {
     if( nPenColor_ != SALCOLOR_NONE )
@@ -621,7 +602,6 @@ void X11SalGraphics::SetLineColor()
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetLineColor( SalColor nSalColor )
 {
     if( nPenColor_ != nSalColor )
@@ -632,7 +612,6 @@ void X11SalGraphics::SetLineColor( SalColor nSalColor )
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetFillColor()
 {
     if( nBrushColor_ != SALCOLOR_NONE )
@@ -643,7 +622,6 @@ void X11SalGraphics::SetFillColor()
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetFillColor( SalColor nSalColor )
 {
     if( nBrushColor_ != nSalColor )
@@ -674,7 +652,6 @@ void X11SalGraphics::SetFillColor( SalColor nSalColor )
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
     switch( nROPColor )
@@ -693,7 +670,6 @@ void X11SalGraphics::SetROPLineColor( SalROPColor nROPColor )
     bPenGC_     = sal_False;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
     switch( nROPColor )
@@ -713,7 +689,6 @@ void X11SalGraphics::SetROPFillColor( SalROPColor nROPColor )
     bBrushGC_       = sal_False;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::SetXORMode( bool bSet, bool )
 {
     if( !bXORMode_ == bSet )
@@ -731,7 +706,6 @@ void X11SalGraphics::SetXORMode( bool bSet, bool )
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawPixel( long nX, long nY )
 {
     if( nPenColor_ !=  SALCOLOR_NONE )
@@ -766,7 +740,6 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     if( nPenColor_ != SALCOLOR_NONE )
@@ -784,7 +757,6 @@ void X11SalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 {
     if( nBrushColor_ != SALCOLOR_NONE )
@@ -802,13 +774,11 @@ void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
                         nX, nY, nDX-1, nDY-1 );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
 {
     drawPolyLine( nPoints, pPtAry, false );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry, bool bClose )
 {
     if( nPenColor_ != SALCOLOR_NONE )
@@ -819,7 +789,6 @@ void X11SalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry, bo
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
 {
     if( nPoints == 0 )
@@ -886,7 +855,6 @@ void X11SalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
         DrawLines( nPoints, Points, SelectPen(), true );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
                                    const sal_uInt32    *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
@@ -934,29 +902,21 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
            drawPolyLine( pPoints[i], pPtAry[i], true );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 sal_Bool X11SalGraphics::drawPolyLineBezier( sal_uLong, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 sal_Bool X11SalGraphics::drawPolygonBezier( sal_uLong, const SalPoint*, const BYTE* )
 {
     return sal_False;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 sal_Bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
                                                 const SalPoint* const*, const BYTE* const* )
 {
     return sal_False;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalGraphics::invert( sal_uLong nPoints,
                              const SalPoint* pPtAry,
@@ -983,14 +943,10 @@ void X11SalGraphics::invert( sal_uLong nPoints,
                       Complex, CoordModeOrigin );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,sal_uLong )
 {
     return sal_False;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 XID X11SalGraphics::GetXRenderPicture()
 {
@@ -1024,8 +980,6 @@ XRenderPictFormat* X11SalGraphics::GetXRenderFormat() const
     return m_pXRenderFormat;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 SystemGraphicsData X11SalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
@@ -1040,8 +994,6 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     aRes.pXRenderFormat = m_pXRenderFormat;
     return aRes;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // draw a poly-polygon
 bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
@@ -1087,8 +1039,6 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
     const bool bDrawn = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
     return bDrawn;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 bool X11SalGraphics::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTraps, int nTrapCount, double fTransparency )
 {
@@ -1157,8 +1107,6 @@ bool X11SalGraphics::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTr
 
     return true;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 bool X11SalGraphics::drawPolyLine(
     const ::basegfx::B2DPolygon& rPolygon,
@@ -1243,7 +1191,5 @@ bool X11SalGraphics::drawPolyLine(
     nBrushColor_ = aKeepBrushColor;
     return bDrawnOk;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

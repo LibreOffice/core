@@ -40,11 +40,6 @@
 
 #undef SALGDI2_TESTTRANS
 
-// -=-= debugging =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-// -----------------------------------------------------------------------------
-
 #if (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 #define DBG_TESTTRANS( _def_drawable )                              \
 {                                                                   \
@@ -57,8 +52,6 @@
 #define DBG_TESTTRANS( _def_drawable )
 #endif // (OSL_DEBUG_LEVEL > 1) && defined SALGDI2_TESTTRANS
 
-// -=-= X11SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::CopyScreenArea( Display* pDisplay,
                                      Drawable aSrc, SalX11Screen nXScreenSrc, int nSrcDepth,
                                      Drawable aDest, SalX11Screen nXScreenDest, int nDestDepth,
@@ -117,7 +110,6 @@ GC X11SalGraphics::CreateGC( Drawable hDrawable, unsigned long nMask )
     return XCreateGC( GetXDisplay(), hDrawable, nMask | GCSubwindowMode, &values );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline GC X11SalGraphics::GetMonoGC( Pixmap hPixmap )
 {
     if( !pMonoGC_ )
@@ -132,7 +124,6 @@ inline GC X11SalGraphics::GetMonoGC( Pixmap hPixmap )
     return pMonoGC_;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline GC X11SalGraphics::GetCopyGC()
 {
     if( bXORMode_ ) return GetInvertGC();
@@ -148,7 +139,6 @@ inline GC X11SalGraphics::GetCopyGC()
     return pCopyGC_;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 GC X11SalGraphics::GetInvertGC()
 {
     if( !pInvertGC_ )
@@ -166,7 +156,6 @@ GC X11SalGraphics::GetInvertGC()
     return pInvertGC_;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 GC X11SalGraphics::GetInvert50GC()
 {
     if( !pInvert50GC_ )
@@ -214,7 +203,6 @@ GC X11SalGraphics::GetInvert50GC()
     return pInvert50GC_;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline GC X11SalGraphics::GetStippleGC()
 {
     if( !pStippleGC_ )
@@ -232,9 +220,6 @@ inline GC X11SalGraphics::GetStippleGC()
 
     return pStippleGC_;
 }
-
-// -=-= SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 extern "C"
 {
@@ -460,7 +445,6 @@ void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
     copyBits ( &aPosAry, 0 );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
 {
     const SalDisplay*   pSalDisp = GetDisplay();
@@ -505,8 +489,6 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
     XFlush( pXDisp );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
                                  const SalBitmap& rSrcBitmap,
                                  const SalBitmap& rMaskBitmap )
@@ -525,8 +507,6 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 
     drawMaskedBitmap( pPosAry, rSrcBitmap, rMaskBitmap );
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
                                        const SalBitmap& rSalBitmap,
@@ -624,14 +604,12 @@ void X11SalGraphics::drawMaskedBitmap( const SalTwoRect* pPosAry,
         XFreePixmap( pXDisp, aBG );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
                                       const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp )
 {
     return drawAlphaBitmapOpt( rTR, rSrcBitmap, rAlphaBmp );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool X11SalGraphics::drawAlphaBitmapOpt( const SalTwoRect& rTR,
                                          const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp, bool bUseAlphaBitmap )
 {
@@ -768,7 +746,6 @@ bool X11SalGraphics::drawAlphaBitmapOpt( const SalTwoRect& rTR,
     return true;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                     long nHeight, sal_uInt8 nTransparency )
 {
@@ -798,7 +775,6 @@ bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     return true;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawBitmap( const SalTwoRect*,
                                  const SalBitmap&,
                                  SalColor )
@@ -806,7 +782,6 @@ void X11SalGraphics::drawBitmap( const SalTwoRect*,
     OSL_FAIL( "::DrawBitmap with transparent color not supported" );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawMask( const SalTwoRect* pPosAry,
                                const SalBitmap &rSalBitmap,
                                SalColor nMaskColor )
@@ -849,7 +824,6 @@ void X11SalGraphics::drawMask( const SalTwoRect* pPosAry,
         drawBitmap( pPosAry, rSalBitmap );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
     if( bPrinter_ && !bVirDev_ )
@@ -920,7 +894,6 @@ SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     return pSalBitmap;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalColor X11SalGraphics::getPixel( long nX, long nY )
 {
     if( bWindow_ && !bVirDev_ )
@@ -955,7 +928,6 @@ SalColor X11SalGraphics::getPixel( long nX, long nY )
     return GetColormap().GetColor( aXColor.pixel );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::invert( long       nX,
                                 long        nY,
                                 long        nDX,

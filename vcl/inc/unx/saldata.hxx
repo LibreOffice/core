@@ -29,12 +29,9 @@
 #include <osl/module.h>
 #include <vclpluginapi.h>
 
-// -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalXLib;
 class SalDisplay;
 class SalPrinter;
-
-// -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #if defined LINUX || defined NETBSD || defined AIX || \
     defined FREEBSD || defined OPENBSD || defined DRAGONFLY || \
@@ -44,7 +41,6 @@ class SalPrinter;
 typedef unsigned int pthread_t;
 #endif
 
-// -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class VCLPLUG_GEN_PUBLIC X11SalData : public SalGenericData
 {
     static int XErrorHdl( Display*, XErrorEvent* );

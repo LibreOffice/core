@@ -329,10 +329,6 @@ struct SalInputContext
 
 #endif // __cplusplus
 
-// ------------------
-// - SalTimer-Types -
-// ------------------
-
 typedef void (*SALTIMERPROC)();
 
 #endif // _SV_SALWTYPE_HXX

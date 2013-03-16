@@ -28,7 +28,6 @@
 #include "generic/geninst.h"
 
 
-// -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalXLib;
 class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
 {

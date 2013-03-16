@@ -22,10 +22,6 @@
 
 #include <salinst.hxx>
 
-// -------------------
-// - SalInstanceData -
-// -------------------
-
 class SalYieldMutex;
 
 class WinSalInstance : public SalInstance
@@ -80,10 +76,6 @@ public:
 
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 };
-
-// --------------
-// - Prototypen -
-// --------------
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, sal_uIntPtr nSalFrameStyle );
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent );

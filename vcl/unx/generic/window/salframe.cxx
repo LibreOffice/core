@@ -78,7 +78,6 @@
 using namespace vcl_sal;
 using namespace vcl;
 
-// -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define CLIENT_EVENTS           StructureNotifyMask \
                                 | SubstructureNotifyMask \
                                 | KeyPressMask \
@@ -94,14 +93,10 @@ using namespace vcl;
                                 | PropertyChangeMask \
                                 | ColormapChangeMask
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 static XLIB_Window  hPresentationWindow = None, hPresFocusWindow = None;
 static ::std::list< XLIB_Window > aPresentationReparentList;
 static int          nVisibleFloats      = 0;
 
-// -=-= C++ statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void doReparentPresentationDialogues( SalDisplay* pDisplay )
 {
     GetGenericData()->ErrorTrapPush();
@@ -131,9 +126,6 @@ static void doReparentPresentationDialogues( SalDisplay* pDisplay )
     XSync( pDisplay->GetDisplay(), False );
     GetGenericData()->ErrorTrapPop();
 }
-
-// -=-= SalFrame / X11SalFrame =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 bool X11SalFrame::IsOverrideRedirect() const
 {
@@ -198,9 +190,6 @@ void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
     XSync( pDisplay_->GetDisplay(), False );
     GetGenericData()->ErrorTrapPop();
 }
-
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemParentData* pParentData, bool bUseGeometry )
 {
@@ -622,7 +611,6 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
     SetPointer( POINTER_ARROW );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,
                           SystemParentData* pSystemParent ) :
     m_nXScreen( 0 )
@@ -784,8 +772,6 @@ X11SalFrame::~X11SalFrame()
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
 {
     if( nStyle != mnExtStyle && ! IsChildWindow() )
@@ -794,8 +780,6 @@ void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
         updateWMClass();
     }
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 const SystemChildData* X11SalFrame::GetSystemData() const
 {
@@ -854,14 +838,10 @@ void X11SalFrame::updateGraphics( bool bClear )
         pFreeGraphics_->SetDrawable( aDrawable, m_nXScreen );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 void X11SalFrame::Enable( sal_Bool /*bEnable*/ )
 {
     // NYI: enable/disable frame
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::SetIcon( sal_uInt16 nIcon )
 {
@@ -972,8 +952,6 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
 {
     if( ! IsChildWindow() )
@@ -1023,7 +1001,7 @@ void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 }
 
 // Show + Pos (x,y,z) + Size (width,height)
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 {
     if( ( bVisible && bMapped_ )
@@ -1248,7 +1226,6 @@ void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::ToTop( sal_uInt16 nFlags )
 {
     if( ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
@@ -1282,12 +1259,12 @@ void X11SalFrame::ToTop( sal_uInt16 nFlags )
             XSetInputFocus( GetXDisplay(), aToTopWindow, RevertToParent, CurrentTime );
     }
 }
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 void X11SalFrame::GetWorkArea( Rectangle& rWorkArea )
 {
     rWorkArea = pDisplay_->getWMAdaptor()->getWorkArea( 0 );
 }
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 void X11SalFrame::GetClientSize( long &rWidth, long &rHeight )
 {
     if( ! bViewable_  )
@@ -1309,8 +1286,6 @@ void X11SalFrame::GetClientSize( long &rWidth, long &rHeight )
         maGeometry.nHeight = rHeight = aAttrib.height;
     }
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::Center( )
 {
@@ -1427,7 +1402,6 @@ void X11SalFrame::Center( )
     SetPosSize( Rectangle( aPoint, Size( maGeometry.nWidth, maGeometry.nHeight ) ) );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::updateScreenNumber()
 {
     if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
@@ -1448,7 +1422,6 @@ void X11SalFrame::updateScreenNumber()
         maGeometry.nDisplayScreenNumber = m_nXScreen.getXScreen();
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     if( nStyle_ & SAL_FRAME_STYLE_PLUG )
@@ -1494,7 +1467,6 @@ void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     bDefaultPosition_ = False;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
 {
     if( ! IsOverrideRedirect() )
@@ -1503,8 +1475,6 @@ void X11SalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
         pDisplay_->getWMAdaptor()->enableAlwaysOnTop( this, bOnTop );
     }
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #define _FRAMESTATE_MASK_GEOMETRY \
      (SAL_FRAMESTATE_MASK_X     | SAL_FRAMESTATE_MASK_Y |   \
@@ -1664,7 +1634,6 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sal_Bool X11SalFrame::GetWindowState( SalFrameState* pState )
 {
     if( SHOWSTATE_MINIMIZED == nShowState_ )
@@ -1707,8 +1676,6 @@ sal_Bool X11SalFrame::GetWindowState( SalFrameState* pState )
     return sal_True;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 // native menu implementation - currently empty
 void X11SalFrame::DrawMenuBar()
 {
@@ -1718,7 +1685,6 @@ void X11SalFrame::SetMenu( SalMenu* )
 {
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::GetPosSize( Rectangle &rPosSize )
 {
     if( maGeometry.nWidth < 1 || maGeometry.nHeight < 1 )
@@ -1734,7 +1700,6 @@ void X11SalFrame::GetPosSize( Rectangle &rPosSize )
                               Size( maGeometry.nWidth, maGeometry.nHeight ) );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::SetSize( const Size &rSize )
 {
     if( rSize.Width() > 0 && rSize.Height() > 0 )
@@ -1777,10 +1742,6 @@ void X11SalFrame::SetSize( const Size &rSize )
             mpInputContext->SetICFocus ( this );
     }
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
 {
@@ -1903,7 +1864,6 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
         mpInputContext->SetICFocus ( this );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::Minimize()
 {
     if( IsSysChildWindow() )
@@ -1921,7 +1881,6 @@ void X11SalFrame::Minimize()
         nShowState_ = SHOWSTATE_MINIMIZED;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::Maximize()
 {
     if( IsSysChildWindow() )
@@ -1937,7 +1896,6 @@ void X11SalFrame::Maximize()
     pDisplay_->getWMAdaptor()->maximizeFrame( this, true, true );
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::Restore()
 {
     if( IsSysChildWindow() )
@@ -1958,8 +1916,6 @@ void X11SalFrame::Restore()
 
     pDisplay_->getWMAdaptor()->maximizeFrame( this, false, false );
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
 {
@@ -2021,9 +1977,6 @@ void X11SalFrame::updateWMClass()
     XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
     XFree( pClass );
 }
-
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
 {
@@ -2176,7 +2129,6 @@ MessageToXAutoLock( Display *p_display, int n_message )
     return True;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::StartPresentation( sal_Bool bStart )
 {
     I18NStatus::get().show( !bStart, I18NStatus::presentation );
@@ -2288,7 +2240,7 @@ void X11SalFrame::StartPresentation( sal_Bool bStart )
 }
 
 // Pointer
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 void X11SalFrame::SetPointer( PointerStyle ePointerStyle )
 {
     hCursor_ = pDisplay_->GetPointer( ePointerStyle );
@@ -2344,7 +2296,7 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
 #endif /* defined(__synchronous_extinput__) */
 
 // PostEvent
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 sal_Bool X11SalFrame::PostEvent( void *pData )
 {
     GetDisplay()->SendInternalEvent( this, pData );
@@ -2352,7 +2304,7 @@ sal_Bool X11SalFrame::PostEvent( void *pData )
 }
 
 // Title
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 void X11SalFrame::SetTitle( const rtl::OUString& rTitle )
 {
     if( ! ( IsChildWindow() || (nStyle_ & SAL_FRAME_STYLE_FLOAT ) ) )
@@ -2377,9 +2329,6 @@ void X11SalFrame::Sync()
 }
 
 // Keyboard
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-// -----------------------------------------------------------------------
 
 void X11SalFrame::SetInputContext( SalInputContext* pContext )
 {
@@ -2446,7 +2395,6 @@ LanguageType X11SalFrame::GetInputLanguage()
 }
 
 // Settings
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 inline Color getColorFromLong( long nColor )
 {
@@ -2464,8 +2412,6 @@ void X11SalFrame::CaptureMouse( sal_Bool bCapture )
 {
     nCaptured_ = pDisplay_->CaptureMouse( bCapture ? this : NULL );
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::SetParent( SalFrame* pNewParent )
 {
@@ -2577,7 +2523,7 @@ bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
 }
 
 // Event Handling
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 static sal_uInt16 sal_GetCode( int state )
 {
     sal_uInt16 nCode = 0;
@@ -2603,8 +2549,6 @@ static sal_uInt16 sal_GetCode( int state )
 
     return nCode;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 SalFrame::SalPointerState X11SalFrame::GetPointerState()
 {
@@ -3024,7 +2968,6 @@ bool X11SalFrame::endUnicodeSequence()
     return bWasInput;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 {
     KeySym          nKeySym;
@@ -3305,8 +3248,6 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     return True;
 }
 
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 {
     // ReflectionX in Windows mode changes focus while mouse is grabbed
@@ -3375,8 +3316,6 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 
     return 0;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
 {
@@ -3508,7 +3447,6 @@ void X11SalFrame::setPendingSizeEvent()
     mPendingSizeEvent = true;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
 {
     // NOTE: if you add more tests in this function, make sure to update size_event_predicate()
@@ -3603,7 +3541,6 @@ IMPL_LINK_NOARG(X11SalFrame, HandleAlwaysOnTopRaise)
     return 0;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
 {
     Display        *pDisplay   = pEvent->display;
@@ -3797,13 +3734,11 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     return 1;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleColormapEvent( XColormapEvent* )
 {
     return 0;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
 {
     Atom          actual_type;
@@ -3841,7 +3776,6 @@ long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
     return 1;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
 {
     const WMAdaptor& rWMAdaptor( *pDisplay_->getWMAdaptor() );
@@ -3902,8 +3836,6 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
     }
     return 0;
 }
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 extern "C"
 {

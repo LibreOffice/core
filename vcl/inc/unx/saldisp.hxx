@@ -20,7 +20,6 @@
 #ifndef _SV_SALDISP_HXX
 #define _SV_SALDISP_HXX
 
-// -=-= exports =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   SalDisplay;
 class   SalColormap;
 class   SalVisual;
@@ -41,14 +40,12 @@ class   SalXLib;
 
 #include <vclpluginapi.h>
 
-// -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   BitmapPalette;
 class   SalFrame;
 class   ColorMask;
 
 namespace vcl_sal { class WMAdaptor; }
 
-// -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define PROPERTY_SUPPORT_WM_Parent_Pixmap_None  0x00000004
 #define PROPERTY_SUPPORT_WM_ClientPos           0x00000008
 #define PROPERTY_SUPPORT_3ButtonMouse           0x00000020
@@ -76,7 +73,6 @@ typedef enum  {
 
 extern "C" srv_vendor_t sal_GetServerVendor( Display *p_display );
 
-// -=-= SalRGB -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // MSB/Bigendian view (SalColor == RGB, r=0xFF0000, g=0xFF00, b=0xFF)
 
 enum SalRGB { RGB,  RBG,
@@ -87,7 +83,6 @@ enum SalRGB { RGB,  RBG,
               BGRA, BRGA,
               otherSalRGB };
 
-// -=-= SalVisual =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalVisual : public XVisualInfo
 {
     SalRGB          eRGBMode_;
@@ -112,7 +107,6 @@ public:
             SalColor        GetTCColor( Pixel nPixel ) const;
 };
 
-// -=-= SalColormap =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalColormap
 {
     const SalDisplay*       m_pDisplay;
@@ -157,7 +151,6 @@ public:
     SalColor        GetColor( Pixel nPixel ) const;
 };
 
-// -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef int(*YieldFunc)(int fd, void* data);
 
 class VCLPLUG_GEN_PUBLIC SalXLib
@@ -191,8 +184,6 @@ public:
 
     bool            CheckTimeout( bool bExecuteTimers = true );
 };
-
-// -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 class SalI18N_InputMethod;
 class SalI18N_KeyboardExtension;
@@ -389,8 +380,6 @@ public:
 
     virtual void    PostUserEvent() = 0;
 };
-
-// -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 inline GC SalDisplay::GetGC( sal_uInt16 nDepth, SalX11Screen nXScreen ) const
 { return 1 == nDepth

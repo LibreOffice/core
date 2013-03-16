@@ -33,8 +33,6 @@
 
 #include <salinst.hxx>
 
-// -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
                                                        long nDX, long nDY,
                                                        sal_uInt16 nBitCount, const SystemGraphicsData *pData )
@@ -85,8 +83,6 @@ void X11SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
     delete pDevice;
 }
 
-// -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
                            bool bDeleteColormap )
 {
@@ -122,8 +118,6 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     bVirDev_     = sal_True;
 }
 
-// -=-= SalVirDevData / SalVirtualDevice -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
                                     long nDX, long nDY,
                                     sal_uInt16 nBitCount,
@@ -171,7 +165,6 @@ sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
     return hDrawable_ != None ? sal_True : sal_False;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 X11SalVirtualDevice::X11SalVirtualDevice() :
     m_nXScreen( 0 )
 {
@@ -185,7 +178,6 @@ X11SalVirtualDevice::X11SalVirtualDevice() :
     bExternPixmap_          = sal_False;
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 X11SalVirtualDevice::~X11SalVirtualDevice()
 {
     if( pGraphics_ )

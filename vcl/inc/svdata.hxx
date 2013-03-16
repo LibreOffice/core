@@ -96,9 +96,6 @@ class SalData;
 namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
 namespace utl { class DefaultFontConfiguration; class FontSubstConfiguration; }
 
-// -----------------
-// - ImplSVAppData -
-// -----------------
 class LocaleConfigurationListener : public utl::ConfigurationListener
 {
 public:
@@ -159,10 +156,6 @@ struct ImplSVAppData
 };
 
 
-// -----------------
-// - ImplSVGDIData -
-// -----------------
-
 struct ImplSVGDIData
 {
     OutputDevice*           mpFirstWinGraphics; // First OutputDevice with a Frame Graphics
@@ -191,10 +184,6 @@ struct ImplSVGDIData
 };
 
 
-// -----------------
-// - ImplSVWinData -
-// -----------------
-
 struct ImplSVWinData
 {
     Window*                 mpFirstFrame;       // First FrameWindow
@@ -219,10 +208,6 @@ struct ImplSVWinData
     sal_Bool                mbNoSaveBackground; // sal_True: save background is unnecessary or even less performant
 };
 
-
-// ------------------
-// - ImplSVCtrlData -
-// ------------------
 
 typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;
 
@@ -251,10 +236,6 @@ struct ImplSVCtrlData
     FieldUnitStringList*    mpCleanUnitStrings; // same list but with some "fluff" like spaces removed
 };
 
-
-// ------------------
-// - ImplSVHelpData -
-// ------------------
 
 struct ImplSVHelpData
 {
@@ -303,10 +284,6 @@ struct ImplSVNWFData
     bool                    mbDDListBoxNoTextArea:1;
 };
 
-
-// --------------
-// - ImplSVData -
-// --------------
 
 struct ImplSVData
 {
@@ -375,22 +352,9 @@ FieldUnitStringList* ImplGetFieldUnits();
 FieldUnitStringList* ImplGetCleanedFieldUnits();
 
 
-// -----------------------------------------------------------------------
-
-// -----------------
-// - ImplSVEmpyStr -
-// -----------------
-
-// Empty-SV-String
-
 inline const String& ImplGetSVEmptyStr()
     { return String::EmptyString(); }
 
-// -----------------------------------------------------------------------
-
-// ----------------------
-// - struct ImplDelData -
-// ----------------------
 // ImplDelData is used as a "dog tag" by a window when it
 // does something that could indirectly destroy the window
 // TODO: wild destruction of a window should not be possible
@@ -416,10 +380,6 @@ struct ImplDelData
 private:
     void            AttachToWindow( const Window* );
 };
-
-// ---------------
-// - ImplSVEvent -
-// ---------------
 
 struct ImplSVEvent
 {

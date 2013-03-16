@@ -35,10 +35,6 @@ struct SystemEnvData;
 #define SAL_OBJECT_CLIP_EXCLUDERECTS            ((sal_uInt16)0x0002)
 #define SAL_OBJECT_CLIP_ABSOLUTE                ((sal_uInt16)0x0004)
 
-// -------------
-// - SalObject -
-// -------------
-
 class VCL_PLUGIN_PUBLIC SalObject
 {
     void*               m_pInst;

@@ -78,24 +78,10 @@ namespace awt {
 VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
 VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4, LanguageType );
 
-// --------------------
-// - SystemWindowMode -
-// --------------------
-
 #define SYSTEMWINDOW_MODE_NOAUTOMODE    ((sal_uInt16)0x0001)
 #define SYSTEMWINDOW_MODE_DIALOG        ((sal_uInt16)0x0002)
 
-// -------------
-// - EventHook -
-// -------------
-
 typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
-
-// --------------------
-// - ApplicationEvent -
-// --------------------
-
-// Build in again, in order to make AppEvents work on MACs
 
 // ATTENTION: ENUM duplicate in daemon.cxx under Unix!
 
@@ -128,9 +114,6 @@ private:
     rtl::OUString aData;
 };
 
-// ---------------
-// - Application -
-// ---------------
 
 class VCL_DLLPUBLIC Application
 {

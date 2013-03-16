@@ -30,8 +30,6 @@
 #include <unx/saltimer.h>
 #include <unx/salinst.h>
 
-// -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalData::Timeout() const
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -39,8 +37,6 @@ void X11SalData::Timeout() const
         pSVData->mpSalTimer->CallCallback();
 }
 
-// -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalXLib::StopTimer()
 {
     m_aTimeout.tv_sec   = 0;
@@ -63,8 +59,6 @@ void SalXLib::StartTimer( sal_uLong nMS )
     }
 }
 
-// -=-= SalTimer -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalTimer* X11SalInstance::CreateSalTimer()
 {
     return new X11SalTimer( mpXLib );

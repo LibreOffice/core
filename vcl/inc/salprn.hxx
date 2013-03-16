@@ -33,10 +33,6 @@ class SalFrame;
 struct ImplJobSetup;
 namespace vcl { class PrinterController; }
 
-// -----------------------
-// - SalPrinterQueueInfo -
-// -----------------------
-
 struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
 {
     rtl::OUString               maPrinterName;
@@ -50,10 +46,6 @@ struct VCL_PLUGIN_PUBLIC SalPrinterQueueInfo
                             SalPrinterQueueInfo();
                             ~SalPrinterQueueInfo();
 };
-
-// ------------------
-// - SalInfoPrinter -
-// ------------------
 
 class VCL_PLUGIN_PUBLIC SalInfoPrinter
 {
@@ -92,10 +84,6 @@ public:
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
 };
-
-// --------------
-// - SalPrinter -
-// --------------
 
 class VCL_PLUGIN_PUBLIC SalPrinter
 {

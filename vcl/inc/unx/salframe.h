@@ -34,14 +34,13 @@
 
 #include <list>
 
-// -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   SalDisplay;
 class   X11SalGraphics;
 class   SalI18N_InputContext;
 
 namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 
-// -=-= X11SalFrame =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// X11SalFrame
 #define SHOWSTATE_UNKNOWN       -1
 #define SHOWSTATE_MINIMIZED     0
 #define SHOWSTATE_NORMAL        1

@@ -24,7 +24,6 @@
 #include <unx/svunx.h>
 #include <unx/salstd.hxx>
 
-// -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline long Divide( long nDividend, long nDivisor )
 { return (nDividend + nDivisor/2) / nDivisor; }
 

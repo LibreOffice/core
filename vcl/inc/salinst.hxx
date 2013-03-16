@@ -60,10 +60,6 @@ struct SystemGraphicsData;
 struct SystemWindowData;
 class Menu;
 
-// ---------------
-// - SalInstance -
-// ---------------
-
 class VCL_PLUGIN_PUBLIC SalInstance
 {
 private:
@@ -183,28 +179,15 @@ public:
 SalInstance* CreateSalInstance();
 void DestroySalInstance( SalInstance* pInst );
 
-// -------------------------
-// - SalInstance-Functions -
-// -------------------------
-
 void SalAbort( const OUString& rErrorText, bool bDumpCore );
 
 VCL_PLUGIN_PUBLIC const OUString& SalGetDesktopEnvironment();
-
-// -----------
-// - SalData -
-// -----------
 
 void InitSalData();                         // called from Application-Ctor
 void DeInitSalData();                       // called from Application-Dtor
 
 void InitSalMain();
 
-// ----------
-// - SVMain -
-// ----------
-
-// Callbacks (indepen in \sv\source\app\svmain.cxx)
 VCL_DLLPUBLIC int SVMain();
 
 #endif // _SV_SALINST_HXX

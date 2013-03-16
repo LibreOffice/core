@@ -42,8 +42,6 @@
 
 int SVMain();
 
-// -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if defined ANDROID

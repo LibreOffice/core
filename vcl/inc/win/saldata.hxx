@@ -42,17 +42,9 @@ struct TempFontItem;
 
 typedef HRESULT (WINAPI  *DwmIsCompositionEnabled_ptr)(BOOL*);
 
-// --------------------
-// - Standard-Defines -
-// --------------------
-
 #define MAX_STOCKPEN            4
 #define MAX_STOCKBRUSH          4
 #define SAL_CLIPRECT_COUNT      16
-
-// --------------------
-// - Icon cache       -
-// --------------------
 
 struct SalIcon
 {
@@ -61,10 +53,6 @@ struct SalIcon
     HICON   hSmallIcon;
     SalIcon *pNext;
 };
-
-// -----------
-// - SalData -
-// -----------
 
 class SalData
 {
@@ -141,10 +129,6 @@ public:
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = pData; }
 inline SalData* GetSalData() { return ImplGetSVData()->mpSalData; }
 
-// --------------
-// - SalShlData -
-// --------------
-
 struct SalShlData
 {
     HINSTANCE               mhInst;                 // Instance of SAL-DLL
@@ -156,10 +140,6 @@ struct SalShlData
 };
 
 extern SalShlData aSalShlData;
-
-// ------------
-// - GDICache -
-// ------------
 
 #define CACHESIZE_HDC       3
 #define CACHED_HDC_1        0
@@ -218,10 +198,6 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont );
 rtl_TextEncoding ImplSalGetSystemEncoding();
 OUString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen = STRING_LEN );
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
-
-// -----------
-// - Defines -
-// -----------
 
 #define SAL_FRAME_WNDEXTRA          sizeof( DWORD )
 #define SAL_FRAME_THIS              0
@@ -308,10 +284,6 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 // POSTFOCUS-Message; wParam == bFocus; lParam == 0
 #define SALOBJ_MSG_POSTFOCUS        (WM_USER+161)
 
-
-// -----------------
-// - Helpfunctions -
-// -----------------
 
 // A/W-Wrapper
 BOOL    ImplPostMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );

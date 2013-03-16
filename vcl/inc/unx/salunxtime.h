@@ -30,7 +30,6 @@
 #endif
 #include <sal/types.h>
 
-// -=-= timeval =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline int operator >= ( const timeval &t1, const timeval &t2 )
 {
     if( t1.tv_sec == t2.tv_sec )

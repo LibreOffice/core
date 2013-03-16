@@ -24,11 +24,9 @@
 #include <unx/saltype.h>
 #include <salvd.hxx>
 
-// -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalDisplay;
 class X11SalGraphics;
 
-// -=-= SalVirDevData -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class X11SalVirtualDevice : public SalVirtualDevice
 {
     SalDisplay      *pDisplay_;
