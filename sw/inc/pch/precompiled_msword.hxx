@@ -15,6 +15,7 @@
 */
 
 #include "sal/config.h"
+#include "sal/log.hxx"
 #include "svl/urihelper.hxx"
 #include <algorithm>
 #include <basegfx/point/b2dpoint.hxx>

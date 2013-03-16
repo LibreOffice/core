@@ -196,6 +196,8 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -224,6 +226,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
@@ -253,6 +256,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -394,6 +398,9 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/table/XTableChart.hpp>
+#include <com/sun/star/table/XTableCharts.hpp>
+#include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -411,6 +418,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -457,6 +465,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/documentconstants.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
@@ -588,6 +597,7 @@
 #include <sal/types.h>
 #include <sax/tools/converter.hxx>
 #include <set>
+#include <sfx2/DocumentMetadataAccess.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
@@ -811,7 +821,6 @@
 #include <svx/unoshape.hxx>
 #include <svx/unoshcol.hxx>
 #include <svx/verttexttbxctrl.hxx>
-#include <svx/xbitmap.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>

@@ -388,6 +388,7 @@
 #include <unotools/viewoptions.hxx>
 #include <utility>
 #include <vcl/bitmap.hxx>
+#include <vcl/bmpacc.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
