@@ -19,6 +19,23 @@
 #ifndef _SVX_ALIGN_HXX
 #define _SVX_ALIGN_HXX
 
+// list box indexes
+#define ALIGNDLG_HORALIGN_STD       0
+#define ALIGNDLG_HORALIGN_LEFT      1
+#define ALIGNDLG_HORALIGN_CENTER    2
+#define ALIGNDLG_HORALIGN_RIGHT     3
+#define ALIGNDLG_HORALIGN_BLOCK     4
+#define ALIGNDLG_HORALIGN_FILL      5
+#define ALIGNDLG_HORALIGN_DISTRIBUTED 6
+
+#define ALIGNDLG_VERALIGN_STD         0
+#define ALIGNDLG_VERALIGN_TOP         1
+#define ALIGNDLG_VERALIGN_MID         2
+#define ALIGNDLG_VERALIGN_BOTTOM      3
+#define ALIGNDLG_VERALIGN_BLOCK       4
+#define ALIGNDLG_VERALIGN_DISTRIBUTED 5
+
+
 #include <svx/orienthelper.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
@@ -42,7 +59,7 @@ public:
     virtual             ~AlignmentTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    static sal_uInt16*      GetRanges();
+    static sal_uInt16*  GetRanges();
 
     virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
@@ -60,30 +77,32 @@ private:
     DECL_LINK( UpdateEnableHdl, void* );
 
 private:
-    FixedLine           maFlAlignment;
-    FixedText           maFtHorAlign;
-    ListBox             maLbHorAlign;
-    FixedText           maFtIndent;
-    MetricField         maEdIndent;
-    FixedText           maFtVerAlign;
-    ListBox             maLbVerAlign;
+    ListBox*             m_pLbHorAlign;
+    FixedText*           m_pFtIndent;
+    MetricField*         m_pEdIndent;
+    ListBox*             m_pLbVerAlign;
 
-    FixedLine           maFlOrient;
-    DialControl         maCtrlDial;
-    FixedText           maFtRotate;
-    WrapField           maNfRotate;
-    FixedText           maFtRefEdge;
-    ValueSet            maVsRefEdge;
-    TriStateBox         maCbStacked;
-    TriStateBox         maCbAsianMode;
-    OrientationHelper   maOrientHlp;
+    DialControl*         m_pCtrlDial;
+    FixedText*           m_pFtRotate;
+    WrapField*           m_pNfRotate;
+    FixedText*           m_pFtRefEdge;
+    ValueSet*            m_pVsRefEdge;
+    TriStateBox*         m_pCbStacked;
+    TriStateBox*         m_pCbAsianMode;
+    OrientationHelper*   m_pOrientHlp;
 
-    FixedLine           maFlProperties;
-    TriStateBox         maBtnWrap;
-    TriStateBox         maBtnHyphen;
-    TriStateBox         maBtnShrink;
-    FixedText           maFtFrameDir;
-    FrameDirListBox     maLbFrameDir;
+    VclHBox*             m_pBoxDirection;
+    TriStateBox*         m_pBtnWrap;
+    TriStateBox*         m_pBtnHyphen;
+    TriStateBox*         m_pBtnShrink;
+    FrameDirListBox*     m_pLbFrameDir;
+
+    // hidden labels/string
+    FixedText*           m_pFtBotLock;
+    FixedText*           m_pFtTopLock;
+    FixedText*           m_pFtCelLock;
+    FixedText*           m_pFtABCD;
+
 };
 
 // ============================================================================
