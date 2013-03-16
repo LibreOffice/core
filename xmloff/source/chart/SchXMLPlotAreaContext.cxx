@@ -957,7 +957,7 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
 static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocument > &xDoc,
                                const uno::Reference< beans::XPropertySet > &xBarProp,
-                               const rtl::OUString &aRange,
+                               const rtl::OUString &aXMLRange,
                                bool bPositiveValue, bool bYError )
 {
     uno::Reference< com::sun::star::chart2::data::XDataProvider > xDataProvider(xDoc->getDataProvider());
@@ -966,7 +966,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 
     assert( xDataSink.is() && xDataSource.is() && xDataProvider.is() );
 
-    rtl::OUString aXMLRange(lcl_ConvertRange(aRange,xDoc));
+    rtl::OUString aRange(lcl_ConvertRange(aXMLRange,xDoc));
 
     uno::Reference< chart2::data::XDataSequence > xNewSequence(
         xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
