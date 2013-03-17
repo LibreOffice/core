@@ -1134,8 +1134,8 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
                 if ( !nTmp ) {
                     nTmp = (sal_Int32) aTwo.Seconds - (sal_Int32) aOne.Seconds;
                 if ( !nTmp )
-                    nTmp = (sal_Int32) aTwo.HundredthSeconds
-                                    - (sal_Int32) aOne.HundredthSeconds;
+                    nTmp = (sal_Int32) aTwo.NanoSeconds
+                                    - (sal_Int32) aOne.NanoSeconds;
                 }}
 
                 if ( nTmp < 0 )
@@ -1169,8 +1169,8 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
                 if ( !nTmp ) {
                     nTmp = (sal_Int32) aTwo.Seconds - (sal_Int32) aOne.Seconds;
                 if ( !nTmp )
-                    nTmp = (sal_Int32) aTwo.HundredthSeconds
-                                    - (sal_Int32) aOne.HundredthSeconds;
+                    nTmp = (sal_Int32) aTwo.NanoSeconds
+                                    - (sal_Int32) aOne.NanoSeconds;
                 }}}}}
 
                 if ( nTmp < 0 )

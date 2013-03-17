@@ -108,7 +108,7 @@ void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime,const com::
         aDateTime.Month++;
     }
 
-    _nJulianTime = ((aDateTime.Hours*3600000)+(aDateTime.Minutes*60000)+(aDateTime.Seconds*1000)+(aDateTime.HundredthSeconds*10));
+    _nJulianTime = ((aDateTime.Hours*3600000)+(aDateTime.Minutes*60000)+(aDateTime.Seconds*1000)+(aDateTime.NanoSeconds/1000000));
     /* conversion factors */
     sal_uInt16 iy0;
     sal_uInt16 im0;

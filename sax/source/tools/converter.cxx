@@ -838,7 +838,7 @@ bool Converter::convertDuration(double& rfTime,
     return bSuccess;
 }
 
-/** convert util::Duration to ISO "duration" string */
+/** convert util::Duration to ISO8601 "duration" string */
 void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
         const ::util::Duration& rDuration)
 {
@@ -865,10 +865,10 @@ void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
         rBuffer.append(static_cast<sal_Int32>(rDuration.Days));
         rBuffer.append(sal_Unicode('D'));
     }
-    const sal_Int32 nMSecs(static_cast<sal_Int32>(rDuration.Seconds)
-                         + static_cast<sal_Int32>(rDuration.MilliSeconds));
-    if (static_cast<sal_Int32>(rDuration.Hours) +
-        static_cast<sal_Int32>(rDuration.Minutes) + nMSecs)
+    if ( rDuration.Hours != 0
+         || rDuration.Minutes != 0
+         || rDuration.Seconds != 0
+         || rDuration.NanoSeconds != 0 )
     {
         rBuffer.append(sal_Unicode('T')); // time separator
         if (rDuration.Hours)
@@ -881,37 +881,19 @@ void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
             rBuffer.append(static_cast<sal_Int32>(rDuration.Minutes));
             rBuffer.append(sal_Unicode('M'));
         }
-        if (nMSecs)
+        if (rDuration.Seconds != 0 || rDuration.NanoSeconds != 0)
         {
             // seconds must not be omitted (i.e. ".42S" is not valid)
             rBuffer.append(static_cast<sal_Int32>(rDuration.Seconds));
-            if (rDuration.MilliSeconds)
+            if (rDuration.NanoSeconds)
             {
-                rBuffer.append(sal_Unicode('.'));
-                const sal_Int32 nMilliSeconds(rDuration.MilliSeconds % 1000);
-                if (nMilliSeconds < 100)
-                {
-                    rBuffer.append(sal_Unicode('0'));
-                }
-                if (nMilliSeconds < 10)
-                {
-                    rBuffer.append(sal_Unicode('0'));
-                }
-                if (0 == (nMilliSeconds % 10))
-                {
-                    if (0 == (nMilliSeconds % 100))
-                    {
-                        rBuffer.append(nMilliSeconds / 100);
-                    }
-                    else
-                    {
-                        rBuffer.append(nMilliSeconds / 10);
-                    }
-                }
-                else
-                {
-                    rBuffer.append(nMilliSeconds);
-                }
+                OSL_ENSURE(rDuration.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
+                rBuffer.append('.');
+                std::ostringstream ostr;
+                ostr.fill('0');
+                ostr.width('9');
+                ostr << rDuration.NanoSeconds;
+                rBuffer.append(ostr.str().c_str());
             }
             rBuffer.append(sal_Unicode('S'));
         }
@@ -1006,7 +988,7 @@ readDurationComponent(const ::rtl::OUString & rString,
     return true;
 }
 
-/** convert ISO "duration" string to util::Duration */
+/** convert ISO8601 "duration" string to util::Duration */
 bool Converter::convertDuration(util::Duration& rDuration,
                                 const ::rtl::OUString& rString)
 {
@@ -1038,7 +1020,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
     sal_Int32 nHours(0);
     sal_Int32 nMinutes(0);
     sal_Int32 nSeconds(0);
-    sal_Int32 nMilliSeconds(0);
+    sal_Int32 nNanoSeconds(0);
 
     bTimePart = readDurationT(string, nPos);
     bSuccess = (R_SUCCESS == readUnsignedNumber(string, nPos, nTemp));
@@ -1097,21 +1079,12 @@ bool Converter::convertDuration(util::Duration& rDuration,
                     {
                         if (-1 != nTemp)
                         {
-                            nTemp = -1;
                             const sal_Int32 nDigits = nPos - nStart;
                             OSL_ENSURE(nDigits > 0, "bad code monkey");
-                            const sal_Unicode cZero('0');
-                            nMilliSeconds = 100 * (string[nStart] - cZero);
-                            if (nDigits >= 2)
-                            {
-                                nMilliSeconds += 10 *
-                                    (string[nStart+1] - cZero);
-                                if (nDigits >= 3)
-                                {
-                                    nMilliSeconds += (string[nStart+2] - cZero);
-                                }
-                            }
-
+                            nNanoSeconds=static_cast<double>(nTemp)/(1000000000.0/pow(10.0,nDigits));
+                            nTemp=-1;
+                            bSuccess =
+                                (R_NOTHING != readUnsignedNumber(string, nPos, nTemp));
                             if (sal_Unicode('S') == string[nPos])
                             {
                                 ++nPos;
@@ -1167,7 +1140,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
         rDuration.Hours         = static_cast<sal_Int16>(nHours);
         rDuration.Minutes       = static_cast<sal_Int16>(nMinutes);
         rDuration.Seconds       = static_cast<sal_Int16>(nSeconds);
-        rDuration.MilliSeconds  = static_cast<sal_Int16>(nMilliSeconds);
+        rDuration.NanoSeconds   = static_cast<sal_Int32>(nNanoSeconds);
     }
 
     return bSuccess;
@@ -1235,13 +1208,14 @@ void Converter::convertDateTime(
             i_rBuffer.append(zero);
         }
         i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Seconds) );
-        if( i_rDateTime.HundredthSeconds > 0 ) {
-            i_rBuffer.append(dot);
-            if( i_rDateTime.HundredthSeconds < 10 ) {
-                i_rBuffer.append(zero);
-            }
-            i_rBuffer.append(
-                static_cast<sal_Int32>(i_rDateTime.HundredthSeconds) );
+        if( i_rDateTime.NanoSeconds > 0 ) {
+            OSL_ENSURE(i_rDateTime.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
+            rBuffer.append(dot);
+            std::ostringstream ostr;
+            ostr.fill('0');
+            ostr.width('9');
+            ostr << i_rDateTime.NanoSeconds;
+            i_rBuffer.append(ostr.str().c_str());
         }
     }
 }
@@ -1262,7 +1236,7 @@ bool Converter::convertDateTime( util::DateTime& rDateTime,
             rDateTime.Hours = 0;
             rDateTime.Minutes = 0;
             rDateTime.Seconds = 0;
-            rDateTime.HundredthSeconds = 0;
+            rDateTime.NanoSeconds = 0;
         }
         return true;
     }
@@ -1384,7 +1358,7 @@ bool Converter::convertDateOrDateTime(
     sal_Int32 nHours(0);
     sal_Int32 nMinutes(0);
     sal_Int32 nSeconds(0);
-    sal_Int32 nMilliSeconds(0);
+    sal_Int32 nNanoSeconds(0);
     if (bSuccess && bHaveTime)
     {
         {
@@ -1422,7 +1396,7 @@ bool Converter::convertDateOrDateTime(
             bSuccess &= (0 <= nSeconds) && (nSeconds < 60);
         }
         if (bSuccess && (nPos < string.getLength()) &&
-            (sal_Unicode('.') == string[nPos])) // fraction separator
+            (sal_Unicode('.') == string[nPos] || sal_Unicode(',') == string[nPos])) // fraction separator
         {
             ++nPos;
             const sal_Int32 nStart(nPos);
@@ -1433,26 +1407,15 @@ bool Converter::convertDateOrDateTime(
             }
             if (bSuccess)
             {
-                // cannot use nTemp because of possible leading zeros
-                // and possible overflow => read digits directly
-                const sal_Int32 nDigits(nPos - nStart);
+                const sal_Int32 nDigits = nPos - nStart;
                 OSL_ENSURE(nDigits > 0, "bad code monkey");
-                const sal_Unicode cZero('0');
-                nMilliSeconds = 100 * (string[nStart] - cZero);
-                if (nDigits >= 2)
-                {
-                    nMilliSeconds += 10 * (string[nStart+1] - cZero);
-                    if (nDigits >= 3)
-                    {
-                        nMilliSeconds += (string[nStart+2] - cZero);
-                    }
-                }
+                nNanoSeconds=static_cast<double>(nTemp)/(1000000000.0/pow(10.0,nDigits));
             }
         }
 
         if (bSuccess && (nHours == 24))
         {
-            if (!((0 == nMinutes) && (0 == nSeconds) && (0 == nMilliSeconds)))
+            if (!((0 == nMinutes) && (0 == nSeconds) && (0 == nNanoSeconds)))
             {
                 bSuccess = false; // only 24:00:00 is valid
             }
@@ -1536,9 +1499,7 @@ bool Converter::convertDateOrDateTime(
             rDateTime.Hours = static_cast<sal_uInt16>(nHours);
             rDateTime.Minutes = static_cast<sal_uInt16>(nMinutes);
             rDateTime.Seconds = static_cast<sal_uInt16>(nSeconds);
-            // util::DateTime does not support 3 decimal digits of precision!
-            rDateTime.HundredthSeconds =
-                static_cast<sal_uInt16>(nMilliSeconds / 10);
+            rDateTime.NanoSeconds = static_cast<sal_uInt32>(nNanoSeconds);
             rbDateTime = true;
         }
         else
@@ -2282,7 +2243,7 @@ bool Converter::convertAny(::rtl::OUStringBuffer&    rsValue,
                     aTempValue.Day              = aDate.Day;
                     aTempValue.Month            = aDate.Month;
                     aTempValue.Year             = aDate.Year;
-                    aTempValue.HundredthSeconds = 0;
+                    aTempValue.NanoSeconds = 0;
                     aTempValue.Seconds          = 0;
                     aTempValue.Minutes          = 0;
                     aTempValue.Hours            = 0;
@@ -2297,7 +2258,7 @@ bool Converter::convertAny(::rtl::OUStringBuffer&    rsValue,
                     aTempValue.Days             = 0;
                     aTempValue.Months           = 0;
                     aTempValue.Years            = 0;
-                    aTempValue.MilliSeconds     = aTime.HundredthSeconds * 10;
+                    aTempValue.NanoSeconds     = aTime.NanoSeconds;
                     aTempValue.Seconds          = aTime.Seconds;
                     aTempValue.Minutes          = aTime.Minutes;
                     aTempValue.Hours            = aTime.Hours;

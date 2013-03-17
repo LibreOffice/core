@@ -345,10 +345,6 @@ private:
     /*
      * Common methods
      */
-    sal_Bool convertNumber( sal_Int32& rValue, const rtl::OUString& rString, sal_Int32 nMin, sal_Int32 nMax );
-    void convertDateTime( ::rtl::OUStringBuffer& rBuffer, const com::sun::star::util::DateTime& rDateTime );
-    sal_Bool convertDateTime( com::sun::star::util::DateTime& rDateTime, const ::rtl::OUString& rString );
-
     void createXSecComponent( );
     int findSignatureInfor( sal_Int32 nSecurityId ) const;
     bool chainOn( bool bRetrievingLastEvent );

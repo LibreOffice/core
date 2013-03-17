@@ -53,6 +53,7 @@ Time::Time( const ResId& rResId )
         SetMin( (sal_uInt16)pResMgr->ReadShort() );
     if ( 0x04 & nObjMask )
         SetSec( (sal_uInt16)pResMgr->ReadShort() );
+#error "FIXME dunno what to do here...\nShould I still ReadShort and convert to nanoseconds or ReadLong and here are my NanoSeconds?"
     if ( 0x08 & nObjMask )
         Set100Sec( (sal_uInt16)pResMgr->ReadShort() );
 }
