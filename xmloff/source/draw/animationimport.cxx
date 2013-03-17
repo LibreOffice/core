@@ -1161,7 +1161,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                         {
                             fInterval = ((((aDuration.Hours * 60)
                                 + aDuration.Minutes) * 60) + aDuration.Seconds)
-                              + (aDuration.MilliSeconds / 1000.0);
+                              + (aDuration.NanoSeconds / 1000000000.0);
                         }
                     }
                     else

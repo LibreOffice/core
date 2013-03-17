@@ -58,10 +58,10 @@ inline sal_Int32 lclIsLeapYear( sal_Int32 nYear )
     return ((nYear % 4) == 0) && (((nYear % 100) != 0) || ((nYear % 400) == 0));
 }
 
-void lclSkipYearBlock( sal_Int32& ornDays, sal_uInt16& ornYear, sal_Int32 nDaysInBlock, sal_Int32 nYearsPerBlock, sal_Int32 nMaxBlocks )
+void lclSkipYearBlock( sal_Int32& ornDays, sal_Int16& ornYear, sal_Int32 nDaysInBlock, sal_Int32 nYearsPerBlock, sal_Int32 nMaxBlocks )
 {
     sal_Int32 nBlocks = ::std::min< sal_Int32 >( ornDays / nDaysInBlock, nMaxBlocks );
-    ornYear = static_cast< sal_uInt16 >( ornYear + nYearsPerBlock * nBlocks );
+    ornYear = static_cast< sal_Int16 >( ornYear + nYearsPerBlock * nBlocks );
     ornDays -= nBlocks * nDaysInBlock;
 }
 

@@ -104,8 +104,6 @@ using ::com::sun::star::beans::XPropertySet;
 
 namespace {
 
-const double D_TIMEFACTOR = 86400.0;
-
 /**
  * Database connection implementation for UNO database API.  Note that in
  * the UNO database API, column index is 1-based, whereas the interface
@@ -220,8 +218,10 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
                 rNumType = NUMBERFORMAT_TIME;
 
                 util::Time aTime = mxRow->getTime(nCol+1);
-                fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
-                           aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                fValue = aTime.Hours       / static_cast<double>(::Time::hourPerDay)   +
+                         aTime.Minutes     / static_cast<double>(::Time::minutePerDay) +
+                         aTime.Seconds     / static_cast<double>(::Time::secondPerDay) +
+                         aTime.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
                 rData.SetValue(fValue);
                 break;
             }
@@ -231,8 +231,10 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
 
                 util::DateTime aStamp = mxRow->getTimestamp(nCol+1);
                 fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - maNullDate ) +
-                         ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
-                           aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                         aStamp.Hours       / static_cast<double>(::Time::hourPerDay)   +
+                         aStamp.Minutes     / static_cast<double>(::Time::minutePerDay) +
+                         aStamp.Seconds     / static_cast<double>(::Time::secondPerDay) +
+                         aStamp.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
                 rData.SetValue(fValue);
                 break;
             }

@@ -31,6 +31,20 @@
 
 #define MAX_DAYS    3636532
 
+namespace
+{
+    const double fMilliSecondsPerDay = 86400000.0;
+    const sal_Int64 nanoSecInSec = 1000000000;
+    const sal_Int16 secInMin  = 60;
+    const sal_Int16 minInHour = 60;
+
+    const sal_Int64 secMask  = 1000000000;
+    const sal_Int64 minMask  = 100000000000;
+    const sal_Int64 hourMask = 10000000000000;
+
+    const double fNanoSecondsPerDay = nanoSecInSec * secInMin * minInHour * 24.0;
+}
+
 //.........................................................................
 namespace dbtools
 {
@@ -68,14 +82,15 @@ namespace dbtools
     //------------------------------------------------------------------
     OUString DBTypeConversion::toTimeString(const Time& rTime)
     {
-        sal_Char s[9];
+        const size_t buflen = 19;
+        sal_Char s[buflen];
         snprintf(s,
-                sizeof(s),
-                "%02d:%02d:%02d",
-                (int)rTime.Hours,
-                (int)rTime.Minutes,
-                (int)rTime.Seconds);
-        s[8] = 0;
+                 buflen,
+                 "%02d:%02d:%02d.%09d",
+                 rTime.Hours,
+                 rTime.Minutes,
+                 rTime.Seconds,
+                 rTime.NanoSeconds);
         return OUString::createFromAscii(s);
     }
 
@@ -85,10 +100,8 @@ namespace dbtools
         Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
         OUStringBuffer aTemp(toDateString(aDate));
         aTemp.appendAscii(" ");
-        Time aTime(0,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
+        Time aTime(_rDateTime.NanoSeconds,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
         aTemp.append( toTimeString(aTime) );
-        aTemp.appendAscii(".");
-        aTemp.append( static_cast<sal_Int32>(_rDateTime.HundredthSeconds));
         return  aTemp.makeStringAndClear();
     }
     //------------------------------------------------------------------------------
@@ -102,17 +115,17 @@ namespace dbtools
     }
 
     //------------------------------------------------------------------------------
-    Time DBTypeConversion::toTime(sal_Int32 _nVal)
+    Time DBTypeConversion::toTime(sal_Int64 _nVal)
     {
         Time aReturn;
-        aReturn.Hours = (sal_uInt16)(((sal_uInt32)(_nVal >= 0 ? _nVal : _nVal*-1)) / 1000000);
-        aReturn.Minutes = (sal_uInt16)((((sal_uInt32)(_nVal >= 0 ? _nVal : _nVal*-1)) / 10000) % 100);
-        aReturn.Seconds = (sal_uInt16)((((sal_uInt32)(_nVal >= 0 ? _nVal : _nVal*-1)) / 100) % 100);
-        aReturn.HundredthSeconds = (sal_uInt16)(((sal_uInt32)(_nVal >= 0 ? _nVal : _nVal*-1)) % 100);
+        sal_uInt64 unVal = static_cast<sal_uInt64>(_nVal >= 0 ? _nVal : -_nVal);
+        aReturn.Hours = unVal / hourMask;
+        aReturn.Minutes = (unVal / minMask) % 100;
+        aReturn.Seconds = (unVal / secMask) % 100;
+        aReturn.NanoSeconds = unVal % secMask;
         return aReturn;
     }
 
-    const double fMilliSecondsPerDay = 86400000.0;
     //------------------------------------------------------------------------------
     sal_Int32 DBTypeConversion::toINT32(const Date& rVal)
     {
@@ -122,18 +135,21 @@ namespace dbtools
     }
 
     //------------------------------------------------------------------------------
-    sal_Int32 DBTypeConversion::toINT32(const Time& rVal)
+    sal_Int64 DBTypeConversion::toINT64(const Time& rVal)
     {
         // normalize time
-        sal_Int32 nSeconds          = rVal.Seconds + rVal.HundredthSeconds / 100;
-        sal_Int32 nHundredthSeconds = rVal.HundredthSeconds % 100;
-        sal_Int32 nMinutes          = rVal.Minutes + nSeconds / 60;
-        nSeconds                    = nSeconds % 60;
-        sal_Int32 nHours            = rVal.Hours + nMinutes / 60;
-        nMinutes                    = nMinutes % 60;
+        sal_Int32 nSeconds          = rVal.Seconds + rVal.NanoSeconds / nanoSecInSec;
+        sal_Int32 nNanoSeconds      = rVal.NanoSeconds % nanoSecInSec;
+        sal_Int32 nMinutes          = rVal.Minutes + nSeconds / secInMin;
+        nSeconds                    = nSeconds % secInMin;
+        sal_Int32 nHours            = rVal.Hours + nMinutes / minInHour;
+        nMinutes                    = nMinutes % minInHour;
 
         // assemble time
-        return (sal_Int32)(nHundredthSeconds + (nSeconds*100) + (nMinutes*10000) + (nHours*1000000));
+        return nNanoSeconds +
+               nSeconds * secMask +
+               nMinutes * minMask +
+               nHours   * hourMask;
     }
 
     //------------------------------------------------------------------------------
@@ -142,9 +158,23 @@ namespace dbtools
         sal_Int32   nHour     = rVal.Hours;
         sal_Int32   nMin      = rVal.Minutes;
         sal_Int32   nSec      = rVal.Seconds;
-        sal_Int32   n100Sec   = rVal.HundredthSeconds;
+        sal_Int32   nNanoSec  = rVal.NanoSeconds;
 
-        return ((nHour*3600000)+(nMin*60000)+(nSec*1000)+(n100Sec*10));
+        return ((nHour*3600000)+(nMin*60000)+(nSec*1000)+(nNanoSec/1000000));
+    }
+
+    //------------------------------------------------------------------------------
+    sal_Int64 DBTypeConversion::getNsFromTime(const Time& rVal)
+    {
+        sal_Int32   nHour     = rVal.Hours;
+        sal_Int32   nMin      = rVal.Minutes;
+        sal_Int32   nSec      = rVal.Seconds;
+        sal_Int32   nNanoSec  = rVal.NanoSeconds;
+
+        return nNanoSec +
+               nSec  * nanoSecInSec +
+               nMin  * (secInMin * nanoSecInSec) +
+               nHour * (minInHour * secInMin * nanoSecInSec);
     }
 
     //------------------------------------------------------------------------------
@@ -195,7 +225,7 @@ namespace dbtools
         return nDays;
     }
     //------------------------------------------------------------------------------
-    static void implBuildFromRelative( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear)
+    static void implBuildFromRelative( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_Int16& rYear)
     {
         sal_Int32   nTempDays;
         sal_Int32   i = 0;
@@ -250,7 +280,7 @@ namespace dbtools
     //------------------------------------------------------------------------------
     double DBTypeConversion::toDouble(const Time& rVal)
     {
-        return (double)getMsFromTime(rVal) / fMilliSecondsPerDay;
+        return (double)getNsFromTime(rVal) / fNanoSecondsPerDay;
     }
 
     //------------------------------------------------------------------------------
@@ -262,7 +292,7 @@ namespace dbtools
         aTimePart.Hours             = _rVal.Hours;
         aTimePart.Minutes           = _rVal.Minutes;
         aTimePart.Seconds           = _rVal.Seconds;
-        aTimePart.HundredthSeconds  = _rVal.HundredthSeconds;
+        aTimePart.NanoSeconds       = _rVal.NanoSeconds;
 
         return ((double)nTime) + toDouble(aTimePart);
     }
@@ -325,12 +355,12 @@ namespace dbtools
     Time DBTypeConversion::toTime(double dVal)
     {
         sal_Int32 nDays     = (sal_Int32)dVal;
-        sal_Int32 nMS = sal_Int32((dVal - (double)nDays) * fMilliSecondsPerDay + 0.5);
+        sal_Int32 nNS = sal_Int32((dVal - (double)nDays) * fNanoSecondsPerDay + 0.5);
 
         sal_Int16 nSign;
-        if ( nMS < 0 )
+        if ( nNS < 0 )
         {
-            nMS *= -1;
+            nNS *= -1;
             nSign = -1;
         }
         else
@@ -339,24 +369,28 @@ namespace dbtools
         Time xRet;
         // normalize time
         // we have to sal_Int32 here because otherwise we get an overflow
-        sal_Int32 nHundredthSeconds = nMS/10;
-        sal_Int32 nSeconds          = nHundredthSeconds / 100;
-        sal_Int32 nMinutes          = nSeconds / 60;
+        sal_Int32 nNanoSeconds      = nNS;
+        sal_Int32 nSeconds          = nNanoSeconds / nanoSecInSec;
+        sal_Int32 nMinutes          = nSeconds / secInMin;
 
-        xRet.HundredthSeconds       = (sal_uInt16)(nHundredthSeconds % 100);
-        xRet.Seconds                = (sal_uInt16)(nSeconds % 60);
-        xRet.Hours                  = (sal_uInt16)(nMinutes / 60);
-        xRet.Minutes                = (sal_uInt16)(nMinutes % 60);
+        xRet.NanoSeconds            = nNanoSeconds % nanoSecInSec;
+        xRet.Seconds                = nSeconds % secInMin;
+        xRet.Hours                  = nMinutes / minInHour;
+        xRet.Minutes                = nMinutes % minInHour;
 
         // assemble time
-        sal_Int32 nTime = (sal_Int32)(xRet.HundredthSeconds + (xRet.Seconds*100) + (xRet.Minutes*10000) + (xRet.Hours*1000000)) * nSign;
+        sal_Int64 nTime = nSign *
+                          (xRet.NanoSeconds +
+                           xRet.Seconds * secMask +
+                           xRet.Minutes * minMask +
+                           xRet.Hours   * hourMask);
 
         if(nTime < 0)
         {
-            xRet.HundredthSeconds   = 99;
-            xRet.Minutes            = 59;
-            xRet.Seconds            = 59;
-            xRet.Hours              = 23;
+            xRet.NanoSeconds  = nanoSecInSec-1;
+            xRet.Seconds      = secInMin-1;
+            xRet.Minutes      = minInHour-1;
+            xRet.Hours        = 23;
         }
         return xRet;
     }
@@ -368,14 +402,14 @@ namespace dbtools
 
         DateTime xRet;
 
-        xRet.Day                = aDate.Day;
-        xRet.Month              = aDate.Month;
-        xRet.Year               = aDate.Year;
+        xRet.Day          = aDate.Day;
+        xRet.Month        = aDate.Month;
+        xRet.Year         = aDate.Year;
 
-        xRet.HundredthSeconds   = aTime.HundredthSeconds;
-        xRet.Minutes            = aTime.Minutes;
-        xRet.Seconds            = aTime.Seconds;
-        xRet.Hours              = aTime.Hours;
+        xRet.NanoSeconds  = aTime.NanoSeconds;
+        xRet.Minutes      = aTime.Minutes;
+        xRet.Seconds      = aTime.Seconds;
+        xRet.Hours        = aTime.Hours;
 
 
         return xRet;
@@ -415,7 +449,8 @@ namespace dbtools
         if ( -1 != nSeparation )
             aTime = toTime( _sSQLString.copy( nSeparation ) );
 
-        return DateTime(aTime.HundredthSeconds,aTime.Seconds,aTime.Minutes,aTime.Hours,aDate.Day,aDate.Month,aDate.Year);
+        return DateTime(aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
+                        aDate.Day, aDate.Month, aDate.Year);
     }
 
     //-----------------------------------------------------------------------------
@@ -426,8 +461,8 @@ namespace dbtools
         sal_Int32 nIndex    = 0;
         sal_uInt16  nHour   = 0,
                     nMinute = 0,
-                    nSecond = 0,
-                    nHundredthSeconds   = 0;
+                    nSecond = 0;
+        sal_uInt32  nNanoSeconds = 0;
         nHour   = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
         if(nIndex != -1)
         {
@@ -437,17 +472,10 @@ namespace dbtools
                 nSecond = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
                 nIndex = 0;
                 OUString sNano(_sSQLString.getToken(1,'.',nIndex));
-                if ( !sNano.isEmpty() )
-                {
-                    // our time struct only supports hundredth seconds
-                    sNano = sNano.copy(0,::std::min<sal_Int32>(sNano.getLength(),2));
-                    const static OUString s_Zeros("00");
-                    sNano += s_Zeros.copy(0,s_Zeros.getLength() - sNano.getLength());
-                    nHundredthSeconds = static_cast<sal_uInt16>(sNano.toInt32());
-                }
+                nNanoSeconds = sNano.toInt32();
             }
         }
-        return Time(nHundredthSeconds,nSecond,nMinute,nHour);
+        return Time(nNanoSeconds, nSecond, nMinute, nHour);
     }
 
 //.........................................................................

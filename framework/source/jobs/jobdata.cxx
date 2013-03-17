@@ -567,6 +567,7 @@ sal_Bool isEnabled( const OUString& sAdminTime ,
 
     // We check for "isEnabled()" here only.
     // Note further: ISO8601 formated strings can be compared as strings directly!
+    //               FIXME: this is not true! "T1215" is the same time as "T12:15" or "T121500"
     return (
             (!bValidAdmin && !bValidUser                         ) ||
             ( bValidAdmin &&  bValidUser && sAdminTime>=sUserTime)

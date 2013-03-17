@@ -30,6 +30,7 @@
 #include <rtl/logfile.hxx>
 
 #include <tools/date.hxx>
+#include <tools/time.hxx>
 #include <tools/fldunit.hxx>
 
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -438,11 +439,11 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
         double Hour = aDateTime.Hours;
         double Min = aDateTime.Minutes;
         double Sec = aDateTime.Seconds;
-        double Sec100 = aDateTime.HundredthSeconds;
-        fTempDateTime += Hour / 24;
-        fTempDateTime += Min / (24 * 60);
-        fTempDateTime += Sec / (24 * 60 * 60);
-        fTempDateTime += Sec100 / (24 * 60 * 60 * 100);
+        double NanoSec = aDateTime.NanoSeconds;
+        fTempDateTime += Hour    / ::Time::hourPerDay;
+        fTempDateTime += Min     / ::Time::minutePerDay;
+        fTempDateTime += Sec     / ::Time::secondPerDay;
+        fTempDateTime += NanoSec / ::Time::nanoSecPerDay;
         fDateTime = fTempDateTime;
     }
     return bSuccess;

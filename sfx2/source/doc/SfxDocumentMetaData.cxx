@@ -412,7 +412,7 @@ bool operator== (const css::util::DateTime &i_rLeft,
         && i_rLeft.Hours            == i_rRight.Hours
         && i_rLeft.Minutes          == i_rRight.Minutes
         && i_rLeft.Seconds          == i_rRight.Seconds
-        && i_rLeft.HundredthSeconds == i_rRight.HundredthSeconds;
+        && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds;
 }
 
 // NB: keep these two arrays in sync!
@@ -633,7 +633,7 @@ OUString SAL_CALL durationToText(sal_Int32 i_value) throw ()
     ud.Hours   = static_cast<sal_Int16>((i_value % (24 * 3600)) / 3600);
     ud.Minutes = static_cast<sal_Int16>((i_value % 3600) / 60);
     ud.Seconds = static_cast<sal_Int16>(i_value % 60);
-    ud.MilliSeconds = 0;
+    ud.NanoSeconds = 0;
     return durationToText(ud);
 }
 
@@ -967,7 +967,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             ud.Hours   = ut.Hours;
             ud.Minutes = ut.Minutes;
             ud.Seconds = ut.Seconds;
-            ud.MilliSeconds = 10 * ut.HundredthSeconds;
+            ud.NanoSeconds = ut.NanoSeconds;
             values.push_back(durationToText(ud));
             as.push_back(std::make_pair(vt,
                 OUString("time")));
@@ -1837,7 +1837,7 @@ SfxDocumentMetaData::resetUserData(const OUString & the_value)
     bool bModified( false );
     bModified |= setMetaText("meta:initial-creator", the_value);
     ::DateTime now( ::DateTime::SYSTEM );
-    css::util::DateTime uDT(now.Get100Sec(), now.GetSec(), now.GetMin(),
+    css::util::DateTime uDT(now.GetNanoSec(), now.GetSec(), now.GetMin(),
         now.GetHour(), now.GetDay(), now.GetMonth(), now.GetYear());
     bModified |= setMetaText("meta:creation-date", dateTimeToText(uDT));
     bModified |= setMetaText("dc:creator", OUString());

@@ -590,7 +590,7 @@ namespace pcr
         {
             util::Time aTime;
             OSL_VERIFY( _rControlValue >>= aTime );
-            aPropertyValue <<= (sal_Int32)DBTypeConversion::toINT32( aTime );
+            aPropertyValue <<= DBTypeConversion::toINT64( aTime );
         }
         break;
 
@@ -726,7 +726,7 @@ namespace pcr
         case PROPERTY_ID_DEFAULT_TIME:
         case PROPERTY_ID_TIME:
         {
-            sal_Int32 nTime = 0;
+            sal_Int64 nTime = 0;
             OSL_VERIFY( _rPropertyValue >>= nTime );
             aControlValue <<= DBTypeConversion::toTime( nTime );
         }

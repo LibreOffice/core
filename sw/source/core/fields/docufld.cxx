@@ -973,7 +973,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             String aName( xDocProps->getAuthor() );
             util::DateTime uDT( xDocProps->getCreationDate() );
             Date aD(uDT.Day, uDT.Month, uDT.Year);
-            Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+            Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
             DateTime aDate(aD,aT);
             if( nSub == DI_CREATE )
                 ;       // das wars schon!!
@@ -982,7 +982,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                 aName = xDocProps->getModifiedBy();
                 uDT = xDocProps->getModificationDate();
                 Date bD(uDT.Day, uDT.Month, uDT.Year);
-                Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+                Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
                 DateTime bDate(bD,bT);
                 aDate = bDate;
             }
@@ -991,7 +991,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                 aName = xDocProps->getPrintedBy();
                 uDT = xDocProps->getPrintDate();
                 Date bD(uDT.Day, uDT.Month, uDT.Year);
-                Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+                Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
                 DateTime bDate(bD,bT);
                 aDate = bDate;
             }
@@ -1068,8 +1068,8 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
 template<class T>
 static double lcl_TimeToDouble( const T& rTime )
 {
-    const double fMilliSecondsPerDay = 86400000.0;
-    return ((rTime.Hours*3600000)+(rTime.Minutes*60000)+(rTime.Seconds*1000)+(rTime.HundredthSeconds*10)) / fMilliSecondsPerDay;
+    const double fNanoSecondsPerDay = 86400000000000.0;
+    return ((rTime.Hours*3600000)+(rTime.Minutes*60000)+(rTime.Seconds*1000)+(rTime.NanoSeconds)) / fNanoSecondsPerDay;
 }
 
 template<class D>
@@ -1904,7 +1904,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_DATE_TIME:
         {
                 util::DateTime DateTimeValue;
-                DateTimeValue.HundredthSeconds = aDateTime.Get100Sec();
+                DateTimeValue.NanoSeconds = aDateTime.GetNanoSec();
                 DateTimeValue.Seconds = aDateTime.GetSec();
                 DateTimeValue.Minutes = aDateTime.GetMin();
                 DateTimeValue.Hours = aDateTime.GetHour();
@@ -1957,7 +1957,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         util::DateTime aDateTimeValue;
         if(!(rAny >>= aDateTimeValue))
             return sal_False;
-        aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
+        aDateTime.SetNanoSec(aDateTimeValue.NanoSeconds);
         aDateTime.SetSec(aDateTimeValue.Seconds);
         aDateTime.SetMin(aDateTimeValue.Minutes);
         aDateTime.SetHour(aDateTimeValue.Hours);

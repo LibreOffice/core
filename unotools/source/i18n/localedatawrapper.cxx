@@ -1140,7 +1140,7 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, sal_uInt64 nNumber, int nMin
 }
 
 
-static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, int bLeading )
+static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, bool bLeading )
 {
     DBG_ASSERT( nNumber < 100, "ImplAdd2UNum() - Number >= 100" );
 
@@ -1166,6 +1166,24 @@ static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, int bLe
     return pBuf;
 }
 
+static sal_Unicode* ImplAdd9UNum( sal_Unicode* pBuf, sal_uInt32 nNumber, bool bLeading )
+{
+    DBG_ASSERT( nNumber < 1000000000, "ImplAdd2UNum() - Number >= 1000000000" );
+
+    std::ostringstream ostr;
+    if (bLeading)
+    {
+        ostr.fill('0');
+        ostr.width(9);
+    }
+    ostr << nNumber;
+    for(const char *pAB=ostr.str().c_str(); *pAB != '\0'; ++pAB, ++pBuf)
+    {
+        *pBuf = *pAB;
+    }
+
+    return pBuf;
+}
 
 inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
 {
@@ -1375,16 +1393,16 @@ OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool 
 
     pBuf = ImplAdd2UNum( pBuf, nHour, sal_True /* IsTimeLeadingZero() */ );
     pBuf = ImplAddString( pBuf, getTimeSep() );
-    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), sal_True );
+    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), true );
     if ( bSec )
     {
         pBuf = ImplAddString( pBuf, getTimeSep() );
-        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), sal_True );
+        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), true );
 
         if ( b100Sec )
         {
             pBuf = ImplAddString( pBuf, getTime100SecSep() );
-            pBuf = ImplAdd2UNum( pBuf, rTime.Get100Sec(), sal_True );
+            pBuf = ImplAdd9UNum( pBuf, rTime.GetNanoSec(), true );
         }
     }
 
@@ -1473,16 +1491,16 @@ OUString LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, sal_B
     else
         pBuf = ImplAddUNum( pBuf, rTime.GetHour() );
     pBuf = ImplAddString( pBuf, getTimeSep() );
-    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), sal_True );
+    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), true );
     if ( bSec )
     {
         pBuf = ImplAddString( pBuf, getTimeSep() );
-        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), sal_True );
+        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), true );
 
         if ( b100Sec )
         {
             pBuf = ImplAddString( pBuf, getTime100SecSep() );
-            pBuf = ImplAdd2UNum( pBuf, rTime.Get100Sec(), sal_True );
+            pBuf = ImplAdd9UNum( pBuf, rTime.GetNanoSec(), true );
         }
     }
 

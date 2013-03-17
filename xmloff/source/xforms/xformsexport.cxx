@@ -688,7 +688,7 @@ void xforms_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Tim
     aDuration.Hours = rTime.Hours;
     aDuration.Minutes = rTime.Minutes;
     aDuration.Seconds = rTime.Seconds;
-    aDuration.MilliSeconds = rTime.HundredthSeconds * 10;
+    aDuration.NanoSeconds = rTime.NanoSeconds;
     ::sax::Converter::convertDuration( aBuffer, aDuration );
 }
 

@@ -349,13 +349,13 @@ void ScXMLConverter::ConvertCoreToAPIDateTime(const DateTime& aDateTime, util::D
     rDateTime.Hours = aDateTime.GetHour();
     rDateTime.Minutes = aDateTime.GetMin();
     rDateTime.Seconds = aDateTime.GetSec();
-    rDateTime.HundredthSeconds = aDateTime.Get100Sec();
+    rDateTime.NanoSeconds = aDateTime.GetNanoSec();
 }
 
 void ScXMLConverter::ConvertAPIToCoreDateTime(const util::DateTime& aDateTime, DateTime& rDateTime)
 {
     Date aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
-    Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds);
+    Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
     DateTime aTempDateTime (aDate, aTime);
     rDateTime = aTempDateTime;
 }

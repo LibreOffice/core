@@ -111,7 +111,9 @@ namespace dbtools
         static ::com::sun::star::util::DateTime toDateTime(const OUString& _sSQLDate);
 
 
+        // TODO: consider removing getMsFromTime
         static sal_Int32 getMsFromTime(const ::com::sun::star::util::Time& rVal);
+        static sal_Int64 getNsFromTime(const ::com::sun::star::util::Time& rVal);
 
         static sal_Int32 toDays(const ::com::sun::star::util::Date& _rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
 
@@ -120,10 +122,10 @@ namespace dbtools
         static double   toDouble(const ::com::sun::star::util::DateTime& rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
 
         static sal_Int32    toINT32(const ::com::sun::star::util::Date& rVal);
-        static sal_Int32    toINT32(const ::com::sun::star::util::Time& rVal);
+        static sal_Int64    toINT64(const ::com::sun::star::util::Time& rVal);
 
         static ::com::sun::star::util::Date toDate(sal_Int32 _nVal);
-        static ::com::sun::star::util::Time toTime(sal_Int32 _nVal);
+        static ::com::sun::star::util::Time toTime(sal_Int64 _nVal);
 
         /** convert a double which is a date value relative to a given fixed date into a date value relative
             to the standard db null date.
@@ -139,9 +141,9 @@ namespace dbtools
 
         // return the date in the format %04d-%02d-%02d
         static OUString toDateString(const ::com::sun::star::util::Date& rDate);
-        // return the time in the format %02d:%02d:%02d
+        // return the time in the format %02d:%02d:%02d.%09d
         static OUString toTimeString(const ::com::sun::star::util::Time& rTime);
-        // return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d
+        // return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d.%09d
         static OUString toDateTimeString(const ::com::sun::star::util::DateTime& _rDateTime);
         // return the any in an sql standard format
         static OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, sal_Bool bQuote,
