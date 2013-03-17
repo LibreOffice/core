@@ -309,7 +309,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             // Time support again (#i38744#)
             Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
             Time aTime( rInfo.stDateTime.Hours, rInfo.stDateTime.Minutes,
-                        rInfo.stDateTime.Seconds, rInfo.stDateTime.HundredthSeconds );
+                        rInfo.stDateTime.Seconds, rInfo.stDateTime.NanoSeconds );
             rSigInfo.SignatureDate = aDate.GetDate();
             rSigInfo.SignatureTime = aTime.GetTime();
 

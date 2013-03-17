@@ -246,7 +246,7 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                 util::Time aTime;
                 if ( !( aControlValue >>= aTime ) )
                 {
-                    sal_Int32 nAsInt(0);
+                    sal_Int64 nAsInt(0);
                     aControlValue >>= nAsInt;
                     aTime = DBTypeConversion::toTime(nAsInt);
                 }
@@ -256,7 +256,7 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                 else
                 {
                     util::DateTime aDateTime = m_xColumn->getTimestamp();
-                    aDateTime.HundredthSeconds = aTime.HundredthSeconds;
+                    aDateTime.NanoSeconds = aTime.NanoSeconds;
                     aDateTime.Seconds = aTime.Seconds;
                     aDateTime.Minutes = aTime.Minutes;
                     aDateTime.Hours = aTime.Hours;
@@ -279,7 +279,7 @@ void OTimeModel::impl_translateControlValueToUNOTime( Any& _rUNOValue ) const
     _rUNOValue = getControlValue();
     if ( _rUNOValue.hasValue() )
     {
-        sal_Int32 nTime = 0;
+        sal_Int64 nTime = 0;
         OSL_VERIFY( _rUNOValue >>= nTime );
         if ( nTime == ::Time( 99, 99, 99 ).GetTime() )
             // "invalid time" in VCL is different from "invalid time" in UNO
@@ -305,7 +305,7 @@ Any OTimeModel::translateExternalValueToControlValue( const Any& _rExternalValue
     {
         util::Time aTime;
         OSL_VERIFY( _rExternalValue >>= aTime );
-        aControlValue <<= DBTypeConversion::toINT32( aTime );
+        aControlValue <<= DBTypeConversion::toINT64( aTime );
     }
     return aControlValue;
 }
@@ -325,8 +325,9 @@ Any OTimeModel::translateDbColumnToControlValue()
     if ( m_xColumn->wasNull() )
         m_aSaveValue.clear();
     else
-        // the aggregated set expects an Int32 as value ...
-        m_aSaveValue <<= DBTypeConversion::toINT32( aTime );
+        // TODO FIXME: "the aggregated set expects an Int32 as value ..."
+        //             need to fix it for int64
+        m_aSaveValue <<= DBTypeConversion::toINT64( aTime );
 
     return m_aSaveValue;
 }
