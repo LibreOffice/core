@@ -88,7 +88,7 @@ static bool eqDuration(util::Duration a, util::Duration b) {
     return a.Years == b.Years && a.Months == b.Months && a.Days == b.Days
         && a.Hours == b.Hours && a.Minutes == b.Minutes
         && a.Seconds == b.Seconds
-        && a.MilliSeconds == b.MilliSeconds
+        && a.NanoSeconds == b.NanoSeconds
         && a.Negative == b.Negative;
 }
 
@@ -97,9 +97,10 @@ static void doTest(util::Duration const & rid, char const*const pis,
 {
     char const*const pos((i_pos) ? i_pos : pis);
     util::Duration od;
-    OUString is(OUString::createFromAscii(pis));
+    OUString is(::rtl::OUString::createFromAscii(pis));
+    SAL_INFO("sax.cppunit","about to convert '" << is << "'");
     bool bSuccess = Converter::convertDuration(od, is);
-    SAL_INFO("sax.cppunit","" << od.Negative << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.MilliSeconds << "m");
+    SAL_INFO("sax.cppunit","" << (od.Negative ? "-" : "+")  << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.NanoSeconds << "n");
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDuration(rid, od));
     OUStringBuffer buf;
@@ -113,7 +114,7 @@ static void doTestDurationF(char const*const pis)
     util::Duration od;
     bool bSuccess = Converter::convertDuration(od,
             OUString::createFromAscii(pis));
-    SAL_INFO("sax.cppunit","" << od.Negative << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.MilliSeconds << "H");
+    SAL_INFO("sax.cppunit","" << (od.Negative ? "-" : "+") << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.NanoSeconds << "n");
     CPPUNIT_ASSERT(!bSuccess);
 }
 
@@ -126,14 +127,15 @@ void ConverterTest::testDuration()
     doTest( util::Duration(false, 0, 0, 0, 52, 0, 0, 0), "PT52H" );
     doTest( util::Duration(false, 0, 0, 0, 0, 717, 0, 0), "PT717M" );
     doTest( util::Duration(false, 0, 0, 0, 0, 0, 121, 0), "PT121S" );
-    doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 190), "PT0.19S" );
-    doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 90), "PT0.09S" );
-    doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 9), "PT0.009S" );
-    doTest( util::Duration(false, 0, 0, 0, 0, 0, 9, 999),
-            "PT9.999999999999999999999999999999S", "PT9.999S" );
+    doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 190000000), "PT0.19S",        "PT0.190000000S");
+    doTest( util::Duration(false, 0, 0, 0, 0, 0, 0,  90000000), "PT0.09S",        "PT0.090000000S" );
+    doTest( util::Duration(false, 0, 0, 0, 0, 0, 0,   9000000), "PT0.009S",       "PT0.009000000S" );
+    doTest( util::Duration(false, 0, 0, 0, 0, 0, 0,         9), "PT0.000000009S", "PT0.000000009S" );
+    doTest( util::Duration(false, 0, 0, 0, 0, 0, 9, 999999999),
+            "PT9.999999999999999999999999999999S", "PT9.999999999S" );
     doTest( util::Duration(true , 0, 0, 9999, 0, 0, 0, 0), "-P9999D" );
-    doTest( util::Duration(true , 7, 6, 5, 4, 3, 2, 10),
-            "-P7Y6M5DT4H3M2.01S" );
+    doTest( util::Duration(true , 7, 6, 5, 4, 3, 2,  10000000),
+            "-P7Y6M5DT4H3M2.01S", "-P7Y6M5DT4H3M2.010000000S" );
     doTest( util::Duration(false, 0, 6, 0, 0, 3, 0, 0), "P6MT3M" );
     doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 0), "P0D" );
     doTestDurationF("1Y1M");        // invalid: no ^P
@@ -155,7 +157,7 @@ static bool eqDateTime(util::DateTime a, util::DateTime b) {
     return a.Year == b.Year && a.Month == b.Month && a.Day == b.Day
         && a.Hours == b.Hours && a.Minutes == b.Minutes
         && a.Seconds == b.Seconds
-        && a.HundredthSeconds == b.HundredthSeconds;
+        && a.NanoSeconds == b.NanoSeconds;
 }
 
 static void doTest(util::DateTime const & rdt, char const*const pis,
@@ -164,8 +166,9 @@ static void doTest(util::DateTime const & rdt, char const*const pis,
     char const*const pos((i_pos) ? i_pos : pis);
     OUString is(OUString::createFromAscii(pis));
     util::DateTime odt;
+    SAL_INFO("sax.cppunit","about to convert '" << is << "'");
     bool bSuccess( Converter::convertDateTime(odt, is) );
-    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " H:" << odt.HundredthSeconds);
+    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds);
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDateTime(rdt, odt));
     OUStringBuffer buf;
@@ -179,7 +182,7 @@ static void doTestDateTimeF(char const*const pis)
     util::DateTime odt;
     bool bSuccess = Converter::convertDateTime(odt,
             OUString::createFromAscii(pis));
-    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << "H M:" << odt.Minutes << " S:" << odt.Seconds << " H:" << odt.HundredthSeconds);
+    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << "H M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds);
     CPPUNIT_ASSERT(!bSuccess);
 }
 
@@ -201,16 +204,16 @@ void ConverterTest::testDateTime()
     doTest( util::DateTime(0, 0, 0, 0, 2, 1, 1)/*(0, 0, 12, 0, 1, 1, 1)*/,
             "0001-01-02T00:00:00+12:00", "0001-01-02T00:00:00" );
 //            "0001-01-01T12:00:00" );
-    doTest( util::DateTime(99, 59, 59, 23, 31, 12, 9999),
-            "9999-12-31T23:59:59.99" );
-    doTest( util::DateTime(99, 59, 59, 23, 31, 12, 9999),
-            "9999-12-31T23:59:59.99Z", "9999-12-31T23:59:59.99" );
-    doTest( util::DateTime(99, 59, 59, 23, 31, 12, 9999),
+    doTest( util::DateTime(990000000, 59, 59, 23, 31, 12, 9999),
+            "9999-12-31T23:59:59.99",  "9999-12-31T23:59:59.990000000" );
+    doTest( util::DateTime(990000000, 59, 59, 23, 31, 12, 9999),
+            "9999-12-31T23:59:59.99Z", "9999-12-31T23:59:59.990000000" );
+    doTest( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999),
             "9999-12-31T23:59:59.9999999999999999999999999999999999999",
-            "9999-12-31T23:59:59.99" );
-    doTest( util::DateTime(99, 59, 59, 23, 31, 12, 9999),
+            "9999-12-31T23:59:59.999999999" );
+    doTest( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999),
             "9999-12-31T23:59:59.9999999999999999999999999999999999999Z",
-            "9999-12-31T23:59:59.99" );
+            "9999-12-31T23:59:59.999999999" );
     doTest( util::DateTime(0, 0, 0, 0, 29, 2, 2000), // leap year
             "2000-02-29T00:00:00-00:00", "2000-02-29T00:00:00" );
     doTest( util::DateTime(0, 0, 0, 0, 29, 2, 1600), // leap year

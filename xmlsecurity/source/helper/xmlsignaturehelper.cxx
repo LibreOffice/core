@@ -124,7 +124,7 @@ void XMLSignatureHelper::SetX509Certificate(
 void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime )
 {
     ::com::sun::star::util::DateTime stDateTime;
-    stDateTime.HundredthSeconds = (::sal_uInt16)rTime.Get100Sec();
+    stDateTime.NanoSeconds = rTime.GetNanoSec();
     stDateTime.Seconds = (::sal_uInt16)rTime.GetSec();
     stDateTime.Minutes = (::sal_uInt16)rTime.GetMin();
     stDateTime.Hours = (::sal_uInt16)rTime.GetHour();

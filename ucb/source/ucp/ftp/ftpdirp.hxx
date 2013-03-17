@@ -41,14 +41,14 @@ namespace ftp {
     struct DateTime
         : public com::sun::star::util::DateTime
     {
-        DateTime(const sal_uInt16& hundredthSeconds,
+        DateTime(const sal_uInt32& nanoSeconds,
                  const sal_uInt16& seconds,
                  const sal_uInt16& minutes,
                  const sal_uInt16& hours,
                  const sal_uInt16& day,
                  const sal_uInt16& month,
                  const sal_uInt16& year) SAL_THROW(())
-                     : com::sun::star::util::DateTime(hundredthSeconds,
+                     : com::sun::star::util::DateTime(nanoSeconds,
                                                       seconds,
                                                       minutes,
                                                       hours,
@@ -60,11 +60,11 @@ namespace ftp {
         void SetMonth(sal_uInt16 month) { Month = month; }
         void SetDay(sal_uInt16 day) { Day = day; }
         // Only zero allowed and used for time-argument
-        void SetTime(sal_uInt16) { Hours = Minutes = Seconds = HundredthSeconds = 0; }
+        void SetTime(sal_uInt16) { Hours = Minutes = Seconds = NanoSeconds = 0; }
         void SetHour(sal_uInt16 hours) { Hours = hours; }
         void SetMin(sal_uInt16 minutes) { Minutes = minutes; }
         void SetSec(sal_uInt16 seconds) { Seconds = seconds; }
-        void Set100Sec(sal_uInt16 hundredthSec) { HundredthSeconds = hundredthSec; }
+        void SetNanoSec(sal_uInt32 nanoSec) { NanoSeconds = nanoSec; }
 
         sal_uInt16 GetMonth(void) { return Month; }
     };

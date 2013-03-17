@@ -33,13 +33,14 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <unotools/datetime.hxx>
 
 using xforms::Convert;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
-using com::sun::star::util::Time;
 using namespace std;
 using namespace o3tl;
+using namespace utl;
 
 typedef com::sun::star::util::Date UNODate;
 typedef com::sun::star::util::Time UNOTime;
@@ -279,30 +280,7 @@ namespace
 
         UNODate aDate( 1, 1, 1900 );
 
-        sal_Int32 nToken = 0;
-        StringTokenizer aTokenizer( rString, '-' );
-        while ( aTokenizer.hasNextToken() )
-        {
-            sal_Int32 nTokenValue = 0;
-            if ( !aTokenizer.getNextToken().toInt32( nTokenValue ) )
-            {
-                bWellformed = false;
-                break;
-            }
-
-            if ( nToken == 0 )
-                aDate.Year = (sal_uInt16)nTokenValue;
-            else if ( nToken == 1 )
-                aDate.Month = (sal_uInt16)nTokenValue;
-            else if ( nToken == 2 )
-                aDate.Day = (sal_uInt16)nTokenValue;
-            else
-            {
-                bWellformed = false;
-                break;
-            }
-            ++nToken;
-        }
+        bWellformed = ISO8601parseDate(rString, aDate);
 
         // sanity checks
         if ( ( aDate.Year > 9999 ) || ( aDate.Month < 1 ) || ( aDate.Month > 12 ) || ( aDate.Day < 1 ) || ( aDate.Day > 31 ) )
@@ -337,10 +315,15 @@ namespace
         lcl_appendInt32ToBuffer( rTime.Minutes, sInfo, 2 );
         sInfo.appendAscii( ":" );
         lcl_appendInt32ToBuffer( rTime.Seconds, sInfo, 2 );
-        if ( rTime.HundredthSeconds )
+        if ( rTime.NanoSeconds != 0 )
         {
-            sInfo.appendAscii( "." );
-            lcl_appendInt32ToBuffer( rTime.HundredthSeconds, sInfo, 2 );
+            OSL_ENSURE(rTime.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
+            sInfo.append('.');
+            std::ostringstream ostr;
+            ostr.fill('0');
+            ostr.width(9);
+            ostr << rTime.NanoSeconds;
+            sInfo.append(OUString::createFromAscii(ostr.str().c_str()));
         }
 
         return sInfo.makeStringAndClear();
@@ -361,62 +344,7 @@ namespace
 
         UNOTime aTime( 0, 0, 0, 0 );
 
-        OUString sString( rString );
-        // see if there's a decimal separator for the seconds,
-        // and if so, handle it separately
-        sal_Int32 nDecimalSepPos = rString.indexOf( '.' );
-        if ( nDecimalSepPos == -1 )
-            // ISO 8601 allows for both a comma and a dot
-            nDecimalSepPos = rString.indexOf( ',' );
-        if ( nDecimalSepPos != -1 )
-        {
-            // handle fractional seconds
-            OUString sFractional = sString.copy( nDecimalSepPos + 1 );
-            if ( sFractional.getLength() > 2 )
-                // our precision is HundrethSeconds - it's all a css.util.Time can hold
-                sFractional = sFractional.copy( 0, 2 );
-            if ( !sFractional.isEmpty() )
-            {
-                sal_Int32 nFractional = 0;
-                if ( StringTokenizer( sFractional, 0 ).getNextToken().toInt32( nFractional ) )
-                {
-                    aTime.HundredthSeconds = (sal_uInt16)nFractional;
-                    if ( nFractional < 10 )
-                        aTime.HundredthSeconds *= 10;
-                }
-                else
-                    bWellformed = false;
-            }
-
-            // strip the fraction before further processing
-            sString = sString.copy( 0, nDecimalSepPos );
-        }
-
-        // split into the tokens which are separated by colon
-        sal_Int32 nToken = 0;
-        StringTokenizer aTokenizer( sString, ':' );
-        while ( aTokenizer.hasNextToken() )
-        {
-            sal_Int32 nTokenValue = 0;
-            if ( !aTokenizer.getNextToken().toInt32( nTokenValue ) )
-            {
-                bWellformed = false;
-                break;
-            }
-
-            if ( nToken == 0 )
-                aTime.Hours = (sal_uInt16)nTokenValue;
-            else if ( nToken == 1 )
-                aTime.Minutes = (sal_uInt16)nTokenValue;
-            else if ( nToken == 2 )
-                aTime.Seconds = (sal_uInt16)nTokenValue;
-            else
-            {
-                bWellformed = false;
-                break;
-            }
-            ++nToken;
-        }
+        bWellformed = ISO8601parseTime(rString, aTime);
 
         // sanity checks
         // note that Seconds == 60 denotes leap seconds. Normally, they're not allowed everywhere,
@@ -431,7 +359,7 @@ namespace
             &&  ( aTime.Hours == 24 )
             &&  (   ( aTime.Minutes != 0 )
                 ||  ( aTime.Seconds != 0 )
-                ||  ( aTime.HundredthSeconds != 0 )
+                ||  ( aTime.NanoSeconds != 0 )
                 )
             )
             bWellformed = false;
@@ -458,7 +386,7 @@ namespace
         UNODate aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
         OUString sDate = lcl_toXSD_UNODate_typed( aDate );
 
-        UNOTime aTime( aDateTime.HundredthSeconds, aDateTime.Seconds, aDateTime.Minutes, aDateTime.Hours );
+        UNOTime aTime( aDateTime.NanoSeconds, aDateTime.Seconds, aDateTime.Minutes, aDateTime.Hours );
         OUString sTime = lcl_toXSD_UNOTime_typed( aTime );
 
         OUStringBuffer sInfo;
@@ -489,7 +417,7 @@ namespace
             aTime = lcl_toUNOTime( rString.copy( nDateTimeSep + 1 ) );
         }
         UNODateTime aDateTime(
-            aTime.HundredthSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
+            aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
             aDate.Day, aDate.Month, aDate.Year
         );
         return makeAny( aDateTime );

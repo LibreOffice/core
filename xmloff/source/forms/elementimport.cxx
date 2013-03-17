@@ -822,7 +822,7 @@ namespace xmloff
                 aProp.Name = PROPERTY_REPEAT_DELAY;
                 sal_Int32 const nMS =
                     ((aDuration.Hours * 60 + aDuration.Minutes) * 60
-                     + aDuration.Seconds) * 1000 + aDuration.MilliSeconds;
+                     + aDuration.Seconds) * 1000 + aDuration.NanoSeconds/1000000;
                 aProp.Value <<= nMS;
 
                 implPushBackPropertyValue(aProp);

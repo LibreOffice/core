@@ -2285,11 +2285,11 @@ util::DateTime InputObjectBase::dumpFileTime( const String& rName )
     }
     // the day
     aDateTime.Day = static_cast< sal_uInt16 >( nDaysInYear + 1 );
-    // number of 1/100 seconds in the day
-    sal_Int64 nTimeInDay = nFileTime % sal_Int64( 360000 * 24 );
-    // 1/100 seconds
-    aDateTime.HundredthSeconds = static_cast< sal_uInt16 >( nTimeInDay % 100 );
-    nTimeInDay /= 100;
+    // number of nanoseconds in the day
+    sal_Int64 nTimeInDay = nFileTime % sal_Int64( 86400000000000 );
+    // nanoseconds
+    aDateTime.NanoSeconds = static_cast< sal_uInt32 >( nTimeInDay % 1000000000 );
+    nTimeInDay /= 1000000000;
     // seconds
     aDateTime.Seconds = static_cast< sal_uInt16 >( nTimeInDay % 60 );
     nTimeInDay /= 60;

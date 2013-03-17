@@ -118,6 +118,7 @@
 #include <algorithm>
 #include <set>
 #include <rtl/strbuf.hxx>
+#include <tools/time.hxx>
 
 // PPT ColorScheme Slots
 #define PPT_COLSCHEME                       (0x08000000)
@@ -2673,11 +2674,11 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
                         >> aDateTime.Hours
                         >> aDateTime.Minutes
                         >> aDateTime.Seconds
-                        >> aDateTime.HundredthSeconds
+                        >> aDateTime.NanoSeconds
                         >> nPosX
                         >> nPosY;
 
-                aDateTime.HundredthSeconds /= 10;
+                aDateTime.NanoSeconds *= ::Time::nanoPerMilli;
             }
             break;
         }

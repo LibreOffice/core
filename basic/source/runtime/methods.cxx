@@ -3051,7 +3051,7 @@ RTLFUNC(FileDateTime)
                 try
                 {
                     util::DateTime aUnoDT = xSFI->getDateTimeModified( aPath );
-                    aTime = Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds );
+                    aTime = Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.NanoSeconds );
                     aDate = Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year );
                 }
                 catch(const Exception & )

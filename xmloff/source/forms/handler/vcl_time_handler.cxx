@@ -64,7 +64,7 @@ namespace xmloff
         aDuration.Hours = aVCLTime.GetHour();
         aDuration.Minutes = aVCLTime.GetMin();
         aDuration.Seconds = aVCLTime.GetSec();
-        aDuration.MilliSeconds = aVCLTime.Get100Sec() * 10;
+        aDuration.NanoSeconds = aVCLTime.GetNanoSec();
 
         OUStringBuffer aBuffer;
         ::sax::Converter::convertDuration( aBuffer, aDuration );
@@ -80,7 +80,7 @@ namespace xmloff
         if (::sax::Converter::convertDuration( aDuration, i_attributeValue ))
         {
             ::Time aVCLTime(aDuration.Hours, aDuration.Minutes,
-                    aDuration.Seconds, aDuration.MilliSeconds / 10);
+                            aDuration.Seconds, aDuration.NanoSeconds);
             nVCLTime = aVCLTime.GetTime();
         }
         else

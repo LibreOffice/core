@@ -1150,7 +1150,7 @@ namespace xmloff
                 aDuration.Hours   = aTime.GetHour();
                 aDuration.Minutes = aTime.GetMin();
                 aDuration.Seconds = aTime.GetSec();
-                aDuration.MilliSeconds = nRepeatDelay % 1000;
+                aDuration.NanoSeconds = (nRepeatDelay % 1000) * 1000000;
 
                 OUStringBuffer buf;
                 ::sax::Converter::convertDuration(buf, aDuration);

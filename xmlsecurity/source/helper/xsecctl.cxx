@@ -30,6 +30,7 @@
 
 #include <xmloff/attrlist.hxx>
 #include <rtl/math.hxx>
+#include <unotools/datetime.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -66,199 +67,6 @@ XSecController::~XSecController()
 /*
  * private methods
  */
-/** convert string to number with optional min and max values */
-sal_Bool XSecController::convertNumber( sal_Int32& rValue,
-                                        const OUString& rString,
-                                        sal_Int32 /*nMin*/, sal_Int32 /*nMax*/ )
-{
-    sal_Bool bNeg = sal_False;
-    rValue = 0;
-
-    sal_Int32 nPos = 0L;
-    sal_Int32 nLen = rString.getLength();
-
-    // skip white space
-    while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
-        nPos++;
-
-    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
-    {
-        bNeg = sal_True;
-        nPos++;
-    }
-
-    // get number
-    while( nPos < nLen &&
-           sal_Unicode('0') <= rString[nPos] &&
-           sal_Unicode('9') >= rString[nPos] )
-    {
-        // TODO: check overflow!
-        rValue *= 10;
-        rValue += (rString[nPos] - sal_Unicode('0'));
-        nPos++;
-    }
-
-    if( bNeg )
-        rValue *= -1;
-
-    return nPos == nLen;
-}
-
-/** convert util::DateTime to ISO Date String */
-void XSecController::convertDateTime( OUStringBuffer& rBuffer,
-                                const com::sun::star::util::DateTime& rDateTime )
-{
-    rBuffer.append((sal_Int32) rDateTime.Year);
-    rBuffer.append('-');
-    if( rDateTime.Month < 10 )
-        rBuffer.append('0');
-    rBuffer.append((sal_Int32) rDateTime.Month);
-    rBuffer.append('-');
-    if( rDateTime.Day < 10 )
-        rBuffer.append('0');
-    rBuffer.append((sal_Int32) rDateTime.Day);
-
-    if( rDateTime.Seconds != 0 ||
-        rDateTime.Minutes != 0 ||
-        rDateTime.Hours   != 0 )
-    {
-        rBuffer.append('T');
-        if( rDateTime.Hours < 10 )
-            rBuffer.append('0');
-        rBuffer.append((sal_Int32) rDateTime.Hours);
-        rBuffer.append(':');
-        if( rDateTime.Minutes < 10 )
-            rBuffer.append('0');
-        rBuffer.append((sal_Int32) rDateTime.Minutes);
-        rBuffer.append(':');
-        if( rDateTime.Seconds < 10 )
-            rBuffer.append('0');
-        rBuffer.append((sal_Int32) rDateTime.Seconds);
-        if ( rDateTime.HundredthSeconds > 0)
-        {
-            rBuffer.append(',');
-            if (rDateTime.HundredthSeconds < 10)
-                rBuffer.append('0');
-            rBuffer.append((sal_Int32) rDateTime.HundredthSeconds);
-        }
-    }
-}
-
-/** convert ISO Date String to util::DateTime */
-sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateTime,
-                                     const OUString& rString )
-{
-    sal_Bool bSuccess = sal_True;
-
-    OUString aDateStr, aTimeStr, sHundredth;
-    sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
-    sal_Int32 nPos2 = rString.indexOf( (sal_Unicode) ',' );
-    if ( nPos >= 0 )
-    {
-        aDateStr = rString.copy( 0, nPos );
-        if ( nPos2 >= 0 )
-        {
-            aTimeStr = rString.copy( nPos + 1, nPos2 - nPos - 1 );
-
-            //Get the fraction of a second with the accuracy of one hundreds second.
-            //The fraction part of the date could have different accuracies. To calculate
-            //the count of a hundredth units one could form a fractional number by appending
-            //the value of the time string to 0. Then multiply it by 100 and use only the whole number.
-            //For example: 5:27:46,1 -> 0,1 * 100 = 10
-            //5:27:46,01 -> 0,01 * 100 = 1
-            //5:27:46,001 -> 0,001 * 100 = 0
-            //Due to the inaccuracy of floating point numbers the result may not be the same on different
-            //platforms. We had the case where we had a value of 24 hundredth of second, which converted to
-            //23 on Linux and 24 on Solaris and Windows.
-
-            //we only support a hundredth second
-            //make ,1 -> 10   ,01 -> 1    ,001 -> only use first two diggits
-            sHundredth = rString.copy(nPos2 + 1);
-            sal_Int32 len = sHundredth.getLength();
-            if (len == 1)
-                sHundredth += OUString("0");
-            if (len > 2)
-                sHundredth = sHundredth.copy(0, 2);
-        }
-        else
-        {
-            aTimeStr = rString.copy(nPos + 1);
-            sHundredth = OUString("0");
-        }
-    }
-    else
-        aDateStr = rString;         // no separator: only date part
-
-    sal_Int32 nYear  = 1899;
-    sal_Int32 nMonth = 12;
-    sal_Int32 nDay   = 30;
-    sal_Int32 nHour  = 0;
-    sal_Int32 nMin   = 0;
-    sal_Int32 nSec   = 0;
-
-    const sal_Unicode* pStr = aDateStr.getStr();
-    sal_Int32 nDateTokens = 1;
-    while ( *pStr )
-    {
-        if ( *pStr == '-' )
-            nDateTokens++;
-        pStr++;
-    }
-    if ( nDateTokens > 3 || aDateStr.isEmpty() )
-        bSuccess = sal_False;
-    else
-    {
-        sal_Int32 n = 0;
-        if ( !convertNumber( nYear, aDateStr.getToken( 0, '-', n ), 0, 9999 ) )
-            bSuccess = sal_False;
-        if ( nDateTokens >= 2 )
-            if ( !convertNumber( nMonth, aDateStr.getToken( 0, '-', n ), 0, 12 ) )
-                bSuccess = sal_False;
-        if ( nDateTokens >= 3 )
-            if ( !convertNumber( nDay, aDateStr.getToken( 0, '-', n ), 0, 31 ) )
-                bSuccess = sal_False;
-    }
-
-    if ( !aTimeStr.isEmpty() )           // time is optional
-    {
-        pStr = aTimeStr.getStr();
-        sal_Int32 nTimeTokens = 1;
-        while ( *pStr )
-        {
-            if ( *pStr == ':' )
-                nTimeTokens++;
-            pStr++;
-        }
-        if ( nTimeTokens > 3 )
-            bSuccess = sal_False;
-        else
-        {
-            sal_Int32 n = 0;
-            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':', n ), 0, 23 ) )
-                bSuccess = sal_False;
-            if ( nTimeTokens >= 2 )
-                if ( !convertNumber( nMin, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
-                    bSuccess = sal_False;
-            if ( nTimeTokens >= 3 )
-                if ( !convertNumber( nSec, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
-                    bSuccess = sal_False;
-        }
-    }
-
-    if (bSuccess)
-    {
-        rDateTime.Year = (sal_uInt16)nYear;
-        rDateTime.Month = (sal_uInt16)nMonth;
-        rDateTime.Day = (sal_uInt16)nDay;
-        rDateTime.Hours = (sal_uInt16)nHour;
-        rDateTime.Minutes = (sal_uInt16)nMin;
-        rDateTime.Seconds = (sal_uInt16)nSec;
- //       rDateTime.HundredthSeconds = sDoubleStr.toDouble() * 100;
-        rDateTime.HundredthSeconds = static_cast<sal_uInt16>(sHundredth.toInt32());
-    }
-    return bSuccess;
-}
-
 int XSecController::findSignatureInfor( sal_Int32 nSecurityId) const
 /****** XSecController/findSignatureInfor *************************************
  *
@@ -1123,16 +931,14 @@ void XSecController::exportSignature(
                     OUStringBuffer buffer;
                     //If the xml signature was already contained in the document,
                     //then we use the original date and time string, rather then the
-                    //converted one. When the original string is converted to the DateTime
-                    //structure then information may be lost because it only holds a fractional
-                    //of a second with a accuracy of one hundredth of second. If the string contains
-                    //milli seconds (document was signed by an application other than OOo)
-                    //and the converted time is written back, then the string looks different
-                    //and the signature is broken.
+                    //converted one. This avoids writing a different string due to
+                    //e.g. rounding issues and thus breaking the signature.
                     if (!signatureInfo.ouDateTime.isEmpty())
                         buffer = signatureInfo.ouDateTime;
                     else
-                        convertDateTime( buffer, signatureInfo.stDateTime );
+                    {
+                        buffer = utl::toISO8601(signatureInfo.stDateTime);
+                    }
                     xDocumentHandler->characters( buffer.makeStringAndClear() );
 
                     xDocumentHandler->endElement(

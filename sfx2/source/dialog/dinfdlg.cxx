@@ -99,7 +99,7 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
         && i_rLeft.Hours            == i_rRight.Hours
         && i_rLeft.Minutes          == i_rRight.Minutes
         && i_rLeft.Seconds          == i_rRight.Seconds
-        && i_rLeft.HundredthSeconds == i_rRight.HundredthSeconds;
+        && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds;
 }
 
 // STATIC DATA -----------------------------------------------------------
@@ -174,7 +174,7 @@ String ConvertDateTime_Impl( const String& rName,
     const util::DateTime& uDT, const LocaleDataWrapper& rWrapper )
 {
     Date aD(uDT.Day, uDT.Month, uDT.Year);
-    Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+    Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
      const String pDelim ( ", " );
      String aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
@@ -352,7 +352,7 @@ void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
     setAuthor(i_rAuthor);
     DateTime now( DateTime::SYSTEM );
     setCreationDate( util::DateTime(
-        now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
+        now.GetNanoSec(), now.GetSec(), now.GetMin(), now.GetHour(),
         now.GetDay(), now.GetMonth(), now.GetYear() ) );
     setModifiedBy(OUString());
     setPrintedBy(OUString());
@@ -798,7 +798,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     DateTime now( DateTime::SYSTEM );
     util::DateTime uDT(
-        now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
+        now.GetNanoSec(), now.GetSec(), now.GetMin(), now.GetHour(),
         now.GetDay(), now.GetMonth(), now.GetYear() );
     m_pCreateValFt->SetText( ConvertDateTime_Impl( aName, uDT, rLocaleWrapper ) );
     OUString aEmpty;
@@ -1241,7 +1241,7 @@ DurationDialog_Impl::DurationDialog_Impl(
     aHourNF.SetValue(rDuration.Hours  );
     aMinuteNF.SetValue(rDuration.Minutes);
     aSecondNF.SetValue(rDuration.Seconds);
-    aMSecondNF.SetValue(rDuration.MilliSeconds);
+    aMSecondNF.SetValue(rDuration.NanoSeconds);
 }
 
 DurationDialog_Impl::~DurationDialog_Impl()
@@ -1258,7 +1258,7 @@ util::Duration  DurationDialog_Impl::GetDuration() const
     aRet.Hours  = aHourNF.GetValue( );
     aRet.Minutes = aMinuteNF.GetValue();
     aRet.Seconds = aSecondNF.GetValue();
-    aRet.MilliSeconds = aMSecondNF.GetValue();
+    aRet.NanoSeconds = aMSecondNF.GetValue();
     return aRet;
 }
 
@@ -1752,7 +1752,7 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     else if ( rAny >>= aTmpDateTime )
     {
         pNewLine->m_aDateField.SetDate( Date( aTmpDateTime.Day, aTmpDateTime.Month, aTmpDateTime.Year ) );
-        pNewLine->m_aTimeField.SetTime( Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.HundredthSeconds ) );
+        pNewLine->m_aTimeField.SetTime( Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.NanoSeconds ) );
 
         nType = CUSTOM_TYPE_DATETIME;
     }
@@ -1866,7 +1866,7 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
             {
                 Date aTmpDate = pLine->m_aDateField.GetDate();
                 Time aTmpTime = pLine->m_aTimeField.GetTime();
-                util::DateTime aDateTime(aTmpTime.Get100Sec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
+                util::DateTime aDateTime(aTmpTime.GetNanoSec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
                         aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear() );
                 aPropertiesSeq[i].Value <<= aDateTime;
             }

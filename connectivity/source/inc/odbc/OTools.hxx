@@ -91,7 +91,6 @@ namespace connectivity
     {
         class OConnection;
 
-        const sal_uInt32 ODBC_FRACTION_UNITS_PER_HSECOND = 10000000L;
         const sal_Int32 MAX_PUT_DATA_LENGTH = 2000;
 
         class OOO_DLLPUBLIC_ODBCBASE OTools
@@ -166,7 +165,7 @@ namespace connectivity
                 aVal.hour       = x.Hours;
                 aVal.minute     = x.Minutes;
                 aVal.second     = x.Seconds;
-                aVal.fraction   = x.HundredthSeconds * ODBC_FRACTION_UNITS_PER_HSECOND;
+                aVal.fraction   = x.NanoSeconds;
                 return aVal;
             }
             /**

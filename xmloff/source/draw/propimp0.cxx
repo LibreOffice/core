@@ -28,6 +28,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 
+#include <tools/time.hxx>
 
 using namespace ::com::sun::star;
 
@@ -55,7 +56,7 @@ sal_Bool XMLDurationPropertyHdl::importXML(
     ::sax::Converter::convertDuration(aDuration,  rStrImpValue);
 
     const double fSeconds = ((aDuration.Days * 24 + aDuration.Hours) * 60
-            + aDuration.Minutes) * 60 + aDuration.Seconds + aDuration.MilliSeconds / 1000.0;
+                             + aDuration.Minutes) * 60 + aDuration.Seconds + aDuration.NanoSeconds / static_cast<double>(::Time::nanoSecPerSec);
     rValue <<= fSeconds;
 
     return sal_True;
@@ -72,7 +73,7 @@ sal_Bool XMLDurationPropertyHdl::exportXML(
     {
         util::Duration aDuration;
         aDuration.Seconds = static_cast<sal_uInt16>(nVal);
-        aDuration.MilliSeconds = static_cast<sal_uInt32>(nVal * 1000.0) % 1000 ;
+        aDuration.NanoSeconds = static_cast<sal_uInt32>((nVal - aDuration.Seconds) * ::Time::nanoSecPerSec);
 
         OUStringBuffer aOut;
         ::sax::Converter::convertDuration(aOut, aDuration);

@@ -829,7 +829,14 @@ namespace xforms
         if ( !( aTypedValue >>= aValue ) )
             return false;
 
-        ::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.HundredthSeconds );
+        ::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds );
+        // no loss/rounding; IEEE 754 double-precision floating-point
+        // has a mantissa of 53 bits; we need at the very most 50 bits:
+        // format of aToolsTime.GetTime() is (in decimal) hhmmssnnnnnnnnn
+        // and 999999999999999 = 0x38D7EA4C67FFF
+        // in reality I doubt we need (much) more than
+        //     240000000000000 = 0x0DA475ABF0000
+        // that is 48 bits
         fValue = aToolsTime.GetTime();
         return true;
     }
@@ -846,7 +853,7 @@ namespace xforms
     {
         Time aValue;
         OSL_VERIFY( _rValue >>= aValue );
-        ::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.HundredthSeconds );
+        ::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds );
         _rDoubleValue = aToolsTime.GetTime();
     }
 
@@ -869,7 +876,7 @@ namespace xforms
         {
             ::DateTime aToolsValue(
                 ::Date( _rValue.Day, _rValue.Month, _rValue.Year ),
-                ::Time( _rValue.Hours, _rValue.Minutes, _rValue.Seconds, _rValue.HundredthSeconds )
+                ::Time( _rValue.Hours, _rValue.Minutes, _rValue.Seconds, _rValue.NanoSeconds )
             );
 
             double fValue = 0;

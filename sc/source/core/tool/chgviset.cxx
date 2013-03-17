@@ -138,7 +138,7 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
                     // all together during the gap between those two times.
                     aFirstDateTime += Time( 0, 1 );
                     aFirstDateTime.SetSec(0);
-                    aFirstDateTime.Set100Sec(0);
+                    aFirstDateTime.SetNanoSec(0);
                 }
             }
             if ( !pLast )

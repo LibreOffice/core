@@ -1314,7 +1314,7 @@ bool PowerPointExport::WriteComments( sal_uInt32 nPageNum )
                 sal_Int32 nId = GetAuthorIdAndLastIndex ( xAnnotation->getAuthor(), nLastIndex );
                 char cDateTime[32];
 
-                snprintf(cDateTime, 31, "%02d-%02d-%02dT%02d:%02d:%02d.%03d", aDateTime.Year, aDateTime.Month, aDateTime.Day, aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds);
+                snprintf(cDateTime, 31, "%02d-%02d-%02dT%02d:%02d:%02d.%09d", aDateTime.Year, aDateTime.Month, aDateTime.Day, aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
 
                 pFS->startElementNS( XML_p, XML_cm,
                                      XML_authorId, I32S( nId ),

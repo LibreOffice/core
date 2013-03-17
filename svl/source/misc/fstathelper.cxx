@@ -49,7 +49,7 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
                 *pDate = Date( pDT->Day, pDT->Month, pDT->Year );
             if( pTime )
                 *pTime = Time( pDT->Hours, pDT->Minutes,
-                               pDT->Seconds, pDT->HundredthSeconds );
+                               pDT->Seconds, pDT->NanoSeconds );
         }
     }
     catch(...)

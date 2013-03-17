@@ -49,10 +49,10 @@ static OString lcl_DateTimeToOString( const DateTime& rDateTime )
 {
     char sBuf[ 200 ];
     snprintf( sBuf, sizeof( sBuf ),
-            "%d-%02d-%02dT%02d:%02d:%02d.%02dZ",
+            "%d-%02d-%02dT%02d:%02d:%02d.%09dZ",
             rDateTime.GetYear(), rDateTime.GetMonth(), rDateTime.GetDay(),
             rDateTime.GetHour(), rDateTime.GetMin(), rDateTime.GetSec(),
-            rDateTime.Get100Sec() );
+            rDateTime.GetNanoSec() );
     return OString( sBuf );
 }
 
@@ -624,7 +624,7 @@ XclExpChTrAction::XclExpChTrAction(
     bForceInfo( false )
 {
     aDateTime.SetSec( 0 );
-    aDateTime.Set100Sec( 0 );
+    aDateTime.SetNanoSec( 0 );
 }
 
 XclExpChTrAction::~XclExpChTrAction()

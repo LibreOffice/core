@@ -29,6 +29,7 @@
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <sal/log.hxx>
+#include <unotools/datetime.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -258,7 +259,7 @@ void XSecController::setDate( OUString& ouDate )
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
-    convertDateTime( isi.signatureInfor.stDateTime, ouDate );
+    utl::ISO8601parseDateTime( ouDate, isi.signatureInfor.stDateTime);
     isi.signatureInfor.ouDateTime = ouDate;
 }
 
