@@ -984,7 +984,7 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         rtl::OString sList( "pairedlist" );
         WriteExportList( pResData, pResData->pPairedList, sList, bCreateNew );
         if ( bCreateNew )
-            pResData->pItemList = 0;
+            pResData->pPairedList = 0;
     }
     if ( pResData->pUIEntries ) {
         rtl::OString sList( "uientries" );
