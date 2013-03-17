@@ -1397,7 +1397,7 @@ Size VclScrolledWindow::calculateRequisition() const
         aRet.Width() += getLayoutRequisition(m_aVScroll).Width();
 
     if (m_aHScroll.IsVisible())
-        aRet.Height() += getLayoutRequisition(m_aVScroll).Height();
+        aRet.Height() += getLayoutRequisition(m_aHScroll).Height();
 
     return aRet;
 }
