@@ -139,8 +139,7 @@ else
 # can then open it from there in Xcode.
 $(call gb_CustomTarget_get_target,ios/Viewer_app) : $(gb_Helper_PHONY)
 	if test $(SRCDIR) != $(BUILDDIR); then \
-		rm -rf $(BUILDDIR)/ios/experimental/Viewer; \
-		(cd $(SRCDIR) && tar cf - ios/experimental/Viewer) | (cd $(BUILDDIR) && tar xf -); \
+		(cd $(SRCDIR) && tar cf - ios/experimental/Viewer/Viewer.xcodeproj/project.pbxproj) | (cd $(BUILDDIR) && tar xf -); \
 	fi
 
 $(call gb_CustomTarget_get_clean_target,ios/Viewer_app) :
