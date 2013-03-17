@@ -117,24 +117,9 @@ void AndroidSalInstance::BlitFrameToWindow(ANativeWindow_Buffer *pOutBuffer,
     BlitFrameRegionToWindow(pOutBuffer, aDev, aWhole, 0, 0);
 }
 
-void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buffer *pBuffer)
+void AndroidSalInstance::RedrawWindows(ANativeWindow_Buffer *pBuffer)
 {
-    ANativeWindow_Buffer aOutBuffer;
-    memset ((void *)&aOutBuffer, 0, sizeof (aOutBuffer));
-
-    if (pBuffer != NULL)
-        aOutBuffer = *pBuffer;
-    else
-    {
-        if (!pWindow)
-            return;
-
-        //    ARect aRect;
-        LOGI("pre lock #3");
-        ANativeWindow_lock(pWindow, &aOutBuffer, NULL);
-    }
-
-    if (aOutBuffer.bits != NULL)
+    if (pBuffer->bits != NULL)
     {
         int i = 0;
         std::list< SalFrame* >::const_iterator it;
@@ -144,15 +129,12 @@ void AndroidSalInstance::RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buf
 
             if (pFrame->IsVisible())
             {
-                BlitFrameToWindow (&aOutBuffer, pFrame->getDevice());
+                BlitFrameToWindow (pBuffer, pFrame->getDevice());
             }
         }
     }
     else
         LOGI("no buffer for locked window");
-
-    if (pBuffer && pWindow)
-        ANativeWindow_unlockAndPost(pWindow);
 }
 
 void AndroidSalInstance::damaged(AndroidSalFrame */* frame */)
@@ -471,7 +453,7 @@ typedef struct ANativeWindow_Buffer {
     dummyOut.stride = info.stride / 4; // sigh !
     dummyOut.format = info.format;
     dummyOut.bits = pixels;
-    AndroidSalInstance::getInstance()->RedrawWindows (NULL, &dummyOut);
+    AndroidSalInstance::getInstance()->RedrawWindows (&dummyOut);
 
     AndroidBitmap_unlockPixels(env, bitmap);
 }
