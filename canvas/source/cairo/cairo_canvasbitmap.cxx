@@ -136,7 +136,7 @@ namespace cairocanvas
 
         void SAL_CALL CanvasBitmap::setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rAny )  throw (uno::RuntimeException)
     {
-        sal_Int64 nPointer;
+        sal_Int64 nPointer = 0;
 
         if ( nHandle == 0 )
         {
