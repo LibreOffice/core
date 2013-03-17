@@ -63,9 +63,11 @@ $(eval $(call gb_Rdb_add_components,services,\
 	package/util/package2 \
 	sax/source/expatwrap/expwrap \
 	sax/source/fastparser/fastsax \
-	sc/util/sc \
-	sc/util/scd \
-	sc/util/scfilt \
+	$(if $(filter CALC,$(PARTIAL_BUILD)),, \
+		sc/util/sc \
+		sc/util/scd \
+		sc/util/scfilt \
+	) \
 	scaddins/source/analysis/analysis \
 	scaddins/source/datefunc/date \
 	scaddins/source/pricing/pricing \
@@ -165,7 +167,9 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(DISABLE_SCRIPTING),, \
 		basctl/util/basctl \
 		basic/util/sb \
-		sc/util/vbaobj \
+		$(if $(filter CALC,$(PARTIAL_BUILD)),, \
+			sc/util/vbaobj \
+		) \
 		scripting/source/basprov/basprov \
 		scripting/source/dlgprov/dlgprov \
 		scripting/source/protocolhandler/protocolhandler \

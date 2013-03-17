@@ -1193,6 +1193,31 @@ AC_ARG_ENABLE(openssl,
 ,enable_openssl=yes)
 
 dnl ===================================================================
+dnl Highly experimental and unsupported partial build!
+dnl Use it at your own risk only.
+dnl FixMe: only --disable-calc known to work.
+dnl ===================================================================
+AC_ARG_ENABLE(calc,
+    AS_HELP_STRING([--disable-calc],
+        [Test if calc should be built]),
+)
+
+AC_ARG_ENABLE(base,
+    AS_HELP_STRING([--disable-base],
+        [Test if base should be built]),
+)
+
+AC_ARG_ENABLE(draw,
+    AS_HELP_STRING([--disable-draw],
+        [Test if draw should be built]),
+)
+
+AC_ARG_ENABLE(impress,
+    AS_HELP_STRING([--disable-impress],
+        [Test if impress should be built]),
+)
+
+dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
 
@@ -11364,6 +11389,44 @@ fi
 AC_SUBST(WGET)
 AC_SUBST(CURL)
 AC_SUBST(MD5SUM)
+
+dnl ===================================================================
+dnl Test which applications to build from the suite
+dnl ===================================================================
+PARTIAL_BUILD=
+AC_MSG_CHECKING([whether to build base])
+if test "$enable_base" = "no"; then
+    PARTIAL_BUILD="$PARTIAL_BUILD BASE"
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
+fi
+AC_MSG_CHECKING([whether to build calc])
+if test "$enable_calc" = "no"; then
+    PARTIAL_BUILD="$PARTIAL_BUILD CALC"
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
+fi
+AC_MSG_CHECKING([whether to build draw])
+if test "$enable_draw" = "no"; then
+    PARTIAL_BUILD="$PARTIAL_BUILD DRAW"
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
+fi
+AC_MSG_CHECKING([whether to build impress])
+if test "$enable_impress" = "no"; then
+    PARTIAL_BUILD="$PARTIAL_BUILD IMPRESS"
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
+fi
+if test -n "$PARTIAL_BUILD"; then
+    AC_MSG_WARN([You are using highly experimental and unsupported partial build! Use it at your own risk only, and don't ask us for any help if you are screwed...])
+fi
+
+AC_SUBST(PARTIAL_BUILD)
 
 dnl ===================================================================
 dnl Product version
