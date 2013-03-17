@@ -339,7 +339,7 @@ DBG_NAME(OConnectionHelper)
     //-------------------------------------------------------------------------
     void OConnectionHelper::impl_setURL( const String& _rURL, sal_Bool _bPrefix )
     {
-        String sURL( _rURL );
+        String sURL( comphelper::string::stripEnd(_rURL, '*') );
         OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )

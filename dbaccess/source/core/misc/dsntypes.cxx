@@ -103,10 +103,12 @@ OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
         WildCard aWildCard(*aIter);
         if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
         {
-            if ( aIter->getLength() < sURL.getLength() )
-                sRet = sURL.copy(sURL.match(*aIter));
-            else
-                sRet = sURL.copy(aIter->match(sURL));
+            // This relies on the fact that all patterns are of the form
+            //   foo*
+            // that is, the very concept of "prefix" applies.
+            OUString prefix(comphelper::string::stripEnd(*aIter, '*'));
+            OSL_ENSURE(prefix.getLength() <= sURL.getLength(), "How can A match B when A shorter than B?");
+            sRet = sURL.copy(prefix.getLength());
             sOldPattern = *aIter;
         }
     }
@@ -127,11 +129,11 @@ OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
         WildCard aWildCard(*aIter);
         if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(sURL) )
         {
-            if ( aIter->getLength() < sURL.getLength() )
-                sRet = aIter->copy(0,sURL.match(*aIter));
-            else
-                sRet = sURL.copy(0,aIter->match(sURL));
-            sRet = comphelper::string::stripEnd(sRet, '*');
+            // This relies on the fact that all patterns are of the form
+            //   foo*
+            // that is, the very concept of "prefix" applies.
+            sRet = comphelper::string::stripEnd(*aIter, '*');
+            OSL_ENSURE(sRet.getLength() <= sURL.getLength(), "How can A match B when A shorter than B?");
             sOldPattern = *aIter;
         }
     }
@@ -344,21 +346,15 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         OSL_FAIL("ODsnTypeCollection::implDetermineType : missing the colon !");
         return DST_UNKNOWN;
     }
-    // find first :
-    sal_Int32 nOracleSeparator =
-        sDsn.indexOf(static_cast<sal_Unicode>(':'), nSeparator + 1);
-    if (-1 != nOracleSeparator)
-    {
-        nOracleSeparator =
-            sDsn.indexOf(static_cast<sal_Unicode>(':'), nOracleSeparator + 1);
-        if (-1 != nOracleSeparator && sDsn.equalsIgnoreAsciiCaseAsciiL("jdbc:oracle:thin", nOracleSeparator))
-            return DST_ORACLE_JDBC;
-    }
 
-    if (sDsn.equalsIgnoreAsciiCaseAsciiL("jdbc", nSeparator))
+    // find first :
+    if (sDsn.startsWithIgnoreAsciiCase("jdbc:oracle:thin:"))
+        return DST_ORACLE_JDBC;
+
+    if (sDsn.startsWithIgnoreAsciiCase("jdbc:"))
         return DST_JDBC;
 
-    if (sDsn.equalsIgnoreAsciiCaseAsciiL("sdbc:embedded:hsqldb", sDsn.getLength()))
+    if (sDsn.equalsIgnoreAsciiCase("sdbc:embedded:hsqldb"))
         return DST_EMBEDDED_HSQLDB;
 
     // find second :
@@ -370,16 +366,14 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
         return DST_UNKNOWN;
     }
 
-    if (sDsn.equalsIgnoreAsciiCaseAsciiL("sdbc:ado:", nSeparator))
+    if (sDsn.startsWithIgnoreAsciiCase("sdbc:ado:"))
     {
-        nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(':'), nSeparator + 1);
-        if (-1 != nSeparator && sDsn.equalsIgnoreAsciiCaseAsciiL("sdbc:ado:access", nSeparator) )
+        if (sDsn.startsWithIgnoreAsciiCase("sdbc:ado:access"))
         {
-            nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(';'), nSeparator + 1);
-            if (-1 != nSeparator && sDsn.equalsIgnoreAsciiCaseAsciiL("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0", nSeparator) )
+            if (sDsn.equalsIgnoreAsciiCase("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;"))
                 return DST_MSACCESS_2007;
-
-            return DST_MSACCESS;
+            else
+                return DST_MSACCESS;
         }
         return DST_ADO;
     }
