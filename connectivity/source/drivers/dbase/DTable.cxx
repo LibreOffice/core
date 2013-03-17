@@ -354,6 +354,7 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
                 break;
             case 'F':
                 aTypeName = "DECIMAL";
+                break;
             case 'N':
                 if ( aDBFColumn.db_typ == 'N' )
                     aTypeName = "NUMERIC";
