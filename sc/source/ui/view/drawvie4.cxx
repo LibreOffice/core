@@ -44,6 +44,9 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
 using namespace com::sun::star;
 
@@ -141,6 +144,70 @@ sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 
 namespace {
 
+void getRangeFromDataSource( uno::Reference< chart2::data::XDataSource > xDataSource, std::vector<OUString>& rRangeRep)
+{
+    uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence> > xSeqs = xDataSource->getDataSequences();
+    for (sal_Int32 i = 0, n = xSeqs.getLength(); i < n; ++i)
+    {
+        uno::Reference<chart2::data::XLabeledDataSequence> xLS = xSeqs[i];
+        uno::Reference<chart2::data::XDataSequence> xSeq = xLS->getValues();
+        if (xSeq.is())
+        {
+            OUString aRep = xSeq->getSourceRangeRepresentation();
+            rRangeRep.push_back(aRep);
+        }
+        xSeq = xLS->getLabel();
+        if (xSeq.is())
+        {
+            OUString aRep = xSeq->getSourceRangeRepresentation();
+            rRangeRep.push_back(aRep);
+        }
+    }
+}
+
+
+void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument > xChartDoc, std::vector<OUString>& rRangeRep)
+{
+    uno::Reference <chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+    if(!xDiagram.is())
+        return;
+
+    uno::Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY);
+    if(!xCooSysContainer.is())
+        return;
+
+    uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
+    for(sal_Int32 i = 0; i < xCooSysSequence.getLength(); ++i)
+    {
+        uno::Reference< chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[i], uno::UNO_QUERY);
+        if(!xChartTypeContainer.is())
+            continue;
+
+        uno::Sequence< uno::Reference< chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
+        for(sal_Int32 nChartType = 0; nChartType < xChartTypeSequence.getLength(); ++nChartType)
+        {
+            uno::Reference< chart2::XDataSeriesContainer > xDataSequenceContainer( xChartTypeSequence[nChartType], uno::UNO_QUERY);
+            if(!xDataSequenceContainer.is())
+                continue;
+
+            uno::Sequence< uno::Reference< chart2::XDataSeries > > xSeriesSequence( xDataSequenceContainer->getDataSeries() );
+            for(sal_Int32 nDataSeries = 0; nDataSeries < xSeriesSequence.getLength(); ++nDataSeries)
+            {
+                uno::Reference< chart2::XDataSeries > xSeries = xSeriesSequence[nDataSeries];
+                uno::Reference< beans::XPropertySet > xPropSet( xSeries, uno::UNO_QUERY);
+                uno::Reference< chart2::data::XDataSource > xErrorBarY;
+                xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarY;
+                if(xErrorBarY.is())
+                    getRangeFromDataSource(xErrorBarY, rRangeRep);
+                uno::Reference< chart2::data::XDataSource > xErrorBarX;
+                xPropSet->getPropertyValue("ErrorBarX") >>= xErrorBarX;
+                if(xErrorBarX.is())
+                    getRangeFromDataSource(xErrorBarX, rRangeRep);
+            }
+        }
+    }
+}
+
 void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRangeRep)
 {
     if (!rObj.IsChart())
@@ -162,28 +229,14 @@ void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRang
     if(xChartDoc->hasInternalDataProvider())
         return;
 
+    getRangeFromErrorBar(xChartDoc, rRangeRep);
+
     uno::Reference<chart2::data::XDataSource> xDataSource(xChartDoc, uno::UNO_QUERY);
     if (!xDataSource.is())
         return;
 
     // Get all data sources used in this chart.
-    uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence> > xSeqs = xDataSource->getDataSequences();
-    for (sal_Int32 i = 0, n = xSeqs.getLength(); i < n; ++i)
-    {
-        uno::Reference<chart2::data::XLabeledDataSequence> xLS = xSeqs[i];
-        uno::Reference<chart2::data::XDataSequence> xSeq = xLS->getValues();
-        if (xSeq.is())
-        {
-            OUString aRep = xSeq->getSourceRangeRepresentation();
-            rRangeRep.push_back(aRep);
-        }
-        xSeq = xLS->getLabel();
-        if (xSeq.is())
-        {
-            OUString aRep = xSeq->getSourceRangeRepresentation();
-            rRangeRep.push_back(aRep);
-        }
-    }
+    getRangeFromDataSource(xDataSource, rRangeRep);
 }
 
 /**
