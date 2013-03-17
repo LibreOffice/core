@@ -2259,7 +2259,7 @@ bool SvxBoxItem::ScaleMetrics( long nMult, long nDiv )
     if ( pTop )     pTop->ScaleMetrics( nMult, nDiv );
     if ( pBottom )  pBottom->ScaleMetrics( nMult, nDiv );
     if ( pLeft )    pLeft->ScaleMetrics( nMult, nDiv );
-    if ( pRight )   pBottom->ScaleMetrics( nMult, nDiv );
+    if ( pRight )   pRight->ScaleMetrics( nMult, nDiv );
     nTopDist = (sal_uInt16)Scale( nTopDist, nMult, nDiv );
     nBottomDist = (sal_uInt16)Scale( nBottomDist, nMult, nDiv );
     nLeftDist = (sal_uInt16)Scale( nLeftDist, nMult, nDiv );
