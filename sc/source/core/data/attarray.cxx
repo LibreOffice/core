@@ -1105,13 +1105,38 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
         nDistBottom = 0;
 
     SvxBoxItem aNewFrame( *pOldFrame );
-
-    if ( bLeft ? pBoxInfoItem->IsValid(VALID_LEFT) : pBoxInfoItem->IsValid(VALID_VERT) )
-        aNewFrame.SetLine( bLeft ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
-            BOX_LINE_LEFT );
-    if ( (nDistRight==0) ? pBoxInfoItem->IsValid(VALID_RIGHT) : pBoxInfoItem->IsValid(VALID_VERT) )
-        aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
-            BOX_LINE_RIGHT );
+    bool bRTL=pDocument->IsLayoutRTL(nTab);
+    // fdo#37464 check if the sheet are RTL then replace right <=> left
+    if (bRTL)
+    {
+        if( bLeft && nDistRight==0)
+        {
+            if ( bLeft ? pBoxInfoItem->IsValid(VALID_LEFT) : pBoxInfoItem->IsValid(VALID_VERT) )
+                aNewFrame.SetLine( bLeft ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
+                    BOX_LINE_RIGHT );
+            if ( (nDistRight==0) ? pBoxInfoItem->IsValid(VALID_RIGHT) : pBoxInfoItem->IsValid(VALID_VERT) )
+                aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
+                    BOX_LINE_LEFT );
+        }
+        else
+        {
+            if ( (nDistRight==0) ? pBoxInfoItem->IsValid(VALID_LEFT) : pBoxInfoItem->IsValid(VALID_VERT) )
+                aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
+                    BOX_LINE_RIGHT );
+            if ( bLeft ? pBoxInfoItem->IsValid(VALID_RIGHT) : pBoxInfoItem->IsValid(VALID_VERT) )
+                aNewFrame.SetLine( bLeft ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
+                    BOX_LINE_LEFT );
+        }
+    }
+    else
+    {
+        if ( bLeft ? pBoxInfoItem->IsValid(VALID_LEFT) : pBoxInfoItem->IsValid(VALID_VERT) )
+            aNewFrame.SetLine( bLeft ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
+                BOX_LINE_LEFT );
+        if ( (nDistRight==0) ? pBoxInfoItem->IsValid(VALID_RIGHT) : pBoxInfoItem->IsValid(VALID_VERT) )
+            aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
+                BOX_LINE_RIGHT );
+    }
     if ( bTop ? pBoxInfoItem->IsValid(VALID_TOP) : pBoxInfoItem->IsValid(VALID_HORI) )
         aNewFrame.SetLine( bTop ? pBoxItem->GetTop() : pBoxInfoItem->GetHori(),
             BOX_LINE_TOP );
