@@ -39,23 +39,22 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 /**
- * If SMART is defined, the navigation history has recency with temporal ordering enhancement,
- * as described on http://zing.ncsl.nist.gov/hfweb/proceedings/greenberg/
+ *  If SMART is defined, the navigation history has recency with temporal ordering enhancement,
+ *  as described on http://zing.ncsl.nist.gov/hfweb/proceedings/greenberg/
  */
+
 #define SMART 1
 
-/*
- *  This method positions the cursor to the position rPos
- */
+// This method positions the cursor to the position rPos.
+
 void SwNavigationMgr::GotoSwPosition(const SwPosition &rPos) {
-    /* EnterStdMode() prevents the cursor to 'block' the current shell when it should move from the image back to the normal shell */
+    // EnterStdMode() prevents the cursor to 'block' the current
+    // shell when it should move from the image back to the normal shell
     m_rMyShell.EnterStdMode();
     m_rMyShell.StartAllAction();
-    /*
-     *    cursor consists of two SwPositions: Point and Mark.
-     *  Such a pair is called a PaM. SwPaM is derived from SwRing.
-     *  The Ring contains the single regions of a multi-selection.
-     */
+    // cursor consists of two SwPositions: Point and Mark.
+    // Such a pair is called a PaM. SwPaM is derived from SwRing.
+    // The Ring contains the single regions of a multi-selection.
     SwPaM* pPaM = m_rMyShell.GetCrsr();
 
     if(pPaM->HasMark())
@@ -64,129 +63,125 @@ void SwNavigationMgr::GotoSwPosition(const SwPosition &rPos) {
 
     m_rMyShell.EndAllAction();
 }
-/*
- * Ctor for the SwNavigationMgr class
- * Sets the shell to the current shell
- * and the index of the current position to 0
- */
+
+// Ctor for the SwNavigationMgr class
+// Sets the shell to the current shell
+// and the index of the current position to 0
+
 SwNavigationMgr::SwNavigationMgr(SwWrtShell & rShell)
     : m_nCurrent(0), m_rMyShell(rShell)
 {
 }
 
-/*
- * This method is used by the navigation shell - defined in sw/source/ui/inc/navsh.hxx
- * and implemented in sw/source/ui/shells/navsh.cxx
- * It is called when we want to check if the back button should be enabled or not.
- * The back button should be enabled only if there are some entries in the navigation history
- */
+// This method is used by the navigation shell - defined in sw/source/ui/inc/navsh.hxx
+// and implemented in sw/source/ui/shells/navsh.cxx
+// It is called when we want to check if the back button should be enabled or not.
+// The back button should be enabled only if there are some entries in the navigation history
+
 bool SwNavigationMgr::backEnabled() {
     return (m_nCurrent > 0);
 }
-/*
- * Similar to backEnabled() method.
- * The forward button should be enabled if we ever clicked back
- * Due to the implementation of the navigation class, this is when the
- * current position within the navigation history entries in not the last one
- * i.e. when the m_nCurrent index is not at the end of the m_entries vector
- */
+
+// Similar to backEnabled() method.
+// The forward button should be enabled if we ever clicked back
+// Due to the implementation of the navigation class, this is when the
+// current position within the navigation history entries in not the last one
+// i.e. when the m_nCurrent index is not at the end of the m_entries vector
+
 bool SwNavigationMgr::forwardEnabled() {
     return m_nCurrent+1 < m_entries.size();
 }
 
+// The goBack() method positions the cursor to the previous entry in the navigation history
+// If there was no history to go forward to, it adds the current position of the cursor
+// to the history so we could go forward to where we came from
 
-/*
- * The goBack() method positions the cursor to the previous entry in the navigation history
- * If there was no history to go forward to, it adds the current position of the cursor
- * to the history so we could go forward to where we came from
- */
 void SwNavigationMgr::goBack()  {
-    /*
-     * Although the button should be disabled whenever the backEnabled() returns false,
-     * the UI is sometimes not as responsive as we would like it to be :)
-     * this check prevents segmentation faults and in this way the class is not relying on the UI
-     */
+
+    // Although the button should be disabled whenever the backEnabled() returns false,
+    // the UI is sometimes not as responsive as we would like it to be :)
+    // this check prevents segmentation faults and in this way the class is not relying on the UI
+
     if (backEnabled()) {
         /* Trying to get the current cursor */
         SwPaM* pPaM = m_rMyShell.GetCrsr();
         if (!pPaM) {
             return;
         }
+        // This flag will be used to manually refresh the buttons
 
-        /* This flag will be used to manually refresh the buttons */
         bool bForwardWasDisabled = !forwardEnabled();
-        /*
-         * If we're going backwards in our history, but the current location is not
-         * in the history then we need to add *here* to it so that we can "go
-         * forward" to here again.
-         */
+
+        // If we're going backwards in our history, but the current location is not
+        // in the history then we need to add *here* to it so that we can "go
+        // forward" to here again.
 
         if (bForwardWasDisabled) {
-            /*
-             * the cursor consists of two SwPositions: Point and Mark.
-             * We are adding the current Point to the navigation history
-             * so we could later navigate forward to it
-             */
-            /* The addEntry() method returns true iff we should decrement the index before navigating back */
+
+            // the cursor consists of two SwPositions: Point and Mark.
+            // We are adding the current Point to the navigation history
+            // so we could later navigate forward to it
+
+            // The addEntry() method returns true iff we should decrement
+            // the index before navigating back
+
             if (addEntry(*pPaM->GetPoint()) ) {
                 m_nCurrent--;
             }
         }
         m_nCurrent--;
-        /* Position cursor to appropriate navigation history entry */
+        // Position cursor to appropriate navigation history entry
         GotoSwPosition(*m_entries[m_nCurrent]->GetPoint());
-        /* Refresh the buttons */
+        // Refresh the buttons
         if (bForwardWasDisabled)
             m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
         if (!backEnabled())
             m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
     }
 }
-/*
- * The goForward() method positions the cursor to the next entry in the navigation history
- */
+
+// The goForward() method positions the cursor to the next entry in the navigation history
 
 void SwNavigationMgr::goForward() {
-    /*
-     * Although the button should be disabled whenever the backForward() returns false,
-     * the UI is sometimes not as responsive as we would like it to be :)
-     * this check prevents segmentation faults and in this way the class is not relying on the UI
-     */
+
+    // Although the button should be disabled whenever the backForward() returns false,
+    // the UI is sometimes not as responsive as we would like it to be :)
+    // this check prevents segmentation faults and in this way the class is not relying on the UI
 
     if (forwardEnabled()) {
-        /* This flag will be used to manually refresh the buttons */
+        // This flag will be used to manually refresh the buttons
         bool bBackWasDisabled = !backEnabled();
-        /*
-         * The current index is positioned at the current entry in the navigation history
-         * We have to increment it to go to the next entry
-         */
+        // The current index is positioned at the current entry in the navigation history
+        // We have to increment it to go to the next entry
         m_nCurrent++;
         GotoSwPosition(*m_entries[m_nCurrent]->GetPoint());
-        /* Refresh the buttons */
+        // Refresh the buttons
         if (bBackWasDisabled)
             m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
         if (!forwardEnabled())
             m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
     }
 }
-/*
- * This method adds the SwPosition rPos to the navigation history
- * rPos is usually the current position of the cursor in the document
- */
+
+// This method adds the SwPosition rPos to the navigation history
+// rPos is usually the current position of the cursor in the document
+
 bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
-    /* Flags that will be used for refreshing the buttons */
+    // Flags that will be used for refreshing the buttons
     bool bBackWasDisabled = !backEnabled();
     bool bForwardWasEnabled = forwardEnabled();
 
     bool bRet = false; // return value of the function.
-                       // Indicates whether the index should be decremented before jumping back or not
+                       // Indicates whether the index should be decremented before
+                       // jumping back or not
 #if SMART
-    /* If any forward history exists, twist the tail of the list from the current position to the end */
+    // If any forward history exists, twist the tail of the
+    // list from the current position to the end
     if (bForwardWasEnabled) {
 
-        size_t number_ofm_entries = m_entries.size(); /* To avoid calling m_entries.size() multiple times */
-        int curr = m_nCurrent; /* Index from which we'll twist the tail. */
-        int n = (number_ofm_entries - curr) / 2; /* Number of entries that will swap places */
+        size_t number_ofm_entries = m_entries.size(); // To avoid calling m_entries.size() multiple times
+        int curr = m_nCurrent; // Index from which we'll twist the tail.
+        int n = (number_ofm_entries - curr) / 2; // Number of entries that will swap places
         for (int i = 0; i < n; i++) {
             ::std::swap(m_entries[curr + i], m_entries[number_ofm_entries -1 - i]);
         }
@@ -217,13 +212,13 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
 #endif
     m_nCurrent = m_entries.size();
 
-    /* Refresh buttons */
+    // Refresh buttons
     if (bBackWasDisabled)
         m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_BACK);
     if (bForwardWasEnabled)
         m_rMyShell.GetView().GetViewFrame()->GetBindings().Invalidate(FN_NAVIGATION_FORWARD);
 
-    /* show the Navigation toolbar */
+    // show the Navigation toolbar
     css::uno::Reference< css::frame::XFrame > xFrame =
         m_rMyShell.GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     if (xFrame.is())

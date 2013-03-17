@@ -33,7 +33,7 @@
 #include <mdiexp.hxx>
 #include <fmtcol.hxx>
 #include <frmfmt.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>                   // for Undo-Ids
 #include <swevent.hxx>
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>
@@ -103,7 +103,7 @@ void SwWrtShell::SelSentence(const Point *pPt, sal_Bool )
     if(pPt)
         aStart = *pPt;
     bSelLn = sal_True;
-    bSelWrd = sal_False;    // SelWord abschalten, sonst geht kein SelLine weiter
+    bSelWrd = sal_False;  // disable SelWord, otherwise no SelLine goes on
 }
 
 void SwWrtShell::SelPara(const Point *pPt, sal_Bool )
@@ -119,7 +119,7 @@ void SwWrtShell::SelPara(const Point *pPt, sal_Bool )
     if(pPt)
         aStart = *pPt;
     bSelLn = sal_False;
-    bSelWrd = sal_False;    // SelWord abschalten, sonst geht kein SelLine weiter
+    bSelWrd = sal_False;  // disable SelWord, otherwise no SelLine goes on
 }
 
 
@@ -183,16 +183,13 @@ long SwWrtShell::SelAll()
     return 1;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Textsuche
-------------------------------------------------------------------------*/
-
+// Desciption: Text search
 
 sal_uLong SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes,
                                 SwDocPositions eStt, SwDocPositions eEnd,
                                 FindRanges eFlags, int bReplace )
 {
-        // keine Erweiterung bestehender Selektionen
+        // no enhancement of existing selections
     if(!(eFlags & FND_IN_SEL))
         ClearMark();
     sal_Bool bCancel = sal_False;
@@ -204,17 +201,14 @@ sal_uLong SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt, sal_Bool b
     }
     return nRet;
 }
-/*------------------------------------------------------------------------
- Beschreibung:  Suche nach Vorlagen
-------------------------------------------------------------------------*/
 
-
+// Description: search for templates
 
 sal_uLong SwWrtShell::SearchTempl( const String &rTempl,
                                SwDocPositions eStt, SwDocPositions eEnd,
                                FindRanges eFlags, const String* pReplTempl )
 {
-        // keine Erweiterung bestehender Selektionen
+        // no enhancement of existing selections
     if(!(eFlags & FND_IN_SEL))
         ClearMark();
     SwTxtFmtColl *pColl = GetParaStyle(rTempl, SwWrtShell::GETSTYLE_CREATESOME);
@@ -233,20 +227,18 @@ sal_uLong SwWrtShell::SearchTempl( const String &rTempl,
     return nRet;
 }
 
-// Suche nach Attributen ----------------------------------------------------
-
-
+// search for attributes
 
 sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, sal_Bool bNoColls,
                                 SwDocPositions eStart, SwDocPositions eEnde,
                                 FindRanges eFlags, const SearchOptions* pSearchOpt,
                                 const SfxItemSet* pReplaceSet )
 {
-    // Keine Erweiterung bestehender Selektionen
+    // no enhancement of existing selections
     if (!(eFlags & FND_IN_SEL))
         ClearMark();
 
-    // Suchen
+    // Searching
     sal_Bool bCancel = sal_False;
     sal_uLong nRet = Find( rFindSet, bNoColls, eStart, eEnde, bCancel, eFlags, pSearchOpt, pReplaceSet);
 
@@ -258,16 +250,12 @@ sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, sal_Bool bNoColls,
     return nRet;
 }
 
-// ---------- Selektionsmodi ----------
-
-
+// Selection modes
 
 void SwWrtShell::PushMode()
 {
     pModeStack = new ModeStack( pModeStack, bIns, bExtMode, bAddMode, bBlockMode );
 }
-
-
 
 void SwWrtShell::PopMode()
 {
@@ -287,27 +275,21 @@ void SwWrtShell::PopMode()
     pModeStack = pTmp;
 }
 
-/*
- * Zwei Methoden fuer das Cursorsetzen; die erste mappt auf die
- * gleichnamige Methoden an der CursorShell, die zweite hebt
- * zuerst alle Selektionen auf.
- */
-
-
+// Two methodes for setting cursors: the first maps at the
+// eponymous methodes in the CursorShell, the second removes
+// all selections at first.
 
 long SwWrtShell::SetCrsr(const Point *pPt, sal_Bool bTextOnly)
 {
-        /*
-        * eine gfs.  bestehende Selektion an der Position des
-        * Mausklicks aufheben
-        */
+        // Remove a possibly present selection at the position
+        // of the mouseclick
+
     if(!IsInSelect() && ChgCurrPam(*pPt)) {
         ClearMark();
     }
 
     return SwCrsrShell::SetCrsr(*pPt, bTextOnly);
 }
-
 
 long SwWrtShell::SetCrsrKillSel(const Point *pPt, sal_Bool bTextOnly )
 {
@@ -316,21 +298,15 @@ long SwWrtShell::SetCrsrKillSel(const Point *pPt, sal_Bool bTextOnly )
     return SwCrsrShell::SetCrsr(*pPt, bTextOnly);
 }
 
-
-
 void SwWrtShell::UnSelectFrm()
 {
-    // Rahmenselektion aufheben mit garantiert ungueltiger Position
+    // Remove Frame selection with guaranteed invalid position
     Point aPt(LONG_MIN, LONG_MIN);
     SelectObj(aPt, 0);
     SwTransferable::ClearSelection( *this );
 }
 
-/*
- * Aufheben aller Selektionen
- */
-
-
+// Remove of all selections
 
 long SwWrtShell::ResetSelect(const Point *,sal_Bool)
 {
@@ -341,12 +317,10 @@ long SwWrtShell::ResetSelect(const Point *,sal_Bool)
     }
     else
     {
-        /*  SwActContext macht eine Action auf -
-            um im Basicablauf keine Probleme mit der
-            Shellumschaltung zu bekommen, darf
-            GetChgLnk().Call() erst nach
-            EndAction() gerufen werden.
-        */
+        //  SwActContext opens an Action -
+        //  to avoid problems in the basic process with the
+        //  shell switching, GetChgLnk().Call() may be called
+        //  after EndAction().
         {
             SwActContext aActContext(this);
             bSelWrd = bSelLn = sal_False;
@@ -355,10 +329,9 @@ long SwWrtShell::ResetSelect(const Point *,sal_Bool)
             fnKillSel = &SwWrtShell::Ignore;
             fnSetCrsr = &SwWrtShell::SetCrsr;
         }
-        /*
-            * nach dem Aufheben aller Selektionen koennte ein Update der
-            * Attr-Controls notwendig sein.
-        */
+
+        // After canceling of all selections an update of Attr-Controls
+        // could be necessary.
         GetChgLnk().Call(this);
     }
     Invalidate();
@@ -366,20 +339,13 @@ long SwWrtShell::ResetSelect(const Point *,sal_Bool)
     return 1;
 }
 
+// Do nothing
 
-
-/*
- * tue nichts
- */
 long SwWrtShell::Ignore(const Point *, sal_Bool ) {
     return 1;
 }
 
-/*
- * Start eines Selektionsvorganges.
- */
-
-
+// Begin of a selection process.
 
 void SwWrtShell::SttSelect()
 {
@@ -399,11 +365,8 @@ void SwWrtShell::SttSelect()
     Invalidate();
     SwTransferable::CreateSelection( *this );
 }
-/*
- * Ende eines Selektionsvorganges.
- */
 
-
+// End of a selection process.
 
 void SwWrtShell::EndSelect()
 {
@@ -425,16 +388,13 @@ void SwWrtShell::EndSelect()
     if (pWrdCnt)
         pWrdCnt->UpdateCounts();
 }
-/* Methode, um eine bestehende wortweise oder zeilenweise Selektion
- * zu erweitern.
- */
+
+// Methode to enhance a selecton word by word or line by line.
 
 inline bool operator<(const Point &rP1,const Point &rP2)
 {
     return rP1.Y() < rP2.Y() || (rP1.Y() == rP2.Y() && rP1.X() < rP2.X());
 }
-
-
 
 long SwWrtShell::ExtSelWrd(const Point *pPt, sal_Bool )
 {
@@ -518,11 +478,11 @@ long SwWrtShell::ExtSelLn(const Point *pPt, sal_Bool )
         }
     }
 
-    // ggfs. den Mark der Selektion anpassen
+    // if applicable fit the selection to the "Mark"
     sal_Bool bToTop = !IsCrsrPtAtEnd();
     SwapPam();
 
-    // der "Mark" muss am Zeilenende/-anfang stehen
+    // The "Mark" has to be at the end or the beginning of the line.
     if( bToTop ? !IsEndSentence() : !IsStartSentence() )
     {
         if( bToTop )
@@ -539,10 +499,7 @@ long SwWrtShell::ExtSelLn(const Point *pPt, sal_Bool )
     return bToTop ? SwCrsrShell::GoStartSentence() : SwCrsrShell::GoEndSentence();
 }
 
-
-/*
- * zurueck in den Standard Mode: kein Mode, keine Selektionen.
- */
+// Back into the standard mode: no mode, no selections.
 
 void SwWrtShell::EnterStdMode()
 {
@@ -560,10 +517,9 @@ void SwWrtShell::EnterStdMode()
     }
     else
     {
-        /*  SwActContext opens and action which has to be
-            closed prior to the call of
-            GetChgLnk().Call()
-        */
+        // SwActContext opens and action which has to be
+        // closed prior to the call of
+        // GetChgLnk().Call()
         {
             SwActContext aActContext(this);
             bSelWrd = bSelLn = sal_False;
@@ -578,11 +534,7 @@ void SwWrtShell::EnterStdMode()
     SwTransferable::ClearSelection( *this );
 }
 
-/*
- * Extended Mode
- */
-
-
+// Extended Mode
 
 void SwWrtShell::EnterExtMode()
 {
@@ -598,19 +550,14 @@ void SwWrtShell::EnterExtMode()
     SttSelect();
 }
 
-
-
 void SwWrtShell::LeaveExtMode()
 {
     bExtMode = sal_False;
     EndSelect();
 }
-/*
- * Ende einer Selektion; falls die Selektion leer ist,
- * ClearMark().
- */
 
-
+// End of a selection; if the selection is empty,
+// ClearMark().
 
 long SwWrtShell::SttLeaveSelect(const Point *, sal_Bool )
 {
@@ -620,11 +567,8 @@ long SwWrtShell::SttLeaveSelect(const Point *, sal_Bool )
     ClearMark();
     return 1;
 }
-/*
- * Verlassen des Selektionsmodus in Additional Mode
- */
 
-
+// Leaving of the selection mode in additional mode
 
 long SwWrtShell::AddLeaveSelect(const Point *, sal_Bool )
 {
@@ -633,11 +577,8 @@ long SwWrtShell::AddLeaveSelect(const Point *, sal_Bool )
         CreateCrsr();
     return 1;
 }
-/*
- * Additional Mode
- */
 
-
+// Additional Mode
 
 void SwWrtShell::EnterAddMode()
 {
@@ -654,8 +595,6 @@ void SwWrtShell::EnterAddMode()
     Invalidate();
 }
 
-
-
 void SwWrtShell::LeaveAddMode()
 {
     fnKillSel = &SwWrtShell::ResetSelect;
@@ -664,9 +603,7 @@ void SwWrtShell::LeaveAddMode()
     Invalidate();
 }
 
-/*
- * Block Mode
- */
+// Block Mode
 
 void SwWrtShell::EnterBlockMode()
 {
@@ -677,8 +614,6 @@ void SwWrtShell::EnterBlockMode()
     Invalidate();
 }
 
-
-
 void SwWrtShell::LeaveBlockMode()
 {
     bBlockMode = sal_False;
@@ -687,9 +622,7 @@ void SwWrtShell::LeaveBlockMode()
     Invalidate();
 }
 
-// Einfuegemodus
-
-
+// Insert mode
 
 void SwWrtShell::SetInsMode( sal_Bool bOn )
 {
@@ -709,10 +642,7 @@ void SwWrtShell::SetRedlineModeAndCheckInsMode( sal_uInt16 eMode )
        SetInsMode( true );
 }
 
-/*
- * Rahmen bearbeiten
- */
-
+// Edit frame
 
 long SwWrtShell::BeginFrmDrag(const Point *pPt, sal_Bool)
 {
@@ -727,8 +657,6 @@ long SwWrtShell::BeginFrmDrag(const Point *pPt, sal_Bool)
     return 1;
 }
 
-
-
 void SwWrtShell::EnterSelFrmMode(const Point *pPos)
 {
     if(pPos)
@@ -740,14 +668,12 @@ void SwWrtShell::EnterSelFrmMode(const Point *pPos)
     bLayoutMode = sal_True;
     HideCrsr();
 
-        // gleicher Aufruf von BeginDrag an der SwFEShell
+        // equal call of BeginDrag in the SwFEShell
     fnDrag          = &SwWrtShell::BeginFrmDrag;
     fnEndDrag       = &SwWrtShell::UpdateLayoutFrm;
     SwBaseShell::SetFrmMode( FLY_DRAG_START, this );
     Invalidate();
 }
-
-
 
 void SwWrtShell::LeaveSelFrmMode()
 {
@@ -759,11 +685,8 @@ void SwWrtShell::LeaveSelFrmMode()
     SwBaseShell::SetFrmMode( FLY_DRAG_END, this );
     Invalidate();
 }
-/*------------------------------------------------------------------------
- Beschreibung:  Rahmengebundenes Macro ausfuehren
-------------------------------------------------------------------------*/
 
-
+// Description: execute framebound macro
 
 IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFmt )
 {
@@ -782,21 +705,15 @@ IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFmt )
     return 0;
 }
 
-
-
 long SwWrtShell::UpdateLayoutFrm(const Point *pPt, sal_Bool )
 {
-        // voerst Dummy
+        // still a dummy
     SwFEShell::EndDrag( pPt, sal_False );
     fnDrag = &SwWrtShell::BeginFrmDrag;
     return 1;
 }
 
-/*
- * Handler fuer das Togglen der Modi. Liefern alten Mode zurueck.
- */
-
-
+// Handler for toggling the modes. Returns back the old mode.
 
 long SwWrtShell::ToggleAddMode()
 {
@@ -805,7 +722,6 @@ long SwWrtShell::ToggleAddMode()
     return !bAddMode;
 }
 
-
 long SwWrtShell::ToggleBlockMode()
 {
     bBlockMode ? LeaveBlockMode(): EnterBlockMode();
@@ -813,18 +729,14 @@ long SwWrtShell::ToggleBlockMode()
     return !bBlockMode;
 }
 
-
 long SwWrtShell::ToggleExtMode()
 {
     bExtMode ? LeaveExtMode() : EnterExtMode();
     Invalidate();
     return !bExtMode;
 }
-/*
- * Draggen im Standard Modus (Selektieren von Inhalt)
- */
 
-
+// Dragging in standard mode (Selecting of content)
 
 long SwWrtShell::BeginDrag(const Point * /*pPt*/, sal_Bool )
 {
@@ -852,8 +764,6 @@ long SwWrtShell::BeginDrag(const Point * /*pPt*/, sal_Bool )
     return 1;
 }
 
-
-
 long SwWrtShell::Drag(const Point *, sal_Bool )
 {
     if( IsSelTblCells() )
@@ -861,8 +771,6 @@ long SwWrtShell::Drag(const Point *, sal_Bool )
 
     return 1;
 }
-
-
 
 long SwWrtShell::EndDrag(const Point * /*pPt*/, sal_Bool )
 {
@@ -890,9 +798,7 @@ sal_Bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, boo
     return sal_False;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Selektion einer Tabellenzeile / Spalte
-------------------------------------------------------------------------*/
+// Description: Selection of a table line or column
 
 sal_Bool SwWrtShell::SelectTableRow()
 {
@@ -904,8 +810,6 @@ sal_Bool SwWrtShell::SelectTableRow()
     }
     return sal_False;
 }
-
-
 
 sal_Bool SwWrtShell::SelectTableCol()
 {
@@ -928,28 +832,26 @@ sal_Bool SwWrtShell::SelectTableCell()
     }
     return sal_False;
 }
-/*------------------------------------------------------------------------
- Beschreibung:    Prueft, ob eine Wortselektion vorliegt.
-                  Gemaess den Regeln fuer intelligentes Cut / Paste
-                  werden umgebende Spaces rausgeschnitten.
- Return:          Liefert Art der Wortselektion zurueck.
-------------------------------------------------------------------------*/
 
-
+// Description: Check if a word selection is present.
+//              According to the rules for intelligent cut / paste
+//              surrounding spaces are cut out.
+// Return:      Delivers the type of the word selection.
 
 int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
 {
-        // kein intelligentes Drag and Drop bei Mehrfachselektion
-        // es existieren mehrere Cursor, da ein zweiter bereits
-        // an die Zielposition gesetzt wurde
+        // On multiple selection no intelligent drag and drop
+        // there are multiple cursors, since a second was placed
+        // already at the target postion.
+an die Zielposition gesetzt wurde
     if( IsAddMode() || !(nSelection & nsSelectionType::SEL_TXT) )
         return sal_False;
 
     String sTxt;
     CharClass& rCC = GetAppCharClass();
 
-        // wenn das erste und das letzte Zeichen kein Wortzeichen ist,
-        // ist kein Wort selektiert.
+        // If the first character is no word character,
+        // no word selected.
     sal_Unicode cPrev = GetChar(sal_False);
     sal_Unicode cNext = GetChar(sal_True, -1);
     if( !cPrev || !cNext ||
@@ -961,7 +863,7 @@ int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
     cNext = GetChar(sal_True);
 
     int cWord = NO_WORD;
-        // ist ein Wort selektiert?
+        // is a word seleced?
     if(!cWord && cPrev && cNext &&
         CH_TXTATR_BREAKWORD != cPrev && CH_TXTATR_INWORD != cPrev &&
         CH_TXTATR_BREAKWORD != cNext && CH_TXTATR_INWORD != cNext &&
@@ -972,7 +874,7 @@ int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
     if(cWord == WORD_NO_SPACE && ' ' == cPrev )
     {
         cWord = WORD_SPACE_BEFORE;
-            // Space davor loeschen
+            // delete the space before
         if(bCut)
         {
             Push();
@@ -988,7 +890,7 @@ int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
     else if(cWord == WORD_NO_SPACE && cNext == ' ')
     {
         cWord = WORD_SPACE_AFTER;
-            // Space dahinter loeschen
+            // delete the space behind
         if(bCut) {
             Push();
             if(!IsCrsrPtAtEnd()) SwapPam();
@@ -1001,8 +903,6 @@ int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
     }
     return cWord;
 }
-
-
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
@@ -1029,8 +929,8 @@ bool SwWrtShell::SelectNextPrevHyperlink( bool bNext )
         if ( bFrmSelected )
             UnSelectFrm();
 
-        // Funktionspointer fuer das Aufheben der Selektion setzen
-        // bei Cursor setzen
+        // Set the function pointer for the canceling of the selection
+        // set at cursor
         fnKillSel = &SwWrtShell::ResetSelect;
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         bCreateXSelection = true;
@@ -1053,15 +953,10 @@ bool SwWrtShell::SelectNextPrevHyperlink( bool bNext )
     return bRet;
 }
 
-
-/* fuer den Erhalt der Selektion wird nach SetMark() der Cursor
- * nach links bewegt, damit er durch das Einfuegen von Text nicht
- * verschoben wird.  Da auf der CORE-Seite am aktuellen Cursor
- * eine bestehende Selektion aufgehoben wird, wird der Cursor auf
- * den Stack gepushed. Nach dem Verschieben werden sie wieder
- * zusammengefasst. */
-
-
-
+// For the preservation of the selection the cursor will be moved left
+// after SetMark(), so that the cursor is not moved by inserting text.
+// Because a present selection at the CORE page is cleared at the
+// current cursor position, the cursor will be pushed on the stack.
+// After moving, they will again resummarized.
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
