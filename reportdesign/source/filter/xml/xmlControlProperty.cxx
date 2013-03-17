@@ -301,7 +301,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                             ::com::sun::star::util::Date aDate = implGetDate(nValue);
 
                             ::com::sun::star::util::DateTime aDateTime;
-                            aDateTime.HundredthSeconds = aTime.HundredthSeconds;
+                            aDateTime.NanoSeconds = aTime.NanoSeconds;
                             aDateTime.Seconds = aTime.Seconds;
                             aDateTime.Minutes = aTime.Minutes;
                             aDateTime.Hours = aTime.Hours;
@@ -329,10 +329,9 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
 ::com::sun::star::util::Time OXMLControlProperty::implGetTime(double _nValue)
 {
     ::com::sun::star::util::Time aTime;
-    sal_uInt32 nIntValue = sal_Int32(_nValue * 8640000);
-    nIntValue *= 8640000;
-    aTime.HundredthSeconds = (sal_uInt16)( nIntValue % 100 );
-    nIntValue /= 100;
+    sal_uInt64 nIntValue = round(_nValue * 86400000000000.0);
+    aTime.NanoSeconds = (sal_uInt16)( nIntValue % 1000000000 );
+    nIntValue /= 1000000000;
     aTime.Seconds = (sal_uInt16)( nIntValue % 60 );
     nIntValue /= 60;
     aTime.Minutes = (sal_uInt16)( nIntValue % 60 );

@@ -303,7 +303,7 @@ bool INetRFC822Message::ParseDateField (
             rDateTime.SetHour   (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.SetMin    (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.SetSec    (ParseNumber (aDateField, nIndex)); nIndex++;
-            rDateTime.Set100Sec (0);
+            rDateTime.SetNanoSec (0);
 
             sal_uInt16 nYear = ParseNumber (aDateField, nIndex);
             if (nYear < 100) nYear += 1900;
@@ -324,7 +324,7 @@ bool INetRFC822Message::ParseDateField (
             rDateTime.SetHour   (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.SetMin    (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.SetSec    (ParseNumber (aDateField, nIndex)); nIndex++;
-            rDateTime.Set100Sec (0);
+            rDateTime.SetNanoSec (0);
 
             if ((aDateField[nIndex] == '+') ||
                 (aDateField[nIndex] == '-')    )
@@ -338,7 +338,7 @@ bool INetRFC822Message::ParseDateField (
                     aDiff.SetHour   (nOffset / 100);
                     aDiff.SetMin    (nOffset % 100);
                     aDiff.SetSec    (0);
-                    aDiff.Set100Sec (0);
+                    aDiff.SetNanoSec (0);
 
                     if (bEast)
                         rDateTime -= aDiff;

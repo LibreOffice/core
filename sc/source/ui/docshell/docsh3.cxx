@@ -743,7 +743,7 @@ static inline sal_Bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction
         pA->GetType()         == pB->GetType() &&
         pA->GetUser()         == pB->GetUser() &&
         (bIgnore100Sec ?
-         pA->GetDateTimeUTC().IsEqualIgnore100Sec( pB->GetDateTimeUTC() ) :
+         pA->GetDateTimeUTC().IsEqualIgnoreNanoSec( pB->GetDateTimeUTC() ) :
          pA->GetDateTimeUTC() == pB->GetDateTimeUTC());
     //  State nicht vergleichen, falls eine alte Aenderung akzeptiert wurde
 }
@@ -762,7 +762,7 @@ static bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScD
         if ( pAction->GetType() == pA->GetType() &&
              pAction->GetUser() == pA->GetUser() &&
              (bIgnore100Sec ?
-                pAction->GetDateTimeUTC().IsEqualIgnore100Sec( pA->GetDateTimeUTC() ) :
+                pAction->GetDateTimeUTC().IsEqualIgnoreNanoSec( pA->GetDateTimeUTC() ) :
                 pAction->GetDateTimeUTC() == pA->GetDateTimeUTC() ) &&
              pAction->GetBigRange() == pA->GetBigRange() )
         {
@@ -807,9 +807,9 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         }
     }
 
-    // include 100th seconds in compare?
-    sal_Bool bIgnore100Sec = !pSourceTrack->IsTime100thSeconds() ||
-            !pThisTrack->IsTime100thSeconds();
+    // include Nano seconds in compare?
+    sal_Bool bIgnore100Sec = !pSourceTrack->IsTimeNanoSeconds() ||
+            !pThisTrack->IsTimeNanoSeconds();
 
     //  gemeinsame Ausgangsposition suchen
     sal_uLong nFirstNewNumber = 0;
@@ -1189,7 +1189,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
     aDocument.SetChangeViewSettings( aChangeViewSet );
 
     // find first merge action in this document
-    sal_Bool bIgnore100Sec = !pThisTrack->IsTime100thSeconds() || !pSharedTrack->IsTime100thSeconds();
+    sal_Bool bIgnore100Sec = !pThisTrack->IsTimeNanoSeconds() || !pSharedTrack->IsTimeNanoSeconds();
     ScChangeAction* pThisAction = pThisTrack->GetFirst();
     ScChangeAction* pSharedAction = pSharedTrack->GetFirst();
     while ( lcl_Equal( pThisAction, pSharedAction, bIgnore100Sec ) )
