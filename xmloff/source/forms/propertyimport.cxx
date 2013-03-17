@@ -30,6 +30,7 @@
 #include "callbacks.hxx"
 #include "xmloff/xmlnmspe.hxx"
 #include <tools/date.hxx>
+#include <tools/time.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -67,16 +68,15 @@ namespace
     ::com::sun::star::util::Time lcl_getTime(double _nValue)
     {
         ::com::sun::star::util::Time aTime;
-        sal_uInt32 nIntValue = sal_Int32(_nValue * 8640000);
-        nIntValue *= 8640000;
-        aTime.HundredthSeconds = (sal_uInt16)( nIntValue % 100 );
-        nIntValue /= 100;
-        aTime.Seconds = (sal_uInt16)( nIntValue % 60 );
-        nIntValue /= 60;
-        aTime.Minutes = (sal_uInt16)( nIntValue % 60 );
-        nIntValue /= 60;
+        sal_uInt64 nIntValue = static_cast<sal_uInt64>(_nValue * ::Time::nanoSecPerDay);
+        aTime.NanoSeconds = nIntValue % ::Time::nanoSecPerSec;
+        nIntValue /= ::Time::nanoSecPerSec;
+        aTime.Seconds = nIntValue % ::Time::secondPerMinute;
+        nIntValue /= ::Time::secondPerMinute;
+        aTime.Minutes = nIntValue % ::Time::minutePerHour;
+        nIntValue /= ::Time::minutePerHour;
         OSL_ENSURE(nIntValue < 24, "lcl_getTime: more than a day?");
-        aTime.Hours = static_cast< sal_uInt16 >( nIntValue );
+        aTime.Hours = nIntValue;
 
         return aTime;
     }
@@ -219,7 +219,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                         ::com::sun::star::util::Date aDate = lcl_getDate(nValue);
 
                         ::com::sun::star::util::DateTime aDateTime;
-                        aDateTime.HundredthSeconds = aTime.HundredthSeconds;
+                        aDateTime.NanoSeconds = aTime.NanoSeconds;
                         aDateTime.Seconds = aTime.Seconds;
                         aDateTime.Minutes = aTime.Minutes;
                         aDateTime.Hours = aTime.Hours;

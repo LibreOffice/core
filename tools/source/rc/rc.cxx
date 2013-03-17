@@ -53,8 +53,9 @@ Time::Time( const ResId& rResId )
         SetMin( (sal_uInt16)pResMgr->ReadShort() );
     if ( 0x04 & nObjMask )
         SetSec( (sal_uInt16)pResMgr->ReadShort() );
+#error "FIXME Need to also change the place that writes this binary resource format"
     if ( 0x08 & nObjMask )
-        Set100Sec( (sal_uInt16)pResMgr->ReadShort() );
+        SetNanoSec( pResMgr->ReadLong() );
 }
 
 Date::Date( const ResId& rResId ) : nDate(0)
