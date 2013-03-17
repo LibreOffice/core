@@ -5987,7 +5987,7 @@ sal_Bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& nRetValue, sa
             case PPT_ParaAttr_DefaultTab :
             {
                 nRetValue = rParaLevel.mnDefaultTab;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletOfs ) )
+                if ( pParaLevel && ( nRetValue != pParaLevel->mnDefaultTab ) )
                     bIsHardAttribute = 1;
             }
             break;
