@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///ac\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-03-17T19:20:21Z",
+      "side": 1,
+      "message": "So we have unit test for it: \n\n FValueTest::test_Bool()\n\nWhat do you mean by failing checks?\nThat test fails? Why tinderboxes are green then?",
+      "revId": "93ef096843402a2b5728a4ac78cebf2ef2156d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAW3///ag\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2013-03-17T19:20:21Z",
+      "side": 1,
+      "message": "s/sal_Int23/sal_Int32",
+      "revId": "93ef096843402a2b5728a4ac78cebf2ef2156d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
