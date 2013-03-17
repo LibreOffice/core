@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Module_Module,chart2))
 
+ifeq ($(filter CALC,$(PARTIAL_BUILD)),)
+
 $(eval $(call gb_Module_add_targets,chart2,\
     AllLangResTarget_chartcontroller \
     Library_chartcontroller \
@@ -23,5 +25,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
 $(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\
     JunitTest_chart2_unoapi \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:

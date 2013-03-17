@@ -246,6 +246,15 @@ OUString AboutDialog::GetVersionString()
     sVersion += EXTRA_BUILDID;
 #endif
 
+#ifdef PARTIAL_BUILD
+    sVersion += "\n";
+    sVersion += "Highly experimental and unsupported partial build!\n";
+    sVersion += "Use it at your own risk only!\n";
+    sVersion += "Don't even try to use it for production, or if you do, please refrain from filing bugs for it!\n";
+    sVersion += "Following application(s) was/were not built into the suite:\n";
+    sVersion += PARTIAL_BUILD;
+#endif
+
     return sVersion;
 }
 

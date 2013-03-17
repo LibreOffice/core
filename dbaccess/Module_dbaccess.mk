@@ -9,6 +9,7 @@
 
 $(eval $(call gb_Module_Module,dbaccess))
 
+ifeq ($(filter BASE,$(PARTIAL_BUILD)),)
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,dbaccess,\
@@ -45,6 +46,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
     JunitTest_dbaccess_unoapi \
 ))
 
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

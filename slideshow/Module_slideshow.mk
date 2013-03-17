@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Module_Module,slideshow))
 
+ifeq ($(filter IMPRESS,$(PARTIAL_BUILD)),)
+
 $(eval $(call gb_Module_add_targets,slideshow,\
     $(if $(filter TRUE,$(ENABLE_OPENGL)),Library_OGLTrans) \
     Library_slideshow \
@@ -19,5 +21,7 @@ $(eval $(call gb_Module_add_targets,slideshow,\
 
 # not built normally (and unbuildable anyway ;)
     # Executable_demoshow \
+
+endif
 
 # vim: set noet sw=4 ts=4:

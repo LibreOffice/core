@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Module_Module,sd))
 
+ifeq ($(filter DRAW IMPRESS,$(PARTIAL_BUILD)),)
+
 $(eval $(call gb_Module_add_targets,sd,\
     AllLangResTarget_sd \
     Library_sd \
@@ -33,5 +35,7 @@ endif
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     JunitTest_sd_unoapi \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
