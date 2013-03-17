@@ -87,7 +87,7 @@ namespace pcr
         }
         else
         {
-            ::Time aTime( aUNOTime.Hours, aUNOTime.Minutes, aUNOTime.Seconds, aUNOTime.HundredthSeconds );
+            ::Time aTime( aUNOTime.Hours, aUNOTime.Minutes, aUNOTime.Seconds, aUNOTime.NanoSeconds );
             getTypedControlWindow()->SetTime( aTime );
         }
     }
@@ -99,7 +99,7 @@ namespace pcr
         if ( !getTypedControlWindow()->GetText().isEmpty() )
         {
             ::Time aTime( getTypedControlWindow()->GetTime() );
-            util::Time aUNOTime( aTime.Get100Sec(), aTime.GetSec(), aTime.GetMin(), aTime.GetHour() );
+            util::Time aUNOTime( aTime.GetNanoSec(), aTime.GetSec(), aTime.GetMin(), aTime.GetHour() );
             aPropValue <<= aUNOTime;
         }
         return aPropValue;
