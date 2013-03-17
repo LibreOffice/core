@@ -317,7 +317,7 @@ void SfxPrinterController::jobStarted()
         ::DateTime now( ::DateTime::SYSTEM );
 
         xDocProps->setPrintDate( util::DateTime(
-            now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
+            now.GetNanoSec(), now.GetSec(), now.GetMin(), now.GetHour(),
             now.GetDay(), now.GetMonth(), now.GetYear() ) );
 
         SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PRINTDOC, GlobalEventConfig::GetEventName( STR_EVENT_PRINTDOC ), mpObjectShell ) );
