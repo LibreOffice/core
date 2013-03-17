@@ -353,8 +353,8 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
                 aTypeName = "VARCHAR";
                 break;
             case 'F':
-                aTypeName = "DECIMAL";
             case 'N':
+                aTypeName = "DECIMAL";
                 if ( aDBFColumn.db_typ == 'N' )
                     aTypeName = "NUMERIC";
                 eType = DataType::DECIMAL;
