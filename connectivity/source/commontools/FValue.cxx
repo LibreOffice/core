@@ -916,7 +916,7 @@ Any ORowSetValue::makeAny() const
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
-                rValue.setValue( &m_aValue.m_bBool, ::getCppuBooleanType() );
+                rValue <<= m_aValue.m_bBool;
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
@@ -2414,8 +2414,7 @@ void ORowSetValue::fill(const Any& _rValue)
         {
             sal_uInt16 nValue(0);
             _rValue >>= nValue;
-            (*this) = static_cast<sal_Int32>(nValue);
-            setSigned(sal_False);
+            (*this) = nValue;
             break;
         }
         case TypeClass_LONG:
