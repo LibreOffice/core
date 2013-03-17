@@ -62,9 +62,6 @@ public:
     // mainloop pieces
     virtual bool AnyInput( sal_uInt16 nType );
 
-    // incoming android event handlers:
-    void      onAppCmd     (struct android_app* app, int32_t cmd);
-    int32_t   onInputEvent (struct android_app* app, AInputEvent* event);
     void RedrawWindows(ANativeWindow *pWindow, ANativeWindow_Buffer *pBuffer = NULL);
     SalFrame *getFocusFrame() const;
 
