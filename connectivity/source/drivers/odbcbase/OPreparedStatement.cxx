@@ -411,14 +411,27 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date&
 
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time& aVal ) throw(SQLException, RuntimeException)
 {
-    const sal_uInt16 hundredths (aVal.HundredthSeconds);
     SQLULEN nColSize;
-    if(hundredths == 0)
+    if(aVal.NanoSeconds == 0)
         nColSize = 8;
-    else if(hundredths % 10 == 0)
+    else if(aVal.NanoSeconds % 100000000 == 0)
         nColSize = 10;
-    else
+    else if(aVal.NanoSeconds % 10000000 == 0)
         nColSize = 11;
+    else if(aVal.NanoSeconds % 1000000 == 0)
+        nColSize = 12;
+    else if(aVal.NanoSeconds % 100000 == 0)
+        nColSize = 13;
+    else if(aVal.NanoSeconds % 10000 == 0)
+        nColSize = 14;
+    else if(aVal.NanoSeconds % 1000 == 0)
+        nColSize = 15;
+    else if(aVal.NanoSeconds % 100 == 0)
+        nColSize = 16;
+    else if(aVal.NanoSeconds % 10 == 0)
+        nColSize = 17;
+    else
+        nColSize = 18;
     TIME_STRUCT x(OTools::TimeToOdbcTime(aVal));
     setScalarParameter<TIME_STRUCT&>(parameterIndex, DataType::TIME, nColSize, x);
 }
@@ -426,20 +439,32 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time&
 
 void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const DateTime& aVal ) throw(SQLException, RuntimeException)
 {
-    sal_uInt16 s(aVal.Seconds);
-    sal_uInt16 hundredths(aVal.HundredthSeconds);
     SQLULEN nColSize;
-    if(hundredths == 0)
+    if(aVal.NanoSeconds == 0)
     {
-        if (s == 0)
+        if (aVal.Seconds == 0)
             nColSize=16;
         else
             nColSize=19;
     }
-    else if(hundredths % 10 == 0)
+    else if(aVal.NanoSeconds % 100000000 == 0)
         nColSize = 21;
-    else
+    else if(aVal.NanoSeconds % 10000000 == 0)
         nColSize = 22;
+    else if(aVal.NanoSeconds % 1000000 == 0)
+        nColSize = 23;
+    else if(aVal.NanoSeconds % 100000 == 0)
+        nColSize = 24;
+    else if(aVal.NanoSeconds % 10000 == 0)
+        nColSize = 25;
+    else if(aVal.NanoSeconds % 1000 == 0)
+        nColSize = 26;
+    else if(aVal.NanoSeconds % 100 == 0)
+        nColSize = 27;
+    else if(aVal.NanoSeconds % 10 == 0)
+        nColSize = 28;
+    else
+        nColSize = 29;
 
     TIMESTAMP_STRUCT x(OTools::DateTimeToTimestamp(aVal));
     setScalarParameter<TIMESTAMP_STRUCT&>(parameterIndex, DataType::TIMESTAMP, nColSize, x);
