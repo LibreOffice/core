@@ -2431,7 +2431,7 @@ shell::commit( const shell::ContentMap::iterator& it,
             osl_getDateTimeFromTimeValue( &myLocalTime, &myDateTime );
             util::DateTime aDateTime;
 
-            aDateTime.HundredthSeconds = (unsigned short)(myDateTime.NanoSeconds / 10000000);
+            aDateTime.NanoSeconds = myDateTime.NanoSeconds;
             aDateTime.Seconds = myDateTime.Seconds;
             aDateTime.Minutes = myDateTime.Minutes;
             aDateTime.Hours = myDateTime.Hours;

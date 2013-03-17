@@ -2228,7 +2228,7 @@ void ScChangeTrack::Init()
     bInDeleteUndo = false;
     bInPasteCut = false;
     bUseFixDateTime = false;
-    bTime100thSeconds = true;
+    bTimeNanoSeconds = true;
 
     const SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
     rtl::OUStringBuffer aBuf;
@@ -4540,7 +4540,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
     }
 
     ScChangeTrack* pClonedTrack = new ScChangeTrack( pDocument );
-    pClonedTrack->SetTime100thSeconds( IsTime100thSeconds() );
+    pClonedTrack->SetTimeNanoSeconds( IsTimeNanoSeconds() );
 
     // clone generated actions
     ::std::stack< const ScChangeAction* > aGeneratedStack;
