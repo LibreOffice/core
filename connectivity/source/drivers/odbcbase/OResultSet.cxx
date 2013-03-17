@@ -663,7 +663,7 @@ DateTime OResultSet::impl_getTimestamp( sal_Int32 columnIndex ) throw(SQLExcepti
     TIMESTAMP_STRUCT aTime = impl_getValue< TIMESTAMP_STRUCT > ( columnIndex,
                                                                  m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIMESTAMP : SQL_C_TYPE_TIMESTAMP );
 
-    return DateTime(static_cast<sal_uInt16>(aTime.fraction/ODBC_FRACTION_UNITS_PER_HSECOND),
+    return DateTime(aTime.fraction,
                     aTime.second,
                     aTime.minute,
                     aTime.hour,

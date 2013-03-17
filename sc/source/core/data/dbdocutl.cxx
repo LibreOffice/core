@@ -29,8 +29,6 @@
 
 using namespace ::com::sun::star;
 
-#define D_TIMEFACTOR              86400.0
-
 // ----------------------------------------------------------------------------
 
 ScDatabaseDocUtil::StrData::StrData() :
@@ -110,8 +108,10 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                                         NUMBERFORMAT_TIME, ScGlobal::eLnge );
 
                     util::Time aTime = xRow->getTime(nRowPos);
-                    nVal = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
-                             aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                    nVal = aTime.Hours       / static_cast<double>(::Time::hourPerDay)   +
+                           aTime.Minutes     / static_cast<double>(::Time::minutePerDay) +
+                           aTime.Seconds     / static_cast<double>(::Time::secondPerDay) +
+                           aTime.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
                     bEmptyFlag = xRow->wasNull();
                     bValue = sal_True;
                 }
@@ -126,8 +126,10 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                     util::DateTime aStamp = xRow->getTimestamp(nRowPos);
                     nVal = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) -
                                                 *pFormTable->GetNullDate() ) +
-                           ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
-                             aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                           aStamp.Hours       / static_cast<double>(::Time::hourPerDay)   +
+                           aStamp.Minutes     / static_cast<double>(::Time::minutePerDay) +
+                           aStamp.Seconds     / static_cast<double>(::Time::secondPerDay) +
+                           aStamp.NanoSeconds / static_cast<double>(::Time::nanoSecPerDay);
                     bEmptyFlag = xRow->wasNull();
                     bValue = sal_True;
                 }
