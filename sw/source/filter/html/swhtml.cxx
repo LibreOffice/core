@@ -144,33 +144,31 @@ HTMLReader::HTMLReader()
 
 String HTMLReader::GetTemplateName() const
 {
-    OUString sTemplate("html");
-    OUString sTemplateWithoutExt( sTemplate );
+    String sTemplate("internal");
+    sTemplate += INET_PATH_TOKEN;
+    sTemplate.Append(String("html"));
+    String sTemplateWithoutExt( sTemplate );
     // first search for OpenDocument Writer/Web template
-    sTemplate += ".oth";
+    sTemplate.Append(String(".oth"));
 
-    //Added path for the common HTML template
     SvtPathOptions aPathOpt;
-    const String sCommonTemplatePath("share/template/common/internal");
-    aPathOpt.SetTemplatePath(sCommonTemplatePath);
     // OpenDocument Writer/Web template (extension .oth)
-    sal_Bool bSet = aPathOpt.SearchFile( String().Assign(sTemplate), SvtPathOptions::PATH_TEMPLATE );
+    sal_Bool bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
     if( !bSet )
     {
-        // 6.0 (extension .stw)
-        sTemplate = sTemplateWithoutExt;
         // no OpenDocument Writer/Web template found.
         // search for OpenOffice.org Writer/Web template
-        sTemplate += ".stw";
-        bSet = aPathOpt.SearchFile( String().Assign(sTemplate), SvtPathOptions::PATH_TEMPLATE );
+        sTemplate = sTemplateWithoutExt;
+        sTemplate.Append(String(".stw"));
+        bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
     }
 
     if( !bSet )
     {
         sTemplate = "";
         OSL_ENSURE( !this,
-            "Die html.vor befindet sich nicht mehr im definierten Directory!");
+            "The default HTML template cannot be found in the defined template directories!");
     }
 
     return sTemplate;
