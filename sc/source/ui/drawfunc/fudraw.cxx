@@ -768,6 +768,21 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     }
 }
 
+sal_Bool FuDraw::IsEditingANote( const MouseEvent& rMEvt ) const
+{
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    sal_Int32 backval=rMarkList.GetMarkCount();
+    for (sal_Int32 nlv1=0;nlv1<backval;nlv1++)
+    {
+        SdrObject* pObj = rMarkList.GetMark( nlv1 )->GetMarkedSdrObj();
+        if ( ScDrawLayer::IsNoteCaption( pObj ) )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 sal_Bool FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
 {
     sal_Bool bIsSizingOrMoving = false;
