@@ -392,7 +392,7 @@ DESCR:Text - Indexes and Index Marks - Indexes
 REF:
 com.sun.star.text.BibliographyDataType
 com.sun.star.text.BibliographyDataField
-com.sun.star.text.IllustrationIndex
+com.sun.star.text.IllustrationsIndex
 com.sun.star.beans.XPropertySet
 com.sun.star.container.XIndexReplace
 com.sun.star.text.Bibliography
@@ -3224,8 +3224,8 @@ com.sun.star.text.textfield.Bibliography
 com.sun.star.text.textfield.Chapter
 com.sun.star.text.textfield.Input
 com.sun.star.text.textfield.SetExpression
-com.sun.star.text.FieldMaster.Database
-com.sun.star.text.FieldMaster.User
+com.sun.star.text.fieldmaster.Database
+com.sun.star.text.fieldmaster.User
 com.sun.star.text.textfield.ReferencePageGet
 com.sun.star.text.textfield.ParagraphCount
 com.sun.star.text.textfield.Author
@@ -3247,15 +3247,15 @@ com.sun.star.text.textfield.DatabaseName
 com.sun.star.util.XUpdatable
 com.sun.star.text.TextContent
 com.sun.star.text.textfield.DatabaseSetNumber
-com.sun.star.text.FieldMaster.SetExpression
+com.sun.star.text.fieldmaster.SetExpression
 com.sun.star.text.textfield.ExtendedUser
-com.sun.star.text.FieldMaster.DDE
+com.sun.star.text.fieldmaster.DDE
 com.sun.star.text.textfield.docinfo.CreateAuthor
 com.sun.star.text.textfield.docinfo.Subject
 com.sun.star.text.textfield.PageNumber
 com.sun.star.text.textfield.TableFormula
 com.sun.star.text.textfield.docinfo.Keywords
-com.sun.star.text.FieldMaster.Bibliography
+com.sun.star.text.fieldmaster.Bibliography
 com.sun.star.text.textfield.GetReference
 com.sun.star.text.textfield.WordCount
 com.sun.star.text.textfield.DDE
@@ -3276,7 +3276,7 @@ com.sun.star.text.textfield.docinfo.Description
 com.sun.star.text.textfield.DatabaseNextSet
 com.sun.star.text.textfield.docinfo.PrintDateTime
 TOPIC:
-com.sun.star.text.FieldMaster
+com.sun.star.text.fieldmaster
 com.sun.star.text.TextField
 com.sun.star.text.XTextField
 

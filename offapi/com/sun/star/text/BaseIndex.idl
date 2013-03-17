@@ -36,7 +36,7 @@
 /** specifies the basic service of different indexes within a document.@see com::sun::star::text::DocumentIndex
         @see com::sun::star::text::ContentIndex
         @see com::sun::star::text::UserDefinedIndex
-        @see com::sun::star::text::IllustrationIndex
+        @see com::sun::star::text::IllustrationsIndex
         @see com::sun::star::text::TableIndex
         @see com::sun::star::text::ObjectIndex
  */

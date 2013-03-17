@@ -20,7 +20,8 @@ $(odk_WORKDIR)/docs/common/ref/module-ix.html: $(SRCDIR)/odk/pack/copying/idl_ch
 	$(call gb_Helper_execute,autodoc) -html $(dir $@) \
 		-dvgroot "http://wiki.services.openoffice.org/wiki" \
 		-name "LibreOffice $(PRODUCTVERSION) API" \
-		-lg idl -dvgfile $< -t $(SRCDIR)/udkapi $(SRCDIR)/offapi
+		-lg idl -dvgfile $< -t $(SRCDIR)/udkapi $(SRCDIR)/offapi \
+		> $(odk_WORKDIR)/autodoc_log.txt
 
 
 # vim: set noet sw=4 ts=4:
