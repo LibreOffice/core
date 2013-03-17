@@ -128,7 +128,7 @@ void XclImpChangeTrack::ReadDateTime( DateTime& rDateTime )
     rDateTime.SetHour( nHour );
     rDateTime.SetMin( nMin );
     rDateTime.SetSec( nSec );
-    rDateTime.Set100Sec( 0 );
+    rDateTime.SetNanoSec( 0 );
 }
 
 sal_Bool XclImpChangeTrack::CheckRecord( sal_uInt16 nOpCode )

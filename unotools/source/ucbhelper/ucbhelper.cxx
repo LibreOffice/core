@@ -121,7 +121,7 @@ OUString getCasePreservingUrl(INetURLObject url) {
 DateTime convert(css::util::DateTime const & dt) {
     return DateTime(
         Date(dt.Day, dt.Month, dt.Year),
-        Time(dt.Hours, dt.Minutes, dt.Seconds, dt.HundredthSeconds));
+        Time(dt.Hours, dt.Minutes, dt.Seconds, dt.NanoSeconds));
 }
 
 }

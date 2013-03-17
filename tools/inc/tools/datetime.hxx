@@ -50,11 +50,11 @@ public:
     sal_Bool        IsBetween( const DateTime& rFrom,
                                const DateTime& rTo ) const;
 
-    sal_Bool        IsEqualIgnore100Sec( const DateTime& rDateTime ) const
+    sal_Bool        IsEqualIgnoreNanoSec( const DateTime& rDateTime ) const
                     {
                         if ( Date::operator!=( rDateTime ) )
                             return sal_False;
-                        return Time::IsEqualIgnore100Sec( rDateTime );
+                        return Time::IsEqualIgnoreNanoSec( rDateTime );
                     }
 
     sal_Bool        operator ==( const DateTime& rDateTime ) const

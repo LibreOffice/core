@@ -2645,7 +2645,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
     // truncate dates
     if(bIsDate)
     {
-        aDateTime.HundredthSeconds = 0;
+        aDateTime.NanoSeconds = 0;
         aDateTime.Seconds = 0;
         aDateTime.Minutes = 0;
         aDateTime.Hours = 0;

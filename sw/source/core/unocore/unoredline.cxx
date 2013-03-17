@@ -204,7 +204,7 @@ static util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
     aRetDT.Hours    = rDT.GetHour();
     aRetDT.Minutes = rDT.GetMin();
     aRetDT.Seconds = rDT.GetSec();
-    aRetDT.HundredthSeconds = rDT.Get100Sec();
+    aRetDT.NanoSeconds = rDT.GetNanoSec();
     return aRetDT;
 }
 

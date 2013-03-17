@@ -97,8 +97,8 @@ namespace comphelper { namespace log { namespace convert
     {
         char buffer[ 30 ];
         const size_t buffer_size = sizeof( buffer );
-        snprintf( buffer, buffer_size, "%02i:%02i:%02i.%02i",
-            (int)_rTime.Hours, (int)_rTime.Minutes, (int)_rTime.Seconds, (int)_rTime.HundredthSeconds );
+        snprintf( buffer, buffer_size, "%02i:%02i:%02i.%09i",
+            (int)_rTime.Hours, (int)_rTime.Minutes, (int)_rTime.Seconds, (int)_rTime.NanoSeconds );
         return OUString::createFromAscii( buffer );
     }
 
@@ -107,9 +107,9 @@ namespace comphelper { namespace log { namespace convert
     {
         char buffer[ 30 ];
         const size_t buffer_size = sizeof( buffer );
-        snprintf( buffer, buffer_size, "%04i-%02i-%02i %02i:%02i:%02i.%02i",
+        snprintf( buffer, buffer_size, "%04i-%02i-%02i %02i:%02i:%02i.%09i",
             (int)_rDateTime.Year, (int)_rDateTime.Month, (int)_rDateTime.Day,
-            (int)_rDateTime.Hours, (int)_rDateTime.Minutes, (int)_rDateTime.Seconds, (int)_rDateTime.HundredthSeconds );
+            (int)_rDateTime.Hours, (int)_rDateTime.Minutes, (int)_rDateTime.Seconds, (int)_rDateTime.NanoSeconds );
         return OUString::createFromAscii( buffer );
     }
 

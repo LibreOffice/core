@@ -925,7 +925,7 @@ class ScChangeTrack : public utl::ConfigurationListener
     bool bInDeleteTop:1;
     bool bInPasteCut:1;
     bool bUseFixDateTime:1;
-    bool bTime100thSeconds:1;
+    bool bTimeNanoSeconds:1;
 
     // not implemented, prevent usage
     ScChangeTrack( const ScChangeTrack& );
@@ -1235,9 +1235,9 @@ public:
 
                                 // If time stamps of actions of this
                                 // ChangeTrack and a second one are to be
-                                // compared including 100th seconds.
-    void SetTime100thSeconds( bool bVal ) { bTime100thSeconds = bVal; }
-    bool IsTime100thSeconds() const { return bTime100thSeconds; }
+                                // compared including nanoseconds.
+    void SetTimeNanoSeconds( bool bVal ) { bTimeNanoSeconds = bVal; }
+    bool IsTimeNanoSeconds() const { return bTimeNanoSeconds; }
 
     void AppendCloned( ScChangeAction* pAppend );
     SC_DLLPUBLIC ScChangeTrack* Clone( ScDocument* pDocument ) const;

@@ -116,7 +116,7 @@ namespace comphelper
             if ( lhs.Seconds > rhs.Seconds )
                 return false;
 
-            if ( lhs.HundredthSeconds < rhs.HundredthSeconds )
+            if ( lhs.NanoSeconds < rhs.NanoSeconds )
                 return true;
             return false;
         }
@@ -166,7 +166,7 @@ namespace comphelper
             if ( lhs.Seconds > rhs.Seconds )
                 return false;
 
-            if ( lhs.HundredthSeconds < rhs.HundredthSeconds )
+            if ( lhs.NanoSeconds < rhs.NanoSeconds )
                 return true;
             return false;
         }

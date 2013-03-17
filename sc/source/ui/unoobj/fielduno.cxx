@@ -950,7 +950,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
                 else if (rName == SC_UNONAME_DATETIME)
                 {
                     maDateTime = rVal.get<util::DateTime>();
-                    Time aTime(maDateTime.Hours, maDateTime.Minutes, maDateTime.Seconds, maDateTime.HundredthSeconds);
+                    Time aTime(maDateTime.Hours, maDateTime.Minutes, maDateTime.Seconds, maDateTime.NanoSeconds);
                     p->SetFixTime(aTime);
                 }
                 else if (rName == SC_UNONAME_NUMFMT)
@@ -1012,7 +1012,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
                     maDateTime.Hours = 0;
                     maDateTime.Minutes = 0;
                     maDateTime.Seconds = 0;
-                    maDateTime.HundredthSeconds = 0;
+                    maDateTime.NanoSeconds = 0;
                     return uno::makeAny(maDateTime);
                 }
 
@@ -1056,7 +1056,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
                     maDateTime.Hours = aT.GetHour();
                     maDateTime.Minutes = aT.GetMin();
                     maDateTime.Seconds = aT.GetSec();
-                    maDateTime.HundredthSeconds = aT.Get100Sec();
+                    maDateTime.NanoSeconds = aT.GetNanoSec();
                     return uno::makeAny(maDateTime);
                 }
 

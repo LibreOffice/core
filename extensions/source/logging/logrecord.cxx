@@ -68,7 +68,7 @@ namespace logging
         aTimeStamp.Hours = aDateTime.Hours;
         aTimeStamp.Minutes = aDateTime.Minutes;
         aTimeStamp.Seconds = aDateTime.Seconds;
-        aTimeStamp.HundredthSeconds = ::sal::static_int_cast< sal_Int16 >( aDateTime.NanoSeconds / 10000000 );
+        aTimeStamp.NanoSeconds = aDateTime.NanoSeconds;
 
         return LogRecord(
             _rLoggerName,

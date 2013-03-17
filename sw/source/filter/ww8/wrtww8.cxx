@@ -284,15 +284,15 @@ static void WriteDop( WW8Export& rWrt )
     {
         ::util::DateTime uDT = xDocProps->getCreationDate();
         Date aD(uDT.Day, uDT.Month, uDT.Year);
-        Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
         rDop.dttmCreated = sw::ms::DateTime2DTTM(DateTime(aD,aT));
         uDT = xDocProps->getModificationDate();
         Date aD2(uDT.Day, uDT.Month, uDT.Year);
-        Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
         rDop.dttmRevised = sw::ms::DateTime2DTTM(DateTime(aD2,aT2));
         uDT = xDocProps->getPrintDate();
         Date aD3(uDT.Day, uDT.Month, uDT.Year);
-        Time aT3(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        Time aT3(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
         rDop.dttmLastPrint = sw::ms::DateTime2DTTM(DateTime(aD3,aT3));
     }
 

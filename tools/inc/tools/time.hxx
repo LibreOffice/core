@@ -33,7 +33,7 @@ class ResId;
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Time
 {
 private:
-    sal_Int32       nTime;
+    sal_Int64       nTime;
 
 public:
     enum TimeInitSystem
@@ -46,38 +46,54 @@ public:
     {
         EMPTY
     };
+    static const sal_Int64 hourPerDay = 24;
+    static const sal_Int64 minutePerHour = 60;
+    static const sal_Int64 secondPerMinute = 60;
+    static const sal_Int64 nanoSecPerSec = 1000000000;
+    static const sal_Int64 nanoSecPerMinute = nanoSecPerSec * secondPerMinute;
+    static const sal_Int64 nanoSecPerHour = nanoSecPerSec * secondPerMinute * minutePerHour;
+    static const sal_Int64 nanoSecPerDay = nanoSecPerSec * secondPerMinute * minutePerHour * hourPerDay;
+    static const sal_Int64 secondPerHour = secondPerMinute * minutePerHour;
+    static const sal_Int64 secondPerDay  = secondPerMinute * minutePerHour * hourPerDay;
+    static const sal_Int64 minutePerDay  = minutePerHour * hourPerDay;
+    static const sal_Int64 nanoPerMicro  = 1000;
+    static const sal_Int64 nanoPerMilli  = 1000000;
+    static const sal_Int64 nanoPerCenti  = 10000000;
 
                     Time( TimeInitEmpty )
                         { nTime = 0; }
                     Time( TimeInitSystem );
                     Time( const ResId & rResId );
-                    Time( sal_Int32 _nTime ) { Time::nTime = _nTime; }
+                    Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const Time& rTime );
                     Time( sal_uIntPtr nHour, sal_uIntPtr nMin,
-                          sal_uIntPtr nSec = 0, sal_uIntPtr n100Sec = 0 );
+                          sal_uIntPtr nSec = 0, sal_uIntPtr nNanoSec = 0 );
 
-    void            SetTime( sal_Int32 nNewTime ) { nTime = nNewTime; }
-    sal_Int32       GetTime() const { return nTime; }
+    void            SetTime( sal_Int64 nNewTime ) { nTime = nNewTime; }
+    sal_Int64       GetTime() const { return nTime; }
 
     void            SetHour( sal_uInt16 nNewHour );
     void            SetMin( sal_uInt16 nNewMin );
     void            SetSec( sal_uInt16 nNewSec );
-    void            Set100Sec( sal_uInt16 nNew100Sec );
+    void            SetNanoSec( sal_uInt32 nNewNanoSec );
     sal_uInt16      GetHour() const
-                    { sal_uIntPtr nTempTime = (nTime >= 0) ? nTime : nTime*-1;
-                      return (sal_uInt16)(nTempTime / 1000000); }
+                    { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
+                      return static_cast<sal_uInt16>(nTempTime / 10000000000000); }
     sal_uInt16      GetMin() const
-                    { sal_uIntPtr nTempTime = (nTime >= 0) ? nTime : nTime*-1;
-                      return (sal_uInt16)((nTempTime / 10000) % 100); }
+                    { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
+                      return static_cast<sal_uInt16>((nTempTime / 100000000000) % 100); }
     sal_uInt16      GetSec() const
-                    { sal_uIntPtr nTempTime = (nTime >= 0) ? nTime : nTime*-1;
-                      return (sal_uInt16)((nTempTime / 100) % 100); }
-    sal_uInt16      Get100Sec() const
-                    { sal_uIntPtr nTempTime = (nTime >= 0) ? nTime : nTime*-1;
-                      return (sal_uInt16)(nTempTime % 100); }
+                    { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
+                      return static_cast<sal_uInt16>((nTempTime / 1000000000) % 100); }
+    sal_uInt32      GetNanoSec() const
+                    { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
+                      return static_cast<sal_uInt32>( nTempTime % 1000000000); }
 
+    // TODO: consider removing GetMSFromTime and MakeTimeFromMS?
     sal_Int32       GetMSFromTime() const;
     void            MakeTimeFromMS( sal_Int32 nMS );
+    sal_Int64       GetNSFromTime() const;
+    void            MakeTimeFromNS( sal_Int64 nNS );
 
                     /// 12 hours == 0.5 days
     double          GetTimeInDays() const;
@@ -85,7 +101,7 @@ public:
     sal_Bool        IsBetween( const Time& rFrom, const Time& rTo ) const
                     { return ((nTime >= rFrom.nTime) && (nTime <= rTo.nTime)); }
 
-    sal_Bool        IsEqualIgnore100Sec( const Time& rTime ) const;
+    sal_Bool        IsEqualIgnoreNanoSec( const Time& rTime ) const;
 
     sal_Bool        operator ==( const Time& rTime ) const
                     { return (nTime == rTime.nTime); }
@@ -108,7 +124,7 @@ public:
 
     Time&           operator =( const Time& rTime );
     Time            operator -() const
-                        { return Time( nTime * -1 ); }
+                        { return Time( -nTime ); }
     Time&           operator +=( const Time& rTime );
     Time&           operator -=( const Time& rTime );
     TOOLS_DLLPUBLIC friend Time     operator +( const Time& rTime1, const Time& rTime2 );

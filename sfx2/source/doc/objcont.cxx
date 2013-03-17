@@ -100,8 +100,8 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
     if ( i_rLeft.Seconds != i_rRight.Seconds )
         return i_rLeft.Seconds > i_rRight.Seconds;
 
-    if ( i_rLeft.HundredthSeconds != i_rRight.HundredthSeconds )
-        return i_rLeft.HundredthSeconds > i_rRight.HundredthSeconds;
+    if ( i_rLeft.NanoSeconds != i_rRight.NanoSeconds )
+        return i_rLeft.NanoSeconds > i_rRight.NanoSeconds;
 
     return sal_False;
 }
@@ -202,7 +202,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
             // update ModificationAuthor, revision and editing time
             ::DateTime now( ::DateTime::SYSTEM );
             xDocProps->setModificationDate( util::DateTime(
-                now.Get100Sec(), now.GetSec(), now.GetMin(),
+                now.GetNanoSec(), now.GetSec(), now.GetMin(),
                 now.GetHour(), now.GetDay(), now.GetMonth(),
                 now.GetYear() ) );
             xDocProps->setModifiedBy( aUserName );
@@ -833,7 +833,7 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
 
                 ::DateTime now( ::DateTime::SYSTEM );
                 xDocProps->setTemplateDate( util::DateTime(
-                    now.Get100Sec(), now.GetSec(), now.GetMin(),
+                    now.GetNanoSec(), now.GetSec(), now.GetMin(),
                     now.GetHour(), now.GetDay(), now.GetMonth(),
                     now.GetYear() ) );
 

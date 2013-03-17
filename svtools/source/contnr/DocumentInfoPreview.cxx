@@ -150,7 +150,7 @@ void ODocumentInfoPreview::insertDateTime(
     DateTime aToolsDT(
         Date(value.Day, value.Month, value.Year),
         Time(
-            value.Hours, value.Minutes, value.Seconds, value.HundredthSeconds));
+            value.Hours, value.Minutes, value.Seconds, value.NanoSeconds));
     if (aToolsDT.IsValidAndGregorian()) {
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
         OUStringBuffer buf(rLocaleWrapper.getDate(aToolsDT));

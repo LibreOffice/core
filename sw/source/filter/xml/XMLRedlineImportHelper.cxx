@@ -723,7 +723,7 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     aDT.SetHour(    pRedlineInfo->aDateTime.Hours );
     aDT.SetMin(     pRedlineInfo->aDateTime.Minutes );
     aDT.SetSec(     pRedlineInfo->aDateTime.Seconds );
-    aDT.Set100Sec(  pRedlineInfo->aDateTime.HundredthSeconds );
+    aDT.SetNanoSec( pRedlineInfo->aDateTime.NanoSeconds );
 
     // 3) recursively convert next redline
     //    ( check presence and sanity of hierarchical redline info )

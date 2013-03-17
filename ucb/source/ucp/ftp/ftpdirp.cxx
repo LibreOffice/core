@@ -828,7 +828,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
 
         /*
          * Parse <minute> part and set entry time's minutes,
-         * seconds (0), and 1/100 seconds (0).
+         * seconds (0), and nanoseconds (0).
          */
         if (*p < '0' || *p > '5')
             return sal_False;
@@ -840,7 +840,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
         nMinute = 10 * nMinute + (*p++ - '0');
         rEntry.m_aDate.SetMin(nMinute);
         rEntry.m_aDate.SetSec(0);
-        rEntry.m_aDate.Set100Sec(0);
+        rEntry.m_aDate.SetNanoSec(0);
 
         // Skip <rest> part:
         if (*p && (*p != '\t' && *p != ' '))
@@ -1202,7 +1202,7 @@ sal_Bool FTPDirectoryParser::parseUNIX_isTime (
     rDateTime.SetHour (nHour);
     rDateTime.SetMin (nMin);
     rDateTime.SetSec (0);
-    rDateTime.Set100Sec (0);
+    rDateTime.SetNanoSec (0);
 
 //      Date aCurDate;
 //      if (rDateTime.GetMonth() > aCurDate.GetMonth())

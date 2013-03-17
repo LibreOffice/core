@@ -9,6 +9,7 @@
 
 #include "oox/ppt/comments.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <rtl/math.hxx>
 
 
 namespace oox { namespace ppt {
@@ -37,7 +38,28 @@ void Comment::setDateTime (OUString datetime)
     datetime = datetime.getToken(1,'T');
     aDateTime.Hours = datetime.getToken(0,':').toInt32();
     aDateTime.Minutes = datetime.getToken(1,':').toInt32();
-    aDateTime.HundredthSeconds = int(datetime.getToken(2,':').toDouble() + .5);
+    double seconds = datetime.getToken(2,':').toDouble();
+    aDateTime.Seconds = floor(seconds);
+    seconds -= aDateTime.Seconds;
+    aDateTime.NanoSeconds = ::rtl::math::round(seconds * 1000000000);
+    const int secondsOverFlow = (aDateTime.Seconds == 60) ? 61 : 60;
+    // normalise time part of aDateTime
+    if (aDateTime.NanoSeconds == 1000000000)
+    {
+        aDateTime.NanoSeconds = 0;
+        ++aDateTime.Seconds;
+    }
+    if (aDateTime.Seconds == secondsOverFlow)
+    {
+        aDateTime.Seconds = 0;
+        ++aDateTime.Minutes;
+    }
+    if (aDateTime.Minutes == 60)
+    {
+        aDateTime.Minutes = 0;
+        ++aDateTime.Hours;
+    }
+    // if overflow goes into date, I give up
 }
 
 OUString Comment::getAuthor ( const CommentAuthorList& list )

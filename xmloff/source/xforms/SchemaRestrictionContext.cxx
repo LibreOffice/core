@@ -215,7 +215,7 @@ Any xforms_time( const OUString& rValue )
         aTime.Hours = aDuration.Hours;
         aTime.Minutes = aDuration.Minutes;
         aTime.Seconds = aDuration.Seconds;
-        aTime.HundredthSeconds = aDuration.MilliSeconds / 10;
+        aTime.NanoSeconds = aDuration.NanoSeconds;
         aAny <<= aTime;
     }
     return aAny;

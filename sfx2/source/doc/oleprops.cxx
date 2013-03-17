@@ -52,7 +52,7 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
         && i_rLeft.Hours            == i_rRight.Hours
         && i_rLeft.Minutes          == i_rRight.Minutes
         && i_rLeft.Seconds          == i_rRight.Seconds
-        && i_rLeft.HundredthSeconds == i_rRight.HundredthSeconds;
+        && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds;
 }
 
 static
@@ -586,7 +586,7 @@ void SfxOleFileTimeProperty::ImplLoad( SvStream& rStrm )
     maDateTime.Hours   = aDateTime.GetHour();
     maDateTime.Minutes = aDateTime.GetMin();
     maDateTime.Seconds = aDateTime.GetSec();
-    maDateTime.HundredthSeconds = aDateTime.Get100Sec();
+    maDateTime.NanoSeconds = aDateTime.GetNanoSec();
 }
 
 void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
@@ -600,7 +600,7 @@ void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
                 static_cast< sal_uIntPtr >( maDateTime.Hours ),
                 static_cast< sal_uIntPtr >( maDateTime.Minutes ),
                 static_cast< sal_uIntPtr >( maDateTime.Seconds ),
-                static_cast< sal_uIntPtr >( maDateTime.HundredthSeconds ) ) );
+                static_cast< sal_uIntPtr >( maDateTime.NanoSeconds ) ) );
     // invalid time stamp is not converted to UTC
     // heuristic to detect editing durations (which we assume to be < 1 year):
     // check only the year, not the entire date

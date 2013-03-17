@@ -1487,7 +1487,7 @@ void SwWW8ImplReader::ImportDop()
     {
         DateTime aLastPrinted(
             msfilter::util::DTTM2DateTime(pWDop->dttmLastPrint));
-       ::util::DateTime uDT(aLastPrinted.Get100Sec(),
+       ::util::DateTime uDT(aLastPrinted.GetNanoSec(),
             aLastPrinted.GetSec(), aLastPrinted.GetMin(),
             aLastPrinted.GetHour(), aLastPrinted.GetDay(),
             aLastPrinted.GetMonth(), aLastPrinted.GetYear());

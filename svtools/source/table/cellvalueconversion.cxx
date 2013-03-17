@@ -239,7 +239,7 @@ namespace svt
 
             // time part
             returnValue += lcl_convertTimeToDays(
-                aDateTimeValue.Hours, aDateTimeValue.Minutes, aDateTimeValue.Seconds, aDateTimeValue.HundredthSeconds );
+                aDateTimeValue.Hours, aDateTimeValue.Minutes, aDateTimeValue.Seconds, aDateTimeValue.NanoSeconds );
 
             // done
             return returnValue;
@@ -300,7 +300,7 @@ namespace svt
 
             // convert
             returnValue += lcl_convertTimeToDays(
-                aTimeValue.Hours, aTimeValue.Minutes, aTimeValue.Seconds, aTimeValue.HundredthSeconds );
+                aTimeValue.Hours, aTimeValue.Minutes, aTimeValue.Seconds, aTimeValue.NanoSeconds );
 
             // done
             return returnValue;

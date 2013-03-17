@@ -428,13 +428,13 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
 void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, String& rUser, DateTime& aDateTime)
 {
     Date aDate(aInfo.aDateTime.Day, aInfo.aDateTime.Month, aInfo.aDateTime.Year);
-    Time aTime(aInfo.aDateTime.Hours, aInfo.aDateTime.Minutes, aInfo.aDateTime.Seconds, aInfo.aDateTime.HundredthSeconds);
+    Time aTime(aInfo.aDateTime.Hours, aInfo.aDateTime.Minutes, aInfo.aDateTime.Seconds, aInfo.aDateTime.NanoSeconds);
     aDateTime.SetDate( aDate.GetDate() );
     aDateTime.SetTime( aTime.GetTime() );
 
-    // old files didn't store 100th seconds, enable again
-    if ( aInfo.aDateTime.HundredthSeconds )
-        pTrack->SetTime100thSeconds( true );
+    // old files didn't store nanoseconds, enable again
+    if ( aInfo.aDateTime.NanoSeconds )
+        pTrack->SetTimeNanoSeconds( true );
 
     const std::set<OUString>& rUsers = pTrack->GetUserCollection();
     std::set<OUString>::const_iterator it = rUsers.find(aInfo.sUser);
@@ -795,8 +795,8 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
     if (pDoc)
     {
         pTrack = new ScChangeTrack(pDoc, aUsers);
-        // old files didn't store 100th seconds, disable until encountered
-        pTrack->SetTime100thSeconds( false );
+        // old files didn't store nanoseconds, disable until encountered
+        pTrack->SetTimeNanoSeconds( false );
 
         ScMyActions::iterator aItr(aActions.begin());
         ScMyActions::iterator aEndItr(aActions.end());
