@@ -86,13 +86,20 @@ public:
     virtual void tearDown();
 
     void testNumberFormat();
+    void testFdo60915();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
+    CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference< uno::XComponentContext > m_xContext;
+    void checkPreviewString(SvNumberFormatter& aFormatter,
+                            const OUString& sCode,
+                            double fPreviewNumber,
+                            LanguageType eLang,
+                            OUString& sExpected);
 };
 
 Test::Test()
@@ -297,6 +304,60 @@ void Test::testNumberFormat()
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[~buddhist]D MMMM YYYY'", false);
+    }
+}
+
+void Test::checkPreviewString(SvNumberFormatter& aFormatter,
+                              const OUString& sCode,
+                              double fPreviewNumber,
+                              LanguageType eLang,
+                              OUString& sExpected)
+{
+    OUString sStr;
+    Color* pColor = 0;
+    Color** ppColor = &pColor;
+    if (!aFormatter.GetPreviewString(sCode, fPreviewNumber, sStr, ppColor, eLang))
+        CPPUNIT_FAIL("GetPreviewString() failed");
+    CPPUNIT_ASSERT_EQUAL(sExpected, sStr);
+}
+
+void Test::testFdo60915()
+{
+    LanguageType eLang = LANGUAGE_THAI;
+    OUString sCode, sExpected;
+    double fPreviewNumber = 1234; // equals 18/05/1903 (2446 B.E.)
+    SvNumberFormatter aFormatter(m_xContext, eLang);
+    {
+        sCode = "[~buddhist]D/MM/YYYY";
+        sExpected = "18/05/2446";
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    }
+    {
+        sCode = "[~buddhist]D/MM/YY";
+        sExpected = "18/05/46";
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    }
+    {
+        sCode = "[NatNum1][$-41E][~buddhist]D/MM/YYYY";
+        sal_Unicode sTemp[] =
+        {
+            0x0E51, 0x0E58, 0x002F,
+            0x0E50, 0x0E55, 0x002F,
+            0x0E52, 0x0E54, 0x0E54, 0x0E56
+        };
+        sExpected = OUString(sTemp, SAL_N_ELEMENTS(sTemp));
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    }
+    {
+        sCode = "[NatNum1][$-41E][~buddhist]D/MM/YY";
+        sal_Unicode sTemp[] =
+        {
+            0x0E51, 0x0E58, 0x002F,
+            0x0E50, 0x0E55, 0x002F,
+            0x0E54, 0x0E56
+        };
+        sExpected = OUString(sTemp, SAL_N_ELEMENTS(sTemp));
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
     }
 }
 
