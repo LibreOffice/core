@@ -163,7 +163,7 @@ bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
                               Time( aValue.Hours,
                                       aValue.Minutes,
                                       aValue.Seconds,
-                                      aValue.HundredthSeconds ) );
+                                      aValue.NanoSeconds ) );
         return true;
     }
 
@@ -177,7 +177,7 @@ bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
-    com::sun::star::util::DateTime aValue( aDateTime.Get100Sec(),
+    com::sun::star::util::DateTime aValue( aDateTime.GetNanoSec(),
                                            aDateTime.GetSec(),
                                               aDateTime.GetMin(),
                                            aDateTime.GetHour(),

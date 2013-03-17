@@ -110,9 +110,9 @@ void ScInterpreter::ScGetActTime()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScGetActTime" );
     nFuncFmtType = NUMBERFORMAT_DATETIME;
     Date aActDate( Date::SYSTEM );
-    long nDiff = aActDate - *(pFormatter->GetNullDate());
+    long nDiff = aActDate - *(pFormatter->GetNullDate());x
     Time aActTime( Time::SYSTEM );
-    double nTime = ((double)aActTime.Get100Sec() / 100 +
+    double nTime = ((double)aActTime.GetNanoSec() / 1000000000.0 +
                     (double)(aActTime.GetSec()        +
                             (aActTime.GetMin()  * 60) +
                             (aActTime.GetHour() * 3600))) / D_TIMEFACTOR;

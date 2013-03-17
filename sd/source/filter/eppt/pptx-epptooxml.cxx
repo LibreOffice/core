@@ -1333,7 +1333,9 @@ bool PowerPointExport::WriteComments( sal_uInt32 nPageNum )
                 sal_Int32 nId = GetAuthorIdAndLastIndex ( xAnnotation->getAuthor(), nLastIndex );
                 char cDateTime[32];
 
-                snprintf(cDateTime, 31, "%02d-%02d-%02dT%02d:%02d:%02d.%03d", aDateTime.Year, aDateTime.Month, aDateTime.Day, aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds);
+                // FIXME: I assume that here precision above millisecond is not desirable,
+                //        possibly forbidden by the standard?
+                snprintf(cDateTime, 31, "%02d-%02d-%02dT%02d:%02d:%02d.%03d", aDateTime.Year, aDateTime.Month, aDateTime.Day, aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, static_cast<int>(round(static_cast<double>(aDateTime.NanoSeconds)/1000000.0));
 
                 pFS->startElementNS( XML_p, XML_cm,
                                      XML_authorId, I32S( nId ),

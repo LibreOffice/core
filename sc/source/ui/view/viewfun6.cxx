@@ -255,7 +255,7 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     double fDate = aActDate - *pFormatter->GetNullDate();
     Time aActTime( Time::SYSTEM );
     double fTime =
-        aActTime.Get100Sec() / 100.0 + aActTime.GetSec() +
+        aActTime.GetNanoSec() / 1000000000.0 + aActTime.GetSec() +
         (aActTime.GetMin() * 60.0) + (aActTime.GetHour() * 3600.0);
     fTime /= D_TIMEFACTOR;
     pUndoMgr->EnterListAction(rUndoStr, rUndoStr);

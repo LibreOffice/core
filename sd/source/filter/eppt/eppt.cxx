@@ -1125,7 +1125,7 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
                 if ( !sInitials.isEmpty() )
                     PPTWriter::WriteCString( rBinaryTagData10Atom, sInitials, 2 );
 
-                sal_Int16 nMilliSeconds = aDateTime.HundredthSeconds * 10;
+                sal_Int16 nMilliSeconds = static_cast<sal_Int16>(round(static_cast<double>(aDateTime.NanoSeconds) / 1000000000.0));
                 EscherExAtom aCommentAtom10( rBinaryTagData10Atom, EPP_CommentAtom10 );
                 rBinaryTagData10Atom << nIndex++
                                      << aDateTime.Year
