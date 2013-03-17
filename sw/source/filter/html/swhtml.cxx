@@ -148,15 +148,14 @@ HTMLReader::HTMLReader()
 
 String HTMLReader::GetTemplateName() const
 {
-    String sTemplate(rtl::OUString("html"));
+    String sTemplate(rtl::OUString("internal"));
+    sTemplate += INET_PATH_TOKEN;
+    sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("html") );
     String sTemplateWithoutExt( sTemplate );
     // first search for OpenDocument Writer/Web template
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".oth") );
 
-    //Added path for the common HTML template
     SvtPathOptions aPathOpt;
-    const String sCommonTemplatePath("share/template/common/internal");
-    aPathOpt.SetTemplatePath(sCommonTemplatePath);
     // OpenDocument Writer/Web template (extension .oth)
     sal_Bool bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
