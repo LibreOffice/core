@@ -746,14 +746,14 @@ bool operator==(const Date& _rLH,const Date& _rRH)
 
 bool operator==(const Time& _rLH,const Time& _rRH)
 {
-    return _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.HundredthSeconds == _rRH.HundredthSeconds;
+    return _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.NanoSeconds == _rRH.NanoSeconds;
 }
 // -------------------------------------------------------------------------
 
 bool operator==(const DateTime& _rLH,const DateTime& _rRH)
 {
     return _rLH.Day == _rRH.Day && _rLH.Month == _rRH.Month && _rLH.Year == _rRH.Year &&
-        _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.HundredthSeconds == _rRH.HundredthSeconds;
+        _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.NanoSeconds == _rRH.NanoSeconds;
 }
 // -------------------------------------------------------------------------
 
@@ -2020,7 +2020,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::TIMESTAMP:
                 {
                     ::com::sun::star::util::DateTime* pDateTime = static_cast< ::com::sun::star::util::DateTime*>(m_aValue.m_pValue);
-                    aValue.HundredthSeconds = pDateTime->HundredthSeconds;
+                    aValue.NanoSeconds      = pDateTime->NanoSeconds;
                     aValue.Seconds          = pDateTime->Seconds;
                     aValue.Minutes          = pDateTime->Minutes;
                     aValue.Hours            = pDateTime->Hours;
@@ -2073,7 +2073,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::TIME:
                 {
                     ::com::sun::star::util::Time* pTime = static_cast< ::com::sun::star::util::Time*>(m_aValue.m_pValue);
-                    aValue.HundredthSeconds = pTime->HundredthSeconds;
+                    aValue.NanoSeconds      = pTime->NanoSeconds;
                     aValue.Seconds          = pTime->Seconds;
                     aValue.Minutes          = pTime->Minutes;
                     aValue.Hours            = pTime->Hours;

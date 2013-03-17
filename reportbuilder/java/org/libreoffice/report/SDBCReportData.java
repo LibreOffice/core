@@ -264,7 +264,14 @@ public class SDBCReportData implements DataSource
             str.append(' ');
             str.append(getTimeString(unoTs.Hours, unoTs.Minutes, unoTs.Seconds));
             str.append('.');
-            str.append(unoTs.HundredthSeconds);
+            {
+                OSL_ENSURE(unoTs.NanoSeconds < 1000000000,"NanoSeconds cannot be more than 999 999 999");
+                std::ostringstream ostr;
+                ostr.fill('0');
+                ostr.width('9');
+                ostr << unoTs.NanoSeconds;
+                str.append(ostr.str());
+            }
             ts = java.sql.Timestamp.valueOf(str.toString());
         }
         else

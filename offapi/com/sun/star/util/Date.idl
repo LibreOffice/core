@@ -40,7 +40,7 @@ published struct Date
 
     /** contains the year.
      */
-    unsigned short Year;
+    short Year;
 
 };
 

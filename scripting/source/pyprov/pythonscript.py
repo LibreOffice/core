@@ -226,7 +226,7 @@ def hasChanged( oldDate, newDate ):
            newDate.Hours > oldDate.Hours or \
            newDate.Minutes > oldDate.Minutes or \
            newDate.Seconds > oldDate.Seconds or \
-           newDate.HundredthSeconds > oldDate.HundredthSeconds
+           newDate.NanoSeconds > oldDate.NanoSeconds
 
 def ensureSourceState( code ):
     if code.endswith(b"\n"):
