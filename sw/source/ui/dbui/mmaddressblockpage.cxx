@@ -905,14 +905,11 @@ void SwCustomizeAddressBlockDialog::MoveFocus( Window* pMember, bool bNext )
     else
     {
         ::std::vector< Window* >::iterator aSearch = aMemberIter;
-        if(aSearch == aControls.begin())
-            aSearch = aControls.end();
         while( true )
         {
             if(aSearch == aControls.begin())
                 aSearch = aControls.end();
-            else
-                --aSearch;
+            --aSearch;
             if( (*aSearch)->IsEnabled() )
             {
                 (*aSearch)->GrabFocus();
