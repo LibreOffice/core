@@ -117,7 +117,7 @@ XMultiPropertySet
      *  initialization of the inheriting class (i.e. within the contructor)
      *  @param name The property's name (Property.Name).
      *  @param handle The property's handle (Property.Handle).
-     *  @param Type The property's type (Property.Type).
+     *  @param type The property's type (Property.Type).
      *  @param attributes The property's attributes (Property.Attributes).
      *  @param id Identifies the property's storage.
      */
@@ -135,8 +135,7 @@ XMultiPropertySet
      *  Registration has to occur during
      *  initialization of the inheriting class (i.e. within the contructor).
      *  @param name The property's name (Property.Name).
-     *  @param handle The property's handle (Property.Handle).
-     *  @param Type The property's type (Property.Type).
+     *  @param type The property's type (Property.Type).
      *  @param attributes The property's attributes (Property.Attributes).
      *  @param id Identifies the property's storage.
      */
@@ -788,7 +787,7 @@ XMultiPropertySet
      *  If a property has the READONLY attribute set, and one of the setter methods, such as setPropertyValue, has been
      *  called, then this method is not going to be called.
      *  @param property the property for which the new value is set
-     *  @param value the new value for the property.
+     *  @param newVal the new value for the property.
      *  @throws com.sun.star.lang.WrappedTargetException An exception, which has to be made known to the caller,
      *  occurred during the setting of the value.
      */

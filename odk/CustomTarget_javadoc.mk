@@ -25,11 +25,12 @@ $(odk_WORKDIR)/docs/java/ref/index.html: $(call gb_Jar_get_outdir_target,ridl)
 	$(JAVADOC) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
 		-header "$(PRODUCTNAME) $(PRODUCTVERSION) SDK Java API Reference"\
+		-tag attention:a:"Attention:" \
 		-d $(dir $@) \
 		-sourcepath "$(SRCDIR)/ridljar/source/unoloader$(gb_CLASSPATHSEP)$(SRCDIR)/ridljar$(gb_CLASSPATHSEP)$(SRCDIR)/jurt$(gb_CLASSPATHSEP)$(SRCDIR)/javaunohelper" \
 		-classpath $(OUTDIR)/bin/ridl.jar \
-		-linkoffline ../../common/reg ./uno \
-		-linkoffline http://java.sun.com/j2se/1.5/docs/api ./java \
+		-linkoffline ../../common/reg $(SRCDIR)/odk/pack/gendocu/uno \
+		-linkoffline http://java.sun.com/j2se/1.5/docs/api $(SRCDIR)/odk/pack/gendocu/java \
 		$(odk_JAVAPACKAGES) \
 		$(if $(JAVADOCISGJDOC),,-notimestamp) \
 		> $(odk_WORKDIR)/javadoc_log.txt
