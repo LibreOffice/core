@@ -503,7 +503,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         rMyProp.Type = getCppuType( static_cast< const sal_Bool * >( 0 ) );
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
 
-        if( nFetchSize != -1 )
+        if( nFetchDirection != -1 )
             m_nFetchDirectionPropertyHandle = (*pOrigProps)[nFetchDirection].Handle;
         else
             m_nFetchDirectionPropertyHandle = impl_getRemainedHandle();
