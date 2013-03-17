@@ -85,11 +85,13 @@ namespace
         unoTime.Minutes = boostTime.time_of_day().minutes();
         unoTime.Seconds = boostTime.time_of_day().seconds();
 
-        long total_milli = boostTime.time_of_day().total_milliseconds( );
-        long milli = total_milli - boostTime.time_of_day().total_seconds( );
-        long hundredthSeconds = milli / 10;
+        // TODO FIXME maybe we should compile with BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
+        //            to actually get nanosecond precision in boostTime?
+        // use this way rather than total_nanos to avoid overflows with 32-bit long
+        const long ticks = boostTime.time_of_day().fractional_seconds();
+        long nanoSeconds = ticks * ( 1000000000 / boost::posix_time::time_duration::ticks_per_second());
 
-        unoTime.HundredthSeconds = hundredthSeconds;
+        unoTime.NanoSeconds = nanoSeconds;
 
         return unoTime;
     }

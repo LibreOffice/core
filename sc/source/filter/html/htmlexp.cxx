@@ -169,7 +169,7 @@ static void lcl_AddStamp( String& rStr, const String& rName,
 {
     Date aD(rDateTime.Day, rDateTime.Month, rDateTime.Year);
     Time aT(rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds,
-            rDateTime.HundredthSeconds);
+            rDateTime.NanoSeconds);
     DateTime aDateTime(aD,aT);
 
     String          aStrDate    = rLoc.getDate( aDateTime );

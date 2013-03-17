@@ -181,8 +181,8 @@ DateTime& DateTime::operator +=( double fTimeInDays )
     if ( fFrac )
     {
         Time aTime(0);  // default ctor calls system time, we don't need that
-        fFrac *= 24UL * 60 * 60 * 1000;     // time expressed in milliseconds
-        aTime.MakeTimeFromMS( long(fFrac) );    // method handles negative ms
+        fFrac *= ::Time::nanoSecPerDay;   // time expressed in nanoseconds
+        aTime.MakeTimeFromNS( static_cast<sal_Int64>(fFrac) );    // method handles negative ns
         operator+=( aTime );
     }
     return *this;
@@ -198,11 +198,11 @@ DateTime operator +( const DateTime& rDateTime, double fTimeInDays )
 double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
 {
     long nDays = (const Date&) rDateTime1 - (const Date&) rDateTime2;
-    long nTime = rDateTime1.GetMSFromTime() - rDateTime2.GetMSFromTime();
+    sal_Int64 nTime = rDateTime1.GetNSFromTime() - rDateTime2.GetNSFromTime();
     if ( nTime )
     {
         double fTime = double(nTime);
-        fTime /= 24UL * 60 * 60 * 1000; // convert from milliseconds to fraction
+        fTime /= ::Time::nanoSecPerDay; // convert from nanoseconds to fraction
         if ( nDays < 0 && fTime > 0.0 )
             fTime = 1.0 - fTime;
         return double(nDays) + fTime;
@@ -223,10 +223,7 @@ void DateTime::GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper )
 
     sal_Int64 aTime =
         a100nPerDay * nDays +
-        a100nPerSecond * (
-                sal_Int64( GetSec() ) +
-                60 * sal_Int64( GetMin() ) +
-                60 * 60 * sal_Int64( GetHour() ) );
+        GetNSFromTime()/100;
 
     rLower = sal_uInt32( aTime % SAL_CONST_UINT64( 0x100000000 ) );
     rUpper = sal_uInt32( aTime / SAL_CONST_UINT64( 0x100000000 ) );
@@ -263,8 +260,9 @@ DateTime DateTime::CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const
         (sal_uInt16)( nDays + 1 ), nMonths,
         sal::static_int_cast< sal_uInt16 >(nYears + 1601) );
     Time _aTime( sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
-            sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 ) ) % sal_Int64( 60 ) ),
-            sal_uIntPtr( ( aTime / ( a100nPerSecond ) ) % sal_Int64( 60 ) ) );
+                 sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 ) )      % sal_Int64( 60 ) ),
+                 sal_uIntPtr( ( aTime / ( a100nPerSecond ) )           % sal_Int64( 60 ) ),
+                 (aTime % a100nPerSecond) * 100 );
 
     return DateTime( _aDate, _aTime );
 }

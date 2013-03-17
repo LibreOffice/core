@@ -302,7 +302,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
         {
             if( FileTimeToSystemTime( &localFileTime, &explTime ) ) {
                 //Convert the time to readable local time
-                dateTime.HundredthSeconds = explTime.wMilliseconds / 100 ;
+                dateTime.NanoSeconds = explTime.wMilliseconds * 1000000 ;
                 dateTime.Seconds = explTime.wSecond ;
                 dateTime.Minutes = explTime.wMinute ;
                 dateTime.Hours = explTime.wHour ;
@@ -328,7 +328,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
         {
             if( FileTimeToSystemTime( &localFileTime, &explTime ) ) {
                 //Convert the time to readable local time
-                dateTime.HundredthSeconds = explTime.wMilliseconds / 100 ;
+                dateTime.NanoSeconds = explTime.wMilliseconds * 1000000 ;
                 dateTime.Seconds = explTime.wSecond ;
                 dateTime.Minutes = explTime.wMinute ;
                 dateTime.Hours = explTime.wHour ;
