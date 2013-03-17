@@ -343,7 +343,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
     }
     else
     {
-        aMtrPosX.SetText( String() );
+        aMtrPosY.SetText( String() );
     }
 
     pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ANGLE );
