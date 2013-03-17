@@ -172,7 +172,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         // created
         ::util::DateTime uDT = i_xDocProps->getCreationDate();
         Date aD(uDT.Day, uDT.Month, uDT.Year);
-        Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
         String sOut = OUString::number(aD.GetDate());
         sOut += ';';
         sOut += OUString::number(aT.GetTime());
@@ -188,7 +188,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         // changed
         uDT = i_xDocProps->getModificationDate();
         Date aD2(uDT.Day, uDT.Month, uDT.Year);
-        Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
         sOut = OUString::number(aD2.GetDate());
         sOut += ';';
         sOut += OUString::number(aT2.GetTime());

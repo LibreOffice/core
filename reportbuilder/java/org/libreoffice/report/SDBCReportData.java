@@ -264,7 +264,7 @@ public class SDBCReportData implements DataSource
             str.append(' ');
             str.append(getTimeString(unoTs.Hours, unoTs.Minutes, unoTs.Seconds));
             str.append('.');
-            str.append(unoTs.HundredthSeconds);
+            str.append(String.format("%09d", unoTs.NanoSeconds));
             ts = java.sql.Timestamp.valueOf(str.toString());
         }
         else
