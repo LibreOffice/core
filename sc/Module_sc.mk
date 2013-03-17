@@ -10,6 +10,8 @@
 
 $(eval $(call gb_Module_Module,sc))
 
+ifeq ($(filter CALC,$(PARTIAL_BUILD)),)
+
 $(eval $(call gb_Module_add_targets,sc,\
 	AllLangResTarget_sc \
 	Library_sc \
@@ -71,5 +73,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_editfieldobj_header \
     CppunitTest_sc_modelobj \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:

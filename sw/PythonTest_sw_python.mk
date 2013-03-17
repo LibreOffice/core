@@ -19,7 +19,6 @@ $(eval $(call gb_PythonTest_use_components,sw_python,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    dbaccess/util/dba \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \

@@ -56,7 +56,9 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
 	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    dbaccess/util/dba \
+    $(if $(filter BASE,$(PARTIAL_BUILD)),, \
+        dbaccess/util/dba \
+    ) /
     fileaccess/source/fileacc \
     forms/util/frm \
     framework/util/fwk \

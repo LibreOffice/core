@@ -40,7 +40,9 @@ void Test::run()
 {
     MethodEntry<Test> aMethods[] = {
         {"n325936.doc", &Test::testN325936},
+#ifndef PARTIAL_BUILD
         {"fdo45724.odt", &Test::testFdo45724},
+#endif
         {"fdo46020.odt", &Test::testFdo46020},
         {"first-header-footer.doc", &Test::testFirstHeaderFooter},
         {"zoom.doc", &Test::testZoom},

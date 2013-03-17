@@ -22,6 +22,7 @@ $(eval $(call gb_Library_add_defs,cui,\
     $(if $(filter TRUE,$(ENABLE_KDE)),-DENABLE_KDE) \
     $(if $(filter TRUE,$(ENABLE_KDE4)),-DENABLE_KDE4) \
     $(if $(EXTRA_BUILDID),-DEXTRA_BUILDID=\""$(EXTRA_BUILDID)"\") \
+    $(if $(PARTIAL_BUILD),-DPARTIAL_BUILD=\""$(PARTIAL_BUILD)"\") \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,cui))

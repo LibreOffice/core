@@ -1274,10 +1274,14 @@ sub remove_Files_Without_Sourcedirectory
     $infoline = "\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    if ( $error_occurred )
+    # Only check if we are not in hackish mode ;-)
+    if (not defined $ENV{PARTIAL_BUILD})
     {
-        for ( my $i = 0; $i <= $#missingfiles; $i++ ) { print "$missingfiles[$i]"; }
-        installer::exiter::exit_program("ERROR: Missing files", "remove_Files_Without_Sourcedirectory");
+        if ( $error_occurred )
+        {
+            for ( my $i = 0; $i <= $#missingfiles; $i++ ) { print "$missingfiles[$i]"; }
+            installer::exiter::exit_program("ERROR: Missing files", "remove_Files_Without_Sourcedirectory");
+        }
     }
 
     return \@newfilesarray;

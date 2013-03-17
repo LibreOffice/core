@@ -15,6 +15,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_ww8export, \
     sw/qa/extras/ww8export/ww8export \
 ))
 
+$(eval $(call gb_CppunitTest_add_defs,sw_ww8export, \
+    $(if $(PARTIAL_BUILD),-DPARTIAL_BUILD=\""$(PARTIAL_BUILD)"\") \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,sw_ww8export, \
     comphelper \
     cppu \
@@ -52,7 +56,9 @@ $(eval $(call gb_CppunitTest_use_components,sw_ww8export,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    dbaccess/util/dba \
+    $(if $(filter BASE,$(PARTIAL_BUILD)),, \
+        dbaccess/util/dba \
+    ) \
     embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \

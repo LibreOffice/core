@@ -68,7 +68,9 @@ $(eval $(call gb_CppunitTest_use_ure,sw_layout_test))
 $(eval $(call gb_CppunitTest_use_components,sw_layout_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
-    dbaccess/util/dba \
+    $(if $(filter BASE,$(PARTIAL_BUILD)),, \
+        dbaccess/util/dba \
+    ) \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \

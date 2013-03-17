@@ -170,8 +170,15 @@ sub analyze_and_save_logfile
     # This is important, to get an error code "-1", if an error was found in the log file,
     # that did not break the packaging process
 
-    if ( ! $is_success) { installer::exiter::exit_program("ERROR: Found an error in the logfile. Packaging failed.", "analyze_and_save_logfile"); }
-
+    # Only check if we are not in hackish mode ;-)
+    if (not defined $ENV{PARTIAL_BUILD})
+    {
+        if ( ! $is_success) { installer::exiter::exit_program("ERROR: Found an error in the logfile. Packaging failed.", "analyze_and_save_logfile"); }
+    }
+    else
+    {
+        $is_success = 1;
+    }
     return ($is_success, $finalinstalldir);
 }
 
