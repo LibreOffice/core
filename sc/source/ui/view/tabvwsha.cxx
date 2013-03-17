@@ -482,7 +482,24 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage
 
     // Umrandungs-Items holen und in den Set packen:
     GetSelectionFrame( aLineOuter, aLineInner );
-    pOldSet->Put( aLineOuter );
+    //Fix border incorrect for RTL fdo#62399
+    if( pDoc->IsLayoutRTL( GetViewData()->GetTabNo() ) )
+    {
+        SvxBoxItem aNewFrame( aLineOuter );
+        if ( aLineInner.IsValid(VALID_LEFT) )
+            aNewFrame.SetLine( aLineOuter.GetLeft(), BOX_LINE_RIGHT );
+        if ( aLineInner.IsValid(VALID_RIGHT) )
+            aNewFrame.SetLine( aLineOuter.GetRight(), BOX_LINE_LEFT );
+        if ( aLineInner.IsValid(VALID_TOP) )
+            aNewFrame.SetLine( aLineOuter.GetTop(), BOX_LINE_TOP );
+        if ( aLineInner.IsValid(VALID_BOTTOM) )
+            aNewFrame.SetLine( aLineOuter.GetBottom() , BOX_LINE_BOTTOM );
+
+        pOldSet->Put( aNewFrame );
+    }
+    else
+        pOldSet->Put( aLineOuter );
+
     pOldSet->Put( aLineInner );
 
     // NumberFormat Value aus Value und Language erzeugen und eintueten
