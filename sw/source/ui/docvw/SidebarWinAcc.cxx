@@ -28,9 +28,7 @@
 
 namespace sw { namespace sidebarwindows {
 
-// =============================================================================
 // declaration and implementation of accessible context for <SidebarWinAccessible> instance
-// =============================================================================
 class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 {
     public:
@@ -94,9 +92,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         ::osl::Mutex maMutex;
 };
 
-// =============================================================================
 // implementaion of accessible for <SwSidebarWin> instance
-// =============================================================================
 SidebarWinAccessible::SidebarWinAccessible( SwSidebarWin& rSidebarWin,
                                             ViewShell& rViewShell,
                                             const SwSidebarItem& rSidebarItem )

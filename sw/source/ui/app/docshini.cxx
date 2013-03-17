@@ -94,13 +94,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-
-
-/*--------------------------------------------------------------------
-    Description: Load Document
- --------------------------------------------------------------------*/
-
-
+// Load Document
 sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::InitNew" );
@@ -335,11 +329,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Ctor with SfxCreateMode ?????
- --------------------------------------------------------------------*/
-
-
+// Ctor with SfxCreateMode ?????
 SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
     SfxObjectShell ( eMode ),
     pDoc(0),
@@ -354,11 +344,7 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
     Init_Impl();
 }
 
-/*--------------------------------------------------------------------
-    Description: Ctor / Dtor
- --------------------------------------------------------------------*/
-
-
+// Ctor / Dtor
 SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     SfxObjectShell ( i_nSfxCreationFlags ),
     pDoc(0),
@@ -373,11 +359,7 @@ SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     Init_Impl();
 }
 
-/*--------------------------------------------------------------------
-    Description: Ctor / Dtor
- --------------------------------------------------------------------*/
-
-
+// Ctor / Dtor
 SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     SfxObjectShell ( eMode ),
     pDoc(pD),
@@ -392,12 +374,8 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     Init_Impl();
 }
 
-/*--------------------------------------------------------------------
-    Description:    Dtor
- --------------------------------------------------------------------*/
-
-
- SwDocShell::~SwDocShell()
+// Dtor
+SwDocShell::~SwDocShell()
 {
     // disable chart related objects now because in ~SwDoc it may be to late for this
     if( pDoc )
@@ -431,11 +409,8 @@ void  SwDocShell::Init_Impl()
     // set map unit to twip
     SetMapUnit( MAP_TWIP );
 }
-/*--------------------------------------------------------------------
-    Description: AddLink
- --------------------------------------------------------------------*/
 
-
+// AddLink
 void SwDocShell::AddLink()
 {
     if( !pDoc )
@@ -457,11 +432,7 @@ void SwDocShell::AddLink()
     pDoc->SetOle2Link(LINK(this, SwDocShell, Ole2ModifiedHdl));
 }
 
-/*--------------------------------------------------------------------
-    Description:    create new FontList Change Printer
- --------------------------------------------------------------------*/
-
-
+// create new FontList Change Printer
 void SwDocShell::UpdateFontList()
 {
     if(!bInUpdateFontList)
@@ -478,11 +449,7 @@ void SwDocShell::UpdateFontList()
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: RemoveLink
- --------------------------------------------------------------------*/
-
-
+// RemoveLink
 void SwDocShell::RemoveLink()
 {
     // disconnect Uno-Object
@@ -517,11 +484,7 @@ void SwDocShell::ReactivateModel()
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
 }
 
-/*--------------------------------------------------------------------
-    Description: Load, Default-Format
- --------------------------------------------------------------------*/
-
-
+// Load, Default-Format
 sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Load" );
@@ -536,74 +499,72 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
 
         // Loading
         // for MD
-            OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
-            mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
-            if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
-            {
-                SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-                nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
-            }
+        OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
+        mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+        if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
+        {
+            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+            nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
+        }
 
         SwWait aWait( *this, sal_True );
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
         {
-
-        case SFX_CREATE_MODE_ORGANIZER:
-            {
-                if( ReadXML )
+            case SFX_CREATE_MODE_ORGANIZER:
                 {
-                    ReadXML->SetOrganizerMode( sal_True );
-                    SwReader aRdr( rMedium, aEmptyStr, pDoc );
-                    nErr = aRdr.Read( *ReadXML );
-                    ReadXML->SetOrganizerMode( sal_False );
-                }
-            }
-            break;
-
-        case SFX_CREATE_MODE_INTERNAL:
-        case SFX_CREATE_MODE_EMBEDDED:
-            {
-                // for MWERKS (Mac-Compiler): can't cast autonomously
-                SwTransferable::InitOle( this, *pDoc );
-            }
-            // suppress SfxProgress, when we are Embedded
-            SW_MOD()->SetEmbeddedLoadSave( sal_True );
-            // no break;
-
-        case SFX_CREATE_MODE_STANDARD:
-        case SFX_CREATE_MODE_PREVIEW:
-            {
-                Reader *pReader = ReadXML;
-                if( pReader )
-                {
-                    // set Doc's DocInfo at DocShell-Medium
-                    RTL_LOGFILE_CONTEXT_TRACE( aLog, "before ReadDocInfo" );
-                    SwReader aRdr( rMedium, aEmptyStr, pDoc );
-                    RTL_LOGFILE_CONTEXT_TRACE( aLog, "before Read" );
-                    nErr = aRdr.Read( *pReader );
-                    RTL_LOGFILE_CONTEXT_TRACE( aLog, "after Read" );
-
-                    // If a XML document is loaded, the global doc/web doc
-                    // flags have to be set, because they aren't loaded
-                    // by this formats.
-                    if( ISA( SwWebDocShell ) )
+                    if( ReadXML )
                     {
-                        if( !pDoc->get(IDocumentSettingAccess::HTML_MODE) )
-                            pDoc->set(IDocumentSettingAccess::HTML_MODE, true);
-                    }
-                    if( ISA( SwGlobalDocShell ) )
-                    {
-                        if( !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-                            pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
+                        ReadXML->SetOrganizerMode( sal_True );
+                        SwReader aRdr( rMedium, aEmptyStr, pDoc );
+                        nErr = aRdr.Read( *ReadXML );
+                        ReadXML->SetOrganizerMode( sal_False );
                     }
                 }
-            }
-            break;
+                break;
 
-        default:
-            OSL_ENSURE( !this, "Load: new CreateMode?" );
+            case SFX_CREATE_MODE_INTERNAL:
+            case SFX_CREATE_MODE_EMBEDDED:
+                {
+                    // for MWERKS (Mac-Compiler): can't cast autonomously
+                    SwTransferable::InitOle( this, *pDoc );
+                }
+                // suppress SfxProgress, when we are Embedded
+                SW_MOD()->SetEmbeddedLoadSave( sal_True );
+                // no break;
 
+            case SFX_CREATE_MODE_STANDARD:
+            case SFX_CREATE_MODE_PREVIEW:
+                {
+                    Reader *pReader = ReadXML;
+                    if( pReader )
+                    {
+                        // set Doc's DocInfo at DocShell-Medium
+                        RTL_LOGFILE_CONTEXT_TRACE( aLog, "before ReadDocInfo" );
+                        SwReader aRdr( rMedium, aEmptyStr, pDoc );
+                        RTL_LOGFILE_CONTEXT_TRACE( aLog, "before Read" );
+                        nErr = aRdr.Read( *pReader );
+                        RTL_LOGFILE_CONTEXT_TRACE( aLog, "after Read" );
+
+                        // If a XML document is loaded, the global doc/web doc
+                        // flags have to be set, because they aren't loaded
+                        // by this formats.
+                        if( ISA( SwWebDocShell ) )
+                        {
+                            if( !pDoc->get(IDocumentSettingAccess::HTML_MODE) )
+                                pDoc->set(IDocumentSettingAccess::HTML_MODE, true);
+                        }
+                        if( ISA( SwGlobalDocShell ) )
+                        {
+                            if( !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+                                pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
+                        }
+                    }
+                }
+                break;
+
+            default:
+                OSL_ENSURE( !this, "Load: new CreateMode?" );
         }
 
         UpdateFontList();

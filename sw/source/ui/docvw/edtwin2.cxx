@@ -69,9 +69,6 @@
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 
-/*--------------------------------------------------------------------
-    Description:    KeyEvents
- --------------------------------------------------------------------*/
 static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, sal_Bool bBalloon )
 {
     sal_uInt16 nResId = 0;
@@ -528,6 +525,5 @@ void  SwEditWin::Paint(const Rectangle& rRect)
     if( bPaintShadowCrsr )
         m_pShadCrsr->Paint();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

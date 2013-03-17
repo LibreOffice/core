@@ -123,14 +123,9 @@ SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 
 TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
 
-//-------------------------------------------------------------------------
 SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter"  )
 
-/*--------------------------------------------------------------------
-    Description: Prepare loading
- --------------------------------------------------------------------*/
-
-
+// Prepare loading
 Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                                     SwCrsrShell *pCrsrShell,
                                     SwPaM* pPaM )
@@ -219,10 +214,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     return pRead;
 }
 
-/*--------------------------------------------------------------------
-    Description: Loading
- --------------------------------------------------------------------*/
-
+// Loading
 sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::ConvertFrom" );
@@ -279,11 +271,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     return bOk;
 }
 
-/*--------------------------------------------------------------------
-    Description: Saving the Default-Format, Stg present
- --------------------------------------------------------------------*/
-
-
+// Saving the Default-Format, Stg present
 sal_Bool SwDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Save" );
@@ -372,11 +360,7 @@ sal_Bool SwDocShell::Save()
     return !IsError( nErr );
 }
 
-/*--------------------------------------------------------------------
-    Description: Save using the Defaultformat
- --------------------------------------------------------------------*/
-
-
+// Save using the Defaultformat
 sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveAs" );
@@ -504,9 +488,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
     return !IsError( nErr );
 }
 
-/*--------------------------------------------------------------------
-    Description: Save all Formats
- --------------------------------------------------------------------*/
+// Save all Formats
 static SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
 {
     // are we in SourceView?
@@ -748,16 +730,9 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     return !IsError( nErrno );
 }
 
-/*--------------------------------------------------------------------
-    Description:    Hands off
- --------------------------------------------------------------------*/
 
-
-/*--------------------------------------------------------------------
-    Description: ??? do not yet activate, must deliver TRUE
- --------------------------------------------------------------------*/
-
-
+// Hands off
+// do not yet activate, must deliver TRUE
 sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveCompleted" );
@@ -793,10 +768,7 @@ sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xS
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description: Draw()-Overload for OLE2 (Sfx)
- --------------------------------------------------------------------*/
-
+// Draw()-Overload for OLE2 (Sfx)
 void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
                                sal_uInt16 nAspect )
 {
@@ -1067,11 +1039,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:    OLE-Hdls
- --------------------------------------------------------------------*/
-
-
+// OLE-Hdls
 IMPL_LINK( SwDocShell, Ole2ModifiedHdl, void *, p )
 {
     // the Status is handed over from Doc (see doc.cxx)
@@ -1083,11 +1051,7 @@ IMPL_LINK( SwDocShell, Ole2ModifiedHdl, void *, p )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description:    return Pool here, because virtual
- --------------------------------------------------------------------*/
-
-
+// return Pool here, because virtual
 SfxStyleSheetBasePool*  SwDocShell::GetStyleSheetPool()
 {
     return mxBasePool.get();
@@ -1332,7 +1296,5 @@ bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
 
     return bRes;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

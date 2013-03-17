@@ -33,10 +33,9 @@
 
 namespace sw { namespace sidebarwindows {
 
-// =============================================================================
+
 // declaration and implementation of <SvxEditSource>
 // for <::accessibiliy::AccessibleTextHelper> instance
-// =============================================================================
 class SidebarTextEditSource : public SvxEditSource,
                               public SfxBroadcaster
 {
@@ -126,10 +125,7 @@ IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify*, pNotify)
     return 0;
 }
 
-
-// =============================================================================
 // declaration and implementation of accessible context for <SidebarTxtControl> instance
-// =============================================================================
 class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
 {
     public:
@@ -272,9 +268,7 @@ void SidebarTxtControlAccessibleContext::ProcessWindowEvent( const VclWindowEven
     VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
 }
 
-// =============================================================================
 // implementaion of accessible for <SidebarTxtControl> instance
-// =============================================================================
 SidebarTxtControlAccessible::SidebarTxtControlAccessible( SidebarTxtControl& rSidebarTxtControl )
     : VCLXWindow()
     , mrSidebarTxtControl( rSidebarTxtControl )

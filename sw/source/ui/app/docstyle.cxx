@@ -104,11 +104,8 @@ SwImplShellAction::~SwImplShellAction()
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:    find/create SwCharFormate
-                    possibly fill Style
- --------------------------------------------------------------------*/
-
+// find/create SwCharFormate
+// possibly fill Style
 static SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
                             const String& rName,
                             SwDocStyleSheet* pStyle = 0,
@@ -149,12 +146,8 @@ static SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
     return pFmt;
 }
 
-
-/*--------------------------------------------------------------------
-    Description:    find/create ParaFormats
-                    fill Style
- --------------------------------------------------------------------*/
-
+// find/create ParaFormats
+// fill Style
 static SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
                                 const String& rName,
                                 SwDocStyleSheet* pStyle = 0,
@@ -192,12 +185,7 @@ static SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
     return pColl;
 }
 
-
-/*--------------------------------------------------------------------
-    Description:    Border formats
- --------------------------------------------------------------------*/
-
-
+// Border formats
 static SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
                             const String& rName,
                             SwDocStyleSheet* pStyle = 0,
@@ -231,11 +219,7 @@ static SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
     return pFmt;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Page descriptors
- --------------------------------------------------------------------*/
-
-
+// Page descriptors
 static const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
                                     const String&    rName,
                                     SwDocStyleSheet* pStyle = 0,
@@ -344,12 +328,7 @@ bool FindPhyStyle( SwDoc& rDoc, const String& rName, SfxStyleFamily eFam )
     return false;
 }
 
-
-/*--------------------------------------------------------------------
-    Description:    Add Strings to the list of templates
- --------------------------------------------------------------------*/
-
-
+// Add Strings to the list of templates
 void SwPoolFmtList::Append( char cChar, const String& rStr )
 {
     String aStr = rtl::OUString(cChar);
@@ -360,21 +339,14 @@ void SwPoolFmtList::Append( char cChar, const String& rStr )
     push_back(aStr);
 }
 
-/*--------------------------------------------------------------------
-    Description:    Erase the list completely
- --------------------------------------------------------------------*/
-
-
+// Erase the list completely
 void SwPoolFmtList::Erase()
 {
     clear();
 }
 
-/*--------------------------------------------------------------------
-    Description:  UI-sided implementation of StyleSheets
-                  uses the Core-Engine
- --------------------------------------------------------------------*/
-
+// UI-sided implementation of StyleSheets
+// uses the Core-Engine
 SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
                                     const String&           rName,
                                     SwDocStyleSheetPool*    _rPool,
@@ -433,11 +405,7 @@ SwDocStyleSheet::SwDocStyleSheet( const SwDocStyleSheet& rOrg) :
 {
 }
 
-/*--------------------------------------------------------------------
-    Description:    Reset
- --------------------------------------------------------------------*/
-
-
+// Reset
 void  SwDocStyleSheet::Reset()
 {
     aName.Erase();
@@ -446,10 +414,7 @@ void  SwDocStyleSheet::Reset()
     SetPhysical(sal_False);
 }
 
-/*--------------------------------------------------------------------
-    Description:    virtual methods
- --------------------------------------------------------------------*/
-
+// virtual methods
 void SwDocStyleSheet::SetHidden( sal_Bool bValue )
 {
     bool bChg = false;
@@ -608,11 +573,7 @@ const String&  SwDocStyleSheet::GetParent() const
     return aParent;
 }
 
-/*--------------------------------------------------------------------
-   Description:     Follower
- --------------------------------------------------------------------*/
-
-
+// Follower
 const String&  SwDocStyleSheet::GetFollow() const
 {
     if( !bPhysical )
@@ -623,11 +584,7 @@ const String&  SwDocStyleSheet::GetFollow() const
     return aFollow;
 }
 
-/*--------------------------------------------------------------------
-    Description:    What Linkage is possible
- --------------------------------------------------------------------*/
-
-
+// What Linkage is possible
 bool  SwDocStyleSheet::HasFollowSupport() const
 {
     switch(nFamily)
@@ -643,11 +600,7 @@ bool  SwDocStyleSheet::HasFollowSupport() const
     return false;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Parent ?
- --------------------------------------------------------------------*/
-
-
+// Parent ?
 bool  SwDocStyleSheet::HasParentSupport() const
 {
     bool bRet = false;
@@ -675,9 +628,7 @@ bool  SwDocStyleSheet::HasClearParentSupport() const
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    determine textual description
- --------------------------------------------------------------------*/
+// determine textual description
 String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
 {
     IntlWrapper aIntlWrapper( SvtSysLocale().GetLanguageTag() );
@@ -849,11 +800,7 @@ String  SwDocStyleSheet::GetDescription()
     return GetDescription(SFX_MAPUNIT_CM);
 }
 
-/*--------------------------------------------------------------------
-    Description:    Set names
- --------------------------------------------------------------------*/
-
-
+// Set names
 bool  SwDocStyleSheet::SetName( const String& rStr)
 {
     if( !rStr.Len() )
@@ -974,11 +921,7 @@ bool  SwDocStyleSheet::SetName( const String& rStr)
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Description:    hierarchy of deduction
- --------------------------------------------------------------------*/
-
-
+// hierarchy of deduction
 bool   SwDocStyleSheet::SetParent( const String& rStr)
 {
     SwFmt* pFmt = 0, *pParent = 0;
@@ -1029,11 +972,7 @@ bool   SwDocStyleSheet::SetParent( const String& rStr)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Set Follower
- --------------------------------------------------------------------*/
-
-
+// Set Follower
 bool   SwDocStyleSheet::SetFollow( const String& rStr)
 {
     if( rStr.Len() && !SfxStyleSheetBase::SetFollow( rStr ))
@@ -1086,10 +1025,7 @@ bool   SwDocStyleSheet::SetFollow( const String& rStr)
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Description:    extract ItemSet to Name and Family, Mask
- --------------------------------------------------------------------*/
-
+// extract ItemSet to Name and Family, Mask
 SfxItemSet&   SwDocStyleSheet::GetItemSet()
 {
     if(!bPhysical)
@@ -1602,10 +1538,7 @@ static void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, 
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:    determine the format
- --------------------------------------------------------------------*/
-
+// determine the format
 sal_Bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
 {
     sal_Bool bRet = sal_False;
@@ -1791,11 +1724,7 @@ sal_Bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Create new format in Core
- --------------------------------------------------------------------*/
-
-
+// Create new format in Core
 void SwDocStyleSheet::Create()
 {
     switch(nFamily)
@@ -1914,11 +1843,7 @@ void SwDocStyleSheet::PresetNameAndFamily(const String& rName)
     aName.Erase( 0, 1 );
 }
 
-/*--------------------------------------------------------------------
-    Description:    Is the format physically present yet
- --------------------------------------------------------------------*/
-
-
+// Is the format physically present yet
 void SwDocStyleSheet::SetPhysical(sal_Bool bPhys)
 {
     bPhysical = bPhys;
@@ -2101,10 +2026,7 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:    methods for DocStyleSheetPool
- --------------------------------------------------------------------*/
-
+// methods for DocStyleSheetPool
 SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, sal_Bool bOrg )
 : SfxStyleSheetBasePool( rDocument.GetAttrPool() )
 , mxStyleSheet( new SwDocStyleSheet( rDocument, aEmptyStr, this, SFX_STYLE_FAMILY_CHAR, 0 ) )
@@ -2323,7 +2245,6 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
     if( bBroadcast )
         Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *pStyle ) );
 }
-
 
 
 bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
@@ -2563,7 +2484,6 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         }
 
         // PoolFormate
-        //
         if( bAll )
         {
             if( !rDoc.get(IDocumentSettingAccess::HTML_MODE) )
@@ -2778,7 +2698,6 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         }
 
         // PoolFormate
-        //
         if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetFrmFmtUINameArray(),
                                     bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, cFRAME);
@@ -2965,6 +2884,5 @@ void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

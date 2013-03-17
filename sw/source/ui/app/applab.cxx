@@ -401,5 +401,4 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     delete pNewDBMgr;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

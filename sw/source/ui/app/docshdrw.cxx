@@ -31,11 +31,7 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Description: Load Document
- --------------------------------------------------------------------*/
-
-
+// Load Document
 void  SwDocShell::InitDraw()
 {
     SdrModel *pDrDoc = pDoc->GetDrawModel();
@@ -55,7 +51,5 @@ void  SwDocShell::InitDraw()
     else
         PutItem( SvxColorListItem( XColorList::GetStdColorList(), SID_COLOR_TABLE ));
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

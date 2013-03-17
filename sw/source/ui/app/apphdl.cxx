@@ -101,14 +101,11 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Description: Slotmaps for the application's methods
- --------------------------------------------------------------------*/
 
+// Slotmaps for the application's methods
 
 // here are the SlotID's being included
 // see Idl-file
-//
 #define SwModule
 #define ViewSettings
 #define PrintSettings
@@ -126,12 +123,7 @@ SFX_IMPL_INTERFACE( SwModule, SfxModule, SW_RES(RID_SW_NAME) )
             SW_RES(RID_MODULE_TOOLBOX) );
 }
 
-
-/*--------------------------------------------------------------------
-    Description: other states
- --------------------------------------------------------------------*/
-
-
+// other states
 void SwModule::StateOther(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
@@ -235,10 +227,8 @@ static SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
 
     return pNewView;
 }
-/*--------------------------------------------------------------------
-    Description: start field dialog
- --------------------------------------------------------------------*/
 
+// start field dialog
 void NewXForms( SfxRequest& rReq ); // implementation: below
 
 namespace
@@ -651,10 +641,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: Catch notifications
- --------------------------------------------------------------------*/
-
+// Catch notifications
 
 // Catch hint for DocInfo
 void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )

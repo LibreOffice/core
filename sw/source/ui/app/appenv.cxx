@@ -505,5 +505,4 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     delete pDlg;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

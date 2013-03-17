@@ -24,10 +24,6 @@
 #include "swerror.h"
 #include "comcore.hrc" // MS:   Why are there resources at the Core-Side now
 
-/*--------------------------------------------------------------------
-    Description:    Strings
- --------------------------------------------------------------------*/
-
 String STR_COMCORE_READERROR
 {
     Text [ en-US ] = "Read-Error" ;
@@ -36,9 +32,8 @@ String STR_COMCORE_CANT_SHOW
 {
     Text [ en-US ] = "Graphic cannot be displayed." ;
 };
-/*--------------------------------------------------------------------
-    Description:    Boxes
- --------------------------------------------------------------------*/
+
+
 InfoBox ERR_CLPBRD_WRITE
 {
     Message [ en-US ] = "Error while copying to the clipboard." ;
@@ -145,7 +140,8 @@ Resource RID_SW_ERRHDL
     {
         Text [ en-US ] = "The structure of a linked table cannot be modified." ;
     };
-     // -------------------- Warnings -----------------------------------
+
+
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
     {
         Text [ en-US ] = "No drawings could be read." ;

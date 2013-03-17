@@ -30,14 +30,12 @@
 
 namespace sw { namespace sidebarwindows {
 
-//////////////////////////////////////////////////////////////////////////////
 // helper SwPostItShadowPrimitive
 //
 // Used to allow view-dependent primitive definition. For that purpose, the
 // initially created primitive (this one) always has to be view-independent,
 // but the decomposition is made view-dependent. Very simple primitive which
 // just remembers the discrete data and applies it at decomposition time.
-
 class ShadowPrimitive : public drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D
 {
 private:
@@ -167,7 +165,6 @@ bool ShadowPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
 
 ImplPrimitrive2DIDBlock(ShadowPrimitive, PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE)
 
-/****** ShadowOverlayObject  **************************************************/
 /* static */ ShadowOverlayObject* ShadowOverlayObject::CreateShadowOverlayObject( SwView& rDocView )
 {
     ShadowOverlayObject* pShadowOverlayObject( 0 );

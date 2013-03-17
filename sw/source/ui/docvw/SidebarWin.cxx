@@ -80,7 +80,6 @@ namespace sw { namespace sidebarwindows {
 
 #define EMPTYSTRING             rtl::OUString()
 
-/************** SwSidebarWin************************************/
 SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
                             WinBits nBits,
                             SwPostItMgr& aMgr,
