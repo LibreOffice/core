@@ -57,9 +57,12 @@ postprocess_FILES_calc := \
 	$(postprocess_MOD)/org/openoffice/Setup-calc.xcu
 
 ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+# build calc app?
+ifeq ($(filter CALC,$(DISABLED_APPS)),)
 postprocess_FILES_calc += \
 	$(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-calc.xcu
 postprocess_DRIVERS += calc
+endif
 ifeq (WNT,$(OS))
 ifeq ($(WITH_MOZAB4WIN),YES)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu

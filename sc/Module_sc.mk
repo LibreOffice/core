@@ -23,6 +23,8 @@
 
 $(eval $(call gb_Module_Module,sc))
 
+ifeq ($(filter CALC,$(DISABLED_APPS)),)
+
 $(eval $(call gb_Module_add_targets,sc,\
 	AllLangResTarget_sc \
 	CustomTarget_uiconfig \
@@ -78,5 +80,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     CppunitTest_sc_editfieldobj_header \
     CppunitTest_sc_modelobj \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:

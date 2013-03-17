@@ -1099,6 +1099,14 @@ AC_ARG_ENABLE(bogus-pkg-config,
 )
 
 dnl ===================================================================
+dnl Optional Enable/Dsiable Applications
+dnl ===================================================================
+AC_ARG_ENABLE(calc,
+    AS_HELP_STRING([--calc],
+        [Test if calc should be built]),
+)
+
+dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
 
@@ -11184,6 +11192,20 @@ fi
 AC_SUBST(WGET)
 AC_SUBST(CURL)
 AC_SUBST(MD5SUM)
+
+dnl ===================================================================
+dnl Test which applications to build from the suite
+dnl ===================================================================
+DISABLED_APPS=
+AC_MSG_CHECKING([whether to build calc])
+if test "$enable_calc" = "" -o "$enable_calc" = "no"; then
+    DISABLED_APPS=CALC
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
+fi
+
+AC_SUBST(DISABLED_APPS)
 
 dnl ===================================================================
 dnl Product version
