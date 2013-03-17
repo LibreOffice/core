@@ -33,6 +33,7 @@ TabDialog RID_OFA_AUTOCORR_DLG
     SVLook = TRUE ;
     Text [ en-US ] = "AutoCorrect" ;
     Moveable = TRUE ;
+    Closeable = TRUE ;
     TabControl 1
     {
         SVLook = TRUE ;
