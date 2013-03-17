@@ -253,12 +253,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     }
 }
 
-
-/*--------------------------------------------------------------------
-    Description:    evaluate StyleSheet-Requests
- --------------------------------------------------------------------*/
-
-
+// evaluate StyleSheet-Requests
 void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 {
     sal_uInt16  nSlot   = rReq.GetSlot();
@@ -599,7 +594,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
         m_xBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *m_xTmp.get() ) );
 
     pDoc->SetModified();
-    if( !m_bModified )    // Bug 57028
+    if( !m_bModified )
     {
         pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
     }
@@ -609,11 +604,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
     return m_nRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Edit
- --------------------------------------------------------------------*/
-
-
+// Edit
 sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uInt16 nFamily, sal_uInt16 nMask,
                          sal_Bool bNew, sal_uInt16 nPageId, SwWrtShell* pActShell,
                          sal_Bool bBasic )
@@ -846,11 +837,7 @@ sal_uInt16 SwDocShell::Edit( const String &rName, const String &rParent, sal_uIn
     return nRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Delete
- --------------------------------------------------------------------*/
-
-
+// Delete
 sal_uInt16 SwDocShell::Delete(const String &rName, sal_uInt16 nFamily)
 {
     SfxStyleSheetBase *pStyle = mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
@@ -886,11 +873,7 @@ sal_uInt16 SwDocShell::Hide(const String &rName, sal_uInt16 nFamily, bool bHidde
     return sal_False;
 }
 
-/*--------------------------------------------------------------------
-    Description:    apply template
- --------------------------------------------------------------------*/
-
-
+// apply template
 sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
                                SwWrtShell* pShell, sal_uInt16 nMode )
 {
@@ -953,12 +936,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const String &rName, sal_uInt16 nFamily,
     return nFamily;
 }
 
-/*--------------------------------------------------------------------
-    Description:    start watering-can
- --------------------------------------------------------------------*/
-
-
-
+// start watering-can
 sal_uInt16 SwDocShell::DoWaterCan(const String &rName, sal_uInt16 nFamily)
 {
     OSL_ENSURE(GetWrtShell(), "No Shell, no Styles");
@@ -1012,11 +990,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const String &rName, sal_uInt16 nFamily)
     return nFamily;
 }
 
-/*--------------------------------------------------------------------
-    Description:    update template
- --------------------------------------------------------------------*/
-
-
+// update template
 sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWrtShell* pShell)
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
@@ -1077,7 +1051,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWr
             {
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->FillByEx(pChar);
-                    // also apply template to remove hard set attributes
+                // also apply template to remove hard set attributes
                 pCurrWrtShell->EndAllAction();
             }
 
@@ -1101,11 +1075,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWr
     return nFamily;
 }
 
-/*--------------------------------------------------------------------
-    Description:    NewByExample
- --------------------------------------------------------------------*/
-
-
+// NewByExample
 sal_uInt16 SwDocShell::MakeByExample( const String &rName, sal_uInt16 nFamily,
                                     sal_uInt16 nMask, SwWrtShell* pShell )
 {
@@ -1141,24 +1111,24 @@ sal_uInt16 SwDocShell::MakeByExample( const String &rName, sal_uInt16 nFamily,
                 sal_uInt16 nId = pColl->GetPoolFmtId() & 0x87ff;
                 switch( nMask & 0x0fff )
                 {
-                case SWSTYLEBIT_TEXT:
-                    nId |= COLL_TEXT_BITS;
-                    break;
-                case SWSTYLEBIT_CHAPTER:
-                    nId |= COLL_DOC_BITS;
-                    break;
-                case SWSTYLEBIT_LIST:
-                    nId |= COLL_LISTS_BITS;
-                    break;
-                case SWSTYLEBIT_IDX:
-                    nId |= COLL_REGISTER_BITS;
-                    break;
-                case SWSTYLEBIT_EXTRA:
-                    nId |= COLL_EXTRA_BITS;
-                    break;
-                case SWSTYLEBIT_HTML:
-                    nId |= COLL_HTML_BITS;
-                    break;
+                    case SWSTYLEBIT_TEXT:
+                        nId |= COLL_TEXT_BITS;
+                        break;
+                    case SWSTYLEBIT_CHAPTER:
+                        nId |= COLL_DOC_BITS;
+                        break;
+                    case SWSTYLEBIT_LIST:
+                        nId |= COLL_LISTS_BITS;
+                        break;
+                    case SWSTYLEBIT_IDX:
+                        nId |= COLL_REGISTER_BITS;
+                        break;
+                    case SWSTYLEBIT_EXTRA:
+                        nId |= COLL_EXTRA_BITS;
+                        break;
+                    case SWSTYLEBIT_HTML:
+                        nId |= COLL_HTML_BITS;
+                        break;
                 }
                 pColl->SetPoolFmtId(nId);
 
@@ -1317,7 +1287,5 @@ Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
         return Bitmap( SW_RES( BMP_STYLES_FAMILY_NUM ));
     return SfxObjectShell::GetStyleFamilyBitmap( eFamily );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

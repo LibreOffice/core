@@ -233,9 +233,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
     Execute(pWin, nId);
 }
 
-/*-------------------------------------------------------------------------
-    execute the resulting ID only - necessary to support XContextMenuInterception
-  -----------------------------------------------------------------------*/
+// execute the resulting ID only - necessary to support XContextMenuInterception
 void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -364,7 +362,5 @@ String SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
     }
     return GraphicHelper::ExportGraphic( aGraphic, sGrfName );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

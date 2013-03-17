@@ -36,12 +36,8 @@
 #include <editeng/frmdiritem.hxx>
 
 
-/*--------------------------------------------------------------------
-    Description:    Core-Notify
- --------------------------------------------------------------------*/
 
-
-
+// Core-Notify
 void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
                 sal_uInt16 nRangeX, sal_uInt16 nRangeY)
 {
@@ -50,12 +46,7 @@ void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
         ((SwView *)pSfxVwSh)->Scroll( rRect.SVRect(), nRangeX, nRangeY );
 }
 
-/*--------------------------------------------------------------------
-    Description:    Docmdi - movable
- --------------------------------------------------------------------*/
-
-
-
+// Docmdi - movable
 sal_Bool IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
@@ -64,12 +55,7 @@ sal_Bool IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
     return sal_False;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Notify for size change
- --------------------------------------------------------------------*/
-
-
-
+// Notify for size change
 void SizeNotify(ViewShell* pVwSh, const Size &rSize)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
@@ -82,10 +68,7 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:    Notify for page number update
- --------------------------------------------------------------------*/
-
+// Notify for page number update
 void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
                                                     const rtl::OUString& rPgStr)
 {
@@ -95,22 +78,13 @@ void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
             ((SwView *)pSfxVwSh)->UpdatePageNums(nPhyNum, nVirtNum, rPgStr);
 }
 
-/******************************************************************************
- *  Method      :   void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
- *  Description:
- ******************************************************************************/
-
-
-
 void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 {
     if ( pVwSh->ISA(SwCrsrShell) )
         SwBaseShell::SetFrmMode( eMode, (SwWrtShell*)pVwSh );
 }
 
-/*--------------------------------------------------------------------
-    Description:    Notify for page number update
- --------------------------------------------------------------------*/
+// Notify for page number update
 sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVerticalMode)
 {
     SvxRuler& rRuler = bVerticalMode ?  m_rView.GetVLineal() : m_rView.GetHLineal();

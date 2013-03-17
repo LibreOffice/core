@@ -139,11 +139,7 @@ SwView* SwModule::GetNextView(SwView* pView)
     return pNView;
 }
 
-/*------------------------------------------------------------------------
- Description:   New Master for the settings is set; this affects the
-                current view and all following.
-------------------------------------------------------------------------*/
-
+// New Master for the settings is set; this affects the current view and all following.
 void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                             sal_uInt16 nDest )
 {
@@ -283,10 +279,7 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bo
     }
 }
 
-/*-------------------------------------------------
-set the usrpref 's char unit attribute and set ruler
-'s unit as char if the "apply char unit" is checked
---------------------------------------------------*/
+//set the usrpref 's char unit attribute and set rulers unit as char if the "apply char unit" is checked
 void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb)
 {
     SwMasterUsrPref* pPref;
@@ -521,10 +514,7 @@ void SwModule::GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
     lcl_FillAuthorAttr(nAuthor, rSet, pModuleConfig->GetDeletedAuthorAttr());
 }
 
-/*--------------------------------------------------------------------
-    Description:    For future extension:
- --------------------------------------------------------------------*/
-
+// For future extension:
 void SwModule::GetFormatAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet )
 {
     lcl_FillAuthorAttr( nAuthor, rSet, pModuleConfig->GetFormatAuthorAttr() );

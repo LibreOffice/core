@@ -95,9 +95,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
                 pAppView = 0; // with View, there's nothing to win here
         }
 
-    /********************************************************************/
-    /* Options/Edit                                                     */
-    /********************************************************************/
+    // Options/Edit
     SfxItemSet* pRet = new SfxItemSet (GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
                                     SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
                                     SID_ATTR_GRID_OPTIONS,  SID_ATTR_GRID_OPTIONS,
@@ -260,9 +258,8 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     SfxBindings *pBindings = pAppView ? &pAppView->GetViewFrame()->GetBindings()
                                  : NULL;
 
-    /*---------------------------------------------------------------------
-            Interpret the page Documentview
-    -----------------------------------------------------------------------*/
+
+    // Interpret the page Documentview
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_DOCDISP, sal_False, &pItem ))
     {
         const SwDocDisplayItem* pDocDispItem = (const SwDocDisplayItem*)pItem;
@@ -288,10 +285,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         }
     }
 
-    /*---------------------------------------------------------------------
-                Elements - interpret Item
-    -----------------------------------------------------------------------*/
-
+    // Elements - interpret Item
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ELEM, sal_False, &pItem ) )
     {
         const SwElemItem* pElemItem = (const SwElemItem*)pItem;
@@ -343,10 +337,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         }
     }
 
-
-    /*------------------------------------------------
-        Background only in WebDialog
-    --------------------------------------------------*/
+    // Background only in WebDialog
     if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND))
     {
         const SvxBrushItem& rBrushItem = (const SvxBrushItem&)rSet.Get(
@@ -354,10 +345,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         aViewOpt.SetRetoucheColor( rBrushItem.GetColor() );
     }
 
-    /*--------------------------------------------------------------------
-            Interpret page Grid Settings
-    ----------------------------------------------------------------------*/
-
+    // Interpret page Grid Settings
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS, sal_False, &pItem ))
     {
         const SvxGridItem* pGridItem = (const SvxGridItem*)pItem;
@@ -384,10 +372,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         }
     }
 
-    /*--------------------------------------------------------------------
-            Interpret Writer Printer Options
-    ----------------------------------------------------------------------*/
-
+    // Interpret Writer Printer Options
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER, sal_False, &pItem ))
     {
         SwPrintOptions* pOpt = GetPrtOptions(!bTextDialog);
@@ -575,6 +560,5 @@ SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
         SAL_WARN( "sw", "SwModule::CreateTabPage(): Unknown tabpage id " << nId );
     return pRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,9 +34,7 @@
 
 namespace sw { namespace sidebarwindows {
 
-//////////////////////////////////////////////////////////////////////////////
 // helper class: Primitive for discrete visualisation
-
 class AnchorPrimitive : public drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D
 {
 private:
@@ -232,7 +230,6 @@ bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive
 
 ImplPrimitrive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
 
-/****** AnchorOverlayObject    ***********************************************************/
 /*static*/ AnchorOverlayObject* AnchorOverlayObject::CreateAnchorOverlayObject(
                                                        SwView& rDocView,
                                                        const SwRect& aAnchorRect,

@@ -217,7 +217,6 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
         }
     }
 
-
     // There's a special treatment for file lists with a single
     // element, that depends on the actual content of the
     // Transferable to be accessible. Since the transferable
@@ -497,7 +496,5 @@ IMPL_LINK_NOARG(SwEditWin, DDHandler)
     }
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

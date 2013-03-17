@@ -148,7 +148,6 @@ using namespace ::com::sun::star;
 /**
  * Globals
  */
-
 static bool bInputLanguageSwitched = false;
 extern bool bNoInterrupt;       // in mainwn.cxx
 
@@ -285,7 +284,6 @@ struct QuickHelpData
 /**
  * Avoid minimal movement shiver
  */
-
 #define HIT_PIX  2 /* hit tolerance in pixel  */
 #define MIN_MOVE 4
 
@@ -659,7 +657,6 @@ inline void SwEditWin::EnterArea()
 /**
  * Insert mode for frames
  */
-
 void SwEditWin::InsFrm(sal_uInt16 nCols)
 {
     StdDrawMode( OBJ_NONE, sal_False );
@@ -5606,8 +5603,6 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::Create
 
     return xAcc;
 }
-
-//-------------------------------------------------------------
 
 void QuickHelpData::Move( QuickHelpData& rCpy )
 {

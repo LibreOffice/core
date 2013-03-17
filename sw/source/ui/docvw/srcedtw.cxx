@@ -796,7 +796,6 @@ static bool lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLan
             // don#t fill - all LANGUAGE_SYSTEM means unicode font has to be used
         break;
 
-
         case RTL_TEXTENCODING_ISO_8859_3:
         case RTL_TEXTENCODING_ISO_8859_1  :
         case RTL_TEXTENCODING_MS_1252     :

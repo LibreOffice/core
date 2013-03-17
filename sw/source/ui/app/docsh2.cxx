@@ -123,10 +123,7 @@ using ::rtl::OUString;
 using namespace ::sfx2;
 extern bool FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
-/*--------------------------------------------------------------------
-    Description:    create DocInfo (virtual)
- --------------------------------------------------------------------*/
-
+// create DocInfo (virtual)
 SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)
 {
@@ -229,10 +226,7 @@ static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVB
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: Notification on DocInfo changes
- --------------------------------------------------------------------*/
-
+// Notification on DocInfo changes
 void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if( !pDoc )
@@ -310,10 +304,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:    Notification Close Doc
- --------------------------------------------------------------------*/
-
+// Notification Close Doc
 sal_uInt16 SwDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     sal_uInt16 nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
@@ -334,10 +325,7 @@ sal_uInt16 SwDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     return nRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    Organizer
- --------------------------------------------------------------------*/
-
+// Organizer
 sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
     sal_uInt16  nSourceIdx1,        // SourcePool: uppermost content level (templates/macros)
     sal_uInt16  nSourceIdx2,        // Index in the content
@@ -548,10 +536,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Description:    template Remove
- --------------------------------------------------------------------*/
-
+// template Remove
 sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // see Insert
                         sal_uInt16 nIdx2,
                         sal_uInt16 nIdx3)
@@ -799,7 +784,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         while( pFlt )
                         {
                             // --> OD #i117339#
-//                            if( pFlt && pFlt->IsAllowedAsTemplate() )
                             if( pFlt && pFlt->IsAllowedAsTemplate() &&
                                 ( pFlt->GetUserData() == "CXML" ||
                                   pFlt->GetUserData() == "CXMLV" ) )
@@ -1772,9 +1756,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
     return nErr;
 }
 
-/*--------------------------------------------------------------------
-    Get a client for an embedded object if possible.
- --------------------------------------------------------------------*/
+// Get a client for an embedded object if possible.
 SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef )
 {
     SfxInPlaceClient* pResult = NULL;

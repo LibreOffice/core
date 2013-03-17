@@ -73,9 +73,8 @@ struct TextBlockInfo_Impl
 typedef boost::ptr_vector<TextBlockInfo_Impl> TextBlockInfoArr;
 SV_IMPL_REF( SwDocShell )
 
-/*------------------------------------------------------------------------
-    Description:    Dialog for edit templates
-------------------------------------------------------------------------*/
+
+// Dialog for edit templates
 void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -102,10 +101,8 @@ void SwGlossaryHdl::GlossaryDlg()
         rStatGlossaries.EditGroupDoc( sName, sShortName );
 }
 
-/*------------------------------------------------------------------------
-    Description:    set the default group; if called from the dialog
-                    the group is created temporarily for faster access
-------------------------------------------------------------------------*/
+// set the default group; if called from the dialog
+// the group is created temporarily for faster access
 void SwGlossaryHdl::SetCurGroup(const String &rGrp, sal_Bool bApi, sal_Bool bAlwaysCreateNew )
 {
     String sGroup(rGrp);
@@ -244,9 +241,7 @@ sal_Bool SwGlossaryHdl::CopyOrMove( const String& rSourceGroupName,  String& rSo
     return !nRet;
 }
 
-/*------------------------------------------------------------------------
-    Description: delete a autotext-file-group
-------------------------------------------------------------------------*/
+// delete a autotext-file-group
 sal_Bool SwGlossaryHdl::DelGroup(const String &rGrpName)
 {
     String sGroup(rGrpName);
@@ -265,9 +260,8 @@ sal_Bool SwGlossaryHdl::DelGroup(const String &rGrpName)
     return sal_False;
 }
 
-/*------------------------------------------------------------------------
-    Description:    ask for number of autotexts
-------------------------------------------------------------------------*/
+
+// ask for number of autotexts
 sal_uInt16 SwGlossaryHdl::GetGlossaryCnt()
 {
     return pCurGrp ? pCurGrp->GetCount() : 0;
@@ -285,9 +279,7 @@ String  SwGlossaryHdl::GetGlossaryShortName(sal_uInt16 nId)
     return pCurGrp->GetShortName( nId );
 }
 
-/*------------------------------------------------------------------------
-    Description:    ask for short name
-------------------------------------------------------------------------*/
+// ask for short name
 String SwGlossaryHdl::GetGlossaryShortName(const String &rName)
 {
     String sReturn;
@@ -304,9 +296,7 @@ String SwGlossaryHdl::GetGlossaryShortName(const String &rName)
     return sReturn;
 }
 
-/*------------------------------------------------------------------------
-    Description:    short name for autotext already used?
-------------------------------------------------------------------------*/
+// short name for autotext already used?
 sal_Bool SwGlossaryHdl::HasShortName(const String& rShortName) const
 {
     SwTextBlocks *pBlock = pCurGrp ? pCurGrp
@@ -322,9 +312,7 @@ sal_Bool    SwGlossaryHdl::ConvertToNew(SwTextBlocks& /*rOld*/)
     return sal_True;
 }
 
-/*------------------------------------------------------------------------
-    Desription:     Create autotext
-------------------------------------------------------------------------*/
+// Create autotext
 sal_Bool SwGlossaryHdl::NewGlossary(const String& rName, const String& rShortName,
                                 sal_Bool bCreateGroup, sal_Bool bNoAttr)
 {
@@ -357,9 +345,8 @@ sal_Bool SwGlossaryHdl::NewGlossary(const String& rName, const String& rShortNam
         rStatGlossaries.PutGroupDoc( pTmp );
     return sal_Bool( nSuccess != (sal_uInt16) -1 );
 }
-/*------------------------------------------------------------------------
-    Description:    Delete a autotext
-------------------------------------------------------------------------*/
+
+// Delete a autotext
 sal_Bool SwGlossaryHdl::DelGlossary(const String &rShortName)
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
@@ -376,9 +363,7 @@ sal_Bool SwGlossaryHdl::DelGlossary(const String &rShortName)
     return sal_True;
 }
 
-/*------------------------------------------------------------------------
-    Description: expand short name
-------------------------------------------------------------------------*/
+// expand short name
 sal_Bool SwGlossaryHdl::ExpandGlossary()
 {
     OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
@@ -525,10 +510,10 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
         SvxMacro aEndMacro(aEmptyStr, aEmptyStr, STARBASIC);
         GetMacros( aShortName, aStartMacro, aEndMacro, pGlossary );
 
-    // StartAction must not be before HasSelection and DelRight,
-    // otherwise the possible Shell change gets delayed and
-    // API-programs would hang.
-    // Moreover the event macro must also not be called in an action
+        // StartAction must not be before HasSelection and DelRight,
+        // otherwise the possible Shell change gets delayed and
+        // API-programs would hang.
+        // Moreover the event macro must also not be called in an action
         pWrtShell->StartUndo(UNDO_INSGLOSSARY);
         if( aStartMacro.HasMacro() )
             pWrtShell->ExecMacro( aStartMacro );
@@ -555,9 +540,7 @@ sal_Bool SwGlossaryHdl::Expand( const String& rShortName,
     return sal_True;
 }
 
-/*------------------------------------------------------------------------
-    Description: add autotext
-------------------------------------------------------------------------*/
+// add autotext
 bool SwGlossaryHdl::InsertGlossary(const String &rName)
 {
     OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
@@ -601,9 +584,7 @@ bool SwGlossaryHdl::InsertGlossary(const String &rName)
     return true;
 }
 
-/*------------------------------------------------------------------------
- Description:   set / ask for macro
-------------------------------------------------------------------------*/
+// set / ask for macro
 void SwGlossaryHdl::SetMacros(const String& rShortName,
                               const SvxMacro* pStart,
                               const SvxMacro* pEnd,
@@ -653,10 +634,7 @@ void SwGlossaryHdl::GetMacros( const String &rShortName,
         rStatGlossaries.PutGroupDoc( pGlos );
 }
 
-
-/*------------------------------------------------------------------------
-    Description:    ctor, dtor
-------------------------------------------------------------------------*/
+// ctor, dtor
 SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrm, SwWrtShell *pSh)
     : rStatGlossaries( *::GetGlossaries() ),
     aCurGrp( rStatGlossaries.GetDefName() ),
@@ -672,9 +650,7 @@ SwGlossaryHdl::~SwGlossaryHdl()
         rStatGlossaries.PutGroupDoc( pCurGrp );
 }
 
-/*------------------------------------------------------------------------
-    Description:    rename an autotext
-------------------------------------------------------------------------*/
+// rename an autotext
 sal_Bool SwGlossaryHdl::Rename(const String& rOldShort, const String& rNewShortName,
                            const String& rNewName )
 {
@@ -734,9 +710,7 @@ sal_Bool SwGlossaryHdl::IsOld() const
     return bRet;
 }
 
-/*--------------------------------------------------
-    find group without path index
---------------------------------------------------*/
+// find group without path index
 sal_Bool SwGlossaryHdl::FindGroupName(String & rGroup)
 {
     return rStatGlossaries.FindGroupName(rGroup);

@@ -1530,7 +1530,7 @@ sal_uInt16 SwTransferable::GetSotDestination( const SwWrtShell& rSh,
     case OBJCNT_URLBUTTON:  nRet = EXCHG_DEST_DOC_URLBUTTON;    break;
     case OBJCNT_GROUPOBJ:   nRet = EXCHG_DEST_DOC_GROUPOBJ;     break;
 
-// what do we do at multiple selections???
+    // what do we do at multiple selections???
     default:
         {
             if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
@@ -1708,7 +1708,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     }
     else
     {
-           // temporary storage until the object is inserted
+        // temporary storage until the object is inserted
         uno::Reference< embed::XStorage > xTmpStor;
         uno::Reference < embed::XEmbeddedObject > xObj;
         ::rtl::OUString aName;
@@ -3089,9 +3089,9 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
          bSmart = 0 != (TRNSFR_DOCUMENT_WORD & eBufferType);
     if( bSmart )
     {
-// Why not for other Scripts? If TRNSFR_DOCUMENT_WORD is set, we have a word
-// in the buffer, word in this context means 'something with spaces at beginning
-// and end'. In this case we definitely want these spaces to be inserted here.
+            // Why not for other Scripts? If TRNSFR_DOCUMENT_WORD is set, we have a word
+            // in the buffer, word in this context means 'something with spaces at beginning
+            // and end'. In this case we definitely want these spaces to be inserted here.
             bInWrd = rShell.IsInWrd();
             bEndWrd = rShell.IsEndWrd();
             bSmart = bInWrd || bEndWrd;

@@ -46,9 +46,7 @@ SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const String &rShortName)
     aGlosBox.SetDoubleClickHdl(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
 }
 
-/*--------------------------------------------------
- overload dtor
---------------------------------------------------*/
+// overload dtor
 SwSelGlossaryDlg::~SwSelGlossaryDlg() {}
 
 IMPL_LINK(SwSelGlossaryDlg, DoubleClickHdl, ListBox*, /*pBox*/)

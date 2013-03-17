@@ -431,5 +431,4 @@ void    SwModule::RemoveAttrPool()
     SfxItemPool::Free(pAttrPool);
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
