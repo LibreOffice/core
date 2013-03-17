@@ -132,9 +132,19 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( pView->IsTextEdit() )
     {
-        if( !IsSizingOrMovingNote(rMEvt) )
+        if ( IsEditingANote(rMEvt) )
         {
-            StopEditMode();            // Danebengeklickt, Ende mit Edit
+            if( !IsSizingOrMovingNote(rMEvt) )
+            {
+                StopEditMode();            // Danebengeklickt, Ende mit Edit
+                bStraightEnter = false;
+            }
+        }
+        else
+        {
+            StopEditMode();            // Clicked outside, ending edit.
+            pView->UnmarkAll();
+            bStraightEnter = false;
         }
         pView->SetCreateMode();
     }
@@ -322,6 +332,8 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     else if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
                     {
                         pView->UnmarkAllObj();
+                        ScViewData& rViewData = *pViewShell->GetViewData();
+                        rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
                         pView->MarkObj(pObj,pPV,false,false);
 
                         pHdl=pView->PickHandle(aMDPos);
@@ -343,6 +355,12 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     pViewShell->SetActivePointer(pView->GetPreferedPointer(
                     pWindow->PixelToLogic(rMEvt.GetPosPixel()), pWindow ));
+    if (!bStraightEnter)
+    {
+            pView->UnmarkAll();
+            ScViewData& rViewData = *pViewShell->GetViewData();
+            rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+    }
 
 //  return (bReturn);
     return sal_True;
