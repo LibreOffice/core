@@ -1589,7 +1589,7 @@ TypeDescription IUnknownWrapper_Impl::getInterfaceMemberDescOfCurrentCall(const 
             {
                 typelib_TypeDescriptionReference* pTypeRefMember = pInterface->ppAllMembers[i];
                 typelib_TypeDescription* pDescMember= NULL;
-                TYPELIB_DANGER_GET( &pDescMember, pTypeRefMember)
+                TYPELIB_DANGER_GET( &pDescMember, pTypeRefMember);
 
                 typelib_InterfaceMemberTypeDescription* pInterfaceMember=
                     (typelib_InterfaceMemberTypeDescription*) pDescMember;
@@ -1598,7 +1598,7 @@ TypeDescription IUnknownWrapper_Impl::getInterfaceMemberDescOfCurrentCall(const 
                     pMember= pInterfaceMember;
                     break;
                 }
-                TYPELIB_DANGER_RELEASE( pDescMember)
+                TYPELIB_DANGER_RELEASE( pDescMember);
             }
 
             if( pMember)
