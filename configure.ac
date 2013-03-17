@@ -4435,9 +4435,11 @@ elif test "$_make_longver" -ge "038100"; then
     dnl ===================================================================
     dnl Search all the common names for sha1sum
     dnl ===================================================================
-    AC_PATH_PROGS(SHA1SUM, sha1sum sha1 shasum)
+    AC_CHECK_PROGS(SHA1SUM, sha1sum sha1 shasum openssl)
     if test -z "$SHA1SUM"; then
         AC_MSG_ERROR([install the approproate SHA-1 checksumming program for this OS])
+    elif test "$SHA1SUM" = "openssl"; then
+        SHA1SUM="openssl sha1"
     fi
     AC_MSG_CHECKING([for GNU make bug 20033])
     TESTGMAKEBUG20033=`mktemp -d tmp.XXXXXX`
