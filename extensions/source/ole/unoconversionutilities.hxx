@@ -2023,9 +2023,9 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         typelib_TypeDescriptionReference *pSeqElemDescRef= pSeqDesc->pType; // type of the Sequence' elements
         Type elemType( pSeqElemDescRef);
         _typelib_TypeDescription* pSeqElemDesc=NULL;
-        TYPELIB_DANGER_GET( &pSeqElemDesc, pSeqElemDescRef)
+        TYPELIB_DANGER_GET( &pSeqElemDesc, pSeqElemDescRef);
             sal_uInt32 nelementSize= pSeqElemDesc->nSize;
-        TYPELIB_DANGER_RELEASE( pSeqElemDesc)
+        TYPELIB_DANGER_RELEASE( pSeqElemDesc);
 
             uno_Sequence *p_uno_Seq;
         uno_sequence_construct( &p_uno_Seq, pDesc, NULL, length, cpp_acquire);
