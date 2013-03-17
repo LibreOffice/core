@@ -27,46 +27,61 @@
 #endif
 
 #include <time.h>
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
 #include <tools/time.hxx>
+
+#include <osl/diagnose.h>
 
 #if defined(SOLARIS) && defined(__GNUC__)
 extern long altzone;
 #endif
 
-static sal_Int32 TimeToSec100( const Time& rTime )
-{
-    short  nSign   = (rTime.GetTime() >= 0) ? +1 : -1;
-    sal_Int32   nHour   = rTime.GetHour();
-    sal_Int32   nMin    = rTime.GetMin();
-    sal_Int32   nSec    = rTime.GetSec();
-    sal_Int32   n100Sec = rTime.Get100Sec();
+namespace {
 
-//  Due to interal compiler error in MSC a little bit more complicated:
-//  return (n100Sec + (nSec*100) + (nMin*60*100) + (nHour*60*60*100) * nSign);
+    const sal_Int64 secMask  = 1000000000;
+    const sal_Int64 minMask  = 100000000000;
+    const sal_Int64 hourMask = 10000000000000;
 
-    sal_Int32 nRet = n100Sec;
-    nRet     += nSec*100;
-    nRet     += nMin*60*100;
-    nRet     += nHour*60*60*100;
+    const sal_Int64 nanoSecInSec = 1000000000;
+    const sal_Int16 secInMin     = 60;
+    const sal_Int16 minInHour    = 60;
 
-    return (nRet * nSign);
-}
-
-static Time Sec100ToTime( sal_Int32 nSec100 )
-{
-    short nSign;
-    if ( nSec100 < 0 )
+    sal_Int64 TimeToNanoSec( const Time& rTime )
     {
-        nSec100 *= -1;
-        nSign = -1;
-    }
-    else
-        nSign = 1;
+        short  nSign   = (rTime.GetTime() >= 0) ? +1 : -1;
+        sal_Int32   nHour    = rTime.GetHour();
+        sal_Int32   nMin     = rTime.GetMin();
+        sal_Int32   nSec     = rTime.GetSec();
+        sal_Int32   nNanoSec = rTime.GetNanoSec();
 
-    Time aTime( 0, 0, 0, nSec100 );
-    aTime.SetTime( aTime.GetTime() * nSign );
-    return aTime;
-}
+        sal_Int64 nRet = nNanoSec;
+        nRet     +=            nSec * nanoSecInSec;
+        nRet     +=       nMin * secInMin * nanoSecInSec;
+        nRet     += nHour * minInHour * secInMin * nanoSecInSec;
+
+        return (nRet * nSign);
+    }
+
+    Time NanoSecToTime( sal_Int64 nNanoSec )
+    {
+        short nSign;
+        if ( nNanoSec < 0 )
+        {
+            nNanoSec *= -1;
+            nSign = -1;
+        }
+        else
+            nSign = 1;
+
+        Time aTime( 0, 0, 0, nNanoSec );
+        aTime.SetTime( aTime.GetTime() * nSign );
+        return aTime;
+    }
+
+} // anonymous namespace
 
 Time::Time( TimeInitSystem )
 {
@@ -75,27 +90,47 @@ Time::Time( TimeInitSystem )
     GetLocalTime( &aDateTime );
 
     // construct time
-    nTime = (((sal_Int32)aDateTime.wHour)*1000000) +
-            (((sal_Int32)aDateTime.wMinute)*10000) +
-            (((sal_Int32)aDateTime.wSecond)*100) +
-            ((sal_Int32)aDateTime.wMilliseconds/10);
+    nTime = aDateTime.wHour         * hourMask +
+            aDateTime.wMinute       * minMask +
+            aDateTime.wSecond       * secMask +
+            aDateTime.wMilliseconds * 1000000;
 #else
-    time_t     nTmpTime;
-    struct tm aTime;
-
     // determine time
-    nTmpTime = time( 0 );
+    struct timespec tsTime;
+#if defined( __MACH__ )
+    // OS X does not have clock_gettime, use clock_get_time
+    clock_serv_t cclock;
+    mach_timespec_t mts;
+    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+    clock_get_time(cclock, &mts);
+    mach_port_deallocate(mach_task_self(), cclock);
+    tsTime.tv_sec  = mts.tv_sec;
+    tsTime.tv_nsec = mts.tv_nsec;
+#else
+    // CLOCK_REALTIME should be supported
+    // on any modern Unix, but be extra cautious
+    if (clock_gettime(CLOCK_REALTIME, &tsTime) != 0)
+    {
+        struct timeval tvTime;
+        OSL_VERIFY( gettimeofday(&tvTime, NULL) != 0 );
+        tsTime.tv_sec  = tvTime.tv_sec;
+        tsTime.tv_nsec = tvTime.tv_usec * 1000;
+    }
+#endif // __MACH__
 
     // construct time
+    struct tm aTime;
+    time_t nTmpTime = tsTime.tv_sec;
     if ( localtime_r( &nTmpTime, &aTime ) )
     {
-        nTime = (((sal_Int32)aTime.tm_hour)*1000000) +
-                (((sal_Int32)aTime.tm_min)*10000) +
-                (((sal_Int32)aTime.tm_sec)*100);
+        nTime = aTime.tm_hour * hourMask +
+                aTime.tm_min  * minMask +
+                aTime.tm_sec  * secMask +
+                tsTime.tv_nsec;
     }
     else
         nTime = 0;
-#endif
+#endif // WNT
 }
 
 Time::Time( const Time& rTime )
@@ -103,43 +138,52 @@ Time::Time( const Time& rTime )
     nTime = rTime.nTime;
 }
 
-Time::Time( sal_uIntPtr nHour, sal_uIntPtr nMin, sal_uIntPtr nSec, sal_uIntPtr n100Sec )
+Time::Time( sal_uIntPtr nHour, sal_uIntPtr nMin, sal_uIntPtr nSec, sal_uIntPtr nNanoSec )
 {
     // normalize time
-    nSec    += n100Sec / 100;
-    n100Sec  = n100Sec % 100;
-    nMin    += nSec / 60;
-    nSec     = nSec % 60;
-    nHour   += nMin / 60;
-    nMin     = nMin % 60;
+    nSec     += nNanoSec / nanoSecInSec;
+    nNanoSec %= nanoSecInSec;
+    nMin     += nSec / secInMin;
+    nSec     %= secInMin;
+    nHour    += nMin / minInHour;
+    nMin     %= minInHour;
 
     // construct time
-    nTime = (sal_Int32)(n100Sec + (nSec*100) + (nMin*10000) + (nHour*1000000));
+    nTime = nNanoSec +
+            nSec  * secMask +
+            nMin  * minMask +
+            nHour * hourMask;
 }
 
 void Time::SetHour( sal_uInt16 nNewHour )
 {
-    short  nSign      = (nTime >= 0) ? +1 : -1;
+    short  nSign          = (nTime >= 0) ? +1 : -1;
     sal_Int32   nMin      = GetMin();
     sal_Int32   nSec      = GetSec();
-    sal_Int32   n100Sec   = Get100Sec();
+    sal_Int32   nNanoSec  = GetNanoSec();
 
-    nTime = (n100Sec + (nSec*100) + (nMin*10000) +
-            (((sal_Int32)nNewHour)*1000000)) * nSign;
+    nTime = nSign *
+            ( nNanoSec +
+              nSec  * secMask +
+              nMin  * minMask +
+              nNewHour * hourMask );
 }
 
 void Time::SetMin( sal_uInt16 nNewMin )
 {
-    short  nSign      = (nTime >= 0) ? +1 : -1;
+    short  nSign          = (nTime >= 0) ? +1 : -1;
     sal_Int32   nHour     = GetHour();
     sal_Int32   nSec      = GetSec();
-    sal_Int32   n100Sec   = Get100Sec();
+    sal_Int32   nNanoSec  = GetNanoSec();
 
     // no overflow
-    nNewMin = nNewMin % 60;
+    nNewMin = nNewMin % minInHour;
 
-    nTime = (n100Sec + (nSec*100) + (((sal_Int32)nNewMin)*10000) +
-            (nHour*1000000)) * nSign;
+    nTime = nSign *
+            ( nNanoSec +
+              nSec  * secMask +
+              nNewMin  * minMask +
+              nHour * hourMask );
 }
 
 void Time::SetSec( sal_uInt16 nNewSec )
@@ -147,16 +191,19 @@ void Time::SetSec( sal_uInt16 nNewSec )
     short       nSign     = (nTime >= 0) ? +1 : -1;
     sal_Int32   nHour     = GetHour();
     sal_Int32   nMin      = GetMin();
-    sal_Int32   n100Sec   = Get100Sec();
+    sal_Int32   nNanoSec   = GetNanoSec();
 
     // no overflow
-    nNewSec = nNewSec % 60;
+    nNewSec = nNewSec % secInMin;
 
-    nTime = (n100Sec + (((sal_Int32)nNewSec)*100) + (nMin*10000) +
-            (nHour*1000000)) * nSign;
+    nTime = nSign *
+            ( nNanoSec +
+              nNewSec  * secMask +
+              nMin  * minMask +
+              nHour * hourMask );
 }
 
-void Time::Set100Sec( sal_uInt16 nNew100Sec )
+void Time::SetNanoSec( sal_uInt32 nNewNanoSec )
 {
     short       nSign     = (nTime >= 0) ? +1 : -1;
     sal_Int32   nHour     = GetHour();
@@ -164,10 +211,44 @@ void Time::Set100Sec( sal_uInt16 nNew100Sec )
     sal_Int32   nSec      = GetSec();
 
     // no overflow
-    nNew100Sec = nNew100Sec % 100;
+    nNewNanoSec = nNewNanoSec % nanoSecInSec;
 
-    nTime = (((sal_Int32)nNew100Sec) + (nSec*100) + (nMin*10000) +
-            (nHour*1000000)) * nSign;
+    nTime = nSign *
+            ( nNewNanoSec +
+              nSec  * secMask +
+              nMin  * minMask +
+              nHour * hourMask );
+}
+
+sal_Int64 Time::GetNSFromTime() const
+{
+    short       nSign     = (nTime >= 0) ? +1 : -1;
+    sal_Int32   nHour     = GetHour();
+    sal_Int32   nMin      = GetMin();
+    sal_Int32   nSec      = GetSec();
+    sal_Int32   nNanoSec  = GetNanoSec();
+
+    return nSign *
+           ( nNanoSec +
+             nSec  * nanoSecInSec +
+             nMin  * (secInMin * nanoSecInSec) +
+             nHour * (minInHour * secInMin * nanoSecInSec) );
+}
+
+void Time::MakeTimeFromNS( sal_Int64 nNS )
+{
+    short nSign;
+    if ( nNS < 0 )
+    {
+        nNS *= -1;
+        nSign = -1;
+    }
+    else
+        nSign = 1;
+
+    // avoid overflow when sal_uIntPtr is 32 bits
+    Time aTime( 0, 0, nNS/nanoSecInSec, nNS % nanoSecInSec );
+    SetTime( aTime.GetTime() * nSign );
 }
 
 sal_Int32 Time::GetMSFromTime() const
@@ -176,9 +257,13 @@ sal_Int32 Time::GetMSFromTime() const
     sal_Int32   nHour     = GetHour();
     sal_Int32   nMin      = GetMin();
     sal_Int32   nSec      = GetSec();
-    sal_Int32   n100Sec   = Get100Sec();
+    sal_Int32   nNanoSec  = GetNanoSec();
 
-    return (((nHour*3600000)+(nMin*60000)+(nSec*1000)+(n100Sec*10))*nSign);
+    return nSign *
+           ( nNanoSec/1000000 +
+             nSec  * 1000 +
+             nMin  * 60000 +
+             nHour * 360000 );
 }
 
 void Time::MakeTimeFromMS( sal_Int32 nMS )
@@ -192,7 +277,8 @@ void Time::MakeTimeFromMS( sal_Int32 nMS )
     else
         nSign = 1;
 
-    Time aTime( 0, 0, 0, nMS/10 );
+    // avoid overflow when sal_uIntPtr is 32 bits
+    Time aTime( 0, 0, nMS/1000, (nMS % 1000) * 1000000 );
     SetTime( aTime.GetTime() * nSign );
 }
 
@@ -202,9 +288,9 @@ double Time::GetTimeInDays() const
     double nHour      = GetHour();
     double nMin       = GetMin();
     double nSec       = GetSec();
-    double n100Sec    = Get100Sec();
+    double nNanoSec   = GetNanoSec();
 
-    return (nHour+(nMin/60)+(nSec/(60*60))+(n100Sec/(60*60*100))) / 24 * nSign;
+    return (nHour + (nMin / 60) + (nSec / (minInHour * secInMin)) + (nNanoSec / (minInHour * secInMin * nanoSecInSec))) / 24 * nSign;
 }
 
 Time& Time::operator =( const Time& rTime )
@@ -215,34 +301,34 @@ Time& Time::operator =( const Time& rTime )
 
 Time& Time::operator +=( const Time& rTime )
 {
-    nTime = Sec100ToTime( TimeToSec100( *this ) +
-                          TimeToSec100( rTime ) ).GetTime();
+    nTime = NanoSecToTime( TimeToNanoSec( *this ) +
+                           TimeToNanoSec( rTime ) ).GetTime();
     return *this;
 }
 
 Time& Time::operator -=( const Time& rTime )
 {
-    nTime = Sec100ToTime( TimeToSec100( *this ) -
-                          TimeToSec100( rTime ) ).GetTime();
+    nTime = NanoSecToTime( TimeToNanoSec( *this ) -
+                           TimeToNanoSec( rTime ) ).GetTime();
     return *this;
 }
 
 Time operator +( const Time& rTime1, const Time& rTime2 )
 {
-    return Sec100ToTime( TimeToSec100( rTime1 ) +
-                         TimeToSec100( rTime2 ) );
+    return NanoSecToTime( TimeToNanoSec( rTime1 ) +
+                          TimeToNanoSec( rTime2 ) );
 }
 
 Time operator -( const Time& rTime1, const Time& rTime2 )
 {
-    return Sec100ToTime( TimeToSec100( rTime1 ) -
-                         TimeToSec100( rTime2 ) );
+    return NanoSecToTime( TimeToNanoSec( rTime1 ) -
+                          TimeToNanoSec( rTime2 ) );
 }
 
-sal_Bool Time::IsEqualIgnore100Sec( const Time& rTime ) const
+sal_Bool Time::IsEqualIgnoreNanoSec( const Time& rTime ) const
 {
-    sal_Int32 n1 = (nTime < 0 ? -Get100Sec() : Get100Sec() );
-    sal_Int32 n2 = (rTime.nTime < 0 ? -rTime.Get100Sec() : rTime.Get100Sec() );
+    sal_Int32 n1 = (nTime       < 0 ? -static_cast<sal_Int32>(GetNanoSec())       : GetNanoSec() );
+    sal_Int32 n2 = (rTime.nTime < 0 ? -static_cast<sal_Int32>(rTime.GetNanoSec()) : rTime.GetNanoSec() );
     return (nTime - n1) == (rTime.nTime - n2);
 }
 

@@ -92,7 +92,7 @@ namespace connectivity
             nRet.Hours = ptm->tm_hour;
             nRet.Minutes = ptm->tm_min;
             nRet.Seconds = ptm->tm_sec;
-            nRet.HundredthSeconds = 0;
+            nRet.NanoSeconds = 0;
             return nRet;
         }
 

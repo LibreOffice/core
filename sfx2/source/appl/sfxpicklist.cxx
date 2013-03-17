@@ -365,7 +365,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     xDocProps->setAuthor( SvtUserOptions().GetFullName() );
                     ::DateTime now( ::DateTime::SYSTEM );
                     xDocProps->setCreationDate( util::DateTime(
-                        now.Get100Sec(), now.GetSec(), now.GetMin(),
+                        now.GetNanoSec(), now.GetSec(), now.GetMin(),
                         now.GetHour(), now.GetDay(), now.GetMonth(),
                         now.GetYear() ) );
                 }

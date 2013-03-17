@@ -28,9 +28,9 @@ module com {  module sun {  module star {  module util {
  */
 published struct Time
 {
-    /** contains the hundredth seconds (0-99).
+    /** contains the nanoseconds (0 - 999 999 999).
      */
-    unsigned short HundredthSeconds;
+    unsigned long NanoSeconds;
 
     /** contains the seconds (0-59).
      */
