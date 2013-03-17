@@ -28,9 +28,9 @@ module com {  module sun {  module star {  module util {
  */
 published struct DateTimeRange
 {
-    /** contains the start hundredth seconds (0-99) for the range.
+    /** contains the start nanoseconds (0 - 999 999 999) for the range.
      */
-    unsigned short StartHundredthSeconds;
+    unsigned long StartNanoSeconds;
 
     /** contains the start seconds (0-59) for the range.
      */
@@ -54,11 +54,11 @@ published struct DateTimeRange
 
     /** contains the start year for the range.
      */
-    unsigned short StartYear;
+    short StartYear;
 
-    /** contains the end hundredth seconds (0-99) for the range.
+    /** contains the end nanoseconds (0 - 999 999 999) for the range.
      */
-    unsigned short EndHundredthSeconds;
+    unsigned long EndNanoSeconds;
 
     /** contains the end seconds (0-59) for the range.
      */
@@ -82,8 +82,9 @@ published struct DateTimeRange
 
     /** contains the end year for the range.
      */
-    unsigned short EndYear;
+    short EndYear;
 
+    /** TODO timezones **/
 };
 
 

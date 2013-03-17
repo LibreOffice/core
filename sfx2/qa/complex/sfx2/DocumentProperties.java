@@ -349,7 +349,7 @@ public class DocumentProperties
             dur.Hours = 777;
             dur.Minutes = 666;
             dur.Seconds = 555;
-            dur.MilliSeconds = 444;
+            dur.NanoSeconds = 444444444;
 
             udpc.addProperty("Frobnicate", PropertyAttribute.REMOVABLE, b);
             udpc.addProperty("FrobDuration", PropertyAttribute.REMOVABLE, dur);
@@ -426,7 +426,7 @@ public class DocumentProperties
             // this is now a Duration!
             Duration t_dur = new Duration(false, (short)0, (short)0, (short)0,
                     t.Hours, t.Minutes, t.Seconds,
-                    (short)(10 * t.HundredthSeconds));
+                    t.NanoSeconds);
             assertTrue("UserDefined time", eqDuration(t_dur, (Duration)
                     udps.getPropertyValue("FrobDuration2")));
             assertTrue("UserDefined date", eqDate(date, (Date)
@@ -476,7 +476,7 @@ public class DocumentProperties
         return a.Year == b.Year && a.Month == b.Month && a.Day == b.Day
             && a.Hours == b.Hours && a.Minutes == b.Minutes
             && a.Seconds == b.Seconds
-            && a.HundredthSeconds == b.HundredthSeconds;
+            && a.NanoSeconds == b.NanoSeconds;
     }
 
     boolean eqDate(Date a, Date b) {
@@ -486,14 +486,14 @@ public class DocumentProperties
     boolean eqTime(Time a, Time b) {
         return a.Hours == b.Hours && a.Minutes == b.Minutes
             && a.Seconds == b.Seconds
-            && a.HundredthSeconds == b.HundredthSeconds;
+            && a.NanoSeconds == b.NanoSeconds;
     }
 
     boolean eqDuration(Duration a, Duration b) {
         return a.Years == b.Years && a.Months == b.Months && a.Days == b.Days
             && a.Hours == b.Hours && a.Minutes == b.Minutes
             && a.Seconds == b.Seconds
-            && a.MilliSeconds == b.MilliSeconds
+            && a.NanoSeconds == b.NanoSeconds
             && a.Negative == b.Negative;
     }
 

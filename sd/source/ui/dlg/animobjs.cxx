@@ -1062,7 +1062,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         for (size_t i = 0; i < nCount; ++i)
         {
             Time *const pTime = m_FrameList[i].second;
-            long  nTime = pTime->Get100Sec();
+            long  nTime = pTime->GetNanoSec();
             nTime += pTime->GetSec() * 100;
 
             BitmapEx const*const pBitmapEx = m_FrameList[i].first;

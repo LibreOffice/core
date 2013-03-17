@@ -2672,11 +2672,11 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
                         >> aDateTime.Hours
                         >> aDateTime.Minutes
                         >> aDateTime.Seconds
-                        >> aDateTime.HundredthSeconds
+                        >> aDateTime.NanoSeconds
                         >> nPosX
                         >> nPosY;
 
-                aDateTime.HundredthSeconds /= 10;
+                aDateTime.NanoSeconds *= 1000000;
             }
             break;
         }

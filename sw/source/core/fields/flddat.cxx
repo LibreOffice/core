@@ -194,7 +194,7 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
             DateTime aDateTime(GetDate(), GetTime());
 
             util::DateTime DateTimeValue;
-            DateTimeValue.HundredthSeconds = aDateTime.Get100Sec();
+            DateTimeValue.NanoSeconds = aDateTime.GetNanoSec();
             DateTimeValue.Seconds = aDateTime.GetSec();
             DateTimeValue.Minutes = aDateTime.GetMin();
             DateTimeValue.Hours = aDateTime.GetHour();
@@ -239,7 +239,7 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
             if(!(rVal >>= aDateTimeValue))
                 return false;
             DateTime aDateTime( DateTime::EMPTY );
-            aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
+            aDateTime.SetNanoSec(aDateTimeValue.NanoSeconds);
             aDateTime.SetSec(aDateTimeValue.Seconds);
             aDateTime.SetMin(aDateTimeValue.Minutes);
             aDateTime.SetHour(aDateTimeValue.Hours);
