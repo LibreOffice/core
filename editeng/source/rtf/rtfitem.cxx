@@ -910,7 +910,7 @@ ATTR_SETOVERLINE:
                         aOL = *(SvxOverlineItem*)pItem;
                     }
                     else
-                        aOL = (const SvxOverlineItem&)pSet->Get( PLAINID->nUnderline, sal_False );
+                        aOL = (const SvxOverlineItem&)pSet->Get( PLAINID->nOverline, sal_False );
 
                     if( UNDERLINE_NONE == aOL.GetLineStyle() )
                         aOL.SetLineStyle( UNDERLINE_SINGLE );
