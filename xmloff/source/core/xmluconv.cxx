@@ -441,11 +441,11 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
         double Hour = aDateTime.Hours;
         double Min = aDateTime.Minutes;
         double Sec = aDateTime.Seconds;
-        double Sec100 = aDateTime.HundredthSeconds;
+        double NanoSec = aDateTime.NanoSeconds;
         fTempDateTime += Hour / 24;
         fTempDateTime += Min / (24 * 60);
         fTempDateTime += Sec / (24 * 60 * 60);
-        fTempDateTime += Sec100 / (24 * 60 * 60 * 100);
+        fTempDateTime += NanoSec / (24 * 60 * 60 * 1000000000LL);
         fDateTime = fTempDateTime;
     }
     return bSuccess;

@@ -256,7 +256,7 @@ sal_Bool OTimeModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                 else
                 {
                     util::DateTime aDateTime = m_xColumn->getTimestamp();
-                    aDateTime.HundredthSeconds = aTime.HundredthSeconds;
+                    aDateTime.NanoSeconds = aTime.NanoSeconds;
                     aDateTime.Seconds = aTime.Seconds;
                     aDateTime.Minutes = aTime.Minutes;
                     aDateTime.Hours = aTime.Hours;

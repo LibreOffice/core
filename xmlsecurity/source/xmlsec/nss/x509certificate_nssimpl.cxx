@@ -107,7 +107,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         //Convert the time to readable local time
         PR_ExplodeTime( notBefore, PR_LocalTimeParameters, &explTime ) ;
 
-        dateTime.HundredthSeconds = static_cast< sal_Int16 >( explTime.tm_usec / 1000  );
+        dateTime.NanoSeconds = static_cast< sal_Int32 >( explTime.tm_usec * 1000  );
         dateTime.Seconds = static_cast< sal_Int16 >( explTime.tm_sec  );
         dateTime.Minutes = static_cast< sal_Int16 >( explTime.tm_min  );
         dateTime.Hours = static_cast< sal_Int16 >( explTime.tm_hour  );
@@ -136,7 +136,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         //Convert the time to readable local time
         PR_ExplodeTime( notAfter, PR_LocalTimeParameters, &explTime ) ;
 
-        dateTime.HundredthSeconds = static_cast< sal_Int16 >( explTime.tm_usec / 1000  );
+        dateTime.NanoSeconds = static_cast< sal_Int16 >( explTime.tm_usec * 1000  );
         dateTime.Seconds = static_cast< sal_Int16 >( explTime.tm_sec  );
         dateTime.Minutes = static_cast< sal_Int16 >( explTime.tm_min  );
         dateTime.Hours = static_cast< sal_Int16 >( explTime.tm_hour  );

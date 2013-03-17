@@ -88,7 +88,7 @@ static bool eqDuration(util::Duration a, util::Duration b) {
     return a.Years == b.Years && a.Months == b.Months && a.Days == b.Days
         && a.Hours == b.Hours && a.Minutes == b.Minutes
         && a.Seconds == b.Seconds
-        && a.MilliSeconds == b.MilliSeconds
+        && a.NanoSeconds == b.NanoSeconds
         && a.Negative == b.Negative;
 }
 
@@ -99,7 +99,7 @@ static void doTest(util::Duration const & rid, char const*const pis,
     util::Duration od;
     ::rtl::OUString is(::rtl::OUString::createFromAscii(pis));
     bool bSuccess = Converter::convertDuration(od, is);
-    SAL_INFO("sax.cppunit","" << od.Negative << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.MilliSeconds << "m");
+    SAL_INFO("sax.cppunit","" << od.Negative << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.NanoSeconds << "n");
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDuration(rid, od));
     ::rtl::OUStringBuffer buf;
@@ -113,7 +113,7 @@ static void doTestDurationF(char const*const pis)
     util::Duration od;
     bool bSuccess = Converter::convertDuration(od,
             ::rtl::OUString::createFromAscii(pis));
-    SAL_INFO("sax.cppunit","" << od.Negative << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.MilliSeconds << "H");
+    SAL_INFO("sax.cppunit","" << od.Negative << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.NanoSeconds << "n");
     CPPUNIT_ASSERT(!bSuccess);
 }
 
@@ -155,7 +155,7 @@ static bool eqDateTime(util::DateTime a, util::DateTime b) {
     return a.Year == b.Year && a.Month == b.Month && a.Day == b.Day
         && a.Hours == b.Hours && a.Minutes == b.Minutes
         && a.Seconds == b.Seconds
-        && a.HundredthSeconds == b.HundredthSeconds;
+        && a.NanoSeconds == b.NanoSeconds;
 }
 
 static void doTest(util::DateTime const & rdt, char const*const pis,
@@ -165,7 +165,7 @@ static void doTest(util::DateTime const & rdt, char const*const pis,
     ::rtl::OUString is(::rtl::OUString::createFromAscii(pis));
     util::DateTime odt;
     bool bSuccess( Converter::convertDateTime(odt, is) );
-    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " H:" << odt.HundredthSeconds);
+    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds);
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDateTime(rdt, odt));
     ::rtl::OUStringBuffer buf;
@@ -179,7 +179,7 @@ static void doTestDateTimeF(char const*const pis)
     util::DateTime odt;
     bool bSuccess = Converter::convertDateTime(odt,
             ::rtl::OUString::createFromAscii(pis));
-    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << "H M:" << odt.Minutes << " S:" << odt.Seconds << " H:" << odt.HundredthSeconds);
+    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << "H M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds);
     CPPUNIT_ASSERT(!bSuccess);
 }
 

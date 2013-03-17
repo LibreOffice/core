@@ -62,7 +62,7 @@ typedef vector< OUString* > StringList_Impl;
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
     aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
-                         Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds ) );
+                         Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.NanoSeconds ) );
 
 void AppendDateTime_Impl( const util::DateTime rDT,
                           String& rRow, const LocaleDataWrapper& rWrapper )
