@@ -208,7 +208,7 @@ static util::DateTime getTime( long nTime )
 
     Time aTempTime( nTime );
 
-    aTime.HundredthSeconds = aTempTime.Get100Sec();
+    aTime.NanoSeconds = aTempTime.GetNanoSec();
     aTime.Seconds = aTempTime.GetSec();
     aTime.Minutes = aTempTime.GetMin();
     aTime.Hours = aTempTime.GetHour();
@@ -218,7 +218,7 @@ static util::DateTime getTime( long nTime )
 
 inline Time setTime( util::DateTime& rDate )
 {
-    return Time( rDate.Hours, rDate.Minutes, rDate.Seconds, rDate.HundredthSeconds  );
+    return Time( rDate.Hours, rDate.Minutes, rDate.Seconds, rDate.NanoSeconds  );
 }
 
 // ====================================================================

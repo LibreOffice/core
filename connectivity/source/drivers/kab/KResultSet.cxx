@@ -344,7 +344,7 @@ DateTime SAL_CALL KabResultSet::getTimestamp(sal_Int32 columnIndex) throw(SQLExc
                 nRet.Hours = nRevision.time().hour();
                 nRet.Minutes = nRevision.time().minute();
                 nRet.Seconds = nRevision.time().second();
-                nRet.HundredthSeconds = nRevision.time().msec() / 10;
+                nRet.NanoSeconds = nRevision.time().msec() * ::Time::nanoPerMilli;
                 return nRet;
             }
         }

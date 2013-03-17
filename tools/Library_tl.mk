@@ -107,6 +107,12 @@ $(eval $(call gb_Library_use_externals,tl,\
 	zlib \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,tl,\
+        -lrt \
+))
+endif
+
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_set_include,tl,\

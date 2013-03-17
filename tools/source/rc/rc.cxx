@@ -54,7 +54,10 @@ Time::Time( const ResId& rResId )
     if ( 0x04 & nObjMask )
         SetSec( (sal_uInt16)pResMgr->ReadShort() );
     if ( 0x08 & nObjMask )
-        Set100Sec( (sal_uInt16)pResMgr->ReadShort() );
+        // TODO: when we change the place that writes this binary resource format to match:
+        // SetNanoSec( pResMgr->ReadLong() );
+        // In the meantime:
+        SetNanoSec( pResMgr->ReadShort() * ::Time::nanoPerCenti );
 }
 
 Date::Date( const ResId& rResId ) : nDate(0)

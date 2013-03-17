@@ -50,9 +50,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::std::vector;
 
-#define D_TIMEFACTOR              86400.0
-
-
 void ScViewFunc::DetectiveAddPred()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -254,10 +251,10 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     Date aActDate( Date::SYSTEM );
     double fDate = aActDate - *pFormatter->GetNullDate();
     Time aActTime( Time::SYSTEM );
-    double fTime =
-        aActTime.Get100Sec() / 100.0 + aActTime.GetSec() +
-        (aActTime.GetMin() * 60.0) + (aActTime.GetHour() * 3600.0);
-    fTime /= D_TIMEFACTOR;
+    double fTime = aActTime.GetHour()    / static_cast<double>(::Time::hourPerDay)   +
+                   aActTime.GetMin()     / static_cast<double>(::Time::minutePerDay) +
+                   aActTime.GetSec()     / static_cast<double>(::Time::secondPerDay) +
+                   aActTime.GetNanoSec() / static_cast<double>(::Time::nanoSecPerDay);
     pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
     pDocSh->GetDocFunc().PutCell(aCurPos, new ScValueCell(fDate+fTime), false);
 
