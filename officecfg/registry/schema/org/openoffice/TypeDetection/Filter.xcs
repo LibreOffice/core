@@ -17,57 +17,95 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="Filter" oor:package="org.openoffice.TypeDetection" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <info>
-        <author>AS</author>
-        <desc >Contains common filters for Office. See package TypeDetection and TypeDetection_Types for other parts of type/filter configuration too.</desc>
-    </info>
-    <templates>
-		<group oor:name="Filter">
-            <info><desc>Lists filters that can import or export content.</desc></info>
-			<prop oor:name="FileFormatVersion" oor:type="xs:int" oor:nillable="false">
-                <info><desc>An unique ID, which is used internal to differ between file formats of same type.</desc></info>
-				<value>0</value>
-			</prop>
-            <prop oor:name="Type" oor:type="xs:string" oor:nillable="false">
-                <info><desc>Supported content type of this filter. Must be an internal type name.</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="DocumentService" oor:type="xs:string" oor:nillable="false">
-                <info><desc>The uno service name of the supported office document type.</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="UIComponent" oor:type="xs:string" oor:nillable="false">
-                <info><desc>The uno implementation name a dialog, which is used to ask an user for special filter parameter (e.g. for csv).</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="UserData" oor:type="oor:string-list" oor:nillable="false">
-                <info><desc>Filter specific data.</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="FilterService" oor:type="xs:string" oor:nillable="false">
-                <info><desc>The uno implementation name of the filter service.</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="TemplateName" oor:type="xs:string" oor:nillable="false">
-                <info><desc>Name of a corresponding template, which is merged together with the style seets of the loaded document.</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="Flags" oor:type="oor:string-list" oor:nillable="false">
-                <info><desc>Specify the filter in some further properties (e.g. import/export/..).</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
-                <info><desc>Localized name of the filter, whch can be shown at the UI.</desc></info>
-            </prop>
-            <prop oor:name="ExportExtension" oor:type="xs:string" oor:nillable="true">
-                <info><desc>Extension to use when exporting content using this filter.  When this value is not given, it is inferred from the Type associated with this filter.</desc></info>
-            </prop>
-		</group>
-	</templates>
-	<component>
-        <set oor:name="Filters" oor:node-type="Filter">
-            <info><desc>Lists the registered office filters.</desc></info>
-        </set>
-	</component>
+<oor:component-schema
+    oor:package="org.openoffice.TypeDetection" oor:name="Filter"
+    xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <info>
+    <author>AS</author>
+    <desc>Contains common filters for Office. See package TypeDetection and
+    TypeDetection_Types for other parts of type/filter configuration too.</desc>
+  </info>
+  <templates>
+    <group oor:name="Filter">
+      <info>
+        <desc>Lists filters that can import or export content.</desc>
+      </info>
+      <prop oor:name="FileFormatVersion" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>A unique ID, which is used internally to differentiate among
+          file formats of the same type.</desc>
+        </info>
+	<value>0</value>
+      </prop>
+      <prop oor:name="Type" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Supported content type of this filter. Must be an internal type
+          name.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop
+          oor:name="DocumentService" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The uno service name of the supported office document
+          type.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="UIComponent" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The uno implementation name a dialog, which is used to ask a
+          user for special filter parameter (e.g., for csv).</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="UserData" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>Filter specific data.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="FilterService" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The uno implementation name of the filter service.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="TemplateName" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Name of a corresponding template, which is merged together with
+          the style seets of the loaded document.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="Flags" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>Specify the filter in some further properties
+          (import/export/...).</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
+        <info>
+          <desc>Localized name of the filter, whch can be shown at the
+          UI.</desc>
+        </info>
+      </prop>
+      <prop oor:name="ExportExtension" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Extension to use when exporting content using this filter. When
+          this value is not given, it is inferred from the Type associated with
+          this filter.</desc>
+        </info>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Filters" oor:node-type="Filter">
+      <info>
+        <desc>Lists the registered office filters.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>

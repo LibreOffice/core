@@ -17,58 +17,99 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="Types" oor:package="org.openoffice.TypeDetection" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <info>
-        <author>AS</author>
-        <desc >Contains common content types for Office. See package TypeDetection and TypeDetection_Filters for other parts of type/filter configuration too.</desc>
-    </info>
-    <templates>
-		<group oor:name="Type">
-            <info><desc>Lists the types that represent common content formats in Office.</desc></info>
-			<prop oor:name="UIOrder" oor:type="xs:int" oor:nillable="false">
-                <info><desc>Used to sort types inside dialogs. Only values &gt;0 are recognized. Types with an order value &lt;1 will be sorted alphabeticly.</desc></info>
-				<value>0</value>
-			</prop>
-            <prop oor:name="URLPattern" oor:type="oor:string-list" oor:nillable="false">
-                <info><desc>List of URL pattern (with simple wildcards */?) which match to this type.</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="Extensions" oor:type="oor:string-list" oor:nillable="false">
-                <info><desc>List of file extensions, which match to this type.</desc></info>
-				<value/>
-            </prop>
-			<prop oor:name="DocumentIconID" oor:type="xs:int" oor:nillable="false">
-                <info><desc>Global ID of an icon, which represent this tye at the UI.</desc></info>
-				<value>0</value>
-			</prop>
-            <prop oor:name="MediaType" oor:type="xs:string" oor:nillable="false">
-                <info><desc>Corresponding mime type.</desc></info>
-				<value/>
-            </prop>
-			<prop oor:name="Preferred" oor:type="xs:boolean" oor:nillable="false">
-                <info><desc>In case of ambigoues registrations (e.g. for extensions doc/txt) it specify the prefererred type.</desc></info>
-				<value>false</value>
-			</prop>
-            <prop oor:name="PreferredFilter" oor:type="xs:string" oor:nillable="false">
-                <info><desc>An optimization! Points directly to the preferred filter for this type. No search across all filters is neccessary ...</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
-                <info><desc>Localized name of this type for showing it at the UI.</desc></info>
-            </prop>
-            <prop oor:name="ClipboardFormat" oor:type="xs:string" oor:nillable="false">
-                <info><desc>Unique identifier, which can be searched inside the stream to detect this format.</desc></info>
-				<value/>
-            </prop>
-            <prop oor:name="DetectService" oor:type="xs:string" oor:nillable="false">
-                <info><desc>An optimization! Points directly to the deep detection service, which can verify a flat detection.</desc></info>
-				<value/>
-            </prop>
-		</group>
-	</templates>
-	<component>
-        <set oor:name="Types" oor:node-type="Type">
-            <info><desc>Lists the registered content types.</desc></info>
-        </set>
-	</component>
+<oor:component-schema
+    oor:package="org.openoffice.TypeDetection" oor:name="Types" xml:lang="en-US"
+    xmlns:oor="http://openoffice.org/2001/registry"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <info>
+    <author>AS</author>
+    <desc>Contains common content types for Office. See package TypeDetection
+    and TypeDetection_Filters for other parts of type/filter configuration
+    too.</desc>
+  </info>
+  <templates>
+    <group oor:name="Type">
+      <info>
+        <desc>Lists the types that represent common content formats in
+        Office.</desc>
+      </info>
+      <prop oor:name="UIOrder" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Used to sort types inside dialogs. Only values &gt; 0 are
+          recognized. Types with an order value &lt; 1 will be sorted
+          alphabeticly.</desc>
+        </info>
+	<value>0</value>
+      </prop>
+      <prop
+          oor:name="URLPattern" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+        <desc>List of URL pattern (with simple wildcards */?) which match to
+        this type.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop
+          oor:name="Extensions" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+        <desc>List of file extensions, which match to this type.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="DocumentIconID" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Global ID of an icon, which represent this tye at the UI.</desc>
+        </info>
+	<value>0</value>
+      </prop>
+      <prop oor:name="MediaType" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Corresponding mime type.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="Preferred" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>In case of ambigoues registrations (e.g. for extensions doc/txt)
+          it specify the prefererred type.</desc>
+        </info>
+	<value>false</value>
+      </prop>
+      <prop
+          oor:name="PreferredFilter" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>An optimization; points directly at the preferred filter for
+          this type. No search across all filters is neccessary.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
+        <info>
+          <desc>Localized name of this type for showing it at the UI.</desc>
+        </info>
+      </prop>
+      <prop
+          oor:name="ClipboardFormat" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Unique identifier, which can be searched inside the stream to
+          detect this format.</desc>
+        </info>
+	<value/>
+      </prop>
+      <prop oor:name="DetectService" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>An optimization; points directly at the deep detection service,
+          which can verify a flat detection.</desc>
+        </info>
+	<value/>
+      </prop>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Types" oor:node-type="Type">
+      <info>
+        <desc>Lists the registered content types.</desc>
+      </info>
+    </set>
+  </component>
 </oor:component-schema>
