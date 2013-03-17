@@ -57,7 +57,7 @@ namespace svt
     //---------------------------------------------------------------------
     SvStream& operator << ( SvStream& _rStorage, const util::DateTime& _rDate )
     {
-        _rStorage << _rDate.HundredthSeconds;
+        _rStorage << _rDate.NanoSeconds;
         _rStorage << _rDate.Seconds;
         _rStorage << _rDate.Minutes;
         _rStorage << _rDate.Hours;
@@ -71,7 +71,7 @@ namespace svt
     //---------------------------------------------------------------------
     SvStream& operator >> ( SvStream& _rStorage, util::DateTime& _rDate )
     {
-        _rStorage >> _rDate.HundredthSeconds;
+        _rStorage >> _rDate.NanoSeconds;
         _rStorage >> _rDate.Seconds;
         _rStorage >> _rDate.Minutes;
         _rStorage >> _rDate.Hours;
@@ -85,7 +85,7 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool operator == ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
     {
-        return  _rLHS.HundredthSeconds == _rRHS.HundredthSeconds
+        return  _rLHS.NanoSeconds == _rRHS.NanoSeconds
             &&  _rLHS.Seconds   == _rRHS.Seconds
             &&  _rLHS.Minutes   == _rRHS.Minutes
             &&  _rLHS.Hours     == _rRHS.Hours
@@ -123,7 +123,7 @@ namespace svt
     private:
         inline  void    implResetDate( )
         {
-            m_aLastModified.HundredthSeconds = m_aLastModified.Seconds = m_aLastModified.Minutes = m_aLastModified.Hours = 0;
+            m_aLastModified.NanoSeconds = m_aLastModified.Seconds = m_aLastModified.Minutes = m_aLastModified.Hours = 0;
             m_aLastModified.Day = m_aLastModified.Month = m_aLastModified.Year = 0;
         }
 

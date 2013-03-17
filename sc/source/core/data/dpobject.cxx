@@ -222,7 +222,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
 
                 util::Time aTime = mxRow->getTime(nCol+1);
                 fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
-                           aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                           aTime.Seconds + aTime.NanoSeconds / 1000000000.0 ) / D_TIMEFACTOR;
                 rData.SetValue(fValue);
                 break;
             }
@@ -233,7 +233,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
                 util::DateTime aStamp = mxRow->getTimestamp(nCol+1);
                 fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - maNullDate ) +
                          ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
-                           aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                           aStamp.Seconds + aStamp.NanoSeconds / 1000000000.0 ) / D_TIMEFACTOR;
                 rData.SetValue(fValue);
                 break;
             }

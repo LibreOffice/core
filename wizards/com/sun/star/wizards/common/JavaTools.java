@@ -433,7 +433,7 @@ public class JavaTools
         dt.Hours = (short) cal.get(Calendar.HOUR);
         dt.Minutes = (short) cal.get(Calendar.MINUTE);
         dt.Seconds = (short) cal.get(Calendar.SECOND);
-        dt.HundredthSeconds = (short) cal.get(Calendar.MILLISECOND);
+        dt.NanoSeconds = cal.get(Calendar.MILLISECOND)*1000000;
         return dt;
     }
 

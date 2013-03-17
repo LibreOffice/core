@@ -111,7 +111,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
 
                     util::Time aTime = xRow->getTime(nRowPos);
                     nVal = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
-                             aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                             aTime.Seconds + aTime.NanoSeconds / 1000000000.0 ) / D_TIMEFACTOR;
                     bEmptyFlag = xRow->wasNull();
                     bValue = sal_True;
                 }
@@ -127,7 +127,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                     nVal = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) -
                                                 *pFormTable->GetNullDate() ) +
                            ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
-                             aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                             aStamp.Seconds + aStamp.NanoSeconds / 1000000000.0 ) / D_TIMEFACTOR;
                     bEmptyFlag = xRow->wasNull();
                     bValue = sal_True;
                 }

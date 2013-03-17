@@ -590,16 +590,16 @@ namespace xmloff
                 }
                 else if (_rValue >>= aTime)
                 {
-                    fValue = ((aTime.Hours * 60 + aTime.Minutes) * 60 + aTime.Seconds) * 100 + aTime.HundredthSeconds;
-                    fValue = fValue / 8640000.0;
+                    fValue = ((aTime.Hours * 60 + aTime.Minutes) * 60 + aTime.Seconds) * 1000000000LL + aTime.NanoSeconds;
+                    fValue = fValue / 86400000000000.0;
                 }
                 else if (_rValue >>= aDateTime)
                 {
                     DateTime aToolsDateTime( DateTime::EMPTY );
                     ::utl::typeConvert(aDateTime, aToolsDateTime);
                     // the time part (the digits behind the comma)
-                    fValue = ((aDateTime.Hours * 60 + aDateTime.Minutes) * 60 + aDateTime.Seconds) * 100 + aDateTime.HundredthSeconds;
-                    fValue = fValue / 8640000.0;
+                    fValue = ((aDateTime.Hours * 60 + aDateTime.Minutes) * 60 + aDateTime.Seconds) * 1000000000LL + aDateTime.NanoSeconds;
+                    fValue = fValue / 86400000000000.0;
                     // plus the data part (the digits in front of the comma)
                     fValue += aToolsDateTime.GetDate();
                 }
