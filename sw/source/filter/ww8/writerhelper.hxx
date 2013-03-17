@@ -182,8 +182,8 @@ namespace sw
                 return (maGrf == rOther.maGrf);
             else if ((!mbForBullet) && (!rOther.mbForBullet))
                 return (mpFlyFrm == rOther.mpFlyFrm);
-            else
-                return false;
+
+            return false;
         }
 
         /** The Size of the contained element
