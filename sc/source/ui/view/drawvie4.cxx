@@ -159,6 +159,9 @@ void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRang
     if (!xChartDoc.is())
         return;
 
+    if(xChartDoc->hasInternalDataProvider())
+        return;
+
     uno::Reference<chart2::data::XDataSource> xDataSource(xChartDoc, uno::UNO_QUERY);
     if (!xDataSource.is())
         return;
