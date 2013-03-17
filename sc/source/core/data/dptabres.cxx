@@ -2694,7 +2694,7 @@ bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
             {
                 // same base (hierarchy between the two groups is irrelevant)
                 bInclude = pResultData->HasCommonElement(
-                    it->mnNameIndex, it->mnSrcIndex, aMemberData, nDimSource);
+                    it->mnNameIndex, it->mnSrcIndex, aMemberData, nGroupBase);
             }
 
         }
