@@ -911,8 +911,7 @@ void SwCustomizeAddressBlockDialog::MoveFocus( Window* pMember, bool bNext )
         {
             if(aSearch == aControls.begin())
                 aSearch = aControls.end();
-            else
-                --aSearch;
+            --aSearch;
             if( (*aSearch)->IsEnabled() )
             {
                 (*aSearch)->GrabFocus();
