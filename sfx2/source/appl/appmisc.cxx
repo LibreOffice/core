@@ -313,7 +313,9 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
         if(xPrimitive2DRenderer.is())
         {
             // cancel out rasterize's mm2pixel conversion
-            const double fFakeDPI=1000.0/2.54;
+            // see fFactor100th_mmToInch in
+            // drawinglayer/source/drawinglayeruno/xprimitive2drenderer.cxx
+            const double fFakeDPI=2.54 * 1000.0;
 
             geometry::RealRectangle2D aRealRect(
                 0, 0,
