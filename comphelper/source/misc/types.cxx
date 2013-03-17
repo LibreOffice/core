@@ -44,7 +44,7 @@ using namespace ::com::sun::star::lang;
 //-------------------------------------------------------------------------
 sal_Bool operator ==(const DateTime& _rLeft, const DateTime& _rRight)
 {
-    return ( _rLeft.HundredthSeconds == _rRight.HundredthSeconds) &&
+    return ( _rLeft.NanoSeconds == _rRight.NanoSeconds) &&
     ( _rLeft.Seconds == _rRight.Seconds) &&
     ( _rLeft.Minutes == _rRight.Minutes) &&
     ( _rLeft.Hours == _rRight.Hours) &&
@@ -64,7 +64,7 @@ sal_Bool operator ==(const Date& _rLeft, const Date& _rRight)
 //-------------------------------------------------------------------------
 sal_Bool operator ==(const Time& _rLeft, const Time& _rRight)
 {
-    return ( _rLeft.HundredthSeconds == _rRight.HundredthSeconds) &&
+    return ( _rLeft.NanoSeconds == _rRight.NanoSeconds) &&
     ( _rLeft.Seconds == _rRight.Seconds) &&
     ( _rLeft.Minutes == _rRight.Minutes) &&
     ( _rLeft.Hours == _rRight.Hours) ;

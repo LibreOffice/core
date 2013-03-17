@@ -636,11 +636,11 @@ public class ODatabaseForm extends TestCase {
         d.Day = 26; d.Month = 1; d.Year = 2001;
         params.add(d) ;
         Time t = new Time();
-        t.Hours = 1; t.HundredthSeconds = 12; t.Minutes = 25; t.Seconds = 14;
+        t.Hours = 1; t.NanoSeconds = 123456789; t.Minutes = 25; t.Seconds = 14;
         params.add(t) ;
         DateTime dt = new DateTime();
         dt.Day = 26; dt.Month = 1; dt.Year = 2001; dt.Hours = 1;
-        dt.HundredthSeconds = 12; dt.Minutes = 25; dt.Seconds = 14;
+        dt.NanoSeconds = 123456789; dt.Minutes = 25; dt.Seconds = 14;
         params.add(dt) ;
         tEnv.addObjRelation("XParameters.ParamValues", params);
 

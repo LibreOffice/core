@@ -70,11 +70,11 @@ public class TimeValidator extends integration.forms.ControlValidator
 
     private boolean isInvalidTime( com.sun.star.util.Time timeValue )
     {
-        return ( timeValue.Hours == -1 ) && ( timeValue.Minutes == -1 ) && ( timeValue.Seconds == -1 ) && ( timeValue.HundredthSeconds == -1 );
+        return ( timeValue.Hours == -1 ) && ( timeValue.Minutes == -1 ) && ( timeValue.Seconds == -1 ) && ( timeValue.NanoSeconds == -1 );
     }
 
     private boolean isFullHour( com.sun.star.util.Time timeValue )
     {
-        return ( timeValue.Minutes == 0 ) && ( timeValue.Seconds == 0 ) && ( timeValue.HundredthSeconds == 0 );
+        return ( timeValue.Minutes == 0 ) && ( timeValue.Seconds == 0 ) && ( timeValue.NanoSeconds == 0 );
     }
 }

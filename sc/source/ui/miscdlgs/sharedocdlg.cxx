@@ -209,7 +209,7 @@ void ScShareDocumentDlg::UpdateView()
 
         util::DateTime uDT(xDocProps->getModificationDate());
         Date d(uDT.Day, uDT.Month, uDT.Year);
-        Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.HundredthSeconds);
+        Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
         DateTime aDateTime(d,t);
 
         aString += ScGlobal::pLocaleData->getDate( aDateTime );

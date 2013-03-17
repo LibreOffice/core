@@ -2170,7 +2170,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                 Date aDate( (sal_uLong)aContent.GetToken(0).ToInt32() );
                 Time aTime( (sal_uLong)aContent.GetToken(1).ToInt32() );
                 DateTime aDateTime( aDate, aTime );
-                ::util::DateTime uDT(aDateTime.Get100Sec(),
+                ::util::DateTime uDT(aDateTime.GetNanoSec(),
                     aDateTime.GetSec(), aDateTime.GetMin(),
                     aDateTime.GetHour(), aDateTime.GetDay(),
                     aDateTime.GetMonth(), aDateTime.GetYear());

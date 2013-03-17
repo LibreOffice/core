@@ -370,12 +370,12 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                 {
                     double fCellVal = xCell->getValue();
                     double fTime = fCellVal - rtl::math::approxFloor( fCellVal );
-                    long nIntTime = (long)rtl::math::round( fTime * 8640000.0 );
-                    if ( nIntTime == 8640000 )
-                        nIntTime = 0;                       // 23:59:59.995 and above is 00:00:00.00
+                    sal_Int64 nIntTime = static_cast<sal_Int64>(rtl::math::round( fTime * static_cast<double>(::Time::nanoSecPerDay) ));
+                    if ( nIntTime ==  ::Time::nanoSecPerDay)
+                        nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
                     ::com::sun::star::util::Time aTime;
-                    aTime.HundredthSeconds = (sal_uInt16)( nIntTime % 100 );
-                    nIntTime /= 100;
+                    aTime.NanoSeconds = (sal_uInt32)( nIntTime % ::Time::nanoSecPerSec );
+                    nIntTime /= ::Time::nanoSecPerSec;
                     aTime.Seconds = (sal_uInt16)( nIntTime % 60 );
                     nIntTime /= 60;
                     aTime.Minutes = (sal_uInt16)( nIntTime % 60 );
@@ -394,17 +394,17 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     double fDays = ::rtl::math::approxFloor( fCellVal );
                     double fTime = fCellVal - fDays;
                     long nIntDays = (long)fDays;
-                    long nIntTime = (long)::rtl::math::round( fTime * 8640000.0 );
-                    if ( nIntTime == 8640000 )
+                    sal_Int64 nIntTime = ::rtl::math::round( fTime * static_cast<double>(::Time::nanoSecPerDay) );
+                    if ( nIntTime == ::Time::nanoSecPerDay )
                     {
-                        nIntTime = 0;                       // 23:59:59.995 and above is 00:00:00.00
+                        nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
                         ++nIntDays;                         // (next day)
                     }
 
                     ::com::sun::star::util::DateTime aDateTime;
 
-                    aDateTime.HundredthSeconds = (sal_uInt16)( nIntTime % 100 );
-                    nIntTime /= 100;
+                    aDateTime.NanoSeconds = (sal_uInt16)( nIntTime % ::Time::nanoSecPerSec );
+                    nIntTime /= ::Time::nanoSecPerSec;
                     aDateTime.Seconds = (sal_uInt16)( nIntTime % 60 );
                     nIntTime /= 60;
                     aDateTime.Minutes = (sal_uInt16)( nIntTime % 60 );
