@@ -23,15 +23,16 @@
 #include <viewopt.hxx>
 #include <crsskip.hxx>
 
-/*  Immer:
-    -   Zuruecksetzen des Cursorstacks
-    -   Timer nachtriggern
-    -   gfs. GCAttr
+/**
+   Always:
+    -   Reset of the cursor stack
+    -   retrigger timer
+    -   if applicable: GCAttr
 
-    bei Selektion
+    on selection
     -   SttSelect()
 
-    sonst
+    else
     -   EndSelect()
  */
 
@@ -52,8 +53,8 @@ public:
     {
         if( bAct )
         {
-            //Die Action wird fuer das Scrollen in "einabsaetzigen" Rahmen mit
-            //fester Hoehe gebraucht.
+            // The action is used for scrolling in "single paragraph"
+            // frames with fixed height.
             pSh->StartAllAction();
             pSh->EndAllAction();
         }
@@ -92,7 +93,6 @@ sal_Bool SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, sal_Bool bSelect )
     return nRet;
 }
 
-
 sal_Bool SwWrtShell::Left( sal_uInt16 nMode, sal_Bool bSelect,
                             sal_uInt16 nCount, sal_Bool bBasicCall, sal_Bool bVisual )
 {
@@ -109,8 +109,6 @@ sal_Bool SwWrtShell::Left( sal_uInt16 nMode, sal_Bool bSelect,
         return SwCrsrShell::Left( nCount, nMode, bVisual );
     }
 }
-
-
 
 sal_Bool SwWrtShell::Right( sal_uInt16 nMode, sal_Bool bSelect,
                             sal_uInt16 nCount, sal_Bool bBasicCall, sal_Bool bVisual )
@@ -130,8 +128,6 @@ sal_Bool SwWrtShell::Right( sal_uInt16 nMode, sal_Bool bSelect,
     }
 }
 
-
-
 sal_Bool SwWrtShell::Up( sal_Bool bSelect, sal_uInt16 nCount, sal_Bool bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
@@ -147,8 +143,6 @@ sal_Bool SwWrtShell::Up( sal_Bool bSelect, sal_uInt16 nCount, sal_Bool bBasicCal
         return SwCrsrShell::Up( nCount );
     }
 }
-
-
 
 sal_Bool SwWrtShell::Down( sal_Bool bSelect, sal_uInt16 nCount, sal_Bool bBasicCall )
 {
@@ -167,8 +161,6 @@ sal_Bool SwWrtShell::Down( sal_Bool bSelect, sal_uInt16 nCount, sal_Bool bBasicC
     }
 }
 
-
-
 sal_Bool SwWrtShell::LeftMargin( sal_Bool bSelect, sal_Bool bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly() )
@@ -184,8 +176,6 @@ sal_Bool SwWrtShell::LeftMargin( sal_Bool bSelect, sal_Bool bBasicCall )
         return SwCrsrShell::LeftMargin();
     }
 }
-
-
 
 sal_Bool SwWrtShell::RightMargin( sal_Bool bSelect, sal_Bool bBasicCall  )
 {
@@ -205,8 +195,6 @@ sal_Bool SwWrtShell::RightMargin( sal_Bool bSelect, sal_Bool bBasicCall  )
     }
 }
 
-
-
 sal_Bool SwWrtShell::GoStart( sal_Bool bKeepArea, sal_Bool *pMoveTable,
                             sal_Bool bSelect, sal_Bool bDontMoveRegion )
 {
@@ -220,7 +208,7 @@ sal_Bool SwWrtShell::GoStart( sal_Bool bKeepArea, sal_Bool *pMoveTable,
             else
                 SttSelect();
         }
-            // Tabellenzelle?
+            // Table cell ?
         if ( !bBoxSelection && (MoveSection( fnSectionCurr, fnSectionStart)
                 || bDontMoveRegion))
         {
@@ -236,11 +224,11 @@ sal_Bool SwWrtShell::GoStart( sal_Bool bKeepArea, sal_Bool *pMoveTable,
         }
         else if( bBoxSelection && pMoveTable )
         {
-            // JP 09.01.96: wir haben eine Boxselektion (oder leere Zelle)
-            //              und wollen selektieren (pMoveTable wird im
-            //              SelAll gesetzt). Dann darf die Tabelle nicht
-            //              verlassen werden; sonst ist keine Selektion der
-            //              gesamten Tabelle moeglich!
+            // JP 09.01.96: We have a box selection (or a empty cell)
+            //              and we want select (pMoveTable will be
+            //              set in SelAll). Then the table must not
+            //              be left, otherwise there is no selection
+            //              of the entire table possible!
             *pMoveTable = sal_True;
             return sal_True;
         }
@@ -268,12 +256,10 @@ sal_Bool SwWrtShell::GoStart( sal_Bool bKeepArea, sal_Bool *pMoveTable,
         else if ( bKeepArea )
             return sal_True;
     }
-    // Bereiche ???
+    // Regions ???
     return SwCrsrShell::MoveRegion( fnRegionCurrAndSkip, fnRegionStart ) ||
            SwCrsrShell::SttEndDoc(sal_True);
 }
-
-
 
 sal_Bool SwWrtShell::GoEnd(sal_Bool bKeepArea, sal_Bool *pMoveTable)
 {
@@ -304,12 +290,10 @@ sal_Bool SwWrtShell::GoEnd(sal_Bool bKeepArea, sal_Bool *pMoveTable)
                 return sal_True;
         }
     }
-    // Bereiche ???
+    // Regions ???
     return SwCrsrShell::MoveRegion( fnRegionCurrAndSkip, fnRegionEnd ) ||
            SwCrsrShell::SttEndDoc(sal_False);
 }
-
-
 
 sal_Bool SwWrtShell::SttDoc( sal_Bool bSelect )
 {
@@ -317,14 +301,11 @@ sal_Bool SwWrtShell::SttDoc( sal_Bool bSelect )
     return GoStart(sal_False, 0, bSelect );
 }
 
-
-
 sal_Bool SwWrtShell::EndDoc( sal_Bool bSelect)
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return GoEnd();
 }
-
 
 sal_Bool SwWrtShell::SttNxtPg( sal_Bool bSelect )
 {
@@ -332,15 +313,11 @@ sal_Bool SwWrtShell::SttNxtPg( sal_Bool bSelect )
     return MovePage( fnPageNext, fnPageStart );
 }
 
-
-
 sal_Bool SwWrtShell::SttPrvPg( sal_Bool bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePage( fnPagePrev, fnPageStart );
 }
-
-
 
 sal_Bool SwWrtShell::EndNxtPg( sal_Bool bSelect )
 {
@@ -348,15 +325,11 @@ sal_Bool SwWrtShell::EndNxtPg( sal_Bool bSelect )
     return MovePage( fnPageNext, fnPageEnd );
 }
 
-
-
 sal_Bool SwWrtShell::EndPrvPg( sal_Bool bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePage( fnPagePrev, fnPageEnd );
 }
-
-
 
 sal_Bool SwWrtShell::SttPg( sal_Bool bSelect )
 {
@@ -364,15 +337,11 @@ sal_Bool SwWrtShell::SttPg( sal_Bool bSelect )
     return MovePage( fnPageCurr, fnPageStart );
 }
 
-
-
 sal_Bool SwWrtShell::EndPg( sal_Bool bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePage( fnPageCurr, fnPageEnd );
 }
-
-
 
 sal_Bool SwWrtShell::SttPara( sal_Bool bSelect )
 {
@@ -380,22 +349,15 @@ sal_Bool SwWrtShell::SttPara( sal_Bool bSelect )
     return MovePara( fnParaCurr, fnParaStart );
 }
 
-
-
 sal_Bool SwWrtShell::EndPara( sal_Bool bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePara(fnParaCurr,fnParaEnd);
 }
 
-
-/*------------------------------------------------------------------------
- Beschreibung:  Spaltenweises Springen
- Parameter:     mit oder ohne SSelection
- Return:        Erfolg oder Misserfolg
-------------------------------------------------------------------------*/
-
-
+// Column-by-jumping.
+// SSelection with or without
+// returns success or failure
 
 sal_Bool SwWrtShell::StartOfColumn( sal_Bool bSelect )
 {
@@ -403,15 +365,11 @@ sal_Bool SwWrtShell::StartOfColumn( sal_Bool bSelect )
     return MoveColumn(fnColumnCurr, fnColumnStart);
 }
 
-
-
 sal_Bool SwWrtShell::EndOfColumn( sal_Bool bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect);
     return MoveColumn(fnColumnCurr, fnColumnEnd);
 }
-
-
 
 sal_Bool SwWrtShell::StartOfNextColumn( sal_Bool bSelect )
 {
@@ -419,15 +377,11 @@ sal_Bool SwWrtShell::StartOfNextColumn( sal_Bool bSelect )
     return MoveColumn( fnColumnNext, fnColumnStart);
 }
 
-
-
 sal_Bool SwWrtShell::EndOfNextColumn( sal_Bool bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect);
     return MoveColumn(fnColumnNext, fnColumnEnd);
 }
-
-
 
 sal_Bool SwWrtShell::StartOfPrevColumn( sal_Bool bSelect )
 {
@@ -435,23 +389,19 @@ sal_Bool SwWrtShell::StartOfPrevColumn( sal_Bool bSelect )
     return MoveColumn(fnColumnPrev, fnColumnStart);
 }
 
-
-
 sal_Bool SwWrtShell::EndOfPrevColumn( sal_Bool bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect);
     return MoveColumn(fnColumnPrev, fnColumnEnd);
 }
 
-
-
 sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
 {
     sal_Bool bDiff = sal_False;
     SwRect aOldRect( GetCharRect() ), aTmpArea( VisArea() );
 
-    //bDestOnStack besagt, ob ich den Cursor nicht an die aktuelle Position
-    //setzen konnte, da in diesem Bereich kein Inhalt vorhanden ist.
+    // bDestOnStack indicates if I could not set the coursor at the current
+    // position, because in this region is no content.
     if( !bDestOnStack )
     {
         Point aPt( aOldRect.Center() );
@@ -467,17 +417,16 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
         bDestOnStack = true;
     }
 
-    //falls wir eine Rahmenselektion hatten, muss diese nach dem
-    //fnSetCrsr entfernt werden und damit wir da wieder hinkommen
-    //auf dem Stack gemerkt werden.
+    // If we had a frame selection, it must be removed after the fnSetCrsr
+    // and we have to remember the position on the stack to return to it later.
     sal_Bool bIsFrmSel = sal_False;
 
     bool bIsObjSel = false;
 
-    //Zielposition liegt jetzt innerhalb des sichtbaren Bereiches -->
-    //Cursor an die Zielposition setzen; merken, dass keine Ziel-
-    //position mehr auf dem Stack steht.
-    //Der neue sichtbare Bereich wird zuvor ermittelt.
+    //Target position is now within the viewable region -->
+    //Place the cursor at the target position; remember that no target
+    //position is longer on the stack.
+    //The new visible region is to be determined beforehand.
     aTmpArea.Pos().Y() += lOffset;
     if( aTmpArea.IsInside(aDest) )
     {
@@ -489,7 +438,7 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
         bIsFrmSel = IsFrmSelected();
         bIsObjSel = 0 != IsObjSelected();
 
-        // Rahmenselektion aufheben
+        // unselect frame
         if( bIsFrmSel || bIsObjSel )
         {
             UnSelectFrm();
@@ -509,17 +458,17 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
 
         if( bIsFrmSel )
         {
-            // bei Frames immer nur die obere Ecke nehmen, damit dieser
-            // wieder selektiert werden kann
+            // In frames take only the upper corner
+            // so that it can be re-selected.
             aOldRect.SSize( 5, 5 );
         }
 
-            // Zuruecksetzen des Dest. SPoint Flags
+            // reset Dest. SPoint Flags
         bDestOnStack = false;
     }
 
-    // Position auf den Stack; bDiff besagt, ob ein Unterschied zwischen
-    // der alten und der neuen Cursorposition besteht.
+    // Position into the stack; bDiff indicates if there is a
+    // difference between the old and the new cursor position.
     pCrsrStack = new CrsrStack( bDiff, bIsFrmSel, aOldRect.Center(),
                                 lOffset, pCrsrStack );
     return !bDestOnStack && bDiff;
@@ -535,8 +484,8 @@ sal_Bool SwWrtShell::PopCrsr(sal_Bool bUpdate, sal_Bool bSelect)
     const sal_Bool bValidPos = pCrsrStack->bValidCurPos;
     if( bUpdate && bValidPos )
     {
-            // falls ein Vorgaenger auf dem Stack steht, dessen Flag fuer eine
-            // gueltige Position verwenden.
+            // If a predecessor is on the stack,
+            // use the flag for a valid position.
         SwRect aTmpArea(VisArea());
         aTmpArea.Pos().Y() -= pCrsrStack->lOffset;
         if( aTmpArea.IsInside( pCrsrStack->aDocPos ) )
@@ -554,9 +503,9 @@ sal_Bool SwWrtShell::PopCrsr(sal_Bool bUpdate, sal_Bool bSelect)
                 EnterSelFrmMode( &pCrsrStack->aDocPos );
             }
         }
-            // Falls eine Verschiebung zwischen dem sichtbaren Bereich
-            // und der gemerkten Cursorpositionen auftritt, werden
-            // alle gemerkten Positionen weggeschmissen
+            // If a discrepancy between the visible range and the
+            // remembered cursor position occurs, all of the remembered
+            // positions are thrown away.
         else
         {
             _ResetCursorStack();
@@ -574,12 +523,8 @@ sal_Bool SwWrtShell::PopCrsr(sal_Bool bUpdate, sal_Bool bSelect)
     return bValidPos;
 }
 
-/*
- * Zuruecksetzen aller gepushten Cursorpositionen; dieser werden nicht
- * zur Anzeige gebracht ( --> Kein Start-/EndAction!!)
- */
-
-
+// Reset of all pushed cursor positions; these will
+// not be displayed ( --> No Start-/EndAction!!)
 
 void SwWrtShell::_ResetCursorStack()
 {
@@ -593,38 +538,38 @@ void SwWrtShell::_ResetCursorStack()
     ePageMove = MV_NO;
     bDestOnStack = false;
 }
-/**************
-
-    falls kein Stack existiert --> Selektionen aufheben
-    falls Stack && Richtungswechsel
-        --> Cursor poppen und return
-    sonst
-        --> Cursor pushen
-             Cursor umsetzen
-
-***************/
+/**
+    if no stack exists --> cancel selection
+    if stack && change of direction
+        --> pop cursor and return
+    else
+        --> push cursor
+            transpose cursor
+*/
 
 
 
 sal_Bool SwWrtShell::PageCrsr(SwTwips lOffset, sal_Bool bSelect)
 {
-    // nichts tun, wenn ein Offset von 0 angegeben wurde
+    // Do nothing if an offset of 0 was indicated
     if(!lOffset) return sal_False;
-        // Diente mal dazu, eine Neuformatierung fuer das Layout
-        // zu erzwingen.
-        // Hat so nicht funktioniert, da der Cursor nicht gesetzt
-        // wurde, da dies innerhalb einer Start- / EndActionklammerung
-        // nicht geschieht.
-        // Da am Ende nur ViewShell::EndAction() gerufen wird,
-        // findet auch hier keine Aktualisierung der Anzeige
-        // der Cursorposition statt.
-        // Die CrsrShell- Actionklammerung kann nicht verwendet werden,
-        // da sie immer zu einer Anzeige des Cursors fuehrt, also auch,
-        // wenn nach dem Blaettern in einen Bereich ohne gueltige Position
-        // geblaettert wurde.
-        //  ViewShell::StartAction();
+        // Was once used to force a reformat of the layout.
+        // This has not work that way, because the cursor was not set
+        // because this does not happen within a
+        // Start-/EndActionParentheses.
+        // Because only ViewShell::EndAction() is called at the end,
+        // no updating of the display of the cursor position takes place.
+        // The CrsrShell-Actionparentheses cannot be used, because it
+        // always leads to displaying the cursor, thus also,
+da sie immer zu einer Anzeige des Cursors fuehrt, also auch,
+        // if after the scroll scrolled in a region without a
+wenn nach dem Blaettern in einen Bereich ohne gueltige Position
+        // valid postition.
+geblaettert wurde.
+        // ViewShell::StartAction();
     PageMove eDir = lOffset > 0? MV_PAGE_DOWN: MV_PAGE_UP;
-        // Richtungswechsel und Stack vorhanden
+        // Change of direction and stack present
+Richtungswechsel und Stack vorhanden
     if( eDir != ePageMove && ePageMove != MV_NO && PopCrsr( sal_True, bSelect ))
         return sal_True;
 
@@ -632,8 +577,6 @@ sal_Bool SwWrtShell::PageCrsr(SwTwips lOffset, sal_Bool bSelect)
     ePageMove = eDir;
     return bRet;
 }
-
-
 
 sal_Bool SwWrtShell::GotoPage(sal_uInt16 nPage, sal_Bool bRecord)
 {
@@ -649,8 +592,6 @@ sal_Bool SwWrtShell::GotoPage(sal_uInt16 nPage, sal_Bool bRecord)
     }
     return sal_False;
 }
-
-
 
 sal_Bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, sal_Bool bSelect, sal_Bool bStart )
 {
@@ -748,8 +689,6 @@ const SwRedline* SwWrtShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect )
     return pRedline;
 }
 
-
-
 sal_Bool SwWrtShell::SelectTxtAttr( sal_uInt16 nWhich, const SwTxtAttr* pAttr )
 {
     sal_Bool bRet;
@@ -761,7 +700,5 @@ sal_Bool SwWrtShell::SelectTxtAttr( sal_uInt16 nWhich, const SwTxtAttr* pAttr )
     EndSelect();
     return bRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

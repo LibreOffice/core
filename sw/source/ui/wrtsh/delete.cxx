@@ -82,11 +82,7 @@ bool SwWrtShell::TryRemoveIndent()
     return bResult;
 }
 
-/*------------------------------------------------------------------------
- Description: Erase the line
-------------------------------------------------------------------------*/
-
-
+/** Description: Erase the line. */
 
 long SwWrtShell::DelLine()
 {
@@ -135,12 +131,12 @@ long SwWrtShell::DelLeft()
     const int nCmp = nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW;
     if( nCmp & nSelType )
     {
-        /*  #108205# Remember object's position. */
+        // #108205# Remember object's position.
         Point aTmpPt = GetObjRect().TopLeft();
 
         DelSelectedObj();
 
-        /*  #108205# Set cursor to remembered position. */
+        // #108205# Set cursor to remembered position.
         SetCrsr(&aTmpPt);
 
         LeaveSelFrmMode();
@@ -195,13 +191,13 @@ long SwWrtShell::DelLeft()
                                       GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
                                       0;
 
-        /* If the cursor is at the beginning of a paragraph, try to step
-           backwards. On failure we are done. */
+        // If the cursor is at the beginning of a paragraph, try to step
+        // backwards. On failure we are done.
         if( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
             return 0;
 
-        /* If the cursor entered or left a table (or both) we are done. No step
-           back. */
+        // If the cursor entered or left a table (or both) we are done. No step
+        // back.
         const SwTableNode* pIsInTblNd = SwCrsrShell::IsCrsrInTbl();
         if( pIsInTblNd != pWasInTblNd )
             return 0;
@@ -306,7 +302,7 @@ long SwWrtShell::DelRight()
         }
 
         {
-            /* #108049# Save the startnode of the current cell */
+            // #108049# Save the startnode of the current cell
             const SwStartNode * pSNdOld;
             pSNdOld = GetSwCrsr()->GetNode()->
                 FindTableBoxStartNode();
@@ -324,13 +320,13 @@ long SwWrtShell::DelRight()
                 {
                     if (IsCrsrInTbl() || (pWasInTblNd != IsCrsrInTbl()))
                     {
-                        /* #108049# Save the startnode of the current
+                        /** #108049# Save the startnode of the current
                             cell. May be different to pSNdOld as we have
                             moved. */
                         const SwStartNode * pSNdNew = GetSwCrsr()
                             ->GetNode()->FindTableBoxStartNode();
 
-                        /* #108049# Only move instead of deleting if we
+                        /** #108049# Only move instead of deleting if we
                             have moved to a different cell */
                         if (pSNdOld != pSNdNew)
                         {
@@ -358,12 +354,12 @@ long SwWrtShell::DelRight()
     case nsSelectionType::SEL_DRW_TXT:
     case nsSelectionType::SEL_DRW_FORM:
         {
-            /*  #108205# Remember object's position. */
+            // #108205# Remember object's position.
             Point aTmpPt = GetObjRect().TopLeft();
 
             DelSelectedObj();
 
-            /*  #108205# Set cursor to remembered position. */
+            // #108205# Set cursor to remembered position.
             SetCrsr(&aTmpPt);
 
             LeaveSelFrmMode();
@@ -405,8 +401,6 @@ long SwWrtShell::DelRight()
     return nRet;
 }
 
-
-
 long SwWrtShell::DelToEndOfPara()
 {
     SwActContext aActContext(this);
@@ -425,8 +419,6 @@ long SwWrtShell::DelToEndOfPara()
     return nRet;
 }
 
-
-
 long SwWrtShell::DelToStartOfPara()
 {
     SwActContext aActContext(this);
@@ -444,13 +436,10 @@ long SwWrtShell::DelToStartOfPara()
         UpdateAttr();
     return nRet;
 }
-/*
- * All erase operations should work with Find instead with
- * Nxt-/PrvDelim, because the latter works with Wrap Around
- * -- that's probably not wished.
- */
 
-
+// All erase operations should work with Find instead with
+// Nxt-/PrvDelim, because the latter works with Wrap Around
+// -- that's probably not wished.
 
 long SwWrtShell::DelToStartOfSentence()
 {
@@ -462,8 +451,6 @@ long SwWrtShell::DelToStartOfSentence()
     return nRet;
 }
 
-
-
 long SwWrtShell::DelToEndOfSentence()
 {
     if(IsEndOfDoc())
@@ -473,8 +460,6 @@ long SwWrtShell::DelToEndOfSentence()
     CloseMark( 0 != nRet );
     return nRet;
 }
-
-
 
 long SwWrtShell::DelNxtWord()
 {
@@ -499,8 +484,6 @@ long SwWrtShell::DelNxtWord()
     ClearMark();
     return nRet;
 }
-
-
 
 long SwWrtShell::DelPrvWord()
 {
