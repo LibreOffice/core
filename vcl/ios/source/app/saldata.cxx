@@ -24,12 +24,6 @@
 
 oslThreadKey SalData::s_aAutoReleaseKey = 0;
 
-static void SAL_CALL releasePool( void* pPool )
-{
-    if( pPool )
-        [(NSAutoreleasePool*)pPool release];
-}
-
 SalData::SalData()
 :
     mpTimerProc( NULL ),
@@ -46,7 +40,7 @@ SalData::SalData()
     mnDPIY( 0 )
 {
     if( s_aAutoReleaseKey == 0 )
-        s_aAutoReleaseKey = osl_createThreadKey( releasePool );
+        s_aAutoReleaseKey = osl_createThreadKey( NULL );
 }
 
 SalData::~SalData()
@@ -55,20 +49,6 @@ SalData::~SalData()
     CGColorSpaceRelease( mxP50Space );
     CGColorSpaceRelease( mxRGBSpace );
     CGColorSpaceRelease( mxGraySpace );
-    if( s_aAutoReleaseKey )
-    {
-        // release the last pool
-        NSAutoreleasePool* pPool = nil;
-        pPool = reinterpret_cast<NSAutoreleasePool*>( osl_getThreadKeyData( s_aAutoReleaseKey ) );
-        if( pPool )
-        {
-            osl_setThreadKeyData( s_aAutoReleaseKey, NULL );
-            [pPool release];
-        }
-
-        osl_destroyThreadKey( s_aAutoReleaseKey );
-        s_aAutoReleaseKey = 0;
-    }
 }
 
 void SalData::ensureThreadAutoreleasePool()
