@@ -2452,9 +2452,11 @@ sal_Bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutSt
         n       += aTempTime.GetSec();
         rOutStr  = OUString::number( n );
         rOutStr += ImplGetLocaleDataWrapper().getTime100SecSep();
-        if ( aTempTime.Get100Sec() < 10 )
-            rOutStr += "0";
-        rOutStr += OUString::number( aTempTime.Get100Sec() );
+        std::ostringstream ostr;
+        ostr.fill('0');
+        ostr.width(9);
+        ostr << aTempTime.GetNanoSec();
+        rOutStr += OUString::createFromAscii(ostr.str().c_str());
     }
     else if ( mbDuration )
         rOutStr = ImplGetLocaleDataWrapper().getDuration( aTempTime, bSecond, b100Sec );
@@ -2755,9 +2757,11 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
             n       += aNewTime.GetSec();
             aStr     = OUString::number( n );
             aStr    += ImplGetLocaleDataWrapper().getTime100SecSep();
-            if ( aNewTime.Get100Sec() < 10 )
-                aStr += "0";
-            aStr += OUString::number( aNewTime.Get100Sec() );
+            std::ostringstream ostr;
+            ostr.fill('0');
+            ostr.width(9);
+            ostr << aNewTime.GetNanoSec();
+            aStr += OUString::createFromAscii(ostr.str().c_str());
         }
         else if ( mbDuration )
         {

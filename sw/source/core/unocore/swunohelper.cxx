@@ -242,7 +242,7 @@ bool UCB_GetFileListOfFolder( const String& rURL,
                                         ::Time( aStamp.Hours,
                                                 aStamp.Minutes,
                                                 aStamp.Seconds,
-                                                aStamp.HundredthSeconds ));
+                                                aStamp.NanoSeconds ));
                                 pDateTimeList->push_back( pDateTime );
                             }
                         }
