@@ -7264,12 +7264,14 @@ AC_SUBST([MINGW_ZLIB_DLL])
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
-# This allows a lack of system python with no error, we use internal one in that case.
-AM_PATH_PYTHON([2.6],, [:])
-# Clean PYTHON_VERSION checked below if cross-compiling
-PYTHON_VERSION=""
-if test "$PYTHON" != ":"; then
-    PYTHON_FOR_BUILD=$PYTHON
+if test "$build_os" != "cygwin"; then
+    # This allows a lack of system python with no error, we use internal one in that case.
+    AM_PATH_PYTHON([2.6],, [:])
+    # Clean PYTHON_VERSION checked below if cross-compiling
+    PYTHON_VERSION=""
+    if test "$PYTHON" != ":"; then
+        PYTHON_FOR_BUILD=$PYTHON
+    fi
 fi
 AC_SUBST(PYTHON_FOR_BUILD)
 
