@@ -123,8 +123,6 @@ public:
     void updateResolution();
 
     bool IsWindowGraphics() const { return mbWindow; }
-    bool IsPrinterGraphics() const { return mbPrinter; }
-    bool IsVirDevGraphics() const { return mbVirDev; }
 
     void ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
 

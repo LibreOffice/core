@@ -143,8 +143,6 @@ public:
     void                updateResolution();
 
     bool                IsWindowGraphics()      const   { return mbWindow; }
-    bool                IsPrinterGraphics()     const   { return mbPrinter; }
-    bool                IsVirDevGraphics()      const   { return mbVirDev; }
     AquaSalFrame*       getGraphicsFrame() const { return mpFrame; }
     void                setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
 
