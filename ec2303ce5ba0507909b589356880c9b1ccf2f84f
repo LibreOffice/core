@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///Vg\u003d",
+        "filename": "sw/source/ui/docvw/PostItMgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-03-18T08:00:55Z",
+      "side": 1,
+      "message": "Just remove the else, it will arrive there only if nothing returns before and it saves us coverity to shout about missing return from non-void fuction.",
+      "revId": "ec2303ce5ba0507909b589356880c9b1ccf2f84f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
