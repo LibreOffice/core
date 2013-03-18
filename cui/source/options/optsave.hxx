@@ -43,33 +43,26 @@ struct SvxSaveTabPage_Impl;
 class SvxSaveTabPage : public SfxTabPage
 {
 private:
-    FixedLine               aLoadFL;
-    CheckBox                aLoadUserSettingsCB;
-    CheckBox                aLoadDocPrinterCB;
+    CheckBox*               aLoadUserSettingsCB;
+    CheckBox*               aLoadDocPrinterCB;
 
-    FixedLine               aSaveFL;
-    CheckBox                aDocInfoCB;
-    ReadOnlyImage           aBackupFI;
-    CheckBox                aBackupCB;
-    CheckBox                aAutoSaveCB;
-    NumericField            aAutoSaveEdit;
-    FixedText               aMinuteFT;
-    CheckBox                aUserAutoSaveCB;
-    CheckBox                aRelativeFsysCB;
-    CheckBox                aRelativeInetCB;
+    CheckBox*               aDocInfoCB;
+    CheckBox*               aBackupCB;
+    CheckBox*               aAutoSaveCB;
+    NumericField*           aAutoSaveEdit;
+    FixedText*              aMinuteFT;
+    CheckBox*               aUserAutoSaveCB;
+    CheckBox*               aRelativeFsysCB;
+    CheckBox*               aRelativeInetCB;
 
-    FixedLine               aDefaultFormatFL;
-    FixedText               aODFVersionFT;
-    ListBox                 aODFVersionLB;
-    CheckBox                aSizeOptimizationCB;
-    CheckBox                aWarnAlienFormatCB;
-    FixedText               aDocTypeFT;
-    ListBox                 aDocTypeLB;
-    FixedText               aSaveAsFT;
-    ReadOnlyImage           aSaveAsFI;
-    ListBox                 aSaveAsLB;
-    FixedImage              aODFWarningFI;
-    FixedText               aODFWarningFT;
+    ListBox*                aODFVersionLB;
+    CheckBox*               aSizeOptimizationCB;
+    CheckBox*               aWarnAlienFormatCB;
+    ListBox*                aDocTypeLB;
+    FixedText*              aSaveAsFT;
+    ListBox*                aSaveAsLB;
+    FixedImage*             aODFWarningFI;
+    FixedText*              aODFWarningFT;
 
     SvxSaveTabPage_Impl*    pImpl;
 

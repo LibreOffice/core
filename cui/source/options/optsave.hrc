@@ -21,36 +21,6 @@
 
 // defines ------------------------------------------------------------------
 
-#define LB_LOAD                 10
-#define CB_LOAD_SETTINGS        11
-#define CB_LOAD_DOCPRINTER      12
-#define GB_SAVE                 13
-#define BTN_DOCINFO             14
-#define BTN_BACKUP              15
-#define BTN_AUTOSAVE            16
-#define ED_AUTOSAVE             17
-#define FT_MINUTE               18
-#define BTN_USERAUTOSAVE        19
-#define BTN_NOPRETTYPRINTING    20
-#define FI_BACKUP               21
-#define BTN_WARNALIENFORMAT     22
-#define FT_ODF_VERSION          23
-#define LB_ODF_VERSION          24
-
-#define BTN_RELATIVE_FSYS       41
-#define BTN_RELATIVE_INET       42
-
-#define FL_FILTER               43
-#define FT_APP                  44
-#define LB_APP                  45
-#define FT_FILTER               46
-#define LB_FILTER               47
-#define FI_FILTER               48
-#define FT_WARN                 49
-#define FI_ODF_WARNING          50
-
-#define IMG_ODF_WARNING         1
-
 #define APP_WRITER              0
 #define APP_WRITER_WEB          1
 #define APP_WRITER_GLOBAL       2
