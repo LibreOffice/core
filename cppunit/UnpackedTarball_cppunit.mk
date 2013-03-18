@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,cppunit,$(CPPUNIT_TARBALL)))
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	cppunit/windows.patch \
 	cppunit/unix.patch \
+	cppunit/wundef.patch \
 ))
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\

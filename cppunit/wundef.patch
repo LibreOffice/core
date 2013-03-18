@@ -1,0 +1,12 @@
+--- misc/cppunit-1.13.1/include/cppunit/Portability.h	2012-09-24 19:10:36.000000000 +0200
++++ misc/build/cppunit-1.13.1/include/cppunit/Portability.h	2013-03-18 14:23:48.880718714 +0100
+@@ -68,6 +68,9 @@
+  * std::allocator. On some compilers, you may need to change this to
+  * std::allocator<T>.
+  */
++#ifndef CPPUNIT_STD_NEED_ALLOCATOR /* avoid -Wundef warning */
++#define CPPUNIT_STD_NEED_ALLOCATOR 0
++#endif
+ #if CPPUNIT_STD_NEED_ALLOCATOR
+ # if !defined(CPPUNIT_STD_ALLOCATOR)
+ #  define CPPUNIT_STD_ALLOCATOR std::allocator
