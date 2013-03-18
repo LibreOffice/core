@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAW3///W0\u003d",
+        "filename": "connectivity/source/drivers/dbase/DTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-03-18T07:03:12Z",
+      "side": 1,
+      "message": "Julien, reading this code, I think that the overflow was intended. The patch changes the behaviour.",
+      "revId": "962cca5f095b8503695b1ea6dc0c8ca3dc2682e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
