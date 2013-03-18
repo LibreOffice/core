@@ -7662,75 +7662,6 @@ dnl ===================================================================
 if test "x$enable_postgresql_sdbc" != "xno"; then
     SCPDEFS="$SCPDEFS -DWITH_POSTGRESQL_SDBC"
 
-    # if/when anything else than PostgreSQL uses Kerberos,
-    # move this out of `test "x$enable_postgresql_sdbc" != "xno"'
-    WITH_KRB5=NO
-    WITH_GSSAPI=no
-    case "$_os" in
-    Darwin)
-        # MacOS X has system MIT Kerberos 5 since 10.4
-        if test "$with_krb5" != "no"; then
-            WITH_KRB5=YES
-            save_LIBS=$LIBS
-            AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5, try installing libcom_err devel package])])
-            LIBS=$save_LIBS
-            AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5, try installing krb5 devel package])])
-            LIBS=$save_LIBS
-        fi
-        if test "$with_gssapi" != "no"; then
-          WITH_GSSAPI=YES
-          save_LIBS=$LIBS
-          AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
-                [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
-          LIBS=$save_LIBS
-        fi
-        ;;
-    WINNT)
-        if test "$with_krb5" = "yes" -o "$with_gssapi" = "yes"; then
-            AC_MSG_ERROR([Refusing to enable MIT Kerberos 5 or GSSAPI on Windows.])
-        fi
-        ;;
-    Linux|GNU|*BSD|DragonFly)
-        if test "$with_krb5" != "no"; then
-            WITH_KRB5=YES
-            save_LIBS=$LIBS
-            AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
-            LIBS=$save_LIBS
-            AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
-            LIBS=$save_LIBS
-        fi
-        if test "$with_gssapi" != "no"; then
-            WITH_GSSAPI=YES
-            save_LIBS=$LIBS
-            AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
-                [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
-            LIBS=$save_LIBS
-        fi
-        ;;
-    *)
-        if test "$with_krb5" = "yes"; then
-            WITH_KRB5=YES
-            save_LIBS=$LIBS
-            AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
-            LIBS=$save_LIBS
-            AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
-            LIBS=$save_LIBS
-        fi
-        if test "$with_gssapi" = "yes"; then
-            WITH_GSSAPI=YES
-            save_LIBS=$LIBS
-            AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
-                [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
-            LIBS=$save_LIBS
-        fi
-    esac
-
     AC_MSG_CHECKING([PostgreSQL C interface])
     if test "$with_system_postgresql" = "yes"; then
         AC_MSG_RESULT([external PostgreSQL])
@@ -7748,6 +7679,75 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
         POSTGRESQL_INC=-I$(${PGCONFIG} --includedir)
         POSTGRESQL_LIB="-L$(${PGCONFIG} --libdir)"
     else
+        # if/when anything else than PostgreSQL uses Kerberos,
+        # move this out of `test "x$enable_postgresql_sdbc" != "xno"'
+        WITH_KRB5=NO
+        WITH_GSSAPI=no
+        case "$_os" in
+        Darwin)
+            # MacOS X has system MIT Kerberos 5 since 10.4
+            if test "$with_krb5" != "no"; then
+                WITH_KRB5=YES
+                save_LIBS=$LIBS
+                AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5, try installing libcom_err devel package])])
+                LIBS=$save_LIBS
+                AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5, try installing krb5 devel package])])
+                LIBS=$save_LIBS
+            fi
+            if test "$with_gssapi" != "no"; then
+              WITH_GSSAPI=YES
+              save_LIBS=$LIBS
+              AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+                    [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+              LIBS=$save_LIBS
+            fi
+            ;;
+        WINNT)
+            if test "$with_krb5" = "yes" -o "$with_gssapi" = "yes"; then
+                AC_MSG_ERROR([Refusing to enable MIT Kerberos 5 or GSSAPI on Windows.])
+            fi
+            ;;
+        Linux|GNU|*BSD|DragonFly)
+            if test "$with_krb5" != "no"; then
+                WITH_KRB5=YES
+                save_LIBS=$LIBS
+                AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+                LIBS=$save_LIBS
+                AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+                LIBS=$save_LIBS
+            fi
+            if test "$with_gssapi" != "no"; then
+                WITH_GSSAPI=YES
+                save_LIBS=$LIBS
+                AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+                    [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+                LIBS=$save_LIBS
+            fi
+            ;;
+        *)
+            if test "$with_krb5" = "yes"; then
+                WITH_KRB5=YES
+                save_LIBS=$LIBS
+                AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+                LIBS=$save_LIBS
+                AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
+                    [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+                LIBS=$save_LIBS
+            fi
+            if test "$with_gssapi" = "yes"; then
+                WITH_GSSAPI=YES
+                save_LIBS=$LIBS
+                AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+                    [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+                LIBS=$save_LIBS
+            fi
+        esac
+
         if test -n "$with_libpq_path"; then
             SYSTEM_POSTGRESQL=YES
             AC_MSG_RESULT([external libpq])
