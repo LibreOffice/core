@@ -1014,6 +1014,7 @@ SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
 {
     UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rExport.GetModel(), rExport );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
+    rExport.GetTextParagraphExport(); // get or create text paragraph export
     SvXMLExportPropertyMapper* pResult =
         new XMLShapeExportPropertyMapper( xMapper, rExport );
     // chain text attributes
@@ -1257,6 +1258,7 @@ const rtl::Reference< XMLTableExport >& XMLShapeExport::GetShapeTableExport()
     {
         rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport ) );
         UniReference < XMLPropertySetMapper > xMapper( new XMLShapePropertySetMapper( xFactory.get() ) );
+        mrExport.GetTextParagraphExport(); // get or create text paragraph export
         rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( new XMLShapeExportPropertyMapper( xMapper, mrExport ) );
         mxShapeTableExport = new XMLTableExport( mrExport, xPropertySetMapper, xFactory );
     }
