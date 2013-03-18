@@ -2379,7 +2379,7 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
 {
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
-#if SCROLLABLEFRAME
+#ifdef SCROLLABLEFRAME
     rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
 #endif
     AxContainerModelBase::convertProperties( rPropMap, rConv );

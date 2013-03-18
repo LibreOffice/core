@@ -97,7 +97,7 @@ void Frame::endElement()
     {
         xControlModel->setPropertyValue( "Label" , makeAny( _label ) );
     }
-#if SCROLLABLEFRAME
+#ifdef SCROLLABLEFRAME
     ctx.importScollableSettings( _xAttributes );
 #endif
     ctx.importEvents( _events );

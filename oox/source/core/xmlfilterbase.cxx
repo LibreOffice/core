@@ -540,7 +540,7 @@ writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xPro
             FSNS( XML_xmlns, XML_xsi ),         "http://www.w3.org/2001/XMLSchema-instance",
             FSEND );
 
-#if OOXTODO
+#ifdef OOXTODO
     writeElement( pCoreProps, FSNS( XML_cp, XML_category ),         "category" );
     writeElement( pCoreProps, FSNS( XML_cp, XML_contentStatus ),    "status" );
     writeElement( pCoreProps, FSNS( XML_cp, XML_contentType ),      "contentType" );
@@ -548,7 +548,7 @@ writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xPro
     writeElement( pCoreProps, FSNS( XML_dcterms, XML_created ),     xProperties->getCreationDate() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_creator ),          xProperties->getAuthor() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_description ),      xProperties->getDescription() );
-#if OOXTODO
+#ifdef OOXTODO
     writeElement( pCoreProps, FSNS( XML_dc, XML_identifier ),       "ident" );
 #endif  /* def OOXTODO */
     writeElement( pCoreProps, FSNS( XML_cp, XML_keywords ),         xProperties->getKeywords() );
@@ -559,7 +559,7 @@ writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xPro
     writeElement( pCoreProps, FSNS( XML_cp, XML_revision ),         xProperties->getEditingCycles() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_subject ),          xProperties->getSubject() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_title ),            xProperties->getTitle() );
-#if OOXTODO
+#ifdef OOXTODO
     writeElement( pCoreProps, FSNS( XML_cp, XML_version ),          "version" );
 #endif  /* def OOXTODO */
 
@@ -581,7 +581,7 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
             FSEND );
 
     writeElement( pAppProps, XML_Template,              xProperties->getTemplateName() );
-#if OOXTODO
+#ifdef OOXTODO
     writeElement( pAppProps, XML_Manager,               "manager" );
     writeElement( pAppProps, XML_Company,               "company" );
     writeElement( pAppProps, XML_Pages,                 "pages" );
@@ -594,7 +594,7 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_Notes,                 "notes" );
 #endif  /* def OOXTODO */
     writeElement( pAppProps, XML_TotalTime,             xProperties->getEditingDuration() );
-#if OOXTODO
+#ifdef OOXTODO
     writeElement( pAppProps, XML_HiddenSlides,          "hidden slides" );
     writeElement( pAppProps, XML_MMClips,               "mm clips" );
     writeElement( pAppProps, XML_ScaleCrop,             "scale crop" );
@@ -609,7 +609,7 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_DigSig,                "digital signature" );
 #endif  /* def OOXTODO */
     writeElement( pAppProps, XML_Application,           xProperties->getGenerator() );
-#if OOXTODO
+#ifdef OOXTODO
     writeElement( pAppProps, XML_AppVersion,            "app version" );
     writeElement( pAppProps, XML_DocSecurity,           "doc security" );
 #endif  /* def OOXTODO */

@@ -32,7 +32,7 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
     sal_Int64 absVal = isNeg ? -rVal : rVal;
 
     sal_Unicode cDecimalSep = '.';
-#if MAYBEFUTURE
+#ifdef MAYBEFUTURE
     sal_Unicode cThousandSep = ',';
     ImpGetIntntlSep( cDecimalSep, cThousandSep );
 #endif
@@ -51,7 +51,7 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
     if ( !bLessThanOne )
     {
         nCapacity = initialLen + 1;
-#if MAYBEFUTURE
+#ifdef MAYBEFUTURE
         if ( initialLen > 5 )
         {
             sal_Int32 nThouSeperators = ( initialLen - 5 ) / 3;
@@ -74,7 +74,7 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
     {
         if ( nDigitCount == 4 )
             aBuf[nInsertIndex--] = cDecimalSep;
-#if MAYBEFUTURE
+#ifdef MAYBEFUTURE
         if ( nDigitCount > 4 && ! ( ( nDigitCount - 4  ) % 3) )
             aBuf[nInsertIndex--] = cThousandSep;
 #endif
@@ -110,7 +110,7 @@ static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
     sal_Unicode cDeciPnt = sal_Unicode('.');
     sal_Unicode c1000Sep = sal_Unicode(',');
 
-#if MAYBEFUTURE
+#ifdef MAYBEFUTURE
     sal_Unicode cLocaleDeciPnt, cLocale1000Sep;
     ImpGetIntntlSep( cLocaleDeciPnt, cLocale1000Sep );
 

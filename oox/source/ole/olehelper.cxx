@@ -604,7 +604,7 @@ sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxMode
     return sal_True;
 }
 
-#if SvxMSConvertOCXControlsRemoved
+#ifdef SvxMSConvertOCXControlsRemoved
 const Reference< com::sun::star::lang::XMultiServiceFactory > & MSConvertOCXControls::GetServiceFactory()
 {
     if ( !mxServiceFactory.is() && mxModel.is() )

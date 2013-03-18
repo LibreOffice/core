@@ -151,7 +151,7 @@ private:
 // implementation into the sd module itself.
 class OOX_DLLPUBLIC MSConvertOCXControls : public SvxMSConvertOCXControls
 {
-#if SvxMSConvertOCXControlsRemoved
+#ifdef SvxMSConvertOCXControlsRemoved
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxShapes;
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > mxDrawPage;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >  mxFormComps;
@@ -176,7 +176,7 @@ public:
                                    sal_Int32 nPos, sal_Int32 nSize );
     static sal_Bool WriteOCXStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, SotStorageRef &rSrc1, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,rtl::OUString &rName);
 
-#if SvxMSConvertOCXControlsRemoved
+#ifdef SvxMSConvertOCXControlsRemoved
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > & GetShapes();
     const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > &  GetFormComps();
     virtual const com::sun::star::uno::Reference<

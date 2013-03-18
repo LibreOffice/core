@@ -53,7 +53,7 @@ void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm,
     {
         Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
-#if FIXME
+#ifdef FIXME
     else if(
         aExt.equalsIgnoreAsciiCaseAscii("xlsb") ||
         aExt.equalsIgnoreAsciiCaseAscii("xlsm") ||

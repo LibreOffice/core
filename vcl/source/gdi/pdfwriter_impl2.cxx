@@ -529,7 +529,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                         if( pGradAction )
                         {
-                            #if USE_PDFGRADIENTS
+                            #ifdef USE_PDFGRADIENTS
                             m_rOuterFace.DrawGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient() );
                             #else
                             implWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), pDummyVDev, i_rContext );

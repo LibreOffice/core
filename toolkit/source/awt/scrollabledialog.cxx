@@ -176,7 +176,7 @@ void ScrollableWrapper<T>::ResetScrollBars()
 }
 
 template class ScrollableWrapper< Dialog >;
-#if SCROLLABLEFRAME
+#ifdef SCROLLABLEFRAME
 template class ScrollableWrapper< GroupBox >;
 #endif
 

@@ -57,7 +57,7 @@ public:
     void testWeak();
     void testAsian();
     void testThai();
-#if TODO
+#ifdef TODO
     void testNorthernThai();
 #endif
     void testKhmer();
@@ -69,7 +69,7 @@ public:
     CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST(testAsian);
     CPPUNIT_TEST(testThai);
-#if TODO
+#ifdef TODO
     CPPUNIT_TEST(testNorthernThai);
 #endif
 
@@ -851,7 +851,7 @@ void TestBreakIterator::testThai()
     }
 }
 
-#if TODO
+#ifdef TODO
 void TestBreakIterator::testNorthernThai()
 {
     lang::Locale aLocale;

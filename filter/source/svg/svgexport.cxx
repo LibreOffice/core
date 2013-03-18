@@ -1830,7 +1830,7 @@ sal_Bool SVGFilter::implCreateObjects()
 
         if( xDrawPage.is() )
         {
-#if ENABLE_EXPORT_CUSTOM_SLIDE_BACKGROUND
+#ifdef ENABLE_EXPORT_CUSTOM_SLIDE_BACKGROUND
             // TODO complete the implementation for exporting custom background for each slide
             // implementation status:
             // - hatch stroke color is set to 'none' so the hatch is not visible, why ?

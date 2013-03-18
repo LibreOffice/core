@@ -769,7 +769,7 @@ FltError ImportExcel::Read( void )
 
 FltError ImportExcel8::Read( void )
 {
-#if EXC_INCL_DUMPER
+#ifdef EXC_INCL_DUMPER
     {
         Biff8RecDumper aDumper( GetRoot(), sal_True );
         if( aDumper.Dump( aIn ) )
