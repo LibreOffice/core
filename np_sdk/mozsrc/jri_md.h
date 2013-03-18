@@ -119,7 +119,7 @@ extern "C" {
 #   endif
 
 /* Mac */
-#elif defined (macintosh) || Macintosh || THINK_C
+#elif defined (macintosh) || defined(Macintosh) || defined(THINK_C)
 #   if defined(__MWERKS__)              /* Metrowerks */
 #       if !__option(enumsalwaysint)
 #           error You need to define 'Enums Always Int' for your project.

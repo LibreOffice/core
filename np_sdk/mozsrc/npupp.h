@@ -66,6 +66,10 @@
 
 /* NPP_Initialize */
 
+#ifndef TARGET_RT_MAC_CFM
+#define TARGET_RT_MAC_CFM 0
+#endif
+
 #define _NPUPP_USE_UPP_ (TARGET_RT_MAC_CFM && !TARGET_API_MAC_CARBON)
 
 #if _NPUPP_USE_UPP_
