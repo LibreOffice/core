@@ -24,8 +24,7 @@
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
 
-/* Button combinations for ShowNativeMessageBox
-*/
+// Button combinations for ShowNativeMessageBox
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK                 = 0;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL          = 1;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE = 2;
@@ -33,8 +32,7 @@ const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL      = 3;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO             = 4;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL       = 5;
 
-/* Button identifier for ShowNativeMessageBox
-*/
+// Button identifier for ShowNativeMessageBox
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK     = 1;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL = 2;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT  = 3;
@@ -42,7 +40,6 @@ const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY  = 4;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE = 5;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES    = 6;
 const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO     = 7;
-
 
 class VCL_PLUGIN_PUBLIC SalSystem
 {

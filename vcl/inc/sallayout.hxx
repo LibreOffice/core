@@ -39,10 +39,7 @@ class PhysicalFontFace;
 
 #define MAX_FALLBACK 16
 
-// ----------------
-// - LayoutOption -
-// ----------------
-
+// Layout options
 #define SAL_LAYOUT_BIDI_RTL                 0x0001
 #define SAL_LAYOUT_BIDI_STRONG              0x0002
 #define SAL_LAYOUT_RIGHT_ALIGN              0x0004
@@ -238,14 +235,14 @@ public:
     virtual long    FillDXArray( sal_Int32* pDXArray ) const;
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
-                        int&, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const;
+                                   int&, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout,
-                         const PhysicalFontFace* pBaseFont = NULL );
+                                    const PhysicalFontFace* pBaseFont = NULL );
     virtual bool    AddFallback( SalLayout& rFallbackLayout,
-                         ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
+                                 ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    InitFont() const;

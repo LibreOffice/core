@@ -69,10 +69,6 @@ namespace basegfx {
 
 #define SAL_COPYAREA_WINDOWINVALIDATE       ((sal_uInt16)0x0001)
 
-// -------------------
-// - common typedefs -
-// -------------------
-
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
 typedef std::map< sal_Ucs, sal_Int32 >    Ucs2SIntMap;
 typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
@@ -97,70 +93,69 @@ protected:
     bool                    m_bAntiAliasB2DDraw;
 
 public:
-    // get/set AA
-    void setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
-    bool getAntiAliasB2DDraw() const { return m_bAntiAliasB2DDraw; }
+    void                    setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
+    bool                    getAntiAliasB2DDraw() const { return m_bAntiAliasB2DDraw; }
 
     SalGraphics();
     virtual ~SalGraphics();
 
 protected:
-    virtual bool        setClipRegion( const Region& ) = 0;
+    virtual bool            setClipRegion( const Region& ) = 0;
+
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void        drawPixel( long nX, long nY ) = 0;
-    virtual void        drawPixel( long nX, long nY, SalColor nSalColor ) = 0;
-    virtual void        drawLine( long nX1, long nY1, long nX2, long nY2 ) = 0;
-    virtual void        drawRect( long nX, long nY, long nWidth, long nHeight ) = 0;
-    virtual void        drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry ) = 0;
-    virtual void        drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry ) = 0;
-    virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
-    virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
-    virtual bool        drawPolyLine(
-        const ::basegfx::B2DPolygon&,
-        double fTransparency,
-        const ::basegfx::B2DVector& rLineWidths,
-        basegfx::B2DLineJoin,
-        com::sun::star::drawing::LineCap) = 0;
-    virtual sal_Bool    drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
-    virtual sal_Bool    drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
-    virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) = 0;
+    virtual void            drawPixel( long nX, long nY ) = 0;
+    virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) = 0;
+    virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) = 0;
+    virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual void            drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void            drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void            drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
+    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
+    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&,
+                                          double fTransparency,
+                                          const ::basegfx::B2DVector& rLineWidths,
+                                          basegfx::B2DLineJoin,
+                                          com::sun::star::drawing::LineCap) = 0;
+    virtual sal_Bool        drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
+    virtual sal_Bool        drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) = 0;
+    virtual sal_Bool        drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) = 0;
 
     // CopyArea --> No RasterOp, but ClipRegion
-    virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
-                                  long nSrcHeight, sal_uInt16 nFlags ) = 0;
+    virtual void            copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
+                                      long nSrcHeight, sal_uInt16 nFlags ) = 0;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void        copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics ) = 0;
-    virtual void        drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap ) = 0;
-    virtual void        drawBitmap( const SalTwoRect* pPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    SalColor nTransparentColor ) = 0;
-    virtual void        drawBitmap( const SalTwoRect* pPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rMaskBitmap ) = 0;
-    virtual void        drawMask( const SalTwoRect* pPosAry,
-                                  const SalBitmap& rSalBitmap,
-                                  SalColor nMaskColor ) = 0;
+    virtual void            copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics ) = 0;
+    virtual void            drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap ) = 0;
+    virtual void            drawBitmap( const SalTwoRect* pPosAry,
+                                        const SalBitmap& rSalBitmap,
+                                        SalColor nTransparentColor ) = 0;
+    virtual void            drawBitmap( const SalTwoRect* pPosAry,
+                                        const SalBitmap& rSalBitmap,
+                                        const SalBitmap& rMaskBitmap ) = 0;
+    virtual void            drawMask( const SalTwoRect* pPosAry,
+                                      const SalBitmap& rSalBitmap,
+                                      SalColor nMaskColor ) = 0;
 
-    virtual SalBitmap*  getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
-    virtual SalColor    getPixel( long nX, long nY ) = 0;
+    virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual SalColor        getPixel( long nX, long nY ) = 0;
 
     // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) = 0;
-    virtual void        invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
+    virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) = 0;
+    virtual void            invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
 
     virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) = 0;
 
     // native widget rendering methods that require mirroring
     virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                              const Point& aPos, sal_Bool& rIsInside );
+                                                  const Point& aPos, sal_Bool& rIsInside );
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                           ControlState nState, const ImplControlValue& aValue,
-                                           const rtl::OUString& aCaption );
+                                               ControlState nState, const ImplControlValue& aValue,
+                                               const rtl::OUString& aCaption );
     virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
-                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
+                                                    const ImplControlValue& aValue, const rtl::OUString& aCaption,
+                                                    Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     /** Render bitmap with alpha channel
 
@@ -174,24 +169,26 @@ protected:
         otherwise. In this case, clients should try to emulate alpha
         compositing themselves
      */
-    virtual bool        drawAlphaBitmap( const SalTwoRect&,
-                                         const SalBitmap& rSourceBitmap,
-                                         const SalBitmap& rAlphaBitmap ) = 0;
+    virtual bool            drawAlphaBitmap( const SalTwoRect&,
+                                             const SalBitmap& rSourceBitmap,
+                                             const SalBitmap& rAlphaBitmap ) = 0;
     /** Render solid rectangle with given transparency
 
         @param nTransparency
         Transparency value (0-255) to use. 0 blits and opaque, 255 a
         fully transparent rectangle
      */
-    virtual bool        drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency ) = 0;
+    virtual bool            drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency ) = 0;
 
 public:
     // public SalGraphics methods, the interface to the independent vcl part
 
     // get device resolution
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) = 0;
+
     // get the depth of the device
-    virtual sal_uInt16          GetBitCount() const = 0;
+    virtual sal_uInt16      GetBitCount() const = 0;
+
     // get the width of the device
     virtual long            GetGraphicsWidth() const = 0;
 
@@ -199,44 +196,63 @@ public:
     virtual void            ResetClipRegion() = 0;
 
     // set the line color to transparent (= don't draw lines)
+
     virtual void            SetLineColor() = 0;
+
     // set the line color to a specific color
     virtual void            SetLineColor( SalColor nSalColor ) = 0;
+
     // set the fill color to transparent (= don't fill)
     virtual void            SetFillColor() = 0;
+
     // set the fill color to a specific color, shapes will be
     // filled accordingly
     virtual void            SetFillColor( SalColor nSalColor ) = 0;
+
     // enable/disable XOR drawing
     virtual void            SetXORMode( bool bSet, bool bInvertOnly ) = 0;
+
     // set line color for raster operations
     virtual void            SetROPLineColor( SalROPColor nROPColor ) = 0;
+
     // set fill color for raster operations
     virtual void            SetROPFillColor( SalROPColor nROPColor ) = 0;
+
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor ) = 0;
+
     // set the font
-    virtual sal_uInt16         SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
+    virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
+
     // release the fonts
-    void                   ReleaseFonts() { SetFont( NULL, 0 ); }
+    void                    ReleaseFonts() { SetFont( NULL, 0 ); }
+
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
 
-    // get kernign pairs of the current font
+    // get kerning pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
-    virtual sal_uLong           GetKernPairs( sal_uLong nMaxPairCount, ImplKernPairData* ) = 0;
+    virtual sal_uLong       GetKernPairs( sal_uLong nMaxPairCount, ImplKernPairData* ) = 0;
+
     // get the repertoire of the current font
-    virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
+    virtual const ImplFontCharMap*
+                            GetImplFontCharMap() const = 0;
+
     // get the layout capabilities of the current font
-    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
+    virtual bool            GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
+
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* ) = 0;
+
     // graphics must drop any cached font info
-    virtual void ClearDevFontCache() = 0;
+    virtual void            ClearDevFontCache() = 0;
+
     // graphics should call ImplAddDevFontSubstitute on supplied
     // OutputDevice for all its device specific preferred font substitutions
     virtual void            GetDevFontSubstList( OutputDevice* ) = 0;
+
     virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName ) = 0;
+
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
     // returns sal_True if creation of subset was successful
@@ -249,14 +265,13 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
+    virtual sal_Bool        CreateFontSubset( const rtl::OUString& rToFile,
                                               const PhysicalFontFace* pFont,
                                               sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
-                                              FontSubsetInfo& rInfo // out parameter
-                                              ) = 0;
+                                              FontSubsetInfo& rInfo ) = 0;
 
     // GetFontEncodingVector: a method to get the encoding map Unicode
     // to font encoded character; this is only used for type1 fonts and
@@ -265,7 +280,8 @@ public:
     // glyphs with only a name) exist it is set to the corresponding
     // map for non encoded glyphs; the encoding vector contains -1
     // as encoding for these cases
-    virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded ) = 0;
+    virtual const Ucs2SIntMap*
+                            GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded ) = 0;
 
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
@@ -276,12 +292,12 @@ public:
     //                      pWidths MUST support at least 256 members;
     //             rInfo: additional outgoing information
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData( const PhysicalFontFace* pFont,
-                                          const sal_Ucs* pUnicodes,
-                                          sal_Int32* pWidths,
-                                          FontSubsetInfo& rInfo,
-                                          long* pDataLen ) = 0;
-    // frees the font data again
+    virtual const void*     GetEmbedFontData( const PhysicalFontFace* pFont,
+                                              const sal_Ucs* pUnicodes,
+                                              sal_Int32* pWidths,
+                                              FontSubsetInfo& rInfo,
+                                              long* pDataLen ) = 0;
+    // free the font data again
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) = 0;
 
     // get the same widths as in CreateFontSubset and GetEmbedFontData
@@ -293,11 +309,12 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) = 0;
 
-    virtual sal_Bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) = 0;
-    virtual sal_Bool                    GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& ) = 0;
+    virtual sal_Bool        GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) = 0;
+    virtual sal_Bool        GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& ) = 0;
 
-    virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
-    virtual void                     DrawServerFontLayout( const ServerFontLayout& ) = 0;
+    virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
+    virtual void            DrawServerFontLayout( const ServerFontLayout& ) = 0;
+
     /** Filter text from DrawText commands in a device specific manner
         <p>
         This function allows a device (or rather the corresponding SalGraphics
@@ -329,7 +346,12 @@ public:
         true: a substitution has taken place and rNewText rLen, rCutStart and rCutStop have been filled accordingly
         false: no substitution has taken place, rNewText, rLen, rCutStart, rCutStop remain unchanged
      */
-    virtual bool            filterText( const rtl::OUString& rOrigText, rtl::OUString& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
+    virtual bool            filterText( const rtl::OUString& rOrigText,
+                                        rtl::OUString& rNewText,
+                                        xub_StrLen nIndex,
+                                        xub_StrLen& rLen,
+                                        xub_StrLen& rCutStart,
+                                        xub_StrLen& rCutStop );
 
     virtual bool            supportsOperation( OutDevSupportType ) const = 0;
 
@@ -339,7 +361,7 @@ public:
 
     void                    mirror( long& nX, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( long& nX, long& nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
-    sal_Bool                    mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack = false ) const;
+    sal_Bool                mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
     void                    mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack = false ) const;
     void                    mirror( ImplControlValue&, const OutputDevice*, bool bBack = false ) const;
@@ -364,13 +386,12 @@ public:
                                              const OutputDevice *pOutDev );
     bool                    DrawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency, const OutputDevice* );
 
-    bool DrawPolyLine(
-        const basegfx::B2DPolygon& i_rPolygon,
-        double i_fTransparency,
-        const basegfx::B2DVector& i_rLineWidth,
-        basegfx::B2DLineJoin i_eLineJoin,
-        com::sun::star::drawing::LineCap i_eLineCap,
-        const OutputDevice* i_pOutDev);
+    bool                    DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
+                                          double i_fTransparency,
+                                          const basegfx::B2DVector& i_rLineWidth,
+                                          basegfx::B2DLineJoin i_eLineJoin,
+                                          com::sun::star::drawing::LineCap i_eLineCap,
+                                          const OutputDevice* i_pOutDev);
 
     sal_Bool                DrawPolyLineBezier( sal_uLong nPoints,
                                                 const SalPoint* pPtAry,
@@ -387,12 +408,9 @@ public:
                                                    const OutputDevice *pOutDev );
 
     // CopyArea --> No RasterOp, but ClipRegion
-    void                    CopyArea( long nDestX,
-                                      long nDestY,
-                                      long nSrcX,
-                                      long nSrcY,
-                                      long nSrcWidth,
-                                      long nSrcHeight,
+    void                    CopyArea( long nDestX, long nDestY,
+                                      long nSrcX, long nSrcY,
+                                      long nSrcWidth, long nSrcHeight,
                                       sal_uInt16 nFlags,
                                       const OutputDevice *pOutDev );
 
@@ -415,60 +433,75 @@ public:
                                       SalColor nMaskColor,
                                       const OutputDevice *pOutDev );
 
-    SalBitmap*              GetBitmap( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
-    SalColor                GetPixel( long nX, long nY, const OutputDevice *pOutDev );
+    SalBitmap*              GetBitmap( long nX, long nY,
+                                       long nWidth, long nHeight,
+                                       const OutputDevice *pOutDev );
 
-    // invert --> ClipRegion (only Windows)
-    void                    Invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags, const OutputDevice *pOutDev );
-    void                    Invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nFlags, const OutputDevice *pOutDev );
-
-    sal_Bool                    DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize, const OutputDevice *pOutDev );
-
-    //-------------------------------------
-    //  Native Widget Rendering functions
-    //-------------------------------------
-
-    // Query the platform layer for control support
-    virtual sal_Bool IsNativeControlSupported( ControlType nType, ControlPart nPart );
-
-    // Query the native control to determine if it was acted upon
-    sal_Bool HitTestNativeControl( ControlType nType,
-                                      ControlPart nPart,
-                                      const Rectangle& rControlRegion,
-                                      const Point& aPos,
-                                      sal_Bool& rIsInside,
+    SalColor                GetPixel( long nX, long nY,
                                       const OutputDevice *pOutDev );
 
-    // Request rendering of a particular control and/or part
-    sal_Bool DrawNativeControl( ControlType nType,
-                                    ControlPart nPart,
-                                    const Rectangle& rControlRegion,
-                                    ControlState nState,
-                                    const ImplControlValue& aValue,
-                                    const rtl::OUString& aCaption,
+    // invert --> ClipRegion (only Windows)
+    void                    Invert( long nX, long nY,
+                                    long nWidth, long nHeight,
+                                    SalInvert nFlags,
                                     const OutputDevice *pOutDev );
 
+    void                    Invert( sal_uLong nPoints,
+                                    const SalPoint* pPtAry,
+                                    SalInvert nFlags,
+                                    const OutputDevice *pOutDev );
+
+    sal_Bool                DrawEPS( long nX, long nY,
+                                     long nWidth, long nHeight,
+                                     void* pPtr,
+                                     sal_uLong nSize,
+                                     const OutputDevice *pOutDev );
+
+    //  native widget rendering functions
+
+    // Query the platform layer for control support
+    virtual sal_Bool        IsNativeControlSupported( ControlType nType, ControlPart nPart );
+
+    // Query the native control to determine if it was acted upon
+    sal_Bool                HitTestNativeControl( ControlType nType,
+                                                  ControlPart nPart,
+                                                  const Rectangle& rControlRegion,
+                                                  const Point& aPos,
+                                                  sal_Bool& rIsInside,
+                                                  const OutputDevice *pOutDev );
+
+    // Request rendering of a particular control and/or part
+    sal_Bool                DrawNativeControl( ControlType nType,
+                                               ControlPart nPart,
+                                               const Rectangle& rControlRegion,
+                                               ControlState nState,
+                                               const ImplControlValue& aValue,
+                                               const rtl::OUString& aCaption,
+                                               const OutputDevice *pOutDev );
+
     // Query the native control's actual drawing region (including adornment)
-    sal_Bool GetNativeControlRegion( ControlType nType,
-                                         ControlPart nPart,
-                                         const Rectangle& rControlRegion,
-                                         ControlState nState,
-                                         const ImplControlValue& aValue,
-                                         const rtl::OUString& aCaption,
-                                         Rectangle &rNativeBoundingRegion,
-                                         Rectangle &rNativeContentRegion,
-                                         const OutputDevice *pOutDev );
+    sal_Bool                GetNativeControlRegion( ControlType nType,
+                                                    ControlPart nPart,
+                                                    const Rectangle& rControlRegion,
+                                                    ControlState nState,
+                                                    const ImplControlValue& aValue,
+                                                    const rtl::OUString& aCaption,
+                                                    Rectangle &rNativeBoundingRegion,
+                                                    Rectangle &rNativeContentRegion,
+                                                    const OutputDevice *pOutDev );
 
-    bool DrawAlphaBitmap( const SalTwoRect&,
-                          const SalBitmap& rSourceBitmap,
-                          const SalBitmap& rAlphaBitmap,
-                          const OutputDevice *pOutDev );
+    bool                    DrawAlphaBitmap( const SalTwoRect&,
+                                             const SalBitmap& rSourceBitmap,
+                                             const SalBitmap& rAlphaBitmap,
+                                             const OutputDevice *pOutDev );
 
-    bool DrawAlphaRect( long nX, long nY, long nWidth, long nHeight,
-                        sal_uInt8 nTransparency, const OutputDevice *pOutDev );
+    bool                    DrawAlphaRect( long nX, long nY, long nWidth, long nHeight,
+                                           sal_uInt8 nTransparency, const OutputDevice *pOutDev );
 
-    virtual SystemGraphicsData   GetGraphicsData() const = 0;
-    virtual SystemFontData       GetSysFontData( int nFallbacklevel ) const = 0;
+    virtual SystemGraphicsData
+                            GetGraphicsData() const = 0;
+
+    virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const = 0;
 };
 
 #endif // _SV_SALGDI_HXX

@@ -51,12 +51,11 @@ public:
     virtual void            SetHasAlpha( bool ) { }
     virtual void            Destroy() = 0;
     virtual Size            GetSize() const = 0;
-    virtual sal_uInt16          GetBitCount() const = 0;
+    virtual sal_uInt16      GetBitCount() const = 0;
 
     virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly ) = 0;
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) = 0;
     virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
-
 };
 
 #endif
