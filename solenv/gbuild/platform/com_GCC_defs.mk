@@ -66,6 +66,7 @@ gb_CFLAGS_COMMON := \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
+	-Wundef \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
@@ -74,6 +75,7 @@ gb_CXXFLAGS_COMMON := \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
+	-Wundef \
 	-fmessage-length=0 \
 	-fno-common \
 	-pipe \
