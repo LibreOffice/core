@@ -882,6 +882,7 @@ private:
     void        CompileDBFormula( bool bCreateFormulaString );
     void        CompileNameFormula( bool bCreateFormulaString );
     void        CompileColRowNameFormula();
+    void        RebuildFormulaGroups();
 
     void        StartListening( const ScAddress& rAddress, SvtListener* pListener );
     void        EndListening( const ScAddress& rAddress, SvtListener* pListener );

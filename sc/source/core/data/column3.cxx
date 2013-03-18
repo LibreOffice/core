@@ -2036,6 +2036,7 @@ void ScColumn::RebuildFormulaGroups()
         ScFormulaCell *pCur = static_cast< ScFormulaCell *>( rCur.pCell );
         ScFormulaCell *pPrev = static_cast< ScFormulaCell *>( rPrev.pCell );
 
+#ifdef BUILD_FORMULA_GROUPS
         fprintf( stderr, "column has contiguous formulae\n" );
         ScSimilarFormulaDelta *pDelta = pPrev->BuildDeltaTo( pCur );
 
@@ -2080,6 +2081,9 @@ void ScColumn::RebuildFormulaGroups()
 
             pCur->ReleaseDelta( pDelta );
         }
+#else
+        (void)pCur; (void) pPrev;
+#endif
     }
 
     bDirtyGroups = false;
