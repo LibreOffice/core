@@ -18,8 +18,8 @@
     <node oor:name="writer_Mac_Works" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.Writer.MWAWImportFilter</value></prop>
         <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value></value></prop>
-        <prop oor:name="MediaType"><value></value></prop>
+        <prop oor:name="Extensions"><value>wps</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.ms-works</value></prop>
         <prop oor:name="Preferred"><value>true</value></prop>
         <prop oor:name="PreferredFilter"><value>Mac_Works</value></prop>
         <prop oor:name="UIName">
