@@ -47,9 +47,6 @@ Module gid_Module_Prg_Base_Bin
         ,gid_File_Lib_Abp
         ,gid_File_Lib_Dbp
         ,gid_File_Lib_Dbu
-        ,gid_File_Lib_Rpt
-        ,gid_File_Lib_Rptui
-        ,gid_File_Lib_Rptxml
     );
 End
 

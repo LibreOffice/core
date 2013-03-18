@@ -31,6 +31,9 @@ Module gid_Module_Reportbuilder
         gid_File_Jar_Libxml,
         gid_File_Jar_Sac,
 #endif
+        gid_File_Lib_Rpt,
+        gid_File_Lib_Rptui,
+        gid_File_Lib_Rptxml,
         gid_File_Jar_Reportbuilder,
         gid_File_Xcd_Reportbuilder);
 End
