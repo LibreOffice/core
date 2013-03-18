@@ -54,7 +54,7 @@ class ImageList(object):
         PropertyNames.PROPERTY_POSITION_Y,
         PropertyNames.PROPERTY_STEP)
     lock = RLock()
-    listModel = []
+    listModel = None
     btnNext = None
     btnBack = None
 
@@ -76,6 +76,11 @@ class ImageList(object):
         self.helpURL = 0
         self.counterRenderer = self.SimpleCounterRenderer()
         self.MOVE_SELECTION_VALS = list(range(3))
+
+    def onMousePressed(self, event):
+        print ("DEBUG !!! onMousePressed -- Mouse pressed.")
+        self.focus(self.getImageIndexFor(self.selected))
+
 
     def create(self, dialog):
         print ("DEBUG !!!! ImageList create 1")
@@ -222,6 +227,7 @@ class ImageList(object):
                 if len(oResources) == 1:
                     item.Model.ImageURL = oResources[0]
                 elif len(oResources) == 2:
+                    print ("DEBUG !!! refreshImages -- oResources: ",  oResources)
                     self.oUnoDialog.getPeerConfiguration().setImageUrl(
                         item.Model, oResources[0], oResources[1])
 
@@ -236,12 +242,12 @@ class ImageList(object):
     def refreshCounterText(self):
         self.lblCounter.Model.Label = self.counterRenderer.render(
             self.Counter (self.pageStart + 1, self.pageEnd,
-                          len(ImageList.listModel)))
+                          self.listModel.getSize()))
 
     def pageEnd(self):
         i = self.pageStart + self.cols * self.rows
-        if i > ImageList.listModel.getSize() - 1:
-            return ImageList.listModel.getSize()
+        if i > self.listModel.getSize() - 1:
+            return self.listModel.getSize()
         else:
             return i
 
@@ -292,11 +298,13 @@ class ImageList(object):
     '''
 
     def getObjectFor(self, i):
+        print ("DEBUG !!! getObjectFor - i: ", i)
         ii = self.getIndexFor(i)
-        if ImageList.listModel.getSize() <= ii:
+        print ("DEBUG !!! getObjectFor - ii: ", ii)
+        if self.listModel.getSize() <= ii:
             return None
         else:
-            return ImageList.listModel.getElementAt(ii)
+            return self.listModel.getElementAt(ii)
 
     '''
     @param i
@@ -304,6 +312,7 @@ class ImageList(object):
     '''
 
     def getIndexFor(self, i):
+        print ("DEBUG !!! getIndexFor - i: ", i)
         return self.pageStart + i
 
     def getImageIndexFor(self, i):
@@ -358,39 +367,49 @@ class ImageList(object):
             i.itemStateChanged(None)
 
     def setSelected(self, _object):
-        print ("DEBUG !!!! setSelected - _object: ", _object)
+        print ("DEBUG !!!! ImageList.setSelected - _object: ", _object)
         if not isinstance(_object, int):
-            _object = -1
-            if _object is not None:
-                for index, item in enumerate(ImageList.listModel):
-                    if item == _object:
-                        _object = index
-                        return
+            if (_object is None):
+                self.setSelected1(-1)
+        else:
+            i = 0
+            while (i < self.listModel.getSize()):
+                item = self.listModel.getElementAt(i)
+                if item == _object:
+                    self.setSelected1(i)
+                    return
+                i += 1
 
-        if self.rowSelect and (_object >= 0):
-            _object = (_object / self.cols) * self.cols
+    def setSelected1(self, index):
+        print ("DEBUG !!!! ImageList.setSelected - _object: ", index)
+        if self.rowSelect and (index >= 0):
+            index = int((index / self.cols) * self.cols)
 
-        if self.selected == _object:
+        if self.selected == index:
             return
 
-        self.selected = _object
+        self.selected = index
         self.refreshImageText()
         self.refreshSelection()
         #COMMENTED
         #self.fireItemSelected()
 
+
     def refreshImageText(self):
         if self.selected >= 0:
-            #COMMENTED
-            item = None #ImageList.listModel.getElementAt(self.selected)
+            try:
+                item = self.listModel.getElementAt(self.selected)
+            except IndexError:
+                item = None
+                traceback.print_exc()
         else:
             item = None
 
         self.lblImageText.Model.Label = " " + self.renderer.render(item)
 
     def nextPage(self):
-        if self.pageStart < listModel().getSize() - self.rows * self.cols:
-            setPageStart(self.pageStart + self.rows * self.cols)
+        if self.pageStart < self.listModel.getSize() - self.rows * self.cols:
+            self.setPageStart(self.pageStart + self.rows * self.cols)
 
     def prevPage(self):
         if self.pageStart == 0:
@@ -405,7 +424,7 @@ class ImageList(object):
     def enableButtons(self):
         self.enable(
             ImageList.btnNext,
-            bool(self.pageStart + self.rows * self.cols < len(ImageList.listModel)))
+            bool(self.pageStart + self.rows * self.cols < self.listModel.getSize()))
         self.enable(ImageList.btnBack, bool(self.pageStart > 0))
 
     def enable(self, control, enable):
@@ -420,14 +439,15 @@ class ImageList(object):
         return Integer.valueOf(controlName.substring(6 + self.name.length()))
 
     def mousePressed(self, event):
-        image = getImageFromEvent(event)
-        index = getIndexFor(image)
-        if index < ImageList.listModel.getSize():
-            focus(image)
-            setSelected(index)
+        print ("DEBUG !!! mousePressed -- Mouse pressed.")
+        image = self.getImageFromEvent(event)
+        index = self.getIndexFor(image)
+        if index < self.listModel.getSize():
+            self.focus(image)
+            self.setSelected(index)
 
     def getSelectedObjects(self):
-        return[listModel().getElementAt(self.selected)]
+        return[self.listModel.getElementAt(self.selected)]
 
     class SimpleCounterRenderer:
 
@@ -444,7 +464,10 @@ class ImageList(object):
 
     def getSelectedObject(self):
         if self.selected >= 0:
-            return listModel().getElementAt(self.selected)
+            try:
+                return self.listModel.getElementAt(self.selected)
+            except IndexError:
+                traceback.print_exc()
         return None
 
     def showSelected(self):
@@ -454,8 +477,7 @@ class ImageList(object):
                 (self.selected / len(self.m_aImages)) * len(self.m_aImages)
 
         if oldPageStart != self.pageStart:
-            #COMMENTED
-            #self.enableButtons()
+            self.enableButtons()
             self.refreshImages()
 
     def keyPressed(self, ke):
@@ -472,7 +494,7 @@ class ImageList(object):
 
     def isFocusable(self, image):
         return (image >= 0) and \
-            (getIndexFor(image) < ImageList.listModel.getSize())
+            (getIndexFor(image) < self.listModel.getSize())
 
     def changeFocus(self, oldFocusImage, newFocusImage):
         focus(newFocusImage)
@@ -496,8 +518,8 @@ class ImageList(object):
 
     def display(self, i):
         isAux = (getCols() * getRows())
-        ps = (ImageList.listModel.getSize() / isAux) * isAux
-        setPageStart(ps)
+        ps = (self.listModel.getSize() / isAux) * isAux
+        self.setPageStart(ps)
 
     def setenabled(self, b):
         i = 0
