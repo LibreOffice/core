@@ -28,6 +28,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libmariadb_inc,inc/external/
     include/my_pthread.h \
     include/my_secure.h \
     include/mysql_com.h \
+    include/mysql_version.h \
     include/mysqld_error.h \
     include/mysql.h \
     include/mysql_io.h \
