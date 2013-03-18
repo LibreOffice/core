@@ -378,10 +378,10 @@ android/experimental. DocumentLoader is just a testbench, really for
 code to load a document (just Writer ones so far) and display one page
 at a time. LibreOffice4Android is what resulted from a Google Summer
 of Code project in 2012, a document viewer. desktop is a totally
-different app, where the actual LibreOffice4Android desktop GUI is
-present. Note that none of these apps in any way are claimed to be
-ready for end-users. No "beta testing" offers needed, it is painfully
-obvious what problems they have.
+different app, where the actual LibreOffice desktop GUI is present.
+Note that none of these apps in any way are claimed to be ready for
+end-users. No "beta testing" offers needed, it is painfully obvious
+what problems they have.
 
 To run some of the apps, do "make install" followed by either "make
 run" or starting it from Android itself. You most likely want to have
