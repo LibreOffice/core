@@ -18,7 +18,7 @@
 
 $(eval $(call gb_Module_Module,officecfg))
 
-include $(SRCDIR)/officecfg/registry/files.mk
+include $(SRCDIR)/officecfg/files.mk
 
 $(eval $(call gb_Module_add_targets,officecfg,\
     CustomTarget_registry \

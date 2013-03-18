@@ -34,7 +34,7 @@ $(call gb_CustomTarget_get_target,officecfg/registry) : \
 
 # auto generated header file for unit test qa/cppheader.cxx
 $(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg_qa_allheaders.hxx: \
-		$(SRCDIR)/officecfg/registry/files.mk
+		$(SRCDIR)/officecfg/files.mk
 	$(call gb_Output_announce,officecfg_qa_allheaders.hxx,$(true),CAT,1)
 	mkdir -p $(dir $@) && \
 	rm -f $@ \
