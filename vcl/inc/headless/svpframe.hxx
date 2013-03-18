@@ -77,7 +77,7 @@ public:
     virtual void                SetTitle( const rtl::OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetMenu( SalMenu* pMenu );
-    virtual void                                DrawMenuBar();
+    virtual void                DrawMenuBar();
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
@@ -89,7 +89,7 @@ public:
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual sal_Bool            GetWindowState( SalFrameState* pState );
     virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
     virtual void                StartPresentation( sal_Bool bStart );
     virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
@@ -102,11 +102,11 @@ public:
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
-    virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode );
-    virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual rtl::OUString       GetKeyName( sal_uInt16 nKeyCode );
+    virtual sal_Bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
-    virtual const SystemEnvData*    GetSystemData() const;
+    virtual const SystemEnvData* GetSystemData() const;
     virtual SalPointerState     GetPointerState();
     virtual SalIndicatorState   GetIndicatorState();
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
@@ -124,7 +124,7 @@ public:
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }
     virtual void                SetApplicationID(const rtl::OUString &rApplicationID) { (void) rApplicationID; }
-    bool IsVisible() { return m_bVisible; }
+    bool                        IsVisible() { return m_bVisible; }
 
     static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
 

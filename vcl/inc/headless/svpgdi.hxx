@@ -73,7 +73,7 @@ public:
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
-    virtual sal_uInt16          GetBitCount() const;
+    virtual sal_uInt16      GetBitCount() const;
     virtual long            GetGraphicsWidth() const;
 
     virtual void            ResetClipRegion();
@@ -90,16 +90,16 @@ public:
     virtual void            SetROPFillColor( SalROPColor nROPColor );
 
     virtual void            SetTextColor( SalColor nSalColor );
-    virtual sal_uInt16                  SetFont( FontSelectPattern*, int nFallbackLevel );
+    virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
-    virtual sal_uLong           GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
+    virtual sal_uLong       GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void ClearDevFontCache();
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName );
-    virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
+    virtual sal_Bool        CreateFontSubset( const rtl::OUString& rToFile,
                                               const PhysicalFontFace*,
                                               sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,
@@ -108,18 +108,18 @@ public:
                                               FontSubsetInfo& rInfo
                                               );
     virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded );
-    virtual const void* GetEmbedFontData( const PhysicalFontFace*,
-                                          const sal_Ucs* pUnicodes,
-                                          sal_Int32* pWidths,
-                                          FontSubsetInfo& rInfo,
-                                          long* pDataLen );
+    virtual const void*     GetEmbedFontData( const PhysicalFontFace*,
+                                              const sal_Ucs* pUnicodes,
+                                              sal_Int32* pWidths,
+                                              FontSubsetInfo& rInfo,
+                                              long* pDataLen );
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
     virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
-    virtual sal_Bool            GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& );
-    virtual sal_Bool            GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& );
+    virtual sal_Bool        GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& );
+    virtual sal_Bool        GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& );
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void            DrawServerFontLayout( const ServerFontLayout& );
     virtual bool            supportsOperation( OutDevSupportType ) const;
@@ -128,12 +128,11 @@ public:
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 );
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight );
     virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool            drawPolyLine(
-        const ::basegfx::B2DPolygon&,
-        double fTransparency,
-        const ::basegfx::B2DVector& rLineWidths,
-        basegfx::B2DLineJoin,
-        com::sun::star::drawing::LineCap);
+    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&,
+                                          double fTransparency,
+                                          const ::basegfx::B2DVector& rLineWidths,
+                                          basegfx::B2DLineJoin,
+                                          com::sun::star::drawing::LineCap);
     virtual void            drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry );
     virtual void            drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry );
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
@@ -175,10 +174,10 @@ public:
     virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags );
     virtual void            invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
-    virtual sal_Bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize );
+    virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize );
 
     virtual SystemGraphicsData GetGraphicsData() const;
-    virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
+    virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const;
 };
 
 #endif

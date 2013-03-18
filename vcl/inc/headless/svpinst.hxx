@@ -32,7 +32,7 @@
 
 #include <list>
 
-#include <time.h>  // timeval
+#include <time.h>
 
 #define VIRTUAL_DESKTOP_WIDTH 1024
 #define VIRTUAL_DESKTOP_HEIGHT 768
@@ -52,18 +52,19 @@ public:
 
 class SvpSalFrame;
 class GenPspGraphics;
+
 class SvpSalInstance : public SalGenericInstance
 {
-    timeval             m_aTimeout;
-    sal_uLong           m_nTimeoutMS;
-    int                 m_pTimeoutFDS[2];
+    timeval                 m_aTimeout;
+    sal_uLong               m_nTimeoutMS;
+    int                     m_pTimeoutFDS[2];
 
     // internal event queue
     struct SalUserEvent
     {
         const SalFrame*     m_pFrame;
         void*               m_pData;
-        sal_uInt16         m_nEvent;
+        sal_uInt16          m_nEvent;
 
         SalUserEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT )
                 : m_pFrame( pFrame ),
@@ -72,35 +73,36 @@ class SvpSalInstance : public SalGenericInstance
         {}
     };
 
-    oslMutex        m_aEventGuard;
+    oslMutex                m_aEventGuard;
     std::list< SalUserEvent > m_aUserEvents;
 
-    std::list< SalFrame* > m_aFrames;
+    std::list< SalFrame* >  m_aFrames;
 
-    bool isFrameAlive( const SalFrame* pFrame ) const;
+    bool                    isFrameAlive( const SalFrame* pFrame ) const;
 
 protected:
-    virtual void DoReleaseYield( int nTimeoutMS );
+    virtual void            DoReleaseYield( int nTimeoutMS );
 
 public:
-    static SvpSalInstance* s_pDefaultInstance;
+    static SvpSalInstance*  s_pDefaultInstance;
 
     SvpSalInstance( SalYieldMutex *pMutex );
     virtual ~SvpSalInstance();
 
-    void PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
+    void                    PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
 
-    bool PostedEventsInQueue();
+    bool                    PostedEventsInQueue();
 
-    void StartTimer( sal_uLong nMS );
-    void StopTimer();
-    void Wakeup();
+    void                    StartTimer( sal_uLong nMS );
+    void                    StopTimer();
+    void                    Wakeup();
 
-    void registerFrame( SalFrame* pFrame ) { m_aFrames.push_back( pFrame ); }
-    void deregisterFrame( SalFrame* pFrame );
-    const std::list< SalFrame* >& getFrames() const { return m_aFrames; }
+    void                    registerFrame( SalFrame* pFrame ) { m_aFrames.push_back( pFrame ); }
+    void                    deregisterFrame( SalFrame* pFrame );
+    const std::list< SalFrame* >&
+                            getFrames() const { return m_aFrames; }
 
-    bool            CheckTimeout( bool bExecuteTimers = true );
+    bool                    CheckTimeout( bool bExecuteTimers = true );
 
     // Frame
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );

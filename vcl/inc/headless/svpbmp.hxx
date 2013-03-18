@@ -50,7 +50,7 @@ public:
                                     bool bMask = false );
     virtual void            Destroy();
     virtual Size            GetSize() const;
-    virtual sal_uInt16              GetBitCount() const;
+    virtual sal_uInt16      GetBitCount() const;
 
     virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly );
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
