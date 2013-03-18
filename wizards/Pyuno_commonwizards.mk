@@ -46,6 +46,7 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     common/UCB.py \
     common/XMLHelper.py \
     common/XMLProvider.py \
+    common/ListModel.py \
     text/TextElement.py \
     document/__init__.py \
     document/OfficeDocument.py \
