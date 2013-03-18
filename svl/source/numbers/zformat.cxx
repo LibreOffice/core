@@ -1292,20 +1292,24 @@ sal_Unicode toUniChar(sal_uInt8 n)
     return sal_Unicode(c);
 }
 
-bool IsSingleSymbol(OUStringBuffer& rStringBuffer, sal_Int32 nPos)
+bool IsSingleSymbol( OUStringBuffer& rStringBuffer, sal_Int32 nPos )
 {
-    bool ret = false;
+    bool bRet = false;
     while (nPos >= 0)
     {
-        if(rStringBuffer[nPos] == '*' || rStringBuffer[nPos] == '\\' || rStringBuffer[nPos] == '_')
+        switch (rStringBuffer[nPos])
         {
-            ret = !ret;
-            nPos--;
+            case '*':
+            case '\\':
+            case '_':
+                bRet = !bRet;
+                --nPos;
+                break;
+            default:
+                return bRet;
         }
-        else
-            return ret;
     }
-    return ret;
+    return bRet;
 }
 
 } // namespace
@@ -1556,7 +1560,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
             }
             break;
         case SsGetString:
-            if (cToken == ';' && (nPos < 2 || !IsSingleSymbol(rString, nPos-2)))
+            if (cToken == ';' && (nPos < 2 || !IsSingleSymbol( rString, nPos-2)))
             {
                 eState = SsStop;
             }
