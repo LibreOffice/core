@@ -85,7 +85,8 @@ ScColumn::ScColumn() :
     maScriptTypes(MAXROWCOUNT),
     nCol( 0 ),
     pAttrArray( NULL ),
-    pDocument( NULL )
+    pDocument( NULL ),
+    bDirtyGroups( true )
 {
 }
 
@@ -103,6 +104,7 @@ void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc)
     nTab = nNewTab;
     pDocument = pDoc;
     pAttrArray = new ScAttrArray( nCol, nTab, pDocument );
+    bDirtyGroups = true;
 }
 
 
@@ -851,6 +853,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         ::std::swap( pCell1, pCell2 );
     }
 
+    bDirtyGroups = true;
+
     // from here: first cell (pCell1, nIndex1) exists always
 
     ScAddress aPos1( nCol, nRow1, nTab );
@@ -1010,6 +1014,8 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
         return;
     }
 
+    bDirtyGroups = true;
+
     // from here: own cell (pCell1, nIndex1) exists always
 
     ScFormulaCell* pFmlaCell1 = (pCell1->GetCellType() == CELLTYPE_FORMULA) ? static_cast< ScFormulaCell* >( pCell1 ) : 0;
@@ -1128,6 +1134,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     Search( nStartRow, i );
     if ( i >= maItems.size() )
         return ;
+
+    bDirtyGroups = true;
 
     bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false );    // avoid recalculations
@@ -1646,6 +1654,10 @@ void ScColumn::SwapCol(ScColumn& rCol)
     pAttrArray->SetCol(nCol);
     rCol.pAttrArray->SetCol(rCol.nCol);
 
+    bool bDirty = bDirtyGroups;
+    bDirtyGroups = rCol.bDirtyGroups;
+    rCol.bDirtyGroups = bDirty;
+
     SCSIZE i;
     for (i = 0; i < maItems.size(); i++)
     {
@@ -2008,6 +2020,8 @@ void ScColumn::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
 void ScColumn::UpdateCompile( bool bForceIfNameInUse )
 {
     if ( !maItems.empty() )
+    {
+        fprintf( stderr, "UpdateCompile - column !?\n" );
         for (SCSIZE i = 0; i < maItems.size(); i++)
         {
             ScFormulaCell* p = (ScFormulaCell*) maItems[i].pCell;
@@ -2019,6 +2033,8 @@ void ScColumn::UpdateCompile( bool bForceIfNameInUse )
                     Search( nRow, i );      // Listener deleted/inserted?
             }
         }
+        RebuildFormulaGroups();
+    }
 }
 
 

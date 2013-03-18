@@ -25,6 +25,7 @@
 #include <set>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 #include <tools/mempool.hxx>
 #include <svl/listener.hxx>
@@ -331,6 +332,32 @@ private:
     ::std::vector<Item> maArray;
 };
 
+struct ScSimilarFormulaDelta;
+
+struct SC_DLLPUBLIC ScFormulaCellGroup
+{
+    sal_Int32              mnRefCount;
+    ScSimilarFormulaDelta *mpDelta;  // difference between items in column
+    sal_Int32              mnStart;  // Start offset of that cell
+    sal_Int32              mnLength; // How many of these do we have ?
+
+    ScFormulaCellGroup();
+    ~ScFormulaCellGroup();
+
+    bool IsCompatible( ScSimilarFormulaDelta *pDelta );
+};
+inline void intrusive_ptr_add_ref(ScFormulaCellGroup *p)
+{
+    p->mnRefCount++;
+}
+inline void intrusive_ptr_release(ScFormulaCellGroup *p)
+{
+    if( --p->mnRefCount == 0 )
+        delete p;
+}
+
+typedef ::boost::intrusive_ptr<ScFormulaCellGroup> ScFormulaCellGroupRef;
+
 enum ScMatrixMode {
     MM_NONE      = 0,                   // No matrix formula
     MM_FORMULA   = 1,                   // Upper left matrix formula cell
@@ -349,6 +376,7 @@ private:
     ScFormulaCell*  pNext;
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
+    ScFormulaCellGroupRef xGroup;       // re-factoring hack - group of formulae we're part of.
     sal_uLong       nFormatIndex;       // Number format set by calculation
     short           nFormatType;        // Number format type set by calculation
     sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
@@ -558,6 +586,14 @@ public:
     bool            IsMultilineResult();
 
     void            MaybeInterpret();
+
+    // Temporary formula cell grouping API
+    ScFormulaCellGroupRef  GetCellGroup()
+        { return xGroup; }
+    void                   SetCellGroup( const ScFormulaCellGroupRef &xRef )
+        { xGroup = xRef; }
+    ScSimilarFormulaDelta *BuildDeltaTo( ScFormulaCell *pOther );
+    void                   ReleaseDelta( ScSimilarFormulaDelta *pDelta );
 };
 
 //          Iterator for references in a formula cell

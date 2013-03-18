@@ -108,10 +108,11 @@ class ScColumn
 
     std::vector<ColEntry> maItems;
 
-    ScAttrArray*       pAttrArray;
-    ScDocument*                pDocument;
+    ScAttrArray*          pAttrArray;
+    ScDocument*           pDocument;
+    bool                  bDirtyGroups;     /// formula groups are dirty.
 
-friend class ScDocument;                                       // for FillInfo
+friend class ScDocument;                    // for FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
@@ -146,6 +147,7 @@ public:
     void ReserveSize( SCSIZE nSize );
     void        SwapRow( SCROW nRow1, SCROW nRow2 );
     void        SwapCell( SCROW nRow, ScColumn& rCol);
+    void        RebuildFormulaGroups();
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
     bool    HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;

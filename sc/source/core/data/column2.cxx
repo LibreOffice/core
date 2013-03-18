@@ -1431,6 +1431,7 @@ void ScColumn::CellStorageModified()
     }
     cout << "-- end" << endl;
 #endif
+    RebuildFormulaGroups();
 }
 
 void ScColumn::CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const

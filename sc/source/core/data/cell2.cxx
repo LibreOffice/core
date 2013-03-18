@@ -1687,6 +1687,104 @@ void ScFormulaCell::CompileColRowNameFormula()
     }
 }
 
+struct ScSimilarFormulaDelta : std::vector< size_t >
+{
+    // we really want to be a lot more descriptive than this
+    bool IsCompatible( ScSimilarFormulaDelta *pDelta )
+    {
+        if ( size() != pDelta->size() )
+            return false;
+        for ( size_t i = 0; i < size(); i++ )
+        {
+            if ( (*this)[ i ] != (*pDelta)[ i ] )
+                return false;
+        }
+        return true;
+    }
+
+    void push_delta( const ScSingleRefData& a, const ScSingleRefData& b )
+    {
+        push_back( b.nCol - a.nCol );
+        push_back( b.nRow - a.nRow );
+        push_back( b.nTab - a.nTab );
+    }
+};
+
+bool ScFormulaCellGroup::IsCompatible( ScSimilarFormulaDelta *pDelta )
+{
+    return pDelta && mpDelta && mpDelta->IsCompatible( pDelta );
+}
+
+/// compare formulae tokens and build a series of deltas describing
+/// the difference - ie. the result, when added to this
+/// formulae should produce pOther
+ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
+{
+
+// FIXME: TODO - M1
+//    if ( kohei_comparison_hash_not_equal( mnHash, pOther->mnHash )
+//       return NULL;
+
+    FormulaToken **pThis = pCode->GetCode();
+    sal_uInt16     pThisLen = pCode->GetCodeLen();
+    FormulaToken **pOther = pOtherCell->pCode->GetCode();
+    sal_uInt16     pOtherLen = pOtherCell->pCode->GetCodeLen();
+
+    if ( !pThis || !pOther )
+    {
+        fprintf( stderr, "no compiled code for cells !" );
+        return NULL;
+    }
+
+    if ( pThisLen != pOtherLen )
+    {
+        fprintf( stderr, "different length formulae !" );
+        return NULL;
+    }
+
+    // check we are basically the same function
+    for ( sal_uInt16 i = 0; i < pThisLen; i++ )
+    {
+        if ( pThis[ i ]->GetType() != pOther[ i ]->GetType() ||
+             pThis[ i ]->GetOpCode() != pOther[ i ]->GetOpCode() ||
+             pThis[ i ]->GetParamCount() != pOther[ i ]->GetParamCount() )
+        {
+            fprintf( stderr, "Incompatible type, op-code or param counts\n" );
+            return NULL;
+        }
+        if( pThis[ i ]->GetType() == formula::svMatrix ||
+            pOther[ i ]->GetType() == formula::svMatrix )
+        {
+            fprintf( stderr, "Ignoring matrix formulae for now\n" );
+            return NULL;
+        }
+    }
+
+    fprintf( stderr, "matching formulae !\n" );
+    ScSimilarFormulaDelta *pDelta = new ScSimilarFormulaDelta();
+
+    for ( sal_uInt16 i = 0; i < pThisLen; i++ )
+    {
+        ScToken *pThisTok = static_cast< ScToken * >( pThis[ i ] );
+        ScToken *pOtherTok = static_cast< ScToken * >( pOther[ i ] );
+
+        const ScSingleRefData& aThisRef = pThisTok->GetSingleRef();
+        const ScSingleRefData& aOtherRef = pOtherTok->GetSingleRef();
+        pDelta->push_delta( aThisRef, aOtherRef );
+
+        const ScSingleRefData& aThisRef2 = pThisTok->GetSingleRef2();
+        const ScSingleRefData& aOtherRef2 = pOtherTok->GetSingleRef2();
+        pDelta->push_delta( aThisRef2, aOtherRef2 );
+    }
+
+    return pDelta;
+}
+
+void ScFormulaCell::ReleaseDelta( ScSimilarFormulaDelta *pDelta )
+{
+    delete pDelta;
+}
+
 // ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

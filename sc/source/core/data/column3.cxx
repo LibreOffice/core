@@ -120,6 +120,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
                     ScAddress( nCol, nRow, nTab ), pNewCell ) );
         }
     }
+    bDirtyGroups = true;
 }
 
 
@@ -133,6 +134,8 @@ void ScColumn::Insert( SCROW nRow, sal_uInt32 nNumberFormat, ScBaseCell* pCell )
     short eNewType = pDocument->GetFormatTable()->GetType(nNumberFormat);
     if (!pDocument->GetFormatTable()->IsCompatible(eOldType, eNewType))
         ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT, (sal_uInt32) nNumberFormat) );
+
+    bDirtyGroups = true;
 }
 
 
@@ -142,6 +145,7 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
     maItems.back().pCell = pCell;
     maItems.back().nRow  = nRow;
 
+    bDirtyGroups = true;
     maTextWidths.set<unsigned short>(nRow, TEXTWIDTH_DIRTY);
     maScriptTypes.set<unsigned short>(nRow, SC_SCRIPTTYPE_UNKNOWN);
     CellStorageModified();
@@ -173,6 +177,7 @@ void ScColumn::Delete( SCROW nRow )
         }
         pCell->EndListeningTo( pDocument );
         pCell->Delete();
+        bDirtyGroups = true;
 
         CellStorageModified();
     }
@@ -192,6 +197,7 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
     pCell->EndListeningTo( pDocument );
     pCell->Delete();
 
+    bDirtyGroups = true;
     maTextWidths.set_empty(nRow, nRow);
     maScriptTypes.set_empty(nRow, nRow);
     CellStorageModified();
@@ -227,6 +233,8 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     sal_Bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false ); // Avoid calculating it multiple times
+
+    bDirtyGroups = true;
 
     sal_Bool bFound=false;
     SCROW nEndRow = nStartRow + nSize - 1;
@@ -551,6 +559,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
             (*aIt)->Delete();
         }
     }
+
+    bDirtyGroups = true;
 }
 
 
@@ -598,6 +608,8 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
     // Delete attributes just now
     if ((nDelFlag & IDF_ATTRIB) == IDF_ATTRIB) pAttrArray->DeleteArea( nStartRow, nEndRow );
     else if ((nDelFlag & IDF_ATTRIB) != 0) pAttrArray->DeleteHardAttr( nStartRow, nEndRow );
+
+    bDirtyGroups = true;
 }
 
 
@@ -1982,6 +1994,84 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
         }
     }
     return nStringLen;
+}
+
+
+ScFormulaCellGroup::ScFormulaCellGroup()
+{
+}
+
+ScFormulaCellGroup::~ScFormulaCellGroup()
+{
+}
+
+// Very[!] slow way to look for and merge contiguous runs
+// of similar formulae into a formulagroup
+void ScColumn::RebuildFormulaGroups()
+{
+    if ( maItems.empty() )
+        return;
+
+    // clear previous groups
+    ScFormulaCellGroupRef xNone;
+    for (size_t i = 0; i < maItems.size(); i++)
+    {
+        ColEntry &rCur = maItems[ i ];
+        if ( rCur.pCell && rCur.pCell->GetCellType() == CELLTYPE_FORMULA )
+            static_cast<ScFormulaCell *>( rCur.pCell )->SetCellGroup( xNone );
+    }
+
+    // re-build groups
+    for (size_t i = 1; i < maItems.size(); i++)
+    {
+        ColEntry &rCur = maItems[ i ];
+        ColEntry &rPrev = maItems[ i - 1 ];
+        if ( ( rPrev.nRow != rCur.nRow - 1 ) ||               // not contiguous
+             !rCur.pCell || !rPrev.pCell ||                   // paranoia
+             rCur.pCell->GetCellType() != CELLTYPE_FORMULA || // not formulae
+             rPrev.pCell->GetCellType() != CELLTYPE_FORMULA )
+            continue;
+
+        // see if these formulae are similar
+        ScFormulaCell *pCur = static_cast< ScFormulaCell *>( rCur.pCell );
+        ScFormulaCell *pPrev = static_cast< ScFormulaCell *>( rPrev.pCell );
+
+        fprintf( stderr, "column has contiguous formulae\n" );
+        ScSimilarFormulaDelta *pDelta = pPrev->BuildDeltaTo( pCur );
+
+        if ( !pDelta )
+        {
+            // not similar
+            pCur->SetCellGroup( xNone );
+            continue;
+        }
+
+        ScFormulaCellGroupRef xGroup = pPrev->GetCellGroup();
+        if ( !xGroup.get() )
+        {
+            // create a new group ...
+            ScFormulaCellGroup *pGroup = new ScFormulaCellGroup();
+            pGroup->mpDelta = pDelta;
+            pGroup->mnStart = i - 1;
+            pGroup->mnLength = 2;
+
+            xGroup.reset( pGroup );
+            pCur->SetCellGroup( xGroup );
+            pPrev->SetCellGroup( xGroup );
+        }
+        else if ( xGroup->IsCompatible( pDelta ) )
+        {
+            // we are a compatible extension - extend the group
+            pCur->SetCellGroup( xGroup );
+            xGroup->mnLength++;
+            pCur->ReleaseDelta( pDelta );
+        }
+        else
+        {
+            fprintf( stderr, "unusual incompatible extension of formulae\n" );
+            pCur->ReleaseDelta( pDelta );
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
