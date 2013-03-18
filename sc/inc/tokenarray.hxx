@@ -42,6 +42,8 @@ public:
    virtual ~ScTokenArray();
     ScTokenArray* Clone() const;    /// True copy!
 
+    size_t GetHash() const;
+
     /// Exactly and only one range (valid or deleted)
     bool    IsReference( ScRange& rRange ) const;
     /// Exactly and only one valid range (no #REF!s)
