@@ -20,8 +20,9 @@ Adding a new setting:
         - add AC_CONFIG_HEADERS([config_host/config_xxx.h]) next to the others
             in configure.ac
         - add config_hxx.h to config_host/.gitignore
-- add #undef HAVE_FOO to the config_host/config_hxx.h , possibly with a comment,
-  and add the following block right after it
+- add #undef HAVE_FOO to the config_host/config_hxx.h , possibly with a comment
+- if the setting is an on/off setting (i.e. not a value of anything),
+  add the following block right after it
 #ifndef HAVE_FOO
 #define HAVE_FOO 0
 #endif
