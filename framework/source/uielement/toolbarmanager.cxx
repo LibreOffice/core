@@ -207,7 +207,7 @@ DEFINE_XTYPEPROVIDER_6                  (   ToolBarManager                      
                                             ::com::sun::star::lang::XEventListener
                                         )
 
-ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServiceManager,
+ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,
                                 const OUString& rResourceName,
                                 ToolBar* pToolBar ) :
@@ -226,10 +226,12 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
     m_aListenerContainer( m_aLock.getShareableOslMutex() ),
-    m_xServiceManager( rServiceManager ),
+    m_xContext( rxContext ),
     m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() ),
     m_bAcceleratorCfg( sal_False )
 {
+    OSL_ASSERT( m_xContext.is() );
+
     Window* pWindow = m_pToolBar;
     while ( pWindow && !pWindow->IsSystemWindow() )
         pWindow = pWindow->GetParent();
@@ -237,13 +239,8 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( m_pToolBar );
 
-    if ( m_xServiceManager.is() )
-    {
-        m_xToolbarControllerRegistration = frame::ToolBarControllerFactory::create( comphelper::getComponentContext(m_xServiceManager) );
-        m_xURLTransformer.set(
-             URLTransformer::create(
-                 ::comphelper::getComponentContext(m_xServiceManager)) );
-    }
+    m_xToolbarControllerRegistration = frame::ToolBarControllerFactory::create( m_xContext );
+    m_xURLTransformer = URLTransformer::create( m_xContext );
 
     m_pToolBar->SetSelectHdl( LINK( this, ToolBarManager, Select) );
     m_pToolBar->SetActivateHdl( LINK( this, ToolBarManager, Activate) );
@@ -591,7 +588,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
         if ( Source.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
             m_xFrame.clear();
 
-        m_xServiceManager.clear();
+        m_xContext.clear();
     }
 }
 
@@ -664,7 +661,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
         }
 
         m_xFrame.clear();
-        m_xServiceManager.clear();
+        m_xContext.clear();
         m_xGlobalAcceleratorManager.clear();
         m_xModuleAcceleratorManager.clear();
         m_xDocAcceleratorManager.clear();
@@ -817,7 +814,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     {
         if ( !m_bModuleIdentified )
         {
-            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
+            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
             Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
 
             m_bModuleIdentified = sal_True;
@@ -825,7 +822,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
 
             if ( !m_aModuleIdentifier.isEmpty() )
             {
-                Reference< XNameAccess > xNameAccess = frame::UICommandDescription::create( comphelper::getComponentContext(m_xServiceManager) );
+                Reference< XNameAccess > xNameAccess = frame::UICommandDescription::create( m_xContext );
                 xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandLabels;
             }
         }
@@ -884,8 +881,6 @@ void ToolBarManager::CreateControllers()
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::CreateControllers" );
 
     Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
-    Reference< XComponentContext > xComponentContext(
-        comphelper::getComponentContext( m_xServiceManager ) );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
 
     css::util::URL      aURL;
@@ -935,7 +930,8 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Value    <<= m_xFrame;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = OUString( "ServiceManager" );
-                aPropValue.Value    <<= m_xServiceManager;
+                Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
+                aPropValue.Value    <<= xMSF;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = OUString( "ParentWindow" );
                 aPropValue.Value    <<= xToolbarWindow;
@@ -950,7 +946,7 @@ void ToolBarManager::CreateControllers()
 
                 Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
                 xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                aCommandURL, aArgs, xComponentContext ),
+                                                                aCommandURL, aArgs, m_xContext ),
                                                             UNO_QUERY );
                 bInit = sal_False; // Initialization is done through the factory service
             }
@@ -970,7 +966,7 @@ void ToolBarManager::CreateControllers()
                     OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
 
                     Reference< XStatusListener > xStatusListener(
-                        ToolBarMerger::CreateController( comphelper::getComponentContext(m_xServiceManager),
+                        ToolBarMerger::CreateController( m_xContext,
                                                          m_xFrame,
                                                          m_pToolBar,
                                                          aCommandURL,
@@ -986,7 +982,7 @@ void ToolBarManager::CreateControllers()
                     if ( it == m_aMenuMap.end() )
                     {
                         xController = Reference< XStatusListener >(
-                            new GenericToolbarController( comphelper::getComponentContext(m_xServiceManager), m_xFrame, m_pToolBar, nId, aCommandURL ));
+                            new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
 
                         // Accessibility support: Set toggle button role for specific commands
                         sal_Int32 nProps = RetrievePropertiesFromCommand( aCommandURL );
@@ -995,7 +991,7 @@ void ToolBarManager::CreateControllers()
                     }
                     else
                         xController = Reference< XStatusListener >(
-                            new MenuToolbarController( comphelper::getComponentContext(m_xServiceManager), m_xFrame, m_pToolBar, nId, aCommandURL, m_aModuleIdentifier, m_aMenuMap[ nId ] ));
+                            new MenuToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL, m_aModuleIdentifier, m_aMenuMap[ nId ] ));
                 }
             }
             else if ( pController )
@@ -1045,7 +1041,8 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Value <<= aCommandURL;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = OUString( "ServiceManager" );
-                aPropValue.Value <<= m_xServiceManager;
+                Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
+                aPropValue.Value <<= xMSF;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = OUString( "ParentWindow" );
                 aPropValue.Value <<= xToolbarWindow;
@@ -1140,7 +1137,7 @@ void ToolBarManager::AddImageOrientationListener()
         m_bImageOrientationRegistered = sal_True;
         ImageOrientationListener* pImageOrientation = new ImageOrientationListener(
             Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ),
-            comphelper::getComponentContext(m_xServiceManager),
+            m_xContext,
             m_xFrame );
         m_xImageOrientationListener = Reference< XComponent >( static_cast< ::cppu::OWeakObject *>(
                                         pImageOrientation ), UNO_QUERY );
@@ -1187,7 +1184,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     sal_uInt16    nId( 1 );
 
-    Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
+    Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
     if ( !m_xDocImageManager.is() )
     {
         Reference< XModel > xModel( GetModelFromFrame() );
@@ -1216,7 +1213,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     if ( !m_xModuleImageManager.is() )
     {
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
-            ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext( m_xServiceManager ) );
+            ModuleUIConfigurationManagerSupplier::create( m_xContext );
         m_xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
         m_xModuleImageManager = Reference< XImageManager >( m_xUICfgMgr->getImageManager(), UNO_QUERY );
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
@@ -2238,7 +2235,7 @@ bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rS
             if ( !xModuleAccelCfg.is() )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
-                    ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(m_xServiceManager) );
+                    ModuleUIConfigurationManagerSupplier::create( m_xContext );
                 try
                 {
                     Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
@@ -2259,7 +2256,7 @@ bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rS
 
             if ( !xGlobalAccelCfg.is() )
             {
-                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( comphelper::getComponentContext(m_xServiceManager) );
+                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( m_xContext );
                 m_xGlobalAcceleratorManager = xGlobalAccelCfg;
             }
         }

@@ -156,7 +156,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 
                     pToolBar = new ToolBar( pWindow, nStyles );
                     m_xToolBarWindow = VCLUnoHelper::GetInterface( pToolBar );
-                    pToolBarManager = new ToolBarManager( m_xServiceFactory, xFrame, m_aResourceURL, pToolBar );
+                    pToolBarManager = new ToolBarManager( comphelper::getComponentContext(m_xServiceFactory), xFrame, m_aResourceURL, pToolBar );
                     pToolBar->SetToolBarManager( pToolBarManager );
                     m_xToolBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
                     pToolBar->WillUsePopupMode( bPopupMode );

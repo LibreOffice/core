@@ -32,7 +32,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
@@ -48,7 +47,7 @@ class ToolBar;
 class AddonsToolBarManager : public ToolBarManager
 {
     public:
-        AddonsToolBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager,
+        AddonsToolBarManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                               const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                               const OUString& rResourceName,
                               ToolBar* pToolBar );

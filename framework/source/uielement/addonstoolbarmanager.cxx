@@ -76,11 +76,11 @@ namespace framework
 static const char   TOOLBOXITEM_SEPARATOR_STR[] = "private:separator";
 static const sal_uInt16 TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
 
-AddonsToolBarManager::AddonsToolBarManager( const Reference< XMultiServiceFactory >& rServiceManager,
+AddonsToolBarManager::AddonsToolBarManager( const Reference< XComponentContext >& rxContext,
                                 const Reference< XFrame >& rFrame,
                                 const OUString& rResourceName,
                                 ToolBar* pToolBar ) :
-    ToolBarManager( rServiceManager, rFrame, rResourceName, pToolBar )
+    ToolBarManager( rxContext, rFrame, rResourceName, pToolBar )
 {
     m_pToolBar->SetMenuType( TOOLBOX_MENUTYPE_CLIPPEDITEMS );
     m_pToolBar->SetSelectHdl( LINK( this, AddonsToolBarManager, Select) );
@@ -215,7 +215,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     OUString aModuleIdentifier;
     try
     {
-        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
+        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
         aModuleIdentifier = xModuleManager->identify( m_xFrame );
     }
     catch ( const Exception& )
@@ -223,8 +223,6 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     }
 
     Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
-    Reference< XComponentContext > xComponentContext(
-        comphelper::getComponentContext( m_xServiceManager ) );
 
     sal_uInt32  nElements( 0 );
     sal_Bool    bAppendSeparator( sal_False );
@@ -297,7 +295,8 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                         aPropValue.Value    <<= m_xFrame;
                         aArgs[1] <<= aPropValue;
                         aPropValue.Name     = OUString( "ServiceManager" );
-                        aPropValue.Value    <<= m_xServiceManager;
+                        Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
+                        aPropValue.Value    <<= xMSF;
                         aArgs[2] <<= aPropValue;
                         aPropValue.Name     = OUString( "ParentWindow" );
                         aPropValue.Value    <<= xToolbarWindow;
@@ -309,7 +308,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                         try
                         {
                             xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                                                            aURL, aArgs, xComponentContext ),
+                                                                            aURL, aArgs, m_xContext ),
                                                                         UNO_QUERY );
                         }
                         catch ( const uno::Exception& )
@@ -322,7 +321,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 {
                     ::cppu::OWeakObject* pController = 0;
 
-                    pController = ToolBarMerger::CreateController( xComponentContext, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
+                    pController = ToolBarMerger::CreateController( m_xContext, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
                     xController = Reference< XStatusListener >( pController, UNO_QUERY );
                 }
 
@@ -341,7 +340,8 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     aPropValue.Value <<= aURL;
                     aArgs[1] <<= aPropValue;
                     aPropValue.Name = OUString( "ServiceManager" );
-                    aPropValue.Value <<= m_xServiceManager;
+                    Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
+                    aPropValue.Value <<= xMSF;
                     aArgs[2] <<= aPropValue;
                     try
                     {

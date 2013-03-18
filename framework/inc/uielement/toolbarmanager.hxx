@@ -34,7 +34,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
@@ -78,7 +77,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
                        public ::cppu::OWeakObject
 {
     public:
-        ToolBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager,
+        ToolBarManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                         const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                         const OUString& rResourceName,
                         ToolBar* pToolBar );
@@ -207,7 +206,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >               m_xUICommandLabels;
         ToolBarControllerMap                                                                   m_aControllerMap;
         ::cppu::OMultiTypeInterfaceContainerHelper                                             m_aListenerContainer;   /// container for ALL Listener
-        ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >         m_xServiceManager;
+        ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >             m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration > m_xToolbarControllerRegistration;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xModuleImageManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xDocImageManager;
