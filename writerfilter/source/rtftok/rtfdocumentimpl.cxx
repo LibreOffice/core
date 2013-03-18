@@ -394,6 +394,11 @@ void RTFDocumentImpl::checkFirstRun()
         if (!m_pSuperstream)
             Mapper().startSectionGroup();
         Mapper().startParagraphGroup();
+
+        // set the requested default font
+        RTFValue::Pointer_t pFont = m_aDefaultState.aCharacterSprms.find(NS_sprm::LN_CRgFtc0);
+        if (pFont.get())
+            dispatchValue(RTF_F, pFont->getInt());
         m_bFirstRun = false;
     }
 }
