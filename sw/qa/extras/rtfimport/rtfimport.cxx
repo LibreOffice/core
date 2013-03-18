@@ -141,6 +141,7 @@ public:
     void testFdo59953();
     void testFdo59638();
     void testFdo60722();
+    void testFdo61909();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -232,6 +233,7 @@ void Test::run()
         {"fdo59953.rtf", &Test::testFdo59953},
         {"fdo59638.rtf", &Test::testFdo59638},
         {"fdo60722.rtf", &Test::testFdo60722},
+        {"fdo61909.rtf", &Test::testFdo61909},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1129,6 +1131,15 @@ void Test::testFdo60722()
     xShape.set(xDraws->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), getProperty<sal_uInt32>(xShape, "LineWidth"));
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "LineColor"));
+}
+
+void Test::testFdo61909()
+{
+    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+    // Was the Writer default font.
+    CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xTextRange, "CharFontName"));
+    // Was 0x008000.
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<sal_uInt32>(xTextRange, "CharBackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
