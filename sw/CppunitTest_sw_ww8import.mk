@@ -28,13 +28,13 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sw_subsequent_ww8import))
+$(eval $(call gb_CppunitTest_CppunitTest,sw_ww8import))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_ww8import, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sw_ww8import, \
     sw/qa/extras/ww8import/ww8import \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ww8import, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_ww8import, \
     comphelper \
     cppu \
     cppuhelper \
@@ -45,26 +45,26 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ww8import, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_ww8import,\
+$(eval $(call gb_CppunitTest_use_externals,sw_ww8import,\
 	boost_headers \
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sw_subsequent_ww8import,\
+$(eval $(call gb_CppunitTest_set_include,sw_ww8import,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/qa/extras/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sw_subsequent_ww8import,\
+$(eval $(call gb_CppunitTest_use_api,sw_ww8import,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sw_subsequent_ww8import))
+$(eval $(call gb_CppunitTest_use_ure,sw_ww8import))
 
-$(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8import,\
+$(eval $(call gb_CppunitTest_use_components,sw_ww8import,\
 	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -89,10 +89,10 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8import,\
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_ww8import))
+$(eval $(call gb_CppunitTest_use_configuration,sw_ww8import))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_ww8import))
+$(eval $(call gb_CppunitTest_use_filter_configuration,sw_ww8import))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_subsequent_ww8import))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_ww8import))
 
 # vim: set noet sw=4 ts=4:

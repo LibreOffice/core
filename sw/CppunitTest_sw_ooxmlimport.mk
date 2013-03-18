@@ -28,13 +28,13 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sw_subsequent_ooxmlimport))
+$(eval $(call gb_CppunitTest_CppunitTest,sw_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_ooxmlimport, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlimport, \
     sw/qa/extras/ooxmlimport/ooxmlimport \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ooxmlimport, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlimport, \
     comphelper \
     cppu \
     cppuhelper \
@@ -46,26 +46,26 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ooxmlimport, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_ooxmlimport,\
+$(eval $(call gb_CppunitTest_use_externals,sw_ooxmlimport,\
 	boost_headers \
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sw_subsequent_ooxmlimport,\
+$(eval $(call gb_CppunitTest_set_include,sw_ooxmlimport,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/qa/extras/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sw_subsequent_ooxmlimport,\
+$(eval $(call gb_CppunitTest_use_api,sw_ooxmlimport,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sw_subsequent_ooxmlimport))
+$(eval $(call gb_CppunitTest_use_ure,sw_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlimport,\
+$(eval $(call gb_CppunitTest_use_components,sw_ooxmlimport,\
 	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -95,10 +95,10 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlimport,\
     xmloff/util/xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_ooxmlimport))
+$(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_ooxmlimport))
+$(eval $(call gb_CppunitTest_use_filter_configuration,sw_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_subsequent_ooxmlimport))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_ooxmlimport))
 
 # vim: set noet sw=4 ts=4:
