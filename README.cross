@@ -1,8 +1,8 @@
 Cross-compiling LibreOffice
-===========================
+***************************
 
-Cross-compilation work has been done, to various degrees, for platforms:
-Windows, iOS, Android, PowerPC Mac OS X, Raspbian.
+Cross-compilation works, to various degree, to the following
+platforms: Windows, iOS, Android, PowerPC Mac OS X, Raspbian.
 
 
 General
@@ -26,47 +26,53 @@ Even though the LibreOffice build mechanism is highly unorthodox, the
 configure script takes the normal --build and --host options like any
 GNU Autoconf -based configure script. To cross-compile, you basically
 need just to specify a suitable --host option and things should work
-out nicely. In practise, many details needed to be handled. See
-examples below.
+out nicely. In practice, many details need to be handled. See examples
+below.
+
+Note that in the case of LibreOffice, it is uncommon to run the
+configure script directly. Normally one uses the autogen.sh script.
+The autogen.sh script saves its last command-line options used in a
+file called autogen.lastrun. The typical way of working is to edit
+this file, i.e. use it as an input file to autogen.sh and not as a
+saved backup copy of command-line parameters.
 
 
 What is so hard, then?
 ----------------------
 
 Despite the fact that the configure script takes normal --build and
---host options, that is just the beginning. In practise a lot of work
-was necessary to separate tests for "host" and "build" platforms in
-the configure script. See the git log for details. And the reasonably
-"standard" configure.in is just the top level; when we get down to the
-actual makefilery used to build the bits of LibreOffice, it gets much
-worse.
+--host options, that is just the beginning. It was necessary to
+separate tests for "host" and "build" platforms in the configure
+script. See the git log for details. And the reasonably "standard"
+configure.in is just the top level; when we get down to the actual
+makefilery used to build the bits of LibreOffice, it gets much worse.
 
 
 Windows
--------
+*******
 
-There is some support in LibreOffice already (from OpenOffice.org) for
-building it locally on Windows with the GNU tool-chain
-(MinGW). Apparently, that work has never attempted cross-compilation.
+There was some support in LibreOffice already from OpenOffice.org days
+for building it locally on Windows with the GNU tool-chain (MinGW).
+Apparently, those doing that work never attempted cross-compilation.
 
-This OOo-originated MinGW support attempts to support both running
-Cygwin gcc in its -mno-cygwin mode, and a native MinGW compiler. The
--mno-cygwin mechanism in the Cygwin gcc is rapidly being obsoleted, if
-it isn't already, and we have not attempted to try to keep it working;
-in fact we have activly cleaned out mechanisms related to this. Ditto
-for native MinGW. If one compiles natively on Windows, just use
-Microsoft's compiler. OOo/LO has been built for Windows all the time
-using that.
+This OOo-originated MinGW support attempts to be for both running the
+Cygwin gcc in its -mno-cygwin mode, and a Windows-native MinGW
+compiler. The -mno-cygwin mechanism in the Cygwin gcc is rapidly being
+obsoleted, if it isn't already, and we have not attempted to try to
+keep it working; in fact we have activly cleaned out mechanisms
+related to this. Ditto for native MinGW. If one compiles natively on
+Windows, just use a version of Microsoft's compiler. OpenOffice.org
+and LibreOffice have been built for Windows all the time using that.
 
-The only case where it makes sense to use MinGW is for
-cross-compilation. There is just too much crack on Windows anyway, and
-it is a semi-miracle (well, make that the result of years of work)
-that the MSVC build under Cygwin works as nicely as it does.
+The only case where it makes sense to use MinGW, is for
+cross-compilation. There is just too much crack involved on Windows
+anyway, and it is a semi-miracle that the MSVC build under Cygwin
+works as nicely as it does.
 
 MinGW is available as cross-build toolchains pre-packaged in more or
-less official packages for many Linux distros including Debian,
-Fedora, openSUSE and SLE. For instance the mingw32 packages in the
-Open Build Service, running on openSUSE:
+less official packages for many Linux distros including Debian, Fedora
+and openSUSE. For instance the mingw32 packages in the Open Build
+Service, running on openSUSE, can be found at:
 
 http://download.opensuse.org/repositories/windows:/mingw:/win32/
 
@@ -246,112 +252,116 @@ TODO:
 
 
 iOS
----
+***
 
-iOS is the operating system of Apple's mobile devices. Clearly for a
-device like the iPad it would be totally unacceptable to run a normal
-LibreOffice application with a overlapping windows and mouse-oriented
-GUI widgets. No work has been done (at least publicly) by others to
-design a touch GUI for LibreOffice, so that is something that needs to
-be done.
+iOS is the operating system on Apple's mobile devices. Clearly for a
+device like the iPad it would not be acceptable to run a normal
+LibreOffice application with overlapping windows and mouse-oriented
+GUI widgets.
 
-Obviously it will make sense to use only a part of LibreOffice's code
-for iOS. Most likely lots of the GUI-oriented code should be left out,
-and some iOS app(s) that eventually wants to use the remaining bits
-will handle all its GUI in a platform-dependent manner. How well it
-will be possible to do such a split remains to be seen.
+It makes sense to use only a part of LibreOffice's code for iOS. Lots
+of the GUI-oriented code should be left out. iOS apps that want to use
+the applicable LibreOffice code will handle all their GUI in a
+platform-dependent manner. How well it will be possible to do such a
+split remains to be seen.
 
-Technically, one important special aspect of iOS is that apps are not
+Obviously we want it to be possible to eventually distribute apps
+using LibreOffice code through the App Store. Technically, one
+important special aspect of iOS is that apps in the App Store are not
 allowed to load own dynamic libraries. (System libraries are used in
-the form of dynamic libraries, just like on Mac OS X, of which iOS is a
-variant.) So all the libraries in LibreOffice that normally are shared
+the form of dynamic libraries, just like on Mac OS X, of which iOS is
+a variant.)
+
+Thus all the libraries in LibreOffice that normally are shared
 libraries (DLLs on Windows, shared objects (.so) on Linux, dynamic
-libraries on Mac OS X (.dylib)) need to be built as static archives
-instead. Obviously this will have some interesting consequences for
-how UNO is implemented and used. None of that has been spared much
-thought yet.
+libraries on Mac OS X (.dylib)) must be built as static archives
+instead. This has some interesting consequences for how UNO is
+implemented and used.
 
-The Apple tool-chain for iOS cross-building is available only for
-Mac OS X.
+An iOS app is a "bundle" that contains a single executable, In an app
+using LibreOffice code, that eecutable then congtains the necessary
+LibreOffice libraries and UNO components statically linked.
 
-Here is an autogen.lastrun for iOS (device) using Xcode 4.3 and clang,
-and Xcode 3 for the build platform parts:
-CXX=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
-CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
-CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
-CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
---with-distro=LibreOfficeiOS
---without-help
---without-helppack-integration
---without-myspell-dicts
+The Apple tool-chain for iOS cross-building is available only for OS
+X. In order to be able to run and debug an app on an actual device
+(and not just the iOS Simulator) you need to be registered in the iOS
+Developer Program.
 
-For the iOS simulator, using Xcode 4.4.1 and clang both for the host and
-build platform:
+Here is an autogen.lastrun for iOS (device) using Xcode 4.6, on OS X 10.8:
 
-CXX=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk -mmacosx-version-min=10.6
-CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.1.sdk -mmacosx-version-min=10.6
+CXX=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk -miphoneos-version-min=5.0
+CC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch armv7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk -miphoneos-version-min=5.0
+--enable-dbgutil
+--enable-debug
 --enable-werror
---with-build-platform-configure-options=--with-macosx-version-min-required=10.6
+--with-build-platform-configure-options=--with-macosx-sdk=10.7
 --with-distro=LibreOfficeiOS
---without-help
---without-helppack-integration
---without-myspell-dicts
+
+For the iOS Simulator:
+
+CXX=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator6.1.sdk -mmacosx-version-min=10.7
+CC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator6.1.sdk -mmacosx-version-min=10.7
+--enable-dbgutil
+--enable-debug
+--enable-werror
+--with-build-platform-configure-options=--with-macosx-sdk=10.7
+--with-distro=LibreOfficeiOS
 
 Note that you will have to install autoconf and automake yourself
 before running autogen.sh. They are no longer included in Xcode 4.3
-(not even in the add-on "command line tools").
+and later (not even in the add-on "command line tools").
 
-The -mmacosx-version-min=10.6 is necessary when building for the iOS
+The -mmacosx-version-min=10.7 is necessary when building for the iOS
 simulator to avoid clang replacing simple calls to fprintf with calls
 to fwrite$UNIX2003 which Xcode then warns that doesn't exist on iOS.
 
 
 Android
--------
+*******
 
-From a technical point of view the core Android OS is Linux, but
-everything else is different. Unlike iOS, an Android app can use
-shared objects just fine, so that aspect of UNO doesn't need special
-handling. Except that there is a silly low limit in the Android
-dynamic linker on the number of libraries you can dlopen. Note that
-this is a limitation of user-level code, not the kernel. Here are
-various ways around this problem that are being examined.
+From a technical point of view the core Android OS (the kernel) is
+Linux, but everything else is different. Unlike iOS, an Android app
+can use shared objects just fine, so that aspect of UNO doesn't need
+special handling. Except that there is a silly low limit in the
+Android dynamic linker on the number of libraries you can dlopen. This
+is a limitation in user-level (but system-provided and not really
+replaceable) code, not the kernel.
 
-As for the GUI, the same holds as said above for iOS.
+Thus, just like for iOS, also for Android the LibreOffice libraries
+and UNO components are built as static archives. For Android, those
+static archives, and any app-specific native code, are linked into one
+single app-specific shared library, called liblo-native-code.so.
 
-Android cross-compilation work has been done on Linux (openSUSE in
-particular) and Mac OS X. The Android cross-buld tool-chain (the
-"Native Development Kit", or NDK) is available for Linux and Mac OS
-X. Sure, for Windows, too, but trying to cross-compile LO from Windows
-will probably drive you insane.
+For the GUI, the same holds as said above for iOS. The GUI layer needs
+to be platform-specific, written in Java.
 
-You will also need the SDK as full "make" also builds a couple of
-Android apps (written in Java). Use the "android" tool from the SDK to
-install the SDK Tools, SDK Platform Tools, the API 14 SDK Platform + ARM EABI
-v7a System Image, and the Android Support Library.
+Android cross-compilation work has been done mainly on Linux (openSUSE
+in particular). Earlier also cross-compiling from OS X was tried. The
+Android cross-compilation tool-chain (the "Native Development Kit", or
+NDK) is available for Linux, OS X and Windows, but trying to
+cross-compile LibreOffice from Windows will probably drive you insane.
 
-Here is an autogen.lastrun for Android, when cross-compiling from Mac
-OS X 10.8 with Xcode 4.4.1:
+You will also need the Android SDK as full "make" also builds a couple
+of Android apps where the upper layer is written in Java.
 
+Use the "android" tool from the SDK to install the SDK Tools, SDK
+Platform Tools, the API 14 SDK Platform and the Android Support
+Library. If you want to run the Android apps in the emulator, you of
+course need an appropriate system image for that.
+
+Here is an autogen.lastrun for Android on ARM when cross-compiling
+from Linux:
+
+--build=x86_64-unknown-linux-gnu
+--enable-dbgutil
 --enable-debug
 --enable-werror
---with-android-ndk=/Users/tml/android-ndk-r8b
+--with-android-ndk=/home/tml/android-ndk-r8d
 --with-android-ndk-toolchain-version=4.6
---with-android-sdk=/Users/tml/android-sdk-macosx
+--with-android-sdk=/home/tml/adt-bundle-linux/sdk
 --with-distro=LibreOfficeAndroid
---without-doxygen
---without-helppack-integration
---without-myspell-dicts
 
-And here is an autogen.lastrun for Android when cross-compiling from Linux:
-
---with-distro=LibreOfficeAndroid
---build=x86_64-unknown-linux-gnu
---with-android-ndk=/home/tml/android-ndk-r8b
---with-android-ndk-toolchain-version=4.6
---with-android-sdk=/home/tml/android-sdk-linux
-
-And here is an autogen.lastrun for Android when cross-compiling to x86 from Linux:
+And here is an autogen.lastrun for Android on X86:
 
 --with-android-ndk=/opt/libreoffice/android-ndk-r8b
 --with-android-ndk-toolchain-version=4.6
@@ -367,38 +377,30 @@ on the emulator or on a device that use LibreOffice code. Look in
 android/experimental. DocumentLoader is just a testbench, really for
 code to load a document (just Writer ones so far) and display one page
 at a time. LibreOffice4Android is what resulted from a Google Summer
-of Code project in 2012, a document viewer.
-
-There are also a couple of non-interactive unit tests that are also
-built as real "apps", only the one in android/qa/sc works to any
-extent any more.
+of Code project in 2012, a document viewer. desktop is a totally
+different app, where the actual LibreOffice4Android desktop GUI is
+present. Note that none of these apps in any way are claimed to be
+ready for end-users. No "beta testing" offers needed, it is painfully
+obvious what problems they have.
 
 To run some of the apps, do "make install" followed by either "make
 run" or starting it from Android itself. You most likely want to have
 an "adb logcat" running in another window.
 
-To debug, do manually what "make run" would do, adding args "-e
-lo-main-delay 20" to the command line, and when the app has started,
-run ndk-gdb. That works just for the sc unit test. Unfortunately the
-gdb in NDK r7 and r8 is a bit broken, you can use the one in a NDK
-build with newer versions of gcc and gdb from
-http://code.google.com/p/mingw-and-ndk/ instead.
-
-Running strace on the unit test in progress is often useful to find
-out what is going wrong. Pass something like -e lo-strace '-tt -f -e
-trace=file,process,network -o /system/sc/strace.out' to the am start
-command line. This too works only for NativeActivity-based apps,
-i.e. the sc unit test.
+To debug, do manually what "make run" would do and when the app has
+started, run ndk-gdb.
 
 
 PowerPC Mac OS X
-----------------
+****************
 
-Cross-compiling for PowerPC Mac OS X from Intel Mac OS X will probably
-be easy. The APIs available should after all be closely identical to
-those on Intel Mac OS X, and LibreOffice builds fine natively on
-PowerPC Mac already. Only a little experimenting has been done with
-it. An autogen.lastrun looked like this when last tried:
+Cross-compiling for PowerPC Mac OS X from Intel Mac OS X is easy in
+theory. The APIs available should after all be closely identical to
+those on a corrersponding (obsolete) version of Mac OS X for Intel,
+and LibreOffice builds fine natively on PowerPC Mac already. Only a
+little experimenting has been done with it, and it seems that nobody
+actually is interested in it. An autogen.lastrun looked like this when
+last tried:
 
 CC=ccache /Xcode3/usr/bin/gcc-4.0 -arch ppc
 CXX=ccache /Xcode3/usr/bin/g++-4.0 -arch ppc
@@ -409,7 +411,7 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
 
 
 Raspbian
---------
+********
 
 It's now possible to cross-compile LibreOffice for Rapsberry Pi running Raspbian.
 You will need Raspbian's pkg-config files and system libraries to build against.

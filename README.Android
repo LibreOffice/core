@@ -101,31 +101,8 @@ Such a native app (or actually, "activity") is not built as a
 executable program, but as a shared object. The Java NativeActivity
 bootstrapper loads that shared object with dlopen.
 
-Anyway, our current "experimental" apps (DocumentLoader and
-LibreOffice4Android) are not based on NativeActivity any more. They
-have normal Java code for the activity, and just call out to native
-libraries to do all the heavy lifting.
-
-It is somewhat problematic to construct .apk packages except by using
-the high-level tools in the Android SDK. At least I haven't figured
-out how to manually construct an .apk that is properly signed so that
-it will run in the emulator. (I don't have any Android device...) I
-only know how to let the SDK Ant tooling do it...
-
-At this stage, the plan is that a LO Android app will work would
-something like this:
-
-We have a Java class org.libreoffice.android.Bootstrap that that loads
-a small helper native library liblo-bootstrap.so that implements JNI
-wrappers for dlopen(), dlsym(), and ELF header scanning coresponding
-to looking for DT_NEEDED entries with readelf.
-
-The Java code then loads the actual native library that corresponds to
-the LibreOffice-related "program" we want to run. For unit tests, a
-library that corresponds to cppunittester program. Then through helper
-functions in liblo-bootstrap it calls a named function in that
-"program".
-
-This Android-specific native code (the lo-bootstrap library) is for
-now in sal/android, and the Java code in the android "module"
-(subdirectory right here).
+Anyway, our current "experimental" apps (DocumentLoader,
+LibreOffice4Android and LibreOfficeDesbktop) are not based on
+NativeActivity any more. They have normal Java code for the activity,
+and just call out to a single, app-specific native library (called
+liblo-native-code.so) to do all the heavy lifting.
