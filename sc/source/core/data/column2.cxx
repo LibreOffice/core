@@ -1525,6 +1525,24 @@ void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
         maScriptTypes.set<unsigned short>(nRow, nType);
 }
 
+size_t ScColumn::GetFormulaHash( SCROW nRow ) const
+{
+    if (!ValidRow(nRow))
+        return 0;
+
+    SCSIZE nIndex;
+    if (!Search(nRow, nIndex))
+        // cell not found.
+        return 0;
+
+    const ScBaseCell* pCell = maItems[nIndex].pCell;
+    if (pCell->GetCellType() != CELLTYPE_FORMULA)
+        // Not a formula cell.
+        return 0;
+
+    return static_cast<const ScFormulaCell*>(pCell)->GetHash();
+}
+
 void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
 {
     // check if we are in a data area

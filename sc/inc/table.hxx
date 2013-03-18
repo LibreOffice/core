@@ -796,6 +796,8 @@ public:
     sal_uInt8 GetScriptType( SCCOL nCol, SCROW nRow ) const;
     void SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType );
 
+    size_t GetFormulaHash( SCCOL nCol, SCROW nRow ) const;
+
 private:
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd,

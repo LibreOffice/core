@@ -116,6 +116,7 @@ public:
     void testCollator();
     void testRangeList();
     void testInput();
+    void testFormulaGrouping();
     void testCellFunctions();
     void testCopyToDocument();
     /**
@@ -269,6 +270,7 @@ public:
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
+    CPPUNIT_TEST(testFormulaGrouping);
     CPPUNIT_TEST(testCellFunctions);
     CPPUNIT_TEST(testCopyToDocument);
     CPPUNIT_TEST(testSheetsFunc);
@@ -1186,6 +1188,56 @@ void testFuncINDIRECT(ScDocument* pDoc)
             CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
         }
     }
+}
+
+void Test::testFormulaGrouping()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScAddress aPos1(0,0,0), aPos2(1,0,0);
+
+    // simplest cases.
+    m_pDoc->SetString(aPos1, "=1");
+    size_t nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
+    m_pDoc->SetString(aPos2, "=2");
+    size_t nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
+    CPPUNIT_ASSERT_MESSAGE("These hashes should differ.", nHashVal1 != nHashVal2);
+
+    // different cell functions.
+    aPos1.IncRow();
+    aPos2.IncRow();
+    m_pDoc->SetString(aPos1, "=SUM(1,2,3,4,5)");
+    m_pDoc->SetString(aPos2, "=AVERAGE(1,2,3,4,5)");
+    nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
+    nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
+    CPPUNIT_ASSERT_MESSAGE("These hashes should differ.", nHashVal1 != nHashVal2);
+
+    // same relative references.
+    aPos1.IncRow();
+    aPos2.IncRow();
+    m_pDoc->SetString(aPos1, "=A2*3");
+    m_pDoc->SetString(aPos2, "=B2*3");
+    nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
+    nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
+    CPPUNIT_ASSERT_MESSAGE("These hashes should be equal.", nHashVal1 == nHashVal2);
+
+    m_pDoc->SetString(aPos2, "=B2*4"); // Change the constant.
+    nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
+    CPPUNIT_ASSERT_MESSAGE("These hashes should differ.", nHashVal1 != nHashVal2);
+
+    m_pDoc->SetString(aPos1, "=A2*4"); // Change the constant again to make it "equal".
+    nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
+    CPPUNIT_ASSERT_MESSAGE("These hashes should be equal.", nHashVal1 == nHashVal2);
+
+    aPos1.IncRow();
+    aPos2.IncRow();
+    m_pDoc->SetString(aPos1, "=3*4*5");
+    m_pDoc->SetString(aPos2, "=3*4*\"foo\"");
+    nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
+    nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
+    CPPUNIT_ASSERT_MESSAGE("These hashes should differ.", nHashVal1 != nHashVal2);
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testCellFunctions()

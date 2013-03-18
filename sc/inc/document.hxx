@@ -750,6 +750,8 @@ public:
     SC_DLLPUBLIC bool           SetString(
         SCCOL nCol, SCROW nRow, SCTAB nTab, const rtl::OUString& rString,
         ScSetStringParam* pParam = NULL );
+    bool SetString( const ScAddress& rPos, const OUString& rString, ScSetStringParam* pParam = NULL );
+
     SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError);
 
@@ -1851,6 +1853,8 @@ public:
 
     sal_uInt8 GetScriptType( const ScAddress& rPos ) const;
     void SetScriptType( const ScAddress& rPos, sal_uInt8 nType );
+
+    size_t GetFormulaHash( const ScAddress& rPos ) const;
 
 private: // CLOOK-Impl-methods
 

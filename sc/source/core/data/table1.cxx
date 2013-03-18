@@ -2096,6 +2096,14 @@ void ScTable::SetScriptType( SCCOL nCol, SCROW nRow, sal_uInt8 nType )
     aCol[nCol].SetScriptType(nRow, nType);
 }
 
+size_t ScTable::GetFormulaHash( SCCOL nCol, SCROW nRow ) const
+{
+    if (!ValidCol(nCol))
+        return 0;
+
+    return aCol[nCol].GetFormulaHash(nRow);
+}
+
 void ScTable::DeleteConditionalFormat( sal_uLong nIndex )
 {
     mpCondFormatList->erase(nIndex);

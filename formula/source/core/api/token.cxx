@@ -687,7 +687,54 @@ FormulaTokenArray* FormulaTokenArray::Clone() const
 
 size_t FormulaTokenArray::GetHash() const
 {
-    return 0;
+    static OUStringHash aHasher;
+
+    size_t nHash = 1;
+    OpCode eOp;
+    StackVar eType;
+    const FormulaToken* p;
+    sal_uInt16 n = std::min<sal_uInt16>(nLen, 20);
+    for (sal_uInt16 i = 0; i < n; ++i)
+    {
+        p = pCode[i];
+        eOp = p->GetOpCode();
+        if (eOp == ocPush)
+        {
+            // This is stack variable. Do additional differentiation.
+            eType = p->GetType();
+            switch (eType)
+            {
+                case svByte:
+                {
+                    // Constant value.
+                    sal_uInt8 nVal = p->GetByte();
+                    nHash += (static_cast<size_t>(nVal) << i);
+                    continue;
+                }
+                case svDouble:
+                {
+                    // Constant value.
+                    double fVal = p->GetDouble();
+                    nHash += (static_cast<size_t>(fVal) << i);
+                    continue;
+                }
+                case svString:
+                {
+                    // Constant string.
+                    const String& rStr = p->GetString();
+                    nHash += (aHasher(rStr) << i);
+                    continue;
+                }
+                default:
+                    // TODO: Decide later if we should generate hash from references as well.
+                    ;
+            }
+        }
+
+        // Use the opcode value in all the other cases.
+        nHash += (static_cast<size_t>(eOp) << i);
+    }
+    return nHash;
 }
 
 void FormulaTokenArray::Clear()

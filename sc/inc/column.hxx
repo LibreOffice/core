@@ -408,6 +408,8 @@ public:
     sal_uInt8 GetScriptType( SCROW nRow ) const;
     void SetScriptType( SCROW nRow, sal_uInt8 nType );
 
+    size_t GetFormulaHash( SCROW nRow ) const;
+
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos) const;
 

@@ -1552,6 +1552,14 @@ bool ScDocument::HasPartOfMerged( const ScRange& rRange )
     return bPart;
 }
 
+size_t ScDocument::GetFormulaHash( const ScAddress& rPos ) const
+{
+    SCTAB nTab = rPos.Tab();
+    if (!ValidTab(nTab) || static_cast<size_t>(nTab) >= maTabs.size() || !maTabs[nTab])
+        return 0;
+
+    return maTabs[nTab]->GetFormulaHash(rPos.Col(), rPos.Row());
+}
 
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
 {
@@ -2939,6 +2947,11 @@ bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& 
         return false;
 }
 
+bool ScDocument::SetString(
+    const ScAddress& rPos, const OUString& rString, ScSetStringParam* pParam )
+{
+    return SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rString, pParam);
+}
 
 void ScDocument::SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal )
 {
