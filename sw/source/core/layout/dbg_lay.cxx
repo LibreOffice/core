@@ -361,34 +361,34 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
     if( '[' == rLine[0] )   // section: FrmIds, type or funciton
     {
         rtl::OString aTmp = comphelper::string::getToken(rLine, 0, ']');
-        if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[frmid")))      // section FrmIds
+        if (aTmp == "[frmid")      // section FrmIds
         {
             nInitFile = 1;
             pFrmIds->clear();
             delete pFrmIds;
             pFrmIds = NULL;         // default: log all frames
         }
-        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[frmtype")))// section types
+        else if (aTmp == "[frmtype")// section types
         {
             nInitFile = 2;
             nTypes = USHRT_MAX;     // default: log all frame types
         }
-        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[record")))// section functions
+        else if (aTmp == "[record")// section functions
         {
             nInitFile = 3;
             SwProtocol::SetRecord( 0 );// default: don't log any function
         }
-        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[test")))// section functions
+        else if (aTmp == "[test")// section functions
         {
             nInitFile = 4; // default:
             nTestMode = 0; // log outside of test formating
         }
-        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[max")))// Max number of lines
+        else if (aTmp == "[max")// Max number of lines
         {
             nInitFile = 5; // default:
             nMaxLines = USHRT_MAX;
         }
-        else if (aTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("[var")))// variables
+        else if (aTmp == "[var")// variables
         {
             nInitFile = 6;
         }
