@@ -842,8 +842,7 @@ int SwWrtShell::IntelligentCut(int nSelection, sal_Bool bCut)
 {
         // On multiple selection no intelligent drag and drop
         // there are multiple cursors, since a second was placed
-        // already at the target postion.
-an die Zielposition gesetzt wurde
+        // already at the target postion. an die Zielposition gesetzt wurde
     if( IsAddMode() || !(nSelection & nsSelectionType::SEL_TXT) )
         return sal_False;
 

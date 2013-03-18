@@ -560,16 +560,12 @@ sal_Bool SwWrtShell::PageCrsr(SwTwips lOffset, sal_Bool bSelect)
         // Because only ViewShell::EndAction() is called at the end,
         // no updating of the display of the cursor position takes place.
         // The CrsrShell-Actionparentheses cannot be used, because it
-        // always leads to displaying the cursor, thus also,
-da sie immer zu einer Anzeige des Cursors fuehrt, also auch,
-        // if after the scroll scrolled in a region without a
-wenn nach dem Blaettern in einen Bereich ohne gueltige Position
-        // valid postition.
-geblaettert wurde.
+        // always leads to displaying the cursor, thus also, da sie immer zu einer Anzeige des Cursors fuehrt, also auch,
+        // if after the scroll scrolled in a region without a wenn nach dem Blaettern in einen Bereich ohne gueltige Position
+        // valid postition. geblaettert wurde.
         // ViewShell::StartAction();
     PageMove eDir = lOffset > 0? MV_PAGE_DOWN: MV_PAGE_UP;
-        // Change of direction and stack present
-Richtungswechsel und Stack vorhanden
+        // Change of direction and stack present Richtungswechsel und Stack vorhanden
     if( eDir != ePageMove && ePageMove != MV_NO && PopCrsr( sal_True, bSelect ))
         return sal_True;
 
