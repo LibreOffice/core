@@ -377,20 +377,22 @@ class ImageList(object):
 
     def setSelected(self, _object):
         print ("DEBUG !!!! ImageList.setSelected - _object: ", _object)
-        if not isinstance(_object, int):
-            if (_object is None):
-                self.setSelected1(-1)
+        if (isinstance (_object, int)):
+            self.setSelected1(_object)
+        elif (_object is None or _object is ""):
+            self.setSelected1(-1)
         else:
             i = 0
             while (i < self.listModel.getSize()):
                 item = self.listModel.getElementAt(i)
+                print ("DEBUG !!!! ImageList.setSelected - item: ", item)
                 if item == _object:
                     self.setSelected1(i)
                     return
                 i += 1
 
     def setSelected1(self, index):
-        print ("DEBUG !!!! ImageList.setSelected - _object: ", index)
+        print ("DEBUG !!!! ImageList.setSelected - _index: ", index)
         if self.rowSelect and (index >= 0):
             index = int((index / self.cols) * self.cols)
 
@@ -488,6 +490,7 @@ class ImageList(object):
             self.max = max_
 
     def getSelectedObject(self):
+        print ("DEBUG !!! getSelectedObject -- selected: ", self.selected)
         if self.selected >= 0:
             try:
                 return self.listModel.getElementAt(self.selected)
