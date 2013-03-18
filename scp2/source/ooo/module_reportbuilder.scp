@@ -10,7 +10,7 @@
 #include "macros.inc"
 
 Module gid_Module_Reportbuilder
-    MOD_NAME_DESC(MODULE_PRG_REPORTBUILDER);
+    PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
     Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Share_Reportbuilder);
