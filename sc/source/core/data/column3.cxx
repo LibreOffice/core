@@ -2009,7 +2009,7 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
 // of similar formulae into a formulagroup
 void ScColumn::RebuildFormulaGroups()
 {
-    if ( maItems.empty() )
+    if ( maItems.empty() || !bDirtyGroups )
         return;
 
     // clear previous groups
@@ -2068,10 +2068,21 @@ void ScColumn::RebuildFormulaGroups()
         }
         else
         {
-            fprintf( stderr, "unusual incompatible extension of formulae\n" );
+            OUString aFormula;
+            pCur->GetFormula( aFormula );
+            ScAddress aAddr( nCol, rCur.nRow, nTab );
+            OUString aCellAddr;
+            aAddr.Format( aCellAddr, 0, pDocument );
+
+            fprintf( stderr, "unusual incompatible extension in cell '%s' of formulae '%s'\n" ,
+                     OUStringToOString( aCellAddr, RTL_TEXTENCODING_UTF8 ).getStr(),
+                     OUStringToOString( aFormula, RTL_TEXTENCODING_UTF8 ).getStr() );
+
             pCur->ReleaseDelta( pDelta );
         }
     }
+
+    bDirtyGroups = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

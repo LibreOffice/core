@@ -2033,7 +2033,6 @@ void ScColumn::UpdateCompile( bool bForceIfNameInUse )
                     Search( nRow, i );      // Listener deleted/inserted?
             }
         }
-        RebuildFormulaGroups();
     }
 }
 
@@ -2243,6 +2242,7 @@ void ScColumn::CalcAll()
 void ScColumn::CompileAll()
 {
     if ( !maItems.empty() )
+    {
         for (SCSIZE i = 0; i < maItems.size(); i++)
         {
             ScBaseCell* pCell = maItems[i].pCell;
@@ -2258,6 +2258,7 @@ void ScColumn::CompileAll()
                     Search( nRow, i );      // Listener deleted/inserted?
             }
         }
+    }
 }
 
 
