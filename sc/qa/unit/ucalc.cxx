@@ -1206,8 +1206,8 @@ void Test::testFormulaGrouping()
     // different cell functions.
     aPos1.IncRow();
     aPos2.IncRow();
-    m_pDoc->SetString(aPos1, "=SUM(1,2,3,4,5)");
-    m_pDoc->SetString(aPos2, "=AVERAGE(1,2,3,4,5)");
+    m_pDoc->SetString(aPos1, "=SUM(1;2;3;4;5)");
+    m_pDoc->SetString(aPos2, "=AVERAGE(1;2;3;4;5)");
     nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
     nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
     CPPUNIT_ASSERT_MESSAGE("These hashes should differ.", nHashVal1 != nHashVal2);
@@ -1229,6 +1229,7 @@ void Test::testFormulaGrouping()
     nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
     CPPUNIT_ASSERT_MESSAGE("These hashes should be equal.", nHashVal1 == nHashVal2);
 
+    // string constant vs numeric constant.
     aPos1.IncRow();
     aPos2.IncRow();
     m_pDoc->SetString(aPos1, "=3*4*5");
