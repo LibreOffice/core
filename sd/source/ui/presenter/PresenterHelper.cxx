@@ -264,7 +264,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
 
     if (pCanvas.get()!=NULL && rsURL.getLength()>0 && mpGraphicFilter.get()!=NULL)
     {
-        sal_Int32 nIndex;
+        sal_Int32 nIndex = 0;
         if( rsURL.getToken( 0, '/', nIndex ).equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( "private:graphicrepository" ) ) )
         {
