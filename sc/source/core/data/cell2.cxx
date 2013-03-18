@@ -1752,11 +1752,15 @@ ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
             fprintf( stderr, "Incompatible type, op-code or param counts\n" );
             return NULL;
         }
-        if( pThis[ i ]->GetType() == formula::svMatrix ||
-            pOther[ i ]->GetType() == formula::svMatrix )
+        switch( pThis[ i ]->GetType() )
         {
-            fprintf( stderr, "Ignoring matrix formulae for now\n" );
+        case formula::svMatrix:
+        case formula::svExternalSingleRef:
+        case formula::svExternalDoubleRef:
+            fprintf( stderr, "Ignoring matrix and external references for now\n" );
             return NULL;
+        default:
+            break;
         }
     }
 
@@ -1765,6 +1769,10 @@ ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
 
     for ( sal_uInt16 i = 0; i < pThisLen; i++ )
     {
+        if ( pThis[i]->GetType() != formula::svSingleRef &&
+             pThis[i]->GetType() != formula::svDoubleRef )
+            continue;
+
         ScToken *pThisTok = static_cast< ScToken * >( pThis[ i ] );
         ScToken *pOtherTok = static_cast< ScToken * >( pOther[ i ] );
 

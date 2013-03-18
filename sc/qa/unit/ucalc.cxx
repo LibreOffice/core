@@ -33,6 +33,7 @@
 #include <osl/file.hxx>
 
 #include "scdll.hxx"
+#include "cell.hxx"
 #include "document.hxx"
 #include "stringutil.hxx"
 #include "scmatrix.hxx"
@@ -266,6 +267,11 @@ public:
     void testAnchoredRotatedShape();
     void testCellTextWidth();
 
+    /**
+     * Test formula & formula grouping
+     */
+    void testFormulaGrouping();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testRangeList);
@@ -328,6 +334,7 @@ public:
     CPPUNIT_TEST(testDeleteCol);
     CPPUNIT_TEST(testAnchoredRotatedShape);
     CPPUNIT_TEST(testCellTextWidth);
+    CPPUNIT_TEST(testFormulaGrouping);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6172,6 +6179,57 @@ void Test::testCellTextWidth()
     }
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaGrouping()
+{
+    static const struct {
+        const char *pFormula[3];
+        const bool  bGroup[3];
+    } aGroupTests[] = {
+        { { "=B1",  "=C1",  "" },      // single increments
+          { true,   true,    false } },
+        { { "=B1",  "=D1",  "=F1" },   // tripple increments
+          { true,  true,    true } },
+        { { "=B1",  "",     "=C1" },   // a gap
+          { false,  false,  false } },
+        { { "=B1",  "=C1+3", "=C1+D1" }, // confusion: FIXME: =C1+7
+          { false,  false,  false } },
+    };
+
+    m_pDoc->InsertTab( 0, "sheet" );
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS( aGroupTests ); i++)
+    {
+        for (size_t j = 0; j < SAL_N_ELEMENTS( aGroupTests[0].pFormula ); j++)
+        {
+            OUString aFormula = OUString::createFromAscii(aGroupTests[i].pFormula[j]);
+            m_pDoc->SetString(0, (SCROW)j, 0, aFormula);
+        }
+        m_pDoc->RebuildFormulaGroups();
+
+        for (size_t j = 0; j < SAL_N_ELEMENTS( aGroupTests[0].pFormula ); j++)
+        {
+            ScBaseCell *pCell = NULL;
+            m_pDoc->GetCell( 0, (SCROW)j, 0, pCell );
+            if( !pCell )
+            {
+                CPPUNIT_ASSERT_MESSAGE("invalid empty cell", !aGroupTests[i].bGroup[j]);
+                continue;
+            }
+            CPPUNIT_ASSERT_MESSAGE("Cell expected, but not there.", pCell != NULL);
+            CPPUNIT_ASSERT_MESSAGE("Cell wrong type.",
+                                   pCell->GetCellType() == CELLTYPE_FORMULA);
+            ScFormulaCell *pCur = static_cast< ScFormulaCell *>( pCell );
+
+            if( !!pCur->GetCellGroup().get() ^ aGroupTests[i].bGroup[j] )
+            {
+                printf("expected group test %d at row %d to be %d but is %d\n",
+                       i, j, !!pCur->GetCellGroup().get(), aGroupTests[i].bGroup[j]);
+                CPPUNIT_ASSERT_MESSAGE("Failed", false);
+            }
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
