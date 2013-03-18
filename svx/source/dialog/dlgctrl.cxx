@@ -917,6 +917,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorLB(Window *pParent, Vc
 
 void ColorLB::Fill( const XColorListRef &pColorTab )
 {
+    if( !pColorTab.is() )
+        return;
+
     long nCount = pColorTab->Count();
     XColorEntry* pEntry;
     SetUpdateMode( sal_False );
@@ -972,6 +975,9 @@ HatchingLB::HatchingLB( Window* pParent, ResId Id, sal_Bool bUserDraw /*= sal_Tr
 
 void HatchingLB::Fill( const XHatchListRef &pList )
 {
+    if( !pList.is() )
+        return;
+
     mpList = pList;
     XHatchEntry* pEntry;
     long nCount = pList->Count();
@@ -1106,6 +1112,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGradientLB(Window *pParent,
 
 void GradientLB::Fill( const XGradientListRef &pList )
 {
+    if( !pList.is() )
+        return;
+
     mpList = pList;
     XGradientEntry* pEntry;
     long nCount = pList->Count();
@@ -1288,6 +1297,9 @@ void BitmapLB::SetVirtualDevice()
 
 void BitmapLB::Fill( const XBitmapListRef &pList )
 {
+    if( !pList.is() )
+        return;
+
     mpList = pList;
     XBitmapEntry* pEntry;
     const long nCount(pList->Count());
@@ -1455,6 +1467,9 @@ void FillTypeLB::Fill()
 
 void LineLB::Fill( const XDashListRef &pList )
 {
+    if( !pList.is() )
+        return;
+
     long nCount = pList->Count();
     XDashEntry* pEntry;
     SetUpdateMode( sal_False );
@@ -1524,6 +1539,9 @@ void LineLB::Modify( XDashEntry* pEntry, sal_uInt16 nPos, Bitmap* pBmp )
 
 void LineEndLB::Fill( const XLineEndListRef &pList, sal_Bool bStart )
 {
+    if( !pList.is() )
+        return;
+
     long nCount = pList->Count();
     XLineEndEntry* pEntry;
     VirtualDevice aVD;
