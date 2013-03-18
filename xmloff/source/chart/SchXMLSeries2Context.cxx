@@ -648,7 +648,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
                 nPrefix, rLocalName, msAutoStyleName,
                 mrStyleList, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_MEAN_VALUE_LINE,
-                maChartSize );
+                maChartSize, mrLSequencesPerIndex );
             break;
         case XML_TOK_SERIES_REGRESSION_CURVE:
             pContext = new SchXMLStatisticsObjectContext(
@@ -656,7 +656,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
                 nPrefix, rLocalName, msAutoStyleName,
                 mrStyleList, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_REGRESSION_CURVE,
-                maChartSize );
+                maChartSize, mrLSequencesPerIndex );
             break;
         case XML_TOK_SERIES_ERROR_INDICATOR:
             pContext = new SchXMLStatisticsObjectContext(
@@ -664,7 +664,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
                 nPrefix, rLocalName, msAutoStyleName,
                 mrStyleList, m_xSeries,
                 SchXMLStatisticsObjectContext::CONTEXT_TYPE_ERROR_INDICATOR,
-                maChartSize );
+                maChartSize, mrLSequencesPerIndex );
             break;
 
         case XML_TOK_SERIES_DATA_POINT:

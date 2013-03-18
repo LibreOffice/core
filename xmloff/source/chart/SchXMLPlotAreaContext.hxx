@@ -265,7 +265,8 @@ public:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
         ContextType eContextType,
-        const ::com::sun::star::awt::Size & rChartSize );
+        const ::com::sun::star::awt::Size & rChartSize,
+        tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
 
     virtual ~SchXMLStatisticsObjectContext();
 
@@ -283,6 +284,7 @@ private:
     ContextType                                    meContextType;
     ::com::sun::star::awt::Size                    maChartSize;
     rtl::OUString maSeriesStyleName;
+    tSchXMLLSequencesPerIndex& mrLSequencesPerIndex;
 };
 
 // ----------------------------------------

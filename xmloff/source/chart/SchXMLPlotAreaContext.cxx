@@ -958,7 +958,8 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
 static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocument > &xDoc,
                                const uno::Reference< beans::XPropertySet > &xBarProp,
                                const rtl::OUString &aXMLRange,
-                               bool bPositiveValue, bool bYError )
+                               bool bPositiveValue, bool bYError,
+                               tSchXMLLSequencesPerIndex& rSequences)
 {
     uno::Reference< com::sun::star::chart2::data::XDataProvider > xDataProvider(xDoc->getDataProvider());
     uno::Reference< com::sun::star::chart2::data::XDataSource > xDataSource( xBarProp, uno::UNO_QUERY );
@@ -999,6 +1000,9 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
         Reference< chart2::data::XLabeledDataSequence > xLabelSeq( chart2::data::LabeledDataSequence::create(xContext),
             uno::UNO_QUERY_THROW );
 
+        rSequences.insert( tSchXMLLSequencesPerIndex::value_type(
+                    tSchXMLIndexWithPart( -2, SCH_XML_PART_ERROR_BARS ), xLabelSeq ) );
+
         xLabelSeq->setValues( xNewSequence );
 
         uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
@@ -1021,7 +1025,8 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
     ContextType eContextType,
-    const awt::Size & rChartSize ) :
+    const awt::Size & rChartSize,
+    tSchXMLLSequencesPerIndex & rLSequencesPerIndex) :
 
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrImportHelper( rImpHelper ),
@@ -1029,7 +1034,8 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
         m_xSeries( xSeries ),
         meContextType( eContextType ),
         maChartSize( rChartSize ),
-        maSeriesStyleName( rSeriesStyleName)
+        maSeriesStyleName( rSeriesStyleName),
+        mrLSequencesPerIndex(rLSequencesPerIndex)
 {}
 
 SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
@@ -1217,10 +1223,10 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
                     uno::Reference< chart2::XChartDocument > xDoc(GetImport().GetModel(),uno::UNO_QUERY);
 
                     if (!aPosRange.isEmpty())
-                        lcl_setErrorBarSequence(xDoc,xBarProp,aPosRange,true,bYError);
+                        lcl_setErrorBarSequence(xDoc,xBarProp,aPosRange,true,bYError, mrLSequencesPerIndex);
 
                     if (!aNegRange.isEmpty())
-                        lcl_setErrorBarSequence(xDoc,xBarProp,aNegRange,false,bYError);
+                        lcl_setErrorBarSequence(xDoc,xBarProp,aNegRange,false,bYError, mrLSequencesPerIndex);
 
                     if ( !bYError )
                     {
