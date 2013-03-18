@@ -74,9 +74,9 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
         throw RuntimeException();
     const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
-        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException(OUString ( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw PropertyVetoException ( OUString ( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     const SfxPoolItem& rItem = m_pDoc->GetDefault(pMap->nWID);
     if (RES_PAGEDESC == pMap->nWID && MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId)
@@ -140,7 +140,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
         throw RuntimeException();
     const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
-        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException(OUString ( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     Any aRet;
     const SfxPoolItem& rItem = m_pDoc->GetDefault(pMap->nWID);
     rItem.QueryValue( aRet, pMap->nMemberId );
@@ -186,7 +186,7 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
         throw RuntimeException();
     const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
-        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException(OUString ( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     const SfxPoolItem& rItem = m_pDoc->GetDefault(pMap->nWID);
     if (IsStaticDefaultItem ( &rItem ) )
@@ -217,9 +217,9 @@ void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyNa
         throw RuntimeException();
     const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
-        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException(OUString ( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertyToDefault: property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw RuntimeException( OUString ( "setPropertyToDefault: property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     SfxItemPool& rSet (m_pDoc->GetAttrPool());
     rSet.ResetPoolDefaultItem ( pMap->nWID );
 }
@@ -232,7 +232,7 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
         throw RuntimeException();
     const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pMap)
-        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        throw UnknownPropertyException(OUString ( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     Any aRet;
     SfxItemPool& rSet (m_pDoc->GetAttrPool());
     const SfxPoolItem *pItem = rSet.GetPoolDefaultItem ( pMap->nWID );

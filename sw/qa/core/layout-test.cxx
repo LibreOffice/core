@@ -76,7 +76,7 @@ private:
 
 void SwLayoutTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
 {
-    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
+    rtl::OUString aSep("/");
     rtl::OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
@@ -86,8 +86,8 @@ void SwLayoutTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUSt
 void SwLayoutTest::test()
 {
     rtl::OUString aFilePath;
-    rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("test."));
-    rtl::OUString aExtension(RTL_CONSTASCII_USTRINGPARAM("odt"));
+    rtl::OUString aFileBase("test.");
+    rtl::OUString aExtension("odt");
     createFileURL(aFileBase, aExtension, aFilePath);
     uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFilePath, "com.sun.star.text.TextDocument");
     CPPUNIT_ASSERT(xComponent.is());
@@ -95,7 +95,7 @@ void SwLayoutTest::test()
 
 
 SwLayoutTest::SwLayoutTest()
-      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sw/qa/core/data"))
+      : m_aBaseString("/sw/qa/core/data")
 {
 }
 
@@ -107,7 +107,7 @@ void SwLayoutTest::setUp()
     // which is a private symbol to us, gets called
     m_xWriterComponent =
         getMultiServiceFactory()->createInstance(rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.TextDocument")));
+        "com.sun.star.comp.Writer.TextDocument"));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
     mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }

@@ -35,8 +35,8 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
 
     try {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xI =
-            rxMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.i18n.IndexEntrySupplier")) );
+            rxMSF->createInstance( ::rtl::OUString(
+                                "com.sun.star.i18n.IndexEntrySupplier") );
         if( xI.is() )
         {
             ::com::sun::star::uno::Any x = xI->queryInterface( ::getCppuType(
@@ -51,7 +51,7 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
         )
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("IndexEntrySupplierWrapper: Caught exception\n"));
+        rtl::OStringBuffer aMsg("IndexEntrySupplierWrapper: Caught exception\n");
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
 #endif
@@ -77,7 +77,7 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
         )
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("getIndexKey: Caught exception\n"));
+        rtl::OStringBuffer aMsg("getIndexKey: Caught exception\n");
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
 #endif
@@ -98,7 +98,7 @@ String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
         )
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("getIndexFollowPageWord: Caught exception\n"));
+        rtl::OStringBuffer aMsg("getIndexFollowPageWord: Caught exception\n");
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
 #endif
@@ -121,7 +121,7 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Local
         )
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("getAlgorithmList: Caught exception\n"));
+        rtl::OStringBuffer aMsg("getAlgorithmList: Caught exception\n");
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
 #endif
@@ -144,7 +144,7 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
         )
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("loadAlgorithm: Caught exception\n"));
+        rtl::OStringBuffer aMsg("loadAlgorithm: Caught exception\n");
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
 #endif
@@ -170,7 +170,7 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
         )
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM("compareIndexEntry: Caught exception\n"));
+        rtl::OStringBuffer aMsg("compareIndexEntry: Caught exception\n");
         aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
         OSL_FAIL( aMsg.getStr() );
 #endif

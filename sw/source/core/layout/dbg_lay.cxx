@@ -491,8 +491,8 @@ static void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uL
 {
     if( nAction == ACT_START )
     {
-        rLay.append(RTL_CONSTASCII_STRINGPARAM("  "));
-        rOut.append(RTL_CONSTASCII_STRINGPARAM(" On"));
+        rLay.append("  ");
+        rOut.append(" On");
     }
     else if( nAction == ACT_END )
     {
@@ -501,7 +501,7 @@ static void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uL
             rLay.remove(rLay.getLength() - 2, rLay.getLength());
             rOut.remove(0, 2);
         }
-        rOut.append(RTL_CONSTASCII_STRINGPARAM(" Off"));
+        rOut.append(" Off");
     }
 }
 
@@ -512,11 +512,11 @@ static void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uL
 
 static void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
 {
-    rOut.append(RTL_CONSTASCII_STRINGPARAM(" Sz"));
+    rOut.append(" Sz");
     rOut.append(pFrm->GetValidSizeFlag() ? '+' : '-');
-    rOut.append(RTL_CONSTASCII_STRINGPARAM(" Ps"));
+    rOut.append(" Ps");
     rOut.append(pFrm->GetValidPosFlag() ? '+' : '-');
-    rOut.append(RTL_CONSTASCII_STRINGPARAM(" PA"));
+    rOut.append(" PA");
     rOut.append(pFrm->GetValidPrtAreaFlag() ? '+' : '-');
 }
 
@@ -527,46 +527,46 @@ static void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
 static void lcl_FrameType( rtl::OStringBuffer& rOut, const SwFrm* pFrm )
 {
     if( pFrm->IsTxtFrm() )
-        rOut.append(RTL_CONSTASCII_STRINGPARAM("Txt "));
+        rOut.append("Txt ");
     else if( pFrm->IsLayoutFrm() )
     {
         if( pFrm->IsPageFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Page "));
+            rOut.append("Page ");
         else if( pFrm->IsColumnFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Col "));
+            rOut.append("Col ");
         else if( pFrm->IsBodyFrm() )
         {
             if( pFrm->GetUpper() && pFrm->IsColBodyFrm() )
-                rOut.append(RTL_CONSTASCII_STRINGPARAM("(Col)"));
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Body "));
+                rOut.append("(Col)");
+            rOut.append("Body ");
         }
         else if( pFrm->IsRootFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Root "));
+            rOut.append("Root ");
         else if( pFrm->IsCellFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Cell "));
+            rOut.append("Cell ");
         else if( pFrm->IsTabFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Tab "));
+            rOut.append("Tab ");
         else if( pFrm->IsRowFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Row "));
+            rOut.append("Row ");
         else if( pFrm->IsSctFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Sect "));
+            rOut.append("Sect ");
         else if( pFrm->IsHeaderFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Header "));
+            rOut.append("Header ");
         else if( pFrm->IsFooterFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Footer "));
+            rOut.append("Footer ");
         else if( pFrm->IsFtnFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Ftn "));
+            rOut.append("Ftn ");
         else if( pFrm->IsFtnContFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("FtnCont "));
+            rOut.append("FtnCont ");
         else if( pFrm->IsFlyFrm() )
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Fly "));
+            rOut.append("Fly ");
         else
-            rOut.append(RTL_CONSTASCII_STRINGPARAM("Layout "));
+            rOut.append("Layout ");
     }
     else if( pFrm->IsNoTxtFrm() )
-        rOut.append(RTL_CONSTASCII_STRINGPARAM("NoTxt "));
+        rOut.append("NoTxt ");
     else
-        rOut.append(RTL_CONSTASCII_STRINGPARAM("Not impl. "));
+        rOut.append("Not impl. ");
 }
 
 /* --------------------------------------------------
@@ -610,7 +610,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
     {
         case PROT_SNAPSHOT: lcl_Flags( aOut, pFrm );
                             break;
-        case PROT_MAKEALL:  aOut.append(RTL_CONSTASCII_STRINGPARAM("MakeAll"));
+        case PROT_MAKEALL:  aOut.append("MakeAll");
                             lcl_Start( aOut, aLayer, nAct );
                             if( nAct == ACT_START )
                                 lcl_Flags( aOut, pFrm );
@@ -618,9 +618,9 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
         case PROT_MOVE_FWD: bTmp = sal_True; // NoBreak
         case PROT_MOVE_BWD:
                             if (nFunction == bTmp)
-                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Fwd"));
+                                aOut.append("Fwd");
                             else
-                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Bwd"));
+                                aOut.append("Bwd");
                             lcl_Start( aOut, aLayer, nAct );
                             if( pParam )
                             {
@@ -630,23 +630,23 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             break;
         case PROT_GROW_TST: if( ACT_START != nAct )
                                 return;
-                            aOut.append(RTL_CONSTASCII_STRINGPARAM("TestGrow"));
+                            aOut.append("TestGrow");
                             break;
         case PROT_SHRINK_TST: if( ACT_START != nAct )
                                 return;
-                            aOut.append(RTL_CONSTASCII_STRINGPARAM("TestShrink"));
+                            aOut.append("TestShrink");
                             break;
         case PROT_ADJUSTN :
         case PROT_SHRINK:   bTmp = sal_True; // NoBreak
         case PROT_GROW:
                             if (!bTmp)
-                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Grow"));
+                                aOut.append("Grow");
                             else
                             {
                                 if (nFunction == PROT_SHRINK)
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("Shrink"));
+                                    aOut.append("Shrink");
                                 else
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("AdjustNgbhd"));
+                                    aOut.append("AdjustNgbhd");
                             }
                             lcl_Start( aOut, aLayer, nAct );
                             if( pParam )
@@ -656,15 +656,15 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             }
                             break;
         case PROT_POS:      break;
-        case PROT_PRTAREA:  aOut.append(RTL_CONSTASCII_STRINGPARAM("PrtArea"));
+        case PROT_PRTAREA:  aOut.append("PrtArea");
                             lcl_Start( aOut, aLayer, nAct );
                             break;
-        case PROT_SIZE:     aOut.append(RTL_CONSTASCII_STRINGPARAM("Size"));
+        case PROT_SIZE:     aOut.append("Size");
                             lcl_Start( aOut, aLayer, nAct );
                             aOut.append(' ');
                             aOut.append(static_cast<sal_Int64>(pFrm->Frm().Height()));
                             break;
-        case PROT_LEAF:     aOut.append(RTL_CONSTASCII_STRINGPARAM("Prev/NextLeaf"));
+        case PROT_LEAF:     aOut.append("Prev/NextLeaf");
                             lcl_Start( aOut, aLayer, nAct );
                             aOut.append(' ');
                             if( pParam )
@@ -674,20 +674,20 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             }
                             break;
         case PROT_FILE_INIT: FileInit();
-                            aOut.append(RTL_CONSTASCII_STRINGPARAM("Initialize"));
+                            aOut.append("Initialize");
                             break;
         case PROT_SECTION:  SectFunc(aOut, pFrm, nAct, pParam);
                             break;
         case PROT_CUT:      bTmp = sal_True; // NoBreak
         case PROT_PASTE:
                             if (bTmp)
-                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Cut from "));
+                                aOut.append("Cut from ");
                             else
-                                aOut.append(RTL_CONSTASCII_STRINGPARAM("Paste to "));
+                                aOut.append("Paste to ");
                             aOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                             break;
         case PROT_TESTFORMAT:
-                            aOut.append(RTL_CONSTASCII_STRINGPARAM("Test"));
+                            aOut.append("Test");
                             lcl_Start( aOut, aLayer, nAct );
                             if( ACT_START == nAct )
                                 nTestMode |= 2;
@@ -699,29 +699,29 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                                 SwRect& rFrm = *((SwRect*)pParam);
                                 if( pFrm->Frm().Pos() != rFrm.Pos() )
                                 {
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("PosChg: ("));
+                                    aOut.append("PosChg: (");
                                     aOut.append(static_cast<sal_Int64>(rFrm.Left()));
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(", "));
+                                    aOut.append(", ");
                                     aOut.append(static_cast<sal_Int64>(rFrm.Top()));
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(") ("));
+                                    aOut.append(") (");
                                     aOut.append(static_cast<sal_Int64>(pFrm->Frm().Left()));
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(", "));
+                                    aOut.append(", ");
                                     aOut.append(static_cast<sal_Int64>(pFrm->Frm().Top()));
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(") "));
+                                    aOut.append(") ");
                                 }
                                 if( pFrm->Frm().Height() != rFrm.Height() )
                                 {
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("Height: "));
+                                    aOut.append("Height: ");
                                     aOut.append(static_cast<sal_Int64>(rFrm.Height()));
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(" -> "));
+                                    aOut.append(" -> ");
                                     aOut.append(static_cast<sal_Int64>(pFrm->Frm().Height()));
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(" "));
+                                    aOut.append(" ");
                                 }
                                 if( pFrm->Frm().Width() != rFrm.Width() )
                                 {
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM("Width: "));
+                                    aOut.append("Width: ");
                                     aOut.append(static_cast<sal_Int64>(rFrm.Width()));
-                                    aOut.append(RTL_CONSTASCII_STRINGPARAM(" -> "));
+                                    aOut.append(" -> ");
                                     aOut.append(static_cast<sal_Int64>(pFrm->Frm().Width()));
                                     aOut.append(' ');
                                 }
@@ -744,23 +744,23 @@ void SwImplProtocol::SectFunc(rtl::OStringBuffer &rOut, const SwFrm* , sal_uLong
     bool bTmp = false;
     switch( nAct )
     {
-        case ACT_MERGE:         rOut.append(RTL_CONSTASCII_STRINGPARAM("Merge Section "));
+        case ACT_MERGE:         rOut.append("Merge Section ");
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
         case ACT_CREATE_MASTER: bTmp = true; // NoBreak
-        case ACT_CREATE_FOLLOW: rOut.append(RTL_CONSTASCII_STRINGPARAM("Create Section "));
+        case ACT_CREATE_FOLLOW: rOut.append("Create Section ");
                                 if (bTmp)
-                                    rOut.append(RTL_CONSTASCII_STRINGPARAM("Master to "));
+                                    rOut.append("Master to ");
                                 else
-                                    rOut.append(RTL_CONSTASCII_STRINGPARAM("Follow from "));
+                                    rOut.append("Follow from ");
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
         case ACT_DEL_MASTER:    bTmp = true; // NoBreak
-        case ACT_DEL_FOLLOW:    rOut.append(RTL_CONSTASCII_STRINGPARAM("Delete Section "));
+        case ACT_DEL_FOLLOW:    rOut.append("Delete Section ");
                                 if (bTmp)
-                                    rOut.append(RTL_CONSTASCII_STRINGPARAM("Master to "));
+                                    rOut.append("Master to ");
                                 else
-                                    rOut.append(RTL_CONSTASCII_STRINGPARAM("Follow from "));
+                                    rOut.append("Follow from ");
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
                                 break;
     }

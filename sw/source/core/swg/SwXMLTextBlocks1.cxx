@@ -489,7 +489,7 @@ void SwXMLTextBlocks::WriteInfo( void )
                     embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
         uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
-        OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
+        OUString aMime ( "text/xml" );
         Any aAny;
         aAny <<= aMime;
         xSet->setPropertyValue( OUString("MediaType"), aAny );

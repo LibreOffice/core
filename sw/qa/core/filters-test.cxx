@@ -137,7 +137,7 @@ void SwFiltersTest::setUp()
     //which is a private symbol to us, gets called
     m_xWriterComponent =
         getMultiServiceFactory()->createInstance(rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.TextDocument")));
+        "com.sun.star.comp.Writer.TextDocument"));
     CPPUNIT_ASSERT_MESSAGE("no writer component!", m_xWriterComponent.is());
 }
 

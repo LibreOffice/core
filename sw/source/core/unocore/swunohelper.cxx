@@ -63,8 +63,7 @@ sal_Bool UCB_DeleteFile( const String& rURL )
         ucbhelper::Content aTempContent( rURL,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
-        aTempContent.executeCommand(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
+        aTempContent.executeCommand(rtl::OUString("delete"),
                         ::com::sun::star::uno::makeAny( sal_True ) );
         bRemoved = sal_True;
     }
@@ -97,9 +96,8 @@ sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopy
         aInfo.SourceURL = rURL;
         aInfo.MoveData = bCopyIsMove;
         aAny <<= aInfo;
-        aTempContent.executeCommand(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
-                            aAny );
+        aTempContent.executeCommand( rtl::OUString("transfer"),
+                                     aAny );
     }
     catch( ::com::sun::star::uno::Exception& )
     {
@@ -144,7 +142,7 @@ sal_Bool UCB_IsReadOnlyFileName( const String& rURL )
     {
         ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly")));
+            rtl::OUString("IsReadOnly"));
         if(aAny.hasValue())
             bIsReadOnly = *(sal_Bool*)aAny.getValue();
     }

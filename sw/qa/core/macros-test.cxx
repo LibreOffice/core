@@ -102,7 +102,7 @@ private:
 
 void SwMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
 {
-    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
+    rtl::OUString aSep("/");
     rtl::OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
@@ -113,7 +113,7 @@ void SwMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUSt
 
 void SwMacrosTest::testStarBasic()
 {
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("StarBasic."));
+    const rtl::OUString aFileNameBase("StarBasic.");
     rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
@@ -121,7 +121,7 @@ void SwMacrosTest::testStarBasic()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
-    rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document"));
+    rtl::OUString aURL("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
     String sUrl = aURL;
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
@@ -142,17 +142,17 @@ void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
         {
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("testVba.")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.Star.script:Project.NewMacros.Macro1?language=Basic&location=document"))
+            rtl::OUString("testVba."),
+            rtl::OUString("vnd.sun.Star.script:Project.NewMacros.Macro1?language=Basic&location=document")
         }
     };
-    rtl::OUString aFileExtension( RTL_CONSTASCII_USTRINGPARAM("doc") );
+    rtl::OUString aFileExtension( "doc" );
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         rtl::OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
         uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
-        rtl::OUStringBuffer sMsg( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Failed to load ")) );
+        rtl::OUStringBuffer sMsg( rtl::OUString("Failed to load ") );
         sMsg.append ( aFileName );
         CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
@@ -208,7 +208,7 @@ void SwMacrosTest::testFdo55289()
 }
 
 SwMacrosTest::SwMacrosTest()
-      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sw/qa/core/data"))
+      : m_aBaseString("/sw/qa/core/data")
 {
 }
 
@@ -220,7 +220,7 @@ void SwMacrosTest::setUp()
     // which is a private symbol to us, gets called
     m_xWriterComponent =
         getMultiServiceFactory()->createInstance(rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.TextDocument")));
+        "com.sun.star.comp.Writer.TextDocument"));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
     mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }

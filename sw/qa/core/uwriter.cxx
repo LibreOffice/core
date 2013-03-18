@@ -135,7 +135,7 @@ void SwDocTest::testFileNameFields()
 {
     //Here's a file name with some chars in it that will be %% encoded, when expanding
     //SwFileNameFields we want to restore the original readable filename
-    utl::TempFile aTempFile(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("demo [name]")));
+    utl::TempFile aTempFile(rtl::OUString("demo [name]"));
     aTempFile.EnableKillingFile();
 
     INetURLObject aTempFileURL(aTempFile.GetURL());
@@ -143,9 +143,9 @@ void SwDocTest::testFileNameFields()
     SfxMedium aDstMed(sFileURL, STREAM_STD_READWRITE);
 
     SfxFilter aFilter(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text")),
+        rtl::OUString("Text"),
         rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TEXT")), rtl::OUString() );
+        rtl::OUString("TEXT"), rtl::OUString() );
     aDstMed.SetFilter(&aFilter);
 
     m_xDocShRef->DoSaveAs(aDstMed);
@@ -198,7 +198,7 @@ void SwDocTest::testDocStat()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    rtl::OUString sText(RTL_CONSTASCII_USTRINGPARAM("Hello World"));
+    rtl::OUString sText("Hello World");
     m_pDoc->InsertString(aPaM, sText);
 
     CPPUNIT_ASSERT_MESSAGE("Should still be non-updated 0 count", m_pDoc->GetDocStat().nChar == 0);
@@ -354,7 +354,7 @@ void SwDocTest::testSwScanner()
     //fdo#40449 and fdo#39365
     {
         SwScanner aScanner(*pTxtNode,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hello World")),
+            rtl::OUString("Hello World"),
             0, ModelToViewHelper(), i18n::WordType::DICTIONARY_WORD, 0,
             RTL_CONSTASCII_LENGTH("Hello World"));
 
@@ -362,13 +362,13 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("First Token", bFirstOk);
         const rtl::OUString &rHello = aScanner.GetWord();
         CPPUNIT_ASSERT_MESSAGE("Should be Hello",
-            rHello.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Hello")));
+            rHello == "Hello");
 
         bool bSecondOk = aScanner.NextWord();
         CPPUNIT_ASSERT_MESSAGE("Second Token", bSecondOk);
         const rtl::OUString &rWorld = aScanner.GetWord();
         CPPUNIT_ASSERT_MESSAGE("Should be World",
-            rWorld.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("World")));
+            rWorld == "World");
     }
 
     //See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=45271
@@ -694,14 +694,14 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    m_pDoc->InsertString(aPaM, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paragraph 1")));
+    m_pDoc->InsertString(aPaM, rtl::OUString("Paragraph 1"));
     m_pDoc->AppendTxtNode(*aPaM.GetPoint());
 
-    m_pDoc->InsertString(aPaM, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("graphic anchor>><<graphic anchor")));
+    m_pDoc->InsertString(aPaM, rtl::OUString("graphic anchor>><<graphic anchor"));
     SwNodeIndex nPara2 = aPaM.GetPoint()->nNode;
     m_pDoc->AppendTxtNode(*aPaM.GetPoint());
 
-    m_pDoc->InsertString(aPaM, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Paragraph 3")));
+    m_pDoc->InsertString(aPaM, rtl::OUString("Paragraph 3"));
 
     aPaM.GetPoint()->nNode = nPara2;
     aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
@@ -727,8 +727,7 @@ void SwDocTest::testGraphicAnchorDeletion()
 
 #ifdef DEBUG_AS_HTML
     {
-        SvFileStream aPasteDebug(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "cppunitDEBUG.html")), STREAM_WRITE|STREAM_TRUNC);
+        SvFileStream aPasteDebug(rtl::OUString("cppunitDEBUG.html"), STREAM_WRITE|STREAM_TRUNC);
         WriterRef xWrt;
         GetHTMLWriter( String(), String(), xWrt );
         SwWriter aDbgWrt( aPasteDebug, *m_pDoc );
