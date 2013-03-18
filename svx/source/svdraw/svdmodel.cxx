@@ -1486,12 +1486,14 @@ SdrPage* SdrModel::RemovePage(sal_uInt16 nPgNum)
 void SdrModel::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
 {
     SdrPage* pPg=maPages[nPgNum];
-    maPages.erase(maPages.begin()+nPgNum);
-    PageListChanged();
     if (pPg!=NULL) {
+        maPages.erase(maPages.begin()+nPgNum); // shortcut to avoid two broadcasts
+        PageListChanged();
         pPg->SetInserted(sal_False);
         InsertPage(pPg,nNewPos);
     }
+    else
+        RemovePage(nPgNum);
 }
 
 void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
