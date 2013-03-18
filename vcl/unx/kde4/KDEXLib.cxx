@@ -47,14 +47,18 @@
 #include <config_kde4.h>
 
 #if QT_VERSION >= QT_VERSION_CHECK( 4, 9, 0 )
-#define QT_UNIX_EVENT_LOOP_SUPPORT
+#define QT_UNIX_EVENT_LOOP_SUPPORT 1
+#else
+#define QT_UNIX_EVENT_LOOP_SUPPORT 0
 #endif
 
-#ifdef KDE_HAVE_GLIB
-#define GLIB_EVENT_LOOP_SUPPORT
+#if KDE_HAVE_GLIB
+#define GLIB_EVENT_LOOP_SUPPORT 1
+#else
+#define GLIB_EVENT_LOOP_SUPPORT 0
 #endif
 
-#ifdef GLIB_EVENT_LOOP_SUPPORT
+#if GLIB_EVENT_LOOP_SUPPORT
 #include <glib-2.0/glib.h>
 #endif
 
@@ -176,11 +180,11 @@ void KDEXLib::Init()
 // needs to be unlocked shortly before entering the main sleep (e.g. select()) and locked
 // immediatelly after. So we need to know which event loop implementation is used and
 // hook accordingly.
-#ifdef GLIB_EVENT_LOOP_SUPPORT
+#if GLIB_EVENT_LOOP_SUPPORT
 static GPollFunc old_gpoll = NULL;
 static gint gpoll_wrapper( GPollFD*, guint, gint );
 #endif
-#ifdef QT_UNIX_EVENT_LOOP_SUPPORT
+#if QT_UNIX_EVENT_LOOP_SUPPORT
 static int (*qt_select)(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
    const struct timeval *orig_timeout);
 static int lo_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
@@ -200,7 +204,7 @@ static bool qt_event_filter( void* m )
 void KDEXLib::setupEventLoop()
 {
     old_qt_event_filter = QAbstractEventDispatcher::instance()->setEventFilter( qt_event_filter );
-#ifdef GLIB_EVENT_LOOP_SUPPORT
+#if GLIB_EVENT_LOOP_SUPPORT
 // Glib is simple, it has g_main_context_set_poll_func() for wrapping the sleep call.
 // The catch is that Qt has a bug that allows triggering timers even when they should
 // not be, leading to crashes caused by QClipboard re-entering the event loop.
@@ -219,7 +223,7 @@ void KDEXLib::setupEventLoop()
     }
 #endif
 #endif
-#ifdef QT_UNIX_EVENT_LOOP_SUPPORT
+#if QT_UNIX_EVENT_LOOP_SUPPORT
 // When Qt does not use Glib support, it uses its own Unix event dispatcher.
 // That one has aboutToBlock() and awake() signals, but they are broken (either
 // functionality or semantics), as e.g. awake() is not emitted right after the dispatcher
@@ -239,7 +243,7 @@ void KDEXLib::setupEventLoop()
 #endif
 }
 
-#ifdef GLIB_EVENT_LOOP_SUPPORT
+#if GLIB_EVENT_LOOP_SUPPORT
 gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 {
     SalYieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
@@ -247,7 +251,7 @@ gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 }
 #endif
 
-#ifdef QT_UNIX_EVENT_LOOP_SUPPORT
+#if QT_UNIX_EVENT_LOOP_SUPPORT
 int lo_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
    const struct timeval *orig_timeout)
 {

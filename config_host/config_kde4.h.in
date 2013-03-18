@@ -6,5 +6,8 @@ Settings for KDE4 integration.
 #define CONFIG_KDE4_H
 
 #undef KDE_HAVE_GLIB
+#ifndef KDE_HAVE_GLIB
+#define KDE_HAVE_GLIB 0
+#endif
 
 #endif
