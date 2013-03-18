@@ -3951,6 +3951,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 
     // remember pArr, in case a subsequent CompileTokenArray() is executed.
     ScTokenArray* pNew = new ScTokenArray( aArr );
+    pNew->GenHash();
     pArr = pNew;
 
     if (!maExternalFiles.empty())

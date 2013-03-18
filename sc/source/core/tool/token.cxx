@@ -1294,7 +1294,7 @@ size_t HashSingleRef( const ScSingleRefData& rRef )
 
 }
 
-size_t ScTokenArray::GetHash() const
+void ScTokenArray::GenHash()
 {
     static OUStringHash aHasher;
 
@@ -1357,7 +1357,13 @@ size_t ScTokenArray::GetHash() const
         // Use the opcode value in all the other cases.
         nHash += (static_cast<size_t>(eOp) << i);
     }
-    return nHash;
+
+    mnHashValue = nHash;
+}
+
+size_t ScTokenArray::GetHash() const
+{
+    return mnHashValue;
 }
 
 bool ScTokenArray::IsReference( ScRange& rRange ) const
@@ -1372,19 +1378,21 @@ bool ScTokenArray::IsValidReference( ScRange& rRange ) const
 
 ////////////////////////////////////////////////////////////////////////////
 
-ScTokenArray::ScTokenArray()
+ScTokenArray::ScTokenArray() :
+    FormulaTokenArray(),
+    mnHashValue(0)
 {
 }
 
-ScTokenArray::ScTokenArray( const ScTokenArray& rArr ) : FormulaTokenArray(rArr)
+ScTokenArray::ScTokenArray( const ScTokenArray& rArr ) :
+    FormulaTokenArray(rArr),
+    mnHashValue(rArr.mnHashValue)
 {
 }
 
 ScTokenArray::~ScTokenArray()
 {
 }
-
-
 
 ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
 {
@@ -1402,6 +1410,7 @@ ScTokenArray* ScTokenArray::Clone() const
     p->nMode = nMode;
     p->nError = nError;
     p->bHyperLink = bHyperLink;
+    p->mnHashValue = mnHashValue;
     FormulaToken** pp;
     if( nLen )
     {

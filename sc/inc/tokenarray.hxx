@@ -35,6 +35,8 @@ class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
     friend class ScCompiler;
     bool                    ImplGetReference( ScRange& rRange, bool bValidOnly ) const;
 
+    size_t mnHashValue;
+
 public:
     ScTokenArray();
     /// Assignment with references to ScToken entries (not copied!)
@@ -42,6 +44,7 @@ public:
    virtual ~ScTokenArray();
     ScTokenArray* Clone() const;    /// True copy!
 
+    void GenHash();
     size_t GetHash() const;
 
     /// Exactly and only one range (valid or deleted)
