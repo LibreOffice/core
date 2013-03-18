@@ -2018,7 +2018,7 @@ void FormulaCompiler::LocalizeString( String& /*rName*/ )
 void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
 {
     if ( bAutoCorrect && !pStack )
-        {   // don't merge stacked subroutine code into entered formula
+    {   // don't merge stacked subroutine code into entered formula
         aCorrectedFormula += aCorrectedSymbol;
         aCorrectedSymbol.Erase();
     }
