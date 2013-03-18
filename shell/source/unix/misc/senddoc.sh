@@ -165,7 +165,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    ATTACH="${ATTACH:-}${ATTACH:+ }--attach "`echo "file://$2" | ${URI_ENCODE}`
+                    ATTACH="${ATTACH:-}${ATTACH:+ }--attach "`echo "file://$2" | "${URI_ENCODE}"`
                     shift
                     ;;
                 *)
