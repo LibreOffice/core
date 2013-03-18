@@ -18,7 +18,7 @@
  */
 
 
-
+#include "sfxacldetect.hxx"
 
 #if EXTRA_ACL_CHECK
 

@@ -354,7 +354,7 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
     }
 
     // unequal number of attributes
-#if CPPUNIT_ASSERT
+#ifdef CPPUNIT_ASSERT
     CPPUNIT_ASSERT(!attr1);
     CPPUNIT_ASSERT(!attr2);
 #else

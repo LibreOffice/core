@@ -21,6 +21,7 @@
 #include "secerr.h"
 #include "sslerr.h"
 #include "nspr.h"
+#include "nss.h"
 #include "certt.h"
 #include <sal/macros.h>
 

@@ -22,7 +22,7 @@
 #include <ooxml/resourceids.hxx>
 #include "dmapperLoggers.hxx"
 
-#if DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
 #endif
 

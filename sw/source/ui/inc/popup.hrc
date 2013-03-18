@@ -39,7 +39,7 @@
 #define MN_HEADERFOOTER_BUTTON      (RC_POPUPS_BEGIN + 18)
 #define MN_PAGEBREAK_BUTTON         (RC_POPUPS_BEGIN + 19)
 
-#if MN_PAGEBREAK_POPUPMENU > RC_POPUPS_END
+#if MN_PAGEBREAK_BUTTON > RC_POPUPS_END
 
 #error Resource-Id Ueberlauf in #file, #line
 #endif

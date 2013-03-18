@@ -239,7 +239,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             break;
             case NS_ooxml::LN_CT_TcPrBase_gridSpan: //number of grid positions spanned by this cell
             {
-#if DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DOMAINMAPPER
                 dmapper_logger->startElement("tablemanager.GridSpan");
                 dmapper_logger->attribute("gridSpan", nIntValue);
                 dmapper_logger->endElement();
