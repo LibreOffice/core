@@ -1,0 +1,42 @@
+--- misc/mdds_0.6.0/include/mdds/segment_tree.hpp
++++ misc/build/mdds_0.6.0/include/mdds/segment_tree.hpp
+@@ -285,7 +285,7 @@ public:
+         }
+     };
+ 
+-#if UNIT_TEST
++#ifdef UNIT_TEST
+     struct node_printer : public ::std::unary_function<const node*, void>
+     {
+         void operator() (const node* p) const
+--- misc/mdds_0.6.0/include/mdds/multi_type_vector_def.inl
++++ misc/build/mdds_0.6.0/include/mdds/multi_type_vector_def.inl
+@@ -29,7 +29,7 @@
+ 
+ #include <stdexcept>
+ 
+-#if UNIT_TEST
++#ifdef UNIT_TEST
+ #include <iostream>
+ using std::cout;
+ using std::endl;
+--- misc/mdds_0.6.0/include/mdds/mixed_type_matrix_flag_storage.hpp
++++ misc/build/mdds_0.6.0/include/mdds/mixed_type_matrix_flag_storage.hpp
+@@ -25,7 +25,7 @@
+  *
+  ************************************************************************/
+ 
+-#if UNIT_TEST
++#ifdef UNIT_TEST
+ #include <iostream>
+ #endif
+ 
+@@ -74,7 +74,7 @@ public:
+             // Flag is stored at this position.  Remove it.
+             m_flags.erase(itr);
+     }
+-#if UNIT_TEST
++#ifdef UNIT_TEST
+     void dump() const
+     {
+         using namespace std;
