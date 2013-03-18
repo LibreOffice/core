@@ -72,7 +72,7 @@ namespace sw { namespace mark
 
     bool CrossRefHeadingBookmark::IsLegalName(const ::rtl::OUString& rName)
     {
-        return rName.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(CrossRefHeadingBookmark_NamePrefix));
+        return rName.match(CrossRefHeadingBookmark_NamePrefix);
     }
 
     const char CrossRefNumItemBookmark_NamePrefix[] = "__RefNumPara__";
@@ -86,7 +86,7 @@ namespace sw { namespace mark
 
     bool CrossRefNumItemBookmark::IsLegalName(const ::rtl::OUString& rName)
     {
-        return rName.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(CrossRefNumItemBookmark_NamePrefix));
+        return rName.match(CrossRefNumItemBookmark_NamePrefix);
     }
 }}
 
