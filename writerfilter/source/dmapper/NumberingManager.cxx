@@ -565,7 +565,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 // Get the merged level properties
                 uno::Sequence< beans::PropertyValue > aLvlProps = aProps[sal_Int32( nLevel )];
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 lcl_printProperties( aLvlProps );
 #endif
 

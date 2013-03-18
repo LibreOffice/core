@@ -178,7 +178,7 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
 
 void SwBodyFrm::Paint( const SwRect& rRect, const SwPrintData* ) const
 {
-#if OSL_DEBUG_LAYOUT > 1
+#if OSL_DEBUG_LEVEL > 1
     // Paint a red border around the SwBodyFrm in debug mode
     ViewShell *pSh = GetShell();
     OutputDevice* pOut =  pSh->GetOut();

@@ -2286,18 +2286,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             }
             catch (const uno::Exception& e)
             {
-#if DEBUG
-                std::clog << "Exception when setting property: ";
-                std::clog << rtl::OUStringToOString(
-                    pTableProperties[nProperty].Name, RTL_TEXTENCODING_UTF8)
-                    .getStr();
-                std::clog << ". Message: ";
-                std::clog << rtl::OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_UTF8 ).getStr();
-                std::clog << std::endl;
-#else
-                (void)e;
-#endif
+                SAL_WARN( "sw.uno", "Exception when setting property: "
+                    + pTableProperties[nProperty].Name + ". Message: " + e.Message );
             }
         }
 

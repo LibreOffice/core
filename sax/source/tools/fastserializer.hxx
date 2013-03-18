@@ -163,7 +163,7 @@ private:
 
         virtual void setCurrentElement( ::sal_Int32 /*nToken*/ ) {}
         virtual Int8Sequence& getData();
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 0
         virtual void print();
 #endif
 
@@ -194,7 +194,7 @@ private:
 
         virtual Int8Sequence& getData();
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 0
         virtual void print();
 #endif
 

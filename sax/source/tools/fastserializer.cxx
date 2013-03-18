@@ -28,7 +28,7 @@
 
 #include <string.h>
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 0
 #include <iostream>
 #endif
 
@@ -295,7 +295,7 @@ namespace sax_fastparser {
         return maData;
     }
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 0
     void FastSaxSerializer::ForMerge::print( )
     {
         std::cerr << "Data: ";
@@ -398,7 +398,7 @@ namespace sax_fastparser {
         return ForMerge::getData();
     }
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 0
     void FastSaxSerializer::ForSort::print( )
     {
         std::map< sal_Int32, Int8Sequence >::iterator iter = maData.begin();

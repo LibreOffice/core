@@ -4244,7 +4244,7 @@ void SwWW8ImplReader::ReadDocInfo()
                 if (!aSttb.Read( *pTableStream ) )
                     OSL_TRACE("** Read of SttbAssoc data failed!!!! ");
                 pTableStream->Seek( nCur ); // return to previous position, is that necessary?
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 aSttb.Print( stderr );
 #endif
                 String sPath = aSttb.getStringAtIndex( 0x1 );
@@ -4324,7 +4324,7 @@ bool WW8Customizations::Import( SwDocShell* pShell )
             SAL_WARN("sw.ww8", "** Read of Customization data failed!!!! ");
             return false;
         }
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
         aTCG.Print( stderr );
 #endif
         return aTCG.ImportCustomToolBar( *pShell );

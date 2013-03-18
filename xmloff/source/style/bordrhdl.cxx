@@ -26,10 +26,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
 
-#if DEBUG
-#include <cstdio>
-#endif
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 

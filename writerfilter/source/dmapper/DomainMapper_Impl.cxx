@@ -62,11 +62,6 @@
 #endif
 #include <ooxml/OOXMLFastTokens.hxx>
 
-#if DEBUG
-#include <stdio.h>
-#include <com/sun/star/style/TabStop.hpp>
-#endif
-
 #include <map>
 
 #include <comphelper/configurationhelper.hxx>
@@ -3596,11 +3591,7 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
         }
         catch( const uno::Exception& rEx)
         {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "Exception caught when converting to frame: %s\n",
-                    OUStringToOString( rEx.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
-            (void)rEx;
+            SAL_WARN( "writerfilter", "Exception caught when converting to frame: " + rEx.Message );
             bRet = false;
         }
         m_xFrameStartRange = 0;

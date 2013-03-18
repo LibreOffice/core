@@ -95,7 +95,7 @@ namespace
                     }
                     m_aAccessDPath.push_back( aFileUrl );
                 } while( nIndex != -1 );
-    #if OSL_G_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 1
                 out( "> cpld: acknowledged following access path(s): \"" );
                 ::std::vector< OUString >::const_iterator iPos( m_aAccessDPath.begin() );
                 while (iPos != m_aAccessDPath.end())
@@ -111,7 +111,7 @@ namespace
             else
             {
                 // no access path env set
-    #if OSL_G_LEVEL > 1
+    #if OSL_DEBUG_LEVEL > 1
                 out( "=> no CPLD_ACCESSPATH set.\n" );
     #endif
             }
