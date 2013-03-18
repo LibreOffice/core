@@ -47,6 +47,7 @@ class PeerConfig(object):
             self.oHCResource = _oHCResource
 
     def windowShown(self):
+        print ("DEBUG !!! PeerConfig.windowShow --")
         try:
             for i in self.m_aPeerTasks:
                 xVclWindowPeer = i.xControl.Peer
@@ -56,7 +57,8 @@ class PeerConfig(object):
                 if isinstance(aImageUrlTask.oResource, int):
                     sImageUrl = oUnoDialog.getWizardImageUrl(aImageUrlTask.oResource, aImageUrlTask.oHCResource)
                 elif isinstance(aImageUrlTask.oResource, str):
-                    sImageUrl = oUnoDialog.getImageUrl(aImageUrlTask.oResource, aImageUrlTask.oHCResource)
+                    sImageUrl = self.oUnoDialog.getImageUrl(aImageUrlTask.oResource, aImageUrlTask.oHCResource)
+                print ("DEBUG !!! PeerConfig.windowShow -- sImageUrl: ", sImageUrl)
                 if sImageUrl != "":
                     Helper.setUnoPropertyValue(aImageUrlTask.oModel, PropertyNames.PROPERTY_IMAGEURL, sImageUrl)
 

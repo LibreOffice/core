@@ -205,6 +205,7 @@ class ImageListDialog(UnoDialog2):
     '''
 
     def setSelected(self, obj):
+        print ("DEBUG !!!  ImageListDialog.setSelected -- obj: ", obj)
         self.il.setSelected(obj)
         self.il.showSelected()
 

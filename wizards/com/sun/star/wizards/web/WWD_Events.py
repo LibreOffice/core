@@ -339,6 +339,7 @@ class WWD_Events(WWD_Startup):
     '''
 
     def chooseBackground(self):
+        print ("DEBUG !!! chooseBackground --")
         try:
             self.setEnabled(self.btnBackgrounds, False)
             if WWD_Events.bgDialog is None:
@@ -363,6 +364,7 @@ class WWD_Events(WWD_Startup):
     '''
 
     def setBackground(self, background):
+        print ("DEBUG !!! setBackground -- background: ", background)
         if background is None:
             background = ""
 
@@ -375,6 +377,7 @@ class WWD_Events(WWD_Startup):
     '''
 
     def chooseIconset(self):
+        print ("DEBUG !!! chooseIconset --")
         try:
             self.setEnabled(self.btnIconSets, False)
             if WWD_Events.iconsDialog is None:
@@ -399,6 +402,7 @@ class WWD_Events(WWD_Startup):
     '''
 
     def setIconset(self, icon):
+        print ("DEBUG !!! setIconset -- icon: ", icon)
         WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_IconSet = icon
         self.updateIconsetText()
 
