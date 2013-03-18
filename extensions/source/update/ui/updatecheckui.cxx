@@ -53,12 +53,12 @@
 
 #define MSG_ERR_NO_WEBBROWSER_FOUND  (RID_SFX_APP_START + 7)
 
-#define PROPERTY_TITLE          RTL_CONSTASCII_STRINGPARAM("BubbleHeading")
-#define PROPERTY_TEXT           RTL_CONSTASCII_STRINGPARAM("BubbleText")
-#define PROPERTY_IMAGE          RTL_CONSTASCII_STRINGPARAM("BubbleImageURL")
-#define PROPERTY_SHOW_BUBBLE    RTL_CONSTASCII_STRINGPARAM("BubbleVisible")
-#define PROPERTY_CLICK_HDL      RTL_CONSTASCII_STRINGPARAM("MenuClickHDL")
-#define PROPERTY_SHOW_MENUICON  RTL_CONSTASCII_STRINGPARAM("MenuIconVisible")
+#define PROPERTY_TITLE          "BubbleHeading"
+#define PROPERTY_TEXT           "BubbleText"
+#define PROPERTY_IMAGE          "BubbleImageURL"
+#define PROPERTY_SHOW_BUBBLE    "BubbleVisible"
+#define PROPERTY_CLICK_HDL      "MenuClickHDL"
+#define PROPERTY_SHOW_MENUICON  "MenuIconVisible"
 
 using namespace ::com::sun::star;
 
@@ -422,21 +422,21 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
 
     rtl::OUString aString;
 
-    if( rPropertyName.compareToAscii( PROPERTY_TITLE ) == 0 ) {
+    if( rPropertyName == PROPERTY_TITLE ) {
         rValue >>= aString;
         if ( aString != maBubbleTitle ) {
             maBubbleTitle = aString;
             mbBubbleChanged = true;
         }
     }
-    else if( rPropertyName.compareToAscii( PROPERTY_TEXT ) == 0 ) {
+    else if( rPropertyName == PROPERTY_TEXT ) {
         rValue >>= aString;
         if ( aString != maBubbleText ) {
             maBubbleText = aString;
             mbBubbleChanged = true;
         }
     }
-    else if( rPropertyName.compareToAscii( PROPERTY_IMAGE ) == 0 ) {
+    else if( rPropertyName == PROPERTY_IMAGE ) {
         rValue >>= aString;
         if ( aString != maBubbleImageURL ) {
             maBubbleImageURL = aString;
@@ -444,14 +444,14 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
             mbBubbleChanged = true;
         }
     }
-    else if( rPropertyName.compareToAscii( PROPERTY_SHOW_BUBBLE ) == 0 ) {
+    else if( rPropertyName == PROPERTY_SHOW_BUBBLE ) {
         rValue >>= mbShowBubble;
         if ( mbShowBubble )
             Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
         else if ( mpBubbleWin )
             mpBubbleWin->Show( sal_False );
     }
-    else if( rPropertyName.compareToAscii( PROPERTY_CLICK_HDL ) == 0 ) {
+    else if( rPropertyName == PROPERTY_CLICK_HDL ) {
         uno::Reference< task::XJob > aJob;
         rValue >>= aJob;
         if ( aJob.is() )
@@ -459,7 +459,7 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
         else
             throw lang::IllegalArgumentException();
     }
-    else if (rPropertyName.compareToAscii( PROPERTY_SHOW_MENUICON ) == 0) {
+    else if (rPropertyName == PROPERTY_SHOW_MENUICON ) {
         bool bShowMenuIcon = sal_False;
         rValue >>= bShowMenuIcon;
         if ( bShowMenuIcon != mbShowMenuIcon )
@@ -486,17 +486,17 @@ uno::Any UpdateCheckUI::getPropertyValue(const rtl::OUString& rPropertyName)
 
     uno::Any aRet;
 
-    if( rPropertyName.compareToAscii( PROPERTY_TITLE ) == 0 )
+    if( rPropertyName == PROPERTY_TITLE )
         aRet = uno::makeAny( maBubbleTitle );
-    else if( rPropertyName.compareToAscii( PROPERTY_TEXT ) == 0 )
+    else if( rPropertyName == PROPERTY_TEXT )
         aRet = uno::makeAny( maBubbleText );
-    else if( rPropertyName.compareToAscii( PROPERTY_SHOW_BUBBLE ) == 0 )
+    else if( rPropertyName == PROPERTY_SHOW_BUBBLE )
         aRet = uno::makeAny( mbShowBubble );
-    else if( rPropertyName.compareToAscii( PROPERTY_IMAGE ) == 0 )
+    else if( rPropertyName == PROPERTY_IMAGE )
         aRet = uno::makeAny( maBubbleImageURL );
-    else if( rPropertyName.compareToAscii( PROPERTY_CLICK_HDL ) == 0 )
+    else if( rPropertyName == PROPERTY_CLICK_HDL )
         aRet = uno::makeAny( mrJob );
-    else if( rPropertyName.compareToAscii( PROPERTY_SHOW_MENUICON ) == 0 )
+    else if( rPropertyName == PROPERTY_SHOW_MENUICON )
         aRet = uno::makeAny( mbShowMenuIcon );
     else
         throw beans::UnknownPropertyException();
