@@ -41,6 +41,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/optgeneralpage \
 	cui/uiconfig/ui/optmemorypage \
 	cui/uiconfig/ui/optpathspage \
+	cui/uiconfig/ui/optsavepage \
 	cui/uiconfig/ui/optsecuritypage \
 	cui/uiconfig/ui/optuserpage \
 	cui/uiconfig/ui/optviewpage \
