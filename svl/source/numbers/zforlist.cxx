@@ -4477,9 +4477,9 @@ sal_Char NfCurrencyEntry::GetEuroSymbol( rtl_TextEncoding eTextEncoding )
     case RTL_TEXTENCODING_APPLE_ROMAN :     // MAC
         return '\xDB';
     default:                                // default system
-#if WNT
+#if defined(WNT)
         return '\x80';
-#elif UNX
+#elif defined(UNX)
 //      return '\xA4';      // #56121# 0xA4 would be correct for iso-8859-15
         return '\x80';      // but Windows code for the converted TrueType fonts
 #else

@@ -69,7 +69,7 @@ namespace
         { "Mozilla/SeaMonkey/", NULL, NULL, NULL },
         { "Mozilla/Firefox/", NULL, NULL, NULL },
         { "Thunderbird/", "Mozilla/Thunderbird/", NULL, NULL }
-    #elif(MACOSX)
+    #elif defined(MACOSX)
         { "../Mozilla/SeaMonkey/", NULL, NULL, NULL },
         { "Firefox/", NULL, NULL, NULL },
         { "../Thunderbird/", NULL, NULL, NULL }
