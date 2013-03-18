@@ -77,11 +77,6 @@ extern BOOL (WINAPI *_pRawDllMain)(HANDLE, DWORD, LPVOID) = _RawDllMain;
 
 #endif
 
-//------------------------------------------------------------------------------
-// DllMain
-//------------------------------------------------------------------------------
-int osl_isSingleCPU = 0;
-
 #ifdef __MINGW32__
 
 void
@@ -157,20 +152,6 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
         case DLL_PROCESS_ATTACH:
             {
 #endif
-
-                SYSTEM_INFO SystemInfo;
-
-                GetSystemInfo(&SystemInfo);
-
-                /* Determine if we are on a multiprocessor/multicore/HT x86/x64 system
-                 *
-                 * The lock prefix for atomic operations in osl_[inc|de]crementInterlockedCount()
-                 * comes with a cost and is especially expensive on pre HT x86 single processor
-                 * systems, where it isn't needed at all.
-                 */
-                if ( SystemInfo.dwNumberOfProcessors == 1 ) {
-                    osl_isSingleCPU = 1;
-                }
 
 #if OSL_DEBUG_LEVEL < 2
                 /* Suppress file error messages from system like "Floppy A: not inserted" */
