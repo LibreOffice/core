@@ -38,14 +38,10 @@
 #include <ne_redirect.h>
 #include <ne_ssl.h>
 
-#if NEON_VERSION < 0x0260
 // old neon versions forgot to set this
 extern "C" {
-#endif
 #include <ne_compress.h>
-#if NEON_VERSION < 0x0260
 }
-#endif
 
 #include "libxml/parser.h"
 #include "rtl/ustrbuf.hxx"
@@ -838,7 +834,7 @@ void NeonSession::Init()
         ne_redirect_register( m_pHttpSession );
 
         // authentication callbacks.
-#if NEON_VERSION >= 0x0260
+#if 1
         ne_add_server_auth( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
         ne_add_proxy_auth ( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
 #else
