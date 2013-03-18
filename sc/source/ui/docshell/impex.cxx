@@ -640,6 +640,7 @@ static bool lcl_appendLineData( String& rField, const sal_Unicode* p1, const sal
 
 enum DoubledQuoteMode
 {
+    DQM_KEEP_ALL,   // both are taken, additionally start and end quote are included in string
     DQM_KEEP,       // both are taken
     DQM_ESCAPE,     // escaped quote, one is taken, one ignored
     DQM_CONCAT,     // first is end, next is start, both ignored => strings combined
@@ -649,7 +650,8 @@ enum DoubledQuoteMode
 static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
             const sal_Unicode* pSeps, sal_Unicode cStr, DoubledQuoteMode eMode, bool& rbOverflowCell )
 {
-    p++;    //! jump over opening quote
+    if (eMode != DQM_KEEP_ALL)
+        p++;    //! jump over opening quote
     bool bCont;
     do
     {
@@ -677,6 +679,7 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
                 // doubled quote char
                 switch ( eMode )
                 {
+                    case DQM_KEEP_ALL :
                     case DQM_KEEP :
                         p++;            // both for us (not breaking for-loop)
                     break;
@@ -705,7 +708,7 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
         }
         if ( p0 < p )
         {
-            if (!lcl_appendLineData( rString, p0, ((*p || *(p-1) == cStr) ? p-1 : p)))
+            if (!lcl_appendLineData( rString, p0, ((eMode != DQM_KEEP_ALL && (*p || *(p-1) == cStr)) ? p-1 : p)))
                 rbOverflowCell = true;
         }
     } while ( bCont );
@@ -897,24 +900,21 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
             while( *p )
             {
                 aCell.Erase();
-                if( *p == cStr )
+                const sal_Unicode* q = p;
+                while (*p && *p != cSep)
                 {
-                    p = lcl_ScanString( p, aCell, pSeps, cStr, DQM_KEEP, bOverflowCell );
-                    while( *p && *p != cSep )
-                        p++;
-                    if( *p )
-                        p++;
-                }
-                else
-                {
-                    const sal_Unicode* q = p;
-                    while( *p && *p != cSep )
-                        p++;
+                    // Always look for a pairing quote and ignore separator in between.
+                    while (*p && *p == cStr)
+                        q = p = lcl_ScanString( p, aCell, pSeps, cStr, DQM_KEEP_ALL, bOverflowCell );
+                    // All until next separator or quote.
+                    while (*p && *p != cSep && *p != cStr)
+                        ++p;
                     if (!lcl_appendLineData( aCell, q, p))
                         bOverflowCell = true;   // display warning on import
-                    if( *p )
-                        p++;
+                    q = p;
                 }
+                if (*p)
+                    ++p;
                 if (ValidCol(nCol) && ValidRow(nRow) )
                 {
                     if( bSingle )
