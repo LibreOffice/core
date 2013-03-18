@@ -5610,6 +5610,34 @@ SfxBoolItem SaveAsTemplate SID_DOCTEMPLATE
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem SaveACopy SID_SAVEACOPY
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxBoolItem PasswordInteraction SID_PASSWORDINTERACTION,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem SaveBasicAs SID_BASICSAVEAS
 ()
 [

@@ -199,6 +199,10 @@ String STR_SAVECOPYDOC
 {
     Text [ en-US ] = "Save Copy ~as..." ;
 };
+String STR_SAVEACOPY
+{
+    Text [ en-US ] = "Save a Copy..." ;
+};
 String STR_CLOSEDOC
 {
     Text [ en-US ] = "~Close" ;

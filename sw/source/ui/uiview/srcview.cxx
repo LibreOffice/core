@@ -291,6 +291,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
     TextView* pTextView = aEditWin.GetTextView();
     switch( nSlot )
     {
+        case SID_SAVEACOPY:
         case SID_SAVEASDOC:
         {
             SvtPathOptions aPathOpt;
