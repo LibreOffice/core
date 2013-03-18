@@ -685,6 +685,11 @@ FormulaTokenArray* FormulaTokenArray::Clone() const
     return p;
 }
 
+size_t FormulaTokenArray::GetHash() const
+{
+    return 0;
+}
+
 void FormulaTokenArray::Clear()
 {
     if( nRPN ) DelRPN();

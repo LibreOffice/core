@@ -427,6 +427,8 @@ public:
 
     ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags = SC_CLONECELL_DEFAULT );
 
+    size_t GetHash() const;
+
     void            GetFormula( rtl::OUString& rFormula,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            GetFormula( rtl::OUStringBuffer& rBuffer,

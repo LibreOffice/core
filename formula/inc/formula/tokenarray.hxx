@@ -93,6 +93,8 @@ public:
     FormulaTokenArray( const FormulaTokenArray& );
     virtual ~FormulaTokenArray();
     FormulaTokenArray* Clone() const;    /// True copy!
+
+    size_t GetHash() const;
     void Clear();
     void DelRPN();
     FormulaToken* First() { nIndex = 0; return Next(); }

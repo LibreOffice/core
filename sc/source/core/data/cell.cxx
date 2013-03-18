@@ -884,6 +884,11 @@ ScFormulaCell::~ScFormulaCell()
 #endif
 }
 
+size_t ScFormulaCell::GetHash() const
+{
+    return pCode->GetHash();
+}
+
 void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
                                 const FormulaGrammar::Grammar eGrammar ) const
 {
