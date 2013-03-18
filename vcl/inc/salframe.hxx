@@ -23,9 +23,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 
-#ifdef __cplusplus
 #include <vcl/ptrstyle.hxx>
-#endif // __cplusplus
 
 #include <salwtype.hxx>
 #include <salgeom.hxx>
@@ -95,8 +93,6 @@ typedef sal_uInt64 SalExtStyle;
 #define SAL_FRAME_POSSIZE_Y                 ((sal_uInt16)0x0002)
 #define SAL_FRAME_POSSIZE_WIDTH             ((sal_uInt16)0x0004)
 #define SAL_FRAME_POSSIZE_HEIGHT            ((sal_uInt16)0x0008)
-
-#ifdef __cplusplus
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -247,8 +243,6 @@ public:                     // public for Sal Implementation
     long                    CallCallback( sal_uInt16 nEvent, const void* pEvent ) const
         { return m_pProc ? m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent ) : 0; }
 };
-
-#endif // __cplusplus
 
 #endif // _SV_SALFRAME_HXX
 

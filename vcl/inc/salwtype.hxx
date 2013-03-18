@@ -187,8 +187,6 @@ struct SalMouseActivateEvent
     long            mnY;            // Y-Position (Pixel, TopLeft-Output)
 };
 
-#ifdef __cplusplus
-
 // EXTTEXTINPUT
 struct SalExtTextInputEvent
 {
@@ -201,8 +199,6 @@ struct SalExtTextInputEvent
     sal_Bool            mbOnlyCursor;   // sal_True: Only Cursor-Position has been changed
 };
 
-#endif // __cplusplus
-
 // EXTTEXTINPUTPOS
 struct SalExtTextInputPosEvent
 {
@@ -214,17 +210,11 @@ struct SalExtTextInputPosEvent
     bool            mbVertical;     // true if in vertical mode
 };
 
-#ifdef __cplusplus
-
 // INPUTCONTEXTCHANGE
 struct SalInputContextChangeEvent
 {
     LanguageType    meLanguage;     // new language
 };
-
-#endif // __cplusplus
-
-#ifdef __cplusplus
 
 // SURROUNDINGTEXTREQUEST
 struct SalSurroundingTextRequestEvent
@@ -234,18 +224,12 @@ struct SalSurroundingTextRequestEvent
     sal_uLong       mnEnd;          // The end index of selected range
 };
 
-#endif // __cplusplus
-
-#ifdef __cplusplus
-
 // SURROUNDINGTEXTSELECTIONCHANGE
 struct SalSurroundingTextSelectionChangeEvent
 {
     sal_uLong       mnStart;        // The beginning index of selected range
     sal_uLong       mnEnd;          // The end index of selected range
 };
-
-#endif // __cplusplus
 
 // ------------------
 // - SalFrame-Types -
@@ -318,16 +302,12 @@ struct SalFrameState
 #define SAL_INPUTCONTEXT_EXTTEXTINPUT_OFF   ((sal_uLong)0x00000008)
 #define SAL_INPUTCONTEXT_CHANGELANGUAGE     ((sal_uLong)0x00000010)
 
-#ifdef __cplusplus
-
 struct SalInputContext
 {
     FontSelectPattern*     mpFont;
     LanguageType           meLanguage;
     sal_uLong              mnOptions;
 };
-
-#endif // __cplusplus
 
 typedef void (*SALTIMERPROC)();
 
