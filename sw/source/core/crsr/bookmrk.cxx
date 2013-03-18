@@ -162,12 +162,12 @@ namespace sw { namespace mark
     OUString MarkBase::ToString( ) const
     {
         OUStringBuffer buf;
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("Mark: ( Name, [ Node1, Index1 ] ): ( "));
-        buf.append( m_aName ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", [ "));
+        buf.append("Mark: ( Name, [ Node1, Index1 ] ): ( ");
+        buf.append( m_aName ).append(", [ ");
         buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+            .append(", ");
         buf.append( sal_Int32( GetMarkPos().nContent.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ] )") );
+            .append(" ] )");
 
         return buf.makeStringAndClear( );
     }
@@ -307,18 +307,18 @@ namespace sw { namespace mark
     OUString Fieldmark::ToString( ) const
     {
         OUStringBuffer buf;
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-            "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( "));
-        buf.append( m_aName ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-        buf.append( m_aFieldname ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", [ "));
+        buf.append(
+            "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( ");
+        buf.append( m_aName ).append(", ");
+        buf.append( m_aFieldname ).append(", [ ");
         buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+            .append(", ");
         buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ], ["));
+            .append(" ], [");
         buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+            .append(", ");
         buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ] ) "));
+            .append(" ] ) ");
 
         return buf.makeStringAndClear( );
     }
@@ -388,18 +388,18 @@ namespace sw { namespace mark
     OUString CheckboxFieldmark::toString( ) const
     {
         OUStringBuffer buf;
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
-            "CheckboxFieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( "));
-        buf.append( m_aName ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
-        buf.append( GetFieldname() ).appendAscii(RTL_CONSTASCII_STRINGPARAM(", [ "));
+        buf.append(
+            "CheckboxFieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( ");
+        buf.append( m_aName ).append(", ");
+        buf.append( GetFieldname() ).append(", [ ");
         buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+            .append(", ");
         buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ], ["));
+            .append(" ], [");
         buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
+            .append(", ");
         buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) )
-            .appendAscii(RTL_CONSTASCII_STRINGPARAM(" ] ) "));
+            .append(" ] ) ");
 
         return buf.makeStringAndClear( );
     }
