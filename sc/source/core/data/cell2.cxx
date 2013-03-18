@@ -42,6 +42,8 @@
 #include "patattr.hxx"
 #include <rtl/strbuf.hxx>
 
+#include <cstdio>
+
 using namespace formula;
 
 // STATIC DATA -----------------------------------------------------------

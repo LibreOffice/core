@@ -37,6 +37,7 @@
 
 #include <cstring>
 #include <map>
+#include <cstdio>
 
 using ::editeng::SvxBorderLine;
 using namespace formula;

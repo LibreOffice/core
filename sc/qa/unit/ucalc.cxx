@@ -117,7 +117,7 @@ public:
     void testCollator();
     void testRangeList();
     void testInput();
-    void testFormulaGrouping();
+    void testFormulaHashAndTag();
     void testCellFunctions();
     void testCopyToDocument();
     /**
@@ -276,7 +276,7 @@ public:
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
-    CPPUNIT_TEST(testFormulaGrouping);
+    CPPUNIT_TEST(testFormulaHashAndTag);
     CPPUNIT_TEST(testCellFunctions);
     CPPUNIT_TEST(testCopyToDocument);
     CPPUNIT_TEST(testSheetsFunc);
@@ -1197,7 +1197,7 @@ void testFuncINDIRECT(ScDocument* pDoc)
     }
 }
 
-void Test::testFormulaGrouping()
+void Test::testFormulaHashAndTag()
 {
     m_pDoc->InsertTab(0, "Test");
 

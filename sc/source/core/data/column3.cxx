@@ -48,6 +48,8 @@
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
+#include <cstdio>
+
 using ::com::sun::star::i18n::LocaleDataItem;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
