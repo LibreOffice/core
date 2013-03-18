@@ -1274,6 +1274,26 @@ bool ScTokenArray::ImplGetReference( ScRange& rRange, bool bValidOnly ) const
     return bIs;
 }
 
+namespace {
+
+size_t HashSingleRef( const ScSingleRefData& rRef )
+{
+    SCsCOL nCol = rRef.Flags.bColRel ? rRef.nRelCol : rRef.nCol;
+    SCsROW nRow = rRef.Flags.bRowRel ? rRef.nRelRow : rRef.nRow;
+    SCsTAB nTab = rRef.Flags.bTabRel ? rRef.nRelTab : rRef.nTab;
+    size_t nVal = nCol;
+    nVal += (nRow << 8);
+    nVal += (nTab << 16);
+
+    // Embed flag values too.
+    nVal += rRef.Flags.bColRel;
+    nVal += (rRef.Flags.bRowRel << 1);
+    nVal += (rRef.Flags.bTabRel << 2);
+    return nVal;
+}
+
+}
+
 size_t ScTokenArray::GetHash() const
 {
     static OUStringHash aHasher;
@@ -1281,11 +1301,11 @@ size_t ScTokenArray::GetHash() const
     size_t nHash = 1;
     OpCode eOp;
     StackVar eType;
-    const FormulaToken* p;
+    const ScToken* p;
     sal_uInt16 n = std::min<sal_uInt16>(nLen, 20);
     for (sal_uInt16 i = 0; i < n; ++i)
     {
-        p = pCode[i];
+        p = static_cast<const ScToken*>(pCode[i]);
         eOp = p->GetOpCode();
         if (eOp == ocPush)
         {
@@ -1314,8 +1334,22 @@ size_t ScTokenArray::GetHash() const
                     nHash += (aHasher(rStr) << i);
                     continue;
                 }
+                case svSingleRef:
+                {
+                    size_t nVal = HashSingleRef(p->GetSingleRef());
+                    nHash += (nVal << i);
+                    continue;
+                }
+                case svDoubleRef:
+                {
+                    const ScComplexRefData& rRef = p->GetDoubleRef();
+                    size_t nVal1 = HashSingleRef(rRef.Ref1);
+                    size_t nVal2 = HashSingleRef(rRef.Ref2);
+                    nHash += (nVal1 << i);
+                    nHash += (nVal2 << i);
+                    continue;
+                }
                 default:
-                    // TODO: Decide later if we should generate hash from references as well.
                     ;
             }
         }

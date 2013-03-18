@@ -1196,47 +1196,47 @@ void Test::testFormulaGrouping()
 
     ScAddress aPos1(0,0,0), aPos2(1,0,0);
 
-    // simplest cases.
-    m_pDoc->SetString(aPos1, "=1");
-    size_t nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
-    m_pDoc->SetString(aPos2, "=2");
-    size_t nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
-    CPPUNIT_ASSERT_MESSAGE("These hashes should differ.", nHashVal1 != nHashVal2);
+    struct {
+        const char* pFormula1; const char* pFormula2; bool bEqual;
+    } aTests[] = {
+        { "=1", "=2", false }, // different constants
+        { "=SUM(1;2;3;4;5)", "=AVERAGE(1;2;3;4;5)", false }, // different functions
+        { "=C2*3", "=D2*3", true },  // relative references
+        { "=C2*3", "=D2*4", false }, // different constants
+        { "=C2*4", "=D2*4", true },  // relative references
+        { "=3*4*5", "=3*4*\"foo\"", false }, // numeric vs string constants
+        { "=$C3/2", "=$C3/2", true }, // absolute column references
+        { "=C$3/2", "=D$3/2", true }, // absolute row references
+        { "=$E$30/2", "=$E$30/2", true }, // absolute references
+        { "=X20", "=$X$20", false }, // absolute vs relative
+        { "=X20", "=X$20", false }, // absolute vs relative
+        { "=X20", "=$X20", false }, // absolute vs relative
+        { "=X$20", "=$X20", false }, // column absolute vs row absolute
+    };
 
-    // different cell functions.
-    aPos1.IncRow();
-    aPos2.IncRow();
-    m_pDoc->SetString(aPos1, "=SUM(1;2;3;4;5)");
-    m_pDoc->SetString(aPos2, "=AVERAGE(1;2;3;4;5)");
-    nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
-    nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
-    CPPUNIT_ASSERT_MESSAGE("These hashes should differ.", nHashVal1 != nHashVal2);
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
+    {
+        m_pDoc->SetString(aPos1, OUString::createFromAscii(aTests[i].pFormula1));
+        m_pDoc->SetString(aPos2, OUString::createFromAscii(aTests[i].pFormula2));
+        size_t nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
+        size_t nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
 
-    // same relative references.
-    aPos1.IncRow();
-    aPos2.IncRow();
-    m_pDoc->SetString(aPos1, "=A2*3");
-    m_pDoc->SetString(aPos2, "=B2*3");
-    nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
-    nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
-    CPPUNIT_ASSERT_MESSAGE("These hashes should be equal.", nHashVal1 == nHashVal2);
+        std::ostringstream os;
+        os << "(expr1:" << aTests[i].pFormula1 << "; expr2:" << aTests[i].pFormula2 << ")";
+        if (aTests[i].bEqual)
+        {
+            os << " Error: these hashes should be equal." << endl;
+            CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), nHashVal1 == nHashVal2);
+        }
+        else
+        {
+            os << " Error: these hashes should differ." << endl;
+            CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), nHashVal1 != nHashVal2);
+        }
 
-    m_pDoc->SetString(aPos2, "=B2*4"); // Change the constant.
-    nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
-    CPPUNIT_ASSERT_MESSAGE("These hashes should differ.", nHashVal1 != nHashVal2);
-
-    m_pDoc->SetString(aPos1, "=A2*4"); // Change the constant again to make it "equal".
-    nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
-    CPPUNIT_ASSERT_MESSAGE("These hashes should be equal.", nHashVal1 == nHashVal2);
-
-    // string constant vs numeric constant.
-    aPos1.IncRow();
-    aPos2.IncRow();
-    m_pDoc->SetString(aPos1, "=3*4*5");
-    m_pDoc->SetString(aPos2, "=3*4*\"foo\"");
-    nHashVal1 = m_pDoc->GetFormulaHash(aPos1);
-    nHashVal2 = m_pDoc->GetFormulaHash(aPos2);
-    CPPUNIT_ASSERT_MESSAGE("These hashes should differ.", nHashVal1 != nHashVal2);
+        aPos1.IncRow();
+        aPos2.IncRow();
+    }
 
     m_pDoc->DeleteTab(0);
 }
