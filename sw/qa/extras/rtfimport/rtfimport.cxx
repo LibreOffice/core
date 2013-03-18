@@ -1171,7 +1171,10 @@ void Test::testFdo60722()
 void Test::testFdo61909()
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+    // Was the Writer default font.
     CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xTextRange, "CharFontName"));
+    // Was 0x008000.
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<sal_uInt32>(xTextRange, "CharBackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -2841,7 +2841,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_HIGHLIGHT:
             {
-                RTFValue::Pointer_t pValue(new RTFValue(nParam));
+                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
                 m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CHighlight, pValue);
             }
             break;
