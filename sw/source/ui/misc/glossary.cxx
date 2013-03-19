@@ -37,6 +37,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
+#include <com/sun/star/text/AutoTextContainer.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -1132,19 +1133,17 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
     }
 }
 
-void    SwGlossaryDlg::ResumeShowAutoText()
+void SwGlossaryDlg::ResumeShowAutoText()
 {
     String sGroup, sShortName;
     if(GetResumeData(sGroup, sShortName) && m_pExampleWIN->IsVisible())
     {
-        if(!_xAutoText.is())
+        if(!m_xAutoText.is())
         {
-            uno::Reference< lang::XMultiServiceFactory >
-                                    xMgr = getProcessServiceFactory();
+            uno::Reference< lang::XMultiServiceFactory > xMgr = getProcessServiceFactory();
             //now the AutoText ListBoxes have to be filled
 
-            uno::Reference< uno::XInterface >  xAText = xMgr->createInstance( "com.sun.star.text.AutoTextContainer" );
-            _xAutoText = uno::Reference< container::XNameAccess >(xAText, uno::UNO_QUERY);
+            m_xAutoText = text::AutoTextContainer::create( comphelper::getComponentContext(xMgr) );
         }
 
         uno::Reference< XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
@@ -1152,7 +1151,7 @@ void    SwGlossaryDlg::ResumeShowAutoText()
         {
             if(sShortName.Len())
             {
-                uno::Any aGroup = _xAutoText->getByName(sGroup);
+                uno::Any aGroup = m_xAutoText->getByName(sGroup);
                 uno::Reference< XAutoTextGroup >  xGroup;
                 OUString uShortName(sShortName);
                 if((aGroup >>= xGroup) && xGroup->hasByName(uShortName))

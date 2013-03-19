@@ -19,21 +19,19 @@
 #ifndef _UNOATXT_HXX
 #define _UNOATXT_HXX
 
-#include <com/sun/star/text/XAutoTextGroup.hpp>
-#include <com/sun/star/text/XAutoTextEntry.hpp>
-#include <com/sun/star/text/XAutoTextContainer.hpp>
-#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/text/XAutoTextGroup.hpp>
+#include <com/sun/star/text/XAutoTextEntry.hpp>
+#include <com/sun/star/text/XAutoTextContainer2.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
-#include <cppuhelper/implbase3.hxx> // helper for implementations
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase5.hxx> // helper for implementations
 #include <cppuhelper/implbase6.hxx> // helper for implementations
 #include <svtools/unoevent.hxx>
@@ -53,11 +51,10 @@ SV_DECL_REF( SwDocShell )
     SAL_CALL SwXAutoTextContainer_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & ) throw ( ::com::sun::star::uno::Exception );
 
-class SwXAutoTextContainer : public cppu::WeakImplHelper3
+class SwXAutoTextContainer : public cppu::WeakImplHelper2
 <
-    ::com::sun::star::text::XAutoTextContainer,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::container::XIndexAccess
+    ::com::sun::star::text::XAutoTextContainer2,
+    ::com::sun::star::lang::XServiceInfo
 >
 {
     SwGlossaries *pGlossaries;

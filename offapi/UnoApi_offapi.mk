@@ -334,6 +334,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
 	StatusIndicatorFactory \
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/text,\
+	AutoTextContainer \
 	DefaultNumberingProvider \
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
@@ -1265,7 +1266,6 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text
 	AccessibleTextEmbeddedObject \
 	AccessibleTextFrameView \
 	AccessibleTextGraphicObject \
-	AutoTextContainer \
 	AutoTextEntry \
 	AutoTextGroup \
 	BaseFrame \
@@ -3647,6 +3647,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/text,\
 	WritingMode \
 	WritingMode2 \
 	XAutoTextContainer \
+	XAutoTextContainer2 \
 	XAutoTextEntry \
 	XAutoTextGroup \
 	XBookmarkInsertTool \

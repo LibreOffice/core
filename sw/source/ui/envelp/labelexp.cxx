@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/AutoTextContainer.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include "svtools/treelistentry.hxx"
 #include <swtypes.hxx>
@@ -52,16 +53,15 @@ void SwVisitingCardPage::InitFrameControl()
                                             getProcessServiceFactory();
     //now the AutoText ListBoxes have to be filled
 
-    uno::Reference< uno::XInterface >  xAText = xMgr->createInstance( "com.sun.star.text.AutoTextContainer" );
-    _xAutoText = uno::Reference< container::XNameAccess >(xAText, uno::UNO_QUERY);
+    m_xAutoText = text::AutoTextContainer::create( comphelper::getComponentContext(xMgr) );
 
-    uno::Sequence<OUString> aNames = _xAutoText->getElementNames();
+    uno::Sequence<OUString> aNames = m_xAutoText->getElementNames();
     const OUString* pGroups = aNames.getConstArray();
     OUString uTitleName( rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_TITLE)) );
 
     for(sal_uInt16 i = 0; i < aNames.getLength(); i++)
     {
-        uno::Any aGroup = _xAutoText->getByName(pGroups[i]);
+        uno::Any aGroup = m_xAutoText->getByName(pGroups[i]);
         uno::Reference< text::XAutoTextGroup >  xGroup;
         aGroup >>= xGroup;
         uno::Reference< container::XIndexAccess >  xIdxAcc(xGroup, uno::UNO_QUERY);
@@ -88,9 +88,9 @@ void SwVisitingCardPage::InitFrameControl()
             aAutoTextGroupLB.SelectEntryPos(0);
         String sCurGroupName(
             *(String*)aAutoTextGroupLB.GetEntryData(aAutoTextGroupLB.GetSelectEntryPos()));
-        if(_xAutoText->hasByName(sCurGroupName))
+        if(m_xAutoText->hasByName(sCurGroupName))
         {
-            uno::Any aGroup = _xAutoText->getByName(sCurGroupName);
+            uno::Any aGroup = m_xAutoText->getByName(sCurGroupName);
             try
             {
                 uno::Reference< text::XAutoTextGroup >  xGroup;
@@ -122,7 +122,7 @@ IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
     {
         String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
                                     aAutoTextGroupLB.GetSelectEntryPos() ) );
-        uno::Any aGroup = _xAutoText->getByName(sGroup);
+        uno::Any aGroup = m_xAutoText->getByName(sGroup);
         uno::Reference< text::XAutoTextGroup >  xGroup;
         aGroup >>= xGroup;
 
@@ -144,13 +144,13 @@ IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
 
 IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
 {
-    if(_xAutoText.is())
+    if(m_xAutoText.is())
     {
         if( &aAutoTextGroupLB == pBox )
         {
             String sGroup( *(String*)aAutoTextGroupLB.GetEntryData(
                                     aAutoTextGroupLB.GetSelectEntryPos()));
-            uno::Any aGroup = _xAutoText->getByName(sGroup);
+            uno::Any aGroup = m_xAutoText->getByName(sGroup);
             uno::Reference< text::XAutoTextGroup >  xGroup;
             aGroup >>= xGroup;
 

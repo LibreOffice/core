@@ -60,9 +60,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XDocumentHandler;
 
 
-const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
-
-
 XMLAutoTextEventExport::XMLAutoTextEventExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         sal_uInt16 nFlags

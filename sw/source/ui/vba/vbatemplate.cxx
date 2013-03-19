@@ -20,7 +20,7 @@
 #include <vbahelper/vbahelper.hxx>
 #include "wordvbahelper.hxx"
 #include "vbaautotextentry.hxx"
-#include <com/sun/star/text/XAutoTextContainer.hpp>
+#include <com/sun/star/text/AutoTextContainer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
@@ -85,8 +85,8 @@ SwVbaTemplate::getPath() throw ( css::uno::RuntimeException )
 uno::Any SAL_CALL
 SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeException)
 {
-    uno::Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
-    uno::Reference< text::XAutoTextContainer > xAutoTextContainer( xMgr->createInstance( rtl::OUString("com.sun.star.text.AutoTextContainer") ), uno::UNO_QUERY_THROW );
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    uno::Reference< text::XAutoTextContainer2 > xAutoTextContainer = text::AutoTextContainer::create( xContext );
 
     // the default template is "Normal.dot" in Word.
     rtl::OUString sGroup("Normal");

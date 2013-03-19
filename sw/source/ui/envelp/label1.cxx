@@ -641,7 +641,7 @@ SwVisitingCardPage::~SwVisitingCardPage()
 {
     for(sal_uInt16 i = 0; i < aAutoTextGroupLB.GetEntryCount(); i++)
         delete (String*)aAutoTextGroupLB.GetEntryData( i );
-    _xAutoText = 0;
+    m_xAutoText = 0;
 
     ClearUserData();
     delete pExampleFrame;

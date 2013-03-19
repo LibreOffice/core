@@ -46,10 +46,6 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
 
-const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
-
-
-// #110680#
 XMLAutoTextEventImport::XMLAutoTextEventImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext) throw()
 :   SvXMLImport(xContext)

@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XElementAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/text/XAutoTextContainer2.hpp>
 
 #include <actctrl.hxx>
 
@@ -100,7 +101,7 @@ class SwGlossaryDlg : public SvxStandardDialog
 
     String          sReadonlyPath;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        _xAutoText;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextContainer2 > m_xAutoText;
     SwOneExampleFrame*  pExampleFrame;
 
     SwGlossaryHdl*  pGlossaryHdl;

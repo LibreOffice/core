@@ -19,6 +19,7 @@
 #ifndef _SWUILABIMP_HXX
 #define _SWUILABIMP_HXX
 #include "labimp.hxx"
+#include <com/sun/star/text/XAutoTextContainer2.hpp>
 
 class SwLabPage : public SfxTabPage
 {
@@ -103,7 +104,7 @@ class SwVisitingCardPage : public SfxTabPage
     SwLabItem       aLabItem;
 
     SwOneExampleFrame*  pExampleFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    _xAutoText;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextContainer2 > m_xAutoText;
 
 
     DECL_LINK( AutoTextSelectHdl, void* );
