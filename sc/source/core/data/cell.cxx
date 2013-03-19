@@ -1198,11 +1198,6 @@ void ScFormulaCell::Interpret()
     if (!IsDirtyOrInTableOpDirty() || pDocument->GetRecursionHelper().IsInReturn())
         return;     // no double/triple processing
 
-    // Re-build formulae groups - ideally this is done at import / insert / delete etc.
-    // and is reflected in the dependency data ...
-    pDocument->RebuildFormulaGroups();
-
-
     //! HACK:
     //  If the call originates from a Reschedule in DdeLink update, leave dirty
     //  Better: Do a Dde Link Update without Reschedule or do it completely asynchronously!
@@ -1243,7 +1238,8 @@ void ScFormulaCell::Interpret()
     }
     else
     {
-        InterpretTail( SCITP_NORMAL);
+        if ( ! InterpretFormulaGroup() )
+            InterpretTail( SCITP_NORMAL);
     }
 
     // While leaving a recursion or iteration stack, insert its cells to the

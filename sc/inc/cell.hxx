@@ -598,6 +598,7 @@ public:
         { xGroup = xRef; }
     ScSimilarFormulaDelta *BuildDeltaTo( ScFormulaCell *pOther );
     void                   ReleaseDelta( ScSimilarFormulaDelta *pDelta );
+    bool                   InterpretFormulaGroup();
 };
 
 //          Iterator for references in a formula cell

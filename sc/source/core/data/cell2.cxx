@@ -1689,9 +1689,9 @@ void ScFormulaCell::CompileColRowNameFormula()
     }
 }
 
+// we really want to be a lot more descriptive than this
 struct ScSimilarFormulaDelta : std::vector< size_t >
 {
-    // we really want to be a lot more descriptive than this
     bool IsCompatible( ScSimilarFormulaDelta *pDelta )
     {
         if ( size() != pDelta->size() )
@@ -1710,6 +1710,17 @@ struct ScSimilarFormulaDelta : std::vector< size_t >
         push_back( b.nRow - a.nRow );
         push_back( b.nTab - a.nTab );
     }
+
+    /// if the vector is zero then nothing changes down the column.
+    bool IsInvariant() const
+    {
+        for ( size_t i = 0; i < size(); i++ )
+        {
+            if ( (*this)[ i ] != 0 )
+                return false;
+        }
+        return true;
+    }
 };
 
 bool ScFormulaCellGroup::IsCompatible( ScSimilarFormulaDelta *pDelta )
@@ -1722,6 +1733,10 @@ bool ScFormulaCellGroup::IsCompatible( ScSimilarFormulaDelta *pDelta )
 /// formulae should produce pOther
 ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
 {
+    // no Matrix formulae yet.
+    if ( GetMatrixFlag() != MM_NONE )
+        return NULL;
+
     // are these formule at all similar ?
     if ( GetHash() != pOtherCell->GetHash() )
         return NULL;
@@ -1787,9 +1802,82 @@ ScSimilarFormulaDelta *ScFormulaCell::BuildDeltaTo( ScFormulaCell *pOtherCell )
     return pDelta;
 }
 
+/// To avoid exposing impl. details of ScSimilarFormulaDelta publicly
 void ScFormulaCell::ReleaseDelta( ScSimilarFormulaDelta *pDelta )
 {
     delete pDelta;
+}
+
+bool ScFormulaCell::InterpretFormulaGroup()
+{
+    // Re-build formulae groups if necessary - ideally this is done at
+    // import / insert / delete etc. and is integral to the data structures
+    pDocument->RebuildFormulaGroups();
+
+    if( !xGroup.get() )
+        return false;
+
+    fprintf( stderr, "Interpret cell %d, %d\n", (int)aPos.Col(), (int)aPos.Row() );
+
+    if ( xGroup->mpDelta->IsInvariant() )
+    {
+        fprintf( stderr, "struck gold - completely invariant for %d items !\n",
+                 (int)xGroup->mnLength );
+
+        // calculate ourselves:
+        InterpretTail( SCITP_NORMAL );
+        for ( sal_Int32 i = 0; i < xGroup->mnLength; i++ )
+        {
+            ScBaseCell *pBaseCell = NULL;
+            pDocument->GetCell( aPos.Col(),
+                                xGroup->mnStart + i,
+                                aPos.Tab(), pBaseCell );
+            assert( pBaseCell != NULL );
+            assert( pBaseCell->GetCellType() == CELLTYPE_FORMULA );
+            ScFormulaCell *pCell = static_cast<ScFormulaCell *>( pBaseCell );
+
+            // FIXME: this set of horrors is unclear to me ... certainly
+            // the above GetCell is profoundly nasty & slow ...
+
+            // Ensure the cell truly has a result:
+            pCell->aResult = aResult;
+            pCell->ResetDirty();
+
+            // FIXME: there is a view / refresh missing here it appears.
+        }
+        return true;
+    }
+    else
+    {
+        // scan the formula ...
+        // have a document method: "Get2DRangeAsDoublesArray" that does the
+        // column-based heavy lifting call it for each absolute range from the
+        // first cell pos in the formula group.
+        //
+        // Project single references to ranges by adding their vector * xGroup->mnLength
+        //
+        // TODO:
+        //    elide multiple dimensional movement in vectors eg. =SUM(A1<1,1>)
+        //    produces a diagonal 'column' that serves no useful purpose for us.
+        //    these should be very rare. Should elide in GetDeltas anyway and
+        //    assert here.
+        //
+        // Having built our input data ...
+        // Throw it, and the formula over to some 'OpenCLCalculage' hook
+        //
+        // on return - release references on these double buffers
+        //
+        // transfer the result to the formula cells (as above)
+        // store the doubles in the columns' maDoubles array for
+        // dependent formulae
+        //
+        // TODO:
+        //    need to abort/fail when we get errors returned and fallback to
+        //    stock interpreting [ I guess ], unless we can use NaN etc. to
+        //    signal errors.
+
+        return false;
+    }
 }
 
 // ============================================================================
