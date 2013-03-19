@@ -113,7 +113,7 @@ void SwDbtoolsClient::registerClient()
         if (NULL != getDbToolsClientModule())
         {
             // get the symbol for the method creating the factory
-            const ::rtl::OUString sFactoryCreationFunc(RTL_CONSTASCII_USTRINGPARAM("createDataAccessToolsFactory"));
+            const ::rtl::OUString sFactoryCreationFunc("createDataAccessToolsFactory");
             //  reinterpret_cast<createDataAccessToolsFactoryFunction> removed for gcc permissive
             getDbToolsClientFactoryFunction() = reinterpret_cast< createDataAccessToolsFactoryFunction >(
                 osl_getFunctionSymbol(getDbToolsClientModule(), sFactoryCreationFunc.pData));

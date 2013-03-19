@@ -741,7 +741,7 @@ sal_Bool SAL_CALL SvUnoImageMap::supportsService( const ::rtl::OUString& Service
 Sequence< ::rtl::OUString > SAL_CALL SvUnoImageMap::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    const ::rtl::OUString aSN( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.image.ImageMap" ) );
+    const ::rtl::OUString aSN( "com.sun.star.image.ImageMap" );
     return Sequence< ::rtl::OUString >( &aSN, 1 );
 }
 

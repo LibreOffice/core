@@ -697,7 +697,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     {
                         Reference<XPropertySet> xCellPropertySet( xCell,
                                                                  UNO_QUERY );
-                        OUString sTextSection( RTL_CONSTASCII_USTRINGPARAM("TextSection") );
+                        OUString sTextSection("TextSection");
                         Any aAny = xCellPropertySet->getPropertyValue(sTextSection);
                         Reference < XTextSection > xTextSection;
                         aAny >>= xTextSection;
@@ -872,7 +872,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
                     if( !rTblInfo.IsBaseSectionValid() )
                     {
-                        OUString sTextSection( RTL_CONSTASCII_USTRINGPARAM("TextSection") );
+                        OUString sTextSection("TextSection");
                         aAny = xCellPropertySet->getPropertyValue(sTextSection);
                         Reference < XTextSection > xTextSection;
                         aAny >>= xTextSection;

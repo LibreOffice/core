@@ -172,7 +172,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
 {
     // Retrieve label from helper function
     uno::Reference< frame::XFrame > xFrame = GetBindings().GetActiveFrame();
-    rtl::OUString aCommandStr( RTL_CONSTASCII_USTRINGPARAM( ".uno:StopRecording" ));
+    rtl::OUString aCommandStr( ".uno:StopRecording" );
     aTbx.SetItemText( SID_STOP_RECORDING, GetLabelFromCommandURL( aCommandStr, xFrame ));
 
     // Determine size of toolbar

@@ -284,7 +284,7 @@ void SAL_CALL MutableTreeDataModel::removeEventListener( const Reference< XEvent
 OUString SAL_CALL MutableTreeDataModel::getImplementationName(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    static const OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "toolkit.MutableTreeDataModel" ) );
+    static const OUString aImplName( "toolkit.MutableTreeDataModel" );
     return aImplName;
 }
 
@@ -633,7 +633,7 @@ OUString SAL_CALL MutableTreeNode::getCollapsedGraphicURL(  ) throw (RuntimeExce
 OUString SAL_CALL MutableTreeNode::getImplementationName(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
-    static const OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "toolkit.MutableTreeNode" ) );
+    static const OUString aImplName( "toolkit.MutableTreeNode" );
     return aImplName;
 }
 
@@ -650,7 +650,7 @@ sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName 
 Sequence< OUString > SAL_CALL MutableTreeNode::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
-    static const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.tree.MutableTreeNode" ) );
+    static const OUString aServiceName( "com.sun.star.awt.tree.MutableTreeNode" );
     static const Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

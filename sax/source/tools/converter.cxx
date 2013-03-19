@@ -415,13 +415,13 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
 
 static const OUString& getTrueString()
 {
-    static const OUString sTrue( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+    static const OUString sTrue( "true" );
     return sTrue;
 }
 
 static const OUString& getFalseString()
 {
-    static const OUString sFalse( RTL_CONSTASCII_USTRINGPARAM( "false" ) );
+    static const OUString sFalse( "false" );
     return sFalse;
 }
 

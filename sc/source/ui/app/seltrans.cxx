@@ -55,7 +55,7 @@ static sal_Bool lcl_IsURLButton( SdrObject* pObject )
             uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-            rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ));
+            rtl::OUString sPropButtonType( "ButtonType" );
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
                 uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );

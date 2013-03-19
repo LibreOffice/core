@@ -152,9 +152,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                     uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-                    rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ));
-                    rtl::OUString sPropTargetURL(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
-                    rtl::OUString sPropLabel(RTL_CONSTASCII_USTRINGPARAM( "Label" ));
+                    rtl::OUString sPropButtonType( "ButtonType" );
+                    rtl::OUString sPropTargetURL( "TargetURL" );
+                    rtl::OUString sPropLabel( "Label" );
 
                     if(xInfo->hasPropertyByName( sPropButtonType ))
                     {
@@ -537,7 +537,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                     try
                     {
                         uno::Sequence < beans::PropertyValue > aSeq;
-                        ::rtl::OUString aDummyName(RTL_CONSTASCII_USTRINGPARAM("Dummy"));
+                        ::rtl::OUString aDummyName("Dummy");
                         xPers->storeToEntry( xWorkStore, aDummyName, aSeq, aSeq );
                         if ( xWorkStore->isStreamElement( aDummyName ) )
                         {

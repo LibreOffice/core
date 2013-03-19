@@ -45,7 +45,7 @@ std::vector< rtl::OUString > XDataPilotDescriptor::maFieldNames;
 
 void XDataPilotDescriptor::testTag()
 {
-    rtl::OUString aTag(RTL_CONSTASCII_USTRINGPARAM("DataPilotDescriptor_Tag"));
+    rtl::OUString aTag("DataPilotDescriptor_Tag");
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
     xDescr->setTag(aTag);
     rtl::OUString aNewTag = xDescr->getTag();
@@ -99,7 +99,7 @@ void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::X
 
     sal_Int32 nCount = xIndex->getCount();
 
-    rtl::OUString aOrientation(RTL_CONSTASCII_USTRINGPARAM("Orientation"));
+    rtl::OUString aOrientation("Orientation");
     for (sal_Int32 i = 0; i < nCount && i < 5; ++i)
     {
         uno::Reference< container::XNamed > xNamed( xIndex->getByIndex( i ), UNO_QUERY_THROW);

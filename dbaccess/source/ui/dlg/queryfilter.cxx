@@ -328,10 +328,10 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                     }
                 }
                 xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
-                static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
+                static ::rtl::OUString sAgg("AggregateFunction");
                 if ( xInfo->hasPropertyByName(sAgg) )
                     xColumn->getPropertyValue(sAgg) >>= bHaving;
-                static ::rtl::OUString sFunction(RTL_CONSTASCII_USTRINGPARAM("Function"));
+                static ::rtl::OUString sFunction("Function");
                 if ( xInfo->hasPropertyByName(sFunction) )
                     xColumn->getPropertyValue(sFunction) >>= bFunction;
             }
@@ -341,7 +341,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                 _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
                 if ( !sTableName.isEmpty() )
                 {
-                    static ::rtl::OUString sSep(RTL_CONSTASCII_USTRINGPARAM("."));
+                    static ::rtl::OUString sSep(".");
                     sTableName += sSep;
                     sTableName += _rFilter.Name;
                     _rFilter.Name = sTableName;

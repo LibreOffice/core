@@ -124,18 +124,18 @@ using namespace ::rtl;
 +(void)applyAttributesFrom:(Sequence < PropertyValue >)attributes toString:(NSMutableAttributedString *)string forRange:(NSRange)range storeDefaultsTo:(AquaA11yWrapper *)wrapperStore getDefaultsFrom:(AquaA11yWrapper *)wrapper {
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     // constants
-    static const OUString attrUnderline(RTL_CONSTASCII_USTRINGPARAM("CharUnderline"));
-    static const OUString attrBold(RTL_CONSTASCII_USTRINGPARAM("CharWeight"));
-    static const OUString attrFontname(RTL_CONSTASCII_USTRINGPARAM("CharFontName"));
-    static const OUString attrItalic(RTL_CONSTASCII_USTRINGPARAM("CharPosture"));
-    static const OUString attrHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
-    static const OUString attrStrikethrough(RTL_CONSTASCII_USTRINGPARAM("CharStrikeout"));
-    static const OUString attrShadow(RTL_CONSTASCII_USTRINGPARAM("CharShadowed"));
-    static const OUString attrUnderlineColor(RTL_CONSTASCII_USTRINGPARAM("CharUnderlineColor"));
-    static const OUString attrUnderlineHasColor(RTL_CONSTASCII_USTRINGPARAM("CharUnderlineHasColor"));
-    static const OUString attrForegroundColor(RTL_CONSTASCII_USTRINGPARAM("CharColor"));
-    static const OUString attrBackgroundColor(RTL_CONSTASCII_USTRINGPARAM("CharBackColor"));
-    static const OUString attrSuperscript(RTL_CONSTASCII_USTRINGPARAM("CharEscapement"));
+    static const OUString attrUnderline("CharUnderline");
+    static const OUString attrBold("CharWeight");
+    static const OUString attrFontname("CharFontName");
+    static const OUString attrItalic("CharPosture");
+    static const OUString attrHeight("CharHeight");
+    static const OUString attrStrikethrough("CharStrikeout");
+    static const OUString attrShadow("CharShadowed");
+    static const OUString attrUnderlineColor("CharUnderlineColor");
+    static const OUString attrUnderlineHasColor("CharUnderlineHasColor");
+    static const OUString attrForegroundColor("CharColor");
+    static const OUString attrBackgroundColor("CharBackColor");
+    static const OUString attrSuperscript("CharEscapement");
     // vars
     OUString fontname;
     int fonttraits = 0;

@@ -301,7 +301,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            aPrintRangeOpt);
 
     // create a choice for the content to create
-    rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
+    rtl::OUString aPrintRangeName( "PrintContent" );
     uno::Sequence< rtl::OUString > aChoices( 3 );
     uno::Sequence< sal_Bool > aChoicesDisabled( 3 );
     uno::Sequence< rtl::OUString > aHelpIds( 3 );
@@ -390,7 +390,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create a bool option for brochure
     bDefaultVal = rDefaultPrintData.IsPrintProspect();
-    rtl::OUString aBrochurePropertyName( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) );
+    rtl::OUString aBrochurePropertyName( "PrintProspect" );
     m_aUIProperties[ nIdx++ ].Value = setBoolControlOpt("brochure", aLocalizedStrings.GetString( 23 ),
                                                         ".HelpID:vcl:PrintDialog:PrintProspect:CheckBox",
                                                         aBrochurePropertyName,

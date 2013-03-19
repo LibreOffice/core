@@ -139,7 +139,7 @@ struct PropertyCompare : public ::std::binary_function< beans::Property, OUStrin
 // -----------------------------------------------------------------------------
 OUString lcl_getQuotedFunctionName(const OUString& _sFunction)
 {
-    OUString sQuotedFunctionName(RTL_CONSTASCII_USTRINGPARAM("["));
+    OUString sQuotedFunctionName("[");
     sQuotedFunctionName += _sFunction + OUString("]");
     return sQuotedFunctionName;
 }
@@ -347,7 +347,7 @@ void SAL_CALL GeometryHandler::inspect( const uno::Reference< uno::XInterface > 
         const uno::Reference< container::XNameContainer > xObjectAsContainer( _rxInspectee, uno::UNO_QUERY );
         m_xReportComponent.set( xObjectAsContainer->getByName( OUString( "ReportComponent" ) ), uno::UNO_QUERY );
 
-        const OUString sRowSet(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
+        const OUString sRowSet("RowSet");
         if ( xObjectAsContainer->hasByName( sRowSet ) )
         {
             const uno::Any aRowSet( xObjectAsContainer->getByName(sRowSet) );

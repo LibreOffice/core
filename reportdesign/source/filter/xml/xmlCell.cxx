@@ -108,7 +108,7 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
     ORptFilter& rImport = GetOwnImport();
     const SvXMLTokenMap&    rTokenMap   = rImport.GetCellElemTokenMap();
     Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
-    static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
+    static const ::rtl::OUString s_sStringConcat(" & ");
 
     const sal_uInt16 nToken = rTokenMap.Get( _nPrefix, _rLocalName );
     switch( nToken )
@@ -261,7 +261,7 @@ void OXMLCell::Characters( const ::rtl::OUString& rChars )
         static const ::rtl::OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
         if ( !m_sText.isEmpty() )
         {
-            static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
+            static const ::rtl::OUString s_sStringConcat(" & ");
             m_sText += s_sStringConcat;
         }
 

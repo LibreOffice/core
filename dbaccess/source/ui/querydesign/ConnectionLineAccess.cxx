@@ -108,7 +108,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OConnectionLineAccess::getAccessibleDescription(  ) throw (RuntimeException)
     {
-        static ::rtl::OUString sDescription(RTL_CONSTASCII_USTRINGPARAM("Relation"));
+        static ::rtl::OUString sDescription("Relation");
         return sDescription;
     }
     // -----------------------------------------------------------------------------

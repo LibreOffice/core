@@ -412,8 +412,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
         if ( ! modulePlugin)
             return JFW_E_NO_PLUGIN;
 
-        rtl::OUString sFunctionName(
-            RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_startJavaVirtualMachine"));
+        rtl::OUString sFunctionName("jfw_plugin_startJavaVirtualMachine");
         jfw_plugin_startJavaVirtualMachine_ptr pFunc =
             (jfw_plugin_startJavaVirtualMachine_ptr)
             osl_getFunctionSymbol(modulePlugin, sFunctionName.pData);
@@ -1224,8 +1223,7 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     osl::Module modulePlugin(sLibPath);
     if ( ! modulePlugin)
         return JFW_E_NO_PLUGIN;
-    rtl::OUString sFunctionName(
-        RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_existJRE"));
+    rtl::OUString sFunctionName("jfw_plugin_existJRE");
     jfw_plugin_existJRE_ptr pFunc =
         (jfw_plugin_existJRE_ptr)
         osl_getFunctionSymbol(modulePlugin, sFunctionName.pData);

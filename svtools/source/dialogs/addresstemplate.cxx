@@ -346,7 +346,7 @@ void AssignmentPersistentData::Commit()
         ::rtl::OUString sAssignment;
         if (hasFieldAssignment(_rLogicalName))
         {
-            ::rtl::OUString sFieldPath(RTL_CONSTASCII_USTRINGPARAM("Fields/"));
+            ::rtl::OUString sFieldPath("Fields/");
             sFieldPath += _rLogicalName;
             sFieldPath += ::rtl::OUString("/AssignedFieldName");
             sAssignment = getStringProperty(sFieldPath);
@@ -417,7 +417,7 @@ void AssignmentPersistentData::Commit()
         }
 
         // Fields
-        ::rtl::OUString sDescriptionNodePath(RTL_CONSTASCII_USTRINGPARAM("Fields"));
+        ::rtl::OUString sDescriptionNodePath("Fields");
 
         // Fields/<field>
         ::rtl::OUString sFieldElementNodePath(sDescriptionNodePath);
@@ -449,7 +449,7 @@ void AssignmentPersistentData::Commit()
             // nothing to do
             return;
 
-        ::rtl::OUString sDescriptionNodePath(RTL_CONSTASCII_USTRINGPARAM("Fields"));
+        ::rtl::OUString sDescriptionNodePath("Fields");
         Sequence< ::rtl::OUString > aNames(&_rLogicalName, 1);
         ClearNodeElements(sDescriptionNodePath, aNames);
     }

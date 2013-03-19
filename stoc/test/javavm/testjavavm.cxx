@@ -50,7 +50,7 @@ using ::rtl::OString;
 sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
 {
 
-      OUString sVMService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"));
+      OUString sVMService("com.sun.star.java.JavaVirtualMachine");
     Reference<XInterface> xXInt= xMgr->createInstance(sVMService);
     if( ! xXInt.is())
         return sal_False;
@@ -126,14 +126,14 @@ SAL_IMPLEMENT_MAIN()
     sal_Bool bSucc = sal_False;
     try
     {
-        OUString sImplReg(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.registry.ImplementationRegistration"));
+        OUString sImplReg(
+            "com.sun.star.registry.ImplementationRegistration");
         Reference<com::sun::star::registry::XImplementationRegistration> xImplReg(
             xMgr->createInstance( sImplReg ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
 
-        OUString sLibLoader( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary"));
+        OUString sLibLoader("com.sun.star.loader.SharedLibrary");
         OUString sJenLib(
             RTL_CONSTASCII_USTRINGPARAM( "javavm.uno" SAL_DLLEXTENSION ) );
         xImplReg->registerImplementation(

@@ -1118,7 +1118,7 @@ OUString SAL_CALL ODatabaseMetaData::getDriverName()
     throw(SQLException, RuntimeException)
 {
     OSL_TRACE("ODatabaseMetaData::getDriverName");
-    OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "MySQL Connector/OO.org" ) );
+    OUString aValue( "MySQL Connector/OO.org" );
     return aValue;
 }
 /* }}} */
@@ -1129,7 +1129,7 @@ OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
     throw(SQLException, RuntimeException)
 {
     OSL_TRACE("ODatabaseMetaData::getDriverVersion");
-    static const OUString sVersion( RTL_CONSTASCII_USTRINGPARAM( "0.9.2" ) );
+    static const OUString sVersion( "0.9.2" );
     return sVersion;
 }
 /* }}} */

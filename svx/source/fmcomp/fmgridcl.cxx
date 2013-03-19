@@ -1699,7 +1699,7 @@ void FmGridControl::InitColumnByField(
     }
 
     // the control type is determined by the ColumnServiceName
-    static ::rtl::OUString s_sPropColumnServiceName( RTL_CONSTASCII_USTRINGPARAM( "ColumnServiceName" ) );
+    static ::rtl::OUString s_sPropColumnServiceName( "ColumnServiceName" );
     if ( !::comphelper::hasProperty( s_sPropColumnServiceName, _rxColumnModel ) )
         return;
 

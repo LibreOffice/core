@@ -64,7 +64,7 @@ using ::rtl::OUString;
 
 using ::std::auto_ptr;
 
-const OUString EXTN(RTL_CONSTASCII_USTRINGPARAM(".xls"));
+const OUString EXTN(".xls");
 
 OUString convertToURL( const OUString& rPath )
 {

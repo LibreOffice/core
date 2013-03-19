@@ -46,7 +46,7 @@ namespace connectivity
                     com::sun::star::configuration::theDefaultProvider::get(
                         comphelper::getComponentContext( _rxORB ) ) );
 
-                ::rtl::OUString sCompleteNodePath(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/DriverSettings/" ));
+                ::rtl::OUString sCompleteNodePath( "/org.openoffice.Office.DataAccess/DriverSettings/" );
                 sCompleteNodePath += OConnection::getDriverImplementationName();
 
                 //=========================================================

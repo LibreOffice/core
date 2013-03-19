@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 bool lcl_isNamedRange( const rtl::OUString& sAddress, const uno::Reference< frame::XModel >& xModel, table::CellRangeAddress& aAddress )
 {
     bool bRes = false;
-    const static rtl::OUString sNamedRanges( RTL_CONSTASCII_USTRINGPARAM("NamedRanges"));
+    const static rtl::OUString sNamedRanges("NamedRanges");
     uno::Reference< sheet::XCellRangeReferrer > xReferrer;
     try
     {

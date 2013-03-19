@@ -204,12 +204,12 @@ namespace dbaui
             Reference < XPropertySet > xPropSet( xBeamerFrame, UNO_QUERY );
             try
             {
-                const ::rtl::OUString aLayoutManager( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
+                const ::rtl::OUString aLayoutManager( "LayoutManager" );
                 Reference < XPropertySet > xLMPropSet(xPropSet->getPropertyValue( aLayoutManager ),UNO_QUERY);
 
                 if ( xLMPropSet.is() )
                 {
-                    const ::rtl::OUString aAutomaticToolbars( RTL_CONSTASCII_USTRINGPARAM( "AutomaticToolbars" ));
+                    const ::rtl::OUString aAutomaticToolbars( "AutomaticToolbars" );
                     xLMPropSet->setPropertyValue( aAutomaticToolbars, Any( sal_False ));
                 }
             }

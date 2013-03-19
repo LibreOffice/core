@@ -7195,7 +7195,7 @@ void CreateTableRows( Reference< XTableRows > xTableRows, const std::set< sal_In
         else
             nHeight = nTableBottom - nLastPosition;
 
-        static const rtl::OUString  sWidth( RTL_CONSTASCII_USTRINGPARAM ( "Height" ) );
+        static const rtl::OUString  sWidth( "Height" );
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( nHeight ) );
     }
@@ -7220,7 +7220,7 @@ void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::se
         else
             nWidth = nTableRight - nLastPosition;
 
-        static const rtl::OUString  sWidth( RTL_CONSTASCII_USTRINGPARAM ( "Width" ) );
+        static const rtl::OUString  sWidth( "Width" );
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( nWidth ) );
     }
@@ -7255,16 +7255,16 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         const sal_Int32 nRightDist(((const SdrTextRightDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
         const sal_Int32 nUpperDist(((const SdrTextUpperDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
         const sal_Int32 nLowerDist(((const SdrTextLowerDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
-        static const rtl::OUString  sTopBorder( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
-        static const rtl::OUString  sBottomBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
-        static const rtl::OUString  sLeftBorder( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) );
-        static const rtl::OUString  sRightBorder( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
+        static const rtl::OUString  sTopBorder( "TextUpperDistance" );
+        static const rtl::OUString  sBottomBorder( "TextLowerDistance" );
+        static const rtl::OUString  sLeftBorder( "TextLeftDistance" );
+        static const rtl::OUString  sRightBorder( "TextRightDistance" );
         xPropSet->setPropertyValue( sTopBorder, Any( nUpperDist ) );
         xPropSet->setPropertyValue( sRightBorder, Any( nRightDist ) );
         xPropSet->setPropertyValue( sLeftBorder, Any( nLeftDist ) );
         xPropSet->setPropertyValue( sBottomBorder, Any( nLowerDist ) );
 
-        static const rtl::OUString  sTextVerticalAdjust( RTL_CONSTASCII_USTRINGPARAM( "TextVerticalAdjust" ) );
+        static const rtl::OUString  sTextVerticalAdjust( "TextVerticalAdjust" );
         const SdrTextVertAdjust eTextVertAdjust(((const SdrTextVertAdjustItem&)pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue());
         drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
         if ( eTextVertAdjust == SDRTEXTVERTADJUST_CENTER )
@@ -7376,8 +7376,8 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
             static const rtl::OUString sBottomBorder( String( RTL_CONSTASCII_USTRINGPARAM( "BottomBorder" ) ) );
             static const rtl::OUString sLeftBorder( String( RTL_CONSTASCII_USTRINGPARAM( "LeftBorder" ) ) );
             static const rtl::OUString sRightBorder( String( RTL_CONSTASCII_USTRINGPARAM( "RightBorder" ) ) );
-            static const rtl::OUString  sDiagonalTLBR( RTL_CONSTASCII_USTRINGPARAM ( "DiagonalTLBR" ) );
-            static const rtl::OUString  sDiagonalBLTR( RTL_CONSTASCII_USTRINGPARAM ( "DiagonalBLTR" ) );
+            static const rtl::OUString  sDiagonalTLBR( "DiagonalTLBR" );
+            static const rtl::OUString  sDiagonalBLTR( "DiagonalBLTR" );
 
             sal_Int32 nPosition = *aIter & 0xffffff;
             sal_Int32 nFlags = *aIter &~0xffffff;

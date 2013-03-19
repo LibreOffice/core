@@ -1788,7 +1788,7 @@ void OReportController::doOpenHelpAgent()
 {
     if (getFrame().is())
     {
-        rtl::OUString suURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter"));
+        rtl::OUString suURL("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter");
         openHelpAgent(suURL);
     }
     else
@@ -2846,7 +2846,7 @@ Reference<XFrame> OReportController::getXFrame()
         m_xFrameLoader.set( frame::Desktop::create(m_xContext) );
     }
     const sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-    const ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+    const ::rtl::OUString sTarget("_blank");
     Reference<XFrame> xFrame = m_xFrameLoader->findFrame(sTarget,nFrameSearchFlag);
     return xFrame;
 }
@@ -3969,7 +3969,7 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
 
     if ( xSection.is() )
     {
-        const ::rtl::OUString sKeyModifier(RTL_CONSTASCII_USTRINGPARAM("KeyModifier"));
+        const ::rtl::OUString sKeyModifier("KeyModifier");
         const beans::PropertyValue* pIter = _aArgs.getConstArray();
         const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
         const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyValueCompare(),boost::cref(sKeyModifier)));
@@ -3993,8 +3993,8 @@ void OReportController::checkChartEnabled()
     if ( !m_bChartEnabledAsked )
     {
         m_bChartEnabledAsked = true;
-        const ::rtl::OUString sConfigName( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.ReportDesign" ) );
-        const ::rtl::OUString sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "UserData/Chart" ) );
+        const ::rtl::OUString sConfigName( "/org.openoffice.Office.ReportDesign" );
+        const ::rtl::OUString sPropertyName( "UserData/Chart" );
 
         try
         {

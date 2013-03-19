@@ -263,10 +263,10 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
 void SvtHelpOptions_Impl::implGetURLCounters( Sequence< ::rtl::OUString >& _rNodeNames, Sequence< Any >& _rURLs, Sequence< Any >& _rCounters )
 {
     // the ignore counters for the help agent URLs
-    const ::rtl::OUString sIgnoreListNodePath( RTL_CONSTASCII_USTRINGPARAM( "HelpAgent/IgnoreList" ));
-    const ::rtl::OUString sPathSeparator(      RTL_CONSTASCII_USTRINGPARAM( "/" ));
-    const ::rtl::OUString sURLLocalPath(       RTL_CONSTASCII_USTRINGPARAM( "/Name" ));
-    const ::rtl::OUString sCounterLocalPath(   RTL_CONSTASCII_USTRINGPARAM( "/Counter" ));
+    const ::rtl::OUString sIgnoreListNodePath( "HelpAgent/IgnoreList" );
+    const ::rtl::OUString sPathSeparator( "/" );
+    const ::rtl::OUString sURLLocalPath( "/Name" );
+    const ::rtl::OUString sCounterLocalPath( "/Counter" );
 
     // get the names of all the nodes containing ignore counters
     // collect the node names we have to ask
@@ -323,10 +323,10 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
 {
     ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
 
-    const ::rtl::OUString sIgnoreListNodePath( RTL_CONSTASCII_USTRINGPARAM( "HelpAgent/IgnoreList" ));
-    const ::rtl::OUString sPathSeparator(      RTL_CONSTASCII_USTRINGPARAM( "/" ));
-    const ::rtl::OUString sURLLocalPath(       RTL_CONSTASCII_USTRINGPARAM( "/Name" ));
-    const ::rtl::OUString sCounterLocalPath(   RTL_CONSTASCII_USTRINGPARAM( "/Counter" ));
+    const ::rtl::OUString sIgnoreListNodePath( "HelpAgent/IgnoreList" );
+    const ::rtl::OUString sPathSeparator( "/" );
+    const ::rtl::OUString sURLLocalPath( "/Name" );
+    const ::rtl::OUString sCounterLocalPath( "/Counter" );
 
     // get the current URL/counter pairs (as they're persistent at the moment)
     Sequence< ::rtl::OUString > aNodeNames;
@@ -410,7 +410,7 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
     ::rtl::OUString sNewNodeName;
     Sequence< ::rtl::OUString > aNewCounterDataNodeNames(2);
     Sequence< Any >             aNewCounterDataValues(2);
-    const ::rtl::OUString sNodeNameBase( RTL_CONSTASCII_USTRINGPARAM( "URL" ));
+    const ::rtl::OUString sNodeNameBase( "URL" );
     for (   ConstMapString2IntIterator aCollectNew = aURLIgnoreCounters.begin();
             aCollectNew != aURLIgnoreCounters.end();
             ++aCollectNew

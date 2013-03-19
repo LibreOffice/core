@@ -838,9 +838,9 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     aSql += sComposedTableName;
     aSql += ::rtl::OUString(" ( ");
     // set values and column names
-    ::rtl::OUString aValues(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( "));
-    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
-    static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
+    ::rtl::OUString aValues(" VALUES ( ");
+    static ::rtl::OUString aPara("?,");
+    static ::rtl::OUString aComma(",");
 
     ::rtl::OUString aQuote;
     if ( _xMetaData.is() )

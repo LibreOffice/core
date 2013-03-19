@@ -739,7 +739,7 @@ namespace frm
 
                     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                     ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
-                    ::rtl::OUString aStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
+                    ::rtl::OUString aStatement("SELECT ");
                     if (aBoundFieldName.isEmpty())   // act like a combobox
                         aStatement += ::rtl::OUString("DISTINCT ");
 

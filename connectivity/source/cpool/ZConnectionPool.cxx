@@ -53,7 +53,7 @@ namespace
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getTimeoutNodeName()
     {
-        static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "Timeout" ));
+        static ::rtl::OUString s_sNodeName( "Timeout" );
         return s_sNodeName;
     }
 

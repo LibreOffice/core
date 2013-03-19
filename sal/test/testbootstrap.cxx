@@ -69,8 +69,8 @@ int main( int argc, char *argv[] )
     Bootstrap bootstrap(iniName);
 
 
-    OUString name( RTL_CONSTASCII_USTRINGPARAM( "MYBOOTSTRAPTESTVALUE" ));
-    OUString myDefault( RTL_CONSTASCII_USTRINGPARAM("$Default"));
+    OUString name( "MYBOOTSTRAPTESTVALUE" );
+    OUString myDefault("$Default");
 
     OUString value;
     sal_Bool useDefault;

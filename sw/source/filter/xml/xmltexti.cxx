@@ -278,7 +278,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             {
                 // create object with desired ClassId
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
+                ::rtl::OUString aName("DummyName");
                 uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
                 uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
                 uno::Reference < embed::XEmbeddedObject > xObj =
@@ -567,7 +567,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
+        ::rtl::OUString aName("DummyName");
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =
                 embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
@@ -698,7 +698,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
+        ::rtl::OUString aName("DummyName");
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =  embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj =
@@ -829,7 +829,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
+        ::rtl::OUString aName("DummyName");
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj =
@@ -935,7 +935,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             }
 
             // unfortunately the names of the properties are depending on the object
-            ::rtl::OUString aParaName(RTL_CONSTASCII_USTRINGPARAM("AppletCommands"));
+            ::rtl::OUString aParaName("AppletCommands");
             try
             {
                 xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );

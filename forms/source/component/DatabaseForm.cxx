@@ -2016,7 +2016,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                 if ( xColProps.is() )
                     xPSI = xColProps->getPropertySetInfo( );
 
-                static const ::rtl::OUString PROPERTY_CONTROLDEFAULT( RTL_CONSTASCII_USTRINGPARAM( "ControlDefault" ) );
+                static const ::rtl::OUString PROPERTY_CONTROLDEFAULT( "ControlDefault" );
                 if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_CONTROLDEFAULT ) )
                 {
                     Any aDefault = xColProps->getPropertyValue( PROPERTY_CONTROLDEFAULT );

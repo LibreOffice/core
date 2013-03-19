@@ -89,7 +89,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     uno::Reference< text::XAutoTextContainer > xAutoTextContainer( xMgr->createInstance( rtl::OUString("com.sun.star.text.AutoTextContainer") ), uno::UNO_QUERY_THROW );
 
     // the default template is "Normal.dot" in Word.
-    rtl::OUString sGroup( RTL_CONSTASCII_USTRINGPARAM("Normal") );
+    rtl::OUString sGroup("Normal");
     rtl::OUString sName = getName();
     sal_Int32 nIndex = sName.lastIndexOf( sal_Unicode('.') );
     if( nIndex > 0 )

@@ -166,7 +166,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
         if ( !m_xReport.is() || !m_xActiveConnection.is() )
             throw lang::IllegalArgumentException();
 
-        static const ::rtl::OUString s_sMediaType(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+        static const ::rtl::OUString s_sMediaType("MediaType");
         try
         {
             MimeConfigurationHelper aConfighelper(m_xContext);
@@ -234,11 +234,11 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             ::rtl::OUStringBuffer sAuthor(aUserOpts.GetFirstName());
             sAuthor.appendAscii(" ");
             sAuthor.append(aUserOpts.GetLastName());
-            static const ::rtl::OUString s_sAuthor(RTL_CONSTASCII_USTRINGPARAM("Author"));
+            static const ::rtl::OUString s_sAuthor("Author");
             aConvertedProperties[nPos].Name = s_sAuthor;
             aConvertedProperties[nPos++].Value <<= sAuthor.makeStringAndClear();
 
-            static const ::rtl::OUString s_sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"));
+            static const ::rtl::OUString s_sTitle("Title");
             aConvertedProperties[nPos].Name = s_sTitle;
             aConvertedProperties[nPos++].Value <<= m_xReport->getCaption();
 
@@ -294,7 +294,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
         {
             // if there is no frame given, find the right
             xFrameLoad.set( frame::Desktop::create(m_xContext), uno::UNO_QUERY);
-            ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+            ::rtl::OUString sTarget("_blank");
             sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
             uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY)->findFrame(sTarget,nFrameSearchFlag);
             xFrameLoad.set( xFrame,uno::UNO_QUERY);

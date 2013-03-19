@@ -88,7 +88,7 @@ ScCellRangeObj::ScCellRangeObj():
 uno::Reference< uno::XInterface > ScCellRangeObj::init()
 {
     rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xcellrangesquery.ods"));
+    const rtl::OUString aFileBase("xcellrangesquery.ods");
     createFileURL(aFileBase, aFileURL);
     std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     if( !mxComponent.is())
@@ -108,7 +108,7 @@ uno::Reference< uno::XInterface > ScCellRangeObj::init()
 uno::Reference< uno::XInterface > ScCellRangeObj::getXCellRangeData()
 {
     rtl::OUString aFileURL;
-    const rtl::OUString aFileBase(RTL_CONSTASCII_USTRINGPARAM("xcellrangesquery.ods"));
+    const rtl::OUString aFileBase("xcellrangesquery.ods");
     createFileURL(aFileBase, aFileURL);
     std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     if( !mxComponent.is())

@@ -53,8 +53,8 @@ void OHCatalog::refreshObjects(const Sequence< ::rtl::OUString >& _sKindOfObject
 void OHCatalog::refreshTables()
 {
     TStringVector aVector;
-    static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-    static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    static const ::rtl::OUString s_sTableTypeView("VIEW");
+    static const ::rtl::OUString s_sTableTypeTable("TABLE");
 
     Sequence< ::rtl::OUString > sTableTypes(2);
     sTableTypes[0] = s_sTableTypeView;

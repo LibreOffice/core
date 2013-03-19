@@ -986,7 +986,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-                        ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM("SendOutlineToImpress"));
+                        ::rtl::OUString aCmd("SendOutlineToImpress");
                         uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
                         pStrm->Seek( STREAM_SEEK_TO_END );
                         *pStrm << '\0';
@@ -1053,7 +1053,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-                        ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM("SendOutlineToImpress"));
+                        ::rtl::OUString aCmd("SendOutlineToImpress");
                         uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
                         pStrm->Seek( STREAM_SEEK_TO_END );
                         *pStrm << '\0';
@@ -1702,7 +1702,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
                 try
                 {
                     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY_THROW );
-                    const ::rtl::OUString aMediaTypePropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+                    const ::rtl::OUString aMediaTypePropName( "MediaType" );
                     xProps->getPropertyValue( aMediaTypePropName );
                     bImport = true;
                 }

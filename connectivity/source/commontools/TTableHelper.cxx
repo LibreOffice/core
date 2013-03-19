@@ -122,13 +122,13 @@ namespace connectivity
                 Reference<XMultiServiceFactory> xFac(_xConnection,UNO_QUERY);
                 if ( xFac.is() )
                 {
-                    static const ::rtl::OUString s_sTableRename(RTL_CONSTASCII_USTRINGPARAM("TableRenameServiceName"));
+                    static const ::rtl::OUString s_sTableRename("TableRenameServiceName");
                     m_xRename.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sTableRename)),UNO_QUERY);
-                    static const ::rtl::OUString s_sTableAlteration(RTL_CONSTASCII_USTRINGPARAM("TableAlterationServiceName"));
+                    static const ::rtl::OUString s_sTableAlteration("TableAlterationServiceName");
                     m_xAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sTableAlteration)),UNO_QUERY);
-                    static const ::rtl::OUString s_sKeyAlteration(RTL_CONSTASCII_USTRINGPARAM("KeyAlterationServiceName"));
+                    static const ::rtl::OUString s_sKeyAlteration("KeyAlterationServiceName");
                     m_xKeyAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sKeyAlteration)),UNO_QUERY);
-                    static const ::rtl::OUString s_sIndexAlteration(RTL_CONSTASCII_USTRINGPARAM("IndexAlterationServiceName"));
+                    static const ::rtl::OUString s_sIndexAlteration("IndexAlterationServiceName");
                     m_xIndexAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sIndexAlteration)),UNO_QUERY);
                 }
             }
@@ -475,7 +475,7 @@ void OTableHelper::refreshIndexes()
 // -----------------------------------------------------------------------------
 ::rtl::OUString OTableHelper::getRenameStart() const
 {
-    ::rtl::OUString sSql(RTL_CONSTASCII_USTRINGPARAM("RENAME "));
+    ::rtl::OUString sSql("RENAME ");
     if ( m_Type == ::rtl::OUString("VIEW") )
         sSql += ::rtl::OUString(" VIEW ");
     else

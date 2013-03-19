@@ -216,8 +216,7 @@ rtl::OUString serviceGetImplementationName()
 
 css::uno::Sequence< rtl::OUString > serviceGetSupportedServiceNames()
 {
-    rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"));
+    rtl::OUString aServiceName("com.sun.star.java.JavaVirtualMachine");
     return css::uno::Sequence< rtl::OUString >(&aServiceName, 1);
 }
 
@@ -424,14 +423,14 @@ void getDefaultLocaleFromConfig(
             country = locale->getStringValue().copy(index + 1);
 
             if(!language.isEmpty()) {
-                rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.language="));
+                rtl::OUString prop("user.language=");
                 prop += language;
 
                 pjvm->pushProp(prop);
             }
 
             if(!country.isEmpty()) {
-                rtl::OUString prop(RTL_CONSTASCII_USTRINGPARAM("user.country="));
+                rtl::OUString prop("user.country=");
                 prop += country;
 
                 pjvm->pushProp(prop);
@@ -486,7 +485,7 @@ void getJavaPropsFromSafetySettings(
             case 3: sVal= rtl::OUString("none");
                 break;
             }
-            rtl::OUString sProperty( RTL_CONSTASCII_USTRINGPARAM("appletviewer.security.mode="));
+            rtl::OUString sProperty("appletviewer.security.mode=");
             sProperty= sProperty + sVal;
             pjvm->pushProp(sProperty);
         }
@@ -495,7 +494,7 @@ void getJavaPropsFromSafetySettings(
         if( key_CheckSecurity.is())
         {
             sal_Bool val= (sal_Bool) key_CheckSecurity->getLongValue();
-            rtl::OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("stardiv.security.disableSecurity="));
+            rtl::OUString sProperty("stardiv.security.disableSecurity=");
             if( val)
                 sProperty= sProperty + rtl::OUString("false");
             else
@@ -1500,12 +1499,12 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
             JNIEnv * pJNIEnv = aAttachGuard.getEnvironment();
 
             // The Java Properties
-            rtl::OUString sFtpProxyHost(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyHost") );
-            rtl::OUString sFtpProxyPort(RTL_CONSTASCII_USTRINGPARAM("ftp.proxyPort") );
-            rtl::OUString sFtpNonProxyHosts (RTL_CONSTASCII_USTRINGPARAM("ftp.nonProxyHosts"));
-            rtl::OUString sHttpProxyHost(RTL_CONSTASCII_USTRINGPARAM("http.proxyHost") );
-            rtl::OUString sHttpProxyPort(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort") );
-            rtl::OUString sHttpNonProxyHosts(RTL_CONSTASCII_USTRINGPARAM("http.nonProxyHosts"));
+            rtl::OUString sFtpProxyHost("ftp.proxyHost");
+            rtl::OUString sFtpProxyPort("ftp.proxyPort");
+            rtl::OUString sFtpNonProxyHosts ("ftp.nonProxyHosts");
+            rtl::OUString sHttpProxyHost("http.proxyHost");
+            rtl::OUString sHttpProxyPort("http.proxyPort");
+            rtl::OUString sHttpNonProxyHosts("http.nonProxyHosts");
 
             // creat Java Properties as JNI strings
             jstring jsFtpProxyHost= pJNIEnv->NewString( sFtpProxyHost.getStr(), sFtpProxyHost.getLength());

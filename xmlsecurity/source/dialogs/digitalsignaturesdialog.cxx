@@ -90,7 +90,7 @@ void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >
     SaveODFItem::SaveODFItem(): utl::ConfigItem(::rtl::OUString(
         "Office.Common/Save")), m_nODF(0)
     {
-        OUString sDef(RTL_CONSTASCII_USTRINGPARAM("ODF/DefaultVersion"));
+        OUString sDef("ODF/DefaultVersion");
         Sequence< css::uno::Any > aValues = GetProperties( Sequence<OUString>(&sDef,1) );
         if ( aValues.getLength() == 1)
         {
@@ -121,9 +121,9 @@ bool DigitalSignaturesDialog::isXML(const rtl::OUString& rURI )
 
     bool bIsXML = false;
     bool bPropsAvailable = false;
-    const OUString sPropFullPath(RTL_CONSTASCII_USTRINGPARAM("FullPath"));
-    const OUString sPropMediaType(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
-    const OUString sPropDigest(RTL_CONSTASCII_USTRINGPARAM("Digest"));
+    const OUString sPropFullPath("FullPath");
+    const OUString sPropMediaType("MediaType");
+    const OUString sPropDigest("Digest");
 
     for (int i = 0; i < m_manifest.getLength(); i++)
     {
@@ -156,7 +156,7 @@ bool DigitalSignaturesDialog::isXML(const rtl::OUString& rURI )
         //Files can only be encrypted if they are in the manifest.xml.
         //That is, the current file cannot be encrypted, otherwise bPropsAvailable
         //would be true.
-        OUString aXMLExt( RTL_CONSTASCII_USTRINGPARAM( "XML" ) );
+        OUString aXMLExt( "XML" );
         sal_Int32 nSep = rURI.lastIndexOf( '.' );
         if ( nSep != (-1) )
         {

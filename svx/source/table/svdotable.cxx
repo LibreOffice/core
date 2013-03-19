@@ -330,7 +330,7 @@ void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
 
         Reference< XStyleFamiliesSupplier > xSFS( pNewModel->getUnoModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_QUERY_THROW );
-        const rtl::OUString sFamilyName( RTL_CONSTASCII_USTRINGPARAM( "table" ) );
+        const rtl::OUString sFamilyName( "table" );
         Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( sFamilyName ), UNO_QUERY_THROW );
 
         if( xTableFamilyAccess->hasByName( sStyleName ) )
@@ -468,7 +468,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
 {
     if( (nEdge >= 0) && mxTable.is()) try
     {
-        const OUString sSize( RTL_CONSTASCII_USTRINGPARAM( "Size" ) );
+        const OUString sSize( "Size" );
         if( mbHorizontal )
         {
             if( (nEdge >= 0) && (nEdge <= getRowCount()) )
@@ -2505,7 +2505,7 @@ SdrTableObj* SdrTableObj::CloneRange( const CellPos& rStart, const CellPos& rEnd
 
     // copy row heights
     Reference< XTableRows > xNewRows( xNewTable->getRows(), UNO_QUERY_THROW );
-    const OUString sHeight( RTL_CONSTASCII_USTRINGPARAM( "Height" ) );
+    const OUString sHeight( "Height" );
     for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
     {
         Reference< XPropertySet > xNewSet( xNewRows->getByIndex( nRow ), UNO_QUERY_THROW );
@@ -2514,7 +2514,7 @@ SdrTableObj* SdrTableObj::CloneRange( const CellPos& rStart, const CellPos& rEnd
 
     // copy column widths
     Reference< XTableColumns > xNewColumns( xNewTable->getColumns(), UNO_QUERY_THROW );
-    const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
+    const OUString sWidth( "Width" );
     for( sal_Int32 nCol = 0; nCol < nColumns; ++nCol )
     {
         Reference< XPropertySet > xNewSet( xNewColumns->getByIndex( nCol ), UNO_QUERY_THROW );

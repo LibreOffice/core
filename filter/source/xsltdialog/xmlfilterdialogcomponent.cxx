@@ -197,7 +197,7 @@ OUString XMLFilterDialogComponent_getImplementationName() throw ( RuntimeExcepti
 
 Sequence< OUString > SAL_CALL XMLFilterDialogComponent_getSupportedServiceNames()  throw ( RuntimeException )
 {
-    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.XSLTFilterDialog" ) );
+    OUString aServiceName( "com.sun.star.comp.ui.XSLTFilterDialog" );
     Sequence< ::rtl::OUString > aSupported( &aServiceName, 1 );
     return aSupported;
 }

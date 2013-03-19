@@ -47,23 +47,23 @@ using namespace ::ooo::vba::excel::XlRowCol;
 using namespace ::ooo::vba::excel::XlAxisType;
 using namespace ::ooo::vba::excel::XlAxisGroup;
 
-const rtl::OUString CHART_NAME( RTL_CONSTASCII_USTRINGPARAM("Name") );
+const rtl::OUString CHART_NAME("Name");
 // #TODO move this constant to vbaseries.[ch]xx ( when it exists )
-const rtl::OUString DEFAULTSERIESPREFIX( RTL_CONSTASCII_USTRINGPARAM("Series") );
-const rtl::OUString DATAROWSOURCE( RTL_CONSTASCII_USTRINGPARAM("DataRowSource") );
-const rtl::OUString UPDOWN( RTL_CONSTASCII_USTRINGPARAM("UpDown") );
-const rtl::OUString VOLUME( RTL_CONSTASCII_USTRINGPARAM("Volume") );
-const rtl::OUString LINES( RTL_CONSTASCII_USTRINGPARAM("Lines") );
-const rtl::OUString SPLINETYPE( RTL_CONSTASCII_USTRINGPARAM("SplineType") );
-const rtl::OUString SYMBOLTYPE( RTL_CONSTASCII_USTRINGPARAM("SymbolType") );
-const rtl::OUString DEEP( RTL_CONSTASCII_USTRINGPARAM("Deep") );
-const rtl::OUString SOLIDTYPE( RTL_CONSTASCII_USTRINGPARAM("SolidType") );
-const rtl::OUString VERTICAL( RTL_CONSTASCII_USTRINGPARAM("Vertical") );
-const rtl::OUString PERCENT( RTL_CONSTASCII_USTRINGPARAM("Percent") );
-const rtl::OUString STACKED( RTL_CONSTASCII_USTRINGPARAM("Stacked") );
-const rtl::OUString DIM3D( RTL_CONSTASCII_USTRINGPARAM("Dim3D") );
-const rtl::OUString HASMAINTITLE( RTL_CONSTASCII_USTRINGPARAM("HasMainTitle") );
-const rtl::OUString HASLEGEND( RTL_CONSTASCII_USTRINGPARAM("HasLegend") );
+const rtl::OUString DEFAULTSERIESPREFIX("Series");
+const rtl::OUString DATAROWSOURCE("DataRowSource");
+const rtl::OUString UPDOWN("UpDown");
+const rtl::OUString VOLUME("Volume");
+const rtl::OUString LINES("Lines");
+const rtl::OUString SPLINETYPE("SplineType");
+const rtl::OUString SYMBOLTYPE("SymbolType");
+const rtl::OUString DEEP("Deep");
+const rtl::OUString SOLIDTYPE("SolidType");
+const rtl::OUString VERTICAL("Vertical");
+const rtl::OUString PERCENT("Percent");
+const rtl::OUString STACKED("Stacked");
+const rtl::OUString DIM3D("Dim3D");
+const rtl::OUString HASMAINTITLE("HasMainTitle");
+const rtl::OUString HASLEGEND("HasLegend");
 
 ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
 {

@@ -44,7 +44,7 @@ template< typename Cont, typename ContRef, typename Obj >
 sal_uInt32 test(Obj *)
 {
     ContRef xCont(new Cont);
-    rtl::OUString aPrefix(RTL_CONSTASCII_USTRINGPARAM("key"));
+    rtl::OUString aPrefix("key");
     sal_uInt32 nTimer = osl_getGlobalTimer();
     for (int i = 0; i < 100000; i += 5)
     {

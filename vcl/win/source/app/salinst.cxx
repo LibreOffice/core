@@ -1062,7 +1062,7 @@ SalI18NImeStatus* WinSalInstance::CreateI18NImeStatus()
 
 const ::rtl::OUString& SalGetDesktopEnvironment()
 {
-    static ::rtl::OUString aDesktopEnvironment( RTL_CONSTASCII_USTRINGPARAM( "Windows" ) );
+    static ::rtl::OUString aDesktopEnvironment( "Windows" );
     return aDesktopEnvironment;
 }
 

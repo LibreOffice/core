@@ -42,7 +42,7 @@ typedef InheritedHelperInterfaceImpl1<excel::XBorder > ScVbaBorder_Base;
 // borders, the enumeration will match the order in this list
 static const sal_Int16 supportedIndexTable[] = {  XlBordersIndex::xlEdgeLeft, XlBordersIndex::xlEdgeTop, XlBordersIndex::xlEdgeBottom, XlBordersIndex::xlEdgeRight, XlBordersIndex::xlDiagonalDown, XlBordersIndex::xlDiagonalUp, XlBordersIndex::xlInsideVertical, XlBordersIndex::xlInsideHorizontal };
 
-const static rtl::OUString sTableBorder( RTL_CONSTASCII_USTRINGPARAM("TableBorder") );
+const static rtl::OUString sTableBorder("TableBorder");
 
 //  Equiv widths in in 1/100 mm
 const static sal_Int32 OOLineThin = 35;

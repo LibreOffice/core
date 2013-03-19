@@ -99,7 +99,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
                             sal_uInt32 * pnIndex, const OUString & aArg)
     throw (RuntimeException)
 {
-    const OUString dash(RTL_CONSTASCII_USTRINGPARAM("-"));
+    const OUString dash("-");
     if(aArg.indexOf(dash) != 0)
         return sal_False;
 
@@ -155,7 +155,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
 static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
                             sal_uInt32 * pnIndex, const OUString & aArg)
 {
-    const OUString dashdash(RTL_CONSTASCII_USTRINGPARAM("--"));
+    const OUString dashdash("--");
     OUString aOpt = OUString::createFromAscii(pOpt);
 
     if(aArg.indexOf(dashdash) == 0 && aOpt.equals(aArg.copy(2)))
@@ -511,7 +511,7 @@ SAL_IMPLEMENT_MAIN()
 
             rtl_getAppCommandArg(nPos, &arg.pData);
 
-            const OUString dashdash(RTL_CONSTASCII_USTRINGPARAM("--"));
+            const OUString dashdash("--");
             if (dashdash == arg)
             {
                 ++nPos;

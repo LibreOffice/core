@@ -53,16 +53,16 @@ namespace apitest {
 
 void XNamedRange::testGetContent()
 {
-    rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
+    rtl::OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
-    rtl::OUString aExpectedContent(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$B$1"));
+    rtl::OUString aExpectedContent("$Sheet1.$B$1");
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 on GetContent", xNamedRange->getContent().equals(aExpectedContent));
 }
 
 void XNamedRange::testSetContent()
 {
-    rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
+    rtl::OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     rtl::OUString aExpectedContent;
@@ -87,14 +87,14 @@ void XNamedRange::testSetContent()
 
 void XNamedRange::testGetType()
 {
-    rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
+    rtl::OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected Type", xNamedRange->getType() == 0);
 }
 
 void XNamedRange::testSetType()
 {
-    rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
+    rtl::OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     sal_Int32 nType = ::sheet::NamedRangeFlag::ROW_HEADER;;
@@ -120,7 +120,7 @@ void XNamedRange::testSetType()
 
 void XNamedRange::testGetReferencePosition()
 {
-    rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial2"));
+    rtl::OUString aTestedNamedRangeString("initial2");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     table::CellAddress xCellAddress = xNamedRange->getReferencePosition();
@@ -132,7 +132,7 @@ void XNamedRange::testGetReferencePosition()
 
 void XNamedRange::testSetReferencePosition()
 {
-    rtl::OUString aTestedNamedRangeString(RTL_CONSTASCII_USTRINGPARAM("initial1"));
+    rtl::OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     table::CellAddress aBaseAddress = table::CellAddress(1,2,3);

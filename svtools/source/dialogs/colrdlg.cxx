@@ -76,7 +76,7 @@ short SvColorDialog::Execute()
     short ret = 0;
     try
     {
-        const OUString sColor( RTL_CONSTASCII_USTRINGPARAM( "Color" ) );
+        const OUString sColor( "Color" );
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
         Reference< com::sun::star::awt::XWindow > xParent( VCLUnoHelper::GetInterface( mpParent ) );

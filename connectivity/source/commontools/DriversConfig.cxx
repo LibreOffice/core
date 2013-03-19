@@ -43,7 +43,7 @@ namespace
         if ( aPropertiesNode.isValid() )
         {
             uno::Sequence< ::rtl::OUString > aStringSeq;
-            static const ::rtl::OUString s_sValue(RTL_CONSTASCII_USTRINGPARAM("/Value"));
+            static const ::rtl::OUString s_sValue("/Value");
             const uno::Sequence< ::rtl::OUString > aProperties = aPropertiesNode.getNodeNames();
             const ::rtl::OUString* pPropertiesIter = aProperties.getConstArray();
             const ::rtl::OUString* pPropertiesEnd  = pPropertiesIter + aProperties.getLength();
@@ -96,7 +96,7 @@ void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rx
     {
         if ( !m_aInstalled.isValid() )
         {
-            static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess.Drivers/Installed")); ///Installed
+            static const ::rtl::OUString s_sNodeName("org.openoffice.Office.DataAccess.Drivers/Installed"); ///Installed
             m_aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(_rxORB, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
         }
 

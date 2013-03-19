@@ -66,7 +66,7 @@ sal_Bool test1()
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
-    OUString sService1( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.BridgeSupplier"));
+    OUString sService1("com.sun.star.bridge.oleautomation.BridgeSupplier");
     Reference<XInterface> xint1= fac->createInstanceWithContext( sService1, context);
 
     OUString sModule(
@@ -76,7 +76,7 @@ sal_Bool test1()
 
     rtl_unloadUnusedModules( NULL);
 
-    OUString sFactoryFunc( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sFactoryFunc("component_getFactory");
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
     sal_Bool bTest1= pSymbol ? sal_True : sal_False;
@@ -101,7 +101,7 @@ sal_Bool test2()
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
-      OUString sService2( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.OleBridgeSupplierVar1"));
+      OUString sService2("com.sun.star.bridge.OleBridgeSupplierVar1");
     Reference<XInterface> xint= fac->createInstanceWithContext( sService2, context);
 
     OUString sModule(
@@ -110,7 +110,7 @@ sal_Bool test2()
     osl_unloadModule( hMod);
 
     rtl_unloadUnusedModules( NULL);
-    OUString sFactoryFunc( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sFactoryFunc("component_getFactory");
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
     sal_Bool bTest1= pSymbol ? sal_True : sal_False;
@@ -135,7 +135,7 @@ sal_Bool test3()
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
 
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
-      OUString sService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.Factory"));
+      OUString sService("com.sun.star.bridge.oleautomation.Factory");
     Reference<XInterface> xint= fac->createInstanceWithContext( sService, context);
 
 
@@ -145,7 +145,7 @@ sal_Bool test3()
     osl_unloadModule( hMod);
 
     rtl_unloadUnusedModules( NULL);
-    OUString sFactoryFunc( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sFactoryFunc("component_getFactory");
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
     // true, instance alive
     sal_Bool bTest1= pSymbol ? sal_True : sal_False;
@@ -169,7 +169,7 @@ sal_Bool test4()
     oslModule hMod= NULL;
     OUString sModule(
         RTL_CONSTASCII_USTRINGPARAM("oleautobridge.uno" SAL_DLLEXTENSION));
-    OUString sFactoryFunc( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sFactoryFunc("component_getFactory");
     {
     printf("Test4:  com.sun.star.bridge.oleautomation.ApplicationRegistration\n");
        Reference<XSimpleRegistry> xreg= createSimpleRegistry();
@@ -178,7 +178,7 @@ sal_Bool test4()
 
     Reference< XComponentContext > context= bootstrap_InitialComponentContext(xreg);
     Reference<XMultiComponentFactory> fac= context->getServiceManager();
-    OUString sService4( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.ApplicationRegistration"));
+    OUString sService4("com.sun.star.bridge.oleautomation.ApplicationRegistration");
     Reference<XInterface> xint= fac->createInstanceWithContext( sService4, context);
 
     hMod= osl_loadModule( sModule.pData, 0);

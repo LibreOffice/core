@@ -465,7 +465,7 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
             if ( IsInPopupMode() )
                 EndPopupMode();
 
-            const rtl::OUString aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthDialog" ));
+            const rtl::OUString aCommand( ".uno:ExtrusionDepthDialog" );
 
             Any a;
             Sequence< PropertyValue > aArgs( 2 );

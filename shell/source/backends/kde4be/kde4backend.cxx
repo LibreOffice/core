@@ -61,8 +61,7 @@ rtl::OUString SAL_CALL getServiceImplementationName() {
 
 css::uno::Sequence< rtl::OUString > SAL_CALL getServiceSupportedServiceNames() {
     rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.backend.KDE4Backend"));
+            "com.sun.star.configuration.backend.KDE4Backend");
     return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 

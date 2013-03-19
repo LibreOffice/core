@@ -237,7 +237,7 @@ Sequence< OUString > MyService1Impl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     // this object only supports one service
-    OUString serviceName( RTL_CONSTASCII_USTRINGPARAM("my_module.MyService1") );
+    OUString serviceName("my_module.MyService1");
     return Sequence< OUString >( &serviceName, 1 );
 }
 

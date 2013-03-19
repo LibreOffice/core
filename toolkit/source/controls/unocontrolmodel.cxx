@@ -1014,7 +1014,7 @@ sal_Bool UnoControlModel::supportsService( const ::rtl::OUString& rServiceName )
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > UnoControlModel::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString sName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlModel" ) );
+    ::rtl::OUString sName( "com.sun.star.awt.UnoControlModel" );
     return Sequence< ::rtl::OUString >( &sName, 1 );
 }
 

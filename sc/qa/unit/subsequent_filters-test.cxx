@@ -292,7 +292,7 @@ void ScFiltersTest::testRangeNameXLS()
     ScDocument* pDoc = xDocSh->GetDocument();
     testRangeNameImpl(pDoc);
 
-    OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
+    OUString aSheet2CSV("rangeExp_Sheet2.");
     OUString aCSVPath;
     createCSVPath( aSheet2CSV, aCSVPath );
     // fdo#44587
@@ -1152,7 +1152,7 @@ void ScFiltersTest::testDataValidityODS()
 
 void ScFiltersTest::testBrokenQuotesCSV()
 {
-    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("fdo48621_broken_quotes."));
+    const OUString aFileNameBase("fdo48621_broken_quotes.");
     OUString aFileExtension(aFileFormats[CSV].pName, strlen(aFileFormats[CSV].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFilterName(aFileFormats[CSV].pFilterName, strlen(aFileFormats[CSV].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
@@ -1169,7 +1169,7 @@ void ScFiltersTest::testBrokenQuotesCSV()
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
 
-    OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("fdo48621_broken_quotes_exported."));
+    OUString aSheet2CSV("fdo48621_broken_quotes_exported.");
     OUString aCSVPath;
     createCSVPath( aSheet2CSV, aCSVPath );
     // fdo#48621
@@ -1180,7 +1180,7 @@ void ScFiltersTest::testBrokenQuotesCSV()
 
 void ScFiltersTest::testSharedFormulaXLSX()
 {
-    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("shared-formula."));
+    const OUString aFileNameBase("shared-formula.");
     OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
@@ -1215,7 +1215,7 @@ void ScFiltersTest::testSharedFormulaXLSX()
 
 void ScFiltersTest::testCellValueXLSX()
 {
-    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("cell-value."));
+    const OUString aFileNameBase("cell-value.");
     OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
@@ -1276,14 +1276,14 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
 void ScFiltersTest::testPasswordNew()
 {
     //tests opening a file with new password algorithm
-    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("password."));
+    const OUString aFileNameBase("password.");
     testPassword_Impl(aFileNameBase);
 }
 
 void ScFiltersTest::testPasswordOld()
 {
     //tests opening a file with old password algorithm
-    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("passwordOld."));
+    const OUString aFileNameBase("passwordOld.");
     testPassword_Impl(aFileNameBase);
 }
 
@@ -1777,7 +1777,7 @@ void testColorScale_Impl(ScDocument* pDoc, const OUString& aBaseString)
 
 void ScFiltersTest::testColorScaleODS()
 {
-    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
+    const OUString aFileNameBase("colorScale.");
     OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;
@@ -1803,7 +1803,7 @@ void ScFiltersTest::testColorScaleODS()
 
 void ScFiltersTest::testColorScaleXLSX()
 {
-    const OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
+    const OUString aFileNameBase("colorScale.");
     OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
     OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFileName;

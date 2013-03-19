@@ -693,7 +693,7 @@ namespace frm
         }
 
         // is it an UNO slot?
-        ::rtl::OUString sUnoProtocolPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) );
+        ::rtl::OUString sUnoProtocolPrefix( ".uno:" );
         if ( _rURL.Complete.startsWith( sUnoProtocolPrefix ) )
         {
             ::rtl::OUString sUnoSlotName = _rURL.Complete.copy( sUnoProtocolPrefix.getLength() );

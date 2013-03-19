@@ -348,8 +348,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             m_xFrame->activate();
         else {
             // create frame and initialize it with with the created window
-            static const ::rtl::OUString aFrameServiceName(
-                RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Frame" ) );
+            static const ::rtl::OUString aFrameServiceName( "com.sun.star.frame.Frame" );
             m_xFrame = uno::Reference<frame::XFrame>(
                 m_xFactory->createInstance(aFrameServiceName),
                 uno::UNO_QUERY);
@@ -1068,8 +1067,7 @@ IDispatch* DocumentHolder::GetIDispatch()
     if ( !m_pIDispatch && m_xDocument.is() )
     {
         const ::rtl::OUString aServiceName (
-            RTL_CONSTASCII_USTRINGPARAM (
-                "com.sun.star.bridge.OleBridgeSupplier2" ) );
+                "com.sun.star.bridge.OleBridgeSupplier2" );
         uno::Reference< bridge::XBridgeSupplier2 > xSupplier(
             m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
 

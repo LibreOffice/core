@@ -76,7 +76,7 @@ private:
 public:
     static rtl::OUString propName()
     {
-        static rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("CharUnderline") );
+        static rtl::OUString sPropName("CharUnderline");
         return sPropName;
     }
 

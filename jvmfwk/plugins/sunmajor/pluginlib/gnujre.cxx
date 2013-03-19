@@ -92,18 +92,12 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
 
     OUString sJavaLibraryPath;
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
-    OUString sVendorProperty(
-        RTL_CONSTASCII_USTRINGPARAM("java.vendor"));
-    OUString sVersionProperty(
-        RTL_CONSTASCII_USTRINGPARAM("java.version"));
-    OUString sJavaHomeProperty(
-        RTL_CONSTASCII_USTRINGPARAM("java.home"));
-    OUString sJavaLibraryPathProperty(
-        RTL_CONSTASCII_USTRINGPARAM("java.library.path"));
-    OUString sGNUHomeProperty(
-        RTL_CONSTASCII_USTRINGPARAM("gnu.classpath.home.url"));
-    OUString sAccessProperty(
-        RTL_CONSTASCII_USTRINGPARAM("javax.accessibility.assistive_technologies"));
+    OUString sVendorProperty("java.vendor");
+    OUString sVersionProperty("java.version");
+    OUString sJavaHomeProperty("java.home");
+    OUString sJavaLibraryPathProperty("java.library.path");
+    OUString sGNUHomeProperty("gnu.classpath.home.url");
+    OUString sAccessProperty("javax.accessibility.assistive_technologies");
 
     bool bVersion = false;
     bool bVendor = false;

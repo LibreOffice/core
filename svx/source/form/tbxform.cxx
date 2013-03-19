@@ -191,7 +191,7 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
             case SID_FM_SCROLLBAR:
             case SID_FM_SPINBUTTON:
             {   // set a new image, matching to this slot
-                rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                rtl::OUString aSlotURL( "slot:" );
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlot ));
                 Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
                 GetToolBox().SetItemImage( GetId(), aImage );

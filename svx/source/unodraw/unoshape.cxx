@@ -3185,7 +3185,7 @@ uno::Sequence<uno::Any> SvxShape::getPropertyDefaults(
 OUString SAL_CALL SvxShape::getImplementationName()
     throw(uno::RuntimeException)
 {
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("SvxShape") );
+    static OUString aServiceName("SvxShape");
     return aServiceName;
 }
 
@@ -4059,7 +4059,7 @@ void SAL_CALL SvxShapeText::release() throw()
 //----------------------------------------------------------------------
 OUString SAL_CALL SvxShapeText::getImplementationName() throw( uno::RuntimeException )
 {
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM("SvxShapeText") );
+    static OUString aServiceName("SvxShapeText");
     return aServiceName;
 }
 

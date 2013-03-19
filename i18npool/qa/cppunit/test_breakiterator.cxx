@@ -127,7 +127,7 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=17155
     {
-        rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("foo /bar/baz"));
+        rtl::OUString aTest("foo /bar/baz");
 
         aLocale.Language = rtl::OUString("en");
         aLocale.Country = rtl::OUString("US");
@@ -142,7 +142,7 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=19716
     {
-        rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("aaa]aaa"));
+        rtl::OUString aTest("aaa]aaa");
 
         aLocale.Language = rtl::OUString("en");
         aLocale.Country = rtl::OUString("US");

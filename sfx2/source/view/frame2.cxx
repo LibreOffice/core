@@ -268,7 +268,7 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
         aLoadArgs = aArgs.getPropertyValues();
 
         // load the doc into that frame
-        ::rtl::OUString sLoaderURL( RTL_CONSTASCII_USTRINGPARAM( "private:object" ) );
+        ::rtl::OUString sLoaderURL( "private:object" );
         Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
         xLoader->loadComponentFromURL(
             sLoaderURL,
@@ -397,7 +397,7 @@ void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )
 
     if ( xLayoutManager.is() )
     {
-        rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
+        rtl::OUString aMenuBarURL( "private:resource/menubar/menubar" );
 
         if ( bOn )
             xLayoutManager->showElement( aMenuBarURL );

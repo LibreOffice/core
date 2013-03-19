@@ -305,7 +305,7 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 uno::Any SAL_CALL
 ScVbaWindow::getCaption() throw (uno::RuntimeException)
 {
-    static rtl::OUString sCrud(RTL_CONSTASCII_USTRINGPARAM(" - OpenOffice.org Calc" ) );
+    static rtl::OUString sCrud(" - OpenOffice.org Calc" );
     static sal_Int32 nCrudLen = sCrud.getLength();
 
     rtl::OUString sTitle;
@@ -330,7 +330,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException)
 
             if ( !sTitle.equals( sName ) )
             {
-                static rtl::OUString sDot( RTL_CONSTASCII_USTRINGPARAM(".") );
+                static rtl::OUString sDot(".");
                 // starts with title
                 if ( sName.indexOf( sTitle ) == 0 )
                     // extention starts immediately after

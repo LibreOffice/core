@@ -118,7 +118,7 @@ OConnectionWrapper::~OConnectionWrapper()
         aSupported = m_xServiceInfo->getSupportedServiceNames();
 
     // append our own service, if necessary
-    ::rtl::OUString sConnectionService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.Connection" ) );
+    ::rtl::OUString sConnectionService( "com.sun.star.sdbc.Connection" );
     if ( 0 == ::comphelper::findValue( aSupported, sConnectionService, sal_True ).getLength() )
     {
         sal_Int32 nLen = aSupported.getLength();

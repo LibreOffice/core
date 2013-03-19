@@ -102,8 +102,7 @@ OUString DriverGetImplementationName()
     if (! p )
     {
         MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        static OUString instance(
-            RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.connectivity.pq.Driver.noext" ) );
+        static OUString instance( "org.openoffice.comp.connectivity.pq.Driver.noext" );
         p = &instance;
     }
     return *p;
@@ -115,7 +114,7 @@ Sequence< OUString > DriverGetSupportedServiceNames()
     if( ! p )
     {
         MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        OUString tmp( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.Driver" ) );
+        OUString tmp( "com.sun.star.sdbc.Driver" );
         static Sequence< OUString > instance( &tmp,1 );
         p = &instance;
     }

@@ -1423,7 +1423,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
         ::rtl::OUString sFieldData = _xReportElement->getDataField();
         static const ::rtl::OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
         static const ::rtl::OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
-        static const ::rtl::OUString s_sReportPrefix(RTL_CONSTASCII_USTRINGPARAM("rpt:"));
+        static const ::rtl::OUString s_sReportPrefix("rpt:");
         sFieldData = sFieldData.copy(s_sReportPrefix.getLength(),sFieldData.getLength() - s_sReportPrefix.getLength());
         sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
         if ( nPageNumberIndex != -1 )
@@ -1437,7 +1437,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                 {
                     if ( sToken == s_sPageNumber )
                     {
-                        static const ::rtl::OUString s_sCurrent(RTL_CONSTASCII_USTRINGPARAM("current"));
+                        static const ::rtl::OUString s_sCurrent("current");
                         AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, s_sCurrent );
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, sal_False, sal_False);
                         Characters(::rtl::OUString("1"));

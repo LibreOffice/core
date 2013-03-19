@@ -421,7 +421,7 @@ void aqua_init_systray()
             std::set< rtl::OUString > aFileNewAppsAvailable;
             SvtDynamicMenuOptions aOpt;
             Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
-            const rtl::OUString sURLKey( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            const rtl::OUString sURLKey( "URL" );
         
             const Sequence< PropertyValue >* pNewMenu = aNewMenu.getConstArray();
             const Sequence< PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();

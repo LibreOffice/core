@@ -338,7 +338,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
     for( sal_Int32 i = 0; i < nAttribs; i++ )
     {
 #if OSL_DEBUG_LEVEL > 1
-        rtl::OUString aVal( RTL_CONSTASCII_USTRINGPARAM( "<no string>" ) );
+        rtl::OUString aVal( "<no string>" );
         pAttribs[i].Value >>= aVal;
         OSL_TRACE( "doDetection: Attrib: %s = %s\n",
                    rtl::OUStringToOString( pAttribs[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(),

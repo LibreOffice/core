@@ -314,7 +314,7 @@ OUString SAL_CALL SvxUnoXColorTable::getImplementationName(  ) throw( uno::Runti
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ColorTable" ) );
+    const OUString aServiceName( "com.sun.star.drawing.ColorTable" );
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
@@ -388,7 +388,7 @@ OUString SAL_CALL SvxUnoXLineEndTable::getImplementationName(  ) throw( uno::Run
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.LineEndTable" ) );
+    const OUString aServiceName( "com.sun.star.drawing.LineEndTable" );
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
@@ -470,7 +470,7 @@ OUString SAL_CALL SvxUnoXDashTable::getImplementationName(  ) throw( uno::Runtim
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DashTable" ) );
+    const OUString aServiceName( "com.sun.star.drawing.DashTable" );
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
@@ -547,7 +547,7 @@ OUString SAL_CALL SvxUnoXHatchTable::getImplementationName(  ) throw( uno::Runti
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.HatchTable" ) );
+    const OUString aServiceName( "com.sun.star.drawing.HatchTable" );
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
@@ -636,7 +636,7 @@ OUString SAL_CALL SvxUnoXGradientTable::getImplementationName(  ) throw( uno::Ru
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GradientTable" ) );
+    const OUString aServiceName( "com.sun.star.drawing.GradientTable" );
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }
@@ -704,7 +704,7 @@ OUString SAL_CALL SvxUnoXBitmapTable::getImplementationName(  ) throw( uno::Runt
 
 uno::Sequence<  OUString > SAL_CALL SvxUnoXBitmapTable::getSupportedServiceNames(  ) throw( uno::RuntimeException)
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.BitmapTable" ) );
+    const OUString aServiceName( "com.sun.star.drawing.BitmapTable" );
     uno::Sequence< OUString > aServices( &aServiceName, 1 );
     return aServices;
 }

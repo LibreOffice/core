@@ -2232,9 +2232,9 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
                 {
                     // Pick up the number format associated with this class (if
                     // any).
-                    rtl::OUString aElem(RTL_CONSTASCII_USTRINGPARAM("td"));
+                    rtl::OUString aElem("td");
                     rtl::OUString aClass = itr->GetString();
-                    rtl::OUString aProp(RTL_CONSTASCII_USTRINGPARAM("mso-number-format"));
+                    rtl::OUString aProp("mso-number-format");
                     const ScHTMLStyles& rStyles = mpParser->GetStyles();
                     const rtl::OUString& rVal = rStyles.getPropertyValue(aElem, aClass, aProp);
                     rtl::OUString aNumFmt = decodeNumberFormat(rVal);

@@ -263,7 +263,7 @@ SfxPopupWindowType FontWorkShapeTypeControl::GetPopupWindowType() const
 
 SfxPopupWindow* FontWorkShapeTypeControl::CreatePopupWindow()
 {
-    rtl::OUString aSubTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/fontworkshapetype" ) );
+    rtl::OUString aSubTbxResName( "private:resource/toolbar/fontworkshapetype" );
     createAndPositionSubToolBar( aSubTbxResName );
     return NULL;
 }

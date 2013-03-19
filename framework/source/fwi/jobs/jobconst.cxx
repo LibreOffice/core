@@ -23,19 +23,19 @@ namespace framework{
 
 const OUString JobConst::ANSWER_DEACTIVATE_JOB()
 {
-    static const OUString PROP(RTL_CONSTASCII_USTRINGPARAM("Deactivate"));
+    static const OUString PROP("Deactivate");
     return PROP;
 }
 
 const OUString JobConst::ANSWER_SAVE_ARGUMENTS()
 {
-    static const OUString PROP(RTL_CONSTASCII_USTRINGPARAM("SaveArguments"));
+    static const OUString PROP("SaveArguments");
     return PROP;
 }
 
 const OUString JobConst::ANSWER_SEND_DISPATCHRESULT()
 {
-    static const OUString PROP(RTL_CONSTASCII_USTRINGPARAM("SendDispatchResult"));
+    static const OUString PROP("SendDispatchResult");
     return PROP;
 }
 

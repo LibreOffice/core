@@ -180,7 +180,7 @@ namespace dbtools
 
                         // the filter
                         sal_Bool bApplyFilter = sal_True;
-                        const ::rtl::OUString sPropApply( RTL_CONSTASCII_USTRINGPARAM( "ApplyFilter" ));
+                        const ::rtl::OUString sPropApply( "ApplyFilter" );
                         if ( ::comphelper::hasProperty( sPropApply, xQuery ) )
                         {
                             OSL_VERIFY( xQuery->getPropertyValue( sPropApply ) >>= bApplyFilter );

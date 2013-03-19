@@ -98,7 +98,7 @@ namespace drawinglayer
 
         rtl::OUString PrimitiveFactory2D::getImplementationName_Static()
         {
-            static rtl::OUString aRetval(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.graphic.PrimitiveFactory2D"));
+            static rtl::OUString aRetval("com.sun.star.comp.graphic.PrimitiveFactory2D");
             return aRetval;
         }
 

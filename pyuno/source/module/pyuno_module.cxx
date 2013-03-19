@@ -225,7 +225,7 @@ OUString getLibDir()
                     reinterpret_cast< oslGenericFunction >(getLibDir), libDir ) )
             {
                 libDir = OUString( libDir.getStr(), libDir.lastIndexOf('/' ) );
-                OUString name ( RTL_CONSTASCII_USTRINGPARAM( "PYUNOLIBDIR" ) );
+                OUString name ( "PYUNOLIBDIR" );
                 rtl_bootstrap_set( name.pData, libDir.pData );
             }
             pLibDir = &libDir;

@@ -172,7 +172,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
-    const OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
+    const OUString sTargetStorage("TargetStorage");
     xInfoSet->setPropertyValue( sTargetStorage, Any( xStg ) );
 
     uno::Any aAny;
@@ -186,22 +186,22 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                                     nProgressRange);
         }
         aAny <<= nProgressRange;
-        OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
+        OUString sProgressRange("ProgressRange");
         xInfoSet->setPropertyValue(sProgressRange, aAny);
 
         aAny <<= static_cast < sal_Int32 >( -1 );
-        OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM("ProgressMax"));
+        OUString sProgressMax("ProgressMax");
         xInfoSet->setPropertyValue(sProgressMax, aAny);
     }
 
     SvtSaveOptions aSaveOpt;
-    OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
+    OUString sUsePrettyPrinting("UsePrettyPrinting");
     sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
     aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
 
     // save show redline mode ...
-    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
+    OUString sShowChanges("ShowChanges");
     sal_uInt16 nRedlineMode = pDoc->GetRedlineMode();
     sal_Bool bShowChanges( IDocumentRedlineAccess::IsShowChanges( nRedlineMode ) );
     aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
@@ -212,7 +212,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     pDoc->SetRedlineMode((RedlineMode_t)( nRedlineMode ));
 
     // Set base URI
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    OUString sPropName("BaseURI");
     xInfoSet->setPropertyValue( sPropName, makeAny( ::rtl::OUString( GetBaseURL() ) ) );
 
     if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
@@ -229,8 +229,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
 
     if( bBlock )
     {
-        OUString sAutoTextMode(
-                RTL_CONSTASCII_USTRINGPARAM("AutoTextMode"));
+        OUString sAutoTextMode("AutoTextMode");
         sal_Bool bTmp = sal_True;
         Any aAny2;
         aAny2.setValue( &bTmp, ::getBooleanCppuType() );
@@ -242,8 +241,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )
     {
-        OUString sOutlineStyleAsNormalListStyle(
-                RTL_CONSTASCII_USTRINGPARAM("OutlineStyleAsNormalListStyle") );
+        OUString sOutlineStyleAsNormalListStyle("OutlineStyleAsNormalListStyle");
         xInfoSet->setPropertyValue( sOutlineStyleAsNormalListStyle, makeAny( sal_True ) );
     }
 
@@ -306,7 +304,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     {
         const uno::Reference<beans::XPropertySet> xPropSet(xStg,
             uno::UNO_QUERY_THROW);
-        const ::rtl::OUString VersionProp(RTL_CONSTASCII_USTRINGPARAM("Version"));
+        const ::rtl::OUString VersionProp("Version");
         try
         {
             ::rtl::OUString Version;
@@ -407,7 +405,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( pDoc->GetCurrentViewShell() && pDoc->GetDocStat().nPage > 1 &&  //swmod 071108//swmod 071225
         !(bOrganizerMode || bBlock || bErr) )
     {
-        OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
+        OUString sStreamName("layout-cache");
         try
         {
             uno::Reference < io::XStream > xStm = xStg->openStreamElement( sStreamName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
@@ -415,7 +413,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             if( !pStream->GetError() )
             {
                 uno::Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
-                OUString aMime( RTL_CONSTASCII_USTRINGPARAM("application/binary") );
+                OUString aMime("application/binary");
                 uno::Any aAny2;
                 aAny2 <<= aMime;
                 xSet->setPropertyValue( rtl::OUString("MediaType"), aAny2 );
@@ -529,12 +527,12 @@ bool SwXMLWriter::WriteThroughComponent(
         if( !xSet.is() )
             return false;
 
-        OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+        OUString aMime("text/xml");
         uno::Any aAny;
         aAny <<= aMime;
         xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
 
-        OUString aUseCommonPassPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+        OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
         // even plain stream should be encrypted in encrypted documents
         sal_Bool bTrue = sal_True;
@@ -551,7 +549,7 @@ bool SwXMLWriter::WriteThroughComponent(
         OSL_ENSURE( xInfoSet.is(), "missing property set" );
         if( xInfoSet.is() )
         {
-            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+            OUString sPropName("StreamName");
             xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
         }
 

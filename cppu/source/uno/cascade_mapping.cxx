@@ -199,10 +199,10 @@ static rtl::OUString getPrefix(rtl::OUString const & str1, rtl::OUString const &
     return result;
 }
 
-//  rtl::OUString str1(RTL_CONSTASCII_USTRINGPARAM("abc:def:ghi"));
-//  rtl::OUString str2(RTL_CONSTASCII_USTRINGPARAM("abc:def"));
-//  rtl::OUString str3(RTL_CONSTASCII_USTRINGPARAM("abc"));
-//  rtl::OUString str4(RTL_CONSTASCII_USTRINGPARAM(""));
+//  rtl::OUString str1("abc:def:ghi");
+//  rtl::OUString str2("abc:def");
+//  rtl::OUString str3("abc");
+//  rtl::OUString str4("");
 
 //  rtl::OUString pref;
 

@@ -69,7 +69,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
         for( sal_Int32 i = 0; i < nAttribs; i++ )
         {
             #if OSL_DEBUG_LEVEL > 1
-            rtl::OUString aVal( RTL_CONSTASCII_USTRINGPARAM( "<no string>" ) );
+            rtl::OUString aVal( "<no string>" );
             pAttribs[i].Value >>= aVal;
             SAL_INFO("sdext.pdfimport", "filter: Attrib: " << pAttribs[i].Name << " = " << aVal << "\n");
             #endif

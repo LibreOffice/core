@@ -123,7 +123,7 @@ void ScMyOLEFixer::FixupOLEs()
 {
     if (!aShapes.empty() && rImport.GetModel().is())
     {
-        rtl::OUString sPersistName (RTL_CONSTASCII_USTRINGPARAM("PersistName"));
+        rtl::OUString sPersistName ("PersistName");
         ScMyToFixupOLEs::iterator aItr(aShapes.begin());
         ScMyToFixupOLEs::iterator aEndItr(aShapes.end());
         ScDocument* pDoc(rImport.GetDocument());
