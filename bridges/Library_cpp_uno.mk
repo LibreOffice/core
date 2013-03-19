@@ -202,7 +202,7 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 			-mno-avx)) \
 ))
 
-ifneq ($(OS),ANDROID)
+ifeq ($(filter ANDROID WNT,$(OS)),)
 $(eval $(call gb_Library_add_libs,gcc3_uno,\
 	-ldl \
 ))
