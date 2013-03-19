@@ -19,6 +19,7 @@
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
+#include "editeng/editobj.hxx"
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
@@ -1322,6 +1323,16 @@ bool ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rStr
         return false;
 }
 
+void ScTable::SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText )
+{
+    if (!ValidColRow(nCol, nRow))
+    {
+        delete pEditText;
+        return;
+    }
+
+    aCol[nCol].SetEditText(nRow, pEditText);
+}
 
 void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 {

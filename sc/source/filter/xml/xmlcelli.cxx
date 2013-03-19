@@ -1053,14 +1053,14 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 // This edit engine uses the SfxItemPool instance returned
                 // from pDoc->GetEditPool() to create the text object, which
                 // is a prerequisite for using this constructor of ScEditCell.
-                pNewCell = new ScEditCell(mpEditEngine->CreateTextObject(), pDoc);
+                pDoc->SetEditText(rCurrentPos, mpEditEngine->CreateTextObject());
             }
         }
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
             pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
 
         bDoIncrement = pNewCell != NULL;
-        if ( bDoIncrement )
+        if (bDoIncrement && pNewCell)
             pDoc->PutCell( rCurrentPos, pNewCell );
     }
     // #i56027# This is about setting simple text, not edit cells,

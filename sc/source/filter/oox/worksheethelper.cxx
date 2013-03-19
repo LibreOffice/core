@@ -1572,10 +1572,9 @@ void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichStri
     ScEditEngineDefaulter& rEE = getEditEngine();
 
     // The cell will own the text object instance returned from convert().
-    ScBaseCell* pNewCell = new ScEditCell(rString.convert(rEE, pFirstPortionFont), &rDoc);
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rAddress );
-    rDoc.PutCell( aAddress, pNewCell );
+    rDoc.SetEditText(aAddress, rString.convert(rEE, pFirstPortionFont));
 }
 
 void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens ) const

@@ -817,11 +817,17 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
                 {
                     String aStr = pFCell->GetString();
                     if ( pFCell->IsMultilineResult() )
-                        pNew = new ScEditCell( aStr, pDestDoc );
+                    {
+                        ScFieldEditEngine& rEngine = pDestDoc->GetEditEngine();
+                        rEngine.SetText(aStr);
+                        pDestDoc->SetEditText(ScAddress(nCol,nRow,nDestTab), rEngine.CreateTextObject());
+                    }
                     else
                         pNew = new ScStringCell( aStr );
                 }
-                pDestDoc->PutCell( nCol,nRow,nDestTab, pNew );
+
+                if (pNew)
+                    pDestDoc->PutCell(nCol, nRow, nDestTab, pNew);
 
                 //  number formats
 

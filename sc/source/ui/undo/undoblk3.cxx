@@ -49,6 +49,7 @@
 #include "postit.hxx"
 #include "docuno.hxx"
 #include "progress.hxx"
+#include "editutil.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -1023,7 +1024,11 @@ void ScUndoReplace::Undo()
     {
         // aUndoStr may contain line breaks
         if ( aUndoStr.Search('\n') != STRING_NOTFOUND )
-            pDoc->PutCell( aCursorPos, new ScEditCell( aUndoStr, pDoc ) );
+        {
+            ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+            rEngine.SetText(aUndoStr);
+            pDoc->SetEditText(aCursorPos, rEngine.CreateTextObject());
+        }
         else
             pDoc->SetString( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aUndoStr );
         if (pViewShell)

@@ -2359,7 +2359,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                 aEngine.QuickSetAttribs( aAttr, ESelection( 0, 0, 0, aStr.Len()));
 
                                 // The cell will own the text object instance.
-                                pDoc->PutCell(aRanges[0]->aStart, new ScEditCell(aEngine.CreateTextObject(), pDoc));
+                                pDoc->SetEditText(aRanges[0]->aStart, aEngine.CreateTextObject());
                             }
                         }
                     }

@@ -47,7 +47,6 @@
 #include "docpool.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
-#include "cell.hxx"
 #include "eeparser.hxx"
 #include "drwlayer.hxx"
 #include "rangenam.hxx"
@@ -386,19 +385,20 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     aStr.SearchAndReplaceAll( (sal_Unicode)'\n', (sal_Unicode)' ' );
 
                     if (bTextFormat)
-                        mpDoc->PutCell( nCol, nRow, nTab, new ScStringCell( aStr));
-                    else
                     {
-                        aParam.mbDetectNumberFormat = bConvertDate;
-                        mpDoc->SetString( nCol, nRow, nTab, aStr, &aParam );
+                        aParam.mbDetectNumberFormat = false;
+                        aParam.meSetTextNumFormat = ScSetStringParam::Always;
                     }
+                    else
+                        aParam.mbDetectNumberFormat = bConvertDate;
+
+                    mpDoc->SetString(nCol, nRow, nTab, aStr, &aParam);
                 }
             }
             else
             {
                 // The cell will own the text object instance.
-                mpDoc->PutCell(
-                    nCol, nRow, nTab, new ScEditCell(mpEngine->CreateTextObject(pE->aSel), mpDoc));
+                mpDoc->SetEditText(ScAddress(nCol,nRow,nTab), mpEngine->CreateTextObject(pE->aSel));
             }
             if ( pE->maImageList.size() )
                 bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );

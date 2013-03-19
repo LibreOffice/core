@@ -750,7 +750,18 @@ public:
     SC_DLLPUBLIC bool           SetString(
         SCCOL nCol, SCROW nRow, SCTAB nTab, const rtl::OUString& rString,
         ScSetStringParam* pParam = NULL );
-    bool SetString( const ScAddress& rPos, const OUString& rString, ScSetStringParam* pParam = NULL );
+    SC_DLLPUBLIC bool SetString( const ScAddress& rPos, const OUString& rString, ScSetStringParam* pParam = NULL );
+
+    /**
+     * This method manages the lifecycle of the passed edit text object. When
+     * the text is successfully inserted, the cell takes over the ownership of
+     * the text object. If not, the text object gets deleted.
+     *
+     * <p>The caller must ensure that the passed edit text object <i>uses the
+     * SfxItemPool instance returned from ScDocument::GetEditPool()</i>.
+     * This is very important.</p>
+     */
+    SC_DLLPUBLIC void SetEditText( const ScAddress& rPos, EditTextObject* pEditText );
 
     SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError);
@@ -1874,6 +1885,8 @@ private: // CLOOK-Impl-methods
     private:
         ScDocument* mpDoc;
     };
+
+    bool TableExists( SCTAB nTab ) const;
 
     void    MergeNumberFormatter(ScDocument* pSrcDoc);
 

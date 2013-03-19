@@ -1204,7 +1204,9 @@ static bool lcl_PutString(
     else
     {
         bMultiLine = true;
-        pDoc->PutCell( nCol, nRow, nTab, new ScEditCell( rStr, pDoc ) );
+        ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+        rEngine.SetText(rStr);
+        pDoc->SetEditText(ScAddress(nCol,nRow,nTab), rEngine.CreateTextObject());
     }
     return bMultiLine;
 }

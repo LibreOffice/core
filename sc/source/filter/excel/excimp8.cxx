@@ -296,8 +296,9 @@ void ImportExcel8::Labelsst( void )
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
     {
         GetXFRangeBuffer().SetXF( aScPos, nXF );
-        if( ScBaseCell* pCell = GetSst().CreateCell( nSst, nXF ) )
-            GetDoc().PutCell( aScPos.Col(), aScPos.Row(), aScPos.Tab(), pCell );
+        const XclImpString* pXclStr = GetSst().GetString(nSst);
+        if (pXclStr)
+            XclImpStringHelper::SetToDocument(GetDoc(), aScPos, *this, *pXclStr, nXF);
     }
 }
 

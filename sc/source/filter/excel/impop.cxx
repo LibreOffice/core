@@ -338,8 +338,7 @@ void ImportExcel::ReadLabel()
         SetTextEncoding( eOldTextEnc );
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( GetRoot(), aString, nXFIdx ) )
-            GetDoc().PutCell( aScPos, pCell );
+        XclImpStringHelper::SetToDocument(GetDoc(), aScPos, GetRoot(), aString, nXFIdx);
     }
 }
 
@@ -902,8 +901,7 @@ void ImportExcel::Rstring( void )
             aString.ReadFormats( maStrm );
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
-        if( ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXFIdx ) )
-            GetDoc().PutCell( aScPos, pCell );
+        XclImpStringHelper::SetToDocument(GetDoc(), aScPos, *this, aString, nXFIdx);
     }
 }
 

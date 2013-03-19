@@ -299,9 +299,12 @@ public:
     void        PutCell( const ScAddress&, ScBaseCell* pCell );
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, sal_uLong nFormatIndex, ScBaseCell* pCell);
-                //  TRUE = numberformat set
+
     bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
                            ScSetStringParam* pParam = NULL );
+
+    void SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
+
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 

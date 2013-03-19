@@ -109,12 +109,10 @@ public:
                             const XclImpRoot& rRoot,
                             const XclImpString& rString );
 
-    /** Creates a new text cell or edit cell for a Calc document.
-        @param nXFIndex  Index to XF for first text portion (for escapement). */
-    static ScBaseCell*  CreateCell(
-                            const XclImpRoot& rRoot,
-                            const XclImpString& rString,
-                            sal_uInt16 nXFIndex = 0 );
+    static void SetToDocument(
+        ScDocument& rDoc, const ScAddress& rPos, const XclImpRoot& rRoot,
+        const XclImpString& rString, sal_uInt16 nXFIndex = 0 );
+
 private:
     /** We don't want anybody to instantiate this class, since it is just a
         collection of static methods. To enforce this, the default constructor

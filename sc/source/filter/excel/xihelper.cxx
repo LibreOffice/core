@@ -25,15 +25,14 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include "document.hxx"
-#include "cell.hxx"
 #include "rangelst.hxx"
 #include "editutil.hxx"
 #include "attrib.hxx"
 #include "xltracer.hxx"
 #include "xistream.hxx"
 #include "xistyle.hxx"
-
 #include "excform.hxx"
+#include "stringutil.hxx"
 
 // Excel->Calc cell address/range conversion ==================================
 
@@ -220,24 +219,39 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
     return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, 0 );
 }
 
-ScBaseCell* XclImpStringHelper::CreateCell(
-        const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt16 nXFIndex )
+void XclImpStringHelper::SetToDocument(
+        ScDocument& rDoc, const ScAddress& rPos, const XclImpRoot& rRoot,
+        const XclImpString& rString, sal_uInt16 nXFIndex )
 {
-    ScBaseCell* pCell = 0;
+    if (!rString.GetText().Len())
+        return;
 
-    if( rString.GetText().Len() )
+    ::std::auto_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, nXFIndex ) );
+
+    if (pTextObj.get())
     {
-        ::std::auto_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, nXFIndex ) );
-        ScDocument& rDoc = rRoot.GetDoc();
-
-        if( pTextObj.get() )
-            // ScEditCell will own the text object instance.
-            pCell = new ScEditCell(pTextObj.release(), &rDoc);
-        else
-            pCell = ScBaseCell::CreateTextCell( rString.GetText(), &rDoc );
+        rDoc.SetEditText(rPos, pTextObj.release());
     }
-
-    return pCell;
+    else
+    {
+        OUString aStr = rString.GetText();
+        if (aStr.indexOf('\n') != -1 || aStr.indexOf(CHAR_CR) != -1)
+        {
+            // Multiline content.
+            ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
+            rEngine.SetText(aStr);
+            rDoc.SetEditText(rPos, rEngine.CreateTextObject());
+        }
+        else
+        {
+            // Normal text cell.
+            ScSetStringParam aParam;
+            aParam.mbDetectNumberFormat = false;
+            aParam.mbHandleApostrophe = false;
+            aParam.meSetTextNumFormat = ScSetStringParam::Always;
+            rDoc.SetString(rPos, aStr, &aParam);
+        }
+    }
 }
 
 // Header/footer conversion ===================================================

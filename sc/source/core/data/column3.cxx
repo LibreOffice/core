@@ -1490,6 +1490,10 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
     return bNumFmtSet;
 }
 
+void ScColumn::SetEditText( SCROW nRow, EditTextObject* pEditText )
+{
+    Insert(nRow, new ScEditCell(pEditText, pDocument));
+}
 
 void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {

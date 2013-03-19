@@ -414,9 +414,8 @@ void ScViewFunc::DoThesaurus( sal_Bool bRecord )
         if (pCell && pTObject)
         {
             // The cell will own the text object instance.
-            pDoc->PutCell(
-                nCol, nRow, nTab,
-                new ScEditCell(pThesaurusEngine->CreateTextObject(), pDoc));
+            pDoc->SetEditText(
+                ScAddress(nCol,nRow,nTab), pThesaurusEngine->CreateTextObject());
         }
         else
         {

@@ -22,6 +22,7 @@
 
 #include <editeng/boxitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include "editeng/editobj.hxx"
 #include <svx/pageitem.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svditer.hxx>
@@ -2158,6 +2159,11 @@ ScDocument::NumFmtMergeHandler::~NumFmtMergeHandler()
     mpDoc->pFormatExchangeList = NULL;
 }
 
+bool ScDocument::TableExists( SCTAB nTab ) const
+{
+    return ValidTab(nTab) && static_cast<size_t>(nTab) < maTabs.size() && maTabs[nTab];
+}
+
 void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
 {
     SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
@@ -2960,6 +2966,17 @@ bool ScDocument::SetString(
     const ScAddress& rPos, const OUString& rString, ScSetStringParam* pParam )
 {
     return SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rString, pParam);
+}
+
+void ScDocument::SetEditText( const ScAddress& rPos, EditTextObject* pEditText )
+{
+    if (!TableExists(rPos.Tab()))
+    {
+        delete pEditText;
+        return;
+    }
+
+    maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), pEditText);
 }
 
 void ScDocument::SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal )

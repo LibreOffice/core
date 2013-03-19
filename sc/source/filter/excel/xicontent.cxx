@@ -91,14 +91,6 @@ const XclImpString* XclImpSst::GetString( sal_uInt32 nSstIndex ) const
     return (nSstIndex < maStrings.size()) ? &maStrings[ nSstIndex ] : 0;
 }
 
-ScBaseCell* XclImpSst::CreateCell( sal_uInt32 nSstIndex, sal_uInt16 nXFIndex ) const
-{
-    ScBaseCell* pCell = 0;
-    if( const XclImpString* pString = GetString( nSstIndex ) )
-        pCell = XclImpStringHelper::CreateCell( *this, *pString, nXFIndex );
-    return pCell;
-}
-
 // Hyperlinks =================================================================
 
 namespace {
@@ -197,8 +189,7 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
             }
 
             // The cell will own the text object instance.
-            ScEditCell* pCell = new ScEditCell(rEE.CreateTextObject(), &rDoc);
-            rDoc.PutCell( aScPos, pCell );
+            rDoc.SetEditText(aScPos, rEE.CreateTextObject());
         }
         break;
 

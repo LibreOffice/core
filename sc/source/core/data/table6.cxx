@@ -222,7 +222,11 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 aCol[nCol].Insert( nRow, pFCell );
             }
             else if ( bMultiLine && aString.indexOf('\n') != -1 )
-                PutCell( nCol, nRow, new ScEditCell( aString, pDocument ) );
+            {
+                ScFieldEditEngine& rEngine = pDocument->GetEditEngine();
+                rEngine.SetText(aString);
+                SetEditText(nCol, nRow, rEngine.CreateTextObject());
+            }
             else
                 aCol[nCol].SetString(nRow, nTab, aString, pDocument->GetAddressConvention());
             // pCell is invalid now (deleted)

@@ -64,10 +64,6 @@ public:
     /** Returns a pointer to the string with the passed index. */
     const XclImpString* GetString( sal_uInt32 nSstIndex ) const;
 
-    /** Creates a new text cell or edit cell for a Calc document.
-        @param nXFIndex  Index to XF for first text portion (checks escapement). */
-    ScBaseCell*         CreateCell( sal_uInt32 nSstIndex, sal_uInt16 nXFIndex = 0 ) const;
-
 private:
     typedef ::std::vector< XclImpString > XclImpStringVec;
     XclImpStringVec     maStrings;          /// List with all strings in the SST.
