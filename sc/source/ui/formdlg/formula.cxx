@@ -318,9 +318,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 {
     sal_Bool bResult = sal_True;
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScFormulaCell> pFCell( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    boost::scoped_ptr<ScFormulaCell> pFCell( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
 
     // HACK! um bei ColRowNames kein #REF! zu bekommen,
     // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
