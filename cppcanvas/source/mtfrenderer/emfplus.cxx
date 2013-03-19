@@ -1334,7 +1334,14 @@ namespace cppcanvas
                 case EmfPlusRecordTypeDrawEllipse:
                 case EmfPlusRecordTypeFillEllipse:
                     {
-                        sal_uInt32 brushIndexOrColor;
+                        // Intentionally very bogus initial value
+                        // to avoid MSVC complaining about
+                        // potentially uninitialized local
+                        // variable. As long as the code stays as
+                        // intended, this variable will be
+                        // assigned a (real) value in the case
+                        // when it is later used.
+                        sal_uInt32 brushIndexOrColor = 1234567;
 
                         if ( type == EmfPlusRecordTypeFillEllipse )
                             rMF >> brushIndexOrColor;
