@@ -24,6 +24,7 @@ $(eval $(call gb_Library_set_componentfile,placeware,filter/source/placeware/pla
 $(eval $(call gb_Library_use_sdk_api,placeware))
 
 $(eval $(call gb_Library_use_libraries,placeware,\
+	comphelper \
 	cppuhelper \
 	cppu \
 	sal \

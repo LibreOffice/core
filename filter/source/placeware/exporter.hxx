@@ -19,20 +19,20 @@
 #ifndef _PLACEWARE_EXPORTER_HXX
 #define _PLACEWARE_EXPORTER_HXX
 
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XGraphicExportFilter.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 class PageEntry;
 
 class PlaceWareExporter
 {
 public:
-    PlaceWareExporter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    PlaceWareExporter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~PlaceWareExporter();
 
     sal_Bool doExport( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc,
@@ -44,8 +44,8 @@ public:
 private:
     PageEntry* exportPage( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >&xDrawPage );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > mxGraphicExporter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XGraphicExportFilter > mxGraphicExporter;
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > mxInteractionHandler;
 };
 

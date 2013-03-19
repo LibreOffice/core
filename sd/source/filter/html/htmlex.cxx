@@ -20,8 +20,8 @@
 
 #include "htmlex.hxx"
 #include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <rtl/uri.hxx>
@@ -966,16 +966,9 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 {
     try
     {
-        Reference < XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-        if( !xMSF.is() )
-            return false;
+        Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
-        Reference< XExporter > xGraphicExporter( xMSF->createInstance( "com.sun.star.drawing.GraphicExportFilter" ), UNO_QUERY );
-        Reference< XFilter > xFilter( xGraphicExporter, UNO_QUERY );
-
-        DBG_ASSERT( xFilter.is(), "no com.sun.star.drawing.GraphicExportFilter?" );
-        if( !xFilter.is() )
-            return false;
+        Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create( xContext );
 
         Sequence< PropertyValue > aFilterData(((meFormat==FORMAT_JPG)&&(mnCompression != -1))? 3 : 2);
         aFilterData[0].Name = "PixelWidth";
@@ -1018,7 +1011,7 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 
             Reference< XComponent > xPage( pPage->getUnoPage(), UNO_QUERY );
             xGraphicExporter->setSourceDocument( xPage );
-            xFilter->filter( aDescriptor );
+            xGraphicExporter->filter( aDescriptor );
 
             if (mpProgress)
                 mpProgress->SetState(++mnPagesWritten);

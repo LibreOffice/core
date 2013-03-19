@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase4.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "exporter.hxx"
 
@@ -47,10 +48,10 @@ class PlaceWareExportFilter : public cppu::WeakImplHelper4
 >
 {
     Reference< XComponent > mxDoc;
-    Reference< XMultiServiceFactory > mxMSF;
+    Reference< XComponentContext > mxContext;
 
 public:
-    PlaceWareExportFilter( const Reference< XMultiServiceFactory > &rxMSF);
+    PlaceWareExportFilter( const Reference< XComponentContext > &rxContext);
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException);
@@ -70,8 +71,8 @@ public:
 
 // -----------------------------------------------------------------------------
 
-PlaceWareExportFilter::PlaceWareExportFilter(const Reference< XMultiServiceFactory > &rxMSF)
-:   mxMSF( rxMSF )
+PlaceWareExportFilter::PlaceWareExportFilter(const Reference< XComponentContext > &rxContext)
+:   mxContext( rxContext )
 {
 }
 
@@ -111,7 +112,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
         return sal_False;
     }
 
-    PlaceWareExporter aExporter( mxMSF );
+    PlaceWareExporter aExporter( mxContext );
     return aExporter.doExport( mxDoc, xOutputStream, sURL, xInteractionHandler, xStatusIndicator );
 }
 
@@ -174,7 +175,7 @@ Sequence< OUString > SAL_CALL PlaceWareExportFilter_getSupportedServiceNames(  )
 Reference< XInterface > SAL_CALL PlaceWareExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new PlaceWareExportFilter( rSMgr );
+    return (cppu::OWeakObject*) new PlaceWareExportFilter( comphelper::getComponentContext(rSMgr) );
 }
 
 // -----------------------------------------------------------------------------

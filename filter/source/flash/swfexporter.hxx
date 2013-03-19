@@ -21,10 +21,9 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XGraphicExportFilter.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
@@ -151,7 +150,7 @@ typedef ::std::map<sal_uInt32, PageInfo> PageInfoMap;
 class FlashExporter
 {
 public:
-    FlashExporter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF, sal_Int32 nJPEGCompressMode = -1, sal_Bool bExportOLEAsJPEG = false);
+    FlashExporter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, sal_Int32 nJPEGCompressMode = -1, sal_Bool bExportOLEAsJPEG = false);
     ~FlashExporter();
 
     void Flush();
@@ -171,8 +170,8 @@ public:
     ChecksumCache gMetafileCache;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > mxGraphicExporter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XGraphicExportFilter > mxGraphicExporter;
 
     PageInfoMap maPagesMap;
 

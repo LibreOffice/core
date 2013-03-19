@@ -19,9 +19,7 @@
 #ifndef __com_sun_star_drawing_GraphicExportFilter_idl__
 #define __com_sun_star_drawing_GraphicExportFilter_idl__
 
-#include <com/sun/star/document/XFilter.idl>
-#include <com/sun/star/document/XExporter.idl>
-#include <com/sun/star/document/XMimeTypeInfo.idl>
+#include <com/sun/star/drawing/XGraphicExportFilter.idl>
 
 
  module com {  module sun {  module star {  module drawing {
@@ -31,52 +29,7 @@
     groups of shapes from a DrawingDocument to a file in one of the file formats
     supported by the component.
 */
-published service GraphicExportFilter
-{
-    /** calling <method scope=scope="com::sun::star::document">XFilter::filter
-        </method> starts the export of the graphic file. The following properties
-        from the        <type scope="com::sun::star::document">MediaDescriptor
-        </type> are supported:<p>
-
-        <member scope="com::sun::star::document">MediaDescriptor::MediaType
-        </member><b>
-
-        Depending on the export filters supported by this component this is
-        the mime type of the target graphic file. Possible values are<b>
-        image/x-MS-bmp<b>
-        application/dxf<b>
-        application/postscript<b>
-        image/gif<b>
-        image/jpeg<b>
-        image/png<b>
-        image/x-pict<b>
-        image/x-pcx<b>
-        image/x-portable-bitmap<b>
-        image/x-portable-graymap<b>
-        image/x-portable-pixmap<b>
-        image/x-cmu-raster<b>
-        image/targa<b>
-        image/tiff<b>
-        image/x-xbitmap<b>
-        image/x-xpixmap<b>
-        image/svg+xml<p>
-        Ask the interface <type scope="com::sun::star::document">XMimeTypeInfo
-        </type> for all values supported by the component.
-
-        <member scope="com::sun::star::document">MediaDescriptor::URL</member><b>
-        This is the target url of the file that will be created during export.
-    */
-    interface ::com::sun::star::document::XFilter;
-
-    /** sets the source component for this export filter.
-        This could either be a <type>DrawPage</type>, a <type>Shape</type>
-        or a <type>Shapes</type>.
-     */
-    interface ::com::sun::star::document::XExporter;
-
-    /** lets you query the supported mime types by this component */
-    interface ::com::sun::star::document::XMimeTypeInfo;
-};
+published service GraphicExportFilter : XGraphicExportFilter;
 
 
 }; }; }; };

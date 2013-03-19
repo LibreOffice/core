@@ -19,6 +19,7 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -45,7 +46,6 @@ using namespace ::com::sun::star::task;
 using namespace ::std;
 using namespace ::swf;
 
-using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::io::XOutputStream;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::container::XIndexAccess;
@@ -90,8 +90,8 @@ void PageInfo::addShape( ShapeInfo* pShapeInfo )
 
 // -----------------------------------------------------------------------------
 
-FlashExporter::FlashExporter(const Reference< XMultiServiceFactory > &rxMSF, sal_Int32 nJPEGCompressMode, sal_Bool bExportOLEAsJPEG)
-:   mxMSF( rxMSF ),
+FlashExporter::FlashExporter(const Reference< XComponentContext > &rxContext, sal_Int32 nJPEGCompressMode, sal_Bool bExportOLEAsJPEG)
+:   mxContext( rxContext ),
     mpWriter( NULL ),
     mnJPEGcompressMode(nJPEGCompressMode),
     mbExportOLEAsJPEG(bExportOLEAsJPEG),
@@ -638,9 +638,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
 bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile& rMtf, bool bOnlyBackground /* = false */, bool bExportAsJPEG /* = false */)
 {
     if( !mxGraphicExporter.is() )
-        mxGraphicExporter = Reference< XExporter >::query( mxMSF->createInstance( "com.sun.star.drawing.GraphicExportFilter" ) );
-
-    Reference< XFilter > xFilter( mxGraphicExporter, UNO_QUERY );
+        mxGraphicExporter = GraphicExportFilter::create( mxContext );
 
     utl::TempFile aFile;
     aFile.EnableKillingFile();
@@ -675,7 +673,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
         aDescriptor[3].Value <<= (sal_Bool)bOnlyBackground;
     }
     mxGraphicExporter->setSourceDocument( xComponent );
-    xFilter->filter( aDescriptor );
+    mxGraphicExporter->filter( aDescriptor );
 
     if (bExportAsJPEG)
     {

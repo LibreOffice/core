@@ -34,6 +34,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Any.h>
 #include <unotools/syslocale.hxx>
+#include <comphelper/processfactory.hxx>
 #include "vcl/svapp.hxx"
 
 using namespace ::rtl;
@@ -47,7 +48,7 @@ uno::Reference< uno::XInterface >
     SAL_CALL SvFilterOptionsDialog_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory > & _rxFactory )
 {
-    return static_cast< ::cppu::OWeakObject* > ( new SvFilterOptionsDialog( _rxFactory ) );
+    return static_cast< ::cppu::OWeakObject* > ( new SvFilterOptionsDialog( comphelper::getComponentContext(_rxFactory) ) );
 }
 
 OUString SvFilterOptionsDialog_getImplementationName()
@@ -74,8 +75,8 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog_getSupportedServiceName
 
 // -----------------------------------------------------------------------------
 
-SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< lang::XMultiServiceFactory > xMgr ) :
-    mxMgr               ( xMgr ),
+SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& rxContext ) :
+    mxContext           ( rxContext ),
     meFieldUnit         ( FUNIT_CM ),
     mbExportSelection   ( sal_False )
 {
@@ -214,7 +215,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
 
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
             sal_Bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
-            if ( ExportDialog( aFltCallDlgPara, mxMgr, mxSourceDocument, mbExportSelection, bIsPixelFormat ).Execute() == RET_OK )
+            if ( ExportDialog( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection, bIsPixelFormat ).Execute() == RET_OK )
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
 
             delete pResMgr;

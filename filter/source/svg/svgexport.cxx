@@ -23,8 +23,9 @@
 #include "svgscript.hxx"
 #include "impsvgdialog.hxx"
 
-#include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <rtl/bootstrap.hxx>
@@ -2001,33 +2002,29 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
 
 sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& rxDrawPage )
 {
-    Reference< XExporter >    xExporter( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.drawing.GraphicExportFilter", mxContext ), UNO_QUERY );
+    Reference< XGraphicExportFilter >  xExporter = drawing::GraphicExportFilter::create( mxContext );
     sal_Bool                bRet = sal_False;
 
-    if( xExporter.is() )
-    {
-        GDIMetaFile                aMtf;
-        Reference< XFilter >    xFilter( xExporter, UNO_QUERY );
+    GDIMetaFile             aMtf;
 
-        utl::TempFile aFile;
-        aFile.EnableKillingFile();
+    utl::TempFile aFile;
+    aFile.EnableKillingFile();
 
-        Sequence< PropertyValue > aDescriptor( 3 );
-        aDescriptor[0].Name = "FilterName";
-        aDescriptor[0].Value <<= OUString( "SVM" );
-        aDescriptor[1].Name = "URL";
-        aDescriptor[1].Value <<= OUString( aFile.GetURL() );
-        aDescriptor[2].Name = "ExportOnlyBackground";
-        aDescriptor[2].Value <<= (sal_Bool) sal_True;
+    Sequence< PropertyValue > aDescriptor( 3 );
+    aDescriptor[0].Name = "FilterName";
+    aDescriptor[0].Value <<= OUString( "SVM" );
+    aDescriptor[1].Name = "URL";
+    aDescriptor[1].Value <<= OUString( aFile.GetURL() );
+    aDescriptor[2].Name = "ExportOnlyBackground";
+    aDescriptor[2].Value <<= (sal_Bool) sal_True;
 
-        xExporter->setSourceDocument( Reference< XComponent >( rxDrawPage, UNO_QUERY ) );
-        xFilter->filter( aDescriptor );
-        aMtf.Read( *aFile.GetStream( STREAM_READ ) );
+    xExporter->setSourceDocument( Reference< XComponent >( rxDrawPage, UNO_QUERY ) );
+    xExporter->filter( aDescriptor );
+    aMtf.Read( *aFile.GetStream( STREAM_READ ) );
 
-        (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, aMtf );
+    (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, aMtf );
 
-        bRet = sal_True;
-    }
+    bRet = sal_True;
 
     return bRet;
 }

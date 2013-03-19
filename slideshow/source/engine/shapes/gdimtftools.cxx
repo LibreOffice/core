@@ -28,6 +28,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
@@ -187,25 +188,9 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
     DummyRenderer*                              pRenderer( new DummyRenderer() );
     uno::Reference< graphic::XGraphicRenderer > xRenderer( pRenderer );
 
-    // -> stuff that into UnoGraphicExporter.
-    uno::Reference<lang::XMultiComponentFactory> xFactory(
-        rxContext->getServiceManager() );
-
-    OSL_ENSURE( xFactory.is(), "### no UNO?!" );
-    if( !xFactory.is() )
-        return false;
-
     // creating the graphic exporter
-    uno::Reference< document::XExporter > xExporter(
-        xFactory->createInstanceWithContext(
-            "com.sun.star.drawing.GraphicExportFilter",
-            rxContext),
-        uno::UNO_QUERY );
-    uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY );
-
-    OSL_ENSURE( xExporter.is() && xFilter.is(), "### no graphic exporter?!" );
-    if( !xExporter.is() || !xFilter.is() )
-        return false;
+    uno::Reference< drawing::XGraphicExportFilter > xExporter =
+        drawing::GraphicExportFilter::create(rxContext);
 
     uno::Sequence< beans::PropertyValue > aProps(3);
     aProps[0].Name = "FilterName";
@@ -232,7 +217,7 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
     aProps[2].Value <<= aFilterData;
 
     xExporter->setSourceDocument( xSource );
-    if( !xFilter->filter( aProps ) )
+    if( !xExporter->filter( aProps ) )
         return false;
 
     rMtf = pRenderer->getMtf( (mtfLoadFlags & MTF_LOAD_FOREIGN_SOURCE) != 0 );

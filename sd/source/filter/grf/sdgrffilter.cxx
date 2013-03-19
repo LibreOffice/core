@@ -21,6 +21,7 @@
 #ifdef _MSC_VER
 #pragma warning (disable:4190)
 #endif
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
@@ -255,112 +256,100 @@ sal_Bool SdGRFFilter::Export()
 
     sal_Bool bRet = sal_False;
 
-     uno::Reference< lang::XMultiServiceFactory >
-        xSMgr( ::comphelper::getProcessServiceFactory() );
-    uno::Reference< uno::XInterface > xComponent
-        ( xSMgr->createInstance( "com.sun.star.drawing.GraphicExportFilter" ),
-            uno::UNO_QUERY );
-    if ( xComponent.is() )
+     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( xContext );
+
+    SdPage* pPage = NULL;
+    sd::DrawViewShell*  pDrawViewShell = static_cast< ::sd::DrawViewShell* >
+        ( ( ( mrDocShell.GetViewShell() && mrDocShell.GetViewShell()->ISA(::sd::DrawViewShell ) ) ? mrDocShell.GetViewShell() : NULL ) );
+
+    PageKind ePageKind = PK_STANDARD;
+    if( pDrawViewShell )
     {
-        uno::Reference< document::XExporter > xExporter
-            ( xComponent, uno::UNO_QUERY );
-        uno::Reference< document::XFilter > xFilter
-            ( xComponent, uno::UNO_QUERY );
-        if ( xExporter.is() && xFilter.is() )
+        ePageKind = pDrawViewShell->GetPageKind();
+        if( PK_HANDOUT == ePageKind )
+            pPage = mrDocument.GetSdPage( 0, PK_HANDOUT );
+        else
+            pPage = pDrawViewShell->GetActualPage();
+    }
+    else
+        pPage = mrDocument.GetSdPage( 0, PK_STANDARD );
+
+    if ( pPage )
+    {
+        // taking the 'correct' page number, seems that there might exist a better method to archive this
+        pPage = mrDocument.GetSdPage( pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0, ePageKind );
+        if ( pPage )
         {
-            SdPage* pPage = NULL;
-            sd::DrawViewShell*  pDrawViewShell = static_cast< ::sd::DrawViewShell* >
-                ( ( ( mrDocShell.GetViewShell() && mrDocShell.GetViewShell()->ISA(::sd::DrawViewShell ) ) ? mrDocShell.GetViewShell() : NULL ) );
-
-            PageKind ePageKind = PK_STANDARD;
-            if( pDrawViewShell )
+            uno::Reference< lang::XComponent > xSource( pPage->getUnoPage(), uno::UNO_QUERY );
+            SfxItemSet* pSet = mrMedium.GetItemSet();
+            if ( pSet && xSource.is() )
             {
-                ePageKind = pDrawViewShell->GetPageKind();
-                if( PK_HANDOUT == ePageKind )
-                    pPage = mrDocument.GetSdPage( 0, PK_HANDOUT );
-                else
-                    pPage = pDrawViewShell->GetActualPage();
-            }
-            else
-                pPage = mrDocument.GetSdPage( 0, PK_STANDARD );
-
-            if ( pPage )
-            {
-                // taking the 'correct' page number, seems that there might exist a better method to archive this
-                pPage = mrDocument.GetSdPage( pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0, ePageKind );
-                if ( pPage )
+                const String aTypeName( mrMedium.GetFilter()->GetTypeName() );
+                GraphicFilter &rGraphicFilter = GraphicFilter::GetGraphicFilter();
+                const sal_uInt16 nFilter = rGraphicFilter.GetExportFormatNumberForTypeName( aTypeName );
+                if ( nFilter != GRFILTER_FORMAT_NOTFOUND )
                 {
-                    uno::Reference< lang::XComponent > xSource( pPage->getUnoPage(), uno::UNO_QUERY );
-                    SfxItemSet* pSet = mrMedium.GetItemSet();
-                    if ( pSet && xSource.is() )
+                    uno::Reference< task::XInteractionHandler > mXInteractionHandler;
+
+                    beans::PropertyValues aArgs;
+                    TransformItems( SID_SAVEASDOC, *pSet, aArgs );
+
+                    rtl::OUString sInteractionHandler( "InteractionHandler" );
+                    rtl::OUString sFilterName( "FilterName" );
+                    rtl::OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
+
+                    sal_Bool    bFilterNameFound = sal_False;
+                    sal_Int32   i, nCount;
+                    for ( i = 0, nCount = aArgs.getLength(); i < nCount; i++ )
                     {
-                        const String aTypeName( mrMedium.GetFilter()->GetTypeName() );
-                        GraphicFilter &rGraphicFilter = GraphicFilter::GetGraphicFilter();
-                        const sal_uInt16 nFilter = rGraphicFilter.GetExportFormatNumberForTypeName( aTypeName );
-                        if ( nFilter != GRFILTER_FORMAT_NOTFOUND )
+                        rtl::OUString& rStr = aArgs[ i ].Name;
+                        if ( rStr == sFilterName )
                         {
-                            uno::Reference< task::XInteractionHandler > mXInteractionHandler;
-
-                            beans::PropertyValues aArgs;
-                            TransformItems( SID_SAVEASDOC, *pSet, aArgs );
-
-                            rtl::OUString sInteractionHandler( "InteractionHandler" );
-                            rtl::OUString sFilterName( "FilterName" );
-                            rtl::OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
-
-                            sal_Bool    bFilterNameFound = sal_False;
-                            sal_Int32   i, nCount;
-                            for ( i = 0, nCount = aArgs.getLength(); i < nCount; i++ )
-                            {
-                                rtl::OUString& rStr = aArgs[ i ].Name;
-                                if ( rStr == sFilterName )
-                                {
-                                    bFilterNameFound = sal_True;
-                                    aArgs[ i ].Name = sFilterName;
-                                    aArgs[ i ].Value <<= sShortName;
-                                }
-                                else if ( rStr == sInteractionHandler )
-                                {
-                                    uno::Reference< task::XInteractionHandler > xHdl;
-                                    if ( aArgs[ i ].Value >>= xHdl )
-                                    {
-                                        mXInteractionHandler = new SdGRFFilter_ImplInteractionHdl( xHdl );
-                                        aArgs[ i ].Value <<= mXInteractionHandler;
-                                    }
-                                }
-                            }
-                            if ( !bFilterNameFound )
-                            {
-                                aArgs.realloc( ++nCount );
-                                aArgs[ i ].Name = sFilterName;
-                                aArgs[ i ].Value <<= sShortName;
-                            }
-
-                            // take selection if needed
-                            if( ( SFX_ITEM_SET == pSet->GetItemState( SID_SELECTION ) )
-                                && static_cast< const SfxBoolItem& >( pSet->Get( SID_SELECTION ) ).GetValue()
-                                && pDrawViewShell )
-                            {
-                                uno::Reference< view::XSelectionSupplier > xSelectionSupplier(
-                                    pDrawViewShell->GetViewShellBase().GetController(), uno::UNO_QUERY );
-                                if ( xSelectionSupplier.is() )
-                                {
-                                    uno::Any aSelection( xSelectionSupplier->getSelection() );
-                                    uno::Reference< lang::XComponent > xSelection;
-                                    if ( aSelection >>= xSelection )
-                                        xSource = xSelection;
-                                }
-                            }
-                            xExporter->setSourceDocument( xSource );
-                            bRet = xFilter->filter( aArgs );
-                            if ( !bRet && mXInteractionHandler.is() )
-                                SdGRFFilter::HandleGraphicFilterError(
-                                    static_cast< SdGRFFilter_ImplInteractionHdl* >( mXInteractionHandler.get() )->GetErrorCode(),
-                                                    rGraphicFilter.GetLastError().nStreamError );
+                            bFilterNameFound = sal_True;
+                            aArgs[ i ].Name = sFilterName;
+                            aArgs[ i ].Value <<= sShortName;
                         }
-                     }
+                        else if ( rStr == sInteractionHandler )
+                        {
+                            uno::Reference< task::XInteractionHandler > xHdl;
+                            if ( aArgs[ i ].Value >>= xHdl )
+                            {
+                                mXInteractionHandler = new SdGRFFilter_ImplInteractionHdl( xHdl );
+                                aArgs[ i ].Value <<= mXInteractionHandler;
+                            }
+                        }
+                    }
+                    if ( !bFilterNameFound )
+                    {
+                        aArgs.realloc( ++nCount );
+                        aArgs[ i ].Name = sFilterName;
+                        aArgs[ i ].Value <<= sShortName;
+                    }
+
+                    // take selection if needed
+                    if( ( SFX_ITEM_SET == pSet->GetItemState( SID_SELECTION ) )
+                        && static_cast< const SfxBoolItem& >( pSet->Get( SID_SELECTION ) ).GetValue()
+                        && pDrawViewShell )
+                    {
+                        uno::Reference< view::XSelectionSupplier > xSelectionSupplier(
+                            pDrawViewShell->GetViewShellBase().GetController(), uno::UNO_QUERY );
+                        if ( xSelectionSupplier.is() )
+                        {
+                            uno::Any aSelection( xSelectionSupplier->getSelection() );
+                            uno::Reference< lang::XComponent > xSelection;
+                            if ( aSelection >>= xSelection )
+                                xSource = xSelection;
+                        }
+                    }
+                    xExporter->setSourceDocument( xSource );
+                    bRet = xExporter->filter( aArgs );
+                    if ( !bRet && mXInteractionHandler.is() )
+                        SdGRFFilter::HandleGraphicFilterError(
+                            static_cast< SdGRFFilter_ImplInteractionHdl* >( mXInteractionHandler.get() )->GetErrorCode(),
+                                            rGraphicFilter.GetLastError().nStreamError );
                 }
-            }
+             }
         }
     }
     return bRet;

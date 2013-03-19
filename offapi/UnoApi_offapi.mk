@@ -114,6 +114,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/documen
 	XMLOasisBasicImporter \
 ))
 $(eval $(call gb_ZipUnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/drawing,\
+	GraphicExportFilter \
 	ModuleDispatcher \
 	ShapeCollection \
 	SlideRenderer \
@@ -731,7 +732,6 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/draw
 	GenericDrawPage \
 	GenericDrawingDocument \
 	GradientTable \
-	GraphicExportFilter \
 	GraphicObjectShape \
 	GroupShape \
 	HatchTable \
@@ -2285,6 +2285,7 @@ $(eval $(call gb_ZipUnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing,\
 	XDrawView \
 	XEnhancedCustomShapeDefaulter \
 	XGluePointsSupplier \
+	XGraphicExportFilter \
 	XLayer \
 	XLayerManager \
 	XLayerSupplier \

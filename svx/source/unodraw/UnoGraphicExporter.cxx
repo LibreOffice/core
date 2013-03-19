@@ -22,13 +22,11 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XMimeTypeInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XGraphicExportFilter.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -141,7 +139,7 @@ namespace svx
 
         @implements com.sun.star.drawing.GraphicExportFilter
     */
-    class GraphicExporter : public WeakImplHelper4< XFilter, XExporter, XServiceInfo, XMimeTypeInfo >
+    class GraphicExporter : public WeakImplHelper2< XGraphicExportFilter, XServiceInfo >
     {
     public:
         GraphicExporter();

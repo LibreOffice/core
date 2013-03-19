@@ -48,8 +48,8 @@ private:
 
     FltCallDialogParameter& mrFltCallPara;
 
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        mxMgr;
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        mxContext;
     const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&
         mxSourceDocument;
 
@@ -175,7 +175,7 @@ private:
 
 public:
                         ExportDialog( FltCallDialogParameter& rPara,
-                            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > rxMgr,
+                            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                 const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
                                     sal_Bool bExportSelection, sal_Bool bIsExportVectorFormat );
                         ~ExportDialog();

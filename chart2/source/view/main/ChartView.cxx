@@ -70,6 +70,8 @@
 
 #include <time.h>
 
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -82,20 +84,18 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XShapeGroup.hpp>
+#include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/drawing/XShapeDescriptor.hpp>
-#include <com/sun/star/text/XText.hpp>
-
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
@@ -242,17 +242,8 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     if( !m_xDrawPage.is() )
         return;
 
-    uno::Reference< lang::XMultiServiceFactory > xFactory( m_xCC->getServiceManager(), uno::UNO_QUERY );
-    if( !xFactory.is() )
-        return;
-
     // creating the graphic exporter
-    uno::Reference< document::XExporter > xExporter( xFactory->createInstance(
-            "com.sun.star.drawing.GraphicExportFilter"), uno::UNO_QUERY);
-    uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY );
-
-    if( !xExporter.is() || !xFilter.is() )
-        return;
+    uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( m_xCC );
 
     uno::Sequence< beans::PropertyValue > aProps(3);
     aProps[0].Name = "FilterName";
@@ -291,7 +282,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     aProps[2].Value <<= aFilterData;
 
     xExporter->setSourceDocument( uno::Reference< lang::XComponent >( m_xDrawPage, uno::UNO_QUERY) );
-    if( xFilter->filter( aProps ) )
+    if( xExporter->filter( aProps ) )
     {
         xOutStream->flush();
         xOutStream->closeOutput();

@@ -142,11 +142,11 @@ class FlashExportFilter : public cppu::WeakImplHelper4
 >
 {
     Reference< XComponent > mxDoc;
-    Reference< XMultiServiceFactory > mxMSF;
+    Reference< XComponentContext > mxContext;
     Reference< XStatusIndicator> mxStatusIndicator;
 
 public:
-    FlashExportFilter( const Reference< XMultiServiceFactory > &rxMSF);
+    FlashExportFilter( const Reference< XComponentContext > &rxContext);
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException);
@@ -170,8 +170,8 @@ public:
 
 // -----------------------------------------------------------------------------
 
-FlashExportFilter::FlashExportFilter(const Reference< XMultiServiceFactory > &rxMSF)
-:   mxMSF( rxMSF )
+FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxContext)
+:   mxContext( rxContext )
 {
 }
 
@@ -264,7 +264,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
     if(!xDrawPages.is())
         return sal_False;
 
-    Reference< XDesktop2 > rDesktop = Desktop::create( comphelper::getComponentContext(mxMSF) );
+    Reference< XDesktop2 > rDesktop = Desktop::create( mxContext );
 
     Reference< XStorable > xStorable(rDesktop->getCurrentComponent(), UNO_QUERY);
     if (!xStorable.is())
@@ -324,7 +324,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
     // TODO: check for errors
     (void) err;
 
-    FlashExporter aFlashExporter( mxMSF, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
+    FlashExporter aFlashExporter( mxContext, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
                                          findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
 
     const sal_Int32 nPageCount = xDrawPages->getCount();
@@ -416,7 +416,7 @@ sal_Bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& 
         return sal_False;
     }
 
-    FlashExporter aFlashExporter( mxMSF, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
+    FlashExporter aFlashExporter( mxContext, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
                                          findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
 
     return aFlashExporter.exportAll( mxDoc, xOutputStream, mxStatusIndicator );
@@ -481,7 +481,7 @@ Sequence< OUString > SAL_CALL FlashExportFilter_getSupportedServiceNames(  )
 Reference< XInterface > SAL_CALL FlashExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new FlashExportFilter( rSMgr );
+    return (cppu::OWeakObject*) new FlashExportFilter( comphelper::getComponentContext(rSMgr) );
 }
 
 // -----------------------------------------------------------------------------

@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -57,8 +58,8 @@ using com::sun::star::task::XStatusIndicator;
 
 // -----------------------------------------------------------------------------
 
-PlaceWareExporter::PlaceWareExporter(const Reference< XMultiServiceFactory > &rxMSF)
-:   mxMSF( rxMSF )
+PlaceWareExporter::PlaceWareExporter(const Reference< XComponentContext > & rxContext)
+:   mxContext( rxContext )
 {
 }
 
@@ -290,7 +291,8 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
 {
     sal_Bool bRet = sal_False;
 
-    mxGraphicExporter = Reference< XExporter >::query( mxMSF->createInstance( OUString("com.sun.star.drawing.GraphicExportFilter") ) );
+    mxGraphicExporter = GraphicExportFilter::create( mxContext );
+
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(xDoc, UNO_QUERY);
     if(!xDrawPagesSupplier.is())
         return sal_False;
@@ -482,7 +484,6 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
     }
 
     // create the gif
-    Reference< XFilter > xFilter( mxGraphicExporter, UNO_QUERY );
 
     Sequence< PropertyValue > aFilterData( 2 );
     aFilterData[0].Name = OUString("Width");
@@ -498,7 +499,7 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
     aDescriptor[2].Name = OUString("FilterData");
     aDescriptor[2].Value <<= aFilterData;
     mxGraphicExporter->setSourceDocument( xComp );
-    xFilter->filter( aDescriptor );
+    mxGraphicExporter->filter( aDescriptor );
 
     return pEntry;
 }

@@ -34,6 +34,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -113,17 +114,8 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
     OUString aFileURL;
     FileBase::createTempFile( 0, 0, &aFileURL );
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-        ::comphelper::getProcessServiceFactory(),
-        uno::UNO_QUERY_THROW );
-
-    uno::Reference< document::XFilter > xFilter(
-        xServiceManager->createInstance(
-        "com.sun.star.drawing.GraphicExportFilter" ) ,
-        uno::UNO_QUERY_THROW );
-
-    uno::Reference< document::XExporter > xExporter( xFilter,
-        uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XGraphicExportFilter > xFilter =
+        drawing::GraphicExportFilter::create( ::comphelper::getProcessComponentContext() );
 
     if ( !xController->isRunning() )
         return uno::Sequence<sal_Int8>();
@@ -132,7 +124,7 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
         xController->getSlideByIndex( aSlideNumber ),
         uno::UNO_QUERY_THROW );
 
-    xExporter->setSourceDocument( xSourceDoc );
+    xFilter->setSourceDocument( xSourceDoc );
 
     uno::Sequence< beans::PropertyValue > aFilterData(3);
 

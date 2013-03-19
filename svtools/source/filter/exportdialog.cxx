@@ -27,17 +27,15 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <unotools/streamwrap.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -358,7 +356,7 @@ awt::Size ExportDialog::GetOriginalSize()
     }
     else
     {
-        uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory = graphic::PrimitiveFactory2D::create( comphelper::getComponentContext(mxMgr) );
+        uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory = graphic::PrimitiveFactory2D::create( mxContext );
 
         basegfx::B2DHomMatrix aViewTransformation( Application::GetDefaultDevice()->GetViewTransformation() );
         com::sun::star::geometry::AffineMatrix2D aTransformation;
@@ -457,9 +455,8 @@ sal_Bool ExportDialog::GetGraphicStream()
             uno::Reference < io::XStream > xStream( new utl::OStreamWrapper( *mpTempStream ) );
             uno::Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
 
-            uno::Reference< document::XExporter > xGraphicExporter(
-                mxMgr->createInstance(OUString("com.sun.star.drawing.GraphicExportFilter")), uno::UNO_QUERY_THROW);
-            uno::Reference< document::XFilter > xFilter( xGraphicExporter, uno::UNO_QUERY_THROW );
+            uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter =
+                drawing::GraphicExportFilter::create( mxContext );
 
             sal_Int32 nProperties = 2;
             uno::Sequence< beans::PropertyValue > aFilterData( nProperties );
@@ -484,7 +481,7 @@ sal_Bool ExportDialog::GetGraphicStream()
             if ( xSourceDoc.is() )
             {
                 xGraphicExporter->setSourceDocument( xSourceDoc );
-                xFilter->filter( aDescriptor );
+                xGraphicExporter->filter( aDescriptor );
                 bRet = sal_True;
 
                 if ( mnFormat == FORMAT_JPG )
@@ -561,12 +558,12 @@ sal_Bool ExportDialog::IsTempExportAvailable() const
 }
 
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > rxMgr,
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
     const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
     sal_Bool bExportSelection, sal_Bool bIsPixelFormat)
     : ModalDialog(rPara.pWindow, "GraphicExportDialog", "svt/ui/graphicexport.ui")
     , mrFltCallPara(rPara)
-    , mxMgr(rxMgr)
+    , mxContext(rxContext)
     , mxSourceDocument(rxSourceDocument)
     , mpSbCompression(NULL)
     , mpNfCompression(NULL)

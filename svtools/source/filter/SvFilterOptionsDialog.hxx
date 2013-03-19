@@ -22,12 +22,13 @@
 
 #include <tools/fldunit.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 class SvFilterOptionsDialog : public cppu::WeakImplHelper5
 <
@@ -38,8 +39,8 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper5
     com::sun::star::lang::XServiceInfo
 >
 {
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        mxMgr;
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        mxContext;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
         maMediaDescriptor;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -53,7 +54,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper5
 
 public:
 
-    SvFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB );
+    SvFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
     ~SvFilterOptionsDialog();
 
     // XInterface
