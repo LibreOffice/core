@@ -202,7 +202,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         {
             if ( !rTextListsHelper.IsListProcessed( msContinueListId ) )
             {
-                msContinueListId = ::rtl::OUString();
+                msContinueListId = "";
             }
             else
             {

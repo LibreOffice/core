@@ -38,11 +38,11 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
     osl_atomic_increment( &m_refCount );
     {
         ::rtl::OUString sUserWorkingFor;
-        Sequence< ::rtl::OUString > sTableTypes(3);
+        Sequence< OUString > sTableTypes(3);
         // we want all catalogues, all schemas, all tables
-        sTableTypes[0] = ::rtl::OUString("VIEW");
-        sTableTypes[1] = ::rtl::OUString("TABLE");
-        sTableTypes[2] = ::rtl::OUString("%"); // just to be sure to include anything else ....
+        sTableTypes[0] = "VIEW";
+        sTableTypes[1] = "TABLE";
+        sTableTypes[2] = "%"; // just to be sure to include anything else ....
         try
         {
             m_xTables = _rxMeta->getTables(catalog,schemaPattern,tableNamePattern,sTableTypes);

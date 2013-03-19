@@ -1032,7 +1032,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
                     pImpl->mxTempStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
                 uno::Sequence < beans::PropertyValue > aSeq;
 
-                ::rtl::OUString aTmpPersistName = ::rtl::OUString( "Object " );
+                OUString aTmpPersistName = "Object ";
                 aTmpPersistName += ::rtl::OUString::valueOf( (sal_Int32) pImpl->maTempObjectContainer.size() );
 
                 xPersist->storeAsEntry( pImpl->mxTempStorage, aTmpPersistName, aSeq, aSeq );

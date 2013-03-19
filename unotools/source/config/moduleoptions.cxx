@@ -104,20 +104,20 @@ struct FactoryInfo
         // easy way to reset struct member!
         void free()
         {
-            bInstalled                  = sal_False         ;
-            sFactory                    = ::rtl::OUString() ;
-            sShortName                  = ::rtl::OUString() ;
-            sTemplateFile               = ::rtl::OUString() ;
-            sWindowAttributes           = ::rtl::OUString() ;
-            sEmptyDocumentURL           = ::rtl::OUString() ;
-            sDefaultFilter              = ::rtl::OUString() ;
-            nIcon                       = 0                 ;
-            bChangedTemplateFile        = sal_False         ;
-            bChangedWindowAttributes    = sal_False         ;
-            bChangedEmptyDocumentURL    = sal_False         ;
-            bChangedDefaultFilter       = sal_False         ;
-            bChangedIcon                = sal_False         ;
-            bDefaultFilterReadonly      = sal_False         ;
+            bInstalled                  = sal_False;
+            sFactory                    = "";
+            sShortName                  = "";
+            sTemplateFile               = "";
+            sWindowAttributes           = "";
+            sEmptyDocumentURL           = "";
+            sDefaultFilter              = "";
+            nIcon                       = 0;
+            bChangedTemplateFile        = sal_False;
+            bChangedWindowAttributes    = sal_False;
+            bChangedEmptyDocumentURL    = sal_False;
+            bChangedDefaultFilter       = sal_False;
+            bChangedIcon                = sal_False;
+            bDefaultFilterReadonly      = sal_False;
         }
 
         //---------------------------------------------------------------------------------------------------------
@@ -610,28 +610,28 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 
     //return m_lFactories[eFactory].sShortName;
 
-    ::rtl::OUString sShortName;
+    OUString sShortName;
     switch( eFactory )
     {
-        case SvtModuleOptions::E_WRITER        :  sShortName = ::rtl::OUString("swriter");
+        case SvtModuleOptions::E_WRITER        :  sShortName = "swriter";
                                                   break;
-        case SvtModuleOptions::E_WRITERWEB     :  sShortName = ::rtl::OUString("swriter/web");
+        case SvtModuleOptions::E_WRITERWEB     :  sShortName = "swriter/web";
                                                   break;
-        case SvtModuleOptions::E_WRITERGLOBAL  :  sShortName = ::rtl::OUString("swriter/GlobalDocument");
+        case SvtModuleOptions::E_WRITERGLOBAL  :  sShortName = "swriter/GlobalDocument";
                                                   break;
-        case SvtModuleOptions::E_CALC          :  sShortName = ::rtl::OUString("scalc");
+        case SvtModuleOptions::E_CALC          :  sShortName = "scalc";
                                                   break;
-        case SvtModuleOptions::E_DRAW          :  sShortName = ::rtl::OUString("sdraw");
+        case SvtModuleOptions::E_DRAW          :  sShortName = "sdraw";
                                                   break;
-        case SvtModuleOptions::E_IMPRESS       :  sShortName = ::rtl::OUString("simpress");
+        case SvtModuleOptions::E_IMPRESS       :  sShortName = "simpress";
                                                   break;
-        case SvtModuleOptions::E_MATH          :  sShortName = ::rtl::OUString("smath");
+        case SvtModuleOptions::E_MATH          :  sShortName = "smath";
                                                   break;
-        case SvtModuleOptions::E_CHART         :  sShortName = ::rtl::OUString("schart");
+        case SvtModuleOptions::E_CHART         :  sShortName = "schart";
                                                   break;
-        case SvtModuleOptions::E_BASIC         :  sShortName = ::rtl::OUString("sbasic");
+        case SvtModuleOptions::E_BASIC         :  sShortName = "sbasic";
                                                   break;
-        case SvtModuleOptions::E_DATABASE     :  sShortName = ::rtl::OUString("sdatabase");
+        case SvtModuleOptions::E_DATABASE     :  sShortName = "sdatabase";
                                                   break;
         default:
             OSL_FAIL( "unknown factory" );
@@ -662,28 +662,28 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 
     //return m_lFactories[eFactory].getEmptyDocumentURL();
 
-    ::rtl::OUString sURL;
+    OUString sURL;
     switch( eFactory )
     {
-        case SvtModuleOptions::E_WRITER        :  sURL = ::rtl::OUString("private:factory/swriter");
+        case SvtModuleOptions::E_WRITER        :  sURL = "private:factory/swriter";
                                                   break;
-        case SvtModuleOptions::E_WRITERWEB     :  sURL = ::rtl::OUString("private:factory/swriter/web");
+        case SvtModuleOptions::E_WRITERWEB     :  sURL = "private:factory/swriter/web";
                                                   break;
-        case SvtModuleOptions::E_WRITERGLOBAL  :  sURL = ::rtl::OUString("private:factory/swriter/GlobalDocument");
+        case SvtModuleOptions::E_WRITERGLOBAL  :  sURL = "private:factory/swriter/GlobalDocument";
                                                   break;
-        case SvtModuleOptions::E_CALC          :  sURL = ::rtl::OUString("private:factory/scalc");
+        case SvtModuleOptions::E_CALC          :  sURL = "private:factory/scalc";
                                                   break;
-        case SvtModuleOptions::E_DRAW          :  sURL = ::rtl::OUString("private:factory/sdraw");
+        case SvtModuleOptions::E_DRAW          :  sURL = "private:factory/sdraw";
                                                   break;
-        case SvtModuleOptions::E_IMPRESS       :  sURL = ::rtl::OUString("private:factory/simpress?slot=6686");
+        case SvtModuleOptions::E_IMPRESS       :  sURL = "private:factory/simpress?slot=6686";
                                                   break;
-        case SvtModuleOptions::E_MATH          :  sURL = ::rtl::OUString("private:factory/smath");
+        case SvtModuleOptions::E_MATH          :  sURL = "private:factory/smath";
                                                   break;
-        case SvtModuleOptions::E_CHART         :  sURL = ::rtl::OUString("private:factory/schart");
+        case SvtModuleOptions::E_CHART         :  sURL = "private:factory/schart";
                                                   break;
-        case SvtModuleOptions::E_BASIC         :  sURL = ::rtl::OUString("private:factory/sbasic");
+        case SvtModuleOptions::E_BASIC         :  sURL = "private:factory/sbasic";
                                                   break;
-        case SvtModuleOptions::E_DATABASE     :  sURL = ::rtl::OUString("private:factory/sdatabase?Interactive");
+        case SvtModuleOptions::E_DATABASE     :  sURL = "private:factory/sdatabase?Interactive";
                                                   break;
         default:
             OSL_FAIL( "unknown factory" );

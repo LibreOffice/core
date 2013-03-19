@@ -124,9 +124,9 @@ void Locale::setVariant(const ::rtl::OUString& sVariant)
 void Locale::fromISO(const ::rtl::OUString& sISO)
     throw(Locale::MalFormedLocaleException)
 {
-    m_sLanguage = ::rtl::OUString();
-    m_sCountry  = ::rtl::OUString();
-    m_sVariant  = ::rtl::OUString();
+    m_sLanguage = "";
+    m_sCountry  = "";
+    m_sVariant  = "";
 
     ::rtl::OUString sParser(sISO);
     sParser = sParser.trim();

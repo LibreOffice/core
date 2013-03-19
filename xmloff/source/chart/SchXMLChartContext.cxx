@@ -774,7 +774,7 @@ void SchXMLChartContext::EndElement()
         xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );
     }
     if( bHasOwnData )
-        msChartAddress = ::rtl::OUString( "all" );
+        msChartAddress = "all";
 
     bool bSwitchRangesFromOuterToInternalIfNecessary = false;
     if( !bHasOwnData && mbAllRangeAddressesAvailable )
@@ -821,7 +821,7 @@ void SchXMLChartContext::EndElement()
                 if(!bHasOwnData)
                 {
                     bHasOwnData = true;
-                    msChartAddress = ::rtl::OUString( "all" );
+                    msChartAddress = "all";
                     if( !xNewDoc->hasInternalDataProvider() )
                     {
                         xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );

@@ -429,9 +429,9 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
                 if (!sUser.isEmpty())
                 {   // use user and pwd together with the url
                     Sequence< PropertyValue> aInfo(2);
-                    aInfo.getArray()[0].Name = ::rtl::OUString("user");
+                    aInfo.getArray()[0].Name = "user";
                     aInfo.getArray()[0].Value <<= sUser;
-                    aInfo.getArray()[1].Name = ::rtl::OUString("password");
+                    aInfo.getArray()[1].Name = "password";
                     aInfo.getArray()[1].Value <<= sPwd;
                     xPureConnection = xDriverManager->getConnectionWithInfo( sURL, aInfo );
                 }
