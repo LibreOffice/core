@@ -756,6 +756,21 @@ String SwField::GetDescription() const
     return SW_RES(STR_FIELD);
 }
 
+bool SwField::IsClickable() const
+{
+    switch (Which())
+    {
+        case RES_JUMPEDITFLD:
+        case RES_MACROFLD:
+        case RES_GETREFFLD:
+        case RES_INPUTFLD:
+        case RES_SETEXPFLD:
+        case RES_DROPDOWN:
+            return true;
+    }
+    return false;
+}
+
 sal_uInt16 SwFldTypes::GetPos(const SwFieldType* pFieldType) const
 {
     const_iterator it = std::find(begin(), end(), pFieldType);

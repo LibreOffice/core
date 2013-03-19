@@ -294,7 +294,7 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             }
 
             bool bConsiderBackground = true;
-            // If the text position if a macro field, then that should have priority.
+            // If the text position is a clickable field, then that should have priority.
             if (pTextNd->IsTxtNode())
             {
                 SwTxtNode* pTxtNd = pTextNd->GetTxtNode();
@@ -302,7 +302,7 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 if (pTxtAttr)
                 {
                     const SwField* pField = pTxtAttr->GetFld().GetFld();
-                    if (pField->Which() == RES_MACROFLD)
+                    if (pField->IsClickable())
                         bConsiderBackground = false;
                 }
             }

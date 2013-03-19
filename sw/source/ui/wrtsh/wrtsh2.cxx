@@ -315,6 +315,8 @@ void SwWrtShell::ClickToField( const SwField& rFld )
     case RES_DROPDOWN :
         StartDropDownFldDlg( (SwField*)&rFld, sal_False );
     break;
+    default:
+        SAL_WARN_IF(rFld.IsClickable(), "sw", "unhandled clickable field!");
     }
 
     bIsInClickToEdit = false;

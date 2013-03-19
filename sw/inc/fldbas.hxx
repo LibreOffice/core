@@ -343,6 +343,8 @@ public:
     void                SetAutomaticLanguage(sal_Bool bSet){bIsAutomaticLanguage = bSet;}
 
     virtual String      GetDescription() const;
+    /// Is this field clickable?
+    bool IsClickable() const;
 };
 
 inline SwFieldType* SwField::GetTyp() const
