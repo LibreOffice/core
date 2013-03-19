@@ -123,7 +123,7 @@ protected:
     virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
 
     /// Output SwTxtNode is depending on outline export mode
-    virtual void OutputTextNode( const SwTxtNode& );
+    virtual void OutputTextNode( const SwTxtNode& ) SAL_OVERRIDE;
 
     /// Output SwGrfNode
     virtual void OutputGrfNode( const SwGrfNode& );

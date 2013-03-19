@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _RTFSdrEXPORT_HXX_
-#define _RTFSdrEXPORT_HXX_
+#ifndef _RTFSDREXPORT_HXX_
+#define _RTFSDREXPORT_HXX_
 
 #include <filter/msfilter/escherex.hxx>
 #include <editeng/outlobj.hxx>
@@ -66,26 +66,25 @@ protected:
     ///
     /// Returns the element's tag number, -1 means we wrote nothing.
     using EscherEx::StartShape;
-    virtual sal_Int32   StartShape();
+    sal_Int32   StartShape();
 
     /// End the shape.
     ///
     /// The parameter is just what we got from StartShape().
     using EscherEx::EndShape;
-    virtual void        EndShape( sal_Int32 nShapeElement );
+    void        EndShape( sal_Int32 nShapeElement );
 
-    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
+    virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
 
-    virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 );
-    virtual void CloseContainer();
+    virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 ) SAL_OVERRIDE;
+    virtual void CloseContainer() SAL_OVERRIDE;
 
-    using EscherEx::EnterGroup;
-    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 );
-    virtual void LeaveGroup();
+    virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 ) SAL_OVERRIDE;
+    virtual void LeaveGroup() SAL_OVERRIDE;
 
-    virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 );
+    virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 ) SAL_OVERRIDE;
 
 private:
     /// Add starting and ending point of a line to the m_pShapeAttrList.
@@ -100,6 +99,6 @@ private:
     void impl_writeGraphic();
 };
 
-#endif // _RTFSdrEXPORT_HXX_
+#endif // _RTFSDREXPORT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

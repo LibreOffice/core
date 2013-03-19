@@ -65,9 +65,9 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData );
 
-    virtual void WritePostitFieldStart();
+    virtual void WritePostitFieldStart() SAL_OVERRIDE;
 
-    virtual void WritePostitFieldEnd();
+    virtual void WritePostitFieldEnd() SAL_OVERRIDE;
 
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
@@ -185,10 +185,10 @@ public:
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule );
 
     /// Start of the abstract numbering definition instance.
-    virtual void StartAbstractNumbering( sal_uInt16 nId );
+    virtual void StartAbstractNumbering( sal_uInt16 nId ) SAL_OVERRIDE;
 
     /// End of the abstract numbering definition instance.
-    virtual void EndAbstractNumbering();
+    virtual void EndAbstractNumbering() SAL_OVERRIDE;
 
     /// All the numbering level information.
     virtual void NumberingLevel( sal_uInt8 nLevel,
