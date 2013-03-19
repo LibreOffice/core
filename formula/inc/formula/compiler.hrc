@@ -94,6 +94,8 @@
 #define SC_OPCODE_NEG_SUB            62
 #define SC_OPCODE_STOP_UN_OP         63
 
+#define SC_OPCODE_START_FUNCTION     65
+
 /*** Functions without parameters ***/
 #define SC_OPCODE_START_NO_PAR       65
 #define SC_OPCODE_PI                 65
@@ -402,6 +404,8 @@
 #define SC_OPCODE_SKEWP             406
 #define SC_OPCODE_STOP_2_PAR        407
 #define SC_OPCODE_LAST_OPCODE_ID    406     /* last OpCode */
+
+#define SC_OPCODE_STOP_FUNCTION     407
 
 /*** Internal ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999

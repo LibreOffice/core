@@ -192,6 +192,12 @@ public:
     */
     bool Fill(const com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& _aSequence, ExternalReferenceHelper* _pRef = NULL);
 
+    /**
+     * Do some checking based on the individual tokens. For now, we use this
+     * only to check whether we can vectorize the token array.
+     */
+    virtual void CheckToken( const FormulaToken& t );
+
     FormulaToken* AddToken( const FormulaToken& );
     FormulaToken* AddString( const sal_Unicode* pStr );
     FormulaToken* AddString( const String& rStr );

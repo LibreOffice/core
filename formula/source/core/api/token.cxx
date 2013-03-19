@@ -708,6 +708,11 @@ void FormulaTokenArray::Clear()
     ClearRecalcMode();
 }
 
+void FormulaTokenArray::CheckToken( const FormulaToken& /*r*/ )
+{
+    // Do nothing.
+}
+
 FormulaToken* FormulaTokenArray::AddToken( const FormulaToken& r )
 {
     return Add( r.Clone() );
@@ -724,6 +729,7 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
         pCode = new FormulaToken*[ MAXCODE ];
     if( nLen < MAXCODE-1 )
     {
+        CheckToken(*t);
         pCode[ nLen++ ] = t;
         if( t->GetOpCode() == ocPush
             && ( t->GetType() == svSingleRef || t->GetType() == svDoubleRef ) )

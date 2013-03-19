@@ -33,9 +33,18 @@ struct ScComplexRefData;
 class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 {
     friend class ScCompiler;
+
+    /**
+     * When vectorization is enabled, we could potentially mass-calculate a
+     * series of formula token arrays in adjacent formula cells in one step,
+     * provided that they all contain identical set of tokens.
+     */
+    enum VectorState { Disabled = 0, Enabled, CheckReference };
+
     bool                    ImplGetReference( ScRange& rRange, bool bValidOnly ) const;
 
     size_t mnHashValue;
+    VectorState meVectorState;
 
 public:
     ScTokenArray();
@@ -61,6 +70,7 @@ public:
 
     formula::FormulaToken* AddRawToken( const ScRawToken& );
     virtual bool AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken,formula::ExternalReferenceHelper* _pRef);
+    virtual void CheckToken( const formula::FormulaToken& r );
     virtual formula::FormulaToken* AddOpCode( OpCode eCode );
     /** ScSingleRefToken with ocPush. */
     formula::FormulaToken* AddSingleReference( const ScSingleRefData& rRef );

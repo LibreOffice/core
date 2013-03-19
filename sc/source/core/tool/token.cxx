@@ -1246,6 +1246,78 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
     }
     return bError;
 }
+
+void ScTokenArray::CheckToken( const FormulaToken& r )
+{
+    if (meVectorState == Disabled)
+        // It's already disabled.  No more checking needed.
+        return;
+
+    OpCode eOp = r.GetOpCode();
+
+    if (SC_OPCODE_START_FUNCTION <= eOp && eOp < SC_OPCODE_STOP_FUNCTION)
+    {
+        // This is a function opcode. For now, we only support vectorization
+        // for min, max, sum and average.
+        switch (eOp)
+        {
+            case ocAverage:
+            case ocMin:
+            case ocMinA:
+            case ocMax:
+            case ocMaxA:
+            case ocSum:
+                // Don't change the state.
+            break;
+            default:
+                meVectorState = Disabled;
+        }
+        return;
+    }
+
+    if (eOp == ocPush)
+    {
+        // This is a stack variable.  See if this is a reference.
+
+        switch (r.GetType())
+        {
+            case svByte:
+            case svDouble:
+            case svString:
+                // Don't change the state.
+            break;
+            case svSingleRef:
+            case svDoubleRef:
+                // Depends on the reference state.
+                meVectorState = CheckReference;
+            break;
+            case svError:
+            case svEmptyCell:
+            case svExternal:
+            case svExternalDoubleRef:
+            case svExternalName:
+            case svExternalSingleRef:
+            case svFAP:
+            case svHybridCell:
+            case svHybridValueCell:
+            case svIndex:
+            case svJump:
+            case svJumpMatrix:
+            case svMatrix:
+            case svMatrixCell:
+            case svMissing:
+            case svRefList:
+            case svSep:
+            case svSubroutine:
+            case svUnknown:
+                // We don't support vectorization on these.
+                meVectorState = Disabled;
+            default:
+                ;
+        }
+    }
+}
+
 bool ScTokenArray::ImplGetReference( ScRange& rRange, bool bValidOnly ) const
 {
     bool bIs = false;
@@ -1380,13 +1452,15 @@ bool ScTokenArray::IsValidReference( ScRange& rRange ) const
 
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),
-    mnHashValue(0)
+    mnHashValue(0),
+    meVectorState(Enabled)
 {
 }
 
 ScTokenArray::ScTokenArray( const ScTokenArray& rArr ) :
     FormulaTokenArray(rArr),
-    mnHashValue(rArr.mnHashValue)
+    mnHashValue(rArr.mnHashValue),
+    meVectorState(rArr.meVectorState)
 {
 }
 
@@ -1411,6 +1485,8 @@ ScTokenArray* ScTokenArray::Clone() const
     p->nError = nError;
     p->bHyperLink = bHyperLink;
     p->mnHashValue = mnHashValue;
+    p->meVectorState = meVectorState;
+
     FormulaToken** pp;
     if( nLen )
     {
