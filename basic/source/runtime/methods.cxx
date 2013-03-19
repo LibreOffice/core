@@ -1265,8 +1265,12 @@ RTLFUNC(Mid)
                 else
                 {
                     aResultStr = aArgStr;
-                    aResultStr.remove( nStartPos, nLen );
-                    aResultStr.insert( nStartPos, rPar.Get(4)->GetOUString().getStr(), std::min(nLen, rPar.Get(4)->GetOUString().getLength()));
+                    sal_Int32 nTmpStartPos = nStartPos;
+                    if ( nTmpStartPos > aArgStr.getLength() )
+                        nTmpStartPos =  aArgStr.getLength();
+                    else
+                        aResultStr.remove( nTmpStartPos, nLen );
+                    aResultStr.insert( nTmpStartPos, rPar.Get(4)->GetOUString().getStr(), std::min(nLen, rPar.Get(4)->GetOUString().getLength()));
                 }
 
                 rPar.Get(1)->PutString( aResultStr.makeStringAndClear() );
