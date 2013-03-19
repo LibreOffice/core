@@ -1930,7 +1930,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getWhereTree() const
     {
         pWhereClause = m_pParseTree->getChild(m_pParseTree->count()-1);
     }
-    if(pWhereClause->count() != 2)
+    if(pWhereClause && pWhereClause->count() != 2)
         pWhereClause = NULL;
     return pWhereClause;
 }
