@@ -19,7 +19,6 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
-#include <tools/fsys.hxx>
 
 #include "errobject.hxx"
 #include "runtime.hxx"

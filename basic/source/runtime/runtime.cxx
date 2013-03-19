@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/fsys.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/wldcrd.hxx>
 #include <svl/zforlist.hxx>
