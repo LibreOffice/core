@@ -188,16 +188,14 @@ SwMarginPortion::SwMarginPortion( const KSHORT nFixedWidth )
 /*************************************************************************
  *                SwMarginPortion::AdjustRight()
  *
- * In der umschliessenden Schleife werden alle Portions durchsucht,
- * dabei werden erst die am Ende liegenden GluePortions verarbeitet.
- * Das Ende wird nach jeder Schleife nach vorne verlegt, bis keine
- * GluePortions mehr vorhanden sind.
- * Es werden immer GluePortion-Paare betrachtet (pLeft und pRight),
- * wobei Textportions zwischen pLeft und pRight hinter pRight verschoben
- * werden, wenn pRight genuegend Glue besitzt. Bei jeder Verschiebung
- * wandert ein Teil des Glues von pRight nach pLeft.
- * Im naechsten Schleifendurchlauf ist pLeft das pRight und das Spiel
- * beginnt von vorne.
+ * In the outer loop all portions are inspected - the GluePortions
+ * at the end are processed first.
+ * The end is shifted forwardly till no more GluePortions remain.
+ * Always GluePortion-pairs (pLeft and pRight) are treated, where
+ * textportions between pLeft and pRight are moved at the back of
+ * pRight if pRight has enough Glue. With every move part of the
+ * Glue is transferred from pRight to pLeft.
+ * The next loop starts with the processed pLeft as pRight.
  *************************************************************************/
 
 void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
@@ -207,7 +205,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
     while( pRight != this )
     {
 
-        // 1) Wir suchen den linken Glue
+        // 1) We search for the left Glue
         SwLinePortion *pPos = (SwLinePortion*)this;
         SwGluePortion *pLeft = 0;
         while( pPos )
@@ -219,7 +217,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 pPos = 0;
         }
 
-        // Zwei nebeneinander liegende FlyPortions verschmelzen
+        // Two adjoining FlyPortions are merged
         if( pRight && pLeft->GetPortion() == pRight )
         {
             pRight->MoveAllGlue( pLeft );
@@ -227,11 +225,11 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
         }
         KSHORT nRightGlue = pRight && 0 < pRight->GetPrtGlue()
                           ? KSHORT(pRight->GetPrtGlue()) : 0;
-        // 2) linken und rechten Glue ausgleichen
-        //    Bei Tabs haengen wir nix um ...
+        // 2) balance left and right Glue
+        //    But not for tabs ...
         if( pLeft && nRightGlue && !pRight->InTabGrp() )
         {
-            // pPrev ist die Portion, die unmittelbar vor pRight liegt.
+            // pPrev is the portion immediately before pRight
             SwLinePortion *pPrev = pRight->FindPrevPortion( pLeft );
 
             if ( pRight->IsFlyPortion() && pRight->GetLen() )
@@ -239,8 +237,8 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 SwFlyPortion *pFly = (SwFlyPortion *)pRight;
                 if ( pFly->GetBlankWidth() < nRightGlue )
                 {
-                    // Hier entsteht eine neue TxtPortion, die dass zuvor
-                    // vom Fly verschluckte Blank reaktiviert.
+                    // Creating new TxtPortion that takes over the
+                    // Blank previously swallowed by the Fly.
                     nRightGlue = nRightGlue - pFly->GetBlankWidth();
                     pFly->SubPrtWidth( pFly->GetBlankWidth() );
                     pFly->SetLen( 0 );
@@ -258,19 +256,18 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 if( bNoMove || pPrev->PrtWidth() >= nRightGlue ||
                     pPrev->InHyphGrp() || pPrev->IsKernPortion() )
                 {
-                    // Die Portion, die vor pRight liegt kann nicht
-                    // verschoben werden, weil kein Glue mehr vorhanden ist.
-                    // Wir fuehren die Abbruchbedingung herbei:
+                    // The portion before the pRight cannot be moved
+                    // because no Glue is remaining.
+                    // We set the break condition:
                     pPrev = pLeft;
                 }
                 else
                 {
                     nRightGlue = nRightGlue - pPrev->PrtWidth();
-                    // pPrev wird hinter pRight verschoben.
-                    // Dazu wird der Gluewert zwischen pRight und pLeft
-                    // ausgeglichen.
+                    // pPrev is moved behind pRight. For this the
+                    // Glue value between pRight and pLeft gets balanced.
                     pRight->MoveGlue( pLeft, short( pPrev->PrtWidth() ) );
-                    // Jetzt wird die Verkettung gerichtet.
+                    // The chain is linked.
                     SwLinePortion *pPrevPrev = pPrev->FindPrevPortion( pLeft );
                     pPrevPrev->SetPortion( pRight );
                     pPrev->SetPortion( pRight->GetPortion() );
@@ -293,8 +290,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 }
             }
         }
-        // Wenn es keinen linken Glue mehr gibt, wird die Abbruchbedingung
-        // herbeigefuehrt.
+        // If no left Glue remaines we set the break condition.
         pRight = pLeft ? pLeft : (SwGluePortion*)this;
     }
 }
