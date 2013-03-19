@@ -4972,7 +4972,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
                 if ( rRef2.IsTabRel() )
                     nTab2 = rRef2.nRelTab + nPosTab;
                 else
-                    nTab2 = rRef1.nTab;
+                    nTab2 = rRef2.nTab;
                 if ( nTab2 < nTab1 )
                 {   // PutInOrder
                     rRef1.nTab = nTab2;
