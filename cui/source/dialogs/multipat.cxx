@@ -88,7 +88,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
         INetURLObject aPath( xFolderPicker->getDirectory() );
         aPath.removeFinalSlash();
         String aURL = aPath.GetMainURL( INetURLObject::NO_DECODE );
-        String sInsPath;
+        OUString sInsPath;
         ::utl::LocalFileHelper::ConvertURLToSystemPath( aURL, sInsPath );
 
         if ( pImpl->bIsRadioButtonMode )
@@ -278,14 +278,14 @@ void SvxMultiPathDialog::SetPath( const String& rPath )
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         String sPath = rPath.GetToken( i, cDelim );
-        String sSystemPath;
+        OUString sSystemPath;
         sal_Bool bIsSystemPath =
             ::utl::LocalFileHelper::ConvertURLToSystemPath( sPath, sSystemPath );
 
         if ( pImpl->bIsRadioButtonMode )
         {
             rtl::OUString sEntry( '\t' );
-            sEntry += (bIsSystemPath ? sSystemPath : sPath);
+            sEntry += (bIsSystemPath ? sSystemPath : OUString(sPath));
             SvTreeListEntry* pEntry = aRadioLB.InsertEntry( sEntry );
             String* pURL = new String( sPath );
             pEntry->SetUserData( pURL );

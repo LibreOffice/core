@@ -585,15 +585,15 @@ sal_Bool LinkManager::GetGraphicFromAny( const String& rMimeType,
 
 
 // ----------------------------------------------------------------------
-String lcl_DDE_RelToAbs( const String& rTopic, const String& rBaseURL )
+String lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 {
-    String sRet;
+    OUString sRet;
     INetURLObject aURL( rTopic );
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         utl::LocalFileHelper::ConvertSystemPathToURL( rTopic, rBaseURL, sRet );
-    if( !sRet.Len() )
+    if( sRet.isEmpty() )
         sRet = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), rTopic, URIHelper::GetMaybeFileHdl(), true );
-    return sRet;
+    return String(sRet);
 }
 
 sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )

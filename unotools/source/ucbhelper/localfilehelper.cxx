@@ -37,9 +37,9 @@ using namespace ::com::sun::star::ucb;
 namespace utl
 {
 
-sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const String& rBaseURL, String& rReturn )
+sal_Bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, const OUString& rBaseURL, OUString& rReturn )
 {
-    rReturn = ::rtl::OUString();
+    rReturn = "";
 
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create(
@@ -53,12 +53,12 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
         return sal_False;
     }
 
-    return ( rReturn.Len() != 0 );
+    return !rReturn.isEmpty();
 }
 
-sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& rReturn )
+sal_Bool LocalFileHelper::ConvertURLToSystemPath( const OUString& rName, OUString& rReturn )
 {
-    rReturn = ::rtl::OUString();
+    rReturn = "";
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create(
             comphelper::getProcessComponentContext() ) );
@@ -70,7 +70,7 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
     {
     }
 
-    return ( rReturn.Len() != 0 );
+    return !rReturn.isEmpty();
 }
 
 bool LocalFileHelper::ConvertPhysicalNameToURL(const rtl::OUString& rName, rtl::OUString& rReturn)
@@ -93,7 +93,7 @@ bool LocalFileHelper::ConvertPhysicalNameToURL(const rtl::OUString& rName, rtl::
 
 bool LocalFileHelper::ConvertURLToPhysicalName(const rtl::OUString& rName, rtl::OUString& rReturn)
 {
-    rReturn = ::rtl::OUString();
+    rReturn = "";
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create(
             comphelper::getProcessComponentContext() ) );
@@ -119,7 +119,7 @@ sal_Bool LocalFileHelper::IsLocalFile(const rtl::OUString& rName)
 
 sal_Bool LocalFileHelper::IsFileContent(const rtl::OUString& rName)
 {
-    String aTmp;
+    OUString aTmp;
     return ConvertURLToSystemPath(rName, aTmp);
 }
 
@@ -136,7 +136,7 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aProps(1);
         ::rtl::OUString* pProps = aProps.getArray();
-        pProps[0] = ::rtl::OUString("Url");
+        pProps[0] = "Url";
 
         try
         {

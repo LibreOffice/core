@@ -555,7 +555,9 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
     }
     else
     {
-        ::utl::LocalFileHelper::ConvertSystemPathToURL( aText, aWorkDir, aMatch );
+        OUString aTmpMatch;
+        ::utl::LocalFileHelper::ConvertSystemPathToURL( OUString(aText), OUString(aWorkDir), aTmpMatch );
+        aMatch = aTmpMatch;
     }
 
     return aMatch;
@@ -988,7 +990,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
                         }
                         if ( bFound )
                         {
-                            String aFile;
+                            OUString aFile;
                             if (::utl::LocalFileHelper::ConvertURLToSystemPath(aURL,aFile))
                                 InsertEntry(aFile);
                             else

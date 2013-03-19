@@ -240,8 +240,8 @@ void SfxURLToolBoxControl_Impl::StateChanged
                         continue;
 
                     INetURLObject aURL    ( sURL );
-                    String        sMainURL( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
-                    String        sFile;
+                    OUString      sMainURL( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
+                    OUString      sFile;
 
                     if (::utl::LocalFileHelper::ConvertURLToSystemPath(sMainURL,sFile))
                         pURLBox->InsertEntry(sFile);
