@@ -103,15 +103,15 @@ public:
    is: they are converted to frame- and window-local coordinates.
    If multiple frames with wrap attributes are located on the same line, we get
    the following settings for the text flow:
-  
+
         L/R    P     L     R     N
          P   -P-P- -P-L  -P R- -P N
          L   -L P- -L L  -L R- -L N
          R    R-P-  R-L   R R-  R N
          N    N P-  N L   N R-  N N
-  
+
    (P=parallel, L=left, R=right, N=no wrap)
-  
+
    We can describe the behaviour as follows:
    Every frame can push away text, with the restriction that it only has influence
    until the next frame.

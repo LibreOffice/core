@@ -44,7 +44,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 #endif
 {
     // Set an explicit Application User Model ID for the process
-    
+
     WCHAR szShell32[MAX_PATH];
     GetSystemDirectoryW(szShell32, MAX_PATH);
     wcscat(szShell32, L"\\Shell32.dll");
@@ -76,7 +76,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             }
         }
     }
-    FreeLibrary(hinstDll);    
+    FreeLibrary(hinstDll);
 
     // Retrieve startup info
 

@@ -451,14 +451,14 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                 int bUseDocType = m_pFilterInfo->maDocType.isEmpty()  ? 0 : 1;
                 Sequence< PropertyValue > aSourceData( 2 + bUseDocType );
                 int i = 0;
-                
-                
+
+
                 aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ) );
                 aSourceData[i++].Value <<= xIS;
-                
+
                 aSourceData[i].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Indent" ) );
                 aSourceData[i++].Value <<= (sal_Bool)sal_True;
-                
+
                 if( bUseDocType )
                     {
                         aSourceData[i  ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("DocType_Public"));

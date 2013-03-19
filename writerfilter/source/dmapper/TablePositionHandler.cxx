@@ -118,7 +118,7 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
         nHoriOrient = text::HoriOrientation::OUTSIDE;
     else if ( m_aXSpec == "right" )
         nHoriOrient = text::HoriOrientation::RIGHT;
-    
+
     sal_Int16 nHoriOrientRelation;
     if ( m_aHorzAnchor == "margin" )
         nHoriOrientRelation = text::RelOrientation::PAGE_PRINT_AREA;

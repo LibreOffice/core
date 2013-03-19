@@ -2167,7 +2167,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
 // -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
-{   
+{
     SvtModuleOptions::EFactory eFactory = getModule(rBindings);
     bool bWriterApp =
         eFactory == SvtModuleOptions::E_WRITER ||
@@ -2182,7 +2182,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
         if (bWriterApp)
             aLayoutBtn.SetText( aLayoutWriterStr);
         else
-            aLayoutBtn.SetText( aStylesStr );        
+            aLayoutBtn.SetText( aStylesStr );
     }
 
     bFormat = sal_False;

@@ -372,7 +372,7 @@ namespace cmis
                     string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ) );
                     aParentUrl.removeSegment( );
                     rtl::OUString sParentUrl = aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
-       
+
                     Content aParent( m_xContext, m_pProvider, new ucbhelper::ContentIdentifier( sParentUrl ) );
                     libcmis::FolderPtr pParentFolder = boost::dynamic_pointer_cast< libcmis::Folder >( aParent.getObject( xEnv ) );
                     if ( pParentFolder )

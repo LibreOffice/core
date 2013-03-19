@@ -43,7 +43,7 @@ namespace dgm {
  */
 struct Connection
 {
-    Connection() : 
+    Connection() :
         mnType( 0 ),
         mnSourceOrder( 0 ),
         mnDestOrder( 0 )
@@ -60,7 +60,7 @@ struct Connection
     OUString msSibTransId;
     sal_Int32 mnSourceOrder;
     sal_Int32 mnDestOrder;
-    
+
 };
 
 typedef std::vector< Connection > Connections;
@@ -70,7 +70,7 @@ typedef std::vector< Connection > Connections;
  */
 struct Point
 {
-    Point() : 
+    Point() :
         mnType(0),
         mnMaxChildren(-1),
         mnPreferredChildren(-1),

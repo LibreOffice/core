@@ -93,7 +93,7 @@ public:
     sal_Bool            InsertDir(const String &rText, sal_uInt16 nRegion);
 
     /** Change the name of an entry or a directory
-        
+
         \param rName
             The new name to set
         \param nRegion

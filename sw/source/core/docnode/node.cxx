@@ -1835,7 +1835,7 @@ void SwCntntNode::ChkCondColl()
         {
             if( IsTxtNode() && ((SwTxtNode*)this)->GetNumRule())
             {
-                // Is at which Level in a list? 
+                // Is at which Level in a list?
                 aTmp.SetCondition( PARA_IN_LIST,
                                 ((SwTxtNode*)this)->GetActualListLevel() );
                 pCColl = ((SwConditionTxtFmtColl*)GetFmtColl())->

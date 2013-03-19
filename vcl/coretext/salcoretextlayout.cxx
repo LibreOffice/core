@@ -66,7 +66,7 @@ private:
 
     mutable int* mpGlyphAdvances;       // glyph widths for the justified layout
 
-    mutable CGPoint* mpGlyphPositions; 
+    mutable CGPoint* mpGlyphPositions;
     mutable CTTypesetterRef mpTypesetter;
     mutable CTLineRef mpLine;
     mutable bool mbHasBoundRectangle;

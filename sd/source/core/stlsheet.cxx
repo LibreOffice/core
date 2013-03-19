@@ -404,11 +404,11 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         {
             aRealStyle = pPage->GetLayoutName();
             // cut after seperator string
-            
+
             if( aRealStyle.indexOf(aSep) >= 0)
             {
                 aRealStyle = aRealStyle.copy(0,(aRealStyle.indexOf(aSep) + aSep.getLength()));
-            }      
+            }
         }
     }
     if (aRealStyle.isEmpty())

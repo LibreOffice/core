@@ -847,7 +847,7 @@ void ScPreview::DoInvalidate()
 {
     //  If the whole GetState of the shell is called
     //  The Invalidate must come behind asynchronously
- 
+
    if (bInGetState)
         Application::PostUserEvent( STATIC_LINK( this, ScPreview, InvalidateHdl ) );
     else

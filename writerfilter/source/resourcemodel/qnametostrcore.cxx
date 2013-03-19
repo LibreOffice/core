@@ -36,7 +36,7 @@ string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC QNameToString::operator()(Id qName)
     string sResult;
 
     Map::const_iterator aIt = mMap.find(qName);
-    
+
     if (aIt != mMap.end())
         sResult = aIt->second;
 

@@ -1585,7 +1585,7 @@ public:
         class ImplEscherExSdr.
      */
     inline SvStream*    QueryPictureStream() { return mxGlobal->QueryPictureStream(); }
-    
+
                 /// Inserts internal data into the EscherStream, this process
                 /// may and has to be executed only once
                 /// If pPicStreamMergeBSE is known, the BLIPs from this stream are being

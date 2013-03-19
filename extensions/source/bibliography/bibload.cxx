@@ -232,7 +232,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUS
 {
 
     SolarMutexGuard aGuard;
-    
+
     m_pBibMod = OpenBibModul();
 
     String aURLStr( rURL );

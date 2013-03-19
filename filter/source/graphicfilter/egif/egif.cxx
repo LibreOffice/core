@@ -312,7 +312,7 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
         m_rGIF << cFlags;
         m_rGIF << (sal_uInt8) 0x00;
         m_rGIF << (sal_uInt8) 0x00;
-        
+
         // write dummy palette with two entries (black/white);
         // we do this only because of a bug in Photoshop, since those can't
         // read pictures without a global color palette
@@ -332,7 +332,7 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
     DBG_ASSERT( rAnimation.Count() > 0, "Animation has no bitmaps!" );
 
     sal_uInt16 nLoopCount = (sal_uInt16) rAnimation.GetLoopCount();
-    
+
     // if only one run should take place
     // the LoopExtension won't be written
     // The default in this case is a single run
