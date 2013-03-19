@@ -1398,7 +1398,7 @@ BrokenRecoveryDialog::BrokenRecoveryDialog(Window*       pParent        ,
 
     m_sSavePath = SvtPathOptions().GetWorkPath();
     INetURLObject aObj( m_sSavePath );
-    String sPath;
+    OUString sPath;
     ::utl::LocalFileHelper::ConvertURLToSystemPath( aObj.GetMainURL( INetURLObject::NO_DECODE ), sPath );
     m_aSaveDirED.SetText( sPath );
 
@@ -1498,7 +1498,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
     if (nRet == css::ui::dialogs::ExecutableDialogResults::OK)
     {
         m_sSavePath = xFolderPicker->getDirectory();
-        String sPath;
+        OUString sPath;
         ::utl::LocalFileHelper::ConvertURLToSystemPath( m_sSavePath, sPath );
         m_aSaveDirED.SetText( sPath );
     }

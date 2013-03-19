@@ -206,7 +206,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
 *//*-*************************************************************************************************************/
 String FilterDialog::impl_buildUIFileName( const String& sName )
 {
-    String sShortName( sName );
+    OUString sShortName( sName );
 
     if( ::utl::LocalFileHelper::ConvertURLToSystemPath( sName, sShortName ) == sal_True )
     {

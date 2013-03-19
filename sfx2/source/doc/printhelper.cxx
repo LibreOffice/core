@@ -627,8 +627,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 throw ::com::sun::star::lang::IllegalArgumentException();
             }
 
-            String        sPath        ;
-            String        sURL  (sTemp);
+            OUString      sPath        ;
+            OUString      sURL  (sTemp);
             INetURLObject aCheck(sURL );
             if (aCheck.GetProtocol()==INET_PROT_NOT_VALID)
             {
@@ -665,7 +665,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
                 aCheckedArgs[nProps].Name = rtl::OUString("LocalFileName");
-                aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sPath );
+                aCheckedArgs[nProps++].Value <<= sPath;
             }
             else
             {
@@ -682,7 +682,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 pUCBPrintTempFile->EnableKillingFile();
 
                 //FIXME: does it work?
-                aCheckedArgs[nProps].Name = rtl::OUString("LocalFileName");
+                aCheckedArgs[nProps].Name = "LocalFileName";
                 aCheckedArgs[nProps++].Value <<= ::rtl::OUString( pUCBPrintTempFile->GetFileName() );
                 sUcbUrl = sURL;
             }

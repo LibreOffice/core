@@ -515,7 +515,7 @@ sal_Bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
 
 String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
 {
-    String          aStrUiURL;
+    OUString          aStrUiURL;
     INetURLObject   aURLObj( aStrURL );
 
     switch(aURLObj.GetProtocol())
@@ -536,7 +536,7 @@ String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
                 aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
             }
     }
-    if(!aStrUiURL.Len())
+    if(aStrUiURL.isEmpty())
         return aStrURL;
     return aStrUiURL;
 }

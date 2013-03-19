@@ -120,7 +120,7 @@ void SvxHyperlinkDocTp::FillDlgFields ( String& aStrURL )
 String SvxHyperlinkDocTp::GetCurrentURL ()
 {
     // get data from dialog-controls
-    String aStrURL;
+    OUString aStrURL;
     String aStrPath ( maCbbPath.GetText() );
     const String aBaseURL ( maCbbPath.GetBaseURL() );
     String aStrMark( maEdTarget.GetText() );
@@ -140,7 +140,7 @@ String SvxHyperlinkDocTp::GetCurrentURL ()
 
     if( aStrMark != aEmptyStr )
     {
-        aStrURL.AppendAscii( sHash );
+        aStrURL += OUString( sHash );
         aStrURL += aStrMark;
     }
 
@@ -213,7 +213,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
     if ( ERRCODE_NONE == nError )
     {
         String aURL( aDlg.GetPath() );
-        String aPath;
+        OUString aPath;
 
         utl::LocalFileHelper::ConvertURLToSystemPath( aURL, aPath );
 

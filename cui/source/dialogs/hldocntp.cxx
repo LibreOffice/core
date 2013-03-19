@@ -402,13 +402,13 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
     uno::Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
 
-    String              aStrURL;
-    String              aTempStrURL( maCbbPath.GetText() );
+    OUString            aStrURL;
+    OUString            aTempStrURL( maCbbPath.GetText() );
     utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, maCbbPath.GetBaseURL(), aStrURL );
 
     String              aStrPath = aStrURL;
-    sal_Bool                bZeroPath = ( aStrPath.Len() == 0 );
-    sal_Bool                bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
+    sal_Bool            bZeroPath = ( aStrPath.Len() == 0 );
+    sal_Bool            bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
                                                         //  as file name, otherwise we do not yet know
 
     if( bZeroPath )
@@ -427,13 +427,13 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
         INetURLObject   aURL( aStrURL, INET_PROT_FILE );
         String          aStrName;
         if( bHandleFileName )
-            aStrName = bZeroPath? aTempStrURL : String(aURL.getName());
+            aStrName = bZeroPath? aTempStrURL : OUString(aURL.getName());
 
         maCbbPath.SetBaseURL( xFolderPicker->getDirectory() );
-        String          aStrTmp( xFolderPicker->getDirectory() );
+        OUString          aStrTmp( xFolderPicker->getDirectory() );
 
-        if( aStrTmp.GetChar( aStrTmp.Len() - 1 ) != sSlash[0] )
-            aStrTmp.AppendAscii( sSlash );
+        if( aStrTmp[ aStrTmp.getLength() - 1 ] != sSlash[0] )
+            aStrTmp += OUString( sSlash );
 
         // append old file name
         if( bHandleFileName )
