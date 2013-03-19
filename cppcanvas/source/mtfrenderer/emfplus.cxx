@@ -68,6 +68,7 @@
 #define EmfPlusRecordTypeSetPixelOffsetMode 16418
 #define EmfPlusRecordTypeSetCompositingQuality 16420
 #define EmfPlusRecordTypeSave 16421
+#define EmfPlusRecordTypeRestore 16422
 #define EmfPlusRecordTypeSetWorldTransform 16426
 #define EmfPlusRecordTypeResetWorldTransform 16427
 #define EmfPlusRecordTypeMultiplyWorldTransform 16428
@@ -1669,9 +1670,53 @@ namespace cppcanvas
                         EMFP_DEBUG (printf ("EMF+\tTODO\n"));
                         break;
                     case EmfPlusRecordTypeSave:
-                        EMFP_DEBUG (printf ("EMF+ Save\n"));
-                        EMFP_DEBUG (printf ("EMF+\tTODO\n"));
+                    {
+                        sal_uInt32 stackIndex;
+
+                        rMF >> stackIndex;
+
+                        EMFP_DEBUG (printf ("EMF+ Save stack index: %d\n", stackIndex));
+
+                        EPGSSIter aIter = mGSStack.find( stackIndex );
+
+                        if ( aIter != mGSStack.end() )
+                        {
+                            EmfPlusGraphicState aState = aIter->second;
+                            mGSStack.erase( aIter );
+
+                            EMFP_DEBUG (printf ("stack index: %d found and erased\n", stackIndex));
+                        }
+
+                        EmfPlusGraphicState aState;
+
+                        aState.aWorldTransform = aWorldTransform;
+                        aState.aDevState = rState;
+
+                        mGSStack[ stackIndex ] = aState;
+
                         break;
+                    }
+                    case EmfPlusRecordTypeRestore:
+                    {
+                        sal_uInt32 stackIndex;
+
+                        rMF >> stackIndex;
+
+                        EMFP_DEBUG (printf ("EMF+ Restore stack index: %d\n", stackIndex));
+
+                        EPGSSIter aIter = mGSStack.find( stackIndex );
+
+                        if ( aIter != mGSStack.end() ) {
+                            EMFP_DEBUG (printf ("stack index: %d found\n", stackIndex));
+                            EmfPlusGraphicState aState = aIter->second;
+                            aWorldTransform = aState.aWorldTransform;
+                            rState.clip = aState.aDevState.clip;
+                            rState.clipRect = aState.aDevState.clipRect;
+                            rState.xClipPoly = aState.aDevState.xClipPoly;
+                        }
+
+                        break;
+                    }
                     case EmfPlusRecordTypeSetWorldTransform: {
                         EMFP_DEBUG (printf ("EMF+ SetWorldTransform\n"));
                         XForm transform;
