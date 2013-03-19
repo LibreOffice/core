@@ -767,11 +767,25 @@ public:
 
     SC_DLLPUBLIC void SetEditText( const ScAddress& rPos, const OUString& rStr );
 
+    /**
+     * Call this if you are not sure whether to put this as an edit text or a
+     * simple text.
+     */
+    SC_DLLPUBLIC void SetTextCell( const ScAddress& rPos, const OUString& rStr );
+
     void SetEmptyCell( const ScAddress& rPos );
 
     SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
     SC_DLLPUBLIC void SetValue( const ScAddress& rPos, double fVal );
     void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError);
+
+    SC_DLLPUBLIC void SetFormula(
+        const ScAddress& rPos, const ScTokenArray& rArray,
+        formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT );
+
+    SC_DLLPUBLIC void SetFormula(
+        const ScAddress& rPos, const OUString& rFormula,
+        formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT );
 
     SC_DLLPUBLIC void           InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,

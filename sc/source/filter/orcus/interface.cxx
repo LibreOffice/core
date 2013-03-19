@@ -118,9 +118,7 @@ void ScOrcusSheet::set_formula(
 {
     OUString aFormula(p, n, RTL_TEXTENCODING_UTF8);
     formula::FormulaGrammar::Grammar eGrammar = getCalcGrammarFromOrcus( grammar );
-
-    ScFormulaCell* pCell = new ScFormulaCell(&mrDoc, ScAddress(col, row, mnTab), aFormula, eGrammar);
-    mrDoc.PutCell(col, row, mnTab, pCell);
+    mrDoc.SetFormula(ScAddress(col,row,mnTab), aFormula, eGrammar);
 }
 
 void ScOrcusSheet::set_formula_result(row_t row, col_t col, const char* p, size_t n)
@@ -153,8 +151,7 @@ void ScOrcusSheet::set_shared_formula(
         maSharedFormulas.insert( std::pair<size_t, ScRangeData*>(sindex, pSharedFormula) );
         ScTokenArray aArr;
         aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
-        ScFormulaCell* pCell = new ScFormulaCell( &mrDoc, ScAddress( row, col, mnTab ), &aArr );
-        mrDoc.PutCell( col, row, mnTab, pCell );
+        mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
     }
 }
 
@@ -174,8 +171,7 @@ void ScOrcusSheet::set_shared_formula(
         maSharedFormulas.insert( std::pair<size_t, ScRangeData*>(sindex, pSharedFormula) );
         ScTokenArray aArr;
         aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
-        ScFormulaCell* pCell = new ScFormulaCell( &mrDoc, ScAddress( row, col, mnTab ), &aArr );
-        mrDoc.PutCell( col, row, mnTab, pCell );
+        mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
     }
 }
 
@@ -187,8 +183,7 @@ void ScOrcusSheet::set_shared_formula(row_t row, col_t col, size_t sindex)
     ScRangeData* pSharedFormula = maSharedFormulas.find(sindex)->second;
     ScTokenArray aArr;
     aArr.AddToken( formula::FormulaIndexToken( ocName, pSharedFormula->GetIndex() ) );
-    ScFormulaCell* pCell = new ScFormulaCell( &mrDoc, ScAddress( row, col, mnTab ), &aArr );
-    mrDoc.PutCell( col, row, mnTab, pCell );
+    mrDoc.SetFormula(ScAddress(col,row,mnTab), aArr);
 }
 
 void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
@@ -199,8 +194,7 @@ void ScOrcusSheet::set_string(row_t row, col_t col, size_t sindex)
     // normal string
 
     const OUString& rSharedString = mrSharedStrings.getByIndex(sindex);
-    ScBaseCell* pCell = ScBaseCell::CreateTextCell( rSharedString, &mrDoc );
-    mrDoc.PutCell(col, row, mnTab, pCell);
+    mrDoc.SetTextCell(ScAddress(col,row,mnTab), rSharedString);
 }
 
 void ScOrcusSheet::set_value(row_t row, col_t col, double value)

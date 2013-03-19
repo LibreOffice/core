@@ -204,11 +204,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
                         if (!aData.isEmpty())
                         {
                             pDoc->EnsureTable(nBaseTab);
-
-                            if (ScStringUtil::isMultiline(aData))
-                                pDoc->SetEditText(aPos, aData);
-                            else
-                                pDoc->SetString(aPos, aData, &aStrParam);
+                            pDoc->SetTextCell(aPos, aData);
                         }
                     }
                     else

@@ -48,6 +48,7 @@
 #include "editutil.hxx"
 #include "cell.hxx"
 #include "editattributemap.hxx"
+#include "stringutil.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -1024,16 +1025,22 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
     }
     else //regular text cells
     {
-        ScBaseCell* pNewCell = NULL;
         ScDocument* pDoc = rXMLImport.GetDocument();
         if (maStringValue)
-            pNewCell = ScBaseCell::CreateTextCell( *maStringValue, pDoc );
+        {
+            pDoc->SetTextCell(rCurrentPos, *maStringValue);
+            bDoIncrement = true;
+        }
         else if (mbEditEngineHasText)
         {
             if (maFields.empty() && maFormats.empty() && mpEditEngine->GetParagraphCount() == 1)
             {
                 // This is a normal text without format runs.
-                pNewCell = new ScStringCell(mpEditEngine->GetText());
+                ScSetStringParam aParam;
+                aParam.mbDetectNumberFormat = false;
+                aParam.mbHandleApostrophe = false;
+                aParam.meSetTextNumFormat = ScSetStringParam::Always;
+                pDoc->SetString(rCurrentPos, mpEditEngine->GetText(), &aParam);
             }
             else
             {
@@ -1055,14 +1062,17 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 // is a prerequisite for using this constructor of ScEditCell.
                 pDoc->SetEditText(rCurrentPos, mpEditEngine->CreateTextObject());
             }
+            bDoIncrement = true;
         }
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
-            pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
-
-        bDoIncrement = pNewCell != NULL;
-        if (bDoIncrement && pNewCell)
-            pDoc->PutCell( rCurrentPos, pNewCell );
+        {
+            pDoc->SetTextCell(rCurrentPos, *pOUText);
+            bDoIncrement = true;
+        }
+        else
+            bDoIncrement = false;
     }
+
     // #i56027# This is about setting simple text, not edit cells,
     // so ProgressBarIncrement must be called with bEditCell = FALSE.
     // Formatted text that is put into the cell by the child context
@@ -1316,12 +1326,13 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pNewCell);
             SetFormulaCell(pFCell);
+            pDoc->PutCell( rCellPos, pNewCell );
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {
             //  for bEnglish, "'" at the beginning is always interpreted as text
             //  marker and stripped
-            pNewCell = ScBaseCell::CreateTextCell( aText.copy( 1 ), pDoc );
+            pDoc->SetTextCell(rCellPos, aText.copy(1));
         }
         else
         {
@@ -1329,13 +1340,12 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
             double fVal;
             if ( pFormatter->IsNumberFormat( aText, nEnglish, fVal ) )
-                pNewCell = new ScValueCell( fVal );
+                pDoc->SetValue(rCellPos, fVal);
             //the (english) number format will not be set
             //search matching local format and apply it
             else
-                pNewCell = ScBaseCell::CreateTextCell( aText, pDoc );
+                pDoc->SetTextCell(rCellPos, aText);
         }
-        pDoc->PutCell( rCellPos, pNewCell );
     }
 }
 

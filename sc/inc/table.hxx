@@ -306,6 +306,10 @@ public:
     void SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
 
     void SetEmptyCell( SCCOL nCol, SCROW nRow );
+    void SetFormula(
+        SCCOL nCol, SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram );
+    void SetFormula(
+        SCCOL nCol, SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
 
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);

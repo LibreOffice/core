@@ -589,17 +589,8 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
 {
     if (ValidTab(nTab))
     {
-        if ( bForceTab && ( nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] ) )
-        {
-            bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
-            if ( nTab >= static_cast<SCTAB>(maTabs.size()) )
-            {
-                maTabs.resize( nTab + 1, NULL );
-            }
-            maTabs.at(nTab) = new ScTable(this, nTab,
-                                    OUString("temp"),
-                                    bExtras, bExtras);
-        }
+        if (bForceTab)
+            EnsureTable(nTab);
 
         if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
             maTabs[nTab]->PutCell( nCol, nRow, nFormatIndex, pCell );
@@ -1040,8 +1031,6 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     return nRetVal;
 }
 
-//  ----------------------------------------------------------------------------
-
 void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError)
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
@@ -1049,7 +1038,23 @@ void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 
             maTabs[nTab]->SetError( nCol, nRow, nError );
 }
 
-//  ----------------------------------------------------------------------------
+void ScDocument::SetFormula(
+    const ScAddress& rPos, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    maTabs[rPos.Tab()]->SetFormula(rPos.Col(), rPos.Row(), rArray, eGram);
+}
+
+void ScDocument::SetFormula(
+    const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    maTabs[rPos.Tab()]->SetFormula(rPos.Col(), rPos.Row(), rFormula, eGram);
+}
 
 void ScDocument::SetConsolidateDlgData( const ScConsolidateParam* pData )
 {

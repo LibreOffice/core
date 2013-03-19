@@ -262,6 +262,8 @@ public:
         ScSetStringParam* pParam = NULL );
 
     void SetEditText( SCROW nRow, EditTextObject* pEditText );
+    void SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram );
+    void SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
 
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const sal_uInt16 nError);

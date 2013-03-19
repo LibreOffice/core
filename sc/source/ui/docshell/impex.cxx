@@ -981,7 +981,7 @@ static bool lcl_PutString(
             pDoc->ApplyPattern(nCol, nRow, nTab, aNewAttrs);
 
         }
-        pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( rStr, pDoc ) );
+        pDoc->SetTextCell(ScAddress(nCol,nRow,nTab), rStr);
         return bMultiLine;
     }
 
@@ -1183,7 +1183,9 @@ static bool lcl_PutString(
                     if (nFound > 5)
                         nFormat = pDocFormatter->GetStandardFormat( fDays, nFormat, nType, eDocLang);
 
-                    pDoc->PutCell( nCol, nRow, nTab, new ScValueCell(fDays), nFormat, false );
+                    ScAddress aPos(nCol,nRow,nTab);
+                    pDoc->SetValue(aPos, fDays);
+                    pDoc->SetNumberFormat(aPos, nFormat);
 
                     return bMultiLine;     // success
                 }
@@ -1780,9 +1782,9 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             {   // don't ignore value
                                 if( bText )
                                 {
-                                    pDoc->PutCell( nCol, nRow, aRange.aStart.Tab(),
-                                            ScBaseCell::CreateTextCell( aText, pDoc),
-                                            true);
+                                    pDoc->EnsureTable(aRange.aStart.Tab());
+                                    pDoc->SetTextCell(
+                                        ScAddress(nCol, nRow, aRange.aStart.Tab()), aText);
                                 }
                                 else
                                 {

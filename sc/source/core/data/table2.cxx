@@ -1342,6 +1342,24 @@ void ScTable::SetEmptyCell( SCCOL nCol, SCROW nRow )
     aCol[nCol].Delete(nRow);
 }
 
+void ScTable::SetFormula(
+    SCCOL nCol, SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram )
+{
+    if (!ValidColRow(nCol, nRow))
+        return;
+
+    aCol[nCol].SetFormula(nRow, rArray, eGram);
+}
+
+void ScTable::SetFormula(
+    SCCOL nCol, SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
+{
+    if (!ValidColRow(nCol, nRow))
+        return;
+
+    aCol[nCol].SetFormula(nRow, rFormula, eGram);
+}
+
 void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 {
     if (ValidColRow(nCol, nRow))

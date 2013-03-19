@@ -1488,6 +1488,18 @@ void ScColumn::SetEditText( SCROW nRow, EditTextObject* pEditText )
     Insert(nRow, new ScEditCell(pEditText, pDocument));
 }
 
+void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram )
+{
+    ScAddress aPos(nCol, nRow, nTab);
+    Insert(nRow, new ScFormulaCell(pDocument, aPos, &rArray, eGram));
+}
+
+void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
+{
+    ScAddress aPos(nCol, nRow, nTab);
+    Insert(nRow, new ScFormulaCell(pDocument, aPos, rFormula, eGram));
+}
+
 void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
     bool bHasDates = false;

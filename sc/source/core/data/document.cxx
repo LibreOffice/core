@@ -87,6 +87,7 @@
 #include "stlalgorithm.hxx"
 #include "defaultsoptions.hxx"
 #include "editutil.hxx"
+#include "stringutil.hxx"
 
 #include <map>
 #include <limits>
@@ -2988,6 +2989,27 @@ void ScDocument::SetEditText( const ScAddress& rPos, const OUString& rStr )
     ScFieldEditEngine& rEngine = GetEditEngine();
     rEngine.SetText(rStr);
     maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), rEngine.CreateTextObject());
+}
+
+void ScDocument::SetTextCell( const ScAddress& rPos, const OUString& rStr )
+{
+    if (!TableExists(rPos.Tab()))
+        return;
+
+    if (ScStringUtil::isMultiline(rStr))
+    {
+        ScFieldEditEngine& rEngine = GetEditEngine();
+        rEngine.SetText(rStr);
+        maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), rEngine.CreateTextObject());
+    }
+    else
+    {
+        ScSetStringParam aParam;
+        aParam.mbDetectNumberFormat = false;
+        aParam.mbHandleApostrophe = false;
+        aParam.meSetTextNumFormat = ScSetStringParam::Always;
+        maTabs[rPos.Tab()]->SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rStr, &aParam);
+    }
 }
 
 void ScDocument::SetEmptyCell( const ScAddress& rPos )

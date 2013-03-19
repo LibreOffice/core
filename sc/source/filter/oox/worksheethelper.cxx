@@ -46,7 +46,6 @@
 #include "oox/helper/propertyset.hxx"
 #include "addressconverter.hxx"
 #include "autofilterbuffer.hxx"
-#include "cell.hxx"
 #include "commentsbuffer.hxx"
 #include "condformatbuffer.hxx"
 #include "convuno.hxx"
@@ -67,8 +66,10 @@
 #include "worksheetsettings.hxx"
 #include "formulabuffer.hxx"
 #include "scitems.hxx"
-#include <svl/stritem.hxx>
 #include "editutil.hxx"
+#include "tokenarray.hxx"
+
+#include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
 
 namespace oox {
@@ -1556,14 +1557,9 @@ void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rT
 {
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rAddress );
-    ScBaseCell* pNewCell = NULL;
     ScDocument& rDoc = getScDocument();
     if ( !rText.isEmpty() )
-        pNewCell = ScBaseCell::CreateTextCell( rText, &rDoc );
-    if ( pNewCell )
-        rDoc.PutCell( aAddress, pNewCell );
-    else
-        rDoc.SetString( aAddress.Col(), aAddress.Row(), aAddress.Tab(), rText );
+        rDoc.SetTextCell(aAddress, rText);
 }
 
 void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const Font* pFirstPortionFont ) const
@@ -1584,8 +1580,7 @@ void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTo
     ScAddress aCellPos;
     ScUnoConversion::FillScAddress( aCellPos, rAddress );
     ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, rTokens );
-    ScBaseCell* pNewCell = new ScFormulaCell( &rDoc, aCellPos, &aTokenArray );
-    rDoc.PutCell( aCellPos, pNewCell, sal_True );
+    rDoc.SetFormula(aCellPos, aTokenArray);
 }
 
 void WorksheetHelper::initializeWorksheetImport()
