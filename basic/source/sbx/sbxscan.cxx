@@ -55,108 +55,131 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
     rcThousandSep = rData.getNumThousandSep()[0];
 }
 
+inline bool ImpIsDigit( sal_Unicode c )
+{
+    return '0' <= c && c <= '9';
+}
+
+/** NOTE: slightly differs from strchr() in that it does not consider the
+    terminating NULL character to be part of the string and returns bool
+    instead of pointer, if character is 0 returns false.
+ */
+bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
+{
+    if (!c)
+        return false;
+    while (*p)
+    {
+        if (*p++ == c)
+            return true;
+    }
+    return false;
+}
+
+bool ImpIsAlNum( sal_Unicode c )
+{
+    return (c < 128) ? isalnum( static_cast<char>(c) ) : false;
+}
+
 // scanning a string according to BASIC-conventions
-// but exponent may also be a D, so data type is SbxDOUBLED
+// but exponent may also be a D, so data type is SbxDOUBLE
 // conversion error if data type is fixed and it doesn't fit
 
 SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                   sal_uInt16* pLen, bool bAllowIntntl, bool bOnlyIntntl )
 {
-    OString aBStr( OUStringToOString( rWSrc, RTL_TEXTENCODING_ASCII_US ) );
-
-    char cIntntlComma, cIntntl1000;
-    char cNonIntntlComma = '.';
-
-    sal_Unicode cDecimalSep, cThousandSep = 0;
+    sal_Unicode cIntntlDecSep, cIntntlGrpSep;
+    sal_Unicode cNonIntntlDecSep = '.';
     if( bAllowIntntl || bOnlyIntntl )
     {
-        ImpGetIntntlSep( cDecimalSep, cThousandSep );
-        cIntntlComma = (char)cDecimalSep;
-        cIntntl1000 = (char)cThousandSep;
+        ImpGetIntntlSep( cIntntlDecSep, cIntntlGrpSep );
+        if( bOnlyIntntl )
+            cNonIntntlDecSep = cIntntlDecSep;
     }
-
     else
     {
-        cIntntlComma = cNonIntntlComma;
-        cIntntl1000 = cNonIntntlComma;
+        cIntntlDecSep = cNonIntntlDecSep;
+        cIntntlGrpSep = 0;  // no group separator accepted in non-i18n
     }
 
-    if( bOnlyIntntl )
-    {
-        cNonIntntlComma = cIntntlComma;
-        cIntntl1000 = (char)cThousandSep;
-    }
-
-    const char* pStart = aBStr.getStr();
-    const char* p = pStart;
-    char buf[ 80 ], *q = buf;
+    const sal_Unicode* const pStart = rWSrc.getStr();
+    const sal_Unicode* p = pStart;
+    OUStringBuffer aBuf( rWSrc.getLength());
     bool bRes = true;
     bool bMinus = false;
     nVal = 0;
     SbxDataType eScanType = SbxSINGLE;
-    while( *p &&( *p == ' ' || *p == '\t' ) ) p++;
+    while( *p == ' ' || *p == '\t' )
+        p++;
     if( *p == '-' )
-        p++, bMinus = true;
-    if( isdigit( *p ) ||( (*p == cNonIntntlComma || *p == cIntntlComma ||
-            *p == cIntntl1000) && isdigit( *(p+1 ) ) ) )
+    {
+        p++;
+        bMinus = true;
+    }
+    if( ImpIsDigit( *p ) || ((*p == cNonIntntlDecSep || *p == cIntntlDecSep ||
+                    (cIntntlDecSep && *p == cIntntlGrpSep)) && ImpIsDigit( *(p+1) )))
     {
         short exp = 0;
-        short comma = 0;
+        short decsep = 0;
         short ndig = 0;
         short ncdig = 0;    // number of digits after decimal point
-        OStringBuffer aSearchStr("0123456789DEde");
-        aSearchStr.append(cNonIntntlComma);
-        if( cIntntlComma != cNonIntntlComma )
-            aSearchStr.append(cIntntlComma);
+        OUStringBuffer aSearchStr("0123456789DEde");
+        aSearchStr.append(cNonIntntlDecSep);
+        if( cIntntlDecSep != cNonIntntlDecSep )
+            aSearchStr.append(cIntntlDecSep);
         if( bOnlyIntntl )
-            aSearchStr.append(cIntntl1000);
-        const char* pSearchStr = aSearchStr.getStr();
-        while( strchr( pSearchStr, *p ) && *p )
+            aSearchStr.append(cIntntlGrpSep);
+        const sal_Unicode* const pSearchStr = aSearchStr.getStr();
+        const sal_Unicode pDdEe[] = { 'D', 'd', 'E', 'e', 0 };
+        while( ImpStrChr( pSearchStr, *p ) )
         {
-            if( bOnlyIntntl && *p == cIntntl1000 )
+            aBuf.append( *p );
+            if( bOnlyIntntl && *p == cIntntlGrpSep )
             {
                 p++;
                 continue;
             }
-
-            if( *p == cNonIntntlComma || *p == cIntntlComma )
+            if( *p == cNonIntntlDecSep || *p == cIntntlDecSep )
             {
-                // always insert '.' so that atof works
                 p++;
-                if( ++comma > 1 )
+                if( ++decsep > 1 )
                     continue;
-                else
-                    *q++ = '.';
+                // Use the separator that is passed to stringToDouble()
+                aBuf[ p - pStart ] = cIntntlDecSep;
             }
-            else if( strchr( "DdEe", *p ) )
+            else if( ImpStrChr( pDdEe, *p ) )
             {
                 if( ++exp > 1 )
                 {
-                    p++; continue;
-                }
-                if( toupper( *p ) == 'D' )
-                    eScanType = SbxDOUBLE;
-                *q++ = 'E'; p++;
-
-                if( *p == '+' )
                     p++;
-                else
-                if( *p == '-' )
-                    *q++ = *p++;
+                    continue;
+                }
+                if( *p == 'D' || *p == 'd' )
+                    eScanType = SbxDOUBLE;
+                aBuf[ p - pStart ] = 'E';
+                p++;
             }
             else
             {
-                *q++ = *p++;
-                if( comma && !exp ) ncdig++;
+                p++;
+                if( decsep && !exp )
+                    ncdig++;
             }
-            if( !exp ) ndig++;
+            if( !exp )
+                ndig++;
         }
-        *q = 0;
 
-        if( comma > 1 || exp > 1 )
+        if( decsep > 1 || exp > 1 )
             bRes = false;
 
-        if( !comma && !exp )
+        OUString aBufStr( aBuf.makeStringAndClear());
+        rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+        sal_Int32 nParseEnd = 0;
+        nVal = rtl::math::stringToDouble( aBufStr, cIntntlDecSep, cIntntlGrpSep, &eStatus, &nParseEnd );
+        if( eStatus != rtl_math_ConversionStatus_Ok || nParseEnd != aBufStr.getLength() )
+            bRes = false;
+
+        if( !decsep && !exp )
         {
             if( nVal >= SbxMININT && nVal <= SbxMAXINT )
                 eScanType = SbxINTEGER;
@@ -164,49 +187,65 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                 eScanType = SbxLONG;
         }
 
-        nVal = atof( buf );
-        ndig = ndig - comma;
+        ndig = ndig - decsep;
         // too many numbers for SINGLE?
         if( ndig > 15 || ncdig > 6 )
             eScanType = SbxDOUBLE;
 
         // type detection?
-        if( strchr( "%!&#", *p ) && *p ) p++;
+        const sal_Unicode pTypes[] = { '%', '!', '&', '#', 0 };
+        if( ImpStrChr( pTypes, *p ) )
+            p++;
     }
     // hex/octal number? read in and convert:
     else if( *p == '&' )
     {
         p++;
         eScanType = SbxLONG;
-        const char *cmp = "0123456789ABCDEF";
+        OUString aCmp( "0123456789ABCDEFabcdef" );
         char base = 16;
         char ndig = 8;
-        char xch  = *p++;
-        switch( toupper( xch ) )
+        switch( *p++ )
         {
-            case 'O': cmp = "01234567"; base = 8; ndig = 11; break;
-            case 'H': break;
-            default : bRes = false;
+            case 'O':
+            case 'o':
+                aCmp = "01234567";
+                base = 8;
+                ndig = 11;
+                break;
+            case 'H':
+            case 'h':
+                break;
+            default :
+                bRes = false;
         }
-        long l = 0;
-        int i;
-        while( isalnum( *p ) )
+        const sal_Unicode* const pCmp = aCmp.getStr();
+        while( ImpIsAlNum( *p ) )    /* XXX: really munge all alnum also when error? */
         {
-            char ch = sal::static_int_cast< char >( toupper( *p ) );
+            sal_Unicode ch = *p;
+            if( ImpStrChr( pCmp, ch ) )
+            {
+                if (ch > 0x60)
+                    ch -= 0x20;     // convert ASCII lower to upper case
+                aBuf.append( ch );
+            }
+            else
+                bRes = false;
             p++;
-            if( strchr( cmp, ch ) ) *q++ = ch;
-            else bRes = false;
         }
-        *q = 0;
-        for( q = buf; *q; q++ )
+        OUString aBufStr( aBuf.makeStringAndClear());
+        long l = 0;
+        for( const sal_Unicode* q = aBufStr.getStr(); bRes && *q; q++ )
         {
-            i =( *q & 0xFF ) - '0';
-            if( i > 9 ) i -= 7;
-            l =( l * base ) + i;
+            int i = *q - '0';
+            if( i > 9 )
+                i -= 7;     // 'A'-'0' = 17 => 10, ...
+            l = ( l * base ) + i;
             if( !ndig-- )
                 bRes = false;
         }
-        if( *p == '&' ) p++;
+        if( *p == '&' )
+            p++;
         nVal = (double) l;
         if( l >= SbxMININT && l <= SbxMAXINT )
             eScanType = SbxINTEGER;
