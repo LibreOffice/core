@@ -141,11 +141,11 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             }
             if( *p == cNonIntntlDecSep || *p == cIntntlDecSep )
             {
+                // Use the separator that is passed to stringToDouble()
+                aBuf[ p - pStart ] = cIntntlDecSep;
                 p++;
                 if( ++decsep > 1 )
                     continue;
-                // Use the separator that is passed to stringToDouble()
-                aBuf[ p - pStart ] = cIntntlDecSep;
             }
             else if( ImpStrChr( pDdEe, *p ) )
             {
