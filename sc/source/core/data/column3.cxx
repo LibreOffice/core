@@ -2028,6 +2028,7 @@ void ScColumn::RebuildFormulaGroups()
         if ( rCur.pCell && rCur.pCell->GetCellType() == CELLTYPE_FORMULA )
             static_cast<ScFormulaCell *>( rCur.pCell )->SetCellGroup( xNone );
     }
+    maFnGroups.clear();
 
     // re-build groups
     ColDoubleEntry *pLastDouble = NULL;
@@ -2049,7 +2050,7 @@ void ScColumn::RebuildFormulaGroups()
             if ( !pLastDouble )
             {
                 pLastDouble = new ColDoubleEntry();
-                pLastDouble->mnStart = i - 1;
+                pLastDouble->mnStart = rPrev.nRow;
                 pLastDouble->maData.push_back(
                         static_cast< ScValueCell * >( rPrev.pCell )->GetValue() );
                 maDoubles.push_back( pLastDouble );
@@ -2081,7 +2082,7 @@ void ScColumn::RebuildFormulaGroups()
             // create a new group ...
             ScFormulaCellGroup *pGroup = new ScFormulaCellGroup();
             pGroup->mpDelta = pDelta;
-            pGroup->mnStart = i - 1;
+            pGroup->mnStart = rPrev.nRow;
             pGroup->mnLength = 2;
 
             xGroup.reset( pGroup );
