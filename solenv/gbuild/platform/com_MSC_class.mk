@@ -550,10 +550,13 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Executable_ge
 $(call gb_ExternalProject_get_state_target,$(1),$(2)): WRAPPERS := $(gb_AUTOCONF_WRAPPERS)
 endef
 
+# if ccache is enabled, then split it and use lastword as REAL_FOO
+# /opt/lo/bin/ccache /cygdrive/c/PROGRA~2/MICROS~2.0/VC/bin/cl.exe
+
 gb_AUTOCONF_WRAPPERS := \
-	REAL_CC="$(shell cygpath -w $(CC))" \
+	REAL_CC="$(shell cygpath -w $(lastword $(CC)))" \
 	CC="$(call gb_Executable_get_target,gcc-wrapper)" \
-	REAL_CXX="$(shell cygpath -w $(CXX))" \
+	REAL_CXX="$(shell cygpath -w  $(lastword $(CXX)))" \
 	CXX="$(call gb_Executable_get_target,g++-wrapper)" \
     LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"
 
