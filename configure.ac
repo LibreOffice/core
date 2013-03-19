@@ -7260,13 +7260,14 @@ AC_SUBST([MINGW_LIBXML_DLL])
 AC_SUBST([MINGW_ZLIB_DLL])
 
 # =====================================================================
-# Checking for a Python interpreter with version >= 2.6 needed to build LO.
+# Checking for a Python interpreter with version >= 2.5 needed to build LO.
+# runtime requires Python 3 compatible version (>= 2.6)
 # Optionally user can pass an option to configure, i. e.
 # ./configure PYTHON=/usr/bin/python
 # =====================================================================
 if test "$build_os" != "cygwin"; then
     # This allows a lack of system python with no error, we use internal one in that case.
-    AM_PATH_PYTHON([2.6],, [:])
+    AM_PATH_PYTHON([2.5],, [:])
     # Clean PYTHON_VERSION checked below if cross-compiling
     PYTHON_VERSION=""
     if test "$PYTHON" != ":"; then
