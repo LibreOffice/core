@@ -63,7 +63,7 @@ namespace toolkitform
         */
         sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel ) SAL_THROW(( Exception ))
         {
-            static const ::rtl::OUString FM_PROP_CLASSID(RTL_CONSTASCII_USTRINGPARAM("ClassId"));
+            static const ::rtl::OUString FM_PROP_CLASSID("ClassId");
             sal_Int16 nControlType = FormComponentType::CONTROL;
 
             Reference< XPropertySetInfo > xPSI;
@@ -243,7 +243,7 @@ namespace toolkitform
         */
         void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< ::rtl::OUString >& _rVector )
         {
-            static const ::rtl::OUString FM_PROP_STRINGITEMLIST(RTL_CONSTASCII_USTRINGPARAM("StringItemList"));
+            static const ::rtl::OUString FM_PROP_STRINGITEMLIST("StringItemList");
             Sequence< ::rtl::OUString > aListEntries;
             OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_STRINGITEMLIST ) >>= aListEntries );
             ::std::copy( aListEntries.getConstArray(), aListEntries.getConstArray() + aListEntries.getLength(),
@@ -283,11 +283,11 @@ namespace toolkitform
             // --------------------------------
             // Name, Description, Text
             OSL_VERIFY( xModelProps->getPropertyValue( rtl::OUString(FM_PROP_NAME) ) >>= _rpDescriptor->Name );
-            static const ::rtl::OUString FM_PROP_HELPTEXT(RTL_CONSTASCII_USTRINGPARAM("HelpText"));
+            static const ::rtl::OUString FM_PROP_HELPTEXT("HelpText");
             OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_HELPTEXT ) >>= _rpDescriptor->Description );
             Any aText;
-            static const ::rtl::OUString FM_PROP_TEXT(RTL_CONSTASCII_USTRINGPARAM("Text"));
-            static const ::rtl::OUString FM_PROP_LABEL(RTL_CONSTASCII_USTRINGPARAM("Label"));
+            static const ::rtl::OUString FM_PROP_TEXT("Text");
+            static const ::rtl::OUString FM_PROP_LABEL("Label");
             if ( xPSI->hasPropertyByName( FM_PROP_TEXT ) )
                 aText = xModelProps->getPropertyValue( FM_PROP_TEXT );
             else if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
@@ -297,21 +297,21 @@ namespace toolkitform
 
             // --------------------------------
             // readonly
-            static const ::rtl::OUString FM_PROP_READONLY(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+            static const ::rtl::OUString FM_PROP_READONLY("ReadOnly");
             if ( xPSI->hasPropertyByName( FM_PROP_READONLY ) )
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= _rpDescriptor->ReadOnly );
 
             // --------------------------------
             // border
             {
-                static const ::rtl::OUString FM_PROP_BORDER(RTL_CONSTASCII_USTRINGPARAM("Border"));
+                static const ::rtl::OUString FM_PROP_BORDER("Border");
                 if ( xPSI->hasPropertyByName( FM_PROP_BORDER ) )
                 {
                     sal_Int16 nBorderType = 0;
                     OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_BORDER ) >>= nBorderType );
                     _rpDescriptor->Border = ( nBorderType != 0 );
 
-                    ::rtl::OUString sBorderColorPropertyName( RTL_CONSTASCII_USTRINGPARAM( "BorderColor" ) );
+                    ::rtl::OUString sBorderColorPropertyName( "BorderColor" );
                     if ( xPSI->hasPropertyByName( sBorderColorPropertyName ) )
                     {
                         sal_Int32 nBoderColor = COL_TRANSPARENT;
@@ -325,7 +325,7 @@ namespace toolkitform
 
             // --------------------------------
             // background color
-            static const ::rtl::OUString FM_PROP_BACKGROUNDCOLOR(RTL_CONSTASCII_USTRINGPARAM("BackgroundColor"));
+            static const ::rtl::OUString FM_PROP_BACKGROUNDCOLOR("BackgroundColor");
             if ( xPSI->hasPropertyByName( FM_PROP_BACKGROUNDCOLOR ) )
             {
                 sal_Int32 nBackColor = COL_TRANSPARENT;
@@ -336,7 +336,7 @@ namespace toolkitform
 
             // --------------------------------
             // text color
-            static const ::rtl::OUString FM_PROP_TEXTCOLOR(RTL_CONSTASCII_USTRINGPARAM("TextColor"));
+            static const ::rtl::OUString FM_PROP_TEXTCOLOR("TextColor");
             if ( xPSI->hasPropertyByName( FM_PROP_TEXTCOLOR ) )
             {
                 sal_Int32 nTextColor = COL_TRANSPARENT;
@@ -351,7 +351,7 @@ namespace toolkitform
             // multi line and word break
             // The MultiLine property of the control is mapped to both the "MULTILINE" and
             // "WORDBREAK" style flags
-            static const ::rtl::OUString FM_PROP_MULTILINE(RTL_CONSTASCII_USTRINGPARAM("MultiLine"));
+            static const ::rtl::OUString FM_PROP_MULTILINE("MultiLine");
             if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
             {
                 sal_Bool bMultiLine = sal_False;
@@ -361,7 +361,7 @@ namespace toolkitform
             }
             // ............................
             // horizontal alignment
-            static const ::rtl::OUString FM_PROP_ALIGN(RTL_CONSTASCII_USTRINGPARAM("Align"));
+            static const ::rtl::OUString FM_PROP_ALIGN("Align");
             if ( xPSI->hasPropertyByName( FM_PROP_ALIGN ) )
             {
                 sal_Int16 nAlign = awt::TextAlign::LEFT;
@@ -380,7 +380,7 @@ namespace toolkitform
             // ............................
             // vertical alignment
             {
-                ::rtl::OUString sVertAlignPropertyName( RTL_CONSTASCII_USTRINGPARAM( "VerticalAlign" ) );
+                ::rtl::OUString sVertAlignPropertyName( "VerticalAlign" );
                 if ( xPSI->hasPropertyByName( sVertAlignPropertyName ) )
                 {
                     sal_Int16 nAlign = VerticalAlignment_MIDDLE;
@@ -397,7 +397,7 @@ namespace toolkitform
             }
 
             // font
-            static const ::rtl::OUString FM_PROP_FONT(RTL_CONSTASCII_USTRINGPARAM("FontDescriptor"));
+            static const ::rtl::OUString FM_PROP_FONT("FontDescriptor");
             if ( xPSI->hasPropertyByName( FM_PROP_FONT ) )
             {
                 FontDescriptor aUNOFont;
@@ -406,7 +406,7 @@ namespace toolkitform
             }
 
             // tab order
-            rtl::OUString aTabIndexString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) );
+            rtl::OUString aTabIndexString( "TabIndex" );
             if ( xPSI->hasPropertyByName( aTabIndexString ) )
             {
                 sal_Int16 nIndex = -1;
@@ -426,7 +426,7 @@ namespace toolkitform
                 pEditWidget->MultiLine = ( _rpDescriptor->TextStyle & TEXT_DRAW_MULTILINE ) != 0;
                 // ............................
                 // password input
-                ::rtl::OUString sEchoCharPropName( RTL_CONSTASCII_USTRINGPARAM( "EchoChar" ) );
+                ::rtl::OUString sEchoCharPropName( "EchoChar" );
                 if ( xPSI->hasPropertyByName( sEchoCharPropName ) )
                 {
                     sal_Int16 nEchoChar = 0;
@@ -435,12 +435,12 @@ namespace toolkitform
                 }
                 // ............................
                 // file select
-                static const ::rtl::OUString FM_SUN_COMPONENT_FILECONTROL(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FileControl"));
+                static const ::rtl::OUString FM_SUN_COMPONENT_FILECONTROL("com.sun.star.form.component.FileControl");
                 if ( xSI->supportsService( FM_SUN_COMPONENT_FILECONTROL ) )
                     pEditWidget->FileSelect = true;
                 // ............................
                 // maximum text length
-                static const ::rtl::OUString FM_PROP_MAXTEXTLEN(RTL_CONSTASCII_USTRINGPARAM("MaxTextLen"));
+                static const ::rtl::OUString FM_PROP_MAXTEXTLEN("MaxTextLen");
                 if ( xPSI->hasPropertyByName( FM_PROP_MAXTEXTLEN ) )
                 {
                     sal_Int16 nMaxTextLength = 0;
@@ -459,7 +459,7 @@ namespace toolkitform
                 ::vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< ::vcl::PDFWriter::PushButtonWidget* >( _rpDescriptor.get() );
                 FormButtonType eButtonType = FormButtonType_PUSH;
                 OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( "ButtonType" ) ) >>= eButtonType );
-                static const ::rtl::OUString FM_PROP_TARGET_URL(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
+                static const ::rtl::OUString FM_PROP_TARGET_URL("TargetURL");
                 if ( eButtonType == FormButtonType_SUBMIT )
                 {
                     // if a button is a submit button, then it uses the URL at it's parent form
@@ -518,7 +518,7 @@ namespace toolkitform
 
             // --------------------------------
             // check boxes
-            static const ::rtl::OUString FM_PROP_STATE(RTL_CONSTASCII_USTRINGPARAM("State"));
+            static const ::rtl::OUString FM_PROP_STATE("State");
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::CheckBox )
             {
                 ::vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< ::vcl::PDFWriter::CheckBoxWidget* >( _rpDescriptor.get() );
@@ -538,7 +538,7 @@ namespace toolkitform
                 pRadioWidget->RadioGroup = determineRadioGroupId( xModelProps );
                 try
                 {
-                    static const ::rtl::OUString FM_PROP_REFVALUE(RTL_CONSTASCII_USTRINGPARAM("RefValue"));
+                    static const ::rtl::OUString FM_PROP_REFVALUE("RefValue");
                     xModelProps->getPropertyValue( FM_PROP_REFVALUE ) >>= pRadioWidget->OnValue;
                 }
                 catch(...)
@@ -554,7 +554,7 @@ namespace toolkitform
                 ::vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< ::vcl::PDFWriter::ListBoxWidget* >( _rpDescriptor.get() );
                 // ............................
                 // drop down
-                static const ::rtl::OUString FM_PROP_DROPDOWN(RTL_CONSTASCII_USTRINGPARAM("Dropdown"));
+                static const ::rtl::OUString FM_PROP_DROPDOWN("Dropdown");
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_DROPDOWN ) >>= pListWidget->DropDown );
                 // ............................
                 // multi selection

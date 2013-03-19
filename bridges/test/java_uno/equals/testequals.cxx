@@ -177,7 +177,7 @@ namespace {
 bool writeInfo(void * pRegistryKey, sal_Char const * pImplementationName,
                css::uno::Sequence< rtl::OUString > const & rServiceNames)
 {
-    rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM( "/" ));
+    rtl::OUString aKeyName( "/" );
     aKeyName += rtl::OUString::createFromAscii(pImplementationName);
     aKeyName += rtl::OUString( "/UNO/SERVICES" );
     css::uno::Reference< css::registry::XRegistryKey > xKey;

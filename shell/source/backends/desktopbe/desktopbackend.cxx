@@ -60,8 +60,7 @@ rtl::OUString SAL_CALL getDefaultImplementationName() {
 
 css::uno::Sequence< rtl::OUString > SAL_CALL getDefaultSupportedServiceNames() {
     rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.backend.DesktopBackend"));
+            "com.sun.star.configuration.backend.DesktopBackend");
     return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 

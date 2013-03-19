@@ -240,8 +240,8 @@ void VistaFilePickerEventHandler::stopListening()
     }
 }
 
-static const ::rtl::OUString PROP_CONTROL_ID(RTL_CONSTASCII_USTRINGPARAM("control_id"));
-static const ::rtl::OUString PROP_PICKER_LISTENER(RTL_CONSTASCII_USTRINGPARAM("picker_listener"));
+static const ::rtl::OUString PROP_CONTROL_ID("control_id");
+static const ::rtl::OUString PROP_PICKER_LISTENER("picker_listener");
 
 //-----------------------------------------------------------------------------------------
 class AsyncPickerEvents : public RequestHandler

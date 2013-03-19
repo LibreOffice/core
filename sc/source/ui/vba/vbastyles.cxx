@@ -23,7 +23,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static rtl::OUString SDEFAULTCELLSTYLENAME( RTL_CONSTASCII_USTRINGPARAM("Default") );
+static rtl::OUString SDEFAULTCELLSTYLENAME("Default");
 static css::uno::Any
 lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel )
 {
@@ -99,7 +99,7 @@ ScVbaStyles::Add( const ::rtl::OUString& _sName, const uno::Any& _aBasedOn ) thr
     uno::Reference< excel::XStyle > aRet;
     try
     {
-        rtl::OUString sParentCellStyleName( RTL_CONSTASCII_USTRINGPARAM("Default"));
+        rtl::OUString sParentCellStyleName("Default");
         if ( _aBasedOn.hasValue() )
         {
             uno::Reference< excel::XRange > oRange;

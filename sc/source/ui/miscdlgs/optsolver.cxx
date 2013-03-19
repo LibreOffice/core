@@ -284,7 +284,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     // Get the "Delete Rows" commandimagelist images from sfx instead of
     // adding a second copy to sc (see ScTbxInsertCtrl::StateChanged)
 
-    rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+    rtl::OUString aSlotURL( "slot:" );
     aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_DEL_ROWS ) );
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
     Image aDelNm = ::GetImage( xFrame, aSlotURL, false );

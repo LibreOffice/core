@@ -156,7 +156,7 @@ void InitSalData()
 
 const ::rtl::OUString& SalGetDesktopEnvironment()
 {
-    static OUString aDesktopEnvironment(RTL_CONSTASCII_USTRINGPARAM( "CocoaTouch" ));
+    static OUString aDesktopEnvironment( "CocoaTouch" );
     return aDesktopEnvironment;
 }
 

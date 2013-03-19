@@ -219,7 +219,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
                     css::uno::Reference<XInterface>());
 
             // map the java JavaLoader to this environment
-            OUString sJava(RTL_CONSTASCII_USTRINGPARAM("java"));
+            OUString sJava("java");
             uno_getEnvironment(&pJava_environment, sJava.pData,
                                 xVirtualMachine.get());
             if(!pJava_environment)

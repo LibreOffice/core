@@ -193,7 +193,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbAllSel                = sal_False;
     mbDropPos               = sal_False;
 
-    ::rtl::OUString aGregorian( RTL_CONSTASCII_USTRINGPARAM( "gregorian"));
+    ::rtl::OUString aGregorian( "gregorian");
     maCalendarWrapper.loadCalendar( aGregorian,
             Application::GetAppLocaleDataWrapper().getLanguageTag().getLocale());
     if (maCalendarWrapper.getUniqueID() != aGregorian)

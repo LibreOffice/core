@@ -65,7 +65,7 @@ static OUString createRelativeURL( const OUString& rFilterName, const OUString& 
             }
         }
 
-        OUString aRelURL( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
+        OUString aRelURL( "vnd.sun.star.Package:" );
         aRelURL += rFilterName;
         aRelURL += OUString( sal_Unicode( '/' ) );
         aRelURL += aName;
@@ -81,18 +81,18 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
 {
     try
     {
-        const OUString sComponentData       ( RTL_CONSTASCII_USTRINGPARAM ( "oor:component-data" ) );
-        const OUString sNode                ( RTL_CONSTASCII_USTRINGPARAM ( "node" ) );
-        const OUString sName                ( RTL_CONSTASCII_USTRINGPARAM ( "oor:name" ) );
-        const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
-        const OUString sUIName              ( RTL_CONSTASCII_USTRINGPARAM ( "UIName" ) );
-        const OUString sComma               ( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
-        const OUString sDelim               ( RTL_CONSTASCII_USTRINGPARAM ( ";" ) );
-        const OUString sData                ( RTL_CONSTASCII_USTRINGPARAM ( "Data" ) );
-        const OUString sDocTypePrefix       ( RTL_CONSTASCII_USTRINGPARAM ( "doctype:" ) );
-        const OUString sFilterAdaptorService( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XmlFilterAdaptor" ) );
-        const OUString sXSLTFilterService   ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.documentconversion.XSLTFilter" ) );
-        const OUString sCdataAttribute      ( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
+        const OUString sComponentData       ( "oor:component-data" );
+        const OUString sNode                ( "node" );
+        const OUString sName                ( "oor:name" );
+        const OUString sWhiteSpace          ( " " );
+        const OUString sUIName              ( "UIName" );
+        const OUString sComma               ( "," );
+        const OUString sDelim               ( ";" );
+        const OUString sData                ( "Data" );
+        const OUString sDocTypePrefix       ( "doctype:" );
+        const OUString sFilterAdaptorService( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
+        const OUString sXSLTFilterService   ( "com.sun.star.documentconversion.XSLTFilter" );
+        const OUString sCdataAttribute      ( "CDATA" );
 
 
         // set up sax writer and connect to given output stream
@@ -227,10 +227,10 @@ void TypeDetectionExporter::addProperty( Reference< XWriter > xHandler, const OU
 {
     try
     {
-        const OUString sCdataAttribute( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
-        const OUString sProp( RTL_CONSTASCII_USTRINGPARAM( "prop" ) );
-        const OUString sValue( RTL_CONSTASCII_USTRINGPARAM( "value" ) );
-        const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+        const OUString sCdataAttribute( "CDATA" );
+        const OUString sProp( "prop" );
+        const OUString sValue( "value" );
+        const OUString sWhiteSpace          ( " " );
 
         ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( OUString( "oor:name" ), sCdataAttribute, rName );
@@ -257,10 +257,10 @@ void TypeDetectionExporter::addLocaleProperty( Reference< XWriter > xHandler, co
 {
     try
     {
-        const OUString sCdataAttribute( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
-        const OUString sProp( RTL_CONSTASCII_USTRINGPARAM( "prop" ) );
-        const OUString sValue( RTL_CONSTASCII_USTRINGPARAM( "value" ) );
-        const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+        const OUString sCdataAttribute( "CDATA" );
+        const OUString sProp( "prop" );
+        const OUString sValue( "value" );
+        const OUString sWhiteSpace          ( " " );
 
         ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( OUString( "oor:name" ), sCdataAttribute, rName );

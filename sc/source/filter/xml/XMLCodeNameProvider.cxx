@@ -30,7 +30,7 @@ sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, String& rCodeN
     if( !(aAny >>= aProps) )
         return false;
 
-    OUString sCodeNameProp( RTL_CONSTASCII_USTRINGPARAM("CodeName") );
+    OUString sCodeNameProp("CodeName");
     sal_Int32 nPropCount = aProps.getLength();
     for( sal_Int32 i=0; i<nPropCount; i++ )
     {
@@ -165,7 +165,7 @@ uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
 void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xNameAccess, ScDocument *pDoc )
 {
     uno::Any aAny;
-    OUString sDocName( RTL_CONSTASCII_USTRINGPARAM("*doc*") );
+    OUString sDocName("*doc*");
     String sCodeName;
     if( xNameAccess->hasByName( sDocName ) )
     {

@@ -41,7 +41,7 @@ namespace apitest {
 void CellProperties::testVertJustify()
 {
     uno::Reference< beans::XPropertySet > xCellRangeBase(init(),UNO_QUERY_THROW);
-    rtl::OUString aVertJustify(RTL_CONSTASCII_USTRINGPARAM("VertJustify"));
+    rtl::OUString aVertJustify("VertJustify");
     uno::Any aOldVertJustify = xCellRangeBase->getPropertyValue(aVertJustify);
     sal_Int32 aValue = 0;
     CPPUNIT_ASSERT(aOldVertJustify >>= aValue);
@@ -59,7 +59,7 @@ void CellProperties::testVertJustify()
 void CellProperties::testRotateReference()
 {
     uno::Reference< beans::XPropertySet > xCellRangeBase(init(),UNO_QUERY_THROW);
-    rtl::OUString aRotateReference(RTL_CONSTASCII_USTRINGPARAM("RotateReference"));
+    rtl::OUString aRotateReference("RotateReference");
     uno::Any aOldRotateReference = xCellRangeBase->getPropertyValue(aRotateReference);
     sal_Int32 aValue = 0;
     CPPUNIT_ASSERT(aOldRotateReference >>= aValue);

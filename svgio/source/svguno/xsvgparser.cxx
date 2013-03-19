@@ -77,7 +77,7 @@ namespace svgio
     {
         uno::Sequence< rtl::OUString > XSvgParser_getSupportedServiceNames()
         {
-            static rtl::OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.SvgTools" ) );
+            static rtl::OUString aServiceName("com.sun.star.graphic.SvgTools" );
             static uno::Sequence< rtl::OUString > aServiceNames( &aServiceName, 1 );
 
             return( aServiceNames );

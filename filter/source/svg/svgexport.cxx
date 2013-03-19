@@ -586,8 +586,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
         // font embedding
         const char* pSVGDisableFontEmbedding = getenv( "SVG_DISABLE_FONT_EMBEDDING" );
-        rtl::OUString aEmbedFontEnv(
-            RTL_CONSTASCII_USTRINGPARAM("${SVG_DISABLE_FONT_EMBEDDING}"));
+        rtl::OUString aEmbedFontEnv("${SVG_DISABLE_FONT_EMBEDDING}");
         rtl::Bootstrap::expandMacros(aEmbedFontEnv);
         const bool bEmbedFonts=pSVGDisableFontEmbedding ? false : (
             aEmbedFontEnv.getLength() ? false : true);

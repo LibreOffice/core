@@ -537,7 +537,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
 
     for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
     {
-        ::rtl::OUString aStreamName(RTL_CONSTASCII_USTRINGPARAM( "\002OlePres00" ));
+        ::rtl::OUString aStreamName( "\002OlePres00" );
         aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
         if ( xNameContainer->hasByName( aStreamName ) )
             xNameContainer->removeByName( aStreamName );
@@ -605,7 +605,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
                 {
                     for ( sal_uInt8 nInd = 0; nInd < 10 && !bExists; nInd++ )
                     {
-                        ::rtl::OUString aStreamName(RTL_CONSTASCII_USTRINGPARAM( "\002OlePres00" ));
+                        ::rtl::OUString aStreamName( "\002OlePres00" );
                         aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
                         try
                         {
@@ -655,7 +655,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         {
             for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
             {
-                ::rtl::OUString aStreamName(RTL_CONSTASCII_USTRINGPARAM( "\002OlePres00" ));
+                ::rtl::OUString aStreamName( "\002OlePres00" );
                 aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
                 uno::Reference< io::XStream > xCachedCopyStream;
                 try
@@ -692,7 +692,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
             {
                 if ( bAllowToRepair50 && !xResult.is() )
                 {
-                    ::rtl::OUString aOrigContName( RTL_CONSTASCII_USTRINGPARAM( "Ole-Object" ) );
+                    ::rtl::OUString aOrigContName( "Ole-Object" );
                     if ( xNameContainer->hasByName( aOrigContName ) )
                     {
                         uno::Reference< embed::XClassifiedObject > xClassified( xNameContainer, uno::UNO_QUERY_THROW );

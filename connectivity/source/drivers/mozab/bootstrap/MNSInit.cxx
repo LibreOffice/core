@@ -114,8 +114,7 @@ sal_Bool MNS_InitXPCOM(sal_Bool* aProfileExists)
     {
         nsCOMPtr<nsILocalFile> binDir;
         // Note: if path3 construction fails, mozilla will default to using MOZILLA_FIVE_HOME in the NS_InitXPCOM2()
-        rtl::OUString path1(
-            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program"));
+        rtl::OUString path1("$BRAND_BASE_DIR/program");
         rtl::Bootstrap::expandMacros(path1);
         rtl::OString path2;
         if ((osl::FileBase::getSystemPathFromFileURL(path1, path1) ==

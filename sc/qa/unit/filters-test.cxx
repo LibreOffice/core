@@ -242,7 +242,7 @@ void ScFiltersTest::testRangeNameODS()
     ScDocument* pDoc = xDocSh->GetDocument();
     testRangeNameImpl(pDoc);
 
-    OUString aSheet2CSV(RTL_CONSTASCII_USTRINGPARAM("rangeExp_Sheet2."));
+    OUString aSheet2CSV("rangeExp_Sheet2.");
     OUString aCSVPath;
     createCSVPath( aSheet2CSV, aCSVPath );
     testFile( aCSVPath, pDoc, 1);

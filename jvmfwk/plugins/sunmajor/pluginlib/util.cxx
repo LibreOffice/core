@@ -396,7 +396,7 @@ bool getJavaProps(const OUString & exePath,
     sal_Int32 cArgs = 3;
     OUString arg1 = OUString("-classpath");// + sClassPath;
     OUString arg2 = sClassPath;
-    OUString arg3(RTL_CONSTASCII_USTRINGPARAM("JREProperties"));
+    OUString arg3("JREProperties");
     OUString arg4 = "noaccessibility";
     rtl_uString *args[4] = {arg1.pData, arg2.pData, arg3.pData};
 
@@ -467,7 +467,7 @@ bool getJavaProps(const OUString & exePath,
 
 #ifdef JVM_ONE_PATH_CHECK
         //replace absolute path by linux distro link
-        OUString sHomeProperty(RTL_CONSTASCII_USTRINGPARAM("java.home"));
+        OUString sHomeProperty("java.home");
         if(sHomeProperty.equals(sKey))
         {
             sVal = homePath + OUString::createFromAscii("/jre");
@@ -991,7 +991,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
     //find java.vendor property
     typedef vector<pair<OUString, OUString> >::const_iterator c_ip;
-    OUString sVendor(RTL_CONSTASCII_USTRINGPARAM("java.vendor"));
+    OUString sVendor("java.vendor");
     OUString sVendorName;
 
     for (c_ip i = props.begin(); i != props.end(); ++i)
@@ -1056,8 +1056,8 @@ inline OUString getDirFromFile(const OUString& usFilePath)
 void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
 // Get Java from PATH environment variable
-    static OUString sCurDir(RTL_CONSTASCII_USTRINGPARAM("."));
-    static OUString sParentDir(RTL_CONSTASCII_USTRINGPARAM(".."));
+    static OUString sCurDir(".");
+    static OUString sParentDir("..");
     char *szPath= getenv("PATH");
     if(szPath)
     {
@@ -1169,7 +1169,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 
 
 
-    OUString usFile(RTL_CONSTASCII_USTRINGPARAM("file:///"));
+    OUString usFile("file:///");
     for( int ii = 0; ii < cSearchPaths; ii ++)
     {
         OUString usDir1(usFile + arPaths[ii]);

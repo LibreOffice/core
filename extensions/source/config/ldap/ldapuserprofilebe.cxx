@@ -90,16 +90,16 @@ bool LdapUserProfileBe::readLdapConfiguration(
     LdapDefinition * definition, rtl::OUString * loggedOnUser)
 {
     OSL_ASSERT(context.is() && definition != 0 && loggedOnUser != 0);
-    const rtl::OUString kReadOnlyViewService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")) ;
-    const rtl::OUString kComponent( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.LDAP/UserDirectory"));
-    const rtl::OUString kServerDefiniton(RTL_CONSTASCII_USTRINGPARAM ("ServerDefinition"));
-    const rtl::OUString kServer(RTL_CONSTASCII_USTRINGPARAM ("Server"));
-    const rtl::OUString kPort(RTL_CONSTASCII_USTRINGPARAM("Port"));
-    const rtl::OUString kBaseDN(RTL_CONSTASCII_USTRINGPARAM("BaseDN"));
-    const rtl::OUString kUser(RTL_CONSTASCII_USTRINGPARAM("SearchUser"));
-    const rtl::OUString kPassword(RTL_CONSTASCII_USTRINGPARAM("SearchPassword"));
-    const rtl::OUString kUserObjectClass(RTL_CONSTASCII_USTRINGPARAM("UserObjectClass"));
-    const rtl::OUString kUserUniqueAttr(RTL_CONSTASCII_USTRINGPARAM("UserUniqueAttribute"));
+    const rtl::OUString kReadOnlyViewService("com.sun.star.configuration.ConfigurationAccess") ;
+    const rtl::OUString kComponent("org.openoffice.LDAP/UserDirectory");
+    const rtl::OUString kServerDefiniton("ServerDefinition");
+    const rtl::OUString kServer("Server");
+    const rtl::OUString kPort("Port");
+    const rtl::OUString kBaseDN("BaseDN");
+    const rtl::OUString kUser("SearchUser");
+    const rtl::OUString kPassword("SearchPassword");
+    const rtl::OUString kUserObjectClass("UserObjectClass");
+    const rtl::OUString kUserUniqueAttr("UserUniqueAttribute");
 
     uno::Reference< XInterface > xIface;
     try

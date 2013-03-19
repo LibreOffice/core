@@ -332,7 +332,7 @@ namespace sfx2
                     bHasMacroLib = sal_False;
                 else
                 {
-                    ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                    ::rtl::OUString aStdLibName( "Standard" );
                     Sequence< ::rtl::OUString > aElements = xContainer->getElementNames();
                     if ( aElements.getLength() )
                     {

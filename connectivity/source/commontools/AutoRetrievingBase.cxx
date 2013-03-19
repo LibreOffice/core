@@ -29,8 +29,8 @@ namespace connectivity
         if ( sStmt.startsWith("INSERT") )
         {
             sStatement = m_sGeneratedValueStatement;
-            static const ::rtl::OUString sColumn(RTL_CONSTASCII_USTRINGPARAM("$column"));
-            static const ::rtl::OUString sTable(RTL_CONSTASCII_USTRINGPARAM("$table"));
+            static const ::rtl::OUString sColumn("$column");
+            static const ::rtl::OUString sTable("$table");
             sal_Int32 nIndex = 0;
             nIndex = sStatement.indexOf(sColumn,nIndex);
             if ( -1 != nIndex )

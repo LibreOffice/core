@@ -285,10 +285,10 @@ void OCollectionView::initCurrentPath()
         if ( m_xContent.is() )
         {
             const ::rtl::OUString sCID = m_xContent->getIdentifier()->getContentIdentifier();
-            const static ::rtl::OUString s_sFormsCID(RTL_CONSTASCII_USTRINGPARAM("private:forms"));
-            const static ::rtl::OUString s_sReportsCID(RTL_CONSTASCII_USTRINGPARAM("private:reports"));
+            const static ::rtl::OUString s_sFormsCID("private:forms");
+            const static ::rtl::OUString s_sReportsCID("private:reports");
             m_bCreateForm = s_sFormsCID.compareTo(sCID) == 0;
-            ::rtl::OUString sPath(RTL_CONSTASCII_USTRINGPARAM("/"));
+            ::rtl::OUString sPath("/");
             if ( m_bCreateForm && sCID.getLength() != s_sFormsCID.getLength())
                 sPath = sCID.copy(s_sFormsCID.getLength());
             else if ( !m_bCreateForm && sCID.getLength() != s_sReportsCID.getLength() )

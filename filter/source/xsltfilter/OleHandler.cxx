@@ -85,7 +85,7 @@ namespace XSLT
                 m_rootStream = createTempFile();
                 Sequence<Any> args(1);
                 args[0] <<= m_rootStream->getInputStream();
-                OUString serviceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OLESimpleStorage"));
+                OUString serviceName("com.sun.star.embed.OLESimpleStorage");
 
                 Reference<XNameContainer> cont(m_msf->createInstanceWithArguments(serviceName, args), UNO_QUERY);
                 m_storage = cont;

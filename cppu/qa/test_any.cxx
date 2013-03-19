@@ -291,7 +291,7 @@ void Test::testVoid() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -389,7 +389,7 @@ void Test::testBoolean() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -488,7 +488,7 @@ void Test::testByte() {
         }
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -587,7 +587,7 @@ void Test::testShort() {
         }
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -688,7 +688,7 @@ void Test::testUnsignedShort() {
         }
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -783,7 +783,7 @@ void Test::testLong() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -878,7 +878,7 @@ void Test::testUnsignedLong() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -973,7 +973,7 @@ void Test::testHyper() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -1068,7 +1068,7 @@ void Test::testUnsignedHyper() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -1163,7 +1163,7 @@ void Test::testFloat() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -1258,7 +1258,7 @@ void Test::testDouble() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -1358,7 +1358,7 @@ void Test::testChar() {
         }
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -1453,7 +1453,7 @@ void Test::testString() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", (a >>= b) && b == "1" );
     }
     {
@@ -1548,7 +1548,7 @@ void Test::testType() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -1644,7 +1644,7 @@ void Test::testSequence() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -1745,7 +1745,7 @@ void Test::testEnum() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -1844,7 +1844,7 @@ void Test::testStruct() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -1964,7 +1964,7 @@ void Test::testException() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -2080,7 +2080,7 @@ void Test::testInterface() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {
@@ -2194,7 +2194,7 @@ void Test::testNull() {
         CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
     }
     {
-        rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
+        rtl::OUString b("2");
         CPPUNIT_ASSERT_MESSAGE( "rtl::OUString", !(a >>= b) && b == "2" );
     }
     {

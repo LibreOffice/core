@@ -31,11 +31,11 @@ using namespace ::com::sun::star;
 
 typedef std::vector< beans::PropertyValue > VecPropValues;
 
-static rtl::OUString OPERATOR( RTL_CONSTASCII_USTRINGPARAM("Operator") );
-static rtl::OUString FORMULA1( RTL_CONSTASCII_USTRINGPARAM("Formula1") );
-static rtl::OUString FORMULA2( RTL_CONSTASCII_USTRINGPARAM("Formula2") );
-static rtl::OUString STYLENAME( RTL_CONSTASCII_USTRINGPARAM("StyleName") );
-static rtl::OUString sStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM("Excel_CondFormat") );
+static rtl::OUString OPERATOR("Operator");
+static rtl::OUString FORMULA1("Formula1");
+static rtl::OUString FORMULA2("Formula2");
+static rtl::OUString STYLENAME("StyleName");
+static rtl::OUString sStyleNamePrefix("Excel_CondFormat");
 
 void SAL_CALL
 ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)

@@ -699,7 +699,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
     if (!xTmpDicList.is())
         return NULL;
 
-    const OUString aDicName( RTL_CONSTASCII_USTRINGPARAM( "standard.dic" ) );
+    const OUString aDicName( "standard.dic" );
     uno::Reference< XDictionary >   xDic( xTmpDicList->getDictionaryByName( aDicName ),
                                       UNO_QUERY );
     if (!xDic.is())

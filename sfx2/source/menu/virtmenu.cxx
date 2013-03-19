@@ -391,7 +391,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                 if (  Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
                 {
-                    rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                    rtl::OUString aSlotURL( "slot:" );
                     aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
                     Image aImage = GetImage( xFrame, aSlotURL, false );
                     pSVMenu->SetItemImage( nSlotId, aImage );
@@ -467,7 +467,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         }
                         else
                         {
-                            rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                            rtl::OUString aSlotURL( "slot:" );
                             aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
                             aImage = GetImage( xFrame, aSlotURL, false );
                         }
@@ -548,7 +548,7 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
                 }
                 else
                 {
-                    rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                    rtl::OUString aSlotURL( "slot:" );
                     aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
                     pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, false ));
                 }
@@ -790,7 +790,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
 
         if ( Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
         {
-               rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+               rtl::OUString aSlotURL( "slot:" );
                aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_ADDONS ));
          pMenu->SetItemImage( SID_ADDONS, GetImage( xFrame, aSlotURL, false ));
         }

@@ -113,7 +113,7 @@ void init() {
         MutexGuard guard( getLogMutex() );
         if( ! g_bHasBeenCalled )
         {
-            OUString name( RTL_CONSTASCII_USTRINGPARAM( "RTL_LOGFILE" ) );
+            OUString name( "RTL_LOGFILE" );
             OUString value;
             if( rtl_bootstrap_get( name.pData, &value.pData, 0 ) )
             {

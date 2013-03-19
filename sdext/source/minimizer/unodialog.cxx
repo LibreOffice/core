@@ -334,7 +334,7 @@ Any UnoDialog::getControlProperty( const OUString& rControlName, const OUString&
 
 void UnoDialog::enableControl( const OUString& rControlName )
 {
-    const OUString sEnabled( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) );
+    const OUString sEnabled( "Enabled" );
     setControlProperty( rControlName, sEnabled, Any( sal_True ) );
 }
 
@@ -342,7 +342,7 @@ void UnoDialog::enableControl( const OUString& rControlName )
 
 void UnoDialog::disableControl( const OUString& rControlName )
 {
-    const OUString sEnabled( RTL_CONSTASCII_USTRINGPARAM( "Enabled" ) );
+    const OUString sEnabled( "Enabled" );
     setControlProperty( rControlName, sEnabled, Any( sal_False ) );
 }
 

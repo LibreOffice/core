@@ -585,7 +585,7 @@ void unoInterfaceProxyDispatch(
             aParam.bOut     = sal_False;
 
             typelib_TypeDescriptionReference * pReturnTypeRef = 0;
-            OUString aVoidName( RTL_CONSTASCII_USTRINGPARAM("void") );
+            OUString aVoidName("void");
             typelib_typedescriptionreference_new(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
 

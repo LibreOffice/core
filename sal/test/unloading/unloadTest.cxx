@@ -198,7 +198,7 @@ sal_Bool test1()
     rtl_unloadUnusedModules( NULL);
 
     // Try to get a symbol, must fail
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol("component_getFactory");
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
 
     if( !pSymbol)
@@ -242,7 +242,7 @@ sal_Bool test2()
     rtl_unloadUnusedModules( NULL);
 
     // Try to get a symbol, must fail
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol("component_getFactory");
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
 
     if( !pSymbol)
@@ -286,7 +286,7 @@ sal_Bool test3()
     rtl_unloadUnusedModules( NULL);
 
     // Try to get a symbol, must succeed
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol("component_getFactory");
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
 
     if( pSymbol)
@@ -334,7 +334,7 @@ sal_Bool test4()
     rtl_unloadUnusedModules( NULL);
 
     // Try to get a symbol, must fail
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol("component_getFactory");
     void* pSymbol= osl_getSymbol(  handleMod1, sSymbol.pData);
 
     void* pSymbol2= osl_getSymbol(  handleMod2, sSymbol.pData);
@@ -354,7 +354,7 @@ sal_Bool test5()
     sal_Bool btest1= sal_False;
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
     OUString lib2Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY2));
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol("component_getFactory");
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
          OUString("applicat.rdb"));
@@ -423,7 +423,7 @@ sal_Bool test6()
     oslModule handleMod2=0;
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
     OUString lib2Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY2));
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol("component_getFactory");
     {
     Reference<XMultiServiceFactory> serviceManager= createRegistryServiceFactory(
          OUString("applicat.rdb"));
@@ -520,7 +520,7 @@ sal_Bool test8()
     printf("Test 8 ####################################################\n");
     oslModule handleMod1=0;
     OUString lib1Name( RTL_CONSTASCII_USTRINGPARAM(LIBRARY1));
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol("component_getFactory");
 
     sal_Bool b_ifaceSupported=sal_False;
     sal_Bool b_instances_identical= sal_False;
@@ -630,7 +630,7 @@ sal_Bool test9()
     // the service manager is still alive
     rtl_unloadUnusedModules( NULL);
     // Try to get a symbol, must fail
-    OUString sSymbol( RTL_CONSTASCII_USTRINGPARAM("component_getFactory"));
+    OUString sSymbol("component_getFactory");
     void* pSymbol= osl_getSymbol(  handleMod, sSymbol.pData);
 
     if( pSymbol)

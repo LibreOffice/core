@@ -156,8 +156,8 @@ namespace dbtools
                         )
                     )
                 {
-                    static const ::rtl::OUString sSingleQuote( RTL_CONSTASCII_USTRINGPARAM( "'" ) );
-                    static const ::rtl::OUString sDoubleQuote( RTL_CONSTASCII_USTRINGPARAM( "''" ) );
+                    static const ::rtl::OUString sSingleQuote( "'" );
+                    static const ::rtl::OUString sDoubleQuote( "''" );
 
                     sal_Int32 nIndex = -1;
                     sal_Int32 nTemp = 0;
@@ -306,8 +306,8 @@ namespace dbtools
             if ( bValidQuotedText )
             {
                 sValue = sValue.copy( 1, sValue.getLength() - 2 );
-                static const ::rtl::OUString sSingleQuote( RTL_CONSTASCII_USTRINGPARAM( "'" ) );
-                static const ::rtl::OUString sDoubleQuote( RTL_CONSTASCII_USTRINGPARAM( "''" ) );
+                static const ::rtl::OUString sSingleQuote( "'" );
+                static const ::rtl::OUString sDoubleQuote( "''" );
 
                 sal_Int32 nIndex = -1;
                 sal_Int32 nTemp = 0;

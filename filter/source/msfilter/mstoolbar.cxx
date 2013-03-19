@@ -123,8 +123,8 @@ uno::Any
 CustomToolBarImportHelper::createCommandFromMacro( const rtl::OUString& sCmd )
 {
 //"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
-    static rtl::OUString scheme( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ));
-    static rtl::OUString part2( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ));
+    static rtl::OUString scheme( "vnd.sun.star.script:" );
+    static rtl::OUString part2( "?language=Basic&location=document" );
     // create script url
     rtl::OUString scriptURL = scheme + sCmd + part2;
     return uno::makeAny( scriptURL );
@@ -153,7 +153,7 @@ CustomToolBarImportHelper::createMenu( const rtl::OUString& rName, const uno::Re
     try
     {
         uno::Reference< ui::XUIConfigurationManager > xCfgManager( getCfgManager() );
-        rtl::OUString sMenuBar( RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/") );
+        rtl::OUString sMenuBar("private:resource/menubar/");
         sMenuBar += rName;
         uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
@@ -349,7 +349,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     else if ( rHeader.getTct() == 0x0a )
     {
         aProp.Name = rtl::OUString("CommandURL") ;
-        rtl::OUString sMenuBar( RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/") );
+        rtl::OUString sMenuBar("private:resource/menubar/");
 
         TBCMenuSpecific* pMenu = getMenuSpecific();
         if ( pMenu )

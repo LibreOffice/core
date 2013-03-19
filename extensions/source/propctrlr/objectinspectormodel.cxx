@@ -176,7 +176,7 @@ namespace pcr
     //--------------------------------------------------------------------
     Sequence< ::rtl::OUString > ObjectInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        ::rtl::OUString sService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.ObjectInspectorModel" ) );
+        ::rtl::OUString sService( "com.sun.star.inspection.ObjectInspectorModel" );
         return Sequence< ::rtl::OUString >( &sService, 1 );
     }
 

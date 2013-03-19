@@ -232,7 +232,7 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
             aValue >>= xLayoutManager;
             if (xLayoutManager.is())
             {
-                const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/navigationobjectbar" ) );
+                const ::rtl::OUString sResourceURL( "private:resource/toolbar/navigationobjectbar" );
                 css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
                 if (!xUIElement.is())
                 {

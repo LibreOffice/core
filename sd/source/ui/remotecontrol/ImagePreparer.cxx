@@ -353,8 +353,8 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl 
 
 
         // put in the REAL file name, and copy all PropertyValues
-        const OUString sOutputStream ( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
-        const OUString sStream ( RTL_CONSTASCII_USTRINGPARAM ( "StreamForOutput" ) );
+        const OUString sOutputStream ( "OutputStream" );
+        const OUString sStream ( "StreamForOutput" );
         sal_Bool bHasOutputStream = sal_False;
         sal_Bool bHasStream = sal_False;
         sal_Bool bHasBaseURL = sal_False;

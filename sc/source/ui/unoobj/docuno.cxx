@@ -277,7 +277,7 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                       aPrintRangeOpt);
 
     // create a choice for the range to print
-    rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    rtl::OUString aPrintRangeName( "PrintRange" );
     aChoices.realloc( 2 );
     aHelpIds.realloc( 2 );
     aWidgetIds.realloc( 2 );

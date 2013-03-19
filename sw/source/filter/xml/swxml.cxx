@@ -350,7 +350,7 @@ sal_Int32 ReadThroughComponent(
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        OUString sPropName("StreamName");
         xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
     }
 
@@ -660,7 +660,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         if( xParentSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
-            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            OUString sPropName("BuildId" );
             if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
             {
                 xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
@@ -694,7 +694,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     }
     uno::Any aProgRange;
     aProgRange <<= nProgressRange;
-    OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
+    OUString sProgressRange("ProgressRange");
     xInfoSet->setPropertyValue(sProgressRange, aProgRange);
 
     Reference< container::XNameAccess > xLateInitSettings( document::NamedPropertyValues::create(xContext), UNO_QUERY_THROW );
@@ -746,13 +746,11 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
             // SFX_STYLE_FAMILY_PSEUDO;
             *pSeq++ = OUString("NumberingStyles");
 
-        OUString sStyleInsertModeFamilies(
-                RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeFamilies"));
+        OUString sStyleInsertModeFamilies("StyleInsertModeFamilies");
         xInfoSet->setPropertyValue( sStyleInsertModeFamilies,
                                     makeAny(aFamiliesSeq) );
 
-        OUString sStyleInsertModeOverwrite(
-                RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeOverwrite"));
+        OUString sStyleInsertModeOverwrite("StyleInsertModeOverwrite");
         sal_Bool bTmp = !aOpt.IsMerge();
         Any aAny;
         aAny.setValue( &bTmp, ::getBooleanCppuType() );
@@ -762,8 +760,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     {
         const uno::Reference<text::XTextRange> xInsertTextRange =
             SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), 0);
-        OUString sTextInsertModeRange(
-                RTL_CONSTASCII_USTRINGPARAM("TextInsertModeRange"));
+        OUString sTextInsertModeRange("TextInsertModeRange");
         xInfoSet->setPropertyValue( sTextInsertModeRange,
                                     makeAny(xInsertTextRange) );
     }
@@ -775,8 +772,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
 
     if( IsBlockMode() )
     {
-        OUString sAutoTextMode(
-                RTL_CONSTASCII_USTRINGPARAM("AutoTextMode"));
+        OUString sAutoTextMode("AutoTextMode");
         sal_Bool bTmp = sal_True;
         Any aAny;
         aAny.setValue( &bTmp, ::getBooleanCppuType() );
@@ -784,8 +780,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     }
     if( IsOrganizerMode() )
     {
-        OUString sOrganizerMode(
-                RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+        OUString sOrganizerMode("OrganizerMode");
         sal_Bool bTmp = sal_True;
         Any aAny;
         aAny.setValue( &bTmp, ::getBooleanCppuType() );
@@ -799,7 +794,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     OSL_ENSURE( pMedDescrMedium, "There is no medium to get MediaDescriptor from!\n" );
 
     ::rtl::OUString aBaseURL( rBaseURL );
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    OUString sPropName("BaseURI");
     xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
 
     // TODO/LATER: separate links from usual embedded objects
@@ -831,15 +826,15 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     // save redline mode into import info property set
     Any aAny;
     sal_Bool bTmp;
-    OUString sShowChanges( RTL_CONSTASCII_USTRINGPARAM("ShowChanges") );
+    OUString sShowChanges("ShowChanges");
     bTmp = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
     aAny.setValue( &bTmp, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sShowChanges, aAny );
-    OUString sRecordChanges( RTL_CONSTASCII_USTRINGPARAM("RecordChanges") );
+    OUString sRecordChanges("RecordChanges");
     bTmp = IDocumentRedlineAccess::IsRedlineOn(rDoc.GetRedlineMode());
     aAny.setValue( &bTmp, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sRecordChanges, aAny );
-    OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM("RedlineProtectionKey") );
+    OUString sRedlineProtectionKey("RedlineProtectionKey");
     aAny <<= rDoc.GetRedlinePassword();
     xInfoSet->setPropertyValue( sRedlineProtectionKey, aAny );
 
@@ -933,7 +928,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
           aOpt.IsFmtsOnly() ) )
     {
-        OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
+        OUString sStreamName("layout-cache");
         try
         {
             uno::Reference < io::XStream > xStm = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
@@ -1029,7 +1024,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         if( xModelSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-            OUString sName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            OUString sName("BuildId" );
             if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sName) )
             {
                 xModelSet->setPropertyValue( sName, xInfoSet->getPropertyValue(sName) );
@@ -1060,7 +1055,7 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
         {
 
             xml::sax::InputSource aParserInput;
-            OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) );
+            OUString sDocName( "content.xml" );
             aParserInput.sSystemId = sDocName;
 
             uno::Reference < io::XStream > xStm = xStg2->openStreamElement( sDocName, embed::ElementModes::READ );

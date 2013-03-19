@@ -50,7 +50,7 @@ SaxAttrList::~SaxAttrList()
 namespace {
     static const rtl::OUString& getCDATAString()
     {
-        static rtl::OUString aStr( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ) );
+        static rtl::OUString aStr( "CDATA" );
         return aStr;
     }
 }

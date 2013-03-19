@@ -691,7 +691,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                 // TODO: we should cache all those things, else this might be too expensive.
                 // However, this requires we're notified of changes in the value binding
 
-                static const ::rtl::OUString s_sExternalData( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) );
+                static const ::rtl::OUString s_sExternalData( "ExternalData" );
                 if ( xBindingPropsPSI.is() && xBindingPropsPSI->hasPropertyByName( s_sExternalData ) )
                 {
                     sal_Bool bExternalData = sal_True;

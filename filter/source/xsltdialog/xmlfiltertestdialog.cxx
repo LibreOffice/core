@@ -404,7 +404,7 @@ void XMLFilterTestDialog::onExportBrowse()
 
             Reference< XDesktop2 > xLoader = Desktop::create( comphelper::getComponentContext(mxMSF) );
             Reference< XInteractionHandler2 > xInter( InteractionHandler::createWithParent(comphelper::getComponentContext(mxMSF), 0) );
-            OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
+            OUString aFrame( "_default" );
             Sequence< PropertyValue > aArguments(1);
             aArguments[0].Name = OUString( "InteractionHandler" );
             aArguments[0].Value <<= xInter;
@@ -590,7 +590,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
         Reference< XDesktop2 > xLoader = Desktop::create( comphelper::getComponentContext(mxMSF) );
         Reference< XInteractionHandler2 > xInter( InteractionHandler::createWithParent(comphelper::getComponentContext(mxMSF), 0) );
 
-        OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
+        OUString aFrame( "_default" );
         Sequence< PropertyValue > aArguments(2);
         aArguments[0].Name = OUString( "FilterName" );
         aArguments[0].Value <<= m_pFilterInfo->maFilterName;

@@ -921,7 +921,7 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 column)
 {
     OSL_TRACE("OPreparedStatement::checkColumnIndex");
     if (column < 1 || column > (sal_Int32) m_paramCount) {
-        OUString buf( RTL_CONSTASCII_USTRINGPARAM( "Parameter index out of range" ) );
+        OUString buf( "Parameter index out of range" );
         throw SQLException(buf, *this, OUString(), 1, Any ());
     }
 }

@@ -103,7 +103,7 @@ private:
 
 void ScChartRegressionTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
 {
-    rtl::OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
+    rtl::OUString aSep("/");
     rtl::OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);

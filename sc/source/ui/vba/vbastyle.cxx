@@ -23,7 +23,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static rtl::OUString DISPLAYNAME( RTL_CONSTASCII_USTRINGPARAM("DisplayName") );
+static rtl::OUString DISPLAYNAME("DisplayName");
 
 
 

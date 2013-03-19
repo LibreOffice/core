@@ -105,7 +105,7 @@ void SvObjectServerList::FillInsertObjects()
         uno::Reference< lang::XMultiServiceFactory > sProviderMSFactory =
             configuration::theDefaultProvider::get(xContext);
 
-        ::rtl::OUString sReaderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
+        ::rtl::OUString sReaderService( "com.sun.star.configuration.ConfigurationAccess" );
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue aPathProp;
         aPathProp.Name = ::rtl::OUString( "nodepath" );
@@ -121,10 +121,10 @@ void SvObjectServerList::FillInsertObjects()
             uno::Sequence< ::rtl::OUString > seqNames= xNameAccess->getElementNames();
             sal_Int32 nInd;
 
-            ::rtl::OUString aStringProductName( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTNAME" ) );
+            ::rtl::OUString aStringProductName( "%PRODUCTNAME" );
             sal_Int32 nStringProductNameLength = aStringProductName.getLength();
 
-            ::rtl::OUString aStringProductVersion( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTVERSION" ) );
+            ::rtl::OUString aStringProductVersion( "%PRODUCTVERSION" );
             sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
 
             for( nInd = 0; nInd < seqNames.getLength(); nInd++ )

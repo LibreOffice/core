@@ -97,7 +97,7 @@ OCopyTable::OCopyTable( Window * pParent )
 
         m_aFT_KeyName.Enable(sal_False);
         m_edKeyName.Enable(sal_False);
-        ::rtl::OUString sKeyName(RTL_CONSTASCII_USTRINGPARAM("ID"));
+        ::rtl::OUString sKeyName("ID");
         sKeyName = m_pParent->createUniqueName(sKeyName);
         m_edKeyName.SetText(sKeyName);
 

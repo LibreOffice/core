@@ -392,7 +392,7 @@ struct TransformEventTo60Format : public ::std::unary_function< ScriptEventDescr
             if ( _rDescriptor.ScriptCode.indexOf( ':' ) < 0 )
             {   // the macro name does not already contain a :
                 // -> default the type to "document"
-                ::rtl::OUString sNewScriptCode( RTL_CONSTASCII_USTRINGPARAM( "document:" ) );
+                ::rtl::OUString sNewScriptCode( "document:" );
                 sNewScriptCode += _rDescriptor.ScriptCode;
                 _rDescriptor.ScriptCode = sNewScriptCode;
             }

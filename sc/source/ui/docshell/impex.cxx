@@ -461,7 +461,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, sal_
 
             // extra bits are used to tell the client to prefer external
             // reference link.
-            ::rtl::OUString aExtraBits(RTL_CONSTASCII_USTRINGPARAM("calc:extref"));
+            ::rtl::OUString aExtraBits("calc:extref");
 
             WriteUnicodeOrByteString( rStrm, aAppName, true );
             WriteUnicodeOrByteString( rStrm, aDocName, true );

@@ -534,7 +534,7 @@ namespace abp
         // failure to create the interaction handler is a serious issue ...
         if (!xInteractions.is())
         {
-            ::rtl::OUString s_sInteractionHandlerServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"));
+            ::rtl::OUString s_sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
             if ( _pMessageParent )
                 ShowServiceNotAvailableError( _pMessageParent, s_sInteractionHandlerServiceName, sal_True );
             return sal_False;

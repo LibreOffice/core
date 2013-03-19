@@ -229,7 +229,7 @@ namespace
         static const ::rtl::OUString sComma(::rtl::OUString(","));
 
         const ::rtl::OUString sQuote(_xMetaData->getIdentifierQuoteString());
-        ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( " (" ));
+        ::rtl::OUString sSql( " (" );
         Reference< XPropertySet > xColProp;
 
         sal_Int32 nColCount  = _xColumns->getCount();
@@ -673,15 +673,15 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         Reference< XRow > xCurrentRow(xPrivileges, UNO_QUERY);
 
         const ::rtl::OUString sUserWorkingFor = _xMetaData->getUserName();
-        static const ::rtl::OUString sSELECT( RTL_CONSTASCII_USTRINGPARAM( "SELECT" ));
-        static const ::rtl::OUString sINSERT( RTL_CONSTASCII_USTRINGPARAM( "INSERT" ));
-        static const ::rtl::OUString sUPDATE( RTL_CONSTASCII_USTRINGPARAM( "UPDATE" ));
-        static const ::rtl::OUString sDELETE( RTL_CONSTASCII_USTRINGPARAM( "DELETE" ));
-        static const ::rtl::OUString sREAD( RTL_CONSTASCII_USTRINGPARAM( "READ" ));
-        static const ::rtl::OUString sCREATE( RTL_CONSTASCII_USTRINGPARAM( "CREATE" ));
-        static const ::rtl::OUString sALTER( RTL_CONSTASCII_USTRINGPARAM( "ALTER" ));
-        static const ::rtl::OUString sREFERENCE( RTL_CONSTASCII_USTRINGPARAM( "REFERENCE" ));
-        static const ::rtl::OUString sDROP( RTL_CONSTASCII_USTRINGPARAM( "DROP" ));
+        static const ::rtl::OUString sSELECT( "SELECT" );
+        static const ::rtl::OUString sINSERT( "INSERT" );
+        static const ::rtl::OUString sUPDATE( "UPDATE" );
+        static const ::rtl::OUString sDELETE( "DELETE" );
+        static const ::rtl::OUString sREAD( "READ" );
+        static const ::rtl::OUString sCREATE( "CREATE" );
+        static const ::rtl::OUString sALTER( "ALTER" );
+        static const ::rtl::OUString sREFERENCE( "REFERENCE" );
+        static const ::rtl::OUString sDROP( "DROP" );
 
         if ( xCurrentRow.is() )
         {
@@ -795,7 +795,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
     }
     catch(const SQLException& e)
     {
-        static ::rtl::OUString sNotSupportedState( RTL_CONSTASCII_USTRINGPARAM( "IM001" ));
+        static ::rtl::OUString sNotSupportedState( "IM001" );
         // some drivers don't support any privileges so we assume that we are allowed to do all we want :-)
         if(e.SQLState == sNotSupportedState)
             nPrivileges |=  Privilege::DROP         |
@@ -966,19 +966,19 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
 }
 ::rtl::OUString lcl_getReportEngines()
 {
-    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/ReportEngines"));
+    static ::rtl::OUString s_sNodeName("org.openoffice.Office.DataAccess/ReportEngines");
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString lcl_getDefaultReportEngine()
 {
-    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DefaultReportEngine"));
+    static ::rtl::OUString s_sNodeName("DefaultReportEngine");
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString lcl_getReportEngineNames()
 {
-    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("ReportEngineNames"));
+    static ::rtl::OUString s_sNodeName("ReportEngineNames");
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
@@ -1000,7 +1000,7 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
                 if ( aReportEngine.isValid() )
                 {
                     ::rtl::OUString sRet;
-                    const static ::rtl::OUString s_sService(RTL_CONSTASCII_USTRINGPARAM("ServiceName"));
+                    const static ::rtl::OUString s_sService("ServiceName");
                     aReportEngine.getNodeValue(s_sService) >>= sRet;
                     return sRet;
                 }

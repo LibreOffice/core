@@ -302,7 +302,7 @@ static sal_Bool parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTim
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    ::rtl::OUString aUTCString(RTL_CONSTASCII_USTRINGPARAM("Z"));
+    ::rtl::OUString aUTCString("Z");
 
     ::rtl::OUString aDateString = aDateTimeString.copy(0, nDateLength);
     ::rtl::OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);

@@ -1487,7 +1487,7 @@ void OResultSet::checkColumnIndex(sal_Int32 index)
     OSL_TRACE("OResultSet::checkColumnIndex");
     if ((index < 1 || index > (int) fieldCount)) {
         /* static object for efficiency or thread safety is a problem ? */
-        OUString buf( RTL_CONSTASCII_USTRINGPARAM( "index out of range" ) );
+        OUString buf( "index out of range" );
         throw SQLException(buf, *this, OUString(), 1, Any());
     }
 }

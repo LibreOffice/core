@@ -707,7 +707,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
 rtl::OUString SAL_CALL
 ScVbaApplication::getName() throw (uno::RuntimeException)
 {
-    static rtl::OUString appName( RTL_CONSTASCII_USTRINGPARAM("Microsoft Excel" ) );
+    static rtl::OUString appName("Microsoft Excel" );
     return appName;
 }
 

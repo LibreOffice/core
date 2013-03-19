@@ -2333,10 +2333,10 @@ OUString SwXTextField::getImplementationName(void) throw( uno::RuntimeException 
 
 static OUString OldNameToNewName_Impl( const OUString &rOld )
 {
-    static OUString aOldNamePart1(RTL_CONSTASCII_USTRINGPARAM(".TextField.DocInfo."));
-    static OUString aOldNamePart2(RTL_CONSTASCII_USTRINGPARAM(".TextField."));
-    static OUString aNewNamePart1(RTL_CONSTASCII_USTRINGPARAM(".textfield.docinfo."));
-    static OUString aNewNamePart2(RTL_CONSTASCII_USTRINGPARAM(".textfield."));
+    static OUString aOldNamePart1(".TextField.DocInfo.");
+    static OUString aOldNamePart2(".TextField.");
+    static OUString aNewNamePart1(".textfield.docinfo.");
+    static OUString aNewNamePart2(".textfield.");
     OUString sServiceNameCC( rOld );
     sal_Int32 nIdx = sServiceNameCC.indexOf( aOldNamePart1 );
     if (nIdx >= 0)

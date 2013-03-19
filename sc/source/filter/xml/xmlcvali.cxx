@@ -418,7 +418,7 @@ void ScXMLContentValidationContext::EndElement()
     // #i36650# event-listeners element moved up one level
     if (xEventContext.Is())
     {
-        rtl::OUString sOnError(RTL_CONSTASCII_USTRINGPARAM("OnError"));
+        rtl::OUString sOnError("OnError");
         XMLEventsImportContext* pEvents =
             (XMLEventsImportContext*)&xEventContext;
         uno::Sequence<beans::PropertyValue> aValues;

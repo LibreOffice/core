@@ -55,7 +55,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment, comphelper::getProcessComponentContext());
 
         // use post command
-        OUString aCommandName(RTL_CONSTASCII_USTRINGPARAM("post"));
+        OUString aCommandName("post");
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
         CSS::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);

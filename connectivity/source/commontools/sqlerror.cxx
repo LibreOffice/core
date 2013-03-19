@@ -115,7 +115,7 @@ namespace connectivity
     //--------------------------------------------------------------------
     const ::rtl::OUString& SQLError_Impl::getMessagePrefix()
     {
-        static ::rtl::OUString s_sMessagePrefix( RTL_CONSTASCII_USTRINGPARAM( "[OOoBase]" ) );
+        static ::rtl::OUString s_sMessagePrefix( "[OOoBase]" );
         return s_sMessagePrefix;
     }
 

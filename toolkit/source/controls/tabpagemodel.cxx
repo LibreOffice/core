@@ -152,7 +152,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
             Reference<XPropertySet> xDialogProp(xDialogModel,UNO_QUERY);
             if ( xDialogProp.is() )
             {
-                static const ::rtl::OUString s_sResourceResolver(RTL_CONSTASCII_USTRINGPARAM("ResourceResolver"));
+                static const ::rtl::OUString s_sResourceResolver("ResourceResolver");
                 Reference<XPropertySet> xThis(*this,UNO_QUERY);
                 xThis->setPropertyValue(s_sResourceResolver,xDialogProp->getPropertyValue(s_sResourceResolver));
                 xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)));
@@ -175,7 +175,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
 Sequence<rtl::OUString> SAL_CALL UnoControlTabPageModel_getSupportedServiceNames (void)
      throw (RuntimeException)
 {
-     const ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tab.UnoControlTabPageModel"));
+     const ::rtl::OUString sServiceName("com.sun.star.awt.tab.UnoControlTabPageModel");
      return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 //=============================================================================

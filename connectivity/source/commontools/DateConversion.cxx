@@ -83,8 +83,8 @@ using namespace ::com::sun::star::uno;
                         ::rtl::OUString aTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
                         sal_Int32 nIndex = (sal_Int32)-1;
-                        const ::rtl::OUString sQuot(RTL_CONSTASCII_USTRINGPARAM("\'"));
-                        const ::rtl::OUString sQuotToReplace(RTL_CONSTASCII_USTRINGPARAM("\'\'"));
+                        const ::rtl::OUString sQuot("\'");
+                        const ::rtl::OUString sQuotToReplace("\'\'");
                         do
                         {
                             nIndex += 2;
@@ -258,7 +258,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             if ((NumberFormat::NUMBER == nRealUsedTypeClass) && (NumberFormat::PERCENT == nTypeClass))
             {   // formatting should be "percent", but the String provides just a simple number -> adjust
                 ::rtl::OUString sExpanded(rString);
-                static ::rtl::OUString s_sPercentSymbol( RTL_CONSTASCII_USTRINGPARAM( "%" ));
+                static ::rtl::OUString s_sPercentSymbol( "%" );
                     // need a method to add a sal_Unicode to a string, 'til then we use a static string
                 sExpanded += s_sPercentSymbol;
                 fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);

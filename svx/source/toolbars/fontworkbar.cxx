@@ -142,7 +142,7 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( pObj->ISA( SdrObjCustomShape ) )
         {
-            const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
+            const rtl::OUString sType( "Type" );
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
             Any* pAny = aGeometryItem.GetPropertyValueByName( sType );
             if( pAny )
@@ -240,7 +240,7 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
     if ( nCheckStatus & 2 )
         return ( nCheckStatus & 1 ) != 0;
 
-    static const rtl::OUString  sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
+    static const rtl::OUString  sTextPath( "TextPath" );
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
@@ -265,8 +265,8 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
 
 static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
-    static const rtl::OUString  sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
-    static const rtl::OUString  sSameLetterHeights( RTL_CONSTASCII_USTRINGPARAM ( "SameLetterHeights" ) );
+    static const rtl::OUString  sTextPath( "TextPath" );
+    static const rtl::OUString  sSameLetterHeights( "SameLetterHeights" );
 
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )
@@ -341,19 +341,19 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
 void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const rtl::OUString rCustomShape )
 {
-    const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
+    const rtl::OUString sType( "Type" );
 
     com::sun::star::beans::PropertyValue aPropVal;
     aPropVal.Name = sType;
     aPropVal.Value <<= rCustomShape;
     rGeometryItem.SetPropertyValue( aPropVal );
 
-    const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM ( "AdjustmentValues" ) );
-    const rtl::OUString sCoordinateOrigin( RTL_CONSTASCII_USTRINGPARAM ( "CoordinateOrigin" ) );
-    const rtl::OUString sCoordinateSize( RTL_CONSTASCII_USTRINGPARAM ( "CoordinateSize" ) );
-    const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM ( "Equations" ) );
-    const rtl::OUString sHandles( RTL_CONSTASCII_USTRINGPARAM ( "Handles" ) );
-    const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
+    const rtl::OUString sAdjustmentValues( "AdjustmentValues" );
+    const rtl::OUString sCoordinateOrigin( "CoordinateOrigin" );
+    const rtl::OUString sCoordinateSize( "CoordinateSize" );
+    const rtl::OUString sEquations( "Equations" );
+    const rtl::OUString sHandles( "Handles" );
+    const rtl::OUString sPath( "Path" );
     rGeometryItem.ClearPropertyValue( sAdjustmentValues );
     rGeometryItem.ClearPropertyValue( sCoordinateOrigin );
     rGeometryItem.ClearPropertyValue( sCoordinateSize );

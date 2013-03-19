@@ -328,7 +328,7 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
     {
         m_bAttemptedFormCreation = true;
 
-        const ::rtl::OUString sFormsCollectionServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.Forms") );
+        const ::rtl::OUString sFormsCollectionServiceName("com.sun.star.form.Forms");
         m_xForms = Reference< XNameContainer > (
             ::comphelper::getProcessServiceFactory()->createInstance( sFormsCollectionServiceName ),
             UNO_QUERY

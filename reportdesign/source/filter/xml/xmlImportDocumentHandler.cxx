@@ -338,7 +338,7 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     m_xDatabaseDataProvider.set(m_xModel->getDataProvider(),uno::UNO_QUERY);
     if ( !m_xDatabaseDataProvider.is() )
     {
-        const static ::rtl::OUString s_sDatabaseDataProvider(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DatabaseDataProvider"));
+        const static ::rtl::OUString s_sDatabaseDataProvider("com.sun.star.chart2.data.DatabaseDataProvider");
         m_xDatabaseDataProvider.set(m_xContext->getServiceManager()->createInstanceWithContext(s_sDatabaseDataProvider
             ,m_xContext),uno::UNO_QUERY);
         if ( !m_xDatabaseDataProvider.is() )

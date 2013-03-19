@@ -425,7 +425,7 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
         if( bHiddenOnly )
         {
             uno::Reference< beans::XPropertySet >  xPropSet( xFormComp, uno::UNO_QUERY );
-            OUString sPropName(RTL_CONSTASCII_USTRINGPARAM("ClassId"));
+            OUString sPropName("ClassId");
             if( xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
             {
                 uno::Any aAny2 = xPropSet->getPropertyValue( sPropName );
@@ -674,7 +674,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
 
     uno::Reference< beans::XPropertySet >  xPropSet( xControlModel, uno::UNO_QUERY );
 
-    OUString sPropName(RTL_CONSTASCII_USTRINGPARAM("ClassId"));
+    OUString sPropName("ClassId");
     if( !xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
         return 0;
 
@@ -850,7 +850,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             GetControlSize( rSdrObject, aSz, rWrt.pDoc );
 
             sal_Bool bMultiLine = sal_False;
-            OUString sMultiLine(RTL_CONSTASCII_USTRINGPARAM("MultiLine"));
+            OUString sMultiLine("MultiLine");
             if( xPropSetInfo->hasPropertyByName( sMultiLine ) )
             {
                 aTmp = xPropSet->getPropertyValue( sMultiLine );
@@ -897,7 +897,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             else
             {
                 eType = TYPE_TEXT;
-                OUString sEchoChar(RTL_CONSTASCII_USTRINGPARAM("EchoChar"));
+                OUString sEchoChar("EchoChar");
                 if( xPropSetInfo->hasPropertyByName( sEchoChar ) )
                 {
                     aTmp = xPropSet->getPropertyValue( sEchoChar );
@@ -923,7 +923,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                                 *(sal_Int16*) aTmp.getValue()));
                 }
 
-                OUString sDefaultText(RTL_CONSTASCII_USTRINGPARAM("DefaultText"));
+                OUString sDefaultText("DefaultText");
                 if( xPropSetInfo->hasPropertyByName( sDefaultText ) )
                 {
                     aTmp = xPropSet->getPropertyValue( sDefaultText );
@@ -1087,7 +1087,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
         SfxItemSet aItemSet( rHTMLWrt.pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
                              RES_CHRATR_END );
-        OUString sPropName(RTL_CONSTASCII_USTRINGPARAM("BackgroundColor"));
+        OUString sPropName("BackgroundColor");
         if( xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             aTmp = xPropSet->getPropertyValue( sPropName );

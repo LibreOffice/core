@@ -70,7 +70,7 @@ SfxObjectShell* SwVbaApplication::GetDocShell( const uno::Reference< frame::XMod
 rtl::OUString SAL_CALL
 SwVbaApplication::getName() throw (uno::RuntimeException)
 {
-    static rtl::OUString appName( RTL_CONSTASCII_USTRINGPARAM("Microsoft Word" ) );
+    static rtl::OUString appName("Microsoft Word" );
     return appName;
 }
 

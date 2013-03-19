@@ -515,8 +515,8 @@ namespace
 {
     static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
     {
-        const ::rtl::OUString sConfigName( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Forms/PropertyBrowser/" ) );
-        const ::rtl::OUString sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "DirectHelp" ) );
+        const ::rtl::OUString sConfigName( "/org.openoffice.Office.Common/Forms/PropertyBrowser/" );
+        const ::rtl::OUString sPropertyName( "DirectHelp" );
 
         ::utl::OConfigurationTreeRoot aConfiguration(
             ::utl::OConfigurationTreeRoot::createWithComponentContext( _rxContext, sConfigName ) );
@@ -592,7 +592,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 
     if ( !m_xBrowserController.is() )
     {
-        ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.ObjectInspector" ) );
+        ::rtl::OUString sServiceName( "com.sun.star.inspection.ObjectInspector" );
         ShowServiceNotAvailableError( GetParent(), sServiceName, sal_True );
     }
     else

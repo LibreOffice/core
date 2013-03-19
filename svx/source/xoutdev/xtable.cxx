@@ -344,7 +344,7 @@ rtl::OUString XPropertyList::GetDefaultExt( XPropertyListType t )
 
 rtl::OUString XPropertyList::GetDefaultExtFilter( XPropertyListType t )
 {
-    rtl::OUString aFilter( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+    rtl::OUString aFilter( "*." );
     return aFilter + GetDefaultExt( t );
 }
 

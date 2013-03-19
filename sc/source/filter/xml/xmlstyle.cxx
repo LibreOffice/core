@@ -714,7 +714,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                         {
                                             if (aOperator == sheet::ConditionOperator_FORMULA)
                                             {
-                                                rtl::OUString sCondition(RTL_CONSTASCII_USTRINGPARAM("is-true-formula("));
+                                                rtl::OUString sCondition("is-true-formula(");
                                                 sCondition += xSheetCondition->getFormula1();
                                                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
@@ -812,7 +812,7 @@ void ScXMLStyleExport::exportStyleAttributes(
     if (xPropSet.is())
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo(xPropSet->getPropertySetInfo());
-        rtl::OUString sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"));
+        rtl::OUString sNumberFormat("NumberFormat");
         if( xPropSetInfo->hasPropertyByName( sNumberFormat ) )
         {
             uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );

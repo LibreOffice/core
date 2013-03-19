@@ -3258,7 +3258,7 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
     {
         try
         {
-            const OUString  sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM ( "CustomShapeGeometry" ) );
+            const OUString  sCustomShapeGeometry( "CustomShapeGeometry" );
             uno::Any aGeoPropSet = aXPropSet->getPropertyValue( sCustomShapeGeometry );
             uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )

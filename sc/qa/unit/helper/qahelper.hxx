@@ -189,7 +189,7 @@ public:
     ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
     void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
     {
-        OUString aSep(RTL_CONSTASCII_USTRINGPARAM("/"));
+        OUString aSep("/");
         OUStringBuffer aBuffer( getSrcRootURL() );
         aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
         aBuffer.append(aSep).append(aFileBase).append(aFileExtension);

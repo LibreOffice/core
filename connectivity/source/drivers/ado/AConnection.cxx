@@ -435,7 +435,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         if ( bOk )
         {
             // HACK for access
-            static const ::rtl::OUString s_sVarChar(RTL_CONSTASCII_USTRINGPARAM("VarChar"));
+            static const ::rtl::OUString s_sVarChar("VarChar");
             do
             {
                 sal_Int32 nPos = 1;

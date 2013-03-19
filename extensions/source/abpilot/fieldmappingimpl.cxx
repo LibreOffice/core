@@ -52,14 +52,14 @@ namespace abp
     //---------------------------------------------------------------------
     static const ::rtl::OUString& lcl_getDriverSettingsNodeName()
     {
-        static const ::rtl::OUString s_sDriverSettingsNodeName(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver" ));
+        static const ::rtl::OUString s_sDriverSettingsNodeName( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver" );
         return s_sDriverSettingsNodeName;
     }
 
     //---------------------------------------------------------------------
     static const ::rtl::OUString& lcl_getAddressBookNodeName()
     {
-        static const ::rtl::OUString s_sAddressBookNodeName(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/AddressBook" ));
+        static const ::rtl::OUString s_sAddressBookNodeName( "/org.openoffice.Office.DataAccess/AddressBook" );
         return s_sAddressBookNodeName;
     }
 
@@ -237,8 +237,8 @@ namespace abp
             const ::rtl::OUString* pExistentFields = aExistentFields.getConstArray();
             const ::rtl::OUString* pExistentFieldsEnd = pExistentFields + aExistentFields.getLength();
 
-            const ::rtl::OUString sProgrammaticNodeName(RTL_CONSTASCII_USTRINGPARAM( "ProgrammaticFieldName" ));
-            const ::rtl::OUString sAssignedNodeName(RTL_CONSTASCII_USTRINGPARAM( "AssignedFieldName" ));
+            const ::rtl::OUString sProgrammaticNodeName( "ProgrammaticFieldName" );
+            const ::rtl::OUString sAssignedNodeName( "AssignedFieldName" );
 
             for ( ; pExistentFields != pExistentFieldsEnd; ++pExistentFields )
             {

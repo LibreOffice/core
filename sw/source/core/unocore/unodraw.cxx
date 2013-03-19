@@ -2392,7 +2392,7 @@ awt::Point SwXShape::_GetAttrPosition()
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        rtl::OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+        rtl::OUString sAnchorType( "AnchorType" );
         uno::Any aAny = getPropertyValue( sAnchorType );
         aAny >>= eTextAnchorType;
     }
@@ -2521,14 +2521,14 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        rtl::OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+        rtl::OUString sAnchorType( "AnchorType" );
         uno::Any aAny = getPropertyValue( sAnchorType );
         aAny >>= eTextAnchorType;
     }
     if ( eTextAnchorType != text::TextContentAnchorType_AS_CHARACTER )
     {
         // determine current x-postion
-        rtl::OUString aHoriPosPropStr( RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition") );
+        rtl::OUString aHoriPosPropStr("HoriOrientPosition");
         uno::Any aHoriPos( getPropertyValue( aHoriPosPropStr ) );
         sal_Int32 dCurrX = 0;
         aHoriPos >>= dCurrX;
@@ -2537,7 +2537,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         {
             // adjust x-position orientation to text::HoriOrientation::NONE, if needed
             // Note: has to be done before setting x-position attribute
-            rtl::OUString aHoriOrientPropStr( RTL_CONSTASCII_USTRINGPARAM("HoriOrient") );
+            rtl::OUString aHoriOrientPropStr("HoriOrient");
             uno::Any aHoriOrient( getPropertyValue( aHoriOrientPropStr ) );
             sal_Int16 eHoriOrient;
             if (aHoriOrient >>= eHoriOrient) // may be void
@@ -2558,7 +2558,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     // handle y-position
     {
         // determine current y-postion
-        rtl::OUString aVertPosPropStr( RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition") );
+        rtl::OUString aVertPosPropStr("VertOrientPosition");
         uno::Any aVertPos( getPropertyValue( aVertPosPropStr ) );
         sal_Int32 dCurrY = 0;
         aVertPos >>= dCurrY;
@@ -2567,7 +2567,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         {
             // adjust y-position orientation to text::VertOrientation::NONE, if needed
             // Note: has to be done before setting y-position attribute
-            rtl::OUString aVertOrientPropStr( RTL_CONSTASCII_USTRINGPARAM("VertOrient") );
+            rtl::OUString aVertOrientPropStr("VertOrient");
             uno::Any aVertOrient( getPropertyValue( aVertOrientPropStr ) );
             sal_Int16 eVertOrient;
             if (aVertOrient >>= eVertOrient) // may be void

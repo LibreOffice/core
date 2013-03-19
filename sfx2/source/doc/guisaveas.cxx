@@ -197,7 +197,7 @@ public:
                     ::rtl::OUString( "com.sun.star.document.Settings" ) ),
                 uno::UNO_QUERY_THROW );
 
-            ::rtl::OUString aLoadReadonlyString( RTL_CONSTASCII_USTRINGPARAM( "LoadReadonly" ) );
+            ::rtl::OUString aLoadReadonlyString( "LoadReadonly" );
 
             try
             {
@@ -219,7 +219,7 @@ public:
     {
         if ( m_bRestoreSettings )
         {
-            ::rtl::OUString aLoadReadonlyString( RTL_CONSTASCII_USTRINGPARAM( "LoadReadonly" ) );
+            ::rtl::OUString aLoadReadonlyString( "LoadReadonly" );
 
             try
             {

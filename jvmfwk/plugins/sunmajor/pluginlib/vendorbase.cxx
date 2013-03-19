@@ -74,14 +74,10 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     //javax.accessibility.assistive_technologies from system properties
 
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
-    OUString sVendorProperty(
-        RTL_CONSTASCII_USTRINGPARAM("java.vendor"));
-    OUString sVersionProperty(
-        RTL_CONSTASCII_USTRINGPARAM("java.version"));
-    OUString sHomeProperty(
-        RTL_CONSTASCII_USTRINGPARAM("java.home"));
-    OUString sAccessProperty(
-        RTL_CONSTASCII_USTRINGPARAM("javax.accessibility.assistive_technologies"));
+    OUString sVendorProperty("java.vendor");
+    OUString sVersionProperty("java.version");
+    OUString sHomeProperty("java.home");
+    OUString sAccessProperty("javax.accessibility.assistive_technologies");
 
     bool bVersion = false;
     bool bVendor = false;

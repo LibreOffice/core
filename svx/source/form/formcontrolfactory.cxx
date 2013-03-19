@@ -445,7 +445,7 @@ namespace svxform
                 case FormComponentType::CHECKBOX:
                 case FormComponentType::FIXEDTEXT:
                 {
-                    ::rtl::OUString sVertAlignPropertyName( RTL_CONSTASCII_USTRINGPARAM( "VerticalAlign" ) );
+                    ::rtl::OUString sVertAlignPropertyName( "VerticalAlign" );
                     if ( xPSI->hasPropertyByName( sVertAlignPropertyName ) )
                         _rxControlModel->setPropertyValue( sVertAlignPropertyName, makeAny( VerticalAlignment_MIDDLE ) );
                 }
@@ -454,7 +454,7 @@ namespace svxform
                 case FormComponentType::IMAGEBUTTON:
                 case FormComponentType::IMAGECONTROL:
                 {
-                    const ::rtl::OUString sScaleModeProperty( RTL_CONSTASCII_USTRINGPARAM( "ScaleMode" ) );
+                    const ::rtl::OUString sScaleModeProperty( "ScaleMode" );
                     if ( xPSI->hasPropertyByName( sScaleModeProperty ) )
                         _rxControlModel->setPropertyValue( sScaleModeProperty, makeAny( ImageScaleMode::Isotropic ) );
                 }

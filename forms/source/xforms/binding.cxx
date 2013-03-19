@@ -750,7 +750,7 @@ void Binding::valueModified()
 void Binding::distributeMIP( const XNode_t & rxNode ) {
 
     typedef com::sun::star::xforms::XFormsEventConcrete XFormsEvent_t;
-    OUString sEventName( RTL_CONSTASCII_USTRINGPARAM("xforms-generic") );
+    OUString sEventName("xforms-generic");
     XFormsEvent_t *pEvent = new XFormsEvent_t;
     pEvent->initXFormsEvent(sEventName, sal_True, sal_False);
     Reference<XEvent> xEvent(pEvent);
@@ -1257,7 +1257,7 @@ void Binding::handleEvent( const XEvent_t& xEvent )
     throw( RuntimeException )
 {
     OUString sType(xEvent->getType());
-    //OUString sEventMIPChanged(RTL_CONSTASCII_USTRINGPARAM("xforms-generic"));
+    //OUString sEventMIPChanged("xforms-generic");
     //if(sType.equals(sEventMIPChanged)) {
     if(!sType.compareToAscii("xforms-generic")) {
 

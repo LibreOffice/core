@@ -35,7 +35,7 @@ namespace rptui
         //----------------------------------------------------------------
         const ::rtl::OUString&  lcl_getExpressionPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
         {
-            static ::rtl::OUString s_sPrefix( RTL_CONSTASCII_USTRINGPARAM( "rpt:" ) );
+            static ::rtl::OUString s_sPrefix( "rpt:" );
             if ( _pTakeLengthOrNull )
                 *_pTakeLengthOrNull = s_sPrefix.getLength();
             return s_sPrefix;
@@ -44,7 +44,7 @@ namespace rptui
         //----------------------------------------------------------------
         const ::rtl::OUString&  lcl_getFieldPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
         {
-            static ::rtl::OUString s_sPrefix( RTL_CONSTASCII_USTRINGPARAM( "field:" ) );
+            static ::rtl::OUString s_sPrefix( "field:" );
             if ( _pTakeLengthOrNull )
                 *_pTakeLengthOrNull = s_sPrefix.getLength();
             return s_sPrefix;

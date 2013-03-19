@@ -313,7 +313,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
     nRC = aTempFile.open( osl_File_OpenFlag_Write|osl_File_OpenFlag_Read );
     OUString aURL( aTempFile.getFileURL() );
 #else
-    OUString aURL( RTL_CONSTASCII_USTRINGPARAM("file:///e:/test.zip") );
+    OUString aURL("file:///e:/test.zip");
     osl::File::remove( aURL );
     osl::File aTempFile( aURL );
     nRC = aTempFile.open( osl_File_OpenFlag_Create|osl_File_OpenFlag_Write|osl_File_OpenFlag_Read );
@@ -344,7 +344,7 @@ sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < 
             PageEntry* pEntry = exportPage( xDrawPage );
             aPageEntries.push_back( pEntry );
 
-            OUString aName( RTL_CONSTASCII_USTRINGPARAM("i") );
+            OUString aName("i");
             aName += OUString::valueOf( nPage );
             aName += OUString(".gif");
             pEntry->setURL( aName );
@@ -414,8 +414,8 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
         pEntry->setName( xNamed->getName() );
 
     // get title text from title presentation shape if available
-    const OUString szTitleTextShape( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape") );
-    const OUString szIsEmptyPresObj( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") );
+    const OUString szTitleTextShape("com.sun.star.presentation.TitleTextShape");
+    const OUString szIsEmptyPresObj("IsEmptyPresentationObject");
 
     sal_Int32 nShapeCount = xDrawPage->getCount();
     sal_Int32 nShape;
@@ -451,7 +451,7 @@ PageEntry* PlaceWareExporter::exportPage( Reference< XDrawPage >&xDrawPage )
     {
         Reference< XDrawPage > xNotesPage( xPresPage->getNotesPage() );
 
-        const OUString szNotesShape( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape") );
+        const OUString szNotesShape("com.sun.star.presentation.NotesShape");
 
         nShapeCount = xNotesPage->getCount();
         for( nShape = 0; nShape < nShapeCount; nShape++ )

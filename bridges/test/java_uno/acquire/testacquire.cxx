@@ -517,7 +517,7 @@ namespace {
 
 bool writeInfo(void * registryKey, rtl::OUString const & implementationName,
                css::uno::Sequence< rtl::OUString > const & serviceNames) {
-    rtl::OUString keyName( RTL_CONSTASCII_USTRINGPARAM( "/" ));
+    rtl::OUString keyName( "/" );
     keyName += implementationName;
     keyName += rtl::OUString( "/UNO/SERVICES" );
     css::uno::Reference< css::registry::XRegistryKey > key;

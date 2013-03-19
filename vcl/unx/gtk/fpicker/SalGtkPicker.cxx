@@ -189,7 +189,7 @@ void SalGtkPicker::setGtkLanguage()
 
     if (aBuffer.getLength() > 8)
     {
-        rtl::OUString envVar( RTL_CONSTASCII_USTRINGPARAM( "LANGUAGE" ) );
+        rtl::OUString envVar( "LANGUAGE" );
         osl_setEnvironment( envVar.pData, aBuffer.makeStringAndClear().pData );
     }
     bSet = true;

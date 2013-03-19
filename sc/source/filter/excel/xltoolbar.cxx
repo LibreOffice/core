@@ -167,7 +167,7 @@ bool ScCTB::ImportMenuTB( ScCTBWrapper& rWrapper, const css::uno::Reference< css
 bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
 
-    static rtl::OUString sToolbarPrefix( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/custom_" ) );
+    static rtl::OUString sToolbarPrefix( "private:resource/toolbar/custom_" );
     bool bRes = false;
     try
     {

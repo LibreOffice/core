@@ -234,7 +234,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
                 /* see @ osl_getExecutableFile(). */
                 if (rtl_ustr_indexOfChar (rtl_uString_getStr(ppArgs[0]), sal_Unicode('/')) == -1)
                 {
-                    const rtl::OUString PATH (RTL_CONSTASCII_USTRINGPARAM("PATH"));
+                    const rtl::OUString PATH ("PATH");
 
                     rtl_uString * pSearchPath = 0;
                     osl_getEnvironment (PATH.pData, &pSearchPath);

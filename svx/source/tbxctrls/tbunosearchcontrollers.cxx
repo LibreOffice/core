@@ -152,7 +152,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                     aValue >>= xLayoutManager;
                     if (xLayoutManager.is())
                     {
-                        const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
+                        const ::rtl::OUString sResourceURL( "private:resource/toolbar/findbar" );
                         xLayoutManager->hideElement( sResourceURL );
                         xLayoutManager->destroyElement( sResourceURL );
                     }
@@ -702,7 +702,7 @@ void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
         aValue >>= xLayoutManager;
         if (xLayoutManager.is())
         {
-            const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
+            const ::rtl::OUString sResourceURL( "private:resource/toolbar/findbar" );
             xLayoutManager->hideElement( sResourceURL );
             xLayoutManager->destroyElement( sResourceURL );
         }
@@ -828,7 +828,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
         if (!xLayoutManager.is())
             return;
 
-        const ::rtl::OUString sResourceURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ) );
+        const ::rtl::OUString sResourceURL( "private:resource/toolbar/findbar" );
         css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
         if (!xUIElement.is())
         {

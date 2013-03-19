@@ -133,13 +133,13 @@ void getLightingDirectionDefaults( const Direction3D **pLighting1Defaults, const
 
 static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
-    static const rtl::OUString  sRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "RotateAngle" ) );
-    static const rtl::OUString  sViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
-    static const rtl::OUString  sOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
-    static const rtl::OUString  sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
-    static const rtl::OUString  sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
+    static const rtl::OUString  sExtrusion( "Extrusion" );
+    static const rtl::OUString  sProjectionMode( "ProjectionMode" );
+    static const rtl::OUString  sRotateAngle( "RotateAngle" );
+    static const rtl::OUString  sViewPoint( "ViewPoint" );
+    static const rtl::OUString  sOrigin( "Origin" );
+    static const rtl::OUString  sSkew( "Skew" );
+    static const rtl::OUString  sDepth( "Depth" );
 
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )
@@ -316,7 +316,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     break;
     case SID_EXTRUSION_3D_COLOR:
     {
-        static const rtl::OUString  sExtrusionColor( RTL_CONSTASCII_USTRINGPARAM ( "Color" ) );
+        static const rtl::OUString  sExtrusionColor( "Color" );
 
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_3D_COLOR ) == SFX_ITEM_SET)
         {
@@ -343,10 +343,10 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     break;
     case SID_EXTRUSION_SURFACE:
     {
-        static const rtl::OUString sShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
-        static const rtl::OUString sSpecularity( RTL_CONSTASCII_USTRINGPARAM ( "Specularity" ) );
-        static const rtl::OUString sDiffusion( RTL_CONSTASCII_USTRINGPARAM ( "Diffusion" ) );
-        static const rtl::OUString sMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
+        static const rtl::OUString sShadeMode( "ShadeMode" );
+        static const rtl::OUString sSpecularity( "Specularity" );
+        static const rtl::OUString sDiffusion( "Diffusion" );
+        static const rtl::OUString sMetal( "Metal" );
 
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_SURFACE ) == SFX_ITEM_SET)
         {
@@ -395,12 +395,12 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     break;
     case SID_EXTRUSION_LIGHTING_INTENSITY:
     {
-        static const rtl::OUString sBrightness( RTL_CONSTASCII_USTRINGPARAM ( "Brightness" ) );
-        static const rtl::OUString sLightFace( RTL_CONSTASCII_USTRINGPARAM ( "LightFace" ) );
-        static const rtl::OUString sFirstLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightHarsh" ) );
-        static const rtl::OUString sSecondLightHarsh( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightHarsh" ) );
-        static const rtl::OUString sFirstLightLevel( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightLevel" ) );
-        static const rtl::OUString sSecondLightLevel( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightLevel" ) );
+        static const rtl::OUString sBrightness( "Brightness" );
+        static const rtl::OUString sLightFace( "LightFace" );
+        static const rtl::OUString sFirstLightHarsh( "FirstLightHarsh" );
+        static const rtl::OUString sSecondLightHarsh( "SecondLightHarsh" );
+        static const rtl::OUString sFirstLightLevel( "FirstLightLevel" );
+        static const rtl::OUString sSecondLightLevel( "SecondLightLevel" );
 
         if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_INTENSITY ) == SFX_ITEM_SET)
         {
@@ -468,8 +468,8 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
             if((nDirection >= 0) && (nDirection < 9))
             {
-                const rtl::OUString sFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
-                const rtl::OUString sSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
+                const rtl::OUString sFirstLightDirection( "FirstLightDirection" );
+                const rtl::OUString sSecondLightDirection( "SecondLightDirection" );
 
                 const Direction3D * pLighting1Defaults;
                 const Direction3D * pLighting2Defaults;
@@ -642,11 +642,11 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
-    static const rtl::OUString  sOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
-    static const rtl::OUString  sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
-    static const rtl::OUString  sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
+    static const rtl::OUString  sExtrusion( "Extrusion" );
+    static const rtl::OUString  sViewPoint( "ViewPoint" );
+    static const rtl::OUString  sOrigin( "Origin" );
+    static const rtl::OUString  sSkew( "Skew" );
+    static const rtl::OUString  sProjectionMode( "ProjectionMode" );
 
     com::sun::star::uno::Any* pAny;
 
@@ -793,8 +793,8 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
+    static const rtl::OUString  sExtrusion( "Extrusion" );
+    static const rtl::OUString  sProjectionMode( "ProjectionMode" );
 
     com::sun::star::uno::Any* pAny;
 
@@ -849,10 +849,10 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
-    static const rtl::OUString  sSpecularity( RTL_CONSTASCII_USTRINGPARAM ( "Specularity" ) );
-    static const rtl::OUString  sMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
+    static const rtl::OUString  sExtrusion( "Extrusion" );
+    static const rtl::OUString  sShadeMode( "ShadeMode" );
+    static const rtl::OUString  sSpecularity( "Specularity" );
+    static const rtl::OUString  sMetal( "Metal" );
 
     com::sun::star::uno::Any* pAny;
 
@@ -937,8 +937,8 @@ void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
+    static const rtl::OUString  sExtrusion( "Extrusion" );
+    static const rtl::OUString  sDepth( "Depth" );
 
     com::sun::star::uno::Any* pAny;
 
@@ -1017,9 +1017,9 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
-    static const rtl::OUString  sSecondLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "SecondLightDirection" ) );
+    static const rtl::OUString  sExtrusion( "Extrusion" );
+    static const rtl::OUString  sFirstLightDirection( "FirstLightDirection" );
+    static const rtl::OUString  sSecondLightDirection( "SecondLightDirection" );
 
     const Direction3D * pLighting1Defaults;
     const Direction3D * pLighting2Defaults;
@@ -1098,8 +1098,8 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sBrightness( RTL_CONSTASCII_USTRINGPARAM ( "Brightness" ) );
+    static const rtl::OUString  sExtrusion( "Extrusion" );
+    static const rtl::OUString  sBrightness( "Brightness" );
 
     com::sun::star::uno::Any* pAny;
 
@@ -1166,8 +1166,8 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
-    static const rtl::OUString  sExtrusionColor( RTL_CONSTASCII_USTRINGPARAM ( "Color" ) );
+    static const rtl::OUString  sExtrusion( "Extrusion" );
+    static const rtl::OUString  sExtrusionColor( "Color" );
 
     com::sun::star::uno::Any* pAny;
 
@@ -1236,7 +1236,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
 namespace svx {
 bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
 {
-    static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+    static const rtl::OUString  sExtrusion( "Extrusion" );
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;

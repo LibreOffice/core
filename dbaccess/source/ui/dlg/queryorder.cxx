@@ -220,8 +220,8 @@ void DlgOrderCrit::EnableLines()
     DBG_CHKTHIS(DlgOrderCrit,NULL);
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
     ::rtl::OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
-    static const ::rtl::OUString sDESC(RTL_CONSTASCII_USTRINGPARAM(" DESC "));
-    static const ::rtl::OUString sASC(RTL_CONSTASCII_USTRINGPARAM(" ASC "));
+    static const ::rtl::OUString sDESC(" DESC ");
+    static const ::rtl::OUString sASC(" ASC ");
 
     Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
 
@@ -245,7 +245,7 @@ void DlgOrderCrit::EnableLines()
                         ::rtl::OUString sRealName;
                         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
                         sName = sRealName;
-                        static ::rtl::OUString sFunction(RTL_CONSTASCII_USTRINGPARAM("Function"));
+                        static ::rtl::OUString sFunction("Function");
                         if ( xColumn->getPropertySetInfo()->hasPropertyByName(sFunction) )
                             xColumn->getPropertyValue(sFunction) >>= bFunction;
                     }

@@ -53,7 +53,7 @@ namespace cfg_test
 //--------------------------------------------------------------------------------------------------
 static Sequence< OUString > impl0_getSupportedServiceNames()
 {
-    OUString str( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bootstrap.TestComponent0") );
+    OUString str("com.sun.star.bootstrap.TestComponent0");
     return Sequence< OUString >( &str, 1 );
 }
 //--------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ static OUString impl0_getImplementationName()
 //--------------------------------------------------------------------------------------------------
 static Sequence< OUString > impl1_getSupportedServiceNames()
 {
-    OUString str( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bootstrap.TestComponent1") );
+    OUString str("com.sun.star.bootstrap.TestComponent1");
     return Sequence< OUString >( &str, 1 );
 }
 //--------------------------------------------------------------------------------------------------

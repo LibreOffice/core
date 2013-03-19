@@ -306,7 +306,7 @@ OStyle::OStyle()
     const sal_Int32 nZero = 0;
     const sal_Int16 n16Zero = 0;
     const sal_Int16 nNummeringType = style::NumberingType::ARABIC;
-    const ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("Default"));
+    const ::rtl::OUString sName("Default");
     const ::rtl::OUString sEmpty;
     const table::BorderLine eBorderLine(0,0,0,0);
     const table::ShadowFormat eShadowFormat(table::ShadowLocation_NONE,0,0,0);
@@ -380,7 +380,7 @@ OStyle::OStyle()
     registerPropertyNoMember(PROPERTY_NUMBERINGTYPE,                ++i,nBound,::getCppuType((const sal_Int16*)0) ,&nNummeringType);
     registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_SCALEVAL),    ++i,nBound,::getCppuType((const sal_Int16*)0) ,&n16Zero);
     registerPropertyNoMember(PROPERTY_PAGESTYLELAYOUT,              ++i,nBound,::getCppuType((const style::PageStyleLayout*)0) ,&ePageStyleLayout);
-    const ::rtl::OUString sPaperTray(RTL_CONSTASCII_USTRINGPARAM("[From printer settings]"));
+    const ::rtl::OUString sPaperTray("[From printer settings]");
     registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_PAPERTRAY),   ++i,nBound,::getCppuType((const ::rtl::OUString*)0) ,&sPaperTray);
     registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTBORDER), ++i,nBound,::getCppuType((const table::BorderLine*)0) ,&eBorderLine);
     registerPropertyNoMember(MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTBRDDIST),++i,nBound,::getCppuType((const sal_Int32*)0) ,&nZero);
@@ -506,7 +506,7 @@ namespace
         {
             uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(m_xContext);
             uno::Reference<frame::XComponentLoader> xFrameLoad(xDesktop,uno::UNO_QUERY);
-            ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+            ::rtl::OUString sTarget("_blank");
             sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
             uno::Reference< frame::XFrame> xFrame = xDesktop->findFrame(sTarget,nFrameSearchFlag);
             xFrameLoad.set(xFrame,uno::UNO_QUERY);
@@ -1466,7 +1466,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     uno::Reference< beans::XPropertySet> xProp(_xStorageToSaveTo,uno::UNO_QUERY);
     if ( xProp.is() )
     {
-        static const ::rtl::OUString sPropName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+        static const ::rtl::OUString sPropName("MediaType");
         ::rtl::OUString sOldMediaType;
         xProp->getPropertyValue(sPropName) >>= sOldMediaType;
         if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT != sOldMediaType )
@@ -1583,8 +1583,8 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     }
     if ( aImage.hasValue() )
     {
-        ::rtl::OUString sObject1(RTL_CONSTASCII_USTRINGPARAM("report"));
-        ::rtl::OUString sPng(RTL_CONSTASCII_USTRINGPARAM("image/png"));
+        ::rtl::OUString sObject1("report");
+        ::rtl::OUString sPng("image/png");
 
         uno::Sequence<sal_Int8> aSeq;
         aImage >>= aSeq;
@@ -1692,8 +1692,8 @@ sal_Bool OReportDefinition::WriteThroughComponent(
             xSeek->seek(0);
         }
 
-        ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
-        ::rtl::OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+        ::rtl::OUString aPropName("MediaType");
+        ::rtl::OUString aMime("text/xml");
         uno::Any aAny;
         aAny <<= aMime;
         xStreamProp->setPropertyValue( aPropName, aAny );
@@ -1888,7 +1888,7 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     embed::VisualRepresentation aResult;
-    ::rtl::OUString sImageName(RTL_CONSTASCII_USTRINGPARAM("report"));
+    ::rtl::OUString sImageName("report");
     ::rtl::OUString sMimeType;
     uno::Reference<io::XInputStream> xStream = m_pImpl->m_pObjectContainer->GetGraphicStream(sImageName,&sMimeType);
     if ( xStream.is() )

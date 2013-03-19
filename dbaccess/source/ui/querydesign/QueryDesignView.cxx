@@ -69,8 +69,8 @@ using namespace ::com::sun::star::container;
 // please look at the book LargeScale C++ to know why
 namespace
 {
-    static const OUString C_AND(RTL_CONSTASCII_USTRINGPARAM(" AND "));
-    static const OUString C_OR(RTL_CONSTASCII_USTRINGPARAM(" OR "));
+    static const OUString C_AND(" AND ");
+    static const OUString C_OR(" OR ");
 
     // forward declarations
     sal_Bool InsertJoin(    const OQueryDesignView* _pView,
@@ -302,7 +302,7 @@ namespace
             {
                 const Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
                 const OUString aQuote = xMetaData->getIdentifierQuoteString();
-                const OUString sEqual(RTL_CONSTASCII_USTRINGPARAM(" = "));
+                const OUString sEqual(" = ");
 
                 for(;aIter != aEnd;++aIter)
                 {
@@ -657,8 +657,8 @@ namespace
 
             OJoinTableView::OTableWindowMap* pTabList = _pView->getTableView()->GetTabWinMap();
 
-            const static OUString sFieldSeparator(RTL_CONSTASCII_USTRINGPARAM(", "));
-            const static OUString s_sAs(RTL_CONSTASCII_USTRINGPARAM(" AS "));
+            const static OUString sFieldSeparator(", ");
+            const static OUString s_sAs(" AS ");
 
             aIter = _rFieldList.begin();
             for(;aIter != aEnd;++aIter)
@@ -1227,7 +1227,7 @@ namespace
             if ( !aGroupByStr.isEmpty() )
             {
                 aGroupByStr = aGroupByStr.replaceAt(aGroupByStr.getLength()-1,1, OUString(' ') );
-                OUString aGroupByStr2(RTL_CONSTASCII_USTRINGPARAM(" GROUP BY "));
+                OUString aGroupByStr2(" GROUP BY ");
                 aGroupByStr2 += aGroupByStr;
                 aGroupByStr = aGroupByStr2;
             }
@@ -2154,7 +2154,7 @@ namespace
     {
         SqlParseError eErrorCode = eOk;
         sal_Bool bFirstField = sal_True;
-        OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));
+        OUString sAsterix("*");
         OJoinTableView::OTableWindowMap::iterator aIter = _pTabList->begin();
         OJoinTableView::OTableWindowMap::iterator aEnd = _pTabList->end();
         for(;aIter != aEnd && eOk == eErrorCode ;++aIter)
@@ -2932,7 +2932,7 @@ OUString OQueryDesignView::getStatement()
     GenerateInnerJoinCriterias(xConnection,aJoinCrit,pConnList);
     if(!aJoinCrit.isEmpty())
     {
-        OUString aTmp(RTL_CONSTASCII_USTRINGPARAM("( "));
+        OUString aTmp("( ");
         aTmp += aJoinCrit;
         aTmp += OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
         if(aCriteriaListStr.getLength())

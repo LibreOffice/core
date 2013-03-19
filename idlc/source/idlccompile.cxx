@@ -52,8 +52,8 @@ extern int yydebug;
 sal_Int32 lineNumber = 1;
 
 
-static OUString TMP(RTL_CONSTASCII_USTRINGPARAM("TMP"));
-static OUString TEMP(RTL_CONSTASCII_USTRINGPARAM("TEMP"));
+static OUString TMP("TMP");
+static OUString TEMP("TEMP");
 static sal_Char tmpFilePattern[512];
 
 sal_Bool isFileUrl(const OString& fileName)

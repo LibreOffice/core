@@ -295,7 +295,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
 //------------------------------------------------------------------------
 ::rtl::OUString UnoControlHolderList::impl_getFreeName_throw()
 {
-    ::rtl::OUString name( RTL_CONSTASCII_USTRINGPARAM( "control_" ) );
+    ::rtl::OUString name( "control_" );
     for ( ControlIdentifier candidateId = 0; candidateId < ::std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
     {
         ::rtl::OUString candidateName( name + ::rtl::OUString::valueOf( candidateId ) );
@@ -337,7 +337,7 @@ void implUpdateVisibility
                 ( xModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo >
                 xInfo = xPSet->getPropertySetInfo();
-            ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM( "Step" ) );
+            ::rtl::OUString aPropName( "Step" );
             sal_Int32 nControlStep = 0;
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
@@ -776,7 +776,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
                 ( xModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo >
                 xInfo = xPSet->getPropertySetInfo();
-            ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM( "Step" ) );
+            ::rtl::OUString aPropName( "Step" );
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
                 ::com::sun::star::uno::Any aVal = xPSet->getPropertyValue( aPropName );

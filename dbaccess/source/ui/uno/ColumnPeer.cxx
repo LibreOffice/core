@@ -91,7 +91,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 
             m_pActFieldDescr = new OFieldDescription(_xColumn,sal_True);
             // search for type
-            ::rtl::OUString sCreateParam(RTL_CONSTASCII_USTRINGPARAM("x"));
+            ::rtl::OUString sCreateParam("x");
             sal_Bool bForce;
             TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
             if ( !pTypeInfo.get() )
