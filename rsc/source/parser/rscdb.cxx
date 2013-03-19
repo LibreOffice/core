@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <tools/fsys.hxx>
 #include <tools/rc.h>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>

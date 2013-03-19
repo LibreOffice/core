@@ -37,7 +37,6 @@
 #include <rscerror.h>
 #include <sal/main.h>
 #include <rtl/strbuf.hxx>
-#include <tools/fsys.hxx>
 
 /*************** C O D E ************************************************/
 

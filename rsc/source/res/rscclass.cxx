@@ -28,7 +28,6 @@
 #include <rscdb.hxx>
 #include <rscclass.hxx>
 
-#include <tools/fsys.hxx>
 #include <tools/rcid.h>
 #include <tools/rc.h>
 
