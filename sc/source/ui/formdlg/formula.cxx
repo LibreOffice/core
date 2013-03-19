@@ -316,8 +316,6 @@ sal_Bool ScFormulaDlg::Close()
 //  --------------------------------------------------------------------------
 bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
 {
-    sal_Bool bResult = sal_True;
-
     boost::scoped_ptr<ScFormulaCell> pFCell( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
 
     // HACK! um bei ColRowNames kein #REF! zu bekommen,
@@ -378,7 +376,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
         CheckMatrix();
     }
 
-    return bResult;
+    return true;
 }
 
 
