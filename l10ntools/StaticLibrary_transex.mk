@@ -45,8 +45,6 @@ $(eval $(call gb_StaticLibrary_use_externals,transex,\
 $(eval $(call gb_StaticLibrary_add_exception_objects,transex,\
     l10ntools/source/export2 \
     l10ntools/source/merge \
-    l10ntools/source/file \
-    l10ntools/source/directory \
     l10ntools/source/po \
 ))
 

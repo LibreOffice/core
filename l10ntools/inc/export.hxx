@@ -26,11 +26,6 @@
 #include <cstddef>
 #include <fstream>
 
-#ifndef L10NTOOLS_DIRECTORY_HXX
-#define L10NTOOLS_DIRECTORY_HXX
-#include "directory.hxx"
-#endif
-
 #include <osl/file.hxx>
 #include <osl/file.h>
 
